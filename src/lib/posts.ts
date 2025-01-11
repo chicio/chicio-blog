@@ -2,9 +2,12 @@ import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 import { remark } from "remark";
-import remarkGfm from "remark-gfm";
+import githubFlavoredMarkdown from "remark-gfm";
+import emoji from 'remark-emoji'
+import html from "remark-html";
+import calculateReadingTime from "reading-time";
 import {Post, PostFrontMatter} from "@/types/post";
-import remarkHtml from "remark-html";
+import {authors} from "@/types/author";
 
 const postsDirectory = path.join(process.cwd(), "posts");
 const mdExtension = ".md"
@@ -32,7 +35,7 @@ const getFrontmatterFrom = (
         date: data.date,
         tags: data.tags,
         comments: data.comments,
-        authors: data.authors,
+        authors: data.authors.map((author: string) => authors[author]),
     };
 };
 
@@ -60,13 +63,15 @@ export const getPostBy = (
     const fileParsed = matter(fileContents);
 
     const htmlContent = remark()
-        .use(remarkGfm)
-        .use(remarkHtml)
+        .use(githubFlavoredMarkdown)
+        .use(emoji)
+        .use(html)
         .processSync(fileParsed.content)
         .toString();
 
     return {
         frontmatter: getFrontmatterFrom(fileParsed, slug),
+        readingTime: calculateReadingTime(htmlContent),
         content: htmlContent,
     };
 };
