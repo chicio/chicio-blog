@@ -1,8 +1,8 @@
 import styled, { css, TransientProps } from "styled-components";
-import { FC } from "react";
-import { StandardInternalLinkWithTracking } from "../../tracking/standard-internal-link-with-tracking";
-import { tracking } from "../../../logic/tracking";
-import { mediaQuery } from "../utils-css/media-query";
+import {FC} from "react";
+import {StandardInternalLinkWithTracking} from "@/components/design-system/atoms/standard-internal-link-with-tracking";
+import {tracking} from "@/types/tracking";
+import {mediaQuery} from "@/components/design-system/utils-css/media-query";
 
 interface TagContentProps {
   big: boolean;

@@ -1,3 +1,5 @@
+/// TODO: MIGRATION MISSING
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, ReactNode } from "react";
 import {siteMetadata} from "@/types/site-metadata";
 import {OgPageType} from "@/lib/seo";

@@ -12,7 +12,6 @@ import {
   ScrollDirection,
   useScrollDirection,
 } from "../hooks/use-scroll-direction";
-import { Search } from "../molecules/search";
 import {MenuItemWithTracking} from "@/components/design-system/atoms/menu-item-with-tracking";
 import {tracking} from "@/types/tracking";
 import {slugs} from "@/types/slug";
@@ -309,7 +308,9 @@ export const BlogMenu: FC<MenuProps> = ({ trackingCategory, pathname }) => {
             </MenuButtonContainer>
           )}
           {!shouldOpenMenu && (
-            <Search startSearch={startSearch} setStartSearch={setStartSearch} />
+              /// TODO: MIGRATION MISSING
+              // <Search startSearch={startSearch} setStartSearch={setStartSearch} />
+              <div></div>
           )}
         </NavBar>
       </MenuContainer>
