@@ -5,7 +5,6 @@ date: 2018-04-03
 image: ../images/posts/blender-modeling-create-primitive-meshes.jpg
 tags: [computer graphics, blender]
 comments: true
-math: false
 authors: [fabrizio_duroni]
 ---
 

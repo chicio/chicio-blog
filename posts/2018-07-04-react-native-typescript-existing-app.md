@@ -6,7 +6,6 @@ date: 2018-07-04
 image: ../images/posts/react-native-typescript.jpg
 tags: [react native, swift, ios, apple, android, java, mobile application development, javascript, typescript]
 comments: true
-math: false
 authors: [fabrizio_duroni]
 ---
 

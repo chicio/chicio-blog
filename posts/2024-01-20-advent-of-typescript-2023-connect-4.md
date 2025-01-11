@@ -5,7 +5,6 @@ date: 2024-01-20
 image: ../images/posts/advent-of-typescript-connect-4.jpg
 tags: [typescript, advent of typescript 2023]
 comments: true
-math: false
 authors: [fabrizio_duroni]
 ---
 

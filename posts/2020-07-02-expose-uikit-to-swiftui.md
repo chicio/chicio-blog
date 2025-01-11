@@ -7,7 +7,6 @@ date: 2020-07-02
 image: ../images/posts/use-uikit-in-swiftui.jpg
 tags: [swift, ios, apple, mobile application development]
 comments: true
-math: false
 authors: [fabrizio_duroni]
 ---
 

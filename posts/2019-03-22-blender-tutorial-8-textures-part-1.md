@@ -5,7 +5,6 @@ date: 2019-03-22
 image: ../images/posts/blender-create-texture.jpg
 tags: [computer graphics, blender]
 comments: true
-math: false
 authors: [fabrizio_duroni]
 ---
 

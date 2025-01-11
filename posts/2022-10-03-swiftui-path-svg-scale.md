@@ -5,7 +5,6 @@ date: 2022-10-03
 image: ../images/posts/swiftui-path.jpg
 tags: [swift, swiftui, ios, apple, mobile application development]
 comments: true 
-math: true 
 authors: [fabrizio_duroni, marco_de_lucchi]
 ---
 

@@ -6,7 +6,6 @@ date: 2021-01-27
 image: ../images/posts/mockk-junit5-kotlin.jpg
 tags: [java, kotlin, test driven development]
 comments: true
-math: false
 authors: [fabrizio_duroni]
 ---
 

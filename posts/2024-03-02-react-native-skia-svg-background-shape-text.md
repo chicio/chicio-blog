@@ -7,7 +7,6 @@ date: 2024-03-02
 image: ../images/posts/daily-deals-featured.jpg
 tags: [react native, swift, ios, apple, android, java, mobile application development, javascript, typescript]
 comments: true
-math: false
 authors: [fabrizio_duroni]
 ---
 

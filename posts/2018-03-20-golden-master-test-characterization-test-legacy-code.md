@@ -6,7 +6,6 @@ date: 2018-03-20
 image: ../images/posts/golden-master.jpg
 tags: [test driven development, agile, clean code]
 comments: true
-math: false
 authors: [fabrizio_duroni, emanuele_ianni]
 ---
 

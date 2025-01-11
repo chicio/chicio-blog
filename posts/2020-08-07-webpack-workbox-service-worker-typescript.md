@@ -7,7 +7,6 @@ date: 2020-08-07
 image: ../images/posts/workbox.jpg 
 tags: [web development, javascript, pwa, typescript]
 comments: true
-math: false
 authors: [fabrizio_duroni]
 ---
 

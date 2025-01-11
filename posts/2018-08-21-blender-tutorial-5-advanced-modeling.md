@@ -5,7 +5,6 @@ date: 2018-08-21
 image: ../images/posts/blender-add-modifier.jpg
 tags: [computer graphics, blender]
 comments: true
-math: false
 authors: [fabrizio_duroni]
 ---
 

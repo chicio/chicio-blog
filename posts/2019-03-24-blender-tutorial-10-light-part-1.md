@@ -5,7 +5,6 @@ date: 2019-03-24
 image: ../images/posts/blender-spot-light.jpg
 tags: [computer graphics, blender]
 comments: true
-math: false
 authors: [fabrizio_duroni]
 ---
 

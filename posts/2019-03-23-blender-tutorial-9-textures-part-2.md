@@ -5,7 +5,6 @@ date: 2019-03-23
 image: ../images/posts/blender-displacement-mapping.jpg
 tags: [computer graphics, blender]
 comments: true
-math: false
 authors: [fabrizio_duroni]
 ---
 

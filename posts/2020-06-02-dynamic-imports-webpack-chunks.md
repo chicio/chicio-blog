@@ -7,7 +7,6 @@ date: 2020-06-02
 image: ../images/posts/webpack-code-split.jpg
 tags: [web development, javascript, typescript]
 comments: true
-math: false
 authors: [fabrizio_duroni]
 ---
 

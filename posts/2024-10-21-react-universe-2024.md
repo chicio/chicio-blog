@@ -6,7 +6,6 @@ date: 2024-10-15
 image: ../images/posts/react-universe.jpeg
 tags: [react native, react, swift, ios, apple, android, java, mobile application development, javascript]
 comments: true
-math: false
 authors: [fabrizio_duroni, sam_campisi]
 ---
 

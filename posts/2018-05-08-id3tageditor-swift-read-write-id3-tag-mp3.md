@@ -6,7 +6,6 @@ date: 2018-05-08
 image: ../images/posts/id3tageditor-logo.jpg
 tags: [swift, ios, apple, mobile application development, macos, tvos, watchos]
 comments: true
-math: false
 authors: [fabrizio_duroni]
 ---
 

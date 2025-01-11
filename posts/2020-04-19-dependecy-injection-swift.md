@@ -8,7 +8,6 @@ date: 2020-04-19
 image: ../images/posts/dp-container.jpg
 tags: [swift, ios, apple, mobile application development]
 comments: true
-math: false
 authors: [fabrizio_duroni]
 ---
 

@@ -5,7 +5,6 @@ date: 2019-04-07
 image: ../images/posts/flow.jpg
 tags: [web development, javascript, typescript]
 comments: true
-math: false
 authors: [fabrizio_duroni]
 ---
 

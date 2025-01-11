@@ -5,7 +5,6 @@ date: 2022-06-06
 image: ../images/posts/webpack-module-federation.jpg
 tags: [react, web development, architectural pattern, typescript]
 comments: true 
-math: false 
 authors: [fabrizio_duroni, alex_stabile]
 ---
 

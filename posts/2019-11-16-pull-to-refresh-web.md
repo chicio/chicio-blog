@@ -6,7 +6,6 @@ date: 2019-11-16
 image: ../images/posts/pull-to-refresh.jpg 
 tags: [pwa, web development, javascript]
 comments: true 
-math: false 
 authors: [fabrizio_duroni]
 ---
 

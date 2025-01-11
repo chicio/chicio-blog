@@ -6,7 +6,6 @@ date: 2017-05-12
 image: ../images/authors/fabrizio-duroni.jpg
 tags: [web development, github pages, jekyll, node, gulp, bootstrap, threejs, javascript]
 comments: true
-math: false
 authors: [fabrizio_duroni]
 ---
 

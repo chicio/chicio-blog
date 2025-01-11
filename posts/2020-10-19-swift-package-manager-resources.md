@@ -8,7 +8,6 @@ date: 2020-10-19
 image: ../images/posts/swiftpm-resources.jpg
 tags: [swift, ios, apple, mobile application development, macos, tvos, watchos]
 comments: true
-math: false
 authors: [fabrizio_duroni]
 ---
 

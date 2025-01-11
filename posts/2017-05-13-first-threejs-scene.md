@@ -6,7 +6,6 @@ date: 2017-05-13
 image: ../images/posts/threejs-scene.jpg
 tags: [computer graphics, threejs, web development, javascript]
 comments: true
-math: false
 authors: [fabrizio_duroni]
 ---
 

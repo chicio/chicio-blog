@@ -6,7 +6,6 @@ date: 2019-12-15
 image: ../images/posts/ga-offline.jpg 
 tags: [pwa, web development, javascript]
 comments: true 
-math: false 
 authors: [fabrizio_duroni]
 ---
 

@@ -6,7 +6,6 @@ date: 2020-05-20
 image: ../images/posts/dark-side-dark-mode.jpg
 tags: [web development, javascript, pwa]
 comments: true
-math: false
 authors: [fabrizio_duroni]
 ---
 

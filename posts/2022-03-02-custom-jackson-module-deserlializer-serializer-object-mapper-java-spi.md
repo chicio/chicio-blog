@@ -6,7 +6,6 @@ date: 2022-03-02
 image: ../images/posts/fasterxml-logo.jpg
 tags: [java, kotlin, web development]
 comments: true 
-math: false 
 authors: [fabrizio_duroni, alex_stabile]
 ---
 

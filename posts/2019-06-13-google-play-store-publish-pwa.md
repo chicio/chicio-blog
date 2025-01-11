@@ -6,7 +6,6 @@ date: 2019-06-13
 image: ../images/posts/pwa-google-play-store.jpg
 tags: [android, pwa, java, mobile application development, web development, javascript]
 comments: true 
-math: false 
 authors: [fabrizio_duroni]
 ---
 

@@ -6,7 +6,6 @@ date: 2020-03-06
 image: ../images/posts/tabbar-swiftui.jpg
 tags: [swift, swiftui, ios, apple, mobile application development]
 comments: true
-math: false
 authors: [fabrizio_duroni]
 ---
 

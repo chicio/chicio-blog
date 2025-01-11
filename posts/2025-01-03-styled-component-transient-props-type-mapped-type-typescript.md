@@ -7,7 +7,6 @@ date: 2025-01-03
 image: ../images/posts/transient-props.png
 tags: [react, typescript, web development]
 comments: true
-math: false
 authors: [fabrizio_duroni]
 ---
 

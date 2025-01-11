@@ -6,7 +6,6 @@ date: 2017-08-25
 image: ../images/posts/reflection.png
 tags: [computer graphics]
 comments: true
-math: true
 authors: [fabrizio_duroni]
 ---
 

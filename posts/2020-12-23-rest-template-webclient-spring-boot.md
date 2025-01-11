@@ -6,7 +6,6 @@ date: 2020-12-23
 image: ../images/posts/spring-boot-rest.jpg
 tags: [java, kotlin, spring, spring boot, backend, web development]
 comments: true
-math: false
 authors: [fabrizio_duroni]
 ---
 

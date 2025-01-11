@@ -6,7 +6,6 @@ date: 2018-06-02
 image: ../images/posts/blender-subdivision.jpg
 tags: [computer graphics, blender]
 comments: true
-math: false
 authors: [fabrizio_duroni]
 ---
 

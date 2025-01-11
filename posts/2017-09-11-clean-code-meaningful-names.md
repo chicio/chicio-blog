@@ -6,7 +6,6 @@ date: 2017-09-11
 image: ../images/posts/meaningful-names.jpg
 tags: [clean code]
 comments: true
-math: false
 authors: [fabrizio_duroni]
 ---
 

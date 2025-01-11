@@ -6,7 +6,6 @@ date: 2020-01-18
 image: ../images/posts/hermes.jpg
 tags: [react native, swift, ios, apple, android, java, mobile application development, javascript, typescript]
 comments: true 
-math: false 
 authors: [fabrizio_duroni, francesco_bonfadelli, marco_de_lucchi]
 ---
 

@@ -5,7 +5,6 @@ date: 2022-01-02
 image: ../images/posts/react-hook-scroll-direction.jpg
 tags: [react, web development, typescript]
 comments: true 
-math: false 
 authors: [fabrizio_duroni]
 ---
 

@@ -6,7 +6,6 @@ date: 2019-03-25
 image: ../images/posts/blender-background-ambient-color.jpg
 tags: [computer graphics, blender]
 comments: true
-math: false
 authors: [fabrizio_duroni]
 ---
 

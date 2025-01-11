@@ -6,7 +6,6 @@ date: 2017-07-26
 image: ../images/posts/phong-example.jpg
 tags: [computer graphics]
 comments: true
-math: true
 authors: [fabrizio_duroni]
 ---
 

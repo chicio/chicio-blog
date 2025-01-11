@@ -5,7 +5,6 @@ date: 2019-03-28
 image: ../images/posts/blender-bones.jpg
 tags: [computer graphics, blender]
 comments: true
-math: false
 authors: [fabrizio_duroni]
 ---
 

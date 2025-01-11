@@ -6,7 +6,6 @@ date: 2019-05-08
 image: ../images/posts/lighthouse-lazy-loading.png
 tags: [web development, javascript, typescript]
 comments: true
-math: false
 authors: [fabrizio_duroni]
 ---
 

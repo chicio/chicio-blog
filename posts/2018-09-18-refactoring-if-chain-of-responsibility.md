@@ -6,7 +6,6 @@ date: 2018-09-18
 image: ../images/posts/ifremoval.jpg
 tags: [clean code]
 comments: true
-math: false
 authors: [francesco_bonfadelli]
 ---
 

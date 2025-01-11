@@ -6,7 +6,6 @@ date: 2023-06-12
 image: ../images/posts/swiftui-five-stars.png
 tags: [swift, swiftui, ios, apple, mobile-application-development]
 comments: true
-math: false
 authors: [fabrizio_duroni, marco_de_lucchi]
 ---
 

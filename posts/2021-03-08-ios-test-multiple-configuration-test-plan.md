@@ -6,7 +6,6 @@ date: 2021-03-08
 image: ../images/posts/test-plans-succeeded.jpg
 tags: [swift, ios, apple, mobile application development, macos, tvos, watchos]
 comments: true 
-math: false 
 authors: [fabrizio_duroni]
 ---
 

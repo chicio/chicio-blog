@@ -6,7 +6,6 @@ date: 2024-12-30
 image: ../images/posts/react-native-parallax-carousel.jpg
 tags: [react native, swift, ios, apple, android, java, mobile application development, javascript, typescript, expo]
 comments: true
-math: false
 authors: [fabrizio_duroni]
 ---
 

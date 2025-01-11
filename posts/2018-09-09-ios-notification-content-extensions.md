@@ -5,7 +5,6 @@ date: 2018-09-09
 image: ../images/posts/notification-content-extension-add-target.jpg
 tags: [swift, ios, apple, mobile application development]
 comments: true
-math: false
 authors: [fabrizio_duroni]
 ---
 

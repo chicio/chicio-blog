@@ -5,7 +5,6 @@ date: 2019-07-28
 image: ../images/posts/uncle-bob-defender-of-clean-code.jpg 
 tags: [clean code]
 comments: true
-math: false
 authors: [fabrizio_duroni]
 ---
 

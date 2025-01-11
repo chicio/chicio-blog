@@ -16,7 +16,7 @@ export type PostFrontMatter = {
     date: string
     tags: string[];
     comments: boolean;
-    authors: Author[]
+    authors: Author[];
 }
 
 export type Post = {

@@ -6,7 +6,6 @@ date: 2023-12-30
 image: ../images/posts/advent-of-typescript-rock-paper-scissors.jpg
 tags: [typescript, advent of typescript 2023]
 comments: true
-math: false
 authors: [fabrizio_duroni]
 ---
 

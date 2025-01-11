@@ -5,7 +5,6 @@ date: 2017-12-08
 image: ../images/posts/react-native-crash-reload-with-debugger.jpg
 tags: [react native, swift, objective-c, ios, apple, mobile application development, javascript]
 comments: true
-math: false
 authors: [fabrizio_duroni]
 ---
 

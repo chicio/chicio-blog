@@ -5,6 +5,10 @@ import {remark} from "remark";
 import githubFlavoredMarkdown from "remark-gfm";
 import emoji from 'remark-emoji'
 import html from "remark-html";
+import math from "remark-math";
+import rehype from 'remark-rehype'
+import katex from "rehype-katex";
+import katexStringify from 'rehype-stringify'
 import calculateReadingTime from "reading-time";
 import {Post, PostFrontMatter, PostParameters} from "@/types/post";
 import {authors} from "@/types/author";
@@ -66,6 +70,10 @@ export const getPostBy = (
         .use(githubFlavoredMarkdown)
         .use(emoji)
         .use(html)
+        .use(math)
+        .use(rehype)
+        .use(katex) // Render LaTeX with KaTeX
+        .use(katexStringify)
         .processSync(fileParsed.content)
         .toString();
 

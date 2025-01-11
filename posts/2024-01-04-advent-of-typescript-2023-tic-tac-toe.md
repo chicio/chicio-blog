@@ -6,7 +6,6 @@ date: 2024-01-04
 image: ../images/posts/advent-of-typescript-tic-tac-toe.jpg
 tags: [typescript, advent of typescript 2023]
 comments: true
-math: false
 authors: [fabrizio_duroni]
 ---
 

@@ -5,7 +5,6 @@ date: 2019-03-03
 image: ../images/posts/pwa-logo.jpg
 tags: [pwa, web development, javascript]
 comments: true
-math: false
 authors: [fabrizio_duroni]
 ---
 

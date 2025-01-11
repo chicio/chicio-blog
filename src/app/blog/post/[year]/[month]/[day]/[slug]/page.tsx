@@ -1,3 +1,4 @@
+import 'katex/dist/katex.min.css';
 import {generateAllPostParams, getPostBy} from "@/lib/posts";
 import {NextPostParameters, PostParameters} from "@/types/post";
 

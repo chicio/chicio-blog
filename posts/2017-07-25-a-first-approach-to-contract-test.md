@@ -5,7 +5,6 @@ date: 2017-07-25
 image: ../images/posts/contract-test.jpg
 tags: [test driven development, java]
 comments: true
-math: false
 authors: [fabrizio_duroni]
 ---
 

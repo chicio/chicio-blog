@@ -6,7 +6,6 @@ date: 2018-10-18
 image: ../images/posts/blender-outliner.jpg
 tags: [computer graphics, blender]
 comments: true
-math: false
 authors: [fabrizio_duroni]
 ---
 

@@ -6,7 +6,6 @@ date: 2017-10-27
 image: ../images/posts/mockup-model-view-presenter.jpg
 tags: [android, java, mobile application development, test driven development, architectural pattern]
 comments: true
-math: false
 authors: [fabrizio_duroni]
 ---
 

@@ -6,7 +6,6 @@ date: 2018-07-05
 image: ../images/posts/beta-enterprise-dogfood.jpg
 tags: [swift, ios, apple, mobile application development]
 comments: true
-math: false
 authors: [giordano_tamburrelli, fabrizio_duroni]
 ---
 

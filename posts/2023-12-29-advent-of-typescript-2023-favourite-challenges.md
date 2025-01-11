@@ -6,7 +6,6 @@ date: 2023-12-29
 image: ../images/posts/advent-of-typescript-featured.jpg
 tags: [typescript, advent of typescript 2023]
 comments: true
-math: false
 authors: [fabrizio_duroni]
 ---
 

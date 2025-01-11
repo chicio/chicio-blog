@@ -5,7 +5,6 @@ date: 2019-03-26
 image: ../images/posts/blender-camera-options.jpg
 tags: [computer graphics, blender]
 comments: true
-math: false
 authors: [fabrizio_duroni]
 ---
 

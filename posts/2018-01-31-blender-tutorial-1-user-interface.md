@@ -6,7 +6,6 @@ date: 2018-01-31
 image: ../images/posts/blender-ui-1-editors.jpg
 tags: [computer graphics, blender]
 comments: true
-math: false
 authors: [fabrizio_duroni]
 ---
 

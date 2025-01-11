@@ -5,7 +5,6 @@ date: 2018-01-03
 image: ../images/posts/physically-based-rendering-scene-right.jpg
 tags: [computer graphics, physically based rendering, swift, ios, apple, mobile application development]
 comments: true
-math: false
 authors: [fabrizio_duroni]
 ---
 

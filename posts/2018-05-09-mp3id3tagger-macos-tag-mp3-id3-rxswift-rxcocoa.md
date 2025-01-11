@@ -6,7 +6,6 @@ date: 2018-05-09
 image: ../images/posts/mp3id3tagger-logo.jpg
 tags: [swift, macos, apple, rxswift, rxcocoa]
 comments: true
-math: false
 authors: [fabrizio_duroni]
 ---
 
