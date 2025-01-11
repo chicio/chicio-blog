@@ -1,10 +1,10 @@
-import {generateAllPostPaginationPages, getPostsPaginationFor} from "@/lib/posts";
+import {getPostsPaginationFor} from "@/lib/posts";
 import Link from "next/link";
-import {NextPostPaginationParameters, PostPaginationParameters} from "@/types/post";
+import {NextPostPaginationParameters} from "@/types/post";
 
-export async function generateStaticParams(): Promise<PostPaginationParameters[]> {
-    return generateAllPostPaginationPages()
-}
+// export async function generateStaticParams(): Promise<PostPaginationParameters[]> {
+//     return generateAllPostPaginationPages()
+// }
 
 export default async function BlogPage({ params }: NextPostPaginationParameters) {
     const { page } = await params

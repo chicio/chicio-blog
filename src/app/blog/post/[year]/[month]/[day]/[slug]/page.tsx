@@ -1,10 +1,10 @@
 import 'katex/dist/katex.min.css';
-import {generateAllPostParams, getPostBy} from "@/lib/posts";
-import {NextPostParameters, PostParameters} from "@/types/post";
+import {getPostBy} from "@/lib/posts";
+import {NextPostParameters} from "@/types/post";
 
-export async function generateStaticParams(): Promise<PostParameters[]> {
-    return generateAllPostParams();
-}
+// export async function generateStaticParams(): Promise<PostParameters[]> {
+//     return generateAllPostParams();
+// }
 
 export default async function BlogPost({ params }: NextPostParameters) {
     const { year, month, day, slug } = await params;

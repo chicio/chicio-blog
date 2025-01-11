@@ -10,7 +10,7 @@ import rehype from 'remark-rehype'
 import katex from "rehype-katex";
 import katexStringify from 'rehype-stringify'
 import calculateReadingTime from "reading-time";
-import {Post, PostFrontMatter, PostParameters} from "@/types/post";
+import {Post, PostFrontMatter} from "@/types/post";
 import {authors} from "@/types/author";
 
 const postsDirectory = path.join(process.cwd(), "posts");
@@ -84,25 +84,25 @@ export const getPostBy = (
     };
 };
 
-export const generateAllPostParams = (): PostParameters[] => {
-    const filenames = fs.readdirSync(postsDirectory);
-
-    return filenames.map((filename) => {
-        const [year, month, day, ...slug] = filename.split("-");
-        return {
-            year, month, day, slug: slug.join('-').replace(/\.md$/, ''),
-        };
-    });
-}
-
-export const generateAllPostPaginationPages = () => {
-    const filenames = fs.readdirSync(postsDirectory);
-    const totalPosts = filenames.length;
-    const totalPages = Math.ceil(totalPosts / postsPerPage);
-    return Array.from({length: totalPages}, (_, i) => ({
-        page: (i + 1).toString()
-    }));
-}
+// export const generateAllPostParams = (): PostParameters[] => {
+//     const filenames = fs.readdirSync(postsDirectory);
+//
+//     return filenames.map((filename) => {
+//         const [year, month, day, ...slug] = filename.split("-");
+//         return {
+//             year, month, day, slug: slug.join('-').replace(/\.md$/, ''),
+//         };
+//     });
+// }
+//
+// export const generateAllPostPaginationPages = () => {
+//     const filenames = fs.readdirSync(postsDirectory);
+//     const totalPosts = filenames.length;
+//     const totalPages = Math.ceil(totalPosts / postsPerPage);
+//     return Array.from({length: totalPages}, (_, i) => ({
+//         page: (i + 1).toString()
+//     }));
+// }
 
 export const getPostsPaginationFor = (page: number) => {
     const posts = getAllPosts();
