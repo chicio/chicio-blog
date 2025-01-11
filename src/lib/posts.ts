@@ -6,15 +6,16 @@ import githubFlavoredMarkdown from "remark-gfm";
 import emoji from 'remark-emoji'
 import html from "remark-html";
 import calculateReadingTime from "reading-time";
-import {NextPostParameters, Post, PostFrontMatter, PostParameters} from "@/types/post";
+import {Post, PostFrontMatter, PostParameters} from "@/types/post";
 import {authors} from "@/types/author";
 
 const postsDirectory = path.join(process.cwd(), "posts");
 const mdExtension = ".md"
+const postsPerPage = 11;
 
 const generatePostSlugFrom = (filename: string) => {
     const [year, month, day, ...slug] = filename.split("-");
-    return `/blog/${year}/${month}/${day}/${slug.join("-")}`.replace(mdExtension, "");
+    return `/blog/post/${year}/${month}/${day}/${slug.join("-")}`.replace(mdExtension, "");
 };
 
 const generateFileNameFrom = (year: string, month: string, day: string, slug: string) => {
@@ -86,3 +87,22 @@ export const generateAllPostParams = (): PostParameters[] => {
     });
 }
 
+export const generateAllPostPaginationPages = () => {
+    const filenames = fs.readdirSync(postsDirectory);
+    const totalPosts = filenames.length;
+    const totalPages = Math.ceil(totalPosts / postsPerPage);
+    return Array.from({length: totalPages}, (_, i) => ({
+        page: (i + 1).toString()
+    }));
+}
+
+export const getPostsPaginationFor = (page: number) => {
+    const posts = getAllPosts();
+    const start = (page - 1) * postsPerPage;
+    const paginatedPosts = posts.slice(start, start + postsPerPage);
+    const totalPages = Math.ceil(posts.length / postsPerPage);
+    const previousPageUrl = page > 1 ? `/blog/page/${page - 1}` : undefined
+    const nextPageUrl = page < totalPages ? `/blog/page/${page + 1}` : undefined
+
+    return { paginatedPosts, previousPageUrl, nextPageUrl };
+}
