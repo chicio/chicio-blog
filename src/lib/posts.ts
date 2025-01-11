@@ -1,24 +1,23 @@
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
-import { remark } from "remark";
+import {remark} from "remark";
 import githubFlavoredMarkdown from "remark-gfm";
 import emoji from 'remark-emoji'
 import html from "remark-html";
 import calculateReadingTime from "reading-time";
-import {Post, PostFrontMatter} from "@/types/post";
+import {NextPostParameters, Post, PostFrontMatter, PostParameters} from "@/types/post";
 import {authors} from "@/types/author";
 
 const postsDirectory = path.join(process.cwd(), "posts");
 const mdExtension = ".md"
 
 const generatePostSlugFrom = (filename: string) => {
-    console.log(filename)
-    const [year, month, day, ...title] = filename.split("-");
-    return `/blog/${year}/${month}/${day}/${title.join("-")}`.replace(mdExtension, "");
+    const [year, month, day, ...slug] = filename.split("-");
+    return `/blog/${year}/${month}/${day}/${slug.join("-")}`.replace(mdExtension, "");
 };
 
-const generateFileNameFrom = (year: string, month: string, day: string,slug: string) => {
+const generateFileNameFrom = (year: string, month: string, day: string, slug: string) => {
     return `${year}-${month}-${day}-${slug}${mdExtension}`;
 };
 
@@ -75,3 +74,15 @@ export const getPostBy = (
         content: htmlContent,
     };
 };
+
+export const generateAllPostParams = (): PostParameters[] => {
+    const filenames = fs.readdirSync(postsDirectory);
+
+    return filenames.map((filename) => {
+        const [year, month, day, ...slug] = filename.split("-");
+        return {
+            year, month, day, slug: slug.join('-').replace(/\.md$/, ''),
+        };
+    });
+}
+

@@ -1,6 +1,11 @@
-import {getPostBy} from "@/lib/posts";
+import {generateAllPostParams, getPostBy} from "@/lib/posts";
+import {NextPostParameters, PostParameters} from "@/types/post";
 
-export default async function BlogPost({ params }: { params: { year: string, month: string, day: string, slug: string } }) {
+export async function generateStaticParams(): Promise<PostParameters[]> {
+    return generateAllPostParams();
+}
+
+export default async function BlogPost({ params }: NextPostParameters) {
     const { year, month, day, slug } = await params;
     const { frontmatter, content, readingTime } = getPostBy(year, month, day, slug);
 

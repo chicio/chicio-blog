@@ -1,6 +1,9 @@
 import {ReadTimeResults} from "reading-time";
 import {Author} from "@/types/author";
 
+export type PostParameters = { year: string, month: string, day: string, slug: string };
+export type NextPostParameters = { params: Promise<PostParameters>};
+
 export type PostFrontMatter = {
     slug: string;
     title: string;

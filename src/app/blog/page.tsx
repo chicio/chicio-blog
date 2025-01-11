@@ -4,7 +4,7 @@ import {getAllPosts} from "@/lib/posts";
 const POSTS_PER_PAGE = 5;
 
 export default async function BlogHome({ searchParams }: { searchParams: { page?: string } }) {
-    const { page } = await searchParams
+    const { page } = searchParams
     const pageParam = parseInt(page || "1", 10);
     const posts = getAllPosts();
     const start = (pageParam - 1) * POSTS_PER_PAGE;
