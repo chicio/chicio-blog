@@ -1,5 +1,7 @@
+'use client'
+
 import { css } from "styled-components";
-import { borderRadius } from "./border-radius";
+import {borderRadius} from "@/components/design-system/atoms/border-radius";
 
 export const syntax = css`
   /**

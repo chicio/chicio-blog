@@ -1,5 +1,7 @@
+'use client'
+
 import styled, { css } from "styled-components";
-import { headingStyle } from "./heading-style";
+import {headingStyle} from "@/components/design-system/atoms/heading-style";
 
 export const heading5Style = css`
   font-size: ${(props) => props.theme.fontSizes[7]};

@@ -1,5 +1,7 @@
+'use client'
+
 import styled from "styled-components";
-import { backgroundGradients } from "./gradients";
+import {backgroundGradients} from "@/components/design-system/atoms/gradients";
 
 export const ContainerFullscreen = styled.div`
   display: flex;

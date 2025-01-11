@@ -16,10 +16,10 @@ export default async function BlogPage({ params }: NextPostPaginationParameters)
             <h1>Blog</h1>
             <ul>
                 {paginatedPosts.map((post) => (
-                    <li key={post.slug}>
-                        <Link href={post.slug}>
-                            <h2>{post.title}</h2>
-                            <p>{post.description}</p>
+                    <li key={post.frontmatter.slug}>
+                        <Link href={post.frontmatter.slug}>
+                            <h2>{post.frontmatter.title}</h2>
+                            <p>{post.frontmatter.description}</p>
                         </Link>
                     </li>
                 ))}

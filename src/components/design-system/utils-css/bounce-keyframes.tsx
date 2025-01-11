@@ -1,3 +1,5 @@
+'use client'
+
 import { keyframes } from "styled-components";
 
 export const bounce = keyframes`

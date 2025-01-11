@@ -1,3 +1,5 @@
+'use client'
+
 import styled from "styled-components";
 import { StyledIconBase } from "@styled-icons/styled-icon";
 import { mediaQuery } from "../utils-css/media-query";

@@ -1,7 +1,9 @@
+'use client'
+
 import styled, { TransientProps } from "styled-components";
 import { opacity } from "../utils-css/opacity-keyframes";
 import { FC } from "react";
-import { useLockBodyScroll } from "../hooks/use-lock-body-scroll";
+import {useLockBodyScroll} from "@/components/design-system/hooks/use-lock-body-scroll";
 
 export interface OverlayProps {
   zIndex: number;

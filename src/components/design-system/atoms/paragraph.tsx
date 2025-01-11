@@ -1,5 +1,7 @@
+'use client'
+
 import styled from "styled-components";
-import { mediaQuery } from "../utils-css/media-query";
+import {mediaQuery} from "@/components/design-system/utils-css/media-query";
 
 export const Paragraph = styled.p`
   font-size: ${(props) => props.theme.fontSizes[2]};

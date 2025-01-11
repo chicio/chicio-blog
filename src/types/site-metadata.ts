@@ -1,0 +1,44 @@
+export const siteMetadata = {
+    title:
+        "Fabrizio Duroni | Fabrizio Duroni ‘Chicio Coding’ official site with profile details. Official blog chicio coding. Main skills: mobile application development, computer graphics, web development.",
+    siteUrl: "https://www.fabrizioduroni.it",
+    featuredImage: "/chicio-coding-feature-graphic.jpg",
+    featuredArtImage: "/chicio-art-featured.png",
+    author: "Fabrizio Duroni",
+    contacts: {
+        email: "fabrizio.duroni@gmail.com",
+        phone: "+393285926828",
+        links: {
+            twitter: "https://twitter.com/chicio86",
+            facebook: "https://www.facebook.com/fabrizio.duroni",
+            linkedin: "https://www.linkedin.com/in/fabrizio-duroni/",
+            github: "https://github.com/chicio",
+            medium: "https://medium.com/@chicio",
+            devto: "https://dev.to/chicio",
+            instagram: "https://www.instagram.com/__chicio__/",
+        },
+    },
+}
+
+export type SiteMetadataSocialLinks = {
+    twitter: string,
+    facebook: string,
+    linkedin: string,
+    github: string,
+    medium: string,
+    devto: string,
+    instagram: string,
+}
+
+export type SiteMetadata = {
+    title: string,
+    siteUrl: string,
+    featuredImage: string,
+    featuredArtImage: string,
+    author: string,
+    contacts: {
+        email: string,
+        phone: string,
+        links: SiteMetadataSocialLinks,
+    },
+};

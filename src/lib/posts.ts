@@ -12,6 +12,7 @@ import katexStringify from 'rehype-stringify'
 import calculateReadingTime from "reading-time";
 import {Post, PostFrontMatter} from "@/types/post";
 import {authors} from "@/types/author";
+import {slugs} from "@/types/slug";
 
 const postsDirectory = path.join(process.cwd(), "posts");
 const mdExtension = ".md"
@@ -19,7 +20,7 @@ const postsPerPage = 11;
 
 const generatePostSlugFrom = (filename: string) => {
     const [year, month, day, ...slug] = filename.split("-");
-    return `/blog/post/${year}/${month}/${day}/${slug.join("-")}`.replace(mdExtension, "");
+    return `${slugs.blogPost}${year}/${month}/${day}/${slug.join("-")}`.replace(mdExtension, "");
 };
 
 const generateFileNameFrom = (year: string, month: string, day: string, slug: string) => {
@@ -40,29 +41,11 @@ const getFrontmatterFrom = (
         tags: data.tags,
         comments: data.comments,
         authors: data.authors.map((author: string) => authors[author]),
+        image: data.image,
     };
 };
 
-export const getAllPosts = (): PostFrontMatter[] => {
-    const filesNames = fs.readdirSync(postsDirectory);
-
-    return filesNames
-        .map((fileName) => {
-            const filePath = path.join(postsDirectory, fileName);
-            const fileContents = fs.readFileSync(filePath, "utf8");
-            const fileParsed = matter(fileContents);
-            return getFrontmatterFrom(fileParsed, fileName);
-        }).sort((a, b) =>
-            new Date(b.date).getTime() - new Date(a.date).getTime());
-};
-
-export const getPostBy = (
-    year: string,
-    month: string,
-    day: string,
-    slug: string
-): Post => {
-    const filePath = path.join(postsDirectory, generateFileNameFrom(year, month, day, slug));
+const getPostFromFilePath = (filePath: string, fileName: string) => {
     const fileContents = fs.readFileSync(filePath, "utf8");
     const fileParsed = matter(fileContents);
 
@@ -78,10 +61,31 @@ export const getPostBy = (
         .toString();
 
     return {
-        frontmatter: getFrontmatterFrom(fileParsed, slug),
+        frontmatter: getFrontmatterFrom(fileParsed, fileName),
         readingTime: calculateReadingTime(htmlContent),
         content: htmlContent,
     };
+}
+
+export const getAllPosts = (): Post[] => {
+    const filesNames = fs.readdirSync(postsDirectory);
+
+    return filesNames
+        .map((fileName) => {
+            const filePath = path.join(postsDirectory, fileName);
+           return getPostFromFilePath(filePath, fileName)
+        }).sort((a, b) =>
+            new Date(b.frontmatter.date).getTime() - new Date(a.frontmatter.date).getTime());
+};
+
+export const getPostBy = (
+    year: string,
+    month: string,
+    day: string,
+    slug: string
+): Post => {
+    const filePath = path.join(postsDirectory, generateFileNameFrom(year, month, day, slug));
+    return getPostFromFilePath(filePath, slug)
 };
 
 // export const generateAllPostParams = (): PostParameters[] => {
@@ -109,8 +113,8 @@ export const getPostsPaginationFor = (page: number) => {
     const start = (page - 1) * postsPerPage;
     const paginatedPosts = posts.slice(start, start + postsPerPage);
     const totalPages = Math.ceil(posts.length / postsPerPage);
-    const previousPageUrl = page > 1 ? `/blog/page/${page - 1}` : undefined
-    const nextPageUrl = page < totalPages ? `/blog/page/${page + 1}` : undefined
+    const previousPageUrl = page > 1 ? `${slugs.blogPage}${page - 1}` : undefined
+    const nextPageUrl = page < totalPages ? `${slugs.blogPage}${page + 1}` : undefined
 
     return { paginatedPosts, previousPageUrl, nextPageUrl };
 }

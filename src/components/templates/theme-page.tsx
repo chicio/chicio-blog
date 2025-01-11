@@ -2,7 +2,7 @@
 
 import { DefaultTheme, ThemeProvider } from "styled-components";
 import { FC, ReactNode } from "react";
-import {GlobalStyle} from "@/components/design-system/templates/global-style";
+import {GlobalStyle} from "@/components/templates/global-style";
 
 interface ThemePageProps {
   theme: DefaultTheme;

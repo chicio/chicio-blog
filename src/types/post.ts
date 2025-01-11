@@ -17,6 +17,7 @@ export type PostFrontMatter = {
     tags: string[];
     comments: boolean;
     authors: Author[];
+    image: string;
 }
 
 export type Post = {

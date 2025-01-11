@@ -1,6 +1,8 @@
+'use client'
+
 import { css } from "styled-components";
-import { mediaQuery } from "../utils-css/media-query";
-import { borderRadius } from "./border-radius";
+import {borderRadius} from "@/components/design-system/atoms/border-radius";
+import {mediaQuery} from "@/components/design-system/utils-css/media-query";
 
 export const callToActionStyle = css`
   font-size: ${(props) => props.theme.fontSizes[3]};
