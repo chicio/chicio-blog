@@ -3,10 +3,11 @@ import {getAllPosts} from "@/lib/posts";
 
 const POSTS_PER_PAGE = 5;
 
-export default function BlogHome({ searchParams }: { searchParams: { page?: string } }) {
-    const page = parseInt(searchParams.page || "1", 10);
+export default async function BlogHome({ searchParams }: { searchParams: { page?: string } }) {
+    const { page } = await searchParams
+    const pageParam = parseInt(page || "1", 10);
     const posts = getAllPosts();
-    const start = (page - 1) * POSTS_PER_PAGE;
+    const start = (pageParam - 1) * POSTS_PER_PAGE;
     const paginatedPosts = posts.slice(start, start + POSTS_PER_PAGE);
 
     const totalPages = Math.ceil(posts.length / POSTS_PER_PAGE);
@@ -17,16 +18,16 @@ export default function BlogHome({ searchParams }: { searchParams: { page?: stri
             <ul>
                 {paginatedPosts.map((post) => (
                     <li key={post.slug}>
-                        <Link href={`/blog/${post.slug}`}>
+                        <Link href={post.slug}>
                             <h2>{post.title}</h2>
-                            <p>{post.excerpt}</p>
+                            <p>{post.description}</p>
                         </Link>
                     </li>
                 ))}
             </ul>
             <div>
-                {page > 1 && <Link href={`/?page=${page - 1}`}>Previous</Link>}
-                {page < totalPages && <Link href={`/?page=${page + 1}`}>Next</Link>}
+                {pageParam > 1 && <Link href={`/?page=${pageParam - 1}`}>Previous</Link>}
+                {pageParam < totalPages && <Link href={`/?page=${pageParam + 1}`}>Next</Link>}
             </div>
         </main>
     );
