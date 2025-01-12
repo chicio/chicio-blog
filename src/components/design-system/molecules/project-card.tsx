@@ -38,14 +38,16 @@ const ProjectImageContainer = styled(ProjectContentContainer)`
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  ${borderRadius};
-  box-shadow: 0 3px 10px 0 ${(props) => props.theme.light.boxShadowLight};
-
-  ${mediaQuery.dark} {
-      box-shadow: 0 3px 10px 0 ${(props) => props.theme.dark.boxShadowLight};
-  }
-  }
 `;
+
+const ProjectImage = styled(Image)`
+    ${borderRadius};
+    box-shadow: 0 3px 10px 0 ${(props) => props.theme.light.boxShadowLight};
+
+    ${mediaQuery.dark} {
+        box-shadow: 0 3px 10px 0 ${(props) => props.theme.dark.boxShadowLight};
+    }
+`
 
 const CallToActionContainer = styled.div`
   margin: ${(props) => props.theme.spacing[6]} 0;
@@ -59,7 +61,7 @@ export const ProjectCard: FC<ProjectProps> = ({
 }) => (
   <ProjectContainer $reverse={reverse}>
     <ProjectImageContainer>
-      <Image
+      <ProjectImage
         width={500}
         height={500}
         alt={project.name}
