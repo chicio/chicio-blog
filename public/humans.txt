@@ -1,0 +1,10 @@
+/* TEAM */
+	Software Developer: Fabrizio Duroni
+	Contact: fabrizio.duroni [at] gmail.com
+	Twitter: @chicio86
+	From: Asso, Como, Italy
+
+/* SITE */
+	Language: English
+	Doctype: HTML5
+	IDE: WebStorm

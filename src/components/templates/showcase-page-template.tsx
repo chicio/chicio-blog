@@ -1,10 +1,10 @@
 import {FC, ReactElement, ReactNode} from "react";
 import {siteMetadata} from "@/types/site-metadata";
-import {OgPageType} from "@/lib/seo";
 import {ContainerFullscreen} from "@/components/design-system/atoms/container-fullscreen";
 import {DownArrow} from "@/components/design-system/molecules/down-arrow";
 import {Footer} from "@/components/design-system/organism/footer";
 import {SiteHead} from "@/components/website/SiteHead";
+import {OgPageType} from "@/lib/seo";
 
 interface ShowcasePageProps {
   fullScreenComponent: ReactElement;

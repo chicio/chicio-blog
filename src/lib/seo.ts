@@ -1,154 +1,120 @@
 import {SiteMetadataSocialLinks} from "@/types/site-metadata";
+import type {Metadata} from 'next'
 
-export enum OgPageType {
-  BlogPosting = "BlogPosting",
-  WebSite = "WebSite",
-  Person = "Person",
+export type OgPageType = 'website' | 'article' | 'profile'
+
+export function createMetadata({
+                                   author,
+                                   title,
+                                   url,
+                                   imageUrl,
+                                   ogPageType,
+                                   keywords
+                               }: {
+    author: string,
+    title: string,
+    url: string,
+    imageUrl: string,
+    ogPageType: OgPageType,
+    keywords?: string[]
+}): Metadata {
+    const validKeywords: string[] = keywords || [
+        "fabrizio duroni",
+        "chicio",
+        "chicio86",
+        "mobile development",
+        "iOS",
+        "apple",
+        "android",
+        "react",
+        "react native",
+        "frontend",
+        "backend",
+        "typescript",
+        "kotlin",
+        "java",
+        "xcode",
+        "swift",
+        "swiftui",
+    ];
+
+    return {
+        // Basic metadata
+        title,
+        description: title,
+        authors: [{name: author}],
+        keywords: validKeywords,
+
+        // Open Graph
+        openGraph: {
+            title,
+            description: title,
+            url,
+            siteName: author,
+            images: [{url: imageUrl}],
+            locale: 'en_US',
+            type: ogPageType
+        },
+
+        // Twitter
+        twitter: {
+            card: 'summary',
+            title,
+            images: [imageUrl],
+            site: '@chicio86',
+            creator: '@chicio86'
+        },
+
+        // Additional meta tags
+        other: {
+            'p:domain_verify': '33d2d5dad0e1496d9f7974925340ea50',
+            'apple-mobile-web-app-status-bar-style': 'black',
+            'msapplication-config': 'browserconfig.xml',
+            'msapplication-TileColor': '#303f9f',
+            'msapplication-TileImage': '/mstile-144x144.png',
+            'yandex-verification': '741cf901cb1dbdf5',
+            'article:publisher': 'https://www.facebook.com/fabrizio.duroni',
+            'fb:app_id': '443203349348229'
+        }
+    }
 }
 
-export const createMetaAttributes = (
-  author: string,
-  title: string,
-  url: string,
-  imageUrl: string,
-  ogPageType: OgPageType,
-  keywords: ReadonlyArray<string | null>,
-) => [
-  {
-    name: "viewport",
-    content: "width=device-width, initial-scale=1",
-  },
-  {
-    name: "p:domain_verify",
-    content: "33d2d5dad0e1496d9f7974925340ea50",
-  },
-  {
-    name: "apple-mobile-web-app-status-bar-style",
-    content: "black",
-  },
-  {
-    name: "author",
-    content: author,
-  },
-  {
-    name: "description",
-    content: title,
-  },
-  {
-    property: "og:title",
-    content: title,
-  },
-
-  {
-    property: "og:locale",
-    content: "en_US",
-  },
-  {
-    property: "og:description",
-    content: title,
-  },
-  {
-    property: "og:url",
-    content: url,
-  },
-  {
-    property: "og:site_name",
-    content: author,
-  },
-  {
-    property: "og:image",
-    content: imageUrl,
-  },
-  {
-    name: "twitter:card",
-    content: "summary",
-  },
-  {
-    property: "twitter:image",
-    content: imageUrl,
-  },
-  {
-    property: "twitter:title",
-    content: title,
-  },
-  {
-    name: "twitter:site",
-    content: "@chicio86",
-  },
-  {
-    name: "twitter:creator",
-    content: "@chicio86",
-  },
-  {
-    property: "article:publisher",
-    content: "https://www.facebook.com/fabrizio.duroni",
-  },
-  {
-    property: "fb:app_id",
-    content: "443203399348229",
-  },
-  {
-    property: "og:type",
-    content: ogPageType,
-  },
-  {
-    name: "msapplication-config",
-    content: "browserconfig.xml",
-  },
-  {
-    name: "msapplication-TileColor",
-    content: "#303f9f",
-  },
-  {
-    name: "msapplication-TileImage",
-    content: `/mstile-144x144.png`,
-  },
-  {
-    name: "yandex-verification",
-    content: "741cf901cb1dbdf5",
-  },
-  {
-    name: "keywords",
-    content: keywords.filter((value) => value !== null).join(", "),
-  },
-];
-
 export const createJsonLD = (
-  ogPageType: OgPageType,
-  url: string,
-  imageUrl: string,
-  author: string,
-  title: string,
-  links: SiteMetadataSocialLinks,
-  keywords: ReadonlyArray<string | null>,
-  description?: string,
-  date?: string,
+    ogPageType: OgPageType,
+    url: string,
+    imageUrl: string,
+    author: string,
+    title: string,
+    links: SiteMetadataSocialLinks,
+    keywords: ReadonlyArray<string | null>,
+    description?: string,
+    date?: string,
 ) => `{
         ${
-          date
-            ? `"datePublished":"${date}",
+    date
+        ? `"datePublished":"${date}",
                "dateModified":"${date}", `
-            : ""
-        }
+        : ""
+}
         "@type":"${ogPageType}",
         "url":"${url}",
         "image":"${imageUrl}",
         ${
-          ogPageType === OgPageType.BlogPosting
-            ? `"mainEntityOfPage":{\n"@type":"WebPage",\n"@id":"${url}"\n},`
-            : ""
-        }
+    ogPageType === 'article'
+        ? `"mainEntityOfPage":{\n"@type":"WebPage",\n"@id":"${url}"\n},`
+        : ""
+}
         ${
-          ogPageType !== OgPageType.Person
-            ? `"author":{
+    ogPageType !== 'profile'
+        ? `"author":{
           "@type":"Person",
           "name":"${author}"
         },`
-            : ""
-        }
+        : ""
+}
         ${
-          ogPageType !== OgPageType.Person
-            ? `"publisher":{
+    ogPageType !== 'profile'
+        ? `"publisher":{
           "@type":"Organization",
           "logo":{
             "@type":"ImageObject",
@@ -156,19 +122,19 @@ export const createJsonLD = (
           },
           "name":"${author}"
         },`
-            : ""
-        }
-        ${ogPageType === OgPageType.WebSite ? `"headline":"${author}",` : ""}
+        : ""
+}
+        ${ogPageType === 'website' ? `"headline":"${author}",` : ""}
         ${
-          ogPageType === OgPageType.BlogPosting
-            ? `"headline":"${
-                title.length > 110 ? title.substr(0, 110) : title
-              }",`
-            : ""
-        }
+    ogPageType === 'article'
+        ? `"headline":"${
+            title.length > 110 ? title.substr(0, 110) : title
+        }",`
+        : ""
+}
         "description":"${
-          ogPageType === OgPageType.BlogPosting ? description : title
-        }",
+    ogPageType === 'article' ? description : title
+}",
         "sameAs":[
           "${links!.twitter}",
           "${links!.facebook}",
@@ -178,13 +144,13 @@ export const createJsonLD = (
         "name":"${author}",
         "@context":"https://schema.org",
         ${
-          ogPageType !== OgPageType.Person
-            ? `"keywords": [
+    ogPageType !== 'profile'
+        ? `"keywords": [
                 ${keywords
-                  .filter((value) => value !== null)
-                  .map((keyword) => `"${keyword}"`)
-                  .join(",")}
+            .filter((value) => value !== null)
+            .map((keyword) => `"${keyword}"`)
+            .join(",")}
                 ]`
-            : ""
-        }
+        : ""
+}
       }`;
