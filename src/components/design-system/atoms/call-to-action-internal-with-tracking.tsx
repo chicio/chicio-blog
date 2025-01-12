@@ -1,3 +1,5 @@
+'use client'
+
 import { FC, ReactNode } from "react";
 import {TrackingElementProps} from "@/types/tracking";
 import {CallToActionInternal} from "@/components/design-system/atoms/call-to-action-internal";
