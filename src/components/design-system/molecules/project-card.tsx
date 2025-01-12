@@ -1,36 +1,34 @@
-import { FC } from "react";
-import styled, { TransientProps } from "styled-components";
+import {FC} from "react";
+import styled, {TransientProps} from "styled-components";
 import {Container} from "@/components/design-system/atoms/container";
 import {mediaQuery} from "@/components/design-system/utils-css/media-query";
 import {borderRadius} from "@/components/design-system/atoms/border-radius";
-import {Heading3} from "@/components/design-system/atoms/heading3";
 import {Paragraph} from "@/components/design-system/atoms/paragraph";
 import {List} from "@/components/design-system/atoms/list";
 import {CallToActionExternalWithTracking} from "@/components/design-system/atoms/call-to-action-external-with-tracking";
 import Image from 'next/image';
 import {Project} from "@/types/projects";
+import {Heading4} from "@/components/design-system/atoms/heading4";
 
 interface ProjectContainerProps {
   reverse: boolean;
 }
 
-type Created = TransientProps<ProjectContainerProps>;
-
-const ProjectContainer = styled(Container)<Created>`
+const ProjectContainer = styled(Container)<TransientProps<ProjectContainerProps>>`
   display: flex;
   flex-direction: column;
-  padding: 0;
   margin: ${(props) => props.theme.spacing[7]} auto;
+    gap: ${(props) => props.theme.spacing[2]};
 
   ${mediaQuery.minWidth.md} {
     flex-direction: ${(props) => (props.$reverse ? "row-reverse" : "row")};
-    max-width: 1100px;
+    gap: ${(props) => props.theme.spacing[10]};
   }
 `;
 
 const ProjectContentContainer = styled.div`
   flex: 50%;
-  padding: ${(props) => props.theme.spacing[2]};
+  //padding: ${(props) => props.theme.spacing[2]};
 `;
 
 const ProjectImageContainer = styled(ProjectContentContainer)`
@@ -66,10 +64,14 @@ export const ProjectCard: FC<ProjectProps> = ({
         height={500}
         alt={project.name}
         src={project.image}
+        style={{
+            width: '100%',
+            height: 'auto',
+        }}
       />
     </ProjectImageContainer>
     <ProjectContentContainer>
-      <Heading3>{project.name}</Heading3>
+      <Heading4>{project.name}</Heading4>
       <Paragraph>{project.description}</Paragraph>
       <List className="project-features">
         {project.features.map((feature) => (

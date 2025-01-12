@@ -24,17 +24,16 @@ export const projects: Record<string, Project> = {
       "Physically based ray tracer with multiple shading models support and Color Rendering Index (CRI)" +
       " evaluation.",
     description:
-      "Physically based ray tracer with multiple shading models support and Color Rendering Index (CRI)" +
+      "Physically based ray tracer with multiple shading models support and CRI" +
       " evaluation. Project developed for my master degree thesis at University Milano-Bicocca - Imaging and Vision" +
       " Laboratory.",
     features: [
       "Computer graphics",
       "Ray-tracing",
       "Physically based rendering",
-      "Color calculation using spectral data",
       "Color Rendering index calculation",
       "iOS, macOS, Windows",
-      "Objective-C, C++",
+      "C++"
     ],
     callToActions: [
       {
@@ -56,9 +55,9 @@ export const projects: Record<string, Project> = {
   },
   "spectral-brdf-explorer": {
     name: "Spectral BRDF Explorer",
-    abstract: "An iOS OpenGL ES appfor exploring lighting models.",
+    abstract: "An iOS OpenGL ES app for exploring lighting models.",
     description:
-      "An iOS OpenGL ES application inspired by Walt Animation Disney Studios BRDF Viewer. A simple application that" +
+      "An iOS OpenGL ES application inspired by Walt Animation Disney Studios BRDF Viewer. It" +
       " shows some of the most famous lighting model used in computer graphics and that supports color calculation using RGB and spectral data of lights and object surfaces.",
     features: [
       "Computer graphics",
@@ -117,14 +116,12 @@ export const projects: Record<string, Project> = {
     description:
       "A highly customizable iOS range selection slider, developed using " +
       "autolayout and completely customizable using IBDesignabled and " +
-      "IBInspectable.Compatible with SwiftUI Distributed as a custom framework and with cocoapods.",
+      "IBInspectable. Compatible with SwiftUI.",
     features: [
       "Cocoa Touch",
       "SwiftUI",
-      "Custom UI Component",
       "Autolayout",
-      "IBDesignable",
-      "IBInspectable",
+      "IBDesignable + IBInspectable",
       "iOS",
       "Swift",
     ],
