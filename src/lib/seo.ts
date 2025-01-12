@@ -19,10 +19,6 @@ export const createMetaAttributes = (
     content: "width=device-width, initial-scale=1",
   },
   {
-    httpEquiv: "X-UA-Compatible",
-    content: "IE=edge",
-  },
-  {
     name: "p:domain_verify",
     content: "33d2d5dad0e1496d9f7974925340ea50",
   },

@@ -1,47 +1,40 @@
-/// TODO: MIGRATION MISSING
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { FC, ReactNode } from "react";
+import {FC, ReactElement, ReactNode} from "react";
 import {siteMetadata} from "@/types/site-metadata";
 import {OgPageType} from "@/lib/seo";
 import {ContainerFullscreen} from "@/components/design-system/atoms/container-fullscreen";
 import {DownArrow} from "@/components/design-system/molecules/down-arrow";
 import {Footer} from "@/components/design-system/organism/footer";
+import {SiteHead} from "@/components/website/SiteHead";
 
 interface ShowcasePageProps {
-  location: string;
-  fullScreenComponent: React.ReactElement;
+  fullScreenComponent: ReactElement;
   trackingCategory: string;
   ogPageType: OgPageType;
   title?: string;
   featuredImage: string;
-  cookieConsentColor: string;
-  keywords?: ReadonlyArray<string | null>;
+  keywords?: string[];
   children?: ReactNode;
 }
 
 export const ShowcasePageTemplate: FC<ShowcasePageProps> = ({
   children,
-  location,
   fullScreenComponent,
   trackingCategory,
   ogPageType,
   title,
   featuredImage,
-  cookieConsentColor,
   keywords,
 }) => {
   const author = siteMetadata.author;
 
   return (
       <>
-          {/*<Head*/}
-          {/*  url={location.url}*/}
-          {/*  pageType={ogPageType}*/}
-          {/*  imageUrl={featuredImage}*/}
-          {/*  customTitle={title}*/}
-          {/*  cookieConsentColor={cookieConsentColor}*/}
-          {/*  keywords={keywords}*/}
-          {/*/>*/}
+          <SiteHead
+            pageType={ogPageType}
+            imageUrl={featuredImage}
+            customTitle={title}
+            keywords={keywords}
+          />
           <ContainerFullscreen>
             {fullScreenComponent}
             <DownArrow />

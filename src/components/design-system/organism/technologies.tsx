@@ -71,7 +71,6 @@ export const Technologies: FC<TechnologiesProps> = ({ author }) => (
     <TechnologiesIconsContainer>
       <TechnologyImageContainer>
         <Image
-          objectFit={"contain"}
           src={typescriptImage}
           alt={"typescript"}
           placeholder={"blur"}
@@ -81,7 +80,6 @@ export const Technologies: FC<TechnologiesProps> = ({ author }) => (
       </TechnologyImageContainer>
       <TechnologyImageContainer>
         <Image
-          objectFit={"contain"}
           src={reactImage}
           alt={"react"}
           placeholder={"blur"}
@@ -91,7 +89,6 @@ export const Technologies: FC<TechnologiesProps> = ({ author }) => (
       </TechnologyImageContainer>
       <TechnologyImageContainer>
         <Image
-          objectFit={"contain"}
           src={xcodeImage}
           alt={"xcode"}
           placeholder={"blur"}
