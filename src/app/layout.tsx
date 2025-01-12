@@ -6,14 +6,15 @@ import {CookieConsent} from "@/components/website/CookieConsent";
 import {Viewport} from "next";
 import {createMetadata} from "@/lib/seo";
 import {siteMetadata} from "@/types/site-metadata";
+import {SharedHead} from "@/components/website/SharedHead";
 
 export const metadata = createMetadata({
-    author: siteMetadata.author,
-    title: siteMetadata.title,
-    url: siteMetadata.siteUrl,
-    imageUrl: siteMetadata.featuredImage,
-    ogPageType: 'website',
-})
+        author: siteMetadata.author,
+        title: siteMetadata.title,
+        url: siteMetadata.siteUrl,
+        imageUrl: siteMetadata.featuredImage,
+        ogPageType: 'website',
+    })
 
 export const viewport: Viewport = {
     width: 'device-width',
@@ -21,31 +22,19 @@ export const viewport: Viewport = {
 }
 
 export default function RootLayout({
-  children,
-}: Readonly<{ children: ReactNode }>) {
-  return (
-    <html lang="en">
-    <head>
-        <link
-            rel="preload"
-            href="/fonts/opensans/OpenSans-Regular.woff2"
-            as="font"
-            crossOrigin="anonymous"
-        />
-        <link
-            rel="author"
-            href="/humans.txt"
-            type="text/plain"
-        />
-    </head>
-    <body>
-    <StyledComponentsRegistry>
-        <ThemePage theme={blogTheme}>
-            {children}
-        </ThemePage>
-        <CookieConsent/>
-    </StyledComponentsRegistry>
-      </body>
-    </html>
-  );
+                                       children,
+                                   }: Readonly<{ children: ReactNode }>) {
+    return (
+        <html lang="en">
+        <SharedHead />
+        <body>
+        <StyledComponentsRegistry>
+            <ThemePage theme={blogTheme}>
+                {children}
+            </ThemePage>
+            <CookieConsent/>
+        </StyledComponentsRegistry>
+        </body>
+        </html>
+    );
 }

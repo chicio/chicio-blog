@@ -4,22 +4,31 @@ import {ProfilePresentation} from "@/components/design-system/organism/profile-p
 import {tracking} from "@/types/tracking";
 import {Technologies} from "@/components/design-system/organism/technologies";
 import {Resume} from "@/components/design-system/organism/resume";
+import {createStructuredData} from "@/lib/seo";
 
 export default function Home() {
   const author = siteMetadata.author;
-  const featuredImage = siteMetadata.featuredImage!;
 
   return (
       <>
-      <ShowcasePageTemplate
-          fullScreenComponent={<ProfilePresentation author={author} />}
-          trackingCategory={tracking.category.home}
-          ogPageType={'profile'}
-          featuredImage={featuredImage}
-      >
-        <Technologies author={author} />
-        <Resume />
-      </ShowcasePageTemplate>
+          <ShowcasePageTemplate
+              fullScreenComponent={<ProfilePresentation author={author}/>}
+              trackingCategory={tracking.category.home}
+          >
+              <Technologies author={author}/>
+              <Resume/>
+          </ShowcasePageTemplate>
+          <script
+              type="application/ld+json"
+              dangerouslySetInnerHTML={{__html: JSON.stringify(createStructuredData({
+                      ogPageType: 'website',
+                      url: siteMetadata.siteUrl,
+                      imageUrl: siteMetadata.featuredImage,
+                      author: siteMetadata.author,
+                      title: siteMetadata.title,
+                      links: siteMetadata.contacts.links,
+                  }))}}
+          />
       </>
   );
 }
