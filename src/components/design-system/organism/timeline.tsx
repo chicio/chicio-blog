@@ -1,7 +1,7 @@
 import { Paragraph } from "../atoms/paragraph";
 import { List } from "../atoms/list";
 import { FC, ReactElement, ReactNode } from "react";
-import styled, { css } from "styled-components";
+import styled, {css, TransientProps} from "styled-components";
 import { Container } from "../atoms/container";
 import { Heading6 } from "../atoms/heading6";
 import { mediaQuery } from "../utils-css/media-query";
@@ -83,7 +83,7 @@ interface TimelinePanelProps {
   inverted: boolean;
 }
 
-const TimelinePanel = styled.div<TimelinePanelProps>`
+const TimelinePanel = styled.div<TransientProps<TimelinePanelProps>>`
   background-color: ${(props) => props.theme.light.generalBackgroundLight};
   border: ${(props) => props.theme.light.dividerColor} 1px solid;
   box-shadow: ${(props) => props.theme.light.boxShadowLight} 0 1px 6px;
@@ -125,7 +125,7 @@ const TimelinePanel = styled.div<TimelinePanelProps>`
   }
 
   ${(props) =>
-    props.inverted &&
+    props.$inverted &&
     css`
       float: right;
 
@@ -162,7 +162,7 @@ const TimelinePanel = styled.div<TimelinePanelProps>`
     }
 
     ${(props) =>
-      props.inverted &&
+      props.$inverted &&
       css`
         float: right;
 
@@ -258,7 +258,7 @@ const TimelineElement: FC<TimelineElementProps> = ({
 }) => (
   <TimelineElementContainer>
     <TimelineBadge>{icon}</TimelineBadge>
-    <TimelinePanel inverted={inverted}>
+    <TimelinePanel $inverted={inverted}>
       <TimelinePanelContentContainer>{children}</TimelinePanelContentContainer>
     </TimelinePanel>
   </TimelineElementContainer>
@@ -299,13 +299,13 @@ export const Timeline: FC = () => {
           <TimelineDescription>
             Designing and implementing iOS and Android apps for the main brands
             of the company:
-            <List>
-              <li>lastminute.com</li>
-              <li>Volagratis</li>
-              <li>Rumbo</li>
-              <li>Weg.de</li>
-            </List>
           </TimelineDescription>
+          <List>
+            <li>lastminute.com</li>
+            <li>Volagratis</li>
+            <li>Rumbo</li>
+            <li>Weg.de</li>
+          </List>
         </TimelineElement>
         <TimelineElement inverted={true} icon={graduationCap}>
           <TimelineImageContainer>
@@ -468,25 +468,25 @@ export const Timeline: FC = () => {
             {" "}
             Assigned on Eurosig integration BA-HVB/Unicredit project, I worked
             with the Accenture Consultant team as a PMO.
-            <List>
-              <li>
-                Tracking creation and evolution of functional specification to
-                cover the gaps between ASC, CRE, PAY, MDM and BSS sector of the
-                IT systems of Unicredit and HVB bank.
-              </li>
-              <li>
-                Publishing statistics to show the state of art of the functional
-                specification produced, the open change request and the state of
-                user test. Maintenance of tools created with Microsoft Excel,
-                Microsoft Powerpoint and VBA used to generate the above
-                mentioned statistics.
-              </li>
-              <li>
-                Maintenance of tools used to manage WBS of the project inside
-                Accenture team.
-              </li>
-            </List>
           </TimelineDescription>
+          <List>
+            <li>
+              Tracking creation and evolution of functional specification to
+              cover the gaps between ASC, CRE, PAY, MDM and BSS sector of the
+              IT systems of Unicredit and HVB bank.
+            </li>
+            <li>
+              Publishing statistics to show the state of art of the functional
+              specification produced, the open change request and the state of
+              user test. Maintenance of tools created with Microsoft Excel,
+              Microsoft Powerpoint and VBA used to generate the above
+              mentioned statistics.
+            </li>
+            <li>
+              Maintenance of tools used to manage WBS of the project inside
+              Accenture team.
+            </li>
+          </List>
         </TimelineElement>
         <TimelineElement inverted={true} icon={graduationCap}>
           <TimelineImageContainer>
