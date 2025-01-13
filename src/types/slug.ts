@@ -3,7 +3,7 @@ const blogPost = `${blog}/post/`;
 
 export const slugs = {
   blog,
-  blogPage: `${blog}page`,
+  blogPage: `${blog}/page`,
   blogPost,
   tags: `${blog}/tags`,
   archive: `${blog}/archive`,

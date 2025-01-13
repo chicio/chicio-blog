@@ -1,8 +1,8 @@
 import {FC} from "react";
-import {PostCard} from "./post-card";
 import {tracking} from "@/types/tracking";
 import {Post} from "@/types/post";
 import {PostsRowContainer} from "@/components/website/PostsRowContainer";
+import {PostCard} from "@/components/design-system/molecules/post-card";
 
 
 interface PostsRowProps {

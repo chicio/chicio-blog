@@ -156,7 +156,7 @@ export const BlogMenu: FC<MenuProps> = ({ trackingCategory }) => {
           </NavBarMenuItem>
           <NavBarMenuItem
               to={slugs.blog}
-              selected={pathname === slugs.blog}
+              selected={pathname === slugs.blog || pathname.includes(slugs.blogPage)}
               trackingData={{
                 action: tracking.action.open_home,
                 category: trackingCategory,

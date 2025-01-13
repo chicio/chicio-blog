@@ -47,22 +47,5 @@ export default async function BlogPage({ params }: NextPostPaginationParameters)
                 nextPageTrackingAction={tracking.action.open_blog_next_page}
             />
         </BlogPageTemplate>
-        // <main>
-        //     <h1>Blog</h1>
-        //     <ul>
-        //         {paginatedPosts.map((post) => (
-        //             <li key={post.frontmatter.slug}>
-        //                 <Link href={post.frontmatter.slug}>
-        //                     <h2>{post.frontmatter.title}</h2>
-        //                     <p>{post.frontmatter.description}</p>
-        //                 </Link>
-        //             </li>
-        //         ))}
-        //     </ul>
-        //     <div>
-        //         {previousPageUrl && <a href={previousPageUrl}>Previous</a>}
-        //         {nextPageUrl && <a href={nextPageUrl}>Next</a>}
-        //     </div>
-        // </main>
     );
 }

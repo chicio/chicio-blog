@@ -121,7 +121,8 @@ export const PostCard: FC<PostCardProps> = ({
         <PostCardImage
           alt={title}
           src={image}
-          fill
+          width={1000}
+          height={500}
           placeholder={'blur'}
           blurDataURL={imageBlur}
         />
