@@ -113,8 +113,8 @@ export const getPostsPaginationFor = (page: number) => {
     const start = (page - 1) * postsPerPage;
     const paginatedPosts = posts.slice(start, start + postsPerPage);
     const totalPages = Math.ceil(posts.length / postsPerPage);
-    const previousPageUrl = page > 1 ? `${slugs.blogPage}${page - 1}` : undefined
-    const nextPageUrl = page < totalPages ? `${slugs.blogPage}${page + 1}` : undefined
+    const previousPageUrl = page > 1 ? `${slugs.blogPage}/${page - 1}` : undefined
+    const nextPageUrl = page < totalPages ? `${slugs.blogPage}/${page + 1}` : undefined
 
     return { paginatedPosts, previousPageUrl, nextPageUrl };
 }

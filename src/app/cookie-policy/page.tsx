@@ -8,11 +8,12 @@ import {Heading4} from "@/components/design-system/atoms/heading4";
 import {List} from "@/components/design-system/atoms/list";
 import {StandardExternalLink} from "@/components/design-system/atoms/standard-external-link";
 import {createMetadata} from "@/lib/seo";
+import {slugs} from "@/types/slug";
 
 export const metadata = createMetadata({
   author: siteMetadata.author,
   title: siteMetadata.title,
-  url: `${siteMetadata.siteUrl}/cookie-policy`,
+  url: `${siteMetadata.siteUrl}${slugs.cookiePolicy}`,
   imageUrl: siteMetadata.featuredImage,
   ogPageType: 'website',
 })
