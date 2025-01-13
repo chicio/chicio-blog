@@ -81,7 +81,7 @@ definition of what an Ubiquitous languages is.
 
 > …The software model inside the context boundary reflects a language that is developed by the team working in the Bounded Context and is spoken by every member of the team that creates the software model that functions within that Bounded Context. The language is called the Ubiquitous Language because it is both spoken among the team members and implemented in the software model…
 
-![DDD bounded context ubiquitous language (credits “DDD distilled” by V. Vernon)](../images/posts/ddd-bounded-context-ubiquitous-language.jpg)
+![DDD bounded context ubiquitous language (credits “DDD distilled” by V. Vernon)](/images/posts/ddd-bounded-context-ubiquitous-language.jpg)
 
 How many bounded context will your project have? How do they map to your business domain parts. Let’s answer to these
 question with Subdomain
@@ -114,7 +114,7 @@ the team in charge of the related bounded context. There are 3 types of subdomai
 * Generic subdomain: this kind of subdomains includes needs where a software solution is already available to be
   purchased without the needs for any development efforts.
 
-![Type of DDD subdomains (credits “DDD distilled” by V. Vernon)](../images/posts/ddd-subdomains.jpg)
+![Type of DDD subdomains (credits “DDD distilled” by V. Vernon)](/images/posts/ddd-subdomains.jpg)
 
 From the definition above it should be clear that every software project will have multiple subdomains and bounded
 context. How do you integrate them together?
@@ -176,7 +176,7 @@ fact the type of transaction used to save your aggregate is an implementation de
 transatction, or could be something implemented using Reactive programming events/messaging.  
 There are 4 rules of thumb reported by Vernon to be considered when you’re creating aggregates:
 
-![DDD aggregates rule of thumb (credits “DDD distilled” by V. Vernon)](../images/posts/ddd-aggregates-rules-of-thumb.jpg)
+![DDD aggregates rule of thumb (credits “DDD distilled” by V. Vernon)](/images/posts/ddd-aggregates-rules-of-thumb.jpg)
 
 Let’s try to analyze them. The first one refer to the fact that the business should determine Aggregate anatomy based
 on what should be consistent when a transaction is committed.  
@@ -195,7 +195,7 @@ Let’ quote (again :laughing:) the Vernon definition of Domain Events.
 
 > A Domain Event is a record of some business-significant occurrence in a Bounded Context.
 
-![DDD domain events (credits “DDD distilled” by V. Vernon)](../images/posts/ddd-domain-events.jpg)
+![DDD domain events (credits “DDD distilled” by V. Vernon)](/images/posts/ddd-domain-events.jpg)
 
 So domain events are the fundamentals of communication between aggregates in order to keep them eventual consistent
 between each other. When creating domain events we should put a lot of attention to decide its name: should be a

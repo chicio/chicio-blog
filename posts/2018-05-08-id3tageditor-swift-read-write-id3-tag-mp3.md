@@ -20,7 +20,7 @@ developed [ID3TagEditor](https://github.com/chicio/ID3TagEditor "id3 tag editor 
 swift library to edit ID3 tag of mp3 files with support for macOS, iOS, watchOS and tvOS. In this post I will described
 how I developed it. Below you can find the library logo.
 
-![The ID3TagEditor logo](../images/posts/id3tageditor-logo.jpg)
+![The ID3TagEditor logo](/images/posts/id3tageditor-logo.jpg)
 
 But before going deeper in the details of ID3TagEditor it useful to know how the ID3 tag standard works (you can find
 the full reference on the [official site](http://id3.org/ "id3 standard")). The definition reported on it for the ID3
@@ -32,7 +32,7 @@ This definition means that an ID3 tag is basically a chunk of information stored
 standard defines the format that any developer can use to read and write this information. Let's see an example of an
 ID3 tag using a hex editor.
 
-![An ID3 tag example shown with an hex editor](../images/posts/id3-tag-example.jpg)
+![An ID3 tag example shown with an hex editor](/images/posts/id3-tag-example.jpg)
 
 A tag is composed of a header and a series of frames. The tag header has a size of 10 bytes contains the following
 information (for both v2 and v3):
@@ -44,7 +44,7 @@ information (for both v2 and v3):
 
 > the size of the complete tag after unsychronisation, including padding, excluding the header but not excluding the extended header. The ID3v2 tag size is encoded with four bytes where the most significant bit (bit 7) is set to zero in every byte, making a total of 28 bits. The zeroed bits are ignored, so a 257 bytes long tag is represented as $00 00 02 01. .... Only 28 bits(representing up to 256MB) are used in the size description...
 
-![An ID3 tag header example](../images/posts/id3-tag-header.jpg)
+![An ID3 tag header example](/images/posts/id3-tag-header.jpg)
 
 A frame is composed of an header and a custom content. The frame header contains the following information, that change
 in size between versions:
@@ -56,7 +56,7 @@ in size between versions:
 So the frame header size is 10 bytes in version 3 and 6 bytes in version 2. After the header there is the custom
 specific frame flags/options and the frame content. Below you can find an example of a frame in a version 3 tag.
 
-![An ID3 frame example](../images/posts/id3-frame-example.jpg)
+![An ID3 frame example](/images/posts/id3-frame-example.jpg)
 
 Last but not least at the end of the ID3 tag there are also 2 KB of offset (you can see it in the previous images, that
 series of endless `0x00` at the end of the tag :relieved:). How does ID3TagEditor read and write all this information?

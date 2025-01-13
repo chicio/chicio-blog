@@ -153,6 +153,10 @@ const PostContentContainer = styled.div`
         padding: 4px;
         ${borderRadius};
     }
+    
+    & img {
+        width: 100%;
+    }
 `;
 
 interface PostContentProps {

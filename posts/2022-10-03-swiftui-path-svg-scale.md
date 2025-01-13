@@ -26,7 +26,7 @@ For this new secret project, we are developing something new for our mobile app
 using [SwiftUI](https://developer.apple.com/xcode/swiftui/ "swiftui"). We had various challenges to overcome. 
 One of this has been to be able to display a cool inspirational title like the following one.
 
-![swiftui path shapes](../images/posts/swiftui-path.jpg "The inspirational title we want to create")
+![swiftui path shapes](/images/posts/swiftui-path.jpg "The inspirational title we want to create")
 
 The easiest way to go could be to simply include in the target bundle the localized version of an assets that 
 represent the title above. This is easily achievable using 

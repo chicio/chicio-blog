@@ -22,7 +22,7 @@ complete example [in this github repository](https://github.com/chicio/Notificat
 Let's start from the beginning: add a Notification Content Extension to your app. To do that just select the + button
 in the target section that appears after selecting the xcodeproj file.
 
-![Add a new Notification Content Extension target to the app](../images/posts/notification-content-extension-add-target.jpg)
+![Add a new Notification Content Extension target to the app](/images/posts/notification-content-extension-add-target.jpg)
 
 The extension that is created contains a `NotificationViewController` that adheres to
 the `UNNotificationContentExtension`. The documentation for this protocol says:
@@ -35,7 +35,7 @@ a `MainInterface.storyboard` that contains a single controller associated with t
 previously mentioned. We can use this storyboard to customize the notification UI using interface builder. So let's
 start by defining the interface in the storyboard. Below in the image there's the final result.
 
-![Customize the notification UI with the storyboard contained in the new created extension](../images/posts/notification-content-extension-storyboard-notification.jpg)
+![Customize the notification UI with the storyboard contained in the new created extension](/images/posts/notification-content-extension-storyboard-notification.jpg)
 
 Then we can fill the UI with the notification content we receive in
 the `func didReceive(_ notification: UNNotification)` of the `NotificationViewController` controller that implements the

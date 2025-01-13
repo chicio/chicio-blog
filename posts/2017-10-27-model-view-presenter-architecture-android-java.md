@@ -24,7 +24,7 @@ the [previous post](/2017/08/11/model-view-presenter-architecture-ios-swift-unit
 a simple product catalog that shows a list of products. When you tap on one of them, its details is shown. Below you can
 find the same mockup we used for the iOS version.
 
-![A mockup of the final app we will obtain at the end of this post](../images/posts/mockup-model-view-presenter.jpg)
+![A mockup of the final app we will obtain at the end of this post](/images/posts/mockup-model-view-presenter.jpg)
 
 Let's start by creating a `Product` class. We need also to create a `ProductsRepository` class: in our case it will be a
 fake one that return to listener a list of products after 3 seconds. We do this to simulate a web service call. This is
@@ -710,4 +710,4 @@ That's it!!!!! You've made it!!! Now you master the Model View Presenter archite
 ready to rock with unit test on all the main mobile platform on the market (somebody said Windows Phone!?!?!?!?!? :
 stuck_out_tongue_closed_eyes:).
 
-![Chuck Norris approves the Model View Presenter architectural pattern](../images/posts/model-view-presenter-platforms.jpg)
+![Chuck Norris approves the Model View Presenter architectural pattern](/images/posts/model-view-presenter-platforms.jpg)

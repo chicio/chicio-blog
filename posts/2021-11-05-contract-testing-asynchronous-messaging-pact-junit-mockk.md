@@ -34,7 +34,7 @@ Let’s have a look at the definition from the Pact website.
 So contract testing is a way to ensure that two application communicate correctly by adhering to a contract that
 describe the API or the message exchanged between them. Cool, isn’t it? 😏
 
-![contract testing pact](../images/posts/pact-contract-testing.jpg "Pact contract testing")
+![contract testing pact](/images/posts/pact-contract-testing.jpg "Pact contract testing")
 
 In this post I will show you how me and Felice tested a messaging interaction between two microservices using Pact with 
 the help of [Stefano Varesi](https://www.linkedin.com/in/stefanovaresi/), a senior software engineer that works in 
@@ -372,7 +372,7 @@ docker-compose up
 After running the commands above we will have a pact broker local instance. We can access it in the browser 
 (as localhost) and below you can see the homepage with an example contract listed. We are now ready to write our test.
 
-![pact broker](../images/posts/pact-broker-homepage.jpg "Pact broker homepage")
+![pact broker](/images/posts/pact-broker-homepage.jpg "Pact broker homepage")
 
 #### Implementation
 
@@ -521,13 +521,13 @@ following command and the contract will be published on the pact broker.
 mvn pact:publish
 ```
 
-![pact publish example](../images/posts/pact-publish-example.jpg "Pact publish example")
+![pact publish example](/images/posts/pact-publish-example.jpg "Pact publish example")
 
 If we reload the pact broker homepage now we should see a new contract, the one we just published, with all the data 
 needed by the provider to verify its payload. Below you can see a screenshot of the pact broker that show our new 
 contract.
 
-![pact broker contract message example](../images/posts/pact-broker-homepage.jpg "Our Pact broker contract message 
+![pact broker contract message example](/images/posts/pact-broker-homepage.jpg "Our Pact broker contract message 
 page")
 
 Now we can write our provider test. Let's see first the `RefundService` codebase. As our consumer, it is very simple.

@@ -31,13 +31,13 @@ Let's see the armature tab first. First we have a the display options, to manage
 show the name, the color and more important we can activate the X-Ray mode that let us see the bone through the
 character.
 
-![Add bones](../images/posts/blender-bones.jpg)
+![Add bones](/images/posts/blender-bones.jpg)
 
 To create a complete armature we have some tools similar to the one we previously seen for modeling. After selecting
 edit mode, in the left panel of the 3D window we have the options extrude and subdivide that let us create a complete
 skeleton for a character. In the scene we will find our armature object with all the bones connected.
 
-![Add armature](../images/posts/blender-armature.jpg)
+![Add armature](/images/posts/blender-armature.jpg)
 
 We can now start to add the armature to an object. To do that we just have to place/create the bones inside our object.
 After that we select the object and the bones (in this specific order), and we choose from the menu at the bottom of the
@@ -45,7 +45,7 @@ After that we select the object and the bones (in this specific order), and we c
 in the menu at the bottom of the 3D window). If we move one of our bones in this mode, the part of the object/mesh that
 contains that bone will move accordingly.
 
-![Set armature](../images/posts/blender-set-armature.jpg)
+![Set armature](/images/posts/blender-set-armature.jpg)
 
 `youtube: https://www.youtube.com/watch?v=GpkMgUqWZJo`
 
@@ -57,7 +57,7 @@ Inverse kinematics. To be more clear this is an extract of the blender doc:
 We can add an inverse kinematic constraint on a bone by choosing it from the menu under the Bone constraint tab in the
 properties panel. This tab will appear only when we are in pose mode.
 
-![Inverse kinematics](../images/posts/blender-inverse-kinematics.jpg)
+![Inverse kinematics](/images/posts/blender-inverse-kinematics.jpg)
 
 After setting bones, armature and inverse kinematics we are ready to animate our character. To do that, we just need to
 be in Pose mode and set the keyframes as we did for standard animation.

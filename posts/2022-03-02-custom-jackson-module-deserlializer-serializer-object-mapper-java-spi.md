@@ -273,7 +273,7 @@ of our implementation. So in our case, to load our `MoneyModule` contained in th
 just have to add a file named `com.fasterxml.jackson.databind.Module` in  the `META-INF/services` folder of the 
 `money-module` and inside it write the fully qualified name of our `MoneyModule` implementation.
 
-![contract testing pact](../images/posts/module-jackson.jpg "custom module jackson findAndRegisterModules")
+![contract testing pact](/images/posts/module-jackson.jpg "custom module jackson findAndRegisterModules")
 
 That's it!!! :rocket: With the implementation above we have a custom Jackson `Module` that will be loaded by its 
 `ObjectMapper` automatically without creating any dependencies. In this way you will be able to publish your 

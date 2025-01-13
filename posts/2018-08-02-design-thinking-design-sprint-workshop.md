@@ -24,7 +24,7 @@ Calcea (Asti) at the bed &
 breakfast ["Cascina Il Quercin"](https://www.tripadvisor.it/Hotel_Review-g1186672-d6420387-Reviews-Cascina_Il_Quercin-Castelnuovo_Calcea_Province_of_Asti_Piedmont/)
 . Below you can find some photos of this beautiful location (yes, I want you to be envy :grin:)
 
-![Cascina Il Quercin Castelnuovo Calcea](../images/posts/offsite-location.jpg)
+![Cascina Il Quercin Castelnuovo Calcea](/images/posts/offsite-location.jpg)
 
 What was the main topic of the workshop? Well, in this one day workshop our UX team shown us what is the Design Thinking
 and the Design Sprint framework and we tried to apply it to came up with a solution for one of the next big projects we
@@ -49,7 +49,7 @@ of design thinking: it is a time constrained process (usually 5 days) where all 
 sequence. During the workshop we tried to simulate a design sprint. We had just one day, so we compressed all the phases
 of a sprint in just a few hours :grin:.
 
-![Deciding the offsite agenda](../images/posts/offsite-agenda.jpg)
+![Deciding the offsite agenda](/images/posts/offsite-agenda.jpg)
 
 We created two separated teams and then we started our design sprint. Let's see the various phases we went through and
 the final result.
@@ -77,7 +77,7 @@ creating some sketch. As the definition says, in this phase it is better to favo
 The more ideas you get, the better it is. So everyone in the two teams started to draw at the speed of light like a 10
 years old children :laughing:.
 
-![The crazy 8 phase](../images/posts/offsite-crazy-8.jpg)
+![The crazy 8 phase](/images/posts/offsite-crazy-8.jpg)
 
 ### One big idea
 
@@ -90,7 +90,7 @@ explained us we had to follow these key points:
 * Focus on emotions.
 * Enough fidelity to start building a prototype.
 
-![The one big idea phase](../images/posts/offsite-one-big-idea.jpg)
+![The one big idea phase](/images/posts/offsite-one-big-idea.jpg)
 
 ### Decide
 
@@ -100,7 +100,7 @@ got “budget” of 3 dot stickers: we had to use them to vote what we thought w
 ideas were chosen as the base to create a detail prototype. So the final prototype is a mix of the best ideas created
 during the sprint.
 
-![Decide: choose the best ideas](../images/posts/offsite-decide.jpg)
+![Decide: choose the best ideas](/images/posts/offsite-decide.jpg)
 
 ### Prototyping
 
@@ -122,7 +122,7 @@ that is required to be a UX designer :relieved:. I don't think I will ever be a 
 point to let me try to enter in the mindset of a UX designer (and also life is unpredictable so who knows? :blush:).
 Anyway...after the hard work...we had some relaxing moments :relieved:.
 
-![It's time for some relax](../images/posts/offsite-relax.jpg)
+![It's time for some relax](/images/posts/offsite-relax.jpg)
 
 To be noted, in the right lower corner you can
 see [Alessandro Romano](https://www.linkedin.com/in/alessandroromano92/ "Alessandro Romano") during some swim stunts

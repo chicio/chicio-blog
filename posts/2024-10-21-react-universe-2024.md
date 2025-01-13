@@ -58,7 +58,7 @@ aiming to offer a seamless development experience across web and mobile platform
 This unified direction highlights the importance
 of creating consistent user experiences regardless of the underlying technology.
 
-![react universe opening speed](../images/posts/react-universe-2024-native-web.jpeg "Strong messages from the react community")
+![react universe opening speed](/images/posts/react-universe-2024-native-web.jpeg "Strong messages from the react community")
 
 ##### 🎉 What a Year for React Native!
 
@@ -71,7 +71,7 @@ To remark the shift to the "use a framework" approach, they also announced the d
 The cli will be published in an ad hoc React Native community package,
 and when you launch an init command, a deprecation message will be shown.
 
-![react universe nicola corti](../images/posts/react-universe-2024-react-native.jpeg "Use a framework 
+![react universe nicola corti](/images/posts/react-universe-2024-react-native.jpeg "Use a framework 
 direction, shown by Nicola Corti from Meta")
 
 Another news shared is related to the next release 0.76 and the fact
@@ -93,7 +93,7 @@ he jokingly admitted the community would have to see for themselves.
 This tool represents a significant improvement in terms "ease of use" and functionality for developers
 working with React Native.
 
-![react universe alex hunt debugger](../images/posts/react-universe-2024-react-native-devtools.jpeg "The new React Native DevTools, available from React Native 0.76")
+![react universe alex hunt debugger](/images/posts/react-universe-2024-react-native-devtools.jpeg "The new React Native DevTools, available from React Native 0.76")
 
 ##### 👓 React Native ❤ Apple Vision Pro
 
@@ -104,7 +104,7 @@ allowing developers to gradually improve app experiences without sacrificing com
 Oskar explained how Callstack is maintaining a fork of React Native specifically developed for Vision Pro,
 with live demos already showcased at the conference.
 
-![react universe apple vision pro](../images/posts/react-universe-2024-apple-vision-pro.jpeg "React native for visionos, maintained by callstack.io")
+![react universe apple vision pro](/images/posts/react-universe-2024-apple-vision-pro.jpeg "React native for visionos, maintained by callstack.io")
 
 While the project is still in its early stages, the potential
 to develop immersive apps for Vision Pro using React Native has sparked a lot of enthusiasm within the community.
@@ -123,7 +123,7 @@ This talk served as a reminder
 that success in scaling requires a combination of strategic planning and community collaboration,
 by contributing back to the open source community (eg. contributing to React Native, Hermes etc.)
 
-![react universe aklarna](../images/posts/react-universe-2024-klarna.jpeg "Hard-learned Lessons in App Scaling")
+![react universe aklarna](/images/posts/react-universe-2024-klarna.jpeg "Hard-learned Lessons in App Scaling")
 
 ##### 🪄 How you can Server-Render without Rendering on the Server 
 
@@ -135,7 +135,7 @@ They introduced a new set of tools, called **RISE Tools**,
 which allows for real-time UI updates and dynamic content changes directly from the server,
 without needing new client-side deployments.
 
-![react universe rise tools](../images/posts/react-universe-2024-rise.jpeg "RISE tools by Mike Grabowski and Eric Vicenti")
+![react universe rise tools](/images/posts/react-universe-2024-rise.jpeg "RISE tools by Mike Grabowski and Eric Vicenti")
 
 This method significantly simplifies managing large-scale apps,
 offering instant flexibility for rearranging elements or adding new features,
@@ -177,7 +177,7 @@ aiming to break down the “walls” of the internet.
 His insights pointed to a future where social platforms and web applications become more interoperable, user-centric,
 and open to innovation.
 
-![react universe web without walls](../images/posts/react-universe-2024-dan-abramov.jpeg "Web without walls by Dan Abramov")
+![react universe web without walls](/images/posts/react-universe-2024-dan-abramov.jpeg "Web without walls by Dan Abramov")
 
 ##### 🏃🏻‍♂️ Hermes: better performance with runtime bytecode translation (Tzvetan Mikov, Meta)
 
@@ -186,7 +186,7 @@ to significantly enhance performance and the current status of **static Hermes**
 The key innovation discussed was how Hermes optimizes JavaScript execution by converting code into an efficient intermediate bytecode at runtime,
 which allows for faster execution and lower memory consumption, particularly on resource-constrained devices.
 
-![react universe hermes](../images/posts/react-universe-2024-hermes.jpeg "Hermes: better performance with runtime bytecode translation")
+![react universe hermes](/images/posts/react-universe-2024-hermes.jpeg "Hermes: better performance with runtime bytecode translation")
 
 Mikov delved into the technical specifics of how Hermes helps to reduce startup times
 and improve the overall performance of React Native apps by processing JavaScript ahead of time,

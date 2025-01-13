@@ -42,12 +42,12 @@ Let's see some statistics in terms of participation to this "Advent of TypeScrip
 As always, the initial participation was very high more than 11000 people solved the first exercise. But as you can 
 see from the photo below, there is already a big drop since the second day :sweat_smile:.  
 
-![Advent of TypeScript: first days result](../images/posts/advent-of-typescript-first.jpg "Advent of TypeScript: first days result")
+![Advent of TypeScript: first days result](/images/posts/advent-of-typescript-first.jpg "Advent of TypeScript: first days result")
 
 Then we arrived to the latest days challenges, and I was surprised to know that **I was one among only 200 
 developers in the world to complete all the 25 challenges :loudspeaker:**.
 
-![Advent of TypeScript: last days result](../images/posts/advent-of-typescript-last.jpg "Advent of TypeScript: last days 
+![Advent of TypeScript: last days result](/images/posts/advent-of-typescript-last.jpg "Advent of TypeScript: last days 
 result")
 
 All this to say: I would like to share with you the solutions for the 4 challenges that I liked the most. In this 

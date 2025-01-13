@@ -71,7 +71,7 @@ So we started to review the slides and we basically created a new presentation :
 the review we made 2 simulations of the entire presentation during the week before the event to be more confident. Last
 but not least, the Human Resources department gave us a company t-shirt to promote our company brand at the conference.
 
-![The t-shirt used during the presentation at Voxxed 2018](../images/posts/voxxed-2018-tshirt.jpg)
+![The t-shirt used during the presentation at Voxxed 2018](/images/posts/voxxed-2018-tshirt.jpg)
 
 ### The talk
 
@@ -80,20 +80,20 @@ Then the day of the talk arrived after a not so quiet sleep. The Voxxed Days 201
 dedicated speakers area for the first time after so many conferences attended! We checked-in and got our shiny speaker
 badge. Then we moved to the lounge section to enjoy breakfast.
 
-![The Voxxed 2018 breakfast](../images/posts/voxxed-2018-breakfast.jpg)
+![The Voxxed 2018 breakfast](/images/posts/voxxed-2018-breakfast.jpg)
 
 Our talk was planned at 2.30 PM, so we had time to attend some other sessions. At 11.50 AM we decided to do a last
 presentation simulation to review some details and then we went to lunch. At 2.00 PM we started to feel the strain. The
 start of our talk was really close. We entered in the room of our session at 2.15 PM and we did the setup of our laptop
 for the presentation.
 
-![Computer setup during Voxxed 2018 pre-talk preparation](../images/posts/voxxed-2018-pre-talk.jpg)
+![Computer setup during Voxxed 2018 pre-talk preparation](/images/posts/voxxed-2018-pre-talk.jpg)
 
 Then the room started to fill in. As scheduled at 2.30 PM we started our presentation. The presentation went smooth. We
 kept the scheduled time per slide we planned in our simulation. The change of speaker between the various part of the
 presentation worked perfectly. At the end we answered to some questions and we received applause from the audience.
 
-![The Voxxed 2018 talk](../images/posts/voxxed-2018-talk.jpg)
+![The Voxxed 2018 talk](/images/posts/voxxed-2018-talk.jpg)
 
 ### Conclusion
 
@@ -101,7 +101,7 @@ That's all for my first experience as a conference speaker. It has been a good e
 field (had I already been working for 10 years?!??! :cold_sweat:) it was a great pleasure to be on the other side of the
 stage.
 
-![Me and Alessandro 'the clean' Romano](../images/posts/voxxed-2018-clean.jpg)
+![Me and Alessandro 'the clean' Romano](/images/posts/voxxed-2018-clean.jpg)
 
 Special thanks to all the team Lynch that give me the opportunity to be the "replacement" speaker for this conference.
 Special thanks also to  [Alessandro Romano](https://www.linkedin.com/in/alessandroromano92/ "Alessandro Romano") "the

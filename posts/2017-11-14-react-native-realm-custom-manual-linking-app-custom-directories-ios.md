@@ -37,7 +37,7 @@ in [this github repo](https://github.com/chicio/React-Native-Realm-Manual-Link '
 Suppose you have a project like the one I shared above, in which React Native is contained in a subfolder of the iOS
 project, instead of the other way around in a standard React Native installation.
 
-![The folders structure of the project used as example in this post](../images/posts/react-native-realm-1-directories.jpg)
+![The folders structure of the project used as example in this post](/images/posts/react-native-realm-1-directories.jpg)
 
 First, to add realm as a dependency we need to install it through npm with following command.
 
@@ -54,7 +54,7 @@ react-native link realm
 But here something strange happens: as you can see from the screenshot below the command fails to link the library. So
 we need to find another way to install the library.
 
-![The react-native link command fails to install the realm library](../images/posts/react-native-realm-2-link-fails.jpg)
+![The react-native link command fails to install the realm library](/images/posts/react-native-realm-2-link-fails.jpg)
 
 Usually, if the previous command fails, you have to do
 the [manual linking](https://reactnative.dev/docs/linking-libraries-ios/ "manual linking"). To do it we navigate inside
@@ -62,12 +62,12 @@ the `node_modules` folder, contained in the React Native folder of our project, 
 will find an Xcode project named `RealmReact`, that you have to drag into our project. After that we have to add a
 reference to the static library `libRealmReact` and compile the project.
 
-![Add the ReactRealm xcodeproj to the project](../images/posts/react-native-realm-3-manual-link-step-1.jpg)
-![Link the Realm static lib](../images/posts/react-native-realm-3-manual-link-step-2.jpg)
+![Add the ReactRealm xcodeproj to the project](/images/posts/react-native-realm-3-manual-link-step-1.jpg)
+![Link the Realm static lib](/images/posts/react-native-realm-3-manual-link-step-2.jpg)
 
 Now you would expect that everything works fine but...
 
-![The compilation fails with a complain about a header file missing](../images/posts/react-native-realm-4-manual-link-fails.jpg)
+![The compilation fails with a complain about a header file missing](/images/posts/react-native-realm-4-manual-link-fails.jpg)
 
 What's happening? The `RealmReact` project is expecting the React Native headers in a relative position with respect to
 its original position. Argh :rage:!! We need to find another way...
@@ -83,31 +83,31 @@ So we can try to modify our main project by:
 * adding the `RealmJS` project and the Objective-C++ files/classes as references
 * linking the static libraries `libRealmJS.a` and `libGCDWebServers.a` to our main project and see if everything works
 
-![Add the RealmReact folder and the RealmJS xcodeproj to the project](../images/posts/react-native-realm-5-custom-manual-link-step-1.jpg)
+![Add the RealmReact folder and the RealmJS xcodeproj to the project](/images/posts/react-native-realm-5-custom-manual-link-step-1.jpg)
 
-![Add libRealmJS and libGCDWebServers static libraries to the project](../images/posts/react-native-realm-5-custom-manual-link-step-2.jpg)
+![Add libRealmJS and libGCDWebServers static libraries to the project](/images/posts/react-native-realm-5-custom-manual-link-step-2.jpg)
 
 Now we need to add to the `Header search path` option of our main project the paths that were set in the `RealmReact`
 project. In this way the `RealmJS` project will be able to find some headers it needs. You can find the complete list of
 the folder that we need to add in the screenshot below.
 
-![Add the header search paths that were setted in the RealmReact project](../images/posts/react-native-realm-6-header-search-path.jpg)
+![Add the header search paths that were setted in the RealmReact project](/images/posts/react-native-realm-6-header-search-path.jpg)
 
 Now if we try to compile our app we expect that everything works fine but...ERROR :warning::fire:!!! The build fails :
 boom:!!!
 
-![The C++ compiler gives an error when compiling the RealmReact source code](../images/posts/react-native-realm-7-Cplusplus-error.jpg)
+![The C++ compiler gives an error when compiling the RealmReact source code](/images/posts/react-native-realm-7-Cplusplus-error.jpg)
 
 It seems like that in order to be able to compile the C++ source code contained in `RealmJS` we need to set a recent C++
 version in our project setting that supports some new features like auto return type on static function. We can set it
 to C++ 14 and set the Standard Library to the LLVM one with C++ 11 support.
 
-![Update the C++ language dialect and std library to C++14/11](../images/posts/react-native-realm-8-Cplusplus-setup.jpg)
+![Update the C++ language dialect and std library to C++14/11](/images/posts/react-native-realm-8-Cplusplus-setup.jpg)
 
 One final step is to remove the flag `-all_load` from the `Other linker flag` option of the main project (if you have
 it). In this way we avoid to load all Objective-C symbols and have the "duplicated symbols" error.
 
-![Remove the all_load linker flag](../images/posts/react-native-realm-9-all_load.jpg)
+![Remove the all_load linker flag](/images/posts/react-native-realm-9-all_load.jpg)
 
 We are now ready to build our app and see if everything works. To do this we create a sample native view controller that
 has a `RCTRootView`.
@@ -179,7 +179,7 @@ AppRegistry.registerComponent('ReactNativeRealmScreen', () => ReactNativeRealmSc
 
 We are now ready to build our app and, as expected, everything works fine.
 
-![The example app compilation is working as expected and you can try to launch it](../images/posts/react-native-realm-10-build-works.jpg)
+![The example app compilation is working as expected and you can try to launch it](/images/posts/react-native-realm-10-build-works.jpg)
 
 That's it!! As I told you before you can find the complete example
 in [this github repo](https://github.com/chicio/React-Native-Realm-Manual-Link 'React Native realm manual link'). We are

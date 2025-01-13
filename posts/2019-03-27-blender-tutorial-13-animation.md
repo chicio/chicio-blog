@@ -18,7 +18,7 @@ timeline. The timeline is usually placed at the bottom of the default layout of 
 frame by clicking on it in the timeline. We also have some controls to start/stop/fast back and forward the animation.
 There is also the possibility to set a start and end frame of the animation.
 
-![The animation timeline](../images/posts/blender-animation-timeline.jpg")
+![The animation timeline](/images/posts/blender-animation-timeline.jpg")
 
 To create an animation we need first of all to set keyframes. To do this we have to select the frame that we want as
 keyframe in the timeline, and the go in the space properties panel, change one of the spatial properties we want to
@@ -26,15 +26,15 @@ animate (location, rotation or scale) and right click on them to show a menu whe
 After that you will see the value of the property we decided to animate to become yellow (orange in my images below
 because I have a custom theme).
 
-![Set animation keyframe](../images/posts/blender-animation-set-keyframe-1.jpg)
+![Set animation keyframe](/images/posts/blender-animation-set-keyframe-1.jpg)
 
-![Keyframe properties](../images/posts/blender-animation-set-keyframe-2.jpg)
+![Keyframe properties](/images/posts/blender-animation-set-keyframe-2.jpg)
 
 To make an animation we need at least 2 keyframes. We can set keyframes also by selecting the record button in the
 timeline. This button will let us set a keyframe for the property we select from the list just near it. The keyframes
 are shown on the timeline as a yellow line.
 
-![Another way to set keyframes](../images/posts/blender-animation-set-keyframe-3.jpg)
+![Another way to set keyframes](/images/posts/blender-animation-set-keyframe-3.jpg)
 
 After settings the second keyframe we finally have our first animation. In the video below you can see the final result.
 
@@ -60,7 +60,7 @@ choosing Key -> Interpolation mode from the menu.
 
 `youtube: https://www.youtube.com/watch?v=xq1J5QrJuSU`
 
-![Interpolation mode](../images/posts/blender-animation-interpolation-mode.jpg)
+![Interpolation mode](/images/posts/blender-animation-interpolation-mode.jpg)
 
 The graph editor in not the only animation editor. We can use also the dope sheet. It could be more faster to edit an
 animation in it instead of the animation editor. In it we don't have the curve of interpolation of the animation. We
@@ -69,8 +69,8 @@ mouse. Last but not least we have animation path. To create an animation path we
 Add -> Curve -> Path. Then we need to add a constraint to the object we want to animate so that it will follow the path.
 After that we can set the keyframes using the same approach showed before.
 
-![Add curve path](../images/posts/blender-path-add-curve.jpg)
+![Add curve path](/images/posts/blender-path-add-curve.jpg)
 
-![Set path constraint](../images/posts/blender-path-set-constraint.jpg)
+![Set path constraint](/images/posts/blender-path-set-constraint.jpg)
 
 That's all for animation. In the next post we will talk about character rigging.

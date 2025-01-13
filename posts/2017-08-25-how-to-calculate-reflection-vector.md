@@ -35,7 +35,7 @@ $$
 How is this formula obtained? Let's start from a picture that represents our reflection vector and the other vectors
 used in the calculation.
 
-![A representation of the reflection phenomenon with all the vectors involved](../images/posts/reflection.png)
+![A representation of the reflection phenomenon with all the vectors involved](/images/posts/reflection.png)
 
 Before we start with the demonstration we also need to know what is the law of reflection:
 

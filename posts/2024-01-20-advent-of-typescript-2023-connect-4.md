@@ -371,7 +371,7 @@ The pain point was that the diagonals to be hardcoded are quite a few, especiall
 x 7), and the fact that the diagonal can be in two directions: from left to right and from right to left :sweat_smile:.
 Below, you can find a schema I created from highlighting visually the diagonals from left to right.
 
-![The diagonals from left to right](../images/posts/advent-of-typescript-connect-4-diagonals.jpg "The diagonals from left to right.")
+![The diagonals from left to right](/images/posts/advent-of-typescript-connect-4-diagonals.jpg "The diagonals from left to right.")
 
 The base type I created is the `SequentialElementsWinningFor`.
 It receives an array of board cells, it scans them to see if there is a sequence of four cells with the same chip, 

@@ -39,7 +39,7 @@ in [Behaviour Driven Development](https://en.wikipedia.org/wiki/Behavior-driven_
 . Even if not related to this article, I like this way of writing unit tests because they are more expressive, so I will
 use it in all my code. Below you can find a mockup of what we want to achieve.
 
-![A mockup of the final app we will obtain at the end of this post](../images/posts/mockup-model-view-presenter.jpg")
+![A mockup of the final app we will obtain at the end of this post](/images/posts/mockup-model-view-presenter.jpg")
 
 Let's start by creating a `Product` struct that we will use to describe our products. Each product will be composed of a
 name, a description and an image (identified by its name):
@@ -564,7 +564,7 @@ Now you can start to create your high quality unit tested apps :relieved:. One f
 above: **the `productsView` property of the `ProductsPresenter` and `productDetailView` of the `ProductDetailPresenter`
 must be `unowned` or `weak` to avoid a retain cycle between the presenters and the controllers.**
 
-![model view presenter: let's toast to Unit Tests!](../images/posts/model-view-presenter-ios.jpg)
+![model view presenter: let's toast to Unit Tests!](/images/posts/model-view-presenter-ios.jpg)
 
 Time to try it yourself in one of your project. If you wanna review the complete project code you can
 check [this Github repository](https://github.com/chicio/Model-View-Presenter "Model View Presenter iOS github repository")

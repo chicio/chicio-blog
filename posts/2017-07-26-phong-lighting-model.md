@@ -124,4 +124,4 @@ lighting is (obviously) calculated using the Phong reflection model. The surface
 some constants we discussed
 before [here](http://devernay.free.fr/cours/opengl/materials.html "phong lighting constants")). Nice :smirk:!!!!
 
-![An example model rendered using Phong model in Spectral BRDF explorer](../images/posts/phong-example.jpg)
+![An example model rendered using Phong model in Spectral BRDF explorer](/images/posts/phong-example.jpg)

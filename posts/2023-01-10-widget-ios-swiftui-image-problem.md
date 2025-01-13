@@ -18,7 +18,7 @@ We were so excited to have our first widget in production that we ~~forced~~ ask
 Unfortunately, for some people, the widget was loading in a broken state: as you can see from the image below,
 the assets were not loading.
 
-![Widget not loading](../images/posts/widget-image-problem.jpg)
+![Widget not loading](/images/posts/widget-image-problem.jpg)
 
 We were heartbroken. We tested the widget carefully before going to production,
 on multiple iPhones and iPads with different iOS and iPadOS versions, even with the iOS 16 Developer Beta build,
@@ -40,7 +40,7 @@ We finally checked the general system log using the Console.app, to better under
 To avoid having noise in the logs, we created and empty app project with attached our widget extension.
 While running the test app on an iPhone 11, we finally found the problem.
 
-![Debugging the code with Console.app](../images/posts/debugger-widget.png)
+![Debugging the code with Console.app](/images/posts/debugger-widget.png)
 
 As you can see from the screenshot, the widget was failing to archive because the image used as background (what we
 called inspiration image in the previous posts) was too big. This was causing a memory leak

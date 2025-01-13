@@ -17,7 +17,7 @@ we talked about the outliner, layers, groups and hierarchies in Blender. In this
 to our models by learning how to use **materials**.  
 To set a material on an object we can select the material tab from the properties panel, and the press the new button.
 
-![blender create material](../images/posts/blender-create-material.jpg)
+![blender create material](/images/posts/blender-create-material.jpg)
 
 After creating we material a new list of option to customize it appears. We have the possibility to change the
 material's name. We can select the material type. The available options are:
@@ -46,14 +46,14 @@ at [this documentation](https://en.wikipedia.org/wiki/Computer_graphics_lighting
 * *shadows*
 * *other options*
 
-![The material panel](../images/posts/blender-material-panel.jpg)
+![The material panel](/images/posts/blender-material-panel.jpg)
 
 We can assign multiple material to the same objects. To do it we just need to :
 
 * add a new material slot using the plus button
 * select (in edit mode) the part of the object to which we want to apply the material and click the assign button
 
-![It is possible to assign multiple material to the same objects](../images/posts/blender-multiple-material.jpg)
+![It is possible to assign multiple material to the same objects](/images/posts/blender-multiple-material.jpg)
 
 Now let's star to have a deeper look at the **diffuse component**. As we said before, the diffuse component defines the
 main color of our object. The default shader applied to it is the lambert shader. Lambertian is an ideal diffuse
@@ -68,7 +68,7 @@ other shaders:
 
 All the diffuse shader types have an intensity parameter to adjust their contribution to the final look of the objects.
 
-![The material diffuse component](../images/posts/blender-material-diffuse-component.jpg)
+![The material diffuse component](/images/posts/blender-material-diffuse-component.jpg)
 
 After the diffuse component there's the **specular component**. This component is used to represent the
 highlights/shininess of the surface. We can select the color as for the diffuse shader. We also have again a intensity
@@ -81,19 +81,19 @@ we can choose from:
 * *toon*
 * *wardiso*
 
-![The material specular component](../images/posts/blender-material-specular-component.jpg)
+![The material specular component](/images/posts/blender-material-specular-component.jpg)
 
 For both the diffuse and specular component we have also the **ramp option**. With this option it is possible to apply
 gradient on the surface. The ramp option could be useful to add a little bit more pop to the material final look. The
 starting values for ramp contains two color, but we can add as many intermediate points as we want.
 
-![The ramp material](../images/posts/blender-ramp-material.jpg)
+![The ramp material](/images/posts/blender-ramp-material.jpg)
 
 We have also some shading option that we can use to set other to surface components. In particular we can set the
 ambient and emit components using the slider contained in this section. We can also completely turn off the shader by
 using the shadeless option, or using the tangent shading option to create tangent specular highlights.
 
-![Shading options](../images/posts/blender-shading-options.jpg)
+![Shading options](/images/posts/blender-shading-options.jpg)
 
 Now we will take a look at how we can create **reflective material**. To create a reflective material we can activate
 the Mirror component. We have some options to customize the final result of our reflection:
@@ -106,7 +106,7 @@ the Mirror component. We have some options to customize the final result of our 
 
 Remember that the mirror material result is visible only in the final render view.
 
-![The mirror material useful to implement reflection](../images/posts/blender-reflection.jpg)
+![The mirror material useful to implement reflection](/images/posts/blender-reflection.jpg)
 
 After mirror material we can take a look at the **transparency component**. To make a transparent material we have to
 activate this component. There are 3 option:
@@ -116,7 +116,7 @@ activate this component. There are 3 option:
   object plane with the color of the corresponding background pixel, according to the alpha channel of the pixel
 * *raytrace*, a realistic transparency configurable with Index Of Refraction (IOR) and other parameters.
 
-![The transparency component](../images/posts/blender-transparency.jpg)
+![The transparency component](/images/posts/blender-transparency.jpg)
 
 Last but not least we have **subsurface scattering**. As reported
 on [wikipedia](https://en.wikipedia.org/wiki/Subsurface_scattering "Subsurface scattering"):
@@ -131,6 +131,6 @@ We have some parameter to modify the final result of this component:
 * *scattering weights*, to tweak if the effects it is more on front then on the back
 * *blend*
 
-![Subsurface scattering](../images/posts/blender-subsurface-scattering.jpg)
+![Subsurface scattering](/images/posts/blender-subsurface-scattering.jpg)
 
 In the next post we will talk about textures.

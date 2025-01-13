@@ -18,7 +18,7 @@ following project: rebuild the native mobile apps of the main brands [lastminute
 and [Rumbo](https://www.rumbo.es/ "Rumbo") with a new interface and new features. Let's compare the old, and the new 
 home of the lastminute.com app. The changes are quite impressive :sunglasses:.
 
-![A comparison between the old and the new lastminute.com app home](../images/posts/compare-homes-lastminute.jpg)
+![A comparison between the old and the new lastminute.com app home](/images/posts/compare-homes-lastminute.jpg)
 
 For this "app relaunch" project we decided to use React Native (I already talked about this framework in some previous
 posts that you can find in the [archive section](/blog/archive "archive")). We didn't rewrite the apps from scratch. We
@@ -43,7 +43,7 @@ integrate React Native and Typescript in an existing app and we will add a new s
 show the photo of the day that we will read from the [Nasa open API](https://api.nasa.gov/ "Nasa open api"). Below you
 can find what we will achieve. The first screen is a standard native screen. The second one is a React Native screen.
 
-![The example react native app we are going to create](../images/posts/react-native-typescript-app-screens.jpg)
+![The example react native app we are going to create](/images/posts/react-native-typescript-app-screens.jpg)
 
 Let's start to setup our project for React Native and TypesScript. First, React Native integration. For this task we can
 just follow
@@ -54,7 +54,7 @@ manager instead of npm (you can use it also to install the dependencies needed t
 structure will be the one contained in the screenshots below. The existing native codebase is contained inside the `ios`
 and `android` folders.
 
-![The folder structure of the project](../images/posts/react-native-typescript-directories.jpg)
+![The folder structure of the project](/images/posts/react-native-typescript-directories.jpg)
 
 So let's start by installing TypeScript and the types for React Native. We can do it with the following commands from
 the root of our project:

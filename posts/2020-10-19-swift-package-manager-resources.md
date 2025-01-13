@@ -164,7 +164,7 @@ class PathLoader {
 Below you can find a screenshot that shows the successfull execution of the tests after opening the ID3TagEditor as a
 Swift Package from Xcode.
 
-![Now I can run my ID3TagEditor acceptance tests when I open it as a Swift package in Xcode](../images/posts/open-as-package-xcode-id3tageditor.jpg)
+![Now I can run my ID3TagEditor acceptance tests when I open it as a Swift package in Xcode](/images/posts/open-as-package-xcode-id3tageditor.jpg)
 
 There's still one problem with this setup. ID3TagEditor is configured also as a Xcode workspace, because there are some
 related demo app that are contained in the repository and I need a way to manage them while developing the library. If I
@@ -179,8 +179,8 @@ the contrary in the `Packagkage.swift` above you can see that I excluded from th
 Xcode (see `exclude: ["Utils/PathLoaderXcodeProj.swift", "Info.plist"],`). In this way I'm able to run all my tests
 without any error. Below you can find some screenshot with the setup I have just described to you.
 
-![The implementation of the PathLoader class for SwiftPM](../images/posts/path-loader-swiftpm.jpg)
-![The implementation of the PathLoader class for Xcode](../images/posts/path-loader-xcode.jpg)
+![The implementation of the PathLoader class for SwiftPM](/images/posts/path-loader-swiftpm.jpg)
+![The implementation of the PathLoader class for Xcode](/images/posts/path-loader-xcode.jpg)
 
 #### Conclusion
 

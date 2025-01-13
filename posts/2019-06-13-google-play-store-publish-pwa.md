@@ -47,7 +47,7 @@ Let's start to see the real action: how I publish my blog PWA to the Google Play
 created a nw android project. This was a standard Android project with minimum API level 16. This let me cover the 99.6%
 of the Android user base. I chose to create an empty project without any activity/fragment in it.
 
-![Create an Android Studio project for your TWA app](../images/posts/pwa-app-01-create-project.jpg)
+![Create an Android Studio project for your TWA app](/images/posts/pwa-app-01-create-project.jpg)
 
 Then I added the TWA support as a dependency of the app. The TWA implementation is contained inside the custom tabs
 client library published on [Jitpack](https://jitpack.io/ "Jitpack") (because unfortunately at the moment of this
@@ -61,9 +61,9 @@ TWA support. Precisely, I added the following line of code to the gradle file.
 implementation 'com.github.GoogleChrome.custom-tabs-client:customtabs:7a2c1374a3'
 ```
 
-![Add jitpack configuration jitpack](../images/posts/pwa-app-02-jitpack-configuration.jpg)
+![Add jitpack configuration jitpack](/images/posts/pwa-app-02-jitpack-configuration.jpg)
 
-![Add the custom tab library dependencies by pointing to a specific commit](../images/posts/pwa-app-03-java8-and-custom-tab-dependecies.jpg)
+![Add the custom tab library dependencies by pointing to a specific commit](/images/posts/pwa-app-03-java8-and-custom-tab-dependecies.jpg)
 
 After the dependencies setup I added the TWA Activity. To do this I just had to modify the Android app manifest file by
 declaring a new TWA activity inside it. For the readers that are not mobile developer, the Android app manifest is a
@@ -83,7 +83,7 @@ The declaration of the TWA inside the Android app manifest must include some imp
   TWA. The `android:host` attribute inside the data tag must point to the domain being opened by the TWA and specified
   in the `meta-data` tag.
 
-![Add TWA declaration to the app manifest](../images/posts/pwa-app-04-twa-activity-declaration.jpg)
+![Add TWA declaration to the app manifest](/images/posts/pwa-app-04-twa-activity-declaration.jpg)
 
 Now I had to establish the link between our PWA website and our PWA app. This is a two way operation because I had to:
 
@@ -109,12 +109,12 @@ the `strings.xml` file. This new string resource contains the Digital AssetLink 
 </resources>
 ```
 
-![Setup the Digital AssetLink statement in a string resource file](../images/posts/pwa-app-05-associate-app-to-web-1.jpg)
+![Setup the Digital AssetLink statement in a string resource file](/images/posts/pwa-app-05-associate-app-to-web-1.jpg)
 
 Then I linked this string resource statement inside the Android app manifest by adding a new `meta-data` tag as a child
 of the `application` tag (NOT inside the TWA declaration).
 
-![Add the Digital AssetLink statement to the Android manifest](../images/posts/pwa-app-05-associate-app-to-web-2.jpg)
+![Add the Digital AssetLink statement to the Android manifest](/images/posts/pwa-app-05-associate-app-to-web-2.jpg)
 
 It is possible to test that the association from app to the website has been completed. To do this I had to:
 
@@ -150,7 +150,7 @@ With both pieces of information at hand I was able to generate a web `assetlink.
 the [asset links generator](https://developers.google.com/digital-asset-links/tools/generator). The `assetlink.json`
 generated must be served from the PWA domain from the URL `<your PWA domain>/.well-known/assetlinks.json`.
 
-![Generate the assetlinks.json file](../images/posts/pwa-app-07-assetlink-generator.jpg)
+![Generate the assetlinks.json file](/images/posts/pwa-app-07-assetlink-generator.jpg)
 
 After publishing the `assetlink.json` to my PWA domain my app was ready to be published to the store. So I followed the
 standard

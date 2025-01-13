@@ -42,7 +42,7 @@ The component that I will create is shown in the following screenshot, and it is
 They will animate in sequence from the top to the bottom in terms of opacity. I will implement it using both the 
 frameworks above, to evaluate their usage complexity. 
 
-![The component on both platforms: iOS and Android](../images/posts/daily-deals-featured.jpg)
+![The component on both platforms: iOS and Android](/images/posts/daily-deals-featured.jpg)
 
 `youtube: https://www.youtube.com/watch?v=96wofMjkyKc`
 
@@ -128,7 +128,7 @@ import Animated, {
 import {StyleSheet, Text, View} from 'react-native';
 
 const FIRE_SIZE = 25;
-const FIRE = require('../images/fire.png');
+const FIRE = require('/images/fire.png');
 
 const RIGHT_INCLINATION = 15;
 
@@ -234,7 +234,7 @@ import {StyleSheet, Text, View} from 'react-native';
 import {PressableWithFeedback} from './PressableWithFeedback.tsx';
 import Animated from 'react-native-reanimated';
 
-const ARROW_DOWN = require('../images/arrow-icon-bold.png');
+const ARROW_DOWN = require('/images/arrow-icon-bold.png');
 const ARROW_SIDE_SIZE = 20;
 
 const BOTTOM_INCLINATION = 3;

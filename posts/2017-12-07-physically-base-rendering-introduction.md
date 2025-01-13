@@ -145,7 +145,7 @@ the second one is taken from PBRT, the physically based engine described in the
 book ["Physically based rendering: from theory to implementation" by M. Pharr, W. Jakob, G. Humphreys](https://www.pbrt.org "Physically based rendering: from theory to implementation by M. Pharr, W. Jakob, G. Humphreys")
 .
 
-![Some PBR scenes generated using PBRT and Spectral Clara Lux Tracer](../images/posts/pbr-introduction-examples.jpg)
+![Some PBR scenes generated using PBRT and Spectral Clara Lux Tracer](/images/posts/pbr-introduction-examples.jpg)
 
 How cool are these images???? :sunglasses:
 We are at the end of the introduction. I hope now it is at least clear what is PBR :relaxed:!! See you for other stuff

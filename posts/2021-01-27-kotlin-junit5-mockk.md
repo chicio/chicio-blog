@@ -225,7 +225,7 @@ Cool, isn't it :sunglasses:? If I run this test in IntelliJ IDEA I can see the f
 almost a list of [BDD behavioural tests](https://en.wikipedia.org/wiki/Behavior-driven_development)). If you ever tried
 to develop something with Jest on the frontend side of the web development world, you will feel at home.
 
-![An example of how your IDE will display tests feedback after renaming them with the @DisplayName and @Nested annotations](../images/posts/junit5-mockk-intellij-test-list.jpg)
+![An example of how your IDE will display tests feedback after renaming them with the @DisplayName and @Nested annotations](/images/posts/junit5-mockk-intellij-test-list.jpg)
 
 Let's move to a new test to see MockK in action. `FieldsResolverByIteratingThroughThemTest` seems a good example where I
 can show the basic building blocks MockK.  

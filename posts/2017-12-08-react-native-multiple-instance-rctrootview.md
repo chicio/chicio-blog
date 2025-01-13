@@ -116,7 +116,7 @@ If we try to run the app something very strange will happen:
 
 * if we do a **live reload while we're in debug mode the app could crash**
 
-![The react native app crashes if we try to do a live reload](../images/posts/react-native-crash-reload-with-debugger.jpg)
+![The react native app crashes if we try to do a live reload](/images/posts/react-native-crash-reload-with-debugger.jpg)
 
 What's happening here? Well, there's something wrong in our code. If we take a look at the comments in the code of React
 Native for the `RCTRootView` initializer, we will notice something very strange:

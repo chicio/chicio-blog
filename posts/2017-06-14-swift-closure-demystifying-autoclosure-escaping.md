@@ -29,7 +29,7 @@ You could start "abusing" closures and use them everywhere after mastering these
 stuck_out_tongue_winking_eye: (Maybe it's better to stay calm and don't abuse closures even after seeing this
 attributes :relieved:).
 
-![Swift closure are everywhere...](../images/posts/closure-everywhere.jpg)
+![Swift closure are everywhere...](/images/posts/closure-everywhere.jpg)
 
 For example we can have a `UITableView` and we want to execute different action for each cell displayed. If we don't use
 closure and the attributes `@autoclosure` and `@escaping`, we need to distinguish the cells using the position or

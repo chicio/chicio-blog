@@ -19,7 +19,7 @@ in [this previous post](https://www.fabrizioduroni.it/2018/05/08/id3tageditor-sw
 . This library was compatible with iOS, Apple TV, watchOS and macOS. Then one day a user of my library **opened a new
 issue on the library github repo** with title "Build Error" and a description of a **build error on Linux**.
 
-![An error on the linux build of ID3TagEditor reported by a user](../images/posts/spm-id3tageditor-linux-error.jpg)
+![An error on the linux build of ID3TagEditor reported by a user](/images/posts/spm-id3tageditor-linux-error.jpg)
 
 The library had a simple `Package.swift`, but honestly I never tested it with the Swift Package Manager (SPM) on Linux
 nor on macOS :sweat_smile: (this was the only feature that I didn't test :sweat_smile:). So I though: "It's time to add
@@ -200,9 +200,9 @@ swift run
 Below you can see some screenshot taken from both Linux and macOS that shows the final output of the demo `Demo Ubuntu`
 after you execute the `swift run` command.
 
-![ID3TagEditor now works as expected on Ubuntu](../images/posts/spm-id3tageditor-demo-linux.jpg)
+![ID3TagEditor now works as expected on Ubuntu](/images/posts/spm-id3tageditor-demo-linux.jpg)
 
-![ID3TagEditor works as expected also on macOS](../images/posts/spm-id3tageditor-demo-macos.jpg)
+![ID3TagEditor works as expected also on macOS](/images/posts/spm-id3tageditor-demo-macos.jpg)
 
 Cool! Now the ID3TagEditor is fully compatible with the SPM and could be used in Swift applications for both macOS and
 Linux. You can see the entire codebase of the `ID3TagEditor`

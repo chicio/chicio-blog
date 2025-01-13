@@ -30,7 +30,7 @@ for [Physically Based Rendering](https://en.wikipedia.org/wiki/Physically_based_
 Let's see the potential of this library. In this post I will show you how to create a simple physically base scene. At
 the end of this post you will have a scene like the one in the following image:
 
-![The 3D scene that you will get at the end of the following tutorial on threejs](../images/posts/threejs-scene.jpg)
+![The 3D scene that you will get at the end of the following tutorial on threejs](/images/posts/threejs-scene.jpg)
 
 The mesh We will use are a simplified version of the ones available from
 the [Stanford scan repository](https://graphics.stanford.edu/data/3Dscanrep/
@@ -391,7 +391,7 @@ You can find the entire scene code is [this github gist](https://gist.github.com
 Yeah!!! You made it!! You create a 3D computer graphics web application using three.js :blush:!! And it is also a scene
 that supports advanced feature, in particular physically based rendering :open_mouth:!!
 
-![You're now ready to conquer the web with Threejs!](../images/posts/i-know-threejs.jpg)
+![You're now ready to conquer the web with Threejs!](/images/posts/i-know-threejs.jpg)
 
 You know three.js now. You're ready to conquer the web 3D world now :smirk:. Ah!! I was forgetting: you can find a live
 demo of the scene we created on the [homepage of my website](/ "Fabrizio Duroni").

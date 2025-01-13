@@ -31,7 +31,7 @@ it worth it? Sure!! :blush:  So, let's try it!
 In this post we will create a scene from scratch that uses the main PBR features you can find inside SceneKit. At the
 end of this post you will be able to render the scene contained in the image below. So it's time to start coding!!
 
-![A physically based scene created using SceneKit](../images/posts/physically-based-rendering-scene-right.jpg)
+![A physically based scene created using SceneKit](/images/posts/physically-based-rendering-scene-right.jpg)
 
 The general approach used in the construction of the scene will be the following: for each main scene category component
 we will create a class that encapsulate the creation of the corresponding `SCNNode`, the base SceneKit unit element, and

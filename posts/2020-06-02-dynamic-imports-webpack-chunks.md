@@ -108,12 +108,12 @@ two chunk. One is our module (the one with the name `scene-threejs`). The second
 keyword contains all the third party dependencies. Yes, you understood right: Webpack extract automatically the third
 party dependencies from you chunk module in separated files.
 
-![Network inspector for the desktop version of the home of my website](../images/posts/webpack-chunk-desktop.jpg)
+![Network inspector for the desktop version of the home of my website](/images/posts/webpack-chunk-desktop.jpg)
 
 If I access the same page from a mobile device the 3D scene is not loaded and consequently the chunk is not loaded. :
 tada:
 
-![Network inspector for the mobile version of the home of my website](../images/posts/webpack-chunk-mobile.jpg)
+![Network inspector for the mobile version of the home of my website](/images/posts/webpack-chunk-mobile.jpg)
 
 #### Conclusion
 

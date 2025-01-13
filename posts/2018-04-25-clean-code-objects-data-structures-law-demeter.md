@@ -58,4 +58,4 @@ between objects and data structures gives us a clear understand of when a train 
 
 The next time you will write a piece of code try to consider these concepts and how they can improve your code.
 
-![Uncle bob, the superman of clean code](../images/posts/uncle-bob-defender-of-clean-code.jpg)
+![Uncle bob, the superman of clean code](/images/posts/uncle-bob-defender-of-clean-code.jpg)

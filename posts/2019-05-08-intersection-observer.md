@@ -22,7 +22,7 @@ accessibility, [progressive web apps](/2019/03/03/github-pages-progressive-web-a
 compliance and more on your web application. One of the last thing that was contained in the report was a warning about
 offscreen images, like the one contained in the following screenshot:
 
-![The lighthouse audit suggestion to load offscreen images asynchronous only when they are really needed (when they are visible in the viewport)](../images/posts/intersection-observer-offscreen-audit.jpg)
+![The lighthouse audit suggestion to load offscreen images asynchronous only when they are really needed (when they are visible in the viewport)](/images/posts/intersection-observer-offscreen-audit.jpg)
 
 So I followed the link contained in the report that points to a page where are contained
 the [official Google Guidelines about offscreen images loading](https://developers.google.com/web/tools/lighthouse/audits/offscreen-images)

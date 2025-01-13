@@ -19,7 +19,7 @@ the reason why I develop [Mp3ID3Tagger](https://github.com/chicio/Mp3ID3Tagger "
 to edit the id3 tag of your mp3 files that leverage on the power
 of [ID3TagEditor](/2018/05/08/id3tageditor-swift-read-write-id3-tag-mp3/). Below you can find the app logo.
 
-![The MP3ID3Tagger logo](../images/posts/mp3id3tagger-logo.jpg)
+![The MP3ID3Tagger logo](/images/posts/mp3id3tagger-logo.jpg)
 
 So how did I develop MP3ID3Tagger? I was about to start the development following the classic approach to develop an app
 on every Apple
@@ -75,7 +75,7 @@ like. The app has only one screen where the user can input its the data he/she w
 button on the left to select the cover and all the textual/numeric values on the left. The values that could be set from
 a list are implemented as `NSPopUpButton` components.
 
-![The MP3ID3Tagger interface](../images/posts/mp3id3tagger-interface.jpg)
+![The MP3ID3Tagger interface](/images/posts/mp3id3tagger-interface.jpg)
 
 The first building block is the `ViewModel` base class. This class is useful to centralize the setup of a `disposeBag`.
 The `DisposeBag` it’s an RxSwift component that keeps a reference to all the `Disposable` you add to it.

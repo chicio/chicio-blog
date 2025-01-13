@@ -26,13 +26,13 @@ scene. We have some option to customize the final background result:
 
 In the same section there's also an ambient color property. The ambient color let us manage the overall light color.
 
-![Add a background ambient color](../images/posts/blender-background-ambient-color.jpg)
+![Add a background ambient color](/images/posts/blender-background-ambient-color.jpg)
 
 We can also choose to add a background image. To do that we have to go from the world tab directly to the texture tab.
 Blender will detect this operation and it will know that we are adding a texture to the background of our scene. From
 here we can choose the type of texture we want and we can apply it.
 
-![Add a background texture](../images/posts/blender-background-texture.jpg)
+![Add a background texture](/images/posts/blender-background-texture.jpg)
 
 We also have a specific type of light to simulate the sun: the sun lamp. It behaves in a similar way to the Hemi lamp.
 One particular feature it has is the possibility to add a sky as background and simulate a sun in terms of shape and
@@ -46,6 +46,6 @@ uses the ambient color by default. If we want to achieve a more accurate result,
 one, we can activate the environment light. This kind of effect will generate ambient occlusion and eventually it will
 use (if we choose it) the sky/sky texture as color.
 
-![Add ambient occlusion environment lighting](../images/posts/blender-ambient-occlusion-enviroment-lighting.jpg)
+![Add ambient occlusion environment lighting](/images/posts/blender-ambient-occlusion-enviroment-lighting.jpg)
 
 In the next post about Blender we will talk about cameras and rendering.

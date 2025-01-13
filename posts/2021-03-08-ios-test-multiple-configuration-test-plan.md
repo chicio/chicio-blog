@@ -49,12 +49,12 @@ them for the `RangeUISlider` framework scheme. To do that you have to:
 * go in the scheme selection panel and click on `Edit schemes` while your target is selected
 * go to the test phase and click on the button in the bottom right corner `Convert to use Test Plans`
 
-![Convert your scheme tests to Test Plan](../images/posts/test-plans-button.jpg)
+![Convert your scheme tests to Test Plan](/images/posts/test-plans-button.jpg)
 
 After that you will see a new window where you can choose how to create your first test plan. In my case I chose to
 create an empty test plan and I clicked on continue.
 
-![Create an empty Test Plan](../images/posts/test-plans-choose.jpg)
+![Create an empty Test Plan](/images/posts/test-plans-choose.jpg)
 
 When I converted the `RangeUISlider` tests to use test plan I had the following tests in place:
 
@@ -75,7 +75,7 @@ test plan is `RangeUISliderTests`. These tests are executed with a single config
 parallel so I checked also the option `Execute in parallel (if possible)`. I also wanted that new tests added to this
 suite should be added automatically to this test plan, so I checked the `Automatically include new tests` option.
 
-![The UnitTestPlan](../images/posts/test-plan-unit.jpg)
+![The UnitTestPlan](/images/posts/test-plan-unit.jpg)
 
 The second test plan I created is `ProgrammaticChangesTestPlan.xctestplan`. As you can imagine in this test plan I added
 all the test related to the RangeUISlider programmatic setup features. In particular at the moment of the creation of
@@ -85,7 +85,7 @@ target launched by the test plan is `RangeUISliderUITests`. For this plan I *unc
 the `Automatically include new tests` option, because I want add new test suites to this test plan only if they can be
 classified as related to programmatic features.
 
-![The ProgrammaticChangesTestPlan](../images/posts/test-plan-programmatic.jpg)
+![The ProgrammaticChangesTestPlan](/images/posts/test-plan-programmatic.jpg)
 
 The third test plan I created is `BehaviourTestPlan.xctestplan`. In this test plan I added all the behavioural UI test
 suites I wrote for RangeUISlider: `MixedFeaturesTests`, `InsideTableViewTests` and `SwiftUITests`. These are again all
@@ -97,9 +97,9 @@ plan with multiple configuration will be execute multiple times, one for each co
 the `BehaviourTestPlan.xctestplan` test plan I defined two configuration, one with a simulated left to right language
 and the other one with the right to left language. In the screenshots below you can find the entire configuration.
 
-![The BehaviourTestPlan tests](../images/posts/test-plan-behaviour-tests.jpg)
+![The BehaviourTestPlan tests](/images/posts/test-plan-behaviour-tests.jpg)
 
-![The BehaviourTestPlan configurations](../images/posts/test-plan-behaviour-configuration.jpg)
+![The BehaviourTestPlan configurations](/images/posts/test-plan-behaviour-configuration.jpg)
 
 Last but not least I created a last test plan called `AllTestPlan.xctestplan` where I added all tests from all the test
 targets and I can use it to have a feedback when my change is spread across the logic, behaviour and UI.  
@@ -107,7 +107,7 @@ So how can I set which test plan I want to run? In the `Test` section of the `Ed
 default test plan to be run with the `cmd + U` option. In this way you can change based on the piece of code you're
 working on.
 
-![The default test plan is launched with the classic cmd + U shortcut](../images/posts/test-plan-set-default.jpg)
+![The default test plan is launched with the classic cmd + U shortcut](/images/posts/test-plan-set-default.jpg)
 
 #### Conclusion
 
