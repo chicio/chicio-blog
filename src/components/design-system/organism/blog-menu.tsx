@@ -1,11 +1,10 @@
 'use client'
 
-import { FC, memo, useCallback, useState } from "react";
+import {FC, memo, useState} from "react";
 import styled, { css } from "styled-components";
 import { Container } from "../atoms/container";
 import { HamburgerMenu } from "../molecules/hamburger-menu";
 import { Overlay } from "../atoms/overlay";
-import { CSSTransition } from "react-transition-group";
 import { Close } from "../molecules/close";
 import { mediaQuery } from "../utils-css/media-query";
 import { MobileBlogHeader } from "./blog-header";
@@ -39,7 +38,7 @@ const Divider = styled.div`
   height: 1px;
   background-color: ${(props) => props.theme.light.textAbovePrimaryColor};
   position: absolute;
-  top: 54px;
+  top: 55px;
   left: ${(props) => props.theme.spacing[3]};
   right: ${(props) => props.theme.spacing[3]};
   opacity: 0.2;
@@ -76,6 +75,7 @@ const MenuContainer = styled.div<{
   width: 100%;
   z-index: 300;
   height: ${(props) => (props.$shouldOpenMenu ? "260px" : menuHeight)};
+  overflow: hidden;
 
   ${mediaQuery.dark} {
     background-color: ${(props) => props.theme.dark.primaryColorDark};
@@ -95,43 +95,15 @@ const NavBar = styled(Container)`
 
 interface NavBarMenuItemProps {
   shouldOpenMenu: boolean;
-  animationDuration: string;
-  enterDelayAnimation: string;
-  exitDelayAnimation: string;
 }
 
 const NavBarMenuItem = memo(styled(MenuItemWithTracking)<NavBarMenuItemProps>`
   position: relative;
   display: inline-block;
-  visibility: ${(props) => (props.shouldOpenMenu ? "visible" : "hidden")};
   margin-right: 20px;
   line-height: 50px;
   font-size: ${(props) => props.theme.fontSizes[5]};
   height: auto;
-
-  &.opacity-enter {
-    visibility: visible;
-    opacity: 0;
-  }
-
-  &.opacity-enter-active {
-    opacity: 1;
-    visibility: visible;
-    transition: opacity ${(props) => props.animationDuration} ease
-      ${(props) => props.enterDelayAnimation};
-  }
-
-  &.opacity-exit {
-    visibility: visible;
-    opacity: 1;
-  }
-
-  &.opacity-exit-active {
-    opacity: 0;
-    transition: opacity ${(props) => props.animationDuration} ease
-      ${(props) => props.exitDelayAnimation};
-    visibility: visible;
-  }
 
   ${mediaQuery.minWidth.sm} {
     visibility: visible;
@@ -148,60 +120,6 @@ const NavBarMenuItem = memo(styled(MenuItemWithTracking)<NavBarMenuItemProps>`
   }
 `);
 
-interface AnimatedNavBarItemProps {
-  label: string;
-  slug: string;
-  selected: boolean;
-  trackingAction: string;
-  trackingCategory: string;
-  shouldOpenMenu: boolean;
-  enterDelayAnimation: string;
-  exitDelayAnimation: string;
-  onStartAnimation: () => void;
-  onFinishAnimation: () => void;
-}
-
-const AnimatedNavBarItem: FC<AnimatedNavBarItemProps> = ({
-  label,
-  slug,
-  selected,
-  trackingAction,
-  trackingCategory,
-  shouldOpenMenu,
-  enterDelayAnimation,
-  exitDelayAnimation,
-  onStartAnimation,
-  onFinishAnimation,
-}) => (
-  <CSSTransition
-    in={shouldOpenMenu}
-    classNames="opacity"
-    addEndListener={(node, done) => {
-      node.addEventListener("transitionend", done, false);
-    }}
-    onEnter={onStartAnimation}
-    onEntered={onFinishAnimation}
-    onExit={onStartAnimation}
-    onExited={onFinishAnimation}
-  >
-    <NavBarMenuItem
-      shouldOpenMenu={shouldOpenMenu}
-      animationDuration={"0.3s"}
-      enterDelayAnimation={enterDelayAnimation}
-      exitDelayAnimation={exitDelayAnimation}
-      selected={selected}
-      to={slug}
-      trackingData={{
-        action: trackingAction,
-        category: trackingCategory,
-        label: tracking.label.header,
-      }}
-    >
-      {label}
-    </NavBarMenuItem>
-  </CSSTransition>
-);
-
 export interface MenuProps {
   trackingCategory: string;
 }
@@ -210,25 +128,7 @@ export const BlogMenu: FC<MenuProps> = ({ trackingCategory }) => {
   const pathname = usePathname()
   const direction = useScrollDirection();
   const [shouldOpenMenu, setShouldOpenMenu] = useState(false);
-  const [enableMenuButton, setEnableMenuButton] = useState(true);
   const [startSearch, setStartSearch] = useState(false);
-
-  const onStartAnimation = useCallback(
-    () => setEnableMenuButton(false),
-    [setEnableMenuButton],
-  );
-  const onFinishAnimation = useCallback(
-    () => setEnableMenuButton(true),
-    [setEnableMenuButton],
-  );
-  const changeMenuStatus = useCallback(
-    (enableMenuButton: boolean, shouldOpenMenu: boolean) => {
-      if (enableMenuButton) {
-        setShouldOpenMenu(!shouldOpenMenu);
-      }
-    },
-    [setShouldOpenMenu],
-  );
 
   return (
     <>
@@ -240,73 +140,69 @@ export const BlogMenu: FC<MenuProps> = ({ trackingCategory }) => {
         <NavBar>
           <MobileBlogHeaderContainer $hide={startSearch}>
             <MobileBlogHeader height={menuHeight} />
-            {shouldOpenMenu && <Divider />}
+            <Divider />
           </MobileBlogHeaderContainer>
-          <AnimatedNavBarItem
-            label={"Home"}
-            slug={"/"}
+          <NavBarMenuItem
+            to={"/"}
             selected={pathname === "/"}
-            trackingAction={tracking.action.open_home}
-            trackingCategory={trackingCategory}
+            trackingData={{
+              action: tracking.action.open_home,
+              category: trackingCategory,
+              label: tracking.label.header,
+            }}
             shouldOpenMenu={shouldOpenMenu}
-            enterDelayAnimation={"0.3s"}
-            exitDelayAnimation={"0.4s"}
-            onStartAnimation={onStartAnimation}
-            onFinishAnimation={onFinishAnimation}
-          />
-          <AnimatedNavBarItem
-            label={"Blog"}
-            slug={slugs.blog}
-            selected={pathname !== slugs.art && pathname !== slugs.aboutMe}
-            trackingAction={tracking.action.open_blog}
-            trackingCategory={trackingCategory}
-            shouldOpenMenu={shouldOpenMenu}
-            enterDelayAnimation={"0.4s"}
-            exitDelayAnimation={"0.3s"}
-            onStartAnimation={onStartAnimation}
-            onFinishAnimation={onFinishAnimation}
-          />
-          <AnimatedNavBarItem
-            label={"Art"}
-            slug={slugs.art}
-            selected={pathname === slugs.art}
-            trackingAction={tracking.action.open_art}
-            trackingCategory={trackingCategory}
-            shouldOpenMenu={shouldOpenMenu}
-            enterDelayAnimation={"0.5s"}
-            exitDelayAnimation={"0.2s"}
-            onStartAnimation={onStartAnimation}
-            onFinishAnimation={onFinishAnimation}
-          />
-          <AnimatedNavBarItem
-            label={"About me"}
-            slug={slugs.aboutMe}
-            selected={pathname === slugs.aboutMe}
-            trackingAction={tracking.action.open_about_me}
-            trackingCategory={trackingCategory}
-            shouldOpenMenu={shouldOpenMenu}
-            enterDelayAnimation={"0.6s"}
-            exitDelayAnimation={"0.1s"}
-            onStartAnimation={onStartAnimation}
-            onFinishAnimation={onFinishAnimation}
-          />
+          >
+            Home
+          </NavBarMenuItem>
+          <NavBarMenuItem
+              to={slugs.blog}
+              selected={pathname === slugs.blog}
+              trackingData={{
+                action: tracking.action.open_home,
+                category: trackingCategory,
+                label: tracking.label.header,
+              }}
+              shouldOpenMenu={shouldOpenMenu}
+          >
+            Blog
+          </NavBarMenuItem>
+          <NavBarMenuItem
+              to={slugs.art}
+              selected={pathname === slugs.art}
+              trackingData={{
+                action: tracking.action.open_art,
+                category: trackingCategory,
+                label: tracking.label.header,
+              }}
+              shouldOpenMenu={shouldOpenMenu}
+          >
+            Art
+          </NavBarMenuItem>
+          <NavBarMenuItem
+              to={slugs.aboutMe}
+              selected={pathname === slugs.aboutMe}
+              trackingData={{
+                action: tracking.action.open_about_me,
+                category: trackingCategory,
+                label: tracking.label.header,
+              }}
+              shouldOpenMenu={shouldOpenMenu}
+          >
+            About me
+          </NavBarMenuItem>
           {!startSearch && (
             <MenuButtonContainer>
               {!shouldOpenMenu && (
                 <HamburgerMenu
                   onClick={() => {
                     if (!startSearch) {
-                      changeMenuStatus(enableMenuButton, shouldOpenMenu);
+                      setShouldOpenMenu(!shouldOpenMenu)
                     }
                   }}
                 />
               )}
               {shouldOpenMenu && (
-                <Close
-                  onClick={() =>
-                    changeMenuStatus(enableMenuButton, shouldOpenMenu)
-                  }
-                />
+                <Close onClick={() => setShouldOpenMenu(!shouldOpenMenu)}/>
               )}
             </MenuButtonContainer>
           )}
