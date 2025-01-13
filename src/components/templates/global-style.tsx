@@ -33,19 +33,7 @@ export const GlobalStyle = createGlobalStyle`
       background-color: ${(props) => props.theme.dark.generalBackground};
     }
   }
-
-  /* Sticky footer https://css-tricks.com/couple-takes-sticky-footer/ */
-  /* see also flex shrink property in footer component */
-  #___gatsby{
-    height: 100%;
-  }
-
-  #gatsby-focus-wrapper{
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-  }
-
+  
   /* https://www.w3schools.com/css/css3_box-sizing.asp */
   * {
     box-sizing: border-box;

@@ -1,3 +1,5 @@
+'use client'
+
 import { FC, memo, useCallback, useState } from "react";
 import styled, { css } from "styled-components";
 import { Container } from "../atoms/container";
@@ -15,6 +17,7 @@ import {
 import {MenuItemWithTracking} from "@/components/design-system/atoms/menu-item-with-tracking";
 import {tracking} from "@/types/tracking";
 import {slugs} from "@/types/slug";
+import {usePathname} from "next/navigation";
 
 export const menuHeight = "55px";
 
@@ -201,10 +204,10 @@ const AnimatedNavBarItem: FC<AnimatedNavBarItemProps> = ({
 
 export interface MenuProps {
   trackingCategory: string;
-  pathname: string;
 }
 
-export const BlogMenu: FC<MenuProps> = ({ trackingCategory, pathname }) => {
+export const BlogMenu: FC<MenuProps> = ({ trackingCategory }) => {
+  const pathname = usePathname()
   const direction = useScrollDirection();
   const [shouldOpenMenu, setShouldOpenMenu] = useState(false);
   const [enableMenuButton, setEnableMenuButton] = useState(true);

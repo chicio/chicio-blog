@@ -1,8 +1,11 @@
+'use client'
+
 import { FC } from "react";
 import styled, { TransientProps } from "styled-components";
 import { mediaQuery } from "../utils-css/media-query";
 import { backgroundGradients } from "../atoms/gradients";
 import Image from "next/image";
+import blogLogoImage from '../../../../public/images/blog-logo.jpg';
 
 const BlogHeaderContainer = styled.div`
   display: flex;
@@ -65,7 +68,7 @@ const BlogDescription = styled.span`
   }
 `;
 
-const ImageContainer = styled.div`
+const BlogHeaderImage = styled(Image)`
   width: 35px;
   height: 35px;
   margin-right: ${(props) => props.theme.spacing[2]};
@@ -86,7 +89,8 @@ const DesktopContainer = styled.div`
   display: none;
 
   ${mediaQuery.minWidth.sm} {
-    display: block;
+      display: block;
+      margin-top: 90px;
   }
 `;
 
@@ -115,19 +119,13 @@ const Background = styled.div<TransientProps<DesktopHeaderProps>>`
 
 export const BlogHeader: FC = () => (
   <BlogHeaderContainer>
-    <ImageContainer>
-      <Image
-        src={"/images/blog-logo.jpg"}
+      <BlogHeaderImage
+        src={blogLogoImage}
         alt={"blog logo"}
         width={80}
         height={80}
         placeholder={"blur"}
-        style={{
-          borderRadius: "10px",
-          boxShadow: "1px 1px 4px rgba(0, 0, 0, 0.575)",
-        }}
       />
-    </ImageContainer>
     <BlogHeaderColumn>
       <BlogTitle>CHICIO CODING</BlogTitle>
       <BlogDescriptionContainer>
