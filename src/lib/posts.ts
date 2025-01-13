@@ -8,7 +8,8 @@ import html from "remark-html";
 import math from "remark-math";
 import rehype from 'remark-rehype'
 import katex from "rehype-katex";
-import katexStringify from 'rehype-stringify'
+import stringify from 'rehype-stringify'
+import syntaxHighlight from 'rehype-highlight'
 import calculateReadingTime from "reading-time";
 import {Post, PostFrontMatter} from "@/types/post";
 import {authors} from "@/types/author";
@@ -64,7 +65,8 @@ const getPostFromFilePath = (filePath: string, fileName: string) => {
         .use(math)
         .use(rehype)
         .use(katex) // Render LaTeX with KaTeX
-        .use(katexStringify)
+        .use(syntaxHighlight)
+        .use(stringify)
         .processSync(fileParsed.content)
         .toString();
 

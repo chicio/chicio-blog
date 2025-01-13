@@ -1,5 +1,6 @@
 'use client'
 
+import 'highlight.js/styles/github-dark.css';
 import { FC } from "react";
 import styled from "styled-components";
 import {Heading2} from "@/components/design-system/atoms/heading2";
@@ -8,7 +9,7 @@ import {heading4Style} from "@/components/design-system/atoms/heading4";
 import {heading5Style} from "@/components/design-system/atoms/heading5";
 import {standardLinkStyle} from "@/components/design-system/atoms/standard-link-style";
 import {mediaQuery} from "@/components/design-system/utils-css/media-query";
-import {syntax} from "@/components/website/syntax";
+import {borderRadius} from "@/components/design-system/atoms/border-radius";
 
 const PostContentContainer = styled.div`
   color: ${(props) => props.theme.light.primaryTextColor};
@@ -132,8 +133,26 @@ const PostContentContainer = styled.div`
   & .emoji-icon {
     top: 4px;
   }
+    
+    & pre {
+        font-family: Menlo, Monaco, "Courier New", monospace;
+        font-size: ${(props) => props.theme.fontSizes[1]};
+        ${borderRadius};
+        box-shadow: 0 3px 10px 0 ${(props) => props.theme.light.boxShadowLight};
 
-  ${syntax}
+        ${mediaQuery.dark} {
+            box-shadow: 0 3px 10px 0 ${(props) => props.theme.dark.boxShadowLight};
+        }    
+    }
+    
+    & p code {
+        font-family: Menlo, Monaco, "Courier New", monospace;
+        font-size: ${(props) => props.theme.fontSizes[1]};
+        color: #d2a8ff;
+        background: #0d1117;
+        padding: 4px;
+        ${borderRadius};
+    }
 `;
 
 interface PostContentProps {
