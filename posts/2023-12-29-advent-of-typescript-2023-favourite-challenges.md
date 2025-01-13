@@ -3,7 +3,7 @@ title: "Advent of TypeScript 2023: my personal favourite challenges"
 description: "This year I participated in the first edition of Advent of TypeScript created by TypeHero. In this 
 new series of article I will show my solutions to the challenges I liked the most."
 date: 2023-12-29
-image: ../images/posts/advent-of-typescript-featured.jpg
+image: /images/posts/advent-of-typescript-featured.jpg
 tags: [typescript, advent of typescript 2023]
 comments: true
 authors: [fabrizio_duroni]

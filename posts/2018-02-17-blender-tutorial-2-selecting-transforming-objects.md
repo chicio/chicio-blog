@@ -2,7 +2,7 @@
 title: "Blender tutorial: selecting and transforming objects"
 description: "Second post of the Blender tutorial series. This time we will learn how to select and move objects."
 date: 2018-02-17
-image: ../images/posts/blender-selecting-objects-2.jpg
+image: /images/posts/blender-selecting-objects-2.jpg
 tags: [computer graphics, blender]
 comments: true
 authors: [fabrizio_duroni]

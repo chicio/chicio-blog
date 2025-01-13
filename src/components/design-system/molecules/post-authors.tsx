@@ -7,6 +7,7 @@ import Image from 'next/image';
 import {Author} from "@/types/author";
 import {StandardExternalLinkWithTracking} from "@/components/design-system/atoms/standard-external-link-with-tracking";
 import {tracking} from "@/types/tracking";
+import {imageBlur} from "@/components/website/ImageBlur";
 
 const PostAuthorsContainer = styled(ContainerFluid)`
   padding: 0;
@@ -23,8 +24,6 @@ const PostAuthorContainer = styled(ContainerFluid)`
 `;
 
 const PostAuthorImage = styled(Image)`
-  width: 30px;
-  height: 30px;
   margin-right: 5px;
   border-radius: 50%;
 
@@ -45,39 +44,41 @@ export const PostAuthors: FC<PostAuthorsProps> = ({
   trackingCategory,
   trackingLabel,
   enableUrl,
-}) => {
-  return (
-    <PostAuthorsContainer>
-      {postAuthors.map((author) => {
-        return (
-          <PostAuthorContainer
-            key={`${author}${Math.floor(Math.random() * 100)}`}
-          >
-            <PostAuthorImage
-              alt={author.name}
-              src={author.image}
-              placeholder={'blur'}
-            />
-            <Paragraph>
-              {enableUrl && (
-                <StandardExternalLinkWithTracking
-                  trackingData={{
-                    action: tracking.action.open_blog_author,
-                    category: trackingCategory,
-                    label: trackingLabel,
-                  }}
-                  href={author.url}
-                  target={"_blank"}
-                  rel="noopener noreferrer"
+}) =>
+    (
+        <PostAuthorsContainer>
+          {postAuthors.map((author) => {
+            return (
+                <PostAuthorContainer
+                    key={`${author}${Math.floor(Math.random() * 100)}`}
                 >
-                  {author.name}
-                </StandardExternalLinkWithTracking>
-              )}
-              {!enableUrl && author.name}
-            </Paragraph>
-          </PostAuthorContainer>
-        );
-      })}
-    </PostAuthorsContainer>
-  );
-};
+                  <PostAuthorImage
+                      alt={author.name}
+                      src={author.image}
+                      width={30}
+                      height={30}
+                      placeholder={'blur'}
+                      blurDataURL={imageBlur}
+                  />
+                  <Paragraph>
+                    {enableUrl && (
+                        <StandardExternalLinkWithTracking
+                            trackingData={{
+                              action: tracking.action.open_blog_author,
+                              category: trackingCategory,
+                              label: trackingLabel,
+                            }}
+                            href={author.url}
+                            target={"_blank"}
+                            rel="noopener noreferrer"
+                        >
+                          {author.name}
+                        </StandardExternalLinkWithTracking>
+                    )}
+                    {!enableUrl && author.name}
+                  </Paragraph>
+                </PostAuthorContainer>
+            );
+          })}
+        </PostAuthorsContainer>
+    );

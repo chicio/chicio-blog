@@ -3,7 +3,7 @@ title: "Advent of TypeScript 2023: Rock paper scissors (Day 17)"
 description: "Rock paper scissors, one of the classical kata games you can find at a coding dojo. Can it be 
 implemented using only TypeScript types?"
 date: 2023-12-30
-image: ../images/posts/advent-of-typescript-rock-paper-scissors.jpg
+image: /images/posts/advent-of-typescript-rock-paper-scissors.jpg
 tags: [typescript, advent of typescript 2023]
 comments: true
 authors: [fabrizio_duroni]

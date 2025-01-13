@@ -4,7 +4,7 @@ description: "Most of the time you have a big JavaScript codebase for your websi
 it when a page is requested. Is it possible to load chunks of JavaScript code only when they are really needed? Yes you
 can with Webpack and its code splitting feature based on a syntax equal to the one of ES2020 dynamic imports."
 date: 2020-06-02
-image: ../images/posts/webpack-code-split.jpg
+image: /images/posts/webpack-code-split.jpg
 tags: [web development, javascript, typescript]
 comments: true
 authors: [fabrizio_duroni]

@@ -2,7 +2,7 @@
 title: "Blender tutorial: animation"
 description: "In this new post of the series Blender tutorial I will talk about animations."
 date: 2019-03-27
-image: ../images/posts/blender-animation-timeline.jpg
+image: /images/posts/blender-animation-timeline.jpg
 tags: [computer graphics, blender]
 comments: true
 authors: [fabrizio_duroni]

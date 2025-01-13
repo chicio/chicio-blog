@@ -2,7 +2,7 @@
 title: "Blender tutorial: armatures and character rigging"
 description: "In this new post of the series Blender tutorial I will talk about character rigging."
 date: 2019-03-28
-image: ../images/posts/blender-bones.jpg
+image: /images/posts/blender-bones.jpg
 tags: [computer graphics, blender]
 comments: true
 authors: [fabrizio_duroni]

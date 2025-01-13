@@ -3,7 +3,7 @@ title: "ID3TagEditor: a Swift framework to read and write ID3 tag of your mp3 fi
 description: "The second of a short series of post in which I describe my two latest project: ID3TagEditor and
 Mp3ID3Tagger. In this post I will talk about ID3TagEditor framework."
 date: 2018-05-08
-image: ../images/posts/id3tageditor-logo.jpg
+image: /images/posts/id3tageditor-logo.jpg
 tags: [swift, ios, apple, mobile application development, macos, tvos, watchos]
 comments: true
 authors: [fabrizio_duroni]

@@ -2,7 +2,7 @@
 title: "Clean Code: functions"
 description: "Let's learn how to write function in a clean way."
 date: 2019-07-28 
-image: ../images/posts/uncle-bob-defender-of-clean-code.jpg 
+image: /images/posts/uncle-bob-defender-of-clean-code.jpg 
 tags: [clean code]
 comments: true
 authors: [fabrizio_duroni]

@@ -2,7 +2,7 @@
 title: "Blender tutorial: textures - part 1"
 description: "In this new post of the series Blender tutorial I will talk about textures."
 date: 2019-03-22
-image: ../images/posts/blender-create-texture.jpg
+image: /images/posts/blender-create-texture.jpg
 tags: [computer graphics, blender]
 comments: true
 authors: [fabrizio_duroni]

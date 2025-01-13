@@ -2,7 +2,7 @@
 title: "Blender tutorial: advanced modeling"
 description: "In this new post of the series Blender tutorial I will talk about advanced modeling in Blender."
 date: 2018-08-21
-image: ../images/posts/blender-add-modifier.jpg
+image: /images/posts/blender-add-modifier.jpg
 tags: [computer graphics, blender]
 comments: true
 authors: [fabrizio_duroni]

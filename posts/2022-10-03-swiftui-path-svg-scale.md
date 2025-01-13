@@ -2,7 +2,7 @@
 title: "Use SwiftUI Path and Shape to render your svg files: a practical example"
 description: "Let's have some fun with SwiftUI by drawing an inspiration title component leveraging Path and Shape."
 date: 2022-10-03
-image: ../images/posts/swiftui-path.jpg
+image: /images/posts/swiftui-path.jpg
 tags: [swift, swiftui, ios, apple, mobile application development]
 comments: true 
 authors: [fabrizio_duroni, marco_de_lucchi]

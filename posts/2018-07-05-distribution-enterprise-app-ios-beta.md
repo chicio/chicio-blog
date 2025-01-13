@@ -3,7 +3,7 @@ title: "Eat Your Own Dog Food: distribute a beta version of your iOS app using A
 description: "In this post I will show you how to distribute a beta version of your iOS app using Apple Enterprise
 Developer Program."
 date: 2018-07-05
-image: ../images/posts/beta-enterprise-dogfood.jpg
+image: /images/posts/beta-enterprise-dogfood.jpg
 tags: [swift, ios, apple, mobile application development]
 comments: true
 authors: [giordano_tamburrelli, fabrizio_duroni]

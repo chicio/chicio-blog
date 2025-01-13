@@ -2,7 +2,7 @@
 title: "Blender tutorial: textures - part 2"
 description: "In this new post of the series Blender tutorial I will talk other about textures techniques."
 date: 2019-03-23
-image: ../images/posts/blender-displacement-mapping.jpg
+image: /images/posts/blender-displacement-mapping.jpg
 tags: [computer graphics, blender]
 comments: true
 authors: [fabrizio_duroni]

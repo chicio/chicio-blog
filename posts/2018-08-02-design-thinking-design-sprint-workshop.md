@@ -3,7 +3,7 @@ title: "Design thinking and Design sprint: embrace you creativity"
 description: "In this new post I will talk about my experience with design sprint and design thinking during a workshop
 I attended."
 date: 2018-08-02
-image: ../images/posts/offsite-location.jpg
+image: /images/posts/offsite-location.jpg
 tags: [design, ux]
 comments: true
 authors: [fabrizio_duroni]

@@ -4,7 +4,7 @@ description: "A lot of mobile developer often complains that React Native is not
 features. This is absolutely not true! In this blog post I will show you how I create a component with a custom 
 background shape, similar to the one I did for a native component ome time ago"
 date: 2024-03-02
-image: ../images/posts/daily-deals-featured.jpg
+image: /images/posts/daily-deals-featured.jpg
 tags: [react native, swift, ios, apple, android, java, mobile application development, javascript, typescript]
 comments: true
 authors: [fabrizio_duroni]

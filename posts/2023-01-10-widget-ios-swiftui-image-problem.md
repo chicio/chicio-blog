@@ -2,7 +2,7 @@
 title: "Widget iOS: how to fix the image bundling problem"
 description: "Discover how we had a long day debugging WidgetKit problems with images."
 date: 2023-01-23
-image: ../images/posts/widget-image-problem-featured.jpg
+image: /images/posts/widget-image-problem-featured.jpg
 tags: [swift, swiftui, ios, apple, mobile-application-development]
 comments: true
 authors: [fabrizio_duroni, marco_de_lucchi]

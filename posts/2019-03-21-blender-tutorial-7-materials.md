@@ -2,7 +2,7 @@
 title: "Blender tutorial: materials"
 description: "In this new post of the series Blender tutorial I will talk about materials."
 date: 2019-03-21
-image: ../images/posts/blender-create-material.jpg
+image: /images/posts/blender-create-material.jpg
 tags: [computer graphics, blender]
 comments: true
 authors: [fabrizio_duroni]

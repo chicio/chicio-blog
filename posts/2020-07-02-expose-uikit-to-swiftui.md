@@ -4,7 +4,7 @@ description: "Do you know that it is possible to use UKit components in SwiftUI?
 UIViewRepresentable and UIViewControllerRepresentable to use your UIKit based component or to fill the gap for missing
 SwiftUI API."
 date: 2020-07-02
-image: ../images/posts/use-uikit-in-swiftui.jpg
+image: /images/posts/use-uikit-in-swiftui.jpg
 tags: [swift, ios, apple, mobile application development]
 comments: true
 authors: [fabrizio_duroni]

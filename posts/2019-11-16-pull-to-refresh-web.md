@@ -3,7 +3,7 @@ title: "Implement a pull to refresh component for you web application"
 description: "Implementing a pull to refresh component in vanilla js for your progressive web app (PWA) it's really
 easy. Let's do it now!"
 date: 2019-11-16 
-image: ../images/posts/pull-to-refresh.jpg 
+image: /images/posts/pull-to-refresh.jpg 
 tags: [pwa, web development, javascript]
 comments: true 
 authors: [fabrizio_duroni]

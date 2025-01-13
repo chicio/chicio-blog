@@ -2,7 +2,7 @@
 title: "Code review: what it is and why it matters"
 description: "In this post I will talk about code review: what it is and why it matters."
 date: 2018-03-02
-image: ../images/posts/01-technology-version-update.jpg
+image: /images/posts/01-technology-version-update.jpg
 tags: [agile, clean code, test driven development]
 comments: true
 authors: [angelo_sciarra, fabrizio_duroni]

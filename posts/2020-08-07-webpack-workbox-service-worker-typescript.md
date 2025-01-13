@@ -4,7 +4,7 @@ description: "Recently I migrated my website to Webpack and TypeScript. I decide
 of Google libraries to improve the creation of a Progressive Web App. Let's see how easy it is to create a PWA with this
 tools."
 date: 2020-08-07 
-image: ../images/posts/workbox.jpg 
+image: /images/posts/workbox.jpg 
 tags: [web development, javascript, pwa, typescript]
 comments: true
 authors: [fabrizio_duroni]

@@ -4,7 +4,7 @@ description: "Standard transient props and shouldForwardProp are styled componen
 should not be passed to the underlying React node or DOM element. In this post we will see how we can create a type 
 to automatically define props from the interface of props of a parent component."
 date: 2025-01-03
-image: ../images/posts/transient-props.png
+image: /images/posts/transient-props.png
 tags: [react, typescript, web development]
 comments: true
 authors: [fabrizio_duroni]

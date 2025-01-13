@@ -3,7 +3,7 @@ title: "Web to native code communication on iOS using WKScriptMessageHandler"
 description: "Did you know that it is possible to call Swift/Objective-C code from the JavaScript code of a web page
 displayed inside a WKWebView?"
 date: 2019-08-03
-image: ../images/posts/swift-js.jpg
+image: /images/posts/swift-js.jpg
 tags: [swift, objective-c, ios, apple, mobile application development, javascript, web development]
 comments: true
 authors: [fabrizio_duroni]

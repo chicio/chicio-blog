@@ -3,7 +3,7 @@ title: "Github Pages and Jekyll: chicio coding birth"
 description: "So, how was created this blog? Let's go through the development process of its creation. Boring and fun at
 the same time."
 date: 2017-05-12
-image: ../images/authors/fabrizio-duroni.jpg
+image: /images/authors/fabrizio-duroni.jpg
 tags: [web development, github pages, jekyll, node, gulp, bootstrap, threejs, javascript]
 comments: true
 authors: [fabrizio_duroni]

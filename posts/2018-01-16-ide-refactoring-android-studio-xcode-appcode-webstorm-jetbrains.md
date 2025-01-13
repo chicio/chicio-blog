@@ -3,7 +3,7 @@ title: "Android Studio vs Xcode vs AppCode: a brief comparison about coding spee
 description: "In this post I will compare the coding speed that it is possible to achieve in some JetBrains IDEs
 and XCode, in terms of code creation and refactoring."
 date: 2018-01-16
-image: ../images/posts/androidstudio-xcode-appcode.jpg
+image: /images/posts/androidstudio-xcode-appcode.jpg
 tags: [IDE, android, java, ios, swift, mobile application development]
 comments: true
 authors: [fabrizio_duroni, tommaso_resti, francesco_bonfadelli]

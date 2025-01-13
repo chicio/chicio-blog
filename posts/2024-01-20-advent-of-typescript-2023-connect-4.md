@@ -2,7 +2,7 @@
 title: "Advent of TypeScript 2023: Connect 4 (Day 23)"
 description: "Connect 4, a classical family Christmas game. Let's see how to tackle it with the typescript type system."
 date: 2024-01-20
-image: ../images/posts/advent-of-typescript-connect-4.jpg
+image: /images/posts/advent-of-typescript-connect-4.jpg
 tags: [typescript, advent of typescript 2023]
 comments: true
 authors: [fabrizio_duroni]

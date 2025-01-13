@@ -3,7 +3,7 @@ title: "Model View Presenter on Android: unit test for everything"
 description: "In this post I will talk about the model view presenter architectural pattern and how it can improve you
 unit test and your TDD workflow when developing an Android application."
 date: 2017-10-27
-image: ../images/posts/mockup-model-view-presenter.jpg
+image: /images/posts/mockup-model-view-presenter.jpg
 tags: [android, java, mobile application development, test driven development, architectural pattern]
 comments: true
 authors: [fabrizio_duroni]

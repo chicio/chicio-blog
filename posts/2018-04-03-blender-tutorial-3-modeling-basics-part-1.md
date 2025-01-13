@@ -2,7 +2,7 @@
 title: "Blender tutorial: introduction to basics of modeling - part 1"
 description: "In this new post of the Blender tutorial series I will talk about the fundamental of modeling in Blender."
 date: 2018-04-03
-image: ../images/posts/blender-modeling-create-primitive-meshes.jpg
+image: /images/posts/blender-modeling-create-primitive-meshes.jpg
 tags: [computer graphics, blender]
 comments: true
 authors: [fabrizio_duroni]

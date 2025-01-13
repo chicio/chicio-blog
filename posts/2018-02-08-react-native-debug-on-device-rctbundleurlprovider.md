@@ -2,7 +2,7 @@
 title: "React Native: the power of RCTBundleURLProvider to build, run and debug on an iOS device from Xcode"
 description: "Do you know how to debug your react native app on a iOS device?"
 date: 2018-02-08
-image: ../images/posts/react-native-bundle-url-provider-setup.jpg
+image: /images/posts/react-native-bundle-url-provider-setup.jpg
 tags: [react native, swift, ios, apple, mobile application development, javascript]
 comments: true
 authors: [fabrizio_duroni, mariano_patafio]

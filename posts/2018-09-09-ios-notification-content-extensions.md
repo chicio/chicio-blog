@@ -2,7 +2,7 @@
 title: "Rich iOS notifications with Notification Content App Extension"
 description: "In this post I will talk about iOS notification customization with Notification Content App Extension."
 date: 2018-09-09
-image: ../images/posts/notification-content-extension-add-target.jpg
+image: /images/posts/notification-content-extension-add-target.jpg
 tags: [swift, ios, apple, mobile application development]
 comments: true
 authors: [fabrizio_duroni]

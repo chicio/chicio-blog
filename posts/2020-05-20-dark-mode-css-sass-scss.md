@@ -3,7 +3,7 @@ title: "Add dark mode support on your website with SASS and prefers-color-scheme
 description: "Dark mode support has been around for quite some time. Let's see how you can create a light theme and a
 dark theme for your website that will be selected automatically based on the user system preference."
 date: 2020-05-20
-image: ../images/posts/dark-side-dark-mode.jpg
+image: /images/posts/dark-side-dark-mode.jpg
 tags: [web development, javascript, pwa]
 comments: true
 authors: [fabrizio_duroni]

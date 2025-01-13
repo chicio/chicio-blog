@@ -2,7 +2,7 @@
 title: "Swift Closure: definition and syntax"
 description: "In this post I will talk about Swift closure: what they are and their syntax"
 date: 2017-06-02
-image: ../images/posts/swift-closure.jpg
+image: /images/posts/swift-closure.jpg
 tags: [swift, ios, apple, mobile application development]
 comments: true
 authors: [fabrizio_duroni]

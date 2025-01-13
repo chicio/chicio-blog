@@ -4,7 +4,7 @@ description: "In the last months, I started to hear a lot of stuff about Domain 
 try to solve? This is a post for all the newbies (like me) that are searching for a definition of what DDD is, which are
 its main parts and what is its main goal."
 date: 2021-06-06
-image: ../images/posts/ddd-bounded-context-ubiquitous-language.jpg
+image: /images/posts/ddd-bounded-context-ubiquitous-language.jpg
 tags: [domain driven design]
 comments: true
 authors: [fabrizio_duroni]

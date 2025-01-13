@@ -3,7 +3,7 @@ title: "Advent of TypeScript 2023: Tic tac toe (Day 21)"
 description: "Tic tac toe, another classical kata games you can find at a coding dojo. A game that is simple to implement with 
 functions, variables etc. becomes a real challenge when you try to implement it using only types."
 date: 2024-01-04
-image: ../images/posts/advent-of-typescript-tic-tac-toe.jpg
+image: /images/posts/advent-of-typescript-tic-tac-toe.jpg
 tags: [typescript, advent of typescript 2023]
 comments: true
 authors: [fabrizio_duroni]

@@ -3,7 +3,7 @@ title: "Golden master testing aka Characterization test: a powerful tool to win 
 description: "In this post I will talk about golden master test aka characterization test: what it is and how to use
 it."
 date: 2018-03-20
-image: ../images/posts/golden-master.jpg
+image: /images/posts/golden-master.jpg
 tags: [test driven development, agile, clean code]
 comments: true
 authors: [fabrizio_duroni, emanuele_ianni]

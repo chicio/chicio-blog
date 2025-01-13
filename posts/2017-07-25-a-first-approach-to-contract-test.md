@@ -2,7 +2,7 @@
 title: "A first approach to contract test"
 description: "In this post I will talk about contract test: what they are and how you can use them."
 date: 2017-07-25
-image: ../images/posts/contract-test.jpg
+image: /images/posts/contract-test.jpg
 tags: [test driven development, java]
 comments: true
 authors: [fabrizio_duroni]

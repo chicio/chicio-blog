@@ -3,7 +3,7 @@ title: "Blender tutorial: introduction to basics of modeling - part 2"
 description: "In this new post of the series Blender tutorial I will continue to talk about the fundamental of modeling
 in Blender."
 date: 2018-06-02
-image: ../images/posts/blender-subdivision.jpg
+image: /images/posts/blender-subdivision.jpg
 tags: [computer graphics, blender]
 comments: true
 authors: [fabrizio_duroni]

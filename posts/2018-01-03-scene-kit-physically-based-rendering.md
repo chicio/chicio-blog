@@ -2,7 +2,7 @@
 title: "SceneKit and physically based rendering"
 description: "Let's try to build a scene using SceneKit and its physically based rendering features."
 date: 2018-01-03
-image: ../images/posts/physically-based-rendering-scene-right.jpg
+image: /images/posts/physically-based-rendering-scene-right.jpg
 tags: [computer graphics, physically based rendering, swift, ios, apple, mobile application development]
 comments: true
 authors: [fabrizio_duroni]

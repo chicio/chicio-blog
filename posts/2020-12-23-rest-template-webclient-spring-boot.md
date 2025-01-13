@@ -3,7 +3,7 @@ title: "Spring Boot + Kotlin Rest client cheatsheet: RestTemplate and Webclient"
 description: "During the last months I worked a lot with Spring Boot backend applications. In this post I explain how
 you can consume a REST api from a Spring Boot application using RestTemplate and (the new) WebClient."
 date: 2020-12-23
-image: ../images/posts/spring-boot-rest.jpg
+image: /images/posts/spring-boot-rest.jpg
 tags: [java, kotlin, spring, spring boot, backend, web development]
 comments: true
 authors: [fabrizio_duroni]

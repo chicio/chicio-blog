@@ -2,7 +2,7 @@
 title: "Web to native code communication on Android using JavaScript Interfaces"
 description: "Javascript Interface can be helpful when you need to call native code from a webview on Android."
 date: 2019-09-06 
-image: ../images/posts/android-js.jpg
+image: /images/posts/android-js.jpg
 tags: [android, java, mobile application development, javascript, web development]
 comments: true 
 authors: [fabrizio_duroni]

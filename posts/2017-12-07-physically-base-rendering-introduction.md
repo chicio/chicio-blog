@@ -2,7 +2,7 @@
 title: "Physically based rendering: informal introduction"
 description: "In this post I will give you an informal introduction about Physically based rendering."
 date: 2017-12-07
-image: ../images/posts/pbr-introduction-examples.jpg
+image: /images/posts/pbr-introduction-examples.jpg
 tags: [computer graphics, physically based rendering]
 comments: true
 authors: [fabrizio_duroni]

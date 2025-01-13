@@ -1,3 +1,5 @@
+'use client'
+
 import styled, { css, TransientProps } from "styled-components";
 import { Paragraph } from "../atoms/paragraph";
 import { PostAuthors } from "./post-authors";
@@ -11,6 +13,7 @@ import Image from "next/image";
 import {StandardInternalLinkWithTracking} from "@/components/design-system/atoms/standard-internal-link-with-tracking";
 import {tracking} from "@/types/tracking";
 import {Author} from "@/types/author";
+import {imageBlur} from "@/components/website/ImageBlur";
 
 interface BigCardProps {
   big: boolean;
@@ -60,7 +63,7 @@ const PostCardImage = styled(Image)`
   }
 `;
 
-const A = styled.div`
+const BorderedContainer = styled.div`
   border-radius: 20px;
 `;
 
@@ -106,7 +109,7 @@ export const PostCard: FC<PostCardProps> = ({
   trackingCategory,
 }) => (
   <PostCardContainer $big={big} key={slug}>
-    <A>
+    <BorderedContainer>
       <PostCardLink
         to={slug}
         trackingData={{
@@ -118,7 +121,9 @@ export const PostCard: FC<PostCardProps> = ({
         <PostCardImage
           alt={title}
           src={image}
+          fill
           placeholder={'blur'}
+          blurDataURL={imageBlur}
         />
       </PostCardLink>
       <PostCardMetaContainer>
@@ -148,6 +153,6 @@ export const PostCard: FC<PostCardProps> = ({
           />
         )}
       </PostCardMetaContainer>
-    </A>
+    </BorderedContainer>
   </PostCardContainer>
 );

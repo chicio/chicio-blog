@@ -3,7 +3,7 @@ title: "How to: enable Hermes JavaScript engine in your React Native app"
 description: "React native 0.60.4 has a new cool feature for Android: a new JavaScript engine called Hermes. Let's see
 how you can turn it on in your React Native application to get all its benefits."
 date: 2020-01-18 
-image: ../images/posts/hermes.jpg
+image: /images/posts/hermes.jpg
 tags: [react native, swift, ios, apple, android, java, mobile application development, javascript, typescript]
 comments: true 
 authors: [fabrizio_duroni, francesco_bonfadelli, marco_de_lucchi]

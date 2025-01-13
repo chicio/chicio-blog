@@ -2,7 +2,7 @@
 title: "Blender tutorial: light - part 1"
 description: "In this new post of the series Blender tutorial I will talk about light."
 date: 2019-03-24
-image: ../images/posts/blender-spot-light.jpg
+image: /images/posts/blender-spot-light.jpg
 tags: [computer graphics, blender]
 comments: true
 authors: [fabrizio_duroni]

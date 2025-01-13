@@ -5,7 +5,7 @@ upgraded I discovered that now you can bundle resources with your Swift package.
 you can do this, and also an interesting trick in order to be able to build a project as a Swift Package and as a standard
 project from Xcode."
 date: 2020-10-19 
-image: ../images/posts/swiftpm-resources.jpg
+image: /images/posts/swiftpm-resources.jpg
 tags: [swift, ios, apple, mobile application development, macos, tvos, watchos]
 comments: true
 authors: [fabrizio_duroni]

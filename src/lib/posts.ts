@@ -18,6 +18,14 @@ const postsDirectory = path.join(process.cwd(), "posts");
 const mdExtension = ".md"
 const postsPerPage = 11;
 
+const formatDate = (date: Date): string => {
+    return new Intl.DateTimeFormat('en-GB', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+    }).format(date);
+};
+
 const generatePostSlugFrom = (filename: string) => {
     const [year, month, day, ...slug] = filename.split("-");
     return `${slugs.blogPost}${year}/${month}/${day}/${slug.join("-")}`.replace(mdExtension, "");
@@ -37,7 +45,7 @@ const getFrontmatterFrom = (
         slug: generatePostSlugFrom(fileName),
         title: data.title,
         description: data.description,
-        date: data.date,
+        date: formatDate(data.date),
         tags: data.tags,
         comments: data.comments,
         authors: data.authors.map((author: string) => authors[author]),
@@ -88,25 +96,15 @@ export const getPostBy = (
     return getPostFromFilePath(filePath, slug)
 };
 
-// export const generateAllPostParams = (): PostParameters[] => {
-//     const filenames = fs.readdirSync(postsDirectory);
-//
-//     return filenames.map((filename) => {
-//         const [year, month, day, ...slug] = filename.split("-");
-//         return {
-//             year, month, day, slug: slug.join('-').replace(/\.md$/, ''),
-//         };
-//     });
-// }
-//
-// export const generateAllPostPaginationPages = () => {
-//     const filenames = fs.readdirSync(postsDirectory);
-//     const totalPosts = filenames.length;
-//     const totalPages = Math.ceil(totalPosts / postsPerPage);
-//     return Array.from({length: totalPages}, (_, i) => ({
-//         page: (i + 1).toString()
-//     }));
-// }
+const groupArrayBy: <T>(array: T[], numberPerGroup: number) => T[][] = (data, n) => {
+    const group = Array(0);
+    for (let i = 0, j = 0; i < data.length; i += 1) {
+        if (i >= n && i % n === 0) j += 1;
+        group[j] = group[j] || [];
+        group[j].push(data[i]);
+    }
+    return group;
+};
 
 export const getPostsPaginationFor = (page: number) => {
     const posts = getAllPosts();
@@ -116,5 +114,8 @@ export const getPostsPaginationFor = (page: number) => {
     const previousPageUrl = page > 1 ? `${slugs.blogPage}/${page - 1}` : undefined
     const nextPageUrl = page < totalPages ? `${slugs.blogPage}/${page + 1}` : undefined
 
-    return { paginatedPosts, previousPageUrl, nextPageUrl };
+    const postsGrouped = groupArrayBy(paginatedPosts.slice(1, paginatedPosts.length), 2);
+
+
+    return { launchPost: paginatedPosts[0], postsGrouped, previousPageUrl, nextPageUrl };
 }

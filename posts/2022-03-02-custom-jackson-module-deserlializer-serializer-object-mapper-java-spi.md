@@ -3,7 +3,7 @@ title: "A custom module for Jackson object mapper using Java Service Provider"
 description: "Sometimes you have custom Jackson object mapper imported from external modules/libraries. How can you 
 customize their serialization/deserialization? Let's go to discover the power of Java Service Provider Interface."
 date: 2022-03-02
-image: ../images/posts/fasterxml-logo.jpg
+image: /images/posts/fasterxml-logo.jpg
 tags: [java, kotlin, web development]
 comments: true 
 authors: [fabrizio_duroni, alex_stabile]

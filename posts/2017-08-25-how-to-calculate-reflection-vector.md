@@ -3,7 +3,7 @@ title: "How to calculate the reflection vector"
 description: "In this post I will talk about reflection vector used in some lighting models, for example the Phong
 reflection model. I will show you how this vector is calculated."
 date: 2017-08-25
-image: ../images/posts/reflection.png
+image: /images/posts/reflection.png
 tags: [computer graphics]
 comments: true
 authors: [fabrizio_duroni]

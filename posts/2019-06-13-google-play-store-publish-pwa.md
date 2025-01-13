@@ -3,7 +3,7 @@ title: "Publish your Progressive Web App to the Google Play Store"
 description: "You can now publish your progressive web apps to the Google Play Store using Trusted Web Activities
 without writing a single line of Java/Kotlin code."
 date: 2019-06-13 
-image: ../images/posts/pwa-google-play-store.jpg
+image: /images/posts/pwa-google-play-store.jpg
 tags: [android, pwa, java, mobile application development, web development, javascript]
 comments: true 
 authors: [fabrizio_duroni]

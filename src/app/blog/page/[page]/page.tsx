@@ -1,33 +1,68 @@
 import {getPostsPaginationFor} from "@/lib/posts";
-import Link from "next/link";
 import {NextPostPaginationParameters} from "@/types/post";
-
-// export async function generateStaticParams(): Promise<PostPaginationParameters[]> {
-//     return generateAllPostPaginationPages()
-// }
+import {BlogPageTemplate} from "@/components/templates/blog-page-template";
+import {siteMetadata} from "@/types/site-metadata";
+import {tracking} from "@/types/tracking";
+import {PostCard} from "@/components/design-system/molecules/post-card";
+import {PaginationNavigation} from "@/components/design-system/molecules/pagination-navigation";
+import {PostsRow} from "@/components/design-system/molecules/posts-row";
 
 export default async function BlogPage({ params }: NextPostPaginationParameters) {
     const { page } = await params
     const pageParam = parseInt(page || "1", 10);
-    const {paginatedPosts, previousPageUrl, nextPageUrl} = getPostsPaginationFor(pageParam);
+    const {launchPost, postsGrouped, previousPageUrl, nextPageUrl} = getPostsPaginationFor(pageParam);
+    const author = siteMetadata.author;
+    const featuredImage = siteMetadata.featuredImage;
+
 
     return (
-        <main>
-            <h1>Blog</h1>
-            <ul>
-                {paginatedPosts.map((post) => (
-                    <li key={post.frontmatter.slug}>
-                        <Link href={post.frontmatter.slug}>
-                            <h2>{post.frontmatter.title}</h2>
-                            <p>{post.frontmatter.description}</p>
-                        </Link>
-                    </li>
-                ))}
-            </ul>
-            <div>
-                {previousPageUrl && <a href={previousPageUrl}>Previous</a>}
-                {nextPageUrl && <a href={nextPageUrl}>Next</a>}
-            </div>
-        </main>
+        <BlogPageTemplate
+            author={author}
+            ogImage={featuredImage}
+            ogPageType={'website'}
+            trackingCategory={tracking.category.blog_home}
+            big={true}
+        >
+            <PostCard
+                big={true}
+                key={launchPost.frontmatter.slug}
+                slug={launchPost.frontmatter.slug}
+                title={launchPost.frontmatter.title}
+                image={launchPost.frontmatter.image}
+                authors={launchPost.frontmatter.authors}
+                date={launchPost.frontmatter.date}
+                readingTime={launchPost.readingTime.text!}
+                description={launchPost.frontmatter.description}
+                trackingCategory={tracking.category.blog_home}
+                tags={launchPost.frontmatter.tags}
+            />
+            {postsGrouped.map((postsGroup, index) => (
+                <PostsRow postsGroup={postsGroup} key={`PostCardsRow${index}`} />
+            ))}
+            <PaginationNavigation
+                trackingCategory={tracking.category.blog_home}
+                previousPageUrl={previousPageUrl}
+                previousPageTrackingAction={tracking.action.open_blog_previous_page}
+                nextPageUrl={nextPageUrl}
+                nextPageTrackingAction={tracking.action.open_blog_next_page}
+            />
+        </BlogPageTemplate>
+        // <main>
+        //     <h1>Blog</h1>
+        //     <ul>
+        //         {paginatedPosts.map((post) => (
+        //             <li key={post.frontmatter.slug}>
+        //                 <Link href={post.frontmatter.slug}>
+        //                     <h2>{post.frontmatter.title}</h2>
+        //                     <p>{post.frontmatter.description}</p>
+        //                 </Link>
+        //             </li>
+        //         ))}
+        //     </ul>
+        //     <div>
+        //         {previousPageUrl && <a href={previousPageUrl}>Previous</a>}
+        //         {nextPageUrl && <a href={nextPageUrl}>Next</a>}
+        //     </div>
+        // </main>
     );
 }

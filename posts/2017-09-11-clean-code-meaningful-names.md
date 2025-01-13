@@ -3,7 +3,7 @@ title: "Clean Code: meaningful names"
 description: "In this post I will talk about clean code and how important are the name you choose while you're
 developing software."
 date: 2017-09-11
-image: ../images/posts/meaningful-names.jpg
+image: /images/posts/meaningful-names.jpg
 tags: [clean code]
 comments: true
 authors: [fabrizio_duroni]

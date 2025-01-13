@@ -1,3 +1,5 @@
+'use client'
+
 import styled from "styled-components";
 import { FC } from "react";
 import {tracking} from "@/types/tracking";
@@ -16,12 +18,10 @@ const PageNavigationCallToAction = styled(CallToActionInternalWithTracking)`
 
 export interface PageNavigationProps {
   trackingCategory: string;
-  previousPageUrl: string;
+  previousPageUrl: string | undefined;
   previousPageTrackingAction: string;
-  nextPageUrl: string;
+  nextPageUrl: string | undefined;
   nextPageTrackingAction: string;
-  isFirst: boolean;
-  isLast: boolean;
 }
 
 export const PaginationNavigation: FC<PageNavigationProps> = ({
@@ -30,11 +30,9 @@ export const PaginationNavigation: FC<PageNavigationProps> = ({
   previousPageTrackingAction,
   nextPageUrl,
   nextPageTrackingAction,
-  isFirst,
-  isLast,
 }) => (
   <CenterHorizontallyContainer>
-    {!isFirst && (
+    {previousPageUrl && (
       <PageNavigationCallToAction
         to={previousPageUrl}
         trackingData={{
@@ -46,7 +44,7 @@ export const PaginationNavigation: FC<PageNavigationProps> = ({
         Previous
       </PageNavigationCallToAction>
     )}
-    {!isLast && (
+    {nextPageUrl && (
       <PageNavigationCallToAction
         to={nextPageUrl}
         trackingData={{

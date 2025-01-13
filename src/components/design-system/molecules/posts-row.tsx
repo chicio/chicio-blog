@@ -1,20 +1,9 @@
-import { FC } from "react";
-import styled from "styled-components";
-import { mediaQuery } from "../utils-css/media-query";
-import { PostCard } from "./post-card";
+import {FC} from "react";
+import {PostCard} from "./post-card";
 import {tracking} from "@/types/tracking";
 import {Post} from "@/types/post";
+import {PostsRowContainer} from "@/components/website/PostsRowContainer";
 
-const PostsRowContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-
-  ${mediaQuery.minWidth.md} {
-    flex-direction: row;
-    justify-content: space-between;
-  }
-`;
 
 interface PostsRowProps {
   postsGroup: Post[];
@@ -45,7 +34,7 @@ export const PostsRow: FC<PostsRowProps> = ({ postsGroup }) => (
         authors={postsGroup[1].frontmatter.authors}
         date={postsGroup[1].frontmatter.date}
         readingTime={postsGroup[1].readingTime.text}
-        description={postsGroup[1].frontmatter!.description!}
+        description={postsGroup[1].frontmatter.description!}
         trackingCategory={tracking.category.blog_home}
         tags={postsGroup[1].frontmatter!.tags!}
       />

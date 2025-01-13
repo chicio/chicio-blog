@@ -2,7 +2,7 @@
 title: "Flow, the static type checker for Javascript: how to use it and a brief comparison with TypeScript"
 description: "Sick and tired of TypeScript? Give a chance to Flow, the JavaScript static type checker from Facebook."
 date: 2019-04-07
-image: ../images/posts/flow.jpg
+image: /images/posts/flow.jpg
 tags: [web development, javascript, typescript]
 comments: true
 authors: [fabrizio_duroni]

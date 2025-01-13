@@ -3,7 +3,7 @@ title: "React Universe 2024"
 description: "Let's dive into the talks from React Universe 2024 that stood out to us the most and share the key 
 insights we gained. From innovative debugging tools to cross-platform development strategies, we’ll walk you through what we found valuable and how it’s shaping our approach to React and React Native development."
 date: 2024-10-15
-image: ../images/posts/react-universe.jpeg
+image: /images/posts/react-universe.jpeg
 tags: [react native, react, swift, ios, apple, android, java, mobile application development, javascript]
 comments: true
 authors: [fabrizio_duroni, sam_campisi]

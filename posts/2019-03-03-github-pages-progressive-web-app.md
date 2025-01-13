@@ -2,7 +2,7 @@
 title: "Progressive Web App: an app-like experience for your website users"
 description: "In this post I will talk about how I transformed my blog on Github Pages and Jekyll into a PWA."
 date: 2019-03-03
-image: ../images/posts/pwa-logo.jpg
+image: /images/posts/pwa-logo.jpg
 tags: [pwa, web development, javascript]
 comments: true
 authors: [fabrizio_duroni]

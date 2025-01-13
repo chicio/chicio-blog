@@ -3,7 +3,7 @@ title: "My first experience as speaker at Voxxed Days 2018: a talk about React, 
 description: "In this post I will talk about my first experience as a speaker at a conference: a talk about React, React
 Native and Typescript with Alessandro Romano."
 date: 2018-11-01
-image: ../images/posts/voxxed-2018-breakfast.jpg
+image: /images/posts/voxxed-2018-breakfast.jpg
 tags: [conference, react native, react, typescript, mobile application development, web development]
 comments: true
 authors: [fabrizio_duroni, alessandro_romano]

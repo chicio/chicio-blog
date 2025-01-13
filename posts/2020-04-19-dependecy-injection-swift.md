@@ -5,7 +5,7 @@ like object graph, persistence etc. But what if all you need is a lightweight de
 will show you how to create it by leveraging the Metatype Type, Generics, the Hashable protocol and the Equatable
 protocol."
 date: 2020-04-19
-image: ../images/posts/dp-container.jpg
+image: /images/posts/dp-container.jpg
 tags: [swift, ios, apple, mobile application development]
 comments: true
 authors: [fabrizio_duroni]

@@ -3,7 +3,7 @@ title: "Blender tutorial: light - part 2"
 description: "In this new post of the series Blender tutorial I will talk about about how to do other cool stuff with
 lights in Blender."
 date: 2019-03-25
-image: ../images/posts/blender-background-ambient-color.jpg
+image: /images/posts/blender-background-ambient-color.jpg
 tags: [computer graphics, blender]
 comments: true
 authors: [fabrizio_duroni]

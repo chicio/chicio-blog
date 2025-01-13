@@ -2,7 +2,7 @@
 title: "Advent of TypeScript 2023: Santa is stuck! (Day 24)"
 description: "Santa is stuck! Let's see how I helped him to escape from the maze using the TypeScript type system."
 date: 2024-01-27
-image: ../images/posts/advent-of-typescript-santa-is-stuck.jpg
+image: /images/posts/advent-of-typescript-santa-is-stuck.jpg
 tags: [typescript, advent of typescript 2023]
 comments: true
 authors: [fabrizio_duroni]
