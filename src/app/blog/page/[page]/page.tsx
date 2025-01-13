@@ -6,6 +6,21 @@ import {tracking} from "@/types/tracking";
 import {PostCard} from "@/components/design-system/molecules/post-card";
 import {PaginationNavigation} from "@/components/design-system/molecules/pagination-navigation";
 import {PostsRow} from "@/components/design-system/molecules/posts-row";
+import {createMetadata} from "@/lib/seo";
+import {slugs} from "@/types/slug";
+import {Metadata} from "next";
+
+export async function generateMetadata({ params }: NextPostPaginationParameters): Promise<Metadata> {
+    const { page } = await params
+
+    return createMetadata({
+        author: siteMetadata.author,
+        title: siteMetadata.title,
+        url: `${siteMetadata.siteUrl}${slugs.blogPage}/${page}`,
+        imageUrl: siteMetadata.featuredImage,
+        ogPageType: 'website',
+    })
+}
 
 export default async function BlogPage({ params }: NextPostPaginationParameters) {
     const { page } = await params
@@ -13,7 +28,6 @@ export default async function BlogPage({ params }: NextPostPaginationParameters)
     const {launchPost, postsGrouped, previousPageUrl, nextPageUrl} = getPostsPaginationFor(pageParam);
     const author = siteMetadata.author;
     const featuredImage = siteMetadata.featuredImage;
-
 
     return (
         <BlogPageTemplate
