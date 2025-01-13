@@ -13,7 +13,7 @@ import Image from "next/image";
 import {StandardInternalLinkWithTracking} from "@/components/design-system/atoms/standard-internal-link-with-tracking";
 import {tracking} from "@/types/tracking";
 import {Author} from "@/types/author";
-import {imageBlur} from "@/components/website/ImageBlur";
+import {imageBlur} from "@/components/website/image-blur";
 
 interface BigCardProps {
   big: boolean;

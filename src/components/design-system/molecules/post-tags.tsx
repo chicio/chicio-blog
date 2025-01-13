@@ -1,3 +1,5 @@
+'use client'
+
 import { Tag } from "./tag";
 import styled from "styled-components";
 import { FC } from "react";

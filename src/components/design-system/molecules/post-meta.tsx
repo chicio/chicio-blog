@@ -1,3 +1,5 @@
+'use client'
+
 import { FC } from "react";
 import styled from "styled-components";
 import {Paragraph} from "@/components/design-system/atoms/paragraph";

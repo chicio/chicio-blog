@@ -1,3 +1,5 @@
+'use client'
+
 import { FC } from "react";
 import styled from "styled-components";
 import { ContainerFluid } from "../atoms/container-fluid";
@@ -7,7 +9,7 @@ import Image from 'next/image';
 import {Author} from "@/types/author";
 import {StandardExternalLinkWithTracking} from "@/components/design-system/atoms/standard-external-link-with-tracking";
 import {tracking} from "@/types/tracking";
-import {imageBlur} from "@/components/website/ImageBlur";
+import {imageBlur} from "@/components/website/image-blur";
 
 const PostAuthorsContainer = styled(ContainerFluid)`
   padding: 0;

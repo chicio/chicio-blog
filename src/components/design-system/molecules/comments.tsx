@@ -1,3 +1,5 @@
+'use client'
+
 import { FC } from "react";
 import { DiscussionEmbed } from "disqus-react";
 import styled from "styled-components";

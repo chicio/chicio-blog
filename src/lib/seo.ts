@@ -31,6 +31,7 @@ export const createMetadata = ({
    url,
    imageUrl,
    ogPageType,
+   description,
    keywords
 }: {
     author: string,
@@ -38,18 +39,19 @@ export const createMetadata = ({
     url: string,
     imageUrl: string,
     ogPageType: OgPageType,
+    description?: string,
     keywords?: string[]
 }): Metadata => ({
     // Basic metadata
     title,
-    description: title,
+    description: description || title,
     authors: [{name: author}],
     keywords: keywords || defaultKeywords,
 
     // Open Graph
     openGraph: {
         title,
-        description: title,
+        description: description || title,
         url,
         siteName: author,
         images: [{url: imageUrl}],

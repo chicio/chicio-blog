@@ -27,13 +27,10 @@ export default async function BlogPage({ params }: NextPostPaginationParameters)
     const pageParam = parseInt(page || "1", 10);
     const {launchPost, postsGrouped, previousPageUrl, nextPageUrl} = getPostsPaginationFor(pageParam);
     const author = siteMetadata.author;
-    const featuredImage = siteMetadata.featuredImage;
 
     return (
         <BlogPageTemplate
             author={author}
-            ogImage={featuredImage}
-            ogPageType={'website'}
             trackingCategory={tracking.category.blog_home}
             big={true}
         >

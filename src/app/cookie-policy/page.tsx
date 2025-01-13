@@ -20,12 +20,9 @@ export const metadata = createMetadata({
 
 export default function CookiePolicy() {
   const author = siteMetadata.author;
-  const featuredImage = siteMetadata.featuredImage;
 
   return (
     <BlogPageTemplate
-      ogPageType={'website'}
-      ogImage={featuredImage}
       author={author}
       trackingCategory={tracking.category.cookie_policy}
     >

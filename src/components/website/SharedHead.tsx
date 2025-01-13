@@ -1,7 +1,8 @@
 import {FC} from "react";
+import Head from "next/head";
 
 export const SharedHead: FC = () =>
-    <head>
+    <Head>
         <link
             rel="preload"
             href="/fonts/opensans/OpenSans-Regular.woff2"
@@ -13,4 +14,4 @@ export const SharedHead: FC = () =>
             href="/humans.txt"
             type="text/plain"
         />
-    </head>
+    </Head>
