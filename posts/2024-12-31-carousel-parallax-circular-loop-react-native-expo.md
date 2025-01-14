@@ -33,7 +33,7 @@ In this post, I’ll show you how to create a stunning full-screen circular caro
 with a parallax effect on the images and an opacity animation for the text descriptions of each item. Below, you can 
 find a video of the final result. 
 
-`youtube: https://youtu.be/ECjX8bXVXzU`
+https://youtu.be/ECjX8bXVXzU
 
 To develop this carousel we will use:
 

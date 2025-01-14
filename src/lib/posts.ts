@@ -10,6 +10,7 @@ import rehype from 'remark-rehype'
 import katex from "rehype-katex";
 import stringify from 'rehype-stringify'
 import syntaxHighlight from 'rehype-highlight'
+import youtube from 'remark-youtube';
 import calculateReadingTime from "reading-time";
 import {Post, PostFrontMatter} from "@/types/post";
 import {authors} from "@/types/author";
@@ -61,6 +62,7 @@ const getPostFromFilePath = (filePath: string, fileName: string) => {
     const htmlContent = remark()
         .use(githubFlavoredMarkdown)
         .use(emoji)
+        .use(youtube)
         .use(html)
         .use(math)
         .use(rehype)

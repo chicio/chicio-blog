@@ -10,6 +10,7 @@ import {heading5Style} from "@/components/design-system/atoms/heading5";
 import {standardLinkStyle} from "@/components/design-system/atoms/standard-link-style";
 import {mediaQuery} from "@/components/design-system/utils-css/media-query";
 import {borderRadius} from "@/components/design-system/atoms/border-radius";
+import {paragraphStyle} from "@/components/design-system/atoms/paragraph";
 
 const PostContentContainer = styled.div`
   color: ${(props) => props.theme.light.primaryTextColor};
@@ -156,6 +157,16 @@ const PostContentContainer = styled.div`
     
     & img {
         width: 100%;
+    }
+    
+    & iframe {
+        width: 100%;
+        height: auto;
+    }
+    
+    & p strong {
+        ${paragraphStyle};
+        font-weight: 600;
     }
 `;
 
