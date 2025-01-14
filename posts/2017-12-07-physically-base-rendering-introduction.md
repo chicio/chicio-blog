@@ -5,6 +5,7 @@ date: 2017-12-07
 image: /images/posts/pbr-introduction-examples.jpg
 tags: [computer graphics, physically based rendering]
 comments: true
+commentsIdentifier: https://www.fabrizioduroni.it/2017/12/07/physically-base-rendering-introduction/
 authors: [fabrizio_duroni]
 ---
 

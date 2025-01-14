@@ -5,6 +5,7 @@ date: 2019-03-22
 image: /images/posts/blender-create-texture.jpg
 tags: [computer graphics, blender]
 comments: true
+commentsIdentifier: https://www.fabrizioduroni.it/2019/03/22/blender-tutorial-8-textures-part-1/
 authors: [fabrizio_duroni]
 ---
 

@@ -6,6 +6,7 @@ date: 2019-05-08
 image: /images/posts/lighthouse-lazy-loading.png
 tags: [web development, javascript, typescript]
 comments: true
+commentsIdentifier: https://www.fabrizioduroni.it/2019/05/08/intersection-observer/
 authors: [fabrizio_duroni]
 ---
 

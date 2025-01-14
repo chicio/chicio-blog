@@ -4,7 +4,8 @@ description: "Javascript Interface can be helpful when you need to call native c
 date: 2019-09-06 
 image: /images/posts/android-js.jpg
 tags: [android, java, mobile application development, javascript, web development]
-comments: true 
+comments: true
+commentsIdentifier: https://www.fabrizioduroni.it/2019/09/06/html-javascript-to-native-communication-android/
 authors: [fabrizio_duroni]
 ---
 

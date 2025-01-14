@@ -50,6 +50,7 @@ const getFrontmatterFrom = (
         date: formatDate(data.date),
         tags: data.tags,
         comments: data.comments,
+        commentsIdentifier: data.commentsIdentifier,
         authors: data.authors.map((author: string) => authors[author]),
         image: data.image,
     };

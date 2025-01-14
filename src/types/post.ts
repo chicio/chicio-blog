@@ -16,6 +16,7 @@ export type PostFrontMatter = {
     date: string
     tags: string[];
     comments: boolean;
+    commentsIdentifier: string;
     authors: Author[];
     image: string;
 }

@@ -5,6 +5,7 @@ date: 2019-03-27
 image: /images/posts/blender-animation-timeline.jpg
 tags: [computer graphics, blender]
 comments: true
+commentsIdentifier: https://www.fabrizioduroni.it/2019/03/27/blender-tutorial-13-animation/
 authors: [fabrizio_duroni]
 ---
 
@@ -18,7 +19,7 @@ timeline. The timeline is usually placed at the bottom of the default layout of 
 frame by clicking on it in the timeline. We also have some controls to start/stop/fast back and forward the animation.
 There is also the possibility to set a start and end frame of the animation.
 
-![The animation timeline](/images/posts/blender-animation-timeline.jpg")
+![The animation timeline](/images/posts/blender-animation-timeline.jpg)
 
 To create an animation we need first of all to set keyframes. To do this we have to select the frame that we want as
 keyframe in the timeline, and the go in the space properties panel, change one of the spatial properties we want to

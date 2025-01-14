@@ -5,6 +5,7 @@ date: 2018-08-21
 image: /images/posts/blender-add-modifier.jpg
 tags: [computer graphics, blender]
 comments: true
+commentsIdentifier: https://www.fabrizioduroni.it/2018/08/21/blender-tutorial-5-advanced-modeling/
 authors: [fabrizio_duroni]
 ---
 

@@ -5,6 +5,7 @@ date: 2019-04-07
 image: /images/posts/flow.jpg
 tags: [web development, javascript, typescript]
 comments: true
+commentsIdentifier: https://www.fabrizioduroni.it/2019/04/07/flow-javascript-types-typescript/
 authors: [fabrizio_duroni]
 ---
 

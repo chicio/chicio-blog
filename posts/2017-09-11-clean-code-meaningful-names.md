@@ -6,6 +6,7 @@ date: 2017-09-11
 image: /images/posts/meaningful-names.jpg
 tags: [clean code]
 comments: true
+commentsIdentifier: https://www.fabrizioduroni.it/2017/09/11/clean-code-meaningful-names/
 authors: [fabrizio_duroni]
 ---
 

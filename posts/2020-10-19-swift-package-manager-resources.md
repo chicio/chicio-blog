@@ -8,6 +8,7 @@ date: 2020-10-19
 image: /images/posts/swiftpm-resources.jpg
 tags: [swift, ios, apple, mobile application development, macos, tvos, watchos]
 comments: true
+commentsIdentifier: https://www.fabrizioduroni.it/2020/10/19/swift-package-manager-resources/
 authors: [fabrizio_duroni]
 ---
 

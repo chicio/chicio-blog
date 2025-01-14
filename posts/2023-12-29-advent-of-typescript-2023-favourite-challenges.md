@@ -6,6 +6,7 @@ date: 2023-12-29
 image: /images/posts/advent-of-typescript-featured.jpg
 tags: [typescript, advent of typescript 2023]
 comments: true
+commentsIdentifier: https://www.fabrizioduroni.it/2023/12/29/advent-of-typescript-2023-favourite-challenges/
 authors: [fabrizio_duroni]
 ---
 

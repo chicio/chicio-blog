@@ -7,6 +7,7 @@ date: 2020-08-07
 image: /images/posts/workbox.jpg 
 tags: [web development, javascript, pwa, typescript]
 comments: true
+commentsIdentifier: https://www.fabrizioduroni.it/2020/08/07/webpack-workbox-service-worker-typescript/
 authors: [fabrizio_duroni]
 ---
 

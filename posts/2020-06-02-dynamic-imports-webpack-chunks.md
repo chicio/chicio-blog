@@ -7,6 +7,7 @@ date: 2020-06-02
 image: /images/posts/webpack-code-split.jpg
 tags: [web development, javascript, typescript]
 comments: true
+commentsIdentifier: https://www.fabrizioduroni.it/2020/06/02/dynamic-imports-webpack-chunks/
 authors: [fabrizio_duroni]
 ---
 

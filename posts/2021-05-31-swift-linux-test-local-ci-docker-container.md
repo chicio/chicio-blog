@@ -6,6 +6,7 @@ date: 2021-05-31
 image: /images/posts/spm-swift.jpg
 tags: [swift, ios, apple, mobile application development, macos, tvos, watchos]
 comments: true 
+commentsIdentifier: https://www.fabrizioduroni.it/2021/05/31/swift-linux-test-local-ci-docker-container/
 authors: [fabrizio_duroni]
 ---
 

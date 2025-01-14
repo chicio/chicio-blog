@@ -5,6 +5,7 @@ date: 2024-01-27
 image: /images/posts/advent-of-typescript-santa-is-stuck.jpg
 tags: [typescript, advent of typescript 2023]
 comments: true
+commentsIdentifier: https://www.fabrizioduroni.it/2024/01/31/advent-of-typescript-2023-santa-is-stuck/
 authors: [fabrizio_duroni]
 ---
 

@@ -6,6 +6,7 @@ date: 2018-03-20
 image: /images/posts/golden-master.jpg
 tags: [test driven development, agile, clean code]
 comments: true
+commentsIdentifier: https://www.fabrizioduroni.it/2018/03/20/golden-master-test-characterization-test-legacy-code/
 authors: [fabrizio_duroni, emanuele_ianni]
 ---
 

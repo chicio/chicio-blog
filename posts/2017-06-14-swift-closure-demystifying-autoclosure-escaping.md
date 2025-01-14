@@ -6,6 +6,7 @@ date: 2017-06-14
 image: /images/posts/closure-everywhere.jpg
 tags: [swift, ios, apple, mobile application development]
 comments: true
+commentsIdentifier: https://www.fabrizioduroni.it/2017/06/14/swift-closure-demystifying-autoclosure-escaping/
 authors: [fabrizio_duroni]
 ---
 

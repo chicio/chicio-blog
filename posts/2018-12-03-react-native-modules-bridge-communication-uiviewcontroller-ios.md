@@ -6,6 +6,7 @@ date: 2018-12-03
 image: /images/posts/native-modules-communication-ios.jpg
 tags: [react native, javascript, swift, objective-c, ios, apple, android, java, mobile application development]
 comments: true
+commentsIdentifier: https://www.fabrizioduroni.it/2018/12/03/react-native-modules-bridge-communication-uiviewcontroller-ios/
 authors: [fabrizio_duroni]
 ---
 

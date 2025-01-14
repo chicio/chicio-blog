@@ -7,6 +7,7 @@ date: 2020-07-02
 image: /images/posts/use-uikit-in-swiftui.jpg
 tags: [swift, ios, apple, mobile application development]
 comments: true
+commentsIdentifier: https://www.fabrizioduroni.it/2020/07/02/expose-uikit-to-swiftui/
 authors: [fabrizio_duroni]
 ---
 

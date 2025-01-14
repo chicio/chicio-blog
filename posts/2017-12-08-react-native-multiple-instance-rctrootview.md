@@ -5,6 +5,7 @@ date: 2017-12-08
 image: /images/posts/react-native-crash-reload-with-debugger.jpg
 tags: [react native, swift, objective-c, ios, apple, mobile application development, javascript]
 comments: true
+commentsIdentifier: https://www.fabrizioduroni.it/2017/12/08/react-native-multiple-instance-rctrootview/
 authors: [fabrizio_duroni]
 ---
 

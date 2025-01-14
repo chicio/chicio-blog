@@ -6,10 +6,11 @@ date: 2017-05-12
 image: /images/authors/fabrizio-duroni.jpg
 tags: [web development, github pages, jekyll, node, gulp, bootstrap, threejs, javascript]
 comments: true
+commentsIdentifier: https://www.fabrizioduroni.it/2017/05/12/github-pages-jekyll-blog-born/
 authors: [fabrizio_duroni]
 ---
 
-*So, how I created this blog? Let's go through the development process of its creation. This is yet another blog post
+*So, how did I create this blog? Let's go through the development process of its creation. This is yet another blog post
 about the creation of a website using Github Pages and Jekyll. But you know, I have to do it.*
 
 ---

@@ -5,6 +5,7 @@ date: 2018-04-03
 image: /images/posts/blender-modeling-create-primitive-meshes.jpg
 tags: [computer graphics, blender]
 comments: true
+commentsIdentifier: https://www.fabrizioduroni.it/2018/04/03/blender-tutorial-3-modeling-basics-part-1/
 authors: [fabrizio_duroni]
 ---
 

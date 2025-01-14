@@ -6,6 +6,7 @@ date: 2020-12-23
 image: /images/posts/spring-boot-rest.jpg
 tags: [java, kotlin, spring, spring boot, backend, web development]
 comments: true
+commentsIdentifier: https://www.fabrizioduroni.it/2020/12/23/rest-template-webclient-spring-boot/
 authors: [fabrizio_duroni]
 ---
 

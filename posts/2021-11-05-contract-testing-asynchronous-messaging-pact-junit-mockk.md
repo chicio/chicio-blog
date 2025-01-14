@@ -6,6 +6,7 @@ date: 2021-11-05
 image: /images/posts/pact-mockk-message.jpg
 tags: [test driven development, contract test, pact, backend]
 comments: true
+commentsIdentifier: https://www.fabrizioduroni.it/2021/11/05/contract-testing-asynchronous-messaging-pact-junit-mockk/
 authors: [fabrizio_duroni, felice_giovinazzo, stefano_varesi]
 ---
 

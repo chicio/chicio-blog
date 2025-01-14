@@ -6,6 +6,7 @@ date: 2019-12-15
 image: /images/posts/ga-offline.jpg 
 tags: [pwa, web development, javascript]
 comments: true 
+commentsIdentifier: https://www.fabrizioduroni.it/2019/12/15/pwa-offiline-tracking-google-analytics/
 authors: [fabrizio_duroni]
 ---
 

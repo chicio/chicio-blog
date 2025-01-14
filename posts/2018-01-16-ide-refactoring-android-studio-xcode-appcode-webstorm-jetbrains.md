@@ -6,6 +6,7 @@ date: 2018-01-16
 image: /images/posts/androidstudio-xcode-appcode.jpg
 tags: [IDE, android, java, ios, swift, mobile application development]
 comments: true
+commentsIdentifier: https://www.fabrizioduroni.it/2018/01/16/ide-refactoring-android-studio-xcode-appcode-webstorm-jetbrains/
 authors: [fabrizio_duroni, tommaso_resti, francesco_bonfadelli]
 ---
 

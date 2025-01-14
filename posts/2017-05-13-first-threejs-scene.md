@@ -6,6 +6,7 @@ date: 2017-05-13
 image: /images/posts/threejs-scene.jpg
 tags: [computer graphics, threejs, web development, javascript]
 comments: true
+commentsIdentifier: https://www.fabrizioduroni.it/2017/05/13/first-threejs-scene/
 authors: [fabrizio_duroni]
 ---
 

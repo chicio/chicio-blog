@@ -4,7 +4,8 @@ description: "How do you detect scroll direction using React hooks? Let’s find
 date: 2022-01-02 
 image: /images/posts/react-hook-scroll-direction.jpg
 tags: [react, web development, typescript]
-comments: true 
+comments: true
+commentsIdentifier: https://www.fabrizioduroni.it/2022/01/02/react-detect-scroll-direction/
 authors: [fabrizio_duroni]
 ---
 

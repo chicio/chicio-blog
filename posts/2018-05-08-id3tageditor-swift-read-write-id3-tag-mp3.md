@@ -6,6 +6,7 @@ date: 2018-05-08
 image: /images/posts/id3tageditor-logo.jpg
 tags: [swift, ios, apple, mobile application development, macos, tvos, watchos]
 comments: true
+commentsIdentifier: https://www.fabrizioduroni.it/2018/05/08/id3tageditor-swift-read-write-id3-tag-mp3/
 authors: [fabrizio_duroni]
 ---
 

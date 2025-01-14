@@ -135,39 +135,39 @@ const PostContentContainer = styled.div`
     top: 4px;
   }
     
-    & pre {
-        font-family: Menlo, Monaco, "Courier New", monospace;
-        font-size: ${(props) => props.theme.fontSizes[1]};
-        ${borderRadius};
-        box-shadow: 0 3px 10px 0 ${(props) => props.theme.light.boxShadowLight};
-
-        ${mediaQuery.dark} {
-            box-shadow: 0 3px 10px 0 ${(props) => props.theme.dark.boxShadowLight};
-        }    
-    }
-    
-    & p code {
-        font-family: Menlo, Monaco, "Courier New", monospace;
-        font-size: ${(props) => props.theme.fontSizes[1]};
-        color: #d2a8ff;
-        background: #0d1117;
-        padding: 4px;
-        ${borderRadius};
-    }
-    
-    & img {
-        width: 100%;
-    }
-    
-    & iframe {
-        width: 100%;
-        height: auto;
-    }
-    
-    & p strong {
-        ${paragraphStyle};
-        font-weight: 600;
-    }
+  & pre {
+      font-family: Menlo, Monaco, "Courier New", monospace;
+      font-size: ${(props) => props.theme.fontSizes[1]};
+      ${borderRadius};
+      box-shadow: 0 3px 10px 0 ${(props) => props.theme.light.boxShadowLight};
+  
+      ${mediaQuery.dark} {
+          box-shadow: 0 3px 10px 0 ${(props) => props.theme.dark.boxShadowLight};
+      }    
+  }
+  
+  & p code {
+      font-family: Menlo, Monaco, "Courier New", monospace;
+      font-size: ${(props) => props.theme.fontSizes[1]};
+      color: #d2a8ff;
+      background: #0d1117;
+      padding: 4px;
+      ${borderRadius};
+  }
+  
+  & img {
+      width: 100%;
+  }
+  
+  & iframe {
+      width: 100%;
+      height: auto;
+  }
+  
+  & p strong {
+      ${paragraphStyle};
+      font-weight: 600;
+  }
 `;
 
 interface PostContentProps {

@@ -61,17 +61,13 @@ export default async function BlogPost({ params }: NextPostParameters) {
             <>
                 <RecentPosts currentSlug={frontmatter.slug} />
                 {frontmatter.comments && (
-                    <Comments url={frontmatter.slug} title={frontmatter.title} />
+                    <Comments
+                        identifier={frontmatter.commentsIdentifier}
+                        url={`${siteMetadata.siteUrl}${frontmatter.slug}`}
+                        title={frontmatter.title}
+                    />
                 )}
             </>
         </BlogPageTemplate>
-        // <article>
-        //     <h1>{frontmatter.title}</h1>
-        //     <h2>{frontmatter.authors[0].name}</h2>
-        //     <h2>{frontmatter.date}</h2>
-        //     <h2>{readingTime.text}</h2>
-        //     <div dangerouslySetInnerHTML={{ __html: content }} />
-        //     <div>{frontmatter.tags}</div>
-        // </article>
     );
 }

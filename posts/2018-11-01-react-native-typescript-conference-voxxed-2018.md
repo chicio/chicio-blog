@@ -6,6 +6,7 @@ date: 2018-11-01
 image: /images/posts/voxxed-2018-breakfast.jpg
 tags: [conference, react native, react, typescript, mobile application development, web development]
 comments: true
+commentsIdentifier: https://www.fabrizioduroni.it/2018/11/01/react-native-typescript-conference-voxxed-2018/
 authors: [fabrizio_duroni, alessandro_romano]
 ---
 

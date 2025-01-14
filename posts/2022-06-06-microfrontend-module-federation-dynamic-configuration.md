@@ -4,7 +4,8 @@ description: "We are used to the term microservice in the backend world. Is ther
 date: 2022-06-06
 image: /images/posts/webpack-module-federation.jpg
 tags: [react, web development, architectural pattern, typescript]
-comments: true 
+comments: true
+commentsIdentifier: https://www.fabrizioduroni.it/2022/06/06/microfrontend-module-federation-dynamic-configuration/
 authors: [fabrizio_duroni, alex_stabile]
 ---
 

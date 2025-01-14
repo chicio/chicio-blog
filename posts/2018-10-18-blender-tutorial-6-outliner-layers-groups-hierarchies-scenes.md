@@ -6,6 +6,7 @@ date: 2018-10-18
 image: /images/posts/blender-outliner.jpg
 tags: [computer graphics, blender]
 comments: true
+commentsIdentifier: https://www.fabrizioduroni.it/2018/10/18/blender-tutorial-6-outliner-layers-groups-hierarchies-scenes/
 authors: [fabrizio_duroni]
 ---
 

@@ -6,6 +6,7 @@ date: 2018-05-09
 image: /images/posts/mp3id3tagger-logo.jpg
 tags: [swift, macos, apple, rxswift, rxcocoa]
 comments: true
+commentsIdentifier: https://www.fabrizioduroni.it/2018/05/09/mp3id3tagger-macos-tag-mp3-id3-rxswift-rxcocoa/
 authors: [fabrizio_duroni]
 ---
 

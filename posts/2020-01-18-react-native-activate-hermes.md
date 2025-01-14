@@ -5,7 +5,8 @@ how you can turn it on in your React Native application to get all its benefits.
 date: 2020-01-18 
 image: /images/posts/hermes.jpg
 tags: [react native, swift, ios, apple, android, java, mobile application development, javascript, typescript]
-comments: true 
+comments: true
+commentsIdentifier: https://www.fabrizioduroni.it/2020/01/18/react-native-activate-hermes/
 authors: [fabrizio_duroni, francesco_bonfadelli, marco_de_lucchi]
 ---
 
