@@ -80,6 +80,20 @@ const getPostFromFilePath = (filePath: string, fileName: string) => {
     };
 }
 
+const groupArrayBy: <T>(array: T[], numberPerGroup: number) => T[][] = (data, n) => {
+    const group = Array(0);
+    for (let i = 0, j = 0; i < data.length; i += 1) {
+        if (i >= n && i % n === 0) j += 1;
+        group[j] = group[j] || [];
+        group[j].push(data[i]);
+    }
+    return group;
+};
+
+/**
+ * POSTS
+ */
+
 export const getAllPosts = (): Post[] => {
     const filesNames = fs.readdirSync(postsDirectory);
 
@@ -101,15 +115,9 @@ export const getPostBy = (
     return getPostFromFilePath(filePath, slug)
 };
 
-const groupArrayBy: <T>(array: T[], numberPerGroup: number) => T[][] = (data, n) => {
-    const group = Array(0);
-    for (let i = 0, j = 0; i < data.length; i += 1) {
-        if (i >= n && i % n === 0) j += 1;
-        group[j] = group[j] || [];
-        group[j].push(data[i]);
-    }
-    return group;
-};
+/**
+ * PAGINATION
+ */
 
 export const getPostsPaginationFor: (page: number) => {
     launchPost: Post;
@@ -128,4 +136,28 @@ export const getPostsPaginationFor: (page: number) => {
 
 
     return { launchPost: paginatedPosts[0], postsGrouped, previousPageUrl, nextPageUrl };
+}
+
+/**
+ * TAGS
+ */
+export const getTags = () => {
+    const tags = new Map<string, { tagValue: string, count: number }>();
+    const posts = getAllPosts();
+    posts.map(post => post.frontmatter.tags.forEach(tag => {
+        if (tags.has(tag)) {
+            const currentTag = tags.get(tag)!;
+            tags.set(tag, { tagValue: tag, count: ++currentTag.count })
+        } else {
+            tags.set(tag, { tagValue: tag, count: 1 })
+        }
+    }));
+
+    return [...tags.values()].sort((a, b) => a.tagValue.toLowerCase() < b.tagValue.toLowerCase() ? -1 : 1);
+}
+
+export const getPostsForTag: (tag: string) => Post[] = (tag: string) => {
+    const posts = getAllPosts();
+
+    return posts.filter(post => post.frontmatter.tags.includes(tag))
 }

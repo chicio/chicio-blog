@@ -1,3 +1,5 @@
+'use client'
+
 import styled, { css, TransientProps } from "styled-components";
 import {FC} from "react";
 import {StandardInternalLinkWithTracking} from "@/components/design-system/atoms/standard-internal-link-with-tracking";
