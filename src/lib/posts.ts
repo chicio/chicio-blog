@@ -111,7 +111,12 @@ const groupArrayBy: <T>(array: T[], numberPerGroup: number) => T[][] = (data, n)
     return group;
 };
 
-export const getPostsPaginationFor = (page: number) => {
+export const getPostsPaginationFor: (page: number) => {
+    launchPost: Post;
+    nextPageUrl: string | undefined;
+    postsGrouped: Post[][];
+    previousPageUrl: string | undefined
+} = (page: number) => {
     const posts = getAllPosts();
     const start = (page - 1) * postsPerPage;
     const paginatedPosts = posts.slice(start, start + postsPerPage);

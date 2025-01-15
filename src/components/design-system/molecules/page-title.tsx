@@ -1,3 +1,5 @@
+'use client'
+
 import styled from "styled-components";
 import {Heading1} from "@/components/design-system/atoms/heading1";
 
