@@ -1,5 +1,4 @@
 import {getPostsPaginationFor} from "@/lib/posts";
-import {NextPostPaginationParameters} from "@/types/post";
 import {BlogPageTemplate} from "@/components/templates/blog-page-template";
 import {siteMetadata} from "@/types/site-metadata";
 import {tracking} from "@/types/tracking";
@@ -9,6 +8,7 @@ import {PostsRow} from "@/components/design-system/molecules/posts-row";
 import {createMetadata} from "@/lib/seo";
 import {slugs} from "@/types/slug";
 import {Metadata} from "next";
+import {NextPostPaginationParameters} from "@/types/page-parameters";
 
 export async function generateMetadata({ params }: NextPostPaginationParameters): Promise<Metadata> {
     const { page } = await params

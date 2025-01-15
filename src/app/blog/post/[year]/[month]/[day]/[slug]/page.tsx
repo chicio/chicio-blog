@@ -1,6 +1,5 @@
 import 'katex/dist/katex.min.css';
 import {getPostBy} from "@/lib/posts";
-import {NextPostParameters} from "@/types/post";
 import {siteMetadata} from "@/types/site-metadata";
 import {tracking} from "@/types/tracking";
 import {BlogPageTemplate} from "@/components/templates/blog-page-template";
@@ -12,6 +11,7 @@ import {PostMeta} from "@/components/design-system/molecules/post-meta";
 import {PostTags} from "@/components/design-system/molecules/post-tags";
 import {RecentPosts} from "@/components/design-system/organism/read-next";
 import {Comments} from "@/components/design-system/molecules/comments";
+import {NextPostParameters} from "@/types/page-parameters";
 
 export async function generateMetadata({ params }: NextPostParameters): Promise<Metadata> {
     const { year, month, day, slug } = await params;
