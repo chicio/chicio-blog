@@ -162,6 +162,7 @@ const PostContentContainer = styled.div`
   & iframe {
       width: 100%;
       height: auto;
+      aspect-ratio: 16 / 9;
   }
   
   & p strong {

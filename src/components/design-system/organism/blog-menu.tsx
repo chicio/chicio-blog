@@ -1,6 +1,6 @@
 'use client'
 
-import {FC, memo, useState} from "react";
+import React, {FC, memo, useState} from "react";
 import styled, { css } from "styled-components";
 import { Container } from "../atoms/container";
 import { HamburgerMenu } from "../molecules/hamburger-menu";
@@ -17,6 +17,8 @@ import {MenuItemWithTracking} from "@/components/design-system/atoms/menu-item-w
 import {tracking} from "@/types/tracking";
 import {slugs} from "@/types/slug";
 import {usePathname} from "next/navigation";
+import {SearchBox, SearchHits} from "@/components/design-system/molecules/search";
+import {useSearch} from "@/components/design-system/hooks/use-search";
 
 export const menuHeight = "55px";
 
@@ -129,6 +131,7 @@ export const BlogMenu: FC<MenuProps> = ({ trackingCategory }) => {
   const direction = useScrollDirection();
   const [shouldOpenMenu, setShouldOpenMenu] = useState(false);
   const [startSearch, setStartSearch] = useState(false);
+  const { handleSearch, results } = useSearch(startSearch);
 
   return (
     <>
@@ -207,9 +210,11 @@ export const BlogMenu: FC<MenuProps> = ({ trackingCategory }) => {
             </MenuButtonContainer>
           )}
           {!shouldOpenMenu && (
-              /// TODO: MIGRATION MISSING
-              // <Search startSearch={startSearch} setStartSearch={setStartSearch} />
-              <div></div>
+              <SearchBox
+                  startSearch={startSearch}
+                  onClick={() => setStartSearch(!startSearch)}
+                  onChange={handleSearch}
+              />
           )}
         </NavBar>
       </MenuContainer>
@@ -225,7 +230,9 @@ export const BlogMenu: FC<MenuProps> = ({ trackingCategory }) => {
               setStartSearch(false);
             }
           }}
-        />
+        >
+            {results.length > 0 && <SearchHits results={results} />}
+        </Overlay>
       )}
     </>
   );

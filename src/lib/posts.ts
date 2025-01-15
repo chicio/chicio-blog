@@ -67,7 +67,7 @@ const getPostFromFilePath = (filePath: string, fileName: string) => {
         .use(html)
         .use(math)
         .use(rehype)
-        .use(katex) // Render LaTeX with KaTeX
+        .use(katex, {strict: false}) // Render LaTeX with KaTeX
         .use(syntaxHighlight)
         .use(stringify)
         .processSync(fileParsed.content)
