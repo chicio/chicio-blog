@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: NextPostPaginationParameters)
     return createMetadata({
         author: siteMetadata.author,
         title: siteMetadata.title,
-        url: `${siteMetadata.siteUrl}${slugs.blogPage}/${page}`,
+        url: `${siteMetadata.siteUrl}${slugs.blogPostsPage}/${page}`,
         imageUrl: siteMetadata.featuredImage,
         ogPageType: 'website',
     })

@@ -4,7 +4,16 @@ import {ProfilePresentation} from "@/components/design-system/organism/profile-p
 import {tracking} from "@/types/tracking";
 import {Technologies} from "@/components/design-system/organism/technologies";
 import {Resume} from "@/components/design-system/organism/resume";
-import {createStructuredData} from "@/lib/seo";
+import {createMetadata, createStructuredData} from "@/lib/seo";
+import {slugs} from "@/types/slug";
+
+export const metadata = createMetadata({
+    author: siteMetadata.author,
+    title: siteMetadata.title,
+    url: `${siteMetadata.siteUrl}${slugs.blog}`,
+    imageUrl: siteMetadata.featuredImage,
+    ogPageType: 'website',
+})
 
 export default function Home() {
   const author = siteMetadata.author;

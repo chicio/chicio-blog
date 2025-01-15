@@ -12,7 +12,7 @@ import stringify from 'rehype-stringify'
 import syntaxHighlight from 'rehype-highlight'
 import youtube from 'remark-youtube';
 import calculateReadingTime from "reading-time";
-import {Post, PostFrontMatter} from "@/types/post";
+import {Post, PostFrontMatter, Tag} from "@/types/post";
 import {authors} from "@/types/author";
 import {slugs} from "@/types/slug";
 
@@ -129,8 +129,8 @@ export const getPostsPaginationFor: (page: number) => {
     const start = (page - 1) * postsPerPage;
     const paginatedPosts = posts.slice(start, start + postsPerPage);
     const totalPages = Math.ceil(posts.length / postsPerPage);
-    const previousPageUrl = page > 1 ? `${slugs.blogPage}/${page - 1}` : undefined
-    const nextPageUrl = page < totalPages ? `${slugs.blogPage}/${page + 1}` : undefined
+    const previousPageUrl = page > 1 ? `${slugs.blogPostsPage}/${page - 1}` : undefined
+    const nextPageUrl = page < totalPages ? `${slugs.blogPostsPage}/${page + 1}` : undefined
 
     const postsGrouped = groupArrayBy(paginatedPosts.slice(1, paginatedPosts.length), 2);
 
@@ -142,14 +142,14 @@ export const getPostsPaginationFor: (page: number) => {
  * TAGS
  */
 export const getTags = () => {
-    const tags = new Map<string, { tagValue: string, count: number }>();
+    const tags = new Map<string, Tag>();
     const posts = getAllPosts();
     posts.map(post => post.frontmatter.tags.forEach(tag => {
         if (tags.has(tag)) {
             const currentTag = tags.get(tag)!;
-            tags.set(tag, { tagValue: tag, count: ++currentTag.count })
+            tags.set(tag, { ...currentTag, count: ++currentTag.count,  });
         } else {
-            tags.set(tag, { tagValue: tag, count: 1 })
+            tags.set(tag, { tagValue: tag, count: 1, slug: `${slugs.tag}/${tag.replaceAll(' ', '-')}` })
         }
     }));
 

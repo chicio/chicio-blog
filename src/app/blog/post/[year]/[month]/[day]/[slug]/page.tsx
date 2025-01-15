@@ -59,13 +59,15 @@ export default async function BlogPost({ params }: NextPostParameters) {
                 />
             </PostContainer>
             <>
-                <RecentPosts currentSlug={frontmatter.slug} />
                 {frontmatter.comments && (
-                    <Comments
-                        identifier={frontmatter.commentsIdentifier}
-                        url={`${siteMetadata.siteUrl}${frontmatter.slug}`}
-                        title={frontmatter.title}
-                    />
+                    <>
+                        <RecentPosts currentSlug={frontmatter.slug} />
+                        <Comments
+                            identifier={frontmatter.commentsIdentifier}
+                            url={`${siteMetadata.siteUrl}${frontmatter.slug}`}
+                            title={frontmatter.title}
+                        />
+                    </>
                 )}
             </>
         </BlogPageTemplate>

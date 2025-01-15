@@ -6,7 +6,6 @@ import {CookieConsent} from "@/components/website/CookieConsent";
 import {Viewport} from "next";
 import {SharedHead} from "@/components/website/SharedHead";
 
-
 export const viewport: Viewport = {
     width: 'device-width',
     initialScale: 1

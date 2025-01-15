@@ -7,7 +7,7 @@ import {PageTitle} from "@/components/design-system/molecules/page-title";
 import {Tag} from "@/components/design-system/molecules/tag";
 
 export default async function Tags() {
-    const tags = await getTags();
+    const tags = getTags();
     const author = siteMetadata.author;
 
     return (
@@ -19,7 +19,7 @@ export default async function Tags() {
                 {tags.map((tag) => (
                     <Tag
                         big={true}
-                        link={""}
+                        link={tag.slug}
                         tag={`${tag.tagValue} (${tag.count})`}
                         key={tag!.tagValue}
                         trackingCategory={tracking.category.blog_tags}
