@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@next/third-parties": "^15.1.5",
     "@styled-icons/boxicons-logos": "^10.47.0",
     "@styled-icons/boxicons-regular": "^10.47.0",
     "@styled-icons/fa-solid": "^10.47.0",
@@ -19,7 +20,7 @@
     "elasticlunr": "^0.9.5",
     "gray-matter": "^4.0.3",
     "katex": "^0.16.19",
-    "next": "15.1.4",
+    "next": "^15.1.5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "reading-time": "^1.5.0",
