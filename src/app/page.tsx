@@ -4,8 +4,9 @@ import {ProfilePresentation} from "@/components/design-system/organism/profile-p
 import {tracking} from "@/types/tracking";
 import {Technologies} from "@/components/design-system/organism/technologies";
 import {Resume} from "@/components/design-system/organism/resume";
-import {createMetadata, createStructuredData} from "@/lib/seo";
+import {createMetadata} from "@/lib/seo";
 import {slugs} from "@/types/slug";
+import {JsonLd} from "@/components/website/jsond-ld";
 
 export const metadata = createMetadata({
     author: siteMetadata.author,
@@ -16,28 +17,17 @@ export const metadata = createMetadata({
 })
 
 export default function Home() {
-  const author = siteMetadata.author;
-
-  return (
-      <>
-          <ShowcasePageTemplate
-              fullScreenComponent={<ProfilePresentation author={author}/>}
-              trackingCategory={tracking.category.home}
-          >
-              <Technologies author={author}/>
-              <Resume/>
-          </ShowcasePageTemplate>
-          <script
-              type="application/ld+json"
-              dangerouslySetInnerHTML={{__html: JSON.stringify(createStructuredData({
-                      ogPageType: 'website',
-                      url: siteMetadata.siteUrl,
-                      imageUrl: siteMetadata.featuredImage,
-                      author: siteMetadata.author,
-                      title: siteMetadata.title,
-                      links: siteMetadata.contacts.links,
-                  }))}}
-          />
-      </>
-  );
+    return (
+        <>
+            <ShowcasePageTemplate
+                fullScreenComponent={<ProfilePresentation author={siteMetadata.author}/>}
+                trackingCategory={tracking.category.home}
+            >
+                <Technologies author={siteMetadata.author}/>
+                <Resume/>
+            </ShowcasePageTemplate>
+            <JsonLd ogPageType="website" url={siteMetadata.siteUrl} imageUrl={siteMetadata.featuredImage}
+                    title={siteMetadata.title}/>
+        </>
+    );
 }

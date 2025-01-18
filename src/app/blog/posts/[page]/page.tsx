@@ -9,6 +9,7 @@ import {createMetadata} from "@/lib/seo";
 import {slugs} from "@/types/slug";
 import {Metadata} from "next";
 import {NextPostPaginationParameters} from "@/types/page-parameters";
+import {JsonLd} from "@/components/website/jsond-ld";
 
 export async function generateMetadata({ params }: NextPostPaginationParameters): Promise<Metadata> {
     const { page } = await params
@@ -29,34 +30,37 @@ export default async function BlogPage({ params }: NextPostPaginationParameters)
     const author = siteMetadata.author;
 
     return (
-        <BlogPageTemplate
-            author={author}
-            trackingCategory={tracking.category.blog_home}
-            big={true}
-        >
-            <PostCard
+        <>
+            <BlogPageTemplate
+                author={author}
+                trackingCategory={tracking.category.blog_home}
                 big={true}
-                key={launchPost.frontmatter.slug}
-                slug={launchPost.frontmatter.slug}
-                title={launchPost.frontmatter.title}
-                image={launchPost.frontmatter.image}
-                authors={launchPost.frontmatter.authors}
-                date={launchPost.frontmatter.date}
-                readingTime={launchPost.readingTime.text!}
-                description={launchPost.frontmatter.description}
-                trackingCategory={tracking.category.blog_home}
-                tags={launchPost.frontmatter.tags}
-            />
-            {postsGrouped.map((postsGroup, index) => (
-                <PostsRow postsGroup={postsGroup} key={`PostCardsRow${index}`} />
-            ))}
-            <PaginationNavigation
-                trackingCategory={tracking.category.blog_home}
-                previousPageUrl={previousPageUrl}
-                previousPageTrackingAction={tracking.action.open_blog_previous_page}
-                nextPageUrl={nextPageUrl}
-                nextPageTrackingAction={tracking.action.open_blog_next_page}
-            />
-        </BlogPageTemplate>
+            >
+                <PostCard
+                    big={true}
+                    key={launchPost.frontmatter.slug}
+                    slug={launchPost.frontmatter.slug}
+                    title={launchPost.frontmatter.title}
+                    image={launchPost.frontmatter.image}
+                    authors={launchPost.frontmatter.authors}
+                    date={launchPost.frontmatter.date}
+                    readingTime={launchPost.readingTime.text!}
+                    description={launchPost.frontmatter.description}
+                    trackingCategory={tracking.category.blog_home}
+                    tags={launchPost.frontmatter.tags}
+                />
+                {postsGrouped.map((postsGroup, index) => (
+                    <PostsRow postsGroup={postsGroup} key={`PostCardsRow${index}`} />
+                ))}
+                <PaginationNavigation
+                    trackingCategory={tracking.category.blog_home}
+                    previousPageUrl={previousPageUrl}
+                    previousPageTrackingAction={tracking.action.open_blog_previous_page}
+                    nextPageUrl={nextPageUrl}
+                    nextPageTrackingAction={tracking.action.open_blog_next_page}
+                />
+            </BlogPageTemplate>
+            <JsonLd ogPageType="website" url={siteMetadata.siteUrl} imageUrl={siteMetadata.featuredImage} title={siteMetadata.title}/>
+        </>
     );
 }

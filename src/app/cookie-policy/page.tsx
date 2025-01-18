@@ -1,22 +1,22 @@
-import {siteMetadata} from "@/types/site-metadata";
-import {BlogPageTemplate} from "@/components/templates/blog-page-template";
-import {tracking} from "@/types/tracking";
-import {Heading1} from "@/components/design-system/atoms/heading1";
-import {Paragraph} from "@/components/design-system/atoms/paragraph";
-import {ContainerSection} from "@/components/design-system/atoms/container-section";
-import {Heading4} from "@/components/design-system/atoms/heading4";
-import {List} from "@/components/design-system/atoms/list";
-import {StandardExternalLink} from "@/components/design-system/atoms/standard-external-link";
-import {createMetadata} from "@/lib/seo";
-import {slugs} from "@/types/slug";
+import { siteMetadata } from "@/types/site-metadata";
+import { BlogPageTemplate } from "@/components/templates/blog-page-template";
+import { tracking } from "@/types/tracking";
+import { Heading1 } from "@/components/design-system/atoms/heading1";
+import { Paragraph } from "@/components/design-system/atoms/paragraph";
+import { ContainerSection } from "@/components/design-system/atoms/container-section";
+import { Heading4 } from "@/components/design-system/atoms/heading4";
+import { List } from "@/components/design-system/atoms/list";
+import { StandardExternalLink } from "@/components/design-system/atoms/standard-external-link";
+import { createMetadata } from "@/lib/seo";
+import { slugs } from "@/types/slug";
 
 export const metadata = createMetadata({
   author: siteMetadata.author,
   title: siteMetadata.title,
   url: `${siteMetadata.siteUrl}${slugs.cookiePolicy}`,
   imageUrl: siteMetadata.featuredImage,
-  ogPageType: 'website',
-})
+  ogPageType: "website",
+});
 
 export default function CookiePolicy() {
   const author = siteMetadata.author;
@@ -110,4 +110,4 @@ export default function CookiePolicy() {
       </ContainerSection>
     </BlogPageTemplate>
   );
-};
+}

@@ -12,6 +12,7 @@ import {PostTags} from "@/components/design-system/molecules/post-tags";
 import {RecentPosts} from "@/components/design-system/organism/read-next";
 import {Comments} from "@/components/design-system/molecules/comments";
 import {NextPostParameters} from "@/types/page-parameters";
+import {JsonLd} from '@/components/website/jsond-ld';
 
 export async function generateMetadata({ params }: NextPostParameters): Promise<Metadata> {
     const { year, month, day, slug } = await params;
@@ -33,6 +34,7 @@ export default async function BlogPost({ params }: NextPostParameters) {
     const { frontmatter, content, readingTime } = getPostBy(year, month, day, slug);
 
     return (
+        <>
         <BlogPageTemplate
             author={siteMetadata.author}
             trackingCategory={tracking.category.blog_post}
@@ -71,5 +73,7 @@ export default async function BlogPost({ params }: NextPostParameters) {
                 )}
             </>
         </BlogPageTemplate>
+        <JsonLd ogPageType="article" url={`${siteMetadata.siteUrl}${frontmatter.slug}`} imageUrl={frontmatter.image} title={frontmatter.title}/>
+        </>
     );
 }
