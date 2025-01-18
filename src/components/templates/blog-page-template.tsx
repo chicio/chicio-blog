@@ -1,6 +1,6 @@
 import {FC, ReactNode} from "react";
 import {BlogMenu} from "@/components/design-system/organism/blog-menu";
-import {ContentContainer} from "@/components/website/ContentContainer";
+import {ContentContainer} from "@/components/website/content-container";
 import {DesktopBlogHeader} from "@/components/design-system/organism/blog-header";
 import {Footer} from "@/components/design-system/organism/footer";
 
