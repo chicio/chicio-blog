@@ -114,7 +114,7 @@ export const Footer: FC<FooterProps> = ({ author, trackingCategory }) => (
         About Me
       </FooterMenuItem>
       <FooterMenuItem
-        to={slugs.archive}
+        to={slugs.blogArchive}
         trackingData={{
           action: tracking.action.open_blog_archive,
           category: trackingCategory,

@@ -94,7 +94,7 @@ const groupArrayBy: <T>(array: T[], numberPerGroup: number) => T[][] = (data, n)
  * POSTS
  */
 
-export const getAllPosts = (): Post[] => {
+export const getPosts = (): Post[] => {
     const filesNames = fs.readdirSync(postsDirectory);
 
     return filesNames
@@ -119,31 +119,43 @@ export const getPostBy = (
  * PAGINATION
  */
 
+export const getPostsTotalPages = (posts: Post[]) => Math.ceil(posts.length / postsPerPage);
+
 export const getPostsPaginationFor: (page: number) => {
-    launchPost: Post;
-    nextPageUrl: string | undefined;
-    postsGrouped: Post[][];
-    previousPageUrl: string | undefined
+  launchPost: Post;
+  nextPageUrl: string | undefined;
+  postsGrouped: Post[][];
+  previousPageUrl: string | undefined;
 } = (page: number) => {
-    const posts = getAllPosts();
-    const start = (page - 1) * postsPerPage;
-    const paginatedPosts = posts.slice(start, start + postsPerPage);
-    const totalPages = Math.ceil(posts.length / postsPerPage);
-    const previousPageUrl = page > 1 ? `${slugs.blogPostsPage}/${page - 1}` : undefined
-    const nextPageUrl = page < totalPages ? `${slugs.blogPostsPage}/${page + 1}` : undefined
+  const posts = getPosts();
+  const totalPages = getPostsTotalPages(posts);
+  const start = (page - 1) * postsPerPage;
+  const paginatedPosts = posts.slice(start, start + postsPerPage);
+  const previousPageUrl =
+    page > 1 ? `${slugs.blogPostsPage}/${page - 1}` : undefined;
+  const nextPageUrl =
+    page < totalPages ? `${slugs.blogPostsPage}/${page + 1}` : undefined;
 
-    const postsGrouped = groupArrayBy(paginatedPosts.slice(1, paginatedPosts.length), 2);
+  const postsGrouped = groupArrayBy(
+    paginatedPosts.slice(1, paginatedPosts.length),
+    2,
+  );
 
-
-    return { launchPost: paginatedPosts[0], postsGrouped, previousPageUrl, nextPageUrl };
-}
+  return {
+    launchPost: paginatedPosts[0],
+    postsGrouped,
+    previousPageUrl,
+    nextPageUrl,
+    totalPages,
+  };
+};
 
 /**
  * TAGS
  */
 export const getTags = () => {
     const tags = new Map<string, Tag>();
-    const posts = getAllPosts();
+    const posts = getPosts();
     posts.map(post => post.frontmatter.tags.forEach(tag => {
         if (tags.has(tag)) {
             const currentTag = tags.get(tag)!;
@@ -157,7 +169,7 @@ export const getTags = () => {
 }
 
 export const getPostsForTag: (tag: string) => Post[] = (tag: string) => {
-    const posts = getAllPosts();
+    const posts = getPosts();
 
     return posts.filter(post => post.frontmatter.tags.includes(tag))
 }

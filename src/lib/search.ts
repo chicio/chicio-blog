@@ -1,9 +1,9 @@
 import elasticlunr from "elasticlunr";
-import {getAllPosts} from "@/lib/posts";
+import {getPosts} from "@/lib/posts";
 import {SearchablePostFields} from "@/types/post";
 
 export const createSearchIndex = () => {
-    const posts = getAllPosts();
+    const posts = getPosts();
     const index = elasticlunr<SearchablePostFields>(function () {
         this.addField("title");
         this.addField("description");

@@ -7,7 +7,7 @@ export const slugs = {
   blogPost,
   tags: `${blog}/tags`,
   tag: `${blog}/tag`,
-  archive: `${blog}/archive`,
+  blogArchive: `${blog}/archive`,
   aboutMe: `${blogPost}/2017/05/10/about-me`,
   art: "/art/",
   cookiePolicy: "/cookie-policy"
