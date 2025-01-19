@@ -1,9 +1,32 @@
 import { siteMetadata } from "@/types/site-metadata";
 import { BlogGenericPostListPageTemplate } from "@/components/templates/blog-generic-post-list-page-template";
 import { tracking } from "@/types/tracking";
-import { getPostsForTag } from "@/lib/posts";
+import {getPostsForTag, getTags} from "@/lib/posts";
 import { NextTagParameters } from "@/types/page-parameters";
 import { JsonLd } from "@/components/website/jsond-ld";
+import {Metadata} from "next";
+import {createMetadata} from "@/lib/seo";
+import {slugs} from "@/types/slug";
+
+export async function generateMetadata({ params }: NextTagParameters): Promise<Metadata> {
+    const { tag } = await params
+
+    return createMetadata({
+        author: siteMetadata.author,
+        title: siteMetadata.title,
+        url: `${siteMetadata.siteUrl}${slugs.tag}/${tag}`,
+        imageUrl: siteMetadata.featuredImage,
+        ogPageType: 'website',
+    })
+}
+
+export async function generateStaticParams() {
+    const tags = getTags();
+
+    return tags.map((tag) => ({
+        tag: tag.tagValue
+    }));
+}
 
 export default async function TagPage({ params }: NextTagParameters) {
   const { tag } = await params;
