@@ -168,7 +168,7 @@ export const projects: Record<string, Project> = {
         trackingCategory: tracking.category.home,
         trackingAction: tracking.action.open_tabbaruiaction_doc,
         trackingLabel: tracking.label.body,
-        link: "https://tabbaruiaction.fabrizioduroni.it",
+        link: "https://chicio.github.io/TabBarUIAction/",
       },
     ],
     image: '/images/projects/tabbaruiaction.png'
