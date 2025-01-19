@@ -4,5 +4,5 @@
 [X] Sitemap
 [ ] Manifest https://nextjs.org/docs/app/building-your-application/configuring/progressive-web-apps#1-creating-the-web-app-manifest
 [X] Art page
-[ ] Favicon + Gatsby static folder content
+[X] Favicon + Gatsby static folder content
 [ ] Deploy + CDN/DNS 
