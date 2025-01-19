@@ -3,7 +3,7 @@ import { Post, Tag } from "@/types/post";
 import { slugs } from "@/types/slug";
 import { getPostFromFilePath } from "@/lib/post";
 import { getPostsUsing } from "@/lib/posts-with-parser";
-import {mdExtension} from "@/lib/markdown";
+import {mdExtension} from "@/lib/files";
 
 const postsDirectory = path.join(process.cwd(), "posts");
 const postsPerPage = 11;

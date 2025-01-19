@@ -14,10 +14,9 @@ import stringify from "rehype-stringify";
 import calculateReadingTime from "reading-time";
 import { getFrontmatterFrom } from "@/lib/frontmatter";
 import { getPostsUsing } from "@/lib/posts-with-parser";
+import {searchIndexFileName} from "@/lib/files";
 
-export const searchIndexFileName = "search-index.json";
-
-export const getSearchPostFromFilePath: (
+const getSearchPostFromFilePath: (
   filePath: string,
   fileName: string,
 ) => Post = (filePath: string, fileName: string) => {
@@ -70,7 +69,7 @@ const createSearchIndex = () => {
   return index;
 };
 
-const generateAndSaveSearchIndex = async () => {
+const generateAndSaveSearchIndex = () => {
   try {
     const index = createSearchIndex();
     const serializedIndex = JSON.stringify(index);

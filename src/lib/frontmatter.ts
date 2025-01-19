@@ -2,7 +2,7 @@ import {slugs} from "@/types/slug";
 import {PostDate, PostFrontMatter, PostSlug} from "@/types/post";
 import {authors} from "@/types/author";
 import matter from "gray-matter";
-import {mdExtension} from "@/lib/markdown";
+import {mdExtension} from "@/lib/files";
 
 const formatDate = (date: Date): string => {
   return new Intl.DateTimeFormat("en-GB", {
