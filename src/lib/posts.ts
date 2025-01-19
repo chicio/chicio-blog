@@ -1,54 +1,12 @@
-import fs from "fs";
 import path from "path";
-import matter from "gray-matter";
-import { remark } from "remark";
-import githubFlavoredMarkdown from "remark-gfm";
-import emoji from "remark-emoji";
-import html from "remark-html";
-import math from "remark-math";
-import rehype from "remark-rehype";
-import katex from "rehype-katex";
-import stringify from "rehype-stringify";
-import syntaxHighlight from "rehype-highlight";
-import youtube from "remark-youtube";
-import calculateReadingTime from "reading-time";
-import { Post, PostDate, PostFrontMatter, PostSlug, Tag } from "@/types/post";
-import { authors } from "@/types/author";
+import { Post, Tag } from "@/types/post";
 import { slugs } from "@/types/slug";
+import { getPostFromFilePath } from "@/lib/post";
+import { getPostsUsing } from "@/lib/posts-with-parser";
+import {mdExtension} from "@/lib/markdown";
 
 const postsDirectory = path.join(process.cwd(), "posts");
-const mdExtension = ".md";
 const postsPerPage = 11;
-
-const formatDate = (date: Date): string => {
-  return new Intl.DateTimeFormat("en-GB", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  }).format(date);
-};
-
-const generatePostSlugFrom = (filename: string): PostSlug => {
-  const [year, month, day, ...slug] = filename.split("-");
-  const text = slug.join("-").replace(mdExtension, "");
-
-  return {
-    year,
-    month,
-    day,
-    text: text,
-    formatted: `${slugs.blogPost}/${year}/${month}/${day}/${text}`,
-  };
-};
-
-const generatePostDate = (date: Date): PostDate => {
-  return {
-    year: date.getFullYear(),
-    month: date.getMonth() + 1,
-    day: date.getDate(),
-    formatted: formatDate(date),
-  };
-};
 
 const generateFileNameFrom = (
   year: string,
@@ -57,49 +15,6 @@ const generateFileNameFrom = (
   slug: string,
 ) => {
   return `${year}-${month}-${day}-${slug}${mdExtension}`;
-};
-
-const getFrontmatterFrom = (
-  fileParsed: matter.GrayMatterFile<string>,
-  fileName: string,
-): PostFrontMatter => {
-  const { data }: matter.GrayMatterFile<string> = fileParsed;
-
-  return {
-    slug: generatePostSlugFrom(fileName),
-    title: data.title,
-    description: data.description,
-    date: generatePostDate(data.date),
-    tags: data.tags,
-    comments: data.comments,
-    commentsIdentifier: data.commentsIdentifier,
-    authors: data.authors.map((author: string) => authors[author]),
-    image: data.image,
-  };
-};
-
-const getPostFromFilePath = (filePath: string, fileName: string) => {
-  const fileContents = fs.readFileSync(filePath, "utf8");
-  const fileParsed = matter(fileContents);
-
-  const htmlContent = remark()
-    .use(githubFlavoredMarkdown)
-    .use(emoji)
-    .use(youtube)
-    .use(html)
-    .use(math)
-    .use(rehype)
-    .use(katex, { strict: false }) // Render LaTeX with KaTeX
-    .use(syntaxHighlight)
-    .use(stringify)
-    .processSync(fileParsed.content)
-    .toString();
-
-  return {
-    frontmatter: getFrontmatterFrom(fileParsed, fileName),
-    readingTime: calculateReadingTime(htmlContent),
-    content: htmlContent,
-  };
 };
 
 const groupArrayBy: <T>(array: T[], numberPerGroup: number) => T[][] = (
@@ -119,33 +34,18 @@ const groupArrayBy: <T>(array: T[], numberPerGroup: number) => T[][] = (
  * POSTS
  */
 
-export const getPosts = (): Post[] => {
-  const filesNames = fs.readdirSync(postsDirectory);
-
-  return filesNames
-    .map((fileName) => {
-      const filePath = path.join(postsDirectory, fileName);
-      return getPostFromFilePath(filePath, fileName);
-    })
-    .sort(
-      (a, b) =>
-        new Date(b.frontmatter.date.formatted).getTime() -
-        new Date(a.frontmatter.date.formatted).getTime(),
-    );
-};
+export const getPosts: () => Post[] = getPostsUsing(getPostFromFilePath);
 
 export const getPostBy = (
   year: string,
   month: string,
   day: string,
   slug: string,
-): Post => {
-  const filePath = path.join(
-    postsDirectory,
-    generateFileNameFrom(year, month, day, slug),
+): Post =>
+  getPostFromFilePath(
+    path.join(postsDirectory, generateFileNameFrom(year, month, day, slug)),
+    slug,
   );
-  return getPostFromFilePath(filePath, slug);
-};
 
 /**
  * PAGINATION

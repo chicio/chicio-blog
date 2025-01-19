@@ -48,3 +48,8 @@ export type SearchablePostFields = {
   authors: string[];
   content: string;
 };
+
+export type PostParser = (
+    filePath: string,
+    fileName: string,
+) => Post
