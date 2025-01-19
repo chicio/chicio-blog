@@ -1,4 +1,4 @@
-import {SiteMetadataSocialLinks} from "@/types/site-metadata";
+import {siteMetadata, SiteMetadataSocialLinks} from "@/types/site-metadata";
 import type {Metadata} from 'next'
 
 export type OgPageType = 'website' | 'article' | 'profile'
@@ -42,13 +42,11 @@ export const createMetadata = ({
     description?: string,
     keywords?: string[]
 }): Metadata => ({
-    // Basic metadata
+    metadataBase: new URL(siteMetadata.siteUrl),
     title,
     description: description || title,
     authors: [{name: author}],
     keywords: keywords || defaultKeywords,
-
-    // Open Graph
     openGraph: {
         title,
         description: description || title,
@@ -58,12 +56,9 @@ export const createMetadata = ({
         locale: 'en_US',
         type: ogPageType
     },
-
     alternates: {
         canonical: url
     },
-
-    // Twitter
     twitter: {
         card: 'summary',
         title,
@@ -71,8 +66,6 @@ export const createMetadata = ({
         site: '@chicio86',
         creator: '@chicio86'
     },
-
-    // Additional meta tags
     other: {
         'p:domain_verify': '33d2d5dad0e1496d9f7974925340ea50',
         'apple-mobile-web-app-status-bar-style': 'black',

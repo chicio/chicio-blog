@@ -19,7 +19,6 @@ import {slugs} from "@/types/slug";
 import {usePathname} from "next/navigation";
 import {SearchBox, SearchHits} from "@/components/design-system/molecules/search";
 import {useSearch} from "@/components/design-system/hooks/use-search";
-import path from "path";
 
 export const menuHeight = "55px";
 

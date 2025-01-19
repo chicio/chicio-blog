@@ -1,5 +1,6 @@
 # [fabrizioduroni.it](https://www.fabrizioduroni.it)
 
+[![Build](https://github.com/chicio/chicio-blog/actions/workflows/build.yml/badge.svg)](https://github.com/chicio/chicio-blog/actions/workflows/build.yml)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/chicio/chicio-blog/blob/master/LICENSE.md)
 
 My personal website.
