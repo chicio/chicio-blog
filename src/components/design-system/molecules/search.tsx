@@ -65,7 +65,7 @@ export const SearchHits: FC<{ results: SearchablePostFields[] }> = ({ results })
     <SearchHitsList>
       {results.map((result, index) => (
         <SearchHitContainer key={"SearchResult" + index}>
-          <SearchLink href={result.slug.formatted}>
+          <SearchLink href={result.slug}>
             <SearchTitle>{result.title}</SearchTitle>
             <Paragraph>{result.description}</Paragraph>
           </SearchLink>

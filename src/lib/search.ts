@@ -17,9 +17,9 @@ export const createSearchIndex = () => {
         title: post.frontmatter.title,
         description: post.frontmatter.description,
         tags: post.frontmatter.tags,
-        authors: post.frontmatter.authors,
+        authors: post.frontmatter.authors.map(author => author.name),
         content: post.content,
-        slug: post.frontmatter.slug,
+        slug: post.frontmatter.slug.formatted,
     }));
 
     return index;

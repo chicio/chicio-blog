@@ -40,8 +40,11 @@ export type Post = {
   content: string;
 };
 
-export type SearchablePostFields = Pick<
-  PostFrontMatter,
-  "slug" | "title" | "description" | "tags" | "authors"
-> &
-  Pick<Post, "content">;
+export type SearchablePostFields = {
+  slug: string;
+  title: string;
+  description: string;
+  tags: string[];
+  authors: string[];
+  content: string;
+};
