@@ -105,7 +105,7 @@ export const projects: Record<string, Project> = {
         trackingCategory: tracking.category.home,
         trackingAction: tracking.action.open_id3tageditor_doc,
         trackingLabel: tracking.label.body,
-        link: "https://id3tageditor.fabrizioduroni.it/documentation/id3tageditor/",
+        link: "https://chicio.github.io/ID3TagEditor/documentation/id3tageditor/",
       },
     ],
     image: '/images/projects/id3tageditor.jpg'
@@ -138,7 +138,7 @@ export const projects: Record<string, Project> = {
         trackingCategory: tracking.category.home,
         trackingAction: tracking.action.open_rangeuislider_doc,
         trackingLabel: tracking.label.body,
-        link: "https://rangeuislider.fabrizioduroni.it",
+        link: "https://chicio.github.io/RangeUISlider/",
       },
     ],
     image: '/images/projects/range-ui-slider.png'
