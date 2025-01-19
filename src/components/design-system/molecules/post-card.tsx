@@ -13,7 +13,6 @@ import Image from "next/image";
 import {StandardInternalLinkWithTracking} from "@/components/design-system/atoms/standard-internal-link-with-tracking";
 import {tracking} from "@/types/tracking";
 import {Author} from "@/types/author";
-import {imageBlur} from "@/components/website/image-blur";
 
 interface BigCardProps {
   big: boolean;
@@ -123,8 +122,6 @@ export const PostCard: FC<PostCardProps> = ({
           src={image}
           width={1000}
           height={500}
-          placeholder={'blur'}
-          blurDataURL={imageBlur}
         />
       </PostCardLink>
       <PostCardMetaContainer>
