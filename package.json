@@ -21,7 +21,7 @@
     "disqus-react": "^1.1.5",
     "elasticlunr": "^0.9.5",
     "gray-matter": "^4.0.3",
-    "katex": "^0.16.19",
+    "katex": "^0.16.21",
     "next": "^15.1.5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
