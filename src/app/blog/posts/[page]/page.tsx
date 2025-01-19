@@ -1,4 +1,4 @@
-import {getPostsPaginationFor} from "@/lib/posts";
+import {getPosts, getPostsPaginationFor, getPostsTotalPages} from "@/lib/posts";
 import {BlogPageTemplate} from "@/components/templates/blog-page-template";
 import {siteMetadata} from "@/types/site-metadata";
 import {tracking} from "@/types/tracking";
@@ -21,6 +21,18 @@ export async function generateMetadata({ params }: NextPostPaginationParameters)
         imageUrl: siteMetadata.featuredImage,
         ogPageType: 'website',
     })
+}
+
+export async function generateStaticParams() {
+    const posts = getPosts();
+    const totalPages = getPostsTotalPages(posts);
+    const pageParams = []
+
+    for(let page = 2; page <= totalPages; page++) {
+        pageParams.push({ page: `${page}` })
+    }
+
+    return pageParams;
 }
 
 export default async function BlogPage({ params }: NextPostPaginationParameters) {
