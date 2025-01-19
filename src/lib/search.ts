@@ -54,7 +54,6 @@ const createSearchIndex = () => {
     this.addField("description");
     this.addField("tags");
     this.addField("authors");
-    this.addField("content");
     this.setRef("slug");
   });
 
@@ -64,7 +63,6 @@ const createSearchIndex = () => {
       description: post.frontmatter.description,
       tags: post.frontmatter.tags,
       authors: post.frontmatter.authors.map((author) => author.name),
-      content: post.content,
       slug: post.frontmatter.slug.formatted,
     }),
   );

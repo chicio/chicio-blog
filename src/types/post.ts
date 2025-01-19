@@ -46,7 +46,6 @@ export type SearchablePostFields = {
   description: string;
   tags: string[];
   authors: string[];
-  content: string;
 };
 
 export type PostParser = (
