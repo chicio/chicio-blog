@@ -19,6 +19,7 @@ import {slugs} from "@/types/slug";
 import {usePathname} from "next/navigation";
 import {SearchBox, SearchHits} from "@/components/design-system/molecules/search";
 import {useSearch} from "@/components/design-system/hooks/use-search";
+import path from "path";
 
 export const menuHeight = "55px";
 
@@ -159,7 +160,7 @@ export const BlogMenu: FC<MenuProps> = ({ trackingCategory }) => {
           </NavBarMenuItem>
           <NavBarMenuItem
               to={slugs.blog}
-              selected={pathname.includes(slugs.blog)}
+              selected={pathname.includes(slugs.blog) && pathname !== slugs.aboutMe}
               trackingData={{
                 action: tracking.action.open_home,
                 category: trackingCategory,

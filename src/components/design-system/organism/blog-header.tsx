@@ -90,7 +90,6 @@ const DesktopContainer = styled.div`
 
   ${mediaQuery.minWidth.sm} {
       display: block;
-      margin-top: 90px;
   }
 `;
 

@@ -1,5 +1,5 @@
 const blog = '/blog'
-const blogPost = `${blog}/post/`;
+const blogPost = `${blog}/post`;
 
 export const slugs = {
   blog,
@@ -9,6 +9,6 @@ export const slugs = {
   tag: `${blog}/tag`,
   blogArchive: `${blog}/archive`,
   aboutMe: `${blogPost}/2017/05/10/about-me`,
-  art: "/art/",
+  art: "/art",
   cookiePolicy: "/cookie-policy"
 };

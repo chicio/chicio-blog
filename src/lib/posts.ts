@@ -30,7 +30,7 @@ const formatDate = (date: Date): string => {
 
 const generatePostSlugFrom = (filename: string) => {
     const [year, month, day, ...slug] = filename.split("-");
-    return `${slugs.blogPost}${year}/${month}/${day}/${slug.join("-")}`.replace(mdExtension, "");
+    return `${slugs.blogPost}/${year}/${month}/${day}/${slug.join("-")}`.replace(mdExtension, "");
 };
 
 const generateFileNameFrom = (year: string, month: string, day: string, slug: string) => {
