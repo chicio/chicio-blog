@@ -64,13 +64,13 @@ export const BlogGenericPostListPageTemplate: FC<
   >
     <PageTitle>{title}</PageTitle>
     {posts.map((post) => (
-      <PostContainer key={post.frontmatter.slug}>
+      <PostContainer key={post.frontmatter.slug.formatted}>
         <Column size={"15%"}>
-          <PostTime>{post.frontmatter.date}</PostTime>
+          <PostTime>{post.frontmatter.date.formatted}</PostTime>
         </Column>
         <Column size={"85%"}>
           <PostLink
-            to={post.frontmatter.slug}
+            to={post.frontmatter.slug.formatted}
             trackingData={{
               action: tracking.action.open_blog_post,
               category: trackingCategory,

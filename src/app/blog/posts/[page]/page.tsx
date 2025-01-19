@@ -38,12 +38,12 @@ export default async function BlogPage({ params }: NextPostPaginationParameters)
             >
                 <PostCard
                     big={true}
-                    key={launchPost.frontmatter.slug}
-                    slug={launchPost.frontmatter.slug}
+                    key={launchPost.frontmatter.slug.formatted}
+                    slug={launchPost.frontmatter.slug.formatted}
                     title={launchPost.frontmatter.title}
                     image={launchPost.frontmatter.image}
                     authors={launchPost.frontmatter.authors}
-                    date={launchPost.frontmatter.date}
+                    date={launchPost.frontmatter.date.formatted}
                     readingTime={launchPost.readingTime.text!}
                     description={launchPost.frontmatter.description}
                     trackingCategory={tracking.category.blog_home}

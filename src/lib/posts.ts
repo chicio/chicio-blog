@@ -1,93 +1,118 @@
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
-import {remark} from "remark";
+import { remark } from "remark";
 import githubFlavoredMarkdown from "remark-gfm";
-import emoji from 'remark-emoji'
+import emoji from "remark-emoji";
 import html from "remark-html";
 import math from "remark-math";
-import rehype from 'remark-rehype'
+import rehype from "remark-rehype";
 import katex from "rehype-katex";
-import stringify from 'rehype-stringify'
-import syntaxHighlight from 'rehype-highlight'
-import youtube from 'remark-youtube';
+import stringify from "rehype-stringify";
+import syntaxHighlight from "rehype-highlight";
+import youtube from "remark-youtube";
 import calculateReadingTime from "reading-time";
-import {Post, PostFrontMatter, Tag} from "@/types/post";
-import {authors} from "@/types/author";
-import {slugs} from "@/types/slug";
+import { Post, PostDate, PostFrontMatter, PostSlug, Tag } from "@/types/post";
+import { authors } from "@/types/author";
+import { slugs } from "@/types/slug";
 
 const postsDirectory = path.join(process.cwd(), "posts");
-const mdExtension = ".md"
+const mdExtension = ".md";
 const postsPerPage = 11;
 
 const formatDate = (date: Date): string => {
-    return new Intl.DateTimeFormat('en-GB', {
-        day: '2-digit',
-        month: 'short',
-        year: 'numeric',
-    }).format(date);
+  return new Intl.DateTimeFormat("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  }).format(date);
 };
 
-const generatePostSlugFrom = (filename: string) => {
-    const [year, month, day, ...slug] = filename.split("-");
-    return `${slugs.blogPost}/${year}/${month}/${day}/${slug.join("-")}`.replace(mdExtension, "");
+const generatePostSlugFrom = (filename: string): PostSlug => {
+  const [year, month, day, ...slug] = filename.split("-");
+  const text = slug.join("-").replace(mdExtension, "");
+
+  return {
+    year,
+    month,
+    day,
+    text: text,
+    formatted: `${slugs.blogPost}/${year}/${month}/${day}/${text}`,
+  };
 };
 
-const generateFileNameFrom = (year: string, month: string, day: string, slug: string) => {
-    return `${year}-${month}-${day}-${slug}${mdExtension}`;
+const generatePostDate = (date: Date): PostDate => {
+  return {
+    year: date.getFullYear(),
+    month: date.getMonth() + 1,
+    day: date.getDate(),
+    formatted: formatDate(date),
+  };
+};
+
+const generateFileNameFrom = (
+  year: string,
+  month: string,
+  day: string,
+  slug: string,
+) => {
+  return `${year}-${month}-${day}-${slug}${mdExtension}`;
 };
 
 const getFrontmatterFrom = (
-    fileParsed: matter.GrayMatterFile<string>,
-    fileName: string
+  fileParsed: matter.GrayMatterFile<string>,
+  fileName: string,
 ): PostFrontMatter => {
-    const {data}: matter.GrayMatterFile<string> = fileParsed;
+  const { data }: matter.GrayMatterFile<string> = fileParsed;
 
-    return {
-        slug: generatePostSlugFrom(fileName),
-        title: data.title,
-        description: data.description,
-        date: formatDate(data.date),
-        tags: data.tags,
-        comments: data.comments,
-        commentsIdentifier: data.commentsIdentifier,
-        authors: data.authors.map((author: string) => authors[author]),
-        image: data.image,
-    };
+  return {
+    slug: generatePostSlugFrom(fileName),
+    title: data.title,
+    description: data.description,
+    date: generatePostDate(data.date),
+    tags: data.tags,
+    comments: data.comments,
+    commentsIdentifier: data.commentsIdentifier,
+    authors: data.authors.map((author: string) => authors[author]),
+    image: data.image,
+  };
 };
 
 const getPostFromFilePath = (filePath: string, fileName: string) => {
-    const fileContents = fs.readFileSync(filePath, "utf8");
-    const fileParsed = matter(fileContents);
+  const fileContents = fs.readFileSync(filePath, "utf8");
+  const fileParsed = matter(fileContents);
 
-    const htmlContent = remark()
-        .use(githubFlavoredMarkdown)
-        .use(emoji)
-        .use(youtube)
-        .use(html)
-        .use(math)
-        .use(rehype)
-        .use(katex, {strict: false}) // Render LaTeX with KaTeX
-        .use(syntaxHighlight)
-        .use(stringify)
-        .processSync(fileParsed.content)
-        .toString();
+  const htmlContent = remark()
+    .use(githubFlavoredMarkdown)
+    .use(emoji)
+    .use(youtube)
+    .use(html)
+    .use(math)
+    .use(rehype)
+    .use(katex, { strict: false }) // Render LaTeX with KaTeX
+    .use(syntaxHighlight)
+    .use(stringify)
+    .processSync(fileParsed.content)
+    .toString();
 
-    return {
-        frontmatter: getFrontmatterFrom(fileParsed, fileName),
-        readingTime: calculateReadingTime(htmlContent),
-        content: htmlContent,
-    };
-}
+  return {
+    frontmatter: getFrontmatterFrom(fileParsed, fileName),
+    readingTime: calculateReadingTime(htmlContent),
+    content: htmlContent,
+  };
+};
 
-const groupArrayBy: <T>(array: T[], numberPerGroup: number) => T[][] = (data, n) => {
-    const group = Array(0);
-    for (let i = 0, j = 0; i < data.length; i += 1) {
-        if (i >= n && i % n === 0) j += 1;
-        group[j] = group[j] || [];
-        group[j].push(data[i]);
-    }
-    return group;
+const groupArrayBy: <T>(array: T[], numberPerGroup: number) => T[][] = (
+  data,
+  n,
+) => {
+  const group = Array(0);
+  for (let i = 0, j = 0; i < data.length; i += 1) {
+    if (i >= n && i % n === 0) j += 1;
+    group[j] = group[j] || [];
+    group[j].push(data[i]);
+  }
+  return group;
 };
 
 /**
@@ -95,31 +120,39 @@ const groupArrayBy: <T>(array: T[], numberPerGroup: number) => T[][] = (data, n)
  */
 
 export const getPosts = (): Post[] => {
-    const filesNames = fs.readdirSync(postsDirectory);
+  const filesNames = fs.readdirSync(postsDirectory);
 
-    return filesNames
-        .map((fileName) => {
-            const filePath = path.join(postsDirectory, fileName);
-           return getPostFromFilePath(filePath, fileName)
-        }).sort((a, b) =>
-            new Date(b.frontmatter.date).getTime() - new Date(a.frontmatter.date).getTime());
+  return filesNames
+    .map((fileName) => {
+      const filePath = path.join(postsDirectory, fileName);
+      return getPostFromFilePath(filePath, fileName);
+    })
+    .sort(
+      (a, b) =>
+        new Date(b.frontmatter.date.formatted).getTime() -
+        new Date(a.frontmatter.date.formatted).getTime(),
+    );
 };
 
 export const getPostBy = (
-    year: string,
-    month: string,
-    day: string,
-    slug: string
+  year: string,
+  month: string,
+  day: string,
+  slug: string,
 ): Post => {
-    const filePath = path.join(postsDirectory, generateFileNameFrom(year, month, day, slug));
-    return getPostFromFilePath(filePath, slug)
+  const filePath = path.join(
+    postsDirectory,
+    generateFileNameFrom(year, month, day, slug),
+  );
+  return getPostFromFilePath(filePath, slug);
 };
 
 /**
  * PAGINATION
  */
 
-export const getPostsTotalPages = (posts: Post[]) => Math.ceil(posts.length / postsPerPage);
+export const getPostsTotalPages = (posts: Post[]) =>
+  Math.ceil(posts.length / postsPerPage);
 
 export const getPostsPaginationFor: (page: number) => {
   launchPost: Post;
@@ -154,22 +187,30 @@ export const getPostsPaginationFor: (page: number) => {
  * TAGS
  */
 export const getTags = () => {
-    const tags = new Map<string, Tag>();
-    const posts = getPosts();
-    posts.map(post => post.frontmatter.tags.forEach(tag => {
-        if (tags.has(tag)) {
-            const currentTag = tags.get(tag)!;
-            tags.set(tag, { ...currentTag, count: ++currentTag.count,  });
-        } else {
-            tags.set(tag, { tagValue: tag, count: 1, slug: `${slugs.tag}/${tag.replaceAll(' ', '-')}` })
-        }
-    }));
+  const tags = new Map<string, Tag>();
+  const posts = getPosts();
+  posts.map((post) =>
+    post.frontmatter.tags.forEach((tag) => {
+      if (tags.has(tag)) {
+        const currentTag = tags.get(tag)!;
+        tags.set(tag, { ...currentTag, count: ++currentTag.count });
+      } else {
+        tags.set(tag, {
+          tagValue: tag,
+          count: 1,
+          slug: `${slugs.tag}/${tag.replaceAll(" ", "-")}`,
+        });
+      }
+    }),
+  );
 
-    return [...tags.values()].sort((a, b) => a.tagValue.toLowerCase() < b.tagValue.toLowerCase() ? -1 : 1);
-}
+  return [...tags.values()].sort((a, b) =>
+    a.tagValue.toLowerCase() < b.tagValue.toLowerCase() ? -1 : 1,
+  );
+};
 
 export const getPostsForTag: (tag: string) => Post[] = (tag: string) => {
-    const posts = getPosts();
+  const posts = getPosts();
 
-    return posts.filter(post => post.frontmatter.tags.includes(tag))
-}
+  return posts.filter((post) => post.frontmatter.tags.includes(tag));
+};

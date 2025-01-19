@@ -11,7 +11,7 @@ export interface RecentPostsProps {
 
 export const RecentPosts: FC<RecentPostsProps> = ({ currentSlug }) => {
   const readNextPosts = useShuffleArray(
-    getPosts().filter((post) => post.frontmatter.slug !== currentSlug,),
+    getPosts().filter((post) => post.frontmatter.slug.formatted !== currentSlug,),
   ).slice(0, 2);
 
   return (

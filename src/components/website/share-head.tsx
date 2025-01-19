@@ -10,6 +10,12 @@ export const SharedHead: FC = () =>
             crossOrigin="anonymous"
         />
         <link
+            rel="preload"
+            href="/fonts/opensans/OpenSans-Regular.ttf"
+            as="font"
+            crossOrigin="anonymous"
+        />
+        <link
             rel="author"
             href="/humans.txt"
             type="text/plain"

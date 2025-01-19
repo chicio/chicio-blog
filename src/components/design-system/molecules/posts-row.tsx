@@ -13,12 +13,12 @@ export const PostsRow: FC<PostsRowProps> = ({ postsGroup }) => (
   <PostsRowContainer>
     <PostCard
       big={false}
-      key={postsGroup[0].frontmatter.slug}
-      slug={postsGroup[0].frontmatter.slug}
+      key={postsGroup[0].frontmatter.slug.formatted}
+      slug={postsGroup[0].frontmatter.slug.formatted}
       title={postsGroup[0].frontmatter.title}
       image={postsGroup[0].frontmatter.image}
       authors={postsGroup[0].frontmatter.authors}
-      date={postsGroup[0].frontmatter.date}
+      date={postsGroup[0].frontmatter.date.formatted}
       readingTime={postsGroup[0].readingTime.text}
       description={postsGroup[0].frontmatter.description}
       trackingCategory={tracking.category.blog_home}
@@ -27,12 +27,12 @@ export const PostsRow: FC<PostsRowProps> = ({ postsGroup }) => (
     {postsGroup[1] && (
       <PostCard
         big={false}
-        key={postsGroup[1].frontmatter.slug}
-        slug={postsGroup[1].frontmatter.slug}
+        key={postsGroup[1].frontmatter.slug.formatted}
+        slug={postsGroup[1].frontmatter.slug.formatted}
         title={postsGroup[1].frontmatter.title}
         image={postsGroup[1].frontmatter.image}
         authors={postsGroup[1].frontmatter.authors}
-        date={postsGroup[1].frontmatter.date}
+        date={postsGroup[1].frontmatter.date.formatted}
         readingTime={postsGroup[1].readingTime.text}
         description={postsGroup[1].frontmatter.description!}
         trackingCategory={tracking.category.blog_home}

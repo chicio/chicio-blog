@@ -43,8 +43,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
       images: [`${siteMetadata.siteUrl}${siteMetadata.featuredImage}`],
     },
     ...posts.map((post) => ({
-      url: `${siteMetadata.siteUrl}${post.frontmatter.slug}`,
-      lastModified: new Date(post.frontmatter.date),
+      url: `${siteMetadata.siteUrl}${post.frontmatter.slug.formatted}`,
+      lastModified: new Date(post.frontmatter.date.formatted),
       priority: 1,
       images: [`${siteMetadata.siteUrl}${post.frontmatter.image}`],
     })),
