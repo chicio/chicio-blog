@@ -9,6 +9,7 @@ import math from "remark-math";
 import rehype from "remark-rehype";
 import katex from "rehype-katex";
 import syntaxHighlight from "rehype-highlight";
+import figure from "@microflash/rehype-figure";
 import stringify from "rehype-stringify";
 import calculateReadingTime from "reading-time";
 import { getFrontmatterFrom } from "@/lib/frontmatter";
@@ -30,6 +31,7 @@ export const getPostFromFilePath: (
     .use(rehype)
     .use(katex, { strict: false }) // Render LaTeX with KaTeX
     .use(syntaxHighlight)
+    .use(figure)
     .use(stringify);
 
   const htmlContent = remarkProcessor

@@ -32,6 +32,7 @@ const PostContentContainer = styled.div`
     font-size: ${(props) => props.theme.fontSizes[1]};
     text-align: center;
     line-height: ${(props) => props.theme.lineHeight};
+    font-style: italic;
   }
 
   & h3 {
