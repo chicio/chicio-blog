@@ -7,6 +7,7 @@ import { SharedHead } from "@/components/website/share-head";
 import { CookieConsent } from "@/components/website/cookie-consent";
 import { GoogleTagManager } from "@next/third-parties/google";
 import {SpeedInsights} from "@vercel/speed-insights/next";
+import {Analytics} from "@vercel/analytics/next";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -26,6 +27,7 @@ export default function RootLayout({
           <CookieConsent />
         </StyledComponentsRegistry>
         <SpeedInsights />
+        <Analytics />
       </body>
     </html>
   );
