@@ -24,7 +24,7 @@ export async function generateStaticParams() {
     const tags = getTags();
 
     return tags.map((tag) => ({
-        tag: tag.tagValue
+        tag: tag.tagSlugText
     }));
 }
 

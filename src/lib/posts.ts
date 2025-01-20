@@ -89,16 +89,21 @@ export const getPostsPaginationFor: (page: number) => {
 export const getTags = () => {
   const tags = new Map<string, Tag>();
   const posts = getPosts();
+
   posts.map((post) =>
     post.frontmatter.tags.forEach((tag) => {
       if (tags.has(tag)) {
         const currentTag = tags.get(tag)!;
+
         tags.set(tag, { ...currentTag, count: ++currentTag.count });
       } else {
+        const tagSlugText = tag.replaceAll(" ", "-");
+
         tags.set(tag, {
           tagValue: tag,
           count: 1,
-          slug: `${slugs.tag}/${tag.replaceAll(" ", "-")}`,
+          tagSlugText,
+          slug: `${slugs.tag}/${tagSlugText}`,
         });
       }
     }),

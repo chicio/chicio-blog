@@ -4,6 +4,7 @@ import { Author } from "@/types/author";
 export type Tag = {
   tagValue: string;
   count: number;
+  tagSlugText: string;
   slug: string;
 };
 
