@@ -107,11 +107,10 @@ export const Technologies: FC<TechnologiesProps> = ({ author }) => (
       </TechnologyImageContainer>
       <TechnologyImageContainer>
         <Image
-          objectFit={"contain"}
           src={androidImage}
           alt={"android"}
           placeholder={"blur"}
-          width={80}
+          width={70}
           height={80}
         />
       </TechnologyImageContainer>

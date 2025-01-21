@@ -1,6 +1,5 @@
 import { DefaultTheme } from "styled-components";
 import { blogDark, blogLight } from "./blog-colors";
-import { artDark, artLight } from "./art-colors";
 
 const fontSizes = [
   "12px",
@@ -44,10 +43,3 @@ export const blogTheme: DefaultTheme = {
   lineHeight: 1.8,
 };
 
-export const artTheme: DefaultTheme = {
-  dark: artDark,
-  light: artLight,
-  fontSizes,
-  spacing,
-  lineHeight: 1.8,
-};
