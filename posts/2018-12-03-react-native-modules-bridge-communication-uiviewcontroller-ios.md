@@ -25,7 +25,7 @@ architecture I will create a simple app that show a React Native screen as a mod
 button functionality by calling a native module from the `onPress` on a React Native button. Below you can see the final
 result.
 
-`youtube: https://www.youtube.com/watch?v=rJLX27nancs`
+https://www.youtube.com/watch?v=rJLX27nancs
 
 The architecture I put in place is based on the `NSNotificationCenter`. The description of this component of the iOS SDK
 is the following one:

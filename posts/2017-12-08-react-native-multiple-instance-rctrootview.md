@@ -113,7 +113,7 @@ If we try to run the app something very strange will happen:
 * if we do a live reload, we will see our **React components refreshed multiple times**
 * if we press cmd + ctrl + z (shake gesture simulation) in the simulator **2 dev menu will be shown**
 
-`youtube: https://youtu.be/HgSbUVlv1Oo`
+https://youtu.be/HgSbUVlv1Oo
 
 * if we do a **live reload while we're in debug mode the app could crash**
 
@@ -223,7 +223,7 @@ Now if we try to run the app again everything will work as expected:
 * if we press cmd + ctrl + z in the simulator **1 dev menu will be shown**
 * **no more crashes with live reload in debug mode**
 
-`youtube: https://youtu.be/z2gwLX8LaLQ`
+https://youtu.be/z2gwLX8LaLQ
 
 The entire source code of the app used as example for this post is contained in [this github repo](https://github.com/chicio/React-Native-Multiple-RCTRootView "React native multiple RCTRootView").
 Now we're ready to use multiple React Native components at the same time in our app :relieved:.

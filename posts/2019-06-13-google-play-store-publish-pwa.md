@@ -167,6 +167,6 @@ Now my blog PWA is published to Google Play store. Below you can find a video th
 Google Play store and the first open of the app. In the video you can also see the debug messages related to the digital
 asset links verification.
 
-`youtube: https://www.youtube.com/watch?v=s0o0AheYw9M`
+https://www.youtube.com/watch?v=s0o0AheYw9M
 
 Go and download it immediately :cupid:!!!!

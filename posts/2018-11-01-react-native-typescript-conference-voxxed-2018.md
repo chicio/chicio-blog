@@ -109,4 +109,4 @@ Special thanks also to  [Alessandro Romano](https://www.linkedin.com/in/alessand
 clean". He is one of the best co-speaker and coworker you could ever find :heart:. If you want to know more about the
 topic of our presentation, below you can find the full session recorded :bowtie:.
 
-`youtube: https://www.youtube.com/watch?v=1x2B7S0XJU4`
+https://www.youtube.com/watch?v=1x2B7S0XJU4

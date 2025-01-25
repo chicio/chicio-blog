@@ -56,7 +56,7 @@ example this list of mixed code creation/refactoring operations:
 In the following video I will try to do these operations in Xcode. At the time of this writing the available Xcode
 version is 9.2.
 
-`youtube: https://www.youtube.com/watch?v=tsuS8UoSS1A`
+https://www.youtube.com/watch?v=tsuS8UoSS1A
 
 **More than 2 minutes to implement all the stuff in the above list.**
 Really slow, isn't it?!?? :fearful:
@@ -74,7 +74,7 @@ list [here](https://developer.android.com/studio/intro/keyboard-shortcuts/ "Andr
 Let's try to do the exact same operations I did before with Xcode, and I also add a rename of the class created at the
 end of all the previous operation. At the time of this writing the available Android Studio version is 3.0.1.
 
-`youtube: https://www.youtube.com/watch?v=tsuS8UoSS1A`
+https://www.youtube.com/watch?v=tsuS8UoSS1A
 
 **Only 50 seconds and I did all the stuff (and I wasn't pushing hard on the keyboard.. .:stuck_out_tongue_winking_eye:)
 .**

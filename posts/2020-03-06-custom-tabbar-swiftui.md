@@ -29,7 +29,7 @@ In this post I will show you how I created a custom tab bar with the ability to 
 (like some major apps, e.g. Instagram) and a customized navigation where the TabBar is shown only on the first level 
 of navigation. Below you can find a video that shows the final result.
 
-`youtube: https://www.youtube.com/watch?v=aOG9y24zCIg`
+https://www.youtube.com/watch?v=aOG9y24zCIg
 
 #### Implementation
 

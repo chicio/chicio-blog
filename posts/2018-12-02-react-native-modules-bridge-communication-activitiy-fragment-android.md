@@ -32,7 +32,7 @@ To show you this architecture I will create a simple app that show a React Nativ
 implement the close button functionality by calling a native module from the `onPress` on a React Native button. Below
 you can see the final result.
 
-`youtube: https://www.youtube.com/watch?v=MdNqDQHNjRc`
+https://www.youtube.com/watch?v=MdNqDQHNjRc
 
 The architecture we put in place is based on a **Event Bus** in which the Native Modules bridges notify the subscribed
 Activities/Fragments of the actions to be executed. So each one of them is subscribed to specific events to which they

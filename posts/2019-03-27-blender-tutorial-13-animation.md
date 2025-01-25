@@ -39,7 +39,7 @@ are shown on the timeline as a yellow line.
 
 After settings the second keyframe we finally have our first animation. In the video below you can see the final result.
 
-`youtube: https://www.youtube.com/watch?v=qTLJL-HF9vY`
+https://www.youtube.com/watch?v=qTLJL-HF9vY
 
 In our previous first animation we animated the movement of the object. In Blender we are not limited to location or
 rotation for animation: we can basically animate any property we want. We can animate color, scale, light camera and so
@@ -49,7 +49,7 @@ value we want (remember that we need at least two keyframe to have an animation)
 can be played (remember to switch the 3D window to texture mode if you want to see the animation with execute a complete
 render).
 
-`youtube: https://www.youtube.com/watch?v=Ledh539mZKo`
+https://www.youtube.com/watch?v=Ledh539mZKo
 
 Sometimes we will need to do to a more precise setup of our animation: change the values between keyframes, change the
 interpolation method and so on. To do these operation we can use the graph editor. This is a a separate editor that we
@@ -59,7 +59,7 @@ all the animation for a specific object selected in the scene. From here we can 
 it and moving in the position we prefer. We can also modify the interpolation by selecting our animation curve and
 choosing Key -> Interpolation mode from the menu.
 
-`youtube: https://www.youtube.com/watch?v=xq1J5QrJuSU`
+https://www.youtube.com/watch?v=xq1J5QrJuSU
 
 ![Interpolation mode](/images/posts/blender-animation-interpolation-mode.jpg)
 

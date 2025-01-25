@@ -160,6 +160,6 @@ we have to set:
 
 We're ready to test our implementation. Below you can find a video with the final result of our implementation.
 
-`youtube: https://www.youtube.com/watch?v=7pDTklC4ocY`
+https://www.youtube.com/watch?v=7pDTklC4ocY
 
 That's all for Notification Content App Extension on iOS. Let's start to test them in your app :relaxed:.

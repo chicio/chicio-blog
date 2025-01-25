@@ -48,7 +48,7 @@ contains that bone will move accordingly.
 
 ![Set armature](/images/posts/blender-set-armature.jpg)
 
-`youtube: https://www.youtube.com/watch?v=GpkMgUqWZJo`
+https://www.youtube.com/watch?v=GpkMgUqWZJo
 
 Sometimes we will also need to constraint a bone to the move of other bones. Instead of doing it manually, we can use
 Inverse kinematics. To be more clear this is an extract of the blender doc:
@@ -63,6 +63,6 @@ properties panel. This tab will appear only when we are in pose mode.
 After setting bones, armature and inverse kinematics we are ready to animate our character. To do that, we just need to
 be in Pose mode and set the keyframes as we did for standard animation.
 
-`youtube: https://www.youtube.com/watch?v=Q5m1rnjT6Rw`
+https://www.youtube.com/watch?v=Q5m1rnjT6Rw
 
 That's all for character rigging. In the next post we will talk about the rendering engine Cycles.

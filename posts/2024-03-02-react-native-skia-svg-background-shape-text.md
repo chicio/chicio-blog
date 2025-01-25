@@ -45,7 +45,7 @@ frameworks above, to evaluate their usage complexity.
 
 ![The component on both platforms: iOS and Android](/images/posts/daily-deals-featured.jpg)
 
-`youtube: https://www.youtube.com/watch?v=96wofMjkyKc`
+https://www.youtube.com/watch?v=96wofMjkyKc
 
 #### Implementation
 

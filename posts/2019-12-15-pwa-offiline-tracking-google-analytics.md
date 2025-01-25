@@ -75,7 +75,7 @@ called `workbox-background-sync`. When the network came back the the requests sa
 Analytics servers as measurement protocol requests. Below you can find a video that shows you the entire flow described
 above.
 
-`youtube: https://www.youtube.com/watch?v=Xshb2rM4L3w`
+https://www.youtube.com/watch?v=Xshb2rM4L3w
 
 One important thing: for all my request you can see two entries in `workbox-background-sync` schema: one for the page
 the user is visiting and one for `/blog`, the homepage of my blog. This is a consequence of the fact that for each page
