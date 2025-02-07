@@ -132,13 +132,13 @@ const SearchBoxInput = styled.input<TransientProps<StartSearchProps>>`
   ${(props) =>
     props.$startSearch &&
     css`
-      color: ${(props) => props.theme.light.textAbovePrimaryColor};
+      color: ${(props) => props.theme.light.primaryTextColor};
       width: 200px;
       background: ${(props) => props.theme.light.generalBackground};
       ${borderRadius};
 
       ${mediaQuery.dark} {
-        color: ${(props) => props.theme.dark.textAbovePrimaryColor};
+        color: ${(props) => props.theme.dark.primaryTextColor};
         background: ${(props) => props.theme.dark.generalBackground};
       }
     `}
