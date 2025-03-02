@@ -3,7 +3,7 @@
 import 'highlight.js/styles/github-dark.css';
 import { FC } from "react";
 import styled from "styled-components";
-import {Heading2} from "@/components/design-system/atoms/heading2";
+import {heading2Style} from "@/components/design-system/atoms/heading2";
 import {heading3Style} from "@/components/design-system/atoms/heading3";
 import {heading4Style} from "@/components/design-system/atoms/heading4";
 import {heading5Style} from "@/components/design-system/atoms/heading5";
@@ -11,6 +11,7 @@ import {standardLinkStyle} from "@/components/design-system/atoms/standard-link-
 import {mediaQuery} from "@/components/design-system/utils-css/media-query";
 import {borderRadius} from "@/components/design-system/atoms/border-radius";
 import {paragraphStyle} from "@/components/design-system/atoms/paragraph";
+import { Heading1 } from '../design-system/atoms/heading1';
 
 const PostContentContainer = styled.div`
   color: ${(props) => props.theme.light.primaryTextColor};
@@ -33,6 +34,13 @@ const PostContentContainer = styled.div`
     text-align: center;
     line-height: ${(props) => props.theme.lineHeight};
     font-style: italic;
+  }
+
+  & h2 {
+    ${heading2Style};
+    margin-left: 0;
+    margin-right: 0;
+    line-height: ${(props) => props.theme.lineHeight};
   }
 
   & h3 {
@@ -180,7 +188,7 @@ export const PostContent: FC<PostContentProps> = ({ html }) => (
     <PostContentContainer dangerouslySetInnerHTML={{ __html: html }} />
 );
 
-export const PostTitle = styled(Heading2)`
+export const PostTitle = styled(Heading1)`
   margin: 0;
   word-wrap: break-word;
 `;

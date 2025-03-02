@@ -58,7 +58,7 @@ const PostCardImage = styled(Image)`
   border-radius: 4px 4px 0 0;
 
   ${mediaQuery.minWidth.sm} {
-    height: 250px;
+    height: 300px;
   }
 `;
 
