@@ -21,7 +21,6 @@ export const getPostFromFilePath: (
 ) => Post = (filePath: string, fileName: string) => {
   const fileContents = fs.readFileSync(filePath, "utf8");
   const fileParsed = matter(fileContents);
-
   const remarkProcessor = remark()
     .use(githubFlavoredMarkdown)
     .use(emoji)

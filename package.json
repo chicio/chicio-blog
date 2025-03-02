@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "search-index": "tsx src/lib/search.ts",
+    "predev": "npm run search-index",
     "dev": "next dev --turbopack",
-    "prebuild": "tsx src/lib/search.ts",
+    "prebuild": "npm run search-index",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"

@@ -1,8 +1,7 @@
 import {Post, PostParser} from "@/types/post";
 import fs from "fs";
 import path from "path";
-
-const postsDirectory = path.join(process.cwd(), "posts");
+import {postsDirectory} from "@/lib/post-dir";
 
 export const getPostsUsing = (parser: PostParser) => (): Post[] =>
     fs

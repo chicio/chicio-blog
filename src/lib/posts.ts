@@ -4,8 +4,8 @@ import { slugs } from "@/types/slug";
 import { getPostFromFilePath } from "@/lib/post";
 import { getPostsUsing } from "@/lib/posts-with-parser";
 import {mdExtension} from "@/lib/files";
+import {postsDirectory} from "@/lib/post-dir";
 
-const postsDirectory = path.join(process.cwd(), "posts");
 const postsPerPage = 11;
 
 const generateFileNameFrom = (
@@ -41,11 +41,13 @@ export const getPostBy = (
   month: string,
   day: string,
   slug: string,
-): Post =>
-  getPostFromFilePath(
-    path.join(postsDirectory, generateFileNameFrom(year, month, day, slug)),
-    slug,
+): Post => {
+  const fileName = generateFileNameFrom(year, month, day, slug);
+  return getPostFromFilePath(
+    path.join(postsDirectory, fileName),
+      fileName,
   );
+};
 
 /**
  * PAGINATION
