@@ -163,6 +163,15 @@ const PostContentContainer = styled.div`
       padding: 4px;
       ${borderRadius};
   }
+
+  & li code {
+      font-family: Menlo, Monaco, "Courier New", monospace;
+      font-size: ${(props) => props.theme.fontSizes[1]};
+      color: #d2a8ff;
+      background: #0d1117;
+      padding: 4px;
+      ${borderRadius};
+  }
   
   & img {
       width: 100%;

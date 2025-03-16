@@ -317,8 +317,8 @@ type AreThereEmptyCells<CurrentBoard extends TicTactToeBoard> =
 So now I was able to create the `UpdateState` type as a composition of the previous types. What it does is:
 * use `IsSomeoneWinning` to check if someone won. If it is so, its result is returned
 * if none of the player won, it uses `AreThereEmptyCells` to check if there are still available moves:
-** if there are, the next chip is returned from `NextChipFrom`
-** if no moves are available, the game is in draw state and `Draw` is returned. 
+  * if there are, the next chip is returned from `NextChipFrom`
+  * if no moves are available, the game is in draw state and `Draw` is returned. 
 
 ```typescript
 type NextChipFrom<CurrentState extends TicTacToeChip> =

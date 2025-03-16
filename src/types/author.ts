@@ -72,4 +72,9 @@ export const authors: { [authorName: string]: Author } = {
         url: "https://www.linkedin.com/in/samantha-campisi-9a70b5a1/",
         image: `${authorImagesFolder}sam-campisi.jpg`,
     },
+    antonino_gitto: {
+        name: "Antonino Gitto",
+        url: "https://www.linkedin.com/in/antonino-gitto/",
+        image: `${authorImagesFolder}antonino-gitto.jpg`,
+    }
 };
