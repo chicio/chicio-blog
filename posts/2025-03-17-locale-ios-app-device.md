@@ -1,12 +1,16 @@
 ---
 title: "Which Locale? Decoding the Madness Behind iOS Localization and Language Preferences"
-description: "iOS localization is a wild ride where device and app locales play by their own rules. But don’t worry, after some chaos, Apple’s settings actually matched our expectations. Of course, only after a few twists and turns."
+description: "iOS localization is a wild ride where device and app locales play by their own rules. But don’t worry, after some chaos, Apple’s settings actually matched our expectations. Of course, only after a few twists and turns"
 date: 2025-03-17
 image: /images/posts/which-locale-featured.jpg
 tags: [swift, ios, apple, mobile application development]
 comments: true
 commentsIdentifier: https://www.fabrizioduroni.it/blog/post/2025/03/17/locale-ios-app-device
 authors: [fabrizio_duroni, antonino_gitto, marco_de_lucchi]
+---
+
+*iOS localization is a wild ride where device and app locales play by their own rules. But don’t worry, after some chaos, Apple’s settings actually matched our expectations. Of course, only after a few twists and turns*
+
 ---
 
 In the past few weeks, I’ve been working with my colleague [Antonino
