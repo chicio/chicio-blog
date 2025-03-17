@@ -13,7 +13,7 @@ In the past few weeks, I’ve been working with my colleague [Antonino
 Gitto](https://www.linkedin.com/in/antonino-gitto/), a senior software engineer with over five years of experience in
 mobile app development, and [Marco De Lucchi](https://www.linkedin.com/in/marcodelucchi/) (you might remember him from
 our [previous post about iOS widgets](/blog/post/2023/01/10/widget-ios-swiftui-image-problem)) on improving how the [lastminute.com](https://corporate.lastminute.com)
-mobile apps handle localization. And we’re doing it for a very special reason (that I cannot share today): something exciting is coming in the next
+mobile apps handle localization. And we’re doing it for a very special reason (that we cannot share today): something exciting is coming in the next
 few months, so stay tuned! :smirk:  
 
 At [lastminute.com](https://corporate.lastminute.com), many configurations depend on the user’s locale. A clear example is currency, which is explicitly
@@ -30,7 +30,6 @@ This marked the beginning of our journey down the rabbit hole of iOS localizatio
 about how iOS selects a locale for apps with multiple locale defined in its bundle.  
 
 Join us on this wild ride and avoid falling into the same traps we did when dealing with iOS locale madness!
-
 
 ## How does the locale works on iOS?
 
@@ -89,13 +88,13 @@ The user can also manually override the app’s locale using the app-specific la
 
 Clear as mud, right? :laughing:  
 
-To illustrate all of this, let’s explore some real-world examples using a small one-screen testing app I built called *Which Locale?*.
+To illustrate all of this, let’s explore some real-world examples using a small one-screen testing app we built called *Which Locale?*.
 
-## "Which locale?" app: locale APIs in action
+## "Which Locale?" app: locale APIs in action
 
-"Which locale" is a single screen app that let us compare the various locale described above and how they behave when
-the user changes the device locale and the app locale. Let's see the setup of the Xcode project and the code behind the
-single screen that is contained in the app.  
+"Which Locale?" is a simple, single-screen app designed to help us compare the different locale settings discussed
+earlier and observe how they behave when the user changes either the device or app locale. Let’s walk through the Xcode
+project setup and the implementation of this app.
 
 The app supports 5 different locales: 
 
@@ -105,27 +104,27 @@ The app supports 5 different locales:
 * "Italian"
 * "Italian (Switzerland)"
 
-The default locale of the app is "English (United Kindom)".
+By default, the app’s locale is set to "English (United Kingdom)".
 
-!["Which locale?" supported locales](/images/posts/whichlocale-locales-supported.png)
+!["Which Locale?" supported locales](/images/posts/whichlocale-locales-supported.png)
 
-In the `Info.plist` of the project I also set:
+In the `Info.plist` of the project we also added some settings:
 
 * `CFBundleDevelopmentRegion` or usually called "Default localization" to be the `$(DEVELOPMENT_REGION)`, that is
   basically the "English (United Kindom)" default choosen in the previous screen.
 * `UIPrefersShowingLanguageSettings` to true, that as we will see later will enable a cool feture related to the *app
   language menu*
 
-!["Which locale?" Info.plist](/images/posts/whichlocale-development-region-show-language-menu.png)
+!["Which Locale?" Info.plist](/images/posts/whichlocale-development-region-show-language-menu.png)
 
-Let's see the code for the single screen the app contains. The view is decomposed in `Section` components. One section
-contains the device locale settings, printed using:
+As we mentioned before, the app consists of a single view, structured into sections that display the device and app
+locale settings using relevant iOS APIs.
 
+The device locale section retrieves and displays:
 * the `Locale.preferredLanguages` 
 * the `"AppleLanguages"` entry in `UserDefaults`
 
-The other section contains the app locale settings, printed using 
-
+The app locale section displays:
 * the `Bundle.preferredLocalizations`, that contains the locale selected by the app based on the device settings
 * the `Bundle.main.localizations`, that contains the locales configured in the screen shown before where it is possible
   to add locales supported by the app.
@@ -201,94 +200,107 @@ struct LocaleSectionView: View {
 }
 ```
 
-So it is time to see how the "Which locale?" app react to changes in the locales setttings we saw above, and which is
-the locale selected for the app with the `Bundle.preferredLocalizations` API.  
+By running the app and modifying the device language settings or overriding the app-specific language settings, we can
+observe how iOS dynamically adjusts both the device locale and the app locale based on user preferences.  
+
 Let's start with a simple case: language selected "English (United Kindom)" and region "United Kindom". In this case the
-`Locale.preferredLanguages` (like the `AppleLanguages`, in fact they will always match each other) returns `en-GB` and
-the `Bundle.preferredLocalization` returns `en-GB`. This makes sense, because "English (United Kindom)" is a locale
-supported by the app, so it is an easy matche between the device locale and the app one.
+`Locale.preferredLanguages` (which always matches `AppleLanguages`) returns `en-GB` and
+also `Bundle.preferredLocalization` returns `en-GB`. This behavior makes sense because "English (United Kingdom)" is a
+locale supported by the app, making it an easy match between the device's locale and the app's available localizations.
 
 ![An example with the default locale set at device level, that matches the app locale](/images/posts/which-locale-en-gb-country-gb.jpg)
 
-Let's start to complicate the things a little bit. This time we will select "English (United Kindom)" as language but the
-region is "Italy". What happens in this case? The locale at both device and app level is still "English (United
-Kindom)". Why? Because in this case the language selected is already a specific dialect, that represents itself a locale
+Now, let's add some complexity. This time, we will select "English (United Kindom)" as language but set the regionas
+"Italy". What happens in this case? The locale at both device and app level is still "English (United
+Kindom)". Why? Because the language selected is already a specific dialect, that represents itself a locale
 (because it is a combination of language and region). So the "region" settings in this case is completely ignored, and
-`Bundle.preferredLocalization` will return again "en-GB"
+`Bundle.preferredLocalization` will return again `en-GB`.
 
 ![An example of dialect (language + region) selected as language and region that doesn't match the dialect one.](/images/posts/which-locale-en-gb-country-italy.jpg)
 
-The next case is another interesting one. The language selected in this case is "English", without any specific
-dialect, and the region selected it "Ireland". In this case the locale is calculated as a combination of language and
-region. So both `Locale.preferredLanguages` and `Bundle.preferredLocalization` returns `en-IE`.
+The next case is another interesting one. The language selected in this case is "English", without specifying a
+particular dialect, and the region selected it "Ireland". In this case the locale is calculated as a combination of
+language and region. As a result, both `Locale.preferredLanguages` and `Bundle.preferredLocalization` returns `en-IE`.
 
 ![An example with language without dialect (no region specified in the language) an a region that combined with the language created an app supported locale](/images/posts/which-locale-en-country-ie.jpg)
 
-Now let's complicated a little bit more the situation. What happens if we select "English" (no dialect) and a region
-that is not related to that language, like for example "Italy". In this case we have the first mismatch between
+Now, let's make things even more complex. What happens if we select "English" (without a specific dialect) and choose a region
+that is not associated to that language in our app, like for example "Italy". In this case we encounter the first mismatch between
 `Locale.preferredLanguages` and `Bundle.preferredLocalization`. The first one will return `en-IT`, so a very basic
-combination of the language and region device settings. This is done so that the system can:
+combination of the preferred language and region device settings. This allow iOS to:
 
 * translate everything at system level with the "en" language
-* format everything (eg. numbers, dates etc.) based on the region, in this case "IT"
+* format numbers, dates etc. according to the region, in this case "IT"
 
-This, even if it seems counterintuitive, still makes sense: the person with a device configured in this way could be an
-"en"/english native speaker but he/she could be living in Italy. This is why iOS try to mix and match the two settings
-in this way.  
-On the other side `Bundle.preferredLocalization` will return `en-GB`. Why? Because of the algorithm we saw before. iOS
-will try to match the first "most similar locale" supported by the app with the one calculated from the language and
-region settings. In this case in particular, the device locale is `en-IT`, and in the app we have two options: `en-GB`
-and `en-IE`. In this case we don't have any match, and we don't have a generic `en` that could match our case, so the
-app will fallback to the `CFBundleDevelopmentRegion` setting, and so to `en-GB`
+Even though this behavior might seem counterintuitive at first, it actually makes sense. A user with this configuration
+might be a native English speaker living in Italy, so iOS attempts to mix and match the language and region settings
+accordingly.
+
+On the other hand, `Bundle.preferredLocalization` returns `en-GB`. Why? This follows the algorithm we discussed earlier:
+
+* iOS tries to match the most similar locale supported by the app to the one derived from the device's language and region settings.
+* In this case, the device locale is `en-IT`, but the app only supports `en-GB` and `en-IE`.
+* Since there's no exact match and no generic en locale available in the app, iOS falls back to the `CFBundleDevelopmentRegion` setting, which defaults to `en-GB`.
 
 ![An example with a language without dialect and a region that doesn't match in combination any locale supported by the app](/images/posts/which-locale-en-generic-country-italy.jpg)
 
-Now let's try with a device locale configuration that has:
+Let's explore a more complex case, where the device locale configuration includes:
 
-* a main language selected not supported by the app
-* a second language supported by the app
-* a region not supported by any locale in the app
+* a preferred language selected not supported by the app, eg. `fr`
+* a second preferred language supported by the app, eg. `it`
+* a region not supported by any locale in the app, eg. `FR`
 
 This is very tricky (and a common case for users like me that have multiple preferred languages selected in the
-settings). In this case iOS will return `fr-FR` as the locale from `Locale.preferredLanguages`. this makes sense,
-because at system level the locale considers only the first (aka main) entry in the language settings.  
-Anyway `fr-FR` is not a locale supported by the app. But still, the user has `it` as second preferred language. This is
-why `Bundle.preferredLocalization` will return `it` as locale: the second preferred language matches one of the locale
-supported by the app, the `it` generic locale.
+settings). In this case iOS will return `fr-FR` as the locale from `Locale.preferredLanguages`. This makes sense 
+because at system level the locale considers only the first (main) entry in the language settings when determining the device locale.  
+However `fr-FR` is not supported by the app. But, since the user has `it` as second preferred language,
+`Bundle.preferredLocalization` will return `it` as locale. This happens because the second language matches a generic
+locale (i.e., `it`) supported by the app, even though the region is not directly supported.
 
 ![An example of device locale not supported by the app, but with a second preferred language supported](/images/posts/which-locale-fr-with-fallback-it-country-fr.jpg)
 
-What does happen if we remove the `it` language as second option from the preferred languages? the app will simply
-fallback to the `CFBundleDevelopmentRegion` because there are no match with all the locale in the app.
+If we remove the `it` language as the second option from the preferred languages, the situation changes. Since there is no
+longer a supported language in the preferred languages list, the `Bundle.preferredLocalization` will not find any match.
+In this case, it will simply fallback to the `CFBundleDevelopmentRegion` (`en-GB`).
+
+This happens because, without a matching supported language, iOS will default to the `CFBundleDevelopmentRegion`
+specified in the app's configuration, ensuring that the app can still present content in a default locale when no other
+match exists.
 
 ![An example with a device locale not supported by the app](/images/posts/which-locale-fr-country-fr.jpg)
 
 Last but not least, what does happen if the preferred language in the system settings is not supported by the app
-but the region is? Let say for example we have `fr` as language and `ch` as region. In this case, even if we have a
-locale that supports that region (`it-CH`), the language still take the precedence. In fact if there are no match for
-that language the system fallbacks to `CFBundleDevelopmentRegion` . This is happening because the region is used to
-resolve conflicts only if there is a first match with the language on multiple locales, otherwise it is ignore.
+but the region is? For example we have `fr` as preferred language and `ch` as region. In this case, even if we have a
+locale that supports that region (`it-CH`) in the app, the system will first try to match based on the language. In fact
+if there is no match for that language the system fallbacks to `CFBundleDevelopmentRegion`. 
+
+So the region is only used to resolve conflicts if there is a first match between the language across multiple locales.
+If there is no matching language, the region setting is ignored, and iOS will fall back to `CFBundleDevelopmentRegion`.
 
 ![An example with a device locale not supported by the app, but with a country supported by another locale in the app](/images/posts/which-locale-fr-country-ch.jpg)
 
-That's it. As you can see the cases are quite interesting, and as soon as you start to fully understand the algorithm at
-OS level everything start to make sense.  
-There is still one last bit before wrapping up, related to how iOS manages the app menu settings. Until now we played
-with the device settings, but maybe you want the user to be able to customize the language of the app by accessing the
-settings section related to your app. You would expect that iOS make it is but... it is not. In fatc if the user has
-only one selected language in the preferred languages option in the device settings, the language menu for the app will
-not be shown :fearful:. This can end up in having most of the user redirect from your app to the setting section just to
-find nothing :sweat_smile:.  
-We were quite desperate about this, but then, buried in a [WWDC 2024 video](https://youtu.be/b9SdW3kUJXY?si=gKALNZ_0PA3HHtEK&t=915) we found an answer to our problem. Do you
-remember that at the beginning I mentioned we added `UIPrefersShowingLanguageSettings` to `Info.plist`? With this
-option, the language menu for you app will always be shown in the app setting. Additionally, if a user selectes a
-locale from the ones supported by your app, that one will be added to the preferred languages at device level (as a
-generic language or as a dialect, depending on the way you defined the locales in the app).  
-Check the video below to see a live example of this option.
+That's it. As you can see, the cases are quite interesting, and once you start to fully understand the algorithm at the
+OS level, everything makes sense. 
 
-https://www.youtube.com/watch?v=_Asr8gg5LJI
 
+There's one last aspect to cover before wrapping up, related to how iOS manages app menu settings. Up until now, we've
+focused on the device settings, but what if you want the user to customize the app's language via the app’s settings
+section? You might expect iOS to make this easy, but... it doesn't. In fact, if the user has only one language selected
+in the preferred languages option in the device settings, the language menu in the app will not appear :fearful:. This can lead
+to frustrating situations where users are redirected to the settings section of the app, only to find there's nothing
+they can change :sweat_smile:.
+
+We were quite desperate about this issue, but then, buried in a [WWDC 2024 video](https://youtu.be/b9SdW3kUJXY?si=gKALNZ_0PA3HHtEK&t=915), 
+we found a solution. Do you remember when we mentioned we added `UIPrefersShowingLanguageSettings` to the `Info.plist`? With
+this option, the language menu will always be visible in your app's settings. Additionally, if a user selects a locale
+from the ones supported by your app, that locale will be added to the device’s preferred languages, either as a generic
+language or a dialect, depending on how you've defined the locales in your app. Check out the video below to see a live
+example of how this option works.
+
+https://www.youtube.com/watch?v=vWTUY0sBYlQ
 
 ## Conclusion
 
-..... https://github.com/chicio/WhichLocale
+The codebase for the "Which Locale?" app can be found in this [github repo](https://github.com/chicio/WhichLocale). Feel free to experiment with it and run your
+own tests. Everything should be consistent with what we've covered in this post :rocket:. We'll do our best to keep this
+post updated if anything changes on Apple’s side. See you next time (we hope not again for the "locale madness" topic :laughing:).
