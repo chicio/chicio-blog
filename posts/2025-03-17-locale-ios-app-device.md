@@ -13,8 +13,7 @@ authors: [fabrizio_duroni, antonino_gitto, marco_de_lucchi]
 
 ---
 
-In the past few weeks, I’ve been working with my colleague [Antonino
-Gitto](https://www.linkedin.com/in/antonino-gitto/), a senior software engineer with over five years of experience in
+In the past few weeks, I’ve been working with my colleague [Antonino Gitto](https://www.linkedin.com/in/antonino-gitto/), a senior software engineer with over five years of experience in
 mobile app development, and [Marco De Lucchi](https://www.linkedin.com/in/marcodelucchi/) (you might remember him from
 our [previous post about iOS widgets](/blog/post/2023/01/10/widget-ios-swiftui-image-problem)) on improving how the [lastminute.com](https://corporate.lastminute.com)
 mobile apps handle localization. And we’re doing it for a very special reason (that we cannot share today): something exciting is coming in the next
@@ -49,7 +48,7 @@ Here’s how it works in detail, and how iOS chooses the device locale based on 
 - If the user selects a generic language, the locale is a combination of the *Preferred Language* and *Region* settings.  
   - Example: Choosing `English` (generic) and `Italy` as the region results in a locale of `en-IT`. Even if this is not
     a locale that exists, it still makes sense as pointed by an [Apple engineer in this post](https://developer.apple.com/forums/thread/9246?answerId=26717022#26717022). 
-    this can happen because you can have your native language set as the preferred one, but have the region set to
+    This can happen because you can have your native language set as the preferred one, but have the region set to
     something else (eg. because for example you live abroad). Anyway, it is strange to see this "non sense" locale
     created by iOS by combining the two fields above :sweat_smile:.
 
@@ -83,7 +82,7 @@ Now that we understand how iOS selects the locale, how do we retrieve this infor
 
 - `Locale.preferredLanguages`: returns the list of available **device locales**. The **first entry** represents the **device’s selected locale** (i.e., the system-wide locale).  
   - Related to this, the `"AppleLanguages"` entry in `UserDefaults` stores the same data and is used by [react-native-localization](https://github.com/stefalda/ReactNativeLocalization/blob/master/ios/ReactLocalization.m#L48) to retrieve the locale.  
-- `Bundle.main.preferredLocalizations`: returns the locales included in the app bundle (as defined in the Xcode project).  
+- `Bundle.main.preferredLocalizations`: returns locales included in the app bundle (as defined in the Xcode project).  
   - According to Apple’s documentation, the returned locales are ordered based on the user’s language preferences, so
     based on the sorting of the *Preferred Languages* selected.  
   - **The first entry in this list represents the locale selected by the app**, based on the **user’s device settings** and the **localizations available in the app bundle**.  
