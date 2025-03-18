@@ -30,27 +30,27 @@ astonished by the results: none of the returned values was matching our expectio
 ones we defined in our apps.
 That’s when we realized we needed to gain a deeper understanding of how iOS determines a user’s locale.  
 
-This marked the beginning of our journey down the rabbit hole of iOS localization wolrd. Along the way, we learned a lot
+This marked the beginning of our journey down the rabbit hole of iOS localization world. Along the way, we learned a lot
 about how iOS selects a locale for apps with multiple locale defined in its bundle.  
 
 Join us on this wild ride and avoid falling into the same traps we did when dealing with iOS locale madness!
 
-## How does the locale works on iOS?
+## How does the locale work on iOS?
 
 iOS operates with two different levels of locale: *device locale* and *app locale*.
 
 The *device locale* is set in *Settings → General → Language & Region*. It can either be selected directly from the
 *Preferred Languages* menu or derived from a combination of *Preferred Languages* and *Region*.  
 
-Here’s how it works in detail, and how iOS choose the device locale based on this two settings:
-- If the user selects a language that is tied to a specific country (a dialect), then the locale is simply the first
+Here’s how it works in detail, and how iOS chooses the device locale based on these two settings:
+- If the user selects a language tied to a specific country (a dialect), then the locale is simply the first
   entry in the *Preferred Languages* list.  
   - Example: Choosing `English (UK)` sets the locale to `en-GB`.  
 - If the user selects a generic language, the locale is a combination of the *Preferred Language* and *Region* settings.  
   - Example: Choosing `English` (generic) and `Italy` as the region results in a locale of `en-IT`. Even if this is not
-    a locale that exists, it stil makes sense as pointed by an [Apple engineer in this post](https://developer.apple.com/forums/thread/9246?answerId=26717022#26717022). 
+    a locale that exists, it still makes sense as pointed by an [Apple engineer in this post](https://developer.apple.com/forums/thread/9246?answerId=26717022#26717022). 
     this can happen because you can have your native language set as the preferred one, but have the region set to
-    something else (eg. because for example you live abroad). Anyway it is strange to see this "non sense" locale
+    something else (eg. because for example you live abroad). Anyway, it is strange to see this "non sense" locale
     created by iOS by combining the two fields above :sweat_smile:.
 
 ![iOS language and region settings](/images/posts/which-locale-settings-ios.jpg)
@@ -223,15 +223,15 @@ Kindom)". Why? Because the language selected is already a specific dialect, that
 ![An example of dialect (language + region) selected as language and region that doesn't match the dialect one.](/images/posts/which-locale-en-gb-country-italy.jpg)
 
 The next case is another interesting one. The language selected in this case is "English", without specifying a
-particular dialect, and the region selected it "Ireland". In this case the locale is calculated as a combination of
+particular dialect, and the region selected it "Ireland". In this case, the locale is calculated as a combination of
 language and region. As a result, both `Locale.preferredLanguages` and `Bundle.preferredLocalization` returns `en-IE`.
 
 ![An example with language without dialect (no region specified in the language) an a region that combined with the language created an app supported locale](/images/posts/which-locale-en-country-ie.jpg)
 
 Now, let's make things even more complex. What happens if we select "English" (without a specific dialect) and choose a region
-that is not associated to that language in our app, like for example "Italy". In this case we encounter the first mismatch between
+that is not associated to that language in our app, like, for example, "Italy". In this case we encounter the first mismatch between
 `Locale.preferredLanguages` and `Bundle.preferredLocalization`. The first one will return `en-IT`, so a very basic
-combination of the preferred language and region device settings. This allow iOS to:
+combination of the preferred language and region device settings. This allows iOS to:
 
 * translate everything at system level with the "en" language
 * format numbers, dates etc. according to the region, in this case "IT"
@@ -256,7 +256,7 @@ Let's explore a more complex case, where the device locale configuration include
 
 This is very tricky (and a common case for users like me that have multiple preferred languages selected in the
 settings). In this case iOS will return `fr-FR` as the locale from `Locale.preferredLanguages`. This makes sense 
-because at system level the locale considers only the first (main) entry in the language settings when determining the device locale.  
+because at system level, the locale considers only the first (main) entry in the language settings when determining the device locale.  
 However `fr-FR` is not supported by the app. But, since the user has `it` as second preferred language,
 `Bundle.preferredLocalization` will return `it` as locale. This happens because the second language matches a generic
 locale (i.e., `it`) supported by the app, even though the region is not directly supported.
@@ -285,7 +285,6 @@ If there is no matching language, the region setting is ignored, and iOS will fa
 
 That's it. As you can see, the cases are quite interesting, and once you start to fully understand the algorithm at the
 OS level, everything makes sense. 
-
 
 There's one last aspect to cover before wrapping up, related to how iOS manages app menu settings. Up until now, we've
 focused on the device settings, but what if you want the user to customize the app's language via the app’s settings
