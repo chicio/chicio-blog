@@ -25,12 +25,12 @@ determined by these parameters. Until now, we’ve been using
 However, the method provided by this library to retrieve the locale reads the `AppleLanguages` user default.  
 
 We conducted several experiments to understand the logic behind the values stored in this user default, only to be
-astonished by the results: none of the returned values was matching our expection in terms of locale with respect to the
+astonished by the results: none of the returned values was matching our expectation in terms of locale with respect to the
 ones we defined in our apps.
 That’s when we realized we needed to gain a deeper understanding of how iOS determines a user’s locale.  
 
 This marked the beginning of our journey down the rabbit hole of iOS localization world. Along the way, we learned a lot
-about how iOS selects a locale for apps with multiple locale defined in its bundle.  
+about how iOS selects a locale for apps with multiple locales defined in its bundle.  
 
 Join us on this wild ride and avoid falling into the same traps we did when dealing with iOS locale madness!
 
