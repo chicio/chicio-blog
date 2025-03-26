@@ -4,8 +4,6 @@ description: "In this new post of the series Blender tutorial I will talk about 
 date: 2019-03-29
 image: /images/posts/blender-cycles-start.jpg
 tags: [computer graphics, blender]
-comments: true
-commentsIdentifier: https://www.fabrizioduroni.it/2019/03/29/blender-tutorial-15-cycles/
 authors: [fabrizio_duroni]
 ---
 

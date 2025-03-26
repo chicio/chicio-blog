@@ -4,8 +4,6 @@ description: "In this new post of the series Blender tutorial I will talk about 
 date: 2019-03-27
 image: /images/posts/blender-animation-timeline.jpg
 tags: [computer graphics, blender]
-comments: true
-commentsIdentifier: https://www.fabrizioduroni.it/2019/03/27/blender-tutorial-13-animation/
 authors: [fabrizio_duroni]
 ---
 

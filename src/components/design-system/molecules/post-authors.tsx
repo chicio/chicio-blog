@@ -52,7 +52,7 @@ export const PostAuthors: FC<PostAuthorsProps> = ({
           {postAuthors.map((author) => {
             return (
                 <PostAuthorContainer
-                    key={`${author}${Math.floor(Math.random() * 100)}`}
+                    key={`${author.name}`}
                 >
                   <PostAuthorImage
                       alt={author.name}

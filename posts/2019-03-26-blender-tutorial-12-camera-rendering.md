@@ -4,8 +4,6 @@ description: "In this new post of the series Blender tutorial I will talk about 
 date: 2019-03-26
 image: /images/posts/blender-camera-options.jpg
 tags: [computer graphics, blender]
-comments: true
-commentsIdentifier: https://www.fabrizioduroni.it/2019/03/26/blender-tutorial-12-camera-rendering/
 authors: [fabrizio_duroni]
 ---
 

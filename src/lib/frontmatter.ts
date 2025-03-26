@@ -46,8 +46,6 @@ export const getFrontmatterFrom = (
     description: data.description,
     date: generatePostDate(data.date),
     tags: data.tags,
-    comments: data.comments,
-    commentsIdentifier: data.commentsIdentifier,
     authors: data.authors.map((author: string) => authors[author]),
     image: data.image,
   };

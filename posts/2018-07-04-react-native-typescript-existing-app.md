@@ -5,8 +5,6 @@ how powerful they are when used together."
 date: 2018-07-04
 image: /images/posts/react-native-typescript.jpg
 tags: [react native, swift, ios, apple, android, java, mobile application development, javascript, typescript]
-comments: true
-commentsIdentifier: https://www.fabrizioduroni.it/2018/07/04/react-native-typescript-existing-app/
 authors: [fabrizio_duroni]
 ---
 

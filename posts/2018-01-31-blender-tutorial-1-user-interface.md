@@ -5,8 +5,6 @@ software. A series of tutorial for beginners (like me)."
 date: 2018-01-31
 image: /images/posts/blender-ui-1-editors.jpg
 tags: [computer graphics, blender]
-comments: true
-commentsIdentifier: https://www.fabrizioduroni.it/2018/01/31/blender-tutorial-1-user-interface/
 authors: [fabrizio_duroni]
 ---
 

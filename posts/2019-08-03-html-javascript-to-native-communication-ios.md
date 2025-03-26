@@ -5,8 +5,6 @@ displayed inside a WKWebView?"
 date: 2019-08-03
 image: /images/posts/swift-js.jpg
 tags: [swift, objective-c, ios, apple, mobile application development, javascript, web development]
-comments: true
-commentsIdentifier: https://www.fabrizioduroni.it/2019/08/03/html-javascript-to-native-communication-ios/
 authors: [fabrizio_duroni]
 ---
 

@@ -6,8 +6,6 @@ background shape, similar to the one I did for a native component ome time ago"
 date: 2024-03-02
 image: /images/posts/daily-deals-featured.jpg
 tags: [react native, swift, ios, apple, android, java, mobile application development, javascript, typescript]
-comments: true
-commentsIdentifier: https://www.fabrizioduroni.it/2024/03/02/react-native-skia-svg-background-shape-text/
 authors: [fabrizio_duroni]
 ---
 

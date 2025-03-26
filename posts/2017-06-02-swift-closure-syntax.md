@@ -4,8 +4,6 @@ description: "In this post I will talk about Swift closure: what they are and th
 date: 2017-06-02
 image: /images/posts/swift-closure.jpg
 tags: [swift, ios, apple, mobile application development]
-comments: true
-commentsIdentifier: https://www.fabrizioduroni.it/2017/06/02/swift-closure-syntax/
 authors: [fabrizio_duroni]
 ---
 

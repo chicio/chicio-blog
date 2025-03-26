@@ -5,8 +5,6 @@ leveraging the power of React Native Reanimated."
 date: 2024-12-30
 image: /images/posts/react-native-parallax-carousel.jpg
 tags: [react native, swift, ios, apple, android, java, mobile application development, javascript, typescript, expo]
-comments: true
-commentsIdentifier: https://www.fabrizioduroni.it/2024/12/31/carousel-parallax-circular-loop-react-native-expo/
 authors: [fabrizio_duroni]
 ---
 

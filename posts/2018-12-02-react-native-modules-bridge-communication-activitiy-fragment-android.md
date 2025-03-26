@@ -6,8 +6,6 @@ modules (aka bridges) and your native code on Android."
 date: 2018-12-02
 image: /images/posts/native-modules-communication-android.jpg
 tags: [react native, javascript, swift, objective-c, ios, apple, android, java, mobile application development]
-comments: true
-commentsIdentifier: https://www.fabrizioduroni.it/2018/12/02/react-native-modules-bridge-communication-activitiy-fragment-android/
 authors: [felice_giovinazzo, fabrizio_duroni]
 ---
 

@@ -5,8 +5,6 @@ chain of responsibility."
 date: 2018-09-18
 image: /images/posts/ifremoval.jpg
 tags: [clean code]
-comments: true
-commentsIdentifier: https://www.fabrizioduroni.it/2018/09/18/refactoring-if-chain-of-responsibility/
 authors: [francesco_bonfadelli]
 ---
 

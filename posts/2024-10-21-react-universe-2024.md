@@ -5,8 +5,6 @@ insights we gained. From innovative debugging tools to cross-platform developmen
 date: 2024-10-15
 image: /images/posts/react-universe.jpeg
 tags: [react native, react, swift, ios, apple, android, java, mobile application development, javascript]
-comments: true
-commentsIdentifier: https://www.fabrizioduroni.it/2024/10/21/react-universe-2024/
 authors: [fabrizio_duroni, sam_campisi]
 ---
 

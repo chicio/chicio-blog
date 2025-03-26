@@ -5,8 +5,6 @@ apps."
 date: 2019-02-08
 image: /images/posts/appium.jpg
 tags: [javascript, swift, objective-c, ios, apple, android, java, mobile application development, react native, test driven development, typescript]
-comments: true
-commentsIdentifier: https://www.fabrizioduroni.it/2019/02/08/mobile-ui-test-crossplatform-appium/
 authors: [fabrizio_duroni]
 ---
 

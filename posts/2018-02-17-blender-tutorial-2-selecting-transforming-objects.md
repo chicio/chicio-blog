@@ -4,8 +4,6 @@ description: "Second post of the Blender tutorial series. This time we will lear
 date: 2018-02-17
 image: /images/posts/blender-selecting-objects-2.jpg
 tags: [computer graphics, blender]
-comments: true
-commentsIdentifier: https://www.fabrizioduroni.it/2018/02/17/blender-tutorial-2-selecting-transforming-objects/
 authors: [fabrizio_duroni]
 ---
 

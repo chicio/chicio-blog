@@ -5,8 +5,6 @@ Developer Program."
 date: 2018-07-05
 image: /images/posts/beta-enterprise-dogfood.jpg
 tags: [swift, ios, apple, mobile application development]
-comments: true
-commentsIdentifier: https://www.fabrizioduroni.it/2018/07/05/distribution-enterprise-app-ios-beta/
 authors: [giordano_tamburrelli, fabrizio_duroni]
 ---
 

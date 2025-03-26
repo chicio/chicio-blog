@@ -5,8 +5,6 @@ functions, variables etc. becomes a real challenge when you try to implement it 
 date: 2024-01-04
 image: /images/posts/advent-of-typescript-tic-tac-toe.jpg
 tags: [typescript, advent of typescript 2023]
-comments: true
-commentsIdentifier: https://www.fabrizioduroni.it/2024/01/04/advent-of-typescript-2023-tic-tac-toe/
 authors: [fabrizio_duroni]
 ---
 

@@ -6,8 +6,6 @@ its main parts and what is its main goal."
 date: 2021-06-06
 image: /images/posts/ddd-bounded-context-ubiquitous-language.jpg
 tags: [domain driven design]
-comments: true
-commentsIdentifier: https://www.fabrizioduroni.it/2021/06/06/ddd-dictionary/
 authors: [fabrizio_duroni]
 ---
 

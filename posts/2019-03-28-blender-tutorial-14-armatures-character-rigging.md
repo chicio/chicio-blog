@@ -4,8 +4,6 @@ description: "In this new post of the series Blender tutorial I will talk about 
 date: 2019-03-28
 image: /images/posts/blender-bones.jpg
 tags: [computer graphics, blender]
-comments: true
-commentsIdentifier: https://www.fabrizioduroni.it/2019/03/28/blender-tutorial-14-armatures-character-rigging/
 authors: [fabrizio_duroni]
 ---
 

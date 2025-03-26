@@ -7,8 +7,6 @@ protocol."
 date: 2020-04-19
 image: /images/posts/dp-container.jpg
 tags: [swift, ios, apple, mobile application development]
-comments: true
-commentsIdentifier: https://www.fabrizioduroni.it/2020/04/19/dependecy-injection-swift/
 authors: [fabrizio_duroni]
 ---
 

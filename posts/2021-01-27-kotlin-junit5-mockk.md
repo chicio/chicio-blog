@@ -5,8 +5,6 @@ modern unit tests with MockK + JUnit 5."
 date: 2021-01-27
 image: /images/posts/mockk-junit5-kotlin.jpg
 tags: [java, kotlin, test driven development]
-comments: true
-commentsIdentifier: https://www.fabrizioduroni.it/2021/01/27/kotlin-junit5-mockk/
 authors: [fabrizio_duroni]
 ---
 

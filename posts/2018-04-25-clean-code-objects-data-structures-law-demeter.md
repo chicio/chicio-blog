@@ -4,8 +4,6 @@ description: "In this post I will talk about clean code: data structures, object
 date: 2018-04-25
 image: /images/posts/uncle-bob-defender-of-clean-code.jpg
 tags: [clean code]
-comments: true
-commentsIdentifier: https://www.fabrizioduroni.it/2018/04/25/clean-code-objects-data-structures-law-demeter/
 authors: [fabrizio_duroni]
 ---
 
