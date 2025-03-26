@@ -1,9 +1,7 @@
-'use client'
+"use client";
 
 import styled from "styled-components";
-import {Container} from "@/components/design-system/atoms/container";
-import {ContainerFluid} from "@/components/design-system/atoms/container-fluid";
-import {ContainerSection} from "@/components/design-system/atoms/container-section";
+import { Container } from "@/components/design-system/atoms/container";
 
 export const ContentContainer = styled(Container)`
   margin-top: ${(props) => props.theme.spacing[12]};
