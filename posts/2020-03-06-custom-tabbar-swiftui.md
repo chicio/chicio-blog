@@ -5,8 +5,6 @@ understand its potential. Let's see how I used SwiftUI to create a custom TabBar
 date: 2020-03-06
 image: /images/posts/tabbar-swiftui.jpg
 tags: [swift, swiftui, ios, apple, mobile application development]
-comments: true
-commentsIdentifier: https://www.fabrizioduroni.it/2020/03/06/custom-tabbar-swiftui/
 authors: [fabrizio_duroni]
 ---
 

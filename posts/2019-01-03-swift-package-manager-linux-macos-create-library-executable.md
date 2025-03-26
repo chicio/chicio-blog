@@ -5,8 +5,6 @@ Linux."
 date: 2019-01-03
 image: /images/posts/spm-swift.jpg
 tags: [swift, objective-c, ios, apple, swift package manager]
-comments: true
-commentsIdentifier: https://www.fabrizioduroni.it/2019/01/03/swift-package-manager-linux-macos-create-library-executable/
 authors: [fabrizio_duroni]
 ---
 

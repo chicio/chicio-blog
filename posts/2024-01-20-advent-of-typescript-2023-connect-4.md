@@ -4,8 +4,6 @@ description: "Connect 4, a classical family Christmas game. Let's see how to tac
 date: 2024-01-20
 image: /images/posts/advent-of-typescript-connect-4.jpg
 tags: [typescript, advent of typescript 2023]
-comments: true
-commentsIdentifier: https://www.fabrizioduroni.it/2024/01/20/advent-of-typescript-2023-connect-4/
 authors: [fabrizio_duroni]
 ---
 

@@ -5,8 +5,6 @@ reflection model. I will show you how this vector is calculated."
 date: 2017-08-25
 image: /images/posts/reflection.png
 tags: [computer graphics]
-comments: true
-commentsIdentifier: https://www.fabrizioduroni.it/2017/08/25/how-to-calculate-reflection-vector/
 authors: [fabrizio_duroni]
 ---
 

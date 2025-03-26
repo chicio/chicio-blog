@@ -4,8 +4,6 @@ description: "In this post I will talk about iOS notification customization with
 date: 2018-09-09
 image: /images/posts/notification-content-extension-add-target.jpg
 tags: [swift, ios, apple, mobile application development]
-comments: true
-commentsIdentifier: https://www.fabrizioduroni.it/2018/09/09/ios-notification-content-extensions/
 authors: [fabrizio_duroni]
 ---
 

@@ -5,8 +5,6 @@ the same time."
 date: 2017-05-12
 image: /images/authors/fabrizio-duroni.jpg
 tags: [web development, github pages, jekyll, node, gulp, bootstrap, threejs, javascript]
-comments: true
-commentsIdentifier: https://www.fabrizioduroni.it/2017/05/12/github-pages-jekyll-blog-born/
 authors: [fabrizio_duroni]
 ---
 

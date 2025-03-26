@@ -6,8 +6,6 @@ to automatically define props from the interface of props of a parent component.
 date: 2025-01-03
 image: /images/posts/transient-props.png
 tags: [react, typescript, web development]
-comments: true
-commentsIdentifier: https://www.fabrizioduroni.it/blog/post/2025/01/03/styled-component-transient-props-type-mapped-type-typescript/
 authors: [fabrizio_duroni]
 ---
 

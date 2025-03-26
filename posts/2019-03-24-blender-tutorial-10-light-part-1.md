@@ -4,8 +4,6 @@ description: "In this new post of the series Blender tutorial I will talk about 
 date: 2019-03-24
 image: /images/posts/blender-spot-light.jpg
 tags: [computer graphics, blender]
-comments: true
-commentsIdentifier: https://www.fabrizioduroni.it/2019/03/24/blender-tutorial-10-light-part-1/
 authors: [fabrizio_duroni]
 ---
 

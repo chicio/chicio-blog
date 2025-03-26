@@ -4,8 +4,6 @@ description: "In this post I will talk about how I transformed my blog on Github
 date: 2019-03-03
 image: /images/posts/pwa-logo.jpg
 tags: [pwa, web development, javascript]
-comments: true
-commentsIdentifier: https://www.fabrizioduroni.it/2019/03/03/github-pages-progressive-web-app/
 authors: [fabrizio_duroni]
 ---
 

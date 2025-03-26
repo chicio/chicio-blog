@@ -5,8 +5,6 @@ Attributed String. The Text component has everything we need to create some sort
 date: 2023-06-12
 image: /images/posts/swiftui-five-stars.png
 tags: [swift, swiftui, ios, apple, mobile application development]
-comments: true
-commentsIdentifier: https://www.fabrizioduroni.it/2023/06/30/swiftui-text-concatenation/
 authors: [fabrizio_duroni, marco_de_lucchi]
 ---
 

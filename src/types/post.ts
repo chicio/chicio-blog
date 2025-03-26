@@ -29,8 +29,6 @@ export type PostFrontMatter = {
   description: string;
   date: PostDate;
   tags: string[];
-  comments: boolean;
-  commentsIdentifier: string;
   authors: Author[];
   image: string;
 };

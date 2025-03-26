@@ -4,8 +4,6 @@ description: "In this post I will talk about contract test: what they are and ho
 date: 2017-07-25
 image: /images/posts/contract-test.jpg
 tags: [test driven development, java]
-comments: true
-commentsIdentifier: https://www.fabrizioduroni.it/2017/07/25/a-first-approach-to-contract-test/
 authors: [fabrizio_duroni]
 ---
 

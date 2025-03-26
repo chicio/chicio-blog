@@ -5,8 +5,6 @@ in Blender."
 date: 2018-06-02
 image: /images/posts/blender-subdivision.jpg
 tags: [computer graphics, blender]
-comments: true
-commentsIdentifier: https://www.fabrizioduroni.it/2018/06/02/blender-tutorial-4-modeling-basics-part-2/
 authors: [fabrizio_duroni]
 ---
 

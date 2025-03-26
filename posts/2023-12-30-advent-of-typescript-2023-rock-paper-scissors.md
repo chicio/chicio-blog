@@ -5,8 +5,6 @@ implemented using only TypeScript types?"
 date: 2023-12-30
 image: /images/posts/advent-of-typescript-rock-paper-scissors.jpg
 tags: [typescript, advent of typescript 2023]
-comments: true
-commentsIdentifier: https://www.fabrizioduroni.it/2023/12/30/advent-of-typescript-2023-rock-paper-scissors/
 authors: [fabrizio_duroni]
 ---
 

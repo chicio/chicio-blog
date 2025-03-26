@@ -4,8 +4,6 @@ description: "In this new post of the series Blender tutorial I will talk other 
 date: 2019-03-23
 image: /images/posts/blender-displacement-mapping.jpg
 tags: [computer graphics, blender]
-comments: true
-commentsIdentifier: https://www.fabrizioduroni.it/2019/03/23/blender-tutorial-9-textures-part-2/
 authors: [fabrizio_duroni]
 ---
 

@@ -5,8 +5,6 @@ I attended."
 date: 2018-08-02
 image: /images/posts/offsite-location.jpg
 tags: [design, ux]
-comments: true
-commentsIdentifier: https://www.fabrizioduroni.it/2018/08/02/design-thinking-design-sprint-workshop/
 authors: [fabrizio_duroni]
 ---
 

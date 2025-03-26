@@ -5,8 +5,6 @@ folders structure without using react-native link command."
 date: 2017-11-14
 image: /images/posts/react-native-realm-10-build-works.jpg
 tags: [react native, realm, swift, ios, apple, mobile application development, javascript]
-comments: true
-commentsIdentifier: https://www.fabrizioduroni.it/2017/11/14/react-native-realm-custom-manual-linking-app-custom-directories-ios/
 authors: [fabrizio_duroni]
 ---
 

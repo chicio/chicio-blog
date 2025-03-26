@@ -5,8 +5,6 @@ unit test and your TDD workflow when developing an Android application."
 date: 2017-10-27
 image: /images/posts/mockup-model-view-presenter.jpg
 tags: [android, java, mobile application development, test driven development, architectural pattern]
-comments: true
-commentsIdentifier: https://www.fabrizioduroni.it/2017/10/27/model-view-presenter-architecture-android-java/
 authors: [fabrizio_duroni]
 ---
 

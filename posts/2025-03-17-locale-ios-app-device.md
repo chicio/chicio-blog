@@ -4,8 +4,6 @@ description: "iOS localization is a wild ride where device and app locales play 
 date: 2025-03-17
 image: /images/posts/which-locale-featured.jpg
 tags: [swift, ios, apple, mobile application development]
-comments: true
-commentsIdentifier: https://www.fabrizioduroni.it/blog/post/2025/03/17/locale-ios-app-device
 authors: [fabrizio_duroni, antonino_gitto, marco_de_lucchi]
 ---
 

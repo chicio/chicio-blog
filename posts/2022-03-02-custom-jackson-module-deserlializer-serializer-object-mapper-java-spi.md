@@ -5,8 +5,6 @@ customize their serialization/deserialization? Let's go to discover the power of
 date: 2022-03-02
 image: /images/posts/fasterxml-logo.jpg
 tags: [java, kotlin, web development]
-comments: true
-commentsIdentifier: https://www.fabrizioduroni.it/2022/03/02/custom-jackson-module-deserlializer-serializer-object-mapper-java-spi/
 authors: [fabrizio_duroni, alex_stabile]
 ---
 

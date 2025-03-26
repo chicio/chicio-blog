@@ -14,7 +14,6 @@ import { PostAuthors } from "@/components/design-system/molecules/post-authors";
 import { PostMeta } from "@/components/design-system/molecules/post-meta";
 import { PostTags } from "@/components/design-system/molecules/post-tags";
 import { RecentPosts } from "@/components/design-system/organism/read-next";
-import { Comments } from "@/components/design-system/molecules/comments";
 import { NextPostParameters } from "@/types/page-parameters";
 import { JsonLd } from "@/components/website/jsond-ld";
 import { Post } from "@/types/post";
@@ -83,18 +82,7 @@ export default async function BlogPost({ params }: NextPostParameters) {
             trackingLabel={tracking.label.body}
           />
         </PostContainer>
-        <>
-          {frontmatter.comments && (
-            <>
-              <RecentPosts currentSlug={frontmatter.slug.formatted} />
-              <Comments
-                identifier={frontmatter.commentsIdentifier}
-                url={`${siteMetadata.siteUrl}${frontmatter.slug.formatted}`}
-                title={frontmatter.title}
-              />
-            </>
-          )}
-        </>
+        <RecentPosts currentSlug={frontmatter.slug.formatted} />
       </BlogPageTemplate>
       <JsonLd
         ogPageType="article"

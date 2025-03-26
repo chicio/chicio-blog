@@ -4,8 +4,6 @@ description: "In this post I will talk about code review: what it is and why it 
 date: 2018-03-02
 image: /images/posts/01-technology-version-update.jpg
 tags: [agile, clean code, test driven development]
-comments: true
-commentsIdentifier: https://www.fabrizioduroni.it/2018/03/02/code-review-whats-it-is-and-why-it-is-important/
 authors: [angelo_sciarra, fabrizio_duroni]
 ---
 

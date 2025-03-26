@@ -5,8 +5,6 @@ lights in Blender."
 date: 2019-03-25
 image: /images/posts/blender-background-ambient-color.jpg
 tags: [computer graphics, blender]
-comments: true
-commentsIdentifier: https://www.fabrizioduroni.it/2019/03/25/blender-tutorial-11-light-part-2/
 authors: [fabrizio_duroni]
 ---
 

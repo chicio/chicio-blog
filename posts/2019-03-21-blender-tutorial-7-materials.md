@@ -4,8 +4,6 @@ description: "In this new post of the series Blender tutorial I will talk about 
 date: 2019-03-21
 image: /images/posts/blender-create-material.jpg
 tags: [computer graphics, blender]
-comments: true
-commentsIdentifier: https://www.fabrizioduroni.it/2019/03/21/blender-tutorial-7-materials/
 authors: [fabrizio_duroni]
 ---
 

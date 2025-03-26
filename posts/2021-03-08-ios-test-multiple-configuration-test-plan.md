@@ -5,8 +5,6 @@ how I grouped them and run them against multiple configurations with Xcode Test 
 date: 2021-03-08 
 image: /images/posts/test-plans-succeeded.jpg
 tags: [swift, ios, apple, mobile application development, macos, tvos, watchos]
-comments: true
-commentsIdentifier: https://www.fabrizioduroni.it/2021/03/08/ios-test-multiple-configuration-test-plan/
 authors: [fabrizio_duroni]
 ---
 

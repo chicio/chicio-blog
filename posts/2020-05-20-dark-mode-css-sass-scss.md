@@ -5,8 +5,6 @@ dark theme for your website that will be selected automatically based on the use
 date: 2020-05-20
 image: /images/posts/dark-side-dark-mode.jpg
 tags: [web development, javascript, pwa]
-comments: true
-commentsIdentifier: https://www.fabrizioduroni.it/2020/05/20/dark-mode-css-sass-scss/
 authors: [fabrizio_duroni]
 ---
 

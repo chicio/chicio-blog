@@ -4,8 +4,6 @@ description: "Let's learn how to write function in a clean way."
 date: 2019-07-28 
 image: /images/posts/uncle-bob-defender-of-clean-code.jpg 
 tags: [clean code]
-comments: true
-commentsIdentifier: https://www.fabrizioduroni.it/2019/07/28/clean-code-functions/
 authors: [fabrizio_duroni]
 ---
 

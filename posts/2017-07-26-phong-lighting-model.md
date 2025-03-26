@@ -5,8 +5,6 @@ in computer graphics."
 date: 2017-07-26
 image: /images/posts/phong-example.jpg
 tags: [computer graphics]
-comments: true
-commentsIdentifier: https://www.fabrizioduroni.it/2017/07/26/phong-lighting-model/
 authors: [fabrizio_duroni]
 ---
 

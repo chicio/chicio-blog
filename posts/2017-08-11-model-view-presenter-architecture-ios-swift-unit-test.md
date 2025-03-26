@@ -5,8 +5,6 @@ unit test and your TDD workflow when developing an iOS application."
 date: 2017-08-11
 image: /images/posts/model-view-presenter-ios.jpg
 tags: [swift, ios, apple, mobile application development, test driven development, architectural pattern]
-comments: true
-commentsIdentifier: https://www.fabrizioduroni.it/2017/08/11/model-view-presenter-architecture-ios-swift-unit-test/
 authors: [fabrizio_duroni]
 ---
 
