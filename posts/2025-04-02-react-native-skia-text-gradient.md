@@ -8,7 +8,7 @@ tags: [ react native, swift, ios, apple, android, java, mobile application devel
 authors: [ fabrizio_duroni, antonino_gitto ]
 ---
 
-*Learn how to create stunning text with React Native using Skia. In this post, we’ll explore how to leverage Skia’s 
+*Learn how to create stunning text with React Native using Skia. In this post, we’ll explore how to leverage Skia’s
 powerful features to bring vibrant gradients to life.*
 
 ---
@@ -39,7 +39,137 @@ because:
 
 ## Implementation
 
-....talk about GradientText component
+Let's implement the gradient text component shown in the first screen above. To build this component, we will leverage
+the power of the `Paragraph`, `LinearGradient`, `Mask`, and `Rect` APIs
+from [react-native-skia](/blog/post/2024/03/02/react-native-skia-svg-background-shape-text).
+
+The most challenging parts of the implementation are:
+
+- `Text` in [react-native-skia](/blog/post/2024/03/02/react-native-skia-svg-background-shape-text) supports gradients
+  through composition with the `LinearGradient` shader component. However, our text is not static, and we need to
+  perform text layout operations such as setting a custom font, adjusting line height, font weight, text alignment, and
+  font size.
+- The text has a dynamic size, meaning we need a way to calculate the dimensions of the `Paragraph` so that we can
+  properly adapt the `Mask` that applies it and the `Rect` that contains the `LinearGradient`.
+
+How can we achieve this? First, our component will be called `GradientText`, and it will expose customizable properties: gradient colors and
+positions, as well as text styling.
+
+```typescript jsx
+interface Gradient {
+    colors: string[];
+    startPercentages: [number, number];
+    endPercentages: [number, number];
+}
+
+interface FontStyle {
+    size: number;
+    weight: GradientFontWeight;
+    alignment: GradientTextAlignment;
+    lineHeight: number;
+}
+
+interface GradientTextProps {
+    text: string;
+    fontStyle: FontStyle;
+    gradient: Gradient;
+    containerStyle?: ViewStyle;
+}
+
+export const GradientText: React.FC<GradientTextProps> = //...implementation...
+```
+
+We will use the [Ubuntu](https://fonts.google.com/specimen/Ubuntu) font, which can be loaded using the `useFonts` hook
+from [react-native-skia](/blog/post/2024/03/02/react-native-skia-svg-background-shape-text). This hook returns a
+`SkTypefaceFontProvider`, which we store in `customFontMgr`.
+
+Since the `Paragraph` depends on the font being available, we do nothing until the font is loaded. Once `customFontMgr`
+is ready, we can create the `Paragraph` using a `ParagraphBuilder` provided by the library.
+
+In the builder's `Make` method, we define text properties such as alignment and pass `customFontMgr` as a required
+parameter. We also adapt our props to match Skia's expected values using maps we created: like `skiaTextAlign` (for
+text alignment) and `skiaFontWeight` (for font weight).
+
+```typescript jsx
+const paragraph = useMemo(() => {
+    if (!customFontMgr) {
+        return null;
+    }
+
+    return Skia
+        .ParagraphBuilder
+        .Make({textAlign: skiaTextAlign[fontStyle.alignment]}, customFontMgr)
+        .pushStyle({
+            fontFamilies: [fontFamilyName],
+            fontSize: fontStyle.size,
+            fontStyle: {
+                weight: skiaFontWeight[fontStyle.weight],
+            },
+            color: Skia.Color('black'),
+            heightMultiplier: fontStyle.lineHeight,
+        })
+        .addText(text)
+        .build();
+}, [customFontMgr]);
+```
+
+At this point, we are ready to render our gradient text—or are we? :smirk: As mentioned earlier, our text has dynamic
+dimensions, but the `LinearGradient` shader requires explicit width and height values when used with `Rect`.
+Additionally, we need to ensure that the gradient only fills the text itself and not the entire `Rect`.
+
+Fortunately, [react-native-skia](/blog/post/2024/03/02/react-native-skia-svg-background-shape-text) provides a built-in
+`layout` method for `Paragraph`, which allows us to compute the text dimensions. We use this method to determine the
+`Canvas`, `Mask`, and `Rect` dimensions.
+
+```typescript jsx
+paragraph.layout(Dimensions.get('window').width);
+
+const paragraphHeight = paragraph.getHeight() + paragraphPadding;
+const paragraphWidth = paragraph.getLongestLine() + paragraphPadding;
+
+const canvasStyle: ViewStyle = {
+    width: paragraphWidth,
+    height: paragraphHeight,
+    ...containerStyle,
+};
+```
+
+Now, we can compose all the components together. We start with the `Canvas`, using the computed styles. Then, we create
+the `Mask`, which applies the `Paragraph` as a mask in `alpha` mode (based on opacity). Inside the `Mask`, we draw a
+`Rect` of the same size and apply the `LinearGradient`, ensuring that it is masked by the `Paragraph`.
+
+A key challenge here is distributing the gradient dynamically based on text dimensions. Instead of using fixed
+positions, the `Gradient` props include `startPercentages` and `endPercentages`, allowing the gradient to adjust
+dynamically.
+
+```typescript jsx
+return (
+    <Canvas style={canvasStyle}>
+        <Mask
+            mode={'alpha'}
+            mask={<Paragraph paragraph={paragraph} x={0} y={0} width={paragraphWidth}/>}>
+            <Rect x={0} y={0} width={paragraphWidth} height={paragraphHeight}>
+                <LinearGradient
+                    start={vec(
+                        gradient.startPercentages[0] * paragraphWidth,
+                        gradient.startPercentages[1] * paragraphHeight,
+                    )}
+                    end={vec(
+                        gradient.endPercentages[0] * paragraphWidth,
+                        gradient.endPercentages[1] * paragraphHeight,
+                    )}
+                    colors={gradient.colors}
+                />
+            </Rect>
+        </Mask>
+    </Canvas>
+);
+```
+
+With this approach, the gradient dynamically adapts to the text dimensions without requiring explicit width and height
+props. The component performs all necessary calculations internally, making it flexible and reusable.
+
+Below, you can find the complete implementation of this component.
 
 ```typescript jsx
 import React, {useMemo} from 'react';
@@ -124,6 +254,7 @@ export const GradientText: React.FC<GradientTextProps> = ({
             .ParagraphBuilder
             .Make({textAlign: skiaTextAlign[fontStyle.alignment]}, customFontMgr)
             .pushStyle({
+                fontFamilies: [fontFamilyName],
                 fontSize: fontStyle.size,
                 fontStyle: {
                     weight: skiaFontWeight[fontStyle.weight]
