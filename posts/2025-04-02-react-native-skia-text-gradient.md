@@ -305,7 +305,129 @@ export const GradientText: React.FC<GradientTextProps> = ({
 };
 ```
 
-....talk about PromotionTextWithPath
+Let's move on with the second component we needed.
+This component is dynamic and scalable underline for a text component in React Native using [React Native Skia](https://shopify.github.io/react-native-skia/). 
+The component is based on an SVG of a custom underline that scales proportionally with the text width while maintaining a gradient effect.
+We begin by defining a `PromotionTextWithPath` component that will contain both the text and the underline.
+
+```tsx
+import React from 'react';
+import { Canvas, LinearGradient, Mask, Path, Rect, vec } from '@shopify/react-native-skia';
+import { LayoutChangeEvent, StyleSheet, Text, View, ViewStyle } from 'react-native';
+
+interface LastMinuteDealsPromotionBadgeProps {
+    style?: ViewStyle;
+}
+
+export const PromotionTextWithPath: React.FC<LastMinuteDealsPromotionBadgeProps> = ({ style }) => {
+    return (
+        <View style={{ ...styles.container, ...style }}>
+            <Text style={styles.deals}>DEALS</Text>
+        </View>
+    );
+};
+
+const styles = StyleSheet.create({
+    container: {
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+        marginBottom: 2,
+        overflow: "visible"
+    },
+    deals: {
+        fontSize: 48,
+        fontFamily: 'PermanentMarker-Regular'
+    },
+});
+```
+
+To scale our underline correctly, we need to measure the width of the text once it is rendered. 
+We use the `onLayout` props on the `Text` component for this purpose. In this way we can get the text size at render time and 
+adjust the dimension of the underline accordingly.
+To calculate the scaling factor $x_{currentText}$, we first need a couple of data from the original mockup that contains the 
+SVG of the underline plus the text:
+
+* the original width of the underline was 48, and we will call it $Width_{ underlineOriginal}$
+* the scaling factor (ratio) between the original text width $Width_{underlineOriginal}$ and the original underline width is 1.1 (this means that 
+the underline was 110% the width of $Width_{underlineOriginal}$)
+
+With this data we can calculate $ScalingFactor_{currenUnderline}$ with a simple proportion:
+
+$$
+Width_{currentText} : Width_{originalText} = ScalingFactor_{currenUnderline}: ScalingFactor_{originalUnderline}
+$$
+
+$$
+ScalingFactor_{currenUnderline} = \frac{(Width_{currentText} * ScalingFactor_{originalUnderline})}{Width_{originalText}}
+$$
+
+
+Now we can translate this formula into code,  in a callback that we will call `onDealsTextLayout`. After calculating 
+the $ScalingFactor_{currenUnderline}$, we can add it `underlineConfig` state with:
+
+* `underlineWidth`, that is the width of the text increased by $ScalingFactor_{originalUnderline}$
+* `underlineHeight`, that is the original height of the underline multiplied by the scaling factor
+
+```tsx
+const [underlineConfig, setUnderlineConfig] = React.useState<UnderlineConfig | null>(null);
+
+const onDealsTextLayout = (event: LayoutChangeEvent) => {
+    const { width } = event.nativeEvent.layout;
+    const scalingFactor = (width / 48) * 1.1; // Base width of the SVG is 48
+    const underlineWidth = width * 1.1;
+    const underlineHeight = 3 * scalingFactor;
+
+    setUnderlineConfig({ scalingFactor, width: underlineWidth, height: underlineHeight });
+};
+
+<Text style={styles.deals} onLayout={onDealsTextLayout}>DEALS</Text>
+```
+
+Now, `underlineConfig` holds all the necessary data needed to draw.
+Next, we use skia to render the underline. The `scalingFactor` is used in the `transform` property of the `Path` component 
+to scale the SVG passed in the `path` prop.
+
+```tsx
+{underlineConfig && (
+    <Canvas
+        style={{
+            width: underlineConfig.width,
+            height: underlineConfig.height + 5,
+            position: 'absolute',
+            bottom: -5,
+            left: -5,
+        }}
+    >
+      <Mask
+              mode={'alpha'}
+              mask={
+                <Path
+                        path={underlineSvg}
+                        color={'#EAEAEB'}
+                        transform={[{scale: underlineConfig.scalingFactor}]}
+                />
+              }>
+        <Rect
+                x={0}
+                y={0}
+                width={underlineConfig.width}
+                height={underlineConfig.height}>
+          <LinearGradient
+                  start={vec(0, underlineBaseHeight / 2)}
+                  end={vec(underlineConfig.width, underlineBaseHeight / 2)}
+                  colors={[
+                    '#F2007C', '#F7AF17'
+                  ]}
+          />
+        </Rect>
+      </Mask>
+    </Canvas>
+)}
+```
+
+Below you can find the complete implementation of the component described above. In the final example some variables have been 
+extracted so that the code is more readable and there is an implicit explanation in the variable name.
 
 ```typescript jsx
 import React from 'react';
