@@ -1,7 +1,7 @@
 ---
 title: "Creating Stunning Gradients in React Native with Skia"
 description: "Learn how to create stunning text with React Native using React Native Skia. In this post, we’ll explore how to leverage Skia’s powerful features to bring vibrant gradients to life."
-date: 2025-04-06
+date: 2025-04-02
 image: /images/posts/skia-gradients-featured.jpg
 tags: [react native, swift, ios, apple, android, java, mobile application development, javascript, typescript, expo, skia]
 authors: [fabrizio_duroni, antonino_gitto]
