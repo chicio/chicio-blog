@@ -4,7 +4,7 @@ description: "Let's see how it is possible to create a circular carousel with pa
 leveraging the power of React Native Reanimated."
 date: 2024-12-30
 image: /images/posts/react-native-parallax-carousel.jpg
-tags: [react native, swift, ios, apple, android, java, mobile application development, javascript, typescript, expo]
+tags: [react native, swift, ios, apple, android, java, mobile application development, javascript, typescript, expo, skia]
 authors: [fabrizio_duroni]
 ---
 

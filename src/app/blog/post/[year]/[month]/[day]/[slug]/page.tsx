@@ -25,7 +25,6 @@ export async function generateMetadata({
 }: NextPostParameters): Promise<Metadata> {
   const { year, month, day, slug } = await params;
   const { frontmatter } = getPostBy(year, month, day, slug);
-  console.log(frontmatter)
 
   return createMetadata({
     author: siteMetadata.author,
