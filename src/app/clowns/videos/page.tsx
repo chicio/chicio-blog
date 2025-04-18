@@ -30,6 +30,8 @@ const ClonwsPage = () => {
     'https://www.youtube.com/embed/64nyoeyAx9w',
     'https://www.youtube.com/embed/NGZ8fBXMM7s',
     'https://www.youtube.com/embed/e8ZXGVui6n8',
+    'https://www.youtube.com/embed/zogb9j4xr5M',
+    'https://www.youtube.com/embed/l0XKdAl3uV4',
   ], 4);
 
   return (
