@@ -1,21 +1,22 @@
 import { FC } from "react";
-import { useShuffleArray } from "../hooks/use-shuffle-array";
 import { PostsRow } from "../molecules/posts-row";
 import { getPosts } from "@/lib/posts";
 import { PostsRowContainer } from "@/components/website/posts-row-container";
 import { ReadNextTitle } from "@/components/design-system/organism/read-next-title";
 import {ContentContainerRecentPosts} from "@/components/website/content-container";
+import { shuffleArray } from "../hooks/shuffle-array";
 
 export interface RecentPostsProps {
   currentSlug: string;
 }
 
 export const RecentPosts: FC<RecentPostsProps> = ({ currentSlug }) => {
-  const readNextPosts = useShuffleArray(
+  const readNextPosts = shuffleArray(
     getPosts().filter(
       (post) => post.frontmatter.slug.formatted !== currentSlug,
     ),
-  ).slice(0, 2);
+    2
+  );
 
   return (
     <ContentContainerRecentPosts>

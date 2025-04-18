@@ -1,21 +1,15 @@
-export const useShuffleArray = <T>(array?: T[]): T[] => {
-  if (!array) {
-    return Array<T>(0);
-  }
+'use client';
 
-  let currentIndex = array.length;
-  let randomIndex;
-  const newArray = Array<T>(...array);
+import React, { useEffect } from "react";
+import { shuffleArray } from "./shuffle-array";
 
-  while (currentIndex !== 0) {
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex -= 1;
-    const elementAtRandomIndex = array[randomIndex];
-    const elementAtCurrentIndex = newArray[currentIndex];
 
-    newArray[currentIndex] = elementAtRandomIndex;
-    newArray[randomIndex] = elementAtCurrentIndex;
-  }
+export const useShuffleArray = <T>(array: T[] = [], numberOfItems: number): T[] => {
+  const [shuffledArray, setShuffledArray] = React.useState<T[]>([]);
 
-  return newArray;
+  useEffect(() => {
+    setShuffledArray(shuffleArray(array, numberOfItems));
+  }, []);
+
+  return shuffledArray;
 };
