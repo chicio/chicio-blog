@@ -1,16 +1,18 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { MediaGrid } from '@/components/design-system/molecules/media-grid';
+import styled, { css } from 'styled-components';
 import { useShuffleArray } from '@/components/design-system/hooks/use-shuffle-array';
-import styled from 'styled-components';
+import { MediaGrid } from '@/components/design-system/molecules/media-grid';
+import { Heading1 } from '@/components/design-system/atoms/heading1';
+import { ClownTitle } from '@/components/design-system/molecules/clown';
 
 export const VideoWrapper = styled.div`
   position: relative;
-  padding-bottom: 56.25%; /* 16:9 aspect ratio */
-  height: 0;
+  width: 100%;
+  padding-top: 56.25%; /* Aspect ratio 16:9 */
   overflow: hidden;
-  
+
   iframe {
     position: absolute;
     top: 0;
@@ -19,6 +21,10 @@ export const VideoWrapper = styled.div`
     height: 100%;
     border: 0;
   }
+`;
+
+const CenteredHeading = styled(Heading1)`
+  text-align: center;
 `;
 
 const ClonwsPage = () => {
@@ -32,21 +38,25 @@ const ClonwsPage = () => {
     'https://www.youtube.com/embed/e8ZXGVui6n8',
     'https://www.youtube.com/embed/zogb9j4xr5M',
     'https://www.youtube.com/embed/l0XKdAl3uV4',
+    'https://www.youtube.com/embed/8L2jFgx3Kb8',
   ], 4);
 
   return (
-    <MediaGrid>
-      {videos.map((video, index) => (
-        <VideoWrapper key={index}>
-          <iframe
-            src={`${video}?autoplay=1&mute=1`}
-            title={`Clown Video ${index + 1}`}
-            allow="autoplay; encrypted-media"
-            allowFullScreen
-          ></iframe>
-        </VideoWrapper>
-      ))}
-    </MediaGrid>
+    <>
+      <ClownTitle />
+      <MediaGrid>
+        {videos.map((video, index) => (
+          <VideoWrapper key={index}>
+            <iframe
+              src={`${video}?autoplay=1&mute=1`}
+              title={`Clown Video ${index + 1}`}
+              allow="autoplay; encrypted-media"
+              allowFullScreen
+            ></iframe>
+          </VideoWrapper>
+        ))}
+      </MediaGrid>
+    </>
   );
 };
 

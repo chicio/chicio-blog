@@ -4,6 +4,9 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { MediaGrid } from '@/components/design-system/molecules/media-grid';
 import { useShuffleArray } from '@/components/design-system/hooks/use-shuffle-array';
+import { Heading1 } from '@/components/design-system/atoms/heading1';
+import { mediaQuery } from '@/components/design-system/utils-css/media-query';
+import { CenteredHeading, ClownBackground, ClownTitle } from '@/components/design-system/molecules/clown';
 
 const PhotoWrapper = styled.div`
   display: flex;
@@ -19,7 +22,7 @@ const PhotoWrapper = styled.div`
 `;
 
 const ClownsPhotosPage = () => {
-    const photos = useShuffleArray([
+  const photos = useShuffleArray([
     'https://media.cnn.com/api/v1/images/stellar/prod/141013132117-clowns-world-clowning-association-march-2014.jpg?q=x_0,y_222,h_2402,w_4271,c_crop/h_833,w_1480',
     'https://s.marketwatch.com/public/resources/images/MW-DS208_clowns_MG_20150813230255.jpg',
     'https://compote.slate.com/images/08fff2b1-ecae-48e0-a350-2bdf792091db.jpg?crop=4928%2C3280%2Cx0%2Cy0',
@@ -30,16 +33,19 @@ const ClownsPhotosPage = () => {
     'https://i.pinimg.com/736x/ec/de/9d/ecde9de299622f9de706a2f31a702b56.jpg',
     'https://live.staticflickr.com/650/32731041796_00cb91ec4e_b.jpg',
     'https://gknxt.com/list-of-collective-nouns/clowns/collective-nouns-for-clowns.webp'
-    ], 4);
+  ], 4);
 
   return (
-    <MediaGrid>
-      {photos.map((photo, index) => (
-        <PhotoWrapper key={index}>
-          <img src={photo} alt={`Clown Photo ${index + 1}`} />
-        </PhotoWrapper>
-      ))}
-    </MediaGrid>
+    <>
+      <ClownTitle />
+      <MediaGrid>
+        {photos.map((photo, index) => (
+          <PhotoWrapper key={index}>
+            <img src={photo} alt={`Clown Photo ${index + 1}`} />
+          </PhotoWrapper>
+        ))}
+      </MediaGrid>
+    </>
   );
 };
 
