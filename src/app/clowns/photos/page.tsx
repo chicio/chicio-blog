@@ -1,6 +1,5 @@
 "use client"
 
-import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { MediaGrid } from '@/components/design-system/molecules/media-grid';
 import { useShuffleArray } from '@/components/design-system/hooks/use-shuffle-array';

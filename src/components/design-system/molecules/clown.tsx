@@ -3,7 +3,6 @@ import { Heading1 } from "../atoms/heading1";
 import { mediaQuery } from "../utils-css/media-query";
 import { FC } from "react";
 import { useScrollDirection, ScrollDirection } from "../hooks/use-scroll-direction";
-import { useState, useEffect } from "react";
 
 const CenteredHeading = styled(Heading1)`
   text-align: center;
