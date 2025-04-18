@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { useShuffleArray } from '@/components/design-system/hooks/use-shuffle-array';
+import { useScrollDirection, ScrollDirection } from '@/components/design-system/hooks/use-scroll-direction';
 import { MediaGrid } from '@/components/design-system/molecules/media-grid';
 import { Heading1 } from '@/components/design-system/atoms/heading1';
 import { ClownTitle } from '@/components/design-system/molecules/clown';
@@ -23,10 +24,6 @@ export const VideoWrapper = styled.div`
   }
 `;
 
-const CenteredHeading = styled(Heading1)`
-  text-align: center;
-`;
-
 const ClonwsPage = () => {
   const videos = useShuffleArray([
     'https://www.youtube.com/embed/zogb9j4xr5M',
@@ -36,10 +33,11 @@ const ClonwsPage = () => {
     'https://www.youtube.com/embed/64nyoeyAx9w',
     'https://www.youtube.com/embed/NGZ8fBXMM7s',
     'https://www.youtube.com/embed/e8ZXGVui6n8',
-    'https://www.youtube.com/embed/zogb9j4xr5M',
     'https://www.youtube.com/embed/l0XKdAl3uV4',
     'https://www.youtube.com/embed/8L2jFgx3Kb8',
   ], 4);
+
+  const scrollDirection = useScrollDirection();
 
   return (
     <>

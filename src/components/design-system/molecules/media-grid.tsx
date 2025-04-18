@@ -13,7 +13,7 @@ export const MediaGrid = styled.div`
   height: 100%;
   padding: 16px;
   box-sizing: border-box;
-  overflow: auto; /* Ensure elements stay in the viewport */
+  overflow: auto; 
 
   & > div:nth-child(1) {
     grid-area: top-left;
@@ -35,6 +35,6 @@ export const MediaGrid = styled.div`
     display: flex;
     flex-direction: column;
     gap: 16px;
-    overflow: visible; /* Allow elements to go outside the viewport under md media query */
+    overflow: visible;
   }
 `;

@@ -4,9 +4,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { MediaGrid } from '@/components/design-system/molecules/media-grid';
 import { useShuffleArray } from '@/components/design-system/hooks/use-shuffle-array';
-import { Heading1 } from '@/components/design-system/atoms/heading1';
-import { mediaQuery } from '@/components/design-system/utils-css/media-query';
-import { CenteredHeading, ClownBackground, ClownTitle } from '@/components/design-system/molecules/clown';
+import { ClownTitle } from '@/components/design-system/molecules/clown';
 
 const PhotoWrapper = styled.div`
   display: flex;
