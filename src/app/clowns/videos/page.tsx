@@ -5,7 +5,7 @@ import { useShuffleArray } from '@/components/design-system/hooks/use-shuffle-ar
 import { MediaGrid } from '@/components/design-system/molecules/media-grid';
 import { ClownTitle } from '@/components/design-system/molecules/clown';
 
-export const VideoWrapper = styled.div`
+const VideoWrapper = styled.div`
   position: relative;
   width: 100%;
   padding-top: 56.25%; /* Aspect ratio 16:9 */
