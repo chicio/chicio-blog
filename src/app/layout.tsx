@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import StyledComponentsRegistry from "@/lib/styled-components-registry";
+import StyledComponentsRegistry from "@/components/styled-components-registry";
 import { ThemePage } from "@/components/templates/theme-page";
 import { blogTheme } from "@/components/design-system/themes/theme";
 import { Viewport } from "next";

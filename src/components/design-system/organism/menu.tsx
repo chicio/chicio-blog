@@ -76,7 +76,7 @@ const MenuContainer = styled.div<{
     height 0.3s ease ${(props) => `${props.$delayOpenCloseMenuAnimation}s`};
   width: 100%;
   z-index: 300;
-  height: ${(props) => (props.$shouldOpenMenu ? "260px" : menuHeight)};
+  height: ${(props) => (props.$shouldOpenMenu ? "310px" : menuHeight)};
   overflow: hidden;
 
   ${mediaQuery.dark} {
@@ -126,7 +126,7 @@ export interface MenuProps {
   trackingCategory: string;
 }
 
-export const BlogMenu: FC<MenuProps> = ({ trackingCategory }) => {
+export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
   const pathname = usePathname()
   const direction = useScrollDirection();
   const [shouldOpenMenu, setShouldOpenMenu] = useState(false);
@@ -192,6 +192,18 @@ export const BlogMenu: FC<MenuProps> = ({ trackingCategory }) => {
               shouldOpenMenu={shouldOpenMenu}
           >
             About me
+          </NavBarMenuItem>
+          <NavBarMenuItem
+            to={slugs.chat}
+            selected={pathname === slugs.chat}
+            trackingData={{
+              action: tracking.action.open_chat,
+              category: trackingCategory,
+              label: tracking.label.header,
+            }}
+            shouldOpenMenu={shouldOpenMenu}
+          >
+            Chat
           </NavBarMenuItem>
           {!startSearch && (
             <MenuButtonContainer>

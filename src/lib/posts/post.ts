@@ -12,7 +12,7 @@ import syntaxHighlight from "rehype-highlight";
 import figure from "@microflash/rehype-figure";
 import stringify from "rehype-stringify";
 import calculateReadingTime from "reading-time";
-import { getFrontmatterFrom } from "@/lib/frontmatter";
+import { getFrontmatterFrom } from "@/lib/posts/frontmatter";
 import { Post } from "@/types/post";
 
 export const getPostFromFilePath: (

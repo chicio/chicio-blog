@@ -1,10 +1,10 @@
 import "katex/dist/katex.min.css";
-import { getPostBy, getPosts } from "@/lib/posts";
+import { getPostBy, getPosts } from "@/lib/posts/posts";
 import { siteMetadata } from "@/types/site-metadata";
 import { tracking } from "@/types/tracking";
 import { BlogPageTemplate } from "@/components/templates/blog-page-template";
 import { Metadata } from "next";
-import { createMetadata } from "@/lib/seo";
+import { createMetadata } from "@/lib/seo/seo";
 import {
   PostContainer,
   PostContent,

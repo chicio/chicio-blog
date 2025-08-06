@@ -1,4 +1,4 @@
-import { createStructuredData, OgPageType } from "@/lib/seo";
+import { createStructuredData, OgPageType } from "@/lib/seo/seo";
 import { siteMetadata } from "@/types/site-metadata";
 import { FC } from "react"
 
@@ -22,4 +22,4 @@ export const JsonLd: FC<JsonLdProps> = ({ogPageType, url, imageUrl, title}) => (
                 links: siteMetadata.contacts.links,
             }))
         }} />
-)   
+)

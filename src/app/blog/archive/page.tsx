@@ -1,7 +1,7 @@
 import {siteMetadata} from "@/types/site-metadata";
 import {BlogGenericPostListPageTemplate} from "@/components/templates/blog-generic-post-list-page-template";
 import {tracking} from "@/types/tracking";
-import {getPosts} from "@/lib/posts";
+import {getPosts} from "@/lib/posts/posts";
 import { JsonLd } from "@/components/website/jsond-ld";
 
 export default async function BlogArchive() {

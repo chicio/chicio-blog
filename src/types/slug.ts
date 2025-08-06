@@ -10,5 +10,6 @@ export const slugs = {
   blogArchive: `${blog}/archive`,
   aboutMe: `${blogPost}/2017/05/10/about-me`,
   art: "/art",
+  chat: "/chat",
   cookiePolicy: "/cookie-policy"
 };

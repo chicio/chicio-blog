@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "search-index": "tsx src/lib/search.ts",
+    "search-index": "tsx src/lib/posts/search.ts",
     "predev": "npm run search-index",
     "dev": "next dev --turbopack",
     "prebuild": "npm run search-index",
@@ -12,6 +12,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ai-sdk/groq": "^2.0.0",
+    "@ai-sdk/react": "^2.0.0",
     "@microflash/rehype-figure": "^2.1.3",
     "@next/third-parties": "^15.3.0",
     "@styled-icons/boxicons-logos": "^10.47.0",
@@ -21,6 +23,7 @@
     "@types/cookieconsent": "^3.1.3",
     "@vercel/analytics": "^1.4.1",
     "@vercel/speed-insights": "^1.2.0",
+    "ai": "^5.0.0",
     "cookieconsent": "^3.1.1",
     "elasticlunr": "^0.9.5",
     "gray-matter": "^4.0.3",
@@ -40,7 +43,8 @@
     "remark-rehype": "^11.1.1",
     "remark-youtube": "^1.3.2",
     "styled-components": "^6.1.14",
-    "tsx": "^4.19.3"
+    "tsx": "^4.19.3",
+    "zod": "^4.0.14"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

@@ -12,9 +12,9 @@ import katex from "rehype-katex";
 import syntaxHighlight from "rehype-highlight";
 import stringify from "rehype-stringify";
 import calculateReadingTime from "reading-time";
-import { getFrontmatterFrom } from "@/lib/frontmatter";
-import { getPostsUsing } from "@/lib/posts-with-parser";
-import {searchIndexFileName} from "@/lib/files";
+import { getFrontmatterFrom } from "@/lib/posts/frontmatter";
+import { getPostsUsing } from "@/lib/posts/posts-with-parser";
+import {searchIndexFileName} from "@/lib/posts/files";
 
 const getSearchPostFromFilePath: (
   filePath: string,

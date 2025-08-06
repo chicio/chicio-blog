@@ -1,11 +1,11 @@
-import {getPosts, getPostsPaginationFor, getPostsTotalPages} from "@/lib/posts";
+import {getPosts, getPostsPaginationFor, getPostsTotalPages} from "@/lib/posts/posts";
 import {BlogPageTemplate} from "@/components/templates/blog-page-template";
 import {siteMetadata} from "@/types/site-metadata";
 import {tracking} from "@/types/tracking";
 import {PostCard} from "@/components/design-system/molecules/post-card";
 import {PaginationNavigation} from "@/components/design-system/molecules/pagination-navigation";
 import {PostsRow} from "@/components/design-system/molecules/posts-row";
-import {createMetadata} from "@/lib/seo";
+import {createMetadata} from "@/lib/seo/seo";
 import {slugs} from "@/types/slug";
 import {Metadata} from "next";
 import {NextPostPaginationParameters} from "@/types/page-parameters";
