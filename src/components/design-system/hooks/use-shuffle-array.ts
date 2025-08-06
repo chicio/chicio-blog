@@ -9,7 +9,7 @@ export const useShuffleArray = <T>(array: T[] = [], numberOfItems: number): T[] 
 
   useEffect(() => {
     setShuffledArray(shuffleArray(array, numberOfItems));
-  }, []);
+  }, [array, numberOfItems]);
 
   return shuffledArray;
 };

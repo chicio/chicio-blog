@@ -203,18 +203,18 @@ export default function ChatInterface() {
       <MessagesContainer>
         {messages.length === 0 && (
           <WelcomeMessage>
-            👋 Hi! I'm here to answer questions about Fabrizio's work and expertise.
+            👋 Hi! I&#39;m here to answer questions about Fabrizio&#39;s work and expertise.
             Feel free to ask about his blog posts, projects, or technical knowledge!
           </WelcomeMessage>
         )}
 
         {messages.map((message) => (
-          <MessageGroup key={message.id} isUser={message.role === 'user'}>
+          <MessageGroup key={message.id} $isUser={message.role === 'user'}>
             <Avatar $isUser={message.role === 'user'}>
               {message.role === 'user' ? <User size={20} /> : <Bot size={20} />}
             </Avatar>
             <MessageBubble $isUser={message.role === 'user'}>
-              {message.parts.map((part, i) => {
+              {message.parts.map((part) => {
                 switch (part.type) {
                   case 'text':
                     return part.text;
