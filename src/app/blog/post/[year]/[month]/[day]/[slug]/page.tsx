@@ -2,7 +2,7 @@ import "katex/dist/katex.min.css";
 import { getPostBy, getPosts } from "@/lib/posts/posts";
 import { siteMetadata } from "@/types/site-metadata";
 import { tracking } from "@/types/tracking";
-import { BlogPageTemplate } from "@/components/templates/blog-page-template";
+import { PageTemplate } from "@/components/templates/page-template";
 import { Metadata } from "next";
 import { createMetadata } from "@/lib/seo/seo";
 import {
@@ -59,7 +59,7 @@ export default async function BlogPost({ params }: NextPostParameters) {
 
   return (
     <>
-      <BlogPageTemplate
+      <PageTemplate
         author={siteMetadata.author}
         trackingCategory={tracking.category.blog_post}
       >
@@ -83,7 +83,7 @@ export default async function BlogPost({ params }: NextPostParameters) {
           />
         </PostContainer>
         <RecentPosts currentSlug={frontmatter.slug.formatted} />
-      </BlogPageTemplate>
+      </PageTemplate>
       <JsonLd
         ogPageType="article"
         url={`${siteMetadata.siteUrl}${frontmatter.slug.formatted}`}

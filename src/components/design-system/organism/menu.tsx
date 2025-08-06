@@ -126,7 +126,7 @@ export interface MenuProps {
   trackingCategory: string;
 }
 
-export const BlogMenu: FC<MenuProps> = ({ trackingCategory }) => {
+export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
   const pathname = usePathname()
   const direction = useScrollDirection();
   const [shouldOpenMenu, setShouldOpenMenu] = useState(false);

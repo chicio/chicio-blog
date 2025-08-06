@@ -1,4 +1,4 @@
-import { BlogPageTemplate } from "@/components/templates/blog-page-template";
+import { PageTemplate } from "@/components/templates/page-template";
 import { siteMetadata } from "@/types/site-metadata";
 import { tracking } from "@/types/tracking";
 import { ArtGallery } from "@/components/design-system/organism/art-gallery";
@@ -8,7 +8,7 @@ import {ContentContainer} from "@/components/website/content-container";
 
 export default async function ArtPage() {
   return (
-    <BlogPageTemplate
+    <PageTemplate
       author={siteMetadata.author}
       trackingCategory={tracking.category.art}
     >
@@ -19,6 +19,6 @@ export default async function ArtPage() {
       <ContentContainer>
         <ArtGallery />
       </ContentContainer>
-    </BlogPageTemplate>
+    </PageTemplate>
   );
 }

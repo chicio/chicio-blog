@@ -1,7 +1,7 @@
 'use client'
 
 import styled from "styled-components";
-import { BlogPageTemplate } from "./blog-page-template";
+import { PageTemplate } from "./page-template";
 import {ContainerFluid} from "@/components/design-system/atoms/container-fluid";
 import {mediaQuery} from "@/components/design-system/utils-css/media-query";
 import {Time} from "@/components/design-system/atoms/time";
@@ -58,7 +58,7 @@ export const BlogGenericPostListPageTemplate: FC<
   author,
   trackingCategory,
 }) => (
-  <BlogPageTemplate
+  <PageTemplate
     author={author}
     trackingCategory={trackingCategory}
   >
@@ -82,5 +82,5 @@ export const BlogGenericPostListPageTemplate: FC<
         </Column>
       </PostContainer>
     ))}
-  </BlogPageTemplate>
+  </PageTemplate>
 );

@@ -1,5 +1,5 @@
 import {getPosts, getPostsPaginationFor, getPostsTotalPages} from "@/lib/posts/posts";
-import {BlogPageTemplate} from "@/components/templates/blog-page-template";
+import {PageTemplate} from "@/components/templates/page-template";
 import {siteMetadata} from "@/types/site-metadata";
 import {tracking} from "@/types/tracking";
 import {PostCard} from "@/components/design-system/molecules/post-card";
@@ -43,7 +43,7 @@ export default async function BlogPage({ params }: NextPostPaginationParameters)
 
     return (
         <>
-            <BlogPageTemplate
+            <PageTemplate
                 author={author}
                 trackingCategory={tracking.category.blog_home}
                 big={true}
@@ -71,7 +71,7 @@ export default async function BlogPage({ params }: NextPostPaginationParameters)
                     nextPageUrl={nextPageUrl}
                     nextPageTrackingAction={tracking.action.open_blog_next_page}
                 />
-            </BlogPageTemplate>
+            </PageTemplate>
             <JsonLd ogPageType="website" url={siteMetadata.siteUrl} imageUrl={siteMetadata.featuredImage} title={siteMetadata.title}/>
         </>
     );

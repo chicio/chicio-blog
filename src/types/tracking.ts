@@ -49,6 +49,7 @@ export const tracking = {
     privacy_policy: "privacy_policy",
     notfound: "notfound",
     art: "art",
+    chat: 'chat',
   },
   label: {
     footer: "footer",

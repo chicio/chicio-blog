@@ -1,6 +1,6 @@
 import { getTags } from "@/lib/posts/posts";
 import { siteMetadata } from "@/types/site-metadata";
-import { BlogPageTemplate } from "@/components/templates/blog-page-template";
+import { PageTemplate } from "@/components/templates/page-template";
 import { tracking } from "@/types/tracking";
 import { TagsContainer } from "@/components/website/tags-container";
 import { PageTitle } from "@/components/design-system/molecules/page-title";
@@ -26,7 +26,7 @@ export default async function Tags() {
 
   return (
     <>
-      <BlogPageTemplate
+      <PageTemplate
         author={author}
         trackingCategory={tracking.category.blog_tags}
       >
@@ -43,7 +43,7 @@ export default async function Tags() {
             />
           ))}
         </TagsContainer>
-      </BlogPageTemplate>
+      </PageTemplate>
       <JsonLd
         ogPageType="website"
         url={siteMetadata.siteUrl}

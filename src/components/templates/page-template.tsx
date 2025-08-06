@@ -1,24 +1,24 @@
 import {FC, ReactNode} from "react";
-import {BlogMenu} from "@/components/design-system/organism/blog-menu";
+import {Menu} from "@/components/design-system/organism/menu";
 import {ContentContainer} from "@/components/website/content-container";
 import {DesktopBlogHeader} from "@/components/design-system/organism/blog-header";
 import {Footer} from "@/components/design-system/organism/footer";
 
-export interface BlogPageProps {
+export interface PageProps {
   author: string;
   trackingCategory: string;
   big?: boolean;
   children?: ReactNode;
 }
 
-export const BlogPageTemplate: FC<BlogPageProps> = ({
+export const PageTemplate: FC<PageProps> = ({
   children,
   author,
   trackingCategory,
   big = false,
 }) => (
     <>
-      <BlogMenu
+      <Menu
         trackingCategory={trackingCategory}
       />
       <ContentContainer>
