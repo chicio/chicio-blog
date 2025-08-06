@@ -1,7 +1,7 @@
 import { FC, ReactNode } from "react";
 import {TrackingElementProps} from "@/types/tracking";
 import {StandardInternalLink} from "@/components/design-system/atoms/standard-internal-link";
-import {trackWith} from "@/lib/tracking";
+import {trackWith} from "@/lib/tracking/tracking";
 
 type StandardInternalLinkWithTrackingProps = TrackingElementProps & {
   to: string;

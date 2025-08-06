@@ -84,29 +84,6 @@ const MessageBubble = styled.div<{ $isUser: boolean }>`
   ${props => props.$isUser && 'margin-left: auto;'}
 `;
 
-// const LoadingIndicator = styled.div`
-//   display: flex;
-//   align-items: center;
-//   gap: 0.75rem;
-// `;
-//
-// const LoadingDots = styled.div`
-//   display: flex;
-//   gap: 0.25rem;
-//
-//   div {
-//     width: 8px;
-//     height: 8px;
-//     background: #ccc;
-//     border-radius: 50%;
-//     animation: ${bounce} 1.4s infinite ease-in-out both;
-//
-//     &:nth-child(1) { animation-delay: -0.32s; }
-//     &:nth-child(2) { animation-delay: -0.16s; }
-//     &:nth-child(3) { animation-delay: 0s; }
-//   }
-// `;
-
 const InputContainer = styled.form`
   display: flex;
   gap: 0.75rem;
@@ -167,22 +144,18 @@ const WelcomeMessage = styled.div`
 `;
 
 export default function ChatInterface() {
-  // First, let's see what useChat actually returns
-  const chat = useChat();
+  const { messages, sendMessage } = useChat();
   const [input, setInput] = useState('');
-
-  // Extract messages from useChat (this should exist)
-  const { messages } = chat;
-
-  // Check what other properties are available
-  console.log('useChat properties:', Object.keys(chat));
 
   // Create our own handlers since the built-in ones might not exist
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!input.trim()) return;
 
-    chat.sendMessage({ text: input });
+    if (!input.trim()) {
+      return;
+    }
+
+    sendMessage({ text: input });
 
     setInput('');
   };

@@ -3,7 +3,7 @@
 import { FC, ReactNode } from "react";
 import {TrackingElementProps} from "@/types/tracking";
 import {CallToActionInternal} from "@/components/design-system/atoms/call-to-action-internal";
-import {trackWith} from "@/lib/tracking";
+import {trackWith} from "@/lib/tracking/tracking";
 
 type CallToActionInternalWithTrackingProps = TrackingElementProps & {
   to: string;

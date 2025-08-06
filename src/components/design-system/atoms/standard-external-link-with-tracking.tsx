@@ -1,7 +1,7 @@
 import { FC, ReactNode } from "react";
 import {TrackingElementProps} from "@/types/tracking";
 import {StandardExternalLink} from "@/components/design-system/atoms/standard-external-link";
-import {trackWith} from "@/lib/tracking";
+import {trackWith} from "@/lib/tracking/tracking";
 
 type StandardExternalLinkWithTrackingProps = TrackingElementProps & {
   href: string;

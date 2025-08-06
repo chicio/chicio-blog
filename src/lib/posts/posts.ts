@@ -1,10 +1,10 @@
 import path from "path";
 import { Post, Tag } from "@/types/post";
 import { slugs } from "@/types/slug";
-import { getPostFromFilePath } from "@/lib/post";
-import { getPostsUsing } from "@/lib/posts-with-parser";
-import {mdExtension} from "@/lib/files";
-import {postsDirectory} from "@/lib/post-dir";
+import { getPostFromFilePath } from "@/lib/posts/post";
+import { getPostsUsing } from "@/lib/posts/posts-with-parser";
+import {mdExtension} from "@/lib/posts/files";
+import {postsDirectory} from "@/lib/posts/post-dir";
 
 const postsPerPage = 11;
 

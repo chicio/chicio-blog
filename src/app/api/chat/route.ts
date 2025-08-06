@@ -1,6 +1,6 @@
 import { convertToModelMessages, streamText, UIMessage } from "ai";
 import { groq } from "@ai-sdk/groq";
-import { FABRIZIO_PROFILE } from "@/lib/llm-prompt";
+import { FABRIZIO_PROFILE } from "@/lib/chat/llm-prompt";
 
 export const maxDuration = 30;
 

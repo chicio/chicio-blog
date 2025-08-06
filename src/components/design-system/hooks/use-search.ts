@@ -3,7 +3,7 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import { SearchablePostFields } from "@/types/post";
 import elasticlunr from "elasticlunr";
-import { searchIndexFileName } from "@/lib/files";
+import { searchIndexFileName } from "@/lib/posts/files";
 
 const hasMinimumCharsToSearch = (query: string): boolean => query.length >= 3;
 

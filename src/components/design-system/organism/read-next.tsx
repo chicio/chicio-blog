@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { PostsRow } from "../molecules/posts-row";
-import { getPosts } from "@/lib/posts";
+import { getPosts } from "@/lib/posts/posts";
 import { PostsRowContainer } from "@/components/website/posts-row-container";
 import { ReadNextTitle } from "@/components/design-system/organism/read-next-title";
 import {ContentContainerRecentPosts} from "@/components/website/content-container";

@@ -1,5 +1,5 @@
 import BlogPage from "@/app/blog/posts/[page]/page";
-import { createMetadata } from "@/lib/seo";
+import { createMetadata } from "@/lib/seo/seo";
 import { siteMetadata } from "@/types/site-metadata";
 import { slugs } from "@/types/slug";
 

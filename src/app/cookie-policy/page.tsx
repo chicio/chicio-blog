@@ -7,7 +7,7 @@ import { ContainerSection } from "@/components/design-system/atoms/container-sec
 import { Heading4 } from "@/components/design-system/atoms/heading4";
 import { List } from "@/components/design-system/atoms/list";
 import { StandardExternalLink } from "@/components/design-system/atoms/standard-external-link";
-import { createMetadata } from "@/lib/seo";
+import { createMetadata } from "@/lib/seo/seo";
 import { slugs } from "@/types/slug";
 
 export const metadata = createMetadata({

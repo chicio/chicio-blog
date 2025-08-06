@@ -1,11 +1,11 @@
 import { siteMetadata } from "@/types/site-metadata";
 import { BlogGenericPostListPageTemplate } from "@/components/templates/blog-generic-post-list-page-template";
 import { tracking } from "@/types/tracking";
-import {getPostsForTag, getTags} from "@/lib/posts";
+import {getPostsForTag, getTags} from "@/lib/posts/posts";
 import { NextTagParameters } from "@/types/page-parameters";
 import { JsonLd } from "@/components/website/jsond-ld";
 import {Metadata} from "next";
-import {createMetadata} from "@/lib/seo";
+import {createMetadata} from "@/lib/seo/seo";
 import {slugs} from "@/types/slug";
 
 export async function generateMetadata({ params }: NextTagParameters): Promise<Metadata> {

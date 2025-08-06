@@ -2,7 +2,7 @@ import { siteMetadata } from "@/types/site-metadata";
 import { ProfilePresentation } from "@/components/design-system/organism/profile-presentation";
 import { Technologies } from "@/components/design-system/organism/technologies";
 import { Resume } from "@/components/design-system/organism/resume";
-import { createMetadata } from "@/lib/seo";
+import { createMetadata } from "@/lib/seo/seo";
 import { slugs } from "@/types/slug";
 import { JsonLd } from "@/components/website/jsond-ld";
 import { ContainerFullscreen } from "@/components/design-system/atoms/container-fullscreen";

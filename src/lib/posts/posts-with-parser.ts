@@ -1,7 +1,7 @@
 import {Post, PostParser} from "@/types/post";
 import fs from "fs";
 import path from "path";
-import {postsDirectory} from "@/lib/post-dir";
+import {postsDirectory} from "@/lib/posts/post-dir";
 
 export const getPostsUsing = (parser: PostParser) => (): Post[] =>
     fs

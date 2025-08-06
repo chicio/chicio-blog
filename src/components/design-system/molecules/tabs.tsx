@@ -2,7 +2,7 @@ import styled, { css, TransientProps } from "styled-components";
 import { FC } from "react";
 import {mediaQuery} from "@/components/design-system/utils-css/media-query";
 import {StandardExternalLink} from "@/components/design-system/atoms/standard-external-link";
-import {trackWith} from "@/lib/tracking";
+import {trackWith} from "@/lib/tracking/tracking";
 
 interface TabLinkProps {
   active: boolean;
