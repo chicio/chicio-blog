@@ -1,15 +1,14 @@
 "use client";
 
 import styled, { keyframes } from "styled-components";
-import { Bot, Send, User } from "@styled-icons/boxicons-regular";
+import { Send, User } from "@styled-icons/boxicons-regular";
 import { useFabrizioChat } from "@/components/chat/useFabrizioChat";
 import { FC } from "react";
 import { Heading1 } from "@/components/design-system/atoms/heading1";
-import { Heading3 } from "@/components/design-system/atoms/heading3";
 import { Paragraph, paragraphStyle } from "@/components/design-system/atoms/paragraph";
 import { mediaQuery } from "@/components/design-system/utils-css/media-query";
-import { Heading4 } from "@/components/design-system/atoms/heading4";
 import { Heading6 } from "@/components/design-system/atoms/heading6";
+import Image from "next/image";
 
 const fadeIn = keyframes`
   from {
@@ -31,70 +30,73 @@ const ChatContainer = styled.div`
   margin: 0 auto;
   padding: 0 ${(props) => props.theme.spacing[3]};
   position: relative;
-  padding-top: ${(props) => props.theme.spacing[5]}; /* Reduced spacing from menu */
-  
-  @media (max-width: 768px) {
-    padding-top: ${(props) => props.theme.spacing[3]}; /* Even less on mobile */
-  }
 `;
 
 const ChatHeader = styled.div`
   text-align: center;
-  margin-bottom: ${(props) => props.theme.spacing[6]}; /* Reduced from spacing[11] */
-  padding: ${(props) => props.theme.spacing[6]} ${(props) => props.theme.spacing[4]}; /* Reduced vertical padding */
-  position: relative;
+  padding: ${(props) => props.theme.spacing[4]} ${(props) => props.theme.spacing[3]};
+  position: absolute;
+  top: 0; /* Right after site header */
+  left: 0;
+  right: 0;
+  width: 100vw; /* Full viewport width */
+  margin-left: calc(-50vw + 50%); /* Center content while using full width */
+  z-index: 50;
   
-  /* Subtle gradient background */
-  background: linear-gradient(
-    135deg,
-    ${(props) => props.theme.light.generalBackground} 0%,
-    ${(props) => props.theme.light.generalBackgroundLight} 50%,
-    ${(props) => props.theme.light.generalBackground} 100%
-  );
-  border-radius: 1.5rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  /* Enhanced blur background */
+  background: rgba(251, 251, 251, 0.8); /* More transparent for stronger blur effect */
+  backdrop-filter: blur(30px); /* Much stronger blur */
+  -webkit-backdrop-filter: blur(30px);
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.08);
   
-  /* Decorative elements - more prominent for main header */
-  &::before {
+  /* Subtle decorative border at bottom */
+  &::after {
     content: '';
     position: absolute;
-    top: -3px;
-    left: -3px;
-    right: -3px;
-    bottom: -3px;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 1px;
     background: linear-gradient(
-      45deg,
+      90deg,
+      transparent,
       ${(props) => props.theme.light.primaryColor}30,
-      ${(props) => props.theme.light.accentColor}40,
-      ${(props) => props.theme.light.primaryColor}30
+      transparent
     );
-    border-radius: 1.5rem;
-    z-index: -1;
-    opacity: 0.8; /* More visible for main header */
   }
-  
-  @media (prefers-color-scheme: dark) {
-    background: linear-gradient(
-      135deg,
-      ${(props) => props.theme.dark.generalBackground} 0%,
-      ${(props) => props.theme.dark.generalBackgroundLight} 50%,
-      ${(props) => props.theme.dark.generalBackground} 100%
-    );
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+
+  ${mediaQuery.dark} {
+    background: rgba(33, 34, 33, 0.80);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.4);
     
-    &::before {
+    &::after {
       background: linear-gradient(
-        45deg,
+        90deg,
+        transparent,
         ${(props) => props.theme.dark.primaryColor}40,
-        ${(props) => props.theme.dark.accentColor}50,
-        ${(props) => props.theme.dark.primaryColor}40
+        transparent
       );
     }
   }
   
   @media (max-width: 768px) {
-    margin-bottom: ${(props) => props.theme.spacing[4]};
-    padding: ${(props) => props.theme.spacing[4]} ${(props) => props.theme.spacing[3]};
+    padding: ${(props) => props.theme.spacing[3]} ${(props) => props.theme.spacing[2]};
+  }
+`;
+
+const TitleGroup = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: ${(props) => props.theme.spacing[2]};
+  margin-bottom: ${(props) => props.theme.spacing[1]}; /* Reduced spacing */
+  
+  @media (max-width: 768px) {
+    gap: ${(props) => props.theme.spacing[1]};
+    margin-bottom: ${(props) => props.theme.spacing[0]};
   }
 `;
 
@@ -107,8 +109,9 @@ const StyledHeading1 = styled(Heading1)`
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  margin-bottom: ${(props) => props.theme.spacing[3]};
+  margin: 0; /* Remove all margins */
   position: relative;
+  font-size: ${(props) => props.theme.fontSizes[9]}; /* Slightly smaller */
   
   /* Fallback for browsers that don't support background-clip */
   @supports not (-webkit-background-clip: text) {
@@ -116,7 +119,7 @@ const StyledHeading1 = styled(Heading1)`
   }
   
   /* Add a subtle glow effect */
-  text-shadow: 0 0 30px ${(props) => props.theme.light.primaryColor}40;
+  text-shadow: 0 0 20px ${(props) => props.theme.light.primaryColor}30;
   
   @media (prefers-color-scheme: dark) {
     background: linear-gradient(
@@ -126,30 +129,27 @@ const StyledHeading1 = styled(Heading1)`
     );
     -webkit-background-clip: text;
     background-clip: text;
-    text-shadow: 0 0 30px ${(props) => props.theme.dark.primaryColor}60;
+    text-shadow: 0 0 20px ${(props) => props.theme.dark.primaryColor}40;
     
     @supports not (-webkit-background-clip: text) {
       color: ${(props) => props.theme.dark.primaryColor};
     }
   }
-`;
-
-const StyledSubtitle = styled(Paragraph)`
-  font-size: ${(props) => props.theme.fontSizes[4]};
-  color: ${(props) => props.theme.light.secondaryTextColor};
-  font-weight: 300;
-  margin: 0;
-  opacity: 0.9;
   
-  @media (prefers-color-scheme: dark) {
-    color: ${(props) => props.theme.dark.secondaryTextColor};
+  @media (max-width: 768px) {
+    font-size: ${(props) => props.theme.fontSizes[7]}; /* Even smaller on mobile */
   }
 `;
 
+const StyledSubtitle = styled(Paragraph)`
+  font-weight: 300;
+  margin: 0;
+  opacity: 0.8; /* More subtle */
+`;
+
 const ChatIcon = styled.div`
-  width: 50px; /* Slightly smaller */
-  height: 50px;
-  margin: 0 auto ${(props) => props.theme.spacing[3]}; /* Reduced margin */
+  width: 36px; /* Smaller and more compact */
+  height: 36px;
   background: linear-gradient(
     135deg,
     ${(props) => props.theme.light.primaryColor},
@@ -159,13 +159,14 @@ const ChatIcon = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.5rem; /* Slightly smaller */
-  box-shadow: 0 6px 20px ${(props) => props.theme.light.primaryColor}30;
-  animation: float 3s ease-in-out infinite;
+  font-size: 1.2rem; /* Smaller icon */
+  box-shadow: 0 4px 15px ${(props) => props.theme.light.primaryColor}40;
+  animation: pulse 3s ease-in-out infinite; /* Changed from float to pulse */
+  flex-shrink: 0;
   
-  @keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-8px); } /* Reduced floating distance */
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); } /* Gentle pulsing effect */
   }
   
   @media (prefers-color-scheme: dark) {
@@ -174,24 +175,23 @@ const ChatIcon = styled.div`
       ${(props) => props.theme.dark.primaryColor},
       ${(props) => props.theme.dark.accentColor}
     );
-    box-shadow: 0 6px 20px ${(props) => props.theme.dark.primaryColor}40;
+    box-shadow: 0 4px 15px ${(props) => props.theme.dark.primaryColor}50;
   }
   
   @media (max-width: 768px) {
-    width: 40px;
-    height: 40px;
-    font-size: 1.2rem;
-    margin-bottom: ${(props) => props.theme.spacing[2]};
+    width: 28px;
+    height: 28px;
+    font-size: 1rem;
   }
 `;
 
 const MessagesContainer = styled.div`
   flex: 1;
   overflow-y: auto;
-  padding: ${(props) => props.theme.spacing[2]} 0 ${(props) => props.theme.spacing[12]} 0; /* Reduced padding */
+  padding: 140px 0 ${(props) => props.theme.spacing[12]} 0; /* Top padding for chat header */
   display: flex;
   flex-direction: column;
-  gap: ${(props) => props.theme.spacing[2]}; /* Reduced gap */
+  gap: ${(props) => props.theme.spacing[2]};
   scroll-behavior: smooth;
   
   /* Hide scrollbar for webkit browsers (Chrome, Safari, Edge) */
@@ -206,7 +206,11 @@ const MessagesContainer = styled.div`
   -ms-overflow-style: none;
   
   @media (max-width: 768px) {
-    padding: ${(props) => props.theme.spacing[1]} 0 ${(props) => props.theme.spacing[10]} 0;
+    padding: 180px 0 ${(props) => props.theme.spacing[10]} 0; /* Increased from 110px to 180px for example questions */
+  }
+  
+  @media (max-width: 480px) {
+    padding: 220px 0 ${(props) => props.theme.spacing[10]} 0; /* Even more space on very small screens */
   }
 `;
 
@@ -237,6 +241,7 @@ const Avatar = styled.div<{ $isUser: boolean }>`
       ? props.theme.light.textAbovePrimaryColor 
       : props.theme.light.primaryTextColor
   };
+  overflow: hidden;
   
   @media (prefers-color-scheme: dark) {
     background: ${(props) => 
@@ -249,6 +254,13 @@ const Avatar = styled.div<{ $isUser: boolean }>`
         ? props.theme.dark.textAbovePrimaryColor 
         : props.theme.dark.primaryTextColor
     };
+  }
+  
+  /* Larger on mobile for better face visibility */
+  @media (max-width: 768px) {
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
   }
 `;
 
@@ -282,6 +294,15 @@ const MessageBubbleContent = styled(Paragraph)<{ $isUser: boolean }>`
         : props.theme.dark.primaryTextColor
     } !important;
   }
+  
+  @media (max-width: 768px) {
+    max-width: 85%; /* Much wider on mobile */
+    padding: ${(props) => props.theme.spacing[2]};
+  }
+  
+  @media (max-width: 480px) {
+    max-width: 90%; /* Even wider on very small screens */
+  }
 `;
 
 const InputContainer = styled.form`
@@ -290,19 +311,73 @@ const InputContainer = styled.form`
   left: 0;
   right: 0;
   padding: ${(props) => props.theme.spacing[3]};
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-top: 1px solid ${(props) => props.theme.light.dividerColor};
+  background: rgba(251, 251, 251, 0.5); /* More transparent for stronger blur effect */
+  backdrop-filter: blur(50px); /* Ultra-strong blur - increased from 45px to match title intensity */
+  -webkit-backdrop-filter: blur(50px);
+  border-top: 1px solid ${(props) => props.theme.light.dividerColor}20; /* Even more subtle border */
   z-index: 100;
   
   /* Container for centering the input */
   display: flex;
   justify-content: center;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    ${(props) => props.theme.light.primaryColor}30,
+    transparent
+  );
+  
+  /* Enhanced gradient overlay for maximum blur effect */
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      to top,
+      rgba(251, 251, 251, 0.99) 0%,
+      rgba(251, 251, 251, 0.9) 30%,
+      rgba(251, 251, 251, 0.7) 60%,
+      rgba(251, 251, 251, 0.3) 80%,
+      rgba(251, 251, 251, 0.1) 100%
+    );
+    pointer-events: none;
+    z-index: -1;
+  }
+  
+  /* Additional blur layer for extreme effect */
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    backdrop-filter: blur(25px); /* Increased from 20px */
+    -webkit-backdrop-filter: blur(25px);
+    pointer-events: none;
+    z-index: -2;
+  }
   
   @media (prefers-color-scheme: dark) {
-    background: rgba(33, 34, 33, 0.8);
-    border-top-color: ${(props) => props.theme.dark.dividerColor};
+    background: rgba(33, 34, 33, 0.6);
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    border-top-color: ${(props) => props.theme.dark.dividerColor}20;
+    
+    &::before {
+      background: linear-gradient(
+        to top,
+        rgba(33, 34, 33, 0.99) 0%,
+        rgba(33, 34, 33, 0.9) 30%,
+        rgba(33, 34, 33, 0.7) 60%,
+        rgba(33, 34, 33, 0.3) 80%,
+        rgba(33, 34, 33, 0.1) 100%
+      );
+    }
   }
 `;
 
@@ -310,6 +385,14 @@ const InputWrapper = styled.div`
   position: relative;
   width: 100%;
   max-width: 900px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 1.5rem;
+  
+  ${mediaQuery.dark} {
+    background: rgba(0, 0, 0, 0.1);
+  }
 `;
 
 const ChatInput = styled.input`
@@ -393,135 +476,77 @@ const SendButton = styled.button`
 
 const WelcomeMessage = styled.div`
   text-align: center;
-  padding: ${(props) => props.theme.spacing[5]} ${(props) => props.theme.spacing[4]}; /* Reduced padding */
+  padding: ${(props) => props.theme.spacing[3]} ${(props) => props.theme.spacing[3]}; /* More compact padding */
   position: relative;
   
-  /* Same style as main header but more subtle */
-  background: linear-gradient(
-    135deg,
-    ${(props) => props.theme.light.generalBackground} 0%,
-    ${(props) => props.theme.light.generalBackgroundLight} 50%,
-    ${(props) => props.theme.light.generalBackground} 100%
-  );
-  border-radius: 1.2rem; /* Slightly smaller radius */
-  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.04); /* Softer shadow */
-  margin: ${(props) => props.theme.spacing[2]} 0;
-  
-  /* Subtle decorative border - less prominent than main header */
-  &::before {
-    content: '';
-    position: absolute;
-    top: -1px;
-    left: -1px;
-    right: -1px;
-    bottom: -1px;
-    background: linear-gradient(
-      45deg,
-      ${(props) => props.theme.light.primaryColor}15,
-      ${(props) => props.theme.light.accentColor}20,
-      ${(props) => props.theme.light.primaryColor}15
-    );
-    border-radius: 1.2rem;
-    z-index: -1;
-    opacity: 0.5; /* More subtle than main header */
-  }
+  /* Lighter styling for less visual weight */
+  background: rgba(251, 251, 251, 0.6); /* More transparent */
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 1rem; /* Smaller radius */
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03); /* Very subtle shadow */
+  margin: ${(props) => props.theme.spacing[1]} 0;
+  border: 1px solid ${(props) => props.theme.light.dividerColor}30; /* Very subtle border */
 
   ${mediaQuery.dark} {
-    background: linear-gradient(
-      135deg,
-      ${(props) => props.theme.dark.generalBackground} 0%,
-      ${(props) => props.theme.dark.generalBackgroundLight} 50%,
-      ${(props) => props.theme.dark.generalBackground} 100%
-    );
-    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.2);
-    
-    &::before {
-      background: linear-gradient(
-        45deg,
-        ${(props) => props.theme.dark.primaryColor}20,
-        ${(props) => props.theme.dark.accentColor}25,
-        ${(props) => props.theme.dark.primaryColor}20
-      );
-    }
+    background: rgba(33, 34, 33, 0.6);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+    border-color: ${(props) => props.theme.dark.dividerColor}30;
   }
   
   @media (max-width: 768px) {
-    padding: ${(props) => props.theme.spacing[4]} ${(props) => props.theme.spacing[3]};
-    margin: ${(props) => props.theme.spacing[1]} 0;
+    padding: ${(props) => props.theme.spacing[2]};
+    margin: ${(props) => props.theme.spacing[0]} 0;
   }
 `;
 
-const WelcomeDescription = styled(Paragraph)`
+
+const ExampleQuestions = styled.div`
   margin-top: ${(props) => props.theme.spacing[2]}; /* Reduced spacing */
-  margin-bottom: ${(props) => props.theme.spacing[3]};
+  display: flex;
+  flex-direction: column;
+  gap: ${(props) => props.theme.spacing[1]}; /* Smaller gap */
   
   @media (max-width: 768px) {
     margin-top: ${(props) => props.theme.spacing[1]};
-    margin-bottom: ${(props) => props.theme.spacing[2]};
-  }
-`;
-
-const ExampleQuestions = styled.div`
-  margin-top: ${(props) => props.theme.spacing[3]}; /* Reduced spacing */
-  display: flex;
-  flex-direction: column;
-  gap: ${(props) => props.theme.spacing[2]}; /* Reduced gap */
-  
-  @media (max-width: 768px) {
-    margin-top: ${(props) => props.theme.spacing[2]};
-    gap: ${(props) => props.theme.spacing[1]};
+    gap: ${(props) => props.theme.spacing[0]};
   }
 `;
 
 const ExampleQuestionsLabel = styled(Paragraph)`
   font-weight: 600;
-  margin-bottom: ${(props) => props.theme.spacing[1]}; /* Reduced margin */
-  
-  @media (max-width: 768px) {
-    margin-bottom: ${(props) => props.theme.spacing[0]};
-  }
+  margin-bottom: ${(props) => props.theme.spacing[0]}; /* Minimal margin */
 `;
 
 const ExampleQuestion = styled.button`
-  background: rgba(255, 255, 255, 0.6); /* Slightly more subtle */
-  backdrop-filter: blur(8px); /* Slightly less blur */
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid ${(props) => props.theme.light.dividerColor};
-  border-radius: 0.8rem; /* Slightly smaller radius than main header */
-  padding: ${(props) => props.theme.spacing[2]} ${(props) => props.theme.spacing[3]}; /* Reduced padding */
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid ${(props) => props.theme.light.dividerColor}30;
+  border-radius: 1rem;
+  padding: ${(props) => props.theme.spacing[3]} ${(props) => props.theme.spacing[4]};
   color: ${(props) => props.theme.light.primaryTextColor};
   cursor: pointer;
-  transition: all 0.3s ease;
   text-align: left;
-  font-size: ${(props) => props.theme.fontSizes[1]}; /* Slightly smaller font */
+  font-size: ${(props) => props.theme.fontSizes[1]};
   font-family: inherit;
-  line-height: 1.4; /* Tighter line height */
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06); /* Softer shadow */
+  font-weight: 500;
+  line-height: 1.4;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06), 0 1px 4px rgba(0, 0, 0, 0.03);
   position: relative;
   overflow: hidden;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(255, 255, 255, 0.15), /* More subtle shimmer */
-      transparent
-    );
-    transition: left 0.5s ease;
-  }
+  display: flex;
+  align-items: center;
+  gap: ${(props) => props.theme.spacing[2]};
 
   &:hover {
-    background: rgba(63, 81, 181, 0.85); /* Slightly less intense */
+    background: linear-gradient(145deg, 
+      ${(props) => props.theme.light.primaryColor}F0,
+      ${(props) => props.theme.light.accentColor}F0
+    );
     color: ${(props) => props.theme.light.textAbovePrimaryColor};
-    border-color: ${(props) => props.theme.light.primaryColor};
-    transform: translateY(-1px); /* Reduced lift */
-    box-shadow: 0 6px 20px rgba(63, 81, 181, 0.25); /* Softer hover shadow */
+    border-color: ${(props) => props.theme.light.primaryColor}40;
+    box-shadow: 0 6px 18px rgba(63, 81, 181, 0.12);
 
     &::before {
       left: 100%;
@@ -533,33 +558,30 @@ const ExampleQuestion = styled.button`
   }
   
   @media (prefers-color-scheme: dark) {
-    background: rgba(33, 34, 33, 0.7); /* Slightly more subtle */
-    border-color: ${(props) => props.theme.dark.dividerColor};
+    background: linear-gradient(145deg, rgba(45, 45, 45, 0.9), rgba(33, 33, 33, 0.8));
+    border-color: ${(props) => props.theme.dark.dividerColor}30;
     color: ${(props) => props.theme.dark.primaryTextColor};
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
-    
-    &::before {
-      background: linear-gradient(
-        90deg,
-        transparent,
-        rgba(63, 81, 181, 0.25),
-        transparent
-      );
-    }
-    
-    &:hover {
-      background: rgba(63, 81, 181, 0.85);
-      color: ${(props) => props.theme.dark.textAbovePrimaryColor};
-      border-color: ${(props) => props.theme.dark.primaryColor};
-      box-shadow: 0 6px 20px rgba(63, 81, 181, 0.35);
-    }
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2), 0 1px 4px rgba(0, 0, 0, 0.1);
   }
   
   @media (max-width: 768px) {
-    padding: ${(props) => props.theme.spacing[2]};
-    font-size: ${(props) => props.theme.fontSizes[0]}; /* Even smaller on mobile */
+    padding: ${(props) => props.theme.spacing[2]} ${(props) => props.theme.spacing[3]};
     line-height: 1.3;
-    border-radius: 0.6rem;
+    border-radius: 0.8rem;
+  }
+`;
+
+const QuestionText = styled.span`
+  flex: 1;
+`;
+
+const QuestionIcon = styled.span`
+  font-size: 1.2em;
+  opacity: 0.8;
+  flex-shrink: 0;
+  
+  @media (max-width: 768px) {
+    font-size: 1em;
   }
 `;
 
@@ -577,8 +599,10 @@ export const Chat: FC = () => {
   return (
     <ChatContainer>
       <ChatHeader>
-        <ChatIcon>💬</ChatIcon>
-        <StyledHeading1>Chat with Fabrizio</StyledHeading1>
+        <TitleGroup>
+          <ChatIcon>💬</ChatIcon>
+          <StyledHeading1>Chat with Fabrizio</StyledHeading1>
+        </TitleGroup>
         <StyledSubtitle>
           Ask me anything about my work, projects, and software development expertise
         </StyledSubtitle>
@@ -588,10 +612,6 @@ export const Chat: FC = () => {
         {messages.length === 0 && (
           <WelcomeMessage>
             <Heading6>👋 Hey there! Ready to dive into my tech journey?</Heading6>
-            <WelcomeDescription>
-              This AI-powered chat knows all about my professional experience,
-              projects, and technical skills. Don&#39;t hold back—ask me anything!
-            </WelcomeDescription>
             <ExampleQuestions>
               <ExampleQuestionsLabel>Here are some conversation starters:</ExampleQuestionsLabel>
               {exampleQuestions.map((question) => (
@@ -600,7 +620,8 @@ export const Chat: FC = () => {
                   onClick={() => handleExampleQuestionsSelection(question)}
                   type="button"
                 >
-                  💬 {question}
+                  <QuestionIcon>💬</QuestionIcon>
+                  <QuestionText>{question}</QuestionText>
                 </ExampleQuestion>
               ))}
             </ExampleQuestions>
@@ -610,7 +631,21 @@ export const Chat: FC = () => {
         {messages.map((message) => (
           <MessageGroup key={message.id} $isUser={message.role === "user"}>
             <Avatar $isUser={message.role === "user"}>
-              {message.role === "user" ? <User size={20} /> : <Bot size={20} />}
+              {message.role === "user" ? (
+                <User size={20} />
+              ) : (
+                <Image
+                  src="/images/authors/fabrizio-duroni.jpg"
+                  alt="Fabrizio Duroni"
+                  width={40}
+                  height={40}
+                  style={{
+                    borderRadius: '50%',
+                    objectFit: 'cover',
+                    objectPosition: '80% 80%'
+                  }}
+                />
+              )}
             </Avatar>
             <MessageBubbleContent $isUser={message.role === "user"}>
               {message.parts.map((part) => {
