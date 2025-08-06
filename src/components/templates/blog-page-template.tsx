@@ -4,14 +4,14 @@ import {ContentContainer} from "@/components/website/content-container";
 import {DesktopBlogHeader} from "@/components/design-system/organism/blog-header";
 import {Footer} from "@/components/design-system/organism/footer";
 
-export interface PageProps {
+export interface BlogPageProps {
   author: string;
   trackingCategory: string;
   big?: boolean;
   children?: ReactNode;
 }
 
-export const PageTemplate: FC<PageProps> = ({
+export const BlogPageTemplate: FC<BlogPageProps> = ({
   children,
   author,
   trackingCategory,

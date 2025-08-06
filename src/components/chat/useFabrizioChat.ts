@@ -1,6 +1,13 @@
 import { useChat } from "@ai-sdk/react";
 import { useState } from "react";
 
+const exampleQuestions = [
+  "Which programming languages does Fabrizio Duroni know?",
+  "Tell me about Fabrizio’s experience at lastminute.com.",
+  "Which open source projects has Fabrizio created?",
+  "Talk about Fabrizio’s experience with React Native."
+];
+
 export const useFabrizioChat = () => {
   const { messages, sendMessage } = useChat();
   const [input, setInput] = useState('');
@@ -21,5 +28,9 @@ export const useFabrizioChat = () => {
     setInput(e.target.value);
   };
 
-  return { messages, input, handleSubmit, handleInputChange };
+  const handleExampleQuestionsSelection = async (question: string) => {
+    await sendMessage({ text: question });
+  };
+
+  return { messages, input, exampleQuestions, handleExampleQuestionsSelection, handleSubmit, handleInputChange };
 }

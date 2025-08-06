@@ -1,5 +1,5 @@
 import { siteMetadata } from "@/types/site-metadata";
-import { PageTemplate } from "@/components/templates/page-template";
+import { BlogPageTemplate } from "@/components/templates/blog-page-template";
 import { tracking } from "@/types/tracking";
 import { Heading1 } from "@/components/design-system/atoms/heading1";
 import { Paragraph } from "@/components/design-system/atoms/paragraph";
@@ -22,7 +22,7 @@ export default function CookiePolicy() {
   const author = siteMetadata.author;
 
   return (
-    <PageTemplate
+    <BlogPageTemplate
       author={author}
       trackingCategory={tracking.category.cookie_policy}
     >
@@ -108,6 +108,6 @@ export default function CookiePolicy() {
           </li>
         </List>
       </ContainerSection>
-    </PageTemplate>
+    </BlogPageTemplate>
   );
 }
