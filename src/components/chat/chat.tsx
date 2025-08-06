@@ -3,10 +3,10 @@
 import styled, { keyframes } from "styled-components";
 import { Bot, Send, User } from "@styled-icons/boxicons-regular";
 import { useFabrizioChat } from "@/components/chat/useFabrizioChat";
-import { FC, useEffect, useRef } from "react";
+import { FC } from "react";
 import { Heading1 } from "@/components/design-system/atoms/heading1";
 import { Heading3 } from "@/components/design-system/atoms/heading3";
-import { Paragraph } from "@/components/design-system/atoms/paragraph";
+import { Paragraph, paragraphStyle } from "@/components/design-system/atoms/paragraph";
 import { mediaQuery } from "@/components/design-system/utils-css/media-query";
 import { Heading4 } from "@/components/design-system/atoms/heading4";
 import { Heading6 } from "@/components/design-system/atoms/heading6";
@@ -313,14 +313,13 @@ const InputWrapper = styled.div`
 `;
 
 const ChatInput = styled.input`
+  ${paragraphStyle};
   width: 100%;
   padding: ${(props) => props.theme.spacing[2]} ${(props) => props.theme.spacing[8]} ${(props) => props.theme.spacing[2]} ${(props) => props.theme.spacing[3]};
   border: 1px solid ${(props) => props.theme.light.dividerColor};
   border-radius: 1.5rem;
-  font-size: ${(props) => props.theme.fontSizes[2]};
   outline: none;
   background: ${(props) => props.theme.light.generalBackground};
-  color: ${(props) => props.theme.light.primaryTextColor};
   transition: border-color 0.2s, box-shadow 0.2s;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 
@@ -333,11 +332,10 @@ const ChatInput = styled.input`
     background: ${(props) => props.theme.light.generalBackgroundLight};
     cursor: not-allowed;
   }
-  
-  @media (prefers-color-scheme: dark) {
+
+  ${mediaQuery.dark} {
     border-color: ${(props) => props.theme.dark.dividerColor};
     background: ${(props) => props.theme.dark.generalBackground};
-    color: ${(props) => props.theme.dark.primaryTextColor};
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     
     &:focus {
@@ -566,16 +564,15 @@ const ExampleQuestion = styled.button`
 `;
 
 export const Chat: FC = () => {
-  const { messages, input, handleSubmit, handleInputChange, exampleQuestions, handleExampleQuestionsSelection } = useFabrizioChat();
-  const messagesEndRef = useRef<HTMLDivElement>(null);
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+  const {
+    messages,
+    input,
+    handleSubmit,
+    handleInputChange,
+    exampleQuestions,
+    handleExampleQuestionsSelection,
+    messagesEndRef
+  } = useFabrizioChat();
 
   return (
     <ChatContainer>
