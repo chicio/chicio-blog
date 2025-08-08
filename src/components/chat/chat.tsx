@@ -267,7 +267,7 @@ const Avatar = styled.div<{ $isUser: boolean }>`
 
 const MessageBubbleContainer = styled.div<{ $isUser: boolean }>`
   max-width: 70%;
-  padding: ${(props) => props.theme.spacing[2]} ${(props) => props.theme.spacing[3]};
+  padding: 0 ${(props) => props.theme.spacing[2]};
   border-radius: 1rem;
   background: ${(props) => 
     props.$isUser 
@@ -297,7 +297,7 @@ const MessageBubbleContainer = styled.div<{ $isUser: boolean }>`
   }
   
   @media (max-width: 768px) {
-    max-width: 85%; /* Much wider on mobile */
+    max-width: 85%;
     padding: ${(props) => props.theme.spacing[2]};
   }
   
