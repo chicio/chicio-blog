@@ -172,6 +172,10 @@ const PostContentContainer = styled.div`
       padding: 4px;
       ${borderRadius};
   }
+
+  & li strong {
+    font-family: 'Open Sans Bold', Arial, sans-serif;
+  }
   
   & img {
       width: 100%;
@@ -185,6 +189,7 @@ const PostContentContainer = styled.div`
   
   & p strong {
       ${paragraphStyle};
+      font-family: 'Open Sans Bold', Arial, sans-serif;
       font-weight: 600;
   }
 `;

@@ -16,6 +16,24 @@ export const GlobalStyle = createGlobalStyle`
         font-display: fallback;
     }
 
+    @font-face {
+        font-family: 'Open Sans';
+        src: local("Open Sans SemiBold"),
+        url('/fonts/opensans/OpenSans-SemiBold.ttf') format('truetype');
+        font-weight: bold;
+        font-style: normal;
+        font-display: fallback;
+    }
+
+    @font-face {
+      font-family: 'Open Sans';
+      src: local("Open Sans Bold"),
+      url('/fonts/opensans/OpenSans-Bold.ttf') format('truetype');
+      font-weight: bold;
+      font-style: normal;
+      font-display: fallback;
+    }
+
     html {
         max-width: 100%;
         overflow-x: hidden;

@@ -1,6 +1,11 @@
 import { marked } from 'marked';
 import { memo, useMemo } from 'react';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import remarkMath from 'remark-math';
+import remarkEmoji from 'remark-emoji';
+import rehypeHighlight from 'rehype-highlight';
+import rehypeKatex from 'rehype-katex';
 
 function parseMarkdownIntoBlocks(markdown: string): string[] {
   const tokens = marked.lexer(markdown);
@@ -9,7 +14,12 @@ function parseMarkdownIntoBlocks(markdown: string): string[] {
 
 const MarkdownBlock = memo(
   ({ content }: { content: string }) => (
-    <ReactMarkdown>{content}</ReactMarkdown>
+    <ReactMarkdown
+      remarkPlugins={[remarkGfm, remarkMath, remarkEmoji]}
+      rehypePlugins={[rehypeHighlight, rehypeKatex]}
+    >
+      {content}
+    </ReactMarkdown>
   ),
   (prevProps, nextProps) => prevProps.content === nextProps.content,
 );

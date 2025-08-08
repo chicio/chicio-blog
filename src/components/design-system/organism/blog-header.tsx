@@ -26,7 +26,6 @@ const BlogHeaderColumn = styled.div`
 const BlogTitle = styled.span`
   color: ${(props) => props.theme.light.textAbovePrimaryColor};
   margin: 0;
-  font-weight: bold;
   display: block;
   line-height: 1.5;
   font-size: ${(props) => props.theme.fontSizes[4]};
