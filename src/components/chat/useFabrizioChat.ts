@@ -44,8 +44,8 @@ export const useFabrizioChat = () => {
 
     await sendMessage({ text: input });
 
-    setHasStartedConversation(true);
     setInput('');
+    setHasStartedConversation(true);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
