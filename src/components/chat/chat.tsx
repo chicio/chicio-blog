@@ -81,7 +81,7 @@ const ChatHeader = styled.div`
     }
   }
   
-  @media (max-width: 768px) {
+  ${mediaQuery.maxWidth.sm} {
     padding: ${(props) => props.theme.spacing[3]} ${(props) => props.theme.spacing[2]};
   }
 `;
@@ -93,7 +93,7 @@ const TitleGroup = styled.div`
   gap: ${(props) => props.theme.spacing[2]};
   margin-bottom: ${(props) => props.theme.spacing[1]};
   
-  @media (max-width: 768px) {
+  ${mediaQuery.maxWidth.sm} {
     gap: ${(props) => props.theme.spacing[1]};
     margin-bottom: ${(props) => props.theme.spacing[0]};
   }
@@ -118,7 +118,7 @@ const StyledHeading1 = styled(Heading1)`
   
   text-shadow: 0 0 20px ${(props) => props.theme.light.primaryColor}30;
   
-  @media (prefers-color-scheme: dark) {
+  ${mediaQuery.dark} {
     background: linear-gradient(
       135deg,
       ${(props) => props.theme.dark.primaryColor},
@@ -133,7 +133,7 @@ const StyledHeading1 = styled(Heading1)`
     }
   }
   
-  @media (max-width: 768px) {
+  ${mediaQuery.maxWidth.sm} {
     font-size: ${(props) => props.theme.fontSizes[7]};
   }
 `;
@@ -166,7 +166,7 @@ const ChatIcon = styled.div`
     50% { transform: scale(1.2); }
   }
   
-  @media (prefers-color-scheme: dark) {
+  ${mediaQuery.dark} {
     background: linear-gradient(
       135deg,
       ${(props) => props.theme.dark.primaryColor},
@@ -175,7 +175,7 @@ const ChatIcon = styled.div`
     box-shadow: 0 4px 15px ${(props) => props.theme.dark.primaryColor}50;
   }
   
-  @media (max-width: 768px) {
+  ${mediaQuery.maxWidth.sm} {
     width: 28px;
     height: 28px;
     font-size: 1rem;
@@ -199,11 +199,11 @@ const MessagesContainer = styled.div`
   
   -ms-overflow-style: none;
   
-  @media (max-width: 768px) {
+  ${mediaQuery.maxWidth.sm} {
     padding: 180px 0 ${(props) => props.theme.spacing[10]} 0;
   }
   
-  @media (max-width: 480px) {
+  ${mediaQuery.maxWidth.xs} {
     padding: 220px 0 ${(props) => props.theme.spacing[10]} 0;
   }
 `;
@@ -237,7 +237,7 @@ const Avatar = styled.div<{ $isUser: boolean }>`
   };
   overflow: hidden;
   
-  @media (prefers-color-scheme: dark) {
+  ${mediaQuery.dark} {
     background: ${(props) => 
       props.$isUser 
         ? props.theme.dark.primaryColor 
@@ -250,7 +250,7 @@ const Avatar = styled.div<{ $isUser: boolean }>`
     };
   }
   
-  @media (max-width: 768px) {
+  ${mediaQuery.maxWidth.sm} {
     width: 32px;
     height: 32px;
     font-size: 1rem;
@@ -288,12 +288,12 @@ const MessageBubbleContainer = styled.div<{ $isUser: boolean }>`
     } !important;
   }
   
-  @media (max-width: 768px) {
+  ${mediaQuery.maxWidth.sm} {
     max-width: 85%;
     padding: ${(props) => props.theme.spacing[2]};
   }
   
-  @media (max-width: 480px) {
+  ${mediaQuery.maxWidth.xs} {
     max-width: 90%;
   }
 `;
@@ -352,7 +352,7 @@ const InputContainer = styled.form`
     z-index: -2;
   }
   
-  @media (prefers-color-scheme: dark) {
+  ${mediaQuery.dark} {
     background: rgba(33, 34, 33, 0.6);
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
@@ -450,7 +450,7 @@ const SendButton = styled.button`
     transform: translateY(-50%);
   }
   
-  @media (prefers-color-scheme: dark) {
+  ${mediaQuery.dark} {
     background: ${(props) => props.theme.dark.primaryColor};
     color: ${(props) => props.theme.dark.textAbovePrimaryColor};
     
@@ -483,7 +483,7 @@ const WelcomeMessage = styled.div`
     border-color: ${(props) => props.theme.dark.dividerColor}30;
   }
   
-  @media (max-width: 768px) {
+  ${mediaQuery.maxWidth.sm} {
     padding: ${(props) => props.theme.spacing[2]};
     margin: ${(props) => props.theme.spacing[0]} 0;
   }
@@ -495,7 +495,7 @@ const ExampleQuestions = styled.div`
   flex-direction: column;
   gap: ${(props) => props.theme.spacing[1]};
   
-  @media (max-width: 768px) {
+  ${mediaQuery.maxWidth.sm} {
     margin-top: ${(props) => props.theme.spacing[1]};
     gap: ${(props) => props.theme.spacing[0]};
   }
@@ -545,14 +545,14 @@ const ExampleQuestion = styled.button`
     transform: translateY(0);
   }
   
-  @media (prefers-color-scheme: dark) {
+  ${mediaQuery.dark} {
     background: linear-gradient(145deg, rgba(45, 45, 45, 0.9), rgba(33, 33, 33, 0.8));
     border-color: ${(props) => props.theme.dark.dividerColor}30;
     color: ${(props) => props.theme.dark.primaryTextColor};
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2), 0 1px 4px rgba(0, 0, 0, 0.1);
   }
   
-  @media (max-width: 768px) {
+  ${mediaQuery.maxWidth.sm} {
     padding: ${(props) => props.theme.spacing[2]} ${(props) => props.theme.spacing[3]};
     line-height: 1.3;
     border-radius: 0.8rem;
@@ -568,7 +568,7 @@ const QuestionIcon = styled.span`
   opacity: 0.8;
   flex-shrink: 0;
   
-  @media (max-width: 768px) {
+  ${mediaQuery.maxWidth.sm} {
     font-size: 1em;
   }
 `;
