@@ -18,9 +18,20 @@ export const useFabrizioChat = () => {
     if (messages.length > 0 && !hasStartedConversation) {
       setHasStartedConversation(true);
     }
+  }, [messages, hasStartedConversation]);
 
-    if (hasStartedConversation) {
-      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  useEffect(() => {
+    if (hasStartedConversation && messages.length > 0) {
+      const lastMessage = messages[messages.length - 1];
+
+      const isLastMessageDone = lastMessage.role === 'user' ||
+        lastMessage.parts.some(part => part.type === 'text' && part.state === 'done');
+
+      if (isLastMessageDone) {
+        setTimeout(() => {
+          messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+        }, 100);
+      }
     }
   }, [messages, hasStartedConversation]);
 
@@ -54,6 +65,6 @@ export const useFabrizioChat = () => {
     handleExampleQuestionsSelection,
     handleSubmit,
     handleInputChange,
-    messagesEndRef
+    messagesEndRef,
   };
 }

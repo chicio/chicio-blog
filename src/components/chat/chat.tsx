@@ -9,6 +9,7 @@ import { Paragraph, paragraphStyle } from "@/components/design-system/atoms/para
 import { mediaQuery } from "@/components/design-system/utils-css/media-query";
 import { Heading6 } from "@/components/design-system/atoms/heading6";
 import Image from "next/image";
+import { Markdown } from "@/components/chat/markdown";
 
 const fadeIn = keyframes`
   from {
@@ -264,7 +265,7 @@ const Avatar = styled.div<{ $isUser: boolean }>`
   }
 `;
 
-const MessageBubbleContent = styled(Paragraph)<{ $isUser: boolean }>`
+const MessageBubbleContainer = styled.div<{ $isUser: boolean }>`
   max-width: 70%;
   padding: ${(props) => props.theme.spacing[2]} ${(props) => props.theme.spacing[3]};
   border-radius: 1rem;
@@ -278,9 +279,9 @@ const MessageBubbleContent = styled(Paragraph)<{ $isUser: boolean }>`
       ? props.theme.light.textAbovePrimaryColor 
       : props.theme.light.primaryTextColor
   } !important;
-  white-space: pre-wrap;
   ${(props) => props.$isUser && "margin-left: auto;"}
-  margin: 0; /* Override default paragraph margin */
+  margin: 0;
+  ${paragraphStyle};
 
   ${mediaQuery.dark} {
     background: ${(props) => 
@@ -479,8 +480,7 @@ const WelcomeMessage = styled.div`
   padding: ${(props) => props.theme.spacing[3]} ${(props) => props.theme.spacing[3]}; /* More compact padding */
   position: relative;
   
-  /* Lighter styling for less visual weight */
-  background: rgba(251, 251, 251, 0.6); /* More transparent */
+  background: rgba(251, 251, 251, 0.6); 
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border-radius: 1rem; /* Smaller radius */
@@ -635,7 +635,7 @@ export const Chat: FC = () => {
                 <User size={20} />
               ) : (
                 <Image
-                  src="/images/authors/fabrizio-duroni.jpg"
+                  src="/images/chat-avatar.png"
                   alt="Fabrizio Duroni"
                   width={40}
                   height={40}
@@ -647,14 +647,19 @@ export const Chat: FC = () => {
                 />
               )}
             </Avatar>
-            <MessageBubbleContent $isUser={message.role === "user"}>
+            <MessageBubbleContainer $isUser={message.role === "user"}>
               {message.parts.map((part) => {
-                switch (part.type) {
-                  case "text":
-                    return part.text;
+                if (part.type === "text") {
+                  return (
+                    <Markdown
+                      key={`${message.id}-text`}
+                      id={message.id}
+                      content={part.text}
+                    />
+                  );
                 }
               })}
-            </MessageBubbleContent>
+            </MessageBubbleContainer>
           </MessageGroup>
         ))}
         <div ref={messagesEndRef} />
