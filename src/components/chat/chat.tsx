@@ -37,20 +37,18 @@ const ChatHeader = styled.div`
   text-align: center;
   padding: ${(props) => props.theme.spacing[4]} ${(props) => props.theme.spacing[3]};
   position: absolute;
-  top: 0; /* Right after site header */
+  top: 0;
   left: 0;
   right: 0;
-  width: 100vw; /* Full viewport width */
-  margin-left: calc(-50vw + 50%); /* Center content while using full width */
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
   z-index: 50;
   
-  /* Enhanced blur background */
-  background: rgba(251, 251, 251, 0.8); /* More transparent for stronger blur effect */
-  backdrop-filter: blur(30px); /* Much stronger blur */
+  background: rgba(251, 251, 251, 0.8);
+  backdrop-filter: blur(30px);
   -webkit-backdrop-filter: blur(30px);
   box-shadow: 0 4px 25px rgba(0, 0, 0, 0.08);
   
-  /* Subtle decorative border at bottom */
   &::after {
     content: '';
     position: absolute;
@@ -93,7 +91,7 @@ const TitleGroup = styled.div`
   align-items: center;
   justify-content: center;
   gap: ${(props) => props.theme.spacing[2]};
-  margin-bottom: ${(props) => props.theme.spacing[1]}; /* Reduced spacing */
+  margin-bottom: ${(props) => props.theme.spacing[1]};
   
   @media (max-width: 768px) {
     gap: ${(props) => props.theme.spacing[1]};
@@ -110,16 +108,14 @@ const StyledHeading1 = styled(Heading1)`
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  margin: 0; /* Remove all margins */
+  margin: 0;
   position: relative;
-  font-size: ${(props) => props.theme.fontSizes[9]}; /* Slightly smaller */
+  font-size: ${(props) => props.theme.fontSizes[9]};
   
-  /* Fallback for browsers that don't support background-clip */
   @supports not (-webkit-background-clip: text) {
     color: ${(props) => props.theme.light.primaryColor};
   }
   
-  /* Add a subtle glow effect */
   text-shadow: 0 0 20px ${(props) => props.theme.light.primaryColor}30;
   
   @media (prefers-color-scheme: dark) {
@@ -138,18 +134,18 @@ const StyledHeading1 = styled(Heading1)`
   }
   
   @media (max-width: 768px) {
-    font-size: ${(props) => props.theme.fontSizes[7]}; /* Even smaller on mobile */
+    font-size: ${(props) => props.theme.fontSizes[7]};
   }
 `;
 
 const StyledSubtitle = styled(Paragraph)`
   font-weight: 300;
   margin: 0;
-  opacity: 0.8; /* More subtle */
+  opacity: 0.8;
 `;
 
 const ChatIcon = styled.div`
-  width: 36px; /* Smaller and more compact */
+  width: 36px;
   height: 36px;
   background: linear-gradient(
     135deg,
@@ -160,14 +156,14 @@ const ChatIcon = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.2rem; /* Smaller icon */
+  font-size: 1.2rem;
   box-shadow: 0 4px 15px ${(props) => props.theme.light.primaryColor}40;
-  animation: pulse 3s ease-in-out infinite; /* Changed from float to pulse */
+  animation: pulse 3s ease-in-out infinite;
   flex-shrink: 0;
   
   @keyframes pulse {
     0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.2); } /* Gentle pulsing effect */
+    50% { transform: scale(1.2); }
   }
   
   @media (prefers-color-scheme: dark) {
@@ -189,29 +185,26 @@ const ChatIcon = styled.div`
 const MessagesContainer = styled.div`
   flex: 1;
   overflow-y: auto;
-  padding: 140px 0 ${(props) => props.theme.spacing[12]} 0; /* Top padding for chat header */
+  padding: 140px 0 ${(props) => props.theme.spacing[12]} 0;
   display: flex;
   flex-direction: column;
   gap: ${(props) => props.theme.spacing[2]};
   scroll-behavior: smooth;
   
-  /* Hide scrollbar for webkit browsers (Chrome, Safari, Edge) */
   &::-webkit-scrollbar {
     display: none;
   }
   
-  /* Hide scrollbar for Firefox */
   scrollbar-width: none;
   
-  /* Hide scrollbar for IE and older Edge */
   -ms-overflow-style: none;
   
   @media (max-width: 768px) {
-    padding: 180px 0 ${(props) => props.theme.spacing[10]} 0; /* Increased from 110px to 180px for example questions */
+    padding: 180px 0 ${(props) => props.theme.spacing[10]} 0;
   }
   
   @media (max-width: 480px) {
-    padding: 220px 0 ${(props) => props.theme.spacing[10]} 0; /* Even more space on very small screens */
+    padding: 220px 0 ${(props) => props.theme.spacing[10]} 0;
   }
 `;
 
@@ -257,7 +250,6 @@ const Avatar = styled.div<{ $isUser: boolean }>`
     };
   }
   
-  /* Larger on mobile for better face visibility */
   @media (max-width: 768px) {
     width: 32px;
     height: 32px;
@@ -302,7 +294,7 @@ const MessageBubbleContainer = styled.div<{ $isUser: boolean }>`
   }
   
   @media (max-width: 480px) {
-    max-width: 90%; /* Even wider on very small screens */
+    max-width: 90%;
   }
 `;
 
@@ -312,13 +304,12 @@ const InputContainer = styled.form`
   left: 0;
   right: 0;
   padding: ${(props) => props.theme.spacing[3]};
-  background: rgba(251, 251, 251, 0.5); /* More transparent for stronger blur effect */
-  backdrop-filter: blur(50px); /* Ultra-strong blur - increased from 45px to match title intensity */
+  background: rgba(251, 251, 251, 0.5);
+  backdrop-filter: blur(50px);
   -webkit-backdrop-filter: blur(50px);
-  border-top: 1px solid ${(props) => props.theme.light.dividerColor}20; /* Even more subtle border */
+  border-top: 1px solid ${(props) => props.theme.light.dividerColor}20;
   z-index: 100;
   
-  /* Container for centering the input */
   display: flex;
   justify-content: center;
 
@@ -329,7 +320,6 @@ const InputContainer = styled.form`
     transparent
   );
   
-  /* Enhanced gradient overlay for maximum blur effect */
   &::before {
     content: '';
     position: absolute;
@@ -349,7 +339,6 @@ const InputContainer = styled.form`
     z-index: -1;
   }
   
-  /* Additional blur layer for extreme effect */
   &::after {
     content: '';
     position: absolute;
@@ -357,7 +346,7 @@ const InputContainer = styled.form`
     left: 0;
     right: 0;
     bottom: 0;
-    backdrop-filter: blur(25px); /* Increased from 20px */
+    backdrop-filter: blur(25px);
     -webkit-backdrop-filter: blur(25px);
     pointer-events: none;
     z-index: -2;
@@ -477,16 +466,16 @@ const SendButton = styled.button`
 
 const WelcomeMessage = styled.div`
   text-align: center;
-  padding: ${(props) => props.theme.spacing[3]} ${(props) => props.theme.spacing[3]}; /* More compact padding */
+  padding: ${(props) => props.theme.spacing[3]} ${(props) => props.theme.spacing[3]};
   position: relative;
   
   background: rgba(251, 251, 251, 0.6); 
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border-radius: 1rem; /* Smaller radius */
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03); /* Very subtle shadow */
+  border-radius: 1rem;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
   margin: ${(props) => props.theme.spacing[1]} 0;
-  border: 1px solid ${(props) => props.theme.light.dividerColor}30; /* Very subtle border */
+  border: 1px solid ${(props) => props.theme.light.dividerColor}30;
 
   ${mediaQuery.dark} {
     background: rgba(33, 34, 33, 0.6);
@@ -500,12 +489,11 @@ const WelcomeMessage = styled.div`
   }
 `;
 
-
 const ExampleQuestions = styled.div`
-  margin-top: ${(props) => props.theme.spacing[2]}; /* Reduced spacing */
+  margin-top: ${(props) => props.theme.spacing[2]};
   display: flex;
   flex-direction: column;
-  gap: ${(props) => props.theme.spacing[1]}; /* Smaller gap */
+  gap: ${(props) => props.theme.spacing[1]};
   
   @media (max-width: 768px) {
     margin-top: ${(props) => props.theme.spacing[1]};
@@ -515,7 +503,7 @@ const ExampleQuestions = styled.div`
 
 const ExampleQuestionsLabel = styled(Paragraph)`
   font-weight: 600;
-  margin-bottom: ${(props) => props.theme.spacing[0]}; /* Minimal margin */
+  margin-bottom: ${(props) => props.theme.spacing[0]};
 `;
 
 const ExampleQuestion = styled.button`
