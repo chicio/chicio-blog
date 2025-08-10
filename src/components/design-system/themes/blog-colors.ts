@@ -27,7 +27,7 @@ export const blogLight: Colors = {
   secondaryColor,
   primaryColorDark,
   primaryColorLight,
-  generalBackground: "#FBFBFB",
+  generalBackground: "#F0F0F0",
   textAbovePrimaryColor: blogTextAbovePrimaryColor,
   primaryTextColor: "#151515",
   secondaryTextColor: "#575757",

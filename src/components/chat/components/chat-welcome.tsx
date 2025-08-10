@@ -17,10 +17,10 @@ const WelcomeMessage = styled.div`
   padding: ${(props) => props.theme.spacing[3]}
     ${(props) => props.theme.spacing[3]};
   border: 1px solid ${(props) => props.theme.light.dividerColor}30;
-  background: ${(props) => props.theme.light.generalBackground};
+  background: ${(props) => props.theme.light.generalBackgroundLight};
 
   ${mediaQuery.dark} {
-    background: ${(props) => props.theme.dark.generalBackground};
+    background: ${(props) => props.theme.dark.generalBackgroundLight};
     border-color: ${(props) => props.theme.dark.dividerColor}30;
   }
 
