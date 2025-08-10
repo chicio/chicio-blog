@@ -42,9 +42,11 @@ export const useFabrizioChat = () => {
       return;
     }
 
-    await sendMessage({ text: input });
-
+    const messageText = input;
     setInput('');
+
+    await sendMessage({ text: messageText });
+
     setHasStartedConversation(true);
   };
 
