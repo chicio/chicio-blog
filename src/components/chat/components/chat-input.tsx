@@ -11,7 +11,6 @@ const InputContainer = styled.form`
   right: 0;
   padding: ${(props) => props.theme.spacing[3]};
   background: rgba(251, 251, 251, 0.5);
-  backdrop-filter: blur(50px);
   border-top: 1px solid ${(props) => props.theme.light.dividerColor}20;
   z-index: 100;
 
@@ -80,8 +79,8 @@ const InputWrapper = styled.div`
   position: relative;
   width: 100%;
   max-width: 900px;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  //backdrop-filter: blur(20px);
+  //-webkit-backdrop-filter: blur(20px);
   background: rgba(255, 255, 255, 0.1);
   border-radius: 1.5rem;
 
