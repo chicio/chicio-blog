@@ -1,5 +1,5 @@
 import { useChat } from "@ai-sdk/react";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, ChangeEvent, FormEvent } from "react";
 
 const exampleQuestions = [
   "Which programming languages does Fabrizio Duroni know?",
@@ -9,7 +9,7 @@ const exampleQuestions = [
 ];
 
 export const useFabrizioChat = () => {
-  const { messages, sendMessage } = useChat();
+  const { messages, sendMessage, error } = useChat();
   const [input, setInput] = useState('');
   const [hasStartedConversation, setHasStartedConversation] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -35,7 +35,7 @@ export const useFabrizioChat = () => {
     }
   }, [messages, hasStartedConversation]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
     if (!input.trim()) {
@@ -48,18 +48,18 @@ export const useFabrizioChat = () => {
     setHasStartedConversation(true);
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
   };
 
   const handleExampleQuestionsSelection = async (question: string) => {
-    // Mark conversation as started when user clicks example question
     setHasStartedConversation(true);
     await sendMessage({ text: question });
   };
 
   return {
     messages,
+    error,
     input,
     exampleQuestions,
     handleExampleQuestionsSelection,
