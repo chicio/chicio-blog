@@ -2,7 +2,6 @@ import styled from "styled-components";
 import { mediaQuery } from "@/components/design-system/utils-css/media-query";
 import React, { FC } from "react";
 import { Heading1 } from "@/components/design-system/atoms/heading1";
-import { Paragraph } from "@/components/design-system/atoms/paragraph";
 import { ChatSubtitle } from "@/components/chat/components/chat-subtitle";
 
 export const ChatHeaderContainer = styled.div`
