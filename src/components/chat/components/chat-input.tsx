@@ -186,7 +186,7 @@ export const ChatInput: FC<{
       <ChatInputField
         value={input}
         onChange={handleInputChange}
-        placeholder="Ask me anything about my work and experience..."
+        placeholder="Ask me anything..."
       />
       <SendButton type="submit" disabled={!input.trim()}>
         <Send size={16} />
