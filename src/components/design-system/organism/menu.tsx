@@ -133,12 +133,13 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
   const [shouldOpenMenu, setShouldOpenMenu] = useState(false);
   const [startSearch, setStartSearch] = useState(false);
   const { handleSearch, results } = useSearch(startSearch);
+  const shouldHideMenu = pathname === slugs.chat ? false : direction === ScrollDirection.down;
 
   return (
     <>
       <MenuContainer
         $shouldOpenMenu={shouldOpenMenu}
-        $shouldHide={direction === ScrollDirection.down}
+        $shouldHide={shouldHideMenu}
         $delayOpenCloseMenuAnimation={shouldOpenMenu ? 0 : 0.4}
       >
         <NavBar>
