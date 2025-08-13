@@ -1,6 +1,5 @@
 "use client";
 
-import styled from "styled-components";
 import { useFabrizioChat } from "@/components/chat/useFabrizioChat";
 import { FC } from "react";
 import { Markdown } from "@/components/chat/markdown";
@@ -9,28 +8,7 @@ import { ChatHeader } from "@/components/chat/components/chat-header";
 import { ChatWelcome } from "@/components/chat/components/chat-welcome";
 import { ChatMessage } from "@/components/chat/components/chat-message";
 import { ChatInput } from "./components/chat-input";
-import { mediaQuery } from "@/components/design-system/utils-css/media-query";
-
-const MessagesContainer = styled.div`
-  flex: 1;
-  overflow-y: auto;
-  padding: 160px 0 calc(140px + env(safe-area-inset-bottom, 0px)) 0;
-  display: flex;
-  flex-direction: column;
-  gap: ${(props) => props.theme.spacing[3]};
-  scroll-behavior: smooth;
-
-  ${mediaQuery.minWidth.sm} {
-    padding: 160px 0 ${(props) => props.theme.spacing[12]} 0;
-  }
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-`;
+import { MessagesContainer } from "@/components/chat/components/chat-messages";
 
 export const Chat: FC = () => {
   const {

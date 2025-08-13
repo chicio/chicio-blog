@@ -1,15 +1,16 @@
 import styled from "styled-components";
 import { mediaQuery } from "@/components/design-system/utils-css/media-query";
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import { Heading1 } from "@/components/design-system/atoms/heading1";
 import { ChatSubtitle } from "@/components/chat/components/chat-subtitle";
+import { menuHeight } from "@/components/design-system/organism/menu";
 
 export const ChatHeaderContainer = styled.div`
   text-align: center;
   padding: ${(props) => props.theme.spacing[4]}
     ${(props) => props.theme.spacing[3]};
-  position: absolute;
-  top: 0;
+  position: fixed;
+  top: ${menuHeight};
   left: 0;
   right: 0;
   width: 100vw;
@@ -18,6 +19,12 @@ export const ChatHeaderContainer = styled.div`
   background: rgba(251, 251, 251, 0.8);
   backdrop-filter: blur(30px);
   box-shadow: 0 4px 25px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(251, 251, 251, 0.9);
+  }
 
   &::after {
     content: "";
@@ -40,6 +47,10 @@ export const ChatHeaderContainer = styled.div`
     backdrop-filter: blur(30px);
     box-shadow: 0 4px 25px rgba(0, 0, 0, 0.4);
 
+    &:hover {
+      background: rgba(33, 34, 33, 0.9);
+    }
+
     &::after {
       background: linear-gradient(
         90deg,
@@ -51,8 +62,22 @@ export const ChatHeaderContainer = styled.div`
   }
 
   ${mediaQuery.maxWidth.sm} {
-    padding: ${(props) => props.theme.spacing[3]}
+    padding: ${(props) => props.theme.spacing[2]}
       ${(props) => props.theme.spacing[2]};
+  }
+
+  ${mediaQuery.minWidth.sm} {
+    cursor: default;
+
+    &:hover {
+      background: rgba(251, 251, 251, 0.8);
+    }
+
+    ${mediaQuery.dark} {
+      &:hover {
+        background: rgba(33, 34, 33, 0.8);
+      }
+    }
   }
 `;
 
@@ -104,7 +129,7 @@ const ChatTitle = styled(Heading1)`
   }
 
   ${mediaQuery.maxWidth.sm} {
-    font-size: ${(props) => props.theme.fontSizes[7]};
+    font-size: ${(props) => props.theme.fontSizes[6]};
   }
 `;
 
@@ -145,21 +170,46 @@ const ChatIcon = styled.div`
   }
 
   ${mediaQuery.maxWidth.sm} {
-    width: 28px;
-    height: 28px;
-    font-size: 1rem;
+    width: 24px;
+    height: 24px;
+    font-size: 0.9rem;
   }
 `;
 
-export const ChatHeader: FC = () => (
-  <ChatHeaderContainer>
-    <TitleGroup>
-      <ChatIcon>💬</ChatIcon>
-      <ChatTitle>Chat with Fabrizio</ChatTitle>
-    </TitleGroup>
-    <ChatSubtitle>
-      Ask me anything about my work, projects, and software development
-      expertise
-    </ChatSubtitle>
-  </ChatHeaderContainer>
-);
+const SubtitleContainer = styled.div<{ $isExpanded: boolean }>`
+  overflow: hidden;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+
+  ${mediaQuery.maxWidth.sm} {
+    max-height: ${(props) => (props.$isExpanded ? "100px" : "0")};
+    opacity: ${(props) => (props.$isExpanded ? "1" : "0")};
+  }
+
+  ${mediaQuery.minWidth.sm} {
+    max-height: none;
+    opacity: 1;
+  }
+`;
+
+export const ChatHeader: FC = () => {
+  const [isSubtitleExpanded, setIsSubtitleExpanded] = useState(false);
+
+  const toggleSubtitle = () => {
+    setIsSubtitleExpanded(!isSubtitleExpanded);
+  };
+
+  return (
+    <ChatHeaderContainer onClick={toggleSubtitle}>
+      <TitleGroup>
+        <ChatIcon>💬</ChatIcon>
+        <ChatTitle>Chat with Fabrizio</ChatTitle>
+      </TitleGroup>
+      <SubtitleContainer $isExpanded={isSubtitleExpanded}>
+        <ChatSubtitle>
+          Ask me anything about my work, projects, and software development
+          expertise
+        </ChatSubtitle>
+      </SubtitleContainer>
+    </ChatHeaderContainer>
+  );
+};

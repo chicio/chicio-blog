@@ -20,7 +20,8 @@ import {usePathname} from "next/navigation";
 import {SearchBox, SearchHits} from "@/components/design-system/molecules/search";
 import {useSearch} from "@/components/design-system/hooks/use-search";
 
-export const menuHeight = "55px";
+export const menuHeightNumber = 55;
+export const menuHeight = `${menuHeightNumber}px`;
 
 const MobileBlogHeaderContainer = styled(ContainerFluid)<{ $hide: boolean }>`
   height: ${menuHeight};

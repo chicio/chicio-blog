@@ -56,6 +56,10 @@ const InputContainer = styled.form`
     z-index: -2;
   }
 
+  ${mediaQuery.maxWidth.sm} {
+    padding: ${(props) => props.theme.spacing[2]};
+  }
+
   ${mediaQuery.dark} {
     background: rgba(33, 34, 33, 0.6);
     backdrop-filter: blur(50px);
@@ -116,6 +120,13 @@ const ChatInputField = styled.input`
     cursor: not-allowed;
   }
 
+  ${mediaQuery.maxWidth.sm} {
+    padding: ${(props) => props.theme.spacing[1]}
+      ${(props) => props.theme.spacing[7]} ${(props) => props.theme.spacing[1]}
+      ${(props) => props.theme.spacing[2]};
+    font-size: ${(props) => props.theme.fontSizes[1]};
+  }
+
   ${mediaQuery.dark} {
     border-color: ${(props) => props.theme.dark.dividerColor};
     background: ${(props) => props.theme.dark.generalBackground};
@@ -160,6 +171,12 @@ const SendButton = styled.button`
     background: ${(props) => props.theme.light.secondaryColor};
     cursor: not-allowed;
     transform: translateY(-50%);
+  }
+
+  ${mediaQuery.maxWidth.sm} {
+    width: 32px;
+    height: 32px;
+    right: ${(props) => props.theme.spacing[0]};
   }
 
   ${mediaQuery.dark} {
