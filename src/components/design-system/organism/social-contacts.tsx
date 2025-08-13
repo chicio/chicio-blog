@@ -11,7 +11,7 @@ import {
   Medium,
 } from "@styled-icons/boxicons-logos";
 import { Twitter } from "@styled-icons/boxicons-logos";
-import { Envelope, Mobile } from "@styled-icons/boxicons-regular";
+import { Envelope } from "@styled-icons/boxicons-regular";
 import { FC } from "react";
 import {siteMetadata} from "@/types/site-metadata";
 import {tracking} from "@/types/tracking";
