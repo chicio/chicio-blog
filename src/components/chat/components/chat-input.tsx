@@ -124,7 +124,6 @@ const ChatInputField = styled.input`
     padding: ${(props) => props.theme.spacing[1]}
       ${(props) => props.theme.spacing[7]} ${(props) => props.theme.spacing[1]}
       ${(props) => props.theme.spacing[2]};
-    font-size: ${(props) => props.theme.fontSizes[1]};
   }
 
   ${mediaQuery.dark} {
