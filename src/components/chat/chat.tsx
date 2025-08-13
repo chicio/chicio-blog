@@ -22,10 +22,12 @@ export const Chat: FC = () => {
     messagesEndRef,
   } = useFabrizioChat();
 
+  const hasMessages = messages.length > 0;
+
   return (
     <ChatContainer>
-      <ChatHeader />
-      <MessagesContainer>
+      <ChatHeader hasMessages={hasMessages} />
+      <MessagesContainer $hasMessages={hasMessages}>
         {messages.length === 0 && (
           <ChatWelcome
             exampleQuestions={exampleQuestions}

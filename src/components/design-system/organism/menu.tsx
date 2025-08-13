@@ -1,6 +1,6 @@
 'use client'
 
-import React, {FC, memo, useState} from "react";
+import React, { FC, memo, useState } from "react";
 import styled, { css } from "styled-components";
 import { Container } from "../atoms/container";
 import { HamburgerMenu } from "../molecules/hamburger-menu";
@@ -9,16 +9,13 @@ import { Close } from "../molecules/close";
 import { mediaQuery } from "../utils-css/media-query";
 import { MobileBlogHeader } from "./blog-header";
 import { ContainerFluid } from "../atoms/container-fluid";
-import {
-  ScrollDirection,
-  useScrollDirection,
-} from "../hooks/use-scroll-direction";
-import {MenuItemWithTracking} from "@/components/design-system/atoms/menu-item-with-tracking";
-import {tracking} from "@/types/tracking";
-import {slugs} from "@/types/slug";
-import {usePathname} from "next/navigation";
-import {SearchBox, SearchHits} from "@/components/design-system/molecules/search";
-import {useSearch} from "@/components/design-system/hooks/use-search";
+import { ScrollDirection, useScrollDirection } from "../hooks/use-scroll-direction";
+import { MenuItemWithTracking } from "@/components/design-system/atoms/menu-item-with-tracking";
+import { tracking } from "@/types/tracking";
+import { slugs } from "@/types/slug";
+import { usePathname } from "next/navigation";
+import { SearchBox, SearchHits } from "@/components/design-system/molecules/search";
+import { useSearch } from "@/components/design-system/hooks/use-search";
 
 export const menuHeightNumber = 55;
 export const menuHeight = `${menuHeightNumber}px`;
@@ -160,38 +157,40 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
             Home
           </NavBarMenuItem>
           <NavBarMenuItem
-              to={slugs.blog}
-              selected={pathname.includes(slugs.blog) && pathname !== slugs.aboutMe}
-              trackingData={{
-                action: tracking.action.open_home,
-                category: trackingCategory,
-                label: tracking.label.header,
-              }}
-              shouldOpenMenu={shouldOpenMenu}
+            to={slugs.blog}
+            selected={
+              pathname.includes(slugs.blog) && pathname !== slugs.aboutMe
+            }
+            trackingData={{
+              action: tracking.action.open_home,
+              category: trackingCategory,
+              label: tracking.label.header,
+            }}
+            shouldOpenMenu={shouldOpenMenu}
           >
             Blog
           </NavBarMenuItem>
           <NavBarMenuItem
-              to={slugs.art}
-              selected={pathname === slugs.art}
-              trackingData={{
-                action: tracking.action.open_art,
-                category: trackingCategory,
-                label: tracking.label.header,
-              }}
-              shouldOpenMenu={shouldOpenMenu}
+            to={slugs.art}
+            selected={pathname === slugs.art}
+            trackingData={{
+              action: tracking.action.open_art,
+              category: trackingCategory,
+              label: tracking.label.header,
+            }}
+            shouldOpenMenu={shouldOpenMenu}
           >
             Art
           </NavBarMenuItem>
           <NavBarMenuItem
-              to={slugs.aboutMe}
-              selected={pathname === slugs.aboutMe}
-              trackingData={{
-                action: tracking.action.open_about_me,
-                category: trackingCategory,
-                label: tracking.label.header,
-              }}
-              shouldOpenMenu={shouldOpenMenu}
+            to={slugs.aboutMe}
+            selected={pathname === slugs.aboutMe}
+            trackingData={{
+              action: tracking.action.open_about_me,
+              category: trackingCategory,
+              label: tracking.label.header,
+            }}
+            shouldOpenMenu={shouldOpenMenu}
           >
             About me
           </NavBarMenuItem>
@@ -213,22 +212,22 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
                 <HamburgerMenu
                   onClick={() => {
                     if (!startSearch) {
-                      setShouldOpenMenu(!shouldOpenMenu)
+                      setShouldOpenMenu(!shouldOpenMenu);
                     }
                   }}
                 />
               )}
               {shouldOpenMenu && (
-                <Close onClick={() => setShouldOpenMenu(!shouldOpenMenu)}/>
+                <Close onClick={() => setShouldOpenMenu(!shouldOpenMenu)} />
               )}
             </MenuButtonContainer>
           )}
           {!shouldOpenMenu && (
-              <SearchBox
-                  startSearch={startSearch}
-                  onClick={() => setStartSearch(!startSearch)}
-                  onChange={handleSearch}
-              />
+            <SearchBox
+              startSearch={startSearch}
+              onClick={() => setStartSearch(!startSearch)}
+              onChange={handleSearch}
+            />
           )}
         </NavBar>
       </MenuContainer>
@@ -245,7 +244,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
             }
           }}
         >
-            {results.length > 0 && <SearchHits results={results} />}
+          {results.length > 0 && <SearchHits results={results} />}
         </Overlay>
       )}
     </>

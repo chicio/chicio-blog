@@ -2,17 +2,25 @@ import styled from "styled-components";
 import { mediaQuery } from "@/components/design-system/utils-css/media-query";
 import { menuHeightNumber } from "@/components/design-system/organism/menu";
 
-export const MessagesContainer = styled.div`
+export const MessagesContainer = styled.div<{ $hasMessages?: boolean }>`
   flex: 1;
   overflow-y: auto;
-  padding: ${menuHeightNumber * 2 + 10}px 0 calc(140px + env(safe-area-inset-bottom, 0px)) 0;
+  padding: ${(props) => 
+    props.$hasMessages 
+      ? `${menuHeightNumber + 10}px 0 calc(140px + env(safe-area-inset-bottom, 0px)) 0`
+      : `${menuHeightNumber * 2 + 10}px 0 calc(140px + env(safe-area-inset-bottom, 0px)) 0`
+  };
   display: flex;
   flex-direction: column;
   gap: ${(props) => props.theme.spacing[3]};
-  scroll-behavior: smooth;
+  transition: padding 0.4s ease;
 
   ${mediaQuery.minWidth.sm} {
-    padding: 160px 0 ${(props) => props.theme.spacing[12]} 0;
+    padding: ${(props) => 
+      props.$hasMessages 
+        ? `${menuHeightNumber + 20}px 0 ${props.theme.spacing[12]} 0`
+        : `160px 0 ${props.theme.spacing[12]} 0`
+    };
   }
 
   &::-webkit-scrollbar {

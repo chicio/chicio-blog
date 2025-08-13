@@ -5,7 +5,7 @@ import { Heading1 } from "@/components/design-system/atoms/heading1";
 import { ChatSubtitle } from "@/components/chat/components/chat-subtitle";
 import { menuHeight } from "@/components/design-system/organism/menu";
 
-export const ChatHeaderContainer = styled.div`
+export const ChatHeaderContainer = styled.div<{ $isVisible: boolean }>`
   text-align: center;
   padding: ${(props) => props.theme.spacing[4]}
     ${(props) => props.theme.spacing[3]};
@@ -20,7 +20,9 @@ export const ChatHeaderContainer = styled.div`
   backdrop-filter: blur(30px);
   box-shadow: 0 4px 25px rgba(0, 0, 0, 0.08);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+  opacity: ${(props) => (props.$isVisible ? 1 : 0)};
+  visibility: ${(props) => (props.$isVisible ? "visible" : "hidden")};
 
   &:hover {
     background: rgba(251, 251, 251, 0.9);
@@ -191,15 +193,20 @@ const SubtitleContainer = styled.div<{ $isExpanded: boolean }>`
   }
 `;
 
-export const ChatHeader: FC = () => {
+export interface ChatHeaderProps {
+  hasMessages?: boolean;
+}
+
+export const ChatHeader: FC<ChatHeaderProps> = ({ hasMessages = false }) => {
   const [isSubtitleExpanded, setIsSubtitleExpanded] = useState(false);
+  const isVisible = !hasMessages;
 
   const toggleSubtitle = () => {
     setIsSubtitleExpanded(!isSubtitleExpanded);
   };
 
   return (
-    <ChatHeaderContainer onClick={toggleSubtitle}>
+    <ChatHeaderContainer $isVisible={isVisible} onClick={toggleSubtitle}>
       <TitleGroup>
         <ChatIcon>💬</ChatIcon>
         <ChatTitle>Chat with Fabrizio</ChatTitle>
