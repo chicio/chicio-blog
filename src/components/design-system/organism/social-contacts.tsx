@@ -93,13 +93,6 @@ export const SocialContacts: FC<SocialContactsProps> = ({
         trackingLabel={trackingLabel}
         icon={<Instagram size={30} title={"Instagram"} />}
       />
-      <SocialContact
-        link={`tel: ${siteMetadata.contacts.phone}`}
-        trackingAction={tracking.action.call_phone}
-        trackingCategory={trackingCategory}
-        trackingLabel={trackingLabel}
-        icon={<Mobile size={30} title={"phone"} />}
-      />
     </SocialContactsContainers>
   );
 };

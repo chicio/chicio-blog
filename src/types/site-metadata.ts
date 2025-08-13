@@ -7,7 +7,6 @@ export const siteMetadata = {
     author: "Fabrizio Duroni",
     contacts: {
         email: "fabrizio.duroni@gmail.com",
-        phone: "+393285926828",
         links: {
             twitter: "https://twitter.com/chicio86",
             facebook: "https://www.facebook.com/fabrizio.duroni",
