@@ -24,7 +24,6 @@ const VideoWrapper = styled.div`
 const ClonwsPage = () => {
   const videos = useShuffleArray([
     'https://www.youtube.com/embed/zogb9j4xr5M',
-    'https://www.youtube.com/embed/2XN5mhdWoM0',
     'https://www.youtube.com/embed/cvUjYs8hUFY',
     'https://www.youtube.com/embed/k8uE-M4o3vw',
     'https://www.youtube.com/embed/64nyoeyAx9w',
