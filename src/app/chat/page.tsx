@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import { siteMetadata } from "@/types/site-metadata";
 import { tracking } from "@/types/tracking";
 import { slugs } from "@/types/slug";
-import { Chat } from "@/components/chat/chat";
+import { Chat } from "@/components/chat/components/chat";
 import { BasicPageTemplate } from "@/components/templates/basic-page-template";
 
 export async function generateMetadata(): Promise<Metadata> {

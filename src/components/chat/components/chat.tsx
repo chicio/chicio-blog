@@ -1,13 +1,13 @@
 "use client";
 
-import { useFabrizioChat } from "@/components/chat/useFabrizioChat";
+import { useFabrizioChat } from "@/components/chat/hooks/useFabrizioChat";
 import { FC } from "react";
-import { Markdown } from "@/components/chat/markdown";
+import { Markdown } from "@/components/chat/components/markdown";
 import { ChatContainer } from "@/components/chat/components/chat-container";
 import { ChatHeader } from "@/components/chat/components/chat-header";
 import { ChatWelcome } from "@/components/chat/components/chat-welcome";
 import { ChatMessage } from "@/components/chat/components/chat-message";
-import { ChatInput } from "./components/chat-input";
+import { ChatInput } from "./chat-input";
 import { MessagesContainer } from "@/components/chat/components/chat-messages";
 
 export const Chat: FC = () => {

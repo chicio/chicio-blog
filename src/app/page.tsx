@@ -1,5 +1,5 @@
 import { siteMetadata } from "@/types/site-metadata";
-import { ProfilePresentation } from "@/components/home/profile-presentation";
+import { ProfilePresentation } from "@/components/home/components/profile-presentation";
 import { Technologies } from "@/components/design-system/organism/technologies";
 import { Resume } from "@/components/design-system/organism/resume";
 import { createMetadata } from "@/lib/seo/seo";
