@@ -26,6 +26,7 @@ const Container = styled.div`
 `;
 
 const ContentWrapper = styled.div`
+  scroll-snap-align: start;
   position: relative;
   z-index: 2;
   display: flex;

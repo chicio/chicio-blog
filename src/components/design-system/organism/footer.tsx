@@ -25,6 +25,7 @@ const FooterMenu = styled.div`
   align-items: center;
   flex-direction: column;
   flex-wrap: wrap;
+  scroll-snap-align: start;
   padding: ${(props) => props.theme.spacing[2]};
 `;
 

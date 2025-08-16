@@ -3,26 +3,19 @@
 import styled from "styled-components";
 import { FC } from "react";
 import { motion, Variants } from "framer-motion";
-import { CallToActionInternalWithTracking } from "@/components/design-system/atoms/call-to-action-internal-with-tracking";
 import { tracking } from "@/types/tracking";
-import { slugs } from "@/types/slug";
 import { SocialContacts } from "@/components/design-system/organism/social-contacts";
 import { ContainerFullscreen } from "@/components/design-system/atoms/container-fullscreen";
-import { GlassmorphismBackground } from "@/components/home/components/glassmorphism-background";
+import { GlassmorphismBackground } from "@/components/design-system/atoms/glassmorphism-background";
 import { ProfilePhoto } from "@/components/home/components/profile-photo";
 import { ProfileAuthor } from "@/components/home/components/profile-author";
 import { ProfileJob } from "@/components/home/components/profile-job";
 import { ProfileCTAs } from "@/components/home/components/profile-ctas";
-
-const CTAContainer = styled(motion.div)`
-  display: flex;
-  gap: ${(props) => props.theme.spacing[4]};
-  justify-content: center;
-  margin-top: ${(props) => props.theme.spacing[6]};
-`;
+import { FloatingDownArrow } from "@/components/design-system/molecules/floating-down-arrow";
 
 const ContentContainer = styled(ContainerFullscreen)`
   padding: ${(props) => props.theme.spacing[4]};
+  position: relative;
 `;
 
 const itemVariants: Variants = {
@@ -70,5 +63,6 @@ export const ProfilePresentation: FC<ProfilePresentationProps> = ({
         <ProfileCTAs />
       </motion.div>
     </GlassmorphismBackground>
+    <FloatingDownArrow />
   </ContentContainer>
 );

@@ -7,7 +7,7 @@ import { bounce } from "@/components/design-system/utils-css/bounce-keyframes";
 import { ChevronDown } from "@styled-icons/boxicons-regular";
 
 const FloatingArrowContainer = styled.div`
-  position: fixed;
+  position: absolute;
   bottom: ${(props) => props.theme.spacing[2]};
   left: 0;
   right: 0;
@@ -31,6 +31,11 @@ const FloatingArrowContainer = styled.div`
 
   animation: ${bounce} 2s ease-in-out infinite;
 
+  &:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px ${(props) => props.theme.dark.accentColor}80;
+  }
+
   ${mediaQuery.minWidth.md} {
     width: 60px;
     height: 60px;
@@ -52,37 +57,49 @@ const ArrowIcon = styled.div`
   }
 `;
 
-export const FloatingDownArrow: FC = ({}) => {
+export const FloatingDownArrow: FC = () => {
   const [isVisible, setIsVisible] = useState(true);
-  const [hasScrolled, setHasScrolled] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      const scrollY = window.scrollY;
-      const windowHeight = window.innerHeight;
+      const scrollContainer = document.querySelector('[data-snap-container]');
+      if (!scrollContainer) return;
 
-      // Hide when user scrolls more than 10% of viewport
-      if (scrollY > windowHeight * 0.1 && !hasScrolled) {
-        setHasScrolled(true);
+      const scrollTop = scrollContainer.scrollTop;
+      const containerHeight = scrollContainer.clientHeight;
+
+      // Hide arrow if scrolled beyond first section (more than 10% of viewport)
+      if (scrollTop > containerHeight * 0.1) {
         setIsVisible(false);
+      } else {
+        setIsVisible(true);
       }
     };
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [hasScrolled]);
+    const scrollContainer = document.querySelector('[data-snap-container]');
+    if (scrollContainer) {
+      scrollContainer.addEventListener("scroll", handleScroll, { passive: true });
+      return () => scrollContainer.removeEventListener("scroll", handleScroll);
+    }
+  }, []);
 
   const handleScrollDown = () => {
-    window.scrollTo({
-      top: window.innerHeight,
+    // Hide immediately when clicked
+    setIsVisible(false);
+
+    const scrollContainer = document.querySelector('[data-snap-container]');
+    if (!scrollContainer) return;
+
+    const containerHeight = scrollContainer.clientHeight;
+
+    // Scroll to next section (Technologies)
+    scrollContainer.scrollTo({
+      top: containerHeight,
       behavior: "smooth",
     });
-
-    // Hide after click
-    setHasScrolled(true);
-    setIsVisible(false);
   };
 
+  // Don't render if not visible
   if (!isVisible) {
     return null;
   }
@@ -90,7 +107,7 @@ export const FloatingDownArrow: FC = ({}) => {
   return (
     <FloatingArrowContainer onClick={handleScrollDown}>
       <ArrowIcon>
-        <ChevronDown size={100} title={"Github"} />
+        <ChevronDown size={100} title="Scroll to next section" />
       </ArrowIcon>
     </FloatingArrowContainer>
   );
