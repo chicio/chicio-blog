@@ -1,39 +1,31 @@
 import {Colors} from "@/types/styled";
 
-export const blogPrimaryColor = "#3F51B5";
-export const blogTextAbovePrimaryColor = "#FFFFFF";
-const primaryColorDark = "#303F9F";
-const primaryColorLight = "#BFBFD1";
-const secondaryColor = "#80808B";
+// Matrix Color Palette - Dark Theme Only (WCAG Compliant)
+export const matrixPrimaryGreen = "#00FF41";      // Matrix green classico
+export const matrixNeoGreen = "#39FF14";          // Highlight/CTA verde brillante
+export const matrixDarkGreen = "#003D10";         // Verde scuro per backgrounds
+export const matrixTextGreen = "#00CC33";         // Verde per testi leggibili
+export const matrixBackgroundDark = "#001100";    // Background principale nero-verde
+export const matrixBackgroundLight = "#002200";   // Background secondario più chiaro
+export const matrixAccentCyan = "#00FFFF";        // Accenti ciano per highlights
 
-export const blogDark: Colors = {
-  primaryColor: blogPrimaryColor,
-  secondaryColor,
-  primaryColorDark,
-  primaryColorLight,
-  generalBackground: "#212221",
-  textAbovePrimaryColor: blogTextAbovePrimaryColor,
-  primaryTextColor: "#FAFAFA",
-  secondaryTextColor: "#A6A6A6",
-  accentColor: "#4fA7ff",
-  accentColorAbovePrimaryColor: "#AAFFFF",
-  generalBackgroundLight: "#363636",
-  boxShadowLight: "rgba(0, 0, 0, 0.75)",
-  dividerColor: "#575757",
+// Single Matrix Dark Theme
+export const matrixTheme: Colors = {
+  primaryColor: matrixPrimaryGreen,
+  secondaryColor: matrixTextGreen,
+  primaryColorDark: matrixDarkGreen,
+  primaryColorLight: matrixNeoGreen,
+  generalBackground: matrixBackgroundDark,
+  textAbovePrimaryColor: "#000000",
+  primaryTextColor: "#E8FFE8",
+  secondaryTextColor: matrixTextGreen,
+  accentColor: matrixNeoGreen,
+  accentColorAbovePrimaryColor: matrixAccentCyan,
+  generalBackgroundLight: matrixBackgroundLight,
+  boxShadowLight: "rgba(0, 255, 65, 0.3)",
+  dividerColor: matrixTextGreen,
 };
 
-export const blogLight: Colors = {
-  primaryColor: blogPrimaryColor,
-  secondaryColor,
-  primaryColorDark,
-  primaryColorLight,
-  generalBackground: "#F0F0F0",
-  textAbovePrimaryColor: blogTextAbovePrimaryColor,
-  primaryTextColor: "#151515",
-  secondaryTextColor: "#575757",
-  accentColor: "#1F67FF",
-  accentColorAbovePrimaryColor: "#AAFFFF",
-  generalBackgroundLight: "#FFFFFF",
-  boxShadowLight: "rgba(0, 0, 0, 0.2)",
-  dividerColor: "#BDBDBD",
-};
+// Legacy exports for backward compatibility (will be removed)
+export const blogDark = matrixTheme;
+export const blogLight = matrixTheme; // Same as dark now

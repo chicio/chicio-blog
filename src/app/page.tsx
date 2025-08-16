@@ -5,10 +5,11 @@ import { Resume } from "@/components/design-system/organism/resume";
 import { createMetadata } from "@/lib/seo/seo";
 import { slugs } from "@/types/slug";
 import { JsonLd } from "@/components/website/jsond-ld";
-import { ContainerFullscreen } from "@/components/design-system/atoms/container-fullscreen";
-import { DownArrow } from "@/components/design-system/molecules/down-arrow";
+import { FloatingDownArrow } from "@/components/design-system/molecules/floating-down-arrow";
 import { Footer } from "@/components/design-system/organism/footer";
+import { FloatingChatButton } from "@/components/design-system/molecules/floating-chat-button";
 import { tracking } from "@/types/tracking";
+import { MatrixBackground } from "@/components/design-system/molecules/matrix-background";
 
 export const metadata = createMetadata({
   author: siteMetadata.author,
@@ -21,16 +22,17 @@ export const metadata = createMetadata({
 export default function Home() {
   return (
     <>
-      <ContainerFullscreen>
+      <MatrixBackground fontSize={16} speed={50} density={0.95}>
         <ProfilePresentation author={siteMetadata.author} />
-        <DownArrow />
-      </ContainerFullscreen>
+        <FloatingDownArrow />
+      </MatrixBackground>
       <Technologies author={siteMetadata.author} />
       <Resume />
       <Footer
         author={siteMetadata.author}
         trackingCategory={tracking.category.home}
       />
+      <FloatingChatButton />
       <JsonLd
         ogPageType="website"
         url={siteMetadata.siteUrl}

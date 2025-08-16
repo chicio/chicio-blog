@@ -2,7 +2,9 @@
 
 import Script from 'next/script'
 import {FC} from "react";
-import {blogPrimaryColor} from "@/components/design-system/themes/blog-colors";
+import {
+  matrixPrimaryGreen,
+} from "@/components/design-system/themes/blog-colors";
 
 export const CookieConsent: FC = () =>
     (
@@ -18,7 +20,7 @@ export const CookieConsent: FC = () =>
                     if (typeof window !== 'undefined') {
                         window.cookieconsent.initialise({
                             palette: {
-                                popup: {background: `${blogPrimaryColor}`, text: '#fff'},
+                                popup: {background: `${matrixPrimaryGreen}`, text: '#fff'},
                                 button: {background: '#0F67FF'},
                             },
                             theme: 'classic',

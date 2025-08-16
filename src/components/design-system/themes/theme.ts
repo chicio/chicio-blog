@@ -1,5 +1,5 @@
 import { DefaultTheme } from "styled-components";
-import { blogDark, blogLight } from "./blog-colors";
+import { matrixTheme } from "./blog-colors";
 
 const fontSizes = [
   "12px",
@@ -35,11 +35,11 @@ const spacing = [
   "60px",
 ];
 
+// Single Matrix Theme - No more light/dark variants
 export const blogTheme: DefaultTheme = {
-  dark: blogDark,
-  light: blogLight,
+  dark: matrixTheme,    // Keep for legacy compatibility
+  light: matrixTheme,   // Same as dark now - will be removed
   fontSizes,
   spacing,
   lineHeight: 1.8,
 };
-
