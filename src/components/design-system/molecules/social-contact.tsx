@@ -15,6 +15,7 @@ export interface SocialContactProps {
 
 const CallToActionBlock = styled(CallToActionExternalWithTracking)`
   display: block;
+  min-width: auto;
 `;
 
 export const SocialContact: FC<SocialContactProps> = ({

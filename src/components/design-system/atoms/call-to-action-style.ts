@@ -6,8 +6,8 @@ import {mediaQuery} from "@/components/design-system/utils-css/media-query";
 
 export const callToActionStyle = css`
   font-size: ${(props) => props.theme.fontSizes[3]};
-  background-color: ${(props) => props.theme.light.accentColor};
-  color: ${(props) => props.theme.light.textAbovePrimaryColor};
+  background-color: ${(props) => props.theme.dark.accentColor};
+  color: ${(props) => props.theme.dark.textAbovePrimaryColor};
   padding: ${(props) => props.theme.spacing[2]};
   border: none;
   ${borderRadius};
@@ -15,13 +15,9 @@ export const callToActionStyle = css`
   line-height: 1;
   text-align: center;
   display: inline-block;
-
-  ${mediaQuery.dark} {
-    background-color: ${(props) => props.theme.dark.accentColor};
-    color: ${(props) => props.theme.dark.textAbovePrimaryColor};
-  }
-
-  color: ${(props) => props.theme.light.textAbovePrimaryColor};
+  min-width: 120px;
+  backdrop-filter: blur(10px);
+  color: ${(props) => props.theme.dark.textAbovePrimaryColor};
   text-decoration: none;
 
   ${mediaQuery.inputDevice.mouse} {
@@ -29,12 +25,8 @@ export const callToActionStyle = css`
   }
 
   &:hover {
-    color: ${(props) => props.theme.light.textAbovePrimaryColor};
     text-decoration: none;
-
-    @media (prefers-color-scheme: dark) {
-      color: ${(props) => props.theme.dark.textAbovePrimaryColor};
-    }
+    box-shadow: 0 0 25px ${(props) => props.theme.dark.accentColor}70;
 
     ${mediaQuery.inputDevice.mouse} {
       transform: scale(1.1);
