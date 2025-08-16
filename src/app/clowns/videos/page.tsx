@@ -21,7 +21,7 @@ const VideoWrapper = styled.div`
   }
 `;
 
-const ClonwsPage = () => {
+const ClownsPage = () => {
   const videos = useShuffleArray([
     'https://www.youtube.com/embed/zogb9j4xr5M',
     'https://www.youtube.com/embed/cvUjYs8hUFY',
@@ -52,4 +52,4 @@ const ClonwsPage = () => {
   );
 };
 
-export default ClonwsPage;
+export default ClownsPage;
