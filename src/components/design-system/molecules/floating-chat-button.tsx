@@ -11,8 +11,8 @@ import { pulse } from "@/components/design-system/utils-css/pulse";
 
 const FloatingContainer = styled(motion.div)`
   position: fixed;
-  bottom: ${(props) => props.theme.spacing[5]};
-  right: 24px;
+  bottom: ${(props) => props.theme.spacing[2]};
+  right: ${(props) => props.theme.spacing[2]};
   z-index: 1000;
   width: 50px;
   height: 50px;
@@ -38,6 +38,8 @@ const FloatingContainer = styled(motion.div)`
   ${mediaQuery.minWidth.md} {
     width: 60px;
     height: 60px;
+    bottom: ${(props) => props.theme.spacing[4]};
+    right: ${(props) => props.theme.spacing[4]};
   }
 `;
 

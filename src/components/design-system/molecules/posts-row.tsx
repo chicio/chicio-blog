@@ -1,7 +1,7 @@
 import {FC} from "react";
 import {tracking} from "@/types/tracking";
 import {Post} from "@/types/post";
-import {PostsRowContainer} from "@/components/website/posts-row-container";
+import {PostsRowContainer} from "@/components/design-system/website/posts-row-container";
 import {PostCard} from "@/components/design-system/molecules/post-card";
 
 

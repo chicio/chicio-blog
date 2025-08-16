@@ -1,10 +1,10 @@
 import { siteMetadata } from "@/types/site-metadata";
-import { ProfilePresentation } from "@/components/design-system/organism/profile-presentation";
+import { ProfilePresentation } from "@/components/home/profile-presentation";
 import { Technologies } from "@/components/design-system/organism/technologies";
 import { Resume } from "@/components/design-system/organism/resume";
 import { createMetadata } from "@/lib/seo/seo";
 import { slugs } from "@/types/slug";
-import { JsonLd } from "@/components/website/jsond-ld";
+import { JsonLd } from "@/components/design-system/website/jsond-ld";
 import { FloatingDownArrow } from "@/components/design-system/molecules/floating-down-arrow";
 import { Footer } from "@/components/design-system/organism/footer";
 import { FloatingChatButton } from "@/components/design-system/molecules/floating-chat-button";

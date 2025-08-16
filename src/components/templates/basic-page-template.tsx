@@ -1,6 +1,6 @@
 import { FC, ReactNode } from "react";
 import { Menu } from "@/components/design-system/organism/menu";
-import { ContentContainer } from "@/components/website/content-container";
+import { ContentContainer } from "@/components/design-system/website/content-container";
 
 export interface BasicPageProps {
   trackingCategory: string;

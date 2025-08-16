@@ -9,7 +9,7 @@ import {createMetadata} from "@/lib/seo/seo";
 import {slugs} from "@/types/slug";
 import {Metadata} from "next";
 import {NextPostPaginationParameters} from "@/types/page-parameters";
-import {JsonLd} from "@/components/website/jsond-ld";
+import {JsonLd} from "@/components/design-system/website/jsond-ld";
 
 export async function generateMetadata({ params }: NextPostPaginationParameters): Promise<Metadata> {
     const { page } = await params

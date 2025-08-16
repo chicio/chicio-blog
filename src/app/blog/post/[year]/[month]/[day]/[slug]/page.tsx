@@ -9,13 +9,13 @@ import {
   PostContainer,
   PostContent,
   PostTitle,
-} from "@/components/website/post";
+} from "@/components/design-system/website/post";
 import { PostAuthors } from "@/components/design-system/molecules/post-authors";
 import { PostMeta } from "@/components/design-system/molecules/post-meta";
 import { PostTags } from "@/components/design-system/molecules/post-tags";
 import { RecentPosts } from "@/components/design-system/organism/read-next";
 import { NextPostParameters } from "@/types/page-parameters";
-import { JsonLd } from "@/components/website/jsond-ld";
+import { JsonLd } from "@/components/design-system/website/jsond-ld";
 import { Post } from "@/types/post";
 
 export const revalidate = false

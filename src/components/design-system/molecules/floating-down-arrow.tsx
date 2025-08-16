@@ -8,7 +8,7 @@ import { ChevronDown } from "@styled-icons/boxicons-regular";
 
 const FloatingArrowContainer = styled.div`
   position: fixed;
-  bottom: ${(props) => props.theme.spacing[5]};
+  bottom: ${(props) => props.theme.spacing[2]};
   left: 0;
   right: 0;
   margin: 0 auto;
@@ -34,6 +34,7 @@ const FloatingArrowContainer = styled.div`
   ${mediaQuery.minWidth.md} {
     width: 60px;
     height: 60px;
+    bottom: ${(props) => props.theme.spacing[4]};
   }
 `;
 

@@ -4,7 +4,7 @@ import { tracking } from "@/types/tracking";
 import { ArtGallery } from "@/components/design-system/organism/art-gallery";
 import { Paragraph } from "@/components/design-system/atoms/paragraph";
 import { Heading2 } from "@/components/design-system/atoms/heading2";
-import {ContentContainer} from "@/components/website/content-container";
+import {ContentContainer} from "@/components/design-system/website/content-container";
 
 export default async function ArtPage() {
   return (

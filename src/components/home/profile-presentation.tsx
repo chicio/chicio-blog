@@ -10,8 +10,8 @@ import { slugs } from "@/types/slug";
 import { mediaQuery } from "@/components/design-system/utils-css/media-query";
 import { SocialContacts } from "@/components/design-system/organism/social-contacts";
 import { ContainerFullscreen } from "@/components/design-system/atoms/container-fullscreen";
+import { Heading5 } from "@/components/design-system/atoms/heading5";
 
-// Glassmorphism container using theme colors
 const GlassmorphismContainer = styled(motion.div)`
   position: relative;
   z-index: 2;
@@ -40,24 +40,17 @@ const Author = styled(motion.h1)`
   }
 `;
 
-const Job = styled(motion.h2)`
-  font-size: ${(props) => props.theme.fontSizes[4]};
+const Job = styled(Heading5)`
   color: ${(props) => props.theme.dark.secondaryTextColor};
   margin: ${(props) => props.theme.spacing[2]} 0
     ${(props) => props.theme.spacing[6]} 0;
   text-align: center;
-  opacity: 0.9;
-
-  ${mediaQuery.minWidth.md} {
-    font-size: ${(props) => props.theme.fontSizes[5]};
-  }
 `;
 
 const CTAContainer = styled(motion.div)`
   display: flex;
   gap: ${(props) => props.theme.spacing[4]};
   justify-content: center;
-  flex-wrap: wrap;
   margin-top: ${(props) => props.theme.spacing[6]};
 `;
 
@@ -141,7 +134,9 @@ export const ProfilePresentation: FC<ProfilePresentationProps> = ({
 
       <Author variants={itemVariants}>{author}</Author>
 
-      <Job variants={itemVariants}>Software Developer</Job>
+      <motion.div variants={itemVariants}>
+        <Job>Software Engineer</Job>
+      </motion.div>
 
       <motion.div variants={itemVariants}>
         <SocialContacts

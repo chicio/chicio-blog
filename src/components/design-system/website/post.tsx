@@ -11,7 +11,7 @@ import {standardLinkStyle} from "@/components/design-system/atoms/standard-link-
 import {mediaQuery} from "@/components/design-system/utils-css/media-query";
 import {borderRadius} from "@/components/design-system/atoms/border-radius";
 import {paragraphStyle} from "@/components/design-system/atoms/paragraph";
-import { Heading1 } from '../design-system/atoms/heading1';
+import { Heading1 } from '../atoms/heading1';
 
 const PostContentContainer = styled.div`
   color: ${(props) => props.theme.light.primaryTextColor};
