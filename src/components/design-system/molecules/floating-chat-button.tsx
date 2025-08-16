@@ -93,13 +93,6 @@ const Tooltip = styled(motion.div)`
   }
 `;
 
-// Chat icon SVG component
-const ChatIconSVG = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-3.582 8-8 8a8.955 8.955 0 01-2.697-.413l-3.303.828 1.242-4.97C5.756 16.227 3 14.343 3 12c0-4.418 3.582-8 8-8s8 3.582 8 8z" />
-  </svg>
-);
-
 export const FloatingChatButton = () => {
   const [isAnimationComplete, setIsAnimationComplete] = useState(false);
 
