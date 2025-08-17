@@ -1,15 +1,15 @@
-import { FC } from "react";
-import styled, { TransientProps } from "styled-components";
-import { mediaQuery } from "@/components/design-system/utils-css/media-query";
 import { borderRadius } from "@/components/design-system/atoms/border-radius";
-import { Paragraph } from "@/components/design-system/atoms/paragraph";
-import { List } from "@/components/design-system/atoms/list";
 import { CallToActionExternalWithTracking } from "@/components/design-system/atoms/call-to-action-external-with-tracking";
-import Image from "next/image";
-import { Project } from "@/types/projects";
-import { Heading4 } from "@/components/design-system/atoms/heading4";
-import { motion, Variants } from "framer-motion";
 import { GlassmorphismBackground } from "@/components/design-system/atoms/glassmorphism-background";
+import { Heading4 } from "@/components/design-system/atoms/heading4";
+import { List } from "@/components/design-system/atoms/list";
+import { Paragraph } from "@/components/design-system/atoms/paragraph";
+import { mediaQuery } from "@/components/design-system/utils-css/media-query";
+import { Project } from "@/types/projects";
+import { motion, Variants } from "framer-motion";
+import Image from "next/image";
+import { FC } from "react";
+import styled from "styled-components";
 
 const ProjectContainer = styled(motion.div)`
   margin: ${(props) => props.theme.spacing[4]} auto;
