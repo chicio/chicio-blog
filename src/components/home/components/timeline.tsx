@@ -53,7 +53,7 @@ const TimelineContainer = styled(motion.div)`
 
 const TimelineItem = styled(motion.div)`
   display: flex;
-  gap: ${(props) => props.theme.spacing[3]};
+  gap: ${(props) => props.theme.spacing[1]};
   position: relative;
   width: 100%;
 
