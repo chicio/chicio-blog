@@ -22,6 +22,9 @@ import javascriptImage from "../../../../public/images/technologies/javascript.p
 import expoImage from "../../../../public/images/technologies/expo.png";
 import nextImage from "../../../../public/images/technologies/next.png";
 import gatsbyImage from "../../../../public/images/technologies/gatsby.png";
+import kubernetesImage from "../../../../public/images/technologies/kubernetes.png";
+import dockerImage from "../../../../public/images/technologies/docker.png";
+import grafanaImage from "../../../../public/images/technologies/grafana.png";
 
 const TechnologiesContainer = styled(ContainerFluid)`
   margin: 0;
@@ -107,11 +110,10 @@ const CategoryTitle = styled(motion.h3)`
   color: ${(props) => props.theme.dark.accentColor};
   font-size: ${(props) => props.theme.fontSizes[4]};
   margin-bottom: ${(props) => props.theme.spacing[4]};
-  text-align: left;
+  text-align: center;
   width: 100%;
 
   ${mediaQuery.minWidth.md} {
-    text-align: center;
     font-size: ${(props) => props.theme.fontSizes[5]};
     margin-bottom: ${(props) => props.theme.spacing[6]};
   }
@@ -123,12 +125,12 @@ const TechnologiesGrid = styled(motion.div)`
   gap: ${(props) => props.theme.spacing[4]};
   width: 100%;
 
-  ${mediaQuery.minWidth.md} {
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  ${mediaQuery.minWidth.sm} {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: ${(props) => props.theme.spacing[6]};
     margin: 0 auto;
-    justify-items: center;
-    place-content: center;
   }
 `;
 
@@ -147,9 +149,11 @@ const TechnologyCard = styled(motion.div)`
   width: 100%;
   min-height: 140px;
 
-  ${mediaQuery.minWidth.md} {
+  ${mediaQuery.minWidth.sm} {
     min-height: 160px;
     padding: ${(props) => props.theme.spacing[5]};
+    max-width: 250px; /* Limite massimo per evitare card troppo larghe */
+    min-width: 200px; /* Larghezza minima per mantenere layout ordinato */
   }
 
   &:hover {
@@ -199,8 +203,12 @@ const technologies: Technology[] = [
   { name: 'Android', image: androidImage, years: '8+ years', category: 'mobile' },
   { name: 'React', image: reactImage, years: '8+ years', category: 'frontend' },
   { name: 'Next.js', image: nextImage, years: '1+ years', category: 'frontend' },
+  { name: 'Expo', image: expoImage, years: '1+ years', category: 'frontend' },
   { name: 'Gatsby', image: gatsbyImage, years: '5+ years', category: 'frontend' },
   { name: 'Spring Boot', image: springBootImage, years: '5+ years', category: 'backend' },
+  { name: 'Kubernetes', image: kubernetesImage, years: '5+ years', category: 'backend' },
+  { name: 'Docker', image: dockerImage, years: '5+ years', category: 'backend' },
+  { name: 'Grafana', image: grafanaImage, years: '5+ years', category: 'backend' },
   { name: 'Swift', image: swiftImage, years: '10+ years', category: 'languages' },
   { name: 'TypeScript', image: typescriptImage, years: '6+ years', category: 'languages' },
   { name: 'JavaScript', image: javascriptImage, years: '6+ years', category: 'languages' },
@@ -212,7 +220,7 @@ const technologies: Technology[] = [
 const categoryTitles = {
   mobile: 'Mobile Development',
   frontend: 'Frontend Development',
-  backend: 'Backend Development & Tools',
+  backend: 'Backend Development',
   languages: 'Programming languages'
 };
 
@@ -277,7 +285,7 @@ export const Technologies: FC<TechnologiesProps> = ({ author }) => {
             </GradientTitle>
             <GlassmorphismBackground>
               <TechnologyParagraph variants={itemVariants}>
-                {`I'm ${author}, Experienced Senior Software Engineer with 15+ years in mobile and web development. Passionate about building performant, scalable applications used by millions 🚀.`}
+                {`I'm ${author}, Experienced Senior Software Engineer with 15+ years in mobile and web development. Passionate about building performant, scalable applications used by millions of users 🚀.`}
               </TechnologyParagraph>
               <TechnologyParagraph variants={itemVariants}>
                 {`
