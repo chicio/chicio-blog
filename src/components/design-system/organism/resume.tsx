@@ -24,15 +24,6 @@ const SectionContainer = styled(ContainerFluid)`
   }
 `;
 
-const ContentWrapper = styled.div`
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  max-width: 1200px;
-  margin: 0 auto;
-  width: 100%;
-`;
-
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
@@ -48,22 +39,18 @@ export const Resume: FC = () => {
   return (
     <>
       <SectionContainer>
-        <ContentWrapper>
           <motion.div
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.1 }}
           >
-            <SectionTitle as="h2">Open Source Projects</SectionTitle>
             <Projects />
           </motion.div>
-        </ContentWrapper>
         <FloatingDownArrow />
       </SectionContainer>
 
       <SectionContainer>
-        <ContentWrapper>
           <motion.div
             variants={containerVariants}
             initial="hidden"
@@ -73,7 +60,6 @@ export const Resume: FC = () => {
             <SectionTitle as="h2">Experience</SectionTitle>
             <Timeline />
           </motion.div>
-        </ContentWrapper>
         <FloatingDownArrow />
       </SectionContainer>
     </>

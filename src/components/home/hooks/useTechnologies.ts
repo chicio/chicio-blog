@@ -14,7 +14,7 @@ import javascriptImage from "../../../../public/images/technologies/javascript.p
 import kotlinImage from "../../../../public/images/technologies/kotlin.png";
 import javaImage from "../../../../public/images/technologies/java.png";
 import objectiveC from "../../../../public/images/technologies/objective-c.png";
-import { categories, Technology } from "@/components/home/hooks/technology";
+import { categories, Technology } from "@/types/technology";
 
 const technologies: Technology[] = [
   { name: 'React Native', image: reactImage, years: '8+ years', category: categories.mobile },

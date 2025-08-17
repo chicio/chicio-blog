@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Technology } from "@/components/home/hooks/technology";
+import { Technology } from "@/types/technology";
 import { FC } from "react";
 import styled from "styled-components";
 import { motion, Variants } from "framer-motion";
