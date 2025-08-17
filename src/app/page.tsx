@@ -1,7 +1,7 @@
 import { siteMetadata } from "@/types/site-metadata";
 import { ProfilePresentation } from "@/components/home/components/profile-presentation";
 import { Technologies } from "@/components/home/components/technologies";
-import { JobsTimeline } from "@/components/home/components/jobsTimeline";
+import { JobsTimeline } from "@/components/home/components/jobs-timeline";
 import { createMetadata } from "@/lib/seo/seo";
 import { slugs } from "@/types/slug";
 import { JsonLd } from "@/components/design-system/website/jsond-ld";

@@ -35,7 +35,6 @@ const containerVariants: Variants = {
 };
 
 export const Projects: FC = () =>
-
   <SectionContainer>
     <motion.div
       variants={containerVariants}
