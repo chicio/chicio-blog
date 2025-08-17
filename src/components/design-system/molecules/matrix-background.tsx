@@ -2,10 +2,8 @@
 
 import styled from "styled-components";
 import { MatrixRain } from "../atoms/matrix-rain";
-import { FloatingDownArrow } from "./floating-down-arrow";
 import { FC, ReactNode } from "react";
 
-// Matrix background container
 const MatrixBackgroundDiv = styled.div`
   position: absolute;
   top: 0;
