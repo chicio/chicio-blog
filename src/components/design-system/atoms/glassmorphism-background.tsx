@@ -10,7 +10,7 @@ export const GlassmorphismBackgroundContainer = styled(motion.div)`
   -webkit-backdrop-filter: blur(5px);
   border-radius: 12px;
   border: 1px solid ${(props) => props.theme.dark.accentColor}40; // Using theme color with hex opacity
-  padding: ${(props) => props.theme.spacing[8]};
+  padding: ${(props) => props.theme.spacing[6]};
   box-shadow:
     0 8px 32px ${(props) => props.theme.dark.boxShadowLight},
     inset 0 1px 0 ${(props) => props.theme.dark.accentColor}1A; // 10% opacity

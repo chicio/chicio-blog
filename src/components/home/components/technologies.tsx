@@ -11,9 +11,17 @@ import { GlassmorphismBackground } from "@/components/design-system/atoms/glassm
 import { FloatingDownArrow } from "@/components/design-system/molecules/floating-down-arrow";
 import typescriptImage from "../../../../public/images/technologies/typescript.png";
 import reactImage from "../../../../public/images/technologies/react.png";
-import xcodeImage from "../../../../public/images/technologies/xcode.png";
 import swiftImage from "../../../../public/images/technologies/swift.png";
+import objectiveC from "../../../../public/images/technologies/objective-c.png";
 import androidImage from "../../../../public/images/technologies/android.png";
+import springBootImage from "../../../../public/images/technologies/spring-boot.png";
+import appleImage from "../../../../public/images/technologies/apple.png";
+import kotlinImage from "../../../../public/images/technologies/kotlin.png";
+import javaImage from "../../../../public/images/technologies/java.png";
+import javascriptImage from "../../../../public/images/technologies/javascript.png";
+import expoImage from "../../../../public/images/technologies/expo.png";
+import nextImage from "../../../../public/images/technologies/next.png";
+import gatsbyImage from "../../../../public/images/technologies/gatsby.png";
 
 const TechnologiesContainer = styled(ContainerFluid)`
   margin: 0;
@@ -25,7 +33,7 @@ const TechnologiesContainer = styled(ContainerFluid)`
   position: relative;
   background: ${(props) => props.theme.dark.generalBackground};
   scroll-snap-align: start;
-  padding: ${(props) => props.theme.spacing[8]};
+  padding: ${(props) => props.theme.spacing[4]};
 
   ${mediaQuery.minWidth.md} {
     padding: ${(props) => props.theme.spacing[12]};
@@ -66,30 +74,47 @@ const GradientTitle = styled(Paragraph)`
 const TechnologyParagraph = styled(Paragraph)`
   text-align: center;
   color: ${(props) => props.theme.dark.primaryTextColor};
-  font-size: ${(props) => props.theme.fontSizes[3]};
+  font-size: ${(props) => props.theme.fontSizes[2]};
   line-height: 1.6;
   max-width: 800px;
-  margin: 0 auto;
+  margin: ${(props) => props.theme.spacing[8]} auto;
 `;
 
 const SkillsGrid = styled(motion.div)`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: ${(props) => props.theme.spacing[6]};
+  display: flex;
+  flex-direction: column;
+  gap: ${(props) => props.theme.spacing[8]};
   margin-top: ${(props) => props.theme.spacing[8]};
+  width: 100%;
+
+  ${mediaQuery.minWidth.md} {
+    gap: ${(props) => props.theme.spacing[12]};
+  }
 `;
 
 const SkillCategory = styled(motion.div)`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
+  width: 100%;
+
+  ${mediaQuery.minWidth.md} {
+    align-items: center;
+  }
 `;
 
 const CategoryTitle = styled(motion.h3)`
   color: ${(props) => props.theme.dark.accentColor};
   font-size: ${(props) => props.theme.fontSizes[4]};
   margin-bottom: ${(props) => props.theme.spacing[4]};
-  text-align: center;
+  text-align: left;
+  width: 100%;
+
+  ${mediaQuery.minWidth.md} {
+    text-align: center;
+    font-size: ${(props) => props.theme.fontSizes[5]};
+    margin-bottom: ${(props) => props.theme.spacing[6]};
+  }
 `;
 
 const TechnologiesGrid = styled(motion.div)`
@@ -97,6 +122,14 @@ const TechnologiesGrid = styled(motion.div)`
   grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   gap: ${(props) => props.theme.spacing[4]};
   width: 100%;
+
+  ${mediaQuery.minWidth.md} {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: ${(props) => props.theme.spacing[6]};
+    margin: 0 auto;
+    justify-items: center;
+    place-content: center;
+  }
 `;
 
 const TechnologyCard = styled(motion.div)`
@@ -108,8 +141,16 @@ const TechnologyCard = styled(motion.div)`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: space-between;
   cursor: pointer;
   transition: all 0.3s ease;
+  width: 100%;
+  min-height: 140px;
+
+  ${mediaQuery.minWidth.md} {
+    min-height: 160px;
+    padding: ${(props) => props.theme.spacing[5]};
+  }
 
   &:hover {
     border-color: ${(props) => props.theme.dark.accentColor};
@@ -125,6 +166,10 @@ const TechnologyImageContainer = styled.div`
   justify-content: center;
   align-items: center;
   margin-bottom: ${(props) => props.theme.spacing[2]};
+
+  img {
+    object-fit: contain;
+  }
 `;
 
 const TechnologyName = styled.span`
@@ -144,22 +189,31 @@ interface Technology {
   name: string;
   image: any;
   years: string;
-  category: 'mobile' | 'web' | 'backend';
+  category: 'mobile' | 'frontend' | 'backend' | 'languages';
 }
 
 const technologies: Technology[] = [
-  { name: 'Swift', image: swiftImage, years: '10+ years', category: 'mobile' },
-  { name: 'Xcode', image: xcodeImage, years: '10+ years', category: 'mobile' },
-  { name: 'Android', image: androidImage, years: '8+ years', category: 'mobile' },
   { name: 'React Native', image: reactImage, years: '8+ years', category: 'mobile' },
-  { name: 'TypeScript', image: typescriptImage, years: '6+ years', category: 'web' },
-  { name: 'React', image: reactImage, years: '8+ years', category: 'web' },
+  { name: 'Expo', image: expoImage, years: '1+ years', category: 'mobile' },
+  { name: 'iOS', image: appleImage, years: '15+ years', category: 'mobile' },
+  { name: 'Android', image: androidImage, years: '8+ years', category: 'mobile' },
+  { name: 'React', image: reactImage, years: '8+ years', category: 'frontend' },
+  { name: 'Next.js', image: nextImage, years: '1+ years', category: 'frontend' },
+  { name: 'Gatsby', image: gatsbyImage, years: '5+ years', category: 'frontend' },
+  { name: 'Spring Boot', image: springBootImage, years: '5+ years', category: 'backend' },
+  { name: 'Swift', image: swiftImage, years: '10+ years', category: 'languages' },
+  { name: 'TypeScript', image: typescriptImage, years: '6+ years', category: 'languages' },
+  { name: 'JavaScript', image: javascriptImage, years: '6+ years', category: 'languages' },
+  { name: 'Kotlin', image: kotlinImage, years: '5+ years', category: 'languages' },
+  { name: 'Java', image: javaImage, years: '15+ years', category: 'languages' },
+  { name: 'Objective-C', image: objectiveC, years: '15+ years', category: 'languages' },
 ];
 
 const categoryTitles = {
   mobile: 'Mobile Development',
-  web: 'Web Development',
-  backend: 'Backend & Tools'
+  frontend: 'Frontend Development',
+  backend: 'Backend Development & Tools',
+  languages: 'Programming languages'
 };
 
 const containerVariants: Variants = {
@@ -223,7 +277,11 @@ export const Technologies: FC<TechnologiesProps> = ({ author }) => {
             </GradientTitle>
             <GlassmorphismBackground>
               <TechnologyParagraph variants={itemVariants}>
-                {`I'm ${author}, a software developer with over 15 years of experience, working in the field since 2008. I specialise in developing mobile 📱 and web applications 🚀. I also maintain small open-source projects and I have a blog where I speak about technology.`}
+                {`I'm ${author}, Experienced Senior Software Engineer with 15+ years in mobile and web development. Passionate about building performant, scalable applications used by millions 🚀.`}
+              </TechnologyParagraph>
+              <TechnologyParagraph variants={itemVariants}>
+                {`
+My expertise spans mobile app development, clean architecture, event-driven systems, and full-stack development (Spring Boot, React/React Native, Kubernetes). I’m an OSS contributor and I share technical insights regularly on my blog.`}
               </TechnologyParagraph>
             </GlassmorphismBackground>
           </SectionTitle>
