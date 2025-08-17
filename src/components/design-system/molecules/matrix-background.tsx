@@ -2,6 +2,8 @@
 
 import styled from "styled-components";
 import { MatrixRain } from "../atoms/matrix-rain";
+import { FloatingDownArrow } from "./floating-down-arrow";
+import { FC, ReactNode } from "react";
 
 // Matrix background container
 const MatrixBackgroundDiv = styled.div`
@@ -38,26 +40,24 @@ const ContentWrapper = styled.div`
 `;
 
 interface ContainerFullscreenWithMatrixProps {
-  children: React.ReactNode;
+  children: ReactNode;
   fontSize?: number;
   speed?: number;
   density?: number;
 }
 
-export const MatrixBackground: React.FC<ContainerFullscreenWithMatrixProps> = ({
+export const MatrixBackground: FC<ContainerFullscreenWithMatrixProps> = ({
   children,
   fontSize = 16,
   speed = 50,
   density = 0.95
-}) => {
-  return (
-    <Container>
-      <MatrixBackgroundDiv>
-        <MatrixRain fontSize={fontSize} speed={speed} density={density} />
-      </MatrixBackgroundDiv>
-      <ContentWrapper>
-        {children}
-      </ContentWrapper>
-    </Container>
-  );
-};
+}) => (
+  <Container>
+    <MatrixBackgroundDiv>
+      <MatrixRain fontSize={fontSize} speed={speed} density={density} />
+    </MatrixBackgroundDiv>
+    <ContentWrapper>
+      {children}
+    </ContentWrapper>
+  </Container>
+);

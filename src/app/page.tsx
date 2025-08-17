@@ -26,6 +26,7 @@ export default function Home() {
       <SnapScrollContainer data-snap-container="true">
         <MatrixBackground fontSize={16} speed={50} density={0.95}>
           <ProfilePresentation author={siteMetadata.author} />
+          <FloatingDownArrow />
         </MatrixBackground>
         <Technologies author={siteMetadata.author} />
         <Resume />

@@ -58,49 +58,52 @@ const ArrowIcon = styled.div`
 `;
 
 export const FloatingDownArrow: FC = () => {
-  const [isVisible, setIsVisible] = useState(true);
+  const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
+  const [totalSections, setTotalSections] = useState(0);
 
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollContainer = document.querySelector('[data-snap-container]');
-      if (!scrollContainer) return;
+    const scrollContainer = document.querySelector('[data-snap-container]');
+    if (!scrollContainer) return;
 
+    // Count total sections (all children of snap container)
+    const sections = Array.from(scrollContainer.children);
+    setTotalSections(sections.length);
+
+    const handleScroll = () => {
       const scrollTop = scrollContainer.scrollTop;
       const containerHeight = scrollContainer.clientHeight;
 
-      // Hide arrow if scrolled beyond first section (more than 10% of viewport)
-      if (scrollTop > containerHeight * 0.1) {
-        setIsVisible(false);
-      } else {
-        setIsVisible(true);
-      }
+      // Calculate current section based on scroll position
+      const newIndex = Math.round(scrollTop / containerHeight);
+      setCurrentSectionIndex(Math.min(newIndex, sections.length - 1));
     };
 
-    const scrollContainer = document.querySelector('[data-snap-container]');
-    if (scrollContainer) {
-      scrollContainer.addEventListener("scroll", handleScroll, { passive: true });
-      return () => scrollContainer.removeEventListener("scroll", handleScroll);
-    }
+    scrollContainer.addEventListener("scroll", handleScroll, { passive: true });
+
+    // Initial calculation
+    handleScroll();
+
+    return () => scrollContainer.removeEventListener("scroll", handleScroll);
   }, []);
 
   const handleScrollDown = () => {
-    // Hide immediately when clicked
-    setIsVisible(false);
-
     const scrollContainer = document.querySelector('[data-snap-container]');
     if (!scrollContainer) return;
 
     const containerHeight = scrollContainer.clientHeight;
+    const nextSectionTop = (currentSectionIndex + 1) * containerHeight;
 
-    // Scroll to next section (Technologies)
-    scrollContainer.scrollTo({
-      top: containerHeight,
-      behavior: "smooth",
-    });
+    // Only scroll if not on last section
+    if (currentSectionIndex < totalSections - 1) {
+      scrollContainer.scrollTo({
+        top: nextSectionTop,
+        behavior: "smooth",
+      });
+    }
   };
 
-  // Don't render if not visible
-  if (!isVisible) {
+  // Hide only on last section (Footer)
+  if (currentSectionIndex >= totalSections - 1) {
     return null;
   }
 

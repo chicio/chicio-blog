@@ -8,6 +8,7 @@ import { Projects } from "./projects";
 import { Timeline } from "./timeline";
 import { mediaQuery } from "../utils-css/media-query";
 import { tracking } from "@/types/tracking";
+import { FloatingDownArrow } from "../molecules/floating-down-arrow";
 
 const ResumeContainer = styled(ContainerFluid)`
   min-height: 100vh;
@@ -68,6 +69,7 @@ export const Resume: FC = () => {
           {currentTab === TabContent.carrier && <Timeline />}
         </div>
       </ContentWrapper>
+      <FloatingDownArrow />
     </ResumeContainer>
   );
 };

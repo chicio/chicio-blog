@@ -11,7 +11,6 @@ import { ProfilePhoto } from "@/components/home/components/profile-photo";
 import { ProfileAuthor } from "@/components/home/components/profile-author";
 import { ProfileJob } from "@/components/home/components/profile-job";
 import { ProfileCTAs } from "@/components/home/components/profile-ctas";
-import { FloatingDownArrow } from "@/components/design-system/molecules/floating-down-arrow";
 
 const ContentContainer = styled(ContainerFullscreen)`
   padding: ${(props) => props.theme.spacing[4]};
@@ -63,6 +62,5 @@ export const ProfilePresentation: FC<ProfilePresentationProps> = ({
         <ProfileCTAs />
       </motion.div>
     </GlassmorphismBackground>
-    <FloatingDownArrow />
   </ContentContainer>
 );
