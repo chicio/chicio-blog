@@ -5,7 +5,7 @@ import { SocialContacts } from "./social-contacts";
 import styled from "styled-components";
 import { Paragraph } from "../atoms/paragraph";
 import { mediaQuery } from "../utils-css/media-query";
-import { MenuItemWithTracking } from "@/components/design-system/atoms/menu-item-with-tracking";
+import { MatrixMenuItem } from "../molecules/matrix-menu-item";
 import { tracking } from "@/types/tracking";
 import { slugs } from "@/types/slug";
 import { motion } from "framer-motion";
@@ -13,11 +13,7 @@ import { motion } from "framer-motion";
 const FooterContainer = styled.footer`
   flex-shrink: 0;
   width: 100%;
-  background: linear-gradient(
-    135deg,
-    ${(props) => props.theme.dark.generalBackgroundLight} 0%,
-    ${(props) => props.theme.dark.primaryColorDark} 100%
-  );
+  background: ${(props) => props.theme.dark.primaryColorDark};
   border-top: 2px solid ${(props) => props.theme.dark.accentColor};
   scroll-snap-align: start;
   position: relative;
@@ -49,39 +45,6 @@ const FooterMenu = styled(motion.div)`
   }
 `;
 
-const FooterMenuItem = styled(MenuItemWithTracking)`
-  color: ${(props) => props.theme.dark.primaryTextColor};
-  text-decoration: none;
-  font-weight: 500;
-  font-size: ${(props) => props.theme.fontSizes[1]};
-  padding: ${(props) => props.theme.spacing[3]} ${(props) => props.theme.spacing[2]};
-  border-radius: 6px;
-  transition: all 0.3s ease;
-  position: relative;
-  border: 1px solid transparent;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  &:hover {
-    color: ${(props) => props.theme.dark.accentColor};
-    background: ${(props) => props.theme.dark.accentColor}1A;
-    border-color: ${(props) => props.theme.dark.accentColor};
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px ${(props) => props.theme.dark.accentColor}33;
-  }
-
-  ${mediaQuery.minWidth.md} {
-    font-size: ${(props) => props.theme.fontSizes[2]};
-    padding: ${(props) => props.theme.spacing[3]} ${(props) => props.theme.spacing[3]};
-  }
-
-  ${mediaQuery.minWidth.lg} {
-    padding: ${(props) => props.theme.spacing[2]} ${(props) => props.theme.spacing[4]};
-  }
-`;
-
 const FooterContentContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -96,7 +59,11 @@ const FooterAuthorSection = styled.div`
   gap: ${(props) => props.theme.spacing[3]};
   padding: ${(props) => props.theme.spacing[6]} ${(props) => props.theme.spacing[4]};
   width: 100%;
-  background: ${(props) => props.theme.dark.primaryColorDark};
+  background: linear-gradient(
+    135deg,
+    ${(props) => props.theme.dark.generalBackgroundLight} 0%,
+    ${(props) => props.theme.dark.primaryColorDark} 100%
+  );
   border-top: 1px solid ${(props) => props.theme.dark.accentColor}33;
 
   ${mediaQuery.minWidth.md} {
@@ -148,7 +115,8 @@ export const Footer: FC<FooterProps> = ({ author, trackingCategory }) => (
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.1 }}
         >
-          <FooterMenuItem
+          <MatrixMenuItem
+            variant="footer"
             to="/"
             trackingData={{
               action: tracking.action.open_home,
@@ -158,8 +126,9 @@ export const Footer: FC<FooterProps> = ({ author, trackingCategory }) => (
             selected={false}
           >
             Home
-          </FooterMenuItem>
-          <FooterMenuItem
+          </MatrixMenuItem>
+          <MatrixMenuItem
+            variant="footer"
             to={slugs.blog}
             trackingData={{
               action: tracking.action.open_blog,
@@ -169,8 +138,9 @@ export const Footer: FC<FooterProps> = ({ author, trackingCategory }) => (
             selected={false}
           >
             Blog
-          </FooterMenuItem>
-          <FooterMenuItem
+          </MatrixMenuItem>
+          <MatrixMenuItem
+            variant="footer"
             to={slugs.art}
             trackingData={{
               action: tracking.action.open_art,
@@ -180,8 +150,9 @@ export const Footer: FC<FooterProps> = ({ author, trackingCategory }) => (
             selected={false}
           >
             Art
-          </FooterMenuItem>
-          <FooterMenuItem
+          </MatrixMenuItem>
+          <MatrixMenuItem
+            variant="footer"
             to={slugs.aboutMe}
             trackingData={{
               action: tracking.action.open_about_me,
@@ -191,8 +162,9 @@ export const Footer: FC<FooterProps> = ({ author, trackingCategory }) => (
             selected={false}
           >
             About Me
-          </FooterMenuItem>
-          <FooterMenuItem
+          </MatrixMenuItem>
+          <MatrixMenuItem
+            variant="footer"
             to={slugs.blogArchive}
             trackingData={{
               action: tracking.action.open_blog_archive,
@@ -202,8 +174,9 @@ export const Footer: FC<FooterProps> = ({ author, trackingCategory }) => (
             selected={false}
           >
             Archive
-          </FooterMenuItem>
-          <FooterMenuItem
+          </MatrixMenuItem>
+          <MatrixMenuItem
+            variant="footer"
             to={slugs.tags}
             trackingData={{
               action: tracking.action.open_blog_tags,
@@ -213,7 +186,7 @@ export const Footer: FC<FooterProps> = ({ author, trackingCategory }) => (
             selected={false}
           >
             Tags
-          </FooterMenuItem>
+          </MatrixMenuItem>
         </FooterMenu>
 
         <FooterSeparator />

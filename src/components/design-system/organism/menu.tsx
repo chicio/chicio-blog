@@ -1,6 +1,6 @@
 'use client'
 
-import React, { FC, memo, useState } from "react";
+import React, { FC, useState } from "react";
 import styled, { css } from "styled-components";
 import { Container } from "../atoms/container";
 import { HamburgerMenu } from "../molecules/hamburger-menu";
@@ -10,7 +10,7 @@ import { mediaQuery } from "../utils-css/media-query";
 import { MobileBlogHeader } from "./blog-header";
 import { ContainerFluid } from "../atoms/container-fluid";
 import { ScrollDirection, useScrollDirection } from "../hooks/use-scroll-direction";
-import { MenuItemWithTracking } from "@/components/design-system/atoms/menu-item-with-tracking";
+import { MatrixMenuItem } from "../molecules/matrix-menu-item";
 import { tracking } from "@/types/tracking";
 import { slugs } from "@/types/slug";
 import { usePathname } from "next/navigation";
@@ -36,16 +36,17 @@ const MobileBlogHeaderContainer = styled(ContainerFluid)<{ $hide: boolean }>`
 
 const Divider = styled.div`
   height: 1px;
-  background-color: ${(props) => props.theme.light.textAbovePrimaryColor};
+  background: linear-gradient(
+    90deg,
+    transparent,
+    ${(props) => props.theme.dark.accentColor},
+    transparent
+  );
   position: absolute;
   top: 55px;
   left: ${(props) => props.theme.spacing[3]};
   right: ${(props) => props.theme.spacing[3]};
-  opacity: 0.2;
-
-  ${mediaQuery.dark} {
-    background-color: ${(props) => props.theme.dark.textAbovePrimaryColor};
-  }
+  opacity: 0.4;
 `;
 
 const MenuButtonContainer = styled.div`
@@ -63,8 +64,11 @@ const MenuContainer = styled.div<{
   $shouldOpenMenu: boolean;
   $delayOpenCloseMenuAnimation: number;
 }>`
-  background-color: ${(props) => props.theme.light.primaryColorDark};
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+  background: ${(props) => props.theme.dark.primaryColorDark};
+  box-shadow: 
+    0 2px 8px ${(props) => props.theme.dark.accentColor}1A,
+    0 1px 3px ${(props) => props.theme.dark.generalBackground}4D;
+  border-bottom: 1px solid ${(props) => props.theme.dark.accentColor}33;
   position: fixed;
   top: ${(props) => (props.$shouldHide ? `-${menuHeight}` : 0)};
   left: 0;
@@ -76,10 +80,6 @@ const MenuContainer = styled.div<{
   z-index: 300;
   height: ${(props) => (props.$shouldOpenMenu ? "310px" : menuHeight)};
   overflow: hidden;
-
-  ${mediaQuery.dark} {
-    background-color: ${(props) => props.theme.dark.primaryColorDark};
-  }
 `;
 
 const NavBar = styled(Container)`
@@ -93,32 +93,31 @@ const NavBar = styled(Container)`
   }
 `;
 
-interface NavBarMenuItemProps {
-  shouldOpenMenu: boolean;
-}
-
-const NavBarMenuItem = memo(styled(MenuItemWithTracking)<NavBarMenuItemProps>`
-  position: relative;
-  display: inline-block;
-  margin-right: 20px;
-  line-height: 50px;
-  font-size: ${(props) => props.theme.fontSizes[5]};
-  height: auto;
+const NavBarMenuItem = styled(MatrixMenuItem)<{ shouldOpenMenu: boolean }>`
+  margin: 0;
+  height: 30px;
 
   ${mediaQuery.minWidth.sm} {
     visibility: visible;
     opacity: 1;
-    height: ${menuHeight};
-
-    ${(props) =>
-      !props.selected &&
-      css`
-        ${mediaQuery.inputDevice.mouse} {
-          transition: transform 0.15s;
-        }
-      `};
+    margin-right: ${(props) => props.theme.spacing[4]};
   }
-`);
+
+  /* Mobile: quando il menu è aperto, mostra gli elementi */
+  ${(props) => !props.shouldOpenMenu && css`
+    ${mediaQuery.maxWidth.sm} {
+      display: none;
+    }
+  `}
+
+  ${(props) => props.shouldOpenMenu && css`
+    ${mediaQuery.maxWidth.sm} {
+      display: flex;
+      margin: ${(props) => props.theme.spacing[2]} 0;
+      width: calc(100% - ${(props) => props.theme.spacing[8]});
+    }
+  `}
+`;
 
 export interface MenuProps {
   trackingCategory: string;
@@ -145,6 +144,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
             <Divider />
           </MobileBlogHeaderContainer>
           <NavBarMenuItem
+            variant="header"
             to={"/"}
             selected={pathname === "/"}
             trackingData={{
@@ -157,6 +157,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
             Home
           </NavBarMenuItem>
           <NavBarMenuItem
+            variant="header"
             to={slugs.blog}
             selected={
               pathname.includes(slugs.blog) && pathname !== slugs.aboutMe
@@ -171,6 +172,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
             Blog
           </NavBarMenuItem>
           <NavBarMenuItem
+            variant="header"
             to={slugs.art}
             selected={pathname === slugs.art}
             trackingData={{
@@ -183,6 +185,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
             Art
           </NavBarMenuItem>
           <NavBarMenuItem
+            variant="header"
             to={slugs.aboutMe}
             selected={pathname === slugs.aboutMe}
             trackingData={{
@@ -195,6 +198,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
             About me
           </NavBarMenuItem>
           <NavBarMenuItem
+            variant="header"
             to={slugs.chat}
             selected={pathname === slugs.chat}
             trackingData={{
