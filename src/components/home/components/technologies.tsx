@@ -36,11 +36,10 @@ const TechnologiesContainer = styled(ContainerFluid)`
   position: relative;
   background: ${(props) => props.theme.dark.generalBackground};
   scroll-snap-align: start;
-  padding: ${(props) => props.theme.spacing[4]};
-
-  ${mediaQuery.minWidth.md} {
-    padding: ${(props) => props.theme.spacing[12]};
-  }
+  padding-top: ${(props) => props.theme.spacing[12]};
+  padding-left: ${(props) => props.theme.spacing[4]};
+  padding-right: ${(props) => props.theme.spacing[4]};
+  padding-bottom: 100px;
 `;
 
 const ContentWrapper = styled.div`
@@ -285,7 +284,7 @@ export const Technologies: FC<TechnologiesProps> = ({ author }) => {
             </GradientTitle>
             <GlassmorphismBackground>
               <TechnologyParagraph variants={itemVariants}>
-                {`I'm ${author}, Experienced Senior Software Engineer with 15+ years in mobile and web development. Passionate about building performant, scalable applications used by millions of users 🚀.`}
+                {`I'm ${author}, Experienced Senior Software Engineer with 15+ years in mobile and web development. Passionate about building performant, scalable applications used by millions of users ??.`}
               </TechnologyParagraph>
               <TechnologyParagraph variants={itemVariants}>
                 {`

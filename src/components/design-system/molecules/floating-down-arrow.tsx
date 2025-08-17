@@ -8,7 +8,7 @@ import { ChevronDown } from "@styled-icons/boxicons-regular";
 
 const FloatingArrowContainer = styled.div`
   position: absolute;
-  bottom: ${(props) => props.theme.spacing[2]};
+  bottom: ${(props) => props.theme.spacing[4]};
   left: 0;
   right: 0;
   margin: 0 auto;
@@ -39,7 +39,6 @@ const FloatingArrowContainer = styled.div`
   ${mediaQuery.minWidth.md} {
     width: 60px;
     height: 60px;
-    bottom: ${(props) => props.theme.spacing[4]};
   }
 `;
 
@@ -65,7 +64,6 @@ export const FloatingDownArrow: FC = () => {
     const scrollContainer = document.querySelector('[data-snap-container]');
     if (!scrollContainer) return;
 
-    // Count total sections (all children of snap container)
     const sections = Array.from(scrollContainer.children);
     setTotalSections(sections.length);
 
@@ -73,9 +71,42 @@ export const FloatingDownArrow: FC = () => {
       const scrollTop = scrollContainer.scrollTop;
       const containerHeight = scrollContainer.clientHeight;
 
-      // Calculate current section based on scroll position
-      const newIndex = Math.round(scrollTop / containerHeight);
-      setCurrentSectionIndex(Math.min(newIndex, sections.length - 1));
+      // Metodo più robusto: trova la sezione più vicina al centro del viewport
+      const viewportCenter = scrollTop + containerHeight / 2;
+
+      let closestSectionIndex = 0;
+      let minDistance = Infinity;
+
+      sections.forEach((section, index) => {
+        const sectionElement = section as HTMLElement;
+        const sectionTop = sectionElement.offsetTop;
+        const sectionCenter = sectionTop + sectionElement.offsetHeight / 2;
+        const distance = Math.abs(viewportCenter - sectionCenter);
+
+        if (distance < minDistance) {
+          minDistance = distance;
+          closestSectionIndex = index;
+        }
+      });
+
+      console.log('Robust Debug:', {
+        scrollTop,
+        containerHeight,
+        viewportCenter,
+        closestSectionIndex,
+        totalSections: sections.length,
+        sectionsInfo: sections.map((section, index) => {
+          const el = section as HTMLElement;
+          return {
+            index,
+            top: el.offsetTop,
+            height: el.offsetHeight,
+            center: el.offsetTop + el.offsetHeight / 2
+          };
+        })
+      });
+
+      setCurrentSectionIndex(closestSectionIndex);
     };
 
     scrollContainer.addEventListener("scroll", handleScroll, { passive: true });
@@ -90,22 +121,46 @@ export const FloatingDownArrow: FC = () => {
     const scrollContainer = document.querySelector('[data-snap-container]');
     if (!scrollContainer) return;
 
-    const containerHeight = scrollContainer.clientHeight;
-    const nextSectionTop = (currentSectionIndex + 1) * containerHeight;
+    // Trova la sezione successiva usando la stessa logica robusta
+    const sections = Array.from(scrollContainer.children);
+    const nextSectionIndex = currentSectionIndex + 1;
 
-    // Only scroll if not on last section
-    if (currentSectionIndex < totalSections - 1) {
-      scrollContainer.scrollTo({
-        top: nextSectionTop,
-        behavior: "smooth",
-      });
-    }
+    // Assicurati che esista una sezione successiva
+    if (nextSectionIndex >= sections.length) return;
+
+    // Ottieni la posizione reale della sezione successiva
+    const nextSection = sections[nextSectionIndex] as HTMLElement;
+    const nextSectionTop = nextSection.offsetTop;
+
+    console.log('ScrollDown Debug:', {
+      currentSectionIndex,
+      nextSectionIndex,
+      nextSectionTop,
+      sectionsCount: sections.length
+    });
+
+    // Scrolla alla posizione reale della sezione successiva
+    scrollContainer.scrollTo({
+      top: nextSectionTop,
+      behavior: "smooth",
+    });
   };
 
-  // Hide only on last section (Footer)
-  if (currentSectionIndex >= totalSections - 1) {
+  // Debug della condizione di nascondere
+  const shouldHide = currentSectionIndex >= totalSections - 1;
+  console.log('Arrow visibility:', {
+    currentSectionIndex,
+    totalSections,
+    shouldHide,
+    calculation: `${currentSectionIndex} >= ${totalSections - 1}`
+  });
+
+  if (shouldHide) {
+    console.log('Hiding arrow - on last section');
     return null;
   }
+
+  console.log('Showing arrow');
 
   return (
     <FloatingArrowContainer onClick={handleScrollDown}>
