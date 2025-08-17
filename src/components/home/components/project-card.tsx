@@ -11,6 +11,7 @@ import {Heading4} from "@/components/design-system/atoms/heading4";
 import { motion, Variants } from "framer-motion";
 import { GlassmorphismBackground } from "@/components/design-system/atoms/glassmorphism-background";
 
+
 interface ProjectContainerProps {
   reverse: boolean;
 }
@@ -35,35 +36,18 @@ const ProjectContentContainer = styled.div`
   flex-direction: column;
 `;
 
-const ProjectImageContainer = styled.div`
+const ProjectImageContainer = styled(motion.div)`
   flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
   overflow: hidden;
   position: relative;
-  //padding: ${(props) => props.theme.spacing[4]};
+  padding: ${(props) => props.theme.spacing[4]};
   
   ${mediaQuery.minWidth.md} {
-    min-height: 400px;
     padding: ${(props) => props.theme.spacing[6]};
-  }
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: radial-gradient(
-      circle at center,
-      rgba(0, 255, 65, 0.05) 0%,
-      rgba(0, 255, 65, 0.02) 50%,
-      transparent 100%
-    );
-    pointer-events: none;
-    z-index: 1;
+    align-self: stretch;
   }
 `;
 
@@ -72,42 +56,33 @@ const ProjectImage = styled(Image)`
   position: relative;
   z-index: 2;
   box-shadow: 
-    0 8px 32px rgba(0, 255, 65, 0.15),
-    0 4px 16px rgba(0, 0, 0, 0.3),
+    0 8px 32px ${(props) => props.theme.dark.primaryColor}26,
+    0 4px 16px ${(props) => props.theme.dark.generalBackground}4D,
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border: 1px solid ${(props) => props.theme.dark.accentColor}40;
+  object-fit: cover;
+  width: 100%;
+  height: auto;
+  max-width: 500px;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  border: 1px solid rgba(0, 255, 65, 0.2);
   
+  ${mediaQuery.minWidth.md} {
+    height: 100%;
+    width: auto;
+    max-width: 100%;
+  }
+
   &:hover {
     transform: scale(1.03) translateY(-4px);
     box-shadow: 
-      0 0 32px rgba(0, 255, 65, 0.4),
+      0 0 20px ${(props) => props.theme.dark.primaryColor}99,
+      0 0 40px ${(props) => props.theme.dark.primaryColor}66,
+      0 0 60px ${(props) => props.theme.dark.primaryColor}33,
+      0 16px 64px ${(props) => props.theme.dark.primaryColor}1A,
+      0 8px 32px ${(props) => props.theme.dark.generalBackground}66,
       inset 0 1px 0 rgba(255, 255, 255, 0.15);
-    border-color: rgba(0, 255, 65, 0.4);
-  }
-
-  &::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(
-      135deg,
-      rgba(0, 255, 65, 0.1) 0%,
-      rgba(0, 255, 65, 0.05) 50%,
-      transparent 70%,
-      transparent 100%
-    );
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    pointer-events: none;
-    border-radius: inherit;
-  }
-
-  &:hover::after {
-    opacity: 1;
+    border-color: ${(props) => props.theme.dark.primaryColor}CC;
+    filter: contrast(1.1) saturate(1.2);
   }
 `;
 
@@ -136,8 +111,12 @@ const cardVariants: Variants = {
       duration: 0.6,
       ease: "easeOut"
     }
+  },
+  hover: {
+    scale: 1.02,
+    transition: { duration: 0.3, ease: "easeOut" }
   }
-};
+}
 
 export type ProjectProps = ProjectContainerProps & { project: Project };
 
@@ -148,6 +127,7 @@ export const ProjectCard: FC<ProjectProps> = ({
   <ProjectContainer
     $reverse={reverse}
     variants={cardVariants}
+    whileHover="hover"
     initial="hidden"
     whileInView="visible"
     viewport={{ once: true, amount: 0.2 }}

@@ -28,7 +28,6 @@ const TechnologyCardContainer = styled(motion.div)`
   &:hover {
     border-color: ${(props) => props.theme.dark.accentColor};
     box-shadow: 0 0 20px ${(props) => props.theme.dark.accentColor}40;
-    transform: translateY(-2px);
   }
 `;
 
