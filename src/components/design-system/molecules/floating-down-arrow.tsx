@@ -8,7 +8,7 @@ import { ChevronDown } from "@styled-icons/boxicons-regular";
 
 const FloatingArrowContainer = styled.div`
   position: absolute;
-  bottom: ${(props) => props.theme.spacing[4]};
+  bottom: ${(props) => props.theme.spacing[2]};
   left: 0;
   right: 0;
   margin: 0 auto;
@@ -37,6 +37,7 @@ const FloatingArrowContainer = styled.div`
   }
 
   ${mediaQuery.minWidth.md} {
+    bottom: ${(props) => props.theme.spacing[4]};
     width: 60px;
     height: 60px;
   }
@@ -71,7 +72,6 @@ export const FloatingDownArrow: FC = () => {
       const scrollTop = scrollContainer.scrollTop;
       const containerHeight = scrollContainer.clientHeight;
 
-      // Metodo più robusto: trova la sezione più vicina al centro del viewport
       const viewportCenter = scrollTop + containerHeight / 2;
 
       let closestSectionIndex = 0;

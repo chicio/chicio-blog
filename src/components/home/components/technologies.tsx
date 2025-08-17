@@ -2,7 +2,7 @@
 
 import styled from "styled-components";
 import { FC } from "react";
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 import { motion, Variants } from "framer-motion";
 import { ContainerFluid } from "@/components/design-system/atoms/container-fluid";
 import { mediaQuery } from "@/components/design-system/utils-css/media-query";
@@ -25,6 +25,8 @@ import gatsbyImage from "../../../../public/images/technologies/gatsby.png";
 import kubernetesImage from "../../../../public/images/technologies/kubernetes.png";
 import dockerImage from "../../../../public/images/technologies/docker.png";
 import grafanaImage from "../../../../public/images/technologies/grafana.png";
+import { Heading2 } from "@/components/design-system/atoms/heading2";
+import { useTechnologies } from "@/components/home/hooks/useTechnologies";
 
 const TechnologiesContainer = styled(ContainerFluid)`
   margin: 0;
@@ -36,7 +38,7 @@ const TechnologiesContainer = styled(ContainerFluid)`
   position: relative;
   background: ${(props) => props.theme.dark.generalBackground};
   scroll-snap-align: start;
-  padding-top: ${(props) => props.theme.spacing[12]};
+  padding-top: ${(props) => props.theme.spacing[10]};
   padding-left: ${(props) => props.theme.spacing[4]};
   padding-right: ${(props) => props.theme.spacing[4]};
   padding-bottom: 100px;
@@ -56,28 +58,12 @@ const SectionTitle = styled(motion.div)`
   margin-bottom: ${(props) => props.theme.spacing[8]};
 `;
 
-const GradientTitle = styled(Paragraph)`
-  background: linear-gradient(
-    135deg,
-    ${(props) => props.theme.dark.accentColor},
-    ${(props) => props.theme.dark.primaryColor}
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  font-size: ${(props) => props.theme.fontSizes[5]};
-  margin-bottom: ${(props) => props.theme.spacing[4]};
-
-  ${mediaQuery.minWidth.md} {
-    font-size: ${(props) => props.theme.fontSizes[6]};
-  }
+const TechExpertiseTitle = styled(Heading2)`
+   margin-bottom: ${(props) => props.theme.spacing[4]};
 `;
 
 const TechnologyParagraph = styled(Paragraph)`
   text-align: center;
-  color: ${(props) => props.theme.dark.primaryTextColor};
-  font-size: ${(props) => props.theme.fontSizes[2]};
-  line-height: 1.6;
   max-width: 800px;
   margin: ${(props) => props.theme.spacing[8]} auto;
 `;
@@ -180,41 +166,6 @@ const ExperienceYears = styled.span`
   margin-top: ${(props) => props.theme.spacing[1]};
 `;
 
-interface Technology {
-  name: string;
-  image: any;
-  years: string;
-  category: 'mobile' | 'frontend' | 'backend' | 'languages';
-}
-
-const technologies: Technology[] = [
-  { name: 'React Native', image: reactImage, years: '8+ years', category: 'mobile' },
-  { name: 'Expo', image: expoImage, years: '1+ years', category: 'mobile' },
-  { name: 'iOS', image: appleImage, years: '15+ years', category: 'mobile' },
-  { name: 'Android', image: androidImage, years: '8+ years', category: 'mobile' },
-  { name: 'React', image: reactImage, years: '8+ years', category: 'frontend' },
-  { name: 'Next.js', image: nextImage, years: '1+ years', category: 'frontend' },
-  { name: 'Expo', image: expoImage, years: '1+ years', category: 'frontend' },
-  { name: 'Gatsby', image: gatsbyImage, years: '5+ years', category: 'frontend' },
-  { name: 'Spring Boot', image: springBootImage, years: '5+ years', category: 'backend' },
-  { name: 'Kubernetes', image: kubernetesImage, years: '5+ years', category: 'backend' },
-  { name: 'Docker', image: dockerImage, years: '5+ years', category: 'backend' },
-  { name: 'Grafana', image: grafanaImage, years: '5+ years', category: 'backend' },
-  { name: 'Swift', image: swiftImage, years: '10+ years', category: 'languages' },
-  { name: 'TypeScript', image: typescriptImage, years: '6+ years', category: 'languages' },
-  { name: 'JavaScript', image: javascriptImage, years: '6+ years', category: 'languages' },
-  { name: 'Kotlin', image: kotlinImage, years: '5+ years', category: 'languages' },
-  { name: 'Java', image: javaImage, years: '15+ years', category: 'languages' },
-  { name: 'Objective-C', image: objectiveC, years: '15+ years', category: 'languages' },
-];
-
-const categoryTitles = {
-  mobile: 'Mobile Development',
-  frontend: 'Frontend Development',
-  backend: 'Backend Development',
-  languages: 'Programming languages'
-};
-
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
@@ -253,13 +204,7 @@ export interface TechnologiesProps {
 }
 
 export const Technologies: FC<TechnologiesProps> = ({ author }) => {
-  const groupedTechnologies = technologies.reduce((acc, tech) => {
-    if (!acc[tech.category]) {
-      acc[tech.category] = [];
-    }
-    acc[tech.category].push(tech);
-    return acc;
-  }, {} as Record<string, Technology[]>);
+  const { technologies } = useTechnologies();
 
   return (
     <TechnologiesContainer>
@@ -268,17 +213,20 @@ export const Technologies: FC<TechnologiesProps> = ({ author }) => {
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
+          viewport={{
+            once: true,
+            amount: 0.1,
+          }}
         >
           <SectionTitle variants={itemVariants}>
-            <GradientTitle as="h2">
+            <TechExpertiseTitle>
               Tech Stack & Expertise
-            </GradientTitle>
+            </TechExpertiseTitle>
             <GlassmorphismBackground>
-              <TechnologyParagraph variants={itemVariants}>
-                {`I'm ${author}, Experienced Senior Software Engineer with 15+ years in mobile and web development. Passionate about building performant, scalable applications used by millions of users ??.`}
+              <TechnologyParagraph>
+                {`I'm ${author}, Experienced Senior Software Engineer with 15+ years in mobile and web development. Passionate about building performant, scalable applications used by millions of users 🚀.`}
               </TechnologyParagraph>
-              <TechnologyParagraph variants={itemVariants}>
+              <TechnologyParagraph>
                 {`
 My expertise spans mobile app development, clean architecture, event-driven systems, and full-stack development (Spring Boot, React/React Native, Kubernetes). I’m an OSS contributor and I share technical insights regularly on my blog.`}
               </TechnologyParagraph>
@@ -286,10 +234,10 @@ My expertise spans mobile app development, clean architecture, event-driven syst
           </SectionTitle>
 
           <SkillsGrid variants={itemVariants}>
-            {Object.entries(groupedTechnologies).map(([category, techs]) => (
+            {Object.entries(technologies).map(([category, techs]) => (
               <SkillCategory key={category} variants={itemVariants}>
                 <CategoryTitle variants={itemVariants}>
-                  {categoryTitles[category as keyof typeof categoryTitles]}
+                  {category}
                 </CategoryTitle>
                 <TechnologiesGrid>
                   {techs.map((tech, index) => (
