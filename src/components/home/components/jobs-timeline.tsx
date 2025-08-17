@@ -13,6 +13,7 @@ const SectionContainer = styled(ContainerFluid)`
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  max-width: 1400px;
   padding: ${(props) => props.theme.spacing[8]}
     ${(props) => props.theme.spacing[8]} ${(props) => props.theme.spacing[16]};
   background: ${(props) => props.theme.dark.generalBackground};

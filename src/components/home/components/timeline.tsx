@@ -1,552 +1,410 @@
+'use client'
+
+import { FC } from "react";
+import styled from "styled-components";
+import { motion, Variants } from "framer-motion";
+import { mediaQuery } from "../../design-system/utils-css/media-query";
 import { Paragraph } from "../../design-system/atoms/paragraph";
 import { List } from "../../design-system/atoms/list";
-import { FC, ReactElement, ReactNode } from "react";
-import styled, {css, TransientProps} from "styled-components";
-import { Container } from "../../design-system/atoms/container";
-import { Heading6 } from "../../design-system/atoms/heading6";
-import { mediaQuery } from "../../design-system/utils-css/media-query";
 import { Time } from "../../design-system/atoms/time";
+import { Heading4 } from "../../design-system/atoms/heading4";
+import { Heading6 } from "../../design-system/atoms/heading6";
+import { GlassmorphismBackground } from "../../design-system/atoms/glassmorphism-background";
+import { StandardExternalLinkWithTracking } from "../../design-system/atoms/standard-external-link-with-tracking";
 import { Briefcase } from "@styled-icons/boxicons-regular";
 import { GraduationCap } from "@styled-icons/fa-solid";
-import {StandardExternalLinkWithTracking} from "@/components/design-system/atoms/standard-external-link-with-tracking";
-import {tracking} from "@/types/tracking";
+import { tracking } from "@/types/tracking";
 import Image from "next/image";
-import lastminuteImage from "../../../../public/images/carrier/lastminute-group.png"
-import unimibImage from "../../../../public/images/carrier/unimib.jpg"
-import avanadeImage from "../../../../public/images/carrier/avanade.png"
-import bottinelliImage from "../../../../public/images/carrier/bottinelli-informatica.png"
-import condenastImage from "../../../../public/images/carrier/condenast.png"
-import insubriaImage from "../../../../public/images/carrier/insubria.png"
-import shiImage from "../../../../public/images/carrier/shi.png"
+import { useTimeline } from "@/components/home/hooks/useTimeline";
 
-const TimelineContentContainer = styled(Container)`
-  padding: 0;
-  margin-top: ${(props) => props.theme.spacing[4]};
-  margin-bottom: ${(props) => props.theme.spacing[4]};
-`;
-
-const TimelineContainer = styled.ul`
-  list-style: none;
-  padding: ${(props) => props.theme.spacing[4]} 0
-    ${(props) => props.theme.spacing[4]};
+const TimelineContainer = styled(motion.div)`
+  display: flex;
+  flex-direction: column;
+  gap: ${(props) => props.theme.spacing[4]};
   position: relative;
-  text-align: justify;
-  margin: 0;
-  background-color: ${(props) => props.theme.light.generalBackground};
+  padding: ${(props) => props.theme.spacing[4]} 0;
+  max-width: 1400px;
 
   ${mediaQuery.minWidth.md} {
-    text-align: left;
-
-    &:before {
-      top: 0;
-      bottom: 0;
-      position: absolute;
-      content: " ";
-      width: 3px;
-      left: 50%;
-      margin-left: -1.5px;
-      background-color: ${(props) => props.theme.light.dividerColor};
-    }
+    gap: ${(props) => props.theme.spacing[6]};
+    padding: ${(props) => props.theme.spacing[6]} 0;
   }
 
-  ${mediaQuery.maxWidth.md} {
-    &:before {
-      left: 40px;
-    }
-  }
-
-  ${mediaQuery.dark} {
-    background-color: ${(props) => props.theme.dark.generalBackground};
-
-    &:before {
-      background-color: ${(props) => props.theme.dark.dividerColor};
-    }
-  }
-`;
-
-const TimelineElementContainer = styled.li`
-  padding-bottom: ${(props) => props.theme.spacing[4]};
-  position: relative;
-
-  &:before,
-  &:after {
-    content: " ";
-    display: table;
-  }
-
-  &:after {
-    clear: both;
-  }
-`;
-
-interface TimelinePanelProps {
-  inverted: boolean;
-}
-
-const TimelinePanel = styled.div<TransientProps<TimelinePanelProps>>`
-  background-color: ${(props) => props.theme.light.generalBackgroundLight};
-  border: ${(props) => props.theme.light.dividerColor} 1px solid;
-  box-shadow: ${(props) => props.theme.light.boxShadowLight} 0 1px 6px;
-  width: 100%;
-  float: left;
-  border-radius: 3px;
-  position: relative;
-
-  ${mediaQuery.minWidth.md} {
-    &:before {
-      position: absolute;
-      top: 26px;
-      right: -15px;
-      display: inline-block;
-      border-top: 15px solid transparent;
-      border-left: ${(props) => props.theme.light.dividerColor} 14px solid;
-      border-right: ${(props) => props.theme.light.dividerColor} 0px solid;
-      border-bottom: 15px solid transparent;
-      content: " ";
-    }
-
-    &:after {
-      position: absolute;
-      top: 27px;
-      right: -14px;
-      display: inline-block;
-      border-left: ${(props) => props.theme.light.generalBackgroundLight} 14px
-        solid;
-      border-right: ${(props) => props.theme.light.generalBackgroundLight} 0px
-        solid;
-      border-top: 14px solid transparent;
-      border-bottom: 14px solid transparent;
-      content: " ";
-    }
-  }
-
-  ${mediaQuery.minWidth.md} {
-    width: 46%;
-  }
-
-  ${(props) =>
-    props.$inverted &&
-    css`
-      float: right;
-
-      &:before {
-        border-left-width: 0;
-        border-right-width: 14px;
-        left: -14px;
-        right: auto;
-      }
-
-      &:after {
-        border-left-width: 0;
-        border-right-width: 14px;
-        left: -13px;
-        right: auto;
-      }
-    `};
-
-  ${mediaQuery.dark} {
-    background-color: ${(props) => props.theme.dark.generalBackgroundLight};
-    border: ${(props) => props.theme.dark.dividerColor} 1px solid;
-    box-shadow: ${(props) => props.theme.dark.boxShadowLight} 0 1px 6px;
-
-    &:before {
-      border-left: ${(props) => props.theme.dark.dividerColor} 14px solid;
-      border-right: ${(props) => props.theme.dark.dividerColor} 0px solid;
-    }
-
-    &:after {
-      border-left: ${(props) => props.theme.dark.generalBackgroundLight} 14px
-        solid;
-      border-right: ${(props) => props.theme.dark.generalBackgroundLight} 0px
-        solid;
-    }
-
-    ${(props) =>
-      props.$inverted &&
-      css`
-        float: right;
-
-        &:before {
-          border-left-width: 0;
-          border-right-width: 14px;
-          left: -14px;
-          right: auto;
-        }
-
-        &:after {
-          border-left-width: 0;
-          border-right-width: 14px;
-          left: -13px;
-          right: auto;
-        }
-      `};
-  }
-`;
-
-const TimelineBadge = styled.div`
-  visibility: hidden;
-
-  ${mediaQuery.minWidth.md} {
-    visibility: visible;
-    background-color: ${(props) => props.theme.light.primaryColor};
-    color: ${(props) => props.theme.light.textAbovePrimaryColor};
-    width: 40px;
-    height: 40px;
-    line-height: 40px;
-    font-size: 1.4em;
-    text-align: center;
+  &::before {
+    content: '';
     position: absolute;
-    top: 20px;
-    left: 50%;
-    margin-left: -20px;
-    z-index: 100;
-    border-radius: 50%;
-  }
+    left: 20px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(
+      180deg,
+      ${(props) => props.theme.dark.primaryColor}80 0%,
+      ${(props) => props.theme.dark.primaryColor}40 50%,
+      ${(props) => props.theme.dark.primaryColor}80 100%
+    );
 
-  ${mediaQuery.dark} {
-    background-color: ${(props) => props.theme.dark.primaryColor};
-    color: ${(props) => props.theme.dark.textAbovePrimaryColor};
+    ${mediaQuery.minWidth.md} {
+      left: 24px;
+      width: 3px;
+    }
   }
 `;
 
-const TimelineTitle = styled.div`
-  font-size: ${(props) => props.theme.fontSizes[7]};
-  margin: ${(props) => props.theme.spacing[0]};
+const TimelineItem = styled(motion.div)`
+  display: flex;
+  gap: ${(props) => props.theme.spacing[3]};
+  position: relative;
+  width: 100%;
+
+  ${mediaQuery.minWidth.md} {
+    gap: ${(props) => props.theme.spacing[4]};
+  }
+`;
+
+const TimelineMarker = styled(motion.div)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: ${(props) => props.theme.dark.primaryColor};
+  color: ${(props) => props.theme.dark.textAbovePrimaryColor};
+  border: 3px solid ${(props) => props.theme.dark.generalBackground};
+  position: relative;
+  z-index: 2;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 30px ${(props) => props.theme.dark.primaryColor}60;
+  }
+
+  ${mediaQuery.minWidth.md} {
+    width: 48px;
+    height: 48px;
+  }
+`;
+
+const TimelineContent = styled(motion.div)`
+  flex: 1;
+  width: 0; /* Force container to respect flex-basis */
+  min-width: 0; /* Allow content to shrink below its natural width */
+`;
+
+const TimelineCard = styled(GlassmorphismBackground)`
+  padding: ${(props) => props.theme.spacing[3]};
+  display: flex;
+  flex-direction: column;
+  gap: ${(props) => props.theme.spacing[2]};
+  width: 100%;
+  box-sizing: border-box;
+
+  ${mediaQuery.minWidth.md} {
+    padding: ${(props) => props.theme.spacing[4]};
+    gap: ${(props) => props.theme.spacing[3]};
+  }
+`;
+
+const TimelineHeader = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${(props) => props.theme.spacing[1]};
+  width: 100%;
+
+  ${mediaQuery.minWidth.md} {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: ${(props) => props.theme.spacing[3]};
+  }
+`;
+
+const TimelineHeaderContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${(props) => props.theme.spacing[1]};
+  flex: 1;
+  min-width: 0;
+  word-wrap: break-word;
+`;
+
+const TimelineTitle = styled(Heading4)`
+  margin: 0;
+  background: linear-gradient(135deg, ${(props) => props.theme.dark.primaryColor}, ${(props) => props.theme.dark.accentColor});
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  word-wrap: break-word;
+  hyphens: auto;
+  font-size: ${(props) => props.theme.fontSizes[4]};
+
+  ${mediaQuery.minWidth.md} {
+    font-size: ${(props) => props.theme.fontSizes[5]};
+  }
 `;
 
 const TimelineSubtitle = styled(Heading6)`
-  text-align: left;
-  margin-bottom: ${(props) => props.theme.spacing[2]};
+  margin: 0;
+  color: ${(props) => props.theme.dark.accentColor};
+  word-wrap: break-word;
+  hyphens: auto;
+  font-size: ${(props) => props.theme.fontSizes[1]};
+
+  ${mediaQuery.minWidth.md} {
+    font-size: ${(props) => props.theme.fontSizes[2]};
+  }
+`;
+
+const TimelineDate = styled(Time)`
+  color: ${(props) => props.theme.dark.primaryColor};
+  font-weight: 600;
+  font-size: ${(props) => props.theme.fontSizes[1]};
+  flex-shrink: 0;
+
+  ${mediaQuery.minWidth.md} {
+    align-self: flex-start;
+    font-size: ${(props) => props.theme.fontSizes[2]};
+  }
+`;
+
+const TimelineContentSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${(props) => props.theme.spacing[2]};
+  width: 100%;
+
+  ${mediaQuery.minWidth.md} {
+    flex-direction: row;
+    gap: ${(props) => props.theme.spacing[3]};
+  }
+`;
+
+const TimelineImageContainer = styled.div`
+  width: 48px;
+  height: 48px;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid ${(props) => props.theme.dark.accentColor}40;
+  background: #FFFFFF;
+  flex-shrink: 0;
+  align-self: flex-start;
+
+  ${mediaQuery.minWidth.md} {
+    width: 56px;
+    height: 56px;
+    border-radius: 8px;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+`;
+
+const TimelineTextContent = styled.div`
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: ${(props) => props.theme.spacing[2]};
 `;
 
 const TimelineDescription = styled(Paragraph)`
+  margin: 0;
   text-align: left;
-  margin-top: ${(props) => props.theme.spacing[2]};
+  word-wrap: break-word;
+  hyphens: auto;
+  line-height: 1.5;
+  font-size: ${(props) => props.theme.fontSizes[1]};
+
+  ${mediaQuery.minWidth.md} {
+    font-size: ${(props) => props.theme.fontSizes[2]};
+  }
 `;
 
-const TimelineTime = styled(Time)`
-  margin: ${(props) => props.theme.spacing[0]};
-  font-size: ${(props) => props.theme.fontSizes[3]};
+const TimelineFeatures = styled(List)`
+  margin: 0;
+  padding: 0;
+  
+  li {
+    position: relative;
+    padding-left: ${(props) => props.theme.spacing[3]};
+    margin-bottom: ${(props) => props.theme.spacing[1]};
+    word-wrap: break-word;
+    hyphens: auto;
+    line-height: 1.4;
+    font-size: ${(props) => props.theme.fontSizes[0]};
+    
+    &::before {
+      content: "▸";
+      position: absolute;
+      left: 0;
+      color: ${(props) => props.theme.dark.primaryColor};
+      font-weight: bold;
+    }
+
+    ${mediaQuery.minWidth.md} {
+      font-size: ${(props) => props.theme.fontSizes[1]};
+      padding-left: ${(props) => props.theme.spacing[4]};
+    }
+  }
 `;
 
-const TimelinePanelContentContainer = styled.div`
-  padding: ${(props) => props.theme.spacing[2]};
-`;
-
-const imgSize = 80;
-
-const TimelineImageContainer = styled.div`
-  border: 1px solid gray;
-  margin-left: ${(props) => props.theme.spacing[0]};
-  margin-right: auto;
-  margin-bottom: 15px;
-  display: block;
-  background-color: #fff;
-  width: ${imgSize}px;
-  height: ${imgSize}px;
-`;
-
-type TimelineElementProps = TimelinePanelProps & {
-  icon: ReactElement;
-  children?: ReactNode;
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      delayChildren: 0.2,
+      staggerChildren: 0.1,
+    },
+  },
 };
 
-const TimelineElement: FC<TimelineElementProps> = ({
-  children,
-  inverted,
-  icon,
-}) => (
-  <TimelineElementContainer>
-    <TimelineBadge>{icon}</TimelineBadge>
-    <TimelinePanel $inverted={inverted}>
-      <TimelinePanelContentContainer>{children}</TimelinePanelContentContainer>
-    </TimelinePanel>
-  </TimelineElementContainer>
-);
+const itemVariants: Variants = {
+  hidden: {
+    opacity: 0,
+    x: -50,
+    scale: 0.95
+  },
+  visible: {
+    opacity: 1,
+    x: 0,
+    scale: 1,
+    transition: {
+      duration: 0.6,
+      ease: "easeOut"
+    }
+  },
+  hover: {
+    scale: 1.02,
+    transition: { duration: 0.3, ease: "easeOut" }
+  }
+};
+
+const markerVariants: Variants = {
+  hidden: {
+    scale: 0,
+    rotate: -180
+  },
+  visible: {
+    scale: 1,
+    rotate: 0,
+    transition: {
+      duration: 0.5,
+      ease: "easeOut",
+      delay: 0.2
+    }
+  },
+  hover: {
+    scale: 1.1,
+    transition: { duration: 0.3, ease: "easeOut" }
+  }
+};
+
+const cardVariants: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 20
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: "easeOut",
+      delay: 0.1
+    }
+  }
+};
 
 export const Timeline: FC = () => {
-  const iconsSize = 20;
-  const briefcase = <Briefcase size={iconsSize} />;
-  const graduationCap = <GraduationCap size={iconsSize} />;
+  const { timeline } = useTimeline();
+
+  const getIcon = (type: "work" | "education") => {
+    return type === "work" ? (
+      <Briefcase size={20} />
+    ) : (
+      <GraduationCap size={18} />
+    );
+  };
 
   return (
-    <TimelineContentContainer>
-      <TimelineContainer>
-        <TimelineElement inverted={false} icon={briefcase}>
-          <TimelineImageContainer>
-            <Image
-              width={imgSize}
-              height={imgSize}
-              src={lastminuteImage}
-              alt={"lastminute"}
-              placeholder={'blur'}
-            />
-          </TimelineImageContainer>
-          <StandardExternalLinkWithTracking
-            trackingData={{
-              action: tracking.action.open_experience_and_education,
-              category: tracking.category.home,
-              label: tracking.label.body,
-            }}
-            href={"https://lmgroup.lastminute.com/"}
-            target={"_blank"}
-            rel="noopener noreferrer"
+    <TimelineContainer
+      variants={containerVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.1 }}
+    >
+      {timeline.map((item) => (
+        <TimelineItem
+          key={item.id}
+          variants={itemVariants}
+          whileHover="hover"
+        >
+          <TimelineMarker
+            variants={markerVariants}
+            whileHover="hover"
           >
-            <TimelineTitle>Lastminute.com group</TimelineTitle>
-          </StandardExternalLinkWithTracking>
-          <TimelineSubtitle>Mobile application developer</TimelineSubtitle>
-          <TimelineTime>February 2017</TimelineTime>
-          <TimelineDescription>
-            Designing and implementing iOS and Android apps for the main brands
-            of the company:
-          </TimelineDescription>
-          <List>
-            <li>lastminute.com</li>
-            <li>Volagratis</li>
-            <li>Rumbo</li>
-            <li>Weg.de</li>
-          </List>
-        </TimelineElement>
-        <TimelineElement inverted={true} icon={graduationCap}>
-          <TimelineImageContainer>
-            <Image
-              width={imgSize}
-              height={imgSize}
-              src={unimibImage}
-              placeholder={'blur'}
-              alt={"unimib"}
-            />
-          </TimelineImageContainer>
-          <StandardExternalLinkWithTracking
-            trackingData={{
-              action: tracking.action.open_experience_and_education,
-              category: tracking.category.home,
-              label: tracking.label.body,
-            }}
-            href={"https://www.disco.unimib.it/it"}
-            target={"_blank"}
-            rel="noopener noreferrer"
-          >
-            <TimelineTitle>Milano-Bicocca University</TimelineTitle>
-          </StandardExternalLinkWithTracking>
-          <TimelineSubtitle>
-            {"Master's degree in Computer Science"}
-          </TimelineSubtitle>
-          <TimelineTime>July 2016</TimelineTime>
-          <TimelineDescription>
-            Thesis: “Spectral Clara Lux Tracer: physically based ray tracer with
-            multiple shading models support”. You can find more info about it in
-            the project section.
-          </TimelineDescription>
-          <List>
-            <li>Computer graphics</li>
-            <li>Software engineering</li>
-            <li>Algorithm and Theoretical CS</li>
-            <li>IT security</li>
-            <li>IT management</li>
-            <li>Design and user experience</li>
-          </List>
-        </TimelineElement>
-        <TimelineElement inverted={false} icon={briefcase}>
-          <TimelineImageContainer>
-            <Image
-              width={imgSize}
-              height={imgSize}
-              src={condenastImage}
-              placeholder={'blur'}
-              alt={"condenast"}
-            />
-          </TimelineImageContainer>
-          <StandardExternalLinkWithTracking
-            trackingData={{
-              action: tracking.action.open_experience_and_education,
-              category: tracking.category.home,
-              label: tracking.label.body,
-            }}
-            href={"https://www.condenast.it"}
-            target={"_blank"}
-            rel="noopener noreferrer"
-          >
-            <TimelineTitle>Condé Nast Italia</TimelineTitle>
-          </StandardExternalLinkWithTracking>
-          <TimelineSubtitle>Mobile/Web application developer</TimelineSubtitle>
-          <TimelineTime>June 2013</TimelineTime>
-          <TimelineDescription>
-            Designing and implementing iOS and Android apps for the main brands
-            of the company: Vanity Fair, Glamour, Wired, Vogue. I also worked
-            with the web team to develop the new version of the official web
-            sites for GQ Italia, Glamour, CNLive! and Vogue Italia.
-          </TimelineDescription>
-        </TimelineElement>
-        <TimelineElement inverted={false} icon={briefcase}>
-          <TimelineImageContainer>
-            <Image
-              width={imgSize}
-              height={imgSize}
-              src={shiImage}
-              placeholder={"blur"}
-              alt={"shi"}
-            />
-          </TimelineImageContainer>
-          <StandardExternalLinkWithTracking
-            trackingData={{
-              action: tracking.action.open_experience_and_education,
-              category: tracking.category.home,
-              label: tracking.label.body,
-            }}
-            href={
-              "https://www.linkedin.com/company/shi-srl/?originalSubdomain=it"
-            }
-            target={"_blank"}
-            rel="noopener noreferrer"
-          >
-            <TimelineTitle>SHI</TimelineTitle>
-          </StandardExternalLinkWithTracking>
-          <TimelineSubtitle>iOS/Web Developer</TimelineSubtitle>
-          <TimelineTime>October 2010</TimelineTime>
-          <TimelineDescription>
-            Design and development of mobile application on iOS, Android and
-            Windows phone platform, for enterprise distribution (ad-hoc
-            distribution) or within the various app store. Design and
-            development of Web application used as backend for mobile app.
-            Design and development of Enterprise Web application.
-          </TimelineDescription>
-        </TimelineElement>
-        <TimelineElement inverted={false} icon={briefcase}>
-          <TimelineImageContainer>
-            <Image
-              width={imgSize}
-              height={imgSize}
-              src={bottinelliImage}
-              placeholder={"blur"}
-              alt={"bottinelli informatica"}
-            />
-          </TimelineImageContainer>
-          <StandardExternalLinkWithTracking
-            trackingData={{
-              action: tracking.action.open_experience_and_education,
-              category: tracking.category.home,
-              label: tracking.label.body,
-            }}
-            href={"#"}
-            target={"_blank"}
-            rel="noopener noreferrer"
-          >
-            <TimelineTitle>Bottinelli informatica</TimelineTitle>
-          </StandardExternalLinkWithTracking>
-          <TimelineSubtitle>Developer</TimelineSubtitle>
-          <TimelineTime>August 2009</TimelineTime>
-          <TimelineDescription>
-            Software development for textile industry.
-          </TimelineDescription>
-        </TimelineElement>
-        <TimelineElement inverted={false} icon={briefcase}>
-          <TimelineImageContainer>
-            <Image
-              width={imgSize}
-              height={imgSize}
-              src={avanadeImage}
-              placeholder={"blur"}
-              alt={"avanade"}
-            />
-          </TimelineImageContainer>
-          <StandardExternalLinkWithTracking
-            trackingData={{
-              action: tracking.action.open_experience_and_education,
-              category: tracking.category.home,
-              label: tracking.label.body,
-            }}
-            href={"https://www.avanade.com"}
-            target={"_blank"}
-            rel="noopener noreferrer"
-          >
-            <TimelineTitle>Avanade</TimelineTitle>
-          </StandardExternalLinkWithTracking>
-          <TimelineSubtitle>PMO Consultant</TimelineSubtitle>
-          <TimelineTime>October 2008</TimelineTime>
-          <TimelineDescription>
-            {" "}
-            Assigned on Eurosig integration BA-HVB/Unicredit project, I worked
-            with the Accenture Consultant team as a PMO.
-          </TimelineDescription>
-          <List>
-            <li>
-              Tracking creation and evolution of functional specification to
-              cover the gaps between ASC, CRE, PAY, MDM and BSS sector of the
-              IT systems of Unicredit and HVB bank.
-            </li>
-            <li>
-              Publishing statistics to show the state of art of the functional
-              specification produced, the open change request and the state of
-              user test. Maintenance of tools created with Microsoft Excel,
-              Microsoft Powerpoint and VBA used to generate the above
-              mentioned statistics.
-            </li>
-            <li>
-              Maintenance of tools used to manage WBS of the project inside
-              Accenture team.
-            </li>
-          </List>
-        </TimelineElement>
-        <TimelineElement inverted={true} icon={graduationCap}>
-          <TimelineImageContainer>
-            <Image
-              width={imgSize}
-              height={imgSize}
-              src={insubriaImage}
-              placeholder={"blur"}
-              alt={"insubria"}
-            />
-          </TimelineImageContainer>
-          <StandardExternalLinkWithTracking
-            trackingData={{
-              action: tracking.action.open_experience_and_education,
-              category: tracking.category.home,
-              label: tracking.label.body,
-            }}
-            href={"https://www.uninsubria.it"}
-            target={"_blank"}
-            rel="noopener noreferrer"
-          >
-            <TimelineTitle>Insubria University</TimelineTitle>
-          </StandardExternalLinkWithTracking>
-          <TimelineSubtitle>
-            {"Bachelor's degree in Computer Science"}
-          </TimelineSubtitle>
-          <TimelineTime>October 2008</TimelineTime>
-          <TimelineDescription>
-            Thesis: “Grandi Giardini: implementazione di un portale web con
-            funzionalità e-commerce”. A web e-commerce developed for Grandi
-            Giardini Italiani s.r.l., a company dealing with the organization of
-            events in some of the most beautiful italian gardens (never deployed
-            in production).
-          </TimelineDescription>
-          <List>
-            <li>Software engineering</li>
-            <li>Algorithm and Theoretical CS</li>
-            <li>IT security</li>
-            <li>IT management</li>
-            <li>Networking</li>
-            <li>Programming</li>
-          </List>
-        </TimelineElement>
-        <TimelineElement inverted={true} icon={graduationCap}>
-          <StandardExternalLinkWithTracking
-            trackingData={{
-              action: tracking.action.open_experience_and_education,
-              category: tracking.category.home,
-              label: tracking.label.body,
-            }}
-            href={"#"}
-            target={"_blank"}
-            rel="noopener noreferrer"
-          >
-            <TimelineTitle>ITCG Romagnosi</TimelineTitle>
-          </StandardExternalLinkWithTracking>
-          <TimelineSubtitle>High school in Accountant</TimelineSubtitle>
-          <TimelineTime>July 2005</TimelineTime>
-        </TimelineElement>
-      </TimelineContainer>
-    </TimelineContentContainer>
+            {getIcon(item.type)}
+          </TimelineMarker>
+
+          <TimelineContent variants={cardVariants}>
+            <TimelineCard>
+              <TimelineHeader>
+                <TimelineHeaderContent>
+                  {item.link ? (
+                    <StandardExternalLinkWithTracking
+                      trackingData={{
+                        action: tracking.action.open_experience_and_education,
+                        category: tracking.category.home,
+                        label: tracking.label.body,
+                      }}
+                      href={item.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <TimelineTitle>{item.title}</TimelineTitle>
+                    </StandardExternalLinkWithTracking>
+                  ) : (
+                    <TimelineTitle>{item.title}</TimelineTitle>
+                  )}
+                  <TimelineSubtitle>{item.subtitle}</TimelineSubtitle>
+                </TimelineHeaderContent>
+
+                <TimelineDate>{item.date}</TimelineDate>
+              </TimelineHeader>
+
+              <TimelineContentSection>
+                <TimelineImageContainer>
+                  <Image
+                    src={item.image}
+                    alt={item.title}
+                    width={56}
+                    height={56}
+                    placeholder="blur"
+                  />
+                </TimelineImageContainer>
+
+                <TimelineTextContent>
+                  <TimelineDescription>{item.description}</TimelineDescription>
+                  {item.features && (
+                    <TimelineFeatures>
+                      {item.features.map((feature, idx) => (
+                        <li key={idx}>{feature}</li>
+                      ))}
+                    </TimelineFeatures>
+                  )}
+                </TimelineTextContent>
+              </TimelineContentSection>
+            </TimelineCard>
+          </TimelineContent>
+        </TimelineItem>
+      ))}
+    </TimelineContainer>
   );
 };
