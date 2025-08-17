@@ -1,11 +1,11 @@
-import { Paragraph } from "../atoms/paragraph";
-import { List } from "../atoms/list";
+import { Paragraph } from "../../design-system/atoms/paragraph";
+import { List } from "../../design-system/atoms/list";
 import { FC, ReactElement, ReactNode } from "react";
 import styled, {css, TransientProps} from "styled-components";
-import { Container } from "../atoms/container";
-import { Heading6 } from "../atoms/heading6";
-import { mediaQuery } from "../utils-css/media-query";
-import { Time } from "../atoms/time";
+import { Container } from "../../design-system/atoms/container";
+import { Heading6 } from "../../design-system/atoms/heading6";
+import { mediaQuery } from "../../design-system/utils-css/media-query";
+import { Time } from "../../design-system/atoms/time";
 import { Briefcase } from "@styled-icons/boxicons-regular";
 import { GraduationCap } from "@styled-icons/fa-solid";
 import {StandardExternalLinkWithTracking} from "@/components/design-system/atoms/standard-external-link-with-tracking";

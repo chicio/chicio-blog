@@ -1,7 +1,7 @@
 import { siteMetadata } from "@/types/site-metadata";
 import { ProfilePresentation } from "@/components/home/components/profile-presentation";
 import { Technologies } from "@/components/home/components/technologies";
-import { Resume } from "@/components/design-system/organism/resume";
+import { JobsTimeline } from "@/components/home/components/jobsTimeline";
 import { createMetadata } from "@/lib/seo/seo";
 import { slugs } from "@/types/slug";
 import { JsonLd } from "@/components/design-system/website/jsond-ld";
@@ -11,6 +11,7 @@ import { FloatingChatButton } from "@/components/design-system/molecules/floatin
 import { tracking } from "@/types/tracking";
 import { MatrixBackground } from "@/components/design-system/molecules/matrix-background";
 import { SnapScrollContainer } from "@/components/home/components/snap-scroll-container";
+import { Projects } from "@/components/home/components/projects";
 
 export const metadata = createMetadata({
   author: siteMetadata.author,
@@ -29,7 +30,8 @@ export default function Home() {
           <FloatingDownArrow />
         </MatrixBackground>
         <Technologies author={siteMetadata.author} />
-        <Resume />
+        <Projects />
+        <JobsTimeline />
         <Footer
           author={siteMetadata.author}
           trackingCategory={tracking.category.home}
