@@ -14,13 +14,37 @@ const SectionContainer = styled(ContainerFluid)`
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  padding: ${(props) => props.theme.spacing[8]} ${(props) => props.theme.spacing[8]} ${(props) => props.theme.spacing[16]};
+  justify-content: flex-start;
+  padding: ${(props) => props.theme.spacing[8]} ${(props) => props.theme.spacing[4]} ${(props) => props.theme.spacing[16]};
   background: ${(props) => props.theme.dark.generalBackground};
   scroll-snap-align: start;
   position: relative;
 
   ${mediaQuery.minWidth.md} {
-    padding: ${(props) => props.theme.spacing[12]} ${(props) => props.theme.spacing[12]} ${(props) => props.theme.spacing[20]};
+    padding: ${(props) => props.theme.spacing[12]} ${(props) => props.theme.spacing[8]} ${(props) => props.theme.spacing[20]};
+  }
+`;
+
+const ProjectsContent = styled(motion.div)`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+`;
+
+const ProjectsGrid = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${(props) => props.theme.spacing[6]};
+  width: 100%;
+  margin-top: ${(props) => props.theme.spacing[8]};
+
+  ${mediaQuery.minWidth.md} {
+    gap: ${(props) => props.theme.spacing[12]};
+    margin-top: ${(props) => props.theme.spacing[12]};
   }
 `;
 
@@ -29,34 +53,53 @@ const containerVariants: Variants = {
   visible: {
     opacity: 1,
     transition: {
-      delayChildren: stagger(0.3, { startDelay: 0.2 }),
+      delayChildren: 0.3,
+      staggerChildren: 0.2,
     },
   },
 };
 
+const titleVariants: Variants = {
+  hidden: {
+    opacity: 0,
+    y: -30,
+    scale: 0.9
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.8,
+      ease: "easeOut"
+    }
+  }
+};
+
 export const Projects: FC = () =>
   <SectionContainer>
-    <motion.div
+    <ProjectsContent
       variants={containerVariants}
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.1 }}
     >
-      <SectionTitle as="h2">Open Source Projects</SectionTitle>
-      {Object.keys(projects).map((projectKey, index) => {
-        const project = projects[projectKey];
+      <motion.div variants={titleVariants}>
+        <SectionTitle as="h2">Open Source Projects</SectionTitle>
+      </motion.div>
+      <ProjectsGrid>
+        {Object.keys(projects).map((projectKey, index) => {
+          const project = projects[projectKey];
 
-        return (
-          <ProjectCard
-            key={project.name}
-            reverse={index % 2 !== 0}
-            project={project}
-          />
-        );
-      })}
-    </motion.div>
+          return (
+            <ProjectCard
+              key={project.name}
+              reverse={index % 2 !== 0}
+              project={project}
+            />
+          );
+        })}
+      </ProjectsGrid>
+    </ProjectsContent>
     <FloatingDownArrow />
   </SectionContainer>
-
-
-
