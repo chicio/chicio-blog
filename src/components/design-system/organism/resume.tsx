@@ -1,26 +1,26 @@
 'use client'
 
-import { FC, useState } from "react";
+import { FC } from "react";
 import { ContainerFluid } from "../atoms/container-fluid";
 import styled from "styled-components";
-import { Tabs } from "../molecules/tabs";
 import { Projects } from "./projects";
 import { Timeline } from "./timeline";
 import { mediaQuery } from "../utils-css/media-query";
-import { tracking } from "@/types/tracking";
 import { FloatingDownArrow } from "../molecules/floating-down-arrow";
+import { motion, stagger, Variants } from "framer-motion";
+import { SectionTitle } from "@/components/home/components/section-title";
 
-const ResumeContainer = styled(ContainerFluid)`
+const SectionContainer = styled(ContainerFluid)`
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  padding: ${(props) => props.theme.spacing[8]};
+  padding: ${(props) => props.theme.spacing[8]} ${(props) => props.theme.spacing[8]} ${(props) => props.theme.spacing[16]};
   background: ${(props) => props.theme.dark.generalBackground};
   scroll-snap-align: start;
   position: relative;
 
   ${mediaQuery.minWidth.md} {
-    padding: ${(props) => props.theme.spacing[12]};
+    padding: ${(props) => props.theme.spacing[12]} ${(props) => props.theme.spacing[12]} ${(props) => props.theme.spacing[20]};
   }
 `;
 
@@ -33,43 +33,49 @@ const ContentWrapper = styled.div`
   width: 100%;
 `;
 
-enum TabContent {
-  projects = "projects",
-  carrier = "carrier",
-}
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      delayChildren: stagger(0.3, { startDelay: 0.2 }),
+    },
+  },
+};
+
 
 export const Resume: FC = () => {
-  const [currentTab, setTab] = useState<TabContent>(TabContent.projects);
-
   return (
-    <ResumeContainer>
-      <ContentWrapper>
-        <Tabs
-          tab1={{
-            active: currentTab === TabContent.projects,
-            label: "Open Source",
-            link: "#personal-projects",
-            trackingAction: tracking.action.open_personal_projects_tab,
-            trackingCategory: tracking.category.home,
-            trackingLabel: tracking.label.body,
-            action: () => setTab(TabContent.projects),
-          }}
-          tab2={{
-            active: currentTab === TabContent.carrier,
-            label: "Experience",
-            link: "#experience",
-            trackingAction: tracking.action.open_education_and_experiences_tab,
-            trackingCategory: tracking.category.home,
-            trackingLabel: tracking.label.body,
-            action: () => setTab(TabContent.carrier),
-          }}
-        />
-        <div>
-          {currentTab === TabContent.projects && <Projects />}
-          {currentTab === TabContent.carrier && <Timeline />}
-        </div>
-      </ContentWrapper>
-      <FloatingDownArrow />
-    </ResumeContainer>
+    <>
+      <SectionContainer>
+        <ContentWrapper>
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.1 }}
+          >
+            <SectionTitle as="h2">Open Source Projects</SectionTitle>
+            <Projects />
+          </motion.div>
+        </ContentWrapper>
+        <FloatingDownArrow />
+      </SectionContainer>
+
+      <SectionContainer>
+        <ContentWrapper>
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.1 }}
+          >
+            <SectionTitle as="h2">Experience</SectionTitle>
+            <Timeline />
+          </motion.div>
+        </ContentWrapper>
+        <FloatingDownArrow />
+      </SectionContainer>
+    </>
   );
 };

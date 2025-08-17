@@ -10,8 +10,6 @@ export const tracking = {
     open_twitter: "open_twitter",
     open_facebook: "open_facebook",
     open_instagram: "open_instagram",
-    open_personal_projects_tab: "open_personal_projects_tab",
-    open_education_and_experiences_tab: "open_education_and_experiences_tab",
     open_sclt_github: "open_sclt_github",
     open_sclt_thesis: "open_sclt_thesis",
     open_spectral_brdf_explorer_github: "open_spectral_brdf_explorer_github",

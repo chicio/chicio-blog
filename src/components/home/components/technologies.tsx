@@ -2,7 +2,7 @@
 
 import styled from "styled-components";
 import { FC } from "react";
-import { motion, Variants } from "framer-motion";
+import { motion, stagger, Variants } from "framer-motion";
 import { ContainerFluid } from "@/components/design-system/atoms/container-fluid";
 import { FloatingDownArrow } from "@/components/design-system/molecules/floating-down-arrow";
 import { TechnologiesExperience } from "@/components/home/components/technologies-experience";
@@ -38,8 +38,7 @@ const containerVariants: Variants = {
   visible: {
     opacity: 1,
     transition: {
-      delayChildren: 0.3,
-      staggerChildren: 0.1,
+      delayChildren: stagger(0.3, { startDelay: 0.2 }),
     },
   },
 };
