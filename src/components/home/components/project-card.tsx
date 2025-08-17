@@ -29,15 +29,6 @@ const ProjectContainer = styled(motion.div)<TransientProps<ProjectContainerProps
   }
 `;
 
-const ProjectGlassContainer = styled(GlassmorphismBackground)`
-  // padding: ${(props) => props.theme.spacing[6]};
-  // height: fit-content;
-  //
-  // ${mediaQuery.minWidth.md} {
-  //   padding: ${(props) => props.theme.spacing[8]};
-  // }
-`;
-
 const ProjectContentContainer = styled.div`
   flex: 1;
   display: flex;
@@ -50,25 +41,78 @@ const ProjectImageContainer = styled.div`
   justify-content: center;
   align-items: center;
   overflow: hidden;
+  position: relative;
+  //padding: ${(props) => props.theme.spacing[4]};
   
   ${mediaQuery.minWidth.md} {
     min-height: 400px;
+    padding: ${(props) => props.theme.spacing[6]};
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(
+      circle at center,
+      rgba(0, 255, 65, 0.05) 0%,
+      rgba(0, 255, 65, 0.02) 50%,
+      transparent 100%
+    );
+    pointer-events: none;
+    z-index: 1;
   }
 `;
 
 const ProjectImage = styled(Image)`
   ${borderRadius};
-  box-shadow: 0 8px 32px rgba(0, 255, 65, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  z-index: 2;
+  box-shadow: 
+    0 8px 32px rgba(0, 255, 65, 0.15),
+    0 4px 16px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(0, 255, 65, 0.2);
   
   &:hover {
-    transform: scale(1.02);
-    box-shadow: 0 12px 48px rgba(0, 255, 65, 0.2);
+    transform: scale(1.03) translateY(-4px);
+    box-shadow: 
+      0 0 32px rgba(0, 255, 65, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    border-color: rgba(0, 255, 65, 0.4);
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(0, 255, 65, 0.1) 0%,
+      rgba(0, 255, 65, 0.05) 50%,
+      transparent 70%,
+      transparent 100%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    border-radius: inherit;
+  }
+
+  &:hover::after {
+    opacity: 1;
   }
 `;
 
 const ProjectTitle = styled(Heading4)`
-  margin-bottom: ${(props) => props.theme.spacing[3]};
+  margin-bottom: ${(props) => props.theme.spacing[2]};
 `;
 
 const CallToActionContainer = styled.div`
@@ -122,7 +166,7 @@ export const ProjectCard: FC<ProjectProps> = ({
       />
     </ProjectImageContainer>
     <ProjectContentContainer>
-      <ProjectGlassContainer>
+      <GlassmorphismBackground>
         <ProjectTitle>{project.name}</ProjectTitle>
         <Paragraph>{project.description}</Paragraph>
         <List>
@@ -147,7 +191,7 @@ export const ProjectCard: FC<ProjectProps> = ({
             </CallToActionExternalWithTracking>
           ))}
         </CallToActionContainer>
-      </ProjectGlassContainer>
+      </GlassmorphismBackground>
     </ProjectContentContainer>
   </ProjectContainer>
 );
