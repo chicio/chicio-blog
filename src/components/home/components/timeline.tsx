@@ -94,20 +94,6 @@ const TimelineContent = styled(motion.div)`
   min-width: 0; /* Allow content to shrink below its natural width */
 `;
 
-const TimelineCard = styled(GlassmorphismBackground)`
-  padding: ${(props) => props.theme.spacing[3]};
-  display: flex;
-  flex-direction: column;
-  gap: ${(props) => props.theme.spacing[2]};
-  width: 100%;
-  box-sizing: border-box;
-
-  ${mediaQuery.minWidth.md} {
-    padding: ${(props) => props.theme.spacing[4]};
-    gap: ${(props) => props.theme.spacing[3]};
-  }
-`;
-
 const TimelineHeader = styled.div`
   display: flex;
   flex-direction: column;
@@ -324,7 +310,7 @@ export const Timeline: FC = () => {
           </TimelineMarker>
 
           <TimelineContent variants={cardVariants}>
-            <TimelineCard>
+            <GlassmorphismBackground>
               <TimelineHeader>
                 <TimelineHeaderContent>
                   {item.link ? (
@@ -371,7 +357,7 @@ export const Timeline: FC = () => {
                   )}
                 </TimelineTextContent>
               </TimelineContentSection>
-            </TimelineCard>
+            </GlassmorphismBackground>
           </TimelineContent>
         </TimelineItem>
       ))}

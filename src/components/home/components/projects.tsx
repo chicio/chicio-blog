@@ -40,11 +40,11 @@ const ProjectsContent = styled(motion.div)`
 const ProjectsGrid = styled.div`
   display: flex;
   flex-direction: column;
-  gap: ${(props) => props.theme.spacing[6]};
+  gap: ${(props) => props.theme.spacing[1]};
   width: 100%;
 
   ${mediaQuery.minWidth.md} {
-    gap: ${(props) => props.theme.spacing[12]};
+    gap: ${(props) => props.theme.spacing[2]};
   }
 `;
 
@@ -68,13 +68,12 @@ export const Projects: FC = () => (
     >
       <SectionTitle as="h2">Open Source</SectionTitle>
       <ProjectsGrid>
-        {Object.keys(projects).map((projectKey, index) => {
+        {Object.keys(projects).map((projectKey) => {
           const project = projects[projectKey];
 
           return (
             <ProjectCard
               key={project.name}
-              reverse={index % 2 !== 0}
               project={project}
             />
           );
