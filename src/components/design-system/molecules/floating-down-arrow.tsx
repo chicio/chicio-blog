@@ -89,23 +89,6 @@ export const FloatingDownArrow: FC = () => {
         }
       });
 
-      console.log('Robust Debug:', {
-        scrollTop,
-        containerHeight,
-        viewportCenter,
-        closestSectionIndex,
-        totalSections: sections.length,
-        sectionsInfo: sections.map((section, index) => {
-          const el = section as HTMLElement;
-          return {
-            index,
-            top: el.offsetTop,
-            height: el.offsetHeight,
-            center: el.offsetTop + el.offsetHeight / 2
-          };
-        })
-      });
-
       setCurrentSectionIndex(closestSectionIndex);
     };
 
@@ -132,13 +115,6 @@ export const FloatingDownArrow: FC = () => {
     const nextSection = sections[nextSectionIndex] as HTMLElement;
     const nextSectionTop = nextSection.offsetTop;
 
-    console.log('ScrollDown Debug:', {
-      currentSectionIndex,
-      nextSectionIndex,
-      nextSectionTop,
-      sectionsCount: sections.length
-    });
-
     // Scrolla alla posizione reale della sezione successiva
     scrollContainer.scrollTo({
       top: nextSectionTop,
@@ -146,21 +122,10 @@ export const FloatingDownArrow: FC = () => {
     });
   };
 
-  // Debug della condizione di nascondere
-  const shouldHide = currentSectionIndex >= totalSections - 1;
-  console.log('Arrow visibility:', {
-    currentSectionIndex,
-    totalSections,
-    shouldHide,
-    calculation: `${currentSectionIndex} >= ${totalSections - 1}`
-  });
-
-  if (shouldHide) {
-    console.log('Hiding arrow - on last section');
+  // Hide on last section
+  if (currentSectionIndex >= totalSections - 1) {
     return null;
   }
-
-  console.log('Showing arrow');
 
   return (
     <FloatingArrowContainer onClick={handleScrollDown}>

@@ -119,18 +119,12 @@ const CategoryTitle = styled(motion.h3)`
 `;
 
 const TechnologiesGrid = styled(motion.div)`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: ${(props) => props.theme.spacing[4]};
   width: 100%;
-
-  ${mediaQuery.minWidth.sm} {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: ${(props) => props.theme.spacing[6]};
-    margin: 0 auto;
-  }
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: ${(props) => props.theme.spacing[6]};
+  margin: 0 auto;
 `;
 
 const TechnologyCard = styled(motion.div)`
@@ -147,12 +141,10 @@ const TechnologyCard = styled(motion.div)`
   transition: all 0.3s ease;
   width: 100%;
   min-height: 140px;
+  max-width: 150px;
 
   ${mediaQuery.minWidth.sm} {
-    min-height: 160px;
-    padding: ${(props) => props.theme.spacing[5]};
-    max-width: 250px; /* Limite massimo per evitare card troppo larghe */
-    min-width: 200px; /* Larghezza minima per mantenere layout ordinato */
+    max-width: 250px;
   }
 
   &:hover {
