@@ -133,14 +133,12 @@ const TimelineHeaderContent = styled.div`
 
 const TimelineTitle = styled(Heading4)`
   margin: 0;
-  background: linear-gradient(135deg, ${(props) => props.theme.dark.primaryColor}, ${(props) => props.theme.dark.accentColor});
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
   background-clip: text;
   word-wrap: break-word;
   hyphens: auto;
   font-size: ${(props) => props.theme.fontSizes[4]};
-
+  color: ${(props) => props.theme.dark.primaryTextColor};
+  
   ${mediaQuery.minWidth.md} {
     font-size: ${(props) => props.theme.fontSizes[5]};
   }
@@ -175,6 +173,7 @@ const TimelineContentSection = styled.div`
   flex-direction: column;
   gap: ${(props) => props.theme.spacing[2]};
   width: 100%;
+  margin-top: ${(props) => props.theme.spacing[3]};
 
   ${mediaQuery.minWidth.md} {
     flex-direction: row;
@@ -218,40 +217,11 @@ const TimelineDescription = styled(Paragraph)`
   text-align: left;
   word-wrap: break-word;
   hyphens: auto;
-  line-height: 1.5;
-  font-size: ${(props) => props.theme.fontSizes[1]};
-
-  ${mediaQuery.minWidth.md} {
-    font-size: ${(props) => props.theme.fontSizes[2]};
-  }
 `;
 
 const TimelineFeatures = styled(List)`
   margin: 0;
   padding: 0;
-  
-  li {
-    position: relative;
-    padding-left: ${(props) => props.theme.spacing[3]};
-    margin-bottom: ${(props) => props.theme.spacing[1]};
-    word-wrap: break-word;
-    hyphens: auto;
-    line-height: 1.4;
-    font-size: ${(props) => props.theme.fontSizes[0]};
-    
-    &::before {
-      content: "▸";
-      position: absolute;
-      left: 0;
-      color: ${(props) => props.theme.dark.primaryColor};
-      font-weight: bold;
-    }
-
-    ${mediaQuery.minWidth.md} {
-      font-size: ${(props) => props.theme.fontSizes[1]};
-      padding-left: ${(props) => props.theme.spacing[4]};
-    }
-  }
 `;
 
 const containerVariants: Variants = {
