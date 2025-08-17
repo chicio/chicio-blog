@@ -39,7 +39,7 @@ const FloatingContainer = styled(motion.div)`
     width: 60px;
     height: 60px;
     bottom: ${(props) => props.theme.spacing[4]};
-    right: ${(props) => props.theme.spacing[4]};
+    right: ${(props) => props.theme.spacing[6]};
   }
 `;
 

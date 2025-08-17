@@ -14,23 +14,7 @@ import javascriptImage from "../../../../public/images/technologies/javascript.p
 import kotlinImage from "../../../../public/images/technologies/kotlin.png";
 import javaImage from "../../../../public/images/technologies/java.png";
 import objectiveC from "../../../../public/images/technologies/objective-c.png";
-import { StaticImageData } from "next/image";
-
-const categories = {
-  mobile: 'Mobile Development',
-  frontend: 'Frontend Development',
-  backend: 'Backend Development',
-  languages: 'Programming languages'
-} as const;
-
-type CategoryType = typeof categories[keyof typeof categories];
-
-interface Technology {
-  name: string;
-  image: StaticImageData;
-  years: string;
-  category: CategoryType;
-}
+import { categories, Technology } from "@/components/home/hooks/technology";
 
 const technologies: Technology[] = [
   { name: 'React Native', image: reactImage, years: '8+ years', category: categories.mobile },
