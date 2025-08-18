@@ -8,6 +8,7 @@ type MenuItemWithTrackingProps = TrackingElementProps & {
   className?: string;
   selected: boolean;
   children?: ReactNode;
+  onClickCallback?: () => void;
 };
 
 export const MenuItemWithTracking: FC<MenuItemWithTrackingProps> = ({
@@ -16,12 +17,14 @@ export const MenuItemWithTracking: FC<MenuItemWithTrackingProps> = ({
   to,
   trackingData,
   selected,
+  onClickCallback,
 }) => (
   <MenuItem
     className={className}
     href={to}
     onClick={() => {
       trackWith(trackingData);
+      onClickCallback?.();
     }}
     selected={selected}
   >

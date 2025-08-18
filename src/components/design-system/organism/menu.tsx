@@ -95,12 +95,14 @@ const NavBar = styled(Container)`
 
 const NavBarMenuItem = styled(MatrixMenuItem)<{ shouldOpenMenu: boolean }>`
   margin: 0;
-  height: 30px;
 
   ${mediaQuery.minWidth.sm} {
     visibility: visible;
     opacity: 1;
     margin-right: ${(props) => props.theme.spacing[4]};
+    height: 40px; /* Altezza ridotta per dare più spazio a border e shadow */
+    margin-top: 7px; /* Centra verticalmente (55-40)/2 = 7.5 ≈ 7px */
+    margin-bottom: 8px;
   }
 
   /* Mobile: quando il menu è aperto, mostra gli elementi */
@@ -113,8 +115,9 @@ const NavBarMenuItem = styled(MatrixMenuItem)<{ shouldOpenMenu: boolean }>`
   ${(props) => props.shouldOpenMenu && css`
     ${mediaQuery.maxWidth.sm} {
       display: flex;
-      margin: ${(props) => props.theme.spacing[2]} 0;
       width: calc(100% - ${(props) => props.theme.spacing[8]});
+      min-height: 48px; /* Altezza adeguata per il tocco mobile */
+      margin: ${(props) => props.theme.spacing[1]} 0; /* Margin ridotto */
     }
   `}
 `;
@@ -153,6 +156,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
               label: tracking.label.header,
             }}
             shouldOpenMenu={shouldOpenMenu}
+            onClickCallback={() => setShouldOpenMenu(false)}
           >
             Home
           </NavBarMenuItem>
@@ -168,6 +172,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
               label: tracking.label.header,
             }}
             shouldOpenMenu={shouldOpenMenu}
+            onClickCallback={() => setShouldOpenMenu(false)}
           >
             Blog
           </NavBarMenuItem>
@@ -181,6 +186,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
               label: tracking.label.header,
             }}
             shouldOpenMenu={shouldOpenMenu}
+            onClickCallback={() => setShouldOpenMenu(false)}
           >
             Art
           </NavBarMenuItem>
@@ -194,6 +200,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
               label: tracking.label.header,
             }}
             shouldOpenMenu={shouldOpenMenu}
+            onClickCallback={() => setShouldOpenMenu(false)}
           >
             About me
           </NavBarMenuItem>
@@ -207,6 +214,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
               label: tracking.label.header,
             }}
             shouldOpenMenu={shouldOpenMenu}
+            onClickCallback={() => setShouldOpenMenu(false)}
           >
             Chat
           </NavBarMenuItem>

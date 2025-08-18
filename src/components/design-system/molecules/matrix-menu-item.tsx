@@ -7,10 +7,11 @@ import { mediaQuery } from "../utils-css/media-query";
 interface MatrixMenuItemProps {
   selected?: boolean;
   variant?: 'default' | 'header' | 'footer';
+  onClickCallback?: () => void;
 }
 
 export const MatrixMenuItem = styled(MenuItemWithTracking)<MatrixMenuItemProps>`
-  color: ${(props) => props.theme.dark.primaryTextColor};
+  color: ${(props) => props.theme.dark.primaryTextColor} !important;
   text-decoration: none;
   font-weight: 500;
   border-radius: 6px;
@@ -39,7 +40,7 @@ export const MatrixMenuItem = styled(MenuItemWithTracking)<MatrixMenuItemProps>`
 
   ${(props) => props.variant === 'header' && css`
     font-size: ${props.theme.fontSizes[2]};
-    padding: ${props.theme.spacing[2]} ${props.theme.spacing[4]};
+    padding: ${props.theme.spacing[3]} ${props.theme.spacing[4]};
     margin-right: ${props.theme.spacing[3]};
 
     ${mediaQuery.minWidth.md} {
@@ -51,7 +52,7 @@ export const MatrixMenuItem = styled(MenuItemWithTracking)<MatrixMenuItemProps>`
 
   /* Stato selected (pagina corrente) */
   ${(props) => props.selected && css`
-    color: ${props.theme.dark.accentColor};
+    color: ${props.theme.dark.accentColor} !important;
     background: ${props.theme.dark.accentColor}26;
     border-color: ${props.theme.dark.accentColor};
     box-shadow: 
@@ -76,7 +77,7 @@ export const MatrixMenuItem = styled(MenuItemWithTracking)<MatrixMenuItemProps>`
 
   /* Hover effect */
   &:hover {
-    color: ${(props) => props.theme.dark.accentColor};
+    color: ${(props) => props.theme.dark.accentColor} !important;
     background: ${(props) => props.theme.dark.accentColor}1A;
     border-color: ${(props) => props.theme.dark.accentColor};
     transform: translateY(-1px);
