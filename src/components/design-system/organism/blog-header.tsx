@@ -31,7 +31,7 @@ const MatrixBackground = styled.div<{ $big: boolean }>`
   top: 0;
   left: 0;
   right: 0;
-  height: ${(props) => (props.$big ? "500px" : "220px")};
+  height: ${(props) => (props.$big ? "500px" : "300px")};
   z-index: -100;
   overflow: hidden;
   
