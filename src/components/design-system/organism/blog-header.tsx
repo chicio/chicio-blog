@@ -4,28 +4,11 @@ import { FC } from "react";
 import styled from "styled-components";
 import { mediaQuery } from "../utils-css/media-query";
 import { MatrixRain } from "../atoms/matrix-rain";
+import { GlassmorphismBackground } from "../atoms/glassmorphism-background";
 import Image from "next/image";
 import blogLogoImage from '../../../../public/images/blog-logo.jpg';
 
 // ===== MATRIX DESKTOP COMPONENTS =====
-const BlogHeaderGlass = styled.div`
-  position: relative;
-  z-index: 2;
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-  border-radius: 12px;
-  border: 1px solid ${(props) => props.theme.dark.accentColor}40;
-  padding: ${(props) => props.theme.spacing[2]};
-  width: 100%;
-  box-shadow:
-    0 8px 32px ${(props) => props.theme.dark.boxShadowLight},
-    inset 0 1px 0 ${(props) => props.theme.dark.accentColor}1A;
-
-  ${mediaQuery.minWidth.md} {
-    padding: ${(props) => props.theme.spacing[3]};
-  }
-`;
-
 const MatrixBackground = styled.div<{ $big: boolean }>`
   position: absolute;
   top: 0;
@@ -167,28 +150,50 @@ interface MobileContainerProps {
 const MobileMatrixContainer = styled.div<MobileContainerProps>`
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  height: ${(props) => props.height};
-  width: 100%;
-  padding: 0 ${(props) => props.theme.spacing[2]};
-  background: ${(props) => props.theme.dark.primaryColorDark};
-  gap: ${(props) => props.theme.spacing[2]};
+  justify-content: center;
+  // height: ${(props) => props.height};
+  // width: 100%;
+  // padding: 0 ${(props) => props.theme.spacing[2]};
+  position: relative;
+  overflow: hidden;
+    border-radius: 8px;
 
   ${mediaQuery.minWidth.sm} {
     display: none;
   }
+`;
+
+const MobileGlassContent = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  position: relative;
+  z-index: 2;
 
   /* Override per dimensioni compatte nel menu */
   ${BlogHeaderImage} {
     width: 32px;
     height: 32px;
     margin-right: ${(props) => props.theme.spacing[2]};
+    box-shadow: 
+      0 0 8px ${(props) => props.theme.dark.accentColor}60,
+      inset 0 1px 0 ${(props) => props.theme.dark.accentColor}30;
+    border: 1px solid ${(props) => props.theme.dark.accentColor}70;
+    transition: all 0.3s ease;
+
+    ${mediaQuery.minWidth.sm} {
+      gap: ${(props) => props.theme.spacing[2]};
+    }
   }
 
   ${BlogTitle} {
     font-size: ${(props) => props.theme.fontSizes[3]};
     margin: 0;
     line-height: 1.2;
+    text-shadow: 
+      0 0 4px ${(props) => props.theme.dark.accentColor}99,
+      0 0 8px ${(props) => props.theme.dark.accentColor}60;
   }
 
   /* Nascondi descrizione nel menu mobile */
@@ -197,6 +202,8 @@ const MobileMatrixContainer = styled.div<MobileContainerProps>`
   }
 `;
 
+
+
 // ===== EXPORT COMPONENTS =====
 interface BlogHeaderProps {
   compact?: boolean;
@@ -204,7 +211,7 @@ interface BlogHeaderProps {
 
 export const BlogHeader: FC<BlogHeaderProps> = ({ compact = false }) => (
   <BlogHeaderContainer $compact={compact}>
-    <BlogHeaderGlass>
+    <GlassmorphismBackground>
       <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
         <BlogHeaderImage
           src={blogLogoImage}
@@ -220,7 +227,7 @@ export const BlogHeader: FC<BlogHeaderProps> = ({ compact = false }) => (
           </BlogDescriptionContainer>
         </BlogHeaderColumn>
       </div>
-    </BlogHeaderGlass>
+    </GlassmorphismBackground>
   </BlogHeaderContainer>
 );
 
@@ -241,18 +248,20 @@ export const DesktopBlogHeader: FC<DesktopHeaderProps> = ({ big }) => (
 
 export const MobileBlogHeader: FC<MobileContainerProps> = ({ height }) => (
   <MobileMatrixContainer height={height}>
-    <BlogHeaderImage
-      src={blogLogoImage}
-      alt={"blog logo"}
-      width={32}
-      height={32}
-      placeholder={"blur"}
-    />
-    <BlogHeaderColumn>
-      <BlogTitle>CHICIO CODING</BlogTitle>
-      <BlogDescriptionContainer>
-        <BlogDescription>Coding. Drawing. Fun.</BlogDescription>
-      </BlogDescriptionContainer>
-    </BlogHeaderColumn>
+      <MobileGlassContent>
+        <BlogHeaderImage
+          src={blogLogoImage}
+          alt={"blog logo"}
+          width={32}
+          height={32}
+          placeholder={"blur"}
+        />
+        <BlogHeaderColumn>
+          <BlogTitle>CHICIO CODING</BlogTitle>
+          <BlogDescriptionContainer>
+            <BlogDescription>Coding. Drawing. Fun.</BlogDescription>
+          </BlogDescriptionContainer>
+        </BlogHeaderColumn>
+      </MobileGlassContent>
   </MobileMatrixContainer>
 );
