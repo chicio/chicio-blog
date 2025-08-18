@@ -31,9 +31,15 @@ const MatrixBackground = styled.div<{ $big: boolean }>`
   top: 0;
   left: 0;
   right: 0;
-  height: ${(props) => (props.$big ? "400px" : "220px")};
+  height: ${(props) => (props.$big ? "500px" : "220px")};
   z-index: -100;
   overflow: hidden;
+  
+  border-bottom: 2px solid ${(props) => props.theme.dark.accentColor};
+  box-shadow: 
+    0 4px 20px ${(props) => props.theme.dark.accentColor}1A,
+    inset 0 -1px 0 ${(props) => props.theme.dark.accentColor}33,
+    0 0 30px ${(props) => props.theme.dark.accentColor}26;
 `;
 
 const MatrixBackgroundRain = styled.div`
