@@ -10,6 +10,7 @@ import {Paragraph} from "../atoms/paragraph";
 import {borderRadius} from "../atoms/border-radius";
 import {SearchablePostFields} from "@/types/post";
 import Link from "next/link";
+import { hideScrollbar } from "../utils-css/hide-scrollbar";
 
 const SearchListContainer = styled(Container)`
   position: absolute;
@@ -21,6 +22,7 @@ const SearchListContainer = styled(Container)`
   height: 80vh;
   overflow: scroll;
   ${borderRadius};
+  ${hideScrollbar};
 `;
 
 const SearchHitsList = styled(List)`
@@ -97,12 +99,8 @@ const SearchAltContainer = styled.span<TransientProps<StartSearchProps>>`
   top: 50%;
   right: -3px;
   transform: translate(-50%, -50%);
-  color: ${(props) => props.theme.light.textAbovePrimaryColor};
+  color: ${(props) => props.theme.dark.primaryTextColor};
   transition: 0.2s;
-
-  ${mediaQuery.dark} {
-    color: ${(props) => props.theme.dark.textAbovePrimaryColor};
-  }
 
   ${(props) =>
     props.$startSearch &&
@@ -120,27 +118,19 @@ const SearchBoxInput = styled.input<TransientProps<StartSearchProps>>`
   border-radius: 50px;
   box-sizing: border-box;
   font-size: ${(props) => props.theme.fontSizes[3]};
-  border: 2px solid ${(props) => props.theme.light.textAbovePrimaryColor};
+  border: 2px solid ${(props) => props.theme.dark.primaryTextColor};
   outline: none;
   transition: 0.5s;
   color: transparent;
 
-  ${mediaQuery.dark} {
-    border: 2px solid ${(props) => props.theme.dark.textAbovePrimaryColor};
-  }
-
   ${(props) =>
     props.$startSearch &&
     css`
-      color: ${(props) => props.theme.light.primaryTextColor};
+      color: ${(props) => props.theme.dark.primaryTextColor};
       width: 200px;
-      background: ${(props) => props.theme.light.generalBackground};
+      background: ${(props) => props.theme.dark.generalBackground};
+      border: 2px solid ${(props) => props.theme.dark.accentColor};
       ${borderRadius};
-
-      ${mediaQuery.dark} {
-        color: ${(props) => props.theme.dark.primaryTextColor};
-        background: ${(props) => props.theme.dark.generalBackground};
-      }
     `}
 `;
 

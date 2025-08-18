@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { mediaQuery } from "@/components/design-system/utils-css/media-query";
 import { menuHeightNumber } from "@/components/design-system/organism/menu";
+import { hideScrollbar } from "@/components/design-system/utils-css/hide-scrollbar";
 
 export const MessagesContainer = styled.div<{ $hasMessages?: boolean }>`
   flex: 1;
@@ -23,10 +24,5 @@ export const MessagesContainer = styled.div<{ $hasMessages?: boolean }>`
     };
   }
 
-  &::-webkit-scrollbar {
-    display: none;
-  }
-
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+  ${hideScrollbar};
 `;

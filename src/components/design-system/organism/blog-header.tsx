@@ -24,15 +24,11 @@ const BlogHeaderColumn = styled.div`
 `;
 
 const BlogTitle = styled.span`
-  color: ${(props) => props.theme.light.textAbovePrimaryColor};
+  color: ${(props) => props.theme.dark.primaryTextColor};
   margin: 0;
   display: block;
   line-height: 1.5;
   font-size: ${(props) => props.theme.fontSizes[4]};
-
-  ${mediaQuery.dark} {
-    color: ${(props) => props.theme.dark.textAbovePrimaryColor};
-  }
 
   ${mediaQuery.minWidth.xs} {
     font-size: ${(props) => props.theme.fontSizes[6]};
