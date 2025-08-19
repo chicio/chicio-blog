@@ -8,13 +8,16 @@ import { GlassmorphismBackground } from "../atoms/glassmorphism-background";
 import Image from "next/image";
 import blogLogoImage from '../../../../public/images/blog-logo.jpg';
 
-// ===== MATRIX DESKTOP COMPONENTS =====
+const BlogHeaderGlassWrapper = styled.div`
+  width: 100%;
+`;
+
 const MatrixBackground = styled.div<{ $big: boolean }>`
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  height: ${(props) => (props.$big ? "500px" : "300px")};
+  height: ${(props) => (props.$big ? "350px" : "200px")};
   z-index: -100;
   overflow: hidden;
   
@@ -23,6 +26,14 @@ const MatrixBackground = styled.div<{ $big: boolean }>`
     0 4px 20px ${(props) => props.theme.dark.accentColor}1A,
     inset 0 -1px 0 ${(props) => props.theme.dark.accentColor}33,
     0 0 30px ${(props) => props.theme.dark.accentColor}26;
+
+  ${mediaQuery.minWidth.sm} {
+      height: ${(props) => (props.$big ? "400px" : "200px")};
+  }
+
+  ${mediaQuery.minWidth.md} {
+      height: ${(props) => (props.$big ? "500px" : "250px")};
+  }
 `;
 
 const MatrixBackgroundRain = styled.div`
@@ -34,15 +45,12 @@ const MatrixBackgroundRain = styled.div`
   z-index: 1;
 `;
 
-// ===== LEGACY COMPONENTS (manteniamo per compatibilità) =====
 const BlogHeaderContainer = styled.div<{ $compact?: boolean }>`
   display: flex;
   align-items: center;
 
-  ${mediaQuery.minWidth.sm} {
     margin-top: ${(props) => props.$compact ? props.theme.spacing[3] : props.theme.spacing[6]};
     margin-bottom: ${(props) => props.$compact ? props.theme.spacing[3] : props.theme.spacing[6]};
-  }
 `;
 
 const BlogHeaderColumn = styled.div`
@@ -66,9 +74,7 @@ const BlogTitle = styled.span`
     0 0 5px ${(props) => props.theme.dark.accentColor}80,
     0 0 10px ${(props) => props.theme.dark.accentColor}40;
 
-  ${mediaQuery.minWidth.xs} {
-    font-size: ${(props) => props.theme.fontSizes[6]};
-  }
+  font-size: ${(props) => props.theme.fontSizes[6]};
 
   ${mediaQuery.minWidth.sm} {
     font-size: ${(props) => props.theme.fontSizes[9]};
@@ -76,21 +82,14 @@ const BlogTitle = styled.span`
 `;
 
 const BlogDescriptionContainer = styled.div`
-  display: none;
+  display: block;
   overflow: hidden;
   margin-top: ${(props) => props.theme.spacing[2]};
-
-  ${mediaQuery.minWidth.sm} {
-    display: block;
-  }
 `;
 
 const BlogDescription = styled.span`
-  display: none;
-
-  ${mediaQuery.minWidth.sm} {
     display: block;
-    font-size: ${(props) => props.theme.fontSizes[4]};
+    font-size: ${(props) => props.theme.fontSizes[2]};
     color: ${(props) => props.theme.dark.primaryTextColor};
     line-height: 1.5;
     font-weight: 400;
@@ -99,12 +98,13 @@ const BlogDescription = styled.span`
     
     /* Subtle glow for description */
     text-shadow: 0 0 3px ${(props) => props.theme.dark.accentColor}20;
+
+  ${mediaQuery.minWidth.sm} {
+    font-size: ${(props) => props.theme.fontSizes[4]};
   }
 `;
 
 const BlogHeaderImage = styled(Image)`
-  width: 35px;
-  height: 35px;
   margin-right: ${(props) => props.theme.spacing[2]};
   border-radius: 12px;
   object-fit: cover;
@@ -116,11 +116,6 @@ const BlogHeaderImage = styled(Image)`
   border: 1px solid ${(props) => props.theme.dark.accentColor}40;
   
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-
-  ${mediaQuery.minWidth.sm} {
-    width: 80px;
-    height: 80px;
-  }
 
   ${mediaQuery.inputDevice.mouse} {
     &:hover {
@@ -135,99 +130,34 @@ const BlogHeaderImage = styled(Image)`
 `;
 
 const DesktopContainer = styled.div`
-  display: none;
-
-  ${mediaQuery.minWidth.sm} {
-      display: block;
-  }
+  display: block;
 `;
 
-interface MobileContainerProps {
-  height: string;
-}
-
-// Mobile Matrix styling per header compatto nel menu
-const MobileMatrixContainer = styled.div<MobileContainerProps>`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  // height: ${(props) => props.height};
-  // width: 100%;
-  // padding: 0 ${(props) => props.theme.spacing[2]};
-  position: relative;
-  overflow: hidden;
-    border-radius: 8px;
-
-  ${mediaQuery.minWidth.sm} {
-    display: none;
-  }
-`;
-
-const MobileGlassContent = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  position: relative;
-  z-index: 2;
-
-  /* Override per dimensioni compatte nel menu */
-  ${BlogHeaderImage} {
-    width: 32px;
-    height: 32px;
-    margin-right: ${(props) => props.theme.spacing[2]};
-    box-shadow: 
-      0 0 8px ${(props) => props.theme.dark.accentColor}60,
-      inset 0 1px 0 ${(props) => props.theme.dark.accentColor}30;
-    border: 1px solid ${(props) => props.theme.dark.accentColor}70;
-    transition: all 0.3s ease;
-
-    ${mediaQuery.minWidth.sm} {
-      gap: ${(props) => props.theme.spacing[2]};
-    }
-  }
-
-  ${BlogTitle} {
-    font-size: ${(props) => props.theme.fontSizes[3]};
-    margin: 0;
-    line-height: 1.2;
-    text-shadow: 
-      0 0 4px ${(props) => props.theme.dark.accentColor}99,
-      0 0 8px ${(props) => props.theme.dark.accentColor}60;
-  }
-
-  /* Nascondi descrizione nel menu mobile */
-  ${BlogDescriptionContainer} {
-    display: none;
-  }
-`;
-
-
-
-// ===== EXPORT COMPONENTS =====
 interface BlogHeaderProps {
   compact?: boolean;
 }
 
 export const BlogHeader: FC<BlogHeaderProps> = ({ compact = false }) => (
   <BlogHeaderContainer $compact={compact}>
-    <GlassmorphismBackground>
-      <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
-        <BlogHeaderImage
-          src={blogLogoImage}
-          alt={"blog logo"}
-          width={80}
-          height={80}
-          placeholder={"blur"}
-        />
-        <BlogHeaderColumn>
-          <BlogTitle>CHICIO CODING</BlogTitle>
-          <BlogDescriptionContainer>
-            <BlogDescription>Coding. Drawing. Fun.</BlogDescription>
-          </BlogDescriptionContainer>
-        </BlogHeaderColumn>
-      </div>
-    </GlassmorphismBackground>
+    <BlogHeaderGlassWrapper>
+      <GlassmorphismBackground>
+        <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+          <BlogHeaderImage
+            src={blogLogoImage}
+            alt={"blog logo"}
+            width={80}
+            height={80}
+            placeholder={"blur"}
+          />
+          <BlogHeaderColumn>
+            <BlogTitle>CHICIO CODING</BlogTitle>
+            <BlogDescriptionContainer>
+              <BlogDescription>Coding. Drawing. Fun.</BlogDescription>
+            </BlogDescriptionContainer>
+          </BlogHeaderColumn>
+        </div>
+      </GlassmorphismBackground>
+    </BlogHeaderGlassWrapper>
   </BlogHeaderContainer>
 );
 
@@ -246,22 +176,3 @@ export const DesktopBlogHeader: FC<DesktopHeaderProps> = ({ big }) => (
   </DesktopContainer>
 );
 
-export const MobileBlogHeader: FC<MobileContainerProps> = ({ height }) => (
-  <MobileMatrixContainer height={height}>
-      <MobileGlassContent>
-        <BlogHeaderImage
-          src={blogLogoImage}
-          alt={"blog logo"}
-          width={32}
-          height={32}
-          placeholder={"blur"}
-        />
-        <BlogHeaderColumn>
-          <BlogTitle>CHICIO CODING</BlogTitle>
-          <BlogDescriptionContainer>
-            <BlogDescription>Coding. Drawing. Fun.</BlogDescription>
-          </BlogDescriptionContainer>
-        </BlogHeaderColumn>
-      </MobileGlassContent>
-  </MobileMatrixContainer>
-);

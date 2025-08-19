@@ -6,7 +6,6 @@ import { BlogPageTemplate } from "@/components/templates/blog-page-template";
 import { Metadata } from "next";
 import { createMetadata } from "@/lib/seo/seo";
 import {
-  PostContainer,
   PostContent,
   PostTitle,
 } from "@/components/design-system/website/post";
@@ -63,25 +62,23 @@ export default async function BlogPost({ params }: NextPostParameters) {
         author={siteMetadata.author}
         trackingCategory={tracking.category.blog_post}
       >
-        <PostContainer>
-          <PostTitle className="blog-post-title">{frontmatter.title}</PostTitle>
-          <PostAuthors
-            postAuthors={frontmatter.authors}
-            trackingCategory={tracking.category.blog_post}
-            trackingLabel={tracking.label.body}
-            enableUrl={true}
-          />
-          <PostMeta
-            date={frontmatter.date.formatted}
-            readingTime={readingTime.text}
-          />
-          <PostContent html={content} />
-          <PostTags
-            tags={frontmatter.tags}
-            trackingCategory={tracking.category.blog_post}
-            trackingLabel={tracking.label.body}
-          />
-        </PostContainer>
+        <PostTitle className="blog-post-title">{frontmatter.title}</PostTitle>
+        <PostAuthors
+          postAuthors={frontmatter.authors}
+          trackingCategory={tracking.category.blog_post}
+          trackingLabel={tracking.label.body}
+          enableUrl={true}
+        />
+        <PostMeta
+          date={frontmatter.date.formatted}
+          readingTime={readingTime.text}
+        />
+        <PostContent html={content} />
+        <PostTags
+          tags={frontmatter.tags}
+          trackingCategory={tracking.category.blog_post}
+          trackingLabel={tracking.label.body}
+        />
         <RecentPosts currentSlug={frontmatter.slug.formatted} />
       </BlogPageTemplate>
       <JsonLd

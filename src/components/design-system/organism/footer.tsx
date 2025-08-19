@@ -9,6 +9,7 @@ import { MatrixMenuItem } from "../molecules/matrix-menu-item";
 import { tracking } from "@/types/tracking";
 import { slugs } from "@/types/slug";
 import { motion } from "framer-motion";
+import { FadeSeparator } from "../atoms/fade-separator";
 
 const FooterContainer = styled.footer`
   flex-shrink: 0;
@@ -81,18 +82,6 @@ const MadeWithLoveParagraph = styled(Paragraph)`
   ${mediaQuery.minWidth.md} {
     font-size: ${(props) => props.theme.fontSizes[2]};
   }
-`;
-
-const FooterSeparator = styled.div`
-  width: 100%;
-  height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    ${(props) => props.theme.dark.accentColor},
-    transparent
-  );
-  opacity: 0.4;
 `;
 
 export interface FooterProps {
@@ -189,7 +178,7 @@ export const Footer: FC<FooterProps> = ({ author, trackingCategory }) => (
           </MatrixMenuItem>
         </FooterMenu>
 
-        <FooterSeparator />
+        <FadeSeparator />
 
         <FooterAuthorSection>
           <SocialContacts

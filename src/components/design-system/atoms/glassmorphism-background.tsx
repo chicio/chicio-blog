@@ -3,7 +3,7 @@ import { motion, stagger, Variants } from "framer-motion";
 import { mediaQuery } from "@/components/design-system/utils-css/media-query";
 import { FC, PropsWithChildren } from "react";
 
-export const GlassmorphismBackgroundContainer = styled(motion.div)`
+const GlassmorphismBackgroundContainer = styled(motion.div)`
   position: relative;
   z-index: 2;
   backdrop-filter: blur(5px);

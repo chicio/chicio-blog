@@ -7,8 +7,6 @@ import { HamburgerMenu } from "../molecules/hamburger-menu";
 import { Overlay } from "../atoms/overlay";
 import { Close } from "../molecules/close";
 import { mediaQuery } from "../utils-css/media-query";
-import { MobileBlogHeader } from "./blog-header";
-import { ContainerFluid } from "../atoms/container-fluid";
 import { ScrollDirection, useScrollDirection } from "../hooks/use-scroll-direction";
 import { MatrixMenuItem } from "../molecules/matrix-menu-item";
 import { tracking } from "@/types/tracking";
@@ -16,37 +14,14 @@ import { slugs } from "@/types/slug";
 import { usePathname } from "next/navigation";
 import { SearchBox, SearchHits } from "@/components/design-system/molecules/search";
 import { useSearch } from "@/components/design-system/hooks/use-search";
+import { FadeSeparator } from "../atoms/fade-separator";
 
 export const menuHeightNumber = 55;
 export const menuHeight = `${menuHeightNumber}px`;
 
-const MobileBlogHeaderContainer = styled(ContainerFluid)<{ $hide: boolean }>`
-  height: ${menuHeight};
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  transition: opacity 0.2s ease ${(props) => (props.$hide ? "0s" : "0.4s")};
-  opacity: ${(props) => (props.$hide ? 0 : 1)};
-
-  ${mediaQuery.minWidth.sm} {
-    display: none;
-  }
-`;
-
-const Divider = styled.div`
-  height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    ${(props) => props.theme.dark.accentColor},
-    transparent
-  );
+const MenuFadeSeparator = styled(FadeSeparator)`
   position: absolute;
-  top: 55px;
-  left: ${(props) => props.theme.spacing[3]};
-  right: ${(props) => props.theme.spacing[3]};
-  opacity: 0.4;
+  bottom: 0;
 `;
 
 const MenuButtonContainer = styled.div`
@@ -142,10 +117,6 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
         $delayOpenCloseMenuAnimation={shouldOpenMenu ? 0 : 0.4}
       >
         <NavBar>
-          <MobileBlogHeaderContainer $hide={startSearch}>
-            <MobileBlogHeader height={menuHeight} />
-            <Divider />
-          </MobileBlogHeaderContainer>
           <NavBarMenuItem
             variant="header"
             to={"/"}
@@ -242,6 +213,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
             />
           )}
         </NavBar>
+        <MenuFadeSeparator />
       </MenuContainer>
       {(shouldOpenMenu || startSearch) && (
         <Overlay

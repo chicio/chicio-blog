@@ -206,7 +206,3 @@ export const PostTitle = styled(Heading1)`
   margin: 0;
   word-wrap: break-word;
 `;
-
-export const PostContainer = styled.div`
-  margin-top: ${(props) => props.theme.spacing[5]};
-`;
