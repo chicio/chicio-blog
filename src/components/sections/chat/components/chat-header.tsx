@@ -2,8 +2,8 @@ import styled from "styled-components";
 import { mediaQuery } from "@/components/design-system/utils/media-query";
 import React, { FC, useState } from "react";
 import { Heading1 } from "@/components/design-system/atoms/heading1";
-import { ChatSubtitle } from "@/components/chat/components/chat-subtitle";
 import { menuHeight } from "@/components/design-system/organism/menu";
+import { ChatSubtitle } from "./chat-subtitle";
 
 export const ChatHeaderContainer = styled.div<{ $isVisible: boolean }>`
   text-align: center;

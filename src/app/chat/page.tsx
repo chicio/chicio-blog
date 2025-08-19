@@ -2,8 +2,8 @@ import { createMetadata } from "@/lib/seo/seo";
 import { siteMetadata } from "@/types/site-metadata";
 import { tracking } from "@/types/tracking";
 import { slugs } from "@/types/slug";
-import { Chat } from "@/components/chat/components/chat";
-import { BasicPageTemplate } from "@/components/templates/basic-page-template";
+import { BasicPageTemplate } from "@/components/design-system/templates/basic-page-template";
+import { Chat } from "@/components/sections/chat/components/chat";
 
 export const metadata = {
   ...createMetadata({

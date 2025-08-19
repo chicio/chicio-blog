@@ -49,7 +49,7 @@ export const ModalWithImage: FC<ModalWithImageProps> = ({
   onClick,
 }) => (
   <>
-    <Overlay zIndex={zIndex} onClick={onClick} delay={"0.25s"} />
+    <Overlay zIndex={zIndex} onClick={onClick} delay={0.25} />
     <ModalContainer $zIndex={zIndex}>
       <ModalImage src={imageUrl} alt={imageAlt} />
       <CallToActionExternal onClick={onClick}>Close</CallToActionExternal>

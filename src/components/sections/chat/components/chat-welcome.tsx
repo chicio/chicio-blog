@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import { mediaQuery } from "@/components/design-system/utils/media-query";
 import { Heading6 } from "@/components/design-system/atoms/heading6";
-import { ChatSubtitle } from "@/components/chat/components/chat-subtitle";
 import { FC } from "react";
+import { ChatSubtitle } from "./chat-subtitle";
 
 const WelcomeMessage = styled.div`
   text-align: center;

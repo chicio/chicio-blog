@@ -1,5 +1,4 @@
 import { siteMetadata } from "@/types/site-metadata";
-import { BlogPageTemplate } from "@/components/templates/blog-page-template";
 import { tracking } from "@/types/tracking";
 import { Heading1 } from "@/components/design-system/atoms/heading1";
 import { Paragraph } from "@/components/design-system/atoms/paragraph";
@@ -9,6 +8,7 @@ import { List } from "@/components/design-system/atoms/list";
 import { StandardExternalLink } from "@/components/design-system/atoms/standard-external-link";
 import { createMetadata } from "@/lib/seo/seo";
 import { slugs } from "@/types/slug";
+import { BlogPageTemplate } from "@/components/design-system/templates/blog-page-template";
 
 export const metadata = createMetadata({
   author: siteMetadata.author,
