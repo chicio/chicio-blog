@@ -1,24 +1,8 @@
 import styled from "styled-components";
 import { motion, stagger, Variants } from "framer-motion";
-import { mediaQuery } from "@/components/design-system/utils/media-query";
 import { FC, PropsWithChildren } from "react";
-
-const GlassmorphismBackgroundContainer = styled(motion.div)`
-  position: relative;
-  z-index: 2;
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-  border-radius: 12px;
-  border: 1px solid ${(props) => props.theme.dark.accentColor}40; // Using theme color with hex opacity
-  padding: ${(props) => props.theme.spacing[4]};
-  box-shadow:
-    0 8px 32px ${(props) => props.theme.dark.boxShadowLight},
-    inset 0 1px 0 ${(props) => props.theme.dark.accentColor}1A; // 10% opacity
-
-  ${mediaQuery.minWidth.md} {
-    padding: ${(props) => props.theme.spacing[8]};
-  }
-`;
+import { mediaQuery } from "../utils/media-query";
+import { glassmorphism } from "./glassmorphism";
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -30,7 +14,22 @@ const containerVariants: Variants = {
   },
 };
 
-export const GlassmorphismBackground: FC<PropsWithChildren> = ({
+const GlassmorphismBackgroundContainer = styled(motion.div)`
+  position: relative;
+  z-index: 2;
+  padding: ${(props) => props.theme.spacing[4]};
+  ${glassmorphism};
+
+  ${mediaQuery.minWidth.md} {
+    padding: ${(props) => props.theme.spacing[8]};
+  }
+`;
+
+type Props = {
+  withPadding?: boolean
+};
+
+export const GlassmorphismBackground: FC<PropsWithChildren<Props>> = ({
   children,
 }) => (
   <GlassmorphismBackgroundContainer
