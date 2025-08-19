@@ -1,7 +1,7 @@
 'use client'
 
 import styled from "styled-components";
-import {mediaQuery} from "../utils-css/media-query";
+import {mediaQuery} from "../utils/media-query";
 import Link from "next/link";
 
 export interface MenuItemProps {

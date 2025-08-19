@@ -1,19 +1,19 @@
-import reactImage from "../../../../public/images/technologies/react.png";
-import expoImage from "../../../../public/images/technologies/expo.png";
-import appleImage from "../../../../public/images/technologies/apple.png";
-import androidImage from "../../../../public/images/technologies/android.png";
-import nextImage from "../../../../public/images/technologies/next.png";
-import gatsbyImage from "../../../../public/images/technologies/gatsby.png";
-import springBootImage from "../../../../public/images/technologies/spring-boot.png";
-import kubernetesImage from "../../../../public/images/technologies/kubernetes.png";
-import dockerImage from "../../../../public/images/technologies/docker.png";
-import grafanaImage from "../../../../public/images/technologies/grafana.png";
-import swiftImage from "../../../../public/images/technologies/swift.png";
-import typescriptImage from "../../../../public/images/technologies/typescript.png";
-import javascriptImage from "../../../../public/images/technologies/javascript.png";
-import kotlinImage from "../../../../public/images/technologies/kotlin.png";
-import javaImage from "../../../../public/images/technologies/java.png";
-import objectiveC from "../../../../public/images/technologies/objective-c.png";
+import reactImage from "../../../../../public/images/technologies/react.png";
+import expoImage from "../../../../../public/images/technologies/expo.png";
+import appleImage from "../../../../../public/images/technologies/apple.png";
+import androidImage from "../../../../../public/images/technologies/android.png";
+import nextImage from "../../../../../public/images/technologies/next.png";
+import gatsbyImage from "../../../../../public/images/technologies/gatsby.png";
+import springBootImage from "../../../../../public/images/technologies/spring-boot.png";
+import kubernetesImage from "../../../../../public/images/technologies/kubernetes.png";
+import dockerImage from "../../../../../public/images/technologies/docker.png";
+import grafanaImage from "../../../../../public/images/technologies/grafana.png";
+import swiftImage from "../../../../../public/images/technologies/swift.png";
+import typescriptImage from "../../../../../public/images/technologies/typescript.png";
+import javascriptImage from "../../../../../public/images/technologies/javascript.png";
+import kotlinImage from "../../../../../public/images/technologies/kotlin.png";
+import javaImage from "../../../../../public/images/technologies/java.png";
+import objectiveC from "../../../../../public/images/technologies/objective-c.png";
 import { categories, Technology } from "@/types/technology";
 
 const technologies: Technology[] = [

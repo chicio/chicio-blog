@@ -2,13 +2,13 @@
 
 import { FC } from "react";
 import { projects } from "@/types/projects";
-import { ProjectCard } from "@/components/home/components/project-card";
-import { SectionTitle } from "@/components/home/components/section-title";
 import { motion, stagger, Variants } from "framer-motion";
 import { FloatingDownArrow } from "@/components/design-system/molecules/floating-down-arrow";
 import styled from "styled-components";
 import { ContainerFluid } from "@/components/design-system/atoms/container-fluid";
-import { mediaQuery } from "@/components/design-system/utils-css/media-query";
+import { mediaQuery } from "@/components/design-system/utils/media-query";
+import { SectionTitle } from "./section-title";
+import { ProjectCard } from "./project-card";
 
 const SectionContainer = styled(ContainerFluid)`
   min-height: 100vh;

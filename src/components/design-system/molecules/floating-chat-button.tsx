@@ -3,11 +3,11 @@
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { mediaQuery } from "../utils-css/media-query";
+import { mediaQuery } from "../utils/media-query";
 import { useState } from "react";
 import { slugs } from "@/types/slug";
 import { Chat } from "@styled-icons/boxicons-regular";
-import { pulse } from "@/components/design-system/utils-css/pulse";
+import { pulse } from "@/components/design-system/utils/animations/pulse-keyframes";
 
 const FloatingContainer = styled(motion.div)`
   position: fixed;

@@ -2,7 +2,7 @@
 
 import styled, { css } from "styled-components";
 import {headingStyle} from "@/components/design-system/atoms/heading-style";
-import { mediaQuery } from "@/components/design-system/utils-css/media-query";
+import { mediaQuery } from "@/components/design-system/utils/media-query";
 
 export const heading2Style = css`
   font-size: ${(props) => props.theme.fontSizes[8]};

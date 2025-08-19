@@ -1,14 +1,14 @@
 import { getTags } from "@/lib/posts/posts";
 import { siteMetadata } from "@/types/site-metadata";
-import { BlogPageTemplate } from "@/components/templates/blog-page-template";
 import { tracking } from "@/types/tracking";
-import { TagsContainer } from "@/components/design-system/website/tags-container";
+import { TagsContainer } from "@/components/design-system/utils/components/tags-container";
 import { PageTitle } from "@/components/design-system/molecules/page-title";
 import { Tag } from "@/components/design-system/molecules/tag";
-import { JsonLd } from "@/components/design-system/website/jsond-ld";
+import { JsonLd } from "@/components/design-system/utils/components/jsond-ld";
 import { Metadata } from "next";
 import { createMetadata } from "@/lib/seo/seo";
 import { slugs } from "@/types/slug";
+import { BlogPageTemplate } from "@/components/design-system/templates/blog-page-template";
 
 export async function generateMetadata(): Promise<Metadata> {
   return createMetadata({

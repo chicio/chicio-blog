@@ -4,7 +4,7 @@ import { FC } from "react";
 import { SocialContacts } from "./social-contacts";
 import styled from "styled-components";
 import { Paragraph } from "../atoms/paragraph";
-import { mediaQuery } from "../utils-css/media-query";
+import { mediaQuery } from "../utils/media-query";
 import { MatrixMenuItem } from "../molecules/matrix-menu-item";
 import { tracking } from "@/types/tracking";
 import { slugs } from "@/types/slug";

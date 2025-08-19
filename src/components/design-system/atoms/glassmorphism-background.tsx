@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { motion, stagger, Variants } from "framer-motion";
-import { mediaQuery } from "@/components/design-system/utils-css/media-query";
+import { mediaQuery } from "@/components/design-system/utils/media-query";
 import { FC, PropsWithChildren } from "react";
 
 const GlassmorphismBackgroundContainer = styled(motion.div)`

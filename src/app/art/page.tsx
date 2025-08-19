@@ -1,10 +1,10 @@
-import { BlogPageTemplate } from "@/components/templates/blog-page-template";
 import { siteMetadata } from "@/types/site-metadata";
 import { tracking } from "@/types/tracking";
 import { ArtGallery } from "@/components/design-system/organism/art-gallery";
 import { Paragraph } from "@/components/design-system/atoms/paragraph";
 import { Heading2 } from "@/components/design-system/atoms/heading2";
 import {ContentContainer} from "@/components/design-system/molecules/content-container";
+import { BlogPageTemplate } from "@/components/design-system/templates/blog-page-template";
 
 export default async function ArtPage() {
   return (

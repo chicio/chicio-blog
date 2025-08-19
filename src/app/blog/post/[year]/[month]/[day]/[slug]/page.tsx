@@ -2,20 +2,20 @@ import "katex/dist/katex.min.css";
 import { getPostBy, getPosts } from "@/lib/posts/posts";
 import { siteMetadata } from "@/types/site-metadata";
 import { tracking } from "@/types/tracking";
-import { BlogPageTemplate } from "@/components/templates/blog-page-template";
 import { Metadata } from "next";
 import { createMetadata } from "@/lib/seo/seo";
 import {
   PostContent,
   PostTitle,
-} from "@/components/design-system/website/post";
+} from "@/components/design-system/utils/components/post";
 import { PostAuthors } from "@/components/design-system/molecules/post-authors";
 import { PostMeta } from "@/components/design-system/molecules/post-meta";
 import { PostTags } from "@/components/design-system/molecules/post-tags";
 import { RecentPosts } from "@/components/design-system/organism/read-next";
 import { NextPostParameters } from "@/types/page-parameters";
-import { JsonLd } from "@/components/design-system/website/jsond-ld";
+import { JsonLd } from "@/components/design-system/utils/components/jsond-ld";
 import { Post } from "@/types/post";
+import { BlogPageTemplate } from "@/components/design-system/templates/blog-page-template";
 
 export const revalidate = false
 

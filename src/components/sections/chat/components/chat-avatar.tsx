@@ -1,7 +1,7 @@
 import { User } from "@styled-icons/boxicons-regular";
 import Image from "next/image";
 import styled from "styled-components";
-import { mediaQuery } from "@/components/design-system/utils-css/media-query";
+import { mediaQuery } from "@/components/design-system/utils/media-query";
 import { FC } from "react";
 
 const Avatar = styled.div<{ $isUser: boolean }>`

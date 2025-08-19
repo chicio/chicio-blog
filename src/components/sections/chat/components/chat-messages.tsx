@@ -1,7 +1,7 @@
 import styled from "styled-components";
-import { mediaQuery } from "@/components/design-system/utils-css/media-query";
+import { mediaQuery } from "@/components/design-system/utils/media-query";
 import { menuHeightNumber } from "@/components/design-system/organism/menu";
-import { hideScrollbar } from "@/components/design-system/utils-css/hide-scrollbar";
+import { hideScrollbar } from "@/components/design-system/utils/components/hide-scrollbar";
 
 export const MessagesContainer = styled.div<{ $hasMessages?: boolean }>`
   flex: 1;

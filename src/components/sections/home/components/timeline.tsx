@@ -3,19 +3,19 @@
 import { FC } from "react";
 import styled from "styled-components";
 import { motion, Variants } from "framer-motion";
-import { mediaQuery } from "../../design-system/utils-css/media-query";
-import { Paragraph } from "../../design-system/atoms/paragraph";
-import { List } from "../../design-system/atoms/list";
-import { Time } from "../../design-system/atoms/time";
-import { Heading4 } from "../../design-system/atoms/heading4";
-import { Heading6 } from "../../design-system/atoms/heading6";
-import { GlassmorphismBackground } from "../../design-system/atoms/glassmorphism-background";
-import { StandardExternalLinkWithTracking } from "../../design-system/atoms/standard-external-link-with-tracking";
 import { Briefcase } from "@styled-icons/boxicons-regular";
 import { GraduationCap } from "@styled-icons/fa-solid";
 import { tracking } from "@/types/tracking";
 import Image from "next/image";
-import { useTimeline } from "@/components/home/hooks/useTimeline";
+import { mediaQuery } from "@/components/design-system/utils/media-query";
+import { Heading4 } from "@/components/design-system/atoms/heading4";
+import { Heading6 } from "@/components/design-system/atoms/heading6";
+import { GlassmorphismBackground } from "@/components/design-system/atoms/glassmorphism-background";
+import { StandardExternalLinkWithTracking } from "@/components/design-system/atoms/standard-external-link-with-tracking";
+import { useTimeline } from "../hooks/useTimeline";
+import { Time } from "@/components/design-system/atoms/time";
+import { List } from "@/components/design-system/atoms/list";
+import { Paragraph } from "@/components/design-system/atoms/paragraph";
 
 const TimelineContainer = styled(motion.div)`
   display: flex;

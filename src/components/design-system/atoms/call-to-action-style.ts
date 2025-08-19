@@ -2,7 +2,7 @@
 
 import { css } from "styled-components";
 import {borderRadius} from "@/components/design-system/atoms/border-radius";
-import {mediaQuery} from "@/components/design-system/utils-css/media-query";
+import {mediaQuery} from "@/components/design-system/utils/media-query";
 
 export const callToActionStyle = css`
   font-size: ${(props) => props.theme.fontSizes[3]};

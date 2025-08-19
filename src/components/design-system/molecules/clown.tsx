@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Heading1 } from "../atoms/heading1";
-import { mediaQuery } from "../utils-css/media-query";
+import { mediaQuery } from "../utils/media-query";
 import { FC } from "react";
 import { useScrollDirection, ScrollDirection } from "../hooks/use-scroll-direction";
 

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { mediaQuery } from "@/components/design-system/utils-css/media-query";
+import { mediaQuery } from "@/components/design-system/utils/media-query";
 import React, { FC, useState } from "react";
 import { Heading1 } from "@/components/design-system/atoms/heading1";
 import { ChatSubtitle } from "@/components/chat/components/chat-subtitle";

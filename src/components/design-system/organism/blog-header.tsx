@@ -2,7 +2,7 @@
 
 import { FC } from "react";
 import styled from "styled-components";
-import { mediaQuery } from "../utils-css/media-query";
+import { mediaQuery } from "../utils/media-query";
 import { MatrixRain } from "../atoms/matrix-rain";
 import { GlassmorphismBackground } from "../atoms/glassmorphism-background";
 import Image from "next/image";

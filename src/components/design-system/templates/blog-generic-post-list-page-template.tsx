@@ -3,7 +3,7 @@
 import styled from "styled-components";
 import { BlogPageTemplate } from "./blog-page-template";
 import {ContainerFluid} from "@/components/design-system/atoms/container-fluid";
-import {mediaQuery} from "@/components/design-system/utils-css/media-query";
+import {mediaQuery} from "@/components/design-system/utils/media-query";
 import {Time} from "@/components/design-system/atoms/time";
 import {StandardInternalLinkWithTracking} from "@/components/design-system/atoms/standard-internal-link-with-tracking";
 import {PageTitle} from "@/components/design-system/molecules/page-title";

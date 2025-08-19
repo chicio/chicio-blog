@@ -1,9 +1,9 @@
-import { TechnologyCard } from "@/components/home/components/technology-card";
 import { FC } from "react";
 import styled from "styled-components";
-import { mediaQuery } from "@/components/design-system/utils-css/media-query";
+import { mediaQuery } from "@/components/design-system/utils/media-query";
 import { motion } from "framer-motion";
-import { useTechnologies } from "@/components/home/hooks/useTechnologies";
+import { TechnologyCard } from "./technology-card";
+import { useTechnologies } from "../hooks/useTechnologies";
 
 const SkillsGrid = styled.div`
   display: flex;

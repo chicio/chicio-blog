@@ -1,9 +1,9 @@
 import { ChatAvatar } from "@/components/chat/components/chat-avatar";
 import { FC, PropsWithChildren } from "react";
 import styled from "styled-components";
-import { opacity } from "@/components/design-system/utils-css/opacity-keyframes";
+import { opacity } from "@/components/design-system/utils/animations/opacity-keyframes";
 import { paragraphStyle } from "@/components/design-system/atoms/paragraph";
-import { mediaQuery } from "@/components/design-system/utils-css/media-query";
+import { mediaQuery } from "@/components/design-system/utils/media-query";
 
 const MessageGroup = styled.div<{ $isUser: boolean }>`
   display: flex;

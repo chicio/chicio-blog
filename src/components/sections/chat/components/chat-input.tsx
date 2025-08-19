@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { mediaQuery } from "@/components/design-system/utils-css/media-query";
+import { mediaQuery } from "@/components/design-system/utils/media-query";
 import { paragraphStyle } from "@/components/design-system/atoms/paragraph";
 import { Send } from "@styled-icons/boxicons-regular";
 import { ChangeEvent, FC, FormEvent } from "react";

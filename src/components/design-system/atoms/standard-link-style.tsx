@@ -1,7 +1,7 @@
 'use client'
 
 import { css } from "styled-components";
-import {mediaQuery} from "@/components/design-system/utils-css/media-query";
+import {mediaQuery} from "@/components/design-system/utils/media-query";
 
 export const standardLinkStyle = css`
   font-size: ${(props) => props.theme.fontSizes[2]};

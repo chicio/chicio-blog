@@ -2,7 +2,7 @@
 
 import styled from "styled-components";
 import {ContainerFluid} from "@/components/design-system/atoms/container-fluid";
-import {mediaQuery} from "@/components/design-system/utils-css/media-query";
+import {mediaQuery} from "@/components/design-system/utils/media-query";
 
 export const Container = styled(ContainerFluid)`
   ${mediaQuery.minWidth.xs} {

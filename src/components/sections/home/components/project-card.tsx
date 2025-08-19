@@ -4,7 +4,7 @@ import { GlassmorphismBackground } from "@/components/design-system/atoms/glassm
 import { Heading4 } from "@/components/design-system/atoms/heading4";
 import { List } from "@/components/design-system/atoms/list";
 import { Paragraph } from "@/components/design-system/atoms/paragraph";
-import { mediaQuery } from "@/components/design-system/utils-css/media-query";
+import { mediaQuery } from "@/components/design-system/utils/media-query";
 import { Project } from "@/types/projects";
 import { motion, Variants } from "framer-motion";
 import Image from "next/image";

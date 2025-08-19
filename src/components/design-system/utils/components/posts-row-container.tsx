@@ -1,7 +1,7 @@
 'use client'
 
 import styled from "styled-components";
-import {mediaQuery} from "@/components/design-system/utils-css/media-query";
+import {mediaQuery} from "@/components/design-system/utils/media-query";
 
 export const PostsRowContainer = styled.div`
   display: flex;

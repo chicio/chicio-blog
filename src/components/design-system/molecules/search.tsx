@@ -3,14 +3,14 @@
 import React, {ChangeEvent, FC} from "react";
 import styled, {css, TransientProps} from "styled-components";
 import {SearchAlt} from "@styled-icons/boxicons-regular";
-import {mediaQuery} from "../utils-css/media-query";
+import {mediaQuery} from "../utils/media-query";
 import {Container} from "../atoms/container";
 import {List} from "../atoms/list";
 import {Paragraph} from "../atoms/paragraph";
 import {borderRadius} from "../atoms/border-radius";
 import {SearchablePostFields} from "@/types/post";
 import Link from "next/link";
-import { hideScrollbar } from "../utils-css/hide-scrollbar";
+import { hideScrollbar } from "../utils/components/hide-scrollbar";
 
 const SearchListContainer = styled(Container)`
   position: absolute;

@@ -3,7 +3,7 @@ import { Technology } from "@/types/technology";
 import { FC } from "react";
 import styled from "styled-components";
 import { motion, Variants } from "framer-motion";
-import { mediaQuery } from "@/components/design-system/utils-css/media-query";
+import { mediaQuery } from "@/components/design-system/utils/media-query";
 
 const TechnologyCardContainer = styled(motion.div)`
   background: rgba(0, 17, 0, 0.1);

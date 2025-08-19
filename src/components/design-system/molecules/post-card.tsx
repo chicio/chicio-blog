@@ -5,7 +5,7 @@ import { Paragraph } from "../atoms/paragraph";
 import { PostAuthors } from "./post-authors";
 import { PostMeta } from "./post-meta";
 import { Heading5 } from "../atoms/heading5";
-import { mediaQuery } from "../utils-css/media-query";
+import { mediaQuery } from "../utils/media-query";
 import { FC } from "react";
 import { PostTags } from "./post-tags";
 import { borderRadius } from "../atoms/border-radius";

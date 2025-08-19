@@ -1,6 +1,6 @@
 import styled, { css, TransientProps } from "styled-components";
 import { FC } from "react";
-import {mediaQuery} from "@/components/design-system/utils-css/media-query";
+import {mediaQuery} from "@/components/design-system/utils/media-query";
 import {StandardExternalLink} from "@/components/design-system/atoms/standard-external-link";
 import {trackWith} from "@/lib/tracking/tracking";
 

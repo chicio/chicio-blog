@@ -1,13 +1,13 @@
 "use client";
 
 import { FC } from "react";
-import { ContainerFluid } from "../../design-system/atoms/container-fluid";
 import styled from "styled-components";
 import { Timeline } from "./timeline";
-import { mediaQuery } from "../../design-system/utils-css/media-query";
-import { FloatingDownArrow } from "../../design-system/molecules/floating-down-arrow";
 import { motion, stagger, Variants } from "framer-motion";
-import { SectionTitle } from "@/components/home/components/section-title";
+import { mediaQuery } from "@/components/design-system/utils/media-query";
+import { ContainerFluid } from "@/components/design-system/atoms/container-fluid";
+import { SectionTitle } from "./section-title";
+import { FloatingDownArrow } from "@/components/design-system/molecules/floating-down-arrow";
 
 const SectionContainer = styled(ContainerFluid)`
   min-height: 100vh;

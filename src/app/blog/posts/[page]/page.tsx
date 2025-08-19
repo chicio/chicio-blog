@@ -1,5 +1,4 @@
 import {getPosts, getPostsPaginationFor, getPostsTotalPages} from "@/lib/posts/posts";
-import {BlogPageTemplate} from "@/components/templates/blog-page-template";
 import {siteMetadata} from "@/types/site-metadata";
 import {tracking} from "@/types/tracking";
 import {PostCard} from "@/components/design-system/molecules/post-card";
@@ -9,7 +8,8 @@ import {createMetadata} from "@/lib/seo/seo";
 import {slugs} from "@/types/slug";
 import {Metadata} from "next";
 import {NextPostPaginationParameters} from "@/types/page-parameters";
-import {JsonLd} from "@/components/design-system/website/jsond-ld";
+import {JsonLd} from "@/components/design-system/utils/components/jsond-ld";
+import { BlogPageTemplate } from "@/components/design-system/templates/blog-page-template";
 
 export async function generateMetadata({ params }: NextPostPaginationParameters): Promise<Metadata> {
     const { page } = await params

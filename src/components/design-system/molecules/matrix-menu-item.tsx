@@ -2,7 +2,7 @@
 
 import styled, { css } from "styled-components";
 import { MenuItemWithTracking } from "../atoms/menu-item-with-tracking";
-import { mediaQuery } from "../utils-css/media-query";
+import { mediaQuery } from "../utils/media-query";
 
 interface MatrixMenuItemProps {
   selected?: boolean;

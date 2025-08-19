@@ -5,8 +5,8 @@ import { FC } from "react";
 import { motion, stagger, Variants } from "framer-motion";
 import { ContainerFluid } from "@/components/design-system/atoms/container-fluid";
 import { FloatingDownArrow } from "@/components/design-system/molecules/floating-down-arrow";
-import { TechnologiesExperience } from "@/components/home/components/technologies-experience";
-import { TechnologiesSkillsGrid } from "@/components/home/components/technologies-skills-grid";
+import { TechnologiesExperience } from "./technologies-experience";
+import { TechnologiesSkillsGrid } from "./technologies-skills-grid";
 
 const TechnologiesContainer = styled(ContainerFluid)`
   margin: 0;

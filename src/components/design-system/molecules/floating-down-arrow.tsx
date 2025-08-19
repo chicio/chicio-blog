@@ -2,8 +2,8 @@
 
 import styled from "styled-components";
 import { FC, useEffect, useState } from "react";
-import { mediaQuery } from "../utils-css/media-query";
-import { bounce } from "@/components/design-system/utils-css/bounce-keyframes";
+import { mediaQuery } from "../utils/media-query";
+import { bounce } from "@/components/design-system/utils/animations/bounce-keyframes";
 import { ChevronDown } from "@styled-icons/boxicons-regular";
 
 const FloatingArrowContainer = styled.div`

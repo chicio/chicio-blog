@@ -5,7 +5,7 @@ import { ModalWithImage } from "./modal-with-image";
 import styled from "styled-components";
 import { ContainerFluid } from "../atoms/container-fluid";
 import { Paragraph } from "../atoms/paragraph";
-import { mediaQuery } from "../utils-css/media-query";
+import { mediaQuery } from "../utils/media-query";
 import { borderRadius } from "../atoms/border-radius";
 import Image from "next/image";
 import {artDescriptions} from "@/types/art";

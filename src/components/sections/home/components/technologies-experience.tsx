@@ -1,8 +1,8 @@
-import { SectionTitle } from "@/components/home/components/section-title";
 import { GlassmorphismBackground } from "@/components/design-system/atoms/glassmorphism-background";
 import styled from "styled-components";
 import { Paragraph } from "@/components/design-system/atoms/paragraph";
 import { FC } from "react";
+import { SectionTitle } from "./section-title";
 
 const TechExpertiseContainer = styled.div`
   text-align: center;

@@ -6,7 +6,7 @@ import { Container } from "../atoms/container";
 import { HamburgerMenu } from "../molecules/hamburger-menu";
 import { Overlay } from "../atoms/overlay";
 import { Close } from "../molecules/close";
-import { mediaQuery } from "../utils-css/media-query";
+import { mediaQuery } from "../utils/media-query";
 import { ScrollDirection, useScrollDirection } from "../hooks/use-scroll-direction";
 import { MatrixMenuItem } from "../molecules/matrix-menu-item";
 import { tracking } from "@/types/tracking";

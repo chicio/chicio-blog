@@ -1,7 +1,7 @@
 'use client'
 
 import styled, { TransientProps } from "styled-components";
-import { opacity } from "../utils-css/opacity-keyframes";
+import { opacity } from "../utils/animations/opacity-keyframes";
 import {FC, ReactNode} from "react";
 import {useLockBodyScroll} from "@/components/design-system/hooks/use-lock-body-scroll";
 

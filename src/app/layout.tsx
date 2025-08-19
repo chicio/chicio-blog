@@ -1,13 +1,13 @@
 import { ReactNode } from "react";
 import StyledComponentsRegistry from "@/components/styled-components-registry";
-import { ThemePage } from "@/components/templates/theme-page";
 import { blogTheme } from "@/components/design-system/themes/theme";
 import { Viewport } from "next";
-import { SharedHead } from "@/components/design-system/website/share-head";
-import { CookieConsent } from "@/components/design-system/website/cookie-consent";
+import { SharedHead } from "@/components/design-system/utils/components/share-head";
+import { CookieConsent } from "@/components/design-system/utils/components/cookie-consent";
 import { GoogleTagManager } from "@next/third-parties/google";
 import {SpeedInsights} from "@vercel/speed-insights/next";
 import {Analytics} from "@vercel/analytics/next";
+import { ThemePage } from "@/components/design-system/templates/theme-page";
 
 export const viewport: Viewport = {
   width: "device-width",
