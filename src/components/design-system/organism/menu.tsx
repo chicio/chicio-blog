@@ -1,7 +1,8 @@
 'use client'
 
 import React, { FC, useState } from "react";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
+import { motion, AnimatePresence, Variants } from "framer-motion";
 import { Container } from "../atoms/container";
 import { HamburgerMenu } from "../molecules/hamburger-menu";
 import { Overlay } from "../atoms/overlay";
@@ -16,20 +17,102 @@ import { SearchBox, SearchHits } from "@/components/design-system/molecules/sear
 import { useSearch } from "@/components/design-system/hooks/use-search";
 import { glassmorphism } from "../atoms/glassmorphism";
 
+const menuVariants: Variants = {
+  hidden: {
+    y: -310,
+    transition: {
+      type: "spring",
+      stiffness: 400,
+      damping: 30,
+      duration: 0.3
+    }
+  },
+  visible: {
+    y: 0,
+    transition: {
+      type: "spring",
+      stiffness: 400,
+      damping: 30,
+      duration: 0.3
+    }
+  }
+};
+
+// Animation variants for menu content expansion
+const contentVariants: Variants = {
+  collapsed: {
+    height: 55,
+    transition: {
+      type: "spring",
+      stiffness: 400,
+      damping: 30,
+      when: "afterChildren",
+    }
+  },
+  expanded: {
+    height: 310,
+    transition: {
+      type: "spring",
+      stiffness: 400,
+      damping: 30,
+      when: "beforeChildren"
+    }
+  }
+};
+
+// Animation variants for menu items with enhanced stagger
+const itemVariants: Variants = {
+  hidden: {
+    opacity: 0,
+    y: -20,
+    scale: 0.9,
+    transition: {
+      type: "spring",
+      stiffness: 350,
+      damping: 28,
+      duration: 0.3 // Più lento in uscita per essere più visibile
+    }
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      type: "spring",
+      stiffness: 300,
+      damping: 25,
+      duration: 0.5
+    }
+  }
+};
+
+// Animation variants for navbar container with stagger control
+const navBarVariants: Variants = {
+  hidden: {
+    transition: {
+      staggerChildren: 0.5,
+      staggerDirection: -1 // Last item disappears first when closing
+    }
+  },
+  visible: {
+    transition: {
+      staggerChildren: 0.12,
+      delayChildren: 0.2 // Wait for height expansion to start
+    }
+  }
+};
+
 export const menuHeightNumber = 55;
 export const menuHeight = `${menuHeightNumber}px`;
 
-const MenuContainer = styled(Container)<{
+const MenuContainer = styled(motion(Container))<{
   $shouldHide: boolean;
   $shouldOpenMenu: boolean;
-  $delayOpenCloseMenuAnimation: number;
 }>`
   position: fixed;
-  top: ${(props) => (props.$shouldHide ? `-${menuHeight}` : 0)};
   padding: 0;
   left: 0;
   right: 0;
-  transition: top 0.3s ease 0s;
   width: 100%;
   z-index: 300;
 
@@ -38,17 +121,14 @@ const MenuContainer = styled(Container)<{
   }
 `;
 
-const MenuGlassContent = styled.div<{
+const MenuGlassContent = styled(motion.div)<{
   $shouldOpenMenu: boolean;
-  $delayOpenCloseMenuAnimation: number;
 }>`
   ${glassmorphism};
   border-top-left-radius: 0;
   border-top-right-radius: 0;
   border-top: none;
 
-  transition: height 0.3s ease ${(props) => `${props.$delayOpenCloseMenuAnimation}s`};
-  height: ${(props) => (props.$shouldOpenMenu ? "310px" : menuHeight)};
   overflow: hidden;
   width: 100%;
   margin: 0 auto;
@@ -64,11 +144,11 @@ const MenuButtonContainer = styled.div`
   }
 `;
 
-const NavBar = styled(Container)`
+const NavBar = styled(motion(Container))`
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: ${menuHeight};
+  min-height: ${menuHeight}; /* min-height invece di height fissa */
   width: 100%;
   margin: 0;
   padding: 0 ${(props) => props.theme.spacing[2]};
@@ -79,32 +159,21 @@ const NavBar = styled(Container)`
   }
 `;
 
-const NavBarMenuItem = styled(MatrixMenuItem)<{ shouldOpenMenu: boolean }>`
+const NavBarMenuItem = styled(motion(MatrixMenuItem))`
   margin: 0;
-  height: 40px; /* Altezza ridotta per dare più spazio a border e shadow */
+  height: 40px;
   
   ${mediaQuery.minWidth.sm} {
     margin-top: 7px; 
-    visibility: visible;
-    opacity: 1;
     margin-right: ${(props) => props.theme.spacing[4]};
     margin-bottom: 8px;
   }
 
-  ${(props) => !props.shouldOpenMenu && css`
-    ${mediaQuery.maxWidth.xs} {
-      display: none;
-    }
-  `}
-
-  ${(props) => props.shouldOpenMenu && css`
-    ${mediaQuery.maxWidth.sm} {
-      display: flex;
-      width: calc(100% - ${(props) => props.theme.spacing[8]});
-      min-height: 48px; /* Altezza adeguata per il tocco mobile */
-      margin: ${(props) => props.theme.spacing[1]} 0; /* Margin ridotto */
-    }
-  `}
+  ${mediaQuery.maxWidth.sm} {
+    width: calc(100% - ${(props) => props.theme.spacing[8]});
+    min-height: 48px;
+    margin: ${(props) => props.theme.spacing[1]} 0;
+  }
 `;
 
 export interface MenuProps {
@@ -124,85 +193,119 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
       <MenuContainer
         $shouldOpenMenu={shouldOpenMenu}
         $shouldHide={shouldHideMenu}
-        $delayOpenCloseMenuAnimation={shouldOpenMenu ? 0 : 0.4}
+        variants={menuVariants}
+        animate={shouldHideMenu ? "hidden" : "visible"}
+        initial="visible"
       >
         <MenuGlassContent
           $shouldOpenMenu={shouldOpenMenu}
-          $delayOpenCloseMenuAnimation={shouldOpenMenu ? 0 : 0.4}
+          variants={contentVariants}
+          animate={shouldOpenMenu ? "expanded" : "collapsed"}
+          initial="collapsed"
         >
-          <NavBar>
-            <NavBarMenuItem
-              variant="header"
-              to={"/"}
-              selected={pathname === "/"}
-              trackingData={{
-                action: tracking.action.open_home,
-                category: trackingCategory,
-                label: tracking.label.header,
-              }}
-              shouldOpenMenu={shouldOpenMenu}
-              onClickCallback={() => setShouldOpenMenu(false)}
-            >
-              Home
-            </NavBarMenuItem>
-            <NavBarMenuItem
-              variant="header"
-              to={slugs.blog}
-              selected={
-                pathname.includes(slugs.blog) && pathname !== slugs.aboutMe
-              }
-              trackingData={{
-                action: tracking.action.open_home,
-                category: trackingCategory,
-                label: tracking.label.header,
-              }}
-              shouldOpenMenu={shouldOpenMenu}
-              onClickCallback={() => setShouldOpenMenu(false)}
-            >
-              Blog
-            </NavBarMenuItem>
-            <NavBarMenuItem
-              variant="header"
-              to={slugs.art}
-              selected={pathname === slugs.art}
-              trackingData={{
-                action: tracking.action.open_art,
-                category: trackingCategory,
-                label: tracking.label.header,
-              }}
-              shouldOpenMenu={shouldOpenMenu}
-              onClickCallback={() => setShouldOpenMenu(false)}
-            >
-              Art
-            </NavBarMenuItem>
-            <NavBarMenuItem
-              variant="header"
-              to={slugs.aboutMe}
-              selected={pathname === slugs.aboutMe}
-              trackingData={{
-                action: tracking.action.open_about_me,
-                category: trackingCategory,
-                label: tracking.label.header,
-              }}
-              shouldOpenMenu={shouldOpenMenu}
-              onClickCallback={() => setShouldOpenMenu(false)}
-            >
-              About me
-            </NavBarMenuItem>
-            <NavBarMenuItem
-              variant="header"
-              to={slugs.chat}
-              selected={pathname === slugs.chat}
-              trackingData={{
-                action: tracking.action.open_chat,
-                category: trackingCategory,
-                label: tracking.label.header,
-              }}
-              shouldOpenMenu={shouldOpenMenu}
-              onClickCallback={() => setShouldOpenMenu(false)}
-            >
-              Chat
-            </NavBarMenuItem>
+          <NavBar
+            variants={navBarVariants}
+            initial="hidden"
+            animate={shouldOpenMenu ? "visible" : "hidden"}
+          >
+            <AnimatePresence>
+              {shouldOpenMenu && (
+                <>
+                  <NavBarMenuItem
+                    key="home"
+                    variant="header"
+                    to={"/"}
+                    selected={pathname === "/"}
+                    trackingData={{
+                      action: tracking.action.open_home,
+                      category: trackingCategory,
+                      label: tracking.label.header,
+                    }}
+                    onClickCallback={() => setShouldOpenMenu(false)}
+                    variants={itemVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="hidden"
+                  >
+                    Home
+                  </NavBarMenuItem>
+                  <NavBarMenuItem
+                    key="blog"
+                    variant="header"
+                    to={slugs.blog}
+                    selected={
+                      pathname.includes(slugs.blog) && pathname !== slugs.aboutMe
+                    }
+                    trackingData={{
+                      action: tracking.action.open_home,
+                      category: trackingCategory,
+                      label: tracking.label.header,
+                    }}
+                    onClickCallback={() => setShouldOpenMenu(false)}
+                    variants={itemVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="hidden"
+                  >
+                    Blog
+                  </NavBarMenuItem>
+                  <NavBarMenuItem
+                    key="art"
+                    variant="header"
+                    to={slugs.art}
+                    selected={pathname === slugs.art}
+                    trackingData={{
+                      action: tracking.action.open_art,
+                      category: trackingCategory,
+                      label: tracking.label.header,
+                    }}
+                    onClickCallback={() => setShouldOpenMenu(false)}
+                    variants={itemVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="hidden"
+                  >
+                    Art
+                  </NavBarMenuItem>
+                  <NavBarMenuItem
+                    key="aboutMe"
+                    variant="header"
+                    to={slugs.aboutMe}
+                    selected={pathname === slugs.aboutMe}
+                    trackingData={{
+                      action: tracking.action.open_about_me,
+                      category: trackingCategory,
+                      label: tracking.label.header,
+                    }}
+                    onClickCallback={() => setShouldOpenMenu(false)}
+                    variants={itemVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="hidden"
+                  >
+                    About me
+                  </NavBarMenuItem>
+                  <NavBarMenuItem
+                    key="chat"
+                    variant="header"
+                    to={slugs.chat}
+                    selected={pathname === slugs.chat}
+                    trackingData={{
+                      action: tracking.action.open_chat,
+                      category: trackingCategory,
+                      label: tracking.label.header,
+                    }}
+                    onClickCallback={() => setShouldOpenMenu(false)}
+                    variants={itemVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="hidden"
+                  >
+                    Chat
+                  </NavBarMenuItem>
+                </>
+              )}
+            </AnimatePresence>
             {!startSearch && (
               <MenuButtonContainer>
                 {!shouldOpenMenu && (
@@ -229,22 +332,36 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
           </NavBar>
         </MenuGlassContent>
       </MenuContainer>
-      {(shouldOpenMenu || startSearch) && (
-        <Overlay
-          zIndex={250}
-          delay={"0.4s"}
-          onClick={() => {
-            if (shouldOpenMenu) {
-              setShouldOpenMenu(false);
-            }
-            if (startSearch) {
-              setStartSearch(false);
-            }
-          }}
-        >
-          {results.length > 0 && <SearchHits results={results} />}
-        </Overlay>
-      )}
+      <AnimatePresence>
+        {(shouldOpenMenu || startSearch) && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ 
+              type: "spring",
+              stiffness: 400,
+              damping: 30,
+              delay: 0.1 
+            }}
+          >
+            <Overlay
+              zIndex={250}
+              delay="0s"
+              onClick={() => {
+                if (shouldOpenMenu) {
+                  setShouldOpenMenu(false);
+                }
+                if (startSearch) {
+                  setStartSearch(false);
+                }
+              }}
+            >
+              {results.length > 0 && <SearchHits results={results} />}
+            </Overlay>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 };
