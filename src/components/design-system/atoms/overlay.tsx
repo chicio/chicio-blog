@@ -1,18 +1,18 @@
 'use client'
 
-import styled, { TransientProps } from "styled-components";
-import { opacity } from "../utils/animations/opacity-keyframes";
+import styled from "styled-components";
+import { motion } from "framer-motion";
 import {FC, ReactNode} from "react";
 import {useLockBodyScroll} from "@/components/design-system/hooks/use-lock-body-scroll";
 
 export interface OverlayProps {
   zIndex: number;
-  delay: string;
+  delay: number; 
   onClick: () => void;
   children?: ReactNode;
 }
 
-const StyledOverlay = styled.div<TransientProps<OverlayProps, "div">>`
+const StyledOverlay = styled(motion.div)<{ $zIndex: number }>`
   position: fixed;
   top: 0;
   left: 0;
@@ -20,16 +20,28 @@ const StyledOverlay = styled.div<TransientProps<OverlayProps, "div">>`
   height: 100%;
   z-index: ${(props) => props.$zIndex};
   background: rgba(0, 0, 0, 0.6);
-  opacity: 0;
-  animation: ${opacity} 0.25s linear ${(props) => `${props.$delay}`};
-  animation-fill-mode: forwards;
   backdrop-filter: blur(4px);
 `;
 
-export const Overlay: FC<OverlayProps> = ({ zIndex, onClick, delay, children }) => {
+export const Overlay: FC<OverlayProps> = ({ zIndex, onClick, delay = 0, children }) => {
   useLockBodyScroll();
 
-  return <StyledOverlay $zIndex={zIndex} onClick={onClick} $delay={delay}>
-    {children}
-  </StyledOverlay>;
+  return (
+    <StyledOverlay 
+      $zIndex={zIndex} 
+      onClick={onClick}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{
+        type: "spring",
+        stiffness: 400,
+        damping: 30,
+        duration: 0.25,
+        delay
+      }}
+    >
+      {children}
+    </StyledOverlay>
+  );
 };
