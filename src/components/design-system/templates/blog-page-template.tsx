@@ -1,7 +1,7 @@
 import { FC, ReactNode } from "react";
 import { Menu } from "@/components/design-system/organism/menu";
 import { BlogContentContainer, ContentContainer } from "@/components/design-system/molecules/content-container";
-import { DesktopBlogHeader } from "@/components/design-system/organism/blog-header";
+import { BlogHeader } from "@/components/design-system/organism/blog-header";
 import { Footer } from "@/components/design-system/organism/footer";
 
 export interface BlogPageProps {
@@ -22,7 +22,7 @@ export const BlogPageTemplate: FC<BlogPageProps> = ({
       trackingCategory={trackingCategory}
     />
     <ContentContainer>
-      <DesktopBlogHeader big={big} />
+      <BlogHeader big={big} />
       <BlogContentContainer>
         {children}
       </BlogContentContainer>

@@ -129,7 +129,7 @@ const BlogHeaderImage = styled(Image)`
   }
 `;
 
-const DesktopContainer = styled.div`
+const Container = styled.div`
   display: block;
 `;
 
@@ -137,7 +137,7 @@ interface BlogHeaderProps {
   compact?: boolean;
 }
 
-export const BlogHeader: FC<BlogHeaderProps> = ({ compact = false }) => (
+export const BlogHeaderLogo: FC<BlogHeaderProps> = ({ compact = false }) => (
   <BlogHeaderContainer $compact={compact}>
     <BlogHeaderGlassWrapper>
       <GlassmorphismBackground>
@@ -165,14 +165,14 @@ interface DesktopHeaderProps {
   big: boolean;
 }
 
-export const DesktopBlogHeader: FC<DesktopHeaderProps> = ({ big }) => (
-  <DesktopContainer>
-    <BlogHeader compact={!big} />
+export const BlogHeader: FC<DesktopHeaderProps> = ({ big }) => (
+  <Container>
+    <BlogHeaderLogo compact={!big} />
     <MatrixBackground $big={big}>
       <MatrixBackgroundRain>
         <MatrixRain fontSize={14} speed={60} density={0.8} />
       </MatrixBackgroundRain>
     </MatrixBackground>
-  </DesktopContainer>
+  </Container>
 );
 
