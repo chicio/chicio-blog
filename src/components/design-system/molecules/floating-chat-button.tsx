@@ -8,6 +8,7 @@ import { useState } from "react";
 import { slugs } from "@/types/slug";
 import { Chat } from "@styled-icons/boxicons-regular";
 import { pulse } from "@/components/design-system/utils/animations/pulse-keyframes";
+import { usePathname } from "next/navigation";
 
 const FloatingContainer = styled(motion.div)`
   position: fixed;
@@ -97,6 +98,12 @@ const Tooltip = styled(motion.div)`
 
 export const FloatingChatButton = () => {
   const [isAnimationComplete, setIsAnimationComplete] = useState(false);
+  const pathname = usePathname();
+
+  // Don't render the button on the chat page
+  if (pathname === slugs.chat) {
+    return null;
+  }
 
   const ButtonContent = (
     <FloatingContainer
