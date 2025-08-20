@@ -1,11 +1,10 @@
-import {FC} from "react";
 import {ContainerFullscreen} from "@/components/design-system/atoms/container-fullscreen";
 import {Heading1} from "@/components/design-system/atoms/heading1";
 import {Paragraph} from "@/components/design-system/atoms/paragraph";
 import {CallToActionInternalWithTracking} from "@/components/design-system/atoms/call-to-action-internal-with-tracking";
 import {tracking} from "@/types/tracking";
 
-const NotFoundPage: FC = () => {
+export default function notFoundPage() {
     return (
         <ContainerFullscreen>
             <Heading1>404!</Heading1>
@@ -23,5 +22,3 @@ const NotFoundPage: FC = () => {
         </ContainerFullscreen>
     );
 };
-
-export default NotFoundPage;
