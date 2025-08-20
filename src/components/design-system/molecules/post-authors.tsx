@@ -28,6 +28,17 @@ const PostAuthorContainer = styled(ContainerFluid)`
 const PostAuthorImage = styled(Image)`
   margin-right: 5px;
   border-radius: 50%;
+  border: 1px solid ${(props) => props.theme.dark.accentColor}40;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+
+  &:hover {
+    border-color: ${(props) => props.theme.dark.accentColor}80;
+    box-shadow: 
+      0 0 10px ${(props) => props.theme.dark.accentColor}40,
+      0 0 20px ${(props) => props.theme.dark.accentColor}20;
+    transform: scale(1.1);
+  }
 
   ${mediaQuery.dark} {
     background-color: ${(props) => props.theme.dark.dividerColor};

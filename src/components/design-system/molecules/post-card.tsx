@@ -1,6 +1,7 @@
 'use client'
 
 import styled, { css, TransientProps } from "styled-components";
+import { motion } from "framer-motion";
 import { Paragraph } from "../atoms/paragraph";
 import { PostAuthors } from "./post-authors";
 import { PostMeta } from "./post-meta";
@@ -9,6 +10,7 @@ import { mediaQuery } from "../utils/media-query";
 import { FC } from "react";
 import { PostTags } from "./post-tags";
 import { borderRadius } from "../atoms/border-radius";
+import { glassmorphism } from "../atoms/glassmorphism";
 import Image from "next/image";
 import {StandardInternalLinkWithTracking} from "@/components/design-system/atoms/standard-internal-link-with-tracking";
 import {tracking} from "@/types/tracking";
@@ -21,20 +23,45 @@ interface BigCardProps {
 const PostDescription = styled(Paragraph)`
   margin-right: 0;
   margin-left: 0;
+  color: ${(props) => props.theme.dark.primaryTextColor};
+  opacity: 0.9;
+  line-height: 1.5;
+  
+  /* Subtle glow per la descrizione */
+  text-shadow: 0 0 3px ${(props) => props.theme.dark.accentColor}15;
 `;
 
-const PostCardContainer = styled.div<TransientProps<BigCardProps>>`
+const PostCardTitle = styled(Heading5)`
+  margin: 0 0 ${(props) => props.theme.spacing[2]};
+  word-wrap: break-word;
+  color: ${(props) => props.theme.dark.accentColor};
+  
+  /* Matrix glow effect per il titolo */
+  text-shadow: 
+    0 0 5px ${(props) => props.theme.dark.accentColor}40,
+    0 0 10px ${(props) => props.theme.dark.accentColor}20;
+  
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+`;
+
+const PostCardContainer = styled(motion.div)<TransientProps<BigCardProps>>`
+  ${glassmorphism};
   ${borderRadius};
-  margin-top: ${(props) => props.theme.spacing[4]};
   background-color: ${(props) => props.theme.light.generalBackgroundLight};
-  box-shadow: 0 3px 10px 0 ${(props) => props.theme.light.boxShadowLight};
+  margin-top: ${(props) => props.theme.spacing[4]};
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
   ${mediaQuery.minWidth.md} {
     ${mediaQuery.inputDevice.mouse} {
-      transition: transform 0.2s;
-
       &:hover {
         transform: scale(1.025);
+        
+        /* Intensifica il glow del titolo al hover */
+        ${PostCardTitle} {
+          text-shadow: 
+            0 0 8px ${(props) => props.theme.dark.accentColor}60,
+            0 0 15px ${(props) => props.theme.dark.accentColor}30;
+        }
       }
     }
 
@@ -43,11 +70,6 @@ const PostCardContainer = styled.div<TransientProps<BigCardProps>>`
       css`
         width: 48%;
       `}
-  }
-
-  ${mediaQuery.dark} {
-    background-color: ${(props) => props.theme.dark.generalBackgroundLight};
-    box-shadow: 0 3px 10px 0 ${(props) => props.theme.dark.boxShadowLight};
   }
 `;
 
@@ -72,11 +94,6 @@ const PostCardLink = styled(StandardInternalLinkWithTracking)`
   &:hover {
     text-decoration: none;
   }
-`;
-
-const PostCardTitle = styled(Heading5)`
-  margin: 0 0 ${(props) => props.theme.spacing[2]};
-  word-wrap: break-word;
 `;
 
 const PostCardMetaContainer = styled.div`

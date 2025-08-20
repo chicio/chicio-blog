@@ -15,8 +15,8 @@ const ProfilePhotoContainer = styled.div`
   background: ${(props) => props.theme.dark.boxShadowLight};
 
   img {
-    width: 95%;
-    height: 95%;
+    width: 97%;
+    height: 97%;
     border-radius: 50%;
     object-fit: cover;
   }
