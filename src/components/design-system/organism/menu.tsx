@@ -83,11 +83,19 @@ const MenuContainer = styled(motion(Container))<{
   padding: 0;
   left: 0;
   right: 0;
-  width: 100%;
+  top: 0;
   z-index: 300;
+  
+  box-sizing: border-box;
+
+  /* Compensazione scrollbar quando lo scroll è locked */
+  body.scroll-locked & {
+    right: var(--scrollbar-width, 0px);
+  }
 
   ${mediaQuery.minWidth.xs} {
-    padding: 0 ${(props) => props.theme.spacing[2]};
+    padding-left: ${(props) => props.theme.spacing[2]};
+    padding-right: ${(props) => props.theme.spacing[2]};
   }
 `;
 

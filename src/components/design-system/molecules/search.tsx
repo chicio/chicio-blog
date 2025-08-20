@@ -62,21 +62,6 @@ const SearchTitle = styled(Paragraph)`
   }
 `;
 
-export const SearchHits: FC<{ results: SearchablePostFields[] }> = ({ results }) => (
-  <SearchListContainer>
-    <SearchHitsList>
-      {results.map((result, index) => (
-        <SearchHitContainer key={"SearchResult" + index}>
-          <SearchLink href={result.slug}>
-            <SearchTitle>{result.title}</SearchTitle>
-            <Paragraph>{result.description}</Paragraph>
-          </SearchLink>
-        </SearchHitContainer>
-      ))}
-    </SearchHitsList>
-  </SearchListContainer>
-);
-
 const SearchBoxContainer = styled.div`
   transform: translate(0, 0);
   margin-left: auto;
@@ -154,3 +139,17 @@ export const SearchBox: FC<
   </SearchBoxContainer>
 );
 
+export const SearchHits: FC<{ results: SearchablePostFields[] }> = ({ results }) => (
+  <SearchListContainer>
+    <SearchHitsList>
+      {results.map((result, index) => (
+        <SearchHitContainer key={"SearchResult" + index}>
+          <SearchLink href={result.slug}>
+            <SearchTitle>{result.title}</SearchTitle>
+            <Paragraph>{result.description}</Paragraph>
+          </SearchLink>
+        </SearchHitContainer>
+      ))}
+    </SearchHitsList>
+  </SearchListContainer>
+);
