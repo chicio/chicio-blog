@@ -8,6 +8,7 @@ import { GoogleTagManager } from "@next/third-parties/google";
 import {SpeedInsights} from "@vercel/speed-insights/next";
 import {Analytics} from "@vercel/analytics/next";
 import { ThemePage } from "@/components/design-system/templates/theme-page";
+import { FloatingChatButton } from "@/components/design-system/molecules/floating-chat-button";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -23,7 +24,10 @@ export default function RootLayout({
       <SharedHead />
       <body>
         <StyledComponentsRegistry>
-          <ThemePage theme={blogTheme}>{children}</ThemePage>
+          <ThemePage theme={blogTheme}>
+            {children}
+            <FloatingChatButton />
+          </ThemePage>
           <CookieConsent />
         </StyledComponentsRegistry>
         <SpeedInsights />

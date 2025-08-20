@@ -37,7 +37,7 @@ export default function Home() {
           trackingCategory={tracking.category.home}
         />
       </SnapScrollContainer>
-      <FloatingChatButton />
+      {/* <FloatingChatButton /> */}
       <JsonLd
         ogPageType="website"
         url={siteMetadata.siteUrl}

@@ -141,7 +141,7 @@ export const FloatingChatButton = () => {
   );
 
   return (
-    <Link href={slugs.chat} passHref>
+    <Link target="_blank" href={slugs.chat} passHref>
       {ButtonContent}
     </Link>
   );
