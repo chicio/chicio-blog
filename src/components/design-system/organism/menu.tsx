@@ -137,7 +137,7 @@ const NavBar = styled(motion(Container))`
   }
 
   /* Su mobile: padding-top pari all'altezza dell'header quando menu chiuso */
-  ${mediaQuery.maxWidth.sm} {
+  ${mediaQuery.maxWidth.xs} {
     padding-top: ${menuHeight};
   }
 `;
@@ -152,10 +152,14 @@ const NavBarMenuItem = styled(MatrixMenuItem)`
     margin-bottom: 8px;
   }
 
-  ${mediaQuery.maxWidth.sm} {
+  ${mediaQuery.maxWidth.xs} {
     width: calc(100% - ${(props) => props.theme.spacing[8]});
     min-height: 48px;
     margin: ${(props) => props.theme.spacing[1]} 0;
+  }
+
+  ${mediaQuery.maxWidth.sm} {
+      font-size: ${(props) => props.theme.fontSizes[1]};
   }
 `;
 

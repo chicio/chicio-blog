@@ -11,55 +11,117 @@ import {borderRadius} from "../atoms/border-radius";
 import {SearchablePostFields} from "@/types/post";
 import Link from "next/link";
 import { hideScrollbar } from "../utils/components/hide-scrollbar";
+import { glassmorphism } from "../atoms/glassmorphism";
 
 const SearchListContainer = styled(Container)`
   position: absolute;
-    z-index: 100;
+  z-index: 100;
   top: 100px;
   right: 0;
   left: 0;
   bottom: 0;
   height: 80vh;
   overflow: scroll;
-  ${borderRadius};
   ${hideScrollbar};
+  padding: ${(props) => props.theme.spacing[2]}; /* Aumentato per contenere il glow effect */
+
+  body.scroll-locked & {
+    right: var(--scrollbar-width, 0px);
+  }
+  
+  box-shadow: 
+    inset 0 0 3px ${(props) => props.theme.dark.accentColor}AA,
+    inset 0 0 8px ${(props) => props.theme.dark.accentColor}99,
+    inset 0 0 10px ${(props) => props.theme.dark.accentColor}55;
+  
+  border: 1px solid ${(props) => props.theme.dark.accentColor}20;
+  border-radius: ${(props) => props.theme.spacing[2]};
+
+  width: 95%;
+
+  ${mediaQuery.minWidth.xs} {
+    width: 100%;
+  }
 `;
 
 const SearchHitsList = styled(List)`
   list-style: none;
-  padding: ${(props) => props.theme.spacing[2]};
-  margin: ${(props) => props.theme.spacing[6]} 0;
-  background-color: ${(props) => props.theme.light.generalBackground};
-  ${borderRadius};
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: ${(props) => props.theme.spacing[2]};
+  
+  /* Container più piccolo per contenere il glow effect */
+  margin: 0 auto;
 
-  ${mediaQuery.dark} {
-    background-color: ${(props) => props.theme.dark.generalBackground};
+  /* Override del before del List component per rimuovere le frecce */
+  li::before {
+    content: none;
+  }
+  
+  li {
+    padding-left: 0; /* Rimuove il padding-left del List component */
+    margin-bottom: 0; /* Rimuove il margin-bottom del List component */
   }
 `;
 
-const SearchHitContainer = styled.li`
-  display: flex;
-  flex-direction: column;
-  border-bottom: 1px solid ${(props) => props.theme.light.dividerColor};
+const SearchHitCard = styled.li`
+  ${glassmorphism};
+  padding: ${(props) => props.theme.spacing[2]}; /* Aumentato per più spazio interno */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* Assicura che il contenuto sia allineato a sinistra */
+  text-align: left;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+      0 12px 40px ${(props) => props.theme.dark.boxShadowLight},
+      0 0 10px ${(props) => props.theme.dark.accentColor}33,
+      inset 0 1px 0 ${(props) => props.theme.dark.accentColor}26;
+    border-color: ${(props) => props.theme.dark.accentColor}66;
+  }
 
-  ${mediaQuery.dark} {
-    border-bottom: 1px solid ${(props) => props.theme.dark.dividerColor};
+  ${mediaQuery.inputDevice.mouse} {
+    cursor: pointer;
   }
 `;
 
 const SearchLink = styled(Link)`
   text-decoration: none;
-  display: flex;
-  flex-direction: column;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: ${(props) => props.theme.spacing[4]};
 `;
 
 const SearchTitle = styled(Paragraph)`
-  font-size: ${(props) => props.theme.fontSizes[3]};
-  color: ${(props) => props.theme.light.accentColor};
+  font-size: ${(props) => props.theme.fontSizes[4]};
+  font-weight: 700;
+  color: ${(props) => props.theme.dark.accentColor};
+  margin-bottom: ${(props) => props.theme.spacing[2]};
+  line-height: 1.3;
+  margin: 0 0 ${(props) => props.theme.spacing[2]} 0; /* Reset margin per allineamento pulito */
+  
+  /* Matrix glow effect */
+  text-shadow: 
+    0 0 5px ${(props) => props.theme.dark.accentColor}40,
+    0 0 10px ${(props) => props.theme.dark.accentColor}20;
 
-  ${mediaQuery.dark} {
-    color: ${(props) => props.theme.dark.accentColor};
+  ${mediaQuery.minWidth.sm} {
+    font-size: ${(props) => props.theme.fontSizes[5]};
   }
+`;
+
+const SearchDescription = styled(Paragraph)`
+  color: ${(props) => props.theme.dark.primaryTextColor};
+  opacity: 0.9;
+  line-height: 1.5;
+  margin: 0;
+  
+  /* Subtle glow for description */
+  text-shadow: 0 0 3px ${(props) => props.theme.dark.accentColor}15;
 `;
 
 const SearchBoxContainer = styled.div`
@@ -103,7 +165,7 @@ const SearchBoxInput = styled.input<TransientProps<StartSearchProps>>`
   border-radius: 50px;
   box-sizing: border-box;
   font-size: ${(props) => props.theme.fontSizes[3]};
-  border: 2px solid ${(props) => props.theme.dark.primaryTextColor};
+  border: 1px solid ${(props) => props.theme.dark.primaryTextColor};
   outline: none;
   transition: 0.5s;
   color: transparent;
@@ -112,9 +174,9 @@ const SearchBoxInput = styled.input<TransientProps<StartSearchProps>>`
     props.$startSearch &&
     css`
       color: ${(props) => props.theme.dark.primaryTextColor};
-      width: 200px;
+      width: 150px;
       background: ${(props) => props.theme.dark.generalBackground};
-      border: 2px solid ${(props) => props.theme.dark.accentColor};
+      border: 1px solid ${(props) => props.theme.dark.accentColor};
       ${borderRadius};
     `}
 `;
@@ -143,12 +205,12 @@ export const SearchHits: FC<{ results: SearchablePostFields[] }> = ({ results })
   <SearchListContainer>
     <SearchHitsList>
       {results.map((result, index) => (
-        <SearchHitContainer key={"SearchResult" + index}>
+        <SearchHitCard key={"SearchResult" + index}>
           <SearchLink href={result.slug}>
             <SearchTitle>{result.title}</SearchTitle>
-            <Paragraph>{result.description}</Paragraph>
+            <SearchDescription>{result.description}</SearchDescription>
           </SearchLink>
-        </SearchHitContainer>
+        </SearchHitCard>
       ))}
     </SearchHitsList>
   </SearchListContainer>
