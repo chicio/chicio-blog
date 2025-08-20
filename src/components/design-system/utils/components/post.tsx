@@ -1,6 +1,6 @@
 'use client'
 
-import 'highlight.js/styles/github-dark.css';
+import 'highlight.js/styles/tokyo-night-dark.css';
 import { FC } from "react";
 import styled from "styled-components";
 import {heading2Style} from "@/components/design-system/atoms/heading2";
