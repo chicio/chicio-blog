@@ -107,6 +107,11 @@ const MenuGlassContent = styled(motion.div)<{
   border-top-right-radius: 0;
   border-top: none;
 
+  ${mediaQuery.maxWidth.xs} {
+    border-right: none;
+    border-left: none;
+  }
+
   overflow: hidden;
   width: 100%;
   margin: 0 auto;

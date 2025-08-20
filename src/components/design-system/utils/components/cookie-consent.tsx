@@ -3,8 +3,8 @@
 import Script from 'next/script'
 import {FC} from "react";
 import {
-  matrixPrimaryGreen,
 } from "@/components/design-system/themes/blog-colors";
+import { blogTheme } from '../../themes/theme';
 
 export const CookieConsent: FC = () =>
     (
@@ -20,8 +20,8 @@ export const CookieConsent: FC = () =>
                     if (typeof window !== 'undefined') {
                         window.cookieconsent.initialise({
                             palette: {
-                                popup: {background: `${matrixPrimaryGreen}`, text: '#fff'},
-                                button: {background: '#0F67FF'},
+                                popup: {background: `${blogTheme.dark.generalBackgroundLight}`, text: '#fff'},
+                                button: {background: `${blogTheme.dark.accentColor}`, text: '#000'},
                             },
                             theme: 'classic',
                             content: {
