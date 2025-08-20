@@ -37,8 +37,11 @@ export const useSearch = (startSearch: boolean) => {
     }
   };
 
+  const resetSearch = () => setResults([])
+
   return {
     handleSearch,
+    resetSearch,
     results,
   };
 };

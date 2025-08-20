@@ -168,7 +168,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
   const direction = useScrollDirection();
   const [shouldOpenMenu, setShouldOpenMenu] = useState(false);
   const [startSearch, setStartSearch] = useState(false);
-  const { handleSearch, results } = useSearch(startSearch);
+  const { handleSearch, resetSearch, results } = useSearch(startSearch);
   const shouldHideMenu = pathname === slugs.chat ? false : direction === ScrollDirection.down;
 
   return (
@@ -283,7 +283,10 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
             {!shouldOpenMenu && (
               <SearchBox
                 startSearch={startSearch}
-                onClick={() => setStartSearch(!startSearch)}
+                onClick={() => {
+                  resetSearch()
+                  setStartSearch(!startSearch);
+                }}
                 onChange={handleSearch}
               />
             )}
@@ -305,7 +308,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
               }
             }}
           >
-            {results.length > 0 && <SearchHits results={results} />}
+            {results.length > 0 && !shouldOpenMenu && <SearchHits results={results} />}
           </Overlay>
         )}
       </AnimatePresence>
