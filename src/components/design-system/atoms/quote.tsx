@@ -1,15 +1,12 @@
 'use client'
 
 import styled from "styled-components";
-import { paragraphStyle } from "./paragraph";
 
 export const Quote = styled.blockquote`
-  ${paragraphStyle}
   font-style: italic;
   text-align: center;
   position: relative;
-  margin: ${(props) => props.theme.spacing[4]} 0;
-  padding: ${(props) => props.theme.spacing[2]} ${(props) => props.theme.spacing[4]};
+  margin: ${(props) => props.theme.spacing[2]} 0;
   
   &::before,
   &::after {

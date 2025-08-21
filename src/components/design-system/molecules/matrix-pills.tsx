@@ -12,7 +12,6 @@ const PillContainer = styled(motion.div)`
   justify-content: center;
   gap: ${(props) => props.theme.spacing[6]};
   margin-top: ${(props) => props.theme.spacing[6]};
-//   flex-direction: column;
   position: relative;
   z-index: 13;
 

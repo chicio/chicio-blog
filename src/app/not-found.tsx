@@ -28,8 +28,8 @@ const ContentWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: ${(props) => props.theme.spacing[4]};
-  padding: ${(props) => props.theme.spacing[4]};
+  gap: ${(props) => props.theme.spacing[2]};
+  padding: ${(props) => props.theme.spacing[2]};
 `;
 
 const Matrix404Title = styled(Heading1)`
@@ -41,7 +41,7 @@ const Matrix404Title = styled(Heading1)`
   position: relative;
 
   font-size: 72px;
-  
+
     ${mediaQuery.minWidth.sm} {
       font-size: 100px;
     }

@@ -3,7 +3,6 @@
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { FC, useEffect, useState } from 'react';
-import { Paragraph } from '@/components/design-system/atoms/paragraph';
 import { Quote } from '@/components/design-system/atoms/quote';
 import { mediaQuery } from '../utils/media-query';
 import { hideScrollbar } from '../utils/components/hide-scrollbar';
@@ -18,7 +17,7 @@ const TerminalContainer = styled(motion.div)`
   box-shadow: 
     0 0 20px ${(props) => props.theme.dark.accentColor}40,
     inset 0 0 20px rgba(0, 255, 65, 0.1);
-  width: 90%;
+  width: 95%;
   max-width: 600px;
   min-width: 280px;
   height: 300px;
@@ -30,15 +29,6 @@ const TerminalContainer = styled(motion.div)`
   overflow-x: hidden;
     
   ${hideScrollbar};
-
-//   &::-webkit-scrollbar-thumb {
-//     background: ${(props) => props.theme.dark.accentColor}50;
-//     border-radius: 4px;
-    
-//     &:hover {
-//       background: ${(props) => props.theme.dark.accentColor}80;
-//     }
-//   }
 
   ${mediaQuery.minWidth.sm} {
     width: 85%;
@@ -57,11 +47,11 @@ const TerminalContainer = styled(motion.div)`
   }
 `;
 
-const TerminalLine = styled(motion(Paragraph))`
+const TerminalLine = styled.div`
   margin-bottom: ${(props) => props.theme.spacing[1]};
   font-family: 'Courier New', monospace;
   line-height: 1.4;
-  color: ${(props) => props.theme.dark.accentColor}; /* Manteniamo il verde per il terminale */
+  color: ${(props) => props.theme.dark.accentColor};
   font-size: 0.8rem;
   word-break: break-word;
 
@@ -74,7 +64,7 @@ const TerminalLine = styled(motion(Paragraph))`
   }
 `;
 
-const TerminalQuoteLine = styled(motion.div)`
+const TerminalQuoteLine = styled.div`
   margin-bottom: ${(props) => props.theme.spacing[1]};
   line-height: 1.4;
   font-size: 0.8rem;
@@ -109,7 +99,7 @@ const SuccessText = styled.span`
 `;
 
 const QuoteText = styled(Quote)`
-  color: #ffffff;
+  color: ${(props) => props.theme.dark.accentColor};
   font-style: italic;
   text-align: center;
   font-family: 'Courier New', monospace;
@@ -117,6 +107,11 @@ const QuoteText = styled(Quote)`
   text-shadow: 0 0 10px ${(props) => props.theme.dark.accentColor}30;
   font-size: 0.85rem;
   line-height: 1.5;
+  font-weight: bold;
+
+  text-shadow: 
+    0 0 5px ${(props) => props.theme.dark.accentColor}40,
+    0 0 10px ${(props) => props.theme.dark.accentColor}20;
 
   ${mediaQuery.minWidth.sm} {
     font-size: 0.9rem;
@@ -170,7 +165,7 @@ export const MatrixTerminal: FC<MatrixTerminalProps> = ({ lines }) => {
   }, [currentLineIndex, currentCharIndex, lines, displayedLines]);
 
   const renderLineContent = (text: string, type?: 'normal' | 'error' | 'success' | 'quote') => {
-    const content = type === 'quote' ? text : text.substring(2); // Rimuovi "> " per il rendering
+    const content = type === 'quote' ? text : text.substring(2);
 
     switch (type) {
       case 'error':
@@ -203,9 +198,6 @@ export const MatrixTerminal: FC<MatrixTerminalProps> = ({ lines }) => {
           return (
             <TerminalQuoteLine
               key={index}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.3 }}
             >
               {renderLineContent(lineText, lines[index].type)}
             </TerminalQuoteLine>
@@ -215,9 +207,6 @@ export const MatrixTerminal: FC<MatrixTerminalProps> = ({ lines }) => {
         return (
           <TerminalLine
             key={index}
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.3 }}
           >
             <span>{'> '}</span>
             {renderLineContent(lineText, lines[index].type)}
@@ -229,20 +218,11 @@ export const MatrixTerminal: FC<MatrixTerminalProps> = ({ lines }) => {
       {currentLineIndex < lines.length && (
         <>
           {lines[currentLineIndex].type === 'quote' ? (
-            <TerminalQuoteLine
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.3 }}
-            >
+            <TerminalQuoteLine>
               {renderLineContent(getCurrentLinePartialText(), lines[currentLineIndex].type)}
-              <Cursor>_</Cursor>
             </TerminalQuoteLine>
           ) : (
-            <TerminalLine
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.3 }}
-            >
+            <TerminalLine>
               {getCurrentLinePartialText()}
               <Cursor>_</Cursor>
             </TerminalLine>
