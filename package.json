@@ -9,7 +9,7 @@
     "prebuild": "npm run search-index",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint ."
   },
   "dependencies": {
     "@ai-sdk/groq": "^2.0.11",
