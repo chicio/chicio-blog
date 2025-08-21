@@ -1,14 +1,14 @@
 'use client'
 
 import { FC, useState } from "react";
-import { ModalWithImage } from "./modal-with-image";
 import styled from "styled-components";
-import { ContainerFluid } from "../atoms/container-fluid";
-import { Paragraph } from "../atoms/paragraph";
-import { mediaQuery } from "../utils/media-query";
-import { borderRadius } from "../atoms/border-radius";
 import Image from "next/image";
 import {artDescriptions} from "@/types/art";
+import { ContainerFluid } from "@/components/design-system/atoms/container-fluid";
+import { borderRadius } from "@/components/design-system/atoms/border-radius";
+import { mediaQuery } from "@/components/design-system/utils/media-query";
+import { Paragraph } from "@/components/design-system/atoms/paragraph";
+import { ModalWithImage } from "@/components/design-system/organism/modal-with-image";
 
 const GalleryContainer = styled(ContainerFluid)`
   padding: 0;

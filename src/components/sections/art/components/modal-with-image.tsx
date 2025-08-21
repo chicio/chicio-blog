@@ -1,8 +1,8 @@
 import styled, { TransientProps } from "styled-components";
-import { CallToActionExternal } from "../atoms/call-to-action-external";
 import { FC } from "react";
-import { opacity } from "../utils/animations/opacity-keyframes";
-import { Overlay } from "../atoms/overlay";
+import { opacity } from "@/components/design-system/utils/animations/opacity-keyframes";
+import { Overlay } from "@/components/design-system/atoms/overlay";
+import { CallToActionExternal } from "@/components/design-system/atoms/call-to-action-external";
 
 const zIndex = 400;
 
