@@ -2,9 +2,10 @@
 
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-import { FC, useEffect, useState } from 'react';
+import { FC } from 'react';
 import { Quote } from '@/components/design-system/atoms/quote';
 import { mediaQuery } from '../utils/media-query';
+import { useTypewriter } from '../hooks/use-typewriter';
 import { hideScrollbar } from '../utils/components/hide-scrollbar';
 
 const TerminalContainer = styled(motion.div)`
@@ -20,8 +21,8 @@ const TerminalContainer = styled(motion.div)`
   width: 95%;
   max-width: 600px;
   min-width: 280px;
-  height: 300px;
-  min-height: 250px;
+  height: 150px;
+  min-height: 150px;
   margin: 0 auto;
   position: relative;
   z-index: 12;
@@ -133,102 +134,47 @@ interface MatrixTerminalProps {
 }
 
 export const MatrixTerminal: FC<MatrixTerminalProps> = ({ lines }) => {
-  const [currentLineIndex, setCurrentLineIndex] = useState(0);
-  const [currentCharIndex, setCurrentCharIndex] = useState(0);
-  const [displayedLines, setDisplayedLines] = useState<string[]>([]);
-
-  useEffect(() => {
-    if (currentLineIndex >= lines.length) return;
-
-    const currentLine = lines[currentLineIndex];
-    const fullText = currentLine.type === 'quote' ? currentLine.text : `> ${currentLine.text}`;
-
-    if (currentCharIndex < fullText.length) {
-      const timer = setTimeout(() => {
-        setCurrentCharIndex(currentCharIndex + 1);
-      }, 50); // Velocità di typing: 50ms per carattere
-
-      return () => clearTimeout(timer);
-    } else {
-      // Linea completata, passa alla successiva dopo un delay
-      const lineCompleteTimer = setTimeout(() => {
-        const newDisplayedLines = [...displayedLines];
-        newDisplayedLines[currentLineIndex] = fullText;
-        setDisplayedLines(newDisplayedLines);
-        
-        setCurrentLineIndex(currentLineIndex + 1);
-        setCurrentCharIndex(0);
-      }, currentLine.delay || 800);
-
-      return () => clearTimeout(lineCompleteTimer);
-    }
-  }, [currentLineIndex, currentCharIndex, lines, displayedLines]);
+  const { completedLines, currentLine, currentText } = useTypewriter(lines);
 
   const renderLineContent = (text: string, type?: 'normal' | 'error' | 'success' | 'quote') => {
-    const content = type === 'quote' ? text : text.substring(2);
-
     switch (type) {
       case 'error':
-        return <ErrorText>{content}</ErrorText>;
+        return <ErrorText>{text}</ErrorText>;
       case 'success':
-        return <SuccessText>{content}</SuccessText>;
+        return <SuccessText>{text}</SuccessText>;
       case 'quote':
-        return <QuoteText>{content}</QuoteText>;
+        return <QuoteText>{text}</QuoteText>;
       default:
-        return content;
+        return text;
     }
   };
 
-  const getCurrentLinePartialText = () => {
-    if (currentLineIndex >= lines.length) return '';
-    const currentLine = lines[currentLineIndex];
-    const fullText = currentLine.type === 'quote' ? currentLine.text : `> ${currentLine.text}`;
-    return fullText.substring(0, currentCharIndex);
+  const renderLine = (line: TerminalLine, text: string, showCursor: boolean = false, index: number) => {
+    if (line.type === 'quote') {
+      return (
+        <TerminalQuoteLine key={`line-${index}`}>
+          {renderLineContent(text, line.type)}
+        </TerminalQuoteLine>
+      );
+    }
+
+    return (
+      <TerminalLine key={`line-${index}`}>
+        <span>{'> '}</span>
+        {renderLineContent(text, line.type)}
+        {showCursor && <Cursor>_</Cursor>}
+      </TerminalLine>
+    );
   };
 
   return (
     <TerminalContainer
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
+      transition={{ duration: 0.2, ease: "easeOut" }}
     >
-      {/* Linee completate */}
-      {displayedLines.map((lineText, index) => {
-        if (lines[index].type === 'quote') {
-          return (
-            <TerminalQuoteLine
-              key={index}
-            >
-              {renderLineContent(lineText, lines[index].type)}
-            </TerminalQuoteLine>
-          );
-        }
-        
-        return (
-          <TerminalLine
-            key={index}
-          >
-            <span>{'> '}</span>
-            {renderLineContent(lineText, lines[index].type)}
-          </TerminalLine>
-        );
-      })}
-      
-      {/* Linea corrente in typing */}
-      {currentLineIndex < lines.length && (
-        <>
-          {lines[currentLineIndex].type === 'quote' ? (
-            <TerminalQuoteLine>
-              {renderLineContent(getCurrentLinePartialText(), lines[currentLineIndex].type)}
-            </TerminalQuoteLine>
-          ) : (
-            <TerminalLine>
-              {getCurrentLinePartialText()}
-              <Cursor>_</Cursor>
-            </TerminalLine>
-          )}
-        </>
-      )}
+      {completedLines.map((line, index) => renderLine(line, line.text, false, index))}
+      {currentLine && renderLine(currentLine, currentText, true, completedLines.length)}
     </TerminalContainer>
   );
 };

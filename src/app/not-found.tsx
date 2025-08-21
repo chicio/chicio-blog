@@ -48,10 +48,10 @@ const Matrix404Title = styled(Heading1)`
 `;
 
 const terminalLines = [
-  { text: "Scanning the matrix...", delay: 300 },
-  { text: "Accessing page...", delay: 500 },
-  { text: "ERROR 404: Page not found", type: 'error' as const, delay: 800 },
-  { text: "This is your last chance...", type: 'quote' as const, delay: 1500 },
+  { text: "Scanning the matrix...", delay: 600 },
+  { text: "Accessing page...", delay: 700 },
+  { text: "ERROR 404: Page not found", type: 'error' as const, delay: 900 },
+  { text: "This is your last chance...", type: 'quote' as const, delay: 1200 },
 ];
 
 export default function notFoundPage() {
