@@ -1,9 +1,9 @@
 'use client'
 
-import styled from "styled-components";
+import { useLockBodyScroll } from "@/components/design-system/hooks/use-lock-body-scroll";
 import { motion } from "framer-motion";
-import {FC, ReactNode} from "react";
-import {useLockBodyScroll} from "@/components/design-system/hooks/use-lock-body-scroll";
+import { FC, ReactNode } from "react";
+import styled from "styled-components";
 
 export interface OverlayProps {
   zIndex: number;
@@ -28,6 +28,7 @@ export const Overlay: FC<OverlayProps> = ({ zIndex, onClick, delay = 0, children
 
   return (
     <StyledOverlay 
+      // ref={overlayRef}
       $zIndex={zIndex} 
       onClick={onClick}
       initial={{ opacity: 0 }}

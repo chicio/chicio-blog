@@ -20,7 +20,7 @@ const SearchListContainer = styled(Container)`
   right: 0;
   left: 0;
   bottom: 0;
-  height: 80vh;
+  height: 80dvh;
   width: 95%;
   overflow: scroll;
   padding: ${(props) => props.theme.spacing[2]};
