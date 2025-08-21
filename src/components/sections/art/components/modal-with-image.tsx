@@ -4,6 +4,8 @@ import { FC } from "react";
 import { glassmorphism } from "@/components/design-system/atoms/glassmorphism";
 import { Overlay } from "@/components/design-system/atoms/overlay";
 import { CallToActionExternal } from "@/components/design-system/atoms/call-to-action-external";
+import { glowContainer } from "@/components/design-system/atoms/glow";
+import { borderRadius } from "@/components/design-system/atoms/border";
 
 const zIndex = 400;
 
@@ -11,11 +13,20 @@ interface ModalContainerProps {
   zIndex: number;
 }
 
-const ModalContainer = styled(motion.div)<TransientProps<ModalContainerProps>>`
+const ModalWrapper = styled.div<{ $zIndex: number }>`
   position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) !important;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: ${(props) => props.$zIndex};
+`;
+
+const ModalContainer = styled(motion.div)<TransientProps<ModalContainerProps>>`
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -24,7 +35,6 @@ const ModalContainer = styled(motion.div)<TransientProps<ModalContainerProps>>`
   max-width: 95vw;
   height: auto;
   max-height: 90vh;
-  z-index: ${(props) => props.$zIndex};
   padding: ${(props) => props.theme.spacing[4]};
   ${glassmorphism};
   box-shadow: 0 8px 32px 0 rgba(0, 255, 70, 0.25);
@@ -53,6 +63,7 @@ const ModalImage = styled.img`
   object-fit: contain;
   border-radius: 16px;
   margin-bottom: 16px;
+  background-color: ${(props) => props.theme.dark.generalBackground};
 `;
 
 export interface ModalWithImageProps {
@@ -68,16 +79,18 @@ export const ModalWithImage: FC<ModalWithImageProps> = ({
 }) => (
   <>
     <Overlay zIndex={zIndex} onClick={onClick} delay={0.15}>
-      <ModalContainer
-        $zIndex={zIndex}
-        variants={modalVariants}
-        initial="hidden"
-        animate="visible"
-        exit="exit"
-      >
-        <ModalImage src={imageUrl} alt={imageAlt} />
-        <CallToActionExternal onClick={onClick}>Close</CallToActionExternal>
-      </ModalContainer>
+      <ModalWrapper $zIndex={zIndex}>
+        <ModalContainer
+          $zIndex={zIndex}
+          variants={modalVariants}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+        >
+          <ModalImage src={imageUrl} alt={imageAlt} />
+          <CallToActionExternal onClick={onClick}>Close</CallToActionExternal>
+        </ModalContainer>
+      </ModalWrapper>
     </Overlay>
   </>
 );

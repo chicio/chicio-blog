@@ -7,7 +7,6 @@ export const matrixDarkGreen = "#003D10";         // Verde scuro per backgrounds
 export const matrixTextGreen = "#00CC33";         // Verde per testi leggibili
 export const matrixBackgroundDark = "#001100";    // Background principale nero-verde
 export const matrixBackgroundLight = "#002200";   // Background secondario più chiaro
-export const matrixAccentCyan = "#00FFFF";        // Accenti ciano per highlights
 
 // Single Matrix Dark Theme
 export const matrixTheme: Colors = {
@@ -20,7 +19,6 @@ export const matrixTheme: Colors = {
   primaryTextColor: "#E8FFE8",
   secondaryTextColor: matrixTextGreen,
   accentColor: matrixNeoGreen,
-  accentColorAbovePrimaryColor: matrixAccentCyan,
   generalBackgroundLight: matrixBackgroundLight,
   boxShadowLight: "rgba(0, 255, 65, 0.3)",
   dividerColor: matrixTextGreen,
