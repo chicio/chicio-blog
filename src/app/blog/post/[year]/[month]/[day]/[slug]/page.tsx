@@ -16,6 +16,7 @@ import { NextPostParameters } from "@/types/page-parameters";
 import { JsonLd } from "@/components/design-system/utils/components/jsond-ld";
 import { Post } from "@/types/post";
 import { BlogPageTemplate } from "@/components/design-system/templates/blog-page-template";
+import { notFound } from "next/navigation";
 
 export const revalidate = false
 
@@ -49,12 +50,18 @@ export async function generateStaticParams() {
 
 export default async function BlogPost({ params }: NextPostParameters) {
   const { year, month, day, slug } = await params;
-  const { frontmatter, content, readingTime } = getPostBy(
+  const post = getPostBy(
     year,
     month,
     day,
     slug,
   );
+
+  if (!post) {
+    notFound();
+  }
+
+  const { frontmatter, content, readingTime } = post;
 
   return (
     <>

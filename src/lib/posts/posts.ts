@@ -3,8 +3,9 @@ import { Post, Tag } from "@/types/post";
 import { slugs } from "@/types/slug";
 import { getPostFromFilePath } from "@/lib/posts/post";
 import { getPostsUsing } from "@/lib/posts/posts-with-parser";
-import {mdExtension} from "@/lib/posts/files";
-import {postsDirectory} from "@/lib/posts/post-dir";
+import { mdExtension } from "@/lib/posts/files";
+import { postsDirectory } from "@/lib/posts/post-dir";
+import { Pagination } from "@/types/pagination";
 
 const postsPerPage = 11;
 
@@ -12,14 +13,14 @@ const generateFileNameFrom = (
   year: string,
   month: string,
   day: string,
-  slug: string,
+  slug: string
 ) => {
   return `${year}-${month}-${day}-${slug}${mdExtension}`;
 };
 
 const groupArrayBy: <T>(array: T[], numberPerGroup: number) => T[][] = (
   data,
-  n,
+  n
 ) => {
   const group = Array(0);
   for (let i = 0, j = 0; i < data.length; i += 1) {
@@ -40,13 +41,14 @@ export const getPostBy = (
   year: string,
   month: string,
   day: string,
-  slug: string,
-): Post => {
-  const fileName = generateFileNameFrom(year, month, day, slug);
-  return getPostFromFilePath(
-    path.join(postsDirectory, fileName),
-      fileName,
-  );
+  slug: string
+): Post | undefined => {
+  try {
+    const fileName = generateFileNameFrom(year, month, day, slug);
+    return getPostFromFilePath(path.join(postsDirectory, fileName), fileName);
+  } catch {
+    return undefined;
+  }
 };
 
 /**
@@ -56,33 +58,39 @@ export const getPostBy = (
 export const getPostsTotalPages = (posts: Post[]) =>
   Math.ceil(posts.length / postsPerPage);
 
-export const getPostsPaginationFor: (page: number) => {
-  launchPost: Post;
-  nextPageUrl: string | undefined;
-  postsGrouped: Post[][];
-  previousPageUrl: string | undefined;
-} = (page: number) => {
-  const posts = getPosts();
-  const totalPages = getPostsTotalPages(posts);
-  const start = (page - 1) * postsPerPage;
-  const paginatedPosts = posts.slice(start, start + postsPerPage);
-  const previousPageUrl =
-    page > 1 ? `${slugs.blogPostsPage}/${page - 1}` : undefined;
-  const nextPageUrl =
-    page < totalPages ? `${slugs.blogPostsPage}/${page + 1}` : undefined;
+export const getPostsPaginationFor: (page: number) => Pagination | undefined = (
+  page: number
+) => {
+  try {
+    const posts = getPosts();
+    const totalPages = getPostsTotalPages(posts);
 
-  const postsGrouped = groupArrayBy(
-    paginatedPosts.slice(1, paginatedPosts.length),
-    2,
-  );
+    if (totalPages < page) {
+      throw new Error("Page does not exists");
+    }
 
-  return {
-    launchPost: paginatedPosts[0],
-    postsGrouped,
-    previousPageUrl,
-    nextPageUrl,
-    totalPages,
-  };
+    const start = (page - 1) * postsPerPage;
+    const paginatedPosts = posts.slice(start, start + postsPerPage);
+    const previousPageUrl =
+      page > 1 ? `${slugs.blogPostsPage}/${page - 1}` : undefined;
+    const nextPageUrl =
+      page < totalPages ? `${slugs.blogPostsPage}/${page + 1}` : undefined;
+
+    const postsGrouped = groupArrayBy(
+      paginatedPosts.slice(1, paginatedPosts.length),
+      2
+    );
+
+    return {
+      launchPost: paginatedPosts[0],
+      postsGrouped,
+      previousPageUrl,
+      nextPageUrl,
+      totalPages,
+    };
+  } catch {
+    return undefined;
+  }
 };
 
 /**
@@ -108,11 +116,11 @@ export const getTags = () => {
           slug: `${slugs.tag}/${tagSlugText}`,
         });
       }
-    }),
+    })
   );
 
   return [...tags.values()].sort((a, b) =>
-    a.tagValue.toLowerCase() < b.tagValue.toLowerCase() ? -1 : 1,
+    a.tagValue.toLowerCase() < b.tagValue.toLowerCase() ? -1 : 1
   );
 };
 
