@@ -4,8 +4,6 @@ import { FC } from "react";
 import { glassmorphism } from "@/components/design-system/atoms/glassmorphism";
 import { Overlay } from "@/components/design-system/atoms/overlay";
 import { CallToActionExternal } from "@/components/design-system/atoms/call-to-action-external";
-import { glowContainer } from "@/components/design-system/atoms/glow";
-import { borderRadius } from "@/components/design-system/atoms/border";
 
 const zIndex = 400;
 
