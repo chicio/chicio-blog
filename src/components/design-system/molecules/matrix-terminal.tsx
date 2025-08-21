@@ -7,22 +7,21 @@ import { Quote } from '@/components/design-system/atoms/quote';
 import { mediaQuery } from '../utils/media-query';
 import { useTypewriter } from '../hooks/use-typewriter';
 import { hideScrollbar } from '../utils/components/hide-scrollbar';
+import { glowText } from '../atoms/glow';
+import { borderRadius } from '../atoms/border';
+import { glassmorphism } from '../atoms/glassmorphism';
 
 const TerminalContainer = styled(motion.div)`
-  background: rgba(0, 0, 0, 0.9);
-  border: 1px solid ${(props) => props.theme.dark.accentColor};
-  border-radius: 8px;
+  ${glassmorphism}
+  ${borderRadius};
   padding: ${(props) => props.theme.spacing[3]};
   font-family: 'Courier New', monospace;
   color: ${(props) => props.theme.dark.accentColor};
-  box-shadow: 
-    0 0 20px ${(props) => props.theme.dark.accentColor}40,
-    inset 0 0 20px rgba(0, 255, 65, 0.1);
   width: 95%;
   max-width: 600px;
   min-width: 280px;
-  height: 150px;
   min-height: 150px;
+  height: 150px;
   margin: 0 auto;
   position: relative;
   z-index: 12;
@@ -96,23 +95,18 @@ const ErrorText = styled.span`
 
 const SuccessText = styled.span`
   color: ${(props) => props.theme.dark.accentColor};
-  text-shadow: 0 0 10px ${(props) => props.theme.dark.accentColor}50;
+  ${glowText}
 `;
 
 const QuoteText = styled(Quote)`
-  color: ${(props) => props.theme.dark.accentColor};
   font-style: italic;
   text-align: center;
   font-family: 'Courier New', monospace;
   margin: ${(props) => props.theme.spacing[4]} 0;
-  text-shadow: 0 0 10px ${(props) => props.theme.dark.accentColor}30;
   font-size: 0.85rem;
   line-height: 1.5;
   font-weight: bold;
-
-  text-shadow: 
-    0 0 5px ${(props) => props.theme.dark.accentColor}40,
-    0 0 10px ${(props) => props.theme.dark.accentColor}20;
+  ${glowText};
 
   ${mediaQuery.minWidth.sm} {
     font-size: 0.9rem;

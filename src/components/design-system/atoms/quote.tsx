@@ -3,6 +3,7 @@
 import styled from "styled-components";
 
 export const Quote = styled.blockquote`
+  color: ${(props) => props.theme.dark.accentColor};
   font-style: italic;
   text-align: center;
   position: relative;

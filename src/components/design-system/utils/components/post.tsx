@@ -9,7 +9,7 @@ import {heading4Style} from "@/components/design-system/atoms/heading4";
 import {heading5Style} from "@/components/design-system/atoms/heading5";
 import {standardLinkStyle} from "@/components/design-system/atoms/standard-link-style";
 import {mediaQuery} from "@/components/design-system/utils/media-query";
-import {borderRadius} from "@/components/design-system/atoms/border-radius";
+import {borderRadius} from "@/components/design-system/atoms/border";
 import {paragraphStyle} from "@/components/design-system/atoms/paragraph";
 import { Heading1 } from '../../atoms/heading1';
 

@@ -1,7 +1,7 @@
-import Image from "next/image";
 import styled from "styled-components";
 import { mediaQuery } from "@/components/design-system/utils/media-query";
 import { FC } from "react";
+import { ImageGlow } from "@/components/design-system/atoms/image-glow";
 
 const ProfilePhotoContainer = styled.div`
   width: 160px;
@@ -15,8 +15,6 @@ const ProfilePhotoContainer = styled.div`
   background: ${(props) => props.theme.dark.boxShadowLight};
 
   img {
-    width: 97%;
-    height: 97%;
     border-radius: 50%;
     object-fit: cover;
   }
@@ -25,16 +23,11 @@ const ProfilePhotoContainer = styled.div`
     width: 200px;
     height: 200px;
   }
-
-  &:hover {
-    background: ${(props) => props.theme.dark.accentColor};
-    box-shadow: 0 0 20px ${(props) => props.theme.dark.accentColor}90;
-  }
 `;
 
 export const ProfilePhoto: FC<{ author: string }> = ({ author }) => (
   <ProfilePhotoContainer>
-    <Image
+    <ImageGlow
       src="/images/authors/fabrizio-duroni.jpg"
       alt={author}
       width={200}

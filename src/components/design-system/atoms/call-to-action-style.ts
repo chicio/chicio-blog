@@ -1,7 +1,7 @@
 'use client'
 
 import { css } from "styled-components";
-import {borderRadius} from "@/components/design-system/atoms/border-radius";
+import {borderRadius} from "@/components/design-system/atoms/border";
 import {mediaQuery} from "@/components/design-system/utils/media-query";
 
 export const callToActionStyle = css`

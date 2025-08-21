@@ -4,30 +4,22 @@ import { FC } from "react";
 import styled from "styled-components";
 import { motion, Variants } from "framer-motion";
 import { mediaQuery } from "@/components/design-system/utils/media-query";
+import { glassmorphism } from "@/components/design-system/atoms/glassmorphism";
 
 const TechnologyCardContainer = styled(motion.div)`
-  background: rgba(0, 17, 0, 0.1);
-  backdrop-filter: blur(10px);
-  border: 1px solid ${(props) => props.theme.dark.accentColor}40;
-  border-radius: 12px;
+  ${glassmorphism}
   padding: ${(props) => props.theme.spacing[4]};
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
   cursor: pointer;
-  transition: all 0.3s ease;
   width: 100%;
   min-height: 140px;
   max-width: 150px;
 
   ${mediaQuery.minWidth.sm} {
     max-width: 250px;
-  }
-
-  &:hover {
-    border-color: ${(props) => props.theme.dark.accentColor};
-    box-shadow: 0 0 20px ${(props) => props.theme.dark.accentColor}40;
   }
 `;
 
@@ -64,17 +56,12 @@ const cardVariants: Variants = {
     opacity: 1,
     transition: { duration: 0.4, type: "spring", stiffness: 100 },
   },
-  hover: {
-    scale: 1.05,
-    transition: { duration: 0.2 },
-  },
 };
 
 export const TechnologyCard: FC<{ tech: Technology, index: number }> = ({ tech, index }) => (
   <TechnologyCardContainer
     key={tech.name}
     variants={cardVariants}
-    whileHover="hover"
     initial="hidden"
     whileInView="visible"
     viewport={{ once: true }}

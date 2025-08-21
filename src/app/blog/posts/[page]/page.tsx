@@ -50,11 +50,8 @@ export default async function BlogPage({
   const pagination = getPostsPaginationFor(pageParam);
 
   if (!pagination) {
-    console.log("Pagination not found");
     notFound();
   }
-
-  console.log(pagination);
 
   const { launchPost, postsGrouped, previousPageUrl, nextPageUrl } = pagination;
   const author = siteMetadata.author;

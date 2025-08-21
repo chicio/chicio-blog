@@ -7,38 +7,36 @@ import { mediaQuery } from "../utils/media-query";
 import { Container } from "../atoms/container";
 import { List } from "../atoms/list";
 import { Paragraph } from "../atoms/paragraph";
-import { borderRadius } from "../atoms/border-radius";
+import { borderColor, borderRadius } from "../atoms/border";
 import { SearchablePostFields } from "@/types/post";
 import Link from "next/link";
 import { hideScrollbar } from "../utils/components/hide-scrollbar";
 import { glassmorphism } from "../atoms/glassmorphism";
+import { glowText } from "../atoms/glow";
 
 const SearchListContainer = styled(Container)`
   position: absolute;
-  backdrop-filter: blur(1px);
   top: 100px;
   right: 0;
   left: 0;
   bottom: 0;
   height: 80vh;
+  width: 95%;
   overflow: scroll;
-  ${hideScrollbar};
-  padding: ${(props) =>
-    props.theme.spacing[2]}; /* Aumentato per contenere il glow effect */
-
+  padding: ${(props) => props.theme.spacing[2]};
   body.scroll-locked & {
     right: var(--scrollbar-width, 0px);
   }
-
+  backdrop-filter: blur(1px);
   box-shadow:
     inset 0 0 3px ${(props) => props.theme.dark.accentColor}AA,
     inset 0 0 8px ${(props) => props.theme.dark.accentColor}99,
     inset 0 0 10px ${(props) => props.theme.dark.accentColor}55;
 
-  border: 1px solid ${(props) => props.theme.dark.accentColor}20;
-  border-radius: ${(props) => props.theme.spacing[2]};
+  ${borderRadius};
+  ${borderColor};
+  ${hideScrollbar};
 
-  width: 95%;
 
   ${mediaQuery.minWidth.xs} {
     width: 100%;
@@ -46,7 +44,7 @@ const SearchListContainer = styled(Container)`
 `;
 
 const SearchHitsList = styled(List)`
-  padding: 0;
+  padding: ${(props) => props.theme.spacing[1]};
   margin: 0;
   display: flex;
   flex-direction: column;
@@ -66,21 +64,6 @@ const SearchHitsList = styled(List)`
 
 const SearchHitCard = styled.li`
   ${glassmorphism};
-  padding: ${(props) =>
-    props.theme.spacing[2]}; /* Aumentato per più spazio interno */
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-  /* Assicura che il contenuto sia allineato a sinistra */
-  text-align: left;
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow:
-      0 12px 40px ${(props) => props.theme.dark.boxShadowLight},
-      0 0 10px ${(props) => props.theme.dark.accentColor}33,
-      inset 0 1px 0 ${(props) => props.theme.dark.accentColor}26;
-    border-color: ${(props) => props.theme.dark.accentColor}66;
-  }
 
   ${mediaQuery.inputDevice.mouse} {
     cursor: pointer;
@@ -102,11 +85,7 @@ const SearchTitle = styled(Paragraph)`
   margin-bottom: ${(props) => props.theme.spacing[2]};
   line-height: 1.3;
   margin: 0 0 ${(props) => props.theme.spacing[2]} 0; /* Reset margin per allineamento pulito */
-
-  /* Matrix glow effect */
-  text-shadow:
-    0 0 5px ${(props) => props.theme.dark.accentColor}40,
-    0 0 10px ${(props) => props.theme.dark.accentColor}20;
+  ${glowText};
 
   ${mediaQuery.minWidth.sm} {
     font-size: ${(props) => props.theme.fontSizes[5]};
@@ -118,9 +97,7 @@ const SearchDescription = styled(Paragraph)`
   opacity: 0.9;
   line-height: 1.5;
   margin: 0;
-
-  /* Subtle glow for description */
-  text-shadow: 0 0 3px ${(props) => props.theme.dark.accentColor}15;
+  ${glowText};
 `;
 
 const SearchBoxContainer = styled.div`

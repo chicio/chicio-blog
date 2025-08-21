@@ -1,18 +1,20 @@
 'use client'
 
+import { ContainerFluid } from "@/components/design-system/atoms/container-fluid";
+import { glassmorphism } from "@/components/design-system/atoms/glassmorphism";
+import { Paragraph } from "@/components/design-system/atoms/paragraph";
+import { artDescriptions } from "@/types/art";
+import { motion } from "framer-motion";
+import Image from "next/image";
 import { FC, useState } from "react";
 import styled from "styled-components";
-import Image from "next/image";
-import {artDescriptions} from "@/types/art";
-import { ContainerFluid } from "@/components/design-system/atoms/container-fluid";
-import { borderRadius } from "@/components/design-system/atoms/border-radius";
-import { mediaQuery } from "@/components/design-system/utils/media-query";
-import { Paragraph } from "@/components/design-system/atoms/paragraph";
 import { ModalWithImage } from "./modal-with-image";
+import { borderRadius } from "@/components/design-system/atoms/border";
+import { glowText } from "@/components/design-system/atoms/glow";
 
 const GalleryContainer = styled(ContainerFluid)`
   padding: 0;
-  margin: 0 0 ${(props) => props.theme.spacing[7]};
+  margin: ${(props) => props.theme.spacing[7]} 0 ${(props) => props.theme.spacing[7]};
   display: grid;
   align-items: center;
   justify-items: center;
@@ -22,56 +24,43 @@ const GalleryContainer = styled(ContainerFluid)`
 `;
 
 const GalleryImageFrame = styled.figure`
-  padding: ${(props) => props.theme.spacing[1]};
+  padding: 0;
   margin: 0;
-  background-color: ${(props) => props.theme.light.generalBackgroundLight};
-  box-shadow: 0 3px 10px 0 ${(props) => props.theme.light.boxShadowLight};
+  background: none;
+  box-shadow: none;
   ${borderRadius};
+`;
 
-  ${mediaQuery.minWidth.md} {
-    ${mediaQuery.inputDevice.mouse} {
-      transition: transform 0.2s;
-
-      &:hover {
-        transform: scale(1.025);
-      }
-    }
-  }
-
-  ${mediaQuery.dark} {
-    background: ${(props) => props.theme.dark.generalBackgroundLight};
-    box-shadow: 0 3px 10px 0 ${(props) => props.theme.dark.boxShadowLight};
-  }
+const GalleryImageContainer = styled.div`
+  overflow: hidden;
+  ${borderRadius};
+  margin-bottom: 4px;
 `;
 
 const GalleryImageDescription = styled(Paragraph)`
-  width: 280px;
-  height: 55px;
+  width: 100%;
+  height: 44px;
   text-align: center;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-left: 0;
-  margin-right: 0;
+  margin: 0;
+  word-break: break-word;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+
+  ${glowText};
 `;
+
+const GalleryItemContainer = styled.div`
+  ${glassmorphism};
+  padding: 8px;
+`
 
 const GalleryImage = styled(Image)`
   object-fit: cover;
-
-  ${mediaQuery.minWidth.md} {
-    ${mediaQuery.inputDevice.mouse} {
-      transition: opacity 0.25s ease-in-out;
-
-      &:hover {
-        opacity: 0.7;
-      }
-    }
-  }
-`;
-
-const GalleryImageContainer = styled.div`
-    overflow: hidden;
-    ${borderRadius};
+  width: 100%;
 `;
 
 export const ArtGallery: FC = () => {
@@ -79,21 +68,37 @@ export const ArtGallery: FC = () => {
     null,
   );
 
+  const cardVariants = {
+    hidden: { opacity: 0, scale: 0.95, y: 20 },
+    visible: { opacity: 1, scale: 1, y: 0 },
+  };
+
   return (
     <>
       <GalleryContainer>
-        {artDescriptions.map((art) => {
-          const imageUrl = `/images/art/${art.name}`
-
+        {artDescriptions.map((art, i) => {
+          const imageUrl = `/images/art/${art.name}`;
           return (
-            <GalleryImageFrame key={art.name} onClick={() => setCurrentImage(imageUrl)}>
-              <GalleryImageContainer>
-                <GalleryImage alt={art.name} src={imageUrl} width={280} height={280} />
-              </GalleryImageContainer>
-              <GalleryImageDescription>
-                {art.description}
-              </GalleryImageDescription>
-            </GalleryImageFrame>
+            <motion.div
+              key={art.name}
+              variants={cardVariants}
+              initial="hidden"
+              animate="visible"
+              whileHover="hover"
+              transition={{ duration: 0.4, delay: i * 0.08 }}
+              style={{ width: '100%' }}
+            >
+              <GalleryItemContainer>
+                <GalleryImageFrame onClick={() => setCurrentImage(imageUrl)}>
+                  <GalleryImageContainer>
+                    <GalleryImage alt={art.name} src={imageUrl} width={280} height={280} />
+                  </GalleryImageContainer>
+                  <GalleryImageDescription>
+                    {art.description}
+                  </GalleryImageDescription>
+                </GalleryImageFrame>
+              </GalleryItemContainer>
+            </motion.div>
           );
         })}
       </GalleryContainer>

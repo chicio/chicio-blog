@@ -3,6 +3,7 @@
 import styled, { css } from "styled-components";
 import { MenuItemWithTracking } from "../atoms/menu-item-with-tracking";
 import { mediaQuery } from "../utils/media-query";
+import { glowText } from "../atoms/glow";
 
 interface MatrixMenuItemProps {
   selected?: boolean;
@@ -22,6 +23,7 @@ export const MatrixMenuItem = styled(MenuItemWithTracking)<MatrixMenuItemProps>`
   display: flex;
   align-items: center;
   justify-content: center;
+  ${glowText}
 
   /* Base styling per varianti */
   ${(props) => props.variant === 'footer' && css`
@@ -50,7 +52,6 @@ export const MatrixMenuItem = styled(MenuItemWithTracking)<MatrixMenuItemProps>`
     }
   `}
 
-  /* Stato selected (pagina corrente) */
   ${(props) => props.selected && css`
     color: ${props.theme.dark.accentColor} !important;
     background: ${props.theme.dark.accentColor}26;

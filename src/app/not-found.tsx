@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import styled from "styled-components";
 import { ContainerFullscreen } from "@/components/design-system/atoms/container-fullscreen";
@@ -33,37 +33,33 @@ const ContentWrapper = styled.div`
 `;
 
 const Matrix404Title = styled(Heading1)`
-  text-shadow: 
-    0 0 10px ${(props) => props.theme.dark.accentColor},
-    0 0 20px ${(props) => props.theme.dark.accentColor},
-    0 0 40px ${(props) => props.theme.dark.accentColor};
   animation: ${glitch} 2s infinite;
   position: relative;
 
   font-size: 72px;
 
-    ${mediaQuery.minWidth.sm} {
-      font-size: 100px;
-    }
+  ${mediaQuery.minWidth.sm} {
+    font-size: 100px;
+  }
 `;
 
 const terminalLines = [
   { text: "Scanning the Matrix...", delay: 600 },
   { text: "Accessing page...", delay: 700 },
-  { text: "ERROR 404: Page not found", type: 'error' as const, delay: 900 },
-  { text: "This is your last chance...", type: 'quote' as const, delay: 1200 },
+  { text: "ERROR 404: Page not found", type: "error" as const, delay: 900 },
+  { text: "This is your last chance...", type: "quote" as const, delay: 1200 },
 ];
 
 export default function notFoundPage() {
   return (
     <Matrix404Container>
       <MatrixRain fontSize={14} speed={35} density={0.975} />
-      
+
       <ContentWrapper>
         <Matrix404Title>404</Matrix404Title>
-        
+
         <MatrixTerminal lines={terminalLines} />
-        
+
         <MatrixPills
           redPillHref="/"
           bluePillHref="javascript:history.back()"
@@ -73,4 +69,4 @@ export default function notFoundPage() {
       </ContentWrapper>
     </Matrix404Container>
   );
-};
+}

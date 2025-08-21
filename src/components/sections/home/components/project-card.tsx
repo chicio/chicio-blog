@@ -1,13 +1,12 @@
-import { borderRadius } from "@/components/design-system/atoms/border-radius";
 import { CallToActionExternalWithTracking } from "@/components/design-system/atoms/call-to-action-external-with-tracking";
 import { GlassmorphismBackground } from "@/components/design-system/atoms/glassmorphism-background";
 import { Heading4 } from "@/components/design-system/atoms/heading4";
+import { ImageGlow } from "@/components/design-system/atoms/image-glow";
 import { List } from "@/components/design-system/atoms/list";
 import { Paragraph } from "@/components/design-system/atoms/paragraph";
 import { mediaQuery } from "@/components/design-system/utils/media-query";
 import { Project } from "@/types/projects";
 import { motion, Variants } from "framer-motion";
-import Image from "next/image";
 import { FC } from "react";
 import styled from "styled-components";
 
@@ -39,35 +38,18 @@ const ProjectImageContainer = styled(motion.div)`
   }
 `;
 
-const ProjectImage = styled(Image)`
-  ${borderRadius};
+const ProjectImage = styled(ImageGlow)`
   position: relative;
   z-index: 2;
-  box-shadow:
-    0 8px 32px ${(props) => props.theme.dark.primaryColor}26,
-    0 4px 16px ${(props) => props.theme.dark.generalBackground}4D,
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  border: 1px solid ${(props) => props.theme.dark.accentColor}40;
   object-fit: cover;
   width: 100%;
   height: auto;
   max-width: 500px;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 
   ${mediaQuery.minWidth.md} {
     height: 100%;
     width: auto;
     max-width: 100%;
-  }
-
-  &:hover {
-    transform: scale(1.03) translateY(-4px);
-    box-shadow:
-      0 0 15px ${(props) => props.theme.dark.primaryColor}99,
-      0 0 25px ${(props) => props.theme.dark.primaryColor}66,
-      inset 0 1px 0 rgba(255, 255, 255, 0.15);
-    border-color: ${(props) => props.theme.dark.primaryColor}CC;
-    filter: contrast(1.1) saturate(1.2);
   }
 `;
 
