@@ -1,4 +1,3 @@
-import { FloatingChatButton } from "@/components/design-system/molecules/floating-chat-button";
 import { FloatingDownArrow } from "@/components/design-system/molecules/floating-down-arrow";
 import { MatrixBackground } from "@/components/design-system/molecules/matrix-background";
 import { Footer } from "@/components/design-system/organism/footer";
@@ -37,7 +36,6 @@ export default function Home() {
           trackingCategory={tracking.category.home}
         />
       </SnapScrollContainer>
-      {/* <FloatingChatButton /> */}
       <JsonLd
         ogPageType="website"
         url={siteMetadata.siteUrl}
