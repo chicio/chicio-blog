@@ -28,7 +28,6 @@ export const Overlay: FC<OverlayProps> = ({ zIndex, onClick, delay = 0, children
 
   return (
     <StyledOverlay 
-      // ref={overlayRef}
       $zIndex={zIndex} 
       onClick={onClick}
       initial={{ opacity: 0 }}

@@ -44,6 +44,10 @@ const MatrixBackgroundRain = styled.div`
   right: 0;
   bottom: 0;
   z-index: 1;
+
+  body.scroll-locked & {
+    right: var(--scrollbar-width, 0px);
+  }
 `;
 
 const BlogHeaderContainer = styled.div<{ $compact?: boolean }>`
