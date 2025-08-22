@@ -5,6 +5,8 @@ import {FC} from "react";
 import {StandardInternalLinkWithTracking} from "@/components/design-system/atoms/standard-internal-link-with-tracking";
 import {tracking} from "@/types/tracking";
 import {mediaQuery} from "@/components/design-system/utils/media-query";
+import { glowContainer, glowText } from "../atoms/glow";
+import { glassmorphism } from "../atoms/glassmorphism";
 
 interface TagContentProps {
   big: boolean;
@@ -19,36 +21,26 @@ const TagLink = styled(StandardInternalLinkWithTracking)<
   &:hover {
     text-decoration: none;
   }
-
-  ${(props) =>
-    props.$big === true &&
-    css`
-      margin-bottom: ${(props) => props.theme.spacing[4]};
-    `}
 `;
 
 const TagText = styled.span<TransientProps<TagContentProps>>`
-  background-color: ${(props) => props.theme.light.primaryColor};
-  color: ${(props) => props.theme.light.textAbovePrimaryColor};
+  color: ${(props) => props.theme.dark.primaryTextColor};
   margin-right: ${(props) => props.theme.spacing[0]};
   margin-bottom: ${(props) => props.theme.spacing[0]};
-  border-radius: 3px;
   font-size: ${(props) =>
     props.$big ? props.theme.fontSizes[5] : props.theme.fontSizes[1]};
-  padding: 0.5px 5px;
+  padding: ${props => props.theme.spacing[1]};
+  display: block;
+  line-height: 1;
+  ${glowContainer};
+  ${glowText};
 
   ${(props) =>
     props.$big &&
     css`
-      display: block;
       margin-right: ${(props) => props.theme.spacing[4]};
-      margin-bottom: ${(props) => props.theme.spacing[4]};
+      margin-bottom: ${(props) => props.theme.spacing[6]};
     `};
-
-  ${mediaQuery.dark} {
-    background-color: ${(props) => props.theme.dark.primaryColor};
-    color: ${(props) => props.theme.dark.textAbovePrimaryColor};
-  }
 `;
 
 export type TagProps = TagContentProps & {
