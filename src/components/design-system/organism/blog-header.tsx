@@ -145,7 +145,7 @@ export const BlogHeader: FC<DesktopHeaderProps> = ({ big }) => (
     <BlogHeaderLogo compact={!big} />
     <MatrixBackground $big={big}>
       <MatrixBackgroundRain>
-        <MatrixRain fontSize={14} speed={60} density={0.8} />
+        <MatrixRain fontSize={14} speed={60} density={0.95} />
       </MatrixBackgroundRain>
     </MatrixBackground>
   </Container>
