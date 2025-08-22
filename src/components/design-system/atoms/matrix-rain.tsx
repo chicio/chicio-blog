@@ -1,8 +1,15 @@
-'use client'
+"use client";
 
-import React, { useRef, useEffect } from 'react';
-import styled from 'styled-components';
-import { matrixNeoGreen, matrixPrimaryGreen, matrixTextGreen } from '../themes/blog-colors';
+import React, { useRef, useEffect } from "react";
+import styled from "styled-components";
+import {
+  matrixBackgroundDark,
+  matrixBackgroundLight,
+  matrixDarkGreen,
+  matrixNeoGreen,
+  matrixPrimaryGreen,
+  matrixTextGreen,
+} from "../themes/blog-colors";
 
 const MatrixCanvas = styled.canvas`
   position: absolute;
@@ -12,132 +19,120 @@ const MatrixCanvas = styled.canvas`
   height: 100%;
   z-index: 1;
   pointer-events: none;
-  display: block; 
+  display: block;
 `;
 
 interface MatrixRainProps {
-  fontSize?: number;
-  speed?: number;
-  density?: number;
+  fontSize: number;
+  speed: number;
+  density: number;
 }
 
 export const MatrixRain: React.FC<MatrixRainProps> = ({
-  fontSize = 16,
-  speed = 50,
-  density = 0.90
+  fontSize,
+  speed,
+  density,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
 
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
+    if (!canvas) {
+      return;
+    }
 
-    // Set canvas size to full container
+    const context = canvas.getContext("2d");
+
+    if (!context) {
+      return;
+    }
+
     const setCanvasSize = () => {
       const rect = canvas.getBoundingClientRect();
       const dpr = window.devicePixelRatio || 1;
-
-      // Set actual size in memory (scaled for high DPI)
       canvas.width = rect.width * dpr;
       canvas.height = rect.height * dpr;
-
-      // Scale the drawing context back down
-      ctx.scale(dpr, dpr);
-
-      // Set display size (CSS)
-      canvas.style.width = rect.width + 'px';
-      canvas.style.height = rect.height + 'px';
+      context.scale(dpr, dpr);
     };
 
-    setCanvasSize();
-    window.addEventListener('resize', setCanvasSize);
-
-    // Original Matrix katakana characters + some symbols
-    const matrixChars = 'ﾊﾐﾋｰｳｼﾅﾓﾆｻﾜﾂｵﾘｱﾎﾃﾏｹﾒｴｶｷﾑﾕﾗｾﾈｽﾀﾇﾍ012345789Z:.=*+-<>';
-    const matrix = matrixChars.split('');
-
-    // Calculate columns based on actual canvas width
-    let drops: number[] = [];
-
-    // Initialize drops
     const initializeDrops = () => {
-      let columns = Math.floor((canvas.width / window.devicePixelRatio) / fontSize);
-      drops = [];
+      const columns = Math.floor(
+        canvas.width / window.devicePixelRatio / fontSize
+      );
+      const drops = [];
       for (let x = 0; x < columns; x++) {
-        drops[x] = Math.floor(Math.random() * (canvas.height / window.devicePixelRatio) / fontSize);
+        drops[x] = Math.floor(
+          (Math.random() * (canvas.height / window.devicePixelRatio)) / fontSize
+        );
       }
+      return drops;
     };
 
-    initializeDrops();
+    const matrix = "ﾊﾐﾋｰｳｼﾅﾓﾆｻﾜﾂｵﾘｱﾎﾃﾏｹﾒｴｶｷﾑﾕﾗｾﾈｽﾀﾇﾍ012345789Z:.=*+-<>".split(
+      ""
+    );
+    const colors = [
+      { threshold: 0.05, color: matrixPrimaryGreen },
+      { threshold: 0.15, color: matrixNeoGreen },
+      { threshold: 0.4, color: matrixTextGreen },
+      { threshold: 0.7, color: matrixDarkGreen },
+      { threshold: 0.9, color: matrixDarkGreen },
+      { threshold: Number.MAX_SAFE_INTEGER, color: matrixBackgroundLight },
+    ];
+    const font = `${fontSize}px 'Courier New', monospace`;
+    const backgroundColor = `${matrixBackgroundDark}10`
+    let drops: number[] = initializeDrops();
 
-    // Matrix colors from our theme
-    const matrixColors = {
-      bright: matrixPrimaryGreen,       // matrixPrimaryGreen - brightest
-      medium: matrixNeoGreen,       // matrixNeoGreen - medium bright
-      normal: matrixTextGreen,       // matrixTextGreen - normal
-      dim: '#006600',          // dimmer green
-      verydim: '#003300'       // very dim green
+    const initialize = () => {
+      setCanvasSize();
+      drops = initializeDrops();
     };
 
-    const draw = () => {
-      // Create trailing fade effect
-      ctx.fillStyle = 'rgba(0, 17, 0, 0.04)';
-      ctx.fillRect(0, 0, canvas.width / window.devicePixelRatio, canvas.height / window.devicePixelRatio);
+    initialize();
 
-      ctx.font = `${fontSize}px 'Courier New', monospace`;
+    let lastFrame = performance.now();
+    let animationFrameId: number;
 
-      // Draw characters
+    const draw = (now: number) => {
+      const elapsed = now - lastFrame;
+
+      if (elapsed < speed) {
+        animationFrameId = requestAnimationFrame(draw);
+        return;
+      }
+      lastFrame = now;
+      const height = canvas.height / window.devicePixelRatio;
+      const width = canvas.width / window.devicePixelRatio;
+
+      context.fillStyle = backgroundColor;
+      context.fillRect(0, 0, width, height);
+      context.font = font;
+
       for (let i = 0; i < drops.length; i++) {
-        // Random character
         const text = matrix[Math.floor(Math.random() * matrix.length)];
-
-        // Color variation for depth effect (more Matrix-like)
-        const rand = Math.random();
-        if (rand < 0.05) {
-          ctx.fillStyle = matrixColors.bright;   // Very rare bright white-green
-        } else if (rand < 0.15) {
-          ctx.fillStyle = matrixColors.medium;   // Rare bright green
-        } else if (rand < 0.4) {
-          ctx.fillStyle = matrixColors.normal;   // Common medium green
-        } else if (rand < 0.7) {
-          ctx.fillStyle = matrixColors.dim;      // Common dim green
-        } else {
-          ctx.fillStyle = matrixColors.verydim;  // Very dim green
-        }
-
-        // Draw character
+        const color = colors.find(({ threshold }) => Math.random() < threshold)!.color;
+        context.fillStyle = color;
         const x = i * fontSize;
         const y = drops[i] * fontSize;
-        ctx.fillText(text, x, y);
 
-        // Reset drop when it reaches bottom or randomly
-        if (y > (canvas.height / window.devicePixelRatio) && Math.random() > density) {
+        context.fillText(text, x, y);
+
+        if (y > height && Math.random() > density) {
           drops[i] = 0;
         }
 
-        // Move drop down
         drops[i]++;
       }
+      animationFrameId = requestAnimationFrame(draw);
     };
 
-    // Animation loop
-    const interval = setInterval(draw, speed);
-
-    // Handle resize
-    const handleResize = () => {
-      setCanvasSize();
-      initializeDrops();
-    };
-
-    window.addEventListener('resize', handleResize);
+    animationFrameId = requestAnimationFrame(draw);
+    window.addEventListener("resize", initialize);
 
     return () => {
-      clearInterval(interval);
-      window.removeEventListener('resize', setCanvasSize);
-      window.removeEventListener('resize', handleResize);
+      cancelAnimationFrame(animationFrameId);
+      window.removeEventListener("resize", initialize);
     };
   }, [fontSize, speed, density]);
 
