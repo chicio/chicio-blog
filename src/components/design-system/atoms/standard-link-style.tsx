@@ -6,18 +6,16 @@ import { glowText } from "./glow";
 
 export const standardLinkStyle = css`
   font-size: ${(props) => props.theme.fontSizes[2]};
-  text-decoration: none;
   line-height: ${(props) => props.theme.lineHeight};
   color: ${(props) => props.theme.dark.accentColor};
   transition: transform 0.35s;
-  display: inline-block;
+  text-decoration: none;
 
   ${glowText}
 
   ${mediaQuery.inputDevice.mouse} {
     &:hover {
-      color: ${(props) => props.theme.dark.accentColor};
-      transform: scale(1.02) !important;
+      text-decoration: underline;
     }
   }
 `;
