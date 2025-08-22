@@ -95,6 +95,11 @@ const Tooltip = styled(motion.div)`
 
 export const FloatingChatButton = () => {
   const [isAnimationComplete, setIsAnimationComplete] = useState(false);
+  const pathname = usePathname();
+
+  if(pathname.startsWith("/chat")) {
+    return null;
+  }
 
   const ButtonContent = (
     <FloatingContainer

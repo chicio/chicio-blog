@@ -13,6 +13,7 @@ import Link from "next/link";
 import { hideScrollbar } from "../utils/components/hide-scrollbar";
 import { glassmorphism } from "../atoms/glassmorphism";
 import { glowText } from "../atoms/glow";
+import { InputField } from "../atoms/input-field";
 
 const SearchListContainer = styled(Container)`
   position: absolute;
@@ -36,7 +37,6 @@ const SearchListContainer = styled(Container)`
   ${borderRadius};
   ${borderColor};
   ${hideScrollbar};
-
 
   ${mediaQuery.minWidth.xs} {
     width: 100%;
@@ -100,7 +100,7 @@ const SearchDescription = styled(Paragraph)`
   ${glowText};
 `;
 
-const SearchBoxContainer = styled.div`
+const SearchBoxContainer = styled.div<TransientProps<{ startSearch: boolean }>>`
   transform: translate(0, 0);
   margin-left: auto;
   position: absolute;
@@ -115,7 +115,8 @@ const SearchBoxContainer = styled.div`
   }
 
   ${mediaQuery.inputDevice.mouse} {
-    &:hover, &:hover * {
+    &:hover,
+    &:hover * {
       border-color: ${(props) => props.theme.dark.accentColor};
     }
 
@@ -124,8 +125,8 @@ const SearchBoxContainer = styled.div`
     }
 
     &:hover {
-      background: ${(props) => props.theme.dark.accentColor}1A;
-      box-shadow: 0 4px 12px ${(props) => props.theme.dark.accentColor}33;
+      background: ${(props) => !props.$startSearch && `${props.theme.dark.accentColor}1A`};
+      box-shadow: ${(props) => !props.$startSearch && `0 4px 12px ${props.theme.dark.accentColor}33`};
     }
   }
 `;
@@ -149,28 +150,15 @@ const SearchAltContainer = styled.span<TransientProps<StartSearchProps>>`
     `}
 `;
 
-const SearchBoxInput = styled.input<TransientProps<StartSearchProps>>`
+const SearchBoxInput = styled(InputField)<TransientProps<StartSearchProps>>`
   padding: 10px;
   width: 35px;
   height: 35px;
-  background: none;
-  border-radius: 50px;
-  box-sizing: border-box;
-  font-size: ${(props) => props.theme.fontSizes[3]};
-  border: 1px solid ${(props) => props.theme.dark.primaryTextColor};
-  outline: none;
-  transition: 0.5s;
-  color: transparent;
 
   ${(props) =>
     props.$startSearch &&
     css`
-      color: ${(props) => props.theme.dark.primaryTextColor};
       width: 150px;
-      background: ${(props) => props.theme.dark.generalBackground};
-      border: 1px solid ${(props) => props.theme.dark.accentColor};
-      color: ${(props) => props.theme.dark.accentColor};
-      ${borderRadius};
     `}
 `;
 
@@ -182,7 +170,7 @@ export const SearchBox: FC<
   StartSearchProps &
     OnClickProp & { onChange: (e: ChangeEvent<HTMLInputElement>) => void }
 > = ({ startSearch, onClick, onChange }) => (
-  <SearchBoxContainer>
+  <SearchBoxContainer $startSearch={startSearch}>
     <SearchBoxInput
       $startSearch={startSearch}
       placeholder={startSearch ? "Search" : ""}
