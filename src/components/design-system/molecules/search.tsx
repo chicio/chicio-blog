@@ -106,10 +106,24 @@ const SearchBoxContainer = styled.div`
   position: absolute;
   top: 10px;
   right: 10px;
+  color: ${(props) => props.theme.dark.primaryTextColor};
+  border-radius: 50%;
 
   ${mediaQuery.minWidth.sm} {
     position: static;
     margin-left: auto;
+  }
+
+  ${mediaQuery.inputDevice.mouse} {
+    &:hover, &:hover * {
+      border-color: ${(props) => props.theme.dark.accentColor};
+      color: ${(props) => props.theme.dark.accentColor};
+    }
+
+    &:hover {
+      background: ${(props) => props.theme.dark.accentColor}1A;
+      box-shadow: 0 4px 12px ${(props) => props.theme.dark.accentColor}33;
+    }
   }
 `;
 
@@ -122,7 +136,6 @@ const SearchAltContainer = styled.span<TransientProps<StartSearchProps>>`
   top: 50%;
   right: -3px;
   transform: translate(-50%, -50%);
-  color: ${(props) => props.theme.dark.primaryTextColor};
   transition: 0.2s;
 
   ${(props) =>
