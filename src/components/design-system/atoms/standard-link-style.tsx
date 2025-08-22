@@ -1,23 +1,23 @@
-'use client'
+"use client";
 
 import { css } from "styled-components";
-import {mediaQuery} from "@/components/design-system/utils/media-query";
+import { mediaQuery } from "@/components/design-system/utils/media-query";
+import { glowText } from "./glow";
 
 export const standardLinkStyle = css`
   font-size: ${(props) => props.theme.fontSizes[2]};
-  color: ${(props) => props.theme.light.accentColor};
   text-decoration: none;
   line-height: ${(props) => props.theme.lineHeight};
+  color: ${(props) => props.theme.dark.accentColor};
+  transition: transform 0.35s;
+  display: inline-block;
 
-  ${mediaQuery.dark} {
-    color: ${(props) => props.theme.dark.accentColor};
-  }
+  ${glowText}
 
-  &:hover {
-    color: ${(props) => props.theme.light.accentColor};
-
-    ${mediaQuery.dark} {
+  ${mediaQuery.inputDevice.mouse} {
+    &:hover {
       color: ${(props) => props.theme.dark.accentColor};
+      transform: scale(1.02) !important;
     }
   }
 `;

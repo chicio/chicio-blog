@@ -68,7 +68,6 @@ const PostContentContainer = styled.div`
 
   & a {
     ${standardLinkStyle};
-    line-height: ${(props) => props.theme.lineHeight};
   }
 
   & blockquote {
