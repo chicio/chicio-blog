@@ -54,6 +54,7 @@ const PostCardImage = styled(Image)`
   width: 100%;
   object-fit: cover;
   height: 200px;
+  background-color: ${(props) => props.theme.light.generalBackground};
   ${borderRadius}
 
   ${mediaQuery.minWidth.sm} {

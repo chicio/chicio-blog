@@ -117,6 +117,9 @@ const SearchBoxContainer = styled.div`
   ${mediaQuery.inputDevice.mouse} {
     &:hover, &:hover * {
       border-color: ${(props) => props.theme.dark.accentColor};
+    }
+
+    &:hover span {
       color: ${(props) => props.theme.dark.accentColor};
     }
 

@@ -24,6 +24,5 @@ export const matrixTheme: Colors = {
   dividerColor: matrixTextGreen,
 };
 
-// Legacy exports for backward compatibility (will be removed)
 export const blogDark = matrixTheme;
 export const blogLight = matrixTheme; // Same as dark now

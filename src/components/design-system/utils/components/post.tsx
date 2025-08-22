@@ -1,17 +1,19 @@
-'use client'
+"use client";
 
-import 'highlight.js/styles/tokyo-night-dark.css';
+import "highlight.js/styles/tokyo-night-dark.css";
 import { FC } from "react";
 import styled from "styled-components";
-import {heading2Style} from "@/components/design-system/atoms/heading2";
-import {heading3Style} from "@/components/design-system/atoms/heading3";
-import {heading4Style} from "@/components/design-system/atoms/heading4";
-import {heading5Style} from "@/components/design-system/atoms/heading5";
-import {standardLinkStyle} from "@/components/design-system/atoms/standard-link-style";
-import {mediaQuery} from "@/components/design-system/utils/media-query";
-import {borderRadius} from "@/components/design-system/atoms/border";
-import {paragraphStyle} from "@/components/design-system/atoms/paragraph";
-import { Heading1 } from '../../atoms/heading1';
+import { heading2Style } from "@/components/design-system/atoms/heading2";
+import { heading3Style } from "@/components/design-system/atoms/heading3";
+import { heading4Style } from "@/components/design-system/atoms/heading4";
+import { heading5Style } from "@/components/design-system/atoms/heading5";
+import { standardLinkStyle } from "@/components/design-system/atoms/standard-link-style";
+import { borderRadius } from "@/components/design-system/atoms/border";
+import { paragraphStyle } from "@/components/design-system/atoms/paragraph";
+import { Heading1 } from "../../atoms/heading1";
+import { glowContainer } from "../../atoms/glow";
+import { glassmorphism } from "../../atoms/glassmorphism";
+import { hideScrollbar } from "./hide-scrollbar";
 
 const PostContentContainer = styled.div`
   color: ${(props) => props.theme.light.primaryTextColor};
@@ -86,26 +88,17 @@ const PostContentContainer = styled.div`
   }
 
   & hr {
-    color: ${(props) => props.theme.light.dividerColor};
-    background-color: ${(props) => props.theme.light.dividerColor};
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      ${(props) => props.theme.dark.generalBackgroundLight},
+      ${(props) => props.theme.dark.accentColor},
+      ${(props) => props.theme.dark.generalBackgroundLight}
+    );
     width: 100%;
     margin: ${(props) => props.theme.spacing[4]} 0;
-    border: 0;
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
-  }
-
-  ${mediaQuery.dark} {
-    color: ${(props) => props.theme.dark.primaryTextColor};
-
-    & blockquote {
-      color: ${(props) => props.theme.dark.secondaryTextColor};
-      border-left: 5px solid ${(props) => props.theme.dark.secondaryTextColor};
-    }
-
-    & hr {
-      color: ${(props) => props.theme.dark.dividerColor};
-      background-color: ${(props) => props.theme.dark.dividerColor};
-    }
+    height: 1px;
+    border: none;
   }
 
   & .embedVideo-container {
@@ -134,6 +127,7 @@ const PostContentContainer = styled.div`
     overflow-x: scroll;
     text-align: initial;
     line-height: ${(props) => props.theme.lineHeight};
+    ${hideScrollbar};
   }
 
   & .katex * {
@@ -143,63 +137,62 @@ const PostContentContainer = styled.div`
   & .emoji-icon {
     top: 4px;
   }
-    
+
   & pre {
-      font-family: Menlo, Monaco, "Courier New", monospace;
-      font-size: ${(props) => props.theme.fontSizes[1]};
-      ${borderRadius};
-      box-shadow: 0 3px 10px 0 ${(props) => props.theme.light.boxShadowLight};
-  
-      ${mediaQuery.dark} {
-          box-shadow: 0 3px 10px 0 ${(props) => props.theme.dark.boxShadowLight};
-      }    
+    font-size: ${(props) => props.theme.fontSizes[1]};
+    overflow: hidden;
+    ${glassmorphism};
+    ${hideScrollbar};
   }
-  
+
   & p code {
-      font-family: Menlo, Monaco, "Courier New", monospace;
-      font-size: ${(props) => props.theme.fontSizes[1]};
-      color: #d2a8ff;
-      background: #0d1117;
-      padding: 4px;
-      ${borderRadius};
+    font-size: ${(props) => props.theme.fontSizes[1]};
+    color: #d2a8ff;
+    background: #0d1117;
+    padding: 4px;
+    ${borderRadius};
   }
 
   & li code {
-      font-family: Menlo, Monaco, "Courier New", monospace;
-      font-size: ${(props) => props.theme.fontSizes[1]};
-      color: #d2a8ff;
-      background: #0d1117;
-      padding: 4px;
-      ${borderRadius};
+    font-size: ${(props) => props.theme.fontSizes[1]};
+    color: #d2a8ff;
+    background: #0d1117;
+    padding: 4px;
+    ${borderRadius};
   }
 
   & li strong {
-    font-family: 'Open Sans Bold', Arial, sans-serif;
+    font-family: "Open Sans Bold", Arial, sans-serif;
   }
-  
+
   & img {
-      width: 100%;
+    width: 100%;
+    ${glowContainer}
   }
-  
+
   & iframe {
-      width: 100%;
-      height: auto;
-      aspect-ratio: 16 / 9;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
   }
-  
+
   & p strong {
-      ${paragraphStyle};
-      font-family: 'Open Sans Bold', Arial, sans-serif;
-      font-weight: 600;
+    ${paragraphStyle};
+    font-family: "Open Sans Bold", Arial, sans-serif;
+    font-weight: 600;
+  }
+
+  & iframe {
+    ${glowContainer};
   }
 `;
 
 interface PostContentProps {
-    html: string;
+  html: string;
 }
 
 export const PostContent: FC<PostContentProps> = ({ html }) => (
-    <PostContentContainer dangerouslySetInnerHTML={{ __html: html }} />
+  <PostContentContainer dangerouslySetInnerHTML={{ __html: html }} />
 );
 
 export const PostTitle = styled(Heading1)`

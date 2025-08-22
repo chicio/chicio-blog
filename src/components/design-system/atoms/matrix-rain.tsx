@@ -2,6 +2,7 @@
 
 import React, { useRef, useEffect } from 'react';
 import styled from 'styled-components';
+import { matrixNeoGreen, matrixPrimaryGreen, matrixTextGreen } from '../themes/blog-colors';
 
 const MatrixCanvas = styled.canvas`
   position: absolute;
@@ -11,7 +12,7 @@ const MatrixCanvas = styled.canvas`
   height: 100%;
   z-index: 1;
   pointer-events: none;
-  display: block; /* Fix potential display issues */
+  display: block; 
 `;
 
 interface MatrixRainProps {
@@ -23,7 +24,7 @@ interface MatrixRainProps {
 export const MatrixRain: React.FC<MatrixRainProps> = ({
   fontSize = 16,
   speed = 50,
-  density = 0.95
+  density = 0.90
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -59,13 +60,11 @@ export const MatrixRain: React.FC<MatrixRainProps> = ({
     const matrix = matrixChars.split('');
 
     // Calculate columns based on actual canvas width
-    const getColumns = () => Math.floor((canvas.width / window.devicePixelRatio) / fontSize);
-    let columns = getColumns();
     let drops: number[] = [];
 
     // Initialize drops
     const initializeDrops = () => {
-      columns = getColumns();
+      let columns = Math.floor((canvas.width / window.devicePixelRatio) / fontSize);
       drops = [];
       for (let x = 0; x < columns; x++) {
         drops[x] = Math.floor(Math.random() * (canvas.height / window.devicePixelRatio) / fontSize);
@@ -76,9 +75,9 @@ export const MatrixRain: React.FC<MatrixRainProps> = ({
 
     // Matrix colors from our theme
     const matrixColors = {
-      bright: '#00FF41',       // matrixPrimaryGreen - brightest
-      medium: '#39FF14',       // matrixNeoGreen - medium bright
-      normal: '#00CC33',       // matrixTextGreen - normal
+      bright: matrixPrimaryGreen,       // matrixPrimaryGreen - brightest
+      medium: matrixNeoGreen,       // matrixNeoGreen - medium bright
+      normal: matrixTextGreen,       // matrixTextGreen - normal
       dim: '#006600',          // dimmer green
       verydim: '#003300'       // very dim green
     };
