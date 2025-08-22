@@ -3,31 +3,7 @@ import { mediaQuery } from "@/components/design-system/utils/media-query";
 import { Heading6 } from "@/components/design-system/atoms/heading6";
 import { FC } from "react";
 import { ChatSubtitle } from "./chat-subtitle";
-
-const WelcomeMessage = styled.div`
-  text-align: center;
-  position: relative;
-  background: rgba(251, 251, 251, 0.6);
-  backdrop-filter: blur(8px);
-  border-radius: 1rem;
-  box-shadow: 0px 0px 12px 0px rgba(0, 0, 0, 0.10);
-  overflow: visible;
-  margin: ${(props) => props.theme.spacing[1]} 
-    ${(props) => props.theme.spacing[1]};
-  padding: ${(props) => props.theme.spacing[3]}
-    ${(props) => props.theme.spacing[3]};
-  border: 1px solid ${(props) => props.theme.light.dividerColor}30;
-  background: ${(props) => props.theme.light.generalBackgroundLight};
-
-  ${mediaQuery.dark} {
-    background: ${(props) => props.theme.dark.generalBackgroundLight};
-    border-color: ${(props) => props.theme.dark.dividerColor}30;
-  }
-
-  ${mediaQuery.maxWidth.sm} {
-    padding: ${(props) => props.theme.spacing[2]};
-  }
-`;
+import { GlassmorphismBackground } from "@/components/design-system/atoms/glassmorphism-background";
 
 const ExampleQuestions = styled.div`
   margin-top: ${(props) => props.theme.spacing[2]};
@@ -131,7 +107,7 @@ export const ChatWelcome: FC<ChatWelcomeProps> = ({
   exampleQuestions,
   handleExampleQuestionsSelection,
 }) => (
-  <WelcomeMessage>
+  <GlassmorphismBackground>
     <Heading6>👋 Hey there! Ready to dive into my tech journey?</Heading6>
     <ExampleQuestions>
       <ChatSubtitle>Here are some conversation starters:</ChatSubtitle>
@@ -146,5 +122,5 @@ export const ChatWelcome: FC<ChatWelcomeProps> = ({
         </ExampleQuestion>
       ))}
     </ExampleQuestions>
-  </WelcomeMessage>
+  </GlassmorphismBackground>
 );

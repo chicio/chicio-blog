@@ -25,7 +25,7 @@ export const Chat: FC = () => {
   const hasMessages = messages.length > 0;
 
   return (
-    <ChatContainer>
+    <>
       <ChatHeader hasMessages={hasMessages} />
       <MessagesContainer $hasMessages={hasMessages}>
         {messages.length === 0 && (
@@ -62,6 +62,6 @@ export const Chat: FC = () => {
         handleSubmit={handleSubmit}
         handleInputChange={handleInputChange}
       />
-    </ChatContainer>
+    </>
   );
 };

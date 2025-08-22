@@ -2,10 +2,10 @@ import styled from "styled-components";
 import { mediaQuery } from "@/components/design-system/utils/media-query";
 import { menuHeightNumber } from "@/components/design-system/organism/menu";
 import { hideScrollbar } from "@/components/design-system/utils/components/hide-scrollbar";
+import { Container } from "@/components/design-system/atoms/container";
 
 export const MessagesContainer = styled.div<{ $hasMessages?: boolean }>`
   flex: 1;
-  overflow-y: auto;
   padding: ${(props) => 
     props.$hasMessages 
       ? `${menuHeightNumber + 10}px 0 calc(140px + env(safe-area-inset-bottom, 0px)) 0`
@@ -19,8 +19,8 @@ export const MessagesContainer = styled.div<{ $hasMessages?: boolean }>`
   ${mediaQuery.minWidth.sm} {
     padding: ${(props) => 
       props.$hasMessages 
-        ? `${menuHeightNumber + 20}px 0 ${props.theme.spacing[12]} 0`
-        : `160px 0 ${props.theme.spacing[12]} 0`
+        ? `${menuHeightNumber + 20}px 0 140px 0`
+        : `160px 0 140px 0`
     };
   }
 
