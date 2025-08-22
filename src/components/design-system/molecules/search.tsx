@@ -166,6 +166,7 @@ const SearchBoxInput = styled.input<TransientProps<StartSearchProps>>`
       width: 150px;
       background: ${(props) => props.theme.dark.generalBackground};
       border: 1px solid ${(props) => props.theme.dark.accentColor};
+      color: ${(props) => props.theme.dark.accentColor};
       ${borderRadius};
     `}
 `;
