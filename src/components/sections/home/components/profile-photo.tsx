@@ -4,16 +4,16 @@ import { FC } from "react";
 import { ImageGlow } from "@/components/design-system/atoms/image-glow";
 
 const ProfilePhotoContainer = styled.div`
-  width: 160px;
-  height: 160px;
-  border-radius: 50%;
-  margin: 0 auto ${(props) => props.theme.spacing[6]} auto;
-  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: ${(props) => props.theme.dark.boxShadowLight};
+`;
 
+const StyledImageGlow = styled(ImageGlow)`
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  
   img {
     border-radius: 50%;
     object-fit: cover;
@@ -27,7 +27,7 @@ const ProfilePhotoContainer = styled.div`
 
 export const ProfilePhoto: FC<{ author: string }> = ({ author }) => (
   <ProfilePhotoContainer>
-    <ImageGlow
+    <StyledImageGlow
       src="/images/authors/fabrizio-duroni.jpg"
       alt={author}
       width={200}
