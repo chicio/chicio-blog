@@ -10,10 +10,11 @@ import { heading5Style } from "@/components/design-system/atoms/heading5";
 import { standardLinkStyle } from "@/components/design-system/atoms/standard-link-style";
 import { borderRadius } from "@/components/design-system/atoms/border";
 import { paragraphStyle } from "@/components/design-system/atoms/paragraph";
-import { Heading1 } from "../../atoms/heading1";
-import { glowContainer } from "../../atoms/glow";
-import { glassmorphism } from "../../atoms/glassmorphism";
-import { hideScrollbar } from "./hide-scrollbar";
+import { Heading1 } from "../../../design-system/atoms/heading1";
+import { glowContainer } from "../../../design-system/atoms/glow";
+import { glassmorphism } from "../../../design-system/atoms/glassmorphism";
+import { hideScrollbar } from "../../../design-system/utils/components/hide-scrollbar";
+import { quoteStyle } from "@/components/design-system/atoms/quote";
 
 const PostContentContainer = styled.div`
   color: ${(props) => props.theme.light.primaryTextColor};
@@ -72,7 +73,7 @@ const PostContentContainer = styled.div`
 
   & blockquote {
     line-height: ${(props) => props.theme.lineHeight};
-    color: ${(props) => props.theme.light.secondaryTextColor};
+    ${quoteStyle};
     border-left: 5px solid ${(props) => props.theme.light.secondaryTextColor};
     margin-left: 0;
     margin-right: 0;

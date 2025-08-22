@@ -2,12 +2,12 @@
 
 import { FC } from "react";
 import styled from "styled-components";
-import { mediaQuery } from "../utils/media-query";
-import { MatrixRain } from "../atoms/matrix-rain";
-import { GlassmorphismBackground } from "../atoms/glassmorphism-background";
-import blogLogoImage from "../../../../public/images/blog-logo.jpg";
-import { ImageGlow } from "../atoms/image-glow";
-import { glowText } from "../atoms/glow";
+import { mediaQuery } from "../../../design-system/utils/media-query";
+import { MatrixRain } from "../../../design-system/atoms/matrix-rain";
+import { GlassmorphismBackground } from "../../../design-system/atoms/glassmorphism-background";
+import blogLogoImage from "../../../../../public/images/blog-logo.jpg";
+import { ImageGlow } from "../../../design-system/atoms/image-glow";
+import { glowText } from "../../../design-system/atoms/glow";
 
 const BlogHeaderGlassWrapper = styled.div`
   width: 100%;

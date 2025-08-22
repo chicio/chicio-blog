@@ -2,20 +2,20 @@
 
 import styled, { css, TransientProps } from "styled-components";
 import { motion } from "framer-motion";
-import { Paragraph } from "../atoms/paragraph";
 import { PostAuthors } from "./post-authors";
 import { PostMeta } from "./post-meta";
-import { Heading5 } from "../atoms/heading5";
-import { mediaQuery } from "../utils/media-query";
 import { FC } from "react";
 import { PostTags } from "./post-tags";
-import { borderRadius } from "../atoms/border";
-import { glassmorphism } from "../atoms/glassmorphism";
 import Image from "next/image";
 import {StandardInternalLinkWithTracking} from "@/components/design-system/atoms/standard-internal-link-with-tracking";
 import {tracking} from "@/types/tracking";
 import {Author} from "@/types/author";
-import { glowText } from "../atoms/glow";
+import { borderRadius } from "@/components/design-system/atoms/border";
+import { glassmorphism } from "@/components/design-system/atoms/glassmorphism";
+import { glowText } from "@/components/design-system/atoms/glow";
+import { Heading5 } from "@/components/design-system/atoms/heading5";
+import { mediaQuery } from "@/components/design-system/utils/media-query";
+import { Paragraph } from "@/components/design-system/atoms/paragraph";
 
 interface BigCardProps {
   big: boolean;

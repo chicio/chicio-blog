@@ -2,7 +2,7 @@ import {siteMetadata} from "@/types/site-metadata";
 import {tracking} from "@/types/tracking";
 import {getPosts} from "@/lib/posts/posts";
 import { JsonLd } from "@/components/design-system/utils/components/jsond-ld";
-import { BlogGenericPostListPageTemplate } from "@/components/design-system/templates/blog-generic-post-list-page-template";
+import { BlogGenericPostListPageTemplate } from "@/components/sections/blog/components/blog-generic-post-list-page-template";
 import { slugs } from "@/types/slug";
 import { Metadata } from "next";
 import { createMetadata } from "@/lib/seo/seo";

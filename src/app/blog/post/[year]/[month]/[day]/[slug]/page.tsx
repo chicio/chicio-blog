@@ -1,21 +1,11 @@
-import "katex/dist/katex.min.css";
+import { BlogPostContent } from "@/components/sections/blog/components/blog-post-content";
 import { getPostBy, getPosts } from "@/lib/posts/posts";
-import { siteMetadata } from "@/types/site-metadata";
-import { tracking } from "@/types/tracking";
-import { Metadata } from "next";
 import { createMetadata } from "@/lib/seo/seo";
-import {
-  PostContent,
-  PostTitle,
-} from "@/components/design-system/utils/components/post";
-import { PostAuthors } from "@/components/design-system/molecules/post-authors";
-import { PostMeta } from "@/components/design-system/molecules/post-meta";
-import { PostTags } from "@/components/design-system/molecules/post-tags";
-import { RecentPosts } from "@/components/design-system/organism/read-next";
 import { NextPostParameters } from "@/types/page-parameters";
-import { JsonLd } from "@/components/design-system/utils/components/jsond-ld";
 import { Post } from "@/types/post";
-import { BlogPageTemplate } from "@/components/design-system/templates/blog-page-template";
+import { siteMetadata } from "@/types/site-metadata";
+import "katex/dist/katex.min.css";
+import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 export const revalidate = false
@@ -61,39 +51,7 @@ export default async function BlogPost({ params }: NextPostParameters) {
     notFound();
   }
 
-  const { frontmatter, content, readingTime } = post;
-
   return (
-    <>
-      <BlogPageTemplate
-        author={siteMetadata.author}
-        trackingCategory={tracking.category.blog_post}
-      >
-        <PostTitle className="blog-post-title">{frontmatter.title}</PostTitle>
-        <PostAuthors
-          postAuthors={frontmatter.authors}
-          trackingCategory={tracking.category.blog_post}
-          trackingLabel={tracking.label.body}
-          enableUrl={true}
-        />
-        <PostMeta
-          date={frontmatter.date.formatted}
-          readingTime={readingTime.text}
-        />
-        <PostContent html={content} />
-        <PostTags
-          tags={frontmatter.tags}
-          trackingCategory={tracking.category.blog_post}
-          trackingLabel={tracking.label.body}
-        />
-        <RecentPosts currentSlug={frontmatter.slug.formatted} />
-      </BlogPageTemplate>
-      <JsonLd
-        ogPageType="article"
-        url={`${siteMetadata.siteUrl}${frontmatter.slug.formatted}`}
-        imageUrl={frontmatter.image}
-        title={frontmatter.title}
-      />
-    </>
+    <BlogPostContent post={post} />
   );
 }

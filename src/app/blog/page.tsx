@@ -1,4 +1,4 @@
-import BlogPage from "@/app/blog/posts/[page]/page";
+import BlogHomePage from "@/app/blog/posts/[page]/page";
 import { createMetadata } from "@/lib/seo/seo";
 import { siteMetadata } from "@/types/site-metadata";
 import { slugs } from "@/types/slug";
@@ -11,7 +11,7 @@ export const metadata = createMetadata({
   ogPageType: "website",
 });
 
-export default async function BlogHomePage() {
+export default async function BlogHome() {
   const params = Promise.resolve({ page: "1" });
-  return <BlogPage params={params} />;
+  return <BlogHomePage params={params} />;
 }

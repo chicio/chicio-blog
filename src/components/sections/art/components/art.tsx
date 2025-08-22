@@ -1,4 +1,4 @@
-import { BlogPageTemplate } from "@/components/design-system/templates/blog-page-template";
+import { BlogPageTemplate } from "@/components/sections/blog/components/blog-page-template";
 import { siteMetadata } from "@/types/site-metadata";
 import { tracking } from "@/types/tracking";
 import { ArtGallery } from "./art-gallery";

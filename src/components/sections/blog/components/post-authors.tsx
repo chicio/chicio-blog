@@ -2,14 +2,14 @@
 
 import { FC } from "react";
 import styled from "styled-components";
-import { ContainerFluid } from "../atoms/container-fluid";
-import { Paragraph } from "../atoms/paragraph";
-import { mediaQuery } from "../utils/media-query";
 import Image from 'next/image';
 import {Author} from "@/types/author";
 import {StandardExternalLinkWithTracking} from "@/components/design-system/atoms/standard-external-link-with-tracking";
 import {tracking} from "@/types/tracking";
 import {imageBlur} from "@/components/design-system/utils/components/image-blur";
+import { ContainerFluid } from "@/components/design-system/atoms/container-fluid";
+import { mediaQuery } from "@/components/design-system/utils/media-query";
+import { Paragraph } from "@/components/design-system/atoms/paragraph";
 
 const PostAuthorsContainer = styled(ContainerFluid)`
   padding: 0;

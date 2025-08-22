@@ -1,10 +1,10 @@
-import { FC } from "react";
-import { PostsRow } from "../molecules/posts-row";
+import { shuffleArray } from "@/components/design-system/hooks/shuffle-array";
+import { ContentContainerRecentPosts } from "@/components/design-system/molecules/content-container";
+import { PostsRowContainer } from "@/components/sections/blog/components/posts-row-container";
 import { getPosts } from "@/lib/posts/posts";
-import { PostsRowContainer } from "@/components/design-system/utils/components/posts-row-container";
-import { ReadNextTitle } from "@/components/design-system/organism/read-next-title";
-import {ContentContainerRecentPosts} from "@/components/design-system/molecules/content-container";
-import { shuffleArray } from "../hooks/shuffle-array";
+import { FC } from "react";
+import { ReadNextTitle } from "./read-next-title";
+import { PostsRow } from "./posts-row";
 
 export interface RecentPostsProps {
   currentSlug: string;

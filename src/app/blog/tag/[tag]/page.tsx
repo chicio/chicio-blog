@@ -6,7 +6,7 @@ import { JsonLd } from "@/components/design-system/utils/components/jsond-ld";
 import {Metadata} from "next";
 import {createMetadata} from "@/lib/seo/seo";
 import {slugs} from "@/types/slug";
-import { BlogGenericPostListPageTemplate } from "@/components/design-system/templates/blog-generic-post-list-page-template";
+import { BlogGenericPostListPageTemplate } from "@/components/sections/blog/components/blog-generic-post-list-page-template";
 
 export async function generateMetadata({ params }: NextTagParameters): Promise<Metadata> {
     const { tag } = await params

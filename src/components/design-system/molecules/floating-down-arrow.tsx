@@ -7,7 +7,7 @@ import { bounce } from "@/components/design-system/utils/animations/bounce-keyfr
 import { ChevronDown } from "@styled-icons/boxicons-regular";
 
 const FloatingArrowContainer = styled.div`
-  position: absolute;
+  position: fixed;
   bottom: ${(props) => props.theme.spacing[2]};
   left: 0;
   right: 0;

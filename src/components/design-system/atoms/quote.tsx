@@ -1,10 +1,14 @@
 'use client'
 
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
-export const Quote = styled.blockquote`
+export const quoteStyle = css`
   color: ${(props) => props.theme.dark.accentColor};
   font-style: italic;
+`
+  
+  export const Quote = styled.blockquote`
+  ${quoteStyle};
   text-align: center;
   position: relative;
   margin: ${(props) => props.theme.spacing[2]} 0;

@@ -48,9 +48,6 @@ const ChatIcon = styled.div`
   width: 24px;
   height: 24px;
   color: ${props => props.theme.dark.textAbovePrimaryColor};
-  display: flex;
-  align-items: center;
-  justify-content: center;
 
   ${mediaQuery.minWidth.md} {
     width: 28px;
@@ -98,12 +95,6 @@ const Tooltip = styled(motion.div)`
 
 export const FloatingChatButton = () => {
   const [isAnimationComplete, setIsAnimationComplete] = useState(false);
-  const pathname = usePathname();
-
-  // Don't render the button on the chat page
-  if (pathname === slugs.chat) {
-    return null;
-  }
 
   const ButtonContent = (
     <FloatingContainer

@@ -8,7 +8,7 @@ import { List } from "@/components/design-system/atoms/list";
 import { StandardExternalLink } from "@/components/design-system/atoms/standard-external-link";
 import { createMetadata } from "@/lib/seo/seo";
 import { slugs } from "@/types/slug";
-import { BlogPageTemplate } from "@/components/design-system/templates/blog-page-template";
+import { BlogPageTemplate } from "@/components/sections/blog/components/blog-page-template";
 
 export const metadata = createMetadata({
   author: siteMetadata.author,

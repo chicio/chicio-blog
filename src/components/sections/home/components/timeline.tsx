@@ -123,7 +123,6 @@ const TimelineTitle = styled(Heading4)`
   word-wrap: break-word;
   hyphens: auto;
   font-size: ${(props) => props.theme.fontSizes[4]};
-  color: ${(props) => props.theme.dark.primaryTextColor};
   
   ${mediaQuery.minWidth.md} {
     font-size: ${(props) => props.theme.fontSizes[5]};

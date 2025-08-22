@@ -1,12 +1,10 @@
 'use client'
 
+import { StandardInternalLinkWithTracking } from "@/components/design-system/atoms/standard-internal-link-with-tracking";
+import { tracking } from "@/types/tracking";
+import { FC } from "react";
 import styled, { css, TransientProps } from "styled-components";
-import {FC} from "react";
-import {StandardInternalLinkWithTracking} from "@/components/design-system/atoms/standard-internal-link-with-tracking";
-import {tracking} from "@/types/tracking";
-import {mediaQuery} from "@/components/design-system/utils/media-query";
 import { glowContainer, glowText } from "../atoms/glow";
-import { glassmorphism } from "../atoms/glassmorphism";
 
 interface TagContentProps {
   big: boolean;
