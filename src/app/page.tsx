@@ -1,5 +1,5 @@
-import { FloatingDownArrow } from "@/components/design-system/molecules/down-arrow";
-import { MatrixBackground } from "@/components/design-system/molecules/matrix-background";
+import { FloatingDownArrow } from "@/components/design-system/molecules/buttons/down-arrow-button";
+import { MatrixBackground } from "@/components/design-system/molecules/effects/matrix-background";
 import { Footer } from "@/components/design-system/organism/footer";
 import { JsonLd } from "@/components/design-system/utils/components/jsond-ld";
 import { JobsTimeline } from "@/components/sections/home/components/jobs-timeline";
@@ -26,7 +26,6 @@ export default function Home() {
       <SnapScrollContainer data-snap-container="true">
         <MatrixBackground fontSize={16} speed={50} density={0.95}>
           <ProfilePresentation author={siteMetadata.author} />
-          <FloatingDownArrow />
         </MatrixBackground>
         <Technologies author={siteMetadata.author} />
         <Projects />
@@ -35,6 +34,7 @@ export default function Home() {
           author={siteMetadata.author}
           trackingCategory={tracking.category.home}
         />
+        <FloatingDownArrow />
       </SnapScrollContainer>
       <JsonLd
         ogPageType="website"

@@ -1,9 +1,9 @@
-import { CallToActionExternalWithTracking } from "@/components/design-system/atoms/call-to-action-external-with-tracking";
-import { GlassmorphismBackground } from "@/components/design-system/atoms/glassmorphism-background";
-import { Heading4 } from "@/components/design-system/atoms/heading4";
-import { ImageGlow } from "@/components/design-system/atoms/image-glow";
-import { List } from "@/components/design-system/atoms/list";
-import { Paragraph } from "@/components/design-system/atoms/paragraph";
+import { CallToActionExternalWithTracking } from "@/components/design-system/atoms/call-to-actions/call-to-action-external-with-tracking";
+import { GlassmorphismBackground } from "@/components/design-system/atoms/effects/glassmorphism-background";
+import { Heading4 } from "@/components/design-system/atoms/typography/heading4";
+import { ImageGlow } from "@/components/design-system/atoms/effects/image-glow";
+import { List } from "@/components/design-system/atoms/typography/list";
+import { Paragraph } from "@/components/design-system/atoms/typography/paragraph";
 import { mediaQuery } from "@/components/design-system/utils/media-query";
 import { Project } from "@/types/projects";
 import { motion, Variants } from "framer-motion";

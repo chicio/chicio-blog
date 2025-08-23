@@ -1,7 +1,7 @@
 import { FC, PropsWithChildren } from "react";
 import styled from "styled-components";
 import { opacity } from "@/components/design-system/utils/animations/opacity-keyframes";
-import { paragraphStyle } from "@/components/design-system/atoms/paragraph";
+import { paragraphStyle } from "@/components/design-system/atoms/typography/paragraph";
 import { mediaQuery } from "@/components/design-system/utils/media-query";
 import { ChatAvatar } from "./chat-avatar";
 

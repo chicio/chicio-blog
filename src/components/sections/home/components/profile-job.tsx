@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Heading5 } from "@/components/design-system/atoms/heading5";
+import { Heading5 } from "@/components/design-system/atoms/typography/heading5";
 
 export const ProfileJob = styled(Heading5)`
   color: ${(props) => props.theme.dark.secondaryTextColor};

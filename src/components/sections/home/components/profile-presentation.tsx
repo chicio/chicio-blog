@@ -5,12 +5,12 @@ import { FC } from "react";
 import { motion, Variants } from "framer-motion";
 import { tracking } from "@/types/tracking";
 import { SocialContacts } from "@/components/design-system/organism/social-contacts";
-import { ContainerFullscreen } from "@/components/design-system/atoms/container-fullscreen";
-import { GlassmorphismBackground } from "@/components/design-system/atoms/glassmorphism-background";
+import { GlassmorphismBackground } from "@/components/design-system/atoms/effects/glassmorphism-background";
 import { ProfilePhoto } from "./profile-photo";
 import { ProfileAuthor } from "./profile-author";
 import { ProfileJob } from "./profile-job";
 import { ProfileCTAs } from "./profile-ctas";
+import { ContainerFullscreen } from "@/components/design-system/atoms/containers/container-fullscreen";
 
 const ContentContainer = styled(ContainerFullscreen)`
   padding: ${(props) => props.theme.spacing[4]};

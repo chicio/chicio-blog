@@ -1,6 +1,6 @@
-import { GlassmorphismBackground } from "@/components/design-system/atoms/glassmorphism-background";
+import { GlassmorphismBackground } from "@/components/design-system/atoms/effects/glassmorphism-background";
 import styled from "styled-components";
-import { Paragraph } from "@/components/design-system/atoms/paragraph";
+import { Paragraph } from "@/components/design-system/atoms/typography/paragraph";
 import { FC } from "react";
 import { SectionTitle } from "./section-title";
 

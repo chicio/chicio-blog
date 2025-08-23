@@ -1,14 +1,13 @@
 "use client";
 
-import { FC } from "react";
+import { mediaQuery } from "@/components/design-system/utils/media-query";
 import { projects } from "@/types/projects";
 import { motion, stagger, Variants } from "framer-motion";
-import { FloatingDownArrow } from "@/components/design-system/molecules/floating-down-arrow";
+import { FC } from "react";
 import styled from "styled-components";
-import { ContainerFluid } from "@/components/design-system/atoms/container-fluid";
-import { mediaQuery } from "@/components/design-system/utils/media-query";
-import { SectionTitle } from "./section-title";
 import { ProjectCard } from "./project-card";
+import { SectionTitle } from "./section-title";
+import { ContainerFluid } from "@/components/design-system/atoms/containers/container-fluid";
 
 const SectionContainer = styled(ContainerFluid)`
   min-height: 100vh;
@@ -80,6 +79,5 @@ export const Projects: FC = () => (
         })}
       </ProjectsGrid>
     </ProjectsContent>
-    <FloatingDownArrow />
   </SectionContainer>
 );

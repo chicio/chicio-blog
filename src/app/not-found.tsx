@@ -1,13 +1,13 @@
 "use client";
 
 import styled from "styled-components";
-import { ContainerFullscreen } from "@/components/design-system/atoms/container-fullscreen";
-import { MatrixRain } from "@/components/design-system/atoms/matrix-rain";
-import { MatrixTerminal } from "@/components/design-system/molecules/matrix-terminal";
-import { MatrixPills } from "@/components/design-system/molecules/matrix-pills";
-import { Heading1 } from "@/components/design-system/atoms/heading1";
+import { MatrixRain } from "@/components/design-system/atoms/effects/matrix-rain";
+import { MatrixTerminal } from "@/components/design-system/molecules/effects/matrix-terminal";
+import { MatrixPills } from "@/components/design-system/molecules/buttons/matrix-pills";
+import { Heading1 } from "@/components/design-system/atoms/typography/heading1";
 import { glitch } from "@/components/design-system/utils/animations/glitch-keyframes";
 import { mediaQuery } from "@/components/design-system/utils/media-query";
+import { ContainerFullscreen } from "@/components/design-system/atoms/containers/container-fullscreen";
 
 const Matrix404Container = styled(ContainerFullscreen)`
   display: flex;

@@ -1,12 +1,7 @@
-import {
-  borderRadius,
-  borderColor,
-} from "@/components/design-system/atoms/border";
-import { boxShadow } from "@/components/design-system/atoms/box-shadow";
-import { Container } from "@/components/design-system/atoms/container";
-import { glowContainer } from "@/components/design-system/atoms/glow";
-import { InputField } from "@/components/design-system/atoms/input-field";
-import { paragraphStyle } from "@/components/design-system/atoms/paragraph";
+import { Container } from "@/components/design-system/atoms/containers/container";
+import { glowContainer } from "@/components/design-system/atoms/effects/glow";
+import { InputField } from "@/components/design-system/atoms/typography/input-field";
+import { paragraphStyle } from "@/components/design-system/atoms/typography/paragraph";
 import { mediaQuery } from "@/components/design-system/utils/media-query";
 import { Send } from "@styled-icons/boxicons-regular";
 import { ChangeEvent, FC, FormEvent } from "react";

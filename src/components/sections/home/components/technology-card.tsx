@@ -4,7 +4,7 @@ import { FC } from "react";
 import styled from "styled-components";
 import { motion, Variants } from "framer-motion";
 import { mediaQuery } from "@/components/design-system/utils/media-query";
-import { glassmorphism } from "@/components/design-system/atoms/glassmorphism";
+import { glassmorphism } from "@/components/design-system/atoms/effects/glassmorphism";
 
 const TechnologyCardContainer = styled(motion.div)`
   ${glassmorphism}

@@ -1,9 +1,9 @@
 import styled from "styled-components";
 import { mediaQuery } from "@/components/design-system/utils/media-query";
-import { Heading6 } from "@/components/design-system/atoms/heading6";
+import { Heading6 } from "@/components/design-system/atoms/typography/heading6";
 import { FC } from "react";
 import { ChatSubtitle } from "./chat-subtitle";
-import { GlassmorphismBackground } from "@/components/design-system/atoms/glassmorphism-background";
+import { GlassmorphismBackground } from "@/components/design-system/atoms/effects/glassmorphism-background";
 
 const ExampleQuestions = styled.div`
   margin-top: ${(props) => props.theme.spacing[2]};

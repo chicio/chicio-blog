@@ -3,7 +3,7 @@
 import styled from "styled-components";
 import { FC } from "react";
 import {generateTagSlug} from "@/lib/tags/tags";
-import { Tag } from "@/components/design-system/molecules/tag";
+import { Tag } from "@/components/design-system/molecules/buttons/tag";
 
 export interface PostTagsProps {
   tags: ReadonlyArray<string | null>;

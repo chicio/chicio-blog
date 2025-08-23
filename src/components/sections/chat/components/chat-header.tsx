@@ -1,14 +1,11 @@
-import styled from "styled-components";
+import { Container } from "@/components/design-system/atoms/containers/container";
+import { glassmorphism } from "@/components/design-system/atoms/effects/glassmorphism";
+import { Heading4 } from "@/components/design-system/atoms/typography/heading4";
+import { ChatButton } from "@/components/design-system/molecules/buttons/chat-button";
 import { mediaQuery } from "@/components/design-system/utils/media-query";
-import React, { FC, useState } from "react";
-import { Heading1 } from "@/components/design-system/atoms/heading1";
-import { menuHeight } from "@/components/design-system/organism/menu";
+import { FC, useState } from "react";
+import styled from "styled-components";
 import { ChatSubtitle } from "./chat-subtitle";
-import { glassmorphism } from "@/components/design-system/atoms/glassmorphism";
-import { Container } from "@/components/design-system/atoms/container";
-import { Heading3 } from "@/components/design-system/atoms/heading3";
-import { Heading4 } from "@/components/design-system/atoms/heading4";
-import { ChatButton } from "@/components/design-system/molecules/chat-button";
 
 export const ChatHeaderContainer = styled(Container)<{ $isVisible: boolean }>`
   ${glassmorphism}

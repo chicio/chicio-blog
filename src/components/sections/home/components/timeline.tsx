@@ -8,14 +8,14 @@ import { GraduationCap } from "@styled-icons/fa-solid";
 import { tracking } from "@/types/tracking";
 import Image from "next/image";
 import { mediaQuery } from "@/components/design-system/utils/media-query";
-import { Heading4 } from "@/components/design-system/atoms/heading4";
-import { Heading6 } from "@/components/design-system/atoms/heading6";
-import { GlassmorphismBackground } from "@/components/design-system/atoms/glassmorphism-background";
-import { StandardExternalLinkWithTracking } from "@/components/design-system/atoms/standard-external-link-with-tracking";
+import { Heading4 } from "@/components/design-system/atoms/typography/heading4";
+import { Heading6 } from "@/components/design-system/atoms/typography/heading6";
+import { GlassmorphismBackground } from "@/components/design-system/atoms/effects/glassmorphism-background";
+import { StandardExternalLinkWithTracking } from "@/components/design-system/atoms/links/standard-external-link-with-tracking";
 import { useTimeline } from "../hooks/useTimeline";
-import { Time } from "@/components/design-system/atoms/time";
-import { List } from "@/components/design-system/atoms/list";
-import { Paragraph } from "@/components/design-system/atoms/paragraph";
+import { Time } from "@/components/design-system/atoms/typography/time";
+import { List } from "@/components/design-system/atoms/typography/list";
+import { Paragraph } from "@/components/design-system/atoms/typography/paragraph";
 
 const TimelineContainer = styled(motion.div)`
   display: flex;

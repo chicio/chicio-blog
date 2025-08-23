@@ -1,15 +1,15 @@
 'use client'
 
 import styled from "styled-components";
-import {ContainerFluid} from "@/components/design-system/atoms/container-fluid";
 import {mediaQuery} from "@/components/design-system/utils/media-query";
-import {Time} from "@/components/design-system/atoms/time";
-import {StandardInternalLinkWithTracking} from "@/components/design-system/atoms/standard-internal-link-with-tracking";
-import {PageTitle} from "@/components/design-system/molecules/page-title";
+import {Time} from "@/components/design-system/atoms/typography/time";
+import {StandardInternalLinkWithTracking} from "@/components/design-system/atoms/links/standard-internal-link-with-tracking";
+import {PageTitle} from "@/components/design-system/molecules/typography/page-title";
 import {FC} from "react";
 import {Post} from "@/types/post";
 import {tracking} from "@/types/tracking";
 import { BlogPageTemplate } from "./blog-page-template";
+import { ContainerFluid } from "@/components/design-system/atoms/containers/container-fluid";
 
 const PostContainer = styled(ContainerFluid)`
   display: flex;

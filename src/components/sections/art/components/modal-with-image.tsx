@@ -1,9 +1,9 @@
 import styled, { TransientProps } from "styled-components";
 import { motion, Variants } from "framer-motion";
 import { FC } from "react";
-import { glassmorphism } from "@/components/design-system/atoms/glassmorphism";
-import { Overlay } from "@/components/design-system/atoms/overlay";
-import { CallToActionExternal } from "@/components/design-system/atoms/call-to-action-external";
+import { glassmorphism } from "@/components/design-system/atoms/effects/glassmorphism";
+import { Overlay } from "@/components/design-system/atoms/effects/overlay";
+import { CallToActionExternal } from "@/components/design-system/atoms/call-to-actions/call-to-action-external";
 
 const zIndex = 400;
 

@@ -7,7 +7,7 @@ import remarkEmoji from 'remark-emoji';
 import rehypeHighlight from 'rehype-highlight';
 import rehypeKatex from 'rehype-katex';
 import styled from 'styled-components';
-import { standardLinkStyle } from "@/components/design-system/atoms/standard-link-style";
+import { standardLinkStyle } from "@/components/design-system/atoms/links/standard-link-style";
 
 const StyledMarkdownContainer = styled.div`
   a {

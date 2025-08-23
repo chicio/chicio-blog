@@ -3,18 +3,18 @@
 import "highlight.js/styles/tokyo-night-dark.css";
 import { FC } from "react";
 import styled from "styled-components";
-import { heading2Style } from "@/components/design-system/atoms/heading2";
-import { heading3Style } from "@/components/design-system/atoms/heading3";
-import { heading4Style } from "@/components/design-system/atoms/heading4";
-import { heading5Style } from "@/components/design-system/atoms/heading5";
-import { standardLinkStyle } from "@/components/design-system/atoms/standard-link-style";
-import { borderRadius } from "@/components/design-system/atoms/border";
-import { paragraphStyle } from "@/components/design-system/atoms/paragraph";
-import { Heading1 } from "../../../design-system/atoms/heading1";
-import { glowContainer } from "../../../design-system/atoms/glow";
-import { glassmorphism } from "../../../design-system/atoms/glassmorphism";
+import { heading2Style } from "@/components/design-system/atoms/typography/heading2";
+import { heading3Style } from "@/components/design-system/atoms/typography/heading3";
+import { heading4Style } from "@/components/design-system/atoms/typography/heading4";
+import { heading5Style } from "@/components/design-system/atoms/typography/heading5";
+import { standardLinkStyle } from "@/components/design-system/atoms/links/standard-link-style";
+import { borderRadius } from "@/components/design-system/atoms/effects/border";
+import { paragraphStyle } from "@/components/design-system/atoms/typography/paragraph";
+import { Heading1 } from "../../../design-system/atoms/typography/heading1";
+import { glowContainer } from "../../../design-system/atoms/effects/glow";
+import { glassmorphism } from "../../../design-system/atoms/effects/glassmorphism";
 import { hideScrollbar } from "../../../design-system/utils/components/hide-scrollbar";
-import { quoteStyle } from "@/components/design-system/atoms/quote";
+import { quoteStyle } from "@/components/design-system/atoms/typography/quote";
 
 const PostContentContainer = styled.div`
   color: ${(props) => props.theme.light.primaryTextColor};

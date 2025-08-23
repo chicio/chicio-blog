@@ -1,13 +1,12 @@
 "use client";
 
+import { mediaQuery } from "@/components/design-system/utils/media-query";
+import { motion, stagger, Variants } from "framer-motion";
 import { FC } from "react";
 import styled from "styled-components";
-import { Timeline } from "./timeline";
-import { motion, stagger, Variants } from "framer-motion";
-import { mediaQuery } from "@/components/design-system/utils/media-query";
-import { ContainerFluid } from "@/components/design-system/atoms/container-fluid";
 import { SectionTitle } from "./section-title";
-import { FloatingDownArrow } from "@/components/design-system/molecules/floating-down-arrow";
+import { Timeline } from "./timeline";
+import { ContainerFluid } from "@/components/design-system/atoms/containers/container-fluid";
 
 const SectionContainer = styled(ContainerFluid)`
   min-height: 100vh;
@@ -48,6 +47,5 @@ export const JobsTimeline: FC = () => (
       <SectionTitle as="h2">Experience</SectionTitle>
       <Timeline />
     </motion.div>
-    <FloatingDownArrow />
   </SectionContainer>
 );

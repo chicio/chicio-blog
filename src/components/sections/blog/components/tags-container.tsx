@@ -1,6 +1,6 @@
 'use client'
 
-import {ContainerFluid} from "@/components/design-system/atoms/container-fluid";
+import { ContainerFluid } from "@/components/design-system/atoms/containers/container-fluid";
 import styled from "styled-components";
 
 export const TagsContainer = styled(ContainerFluid)`

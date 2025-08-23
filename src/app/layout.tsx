@@ -1,4 +1,4 @@
-import { FloatingChatButton } from "@/components/design-system/molecules/chat-button";
+import { FloatingChatButton } from "@/components/design-system/molecules/buttons/chat-button";
 import { ThemePage } from "@/components/design-system/templates/theme-page";
 import { blogTheme } from "@/components/design-system/themes/theme";
 import { CookieConsent } from "@/components/design-system/utils/components/cookie-consent";

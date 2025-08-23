@@ -1,6 +1,5 @@
 'use client'
 
-import { SocialContact } from "../molecules/social-contact";
 import styled from "styled-components";
 import {
   DevTo,
@@ -15,6 +14,7 @@ import { Envelope } from "@styled-icons/boxicons-regular";
 import { FC } from "react";
 import {siteMetadata} from "@/types/site-metadata";
 import {tracking} from "@/types/tracking";
+import { SocialContact } from "../molecules/buttons/social-contact";
 
 const SocialContactsContainers = styled.div`
   display: flex;

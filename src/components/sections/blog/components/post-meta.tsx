@@ -2,9 +2,9 @@
 
 import { FC } from "react";
 import styled from "styled-components";
-import {Paragraph} from "@/components/design-system/atoms/paragraph";
+import {Paragraph} from "@/components/design-system/atoms/typography/paragraph";
 import {mediaQuery} from "@/components/design-system/utils/media-query";
-import {Time} from "@/components/design-system/atoms/time";
+import {Time} from "@/components/design-system/atoms/typography/time";
 
 export interface PostMetaProps {
   date: string;

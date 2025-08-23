@@ -1,21 +1,21 @@
 'use client'
 
-import React, { FC, useState } from "react";
-import styled from "styled-components";
-import { motion, AnimatePresence, Variants } from "framer-motion";
-import { Container } from "../atoms/container";
-import { HamburgerMenu } from "../molecules/hamburger-menu";
-import { Overlay } from "../atoms/overlay";
-import { Close } from "../molecules/close";
-import { mediaQuery } from "../utils/media-query";
-import { ScrollDirection, useScrollDirection } from "../hooks/use-scroll-direction";
-import { MatrixMenuItem } from "../molecules/matrix-menu-item";
-import { tracking } from "@/types/tracking";
+import { SearchBox, SearchHits } from "@/components/design-system/molecules/menu/search";
+import { useSearch } from "@/components/design-system/utils/hooks/use-search";
 import { slugs } from "@/types/slug";
+import { tracking } from "@/types/tracking";
+import { AnimatePresence, motion, Variants } from "framer-motion";
 import { usePathname } from "next/navigation";
-import { SearchBox, SearchHits } from "@/components/design-system/molecules/search";
-import { useSearch } from "@/components/design-system/hooks/use-search";
-import { glassmorphism } from "../atoms/glassmorphism";
+import { FC, useState } from "react";
+import styled from "styled-components";
+import { Container } from "../atoms/containers/container";
+import { glassmorphism } from "../atoms/effects/glassmorphism";
+import { Overlay } from "../atoms/effects/overlay";
+import { MatrixMenuItem } from "../molecules/menu/matrix-menu-item";
+import { ScrollDirection, useScrollDirection } from "../utils/hooks/use-scroll-direction";
+import { mediaQuery } from "../utils/media-query";
+import { HamburgerMenu } from "../molecules/menu/hamburger-menu";
+import { Close } from "../molecules/menu/close";
 
 export const menuHeightNumber = 55;
 export const menuHeight = `${menuHeightNumber}px`;

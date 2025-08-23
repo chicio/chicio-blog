@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { CallToActionInternalWithTracking } from "@/components/design-system/atoms/call-to-action-internal-with-tracking";
+import { CallToActionInternalWithTracking } from "@/components/design-system/atoms/call-to-actions/call-to-action-internal-with-tracking";
 import { tracking } from "@/types/tracking";
 import { slugs } from "@/types/slug";
 

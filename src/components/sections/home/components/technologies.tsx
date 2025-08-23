@@ -1,12 +1,11 @@
 "use client";
 
-import styled from "styled-components";
-import { FC } from "react";
 import { motion, stagger, Variants } from "framer-motion";
-import { ContainerFluid } from "@/components/design-system/atoms/container-fluid";
-import { FloatingDownArrow } from "@/components/design-system/molecules/floating-down-arrow";
+import { FC } from "react";
+import styled from "styled-components";
 import { TechnologiesExperience } from "./technologies-experience";
 import { TechnologiesSkillsGrid } from "./technologies-skills-grid";
+import { ContainerFluid } from "@/components/design-system/atoms/containers/container-fluid";
 
 const TechnologiesContainer = styled(ContainerFluid)`
   margin: 0;
@@ -77,7 +76,5 @@ export const Technologies: FC<TechnologiesProps> = ({ author }) => (
         </motion.div>
       </motion.div>
     </ContentWrapper>
-
-    <FloatingDownArrow />
   </TechnologiesContainer>
 );

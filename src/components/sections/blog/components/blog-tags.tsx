@@ -1,4 +1,4 @@
-import { PageTitle } from "@/components/design-system/molecules/page-title";
+import { PageTitle } from "@/components/design-system/molecules/typography/page-title";
 import { JsonLd } from "@/components/design-system/utils/components/jsond-ld";
 import { siteMetadata } from "@/types/site-metadata";
 import { tracking } from "@/types/tracking";
@@ -6,7 +6,7 @@ import { BlogPageTemplate } from "./blog-page-template";
 import { TagsContainer } from "./tags-container";
 import { FC } from "react";
 import { Tag } from "@/types/post";
-import { Tag as TagItem } from "@/components/design-system/molecules/tag";
+import { Tag as TagItem } from "@/components/design-system/molecules/buttons/tag";
 
 interface BlogTagsProps {
     author: string

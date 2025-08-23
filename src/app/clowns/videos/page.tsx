@@ -1,9 +1,9 @@
 'use client';
 
 import styled from 'styled-components';
-import { useShuffleArray } from '@/components/design-system/hooks/use-shuffle-array';
-import { MediaGrid } from '@/components/design-system/molecules/media-grid';
-import { ClownTitle } from '@/components/design-system/molecules/clown';
+import { useShuffleArray } from '@/components/design-system/utils/hooks/use-shuffle-array';
+import { ClownTitle } from '@/components/design-system/molecules/effects/clown';
+import { MediaGrid } from '@/components/design-system/molecules/containers/media-grid';
 
 const VideoWrapper = styled.div`
   position: relative;

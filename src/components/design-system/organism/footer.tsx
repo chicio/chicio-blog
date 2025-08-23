@@ -3,13 +3,13 @@
 import { FC } from "react";
 import { SocialContacts } from "./social-contacts";
 import styled from "styled-components";
-import { Paragraph } from "../atoms/paragraph";
+import { Paragraph } from "../atoms/typography/paragraph";
 import { mediaQuery } from "../utils/media-query";
-import { MatrixMenuItem } from "../molecules/matrix-menu-item";
+import { MatrixMenuItem } from "../molecules/menu/matrix-menu-item";
 import { tracking } from "@/types/tracking";
 import { slugs } from "@/types/slug";
 import { motion } from "framer-motion";
-import { FadeSeparator } from "../atoms/fade-separator";
+import { FadeSeparator } from "../atoms/effects/fade-separator";
 
 const FooterContainer = styled.footer`
   flex-shrink: 0;

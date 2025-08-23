@@ -1,8 +1,8 @@
 'use client'
 
-import { GlassmorphismBackground } from "@/components/design-system/atoms/glassmorphism-background";
-import { Heading2 } from "@/components/design-system/atoms/heading2";
-import { Paragraph } from "@/components/design-system/atoms/paragraph";
+import { GlassmorphismBackground } from "@/components/design-system/atoms/effects/glassmorphism-background";
+import { Heading2 } from "@/components/design-system/atoms/typography/heading2";
+import { Paragraph } from "@/components/design-system/atoms/typography/paragraph";
 import { FC } from "react";
 import styled from "styled-components";
 

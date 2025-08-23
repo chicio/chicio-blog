@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { mediaQuery } from "@/components/design-system/utils/media-query";
 import { FC } from "react";
-import { ImageGlow } from "@/components/design-system/atoms/image-glow";
+import { ImageGlow } from "@/components/design-system/atoms/effects/image-glow";
 
 const ProfilePhotoContainer = styled.div`
   display: flex;

@@ -7,15 +7,15 @@ import { PostMeta } from "./post-meta";
 import { FC } from "react";
 import { PostTags } from "./post-tags";
 import Image from "next/image";
-import {StandardInternalLinkWithTracking} from "@/components/design-system/atoms/standard-internal-link-with-tracking";
+import {StandardInternalLinkWithTracking} from "@/components/design-system/atoms/links/standard-internal-link-with-tracking";
 import {tracking} from "@/types/tracking";
 import {Author} from "@/types/author";
-import { borderRadius } from "@/components/design-system/atoms/border";
-import { glassmorphism } from "@/components/design-system/atoms/glassmorphism";
-import { glowText } from "@/components/design-system/atoms/glow";
-import { Heading5 } from "@/components/design-system/atoms/heading5";
+import { borderRadius } from "@/components/design-system/atoms/effects/border";
+import { glassmorphism } from "@/components/design-system/atoms/effects/glassmorphism";
+import { glowText } from "@/components/design-system/atoms/effects/glow";
+import { Heading5 } from "@/components/design-system/atoms/typography/heading5";
 import { mediaQuery } from "@/components/design-system/utils/media-query";
-import { Paragraph } from "@/components/design-system/atoms/paragraph";
+import { Paragraph } from "@/components/design-system/atoms/typography/paragraph";
 
 interface BigCardProps {
   big: boolean;

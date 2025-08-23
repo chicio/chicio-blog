@@ -1,4 +1,4 @@
-import { PaginationNavigation } from "@/components/design-system/molecules/pagination-navigation";
+import { PaginationNavigation } from "@/components/design-system/molecules/buttons/pagination-navigation";
 import { BlogPageTemplate } from "@/components/sections/blog/components/blog-page-template";
 import { JsonLd } from "@/components/design-system/utils/components/jsond-ld";
 import { siteMetadata } from "@/types/site-metadata";

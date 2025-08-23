@@ -1,10 +1,9 @@
-/* eslint-disable @next/next/no-img-element */
 "use client"
 
 import styled from 'styled-components';
-import { MediaGrid } from '@/components/design-system/molecules/media-grid';
-import { useShuffleArray } from '@/components/design-system/hooks/use-shuffle-array';
-import { ClownTitle } from '@/components/design-system/molecules/clown';
+import { useShuffleArray } from '@/components/design-system/utils/hooks/use-shuffle-array';
+import { ClownTitle } from '@/components/design-system/molecules/effects/clown';
+import { MediaGrid } from '@/components/design-system/molecules/containers/media-grid';
 
 const PhotoWrapper = styled.div`
   display: flex;

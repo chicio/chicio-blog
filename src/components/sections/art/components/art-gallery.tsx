@@ -1,16 +1,16 @@
 'use client'
 
-import { ContainerFluid } from "@/components/design-system/atoms/container-fluid";
-import { glassmorphism } from "@/components/design-system/atoms/glassmorphism";
-import { Paragraph } from "@/components/design-system/atoms/paragraph";
+import { glassmorphism } from "@/components/design-system/atoms/effects/glassmorphism";
+import { Paragraph } from "@/components/design-system/atoms/typography/paragraph";
 import { artDescriptions } from "@/types/art";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { FC, useState } from "react";
 import styled from "styled-components";
 import { ModalWithImage } from "./modal-with-image";
-import { borderRadius } from "@/components/design-system/atoms/border";
-import { glowText } from "@/components/design-system/atoms/glow";
+import { borderRadius } from "@/components/design-system/atoms/effects/border";
+import { glowText } from "@/components/design-system/atoms/effects/glow";
+import { ContainerFluid } from "@/components/design-system/atoms/containers/container-fluid";
 
 const GalleryContainer = styled(ContainerFluid)`
   padding: 0;

@@ -3,11 +3,11 @@
 import { FC } from "react";
 import styled from "styled-components";
 import { mediaQuery } from "../../../design-system/utils/media-query";
-import { MatrixRain } from "../../../design-system/atoms/matrix-rain";
-import { GlassmorphismBackground } from "../../../design-system/atoms/glassmorphism-background";
+import { MatrixRain } from "../../../design-system/atoms/effects/matrix-rain";
+import { GlassmorphismBackground } from "../../../design-system/atoms/effects/glassmorphism-background";
 import blogLogoImage from "../../../../../public/images/blog-logo.jpg";
-import { ImageGlow } from "../../../design-system/atoms/image-glow";
-import { glowText } from "../../../design-system/atoms/glow";
+import { ImageGlow } from "../../../design-system/atoms/effects/image-glow";
+import { glowText } from "../../../design-system/atoms/effects/glow";
 
 const BlogHeaderGlassWrapper = styled.div`
   width: 100%;
