@@ -3,17 +3,13 @@
 import styled from "styled-components";
 import { FC } from "react";
 import {tracking} from "@/types/tracking";
-import {CallToActionInternalWithTracking} from "@/components/design-system/atoms/call-to-actions/call-to-action-internal-with-tracking";
+import { BluePillLink, RedPillLink } from "../links/pills-links";
 
 const CenterHorizontallyContainer = styled.div`
   display: flex;
   justify-content: center;
+  gap: ${(props) => props.theme.spacing[4]};
   padding: ${(props) => props.theme.spacing[4]};
-`;
-
-const PageNavigationCallToAction = styled(CallToActionInternalWithTracking)`
-  width: 100px;
-  text-align: center;
 `;
 
 export interface PageNavigationProps {
@@ -33,7 +29,7 @@ export const PaginationNavigation: FC<PageNavigationProps> = ({
 }) => (
   <CenterHorizontallyContainer>
     {previousPageUrl && (
-      <PageNavigationCallToAction
+      <BluePillLink
         to={previousPageUrl}
         trackingData={{
           category: trackingCategory,
@@ -42,10 +38,10 @@ export const PaginationNavigation: FC<PageNavigationProps> = ({
         }}
       >
         Previous
-      </PageNavigationCallToAction>
+      </BluePillLink>
     )}
     {nextPageUrl && (
-      <PageNavigationCallToAction
+      <RedPillLink
         to={nextPageUrl}
         trackingData={{
           category: trackingCategory,
@@ -54,7 +50,7 @@ export const PaginationNavigation: FC<PageNavigationProps> = ({
         }}
       >
         Next
-      </PageNavigationCallToAction>
+      </RedPillLink>
     )}
   </CenterHorizontallyContainer>
 );
