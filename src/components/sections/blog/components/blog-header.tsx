@@ -1,14 +1,13 @@
 "use client";
 
+import { MatrixHeaderBackground } from "@/components/design-system/molecules/effects/matrix-header-background";
 import { FC } from "react";
 import styled from "styled-components";
-import { mediaQuery } from "../../../design-system/utils/media-query";
-import { MatrixRain } from "../../../design-system/atoms/effects/matrix-rain";
-import { GlassmorphismBackground } from "../../../design-system/atoms/effects/glassmorphism-background";
 import blogLogoImage from "../../../../../public/images/blog-logo.jpg";
-import { ImageGlow } from "../../../design-system/atoms/effects/image-glow";
+import { GlassmorphismBackground } from "../../../design-system/atoms/effects/glassmorphism-background";
 import { glowText } from "../../../design-system/atoms/effects/glow";
-import { MatrixHeaderBackground } from "@/components/design-system/molecules/effects/matrix-header-background";
+import { ImageGlow } from "../../../design-system/atoms/effects/image-glow";
+import { mediaQuery } from "../../../design-system/utils/media-query";
 
 const BlogHeaderGlassWrapper = styled.div`
   width: 100%;

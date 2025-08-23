@@ -16,7 +16,6 @@ export const callToActionStyle = css`
   text-align: center;
   display: inline-block;
   min-width: 120px;
-  backdrop-filter: blur(10px);
   color: ${(props) => props.theme.dark.textAbovePrimaryColor};
   text-decoration: none;
 
@@ -29,7 +28,7 @@ export const callToActionStyle = css`
     box-shadow: 0 0 25px ${(props) => props.theme.dark.accentColor}70;
 
     ${mediaQuery.inputDevice.mouse} {
-      transform: scale(1.1);
+      transform: scale(1.05);
     }
   }
 `;

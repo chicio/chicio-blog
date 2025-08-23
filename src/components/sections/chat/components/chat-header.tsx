@@ -36,49 +36,6 @@ const TitleGroup = styled.div`
   }
 `;
 
-const ChatIcon = styled.div`
-  width: 36px;
-  height: 36px;
-  background: linear-gradient(
-    135deg,
-    ${(props) => props.theme.light.primaryColor},
-    ${(props) => props.theme.light.accentColor}
-  );
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
-  box-shadow: 0 4px 15px ${(props) => props.theme.light.primaryColor}40;
-  animation: pulse 3s ease-in-out infinite;
-  flex-shrink: 0;
-
-  @keyframes pulse {
-    0%,
-    100% {
-      transform: scale(1);
-    }
-    50% {
-      transform: scale(1.2);
-    }
-  }
-
-  ${mediaQuery.dark} {
-    background: linear-gradient(
-      135deg,
-      ${(props) => props.theme.dark.primaryColor},
-      ${(props) => props.theme.dark.accentColor}
-    );
-    box-shadow: 0 4px 15px ${(props) => props.theme.dark.primaryColor}50;
-  }
-
-  ${mediaQuery.maxWidth.sm} {
-    width: 24px;
-    height: 24px;
-    font-size: 0.9rem;
-  }
-`;
-
 export interface ChatHeaderProps {
   hasMessages?: boolean;
 }
