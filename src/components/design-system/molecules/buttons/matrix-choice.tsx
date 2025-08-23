@@ -9,8 +9,8 @@ import { tracking } from "@/types/tracking";
 
 const PillContainer = styled(motion.div)`
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: space-evenly;
+  justify-content: space-evenly;
   gap: ${(props) => props.theme.spacing[6]};
   margin-top: ${(props) => props.theme.spacing[6]};
   position: relative;
@@ -18,6 +18,11 @@ const PillContainer = styled(motion.div)`
 
   ${mediaQuery.minWidth.sm} {
     flex-direction: row;
+  }
+
+  > * {
+    flex: 1 1 0;
+    min-width: 0;
   }
 `;
 
@@ -36,7 +41,7 @@ export const MatrixChoice: FC<MatrixPillsProps> = ({
   redPillText = "Red Pill",
   bluePillText = "Blue Pill",
   trackingCategory,
-  trackingLabel
+  trackingLabel,
 }) => {
   return (
     <PillContainer

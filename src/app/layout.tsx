@@ -1,7 +1,7 @@
 import { FloatingChatButton } from "@/components/design-system/molecules/buttons/chat-button";
 import { ThemePage } from "@/components/design-system/templates/theme-page";
 import { blogTheme } from "@/components/design-system/themes/theme";
-import { CookieConsent } from "@/components/design-system/utils/components/cookie-consent";
+import { CookieConsentBanner } from "@/components/design-system/organism/cookie-consent-banner";
 import { SharedHead } from "@/components/design-system/utils/components/share-head";
 import StyledComponentsRegistry from "@/components/styled-components-registry";
 import { GoogleTagManager } from "@next/third-parties/google";
@@ -27,8 +27,8 @@ export default function RootLayout({
           <ThemePage theme={blogTheme}>
             {children}
             <FloatingChatButton />
+            <CookieConsentBanner />
           </ThemePage>
-          <CookieConsent />
         </StyledComponentsRegistry>
         <SpeedInsights />
         <Analytics />

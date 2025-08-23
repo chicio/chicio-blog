@@ -1,6 +1,5 @@
 import { createGlobalStyle } from "styled-components";
 import { mediaQuery } from "@/components/design-system/utils/media-query";
-import 'cookieconsent/build/cookieconsent.min.css';
 
 export const GlobalStyle = createGlobalStyle`
     @font-face {

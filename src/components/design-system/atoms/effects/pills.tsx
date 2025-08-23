@@ -8,7 +8,8 @@ export const PillContainer = styled.div<{ $color: "red" | "blue" }>`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 140px;
+  min-width: 140px;
+  padding: 0 ${props => props.theme.spacing[2]};
   height: 50px;
   border-radius: 25px;
   text-decoration: none;
