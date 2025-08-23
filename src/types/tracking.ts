@@ -35,6 +35,8 @@ export const tracking = {
     open_experience_and_education: "open_experience_and_education",
     open_blog_tag: "open_blog_tag",
     pull_to_refresh: "pull_to_refresh",
+    red_pill: "red_pill",
+    blue_pill: "blue_pill"
   },
   category: {
     home: "home",

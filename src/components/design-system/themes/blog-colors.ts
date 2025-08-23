@@ -22,6 +22,7 @@ export const matrixTheme: Colors = {
   generalBackgroundLight: matrixBackgroundLight,
   boxShadowLight: "rgba(0, 255, 65, 0.3)",
   dividerColor: matrixTextGreen,
+  
 };
 
 export const blogDark = matrixTheme;

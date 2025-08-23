@@ -75,7 +75,7 @@ const navBarVariants: Variants = {
   }
 };
 
-const MenuContainer = styled(motion(Container))<{
+const MenuContainer = styled(motion.create(Container))<{
   $shouldHide: boolean;
   $shouldOpenMenu: boolean;
 }>`
@@ -127,7 +127,7 @@ const MenuButtonContainer = styled.div`
   }
 `;
 
-const NavBar = styled(motion(Container))`
+const NavBar = styled(motion.create(Container))`
   display: flex;
   flex-direction: column;
   align-items: center;
