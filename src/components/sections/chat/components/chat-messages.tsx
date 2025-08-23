@@ -11,7 +11,7 @@ export const MessagesContainer = styled.div`
   transition: padding 0.4s ease;
 
   ${mediaQuery.minWidth.sm} {
-    padding: ${(props) => `${props.theme.spacing[6]} 0 140px 0`};
+    padding: ${(props) => `${props.theme.spacing[10]} 0 140px 0`};
   }
 
   ${hideScrollbar};

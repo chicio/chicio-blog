@@ -8,6 +8,7 @@ import { ChatMessage } from "./chat-message";
 import { MessagesContainer } from "./chat-messages";
 import { ChatWelcome } from "./chat-welcome";
 import { Markdown } from "./markdown";
+import { MatrixHeaderBackground } from "@/components/design-system/molecules/effects/matrix-header-background";
 
 export const Chat: FC = () => {
   const {
@@ -25,6 +26,7 @@ export const Chat: FC = () => {
 
   return (
     <>
+      {!hasMessages && <MatrixHeaderBackground big={false} />}
       <ChatHeader hasMessages={hasMessages} />
       <MessagesContainer>
         {messages.length === 0 && (

@@ -3,7 +3,6 @@ import { borderColor, borderRadius } from "../effects/border";
 
 export const InputField = styled.input`
   background: none;
-  background-color: ${(props) => props.theme.light.generalBackground};
   ${borderRadius};
   ${borderColor};
   box-sizing: border-box;

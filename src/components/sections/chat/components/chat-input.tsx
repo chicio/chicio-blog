@@ -30,6 +30,8 @@ const InputWrapper = styled.form`
 const ChatInputField = styled(InputField)`
   ${paragraphStyle};
   ${glowContainer};
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   width: 100%;
   padding: ${(props) => props.theme.spacing[2]}
     ${(props) => props.theme.spacing[8]} ${(props) => props.theme.spacing[2]}

@@ -12,11 +12,12 @@ export const ChatHeaderContainer = styled(Container)<{ $isVisible: boolean }>`
   text-align: center;
   padding: ${(props) => props.theme.spacing[2]}
     ${(props) => props.theme.spacing[2]};
-  margin-top: ${(props) => props.theme.spacing[6]};
+  margin: ${(props) => props.theme.spacing[4]} 0 ;
   z-index: 50;
   display: ${(props) => (props.$isVisible ? "block" : "none")};
-
+  
   ${mediaQuery.minWidth.sm} {
+    margin: ${(props) => props.theme.spacing[6]} 0 ;
     padding: ${(props) => props.theme.spacing[4]}
       ${(props) => props.theme.spacing[3]};
   }
@@ -78,23 +79,6 @@ const ChatIcon = styled.div`
   }
 `;
 
-const SubtitleContainer = styled.div<{ $isExpanded: boolean }>`
-  overflow: hidden;
-  transition:
-    max-height 0.3s ease,
-    opacity 0.3s ease;
-
-  ${mediaQuery.maxWidth.sm} {
-    max-height: ${(props) => (props.$isExpanded ? "100px" : "0")};
-    opacity: ${(props) => (props.$isExpanded ? "1" : "0")};
-  }
-
-  ${mediaQuery.minWidth.sm} {
-    max-height: none;
-    opacity: 1;
-  }
-`;
-
 export interface ChatHeaderProps {
   hasMessages?: boolean;
 }
@@ -113,12 +97,10 @@ export const ChatHeader: FC<ChatHeaderProps> = ({ hasMessages = false }) => {
         <ChatButton />
         <Heading4>Chat with Fabrizio</Heading4>
       </TitleGroup>
-      <SubtitleContainer $isExpanded={isSubtitleExpanded}>
-        <ChatSubtitle>
-          Ask me anything about my work, projects, and software development
-          expertise
-        </ChatSubtitle>
-      </SubtitleContainer>
+      <ChatSubtitle>
+        Ask me anything about my work, projects, and software development
+        expertise
+      </ChatSubtitle>
     </ChatHeaderContainer>
   );
 };
