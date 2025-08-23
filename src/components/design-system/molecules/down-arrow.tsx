@@ -5,41 +5,16 @@ import { FC, useEffect, useState } from "react";
 import { mediaQuery } from "../utils/media-query";
 import { bounce } from "@/components/design-system/utils/animations/bounce-keyframes";
 import { ChevronDown } from "@styled-icons/boxicons-regular";
+import { RoundedIcon } from "../atoms/icon";
 
-const FloatingArrowContainer = styled.div`
-  position: fixed;
-  bottom: ${(props) => props.theme.spacing[2]};
-  left: 0;
-  right: 0;
-  margin: 0 auto;
-  z-index: 1000;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background: linear-gradient(
-    135deg,
-    ${(props) => props.theme.dark.accentColor} 0%,
-    ${(props) => props.theme.dark.primaryColor} 100%
-  );
-  backdrop-filter: blur(10px);
-  border: 2px solid ${(props) => props.theme.dark.accentColor};
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-
+const FloatingArrowContainer = styled(RoundedIcon)`
   animation: ${bounce} 2s ease-in-out infinite;
-
-  &:hover {
-    transform: scale(1.1);
-    box-shadow: 0 0 20px ${(props) => props.theme.dark.accentColor}80;
-  }
+  position: fixed;
+  z-index: 3;
+  bottom: ${(props) => props.theme.spacing[2]};
 
   ${mediaQuery.minWidth.md} {
     bottom: ${(props) => props.theme.spacing[4]};
-    width: 60px;
-    height: 60px;
   }
 `;
 
@@ -62,7 +37,7 @@ export const FloatingDownArrow: FC = () => {
   const [totalSections, setTotalSections] = useState(0);
 
   useEffect(() => {
-    const scrollContainer = document.querySelector('[data-snap-container]');
+    const scrollContainer = document.querySelector("[data-snap-container]");
     if (!scrollContainer) return;
 
     const sections = Array.from(scrollContainer.children);
@@ -94,35 +69,29 @@ export const FloatingDownArrow: FC = () => {
 
     scrollContainer.addEventListener("scroll", handleScroll, { passive: true });
 
-    // Initial calculation
     handleScroll();
 
     return () => scrollContainer.removeEventListener("scroll", handleScroll);
   }, []);
 
   const handleScrollDown = () => {
-    const scrollContainer = document.querySelector('[data-snap-container]');
+    const scrollContainer = document.querySelector("[data-snap-container]");
     if (!scrollContainer) return;
 
-    // Trova la sezione successiva usando la stessa logica robusta
     const sections = Array.from(scrollContainer.children);
     const nextSectionIndex = currentSectionIndex + 1;
 
-    // Assicurati che esista una sezione successiva
     if (nextSectionIndex >= sections.length) return;
 
-    // Ottieni la posizione reale della sezione successiva
     const nextSection = sections[nextSectionIndex] as HTMLElement;
     const nextSectionTop = nextSection.offsetTop;
 
-    // Scrolla alla posizione reale della sezione successiva
     scrollContainer.scrollTo({
       top: nextSectionTop,
       behavior: "smooth",
     });
   };
 
-  // Hide on last section
   if (currentSectionIndex >= totalSections - 1) {
     return null;
   }

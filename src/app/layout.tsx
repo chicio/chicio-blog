@@ -1,14 +1,14 @@
-import { ReactNode } from "react";
-import StyledComponentsRegistry from "@/components/styled-components-registry";
-import { blogTheme } from "@/components/design-system/themes/theme";
-import { Viewport } from "next";
-import { SharedHead } from "@/components/design-system/utils/components/share-head";
-import { CookieConsent } from "@/components/design-system/utils/components/cookie-consent";
-import { GoogleTagManager } from "@next/third-parties/google";
-import { SpeedInsights } from "@vercel/speed-insights/next";
-import { Analytics } from "@vercel/analytics/next";
+import { FloatingChatButton } from "@/components/design-system/molecules/chat-button";
 import { ThemePage } from "@/components/design-system/templates/theme-page";
-import { FloatingChatButton } from "@/components/design-system/molecules/floating-chat-button";
+import { blogTheme } from "@/components/design-system/themes/theme";
+import { CookieConsent } from "@/components/design-system/utils/components/cookie-consent";
+import { SharedHead } from "@/components/design-system/utils/components/share-head";
+import StyledComponentsRegistry from "@/components/styled-components-registry";
+import { GoogleTagManager } from "@next/third-parties/google";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Viewport } from "next";
+import { ReactNode } from "react";
 
 export const viewport: Viewport = {
   width: "device-width",

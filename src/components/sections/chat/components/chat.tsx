@@ -27,7 +27,7 @@ export const Chat: FC = () => {
   return (
     <>
       <ChatHeader hasMessages={hasMessages} />
-      <MessagesContainer $hasMessages={hasMessages}>
+      <MessagesContainer>
         {messages.length === 0 && (
           <ChatWelcome
             exampleQuestions={exampleQuestions}

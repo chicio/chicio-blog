@@ -1,4 +1,4 @@
-import { FloatingDownArrow } from "@/components/design-system/molecules/floating-down-arrow";
+import { FloatingDownArrow } from "@/components/design-system/molecules/down-arrow";
 import { MatrixBackground } from "@/components/design-system/molecules/matrix-background";
 import { Footer } from "@/components/design-system/organism/footer";
 import { JsonLd } from "@/components/design-system/utils/components/jsond-ld";
