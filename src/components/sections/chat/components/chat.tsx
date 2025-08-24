@@ -9,6 +9,9 @@ import { MessagesContainer } from "./chat-messages";
 import { ChatWelcome } from "./chat-welcome";
 import { Markdown } from "./markdown";
 import { MatrixHeaderBackground } from "@/components/design-system/molecules/effects/matrix-header-background";
+import { ContentContainer } from "@/components/design-system/molecules/containers/content-container";
+import { tracking } from "@/types/tracking";
+import { Menu } from "@/components/design-system/organism/menu";
 
 export const Chat: FC = () => {
   const {
@@ -26,43 +29,46 @@ export const Chat: FC = () => {
 
   return (
     <>
-      {!hasMessages && <MatrixHeaderBackground big={false} />}
-      <ChatHeader hasMessages={hasMessages} />
-      <MessagesContainer>
-        {messages.length === 0 && (
-          <ChatWelcome
-            exampleQuestions={exampleQuestions}
-            handleExampleQuestionsSelection={handleExampleQuestionsSelection}
-          />
-        )}
-        {messages.map((message) => (
-          <ChatMessage isUser={message.role === "user"} key={message.id}>
-            {message.parts.map((part) => {
-              if (part.type === "text") {
-                return (
-                  <Markdown
-                    key={`${message.id}-text`}
-                    id={message.id}
-                    content={part.text}
-                  />
-                );
-              }
-            })}
-          </ChatMessage>
-        ))}
-        {error && (
-          <ChatMessage isUser={false}>
-            Sorry, I have encountered an error while trying to processing your
-            question. Please try again later.
-          </ChatMessage>
-        )}
-        <div ref={messagesEndRef} />
-      </MessagesContainer>
-      <ChatInput
-        input={input}
-        handleSubmit={handleSubmit}
-        handleInputChange={handleInputChange}
-      />
+      <Menu trackingCategory={tracking.category.chat} />
+      <ContentContainer>
+        {!hasMessages && <MatrixHeaderBackground big={false} />}
+        <ChatHeader hasMessages={hasMessages} />
+        <MessagesContainer>
+          {messages.length === 0 && (
+            <ChatWelcome
+              exampleQuestions={exampleQuestions}
+              handleExampleQuestionsSelection={handleExampleQuestionsSelection}
+            />
+          )}
+          {messages.map((message) => (
+            <ChatMessage isUser={message.role === "user"} key={message.id}>
+              {message.parts.map((part) => {
+                if (part.type === "text") {
+                  return (
+                    <Markdown
+                      key={`${message.id}-text`}
+                      id={message.id}
+                      content={part.text}
+                    />
+                  );
+                }
+              })}
+            </ChatMessage>
+          ))}
+          {error && (
+            <ChatMessage isUser={false}>
+              Sorry, I have encountered an error while trying to processing your
+              question. Please try again later.
+            </ChatMessage>
+          )}
+          <div ref={messagesEndRef} />
+        </MessagesContainer>
+        <ChatInput
+          input={input}
+          handleSubmit={handleSubmit}
+          handleInputChange={handleInputChange}
+        />
+      </ContentContainer>
     </>
   );
 };

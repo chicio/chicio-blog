@@ -1,9 +1,9 @@
 import { FC } from "react";
-import styled from "styled-components";
+import styled, { TransientProps } from "styled-components";
 import { MatrixRain } from "../../atoms/effects/matrix-rain";
 import { mediaQuery } from "../../utils/media-query";
 
-const MatrixBackground = styled.div<{ $big: boolean }>`
+const MatrixBackground = styled.div<TransientProps<MatrixHeaderBackgroundProps>>`
   position: absolute;
   top: 0;
   left: 0;

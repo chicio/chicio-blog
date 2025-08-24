@@ -1,9 +1,12 @@
-'use client';
+"use client";
 
-import styled from 'styled-components';
-import { useShuffleArray } from '@/components/design-system/utils/hooks/use-shuffle-array';
-import { ClownTitle } from '@/components/design-system/molecules/effects/clown';
-import { MediaGrid } from '@/components/design-system/molecules/containers/media-grid';
+import { MediaGrid } from "@/components/design-system/molecules/containers/media-grid";
+import { MatrixHeaderBackground } from "@/components/design-system/molecules/effects/matrix-header-background";
+import { PageTemplate } from "@/components/design-system/templates/page-template";
+import { useShuffleArray } from "@/components/design-system/utils/hooks/use-shuffle-array";
+import { siteMetadata } from "@/types/site-metadata";
+import { tracking } from "@/types/tracking";
+import styled from "styled-components";
 
 const VideoWrapper = styled.div`
   position: relative;
@@ -22,20 +25,28 @@ const VideoWrapper = styled.div`
 `;
 
 const ClownsPage = () => {
-  const videos = useShuffleArray([
-    'https://www.youtube.com/embed/zogb9j4xr5M',
-    'https://www.youtube.com/embed/cvUjYs8hUFY',
-    'https://www.youtube.com/embed/k8uE-M4o3vw',
-    'https://www.youtube.com/embed/64nyoeyAx9w',
-    'https://www.youtube.com/embed/NGZ8fBXMM7s',
-    'https://www.youtube.com/embed/e8ZXGVui6n8',
-    'https://www.youtube.com/embed/l0XKdAl3uV4',
-    'https://www.youtube.com/embed/8L2jFgx3Kb8',
-  ], 4);
+  const videos = useShuffleArray(
+    [
+      "https://www.youtube.com/embed/zogb9j4xr5M",
+      "https://www.youtube.com/embed/cvUjYs8hUFY",
+      "https://www.youtube.com/embed/k8uE-M4o3vw",
+      "https://www.youtube.com/embed/64nyoeyAx9w",
+      "https://www.youtube.com/embed/NGZ8fBXMM7s",
+      "https://www.youtube.com/embed/e8ZXGVui6n8",
+      "https://www.youtube.com/embed/l0XKdAl3uV4",
+      "https://www.youtube.com/embed/8L2jFgx3Kb8",
+    ],
+    4
+  );
 
   return (
-    <>
-      <ClownTitle />
+    <PageTemplate
+      header={
+          <MatrixHeaderBackground big={false} />
+      }
+      author={siteMetadata.author}
+      trackingCategory={tracking.category.clowns}
+    >
       <MediaGrid>
         {videos.map((video, index) => (
           <VideoWrapper key={index}>
@@ -48,7 +59,7 @@ const ClownsPage = () => {
           </VideoWrapper>
         ))}
       </MediaGrid>
-    </>
+    </PageTemplate>
   );
 };
 

@@ -1,8 +1,6 @@
-import { FC, ReactNode } from "react";
-import { Menu } from "@/components/design-system/organism/menu";
-import { BlogContentContainer, ContentContainer } from "@/components/design-system/molecules/containers/content-container";
+import { PageTemplate } from "@/components/design-system/templates/page-template";
 import { BlogHeader } from "@/components/sections/blog/components/blog-header";
-import { Footer } from "@/components/design-system/organism/footer";
+import { FC, ReactNode } from "react";
 
 export interface BlogPageProps {
   author: string;
@@ -17,16 +15,15 @@ export const BlogPageTemplate: FC<BlogPageProps> = ({
   trackingCategory,
   big = false,
 }) => (
-  <>
-    <Menu
-      trackingCategory={trackingCategory}
-    />
-    <ContentContainer>
-      <BlogHeader big={big} />
-      <BlogContentContainer>
-        {children}
-      </BlogContentContainer>
-    </ContentContainer>
-    <Footer author={author} trackingCategory={trackingCategory} />
-  </>
+  <PageTemplate
+    author={author}
+    trackingCategory={trackingCategory}
+    header={
+      <div>
+        <BlogHeader big={big} />
+      </div>
+    }
+  >
+    {children}
+  </PageTemplate>
 );
