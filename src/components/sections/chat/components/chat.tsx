@@ -2,7 +2,7 @@
 
 import { FC } from "react";
 import { useFabrizioChat } from "../hooks/useFabrizioChat";
-import { ChatHeader } from "./chat-header";
+import { GenericHeader } from "../../../design-system/organism/header/generic-header";
 import { ChatInput } from "./chat-input";
 import { ChatMessage } from "./chat-message";
 import { MessagesContainer } from "./chat-messages";
@@ -12,6 +12,7 @@ import { MatrixHeaderBackground } from "@/components/design-system/molecules/eff
 import { ContentContainer } from "@/components/design-system/molecules/containers/content-container";
 import { tracking } from "@/types/tracking";
 import { Menu } from "@/components/design-system/organism/menu";
+import { ChatButton } from "@/components/design-system/molecules/buttons/chat-button";
 
 export const Chat: FC = () => {
   const {
@@ -32,7 +33,12 @@ export const Chat: FC = () => {
       <Menu trackingCategory={tracking.category.chat} />
       <ContentContainer>
         {!hasMessages && <MatrixHeaderBackground big={false} />}
-        <ChatHeader hasMessages={hasMessages} />
+        <GenericHeader
+          title="Chat with Fabrizio"
+          subtitle="Ask me anything about my work, projects, and software development expertise"
+          logo={<ChatButton />}
+          visible={!hasMessages}
+        />
         <MessagesContainer>
           {messages.length === 0 && (
             <ChatWelcome

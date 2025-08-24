@@ -1,14 +1,19 @@
 "use client";
 
+import styled from "styled-components";
 import { MediaGrid } from "@/components/design-system/molecules/containers/media-grid";
 import { MatrixHeaderBackground } from "@/components/design-system/molecules/effects/matrix-header-background";
+import { GenericHeader } from "@/components/design-system/organism/header/generic-header";
 import { PageTemplate } from "@/components/design-system/templates/page-template";
 import { useShuffleArray } from "@/components/design-system/utils/hooks/use-shuffle-array";
 import { siteMetadata } from "@/types/site-metadata";
 import { tracking } from "@/types/tracking";
-import styled from "styled-components";
+
+import { ClownSvgIcon } from "@/components/sections/clowns/components/clown-svg-icon";
+import { glowContainer } from "@/components/design-system/atoms/effects/glow";
 
 const VideoWrapper = styled.div`
+  ${glowContainer};
   position: relative;
   width: 100%;
   padding-top: 56.25%; /* Aspect ratio 16:9 */
@@ -42,7 +47,14 @@ const ClownsPage = () => {
   return (
     <PageTemplate
       header={
+        <>
           <MatrixHeaderBackground big={false} />
+          <GenericHeader
+            title="Clownified!!!"
+            subtitle="Bravo! Keep up the effort and you’ll clown-it!"
+            logo={<ClownSvgIcon />}
+          />
+        </>
       }
       author={siteMetadata.author}
       trackingCategory={tracking.category.clowns}

@@ -1,11 +1,10 @@
 import { Container } from "@/components/design-system/atoms/containers/container";
 import { glassmorphism } from "@/components/design-system/atoms/effects/glassmorphism";
 import { Heading4 } from "@/components/design-system/atoms/typography/heading4";
-import { ChatButton } from "@/components/design-system/molecules/buttons/chat-button";
 import { mediaQuery } from "@/components/design-system/utils/media-query";
 import { FC, useState } from "react";
 import styled from "styled-components";
-import { ChatSubtitle } from "./chat-subtitle";
+import { ChatSubtitle } from "../../../sections/chat/components/chat-subtitle";
 
 export const ChatHeaderContainer = styled(Container)<{ $isVisible: boolean }>`
   ${glassmorphism}
@@ -37,26 +36,27 @@ const TitleGroup = styled.div`
 `;
 
 export interface ChatHeaderProps {
-  hasMessages?: boolean;
+  title: string;
+  subtitle: string;
+  logo: React.ReactElement; 
+  visible?: boolean;
 }
 
-export const ChatHeader: FC<ChatHeaderProps> = ({ hasMessages = false }) => {
+export const GenericHeader: FC<ChatHeaderProps> = ({ title, subtitle, logo, visible = true }) => {
   const [isSubtitleExpanded, setIsSubtitleExpanded] = useState(false);
-  const isVisible = !hasMessages;
 
   const toggleSubtitle = () => {
     setIsSubtitleExpanded(!isSubtitleExpanded);
   };
 
   return (
-    <ChatHeaderContainer $isVisible={isVisible} onClick={toggleSubtitle}>
+    <ChatHeaderContainer $isVisible={visible} onClick={toggleSubtitle}>
       <TitleGroup>
-        <ChatButton />
-        <Heading4>Chat with Fabrizio</Heading4>
+        {logo}
+        <Heading4>{title}</Heading4>
       </TitleGroup>
       <ChatSubtitle>
-        Ask me anything about my work, projects, and software development
-        expertise
+        {subtitle}
       </ChatSubtitle>
     </ChatHeaderContainer>
   );

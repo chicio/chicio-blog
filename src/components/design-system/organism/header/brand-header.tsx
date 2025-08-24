@@ -4,10 +4,10 @@ import { MatrixHeaderBackground } from "@/components/design-system/molecules/eff
 import { FC } from "react";
 import styled, { TransientProps } from "styled-components";
 import blogLogoImage from "../../../../../public/images/blog-logo.jpg";
-import { GlassmorphismBackground } from "../../../design-system/atoms/effects/glassmorphism-background";
-import { glowText } from "../../../design-system/atoms/effects/glow";
-import { ImageGlow } from "../../../design-system/atoms/effects/image-glow";
-import { mediaQuery } from "../../../design-system/utils/media-query";
+import { GlassmorphismBackground } from "../../atoms/effects/glassmorphism-background";
+import { glowText } from "../../atoms/effects/glow";
+import { ImageGlow } from "../../atoms/effects/image-glow";
+import { mediaQuery } from "../../utils/media-query";
 
 const BlogHeaderGlassWrapper = styled.div`
   width: 100%;
@@ -75,7 +75,6 @@ const Container = styled.div<TransientProps<BlogHeaderProps>>`
   display: block;
 
   height: ${(props) => (props.$compact ? "150px" : "auto")};
-  
   ${mediaQuery.minWidth.md} {
     height: ${(props) => (props.$compact ? "180px" : "auto")};
   }
@@ -113,7 +112,7 @@ interface DesktopHeaderProps {
   big: boolean;
 }
 
-export const BlogHeader: FC<DesktopHeaderProps> = ({ big }) => (
+export const BrandHeader: FC<DesktopHeaderProps> = ({ big }) => (
   <Container $compact={!big}>
     <BlogHeaderLogo compact={!big} />
     <MatrixHeaderBackground big={big} />

@@ -1,5 +1,5 @@
 import { PageTemplate } from "@/components/design-system/templates/page-template";
-import { BlogHeader } from "@/components/sections/blog/components/blog-header";
+import { BrandHeader } from "@/components/design-system/organism/header/brand-header";
 import { FC, ReactNode } from "react";
 
 export interface BlogPageProps {
@@ -18,11 +18,7 @@ export const BlogPageTemplate: FC<BlogPageProps> = ({
   <PageTemplate
     author={author}
     trackingCategory={trackingCategory}
-    header={
-      <div>
-        <BlogHeader big={big} />
-      </div>
-    }
+    header={<BrandHeader big={big} />}
   >
     {children}
   </PageTemplate>
