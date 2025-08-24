@@ -80,7 +80,7 @@ const getStatusLine = (
 };
 
 export const MatrixProgressBar: React.FC = () => {
-  const { percent, started } = useReadingProgress();
+  const { percent, started } = useReadingProgress('blog-post-container');
   const direction = useScrollDirection();
   let status: "uploading" | "complete" = "uploading";
 
@@ -93,9 +93,8 @@ export const MatrixProgressBar: React.FC = () => {
       {started && direction === "down" && (
         <ProgressBarWrapper
           initial={{ y: -60, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          exit={{ y: -60, opacity: 0 }}
-          transition={{ duration: 0.4, ease: "easeOut" }}
+          animate={{ y: 0, opacity: 1, transition: { delay: 0.1, duration: 0.4, ease: "linear" } }}
+          exit={{ y: -60, opacity: 0, transition: { duration: 0.2, ease: "linear" } }}
         >
           <ProgressBar>
             {getStatusLine(status)}

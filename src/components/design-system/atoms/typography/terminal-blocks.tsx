@@ -9,6 +9,7 @@ export const TerminalLine = styled.div`
   ${glowText};
   margin-bottom: ${(props) => props.theme.spacing[1]};
   font-family: "Courier New", monospace;
+  font-weight: bold;
   line-height: 1.4;
   color: ${(props) => props.theme.dark.accentColor};
   font-size: 0.8rem;

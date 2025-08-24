@@ -192,7 +192,7 @@ interface PostContentProps {
 }
 
 export const PostContent: FC<PostContentProps> = ({ html }) => (
-  <PostContentContainer dangerouslySetInnerHTML={{ __html: html }} />
+  <PostContentContainer id="blog-post-container" dangerouslySetInnerHTML={{ __html: html }} />
 );
 
 export const PostTitle = styled(Heading1)`
