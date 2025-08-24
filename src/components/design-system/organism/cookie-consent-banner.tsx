@@ -1,15 +1,16 @@
 "use client";
 
+import { hasConsented, writeConsent } from "@/lib/consents/consents";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { glassmorphism } from "../atoms/effects/glassmorphism";
-import {
-  BluePillButton,
-  RedPillButton,
-} from "../molecules/buttons/pills-buttons";
-import { mediaQuery } from "../utils/media-query";
 import { glowText } from "../atoms/effects/glow";
 import { Paragraph } from "../atoms/typography/paragraph";
+import {
+    BluePillButton,
+    RedPillButton,
+} from "../molecules/buttons/pills-buttons";
+import { mediaQuery } from "../utils/media-query";
 
 const BannerContainer = styled.div`
   ${glassmorphism}
@@ -62,12 +63,13 @@ export const CookieConsentBanner = () => {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const consent = localStorage.getItem("cookieConsent");
-    if (!consent) setVisible(true);
+    if (!hasConsented()) { 
+        setVisible(true);
+    }
   }, []);
 
   const handle = (accepted: "accepted" | "rejected") => {
-    localStorage.setItem("fabrizioduroni_cookieConsent", accepted);
+    writeConsent(accepted);
     setVisible(false);
   };
 
@@ -85,13 +87,13 @@ export const CookieConsentBanner = () => {
           onClick={() => handle("rejected")}
           aria-label="Reject cookie"
         >
-          Reject cookies
+          Sleep (Reject)
         </BluePillButton>
         <RedPillButton
           onClick={() => handle("accepted")}
           aria-label="Accept cookie"
         >
-          Accept cookies
+          Wake up (Accept)
         </RedPillButton>
       </PillsContainer>
     </BannerContainer>

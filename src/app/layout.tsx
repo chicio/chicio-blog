@@ -5,8 +5,7 @@ import { CookieConsentBanner } from "@/components/design-system/organism/cookie-
 import { SharedHead } from "@/components/design-system/utils/components/share-head";
 import StyledComponentsRegistry from "@/components/styled-components-registry";
 import { GoogleTagManager } from "@next/third-parties/google";
-import { Analytics } from "@vercel/analytics/next";
-import { SpeedInsights } from "@vercel/speed-insights/next";
+import { TrackingOptIn } from "@/components/design-system/organism/tracking-optin";
 import { Viewport } from "next";
 import { ReactNode } from "react";
 
@@ -30,8 +29,7 @@ export default function RootLayout({
             <CookieConsentBanner />
           </ThemePage>
         </StyledComponentsRegistry>
-        <SpeedInsights />
-        <Analytics />
+        <TrackingOptIn />
       </body>
     </html>
   );
