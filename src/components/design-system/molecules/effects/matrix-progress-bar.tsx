@@ -8,27 +8,29 @@ import {
   Cursor,
 } from "@/components/design-system/atoms/typography/terminal-blocks";
 import { useReadingProgress } from "../../utils/hooks/use-reading-progress";
+import { glassmorphism } from "../../atoms/effects/glassmorphism";
 
 const ProgressBarWrapper = styled.div`
+    ${glassmorphism}
   position: fixed;
   top: 0;
   z-index: 100;
   width: 100%;
-  background: rgba(10, 20, 10, 0.85);
-  box-shadow: 0 2px 8px #00ff41;
-  padding: 0.5rem 0;
+  padding: ${(props) => props.theme.spacing[1]} 0;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-top: none;
 `;
 
 const ProgressBar = styled.div`
-  margin-top: ${(props) => props.theme.spacing[1]};
   width: 100%;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 `;
 
-const getBar = (percent: number, length = 10) => {
+const getBar = (percent: number, length = 16) => {
   const filled = Math.round((percent / 100) * length);
   const empty = length - filled;
   return `[${"█".repeat(filled)}${"░".repeat(empty)}]  ${percent}%`;
@@ -42,13 +44,13 @@ const getStatusLine = (
     case "uploading":
       return (
         <TerminalLine>
-          {"> Uploading knowledge..."} <Cursor>_</Cursor> {getBar(percent)}
+          {"> Uploading knowledge..."} <Cursor>_</Cursor> 
         </TerminalLine>
       );
     case "complete":
       return (
         <TerminalLine>
-          <SuccessText>{"> Transfer complete."}</SuccessText> {getBar(percent)}
+          <SuccessText>{"> Transfer complete."}</SuccessText> 
         </TerminalLine>
       );
     default:
@@ -70,7 +72,7 @@ export const MatrixProgressBar: React.FC = () => {
         <ProgressBarWrapper>
           <ProgressBar>
             {getStatusLine(status, percent)}
-            {/* <TerminalLine>{getBar(percent)}</TerminalLine> */}
+            <TerminalLine>{getBar(percent)}</TerminalLine>
           </ProgressBar>
         </ProgressBarWrapper>
       )}
