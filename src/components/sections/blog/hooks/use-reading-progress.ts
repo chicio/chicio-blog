@@ -3,8 +3,11 @@
 import { useEffect, useState } from "react";
 
 export function useReadingProgress(targetId: string) {
-  const [percent, setPercent] = useState(0);
-  const [started, setStarted] = useState(false);
+  const [readingProgress, setReadingProgress] = useState({
+    percentage: 0,
+    started: false,
+    status: "uploading" as "uploading" | "complete",
+  });
 
   useEffect(() => {
     function updateProgress() {
@@ -13,17 +16,20 @@ export function useReadingProgress(targetId: string) {
       const scrollHeight = el.scrollHeight;
       const clientHeight = window.innerHeight;
       const total = scrollHeight - clientHeight;
-      const pct = Math.max(
+      const percentage = Math.max(
         0,
         Math.min(100, Math.round((scrollTop / total) * 100))
       );
-      setPercent(pct);
-      setStarted(scrollTop > 0);
+      setReadingProgress({
+        percentage,
+        started: scrollTop > 0,
+        status: percentage >= 100 ? "complete" : "uploading",
+      });
     }
     window.addEventListener("scroll", updateProgress);
     updateProgress();
     return () => window.removeEventListener("scroll", updateProgress);
   }, [targetId]);
 
-  return { percent, started };
+  return readingProgress;
 }

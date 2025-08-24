@@ -8,7 +8,7 @@ import {
   SuccessText,
   Cursor,
 } from "@/components/design-system/atoms/typography/terminal-blocks";
-import { useReadingProgress } from "../../utils/hooks/use-reading-progress";
+import { useReadingProgress } from "../hooks/use-reading-progress";
 import { useEffect, useState } from "react";
 // Hook per rilevare la direzione dello scroll
 function useScrollDirection() {
@@ -30,7 +30,7 @@ function useScrollDirection() {
   }, [lastScroll]);
   return direction;
 }
-import { glassmorphism } from "../../atoms/effects/glassmorphism";
+import { glassmorphism } from "../../../design-system/atoms/effects/glassmorphism";
 
 const ProgressBarWrapper = styled(motion.div)`
   ${glassmorphism};
@@ -52,10 +52,10 @@ const ProgressBar = styled.div`
   align-items: center;
 `;
 
-const getBar = (percent: number, length = 20) => {
-  const filled = Math.round((percent / 100) * length);
+const getBar = (percentage: number, length = 24) => {
+  const filled = Math.round((percentage / 100) * length);
   const empty = length - filled;
-  return `[${"█".repeat(filled)}${"░".repeat(empty)}]  ${percent}%`;
+  return `[${"█".repeat(filled)}${"░".repeat(empty)}]  ${percentage}%`;
 };
 
 const getStatusLine = (
@@ -79,14 +79,9 @@ const getStatusLine = (
   }
 };
 
-export const MatrixProgressBar: React.FC = () => {
-  const { percent, started } = useReadingProgress('blog-post-container');
+export const BlogPostProgressBar: React.FC = () => {
+  const { percentage, started, status } = useReadingProgress('blog-post-container');
   const direction = useScrollDirection();
-  let status: "uploading" | "complete" = "uploading";
-
-  if (percent >= 100) {
-    status = "complete";
-  }
 
   return (
     <AnimatePresence>
@@ -99,7 +94,7 @@ export const MatrixProgressBar: React.FC = () => {
           <ProgressBar>
             {getStatusLine(status)}
             <TerminalLine>
-              <SuccessText>{getBar(percent)}</SuccessText>
+              <SuccessText>{getBar(percentage)}</SuccessText>
             </TerminalLine>
           </ProgressBar>
         </ProgressBarWrapper>

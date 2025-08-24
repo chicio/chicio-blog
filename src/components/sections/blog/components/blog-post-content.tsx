@@ -1,4 +1,4 @@
-import { MatrixProgressBar } from "@/components/design-system/molecules/effects/matrix-progress-bar";
+import { BlogPostProgressBar } from "@/components/sections/blog/components/blog-post-progress-bar";
 import { JsonLd } from "@/components/design-system/utils/components/jsond-ld";
 import { BlogPageTemplate } from "@/components/sections/blog/components/blog-page-template";
 import { Post } from "@/types/post";
@@ -20,7 +20,7 @@ export const BlogPostContent: FC<PostProps> = ({ post }) => {
 
   return (
     <>
-      <MatrixProgressBar />
+      <BlogPostProgressBar />
       <BlogPageTemplate
         author={siteMetadata.author}
         trackingCategory={tracking.category.blog_post}
