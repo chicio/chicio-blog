@@ -1,14 +1,15 @@
-import { BlogPageTemplate } from "@/components/sections/blog/components/blog-page-template";
+import { MatrixProgressBar } from "@/components/design-system/molecules/effects/matrix-progress-bar";
 import { JsonLd } from "@/components/design-system/utils/components/jsond-ld";
+import { BlogPageTemplate } from "@/components/sections/blog/components/blog-page-template";
+import { Post } from "@/types/post";
 import { siteMetadata } from "@/types/site-metadata";
 import { tracking } from "@/types/tracking";
 import { FC } from "react";
 import { PostAuthors } from "./post-authors";
-import { PostTitle, PostContent } from "./post-content";
+import { PostContent, PostTitle } from "./post-content";
 import { PostMeta } from "./post-meta";
 import { PostTags } from "./post-tags";
 import { RecentPosts } from "./read-next";
-import { Post } from "@/types/post";
 
 interface PostProps {
   post: Post;
@@ -19,6 +20,7 @@ export const BlogPostContent: FC<PostProps> = ({ post }) => {
 
   return (
     <>
+      <MatrixProgressBar />
       <BlogPageTemplate
         author={siteMetadata.author}
         trackingCategory={tracking.category.blog_post}
