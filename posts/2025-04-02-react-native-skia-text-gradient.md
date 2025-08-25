@@ -412,7 +412,7 @@ return (
 );
 ```
 
-Here’s the complete implementation of the `PromotionTextWithPath` component. In it you will find also the base SVG shape of the underline path, plus all the multiplier used to do the calculation in the `onDealsLayout` that we mentioned befor.
+Here’s the complete implementation of the `PromotionTextWithPath` component. In it you will find also the base SVG shape of the underline path, plus all the multiplier used to do the calculation in the `onDealsLayout` that we mentioned before.
 
 ```typescript jsx
 import React from 'react';

@@ -34,7 +34,7 @@ export const FloatingChatButton = () => {
 
   return (
     <FixedIconContainer>
-      <Link target="_blank" href={slugs.chat} passHref>
+      <Link aria-label="chat" target="_blank" href={slugs.chat} passHref >
         <ChatIcon />
       </Link>
     </FixedIconContainer>

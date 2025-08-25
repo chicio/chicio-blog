@@ -172,6 +172,7 @@ export const SearchBox: FC<
 > = ({ startSearch, onClick, onChange }) => (
   <SearchBoxContainer $startSearch={startSearch}>
     <SearchBoxInput
+      aria-label="Search"
       $startSearch={startSearch}
       placeholder={startSearch ? "Search" : ""}
       onChange={onChange}

@@ -9,28 +9,8 @@ import {
   Cursor,
 } from "@/components/design-system/atoms/typography/terminal-blocks";
 import { useReadingProgress } from "../hooks/use-reading-progress";
-import { useEffect, useState } from "react";
-// Hook per rilevare la direzione dello scroll
-function useScrollDirection() {
-  const [direction, setDirection] = useState<"up" | "down">("down");
-  const [lastScroll, setLastScroll] = useState(0);
-
-  useEffect(() => {
-    function onScroll() {
-      const current = window.scrollY;
-      if (current > lastScroll) {
-        setDirection("down");
-      } else if (current < lastScroll) {
-        setDirection("up");
-      }
-      setLastScroll(current);
-    }
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [lastScroll]);
-  return direction;
-}
 import { glassmorphism } from "../../../design-system/atoms/effects/glassmorphism";
+import { ScrollDirection, useScrollDirection } from "@/components/design-system/utils/hooks/use-scroll-direction";
 
 const ProgressBarWrapper = styled(motion.div)`
   ${glassmorphism};
@@ -85,7 +65,7 @@ export const BlogPostProgressBar: React.FC = () => {
 
   return (
     <AnimatePresence>
-      {started && direction === "down" && (
+      {started && direction === ScrollDirection.down && (
         <ProgressBarWrapper
           initial={{ y: -60, opacity: 0 }}
           animate={{ y: 0, opacity: 1, transition: { delay: 0.1, duration: 0.4, ease: "linear" } }}
