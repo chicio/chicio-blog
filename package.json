@@ -31,7 +31,7 @@
     "marked": "^16.1.2",
     "next": "^15.2.4",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0",
+    "react-dom": "^19.1.1",
     "react-markdown": "^10.1.0",
     "reading-time": "^1.5.0",
     "rehype-highlight": "^7.0.2",
