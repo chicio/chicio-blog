@@ -17,7 +17,7 @@ export const GlobalStyle = createGlobalStyle`
 
     @font-face {
         font-family: 'Open Sans';
-        src: local("Open Sans SemiBold"),
+        src: local("Open Sans SemiBold")
         url('/fonts/opensans/OpenSans-SemiBold.ttf') format('truetype');
         font-weight: bold;
         font-style: normal;
@@ -32,6 +32,24 @@ export const GlobalStyle = createGlobalStyle`
       font-style: normal;
       font-display: fallback;
     }
+
+    @font-face {
+        font-family: 'Courier Prime';
+        src: local("Courier Prime Regular"),
+        url('/fonts/courierprime/CourierPrime-Regular.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+        font-display: fallback;
+    } 
+
+    @font-face {
+        font-family: 'Courier Prime';
+        src: local("Courier Prime Bold"),
+        url('/fonts/courierprime/CourierPrime-Bold.ttf') format('truetype');
+        font-weight: bold;
+        font-style: normal;
+        font-display: fallback;
+    } 
 
     html {
         max-width: 100%;
