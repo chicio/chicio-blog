@@ -59,8 +59,8 @@ export default function notFoundPage() {
         <Matrix404Title>404</Matrix404Title>
         <MatrixTerminal lines={terminalLines} />
         <MatrixChoice
-          redPillHref="/"
-          bluePillHref="javascript:history.back()"
+          redPillHref="/blog"
+          bluePillHref="/"
           redPillText="Wake up!"
           bluePillText="Stay asleep"
           trackingCategory={tracking.category.notfound}

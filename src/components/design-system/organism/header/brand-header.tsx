@@ -3,7 +3,7 @@
 import { MatrixHeaderBackground } from "@/components/design-system/molecules/effects/matrix-header-background";
 import { FC } from "react";
 import styled, { TransientProps } from "styled-components";
-import logoImage from "../../../../../public/images/blog-logo.jpg";
+import logoImage from "../../../../../public/images/logo.png";
 import { GlassmorphismBackground } from "../../atoms/effects/glassmorphism-background";
 import { glowText } from "../../atoms/effects/glow";
 import { ImageGlow } from "../../atoms/effects/image-glow";
