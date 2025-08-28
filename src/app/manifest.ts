@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import { siteMetadata } from "@/types/site-metadata";
-import { blogTheme } from "@/components/design-system/themes/theme";
+import { theme } from "@/components/design-system/themes/theme";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
@@ -9,13 +9,20 @@ export default function manifest(): MetadataRoute.Manifest {
     description: siteMetadata.title,
     start_url: "/",
     display: "standalone",
-    background_color: blogTheme.light.primaryColorDark,
-    theme_color: blogTheme.light.primaryColor,
+    background_color: theme.colors.generalBackground,
+    theme_color: theme.colors.generalBackground,
     icons: [
       {
-        src: "/icon4.png",
-        sizes: "any",
-        type: "image/x-icon",
+        src: "/icon1.png",
+        sizes: "192x192",
+        type: "image/png",
+        purpose: "maskable",
+      },
+      {
+        src: "/icon2.png",
+        sizes: "512x512",
+        type: "image/png",
+        purpose: "maskable",
       },
     ],
   };

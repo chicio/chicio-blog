@@ -10,8 +10,6 @@ export const tracking = {
     open_twitter: "open_twitter",
     open_facebook: "open_facebook",
     open_instagram: "open_instagram",
-    open_personal_projects_tab: "open_personal_projects_tab",
-    open_education_and_experiences_tab: "open_education_and_experiences_tab",
     open_sclt_github: "open_sclt_github",
     open_sclt_thesis: "open_sclt_thesis",
     open_spectral_brdf_explorer_github: "open_spectral_brdf_explorer_github",
@@ -37,6 +35,8 @@ export const tracking = {
     open_experience_and_education: "open_experience_and_education",
     open_blog_tag: "open_blog_tag",
     pull_to_refresh: "pull_to_refresh",
+    red_pill: "red_pill",
+    blue_pill: "blue_pill"
   },
   category: {
     home: "home",
@@ -49,7 +49,8 @@ export const tracking = {
     privacy_policy: "privacy_policy",
     notfound: "notfound",
     art: "art",
-    chat: 'chat',
+    chat: "chat",
+    clowns: "clowns"
   },
   label: {
     footer: "footer",

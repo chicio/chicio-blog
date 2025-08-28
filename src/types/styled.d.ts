@@ -11,16 +11,16 @@ interface Colors {
   primaryTextColor: string;
   secondaryTextColor: string;
   accentColor: string;
-  accentColorAbovePrimaryColor: string;
   generalBackgroundLight: string;
   boxShadowLight: string;
   dividerColor: string;
+  confirmColor: string;
+  undoColor: string;
 }
 
 declare module "styled-components" {
   export interface DefaultTheme {
-    dark: Colors;
-    light: Colors;
+    colors: Colors;
     fontSizes: string[];
     spacing: string[];
     lineHeight: number;

@@ -17,7 +17,7 @@ import { Post } from "@/types/post";
 
 export const getPostFromFilePath: (
   filePath: string,
-  fileName: string,
+  fileName: string
 ) => Post = (filePath: string, fileName: string) => {
   const fileContents = fs.readFileSync(filePath, "utf8");
   const fileParsed = matter(fileContents);

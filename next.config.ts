@@ -4,10 +4,6 @@ const nextConfig: NextConfig = {
     compiler: {
         styledComponents: true,
     },
-    i18n: {
-        locales: ['en'],
-        defaultLocale: 'en',
-    },
     async redirects() {
         return [
             {

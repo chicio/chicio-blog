@@ -1,14 +1,14 @@
 import { siteMetadata } from "@/types/site-metadata";
-import { BlogPageTemplate } from "@/components/templates/blog-page-template";
 import { tracking } from "@/types/tracking";
-import { Heading1 } from "@/components/design-system/atoms/heading1";
-import { Paragraph } from "@/components/design-system/atoms/paragraph";
-import { ContainerSection } from "@/components/design-system/atoms/container-section";
-import { Heading4 } from "@/components/design-system/atoms/heading4";
-import { List } from "@/components/design-system/atoms/list";
-import { StandardExternalLink } from "@/components/design-system/atoms/standard-external-link";
+import { Heading1 } from "@/components/design-system/atoms/typography/heading1";
+import { Paragraph } from "@/components/design-system/atoms/typography/paragraph";
+import { Heading4 } from "@/components/design-system/atoms/typography/heading4";
+import { List } from "@/components/design-system/atoms/typography/list";
+import { StandardExternalLink } from "@/components/design-system/atoms/links/standard-external-link";
 import { createMetadata } from "@/lib/seo/seo";
 import { slugs } from "@/types/slug";
+import { BlogPageTemplate } from "@/components/sections/blog/components/blog-page-template";
+import { ContainerSection } from "@/components/design-system/atoms/containers/container-section";
 
 export const metadata = createMetadata({
   author: siteMetadata.author,
