@@ -11,9 +11,14 @@ export function useReadingProgress(targetId: string) {
 
   useEffect(() => {
     function updateProgress() {
-      const el = document.getElementById(targetId)!;
-      const scrollTop = window.scrollY - el.offsetTop;
-      const scrollHeight = el.scrollHeight;
+      const element = document.getElementById(targetId)!;
+
+      if (!element) { 
+        return;
+      }
+
+      const scrollTop = window.scrollY - element.offsetTop;
+      const scrollHeight = element.scrollHeight;
       const clientHeight = window.innerHeight;
       const total = scrollHeight - clientHeight;
       const percentage = Math.max(
