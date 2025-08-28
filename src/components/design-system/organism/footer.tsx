@@ -5,11 +5,11 @@ import { SocialContacts } from "./social-contacts";
 import styled from "styled-components";
 import { Paragraph } from "../atoms/typography/paragraph";
 import { mediaQuery } from "../utils/media-query";
-import { MatrixMenuItem } from "../molecules/menu/matrix-menu-item";
 import { tracking } from "@/types/tracking";
 import { slugs } from "@/types/slug";
 import { motion } from "framer-motion";
 import { FadeSeparator } from "../atoms/effects/fade-separator";
+import { MenuItemWithTracking } from "../molecules/menu/menu-item-with-tracking";
 
 const FooterContainer = styled.footer`
   flex-shrink: 0;
@@ -104,8 +104,7 @@ export const Footer: FC<FooterProps> = ({ author, trackingCategory }) => (
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.1 }}
         >
-          <MatrixMenuItem
-            variant="footer"
+          <MenuItemWithTracking
             to="/"
             trackingData={{
               action: tracking.action.open_home,
@@ -115,9 +114,8 @@ export const Footer: FC<FooterProps> = ({ author, trackingCategory }) => (
             selected={false}
           >
             Home
-          </MatrixMenuItem>
-          <MatrixMenuItem
-            variant="footer"
+          </MenuItemWithTracking>
+          <MenuItemWithTracking
             to={slugs.blog}
             trackingData={{
               action: tracking.action.open_blog,
@@ -127,9 +125,8 @@ export const Footer: FC<FooterProps> = ({ author, trackingCategory }) => (
             selected={false}
           >
             Blog
-          </MatrixMenuItem>
-          <MatrixMenuItem
-            variant="footer"
+          </MenuItemWithTracking>
+          <MenuItemWithTracking
             to={slugs.art}
             trackingData={{
               action: tracking.action.open_art,
@@ -139,9 +136,8 @@ export const Footer: FC<FooterProps> = ({ author, trackingCategory }) => (
             selected={false}
           >
             Art
-          </MatrixMenuItem>
-          <MatrixMenuItem
-            variant="footer"
+          </MenuItemWithTracking>
+          <MenuItemWithTracking
             to={slugs.aboutMe}
             trackingData={{
               action: tracking.action.open_about_me,
@@ -151,9 +147,8 @@ export const Footer: FC<FooterProps> = ({ author, trackingCategory }) => (
             selected={false}
           >
             About Me
-          </MatrixMenuItem>
-          <MatrixMenuItem
-            variant="footer"
+          </MenuItemWithTracking>
+          <MenuItemWithTracking
             to={slugs.blogArchive}
             trackingData={{
               action: tracking.action.open_blog_archive,
@@ -163,9 +158,8 @@ export const Footer: FC<FooterProps> = ({ author, trackingCategory }) => (
             selected={false}
           >
             Archive
-          </MatrixMenuItem>
-          <MatrixMenuItem
-            variant="footer"
+          </MenuItemWithTracking>
+          <MenuItemWithTracking
             to={slugs.tags}
             trackingData={{
               action: tracking.action.open_blog_tags,
@@ -175,7 +169,7 @@ export const Footer: FC<FooterProps> = ({ author, trackingCategory }) => (
             selected={false}
           >
             Tags
-          </MatrixMenuItem>
+          </MenuItemWithTracking>
         </FooterMenu>
 
         <FadeSeparator />

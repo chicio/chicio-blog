@@ -9,7 +9,7 @@ import {
   matrixNeoGreen,
   matrixPrimaryGreen,
   matrixTextGreen,
-} from "../../themes/blog-colors";
+} from "../../themes/colors";
 
 const MatrixCanvas = styled.canvas`
   position: absolute;

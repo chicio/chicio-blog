@@ -11,11 +11,11 @@ import styled from "styled-components";
 import { Container } from "../atoms/containers/container";
 import { glassmorphism } from "../atoms/effects/glassmorphism";
 import { Overlay } from "../atoms/effects/overlay";
-import { MatrixMenuItem } from "../molecules/menu/matrix-menu-item";
 import { ScrollDirection, useScrollDirection } from "../utils/hooks/use-scroll-direction";
 import { mediaQuery } from "../utils/media-query";
 import { HamburgerMenu } from "../molecules/menu/hamburger-menu";
 import { Close } from "../molecules/menu/close";
+import { MenuItemWithTracking } from "../molecules/menu/menu-item-with-tracking";
 
 export const menuHeightNumber = 55;
 export const menuHeight = `${menuHeightNumber}px`;
@@ -147,7 +147,7 @@ const NavBar = styled(motion.create(Container))`
   }
 `;
 
-const NavBarMenuItem = styled(MatrixMenuItem)`
+const NavBarMenuItem = styled(MenuItemWithTracking)`
   margin: 0;
   height: 40px;
   
@@ -203,7 +203,6 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
             {/* Desktop: sempre visibili, Mobile: nascosti con padding quando chiuso */}
             <NavBarMenuItem
               key="home"
-              variant="header"
               to={"/"}
               selected={pathname === "/"}
               trackingData={{
@@ -217,7 +216,6 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
             </NavBarMenuItem>
             <NavBarMenuItem
               key="blog"
-              variant="header"
               to={slugs.blog}
               selected={
                 pathname.includes(slugs.blog) && pathname !== slugs.aboutMe
@@ -233,7 +231,6 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
             </NavBarMenuItem>
             <NavBarMenuItem
               key="art"
-              variant="header"
               to={slugs.art}
               selected={pathname === slugs.art}
               trackingData={{
@@ -247,7 +244,6 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
             </NavBarMenuItem>
             <NavBarMenuItem
               key="aboutMe"
-              variant="header"
               to={slugs.aboutMe}
               selected={pathname === slugs.aboutMe}
               trackingData={{
@@ -261,7 +257,6 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
             </NavBarMenuItem>
             <NavBarMenuItem
               key="chat"
-              variant="header"
               to={slugs.chat}
               selected={pathname === slugs.chat}
               trackingData={{

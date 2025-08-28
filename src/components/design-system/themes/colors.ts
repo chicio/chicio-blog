@@ -10,7 +10,7 @@ export const matrixBackgroundLight = "#002200";
 export const redPill = "#ff2a2a";
 export const bluePill = "#33aaff";
 
-export const matrixTheme: Colors = {
+export const matrixColors: Colors = {
   primaryColor: matrixPrimaryGreen,
   secondaryColor: matrixTextGreen,
   primaryColorDark: matrixDarkGreen,

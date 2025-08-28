@@ -1,5 +1,5 @@
 import { DefaultTheme } from "styled-components";
-import { matrixTheme } from "./blog-colors";
+import { matrixColors } from "./colors";
 
 const fontSizes = [
   "12px",
@@ -36,7 +36,7 @@ const spacing = [
 ];
 
 export const theme: DefaultTheme = {
-  colors: matrixTheme,
+  colors: matrixColors,
   fontSizes,
   spacing,
   lineHeight: 1.8,
