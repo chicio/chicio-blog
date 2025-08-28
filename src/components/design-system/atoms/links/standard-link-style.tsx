@@ -7,7 +7,7 @@ import { glowText } from "../effects/glow";
 export const standardLinkStyle = css`
   font-size: ${(props) => props.theme.fontSizes[2]};
   line-height: ${(props) => props.theme.lineHeight};
-  color: ${(props) => props.theme.dark.accentColor};
+  color: ${(props) => props.theme.colors.accentColor};
   transition: transform 0.35s;
   text-decoration: none;
 

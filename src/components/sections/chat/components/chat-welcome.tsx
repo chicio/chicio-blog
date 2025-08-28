@@ -24,7 +24,7 @@ const QuestionText = styled.span`
   font-size: ${(props) => props.theme.fontSizes[1]};
   font-family: inherit;
   font-weight: bold;
-  color: ${(props) => props.theme.light.primaryTextColor};
+  color: ${(props) => props.theme.colors.primaryTextColor};
 
   ${mediaQuery.minWidth.sm} {
     font-size: ${(props) => props.theme.fontSizes[2]};

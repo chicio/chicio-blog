@@ -8,7 +8,7 @@ export const borderRadius = css`
 `;
 
 export const borderColor = css`
-  border: 1px solid ${(props) => props.theme.dark.accentColor}40;
+  border: 1px solid ${(props) => props.theme.colors.accentColor}40;
 `;
 
 export const borderHover = css`
@@ -16,7 +16,7 @@ export const borderHover = css`
 
   ${mediaQuery.inputDevice.mouse} {
     &:hover {
-      border-color: ${(props) => props.theme.dark.accentColor};
+      border-color: ${(props) => props.theme.colors.accentColor};
       transform: scale(1.02) !important;
     }
   }

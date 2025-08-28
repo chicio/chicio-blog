@@ -13,7 +13,7 @@ const StyledMarkdownContainer = styled.div`
   a {
     ${standardLinkStyle};
     line-height: ${(props) => props.theme.lineHeight};
-    color: ${(props) => props.theme.light.primaryColor} !important;
+    color: ${(props) => props.theme.colors.primaryColor} !important;
     text-decoration: none;
     word-break: break-all; /* Force long URLs to break */
     word-wrap: break-word; /* Fallback for older browsers */

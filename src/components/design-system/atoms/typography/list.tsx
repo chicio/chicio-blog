@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 export const List = styled.ul`
   font-size: ${(props) => props.theme.fontSizes[2]};
-  color: ${(props) => props.theme.dark.primaryTextColor};
+  color: ${(props) => props.theme.colors.primaryTextColor};
   line-height: ${(props) => props.theme.lineHeight};
   list-style: none;
 
@@ -17,7 +17,7 @@ export const List = styled.ul`
       content: "▸";
       position: absolute;
       left: 0;
-      color: ${(props) => props.theme.dark.primaryColor};
+      color: ${(props) => props.theme.colors.primaryColor};
       font-weight: bold;
     }
   }

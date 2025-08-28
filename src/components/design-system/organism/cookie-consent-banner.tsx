@@ -52,11 +52,11 @@ const PillsContainer = styled.div`
 `;
 
 const RedPillText = styled.span`
-  color: ${(props) => props.theme.dark.confirmColor};
+  color: ${(props) => props.theme.colors.confirmColor};
 `;
 
 const BluePillText = styled.span`
-  color: ${(props) => props.theme.dark.undoColor};
+  color: ${(props) => props.theme.colors.undoColor};
 `;
 
 export const CookieConsentBanner = () => {

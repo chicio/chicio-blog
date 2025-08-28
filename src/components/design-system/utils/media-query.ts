@@ -18,7 +18,6 @@ interface MediaQuery {
     md: string;
     lg: string;
   };
-  dark: string;
   inputDevice: {
     mouse: string;
   };
@@ -35,8 +34,6 @@ const content: (properties: string) => string = (properties) =>
   `(${properties})`;
 
 const media: (content: string) => string = (content) => `@media ${content}`;
-
-const dark = media(content("prefers-color-scheme: dark"));
 
 const mouse = media(
   `${content("hover: hover")} and ${content("pointer: fine")}`,
@@ -67,7 +64,6 @@ export const mediaQuery: MediaQuery = {
     md: maxWidth(BreakPoint.md),
     lg: maxWidth(BreakPoint.lg),
   },
-  dark,
   inputDevice: {
     mouse,
   },

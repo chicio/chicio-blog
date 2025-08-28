@@ -11,6 +11,6 @@ export const glowContainer = css`
 
 export const glowText = css`
   text-shadow: 
-    0 0 5px ${(props) => props.theme.dark.accentColor}80,
-    0 0 10px ${(props) => props.theme.dark.accentColor}40;
+    0 0 5px ${(props) => props.theme.colors.accentColor}80,
+    0 0 10px ${(props) => props.theme.colors.accentColor}40;
 `

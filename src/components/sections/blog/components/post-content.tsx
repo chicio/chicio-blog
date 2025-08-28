@@ -17,7 +17,7 @@ import { hideScrollbar } from "../../../design-system/utils/components/hide-scro
 import { quoteStyle } from "@/components/design-system/atoms/typography/quote";
 
 const PostContentContainer = styled.div`
-  color: ${(props) => props.theme.light.primaryTextColor};
+  color: ${(props) => props.theme.colors.primaryTextColor};
   line-height: 1.5;
 
   & ul li {
@@ -74,7 +74,7 @@ const PostContentContainer = styled.div`
   & blockquote {
     line-height: ${(props) => props.theme.lineHeight};
     ${quoteStyle};
-    border-left: 5px solid ${(props) => props.theme.light.secondaryTextColor};
+    border-left: 5px solid ${(props) => props.theme.colors.secondaryTextColor};
     margin-left: 0;
     margin-right: 0;
     padding: ${(props) => props.theme.spacing[4]}
@@ -91,9 +91,9 @@ const PostContentContainer = styled.div`
     height: 1px;
     background: linear-gradient(
       90deg,
-      ${(props) => props.theme.dark.generalBackgroundLight},
-      ${(props) => props.theme.dark.accentColor},
-      ${(props) => props.theme.dark.generalBackgroundLight}
+      ${(props) => props.theme.colors.generalBackgroundLight},
+      ${(props) => props.theme.colors.accentColor},
+      ${(props) => props.theme.colors.generalBackgroundLight}
     );
     width: 100%;
     margin: ${(props) => props.theme.spacing[4]} 0;

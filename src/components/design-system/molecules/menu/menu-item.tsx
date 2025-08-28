@@ -10,8 +10,8 @@ export interface MenuItemProps {
 export const MenuItem = styled(Link)<MenuItemProps>`
     color: ${(props) =>
             props.selected
-                    ? props.theme.light.textAbovePrimaryColor
-                    : props.theme.light.primaryColorLight};
+                    ? props.theme.colors.textAbovePrimaryColor
+                    : props.theme.colors.primaryColorLight};
     font-size: ${(props) => props.theme.fontSizes[2]};
     font-weight: 500;
     text-decoration: none;
@@ -19,7 +19,7 @@ export const MenuItem = styled(Link)<MenuItemProps>`
 
     &:hover,
     &:focus {
-        color: ${(props) => props.theme.light.textAbovePrimaryColor};
+        color: ${(props) => props.theme.colors.textAbovePrimaryColor};
         text-decoration: none;
     }
 `;

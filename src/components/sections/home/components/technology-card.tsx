@@ -37,14 +37,14 @@ const TechnologyImageContainer = styled.div`
 `;
 
 const TechnologyName = styled.span`
-  color: ${(props) => props.theme.dark.primaryTextColor};
+  color: ${(props) => props.theme.colors.primaryTextColor};
   font-size: ${(props) => props.theme.fontSizes[1]};
   text-align: center;
   font-weight: 500;
 `;
 
 const ExperienceYears = styled.span`
-  color: ${(props) => props.theme.dark.accentColor};
+  color: ${(props) => props.theme.colors.accentColor};
   font-size: ${(props) => props.theme.fontSizes[0]};
   margin-top: ${(props) => props.theme.spacing[1]};
 `;

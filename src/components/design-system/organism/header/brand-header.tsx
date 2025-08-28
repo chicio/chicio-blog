@@ -30,7 +30,7 @@ const HeaderColumn = styled.div`
 `;
 
 const Title = styled.span`
-  color: ${(props) => props.theme.dark.accentColor};
+  color: ${(props) => props.theme.colors.accentColor};
   margin: 0;
   display: block;
   font-family: 'Courier Prime';
@@ -40,10 +40,9 @@ const Title = styled.span`
   text-transform: uppercase;
   font-size: ${(props) => props.theme.fontSizes[6]};
   text-shadow: 
-    0 0 10px ${(props) => props.theme.dark.accentColor},
-    0 0 20px ${(props) => props.theme.dark.primaryColorDark}A0;
-    0 0 30px ${(props) => props.theme.dark.accentColor}50;
-    
+    0 0 10px ${(props) => props.theme.colors.accentColor},
+    0 0 20px ${(props) => props.theme.colors.primaryColorDark}A0,
+    0 0 30px ${(props) => props.theme.colors.accentColor}50;
 
   ${mediaQuery.minWidth.sm} {
     font-size: ${(props) => props.theme.fontSizes[9]};
@@ -61,7 +60,7 @@ const Slogan = styled.span`
   display: block;
   font-size: ${(props) => props.theme.fontSizes[1]};
   font-family: 'Courier Prime';
-  color: ${(props) => props.theme.dark.primaryTextColor};
+  color: ${(props) => props.theme.colors.primaryTextColor};
   font-weight: normal;
 
   ${mediaQuery.minWidth.sm} {

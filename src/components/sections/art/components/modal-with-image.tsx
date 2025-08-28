@@ -61,7 +61,7 @@ const ModalImage = styled.img`
   object-fit: contain;
   border-radius: 16px;
   margin-bottom: 16px;
-  background-color: ${(props) => props.theme.dark.generalBackground};
+  background-color: ${(props) => props.theme.colors.generalBackground};
 `;
 
 export interface ModalWithImageProps {

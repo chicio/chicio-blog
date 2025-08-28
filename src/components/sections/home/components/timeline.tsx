@@ -39,9 +39,9 @@ const TimelineContainer = styled(motion.div)`
     width: 2px;
     background: linear-gradient(
       180deg,
-      ${(props) => props.theme.dark.primaryColor}80 0%,
-      ${(props) => props.theme.dark.primaryColor}40 50%,
-      ${(props) => props.theme.dark.primaryColor}80 100%
+      ${(props) => props.theme.colors.primaryColor}80 0%,
+      ${(props) => props.theme.colors.primaryColor}40 50%,
+      ${(props) => props.theme.colors.primaryColor}80 100%
     );
 
     ${mediaQuery.minWidth.md} {
@@ -69,9 +69,9 @@ const TimelineMarker = styled(motion.div)`
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: ${(props) => props.theme.dark.primaryColor};
-  color: ${(props) => props.theme.dark.textAbovePrimaryColor};
-  border: 3px solid ${(props) => props.theme.dark.generalBackground};
+  background: ${(props) => props.theme.colors.primaryColor};
+  color: ${(props) => props.theme.colors.textAbovePrimaryColor};
+  border: 3px solid ${(props) => props.theme.colors.generalBackground};
   position: relative;
   z-index: 2;
   flex-shrink: 0;
@@ -79,7 +79,7 @@ const TimelineMarker = styled(motion.div)`
 
   &:hover {
     transform: scale(1.1);
-    box-shadow: 0 0 30px ${(props) => props.theme.dark.primaryColor}60;
+    box-shadow: 0 0 30px ${(props) => props.theme.colors.primaryColor}60;
   }
 
   ${mediaQuery.minWidth.md} {
@@ -131,7 +131,7 @@ const TimelineTitle = styled(Heading4)`
 
 const TimelineSubtitle = styled(Heading6)`
   margin: 0;
-  color: ${(props) => props.theme.dark.accentColor};
+  color: ${(props) => props.theme.colors.accentColor};
   word-wrap: break-word;
   hyphens: auto;
   font-size: ${(props) => props.theme.fontSizes[1]};
@@ -142,7 +142,7 @@ const TimelineSubtitle = styled(Heading6)`
 `;
 
 const TimelineDate = styled(Time)`
-  color: ${(props) => props.theme.dark.primaryColor};
+  color: ${(props) => props.theme.colors.primaryColor};
   font-weight: 600;
   font-size: ${(props) => props.theme.fontSizes[1]};
   flex-shrink: 0;
@@ -171,7 +171,7 @@ const TimelineImageContainer = styled.div`
   height: 48px;
   border-radius: 6px;
   overflow: hidden;
-  border: 1px solid ${(props) => props.theme.dark.accentColor}40;
+  border: 1px solid ${(props) => props.theme.colors.accentColor}40;
   background: #FFFFFF;
   flex-shrink: 0;
   align-self: flex-start;

@@ -9,7 +9,7 @@ export const Button = styled.button`
   background-color: transparent;
   padding: ${(props) => props.theme.spacing[2]}
     ${(props) => props.theme.spacing[2]};
-  color: ${(props) => props.theme.light.textAbovePrimaryColor};
+  color: ${(props) => props.theme.colors.textAbovePrimaryColor};
   cursor: pointer;
   text-align: left;
   display: flex;

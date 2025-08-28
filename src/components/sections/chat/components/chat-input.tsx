@@ -55,8 +55,8 @@ const SendButton = styled.button`
   transform: translateY(-50%);
   width: 36px;
   height: 36px;
-  background: ${(props) => props.theme.light.primaryColor};
-  color: ${(props) => props.theme.light.textAbovePrimaryColor};
+  background: ${(props) => props.theme.colors.primaryColor};
+  color: ${(props) => props.theme.colors.textAbovePrimaryColor};
   border: none;
   border-radius: 50%;
   cursor: pointer;
@@ -66,12 +66,12 @@ const SendButton = styled.button`
   transition: all 0.2s;
 
   &:hover:not(:disabled) {
-    background: ${(props) => props.theme.light.primaryColorDark};
+    background: ${(props) => props.theme.colors.primaryColorDark};
     transform: translateY(-50%) scale(1.05);
   }
 
   &:disabled {
-    background: ${(props) => props.theme.light.secondaryColor};
+    background: ${(props) => props.theme.colors.secondaryColor};
     cursor: not-allowed;
     transform: translateY(-50%);
   }
@@ -80,19 +80,6 @@ const SendButton = styled.button`
     width: 32px;
     height: 32px;
     right: ${(props) => props.theme.spacing[0]};
-  }
-
-  ${mediaQuery.dark} {
-    background: ${(props) => props.theme.dark.primaryColor};
-    color: ${(props) => props.theme.dark.textAbovePrimaryColor};
-
-    &:hover:not(:disabled) {
-      background: ${(props) => props.theme.dark.primaryColorDark};
-    }
-
-    &:disabled {
-      background: ${(props) => props.theme.dark.secondaryColor};
-    }
   }
 `;
 

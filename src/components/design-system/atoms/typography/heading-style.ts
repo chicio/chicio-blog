@@ -5,7 +5,7 @@ import { glowText } from "../effects/glow";
 
 export const headingStyle = css`
   line-height: 1.4;
-  color: ${(props) => props.theme.dark.accentColor};
+  color: ${(props) => props.theme.colors.accentColor};
   margin: ${(props) => props.theme.spacing[0]};
   ${glowText};
 `;

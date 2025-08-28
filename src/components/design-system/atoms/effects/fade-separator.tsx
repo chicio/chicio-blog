@@ -5,9 +5,9 @@ export const FadeSeparator = styled.div`
   height: 1px;
   background: linear-gradient(
     90deg,
-      ${(props) => props.theme.dark.generalBackgroundLight},
-      ${(props) => props.theme.dark.accentColor},
-      ${(props) => props.theme.dark.generalBackgroundLight}
+      ${(props) => props.theme.colors.generalBackgroundLight},
+      ${(props) => props.theme.colors.accentColor},
+      ${(props) => props.theme.colors.generalBackgroundLight}
   );
   opacity: 0.6;
 `;

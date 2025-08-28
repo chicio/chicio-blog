@@ -6,7 +6,7 @@ import { mediaQuery } from "../../utils/media-query";
 
 export const Icon = styled.div`
   ${StyledIconBase} {
-    color: ${(props) => props.theme.light.textAbovePrimaryColor};
+    color: ${(props) => props.theme.colors.textAbovePrimaryColor};
   }
 `;
 
@@ -15,7 +15,7 @@ export const RoundedIcon = styled.div`
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background-color: ${(props) => props.theme.dark.accentColor};
+  background-color: ${(props) => props.theme.colors.accentColor};
   cursor: pointer;
   display: flex;
   align-items: center;

@@ -16,7 +16,7 @@ const SectionContainer = styled(ContainerFluid)`
   justify-content: flex-start;
   padding: ${(props) => props.theme.spacing[8]}
     ${(props) => props.theme.spacing[4]} ${(props) => props.theme.spacing[16]};
-  background: ${(props) => props.theme.dark.generalBackground};
+  background: ${(props) => props.theme.colors.generalBackground};
   scroll-snap-align: start;
   position: relative;
 

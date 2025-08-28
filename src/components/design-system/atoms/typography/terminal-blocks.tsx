@@ -11,7 +11,7 @@ export const TerminalLine = styled.div`
   font-family: "Courier New", monospace;
   font-weight: bold;
   line-height: 1.4;
-  color: ${(props) => props.theme.dark.accentColor};
+  color: ${(props) => props.theme.colors.accentColor};
   font-size: 0.8rem;
   word-break: break-word;
 
@@ -59,7 +59,7 @@ export const ErrorText = styled.span`
 `;
 
 export const SuccessText = styled.span`
-  color: ${(props) => props.theme.dark.accentColor};
+  color: ${(props) => props.theme.colors.accentColor};
   ${glowText}
 `;
 

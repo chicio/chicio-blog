@@ -30,9 +30,9 @@ const SearchListContainer = styled(Container)`
   }
   backdrop-filter: blur(1px);
   box-shadow:
-    inset 0 0 3px ${(props) => props.theme.dark.accentColor}AA,
-    inset 0 0 8px ${(props) => props.theme.dark.accentColor}99,
-    inset 0 0 10px ${(props) => props.theme.dark.accentColor}55;
+    inset 0 0 3px ${(props) => props.theme.colors.accentColor}AA,
+    inset 0 0 8px ${(props) => props.theme.colors.accentColor}99,
+    inset 0 0 10px ${(props) => props.theme.colors.accentColor}55;
 
   ${borderRadius};
   ${borderColor};
@@ -81,10 +81,10 @@ const SearchLink = styled(Link)`
 const SearchTitle = styled(Paragraph)`
   font-size: ${(props) => props.theme.fontSizes[4]};
   font-weight: 700;
-  color: ${(props) => props.theme.dark.accentColor};
+  color: ${(props) => props.theme.colors.accentColor};
   margin-bottom: ${(props) => props.theme.spacing[2]};
   line-height: 1.3;
-  margin: 0 0 ${(props) => props.theme.spacing[2]} 0; /* Reset margin per allineamento pulito */
+  margin: 0 0 ${(props) => props.theme.spacing[2]} 0;
   ${glowText};
 
   ${mediaQuery.minWidth.sm} {
@@ -93,7 +93,7 @@ const SearchTitle = styled(Paragraph)`
 `;
 
 const SearchDescription = styled(Paragraph)`
-  color: ${(props) => props.theme.dark.primaryTextColor};
+  color: ${(props) => props.theme.colors.primaryTextColor};
   opacity: 0.9;
   line-height: 1.5;
   margin: 0;
@@ -106,7 +106,7 @@ const SearchBoxContainer = styled.div<TransientProps<{ startSearch: boolean }>>`
   position: absolute;
   top: 10px;
   right: 10px;
-  color: ${(props) => props.theme.dark.primaryTextColor};
+  color: ${(props) => props.theme.colors.primaryTextColor};
   border-radius: 50%;
 
   ${mediaQuery.minWidth.sm} {
@@ -117,16 +117,16 @@ const SearchBoxContainer = styled.div<TransientProps<{ startSearch: boolean }>>`
   ${mediaQuery.inputDevice.mouse} {
     &:hover,
     &:hover * {
-      border-color: ${(props) => props.theme.dark.accentColor};
+      border-color: ${(props) => props.theme.colors.accentColor};
     }
 
     &:hover span {
-      color: ${(props) => props.theme.dark.accentColor};
+      color: ${(props) => props.theme.colors.accentColor};
     }
 
     &:hover {
-      background: ${(props) => !props.$startSearch && `${props.theme.dark.accentColor}1A`};
-      box-shadow: ${(props) => !props.$startSearch && `0 4px 12px ${props.theme.dark.accentColor}33`};
+      background: ${(props) => !props.$startSearch && `${props.theme.colors.accentColor}1A`};
+      box-shadow: ${(props) => !props.$startSearch && `0 4px 12px ${props.theme.colors.accentColor}33`};
     }
   }
 `;

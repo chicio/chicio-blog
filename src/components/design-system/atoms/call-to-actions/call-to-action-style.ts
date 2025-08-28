@@ -6,8 +6,8 @@ import {mediaQuery} from "@/components/design-system/utils/media-query";
 
 export const callToActionStyle = css`
   font-size: ${(props) => props.theme.fontSizes[3]};
-  background-color: ${(props) => props.theme.dark.accentColor};
-  color: ${(props) => props.theme.dark.textAbovePrimaryColor};
+  background-color: ${(props) => props.theme.colors.accentColor};
+  color: ${(props) => props.theme.colors.textAbovePrimaryColor};
   padding: ${(props) => props.theme.spacing[2]};
   border: none;
   ${borderRadius};
@@ -16,7 +16,7 @@ export const callToActionStyle = css`
   text-align: center;
   display: inline-block;
   min-width: 120px;
-  color: ${(props) => props.theme.dark.textAbovePrimaryColor};
+  color: ${(props) => props.theme.colors.textAbovePrimaryColor};
   text-decoration: none;
 
   ${mediaQuery.inputDevice.mouse} {
@@ -25,7 +25,7 @@ export const callToActionStyle = css`
 
   &:hover {
     text-decoration: none;
-    box-shadow: 0 0 25px ${(props) => props.theme.dark.accentColor}70;
+    box-shadow: 0 0 25px ${(props) => props.theme.colors.accentColor}70;
 
     ${mediaQuery.inputDevice.mouse} {
       transform: scale(1.05);

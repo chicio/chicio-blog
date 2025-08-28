@@ -3,7 +3,6 @@
 import { FC } from "react";
 import styled from "styled-components";
 import {Paragraph} from "@/components/design-system/atoms/typography/paragraph";
-import {mediaQuery} from "@/components/design-system/utils/media-query";
 import {Time} from "@/components/design-system/atoms/typography/time";
 
 export interface PostMetaProps {
@@ -14,11 +13,6 @@ export interface PostMetaProps {
 const PostMetaParagraph = styled(Paragraph)`
   margin: ${(props) => props.theme.spacing[0]} 0
     ${(props) => props.theme.spacing[3]} 0;
-  color: ${(props) => props.theme.light.secondaryTextColor};
-
-  ${mediaQuery.dark} {
-    color: ${(props) => props.theme.dark.secondaryTextColor};
-  }
 `;
 
 export const PostMeta: FC<PostMetaProps> = ({ date, readingTime }) => (

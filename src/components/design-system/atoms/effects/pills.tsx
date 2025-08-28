@@ -21,8 +21,8 @@ export const PillContainer = styled.div<{ $color: "red" | "blue" }>`
   -webkit-backdrop-filter: blur(2px);
   background: ${(props) =>
     props.$color === "red"
-      ? `linear-gradient(135deg, ${props.theme.dark.confirmColor}A0 0%, ${props.theme.dark.confirmColor}A0 60%, ${props.theme.dark.confirmColor}40 100%)`
-      : `linear-gradient(135deg, ${props.theme.dark.undoColor}A0 0%, ${props.theme.dark.undoColor}A0 60%, ${props.theme.dark.undoColor}40 100%)`};
+      ? `linear-gradient(135deg, ${props.theme.colors.confirmColor}A0 0%, ${props.theme.colors.confirmColor}A0 60%, ${props.theme.colors.confirmColor}40 100%)`
+      : `linear-gradient(135deg, ${props.theme.colors.undoColor}A0 0%, ${props.theme.colors.undoColor}A0 60%, ${props.theme.colors.undoColor}40 100%)`};
   color: white;
   border: 2px solid
     ${(props) => (props.$color === "red" ? "#ff0000" : "#0066ff")};
@@ -92,7 +92,7 @@ export const PillLabel = styled.span`
   text-decoration: none !important;
   width: 100%;
   font-weight: bold;
-  color: ${(props) => props.theme.dark.primaryTextColor};
+  color: ${(props) => props.theme.colors.primaryTextColor};
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.85);
 
   ${mediaQuery.inputDevice.mouse} {

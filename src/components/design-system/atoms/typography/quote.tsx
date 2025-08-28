@@ -3,7 +3,7 @@
 import styled, { css } from "styled-components";
 
 export const quoteStyle = css`
-  color: ${(props) => props.theme.dark.accentColor};
+  color: ${(props) => props.theme.colors.accentColor};
   font-style: italic;
 `
   
@@ -17,7 +17,7 @@ export const quoteStyle = css`
   &::after {
     content: '"';
     font-size: 1.5em;
-    color: ${(props) => props.theme.dark.accentColor};
+    color: ${(props) => props.theme.colors.accentColor};
     opacity: 0.6;
   }
   

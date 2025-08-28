@@ -14,14 +14,14 @@ import { FadeSeparator } from "../atoms/effects/fade-separator";
 const FooterContainer = styled.footer`
   flex-shrink: 0;
   width: 100%;
-  background: ${(props) => props.theme.dark.primaryColorDark};
-  border-top: 2px solid ${(props) => props.theme.dark.accentColor};
+  background: ${(props) => props.theme.colors.primaryColorDark};
+  border-top: 2px solid ${(props) => props.theme.colors.accentColor};
   scroll-snap-align: start;
   position: relative;
   
   box-shadow: 
-    0 -4px 20px ${(props) => props.theme.dark.accentColor}1A,
-    inset 0 1px 0 ${(props) => props.theme.dark.accentColor}33;
+    0 -4px 20px ${(props) => props.theme.colors.accentColor}1A,
+    inset 0 1px 0 ${(props) => props.theme.colors.accentColor}33;
 `;
 
 const FooterContent = styled(motion.div)`
@@ -62,10 +62,10 @@ const FooterAuthorSection = styled.div`
   width: 100%;
   background: linear-gradient(
     135deg,
-    ${(props) => props.theme.dark.generalBackgroundLight} 0%,
-    ${(props) => props.theme.dark.primaryColorDark} 100%
+    ${(props) => props.theme.colors.generalBackgroundLight} 0%,
+    ${(props) => props.theme.colors.primaryColorDark} 100%
   );
-  border-top: 1px solid ${(props) => props.theme.dark.accentColor}33;
+  border-top: 1px solid ${(props) => props.theme.colors.accentColor}33;
 
   ${mediaQuery.minWidth.md} {
     padding: ${(props) => props.theme.spacing[8]} ${(props) => props.theme.spacing[6]};
@@ -73,7 +73,7 @@ const FooterAuthorSection = styled.div`
 `;
 
 const MadeWithLoveParagraph = styled(Paragraph)`
-  color: ${(props) => props.theme.dark.primaryTextColor};
+  color: ${(props) => props.theme.colors.primaryTextColor};
   font-size: ${(props) => props.theme.fontSizes[1]};
   opacity: 0.9;
   margin: 0;

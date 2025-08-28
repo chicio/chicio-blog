@@ -19,27 +19,16 @@ const MessageBubbleContainer = styled.div<{ $isUser: boolean }>`
   border-radius: 1rem;
   background: ${(props) =>
     props.$isUser
-      ? props.theme.light.primaryColor
-      : props.theme.light.generalBackgroundLight};
+      ? props.theme.colors.primaryColor
+      : props.theme.colors.generalBackgroundLight};
   color: ${(props) =>
     props.$isUser
-      ? props.theme.light.textAbovePrimaryColor
-      : props.theme.light.primaryTextColor
+      ? props.theme.colors.textAbovePrimaryColor
+      : props.theme.colors.primaryTextColor
   } !important;
   ${paragraphStyle};
   margin: 0;
 
-  ${mediaQuery.dark} {
-    background: ${(props) =>
-      props.$isUser
-        ? props.theme.dark.primaryColor
-        : props.theme.dark.generalBackgroundLight};
-    color: ${(props) =>
-      props.$isUser
-        ? props.theme.dark.textAbovePrimaryColor
-        : props.theme.dark.primaryTextColor
-    } !important;
-  }
 
   ${mediaQuery.minWidth.sm} {
     max-width: 70%;

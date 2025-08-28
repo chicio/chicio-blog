@@ -18,7 +18,7 @@ const Matrix404Container = styled(ContainerFullscreen)`
   min-height: 100vh;
   position: relative;
   background: #000;
-  color: ${(props) => props.theme.dark.accentColor};
+  color: ${(props) => props.theme.colors.accentColor};
   overflow: hidden;
 `;
 

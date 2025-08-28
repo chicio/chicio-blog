@@ -20,7 +20,7 @@ const FloatingArrowContainer = styled(RoundedIcon)`
 
   &:hover {
     transform: scale(1.1);
-    box-shadow: 0 0 20px ${(props) => props.theme.dark.accentColor}80;
+    box-shadow: 0 0 20px ${(props) => props.theme.colors.accentColor}80;
   }
 
   ${mediaQuery.minWidth.md} {
@@ -33,7 +33,7 @@ const FloatingArrowContainer = styled(RoundedIcon)`
 const ArrowIcon = styled.div`
   width: 30px;
   height: 30px;
-  color: ${(props) => props.theme.dark.textAbovePrimaryColor};
+  color: ${(props) => props.theme.colors.textAbovePrimaryColor};
   display: flex;
   align-items: center;
   justify-content: center;

@@ -15,7 +15,7 @@ const TechnologiesContainer = styled(ContainerFluid)`
   justify-content: center;
   align-items: center;
   position: relative;
-  background: ${(props) => props.theme.dark.generalBackground};
+  background: ${(props) => props.theme.colors.generalBackground};
   scroll-snap-align: start;
   padding-top: ${(props) => props.theme.spacing[10]};
   padding-left: ${(props) => props.theme.spacing[4]};

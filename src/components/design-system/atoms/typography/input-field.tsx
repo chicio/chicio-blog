@@ -13,7 +13,7 @@ export const InputField = styled.input`
   
   &:focus,
   &:active {
-    border: 1px solid ${(props) => props.theme.dark.accentColor};
-    color: ${(props) => props.theme.dark.accentColor};
+    border: 1px solid ${(props) => props.theme.colors.accentColor};
+    color: ${(props) => props.theme.colors.accentColor};
   }
 `;

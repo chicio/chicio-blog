@@ -11,12 +11,11 @@ const MatrixBackground = styled.div<TransientProps<MatrixHeaderBackgroundProps>>
   height: ${(props) => (props.$big ? "350px" : "220px")};
   z-index: -100;
   overflow: hidden;
-
-  border-bottom: 2px solid ${(props) => props.theme.dark.accentColor};
+  border-bottom: 2px solid ${(props) => props.theme.colors.accentColor};
   box-shadow:
-    0 4px 20px ${(props) => props.theme.dark.accentColor}1A,
-    inset 0 -1px 0 ${(props) => props.theme.dark.accentColor}33,
-    0 0 30px ${(props) => props.theme.dark.accentColor}26;
+    0 4px 20px ${(props) => props.theme.colors.accentColor}1A,
+    inset 0 -1px 0 ${(props) => props.theme.colors.accentColor}33,
+    0 0 30px ${(props) => props.theme.colors.accentColor}26;
 
   ${mediaQuery.minWidth.sm} {
     height: ${(props) => (props.$big ? "400px" : "230px")};

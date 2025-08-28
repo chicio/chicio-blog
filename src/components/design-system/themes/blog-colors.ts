@@ -1,17 +1,15 @@
 import {Colors} from "@/types/styled";
 
-// Matrix Color Palette - Dark Theme Only (WCAG Compliant)
-export const matrixPrimaryGreen = "#00FF41";      // Matrix green classico
-export const matrixNeoGreen = "#39FF14";          // Highlight/CTA verde brillante
-export const matrixDarkGreen = "#003D10";         // Verde scuro per backgrounds
-export const matrixTextGreen = "#00CC33";         // Verde per testi leggibili
-export const matrixBackgroundDark = "#001100";    // Background principale nero-verde
-export const matrixBackgroundLight = "#002200";   // Background secondario più chiaro
+// Matrix Color Palette (WCAG Compliant)
+export const matrixPrimaryGreen = "#00FF41";      
+export const matrixNeoGreen = "#39FF14";          
+export const matrixDarkGreen = "#003D10";         
+export const matrixTextGreen = "#00CC33";         
+export const matrixBackgroundDark = "#001100";    
+export const matrixBackgroundLight = "#002200"; 
 export const redPill = "#ff2a2a";
 export const bluePill = "#33aaff";
 
-
-// Single Matrix Dark Theme
 export const matrixTheme: Colors = {
   primaryColor: matrixPrimaryGreen,
   secondaryColor: matrixTextGreen,
@@ -28,6 +26,3 @@ export const matrixTheme: Colors = {
   confirmColor: redPill,
   undoColor: bluePill,
 };
-
-export const blogDark = matrixTheme;
-export const blogLight = matrixTheme; // Same as dark now

@@ -29,7 +29,7 @@ const SkillCategory = styled(motion.div)`
 `;
 
 const CategoryTitle = styled(motion.h3)`
-  color: ${(props) => props.theme.dark.accentColor};
+  color: ${(props) => props.theme.colors.accentColor};
   font-size: ${(props) => props.theme.fontSizes[4]};
   margin-bottom: ${(props) => props.theme.spacing[4]};
   text-align: center;

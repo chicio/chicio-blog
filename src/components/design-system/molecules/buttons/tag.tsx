@@ -22,7 +22,7 @@ const TagLink = styled(StandardInternalLinkWithTracking)<
 `;
 
 const TagText = styled.span<TransientProps<TagContentProps>>`
-  color: ${(props) => props.theme.dark.primaryTextColor};
+  color: ${(props) => props.theme.colors.primaryTextColor};
   margin-right: ${(props) => props.theme.spacing[0]};
   margin-bottom: ${(props) => props.theme.spacing[0]};
   font-size: ${(props) =>

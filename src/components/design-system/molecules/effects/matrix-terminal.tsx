@@ -15,7 +15,7 @@ const TerminalContainer = styled(motion.div)`
   ${borderRadius};
   padding: ${(props) => props.theme.spacing[3]};
   font-family: 'Courier New', monospace;
-  color: ${(props) => props.theme.dark.accentColor};
+  color: ${(props) => props.theme.colors.accentColor};
   width: 95%;
   max-width: 600px;
   min-width: 280px;

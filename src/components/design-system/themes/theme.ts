@@ -35,10 +35,8 @@ const spacing = [
   "60px",
 ];
 
-// Single Matrix Theme - No more light/dark variants
-export const blogTheme: DefaultTheme = {
-  dark: matrixTheme,    // Keep for legacy compatibility
-  light: matrixTheme,   // Same as dark now - will be removed
+export const theme: DefaultTheme = {
+  colors: matrixTheme,
   fontSizes,
   spacing,
   lineHeight: 1.8,

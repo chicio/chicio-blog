@@ -24,7 +24,7 @@ interface BigCardProps {
 const PostDescription = styled(Paragraph)`
   margin-right: 0;
   margin-left: 0;
-  color: ${(props) => props.theme.dark.primaryTextColor};
+  color: ${(props) => props.theme.colors.primaryTextColor};
   opacity: 0.9;
   line-height: 1.5;
   ${glowText}
@@ -33,12 +33,12 @@ const PostDescription = styled(Paragraph)`
 const PostCardTitle = styled(Heading5)`
   margin: 0 0 ${(props) => props.theme.spacing[2]};
   word-wrap: break-word;
-  color: ${(props) => props.theme.dark.accentColor};
+  color: ${(props) => props.theme.colors.accentColor};
 `;
 
 const PostCardContainer = styled(motion.div)<TransientProps<BigCardProps>>`
   ${glassmorphism};
-  background-color: ${(props) => props.theme.light.generalBackgroundLight};
+  background-color: ${(props) => props.theme.colors.generalBackgroundLight};
   margin-top: ${(props) => props.theme.spacing[4]};
 
   ${mediaQuery.minWidth.md} {
@@ -54,7 +54,7 @@ const PostCardImage = styled(Image)`
   width: 100%;
   object-fit: cover;
   height: 200px;
-  background-color: ${(props) => props.theme.light.generalBackground};
+  background-color: ${(props) => props.theme.colors.generalBackground};
   ${borderRadius}
 
   ${mediaQuery.minWidth.sm} {

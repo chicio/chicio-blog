@@ -15,7 +15,7 @@ const SectionContainer = styled(ContainerFluid)`
   max-width: 1200px;
   padding: ${(props) => props.theme.spacing[2]}
     ${(props) => props.theme.spacing[2]} ${(props) => props.theme.spacing[16]};
-  background: ${(props) => props.theme.dark.generalBackground};
+  background: ${(props) => props.theme.colors.generalBackground};
   scroll-snap-align: start;
   position: relative;
 

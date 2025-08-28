@@ -20,7 +20,7 @@ const AnimatedRoundedIcon = styled(RoundedIcon)`
 const ChatIconContainer = styled.div`
   width: 24px;
   height: 24px;
-  color: ${(props) => props.theme.dark.textAbovePrimaryColor};
+  color: ${(props) => props.theme.colors.textAbovePrimaryColor};
 
   ${mediaQuery.minWidth.md} {
     width: 28px;

@@ -58,17 +58,13 @@ export const GlobalStyle = createGlobalStyle`
     }
 
     body {
-        background-color: ${(props) => props.theme.light.generalBackground};
+        background-color: ${(props) => props.theme.colors.generalBackground};
         font: ${(props) => props.theme.fontSizes[0]} 'Open Sans', Arial, sans-serif;
         max-width: 100%;
         height: 100%;
         margin: 0;
         display: flex;
         flex-direction: column;
-
-        ${mediaQuery.dark} {
-            background-color: ${(props) => props.theme.dark.generalBackground};
-        }
     }
 
     /* https://www.w3schools.com/css/css3_box-sizing.asp */

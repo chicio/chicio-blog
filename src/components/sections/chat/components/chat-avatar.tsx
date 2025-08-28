@@ -15,24 +15,13 @@ const Avatar = styled.div<{ $isUser: boolean }>`
   flex-shrink: 0;
   background: ${(props) =>
     props.$isUser
-      ? props.theme.light.primaryColor
-      : props.theme.light.generalBackgroundLight};
+      ? props.theme.colors.primaryColor
+      : props.theme.colors.generalBackgroundLight};
   color: ${(props) =>
     props.$isUser
-      ? props.theme.light.textAbovePrimaryColor
-      : props.theme.light.primaryTextColor};
+      ? props.theme.colors.textAbovePrimaryColor
+      : props.theme.colors.primaryTextColor};
   overflow: hidden;
-
-  ${mediaQuery.dark} {
-    background: ${(props) =>
-      props.$isUser
-        ? props.theme.dark.primaryColor
-        : props.theme.dark.generalBackgroundLight};
-    color: ${(props) =>
-      props.$isUser
-        ? props.theme.dark.textAbovePrimaryColor
-        : props.theme.dark.primaryTextColor};
-  }
 
   ${mediaQuery.minWidth.sm} {
     width: 40px;

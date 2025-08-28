@@ -20,8 +20,7 @@ interface Colors {
 
 declare module "styled-components" {
   export interface DefaultTheme {
-    dark: Colors;
-    light: Colors;
+    colors: Colors;
     fontSizes: string[];
     spacing: string[];
     lineHeight: number;
