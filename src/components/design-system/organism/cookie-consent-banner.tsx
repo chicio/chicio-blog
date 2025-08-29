@@ -3,16 +3,17 @@
 import { hasConsented, writeConsent } from "@/lib/consents/consents";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+import { motion, AnimatePresence } from "framer-motion";
 import { glassmorphism } from "../atoms/effects/glassmorphism";
 import { glowText } from "../atoms/effects/glow";
 import { Paragraph } from "../atoms/typography/paragraph";
 import {
-    BluePillButton,
-    RedPillButton,
+  BluePillButton,
+  RedPillButton,
 } from "../molecules/buttons/pills-buttons";
 import { mediaQuery } from "../utils/media-query";
 
-const BannerContainer = styled.div`
+const BannerContainer = styled(motion.div)`
   ${glassmorphism}
   position: fixed;
   padding: ${(props) => props.theme.spacing[3]};
@@ -20,7 +21,7 @@ const BannerContainer = styled.div`
   left: 0;
   right: 0;
   margin: 0 auto;
-  z-index: 1000;
+  z-index: 900;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -63,8 +64,8 @@ export const CookieConsentBanner = () => {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    if (!hasConsented()) { 
-        setVisible(true);
+    if (!hasConsented()) {
+      setVisible(true);
     }
   }, []);
 
@@ -73,29 +74,40 @@ export const CookieConsentBanner = () => {
     setVisible(false);
   };
 
-  if (!visible) return null;
-
   return (
-    <BannerContainer role="dialog" aria-live="polite">
-      <BannerText>
-        This website uses cookies. Take the <RedPillText>red pill</RedPillText>, and you’ll see how deep
-        the rabbit hole goes. Take the <BluePillText>blue pill</BluePillText>, and the story ends, you wake
-        up in your browser and believe whatever you want.
-      </BannerText>
-      <PillsContainer>
-        <BluePillButton
-          onClick={() => handle("rejected")}
-          aria-label="Reject cookie"
-        >
-          Sleep (Reject)
-        </BluePillButton>
-        <RedPillButton
-          onClick={() => handle("accepted")}
-          aria-label="Accept cookie"
-        >
-          Wake up (Accept)
-        </RedPillButton>
-      </PillsContainer>
-    </BannerContainer>
+    <AnimatePresence>
+      {visible && (
+          <BannerContainer
+            initial={{ opacity: 0, y: 100 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2, ease: "linear" }}
+            role="dialog"
+            aria-live="polite"
+          >
+            <BannerText>
+              This website uses cookies. Take the{" "}
+              <RedPillText>red pill</RedPillText>, and you’ll see how deep the
+              rabbit hole goes. Take the <BluePillText>blue pill</BluePillText>,
+              and the story ends, you wake up in your browser and believe
+              whatever you want.
+            </BannerText>
+            <PillsContainer>
+              <BluePillButton
+                onClick={() => handle("rejected")}
+                aria-label="Reject cookie"
+              >
+                Sleep (Reject)
+              </BluePillButton>
+              <RedPillButton
+                onClick={() => handle("accepted")}
+                aria-label="Accept cookie"
+              >
+                Wake up (Accept)
+              </RedPillButton>
+            </PillsContainer>
+          </BannerContainer>
+      )}
+    </AnimatePresence>
   );
 };

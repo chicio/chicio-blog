@@ -1,10 +1,10 @@
 "use client";
 
-import styled from "styled-components";
-import { FC, useEffect, useState } from "react";
 import { bounce } from "@/components/design-system/utils/animations/bounce-keyframes";
-import { ChevronDown } from "@styled-icons/boxicons-regular";
+import { FC, useEffect, useState } from "react";
+import styled from "styled-components";
 import { RoundedIcon } from "../../atoms/effects/icon";
+import { DownArrowIcon } from "../../atoms/icons/down-arrow-icon";
 import { mediaQuery } from "../../utils/media-query";
 
 const FloatingArrowContainer = styled(RoundedIcon)`
@@ -13,7 +13,7 @@ const FloatingArrowContainer = styled(RoundedIcon)`
   left: 0;
   right: 0;
   margin: 0 auto;
-  z-index: 1000;
+  z-index: 10;
   width: 40px;
   height: 40px;
 
@@ -26,20 +26,6 @@ const FloatingArrowContainer = styled(RoundedIcon)`
 
   ${mediaQuery.minWidth.md} {
     bottom: ${(props) => props.theme.spacing[4]};
-    width: 50px;
-    height: 50px;
-  }
-`;
-
-const ArrowIcon = styled.div`
-  width: 30px;
-  height: 30px;
-  color: ${(props) => props.theme.colors.textAbovePrimaryColor};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  ${mediaQuery.minWidth.md} {
     width: 50px;
     height: 50px;
   }
@@ -118,9 +104,7 @@ export const FloatingDownArrow: FC = () => {
   return (
     <div onClick={handleScrollDown}>
       <FloatingArrowContainer>
-        <ArrowIcon>
-          <ChevronDown size={100} title="Scroll to next section" />
-        </ArrowIcon>
+        <DownArrowIcon />
       </FloatingArrowContainer>
     </div>
   );
