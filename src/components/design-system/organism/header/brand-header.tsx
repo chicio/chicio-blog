@@ -1,13 +1,14 @@
 "use client";
 
 import { MatrixHeaderBackground } from "@/components/design-system/molecules/effects/matrix-header-background";
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import styled, { TransientProps } from "styled-components";
 import logoImage from "../../../../../public/images/logo.png";
 import { GlassmorphismBackground } from "../../atoms/effects/glassmorphism-background";
 import { glowText } from "../../atoms/effects/glow";
 import { ImageGlow } from "../../atoms/effects/image-glow";
 import { mediaQuery } from "../../utils/media-query";
+import { DejavuEasterEgg } from "../../utils/easter-eggs/dejavu";
 
 const HeaderGlassWrapper = styled.div`
   width: 100%;
@@ -33,13 +34,13 @@ const Title = styled.span`
   color: ${(props) => props.theme.colors.accentColor};
   margin: 0;
   display: block;
-  font-family: 'Courier Prime';
+  font-family: "Courier Prime";
   font-size: ${(props) => props.theme.fontSizes[3]};
   font-weight: bold;
   letter-spacing: 0.5px;
   text-transform: uppercase;
   font-size: ${(props) => props.theme.fontSizes[6]};
-  text-shadow: 
+  text-shadow:
     0 0 10px ${(props) => props.theme.colors.accentColor},
     0 0 20px ${(props) => props.theme.colors.primaryColorDark}A0,
     0 0 30px ${(props) => props.theme.colors.accentColor}50;
@@ -59,7 +60,7 @@ const Slogan = styled.span`
   ${glowText};
   display: block;
   font-size: ${(props) => props.theme.fontSizes[1]};
-  font-family: 'Courier Prime';
+  font-family: "Courier Prime";
   color: ${(props) => props.theme.colors.primaryTextColor};
   font-weight: normal;
 
@@ -93,29 +94,62 @@ interface BlogHeaderProps {
   compact?: boolean;
 }
 
-export const BrandHeaderLogo: FC<BlogHeaderProps> = ({ compact = false }) => (
-  <HeaderContainer $compact={compact}>
-    <HeaderGlassWrapper>
-      <GlassmorphismBackground>
-        <div style={{ display: "flex", alignItems: "center", width: "100%" }}>
-          <BrandHeaderImage
-            src={logoImage}
-            alt={"blog logo"}
-            width={80}
-            height={80}
-            placeholder={"blur"}
-          />
-          <HeaderColumn>
-            <Title>CHICIO CODING</Title>
-            <SloganContainer>
-              <Slogan>Pixels. Code. Unplugged.</Slogan>
-            </SloganContainer>
-          </HeaderColumn>
-        </div>
-      </GlassmorphismBackground>
-    </HeaderGlassWrapper>
-  </HeaderContainer>
-);
+export const BrandHeaderLogo: FC<BlogHeaderProps> = ({ compact = false }) => {
+  const [logoClicks, setLogoClicks] = useState(0);
+  const [showDejavu, setShowDejavu] = useState(false);
+
+  useEffect(() => {
+    if (logoClicks === 4) {
+      document.body.classList.add("glitch-active");
+      const glitchTimeout = setTimeout(() => {
+        document.body.classList.remove("glitch-active");
+        setShowDejavu(true);
+      }, 400);
+      const resetTimeout = setTimeout(() => {
+        setShowDejavu(false);
+        setLogoClicks(0);
+      }, 4000);
+      return () => {
+        clearTimeout(glitchTimeout);
+        clearTimeout(resetTimeout);
+      };
+    }
+  }, [logoClicks]);
+
+  const handleLogoClick = () => {
+    setLogoClicks((prev) => prev + 1);
+  };
+
+  return (
+    <DejavuEasterEgg>
+      <HeaderContainer $compact={compact}>
+        <HeaderGlassWrapper>
+          <GlassmorphismBackground>
+            <div
+              style={{ display: "flex", alignItems: "center", width: "100%" }}
+            >
+              <BrandHeaderImage
+                src={logoImage}
+                alt={"blog logo"}
+                width={80}
+                height={80}
+                placeholder={"blur"}
+                onClick={handleLogoClick}
+                style={{ cursor: "pointer" }}
+              />
+              <HeaderColumn>
+                <Title>CHICIO CODING</Title>
+                <SloganContainer>
+                  <Slogan>Pixels. Code. Unplugged.</Slogan>
+                </SloganContainer>
+              </HeaderColumn>
+            </div>
+          </GlassmorphismBackground>
+        </HeaderGlassWrapper>
+      </HeaderContainer>
+    </DejavuEasterEgg>
+  );
+};
 
 interface DesktopHeaderProps {
   big: boolean;

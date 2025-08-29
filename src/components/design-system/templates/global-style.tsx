@@ -1,5 +1,5 @@
 import { createGlobalStyle } from "styled-components";
-import { mediaQuery } from "@/components/design-system/utils/media-query";
+import { glitch } from "@/components/design-system/utils/animations/glitch-keyframes";
 
 export const GlobalStyle = createGlobalStyle`
     @font-face {
@@ -74,5 +74,9 @@ export const GlobalStyle = createGlobalStyle`
 
     :root {
         color-scheme: dark;
+    }
+
+    body.glitch-active, body.glitch-active * {
+      animation: ${glitch} 0.3s infinite;
     }
 `;

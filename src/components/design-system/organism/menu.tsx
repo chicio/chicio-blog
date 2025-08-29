@@ -19,7 +19,7 @@ import { CenterContainer } from "../molecules/containers/content-container";
 import { Close } from "../molecules/menu/close";
 import { HamburgerMenu } from "../molecules/menu/hamburger-menu";
 import { MenuItemWithTracking } from "../molecules/menu/menu-item-with-tracking";
-import { whiteRabbitEasterEgg } from "../utils/easter-eggs/easter-eggs";
+import { whiteRabbitEasterEgg } from "../utils/easter-eggs/white-rabbit";
 import {
   ScrollDirection,
   useScrollDirection,
