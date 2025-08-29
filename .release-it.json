@@ -8,5 +8,11 @@
   },
   "hooks": {
     "before:init": "npm run build"
+  },
+  "plugins": {
+    "@release-it/conventional-changelog": {
+      "infile": "CHANGELOG.md",
+      "preset": "conventionalcommits"
+    }
   }
 }

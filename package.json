@@ -50,6 +50,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@release-it/conventional-changelog": "^10.0.1",
     "@types/elasticlunr": "^0.9.9",
     "@types/node": "^24",
     "@types/react": "^19",
