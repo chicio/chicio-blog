@@ -2,6 +2,8 @@ import { FC, PropsWithChildren, useEffect, useState } from "react";
 import { Overlay } from "../../atoms/effects/overlay";
 import { CenterContainer } from "../../molecules/containers/content-container";
 import { MatrixTerminal } from "../../molecules/effects/matrix-terminal";
+import { ImageGlow } from "../../atoms/effects/image-glow";
+import { styled } from "styled-components";
 
 export const useDejavu = () => {
   const [logoClicks, setLogoClicks] = useState(0);
@@ -34,6 +36,13 @@ export const useDejavu = () => {
   return { showDejavu, handleLogoClick };
 };
 
+const DejavuImage = styled(ImageGlow)`
+  width: 95%;
+  max-width: 600px;
+  height: auto;
+  object-fit: contain;
+`;
+
 export const DejavuEasterEgg: FC<PropsWithChildren> = ({ children }) => {
   const { handleLogoClick, showDejavu } = useDejavu();
 
@@ -45,6 +54,12 @@ export const DejavuEasterEgg: FC<PropsWithChildren> = ({ children }) => {
           <CenterContainer>
             <MatrixTerminal
               lines={[{ text: "Déjà vu", type: "quote", delay: 200 }]}
+            />
+            <DejavuImage
+              src="/images/tattoos/matrix-pills.png"
+              alt="matrix pills"
+              width={200}
+              height={500}
             />
           </CenterContainer>
         </Overlay>
