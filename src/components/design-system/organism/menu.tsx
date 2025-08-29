@@ -49,7 +49,7 @@ const contentVariants: Variants = {
     }
   },
   expanded: {
-    height: 370,
+    height: 390,
     transition: {
       type: "spring",
       stiffness: 400,
@@ -59,26 +59,22 @@ const contentVariants: Variants = {
   }
 };
 
-// Animation variants for navbar container with stagger control
 const navBarVariants: Variants = {
   hidden: {
     transition: {
       staggerChildren: 0.5,
-      staggerDirection: -1 // Last item disappears first when closing
+      staggerDirection: -1
     }
   },
   visible: {
     transition: {
       staggerChildren: 0.12,
-      delayChildren: 0.2 // Wait for height expansion to start
+      delayChildren: 0.2
     }
   }
 };
 
-const MenuContainer = styled(motion.create(Container))<{
-  $shouldHide: boolean;
-  $shouldOpenMenu: boolean;
-}>`
+const MenuContainer = styled(motion.create(Container))`
   position: fixed;
   padding: 0;
   left: 0;
@@ -99,9 +95,7 @@ const MenuContainer = styled(motion.create(Container))<{
   }
 `;
 
-const MenuGlassContent = styled(motion.div)<{
-  $shouldOpenMenu: boolean;
-}>`
+const MenuGlassContent = styled(motion.div)`
   ${glassmorphism};
   border-top-left-radius: 0;
   border-top-right-radius: 0;
@@ -183,14 +177,11 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
   return (
     <>
       <MenuContainer
-        $shouldOpenMenu={shouldOpenMenu}
-        $shouldHide={shouldHideMenu}
         variants={menuVariants}
         animate={shouldHideMenu ? "hidden" : "visible"}
         initial="visible"
       >
         <MenuGlassContent
-          $shouldOpenMenu={shouldOpenMenu}
           variants={contentVariants}
           animate={shouldOpenMenu ? "expanded" : "collapsed"}
           initial="collapsed"
