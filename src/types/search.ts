@@ -1,10 +1,12 @@
-export type EasterEggSearchResult = {
-  type: "easterEgg";
-  terminalLines: {
+export type EasterEggTerminalLines = {
     text: string;
     type?: "normal" | "quote";
     delay?: number;
-  }[];
+  }[]
+
+export type EasterEggSearchResult = {
+  type: "easterEgg";
+  terminalLines: EasterEggTerminalLines;
 };
 
 export type SearchablePostFields = {

@@ -1,6 +1,5 @@
 "use client";
 
-import { MatrixTerminal } from "@/components/design-system/molecules/effects/matrix-terminal";
 import {
   SearchBox,
   SearchHits,
@@ -15,11 +14,10 @@ import styled from "styled-components";
 import { Container } from "../atoms/containers/container";
 import { glassmorphism } from "../atoms/effects/glassmorphism";
 import { Overlay } from "../atoms/effects/overlay";
-import { CenterContainer } from "../molecules/containers/content-container";
 import { Close } from "../molecules/menu/close";
 import { HamburgerMenu } from "../molecules/menu/hamburger-menu";
 import { MenuItemWithTracking } from "../molecules/menu/menu-item-with-tracking";
-import { whiteRabbitEasterEgg } from "../utils/easter-eggs/white-rabbit";
+import { NeoRoomEasterEgg, whiteRabbitEasterEgg } from "../utils/easter-eggs/white-rabbit";
 import {
   ScrollDirection,
   useScrollDirection,
@@ -317,15 +315,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
             }}
           >
             {search.type === "easterEgg" && (
-              <CenterContainer>
-                <MatrixTerminal
-                  lines={search.terminalLines}
-                  onComplete={() => {
-                    const audio = new Audio("/sounds/knock-knock.mp3");
-                    audio.play();
-                  }}
-                />
-              </CenterContainer>
+              <NeoRoomEasterEgg lines={search.terminalLines} />
             )}
             {search.type === "search" &&
               search.results.length > 0 &&

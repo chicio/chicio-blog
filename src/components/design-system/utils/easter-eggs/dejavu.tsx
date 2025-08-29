@@ -19,7 +19,7 @@ export const useDejavu = () => {
       const resetTimeout = setTimeout(() => {
         setShowDejavu(false);
         setLogoClicks(0);
-      }, 3500);
+      }, 4000);
       return () => {
         clearTimeout(glitchTimeout);
         clearTimeout(resetTimeout);
