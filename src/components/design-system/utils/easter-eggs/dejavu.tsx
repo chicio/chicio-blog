@@ -26,7 +26,7 @@ export const useDejavu = () => {
   }, [logoClicks]);
 
   const handleLogoClick = () => {
-    if (!showDejavu) {
+    if (!showDejavu && logoClicks < 4) {
       setLogoClicks((prev) => prev + 1);
     }
   };
