@@ -1,43 +1,12 @@
-"use client";
+import { useEffect, useState } from "react";
 
-import { bounce } from "@/components/design-system/utils/animations/bounce-keyframes";
-import { FC, useEffect, useState } from "react";
-import styled from "styled-components";
-import { RoundedIcon } from "../../atoms/effects/icon";
-import { DownArrowIcon } from "../../atoms/icons/down-arrow-icon";
-import { mediaQuery } from "../../utils/media-query";
-
-const FloatingArrowContainer = styled(RoundedIcon)`
-  position: fixed;
-  bottom: ${(props) => props.theme.spacing[2]};
-  left: 0;
-  right: 0;
-  margin: 0 auto;
-  z-index: 10;
-  width: 40px;
-  height: 40px;
-
-  animation: ${bounce} 2s ease-in-out infinite;
-
-  &:hover {
-    transform: scale(1.1);
-    box-shadow: 0 0 20px ${(props) => props.theme.colors.accentColor}80;
-  }
-
-  ${mediaQuery.minWidth.md} {
-    bottom: ${(props) => props.theme.spacing[4]};
-    width: 50px;
-    height: 50px;
-  }
-`;
-
-export const DownArrowButton: FC = () => {
+export const useSnapScroll = () => {
   const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
   const [totalSections, setTotalSections] = useState(0);
 
   useEffect(() => {
     const scrollContainer = document.querySelector("[data-snap-container]");
-    
+
     if (!scrollContainer) {
       return;
     }
@@ -48,17 +17,23 @@ export const DownArrowButton: FC = () => {
     const handleScroll = () => {
       const scrollTop = scrollContainer.scrollTop;
       let currentIdx = 0;
+
       for (let i = 0; i < sections.length; i++) {
         const sectionElement = sections[i] as HTMLElement;
+
         if (sectionElement.offsetTop > scrollTop) {
           currentIdx = i - 1 >= 0 ? i - 1 : 0;
           break;
         }
-        // Se siamo oltre l'ultima sezione
-        if (i === sections.length - 1 && scrollTop >= sectionElement.offsetTop) {
+
+        if (
+          i === sections.length - 1 &&
+          scrollTop >= sectionElement.offsetTop
+        ) {
           currentIdx = i;
         }
       }
+
       setCurrentSectionIndex(currentIdx);
     };
 
@@ -70,12 +45,15 @@ export const DownArrowButton: FC = () => {
 
   const handleScrollDown = () => {
     const scrollContainer = document.querySelector("[data-snap-container]");
-    if (!scrollContainer) return;
+    
+    if (!scrollContainer) {
+      return;
+    }
 
     const sections = Array.from(scrollContainer.children);
     const nextSectionIndex = currentSectionIndex + 1;
 
-    if (nextSectionIndex >= sections.length) { 
+    if (nextSectionIndex >= sections.length) {
       return;
     }
 
@@ -88,15 +66,9 @@ export const DownArrowButton: FC = () => {
     });
   };
 
-  if (currentSectionIndex >= totalSections - 1) {
-    return null;
-  }
-
-  return (
-    <div onClick={handleScrollDown}>
-      <FloatingArrowContainer>
-        <DownArrowIcon />
-      </FloatingArrowContainer>
-    </div>
-  );
+  return {
+    currentSectionIndex,
+    totalSections,
+    handleScrollDown,
+  };
 };

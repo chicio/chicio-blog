@@ -1,4 +1,4 @@
-import { FloatingDownArrow } from "@/components/design-system/molecules/buttons/down-arrow-button";
+import { DownArrowButton } from "@/components/design-system/molecules/buttons/down-arrow-button";
 import { MatrixBackground } from "@/components/design-system/molecules/effects/matrix-background";
 import { Footer } from "@/components/design-system/organism/footer";
 import { JsonLd } from "@/components/design-system/utils/components/jsond-ld";
@@ -34,7 +34,7 @@ export default function Home() {
           author={siteMetadata.author}
           trackingCategory={tracking.category.home}
         />
-        <FloatingDownArrow />
+        <DownArrowButton />
       </SnapScrollContainer>
       <JsonLd
         ogPageType="website"
