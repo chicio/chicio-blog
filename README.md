@@ -30,9 +30,8 @@ npm run build
 npm start
 ```
 
-## Overview
+To release a new version run the following command:
 
-This website has been created using Next.js. To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm run release
+```
