@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.3.0](https://github.com/chicio/chicio-blog/compare/v2.2.0...v2.3.0) (2025-08-29)
+
+### Features
+
+* **clown:** removed broken image :rocket: ([e4fcdfb](https://github.com/chicio/chicio-blog/commit/e4fcdfbae3005d3937952172e1d4a1563de6d891))
+
 ## [2.2.0](https://github.com/chicio/chicio-blog/compare/v2.1.0...v2.2.0) (2025-08-29)
 
 ### Features
