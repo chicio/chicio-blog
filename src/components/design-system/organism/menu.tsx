@@ -1,6 +1,10 @@
-'use client'
+"use client";
 
-import { SearchBox, SearchHits } from "@/components/design-system/molecules/menu/search";
+import { MatrixTerminal } from "@/components/design-system/molecules/effects/matrix-terminal";
+import {
+  SearchBox,
+  SearchHits,
+} from "@/components/design-system/molecules/menu/search";
 import { useSearch } from "@/components/design-system/utils/hooks/use-search";
 import { slugs } from "@/types/slug";
 import { tracking } from "@/types/tracking";
@@ -11,11 +15,16 @@ import styled from "styled-components";
 import { Container } from "../atoms/containers/container";
 import { glassmorphism } from "../atoms/effects/glassmorphism";
 import { Overlay } from "../atoms/effects/overlay";
-import { ScrollDirection, useScrollDirection } from "../utils/hooks/use-scroll-direction";
-import { mediaQuery } from "../utils/media-query";
-import { HamburgerMenu } from "../molecules/menu/hamburger-menu";
+import { CenterContainer } from "../molecules/containers/content-container";
 import { Close } from "../molecules/menu/close";
+import { HamburgerMenu } from "../molecules/menu/hamburger-menu";
 import { MenuItemWithTracking } from "../molecules/menu/menu-item-with-tracking";
+import { whiteRabbitEasterEgg } from "../utils/easter-eggs/easter-eggs";
+import {
+  ScrollDirection,
+  useScrollDirection,
+} from "../utils/hooks/use-scroll-direction";
+import { mediaQuery } from "../utils/media-query";
 
 export const menuHeightNumber = 55;
 export const menuHeight = `${menuHeightNumber}px`;
@@ -25,16 +34,16 @@ const menuVariants: Variants = {
     y: -menuHeightNumber,
     transition: {
       type: "spring",
-      duration: 0.3
-    }
+      duration: 0.3,
+    },
   },
   visible: {
     y: 0,
     transition: {
       type: "spring",
-      duration: 0.3
-    }
-  }
+      duration: 0.3,
+    },
+  },
 };
 
 // Animation variants for menu content expansion
@@ -46,7 +55,7 @@ const contentVariants: Variants = {
       stiffness: 400,
       damping: 30,
       when: "afterChildren",
-    }
+    },
   },
   expanded: {
     height: 390,
@@ -54,24 +63,24 @@ const contentVariants: Variants = {
       type: "spring",
       stiffness: 400,
       damping: 30,
-      when: "beforeChildren"
-    }
-  }
+      when: "beforeChildren",
+    },
+  },
 };
 
 const navBarVariants: Variants = {
   hidden: {
     transition: {
       staggerChildren: 0.5,
-      staggerDirection: -1
-    }
+      staggerDirection: -1,
+    },
   },
   visible: {
     transition: {
       staggerChildren: 0.12,
-      delayChildren: 0.2
-    }
-  }
+      delayChildren: 0.2,
+    },
+  },
 };
 
 const MenuContainer = styled(motion.create(Container))`
@@ -81,7 +90,7 @@ const MenuContainer = styled(motion.create(Container))`
   right: 0;
   top: 0;
   z-index: 300;
-  
+
   box-sizing: border-box;
 
   /* Compensazione scrollbar quando lo scroll è locked */
@@ -144,9 +153,9 @@ const NavBar = styled(motion.create(Container))`
 const NavBarMenuItem = styled(MenuItemWithTracking)`
   margin: 0;
   height: 40px;
-  
+
   ${mediaQuery.minWidth.sm} {
-    margin-top: 7px; 
+    margin-top: 7px;
     margin-right: ${(props) => props.theme.spacing[4]};
     margin-bottom: 8px;
   }
@@ -158,7 +167,7 @@ const NavBarMenuItem = styled(MenuItemWithTracking)`
   }
 
   ${mediaQuery.maxWidth.sm} {
-      font-size: ${(props) => props.theme.fontSizes[1]};
+    font-size: ${(props) => props.theme.fontSizes[1]};
   }
 `;
 
@@ -167,12 +176,16 @@ export interface MenuProps {
 }
 
 export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
-  const pathname = usePathname()
+  const pathname = usePathname();
   const direction = useScrollDirection();
   const [shouldOpenMenu, setShouldOpenMenu] = useState(false);
   const [startSearch, setStartSearch] = useState(false);
-  const { handleSearch, resetSearch, results } = useSearch(startSearch);
-  const shouldHideMenu = pathname === slugs.chat ? false : direction === ScrollDirection.down;
+  const { handleSearch, resetSearch, search } = useSearch(
+    startSearch,
+    whiteRabbitEasterEgg
+  );
+  const shouldHideMenu =
+    pathname === slugs.chat ? false : direction === ScrollDirection.down;
 
   return (
     <>
@@ -279,7 +292,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
               <SearchBox
                 startSearch={startSearch}
                 onClick={() => {
-                  resetSearch()
+                  resetSearch();
                   setStartSearch(!startSearch);
                 }}
                 onChange={handleSearch}
@@ -303,7 +316,20 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
               }
             }}
           >
-            {results.length > 0 && !shouldOpenMenu && <SearchHits results={results} />}
+            {search.type === "easterEgg" && (
+              <CenterContainer>
+                <MatrixTerminal
+                  lines={search.terminalLines}
+                  onComplete={() => {
+                    const audio = new Audio("/sounds/knock-knock.mp3");
+                    audio.play();
+                  }}
+                />
+              </CenterContainer>
+            )}
+            {search.type === "search" &&
+              search.results.length > 0 &&
+              !shouldOpenMenu && <SearchHits results={search.results} />}
           </Overlay>
         )}
       </AnimatePresence>

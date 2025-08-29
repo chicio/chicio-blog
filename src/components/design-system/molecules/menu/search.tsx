@@ -7,13 +7,13 @@ import { mediaQuery } from "../../utils/media-query";
 import { List } from "../../atoms/typography/list";
 import { Paragraph } from "../../atoms/typography/paragraph";
 import { borderColor, borderRadius } from "../../atoms/effects/border";
-import { SearchablePostFields } from "@/types/post";
 import Link from "next/link";
 import { hideScrollbar } from "../../utils/components/hide-scrollbar";
 import { glassmorphism } from "../../atoms/effects/glassmorphism";
 import { glowText } from "../../atoms/effects/glow";
 import { InputField } from "../../atoms/typography/input-field";
 import { Container } from "../../atoms/containers/container";
+import { SearchablePostFields } from "@/types/search";
 
 const SearchListContainer = styled(Container)`
   position: absolute;

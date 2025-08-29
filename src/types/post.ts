@@ -39,14 +39,6 @@ export type Post = {
   content: string;
 };
 
-export type SearchablePostFields = {
-  slug: string;
-  title: string;
-  description: string;
-  tags: string[];
-  authors: string[];
-};
-
 export type PostParser = (
     filePath: string,
     fileName: string,

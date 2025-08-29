@@ -2,7 +2,7 @@
 
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { TerminalLine, TerminalQuoteLine, Cursor, ErrorText, SuccessText, QuoteText } from '@/components/design-system/atoms/typography/terminal-blocks';
 import { mediaQuery } from '../../utils/media-query';
 import { useTypewriter } from '../../utils/hooks/use-typewriter';
@@ -55,10 +55,17 @@ interface TerminalLine {
 
 interface MatrixTerminalProps {
   lines: TerminalLine[];
+  onComplete?: () => void;
 }
 
-export const MatrixTerminal: FC<MatrixTerminalProps> = ({ lines }) => {
+export const MatrixTerminal: FC<MatrixTerminalProps> = ({ lines, onComplete }) => {
   const { completedLines, currentLine, currentText } = useTypewriter(lines);
+
+  useEffect(() => {
+    if (completedLines.length === lines.length && !currentLine && onComplete) {
+      onComplete();
+    }
+  }, [completedLines.length, currentLine, lines.length, onComplete]);
 
   const renderLineContent = (text: string, type?: 'normal' | 'error' | 'success' | 'quote') => {
     switch (type) {
