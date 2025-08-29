@@ -1,7 +1,7 @@
 "use client";
 
 import { MatrixHeaderBackground } from "@/components/design-system/molecules/effects/matrix-header-background";
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import styled, { TransientProps } from "styled-components";
 import logoImage from "../../../../../public/images/logo.png";
 import { GlassmorphismBackground } from "../../atoms/effects/glassmorphism-background";
@@ -94,62 +94,33 @@ interface BlogHeaderProps {
   compact?: boolean;
 }
 
-export const BrandHeaderLogo: FC<BlogHeaderProps> = ({ compact = false }) => {
-  const [logoClicks, setLogoClicks] = useState(0);
-  const [showDejavu, setShowDejavu] = useState(false);
-
-  useEffect(() => {
-    if (logoClicks === 4) {
-      document.body.classList.add("glitch-active");
-      const glitchTimeout = setTimeout(() => {
-        document.body.classList.remove("glitch-active");
-        setShowDejavu(true);
-      }, 400);
-      const resetTimeout = setTimeout(() => {
-        setShowDejavu(false);
-        setLogoClicks(0);
-      }, 4000);
-      return () => {
-        clearTimeout(glitchTimeout);
-        clearTimeout(resetTimeout);
-      };
-    }
-  }, [logoClicks]);
-
-  const handleLogoClick = () => {
-    setLogoClicks((prev) => prev + 1);
-  };
-
-  return (
-    <DejavuEasterEgg>
-      <HeaderContainer $compact={compact}>
-        <HeaderGlassWrapper>
-          <GlassmorphismBackground>
-            <div
-              style={{ display: "flex", alignItems: "center", width: "100%" }}
-            >
-              <BrandHeaderImage
-                src={logoImage}
-                alt={"blog logo"}
-                width={80}
-                height={80}
-                placeholder={"blur"}
-                onClick={handleLogoClick}
-                style={{ cursor: "pointer" }}
-              />
-              <HeaderColumn>
-                <Title>CHICIO CODING</Title>
-                <SloganContainer>
-                  <Slogan>Pixels. Code. Unplugged.</Slogan>
-                </SloganContainer>
-              </HeaderColumn>
-            </div>
-          </GlassmorphismBackground>
-        </HeaderGlassWrapper>
-      </HeaderContainer>
-    </DejavuEasterEgg>
-  );
-};
+export const BrandHeaderLogo: FC<BlogHeaderProps> = ({ compact = false }) => (
+  <DejavuEasterEgg>
+    <HeaderContainer $compact={compact}>
+      <HeaderGlassWrapper>
+        <GlassmorphismBackground>
+          <div
+            style={{ display: "flex", alignItems: "center", width: "100%" }}
+          >
+            <BrandHeaderImage
+              src={logoImage}
+              alt={"blog logo"}
+              width={80}
+              height={80}
+              placeholder={"blur"}
+              style={{ cursor: "pointer" }} />
+            <HeaderColumn>
+              <Title>CHICIO CODING</Title>
+              <SloganContainer>
+                <Slogan>Pixels. Code. Unplugged.</Slogan>
+              </SloganContainer>
+            </HeaderColumn>
+          </div>
+        </GlassmorphismBackground>
+      </HeaderGlassWrapper>
+    </HeaderContainer>
+  </DejavuEasterEgg>
+);
 
 interface DesktopHeaderProps {
   big: boolean;

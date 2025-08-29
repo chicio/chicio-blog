@@ -1,5 +1,4 @@
 import { EasterEggSearchResult } from "@/types/search";
-import { useEffect, useState } from "react";
 
 export const neoRoomNumber = "101"
 

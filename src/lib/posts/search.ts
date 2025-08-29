@@ -1,5 +1,5 @@
 import elasticlunr from "elasticlunr";
-import { Post, SearchablePostFields } from "@/types/post";
+import { Post } from "@/types/post";
 import path from "path";
 import fs from "fs";
 import matter from "gray-matter";
@@ -15,6 +15,7 @@ import calculateReadingTime from "reading-time";
 import { getFrontmatterFrom } from "@/lib/posts/frontmatter";
 import { getPostsUsing } from "@/lib/posts/posts-with-parser";
 import {searchIndexFileName} from "@/lib/posts/files";
+import { SearchablePostFields } from "@/types/search";
 
 const getSearchPostFromFilePath: (
   filePath: string,
