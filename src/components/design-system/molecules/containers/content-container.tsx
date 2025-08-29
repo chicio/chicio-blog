@@ -15,6 +15,7 @@ export const CenterContainer = styled(Container)`
   flex-direction: column;
   width: 100%;
   height: 100%;
+  gap: ${(props) => props.theme.spacing[4]};
 `;
 
 export const ContentContainerRecentPosts = styled.div`
