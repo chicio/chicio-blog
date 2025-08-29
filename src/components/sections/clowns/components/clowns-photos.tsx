@@ -29,7 +29,6 @@ export const ClownsPhotos = () => {
     'https://c8.alamy.com/comp/GAXFDF/glastonbury-festival-2008-day-two-a-group-revellers-dressed-up-as-GAXFDF.jpg',
     'https://i.pinimg.com/736x/ec/de/9d/ecde9de299622f9de706a2f31a702b56.jpg',
     'https://live.staticflickr.com/650/32731041796_00cb91ec4e_b.jpg',
-    'https://gknxt.com/list-of-collective-nouns/clowns/collective-nouns-for-clowns.webp'
   ], 4);
 
   return (
