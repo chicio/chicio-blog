@@ -1,5 +1,20 @@
 # Changelog
 
+## [2.4.0](https://github.com/chicio/chicio-blog/compare/v2.3.0...v2.4.0) (2025-08-29)
+
+### Features
+
+* **branding:** reorganizing mockups ([f4399b6](https://github.com/chicio/chicio-blog/commit/f4399b6bc9a9e014811ae7484e70584c7f4a72b9))
+* **consent:** added animation for cookie consent banner :rocket: ([0e0e62f](https://github.com/chicio/chicio-blog/commit/0e0e62f85fb7bac60cc1546e8e2f6ba9deaea99c))
+* **easter-egg:** follow the white rabbit easter egg :rocket: ([e83b354](https://github.com/chicio/chicio-blog/commit/e83b35406e3c42a54cd1fc9179a67bad83fb9616))
+* **easter-egg:** implemented logo easter egg :rocket: ([d8a06c6](https://github.com/chicio/chicio-blog/commit/d8a06c6888af618b22385429375bb031480320b8))
+* **easter-egg:** improved logic :rocket: ([cdd814c](https://github.com/chicio/chicio-blog/commit/cdd814c6db14b08005691831085db6c8dff8b5ac))
+* **eatser-egg:** removed unused logics + fix typing errors ([23828d8](https://github.com/chicio/chicio-blog/commit/23828d8c591f482add8c4f279987f8d7953b4bb8))
+* **home:** improved snap to scroll :rocket: ([6786ca6](https://github.com/chicio/chicio-blog/commit/6786ca6b08c8ce7f0a060e35fb57a82129817e96))
+* **menu:** cleanup :rocket: ([b596ab1](https://github.com/chicio/chicio-blog/commit/b596ab18897988a49fe3fb65969c6dd8b15855d6))
+* **monitor:** setup uptimerobot :rocket: ([3a824db](https://github.com/chicio/chicio-blog/commit/3a824db83bc7a0ad1318a702afbec705d154dfdb))
+* **technologies:** minor refactoring :rocket: ([96f4862](https://github.com/chicio/chicio-blog/commit/96f4862976b9c6c240d7976a6fc8d41dc7779615))
+
 ## [2.3.0](https://github.com/chicio/chicio-blog/compare/v2.2.0...v2.3.0) (2025-08-29)
 
 ### Features
