@@ -1,8 +1,8 @@
 # [fabrizioduroni.it](https://www.fabrizioduroni.it)
 
 [![Build](https://github.com/chicio/chicio-blog/actions/workflows/build.yml/badge.svg)](https://github.com/chicio/chicio-blog/actions/workflows/build.yml)
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/chicio/chicio-blog/blob/master/LICENSE.md)
-[![Status](https://img.shields.io/badge/license-MIT-green.svg)](https://stats.uptimerobot.com/H8Am1Ay0Vd)
+[![GitHub license](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/chicio/chicio-blog/blob/master/LICENSE.md)
+[![Status](https://img.shields.io/badge/Status-Ok-green.svg)](https://stats.uptimerobot.com/H8Am1Ay0Vd)
 
 My personal website.
 
