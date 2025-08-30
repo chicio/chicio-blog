@@ -27,11 +27,11 @@ export const whiteRabbitEasterEgg = (
   return null;
 };
 
-const PlaySoundContainer = styled.div`
-  display: block;
+const PlaySoundContainer = styled.div<{ $visible: boolean }>`
+  visibility: ${$props => $props.$visible ? 'visible' : 'hidden'};
 
   ${mediaQuery.minWidth.sm} {
-    display: none;
+    visibility: hidden;
   }
 `;
 
@@ -39,6 +39,7 @@ export const NeoRoomEasterEgg: FC<{ lines: EasterEggTerminalLines }> = ({
   lines,
 }) => {
   const [isCompleted, setIsCompleted] = useState<boolean>(false);
+  
   return (
     <CenterContainer>
       <MatrixTerminal
@@ -49,7 +50,7 @@ export const NeoRoomEasterEgg: FC<{ lines: EasterEggTerminalLines }> = ({
           audio.play();
         }}
       />
-      {isCompleted && <PlaySoundContainer>
+     <PlaySoundContainer $visible={isCompleted}>
         <RedPillButton
           onClick={() => {
             const audio = new Audio("/sounds/knock-knock.mp3");
@@ -58,7 +59,7 @@ export const NeoRoomEasterEgg: FC<{ lines: EasterEggTerminalLines }> = ({
         >
           Knock, knock
         </RedPillButton>
-      </PlaySoundContainer>}
+      </PlaySoundContainer>
     </CenterContainer>
   );
 };
