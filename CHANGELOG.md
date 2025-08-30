@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.4.1](https://github.com/chicio/chicio-blog/compare/v2.4.0...v2.4.1) (2025-08-30)
+
+### Features
+
+* **easter-egg:** added other effects :rocket: ([12d869a](https://github.com/chicio/chicio-blog/commit/12d869a79de6860635bdbbccc0a61b2948f76d6f))
+* **easter-egg:** added other effects :rocket: ([b0bc6be](https://github.com/chicio/chicio-blog/commit/b0bc6beb0b9e19fc00eff1f6e25e3902587887e0))
+* **easter-egg:** improved both easter eggs :rocket: ([190a5ae](https://github.com/chicio/chicio-blog/commit/190a5ae25359adb60013cec0f84b845a57f86560))
+* **easter-egg:** small improvement to white rabbit button for mobile :rocket: ([d0cce68](https://github.com/chicio/chicio-blog/commit/d0cce6846220f25eeea202c434618fd0b15cd489))
+
 ## [2.4.0](https://github.com/chicio/chicio-blog/compare/v2.3.0...v2.4.0) (2025-08-29)
 
 ### Features
