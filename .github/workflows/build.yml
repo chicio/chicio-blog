@@ -25,6 +25,10 @@ jobs:
         run: |
           npm install
           npm run build
+        env: # Or as an environment variable
+        
+          UPSTASH_VECTOR_REST_URL: ${{ secrets.UPSTASH_VECTOR_REST_URL }}          
+          UPSTASH_VECTOR_REST_TOKEN: ${{ secrets.UPSTASH_VECTOR_REST_TOKEN }}          
       - name: Archive generated site source
         uses: actions/upload-artifact@v4
         with:
