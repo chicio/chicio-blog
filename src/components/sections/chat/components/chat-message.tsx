@@ -14,7 +14,7 @@ const MessageGroup = styled.div<{ $isUser: boolean }>`
 `;
 
 const MessageBubbleContainer = styled.div<{ $isUser: boolean }>`
-  max-width: 100%;
+  max-width: 80%;
   padding: 0 ${(props) => props.theme.spacing[2]};
   border-radius: 1rem;
   background: ${(props) =>
@@ -28,7 +28,9 @@ const MessageBubbleContainer = styled.div<{ $isUser: boolean }>`
   } !important;
   ${paragraphStyle};
   margin: 0;
-
+  display: flex;
+  flex-direction: column-reverse;
+  gap: ${(props) => props.theme.spacing[1]};
 
   ${mediaQuery.minWidth.sm} {
     max-width: 70%;

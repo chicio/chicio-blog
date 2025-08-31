@@ -1,50 +1,9 @@
-import elasticlunr from "elasticlunr";
-import { Post } from "@/types/post";
-import path from "path";
-import fs from "fs";
-import matter from "gray-matter";
-import { remark } from "remark";
-import githubFlavoredMarkdown from "remark-gfm";
-import html from "remark-html";
-import math from "remark-math";
-import rehype from "remark-rehype";
-import katex from "rehype-katex";
-import syntaxHighlight from "rehype-highlight";
-import stringify from "rehype-stringify";
-import calculateReadingTime from "reading-time";
-import { getFrontmatterFrom } from "@/lib/posts/frontmatter";
-import { getPostsUsing } from "@/lib/posts/posts-with-parser";
-import {searchIndexFileName} from "@/lib/posts/files";
+import { searchIndexFileName } from "@/lib/posts/files";
 import { SearchablePostFields } from "@/types/search";
-
-const getSearchPostFromFilePath: (
-  filePath: string,
-  fileName: string,
-) => Post = (filePath: string, fileName: string) => {
-  const fileContents = fs.readFileSync(filePath, "utf8");
-  const fileParsed = matter(fileContents);
-
-  const remarkProcessor = remark()
-    .use(githubFlavoredMarkdown)
-    .use(html)
-    .use(math)
-    .use(rehype)
-    .use(katex, { strict: false }) // Render LaTeX with KaTeX
-    .use(syntaxHighlight)
-    .use(stringify);
-
-  const htmlContent = remarkProcessor
-    .processSync(fileParsed.content)
-    .toString();
-
-  return {
-    frontmatter: getFrontmatterFrom(fileParsed, fileName),
-    readingTime: calculateReadingTime(htmlContent),
-    content: htmlContent,
-  };
-};
-
-const getSearchablePost = getPostsUsing(getSearchPostFromFilePath);
+import elasticlunr from "elasticlunr";
+import fs from "fs";
+import path from "path";
+import { getSearchablePost } from "./searchable-post";
 
 const createSearchIndex = () => {
   const posts = getSearchablePost();
@@ -72,10 +31,14 @@ const createSearchIndex = () => {
 
 const generateAndSaveSearchIndex = () => {
   try {
+    console.log('🚀 Starting search index creation...');
     const index = createSearchIndex();
+    console.log('✅ Index created successfully!');
+    console.log('🚀 Writing index to file...');
     const serializedIndex = JSON.stringify(index);
     const outputPath = path.join(process.cwd(), "public", searchIndexFileName);
     fs.writeFileSync(outputPath, serializedIndex, "utf8");
+    console.log('✅ Index written to file successfully!');
   } catch (error) {
     console.error("Error generating search index:", error);
     process.exit(1);
