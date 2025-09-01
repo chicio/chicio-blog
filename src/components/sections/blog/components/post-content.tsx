@@ -162,7 +162,7 @@ const PostContentContainer = styled.div`
   }
 
   & li strong {
-    font-family: "Open Sans Bold", Arial, sans-serif;
+    font-weight: 700;
   }
 
   & img {
@@ -178,8 +178,7 @@ const PostContentContainer = styled.div`
 
   & p strong {
     ${paragraphStyle};
-    font-family: "Open Sans Bold", Arial, sans-serif;
-    font-weight: 600;
+    font-weight: 700;
   }
 
   & iframe {

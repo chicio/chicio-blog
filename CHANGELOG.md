@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.5.0](https://github.com/chicio/chicio-blog/compare/v2.4.1...v2.5.0) (2025-09-01)
+
+### Features
+
+* **chat:** rag content from blog posts :rocket: ([845d0f8](https://github.com/chicio/chicio-blog/commit/845d0f82fa0dde4f6e392e73d101e93ebc1e0950))
+* **chat:** restored model for chat :rocket: ([04467ec](https://github.com/chicio/chicio-blog/commit/04467ec55365eddd2f7939a55adff1eaf92b2cbc))
+* **ci:** added env variables as secrets :rocket: ([944c556](https://github.com/chicio/chicio-blog/commit/944c556a6cb669c4928bc2b0daea0d5492a865d9))
+* **ci:** added env variables as secrets :rocket: ([4b3b3db](https://github.com/chicio/chicio-blog/commit/4b3b3db22fd104e781dfb83bb39c0e8889124c19))
+* **docs:** updated readm :rocket: ([b3356f5](https://github.com/chicio/chicio-blog/commit/b3356f5e43b91aea9910c44000eb6a4ed5781659))
+* **font:** migrated to next font for google fonts :rocket: ([c7e499f](https://github.com/chicio/chicio-blog/commit/c7e499ff2e9bcd1cdb8c0207d332be11d6395e1d))
+* **tracking:** using google analytics tracking :rocket: ([63d2bdd](https://github.com/chicio/chicio-blog/commit/63d2bdd7509d13258c64993728916a1b3bc08c35))
+
 ## [2.4.1](https://github.com/chicio/chicio-blog/compare/v2.4.0...v2.4.1) (2025-08-30)
 
 ### Features

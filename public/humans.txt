@@ -2,7 +2,7 @@
 	Software Developer: Fabrizio Duroni
 	Contact: fabrizio.duroni [at] gmail.com
 	Twitter: @chicio86
-	From: Asso, Como, Italy
+	From: Como, Italy
 
 /* SITE */
 	Language: English

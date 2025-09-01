@@ -2,55 +2,6 @@ import { createGlobalStyle } from "styled-components";
 import { glitch } from "@/components/design-system/utils/animations/glitch-keyframes";
 
 export const GlobalStyle = createGlobalStyle`
-    @font-face {
-        font-family: 'Open Sans';
-        src: local("Open Sans Regular"),
-        url("/fonts/opensans/OpenSans-Regular.woff2") format("woff2"),
-        url("/fonts/opensans/OpenSans-Regular.woff") format("woff"),
-        url('/fonts/opensans/OpenSans-Regular.eot?#iefix') format('embedded-opentype'),
-        url('/fonts/opensans/OpenSans-Regular.ttf') format('truetype'),
-        url('/fonts/opensans/OpenSans-Regular.svg#OpenSansRegular') format('svg');
-        font-weight: normal;
-        font-style: normal;
-        font-display: fallback;
-    }
-
-    @font-face {
-        font-family: 'Open Sans';
-        src: local("Open Sans SemiBold")
-        url('/fonts/opensans/OpenSans-SemiBold.ttf') format('truetype');
-        font-weight: bold;
-        font-style: normal;
-        font-display: fallback;
-    }
-
-    @font-face {
-      font-family: 'Open Sans';
-      src: local("Open Sans Bold"),
-      url('/fonts/opensans/OpenSans-Bold.ttf') format('truetype');
-      font-weight: bold;
-      font-style: normal;
-      font-display: fallback;
-    }
-
-    @font-face {
-        font-family: 'Courier Prime';
-        src: local("Courier Prime Regular"),
-        url('/fonts/courierprime/CourierPrime-Regular.ttf') format('truetype');
-        font-weight: normal;
-        font-style: normal;
-        font-display: fallback;
-    } 
-
-    @font-face {
-        font-family: 'Courier Prime';
-        src: local("Courier Prime Bold"),
-        url('/fonts/courierprime/CourierPrime-Bold.ttf') format('truetype');
-        font-weight: bold;
-        font-style: normal;
-        font-display: fallback;
-    } 
-
     html {
         max-width: 100%;
         overflow-x: hidden;
