@@ -9,6 +9,12 @@ import { glowText } from "../../atoms/effects/glow";
 import { ImageGlow } from "../../atoms/effects/image-glow";
 import { mediaQuery } from "../../utils/media-query";
 import { DejavuEasterEgg } from "../../utils/easter-eggs/dejavu";
+import { Courier_Prime } from 'next/font/google';
+
+export const courierPrime = Courier_Prime({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+});
 
 const HeaderGlassWrapper = styled.div`
   width: 100%;

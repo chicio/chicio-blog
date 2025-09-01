@@ -18,7 +18,6 @@ export const MenuItem = styled(Link)<MenuItemProps>`
   padding: ${(props) => props.theme.spacing[3]}
     ${(props) => props.theme.spacing[4]};
   font-size: ${(props) => props.theme.fontSizes[2]};
-  font-weight: 500;
   text-decoration: none;
   text-align: center;
   transition: all 0.3s ease;
