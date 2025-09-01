@@ -13,6 +13,8 @@ import { ContentContainer } from "@/components/design-system/molecules/container
 import { tracking } from "@/types/tracking";
 import { Menu } from "@/components/design-system/organism/menu";
 import { ChatButton } from "@/components/design-system/molecules/buttons/chat-button";
+import { RedPill } from "@/components/design-system/atoms/effects/pills";
+import { ToolStatusPill } from "./chat-tools";
 
 export const Chat: FC = () => {
   const {
@@ -48,15 +50,27 @@ export const Chat: FC = () => {
           )}
           {messages.map((message) => (
             <ChatMessage isUser={message.role === "user"} key={message.id}>
-              {message.parts.map((part) => {
-                if (part.type === "text") {
-                  return (
-                    <Markdown
-                      key={`${message.id}-text`}
-                      id={message.id}
-                      content={part.text}
-                    />
-                  );
+              {message.parts.map((part, idx) => {
+                switch (part.type) {
+                  case "text":
+                    return (
+                      <Markdown
+                        key={`${message.id}-text`}
+                        id={message.id}
+                        content={part.text}
+                      />
+                    );
+                  case "tool-getFabrizioDuroniBlogKnowledge": {
+                    const statusText =
+                      part.state === "output-available"
+                        ? `completed`
+                        : `in progress…`;
+                    return (
+                      <ToolStatusPill key={`${message.id}-tool-${idx}`}>
+                        <RedPill>{`Blog Knowledge - ${statusText}`}</RedPill>
+                      </ToolStatusPill>
+                    );
+                  }
                 }
               })}
             </ChatMessage>
