@@ -6,6 +6,7 @@
     "search-index": "tsx src/lib/posts/search.ts",
     "chat-knowledge-upload": "tsx --env-file=.env.development src/lib/chat/chat-knowledge-upload.ts",
     "predev": "npm run search-index",
+    "prepare": "panda codegen",
     "dev": "next dev --turbopack",
     "prebuild": "npm run search-index",
     "build": "next build",
@@ -52,6 +53,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@pandacss/dev": "^1.2.0",
     "@release-it/conventional-changelog": "^10.0.1",
     "@types/elasticlunr": "^0.9.9",
     "@types/node": "^24",

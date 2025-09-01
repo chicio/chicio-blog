@@ -131,3 +131,7 @@ fabric.properties
 # Built Visual Studio Code Extensions
 *.vsix
 .idea/copilotDiffState.xml
+
+## Panda
+styled-system
+styled-system-studio
