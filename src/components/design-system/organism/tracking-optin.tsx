@@ -1,22 +1,37 @@
 "use client";
-import { useEffect, useState } from "react";
-import { SpeedInsights } from "@vercel/speed-insights/next";
-import { Analytics } from "@vercel/analytics/next";
+
 import { hasConsented } from "@/lib/consents/consents";
+import { GoogleAnalytics } from "@next/third-parties/google";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { useEffect, useState } from "react";
 
 export const TrackingOptIn = () => {
-  const [enabled, setEnabled] = useState(false);
+  const [enabled, setEnabled] = useState(true);
 
   useEffect(() => {
     setEnabled(hasConsented());
-    const handler = () => setEnabled(hasConsented());
+    const handler = () => {
+      const hasConsentedTracking = hasConsented();
+      console.log(
+        "Storage event triggered, analytics status",
+        hasConsentedTracking
+      );
+      return setEnabled(hasConsentedTracking);
+    };
     window.addEventListener("storage", handler);
     return () => window.removeEventListener("storage", handler);
   }, []);
 
-  if (!enabled) return null;
-  return <>
-    <SpeedInsights />
-    <Analytics />
-  </>;
+  if (!enabled) {
+    return null;
+  }
+
+  return (
+    <>
+      <GoogleAnalytics gaId="G-B992TEM300" />
+      <SpeedInsights />
+      <Analytics />
+    </>
+  );
 };
