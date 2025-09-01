@@ -30,7 +30,7 @@
     "framer-motion": "^12.23.12",
     "gray-matter": "^4.0.3",
     "katex": "^0.16.22",
-    "marked": "^16.2.0",
+    "marked": "^16.2.1",
     "next": "^15.5.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
