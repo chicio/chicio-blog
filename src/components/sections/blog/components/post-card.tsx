@@ -13,7 +13,6 @@ import {Author} from "@/types/author";
 import { borderRadius } from "@/components/design-system/atoms/effects/border";
 import { glassmorphism } from "@/components/design-system/atoms/effects/glassmorphism";
 import { glowText } from "@/components/design-system/atoms/effects/glow";
-import { Heading5 } from "@/components/design-system/atoms/typography/heading5";
 import { mediaQuery } from "@/components/design-system/utils/media-query";
 import { Paragraph } from "@/components/design-system/atoms/typography/paragraph";
 
@@ -28,12 +27,6 @@ const PostDescription = styled(Paragraph)`
   opacity: 0.9;
   line-height: 1.5;
   ${glowText}
-`;
-
-const PostCardTitle = styled(Heading5)`
-  margin: 0 0 ${(props) => props.theme.spacing[2]};
-  word-wrap: break-word;
-  color: ${(props) => props.theme.colors.accentColor};
 `;
 
 const PostCardContainer = styled(motion.div)<TransientProps<BigCardProps>>`
@@ -128,7 +121,7 @@ export const PostCard: FC<PostCardProps> = ({
             label: tracking.label.body,
           }}
         >
-          <PostCardTitle>{title}</PostCardTitle>
+          <h3>{title}</h3>
           <PostAuthors
             postAuthors={authors}
             trackingCategory={trackingCategory}

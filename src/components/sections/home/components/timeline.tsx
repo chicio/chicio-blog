@@ -1,21 +1,19 @@
 'use client'
 
-import { FC } from "react";
-import styled from "styled-components";
-import { motion, Variants } from "framer-motion";
-import { Briefcase } from "@styled-icons/boxicons-regular";
-import { GraduationCap } from "@styled-icons/fa-solid";
-import { tracking } from "@/types/tracking";
-import Image from "next/image";
-import { mediaQuery } from "@/components/design-system/utils/media-query";
-import { Heading4 } from "@/components/design-system/atoms/typography/heading4";
-import { Heading6 } from "@/components/design-system/atoms/typography/heading6";
 import { GlassmorphismBackground } from "@/components/design-system/atoms/effects/glassmorphism-background";
 import { StandardExternalLinkWithTracking } from "@/components/design-system/atoms/links/standard-external-link-with-tracking";
-import { useTimeline } from "../hooks/useTimeline";
-import { Time } from "@/components/design-system/atoms/typography/time";
 import { List } from "@/components/design-system/atoms/typography/list";
 import { Paragraph } from "@/components/design-system/atoms/typography/paragraph";
+import { Time } from "@/components/design-system/atoms/typography/time";
+import { mediaQuery } from "@/components/design-system/utils/media-query";
+import { tracking } from "@/types/tracking";
+import { BiBriefcase } from "react-icons/bi";
+import { BiSolidGraduation } from "react-icons/bi";
+import { motion, Variants } from "framer-motion";
+import Image from "next/image";
+import { FC } from "react";
+import styled from "styled-components";
+import { useTimeline } from "../hooks/useTimeline";
 
 const TimelineContainer = styled(motion.div)`
   display: flex;
@@ -115,30 +113,6 @@ const TimelineHeaderContent = styled.div`
   flex: 1;
   min-width: 0;
   word-wrap: break-word;
-`;
-
-const TimelineTitle = styled(Heading4)`
-  margin: 0;
-  background-clip: text;
-  word-wrap: break-word;
-  hyphens: auto;
-  font-size: ${(props) => props.theme.fontSizes[4]};
-  
-  ${mediaQuery.minWidth.md} {
-    font-size: ${(props) => props.theme.fontSizes[5]};
-  }
-`;
-
-const TimelineSubtitle = styled(Heading6)`
-  margin: 0;
-  color: ${(props) => props.theme.colors.accentColor};
-  word-wrap: break-word;
-  hyphens: auto;
-  font-size: ${(props) => props.theme.fontSizes[1]};
-
-  ${mediaQuery.minWidth.md} {
-    font-size: ${(props) => props.theme.fontSizes[2]};
-  }
 `;
 
 const TimelineDate = styled(Time)`
@@ -282,9 +256,9 @@ export const Timeline: FC = () => {
 
   const getIcon = (type: "work" | "education") => {
     return type === "work" ? (
-      <Briefcase size={20} />
+      <BiBriefcase className="size-5" />
     ) : (
-      <GraduationCap size={18} />
+      <BiSolidGraduation className="size-5" />
     );
   };
 
@@ -323,12 +297,12 @@ export const Timeline: FC = () => {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <TimelineTitle>{item.title}</TimelineTitle>
+                      <h3>{item.title}</h3>
                     </StandardExternalLinkWithTracking>
                   ) : (
-                    <TimelineTitle>{item.title}</TimelineTitle>
+                    <h3>{item.title}</h3>
                   )}
-                  <TimelineSubtitle>{item.subtitle}</TimelineSubtitle>
+                  <h5>{item.subtitle}</h5>
                 </TimelineHeaderContent>
 
                 <TimelineDate>{item.date}</TimelineDate>

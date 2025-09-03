@@ -11,7 +11,6 @@ import { AnimatePresence, motion, Variants } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { FC, useState } from "react";
 import styled from "styled-components";
-import { Container } from "../atoms/containers/container";
 import { glassmorphism } from "../atoms/effects/glassmorphism";
 import { Overlay } from "../atoms/effects/overlay";
 import { Close } from "../molecules/menu/close";
@@ -23,6 +22,7 @@ import {
   useScrollDirection,
 } from "../utils/hooks/use-scroll-direction";
 import { mediaQuery } from "../utils/media-query";
+import { Container } from "../atoms/containers/container";
 
 export const menuHeightNumber = 55;
 export const menuHeight = `${menuHeightNumber}px`;
@@ -88,13 +88,7 @@ const MenuContainer = styled(motion.create(Container))`
   right: 0;
   top: 0;
   z-index: 300;
-
   box-sizing: border-box;
-
-  /* Compensazione scrollbar quando lo scroll è locked */
-  body.scroll-locked & {
-    right: var(--scrollbar-width, 0px);
-  }
 
   ${mediaQuery.minWidth.xs} {
     padding-left: ${(props) => props.theme.spacing[2]};
@@ -188,6 +182,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
   return (
     <>
       <MenuContainer
+        className="menu-container"
         variants={menuVariants}
         animate={shouldHideMenu ? "hidden" : "visible"}
         initial="visible"

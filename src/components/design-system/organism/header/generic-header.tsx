@@ -1,6 +1,5 @@
 import { Container } from "@/components/design-system/atoms/containers/container";
 import { glassmorphism } from "@/components/design-system/atoms/effects/glassmorphism";
-import { Heading4 } from "@/components/design-system/atoms/typography/heading4";
 import { mediaQuery } from "@/components/design-system/utils/media-query";
 import { FC, useState } from "react";
 import styled from "styled-components";
@@ -53,7 +52,7 @@ export const GenericHeader: FC<ChatHeaderProps> = ({ title, subtitle, logo, visi
     <ChatHeaderContainer $isVisible={visible} onClick={toggleSubtitle}>
       <TitleGroup>
         {logo}
-        <Heading4>{title}</Heading4>
+        <h4>{title}</h4>
       </TitleGroup>
       <ChatSubtitle>
         {subtitle}

@@ -1,14 +1,7 @@
 "use client";
 
 import styled from "styled-components";
-import { StyledIconBase } from "@styled-icons/styled-icon";
 import { mediaQuery } from "../../utils/media-query";
-
-export const Icon = styled.div`
-  ${StyledIconBase} {
-    color: ${(props) => props.theme.colors.textAbovePrimaryColor};
-  }
-`;
 
 export const RoundedIcon = styled.div`
   z-index: 1000;

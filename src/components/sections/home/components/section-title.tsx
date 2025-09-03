@@ -1,7 +1,5 @@
-import styled from "styled-components";
-import { Heading2 } from "@/components/design-system/atoms/typography/heading2";
+import { FC, PropsWithChildren } from "react";
 
-export const SectionTitle = styled(Heading2)`
-  margin-bottom: ${(props) => props.theme.spacing[4]};
-  text-align: center;
-`;
+export const SectionTitle: FC<PropsWithChildren> = ({ children }) => (
+  <h2 className="mb-5 text-center">{children}</h2>
+);

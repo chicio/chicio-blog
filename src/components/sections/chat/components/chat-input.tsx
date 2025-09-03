@@ -3,8 +3,9 @@ import { glowContainer } from "@/components/design-system/atoms/effects/glow";
 import { InputField } from "@/components/design-system/atoms/typography/input-field";
 import { paragraphStyle } from "@/components/design-system/atoms/typography/paragraph";
 import { mediaQuery } from "@/components/design-system/utils/media-query";
-import { Send } from "@styled-icons/boxicons-regular";
+
 import { ChangeEvent, FC, FormEvent } from "react";
+import { BiSend } from "react-icons/bi";
 import styled from "styled-components";
 
 const InputContainer = styled(Container)`
@@ -96,7 +97,7 @@ export const ChatInput: FC<{
         placeholder="Ask me anything..."
       />
       <SendButton type="submit" disabled={!input.trim()}>
-        <Send size={16} />
+        <BiSend size={16} />
       </SendButton>
     </InputWrapper>
   </InputContainer>

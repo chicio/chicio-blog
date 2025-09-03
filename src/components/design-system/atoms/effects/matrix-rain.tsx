@@ -1,26 +1,13 @@
-"use client";
+'use client';
 
 import React, { useRef, useEffect } from "react";
-import styled from "styled-components";
-import {
-  matrixBackgroundDark,
-  matrixBackgroundLight,
-  matrixDarkGreen,
-  matrixNeoGreen,
-  matrixPrimaryGreen,
-  matrixTextGreen,
-} from "../../themes/colors";
 
-const MatrixCanvas = styled.canvas`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-  pointer-events: none;
-  display: block;
-`;
+const matrixPrimaryGreen = "#00FF41";      
+const matrixNeoGreen = "#39FF14";          
+const matrixDarkGreen = "#003D10";         
+const matrixTextGreen = "#00CC33";         
+const matrixBackgroundDark = "#001100";    
+const matrixBackgroundLight = "#002200"; 
 
 interface MatrixRainProps {
   fontSize: number;
@@ -136,5 +123,5 @@ export const MatrixRain: React.FC<MatrixRainProps> = ({
     };
   }, [fontSize, speed, density]);
 
-  return <MatrixCanvas ref={canvasRef} />;
+  return <canvas className="absolute top-0 left-0 w-full h-full pointer-events-none block" ref={canvasRef} />;
 };

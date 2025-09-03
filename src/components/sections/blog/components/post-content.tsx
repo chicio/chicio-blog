@@ -1,20 +1,13 @@
 "use client";
 
-import "highlight.js/styles/tokyo-night-dark.css";
-import { FC } from "react";
-import styled from "styled-components";
-import { heading2Style } from "@/components/design-system/atoms/typography/heading2";
-import { heading3Style } from "@/components/design-system/atoms/typography/heading3";
-import { heading4Style } from "@/components/design-system/atoms/typography/heading4";
-import { heading5Style } from "@/components/design-system/atoms/typography/heading5";
-import { standardLinkStyle } from "@/components/design-system/atoms/links/standard-link-style";
 import { borderRadius } from "@/components/design-system/atoms/effects/border";
 import { paragraphStyle } from "@/components/design-system/atoms/typography/paragraph";
-import { Heading1 } from "../../../design-system/atoms/typography/heading1";
-import { glowContainer } from "../../../design-system/atoms/effects/glow";
-import { glassmorphism } from "../../../design-system/atoms/effects/glassmorphism";
-import { hideScrollbar } from "../../../design-system/utils/components/hide-scrollbar";
 import { quoteStyle } from "@/components/design-system/atoms/typography/quote";
+import { FC } from "react";
+import styled from "styled-components";
+import { glassmorphism } from "../../../design-system/atoms/effects/glassmorphism";
+import { glowContainer } from "../../../design-system/atoms/effects/glow";
+import { hideScrollbar } from "../../../design-system/utils/components/hide-scrollbar";
 
 const PostContentContainer = styled.div`
   color: ${(props) => props.theme.colors.primaryTextColor};
@@ -25,50 +18,11 @@ const PostContentContainer = styled.div`
     line-height: ${(props) => props.theme.lineHeight};
   }
 
-  & p {
-    font-size: ${(props) => props.theme.fontSizes[2]};
-    margin-left: 0;
-    margin-right: 0;
-    line-height: ${(props) => props.theme.lineHeight};
-  }
-
   & figure figcaption {
     font-size: ${(props) => props.theme.fontSizes[1]};
     text-align: center;
     line-height: ${(props) => props.theme.lineHeight};
     font-style: italic;
-  }
-
-  & h2 {
-    ${heading2Style};
-    margin-left: 0;
-    margin-right: 0;
-    line-height: ${(props) => props.theme.lineHeight};
-  }
-
-  & h3 {
-    ${heading3Style};
-    margin-left: 0;
-    margin-right: 0;
-    line-height: ${(props) => props.theme.lineHeight};
-  }
-
-  & h4 {
-    ${heading4Style};
-    margin-left: 0;
-    margin-right: 0;
-    line-height: ${(props) => props.theme.lineHeight};
-  }
-
-  & h5 {
-    ${heading5Style};
-    margin-left: 0;
-    margin-right: 0;
-    line-height: ${(props) => props.theme.lineHeight};
-  }
-
-  & a {
-    ${standardLinkStyle};
   }
 
   & blockquote {
@@ -85,20 +39,6 @@ const PostContentContainer = styled.div`
     line-height: ${(props) => props.theme.lineHeight};
     margin-bottom: 0;
     margin-top: 0;
-  }
-
-  & hr {
-    height: 1px;
-    background: linear-gradient(
-      90deg,
-      ${(props) => props.theme.colors.generalBackgroundLight},
-      ${(props) => props.theme.colors.accentColor},
-      ${(props) => props.theme.colors.generalBackgroundLight}
-    );
-    width: 100%;
-    margin: ${(props) => props.theme.spacing[4]} 0;
-    height: 1px;
-    border: none;
   }
 
   & .embedVideo-container {
@@ -193,8 +133,3 @@ interface PostContentProps {
 export const PostContent: FC<PostContentProps> = ({ html }) => (
   <PostContentContainer id="blog-post-container" dangerouslySetInnerHTML={{ __html: html }} />
 );
-
-export const PostTitle = styled(Heading1)`
-  margin: 0;
-  word-wrap: break-word;
-`;

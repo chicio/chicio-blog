@@ -2,7 +2,7 @@
 
 import React, { ChangeEvent, FC } from "react";
 import styled, { css, TransientProps } from "styled-components";
-import { SearchAlt } from "@styled-icons/boxicons-regular";
+import { BiSearchAlt } from "react-icons/bi";
 import { mediaQuery } from "../../utils/media-query";
 import { List } from "../../atoms/typography/list";
 import { Paragraph } from "../../atoms/typography/paragraph";
@@ -179,7 +179,7 @@ export const SearchBox: FC<
       disabled={!startSearch}
     />
     <SearchAltContainer $startSearch={startSearch} onClick={onClick}>
-      <SearchAlt width={20} height={20} />
+      <BiSearchAlt className="size-5" />
     </SearchAltContainer>
   </SearchBoxContainer>
 );

@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronDown } from "@styled-icons/boxicons-regular";
+import { BiChevronDown } from "react-icons/bi";
 import styled from "styled-components";
 import { mediaQuery } from "../../utils/media-query";
 
@@ -20,6 +20,6 @@ const ArrowIcon = styled.div`
 
 export const DownArrowIcon = () => (
     <ArrowIcon>
-      <ChevronDown size={100} title="Scroll to next section" />
+      <BiChevronDown className='size-7 md:size-9' title="Scroll to next section" />
     </ArrowIcon>
 );

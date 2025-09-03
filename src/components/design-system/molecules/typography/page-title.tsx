@@ -1,10 +1,5 @@
-'use client'
+import { FC, PropsWithChildren } from "react";
 
-import styled from "styled-components";
-import {Heading1} from "@/components/design-system/atoms/typography/heading1";
-
-export const PageTitle = styled(Heading1)`
-  margin-left: 0;
-  margin-right: 0;
-  margin-bottom: ${(props) => props.theme.spacing[4]};
-`;
+export const PageTitle: FC<PropsWithChildren> = ({ children }) => (
+  <h1 className="mb-2">{children}</h1>
+);

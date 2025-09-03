@@ -1,0 +1,158 @@
+@import "tailwindcss";
+@import "highlight.js/styles/tokyo-night-dark.css";
+
+@theme {
+    --color-primary: #00FF41;
+    --color-secondary: #00CC33;
+    --color-primary-dark: #003D10;
+    --color-primary-light: #39FF14;
+    --color-general-background: #001100;
+    --color-text-above-primary: #000000;
+    --color-primary-text: #E8FFE8;
+    --color-secondary-text: #00CC33;
+    --color-accent: #39FF14;
+    --color-accent-alpha-50: #39FF1480;
+    --color-accent-alpha-25: #39FF1440;
+    --color-general-background-light: #002200;
+    --color-box-shadow-light: rgba(0, 255, 65, 0.3);
+    --color-divider: #00CC33;
+    --color-confirm: #ff2a2a;
+    --color-undo: #33aaff;
+
+    --spacing: 0.25rem;
+
+    --leading-tight: 1.4;
+    --leading-snug: 1.6;
+    --leading-normal: 1.8;
+    --leading-relaxed: 2;
+    --leading-loose: 2.2;
+
+    --breakpoint-xs: 576px;
+    --breakpoint-sm: 768px;
+    --breakpoint-md: 992px;
+    --breakpoint-lg: 1200px;
+
+    --animate-glitch: glitch 2s infinite;
+
+    @keyframes glitch {
+
+        0%,
+        100% {
+            transform: translateX(0);
+        }
+
+        20% {
+            transform: translateX(-2px);
+        }
+
+        40% {
+            transform: translateX(2px);
+        }
+
+        60% {
+            transform: translateX(-1px);
+        }
+
+        80% {
+            transform: translateX(1px);
+        }
+    }
+}
+
+@layer components {
+    .container {
+        @apply w-full px-4 mx-auto max-w-[540px] sm:max-w-[720px] md:max-w-[960px];
+    }
+
+    .container-fluid {
+        @apply w-full px-4 mx-auto;
+    }
+
+    .container-fullscreen {
+        @apply flex justify-center items-center flex-col h-screen min-h-screen w-full bg-transparent;
+    }
+
+    .container-section {
+        @apply w-full py-4 mx-auto max-w-[540px] sm:max-w-[720px] md:max-w-[960px];
+    }
+
+    .divider {
+        @apply w-full h-px bg-gradient-to-r from-general-background-light via-accent to-general-background-light;
+    }
+}
+
+@utility glow-text {
+    text-shadow:
+        0 0 5px var(--color-accent-alpha-50),
+        0 0 10px var(--color-accent-alpha-25);
+}
+
+@layer base {
+    h1 {
+        @apply text-accent font-bold glow-text text-4xl sm:text-5xl leading-normal;
+    }
+
+    h2 {
+        @apply text-accent font-bold glow-text text-3xl sm:text-4xl leading-normal;
+    }
+
+    h3 {
+        @apply text-accent font-bold glow-text text-2xl sm:text-3xl leading-normal;
+    }
+
+    h4 {
+        @apply text-accent font-bold glow-text text-xl sm:text-2xl leading-normal;
+    }
+
+    h5 {
+        @apply text-accent font-bold glow-text text-lg sm:text-xl leading-normal;
+    }
+
+    h6 {
+        @apply text-accent font-bold glow-text text-base leading-normal;
+    }
+
+    p {
+        @apply text-primary-text text-base leading-normal;
+    }
+
+    ul {
+        @apply list-none text-primary-text text-base leading-normal p-0 m-4;
+    }
+
+    ul li {
+        @apply relative pl-4 mb-2;
+    }
+
+    ul li::before {
+        @apply content-['▸'] absolute left-0 text-primary font-bold;
+    }
+
+    time {
+        @apply text-secondary-text;
+    }
+
+    a {
+        @apply text-accent glow-text text-base leading-normal no-underline break-words;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+        a:hover {
+            @apply underline;
+        }
+    }
+
+    hr {
+        @apply w-full h-px bg-gradient-to-r from-general-background-light via-accent to-general-background-light border-0;
+    }
+
+    #blog-post-container p {
+        @apply my-4;
+    }
+}
+
+/** custom rules **/
+
+.scroll-locked .menu-container {
+    right: var(--scrollbar-width, 0px);
+}

@@ -8,7 +8,6 @@ import { mediaQuery } from "../utils/media-query";
 import { tracking } from "@/types/tracking";
 import { slugs } from "@/types/slug";
 import { motion } from "framer-motion";
-import { FadeSeparator } from "../atoms/effects/fade-separator";
 import { MenuItemWithTracking } from "../molecules/menu/menu-item-with-tracking";
 
 const FooterContainer = styled.footer`
@@ -172,7 +171,7 @@ export const Footer: FC<FooterProps> = ({ author, trackingCategory }) => (
           </MenuItemWithTracking>
         </FooterMenu>
 
-        <FadeSeparator />
+        <hr/>
 
         <FooterAuthorSection>
           <SocialContacts

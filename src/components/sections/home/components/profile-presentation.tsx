@@ -7,8 +7,6 @@ import { tracking } from "@/types/tracking";
 import { SocialContacts } from "@/components/design-system/organism/social-contacts";
 import { GlassmorphismBackground } from "@/components/design-system/atoms/effects/glassmorphism-background";
 import { ProfilePhoto } from "./profile-photo";
-import { ProfileAuthor } from "./profile-author";
-import { ProfileJob } from "./profile-job";
 import { ProfileCTAs } from "./profile-ctas";
 import { ContainerFullscreen } from "@/components/design-system/atoms/containers/container-fullscreen";
 
@@ -47,10 +45,12 @@ export const ProfilePresentation: FC<ProfilePresentationProps> = ({
         <ProfilePhoto author={author} />
       </motion.div>
       <motion.div variants={itemVariants}>
-        <ProfileAuthor>{author}</ProfileAuthor>
+        <h1 className="mx-0 mt-3 text-center text-primary-text">{author}</h1>
       </motion.div>
       <motion.div variants={itemVariants}>
-        <ProfileJob>Software Engineer</ProfileJob>
+        <h3 className="text-center text-secondary-text mt-0 mr-0 mb-6 ml-0">
+          Software Engineer
+        </h3>
       </motion.div>
       <motion.div variants={itemVariants}>
         <SocialContacts

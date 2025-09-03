@@ -1,6 +1,5 @@
 import { CallToActionExternalWithTracking } from "@/components/design-system/atoms/call-to-actions/call-to-action-external-with-tracking";
 import { GlassmorphismBackground } from "@/components/design-system/atoms/effects/glassmorphism-background";
-import { Heading4 } from "@/components/design-system/atoms/typography/heading4";
 import { ImageGlow } from "@/components/design-system/atoms/effects/image-glow";
 import { List } from "@/components/design-system/atoms/typography/list";
 import { Paragraph } from "@/components/design-system/atoms/typography/paragraph";
@@ -51,10 +50,6 @@ const ProjectImage = styled(ImageGlow)`
     width: auto;
     max-width: 100%;
   }
-`;
-
-const ProjectTitle = styled(Heading4)`
-  margin-bottom: ${(props) => props.theme.spacing[2]};
 `;
 
 const CallToActionContainer = styled.div`
@@ -110,7 +105,7 @@ export const ProjectCard: FC<ProjectProps> = ({ project }) => (
     <GlassmorphismBackground>
       <ProjectItem>
         <ProjectContentContainer>
-          <ProjectTitle>{project.name}</ProjectTitle>
+          <h3 className="mb-3">{project.name}</h3>
           <Paragraph>{project.description}</Paragraph>
           <List>
             {project.features.map((feature) => (

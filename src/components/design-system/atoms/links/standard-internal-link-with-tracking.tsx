@@ -1,7 +1,9 @@
+'use client'
+
+import { trackWith } from "@/lib/tracking/tracking";
+import { TrackingElementProps } from "@/types/tracking";
+import Link from "next/link";
 import { FC, ReactNode } from "react";
-import {TrackingElementProps} from "@/types/tracking";
-import {StandardInternalLink} from "@/components/design-system/atoms/links/standard-internal-link";
-import {trackWith} from "@/lib/tracking/tracking";
 
 type StandardInternalLinkWithTrackingProps = TrackingElementProps & {
   to: string;
@@ -12,7 +14,7 @@ type StandardInternalLinkWithTrackingProps = TrackingElementProps & {
 export const StandardInternalLinkWithTracking: FC<
   StandardInternalLinkWithTrackingProps
 > = ({ children, className, to, trackingData }) => (
-  <StandardInternalLink
+  <Link
     className={className}
     href={to}
     onClick={() => {
@@ -20,5 +22,5 @@ export const StandardInternalLinkWithTracking: FC<
     }}
   >
     {children}
-  </StandardInternalLink>
+  </Link>
 );

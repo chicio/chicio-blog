@@ -1,6 +1,5 @@
 import { Button } from "@/components/design-system/atoms/buttons/button";
 import { GlassmorphismBackground } from "@/components/design-system/atoms/effects/glassmorphism-background";
-import { Heading6 } from "@/components/design-system/atoms/typography/heading6";
 import { mediaQuery } from "@/components/design-system/utils/media-query";
 import { FC } from "react";
 import styled from "styled-components";
@@ -51,7 +50,7 @@ export const ChatWelcome: FC<ChatWelcomeProps> = ({
   handleExampleQuestionsSelection,
 }) => (
   <GlassmorphismBackground>
-    <Heading6>👋 Hey there! Ready to dive into my tech journey?</Heading6>
+    <h4>👋 Hey there! Ready to dive into my tech journey?</h4>
     <ExampleQuestions>
       <ChatSubtitle>Here are some conversation starters:</ChatSubtitle>
       {exampleQuestions.map((question) => (

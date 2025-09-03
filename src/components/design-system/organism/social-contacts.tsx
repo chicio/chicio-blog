@@ -1,19 +1,19 @@
-'use client'
+"use client";
 
 import styled from "styled-components";
 import {
-  DevTo,
-  Facebook,
-  Github,
-  Instagram,
-  Linkedin,
-  Medium,
-} from "@styled-icons/boxicons-logos";
-import { Twitter } from "@styled-icons/boxicons-logos";
-import { Envelope } from "@styled-icons/boxicons-regular";
+  BiLogoDevTo,
+  BiLogoFacebookSquare,
+  BiLogoGithub,
+  BiLogoInstagram,
+  BiLogoLinkedin,
+  BiLogoMedium,
+  BiEnvelope
+} from "react-icons/bi";
+import { FaXTwitter } from "react-icons/fa6";
 import { FC } from "react";
-import {siteMetadata} from "@/types/site-metadata";
-import {tracking} from "@/types/tracking";
+import { siteMetadata } from "@/types/site-metadata";
+import { tracking } from "@/types/tracking";
 import { SocialContact } from "../molecules/buttons/social-contact";
 
 const SocialContactsContainers = styled.div`
@@ -42,56 +42,56 @@ export const SocialContacts: FC<SocialContactsProps> = ({
         trackingAction={tracking.action.open_github}
         trackingCategory={trackingCategory}
         trackingLabel={trackingLabel}
-        icon={<Github size={30} title={"Github"} />}
+        icon={<BiLogoGithub size={30} title={"Github"} />}
       />
       <SocialContact
         link={links.linkedin}
         trackingAction={tracking.action.open_linkedin}
         trackingCategory={trackingCategory}
         trackingLabel={trackingLabel}
-        icon={<Linkedin size={30} title={"Linkedin"} />}
+        icon={<BiLogoLinkedin size={30} title={"Linkedin"} />}
       />
       <SocialContact
         link={`mailto:${siteMetadata.contacts.email}`}
         trackingAction={tracking.action.send_mail}
         trackingCategory={trackingCategory}
         trackingLabel={trackingLabel}
-        icon={<Envelope size={30} title={"mail"} />}
+        icon={<BiEnvelope size={30} title={"mail"} />}
       />
       <SocialContact
         link={links.medium}
         trackingAction={tracking.action.open_medium}
         trackingCategory={trackingCategory}
         trackingLabel={trackingLabel}
-        icon={<Medium size={30} title={"Medium"} />}
+        icon={<BiLogoMedium size={30} title={"Medium"} />}
       />
       <SocialContact
         link={links.devto!}
         trackingAction={tracking.action.open_devto}
         trackingCategory={trackingCategory}
         trackingLabel={trackingLabel}
-        icon={<DevTo size={30} title={"Devto"} />}
+        icon={<BiLogoDevTo size={30} title={"Devto"} />}
       />
       <SocialContact
         link={links.twitter}
         trackingAction={tracking.action.open_twitter}
         trackingCategory={trackingCategory}
         trackingLabel={trackingLabel}
-        icon={<Twitter size={30} title={"Twitter"} />}
+        icon={<FaXTwitter size={30} title={"Twitter"} />}
       />
       <SocialContact
         link={links.facebook}
         trackingAction={tracking.action.open_facebook}
         trackingCategory={trackingCategory}
         trackingLabel={trackingLabel}
-        icon={<Facebook size={30} title={"Facebook"} />}
+        icon={<BiLogoFacebookSquare size={30} title={"Facebook"} />}
       />
       <SocialContact
         link={links.instagram}
         trackingAction={tracking.action.open_instagram}
         trackingCategory={trackingCategory}
         trackingLabel={trackingLabel}
-        icon={<Instagram size={30} title={"Instagram"} />}
+        icon={<BiLogoInstagram size={30} title={"Instagram"} />}
       />
     </SocialContactsContainers>
   );

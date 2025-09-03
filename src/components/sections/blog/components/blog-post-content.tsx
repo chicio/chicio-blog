@@ -6,7 +6,7 @@ import { siteMetadata } from "@/types/site-metadata";
 import { tracking } from "@/types/tracking";
 import { FC } from "react";
 import { PostAuthors } from "./post-authors";
-import { PostContent, PostTitle } from "./post-content";
+import { PostContent } from "./post-content";
 import { PostMeta } from "./post-meta";
 import { PostTags } from "./post-tags";
 import { RecentPosts } from "./read-next";
@@ -25,7 +25,7 @@ export const BlogPostContent: FC<PostProps> = ({ post }) => {
         author={siteMetadata.author}
         trackingCategory={tracking.category.blog_post}
       >
-        <PostTitle className="blog-post-title">{frontmatter.title}</PostTitle>
+        <h1 className="leading-tight">{frontmatter.title}</h1>
         <PostAuthors
           postAuthors={frontmatter.authors}
           trackingCategory={tracking.category.blog_post}
