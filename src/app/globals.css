@@ -3,6 +3,7 @@
 
 @theme {
     --color-primary: #00FF41;
+    --color-primary-alpha-0: #00FF4100;
     --color-secondary: #00CC33;
     --color-primary-dark: #003D10;
     --color-primary-light: #39FF14;
@@ -11,8 +12,11 @@
     --color-primary-text: #E8FFE8;
     --color-secondary-text: #00CC33;
     --color-accent: #39FF14;
+    --color-accent-alpha-70: #39FF14B3;
     --color-accent-alpha-50: #39FF1480;
+    --color-accent-alpha-40: #39FF1466;
     --color-accent-alpha-25: #39FF1440;
+    --color-accent-alpha-10: #39FF141A;
     --color-general-background-light: #002200;
     --color-box-shadow-light: rgba(0, 255, 65, 0.3);
     --color-divider: #00CC33;
@@ -20,6 +24,35 @@
     --color-undo: #33aaff;
 
     --spacing: 0.25rem;
+
+    --shadow-2xs: 0 0 1px var(--color-accent-alpha-40);
+    --shadow-xs: 0 0px 2px 0 var(--color-accent-alpha-40);
+    --shadow-sm: 0 0px 3px 0 var(--color-accent-alpha-40);
+    --shadow-md: 0 0px 6px 0 var(--color-accent-alpha-40);
+    --shadow-lg: 0 0px 15px 0 var(--color-accent-alpha-40);
+    --shadow-xl: 0 0px 25px 0 var(--color-accent-alpha-40);
+    --shadow-2xl: 0 0px 50px 0 var(--color-accent-alpha-40);
+
+    --inset-shadow-2xs: inset 0 1px 0 var(--color-accent-alpha-10);
+    --inset-shadow-xs: inset 0 1px 1px var(--color-accent-alpha-10);
+    --inset-shadow-sm: inset 0 2px 4px var(--color-accent-alpha-10);
+
+    --drop-shadow-xs: 0 1px 1px var(--color-accent-alpha-10);
+    --drop-shadow-sm: 0 1px 2px var(--color-accent-alpha-25);
+    --drop-shadow-md: 0 3px 3px var(--color-accent-alpha-25);
+    --drop-shadow-lg: 0 4px 4px var(--color-accent-alpha-25);
+    --drop-shadow-xl: 0 9px 7px var(--color-accent-alpha-25);
+    --drop-shadow-2xl: 0 25px 25px var(--color-accent-alpha-25);
+
+    --text-shadow-2xs: 0px 0px 1px var(--color-accent-alpha-50), 0px 0px 6px var(--color-accent-alpha-25);
+    --text-shadow-xs: 0px 0px 3px var(--color-accent-alpha-50), 0px 0px 8px var(--color-accent-alpha-25);
+    --text-shadow-sm:
+        0px 0px 5px var(--color-accent-alpha-50), 0px 0px 10px var(--color-accent-alpha-25), 0px 0px 15px var(--color-accent-alpha-10);
+    --text-shadow-md:
+        0px 0px 7px var(--color-accent-alpha-50), 0px 0px 12px var(--color-accent-alpha-25), 0px 0px 17px var(--color-accent-alpha-10);
+    --text-shadow-lg:
+        0px 0px 9px var(--color-accent-alpha-50), 0px 0px 14px var(--color-accent-alpha-25), 0px 0px 19px var(--color-accent-alpha-10);
+
 
     --leading-tight: 1.4;
     --leading-snug: 1.6;
@@ -33,6 +66,8 @@
     --breakpoint-lg: 1200px;
 
     --animate-glitch: glitch 2s infinite;
+    --animate-pulse: pulse 2s infinite;
+    --animate-bounce: bounce 2s infinite;
 
     @keyframes glitch {
 
@@ -55,6 +90,38 @@
 
         80% {
             transform: translateX(1px);
+        }
+    }
+
+    @keyframes pulse {
+        0% {
+            box-shadow: 0 0 0 0 var(--color-accent-alpha-70);
+        }
+
+        70% {
+            box-shadow: 0 0 0 10px var(--color-primary-alpha-0);
+        }
+
+        100% {
+            box-shadow: 0 0 0 0 var(--color-primary-alpha-0);
+        }
+    }
+
+    @keyframes bounce {
+        0%,
+        20%,
+        50%,
+        80%,
+        100% {
+            transform: translateY(0);
+        }
+
+        40% {
+            transform: translateY(-8px);
+        }
+
+        60% {
+            transform: translateY(-4px);
         }
     }
 }
@@ -81,35 +148,29 @@
     }
 }
 
-@utility glow-text {
-    text-shadow:
-        0 0 5px var(--color-accent-alpha-50),
-        0 0 10px var(--color-accent-alpha-25);
-}
-
 @layer base {
     h1 {
-        @apply text-accent font-bold glow-text text-4xl sm:text-5xl leading-normal;
+        @apply text-accent font-bold text-shadow-md text-4xl sm:text-5xl leading-normal;
     }
 
     h2 {
-        @apply text-accent font-bold glow-text text-3xl sm:text-4xl leading-normal;
+        @apply text-accent font-bold text-shadow-md text-3xl sm:text-4xl leading-normal;
     }
 
     h3 {
-        @apply text-accent font-bold glow-text text-2xl sm:text-3xl leading-normal;
+        @apply text-accent font-bold text-shadow-md text-2xl sm:text-3xl leading-normal;
     }
 
     h4 {
-        @apply text-accent font-bold glow-text text-xl sm:text-2xl leading-normal;
+        @apply text-accent font-bold text-shadow-md text-xl sm:text-2xl leading-normal;
     }
 
     h5 {
-        @apply text-accent font-bold glow-text text-lg sm:text-xl leading-normal;
+        @apply text-accent font-bold text-shadow-md text-lg sm:text-xl leading-normal;
     }
 
     h6 {
-        @apply text-accent font-bold glow-text text-base leading-normal;
+        @apply text-accent font-bold text-shadow-md text-base leading-normal;
     }
 
     p {
@@ -133,7 +194,7 @@
     }
 
     a {
-        @apply text-accent glow-text text-base leading-normal no-underline break-words;
+        @apply text-accent text-shadow-sm text-base leading-normal no-underline break-words;
     }
 
     @media (hover: hover) and (pointer: fine) {
