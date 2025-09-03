@@ -1,19 +1,16 @@
 "use client";
 
-import React, { ChangeEvent, FC } from "react";
-import styled, { css, TransientProps } from "styled-components";
-import { BiSearchAlt } from "react-icons/bi";
-import { mediaQuery } from "../../utils/media-query";
-import { List } from "../../atoms/typography/list";
-import { Paragraph } from "../../atoms/typography/paragraph";
-import { borderColor, borderRadius } from "../../atoms/effects/border";
-import Link from "next/link";
-import { hideScrollbar } from "../../utils/components/hide-scrollbar";
-import { glassmorphism } from "../../atoms/effects/glassmorphism";
-import { glowText } from "../../atoms/effects/glow";
-import { InputField } from "../../atoms/typography/input-field";
-import { Container } from "../../atoms/containers/container";
 import { SearchablePostFields } from "@/types/search";
+import Link from "next/link";
+import { ChangeEvent, FC } from "react";
+import { BiSearchAlt } from "react-icons/bi";
+import styled, { css, TransientProps } from "styled-components";
+import { Container } from "../../atoms/containers/container";
+import { borderColor, borderRadius } from "../../atoms/effects/border";
+import { glassmorphism } from "../../atoms/effects/glassmorphism";
+import { InputField } from "../../atoms/typography/input-field";
+import { hideScrollbar } from "../../utils/components/hide-scrollbar";
+import { mediaQuery } from "../../utils/media-query";
 
 const SearchListContainer = styled(Container)`
   position: absolute;
@@ -43,27 +40,9 @@ const SearchListContainer = styled(Container)`
   }
 `;
 
-const SearchHitsList = styled(List)`
-  padding: ${(props) => props.theme.spacing[1]};
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: ${(props) => props.theme.spacing[2]};
-
-  margin: 0 auto;
-
-  li::before {
-    content: none;
-  }
-
-  li {
-    padding-left: 0;
-    margin-bottom: 0;
-  }
-`;
-
-const SearchHitCard = styled.li`
+const SearchHitCard = styled.div`
   ${glassmorphism};
+  margin: 12px;
 
   ${mediaQuery.inputDevice.mouse} {
     cursor: pointer;
@@ -76,28 +55,6 @@ const SearchLink = styled(Link)`
   width: 100%;
   height: 100%;
   padding: ${(props) => props.theme.spacing[4]};
-`;
-
-const SearchTitle = styled(Paragraph)`
-  font-size: ${(props) => props.theme.fontSizes[4]};
-  font-weight: 700;
-  color: ${(props) => props.theme.colors.accentColor};
-  margin-bottom: ${(props) => props.theme.spacing[2]};
-  line-height: 1.3;
-  margin: 0 0 ${(props) => props.theme.spacing[2]} 0;
-  ${glowText};
-
-  ${mediaQuery.minWidth.sm} {
-    font-size: ${(props) => props.theme.fontSizes[5]};
-  }
-`;
-
-const SearchDescription = styled(Paragraph)`
-  color: ${(props) => props.theme.colors.primaryTextColor};
-  opacity: 0.9;
-  line-height: 1.5;
-  margin: 0;
-  ${glowText};
 `;
 
 const SearchBoxContainer = styled.div<TransientProps<{ startSearch: boolean }>>`
@@ -125,8 +82,11 @@ const SearchBoxContainer = styled.div<TransientProps<{ startSearch: boolean }>>`
     }
 
     &:hover {
-      background: ${(props) => !props.$startSearch && `${props.theme.colors.accentColor}1A`};
-      box-shadow: ${(props) => !props.$startSearch && `0 4px 12px ${props.theme.colors.accentColor}33`};
+      background: ${(props) =>
+        !props.$startSearch && `${props.theme.colors.accentColor}1A`};
+      box-shadow: ${(props) =>
+        !props.$startSearch &&
+        `0 4px 12px ${props.theme.colors.accentColor}33`};
     }
   }
 `;
@@ -150,18 +110,6 @@ const SearchAltContainer = styled.span<TransientProps<StartSearchProps>>`
     `}
 `;
 
-const SearchBoxInput = styled(InputField)<TransientProps<StartSearchProps>>`
-  padding: 10px;
-  width: 35px;
-  height: 35px;
-
-  ${(props) =>
-    props.$startSearch &&
-    css`
-      width: 150px;
-    `}
-`;
-
 interface OnClickProp {
   onClick: () => void;
 }
@@ -171,9 +119,9 @@ export const SearchBox: FC<
     OnClickProp & { onChange: (e: ChangeEvent<HTMLInputElement>) => void }
 > = ({ startSearch, onClick, onChange }) => (
   <SearchBoxContainer $startSearch={startSearch}>
-    <SearchBoxInput
+    <InputField
+      className={`h-[35px] p-2.5 text-transparent active:text-accent focus:text-accent transition-all duration-300 ${startSearch ? "w-[150px]" : "w-[35px]"}`}
       aria-label="Search"
-      $startSearch={startSearch}
       placeholder={startSearch ? "Search" : ""}
       onChange={onChange}
       disabled={!startSearch}
@@ -188,15 +136,13 @@ export const SearchHits: FC<{ results: SearchablePostFields[] }> = ({
   results,
 }) => (
   <SearchListContainer>
-    <SearchHitsList>
       {results.map((result, index) => (
         <SearchHitCard key={"SearchResult" + index}>
           <SearchLink href={result.slug}>
-            <SearchTitle>{result.title}</SearchTitle>
-            <SearchDescription>{result.description}</SearchDescription>
+            <h4>{result.title}</h4>
+            <p>{result.description}</p>
           </SearchLink>
         </SearchHitCard>
       ))}
-    </SearchHitsList>
   </SearchListContainer>
 );

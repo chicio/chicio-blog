@@ -7,7 +7,7 @@ export const quoteStyle = css`
   font-style: italic;
 `
   
-  export const Quote = styled.blockquote`
+export const Quote = styled.blockquote`
   ${quoteStyle};
   text-align: center;
   position: relative;

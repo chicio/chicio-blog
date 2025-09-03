@@ -1,8 +1,8 @@
+import { ImageGlow } from "@/components/design-system/atoms/effects/image-glow";
+import { Overlay } from "@/components/design-system/atoms/effects/overlay";
+import { CenterContainer } from "@/components/design-system/molecules/containers/content-container";
+import { MatrixTerminal } from "@/components/design-system/molecules/effects/matrix-terminal";
 import { FC, PropsWithChildren, useEffect, useState } from "react";
-import { Overlay } from "../../atoms/effects/overlay";
-import { CenterContainer } from "../../molecules/containers/content-container";
-import { MatrixTerminal } from "../../molecules/effects/matrix-terminal";
-import { ImageGlow } from "../../atoms/effects/image-glow";
 import { styled } from "styled-components";
 
 export const useDejavu = () => {
@@ -50,7 +50,7 @@ export const DejavuEasterEgg: FC<PropsWithChildren> = ({ children }) => {
     <div onClick={handleLogoClick}>
       {children}
       {showDejavu && (
-        <Overlay zIndex={10000} delay={0} onClick={() => {}}>
+        <Overlay delay={0}>
           <CenterContainer>
             <MatrixTerminal
               lines={[{ text: "Déjà vu", type: "quote", delay: 200 }]}

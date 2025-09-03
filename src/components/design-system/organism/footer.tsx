@@ -1,14 +1,13 @@
 'use client'
 
-import { FC } from "react";
-import { SocialContacts } from "./social-contacts";
-import styled from "styled-components";
-import { Paragraph } from "../atoms/typography/paragraph";
-import { mediaQuery } from "../utils/media-query";
-import { tracking } from "@/types/tracking";
 import { slugs } from "@/types/slug";
+import { tracking } from "@/types/tracking";
 import { motion } from "framer-motion";
+import { FC } from "react";
+import styled from "styled-components";
 import { MenuItemWithTracking } from "../molecules/menu/menu-item-with-tracking";
+import { mediaQuery } from "../utils/media-query";
+import { SocialContacts } from "./social-contacts";
 
 const FooterContainer = styled.footer`
   flex-shrink: 0;
@@ -68,18 +67,6 @@ const FooterAuthorSection = styled.div`
 
   ${mediaQuery.minWidth.md} {
     padding: ${(props) => props.theme.spacing[8]} ${(props) => props.theme.spacing[6]};
-  }
-`;
-
-const MadeWithLoveParagraph = styled(Paragraph)`
-  color: ${(props) => props.theme.colors.primaryTextColor};
-  font-size: ${(props) => props.theme.fontSizes[1]};
-  opacity: 0.9;
-  margin: 0;
-  text-align: center;
-
-  ${mediaQuery.minWidth.md} {
-    font-size: ${(props) => props.theme.fontSizes[2]};
   }
 `;
 
@@ -178,9 +165,9 @@ export const Footer: FC<FooterProps> = ({ author, trackingCategory }) => (
             trackingCategory={trackingCategory}
             trackingLabel={tracking.label.footer}
           />
-          <MadeWithLoveParagraph>
+          <p className='m-0 text-center text-sm md:text-base'>
             {`Made with 💝 by ${author} 'Chicio'`}
-          </MadeWithLoveParagraph>
+          </p>
         </FooterAuthorSection>
       </FooterContentContainer>
     </FooterContent>

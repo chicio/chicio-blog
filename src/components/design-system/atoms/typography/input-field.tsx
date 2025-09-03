@@ -1,19 +1,12 @@
-import styled from "styled-components";
-import { borderColor, borderRadius } from "../effects/border";
+import { FC } from "react";
 
-export const InputField = styled.input`
-  background: none;
-  ${borderRadius};
-  ${borderColor};
-  box-sizing: border-box;
-  font-size: ${(props) => props.theme.fontSizes[2]};
-  outline: none;
-  transition: 0.5s;
-  color: transparent;
-  
-  &:focus,
-  &:active {
-    border: 1px solid ${(props) => props.theme.colors.accentColor};
-    color: ${(props) => props.theme.colors.accentColor};
-  }
-`;
+interface InputFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  className?: string;
+}
+
+export const InputField: FC<InputFieldProps> = ({
+  className,
+  ...props
+}) => (
+  <input className={`border-glow rounded-xl bg-none outline-none text-accent ${className}`} {...props} />
+);

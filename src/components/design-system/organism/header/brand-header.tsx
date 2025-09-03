@@ -8,8 +8,8 @@ import { GlassmorphismBackground } from "../../atoms/effects/glassmorphism-backg
 import { glowText } from "../../atoms/effects/glow";
 import { ImageGlow } from "../../atoms/effects/image-glow";
 import { mediaQuery } from "../../utils/media-query";
-import { DejavuEasterEgg } from "../../utils/easter-eggs/dejavu";
 import { Courier_Prime } from 'next/font/google';
+import { DejavuEasterEgg } from "@/lib/easter-eggs/dejavu";
 
 export const courierPrime = Courier_Prime({
   subsets: ['latin'],

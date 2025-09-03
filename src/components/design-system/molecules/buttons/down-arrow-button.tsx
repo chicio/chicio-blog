@@ -13,7 +13,7 @@ export const DownArrowButton: FC = () => {
   }
 
   return (
-    <div className="fixed left-0 right-0 bottom-3 md:bottom-4 mx-auto my-0 flex items-center justify-center z-50" onClick={handleScrollDown}>
+    <div className="fixed left-0 right-0 bottom-3 md:bottom-4 mx-auto my-0 flex items-center justify-center z-40" onClick={handleScrollDown}>
       <DownArrowIcon />
     </div>
   );

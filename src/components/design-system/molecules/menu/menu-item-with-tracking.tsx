@@ -5,7 +5,6 @@ import { MenuItem } from "./menu-item";
 
 type MenuItemWithTrackingProps = TrackingElementProps & {
   to: string;
-  className?: string;
   selected: boolean;
   children?: ReactNode;
   onClickCallback?: () => void;
@@ -13,15 +12,14 @@ type MenuItemWithTrackingProps = TrackingElementProps & {
 
 export const MenuItemWithTracking: FC<MenuItemWithTrackingProps> = ({
   children,
-  className,
   to,
   trackingData,
   selected,
   onClickCallback,
 }) => (
   <MenuItem
-    className={className}
-    href={to}
+    to={to}
+    // href={to}
     onClick={() => {
       trackWith(trackingData);
       onClickCallback?.();

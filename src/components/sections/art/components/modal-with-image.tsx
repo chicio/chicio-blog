@@ -76,7 +76,7 @@ export const ModalWithImage: FC<ModalWithImageProps> = ({
   onClick,
 }) => (
   <>
-    <Overlay zIndex={zIndex} onClick={onClick} delay={0.15}>
+    <Overlay onClick={onClick} delay={0.15}>
       <ModalWrapper $zIndex={zIndex}>
         <ModalContainer
           $zIndex={zIndex}

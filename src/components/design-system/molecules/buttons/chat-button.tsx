@@ -13,7 +13,7 @@ export const FloatingChatButton = () => {
   }
 
   return (
-    <div className="fixed bottom-3 right-3 md:bottom-5 md:right-9 z-50">
+    <div className="fixed bottom-3 right-3 md:bottom-5 md:right-9 z-40">
       <Link aria-label="chat" target="_blank" href={slugs.chat} passHref >
         <ChatIcon />
       </Link>

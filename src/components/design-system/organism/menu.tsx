@@ -16,13 +16,13 @@ import { Overlay } from "../atoms/effects/overlay";
 import { Close } from "../molecules/menu/close";
 import { HamburgerMenu } from "../molecules/menu/hamburger-menu";
 import { MenuItemWithTracking } from "../molecules/menu/menu-item-with-tracking";
-import { NeoRoomEasterEgg, whiteRabbitEasterEgg } from "../utils/easter-eggs/white-rabbit";
 import {
   ScrollDirection,
   useScrollDirection,
 } from "../utils/hooks/use-scroll-direction";
 import { mediaQuery } from "../utils/media-query";
 import { Container } from "../atoms/containers/container";
+import { NeoRoomEasterEgg, whiteRabbitEasterEgg } from "@/lib/easter-eggs/white-rabbit";
 
 export const menuHeightNumber = 55;
 export const menuHeight = `${menuHeightNumber}px`;
@@ -298,7 +298,6 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
         {(shouldOpenMenu || startSearch) && (
           <Overlay
             key="menu-overlay"
-            zIndex={250}
             delay={0.1}
             onClick={() => {
               if (shouldOpenMenu) {

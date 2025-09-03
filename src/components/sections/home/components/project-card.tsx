@@ -1,7 +1,6 @@
 import { CallToActionExternalWithTracking } from "@/components/design-system/atoms/call-to-actions/call-to-action-external-with-tracking";
 import { GlassmorphismBackground } from "@/components/design-system/atoms/effects/glassmorphism-background";
 import { ImageGlow } from "@/components/design-system/atoms/effects/image-glow";
-import { List } from "@/components/design-system/atoms/typography/list";
 import { Paragraph } from "@/components/design-system/atoms/typography/paragraph";
 import { mediaQuery } from "@/components/design-system/utils/media-query";
 import { Project } from "@/types/projects";
@@ -107,11 +106,11 @@ export const ProjectCard: FC<ProjectProps> = ({ project }) => (
         <ProjectContentContainer>
           <h3 className="mb-3">{project.name}</h3>
           <Paragraph>{project.description}</Paragraph>
-          <List>
+          <ul>
             {project.features.map((feature) => (
               <li key={`${project.name}${feature}`}>{feature}</li>
             ))}
-          </List>
+          </ul>
           <CallToActionContainer>
             {project.callToActions.map((callToAction) => (
               <CallToActionExternalWithTracking

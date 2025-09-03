@@ -5,8 +5,6 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
 import { glassmorphism } from "../atoms/effects/glassmorphism";
-import { glowText } from "../atoms/effects/glow";
-import { Paragraph } from "../atoms/typography/paragraph";
 import {
   BluePillButton,
   RedPillButton,
@@ -38,12 +36,6 @@ const BannerContainer = styled(motion.div)`
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
   }
-`;
-
-const BannerText = styled(Paragraph)`
-  ${glowText};
-  text-align: left;
-  margin: 0;
 `;
 
 const PillsContainer = styled.div`
@@ -85,13 +77,13 @@ export const CookieConsentBanner = () => {
             role="dialog"
             aria-live="polite"
           >
-            <BannerText>
+            <p className="text-shadow-md">
               This website uses cookies. Take the{" "}
               <RedPillText>red pill</RedPillText>, and you’ll see how deep the
               rabbit hole goes. Take the <BluePillText>blue pill</BluePillText>,
               and the story ends, you wake up in your browser and believe
               whatever you want.
-            </BannerText>
+            </p>
             <PillsContainer>
               <BluePillButton
                 onClick={() => handle("rejected")}
