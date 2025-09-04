@@ -12,7 +12,7 @@ export function useReducedAnimations() {
 
   useEffect(() => {
     const nav = navigator as NavigatorWithDevice;
-    const memory = nav.deviceMemory ?? 4; // valore di fallback
+    const memory = nav.deviceMemory ?? 4;
     const cores = nav.hardwareConcurrency ?? 4;
     const saveData = nav.connection?.saveData ?? false;
     const isLow = memory <= 2 || cores <= 2 || saveData;

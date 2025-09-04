@@ -11,6 +11,7 @@ import {
   matrixTextGreen,
 } from "../../themes/colors";
 import { MatrixRainDrawContext } from "@/types/matrix-rain";
+import { useReducedAnimations } from "../../utils/hooks/use-reduced-animations";
 
 const MatrixCanvas = styled.canvas`
   position: absolute;
@@ -107,6 +108,7 @@ export const MatrixRain: React.FC<MatrixRainProps> = ({
   frameRate = 20,
   density,
 }) => {
+  const shouldReduceMotion = useReducedAnimations();
   const [isVisible, setIsVisible] = useState(true);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -152,15 +154,7 @@ export const MatrixRain: React.FC<MatrixRainProps> = ({
       matrixRainDrawContext = initialize(canvas, context, fontSize, frameRate);
     };
 
-    const draw = (now: number) => {
-      const elapsed = now - matrixRainDrawContext.lastFrameTimestamp;
-
-      if (elapsed < matrixRainDrawContext.timeDistanceBetweenFrames) {
-        matrixRainDrawContext.animationFrameId = requestAnimationFrame(draw);
-        return;
-      }
-
-      matrixRainDrawContext.lastFrameTimestamp = now;
+    const draw = () => {
       context.font = matrixRainDrawContext.font;
       context.fillStyle = backgroundColor;
       context.fillRect(
@@ -169,6 +163,7 @@ export const MatrixRain: React.FC<MatrixRainProps> = ({
         matrixRainDrawContext.width,
         matrixRainDrawContext.height
       );
+
       for (let i = 0; i < matrixRainDrawContext.drops.length; i++) {
         const text = matrix[Math.floor(Math.random() * matrix.length)];
         const color = colors.find(
@@ -183,11 +178,35 @@ export const MatrixRain: React.FC<MatrixRainProps> = ({
         }
         matrixRainDrawContext.drops[i]++;
       }
-      matrixRainDrawContext.animationFrameId = requestAnimationFrame(draw);
     };
 
-    matrixRainDrawContext.animationFrameId = requestAnimationFrame(draw);
-    window.addEventListener("resize", start);
+    const frame = (now: number) => {
+      const elapsed = now - matrixRainDrawContext.lastFrameTimestamp;
+
+      if (elapsed < matrixRainDrawContext.timeDistanceBetweenFrames) {
+        matrixRainDrawContext.animationFrameId = requestAnimationFrame(frame);
+        return;
+      }
+
+      draw();
+
+      matrixRainDrawContext.lastFrameTimestamp = now;
+      matrixRainDrawContext.animationFrameId = requestAnimationFrame(frame);
+    };
+
+    const renderingLoop = () => {
+      if (shouldReduceMotion) {
+        for (let i = 0; i < frameRate; i++) {
+          draw();
+        }
+      } else {
+        matrixRainDrawContext.animationFrameId = requestAnimationFrame(frame);
+      }
+
+      window.addEventListener("resize", start);
+    };
+
+    renderingLoop();
 
     return () => {
       if (matrixRainDrawContext.animationFrameId) {
@@ -195,7 +214,7 @@ export const MatrixRain: React.FC<MatrixRainProps> = ({
       }
       window.removeEventListener("resize", start);
     };
-  }, [fontSize, frameRate, density, isVisible]);
+  }, [fontSize, frameRate, density, isVisible, shouldReduceMotion]);
 
   return <MatrixCanvas ref={canvasRef} />;
 };
