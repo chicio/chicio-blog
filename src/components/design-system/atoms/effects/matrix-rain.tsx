@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import styled from "styled-components";
 import {
   matrixBackgroundDark,
@@ -70,9 +70,30 @@ const initialize = (
     width: canvas.width / window.devicePixelRatio,
     lastFrameTimestamp: performance.now(),
     timeDistanceBetweenFrames: 1000 / frameRate,
-    font: `${fontSize}px 'Courier New', monospace`,
+    font: `${fontSize}px 'Courier Prime', monospace`,
     animationFrameId: 0,
   };
+};
+
+const observe = (
+  canvas: HTMLCanvasElement,
+  handleVisibilityChange: (isVisible: boolean) => void
+) => {
+  const observer = new window.IntersectionObserver(
+    ([entry]) => {
+      console.log(entry.isIntersecting);
+      return handleVisibilityChange(
+        entry.isIntersecting || entry.intersectionRect.height > 0
+      );
+    },
+    {
+      root: null,
+      rootMargin: "-50px 0px -50px 0px",
+      threshold: 0,
+    }
+  );
+  observer.observe(canvas);
+  return observer;
 };
 
 interface MatrixRainProps {
@@ -86,9 +107,28 @@ export const MatrixRain: React.FC<MatrixRainProps> = ({
   frameRate = 20,
   density,
 }) => {
+  const [isVisible, setIsVisible] = useState(true);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
+    const canvas = canvasRef.current;
+
+    if (!canvas) {
+      return;
+    }
+
+    const observer = observe(canvas, setIsVisible);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isVisible) {
+      return;
+    }
+
     const canvas = canvasRef.current;
 
     if (!canvas) {
@@ -121,7 +161,6 @@ export const MatrixRain: React.FC<MatrixRainProps> = ({
       }
 
       matrixRainDrawContext.lastFrameTimestamp = now;
-
       context.font = matrixRainDrawContext.font;
       context.fillStyle = backgroundColor;
       context.fillRect(
@@ -130,7 +169,6 @@ export const MatrixRain: React.FC<MatrixRainProps> = ({
         matrixRainDrawContext.width,
         matrixRainDrawContext.height
       );
-
       for (let i = 0; i < matrixRainDrawContext.drops.length; i++) {
         const text = matrix[Math.floor(Math.random() * matrix.length)];
         const color = colors.find(
@@ -139,13 +177,10 @@ export const MatrixRain: React.FC<MatrixRainProps> = ({
         context.fillStyle = color;
         const x = i * fontSize;
         const y = matrixRainDrawContext.drops[i] * fontSize;
-
         context.fillText(text, x, y);
-
         if (y > matrixRainDrawContext.height && Math.random() > density) {
           matrixRainDrawContext.drops[i] = 0;
         }
-
         matrixRainDrawContext.drops[i]++;
       }
       matrixRainDrawContext.animationFrameId = requestAnimationFrame(draw);
@@ -155,10 +190,12 @@ export const MatrixRain: React.FC<MatrixRainProps> = ({
     window.addEventListener("resize", start);
 
     return () => {
-      cancelAnimationFrame(matrixRainDrawContext.animationFrameId);
+      if (matrixRainDrawContext.animationFrameId) {
+        cancelAnimationFrame(matrixRainDrawContext.animationFrameId);
+      }
       window.removeEventListener("resize", start);
     };
-  }, [fontSize, frameRate, density]);
+  }, [fontSize, frameRate, density, isVisible]);
 
   return <MatrixCanvas ref={canvasRef} />;
 };
