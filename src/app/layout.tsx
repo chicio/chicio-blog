@@ -8,7 +8,6 @@ import { TrackingOptIn } from "@/components/design-system/organism/tracking-opti
 import { Viewport } from "next";
 import { ReactNode } from "react";
 import { Open_Sans, Courier_Prime } from "next/font/google";
-import { MotionConfig } from "framer-motion";
 
 export const openSans = Open_Sans({
   subsets: ["latin"],
@@ -34,7 +33,6 @@ export default function RootLayout({
     >
       <SharedHead />
       <body>
-        <MotionConfig reducedMotion="user">
           <StyledComponentsRegistry>
             <ThemePage theme={theme}>
               {children}
@@ -43,7 +41,6 @@ export default function RootLayout({
             </ThemePage>
           </StyledComponentsRegistry>
           <TrackingOptIn />
-        </MotionConfig>
       </body>
     </html>
   );
