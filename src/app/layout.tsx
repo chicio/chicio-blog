@@ -7,15 +7,15 @@ import StyledComponentsRegistry from "@/components/styled-components-registry";
 import { TrackingOptIn } from "@/components/design-system/organism/tracking-optin";
 import { Viewport } from "next";
 import { ReactNode } from "react";
-import { Open_Sans, Courier_Prime } from 'next/font/google';
+import { Open_Sans, Courier_Prime } from "next/font/google";
 
 export const openSans = Open_Sans({
-  subsets: ['latin'],
+  subsets: ["latin"],
 });
 
 export const courierPrime = Courier_Prime({
-  subsets: ['latin'],
-  weight: ['400', '700'],
+  subsets: ["latin"],
+  weight: ["400", "700"],
 });
 
 export const viewport: Viewport = {
@@ -27,17 +27,20 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: ReactNode }>) {
   return (
-    <html lang="en" className={`${courierPrime.className} ${openSans.className}`}>
+    <html
+      lang="en"
+      className={`${courierPrime.className} ${openSans.className}`}
+    >
       <SharedHead />
       <body>
-        <StyledComponentsRegistry>
-          <ThemePage theme={theme}>
-            {children}
-            <FloatingChatButton />
-            <CookieConsentBanner />
-          </ThemePage>
-        </StyledComponentsRegistry>
-        <TrackingOptIn />
+          <StyledComponentsRegistry>
+            <ThemePage theme={theme}>
+              {children}
+              <FloatingChatButton />
+              <CookieConsentBanner />
+            </ThemePage>
+          </StyledComponentsRegistry>
+          <TrackingOptIn />
       </body>
     </html>
   );

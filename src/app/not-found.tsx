@@ -54,7 +54,7 @@ const terminalLines = [
 export default function notFoundPage() {
   return (
     <Matrix404Container>
-      <MatrixRain fontSize={14} speed={35} density={0.975} />
+      <MatrixRain fontSize={14} density={0.975} />
       <ContentWrapper>
         <Matrix404Title>404</Matrix404Title>
         <MatrixTerminal lines={terminalLines} />
