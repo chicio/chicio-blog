@@ -10,6 +10,7 @@ import {
   matrixPrimaryGreen,
   matrixTextGreen,
 } from "../../themes/colors";
+import { MatrixRainDrawContext } from "@/types/matrix-rain";
 
 const MatrixCanvas = styled.canvas`
   position: absolute;
@@ -22,15 +23,67 @@ const MatrixCanvas = styled.canvas`
   display: block;
 `;
 
+const matrix = "ﾊﾐﾋｰｳｼﾅﾓﾆｻﾜﾂｵﾘｱﾎﾃﾏｹﾒｴｶｷﾑﾕﾗｾﾈｽﾀﾇﾍ012345789Z:.=*+-<>".split("");
+const colors = [
+  { threshold: 0.05, color: matrixPrimaryGreen },
+  { threshold: 0.15, color: matrixNeoGreen },
+  { threshold: 0.4, color: matrixTextGreen },
+  { threshold: 0.7, color: matrixDarkGreen },
+  { threshold: 0.9, color: matrixDarkGreen },
+  { threshold: Number.MAX_SAFE_INTEGER, color: matrixBackgroundLight },
+];
+const backgroundColor = `${matrixBackgroundDark}10`;
+
+const setCanvasSize = (
+  canvas: HTMLCanvasElement,
+  context: CanvasRenderingContext2D
+) => {
+  const rect = canvas.getBoundingClientRect();
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+  context?.scale(dpr, dpr);
+};
+
+const initializeDrops = (canvas: HTMLCanvasElement, fontSize: number) => {
+  const columns = Math.floor(canvas.width / window.devicePixelRatio / fontSize);
+  const drops = [];
+  for (let x = 0; x < columns; x++) {
+    drops[x] = Math.floor(
+      (Math.random() * (canvas.height / window.devicePixelRatio)) / fontSize
+    );
+  }
+  return drops;
+};
+
+const initialize = (
+  canvas: HTMLCanvasElement,
+  context: CanvasRenderingContext2D,
+  fontSize: number,
+  frameRate: number
+): MatrixRainDrawContext => {
+  setCanvasSize(canvas, context);
+
+  return {
+    drops: initializeDrops(canvas, fontSize),
+    height: canvas.height / window.devicePixelRatio,
+    width: canvas.width / window.devicePixelRatio,
+    lastFrameTimestamp: performance.now(),
+    timeDistanceBetweenFrames: 1000 / frameRate,
+    font: `${fontSize}px 'Courier New', monospace`,
+    animationFrameId: 0,
+  };
+};
+
 interface MatrixRainProps {
   fontSize: number;
-  speed: number;
+  frameRate?: number;
   density: number;
 }
 
 export const MatrixRain: React.FC<MatrixRainProps> = ({
   fontSize,
-  speed,
+  frameRate = 20,
   density,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -48,93 +101,64 @@ export const MatrixRain: React.FC<MatrixRainProps> = ({
       return;
     }
 
-    const setCanvasSize = () => {
-      const rect = canvas.getBoundingClientRect();
-      const dpr = window.devicePixelRatio || 1;
-      canvas.width = rect.width * dpr;
-      canvas.height = rect.height * dpr;
-      context.scale(dpr, dpr);
-    };
-
-    const initializeDrops = () => {
-      const columns = Math.floor(
-        canvas.width / window.devicePixelRatio / fontSize
-      );
-      const drops = [];
-      for (let x = 0; x < columns; x++) {
-        drops[x] = Math.floor(
-          (Math.random() * (canvas.height / window.devicePixelRatio)) / fontSize
-        );
-      }
-      return drops;
-    };
-
-    const matrix = "ﾊﾐﾋｰｳｼﾅﾓﾆｻﾜﾂｵﾘｱﾎﾃﾏｹﾒｴｶｷﾑﾕﾗｾﾈｽﾀﾇﾍ012345789Z:.=*+-<>".split(
-      ""
+    let matrixRainDrawContext: MatrixRainDrawContext = initialize(
+      canvas,
+      context,
+      fontSize,
+      frameRate
     );
-    const colors = [
-      { threshold: 0.05, color: matrixPrimaryGreen },
-      { threshold: 0.15, color: matrixNeoGreen },
-      { threshold: 0.4, color: matrixTextGreen },
-      { threshold: 0.7, color: matrixDarkGreen },
-      { threshold: 0.9, color: matrixDarkGreen },
-      { threshold: Number.MAX_SAFE_INTEGER, color: matrixBackgroundLight },
-    ];
-    const font = `${fontSize}px 'Courier New', monospace`;
-    const backgroundColor = `${matrixBackgroundDark}10`
-    let drops: number[] = initializeDrops();
 
-    const initialize = () => {
-      setCanvasSize();
-      drops = initializeDrops();
+    const start = () => {
+      matrixRainDrawContext = initialize(canvas, context, fontSize, frameRate);
     };
-
-    initialize();
-
-    let lastFrame = performance.now();
-    let animationFrameId: number;
 
     const draw = (now: number) => {
-      const elapsed = now - lastFrame;
+      const elapsed = now - matrixRainDrawContext.lastFrameTimestamp;
 
-      if (elapsed < speed) {
-        animationFrameId = requestAnimationFrame(draw);
+      if (elapsed < matrixRainDrawContext.timeDistanceBetweenFrames) {
+        matrixRainDrawContext.animationFrameId = requestAnimationFrame(draw);
         return;
       }
-      lastFrame = now;
-      const height = canvas.height / window.devicePixelRatio;
-      const width = canvas.width / window.devicePixelRatio;
 
+      matrixRainDrawContext.lastFrameTimestamp = now;
+
+      context.font = matrixRainDrawContext.font;
       context.fillStyle = backgroundColor;
-      context.fillRect(0, 0, width, height);
-      context.font = font;
+      context.fillRect(
+        0,
+        0,
+        matrixRainDrawContext.width,
+        matrixRainDrawContext.height
+      );
 
-      for (let i = 0; i < drops.length; i++) {
+      for (let i = 0; i < matrixRainDrawContext.drops.length; i++) {
         const text = matrix[Math.floor(Math.random() * matrix.length)];
-        const color = colors.find(({ threshold }) => Math.random() < threshold)!.color;
+        const color = colors.find(
+          ({ threshold }) => Math.random() < threshold
+        )!.color;
         context.fillStyle = color;
         const x = i * fontSize;
-        const y = drops[i] * fontSize;
+        const y = matrixRainDrawContext.drops[i] * fontSize;
 
         context.fillText(text, x, y);
 
-        if (y > height && Math.random() > density) {
-          drops[i] = 0;
+        if (y > matrixRainDrawContext.height && Math.random() > density) {
+          matrixRainDrawContext.drops[i] = 0;
         }
 
-        drops[i]++;
+        matrixRainDrawContext.drops[i]++;
       }
-      animationFrameId = requestAnimationFrame(draw);
+      matrixRainDrawContext.animationFrameId = requestAnimationFrame(draw);
     };
 
-    animationFrameId = requestAnimationFrame(draw);
-    window.addEventListener("resize", initialize);
+    matrixRainDrawContext.animationFrameId = requestAnimationFrame(draw);
+    window.addEventListener("resize", start);
 
     return () => {
-      cancelAnimationFrame(animationFrameId);
-      window.removeEventListener("resize", initialize);
+      cancelAnimationFrame(matrixRainDrawContext.animationFrameId);
+      window.removeEventListener("resize", start);
     };
-  }, [fontSize, speed, density]);
+  }, [fontSize, frameRate, density]);
 
   return <MatrixCanvas ref={canvasRef} />;
 };

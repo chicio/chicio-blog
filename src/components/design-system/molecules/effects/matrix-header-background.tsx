@@ -44,7 +44,7 @@ interface MatrixHeaderBackgroundProps {
 export const MatrixHeaderBackground: FC<MatrixHeaderBackgroundProps> = ({ big }) => (
   <MatrixBackground $big={big}> 
     <MatrixBackgroundRain>
-      <MatrixRain fontSize={14} speed={60} density={0.95} />
+      <MatrixRain fontSize={14} density={0.95} />
     </MatrixBackgroundRain>
   </MatrixBackground>
 );
