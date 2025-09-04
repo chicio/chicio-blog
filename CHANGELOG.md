@@ -1,5 +1,15 @@
 # Changelog
 
+## [2.6.0](https://github.com/chicio/chicio-blog/compare/v2.5.0...v2.6.0) (2025-09-04)
+
+### Features
+
+* **performance:** added intersection observer to stop animation when canvas is out of screen :rocket: ([dae778c](https://github.com/chicio/chicio-blog/commit/dae778c4cd4eddf553edc30efacbe359bb9c8b19))
+* **performance:** added reduce motion for motion :rocket: ([1c8213a](https://github.com/chicio/chicio-blog/commit/1c8213ab25cd1e09c7d2670d53e7a00f1f86ab73))
+* **performance:** matrix background managed for low end devices :rocket: ([cb70ae4](https://github.com/chicio/chicio-blog/commit/cb70ae4612e8b9a13713599057a9d0f2faf1f2be))
+* **performance:** moved MotionConfig in a client page :rocket: ([87a6676](https://github.com/chicio/chicio-blog/commit/87a667605f86a4bfe7f1400b8cf72bc4cacccd3b))
+* **performance:** refactor matrix-rain with draw context object :rocket: ([de5f0ab](https://github.com/chicio/chicio-blog/commit/de5f0aba7320f5f5b006b3101168d8d89e6819c2))
+
 ## [2.5.0](https://github.com/chicio/chicio-blog/compare/v2.4.1...v2.5.0) (2025-09-01)
 
 ### Features
