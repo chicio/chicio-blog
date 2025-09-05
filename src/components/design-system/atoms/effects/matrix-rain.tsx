@@ -1,39 +1,19 @@
 'use client';
 
 import React, { useRef, useEffect, useState } from "react";
-import styled from "styled-components";
-import {
-  matrixBackgroundDark,
-  matrixBackgroundLight,
-  matrixDarkGreen,
-  matrixNeoGreen,
-  matrixPrimaryGreen,
-  matrixTextGreen,
-} from "../../themes/colors";
 import { MatrixRainDrawContext } from "@/types/matrix-rain";
 import { useReducedAnimations } from "../../utils/hooks/use-reduced-animations";
 
-const MatrixCanvas = styled.canvas`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-  pointer-events: none;
-  display: block;
-`;
-
 const matrix = "ﾊﾐﾋｰｳｼﾅﾓﾆｻﾜﾂｵﾘｱﾎﾃﾏｹﾒｴｶｷﾑﾕﾗｾﾈｽﾀﾇﾍ012345789Z:.=*+-<>".split("");
 const colors = [
-  { threshold: 0.05, color: matrixPrimaryGreen },
-  { threshold: 0.15, color: matrixNeoGreen },
-  { threshold: 0.4, color: matrixTextGreen },
-  { threshold: 0.7, color: matrixDarkGreen },
-  { threshold: 0.9, color: matrixDarkGreen },
-  { threshold: Number.MAX_SAFE_INTEGER, color: matrixBackgroundLight },
+  { threshold: 0.05, color: "#00FF41" },
+  { threshold: 0.15, color: "#39FF14" },
+  { threshold: 0.4, color: "#00CC33" },
+  { threshold: 0.7, color: "#003D10" },
+  { threshold: 0.9, color: "#003D10" },
+  { threshold: Number.MAX_SAFE_INTEGER, color: "#002200" },
 ];
-const backgroundColor = `${matrixBackgroundDark}10`;
+const backgroundColor = `#00110010`;
 
 const setCanvasSize = (
   canvas: HTMLCanvasElement,
