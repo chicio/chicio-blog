@@ -1,7 +1,6 @@
 "use client";
 
 import styled from "styled-components";
-import { Quote } from "@/components/design-system/atoms/typography/quote";
 import { glowText } from "../effects/glow";
 import { mediaQuery } from "../../utils/media-query";
 
@@ -61,23 +60,4 @@ export const ErrorText = styled.span`
 export const SuccessText = styled.span`
   color: ${(props) => props.theme.colors.accentColor};
   ${glowText}
-`;
-
-export const QuoteText = styled(Quote)`
-  font-style: italic;
-  text-align: center;
-  font-family: "Courier New", monospace;
-  margin: ${(props) => props.theme.spacing[4]} 0;
-  font-size: 0.85rem;
-  line-height: 1.5;
-  font-weight: bold;
-  ${glowText};
-
-  ${mediaQuery.minWidth.sm} {
-    font-size: 0.9rem;
-  }
-
-  ${mediaQuery.minWidth.md} {
-    font-size: 1rem;
-  }
 `;

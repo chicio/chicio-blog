@@ -210,6 +210,16 @@
     }
 }
 
+@utility hide-scrollbar {
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    & {
+        scrollbar-width: none;
+    }
+}
+
 @layer base {
 
     html {
@@ -343,5 +353,9 @@
 /** custom rules **/
 
 .scroll-locked .menu-container {
+    right: var(--scrollbar-width, 0px);
+}
+
+.remove-scroll-width {
     right: var(--scrollbar-width, 0px);
 }

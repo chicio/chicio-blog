@@ -8,7 +8,7 @@ import { useSearch } from "@/components/design-system/utils/hooks/use-search";
 import {
   NeoRoomEasterEgg,
   whiteRabbitEasterEgg,
-} from "@/lib/easter-eggs/white-rabbit";
+} from "@/components/sections/easter-eggs/white-rabbit";
 import { slugs } from "@/types/slug";
 import { tracking } from "@/types/tracking";
 import { AnimatePresence, motion, Variants } from "framer-motion";

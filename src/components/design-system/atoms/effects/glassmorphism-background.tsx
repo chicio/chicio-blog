@@ -1,10 +1,5 @@
-'use client';
-
-import styled from "styled-components";
 import { motion, stagger, Variants } from "framer-motion";
 import { FC, PropsWithChildren } from "react";
-import { mediaQuery } from "../../utils/media-query";
-import { glassmorphism } from "./glassmorphism";
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -16,29 +11,15 @@ const containerVariants: Variants = {
   },
 };
 
-const GlassmorphismBackgroundContainer = styled(motion.div)`
-  position: relative;
-  z-index: 2;
-  padding: ${(props) => props.theme.spacing[4]};
-  ${glassmorphism};
-
-  ${mediaQuery.minWidth.md} {
-    padding: ${(props) => props.theme.spacing[8]};
-  }
-`;
-
-type Props = {
-  withPadding?: boolean
-};
-
-export const GlassmorphismBackground: FC<PropsWithChildren<Props>> = ({
+export const GlassmorphismBackground: FC<PropsWithChildren> = ({
   children,
 }) => (
-  <GlassmorphismBackgroundContainer
+  <motion.div
+    className="glassmorphism relative p-5 md:p-9"
     variants={containerVariants}
     initial="hidden"
     animate="visible"
   >
     {children}
-  </GlassmorphismBackgroundContainer>
+  </motion.div>
 );

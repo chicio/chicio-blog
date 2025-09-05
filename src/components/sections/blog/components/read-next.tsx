@@ -1,5 +1,4 @@
 import { shuffleArray } from "@/components/design-system/utils/hooks/shuffle-array";
-import { ContentContainerRecentPosts } from "@/components/design-system/molecules/containers/content-container";
 import { PostsRowContainer } from "@/components/sections/blog/components/posts-row-container";
 import { getPosts } from "@/lib/posts/posts";
 import { FC } from "react";
@@ -18,11 +17,11 @@ export const RecentPosts: FC<RecentPostsProps> = ({ currentSlug }) => {
   );
 
   return (
-    <ContentContainerRecentPosts>
+    <div className="my-12">
       <h2 className="my-2">Read next</h2>
       <PostsRowContainer>
         <PostsRow postsGroup={readNextPosts} />
       </PostsRowContainer>
-    </ContentContainerRecentPosts>
+    </div>
   );
 };

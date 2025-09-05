@@ -1,19 +1,12 @@
 "use client";
 
-import styled from "styled-components";
-import { FC } from "react";
-import { motion, Variants } from "framer-motion";
-import { tracking } from "@/types/tracking";
-import { SocialContacts } from "@/components/design-system/organism/social-contacts";
 import { GlassmorphismBackground } from "@/components/design-system/atoms/effects/glassmorphism-background";
-import { ProfilePhoto } from "./profile-photo";
+import { SocialContacts } from "@/components/design-system/organism/social-contacts";
+import { tracking } from "@/types/tracking";
+import { motion, Variants } from "framer-motion";
+import { FC } from "react";
 import { ProfileCTAs } from "./profile-ctas";
-import { ContainerFullscreen } from "@/components/design-system/atoms/containers/container-fullscreen";
-
-const ContentContainer = styled(ContainerFullscreen)`
-  padding: ${(props) => props.theme.spacing[4]};
-  position: relative;
-`;
+import { ProfilePhoto } from "./profile-photo";
 
 const itemVariants: Variants = {
   hidden: { y: 50, opacity: 0 },
@@ -35,7 +28,7 @@ export interface ProfilePresentationProps {
 export const ProfilePresentation: FC<ProfilePresentationProps> = ({
   author,
 }) => (
-  <ContentContainer>
+  <div className="h-dvh w-full p-5 relative flex items-center justify-center flex-col bg-transparent">
     <GlassmorphismBackground>
       <motion.div
         variants={itemVariants}
@@ -62,5 +55,5 @@ export const ProfilePresentation: FC<ProfilePresentationProps> = ({
         <ProfileCTAs />
       </motion.div>
     </GlassmorphismBackground>
-  </ContentContainer>
+  </div>
 );

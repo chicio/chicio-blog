@@ -35,21 +35,6 @@ const ProjectImageContainer = styled(motion.div)`
   }
 `;
 
-const ProjectImage = styled(ImageGlow)`
-  position: relative;
-  z-index: 2;
-  object-fit: cover;
-  width: 100%;
-  height: auto;
-  max-width: 500px;
-
-  ${mediaQuery.minWidth.md} {
-    height: 100%;
-    width: auto;
-    max-width: 100%;
-  }
-`;
-
 const CallToActionContainer = styled.div`
   margin-top: ${(props) => props.theme.spacing[6]};
   display: flex;
@@ -129,7 +114,8 @@ export const ProjectCard: FC<ProjectProps> = ({ project }) => (
           </CallToActionContainer>
         </ProjectContentContainer>
         <ProjectImageContainer>
-          <ProjectImage
+          <ImageGlow
+            className="relative object-cover w-full h-auto max-w-[500px] md:h-[100%] md:w-auto md:max-w-full"
             width={500}
             height={500}
             alt={project.name}

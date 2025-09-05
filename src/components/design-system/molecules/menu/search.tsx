@@ -5,40 +5,10 @@ import Link from "next/link";
 import { ChangeEvent, FC } from "react";
 import { BiSearchAlt } from "react-icons/bi";
 import styled, { css, TransientProps } from "styled-components";
-import { Container } from "../../atoms/containers/container";
-import { borderColor, borderRadius } from "../../atoms/effects/border";
 import { glassmorphism } from "../../atoms/effects/glassmorphism";
 import { InputField } from "../../atoms/typography/input-field";
-import { hideScrollbar } from "../../utils/components/hide-scrollbar";
 import { mediaQuery } from "../../utils/media-query";
 
-const SearchListContainer = styled(Container)`
-  position: absolute;
-  top: 100px;
-  right: 0;
-  left: 0;
-  bottom: 0;
-  height: 80dvh;
-  width: 95%;
-  overflow: scroll;
-  padding: ${(props) => props.theme.spacing[2]};
-  body.scroll-locked & {
-    right: var(--scrollbar-width, 0px);
-  }
-  backdrop-filter: blur(1px);
-  box-shadow:
-    inset 0 0 3px ${(props) => props.theme.colors.accentColor}AA,
-    inset 0 0 8px ${(props) => props.theme.colors.accentColor}99,
-    inset 0 0 10px ${(props) => props.theme.colors.accentColor}55;
-
-  ${borderRadius};
-  ${borderColor};
-  ${hideScrollbar};
-
-  ${mediaQuery.minWidth.xs} {
-    width: 100%;
-  }
-`;
 
 const SearchHitCard = styled.div`
   ${glassmorphism};
@@ -135,7 +105,7 @@ export const SearchBox: FC<
 export const SearchHits: FC<{ results: SearchablePostFields[] }> = ({
   results,
 }) => (
-  <SearchListContainer>
+  <div className="container-fixed remove-scroll-width overflow-scroll glow-container hide-scrollbar absolute top-24 left-0 right-0 h-[80dvh] w-[95%] xs:w-full backdrop-blur-xs">
       {results.map((result, index) => (
         <SearchHitCard key={"SearchResult" + index}>
           <SearchLink href={result.slug}>
@@ -144,5 +114,6 @@ export const SearchHits: FC<{ results: SearchablePostFields[] }> = ({
           </SearchLink>
         </SearchHitCard>
       ))}
-  </SearchListContainer>
+  </div>
 );
+

@@ -1,24 +1,6 @@
-import { Container } from "@/components/design-system/atoms/containers/container";
-import { glassmorphism } from "@/components/design-system/atoms/effects/glassmorphism";
 import { mediaQuery } from "@/components/design-system/utils/media-query";
 import { FC, useState } from "react";
 import styled from "styled-components";
-
-export const ChatHeaderContainer = styled(Container)<{ $isVisible: boolean }>`
-  ${glassmorphism}
-  text-align: center;
-  padding: ${(props) => props.theme.spacing[2]}
-    ${(props) => props.theme.spacing[2]};
-  margin: ${(props) => props.theme.spacing[4]} 0 ;
-  z-index: 50;
-  display: ${(props) => (props.$isVisible ? "block" : "none")};
-  
-  ${mediaQuery.minWidth.sm} {
-    margin: ${(props) => props.theme.spacing[6]} 0 ;
-    padding: ${(props) => props.theme.spacing[4]}
-      ${(props) => props.theme.spacing[3]};
-  }
-`;
 
 const TitleGroup = styled.div`
   display: flex;
@@ -47,8 +29,12 @@ export const GenericHeader: FC<ChatHeaderProps> = ({ title, subtitle, logo, visi
     setIsSubtitleExpanded(!isSubtitleExpanded);
   };
 
+  if (!visible) {
+    return null;
+  }
+
   return (
-    <ChatHeaderContainer $isVisible={visible} onClick={toggleSubtitle}>
+    <div className="glassmorphism text-center px-3 py-3 sm:px-5 sm:py-4 my-4 sm:my-7 mx-0" onClick={toggleSubtitle}>
       <TitleGroup>
         {logo}
         <h3>{title}</h3>
@@ -56,6 +42,6 @@ export const GenericHeader: FC<ChatHeaderProps> = ({ title, subtitle, logo, visi
       <p className='text-shadow-md text-center text-sm sm:text-base'>
         {subtitle}
       </p>
-    </ChatHeaderContainer>
+    </div>
   );
 };

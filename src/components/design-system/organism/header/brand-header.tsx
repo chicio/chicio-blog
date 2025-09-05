@@ -9,7 +9,7 @@ import { glowText } from "../../atoms/effects/glow";
 import { ImageGlow } from "../../atoms/effects/image-glow";
 import { mediaQuery } from "../../utils/media-query";
 import { Courier_Prime } from 'next/font/google';
-import { DejavuEasterEgg } from "@/lib/easter-eggs/dejavu";
+import { DejavuEasterEgg } from "@/components/sections/easter-eggs/dejavu";
 
 export const courierPrime = Courier_Prime({
   subsets: ['latin'],
@@ -75,18 +75,6 @@ const Slogan = styled.span`
   }
 `;
 
-const BrandHeaderImage = styled(ImageGlow)`
-  margin-right: ${(props) => props.theme.spacing[2]};
-  object-fit: cover;
-  width: 50px;
-  height: 50px;
-
-  ${mediaQuery.minWidth.sm} {
-    width: 80px;
-    height: 80px;
-  }
-`;
-
 const Container = styled.div<TransientProps<BlogHeaderProps>>`
   display: block;
   height: ${(props) => (props.$compact ? "150px" : "auto")};
@@ -108,13 +96,14 @@ export const BrandHeaderLogo: FC<BlogHeaderProps> = ({ compact = false }) => (
           <div
             style={{ display: "flex", alignItems: "center", width: "100%" }}
           >
-            <BrandHeaderImage
+            <ImageGlow
               src={logoImage}
               alt={"blog logo"}
               width={80}
               height={80}
               placeholder={"blur"}
-              style={{ cursor: "pointer" }} />
+              className="mr-3 object-cover w-[50px] h-[50px] sm:w-[80px] sm:h-[80px]"
+              />
             <HeaderColumn>
               <Title>CHICIO CODING</Title>
               <SloganContainer>
