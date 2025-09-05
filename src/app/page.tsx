@@ -24,7 +24,7 @@ export default function Home() {
   return (
     <>
       <SnapScrollContainer data-snap-container="true">
-        <MatrixBackground fontSize={16} speed={50} density={0.95}>
+        <MatrixBackground fontSize={16} density={0.95}>
           <ProfilePresentation author={siteMetadata.author} />
         </MatrixBackground>
         <Technologies author={siteMetadata.author} />

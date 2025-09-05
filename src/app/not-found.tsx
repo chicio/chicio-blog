@@ -13,7 +13,7 @@ const terminalLines = [
 export default function notFoundPage() {
   return (
     <div className="container-fullscreen min-h-screen relative bg-black text-accent-color overflow-hidden">
-      <MatrixRain fontSize={14} speed={35} density={0.975} />
+      <MatrixRain fontSize={14} density={0.975} />
       <div className="relative z-10 flex flex-col items-center justify-center gap-2 p-2">
         <h1 className="heading animate-glitch text-accent font-bold text-[72px] sm:text-[100px] glow-text">
           404

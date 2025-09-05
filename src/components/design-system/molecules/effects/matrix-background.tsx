@@ -40,19 +40,17 @@ const ContentWrapper = styled.div`
 interface ContainerFullscreenWithMatrixProps {
   children: ReactNode;
   fontSize?: number;
-  speed?: number;
   density?: number;
 }
 
 export const MatrixBackground: FC<ContainerFullscreenWithMatrixProps> = ({
   children,
   fontSize = 16,
-  speed = 50,
   density = 0.95
 }) => (
   <Container>
     <MatrixBackgroundDiv>
-      <MatrixRain fontSize={fontSize} speed={speed} density={density} />
+      <MatrixRain fontSize={fontSize} density={density} />
     </MatrixBackgroundDiv>
     <ContentWrapper>
       {children}
