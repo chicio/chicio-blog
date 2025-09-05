@@ -1,31 +1,43 @@
 import { FC, ReactNode } from "react";
-import {TrackingElementProps} from "@/types/tracking";
-import {trackWith} from "@/lib/tracking/tracking";
-import { MenuItem } from "./menu-item";
+import { TrackingElementProps } from "@/types/tracking";
+import { trackWith } from "@/lib/tracking/tracking";
+import Link from "next/link";
 
 type MenuItemWithTrackingProps = TrackingElementProps & {
   to: string;
   selected: boolean;
   children?: ReactNode;
+  className?: string;
   onClickCallback?: () => void;
 };
 
 export const MenuItemWithTracking: FC<MenuItemWithTrackingProps> = ({
   children,
+  className,
   to,
   trackingData,
   selected,
   onClickCallback,
-}) => (
-  <MenuItem
-    to={to}
-    // href={to}
-    onClick={() => {
-      trackWith(trackingData);
-      onClickCallback?.();
-    }}
-    selected={selected}
-  >
-    {children}
-  </MenuItem>
-);
+}) => {
+  const color = selected ? "text-accent" : "text-primary-text";
+  const spacing = "px-2 py-2 xs:px-6 xs:py-1";
+  const text = "text-base md:text-lg text-shadow-md text-center no-underline";
+  const transition = "transition-all duration-300";
+  const border = `border border-solid rounded-xl ${selected ? "border-accent" : "border-transparent"}`;
+  const flex = `flex items-center justify-center`;
+  const background = selected ? "bg-accent-alpha-15" : "transparent";
+  const hover = `hover:bg-accent-alpha-10 hover:text-accent hover:border-accent hover:transition-all hover:duration-300 hover:translate-y-[-1px] hover:shadow-lg`;
+
+  return (
+    <Link
+      href={to}
+      className={`relative ${transition} ${color} ${spacing} ${text} ${border} ${flex} ${background} ${hover}${className ? ` ${className}` : ""}`}
+      onClick={() => {
+        trackWith(trackingData);
+        onClickCallback?.();
+      }}
+    >
+      {children}
+    </Link>
+  );
+};

@@ -5,13 +5,16 @@ import {
   SearchHits,
 } from "@/components/design-system/molecules/menu/search";
 import { useSearch } from "@/components/design-system/utils/hooks/use-search";
+import {
+  NeoRoomEasterEgg,
+  whiteRabbitEasterEgg,
+} from "@/lib/easter-eggs/white-rabbit";
 import { slugs } from "@/types/slug";
 import { tracking } from "@/types/tracking";
 import { AnimatePresence, motion, Variants } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { FC, useState } from "react";
 import styled from "styled-components";
-import { glassmorphism } from "../atoms/effects/glassmorphism";
 import { Overlay } from "../atoms/effects/overlay";
 import { Close } from "../molecules/menu/close";
 import { HamburgerMenu } from "../molecules/menu/hamburger-menu";
@@ -21,11 +24,8 @@ import {
   useScrollDirection,
 } from "../utils/hooks/use-scroll-direction";
 import { mediaQuery } from "../utils/media-query";
-import { Container } from "../atoms/containers/container";
-import { NeoRoomEasterEgg, whiteRabbitEasterEgg } from "@/lib/easter-eggs/white-rabbit";
 
 export const menuHeightNumber = 55;
-export const menuHeight = `${menuHeightNumber}px`;
 
 const menuVariants: Variants = {
   hidden: {
@@ -44,103 +44,20 @@ const menuVariants: Variants = {
   },
 };
 
-// Animation variants for menu content expansion
 const contentVariants: Variants = {
   collapsed: {
-    height: menuHeightNumber,
+    maxHeight: menuHeightNumber,
     transition: {
-      type: "spring",
-      stiffness: 400,
-      damping: 30,
-      when: "afterChildren",
+      type: "tween",
     },
   },
   expanded: {
-    height: 390,
+    maxHeight: 400,
     transition: {
-      type: "spring",
-      stiffness: 400,
-      damping: 30,
-      when: "beforeChildren",
+      type: "tween",
     },
   },
 };
-
-const navBarVariants: Variants = {
-  hidden: {
-    transition: {
-      staggerChildren: 0.5,
-      staggerDirection: -1,
-    },
-  },
-  visible: {
-    transition: {
-      staggerChildren: 0.12,
-      delayChildren: 0.2,
-    },
-  },
-};
-
-const MenuContainer = styled(motion.create(Container))`
-  position: fixed;
-  padding: 0;
-  left: 0;
-  right: 0;
-  top: 0;
-  z-index: 300;
-  box-sizing: border-box;
-
-  ${mediaQuery.minWidth.xs} {
-    padding-left: ${(props) => props.theme.spacing[2]};
-    padding-right: ${(props) => props.theme.spacing[2]};
-  }
-`;
-
-const MenuGlassContent = styled(motion.div)`
-  ${glassmorphism};
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-  border-top: none;
-
-  ${mediaQuery.maxWidth.xs} {
-    border-right: none;
-    border-left: none;
-  }
-
-  overflow: hidden;
-  width: 100%;
-  margin: 0 auto;
-`;
-
-const MenuButtonContainer = styled.div`
-  position: absolute;
-  top: 10px;
-  left: 10px;
-
-  ${mediaQuery.minWidth.xs} {
-    display: none;
-  }
-`;
-
-const NavBar = styled(motion.create(Container))`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: ${menuHeight};
-  width: 100%;
-  margin: 0;
-  padding: 0 ${(props) => props.theme.spacing[2]};
-
-  ${mediaQuery.minWidth.xs} {
-    flex-direction: row;
-    padding: 0 ${(props) => props.theme.spacing[4]};
-  }
-
-  /* Su mobile: padding-top pari all'altezza dell'header quando menu chiuso */
-  ${mediaQuery.maxWidth.xs} {
-    padding-top: ${menuHeight};
-  }
-`;
 
 const NavBarMenuItem = styled(MenuItemWithTracking)`
   margin: 0;
@@ -152,11 +69,11 @@ const NavBarMenuItem = styled(MenuItemWithTracking)`
     margin-bottom: 8px;
   }
 
-  ${mediaQuery.maxWidth.xs} {
-    width: calc(100% - ${(props) => props.theme.spacing[8]});
-    min-height: 48px;
-    margin: ${(props) => props.theme.spacing[1]} 0;
-  }
+  // ${mediaQuery.maxWidth.xs} {
+  //   width: calc(100% - ${(props) => props.theme.spacing[8]});
+  //   min-height: 48px;
+  //   margin: ${(props) => props.theme.spacing[1]} 0;
+  // }
 
   ${mediaQuery.maxWidth.sm} {
     font-size: ${(props) => props.theme.fontSizes[1]};
@@ -174,31 +91,28 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
   const [startSearch, setStartSearch] = useState(false);
   const { handleSearch, resetSearch, search } = useSearch(
     startSearch,
-    whiteRabbitEasterEgg
+    whiteRabbitEasterEgg,
   );
   const shouldHideMenu =
     pathname === slugs.chat ? false : direction === ScrollDirection.down;
 
   return (
     <>
-      <MenuContainer
-        className="menu-container"
+      <motion.div
+        className="menu-container container-fixed xs:pl-3 xs:pr-3 fixed top-0 right-0 left-0 z-50 p-0"
         variants={menuVariants}
         animate={shouldHideMenu ? "hidden" : "visible"}
         initial="visible"
       >
-        <MenuGlassContent
-          variants={contentVariants}
-          animate={shouldOpenMenu ? "expanded" : "collapsed"}
-          initial="collapsed"
-        >
-          <NavBar
-            variants={navBarVariants}
-            initial="hidden"
-            animate={shouldOpenMenu ? "visible" : "hidden"}
+        <div className="glassmorphism xs:border-r-1 xs:border-l-1 mx-auto my-0 w-full overflow-hidden rounded-t-none border-t-0 border-r-0 border-l-0">
+          <motion.div
+            variants={contentVariants}
+            initial="collapsed"
+            animate={shouldOpenMenu ? "expanded" : "collapsed"}
+            className="xs:flex-row xs:py-0 xs:px-5 m-0 flex min-h-[55px] flex-col items-center pt-[55px]"
           >
-            {/* Desktop: sempre visibili, Mobile: nascosti con padding quando chiuso */}
-            <NavBarMenuItem
+            <MenuItemWithTracking
+              className="w-full xs:w-auto sm:mr-5"
               key="home"
               to={"/"}
               selected={pathname === "/"}
@@ -210,9 +124,10 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
               onClickCallback={() => setShouldOpenMenu(false)}
             >
               Home
-            </NavBarMenuItem>
-            <NavBarMenuItem
+            </MenuItemWithTracking>
+            <MenuItemWithTracking
               key="blog"
+              className="w-80 xs:w-auto sm:mr-5"
               to={slugs.blog}
               selected={
                 pathname.includes(slugs.blog) && pathname !== slugs.aboutMe
@@ -225,9 +140,10 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
               onClickCallback={() => setShouldOpenMenu(false)}
             >
               Blog
-            </NavBarMenuItem>
-            <NavBarMenuItem
+            </MenuItemWithTracking>
+            <MenuItemWithTracking
               key="art"
+              className="w-80 xs:w-auto sm:mr-5"
               to={slugs.art}
               selected={pathname === slugs.art}
               trackingData={{
@@ -238,9 +154,10 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
               onClickCallback={() => setShouldOpenMenu(false)}
             >
               Art
-            </NavBarMenuItem>
-            <NavBarMenuItem
+            </MenuItemWithTracking>
+            <MenuItemWithTracking
               key="aboutMe"
+              className="w-80 xs:w-auto sm:mr-5"
               to={slugs.aboutMe}
               selected={pathname === slugs.aboutMe}
               trackingData={{
@@ -251,9 +168,10 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
               onClickCallback={() => setShouldOpenMenu(false)}
             >
               About me
-            </NavBarMenuItem>
-            <NavBarMenuItem
+            </MenuItemWithTracking>
+            <MenuItemWithTracking
               key="chat"
+              className="w-80 xs:w-auto sm:mr-5"
               to={slugs.chat}
               selected={pathname === slugs.chat}
               trackingData={{
@@ -264,9 +182,9 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
               onClickCallback={() => setShouldOpenMenu(false)}
             >
               Chat
-            </NavBarMenuItem>
+            </MenuItemWithTracking>
             {!startSearch && (
-              <MenuButtonContainer>
+              <div className="xs:hidden absolute top-2.5 left-2.5">
                 {!shouldOpenMenu && (
                   <HamburgerMenu
                     onClick={() => {
@@ -279,7 +197,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
                 {shouldOpenMenu && (
                   <Close onClick={() => setShouldOpenMenu(!shouldOpenMenu)} />
                 )}
-              </MenuButtonContainer>
+              </div>
             )}
             {!shouldOpenMenu && (
               <SearchBox
@@ -291,9 +209,9 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
                 onChange={handleSearch}
               />
             )}
-          </NavBar>
-        </MenuGlassContent>
-      </MenuContainer>
+          </motion.div>
+        </div>
+      </motion.div>
       <AnimatePresence>
         {(shouldOpenMenu || startSearch) && (
           <Overlay

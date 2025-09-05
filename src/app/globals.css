@@ -323,12 +323,20 @@
         @apply w-full py-4 mx-auto max-w-[540px] sm:max-w-[720px] md:max-w-[960px];
     }
 
-    .border-glow {
+    .call-to-action {
+        @apply text-lg bg-accent text-text-above-primary p-3 m-1 border-0 rounded-xl leading-none text-center inline-block min-w-[120px] no-underline transition-all hover:shadow-xl hover:scale-105;
+    }
+
+    .glow-border {
         @apply border border-solid border-accent-alpha-40 rounded-xl hover:border-accent active:border-accent focus:border-accent;
     }
 
     .glow-container {
-        @apply border border-solid shadow-lg border-accent-alpha-40 rounded-xl hover:border-accent active:border-accent focus:border-accent;
+        @apply border border-solid border-accent-alpha-40 rounded-xl hover:border-accent active:border-accent focus:border-accent shadow-lg transition-all duration-300 hover:scale-102;
+    }
+
+    .glassmorphism {
+        @apply border border-solid border-accent-alpha-40 rounded-xl hover:border-accent active:border-accent focus:border-accent shadow-lg transition-all duration-300 hover:scale-102 backdrop-blur-sm;
     }
 }
 

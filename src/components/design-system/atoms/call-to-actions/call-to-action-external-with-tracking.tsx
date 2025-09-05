@@ -1,6 +1,5 @@
 import { FC, ReactNode } from "react";
 import {TrackingElementProps} from "@/types/tracking";
-import {CallToActionExternal} from "@/components/design-system/atoms/call-to-actions/call-to-action-external";
 import {trackWith} from "@/lib/tracking/tracking";
 
 type CallToActionExternalWithTrackingProps = TrackingElementProps & {
@@ -13,8 +12,8 @@ type CallToActionExternalWithTrackingProps = TrackingElementProps & {
 
 export const CallToActionExternalWithTracking: FC<CallToActionExternalWithTrackingProps> =
   ({ children, className, href, trackingData, target, rel }) => (
-    <CallToActionExternal
-      className={className}
+    <a  
+      className={`call-to-action${className ? ` ${className}` : ""}`}
       href={href}
       onClick={() => {
         trackWith(trackingData);
@@ -23,5 +22,5 @@ export const CallToActionExternalWithTracking: FC<CallToActionExternalWithTracki
       rel={rel}
     >
       {children}
-    </CallToActionExternal>
+    </a>
   );
