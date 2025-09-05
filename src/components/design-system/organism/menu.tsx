@@ -14,7 +14,6 @@ import { tracking } from "@/types/tracking";
 import { AnimatePresence, motion, Variants } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { FC, useState } from "react";
-import styled from "styled-components";
 import { Overlay } from "../atoms/effects/overlay";
 import { Close } from "../molecules/menu/close";
 import { HamburgerMenu } from "../molecules/menu/hamburger-menu";
@@ -23,7 +22,6 @@ import {
   ScrollDirection,
   useScrollDirection,
 } from "../utils/hooks/use-scroll-direction";
-import { mediaQuery } from "../utils/media-query";
 
 export const menuHeightNumber = 55;
 
@@ -58,27 +56,6 @@ const contentVariants: Variants = {
     },
   },
 };
-
-const NavBarMenuItem = styled(MenuItemWithTracking)`
-  margin: 0;
-  height: 40px;
-
-  ${mediaQuery.minWidth.sm} {
-    margin-top: 7px;
-    margin-right: ${(props) => props.theme.spacing[4]};
-    margin-bottom: 8px;
-  }
-
-  // ${mediaQuery.maxWidth.xs} {
-  //   width: calc(100% - ${(props) => props.theme.spacing[8]});
-  //   min-height: 48px;
-  //   margin: ${(props) => props.theme.spacing[1]} 0;
-  // }
-
-  ${mediaQuery.maxWidth.sm} {
-    font-size: ${(props) => props.theme.fontSizes[1]};
-  }
-`;
 
 export interface MenuProps {
   trackingCategory: string;
@@ -127,7 +104,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
             </MenuItemWithTracking>
             <MenuItemWithTracking
               key="blog"
-              className="w-80 xs:w-auto sm:mr-5"
+              className="w-80 mb-2 xs:mb-0 xs:w-auto sm:mr-5"
               to={slugs.blog}
               selected={
                 pathname.includes(slugs.blog) && pathname !== slugs.aboutMe
@@ -143,7 +120,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
             </MenuItemWithTracking>
             <MenuItemWithTracking
               key="art"
-              className="w-80 xs:w-auto sm:mr-5"
+              className="w-80 mb-2 xs:mb-0 xs:w-auto sm:mr-5"
               to={slugs.art}
               selected={pathname === slugs.art}
               trackingData={{
@@ -157,7 +134,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
             </MenuItemWithTracking>
             <MenuItemWithTracking
               key="aboutMe"
-              className="w-80 xs:w-auto sm:mr-5"
+              className="w-80 mb-2 xs:mb-0 xs:w-auto sm:mr-5"
               to={slugs.aboutMe}
               selected={pathname === slugs.aboutMe}
               trackingData={{
@@ -171,7 +148,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
             </MenuItemWithTracking>
             <MenuItemWithTracking
               key="chat"
-              className="w-80 xs:w-auto sm:mr-5"
+              className="w-80 mb-2 xs:mb-0 xs:w-auto sm:mr-5"
               to={slugs.chat}
               selected={pathname === slugs.chat}
               trackingData={{
