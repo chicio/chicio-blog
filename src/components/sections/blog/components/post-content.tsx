@@ -1,7 +1,6 @@
 "use client";
 
 import { borderRadius } from "@/components/design-system/atoms/effects/border";
-import { paragraphStyle } from "@/components/design-system/atoms/typography/paragraph";
 import { quoteStyle } from "@/components/design-system/atoms/typography/quote";
 import { FC } from "react";
 import styled from "styled-components";
@@ -25,21 +24,6 @@ const PostContentContainer = styled.div`
     font-style: italic;
   }
 
-  & blockquote {
-    line-height: ${(props) => props.theme.lineHeight};
-    ${quoteStyle};
-    border-left: 5px solid ${(props) => props.theme.colors.secondaryTextColor};
-    margin-left: 0;
-    margin-right: 0;
-    padding: ${(props) => props.theme.spacing[4]}
-      ${(props) => props.theme.spacing[2]};
-  }
-
-  & blockquote p {
-    line-height: ${(props) => props.theme.lineHeight};
-    margin-bottom: 0;
-    margin-top: 0;
-  }
 
   & .embedVideo-container {
     position: relative;
@@ -101,10 +85,6 @@ const PostContentContainer = styled.div`
     ${borderRadius};
   }
 
-  & li strong {
-    font-weight: 700;
-  }
-
   & img {
     width: 100%;
     ${glowContainer}
@@ -114,11 +94,6 @@ const PostContentContainer = styled.div`
     width: 100%;
     height: auto;
     aspect-ratio: 16 / 9;
-  }
-
-  & p strong {
-    ${paragraphStyle};
-    font-weight: 700;
   }
 
   & iframe {

@@ -3,7 +3,6 @@ import { GlassmorphismBackground } from "@/components/design-system/atoms/effect
 import { mediaQuery } from "@/components/design-system/utils/media-query";
 import { FC } from "react";
 import styled from "styled-components";
-import { ChatSubtitle } from "./chat-subtitle";
 
 const ExampleQuestions = styled.div`
   margin-top: ${(props) => props.theme.spacing[2]};
@@ -52,7 +51,9 @@ export const ChatWelcome: FC<ChatWelcomeProps> = ({
   <GlassmorphismBackground>
     <h4>👋 Hey there! Ready to dive into my tech journey?</h4>
     <ExampleQuestions>
-      <ChatSubtitle>Here are some conversation starters:</ChatSubtitle>
+      <p className='text-shadow-md text-sm sm:text-base'>
+        Here are some conversation starters:
+      </p>
       {exampleQuestions.map((question) => (
         <Button
           key={question}

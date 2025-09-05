@@ -2,7 +2,6 @@
 
 import { GlassmorphismBackground } from "@/components/design-system/atoms/effects/glassmorphism-background";
 import { StandardExternalLinkWithTracking } from "@/components/design-system/atoms/links/standard-external-link-with-tracking";
-import { Paragraph } from "@/components/design-system/atoms/typography/paragraph";
 import { mediaQuery } from "@/components/design-system/utils/media-query";
 import { tracking } from "@/types/tracking";
 import { BiBriefcase } from "react-icons/bi";
@@ -141,13 +140,6 @@ const TimelineTextContent = styled.div`
   gap: ${(props) => props.theme.spacing[2]};
 `;
 
-const TimelineDescription = styled(Paragraph)`
-  margin: 0;
-  text-align: left;
-  word-wrap: break-word;
-  hyphens: auto;
-`;
-
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
@@ -275,7 +267,7 @@ export const Timeline: FC = () => {
                 </TimelineImageContainer>
 
                 <TimelineTextContent>
-                  <TimelineDescription>{item.description}</TimelineDescription>
+                  <p className="m-0 text-left break-words hyphens-auto">{item.description}</p>
                   {item.features && (
                     <ul>
                       {item.features.map((feature, idx) => (
@@ -292,3 +284,4 @@ export const Timeline: FC = () => {
     </TimelineContainer>
   );
 };
+

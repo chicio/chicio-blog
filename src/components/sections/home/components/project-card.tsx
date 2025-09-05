@@ -1,7 +1,6 @@
 import { CallToActionExternalWithTracking } from "@/components/design-system/atoms/call-to-actions/call-to-action-external-with-tracking";
 import { GlassmorphismBackground } from "@/components/design-system/atoms/effects/glassmorphism-background";
 import { ImageGlow } from "@/components/design-system/atoms/effects/image-glow";
-import { Paragraph } from "@/components/design-system/atoms/typography/paragraph";
 import { mediaQuery } from "@/components/design-system/utils/media-query";
 import { Project } from "@/types/projects";
 import { motion, Variants } from "framer-motion";
@@ -105,7 +104,7 @@ export const ProjectCard: FC<ProjectProps> = ({ project }) => (
       <ProjectItem>
         <ProjectContentContainer>
           <h3 className="mb-3">{project.name}</h3>
-          <Paragraph>{project.description}</Paragraph>
+          <p>{project.description}</p>
           <ul>
             {project.features.map((feature) => (
               <li key={`${project.name}${feature}`}>{feature}</li>

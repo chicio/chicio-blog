@@ -3,7 +3,6 @@ import { glassmorphism } from "@/components/design-system/atoms/effects/glassmor
 import { mediaQuery } from "@/components/design-system/utils/media-query";
 import { FC, useState } from "react";
 import styled from "styled-components";
-import { ChatSubtitle } from "../../../sections/chat/components/chat-subtitle";
 
 export const ChatHeaderContainer = styled(Container)<{ $isVisible: boolean }>`
   ${glassmorphism}
@@ -52,11 +51,11 @@ export const GenericHeader: FC<ChatHeaderProps> = ({ title, subtitle, logo, visi
     <ChatHeaderContainer $isVisible={visible} onClick={toggleSubtitle}>
       <TitleGroup>
         {logo}
-        <h4>{title}</h4>
+        <h3>{title}</h3>
       </TitleGroup>
-      <ChatSubtitle>
+      <p className='text-shadow-md text-center text-sm sm:text-base'>
         {subtitle}
-      </ChatSubtitle>
+      </p>
     </ChatHeaderContainer>
   );
 };

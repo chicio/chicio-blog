@@ -141,6 +141,7 @@
     --animate-glitch: glitch 2s infinite;
     --animate-pulse: pulse 2s infinite;
     --animate-bounce: bounce 2s infinite;
+    --animate-opacity: opacity 0.3s;
 
     @keyframes glitch {
 
@@ -198,6 +199,15 @@
             transform: translateY(-4px);
         }
     }
+
+    @keyframes opacity {
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
 }
 
 @layer base {
@@ -236,6 +246,18 @@
 
     p {
         @apply text-primary-text text-left text-base leading-normal;
+    }
+
+    strong {
+        @apply font-bold;
+    }
+
+    blockquote {
+        @apply border-l-4 border-accent pl-4 italic text-accent;
+    }
+
+    blockquote * {
+        @apply text-accent;
     }
 
     ul {
@@ -279,10 +301,13 @@
         animation-duration: 300ms !important;
     }
 
+    .chat-message-user * {
+        @apply text-text-above-primary;
+    }
 }
 
 @layer components {
-    .container {
+    .container-fixed {
         @apply w-full px-4 mx-auto max-w-[540px] sm:max-w-[720px] md:max-w-[960px];
     }
 
@@ -300,6 +325,10 @@
 
     .border-glow {
         @apply border border-solid border-accent-alpha-40 rounded-xl hover:border-accent active:border-accent focus:border-accent;
+    }
+
+    .glow-container {
+        @apply border border-solid shadow-lg border-accent-alpha-40 rounded-xl hover:border-accent active:border-accent focus:border-accent;
     }
 }
 
