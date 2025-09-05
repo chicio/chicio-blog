@@ -1,3 +1,5 @@
+'use client'
+
 import { motion, stagger, Variants } from "framer-motion";
 import { FC, PropsWithChildren } from "react";
 
