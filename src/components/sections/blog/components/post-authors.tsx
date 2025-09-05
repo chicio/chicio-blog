@@ -1,20 +1,20 @@
 'use client'
 
+import { ContainerFluid } from "@/components/design-system/atoms/containers/container-fluid";
+import { StandardExternalLinkWithTracking } from "@/components/design-system/atoms/links/standard-external-link-with-tracking";
+import { imageBlur } from "@/components/design-system/utils/components/image-blur";
+import { Author } from "@/types/author";
+import { tracking } from "@/types/tracking";
+import Image from 'next/image';
 import { FC } from "react";
 import styled from "styled-components";
-import Image from 'next/image';
-import {Author} from "@/types/author";
-import {StandardExternalLinkWithTracking} from "@/components/design-system/atoms/links/standard-external-link-with-tracking";
-import {tracking} from "@/types/tracking";
-import {imageBlur} from "@/components/design-system/utils/components/image-blur";
-import { Paragraph } from "@/components/design-system/atoms/typography/paragraph";
-import { ContainerFluid } from "@/components/design-system/atoms/containers/container-fluid";
 
 const PostAuthorsContainer = styled(ContainerFluid)`
   padding: 0;
   margin: ${(props) => props.theme.spacing[2]} 0;
   display: flex;
   flex-direction: column;
+  gap: ${(props) => props.theme.spacing[1]};
 `;
 
 const PostAuthorContainer = styled(ContainerFluid)`
@@ -22,6 +22,7 @@ const PostAuthorContainer = styled(ContainerFluid)`
   margin-top: ${(props) => props.theme.spacing[0]};
   display: flex;
   align-items: center;
+  gap: ${(props) => props.theme.spacing[0]};
 `;
 
 const PostAuthorImage = styled(Image)`
@@ -68,7 +69,7 @@ export const PostAuthors: FC<PostAuthorsProps> = ({
                       placeholder={'blur'}
                       blurDataURL={imageBlur}
                   />
-                  <Paragraph>
+                  <p>
                     {enableUrl && (
                         <StandardExternalLinkWithTracking
                             trackingData={{
@@ -84,7 +85,7 @@ export const PostAuthors: FC<PostAuthorsProps> = ({
                         </StandardExternalLinkWithTracking>
                     )}
                     {!enableUrl && author.name}
-                  </Paragraph>
+                  </p>
                 </PostAuthorContainer>
             );
           })}

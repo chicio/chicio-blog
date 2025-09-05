@@ -1,9 +1,6 @@
 import { CallToActionExternalWithTracking } from "@/components/design-system/atoms/call-to-actions/call-to-action-external-with-tracking";
 import { GlassmorphismBackground } from "@/components/design-system/atoms/effects/glassmorphism-background";
-import { Heading4 } from "@/components/design-system/atoms/typography/heading4";
 import { ImageGlow } from "@/components/design-system/atoms/effects/image-glow";
-import { List } from "@/components/design-system/atoms/typography/list";
-import { Paragraph } from "@/components/design-system/atoms/typography/paragraph";
 import { mediaQuery } from "@/components/design-system/utils/media-query";
 import { Project } from "@/types/projects";
 import { motion, Variants } from "framer-motion";
@@ -36,25 +33,6 @@ const ProjectImageContainer = styled(motion.div)`
     padding: ${(props) => props.theme.spacing[6]};
     align-self: stretch;
   }
-`;
-
-const ProjectImage = styled(ImageGlow)`
-  position: relative;
-  z-index: 2;
-  object-fit: cover;
-  width: 100%;
-  height: auto;
-  max-width: 500px;
-
-  ${mediaQuery.minWidth.md} {
-    height: 100%;
-    width: auto;
-    max-width: 100%;
-  }
-`;
-
-const ProjectTitle = styled(Heading4)`
-  margin-bottom: ${(props) => props.theme.spacing[2]};
 `;
 
 const CallToActionContainer = styled.div`
@@ -110,13 +88,13 @@ export const ProjectCard: FC<ProjectProps> = ({ project }) => (
     <GlassmorphismBackground>
       <ProjectItem>
         <ProjectContentContainer>
-          <ProjectTitle>{project.name}</ProjectTitle>
-          <Paragraph>{project.description}</Paragraph>
-          <List>
+          <h3 className="mb-3">{project.name}</h3>
+          <p>{project.description}</p>
+          <ul>
             {project.features.map((feature) => (
               <li key={`${project.name}${feature}`}>{feature}</li>
             ))}
-          </List>
+          </ul>
           <CallToActionContainer>
             {project.callToActions.map((callToAction) => (
               <CallToActionExternalWithTracking
@@ -136,7 +114,8 @@ export const ProjectCard: FC<ProjectProps> = ({ project }) => (
           </CallToActionContainer>
         </ProjectContentContainer>
         <ProjectImageContainer>
-          <ProjectImage
+          <ImageGlow
+            className="relative object-cover w-full h-auto max-w-[500px] md:h-[100%] md:w-auto md:max-w-full"
             width={500}
             height={500}
             alt={project.name}

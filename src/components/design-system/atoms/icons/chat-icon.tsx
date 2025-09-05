@@ -1,37 +1,8 @@
-'use client'
-
-import styled from "styled-components";
-import { mediaQuery } from "../../utils/media-query";
-import { Chat } from "@styled-icons/boxicons-regular";
-import { RoundedIcon } from "../effects/icon";
-import { pulse } from "../../utils/animations/pulse-keyframes";
-
-const AnimatedRoundedIcon = styled(RoundedIcon)`
-  transition: all 0.3s ease;
-
-  &:hover {
-    transform: scale(1.1);
-    animation-duration: 1s;
-  }
-    
-  animation: ${pulse} 2s infinite;
-`;
-
-const ChatIconContainer = styled.div`
-  width: 24px;
-  height: 24px;
-  color: ${(props) => props.theme.colors.textAbovePrimaryColor};
-
-  ${mediaQuery.minWidth.md} {
-    width: 28px;
-    height: 28px;
-  }
-`;
+import { BiChat } from "react-icons/bi";
+import { RoundedIcon } from "./icon";
 
 export const ChatIcon = () => (
-  <AnimatedRoundedIcon>
-    <ChatIconContainer>
-      <Chat />
-    </ChatIconContainer>
-  </AnimatedRoundedIcon>
+  <RoundedIcon className="animate-pulse flex items-center justify-center text-text-above-primary">
+    <BiChat className="size-5 md:size-7" title="chat with fabrizio" />
+  </RoundedIcon>
 );

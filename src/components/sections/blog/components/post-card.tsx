@@ -1,40 +1,22 @@
 'use client'
 
-import styled, { css, TransientProps } from "styled-components";
-import { motion } from "framer-motion";
-import { PostAuthors } from "./post-authors";
-import { PostMeta } from "./post-meta";
-import { FC } from "react";
-import { PostTags } from "./post-tags";
-import Image from "next/image";
-import {StandardInternalLinkWithTracking} from "@/components/design-system/atoms/links/standard-internal-link-with-tracking";
-import {tracking} from "@/types/tracking";
-import {Author} from "@/types/author";
 import { borderRadius } from "@/components/design-system/atoms/effects/border";
 import { glassmorphism } from "@/components/design-system/atoms/effects/glassmorphism";
-import { glowText } from "@/components/design-system/atoms/effects/glow";
-import { Heading5 } from "@/components/design-system/atoms/typography/heading5";
+import { StandardInternalLinkWithTracking } from "@/components/design-system/atoms/links/standard-internal-link-with-tracking";
 import { mediaQuery } from "@/components/design-system/utils/media-query";
-import { Paragraph } from "@/components/design-system/atoms/typography/paragraph";
+import { Author } from "@/types/author";
+import { tracking } from "@/types/tracking";
+import { motion } from "framer-motion";
+import Image from "next/image";
+import { FC } from "react";
+import styled, { css, TransientProps } from "styled-components";
+import { PostAuthors } from "./post-authors";
+import { PostMeta } from "./post-meta";
+import { PostTags } from "./post-tags";
 
 interface BigCardProps {
   big: boolean;
 }
-
-const PostDescription = styled(Paragraph)`
-  margin-right: 0;
-  margin-left: 0;
-  color: ${(props) => props.theme.colors.primaryTextColor};
-  opacity: 0.9;
-  line-height: 1.5;
-  ${glowText}
-`;
-
-const PostCardTitle = styled(Heading5)`
-  margin: 0 0 ${(props) => props.theme.spacing[2]};
-  word-wrap: break-word;
-  color: ${(props) => props.theme.colors.accentColor};
-`;
 
 const PostCardContainer = styled(motion.div)<TransientProps<BigCardProps>>`
   ${glassmorphism};
@@ -128,7 +110,7 @@ export const PostCard: FC<PostCardProps> = ({
             label: tracking.label.body,
           }}
         >
-          <PostCardTitle>{title}</PostCardTitle>
+          <h3>{title}</h3>
           <PostAuthors
             postAuthors={authors}
             trackingCategory={trackingCategory}
@@ -136,7 +118,7 @@ export const PostCard: FC<PostCardProps> = ({
             enableUrl={false}
           />
           <PostMeta date={date} readingTime={readingTime} />
-          <PostDescription>{`${description} [...]`}</PostDescription>
+          <p className='mx-0 text-shadow-md'>{`${description} [...]`}</p>
         </PostCardLink>
         {tags && (
           <PostTags

@@ -1,9 +1,8 @@
 'use client'
 
-import styled from "styled-components";
+import { CallToActionExternalWithTracking } from "@/components/design-system/atoms/call-to-actions/call-to-action-external-with-tracking";
 import { FC, ReactElement } from "react";
-import {CallToActionExternalWithTracking} from "@/components/design-system/atoms/call-to-actions/call-to-action-external-with-tracking";
-import { Icon } from "../../atoms/effects/icon";
+import styled from "styled-components";
 
 export interface SocialContactProps {
   link: string;
@@ -35,6 +34,6 @@ export const SocialContact: FC<SocialContactProps> = ({
     target="_blank"
     rel="noopener noreferrer"
   >
-    <Icon>{icon}</Icon>
+    {icon}
   </CallToActionBlock>
 );

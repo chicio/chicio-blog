@@ -65,7 +65,7 @@ export const Projects: FC = () => (
       whileInView="visible"
       viewport={{ once: true, amount: 0.01 }}
     >
-      <SectionTitle as="h2">Open Source</SectionTitle>
+      <SectionTitle>Open Source</SectionTitle>
       <ProjectsGrid>
         {Object.keys(projects).map((projectKey) => {
           const project = projects[projectKey];

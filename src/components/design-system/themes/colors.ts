@@ -1,14 +1,14 @@
 import {Colors} from "@/types/styled";
 
 // Matrix Color Palette (WCAG Compliant)
-export const matrixPrimaryGreen = "#00FF41";      
-export const matrixNeoGreen = "#39FF14";          
-export const matrixDarkGreen = "#003D10";         
-export const matrixTextGreen = "#00CC33";         
-export const matrixBackgroundDark = "#001100";    
-export const matrixBackgroundLight = "#002200"; 
-export const redPill = "#ff2a2a";
-export const bluePill = "#33aaff";
+const matrixPrimaryGreen = "#00FF41";      
+const matrixNeoGreen = "#39FF14";          
+const matrixDarkGreen = "#003D10";         
+const matrixTextGreen = "#00CC33";         
+const matrixBackgroundDark = "#001100";    
+const matrixBackgroundLight = "#002200"; 
+const redPill = "#ff2a2a";
+const bluePill = "#33aaff";
 
 export const matrixColors: Colors = {
   primaryColor: matrixPrimaryGreen,

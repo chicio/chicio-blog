@@ -1,4 +1,4 @@
-import { User } from "@styled-icons/boxicons-regular";
+import { BiUser } from "react-icons/bi";
 import Image from "next/image";
 import styled from "styled-components";
 import { mediaQuery } from "@/components/design-system/utils/media-query";
@@ -35,7 +35,7 @@ export const ChatAvatar: FC<{ isUser: boolean }> = ({
 }) => (
   <Avatar $isUser={isUser}>
     {isUser ? (
-      <User size={20} />
+      <BiUser className="size-5" />
     ) : (
       <Image
         src="/images/chat-avatar.png"

@@ -1,23 +1,13 @@
 "use client";
 
-import styled from "styled-components";
-import { mediaQuery } from "../../utils/media-query";
-import { glassmorphism } from "../effects/glassmorphism";
+import React, { FC, PropsWithChildren } from "react";
 
-export const Button = styled.button`
-  ${glassmorphism};
-  background-color: transparent;
-  padding: ${(props) => props.theme.spacing[2]}
-    ${(props) => props.theme.spacing[2]};
-  color: ${(props) => props.theme.colors.textAbovePrimaryColor};
-  cursor: pointer;
-  text-align: left;
-  display: flex;
-  align-items: center;
-  gap: ${(props) => props.theme.spacing[2]};
+type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & PropsWithChildren & {
+  className?: string;
+}
 
-  ${mediaQuery.minWidth.sm} {
-    padding: ${(props) => props.theme.spacing[4]}
-      ${(props) => props.theme.spacing[4]};
-  }
-`;
+export const Button: FC<ButtonProps> = ({ className, children, ...props }) => (
+  <button className={`glassmorphism bg-transparent p-3 sm:p-5 text-text-above-primary cursor-pointer text-left flex items-center gap-3${className ? ` ${className}` : ""}`} {...props}>
+    {children}
+  </button>
+);

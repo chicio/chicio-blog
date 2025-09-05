@@ -1,8 +1,7 @@
 'use client'
 
-import { DefaultTheme, ThemeProvider } from "styled-components";
 import { FC, ReactNode } from "react";
-import { GlobalStyle } from "./global-style";
+import { DefaultTheme, ThemeProvider } from "styled-components";
 import { MotionConfig } from "framer-motion";
 
 interface ThemePageProps {
@@ -13,7 +12,6 @@ interface ThemePageProps {
 export const ThemePage: FC<ThemePageProps> = ({ children, theme }) => (
   <MotionConfig reducedMotion="user">
     <ThemeProvider theme={theme}>
-      <GlobalStyle />
       {children}
     </ThemeProvider>
   </MotionConfig>

@@ -1,28 +1,7 @@
 "use client";
 
-import styled from "styled-components";
-import { Container } from "../../atoms/containers/container";
+import { FC, PropsWithChildren } from "react";
 
-export const ContentContainer = styled(Container)`
-  margin-top: ${(props) => props.theme.spacing[12]};
-  flex: 1 0 auto;
-`;
-
-export const CenterContainer = styled(Container)`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  gap: ${(props) => props.theme.spacing[4]};
-`;
-
-export const ContentContainerRecentPosts = styled.div`
-  margin-top: ${(props) => props.theme.spacing[12]};
-  margin-bottom: ${(props) => props.theme.spacing[12]};
-`;
-
-export const FreeLayoutContentContainer = styled.div`
-  margin-top: ${(props) => props.theme.spacing[7]};
-`;
+export const ContentContainer: FC<PropsWithChildren> = ({ children }) => (
+  <div className='container-fixed mt-13'>{children}</div>
+);

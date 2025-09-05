@@ -1,13 +1,10 @@
-import { Menu } from "@styled-icons/boxicons-regular/Menu";
+import { BiMenu } from "react-icons/bi";
 import { FC } from "react";
-import { MenuIcon } from "../../atoms/icons/menu-icon";
 
 interface HamburgerMenuProps {
-    onClick: () => void;
+  onClick: () => void;
 }
 
-export const HamburgerMenu: FC<HamburgerMenuProps> = ({onClick}) => (
-    <MenuIcon>
-        <Menu size={35} onClick={onClick}/>
-    </MenuIcon>
+export const HamburgerMenu: FC<HamburgerMenuProps> = ({ onClick }) => (
+  <BiMenu className="size-9" onClick={onClick} />
 );

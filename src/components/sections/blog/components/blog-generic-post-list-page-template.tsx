@@ -1,47 +1,9 @@
-'use client'
-
-import styled from "styled-components";
-import {mediaQuery} from "@/components/design-system/utils/media-query";
-import {Time} from "@/components/design-system/atoms/typography/time";
-import {StandardInternalLinkWithTracking} from "@/components/design-system/atoms/links/standard-internal-link-with-tracking";
-import {PageTitle} from "@/components/design-system/molecules/typography/page-title";
-import {FC} from "react";
-import {Post} from "@/types/post";
-import {tracking} from "@/types/tracking";
+import { StandardInternalLinkWithTracking } from "@/components/design-system/atoms/links/standard-internal-link-with-tracking";
+import { PageTitle } from "@/components/design-system/molecules/typography/page-title";
+import { Post } from "@/types/post";
+import { tracking } from "@/types/tracking";
+import { FC } from "react";
 import { BlogPageTemplate } from "./blog-page-template";
-import { ContainerFluid } from "@/components/design-system/atoms/containers/container-fluid";
-
-const PostContainer = styled(ContainerFluid)`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin-bottom: ${(props) => props.theme.spacing[3]};
-  padding-left: 0;
-  padding-right: 0;
-
-  ${mediaQuery.minWidth.md} {
-    flex-direction: row;
-    align-items: center;
-  }
-`;
-
-interface ColumnProps {
-  size: string;
-}
-
-const Column = styled.div<ColumnProps>`
-  ${mediaQuery.minWidth.md} {
-    flex: ${(props) => props.size};
-  }
-`;
-
-const PostTime = styled(Time)`
-  font-size: ${(props) => props.theme.fontSizes[4]};
-`;
-
-const PostLink = styled(StandardInternalLinkWithTracking)`
-  font-size: ${(props) => props.theme.fontSizes[4]};
-`;
 
 export interface BlogGenericPostListPageProps {
   title: string;
@@ -52,24 +14,20 @@ export interface BlogGenericPostListPageProps {
 
 export const BlogGenericPostListPageTemplate: FC<
   BlogGenericPostListPageProps
-> = ({
-  title,
-  posts,
-  author,
-  trackingCategory,
-}) => (
-  <BlogPageTemplate
-    author={author}
-    trackingCategory={trackingCategory}
-  >
+> = ({ title, posts, author, trackingCategory }) => (
+  <BlogPageTemplate author={author} trackingCategory={trackingCategory}>
     <PageTitle>{title}</PageTitle>
     {posts.map((post) => (
-      <PostContainer key={post.frontmatter.slug.formatted}>
-        <Column size={"15%"}>
-          <PostTime>{post.frontmatter.date.formatted}</PostTime>
-        </Column>
-        <Column size={"85%"}>
-          <PostLink
+      <div
+        className="container-fluid flex flex-col items-start mb-4 px-0 md:flex-row md:items-center"
+        key={post.frontmatter.slug.formatted}
+      >
+        <div className="flex-1/6">
+          <time className="text-xl">{post.frontmatter.date.formatted}</time>
+        </div>
+        <div className="flex-5/6">
+          <StandardInternalLinkWithTracking
+            className="text-xl"
             to={post.frontmatter.slug.formatted}
             trackingData={{
               action: tracking.action.open_blog_post,
@@ -78,9 +36,9 @@ export const BlogGenericPostListPageTemplate: FC<
             }}
           >
             {post.frontmatter.title}
-          </PostLink>
-        </Column>
-      </PostContainer>
+          </StandardInternalLinkWithTracking>
+        </div>
+      </div>
     ))}
   </BlogPageTemplate>
 );

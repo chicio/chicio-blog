@@ -1,21 +1,16 @@
-'use client'
+"use client";
 
-import { FC } from "react";
-import styled from "styled-components";
-import { motion, Variants } from "framer-motion";
-import { Briefcase } from "@styled-icons/boxicons-regular";
-import { GraduationCap } from "@styled-icons/fa-solid";
-import { tracking } from "@/types/tracking";
-import Image from "next/image";
-import { mediaQuery } from "@/components/design-system/utils/media-query";
-import { Heading4 } from "@/components/design-system/atoms/typography/heading4";
-import { Heading6 } from "@/components/design-system/atoms/typography/heading6";
 import { GlassmorphismBackground } from "@/components/design-system/atoms/effects/glassmorphism-background";
 import { StandardExternalLinkWithTracking } from "@/components/design-system/atoms/links/standard-external-link-with-tracking";
+import { mediaQuery } from "@/components/design-system/utils/media-query";
+import { tracking } from "@/types/tracking";
+import { BiBriefcase } from "react-icons/bi";
+import { BiSolidGraduation } from "react-icons/bi";
+import { motion, Variants } from "framer-motion";
+import Image from "next/image";
+import { FC } from "react";
+import styled from "styled-components";
 import { useTimeline } from "../hooks/useTimeline";
-import { Time } from "@/components/design-system/atoms/typography/time";
-import { List } from "@/components/design-system/atoms/typography/list";
-import { Paragraph } from "@/components/design-system/atoms/typography/paragraph";
 
 const TimelineContainer = styled(motion.div)`
   display: flex;
@@ -31,7 +26,7 @@ const TimelineContainer = styled(motion.div)`
   }
 
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     left: 20px;
     top: 0;
@@ -99,58 +94,6 @@ const TimelineHeader = styled.div`
   flex-direction: column;
   gap: ${(props) => props.theme.spacing[1]};
   width: 100%;
-
-  ${mediaQuery.minWidth.md} {
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: ${(props) => props.theme.spacing[3]};
-  }
-`;
-
-const TimelineHeaderContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${(props) => props.theme.spacing[1]};
-  flex: 1;
-  min-width: 0;
-  word-wrap: break-word;
-`;
-
-const TimelineTitle = styled(Heading4)`
-  margin: 0;
-  background-clip: text;
-  word-wrap: break-word;
-  hyphens: auto;
-  font-size: ${(props) => props.theme.fontSizes[4]};
-  
-  ${mediaQuery.minWidth.md} {
-    font-size: ${(props) => props.theme.fontSizes[5]};
-  }
-`;
-
-const TimelineSubtitle = styled(Heading6)`
-  margin: 0;
-  color: ${(props) => props.theme.colors.accentColor};
-  word-wrap: break-word;
-  hyphens: auto;
-  font-size: ${(props) => props.theme.fontSizes[1]};
-
-  ${mediaQuery.minWidth.md} {
-    font-size: ${(props) => props.theme.fontSizes[2]};
-  }
-`;
-
-const TimelineDate = styled(Time)`
-  color: ${(props) => props.theme.colors.primaryColor};
-  font-weight: 600;
-  font-size: ${(props) => props.theme.fontSizes[1]};
-  flex-shrink: 0;
-
-  ${mediaQuery.minWidth.md} {
-    align-self: flex-start;
-    font-size: ${(props) => props.theme.fontSizes[2]};
-  }
 `;
 
 const TimelineContentSection = styled.div`
@@ -172,7 +115,7 @@ const TimelineImageContainer = styled.div`
   border-radius: 6px;
   overflow: hidden;
   border: 1px solid ${(props) => props.theme.colors.accentColor}40;
-  background: #FFFFFF;
+  background: #ffffff;
   flex-shrink: 0;
   align-self: flex-start;
 
@@ -197,18 +140,6 @@ const TimelineTextContent = styled.div`
   gap: ${(props) => props.theme.spacing[2]};
 `;
 
-const TimelineDescription = styled(Paragraph)`
-  margin: 0;
-  text-align: left;
-  word-wrap: break-word;
-  hyphens: auto;
-`;
-
-const TimelineFeatures = styled(List)`
-  margin: 0;
-  padding: 0;
-`;
-
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
@@ -224,7 +155,7 @@ const itemVariants: Variants = {
   hidden: {
     opacity: 0,
     x: -50,
-    scale: 0.95
+    scale: 0.95,
   },
   visible: {
     opacity: 1,
@@ -232,19 +163,19 @@ const itemVariants: Variants = {
     scale: 1,
     transition: {
       duration: 0.6,
-      ease: "easeOut"
-    }
+      ease: "easeOut",
+    },
   },
   hover: {
     scale: 1.02,
-    transition: { duration: 0.3, ease: "easeOut" }
-  }
+    transition: { duration: 0.3, ease: "easeOut" },
+  },
 };
 
 const markerVariants: Variants = {
   hidden: {
     scale: 0,
-    rotate: -180
+    rotate: -180,
   },
   visible: {
     scale: 1,
@@ -252,19 +183,19 @@ const markerVariants: Variants = {
     transition: {
       duration: 0.5,
       ease: "easeOut",
-      delay: 0.2
-    }
+      delay: 0.2,
+    },
   },
   hover: {
     scale: 1.1,
-    transition: { duration: 0.3, ease: "easeOut" }
-  }
+    transition: { duration: 0.3, ease: "easeOut" },
+  },
 };
 
 const cardVariants: Variants = {
   hidden: {
     opacity: 0,
-    y: 20
+    y: 20,
   },
   visible: {
     opacity: 1,
@@ -272,9 +203,9 @@ const cardVariants: Variants = {
     transition: {
       duration: 0.6,
       ease: "easeOut",
-      delay: 0.1
-    }
-  }
+      delay: 0.1,
+    },
+  },
 };
 
 export const Timeline: FC = () => {
@@ -282,9 +213,9 @@ export const Timeline: FC = () => {
 
   const getIcon = (type: "work" | "education") => {
     return type === "work" ? (
-      <Briefcase size={20} />
+      <BiBriefcase className="size-5" />
     ) : (
-      <GraduationCap size={18} />
+      <BiSolidGraduation className="size-5" />
     );
   };
 
@@ -296,22 +227,14 @@ export const Timeline: FC = () => {
       viewport={{ once: true, amount: 0.1 }}
     >
       {timeline.map((item) => (
-        <TimelineItem
-          key={item.id}
-          variants={itemVariants}
-          whileHover="hover"
-        >
-          <TimelineMarker
-            variants={markerVariants}
-            whileHover="hover"
-          >
+        <TimelineItem key={item.id} variants={itemVariants} whileHover="hover">
+          <TimelineMarker variants={markerVariants} whileHover="hover">
             {getIcon(item.type)}
           </TimelineMarker>
 
           <TimelineContent variants={cardVariants}>
             <GlassmorphismBackground>
               <TimelineHeader>
-                <TimelineHeaderContent>
                   {item.link ? (
                     <StandardExternalLinkWithTracking
                       trackingData={{
@@ -323,15 +246,13 @@ export const Timeline: FC = () => {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <TimelineTitle>{item.title}</TimelineTitle>
+                      <h3>{item.title}</h3>
                     </StandardExternalLinkWithTracking>
                   ) : (
-                    <TimelineTitle>{item.title}</TimelineTitle>
+                    <h3>{item.title}</h3>
                   )}
-                  <TimelineSubtitle>{item.subtitle}</TimelineSubtitle>
-                </TimelineHeaderContent>
-
-                <TimelineDate>{item.date}</TimelineDate>
+                  <h5>{item.subtitle}</h5>
+                  <time className="text-xs sm:text-base">{item.date}</time>
               </TimelineHeader>
 
               <TimelineContentSection>
@@ -346,13 +267,13 @@ export const Timeline: FC = () => {
                 </TimelineImageContainer>
 
                 <TimelineTextContent>
-                  <TimelineDescription>{item.description}</TimelineDescription>
+                  <p className="m-0 text-left break-words hyphens-auto">{item.description}</p>
                   {item.features && (
-                    <TimelineFeatures>
+                    <ul>
                       {item.features.map((feature, idx) => (
                         <li key={idx}>{feature}</li>
                       ))}
-                    </TimelineFeatures>
+                    </ul>
                   )}
                 </TimelineTextContent>
               </TimelineContentSection>
@@ -363,3 +284,4 @@ export const Timeline: FC = () => {
     </TimelineContainer>
   );
 };
+
