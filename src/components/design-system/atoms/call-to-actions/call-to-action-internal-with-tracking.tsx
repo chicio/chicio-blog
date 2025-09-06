@@ -1,9 +1,9 @@
 'use client'
 
+import { trackWith } from "@/lib/tracking/tracking";
+import { TrackingElementProps } from "@/types/tracking";
+import Link from "next/link";
 import { FC, ReactNode } from "react";
-import {TrackingElementProps} from "@/types/tracking";
-import {CallToActionInternal} from "@/components/design-system/atoms/call-to-actions/call-to-action-internal";
-import {trackWith} from "@/lib/tracking/tracking";
 
 type CallToActionInternalWithTrackingProps = TrackingElementProps & {
   to: string;
@@ -13,13 +13,13 @@ type CallToActionInternalWithTrackingProps = TrackingElementProps & {
 
 export const CallToActionInternalWithTracking: FC<CallToActionInternalWithTrackingProps> =
   ({ children, className, to, trackingData }) => (
-    <CallToActionInternal
-      className={className}
+    <Link
+      className={`call-to-action${className ? ` ${className}` : ""}`}
       href={to}
       onClick={() => {
         trackWith(trackingData);
       }}
     >
       {children}
-    </CallToActionInternal>
+    </Link>
   );

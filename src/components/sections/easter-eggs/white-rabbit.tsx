@@ -1,10 +1,10 @@
+import { RedPillButton } from "@/components/design-system/molecules/buttons/pills-buttons";
+import { MatrixTerminal } from "@/components/design-system/molecules/effects/matrix-terminal";
+import { mediaQuery } from "@/components/design-system/utils/media-query";
 import { EasterEggSearchResult, EasterEggTerminalLines } from "@/types/search";
-import { CenterContainer } from "../../molecules/containers/content-container";
-import { MatrixTerminal } from "../../molecules/effects/matrix-terminal";
 import { FC, useState } from "react";
-import { RedPillButton } from "../../molecules/buttons/pills-buttons";
-import { mediaQuery } from "../media-query";
 import { styled } from "styled-components";
+import { CenterContainer } from "./center-container";
 
 export const neoRoomNumber = "101";
 

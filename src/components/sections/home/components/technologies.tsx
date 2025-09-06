@@ -5,23 +5,6 @@ import { FC } from "react";
 import styled from "styled-components";
 import { TechnologiesExperience } from "./technologies-experience";
 import { TechnologiesSkillsGrid } from "./technologies-skills-grid";
-import { ContainerFluid } from "@/components/design-system/atoms/containers/container-fluid";
-
-const TechnologiesContainer = styled(ContainerFluid)`
-  margin: 0;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  background: ${(props) => props.theme.colors.generalBackground};
-  scroll-snap-align: start;
-  padding-top: ${(props) => props.theme.spacing[10]};
-  padding-left: ${(props) => props.theme.spacing[4]};
-  padding-right: ${(props) => props.theme.spacing[4]};
-  padding-bottom: 100px;
-`;
 
 const ContentWrapper = styled.div`
   max-width: 1200px;
@@ -56,7 +39,7 @@ export interface TechnologiesProps {
 }
 
 export const Technologies: FC<TechnologiesProps> = ({ author }) => (
-  <TechnologiesContainer>
+  <div className="container-fluid flex max-w-6xl snap-start flex-col py-9">
     <ContentWrapper>
       <motion.div
         variants={containerVariants}
@@ -76,5 +59,5 @@ export const Technologies: FC<TechnologiesProps> = ({ author }) => (
         </motion.div>
       </motion.div>
     </ContentWrapper>
-  </TechnologiesContainer>
+  </div>
 );

@@ -1,51 +1,9 @@
 'use client'
 
-import styled from 'styled-components';
+import { Cursor, ErrorText, SuccessText, TerminalLine, TerminalQuoteLine } from '@/components/design-system/atoms/typography/terminal-blocks';
 import { motion } from 'framer-motion';
 import { FC, useEffect } from 'react';
-import { TerminalLine, TerminalQuoteLine, Cursor, ErrorText, SuccessText, QuoteText } from '@/components/design-system/atoms/typography/terminal-blocks';
-import { mediaQuery } from '../../utils/media-query';
 import { useTypewriter } from '../../utils/hooks/use-typewriter';
-import { hideScrollbar } from '../../utils/components/hide-scrollbar';
-import { borderRadius } from '../../atoms/effects/border';
-import { glassmorphism } from '../../atoms/effects/glassmorphism';
-
-const TerminalContainer = styled(motion.div)`
-  ${glassmorphism}
-  ${borderRadius};
-  padding: ${(props) => props.theme.spacing[3]};
-  font-family: 'Courier New', monospace;
-  color: ${(props) => props.theme.colors.accentColor};
-  width: 95%;
-  max-width: 600px;
-  min-width: 280px;
-  min-height: 150px;
-  height: 150px;
-  margin: 0 auto;
-  position: relative;
-  z-index: 12;
-  overflow-y: auto;
-  overflow-x: hidden;
-    
-  ${hideScrollbar};
-
-  ${mediaQuery.minWidth.sm} {
-    width: 85%;
-    height: 200px;
-    padding: ${(props) => props.theme.spacing[4]};
-  }
-
-  ${mediaQuery.minWidth.md} {
-    width: 600px;
-    height: 250px;
-  }
-
-  ${mediaQuery.minWidth.lg} {
-    width: 650px;
-    max-width: 650px;
-  }
-`;
-
 
 interface TerminalLine {
   text: string;
@@ -74,7 +32,7 @@ export const MatrixTerminal: FC<MatrixTerminalProps> = ({ lines, onComplete }) =
       case 'success':
         return <SuccessText>{text}</SuccessText>;
       case 'quote':
-        return <QuoteText>{text}</QuoteText>;
+        return <p className='font-bold text-center text-accent italic m-6 font-mono'>{text}</p>;
       default:
         return text;
     }
@@ -99,13 +57,14 @@ export const MatrixTerminal: FC<MatrixTerminalProps> = ({ lines, onComplete }) =
   };
 
   return (
-    <TerminalContainer
+    <motion.div
+      className='glassmorphism w-[95%] sm:w-[600px] p-4 min-h-[150px] sm:min-h-[200px]'
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.2, ease: "easeOut" }}
     >
       {completedLines.map((line, index) => renderLine(line, line.text, false, index))}
       {currentLine && renderLine(currentLine, currentText, true, completedLines.length)}
-    </TerminalContainer>
+    </motion.div>
   );
 };

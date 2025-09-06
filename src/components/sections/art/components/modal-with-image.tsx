@@ -3,7 +3,7 @@ import { motion, Variants } from "framer-motion";
 import { FC } from "react";
 import { glassmorphism } from "@/components/design-system/atoms/effects/glassmorphism";
 import { Overlay } from "@/components/design-system/atoms/effects/overlay";
-import { CallToActionExternal } from "@/components/design-system/atoms/call-to-actions/call-to-action-external";
+import { Button } from "@/components/design-system/atoms/buttons/button";
 
 const zIndex = 400;
 
@@ -76,7 +76,7 @@ export const ModalWithImage: FC<ModalWithImageProps> = ({
   onClick,
 }) => (
   <>
-    <Overlay zIndex={zIndex} onClick={onClick} delay={0.15}>
+    <Overlay onClick={onClick} delay={0.15}>
       <ModalWrapper $zIndex={zIndex}>
         <ModalContainer
           $zIndex={zIndex}
@@ -86,7 +86,7 @@ export const ModalWithImage: FC<ModalWithImageProps> = ({
           exit="exit"
         >
           <ModalImage src={imageUrl} alt={imageAlt} />
-          <CallToActionExternal onClick={onClick}>Close</CallToActionExternal>
+          <Button className="text-primary-text" onClick={onClick}><p>Close</p></Button>
         </ModalContainer>
       </ModalWrapper>
     </Overlay>

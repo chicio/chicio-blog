@@ -27,6 +27,7 @@ export const tracking = {
     open_chat: "open_chat",
     open_blog_archive: "open_blog_archive",
     open_blog_tags: "open_blog_tags",
+    open_http_cookie_policy: "open_http_cookie_policy",
     reload: "reload",
     open_blog_post: "open_blog_post",
     open_blog_next_page: "open_blog_next_page",

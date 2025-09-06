@@ -1,6 +1,5 @@
 import {
-    FreeLayoutContentContainer,
-    ContentContainer,
+  ContentContainer,
 } from "@/components/design-system/molecules/containers/content-container";
 import { Footer } from "@/components/design-system/organism/footer";
 import { Menu } from "@/components/design-system/organism/menu";
@@ -23,7 +22,7 @@ export const PageTemplate: FC<BlogPageProps> = ({
     <Menu trackingCategory={trackingCategory} />
     <ContentContainer>
       {header}
-      <FreeLayoutContentContainer>{children}</FreeLayoutContentContainer>
+      <div className="mt-8">{children}</div>
     </ContentContainer>
     <Footer author={author} trackingCategory={trackingCategory} />
   </>

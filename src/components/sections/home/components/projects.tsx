@@ -7,24 +7,6 @@ import { FC } from "react";
 import styled from "styled-components";
 import { ProjectCard } from "./project-card";
 import { SectionTitle } from "./section-title";
-import { ContainerFluid } from "@/components/design-system/atoms/containers/container-fluid";
-
-const SectionContainer = styled(ContainerFluid)`
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  padding: ${(props) => props.theme.spacing[8]}
-    ${(props) => props.theme.spacing[4]} ${(props) => props.theme.spacing[16]};
-  background: ${(props) => props.theme.colors.generalBackground};
-  scroll-snap-align: start;
-  position: relative;
-
-  ${mediaQuery.minWidth.md} {
-    padding: ${(props) => props.theme.spacing[12]}
-      ${(props) => props.theme.spacing[8]} ${(props) => props.theme.spacing[20]};
-  }
-`;
 
 const ProjectsContent = styled(motion.div)`
   flex: 1;
@@ -58,14 +40,14 @@ const containerVariants: Variants = {
 };
 
 export const Projects: FC = () => (
-  <SectionContainer>
+  <div className="container-fluid snap-start flex flex-col max-w-6xl py-9">
     <ProjectsContent
       variants={containerVariants}
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.01 }}
     >
-      <SectionTitle as="h2">Open Source</SectionTitle>
+      <SectionTitle>Open Source</SectionTitle>
       <ProjectsGrid>
         {Object.keys(projects).map((projectKey) => {
           const project = projects[projectKey];
@@ -79,5 +61,5 @@ export const Projects: FC = () => (
         })}
       </ProjectsGrid>
     </ProjectsContent>
-  </SectionContainer>
+  </div>
 );

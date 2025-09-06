@@ -1,10 +1,8 @@
 import { Button } from "@/components/design-system/atoms/buttons/button";
 import { GlassmorphismBackground } from "@/components/design-system/atoms/effects/glassmorphism-background";
-import { Heading6 } from "@/components/design-system/atoms/typography/heading6";
 import { mediaQuery } from "@/components/design-system/utils/media-query";
 import { FC } from "react";
 import styled from "styled-components";
-import { ChatSubtitle } from "./chat-subtitle";
 
 const ExampleQuestions = styled.div`
   margin-top: ${(props) => props.theme.spacing[2]};
@@ -51,9 +49,11 @@ export const ChatWelcome: FC<ChatWelcomeProps> = ({
   handleExampleQuestionsSelection,
 }) => (
   <GlassmorphismBackground>
-    <Heading6>👋 Hey there! Ready to dive into my tech journey?</Heading6>
+    <h4>👋 Hey there! Ready to dive into my tech journey?</h4>
     <ExampleQuestions>
-      <ChatSubtitle>Here are some conversation starters:</ChatSubtitle>
+      <p className='text-shadow-md text-sm sm:text-base'>
+        Here are some conversation starters:
+      </p>
       {exampleQuestions.map((question) => (
         <Button
           key={question}
@@ -67,3 +67,23 @@ export const ChatWelcome: FC<ChatWelcomeProps> = ({
     </ExampleQuestions>
   </GlassmorphismBackground>
 );
+
+
+
+// export const Button2 = styled.button`
+//   ${glassmorphism};
+//   background-color: transparent;
+//   padding: ${(props) => props.theme.spacing[2]}
+//     ${(props) => props.theme.spacing[2]};
+//   color: ${(props) => props.theme.colors.textAbovePrimaryColor};
+//   cursor: pointer;
+//   text-align: left;
+//   display: flex;
+//   align-items: center;
+//   gap: ${(props) => props.theme.spacing[2]};
+
+//   ${mediaQuery.minWidth.sm} {
+//     padding: ${(props) => props.theme.spacing[4]}
+//       ${(props) => props.theme.spacing[4]};
+//   }
+// `;

@@ -1,15 +1,13 @@
 'use client'
 
-import { FC } from "react";
-import { SocialContacts } from "./social-contacts";
-import styled from "styled-components";
-import { Paragraph } from "../atoms/typography/paragraph";
-import { mediaQuery } from "../utils/media-query";
-import { tracking } from "@/types/tracking";
 import { slugs } from "@/types/slug";
+import { tracking } from "@/types/tracking";
 import { motion } from "framer-motion";
-import { FadeSeparator } from "../atoms/effects/fade-separator";
+import { FC } from "react";
+import styled from "styled-components";
 import { MenuItemWithTracking } from "../molecules/menu/menu-item-with-tracking";
+import { mediaQuery } from "../utils/media-query";
+import { SocialContacts } from "./social-contacts";
 
 const FooterContainer = styled.footer`
   flex-shrink: 0;
@@ -24,7 +22,7 @@ const FooterContainer = styled.footer`
     inset 0 1px 0 ${(props) => props.theme.colors.accentColor}33;
 `;
 
-const FooterContent = styled(motion.div)`
+const FooterContent = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -72,18 +70,6 @@ const FooterAuthorSection = styled.div`
   }
 `;
 
-const MadeWithLoveParagraph = styled(Paragraph)`
-  color: ${(props) => props.theme.colors.primaryTextColor};
-  font-size: ${(props) => props.theme.fontSizes[1]};
-  opacity: 0.9;
-  margin: 0;
-  text-align: center;
-
-  ${mediaQuery.minWidth.md} {
-    font-size: ${(props) => props.theme.fontSizes[2]};
-  }
-`;
-
 export interface FooterProps {
   author: string;
   trackingCategory: string;
@@ -91,12 +77,7 @@ export interface FooterProps {
 
 export const Footer: FC<FooterProps> = ({ author, trackingCategory }) => (
   <FooterContainer>
-    <FooterContent
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.1 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
-    >
+    <FooterContent>
       <FooterContentContainer>
         <FooterMenu
           initial={{ opacity: 0 }}
@@ -172,16 +153,16 @@ export const Footer: FC<FooterProps> = ({ author, trackingCategory }) => (
           </MenuItemWithTracking>
         </FooterMenu>
 
-        <FadeSeparator />
+        <hr/>
 
         <FooterAuthorSection>
           <SocialContacts
             trackingCategory={trackingCategory}
             trackingLabel={tracking.label.footer}
           />
-          <MadeWithLoveParagraph>
+          <p className='m-0 text-center text-sm md:text-base'>
             {`Made with 💝 by ${author} 'Chicio'`}
-          </MadeWithLoveParagraph>
+          </p>
         </FooterAuthorSection>
       </FooterContentContainer>
     </FooterContent>

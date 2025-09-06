@@ -1,20 +1,20 @@
 "use client";
 
+import { RedPill } from "@/components/design-system/atoms/effects/pills";
+import { ChatIcon } from "@/components/design-system/atoms/icons/chat-icon";
+import { ContentContainer } from "@/components/design-system/molecules/containers/content-container";
+import { MatrixHeaderBackground } from "@/components/design-system/molecules/effects/matrix-header-background";
+import { Menu } from "@/components/design-system/organism/menu";
+import { tracking } from "@/types/tracking";
 import { FC } from "react";
-import { useFabrizioChat } from "../hooks/useFabrizioChat";
 import { GenericHeader } from "../../../design-system/organism/header/generic-header";
+import { useFabrizioChat } from "../hooks/useFabrizioChat";
 import { ChatInput } from "./chat-input";
 import { ChatMessage } from "./chat-message";
 import { MessagesContainer } from "./chat-messages";
+import { ToolStatusPill } from "./chat-tools";
 import { ChatWelcome } from "./chat-welcome";
 import { Markdown } from "./markdown";
-import { MatrixHeaderBackground } from "@/components/design-system/molecules/effects/matrix-header-background";
-import { ContentContainer } from "@/components/design-system/molecules/containers/content-container";
-import { tracking } from "@/types/tracking";
-import { Menu } from "@/components/design-system/organism/menu";
-import { ChatButton } from "@/components/design-system/molecules/buttons/chat-button";
-import { RedPill } from "@/components/design-system/atoms/effects/pills";
-import { ToolStatusPill } from "./chat-tools";
 
 export const Chat: FC = () => {
   const {
@@ -38,7 +38,7 @@ export const Chat: FC = () => {
         <GenericHeader
           title="Chat with Fabrizio"
           subtitle="Ask me anything about my work, projects, and software development expertise"
-          logo={<ChatButton />}
+          logo={<ChatIcon />}
           visible={!hasMessages}
         />
         <MessagesContainer>
