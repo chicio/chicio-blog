@@ -22,7 +22,7 @@ const FooterContainer = styled.footer`
     inset 0 1px 0 ${(props) => props.theme.colors.accentColor}33;
 `;
 
-const FooterContent = styled(motion.div)`
+const FooterContent = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -77,12 +77,7 @@ export interface FooterProps {
 
 export const Footer: FC<FooterProps> = ({ author, trackingCategory }) => (
   <FooterContainer>
-    <FooterContent
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.1 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
-    >
+    <FooterContent>
       <FooterContentContainer>
         <FooterMenu
           initial={{ opacity: 0 }}
