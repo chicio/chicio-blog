@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.7.0](https://github.com/chicio/chicio-blog/compare/v2.6.0...v2.7.0) (2025-09-06)
+
+### Features
+
+* **next:** added config for redirect from old post format :rocket: ([3f5b9b7](https://github.com/chicio/chicio-blog/commit/3f5b9b7f86d3b3963c9c56eccea67834ea5e473e))
+* **performance:** added button to reduce animation :rocket: ([0de325f](https://github.com/chicio/chicio-blog/commit/0de325fa4499566029bf5b1febcf557e7e04181b))
+* **tailwind:** TailwindCSS  - atoms migrations ([#74](https://github.com/chicio/chicio-blog/issues/74)) :rocket: ([672aa0b](https://github.com/chicio/chicio-blog/commit/672aa0bf53784a549333147b04a61ff58a5c246c))
+
 ## [2.6.0](https://github.com/chicio/chicio-blog/compare/v2.5.0...v2.6.0) (2025-09-04)
 
 ### Features
