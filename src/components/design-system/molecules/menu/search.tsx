@@ -8,6 +8,7 @@ import styled, { css, TransientProps } from "styled-components";
 import { glassmorphism } from "../../atoms/effects/glassmorphism";
 import { InputField } from "../../atoms/typography/input-field";
 import { mediaQuery } from "../../utils/media-query";
+import { useGlassmorphism } from "../../utils/hooks/use-glassmorphism";
 
 
 const SearchHitCard = styled.div`
@@ -104,16 +105,20 @@ export const SearchBox: FC<
 
 export const SearchHits: FC<{ results: SearchablePostFields[] }> = ({
   results,
-}) => (
-  <div className="container-fixed remove-scroll-width overflow-scroll glow-container hide-scrollbar absolute top-24 left-0 right-0 h-[80dvh] w-[95%] xs:w-full backdrop-blur-xs">
+}) => {
+  const { glassmorphismClass } = useGlassmorphism();
+  
+  return (
+    <div className={`${glassmorphismClass}container-fixed remove-scroll-width overflow-scroll glow-container hide-scrollbar absolute top-24 left-0 right-0 h-[80dvh] w-[95%] xs:w-full`}>
       {results.map((result, index) => (
         <SearchHitCard key={"SearchResult" + index}>
           <SearchLink href={result.slug}>
-            <h4>{result.title}</h4>
-            <p>{result.description}</p>
-          </SearchLink>
-        </SearchHitCard>
-      ))}
-  </div>
-);
+              <h4>{result.title}</h4>
+              <p>{result.description}</p>
+            </SearchLink>
+          </SearchHitCard>
+        ))}
+      </div>
+    );
+  };
 

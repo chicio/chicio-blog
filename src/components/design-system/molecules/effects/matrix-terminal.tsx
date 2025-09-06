@@ -4,6 +4,7 @@ import { Cursor, ErrorText, SuccessText, TerminalLine, TerminalQuoteLine } from 
 import { motion } from 'framer-motion';
 import { FC, useEffect } from 'react';
 import { useTypewriter } from '../../utils/hooks/use-typewriter';
+import { useGlassmorphism } from '../../utils/hooks/use-glassmorphism';
 
 interface TerminalLine {
   text: string;
@@ -18,6 +19,7 @@ interface MatrixTerminalProps {
 
 export const MatrixTerminal: FC<MatrixTerminalProps> = ({ lines, onComplete }) => {
   const { completedLines, currentLine, currentText } = useTypewriter(lines);
+  const { glassmorphismClass } = useGlassmorphism();
 
   useEffect(() => {
     if (completedLines.length === lines.length && !currentLine && onComplete) {
@@ -58,7 +60,7 @@ export const MatrixTerminal: FC<MatrixTerminalProps> = ({ lines, onComplete }) =
 
   return (
     <motion.div
-      className='glassmorphism w-[95%] sm:w-[600px] p-4 min-h-[150px] sm:min-h-[200px]'
+      className={`${glassmorphismClass}w-[95%] sm:w-[600px] p-4 min-h-[150px] sm:min-h-[200px]`}
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.2, ease: "easeOut" }}

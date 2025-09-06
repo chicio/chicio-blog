@@ -1,5 +1,6 @@
 "use client";
 
+import { useGlassmorphism } from "@/components/design-system/utils/hooks/use-glassmorphism";
 import { artDescriptions } from "@/types/art";
 import { motion } from "framer-motion";
 import Image from "next/image";
@@ -8,7 +9,7 @@ import { ModalWithImage } from "./modal-with-image";
 
 export const ArtGallery: FC = () => {
   const [currentImage, setCurrentImage] = useState<string | null>(null);
-
+  const { glassmorphismClass } = useGlassmorphism();
   const cardVariants = {
     hidden: { opacity: 0, scale: 0.95, y: 20 },
     visible: { opacity: 1, scale: 1, y: 0 },
@@ -31,7 +32,7 @@ export const ArtGallery: FC = () => {
               style={{ width: "100%" }}
             >
               <div
-                className="glassmorphism flex h-full flex-col p-2"
+                className={`${glassmorphismClass}flex h-full flex-col p-2`}
                 onClick={() => setCurrentImage(imageUrl)}
               >
                 <div className="h-full flex-1 overflow-hidden">

@@ -211,6 +211,7 @@
         0% {
             opacity: 0;
         }
+
         100% {
             opacity: 1;
         }
@@ -352,6 +353,10 @@
         @apply border border-solid border-accent-alpha-40 rounded-xl hover:border-accent active:border-accent focus:border-accent shadow-lg transition-all duration-300 hover:scale-102;
     }
 
+    .glassmorphism-lite {
+        @apply border border-solid border-accent-alpha-40 rounded-xl hover:border-accent active:border-accent focus:border-accent shadow-lg transition-all duration-300 hover:scale-102 bg-general-background;
+    }
+
     .glassmorphism {
         @apply border border-solid border-accent-alpha-40 rounded-xl hover:border-accent active:border-accent focus:border-accent shadow-lg transition-all duration-300 hover:scale-102 backdrop-blur-sm;
     }
@@ -365,4 +370,8 @@
 
 .remove-scroll-width {
     right: var(--scrollbar-width, 0px);
+}
+
+:root {
+    color-scheme: dark;
 }

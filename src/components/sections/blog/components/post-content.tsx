@@ -1,7 +1,6 @@
 "use client";
 
 import { borderRadius } from "@/components/design-system/atoms/effects/border";
-import { quoteStyle } from "@/components/design-system/atoms/typography/quote";
 import { FC } from "react";
 import styled from "styled-components";
 import { glassmorphism } from "../../../design-system/atoms/effects/glassmorphism";

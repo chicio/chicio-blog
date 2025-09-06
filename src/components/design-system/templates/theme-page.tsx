@@ -2,7 +2,7 @@
 
 import { FC, ReactNode } from "react";
 import { DefaultTheme, ThemeProvider } from "styled-components";
-import { MotionConfig } from "framer-motion";
+import { MotionSettingsProvider } from "../utils/context/motion-settings-context";
 
 interface ThemePageProps {
   theme: DefaultTheme;
@@ -10,9 +10,9 @@ interface ThemePageProps {
 }
 
 export const ThemePage: FC<ThemePageProps> = ({ children, theme }) => (
-  <MotionConfig reducedMotion="user">
+   <MotionSettingsProvider>
     <ThemeProvider theme={theme}>
       {children}
     </ThemeProvider>
-  </MotionConfig>
+  </MotionSettingsProvider>
 );

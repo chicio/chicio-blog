@@ -2,7 +2,7 @@
 
 import React, { useRef, useEffect, useState } from "react";
 import { MatrixRainDrawContext } from "@/types/matrix-rain";
-import { useReducedAnimations } from "../../utils/hooks/use-reduced-animations";
+import { useReducedMotions } from "../../utils/hooks/use-reduced-motions";
 
 const matrix = "ﾊﾐﾋｰｳｼﾅﾓﾆｻﾜﾂｵﾘｱﾎﾃﾏｹﾒｴｶｷﾑﾕﾗｾﾈｽﾀﾇﾍ012345789Z:.=*+-<>".split("");
 const colors = [
@@ -62,7 +62,6 @@ const observe = (
 ) => {
   const observer = new window.IntersectionObserver(
     ([entry]) => {
-      console.log(entry.isIntersecting);
       return handleVisibilityChange(
         entry.isIntersecting || entry.intersectionRect.height > 0
       );
@@ -88,14 +87,14 @@ export const MatrixRain: React.FC<MatrixRainProps> = ({
   frameRate = 20,
   density,
 }) => {
-  const shouldReduceMotion = useReducedAnimations();
+  const shouldReduceMotion = useReducedMotions();
   const [isVisible, setIsVisible] = useState(true);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
 
-    if (!canvas) {
+    if (!canvas || shouldReduceMotion) {
       return;
     }
 
@@ -104,7 +103,7 @@ export const MatrixRain: React.FC<MatrixRainProps> = ({
     return () => {
       observer.disconnect();
     };
-  }, []);
+  }, [shouldReduceMotion]);
 
   useEffect(() => {
     if (!isVisible) {

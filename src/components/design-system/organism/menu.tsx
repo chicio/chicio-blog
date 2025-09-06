@@ -22,6 +22,7 @@ import {
   ScrollDirection,
   useScrollDirection,
 } from "../utils/hooks/use-scroll-direction";
+import { useGlassmorphism } from "../utils/hooks/use-glassmorphism";
 
 export const menuHeightNumber = 55;
 
@@ -70,6 +71,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
     startSearch,
     whiteRabbitEasterEgg,
   );
+  const { glassmorphismClass } = useGlassmorphism();
   const shouldHideMenu =
     pathname === slugs.chat ? false : direction === ScrollDirection.down;
 
@@ -81,7 +83,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
         animate={shouldHideMenu ? "hidden" : "visible"}
         initial="visible"
       >
-        <div className="glassmorphism xs:border-r-1 xs:border-l-1 mx-auto my-0 w-full overflow-hidden rounded-t-none border-t-0 border-r-0 border-l-0">
+        <div className={`${glassmorphismClass}xs:border-r-1 xs:border-l-1 mx-auto my-0 w-full overflow-hidden rounded-t-none border-t-0 border-r-0 border-l-0`}>
           <motion.div
             variants={contentVariants}
             initial="collapsed"

@@ -1,4 +1,4 @@
-import './css/globals.css'
+import "./css/globals.css";
 
 import { FloatingChatButton } from "@/components/design-system/molecules/buttons/chat-button";
 import { ThemePage } from "@/components/design-system/templates/theme-page";
@@ -10,6 +10,7 @@ import { TrackingOptIn } from "@/components/design-system/organism/tracking-opti
 import { Viewport } from "next";
 import { ReactNode } from "react";
 import { Open_Sans, Courier_Prime } from "next/font/google";
+import { MotionButton } from "@/components/design-system/molecules/buttons/motion-button";
 
 export const openSans = Open_Sans({
   subsets: ["latin"],
@@ -35,14 +36,19 @@ export default function RootLayout({
     >
       <SharedHead />
       <body>
-          <StyledComponentsRegistry>
-            <ThemePage theme={theme}>
-              {children}
+        <StyledComponentsRegistry>
+          <ThemePage theme={theme}>
+            {children}
+            <div className="fixed right-3 bottom-3 z-40 md:right-9 md:bottom-5">
               <FloatingChatButton />
-              <CookieConsentBanner />
-            </ThemePage>
-          </StyledComponentsRegistry>
-          <TrackingOptIn />
+            </div>
+            <div className="fixed bottom-3 left-3 z-40 md:bottom-5 md:left-9">
+              <MotionButton />
+            </div>
+            <CookieConsentBanner />
+          </ThemePage>
+        </StyledComponentsRegistry>
+        <TrackingOptIn />
       </body>
     </html>
   );

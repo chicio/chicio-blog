@@ -1,6 +1,7 @@
 import { mediaQuery } from "@/components/design-system/utils/media-query";
 import { FC, useState } from "react";
 import styled from "styled-components";
+import { useGlassmorphism } from "../../utils/hooks/use-glassmorphism";
 
 const TitleGroup = styled.div`
   display: flex;
@@ -24,6 +25,7 @@ export interface ChatHeaderProps {
 
 export const GenericHeader: FC<ChatHeaderProps> = ({ title, subtitle, logo, visible = true }) => {
   const [isSubtitleExpanded, setIsSubtitleExpanded] = useState(false);
+  const { glassmorphismClass } = useGlassmorphism();
 
   const toggleSubtitle = () => {
     setIsSubtitleExpanded(!isSubtitleExpanded);
@@ -34,7 +36,7 @@ export const GenericHeader: FC<ChatHeaderProps> = ({ title, subtitle, logo, visi
   }
 
   return (
-    <div className="glassmorphism text-center px-3 py-3 sm:px-5 sm:py-4 my-4 sm:my-7 mx-0" onClick={toggleSubtitle}>
+    <div className={`${glassmorphismClass}text-center px-3 py-3 sm:px-5 sm:py-4 my-4 sm:my-7 mx-0`} onClick={toggleSubtitle}>
       <TitleGroup>
         {logo}
         <h3>{title}</h3>

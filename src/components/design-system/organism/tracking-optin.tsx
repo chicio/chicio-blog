@@ -13,10 +13,6 @@ export const TrackingOptIn = () => {
     setEnabled(hasConsented());
     const handler = () => {
       const hasConsentedTracking = hasConsented();
-      console.log(
-        "Storage event triggered, analytics status",
-        hasConsentedTracking
-      );
       return setEnabled(hasConsentedTracking);
     };
     window.addEventListener("storage", handler);

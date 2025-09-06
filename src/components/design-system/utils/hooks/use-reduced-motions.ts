@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import { useReducedMotion } from "framer-motion";
+import { useMotionSettings } from "../context/motion-settings-context";
 
 interface NavigatorWithDevice extends Navigator {
   deviceMemory?: number;
   connection?: { saveData?: boolean };
 }
 
-export function useReducedAnimations() {
-  const prefersReducedMotion = useReducedMotion();
+export function useReducedMotions() {
+  const { motionEnabled } = useMotionSettings();
   const [lowEndDevice, setLowEndDevice] = useState(false);
 
   useEffect(() => {
@@ -20,7 +20,7 @@ export function useReducedAnimations() {
     setLowEndDevice(isLow);
   }, []);
 
-  const shouldReduceMotion = prefersReducedMotion || lowEndDevice;
+  const shouldReduceMotion = !motionEnabled || lowEndDevice;
 
   return shouldReduceMotion;
 }
