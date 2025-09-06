@@ -1,4 +1,4 @@
-import './globals.css'
+import './css/globals.css'
 
 import { FloatingChatButton } from "@/components/design-system/molecules/buttons/chat-button";
 import { ThemePage } from "@/components/design-system/templates/theme-page";

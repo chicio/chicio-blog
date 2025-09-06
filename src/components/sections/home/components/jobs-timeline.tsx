@@ -1,30 +1,9 @@
 "use client";
 
-import { mediaQuery } from "@/components/design-system/utils/media-query";
 import { motion, stagger, Variants } from "framer-motion";
 import { FC } from "react";
-import styled from "styled-components";
 import { SectionTitle } from "./section-title";
 import { Timeline } from "./timeline";
-import { ContainerFluid } from "@/components/design-system/atoms/containers/container-fluid";
-
-const SectionContainer = styled(ContainerFluid)`
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  max-width: 1200px;
-  padding: ${(props) => props.theme.spacing[2]}
-    ${(props) => props.theme.spacing[2]} ${(props) => props.theme.spacing[16]};
-  background: ${(props) => props.theme.colors.generalBackground};
-  scroll-snap-align: start;
-  position: relative;
-
-  ${mediaQuery.minWidth.md} {
-    padding: ${(props) => props.theme.spacing[12]}
-      ${(props) => props.theme.spacing[12]}
-      ${(props) => props.theme.spacing[20]};
-  }
-`;
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -37,7 +16,7 @@ const containerVariants: Variants = {
 };
 
 export const JobsTimeline: FC = () => (
-  <SectionContainer>
+  <div className="container-fluid snap-start flex flex-col max-w-6xl py-9">
     <motion.div
       variants={containerVariants}
       initial="hidden"
@@ -47,5 +26,5 @@ export const JobsTimeline: FC = () => (
       <SectionTitle>Experience</SectionTitle>
       <Timeline />
     </motion.div>
-  </SectionContainer>
+  </div>
 );

@@ -1,0 +1,60 @@
+@layer components {
+  .pill {
+    @apply relative flex items-center justify-center min-w-[145px] h-[50px] py-0 px-3;
+    @apply border-2 border-solid border-(--pill-border-color) rounded-[25px];
+    @apply no-underline cursor-pointer;
+    @apply transition-all duration-300 ease-in-out;
+    @apply backdrop-blur-xs;
+
+    box-shadow:
+      0 4px 15px var(--pill-shadow-color),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+  
+  .pill::before {
+    @apply content-[""] pointer-events-none;
+    @apply absolute top-1.5 left-3 right-3 h-4 rounded-[22px];
+    @apply bg-gradient-to-r from-white/80 to-white/60 via-white/10 blur-xs opacity-85;
+  }
+
+  .pill::after {
+    @apply content-[""] pointer-events-none;
+    @apply absolute bottom-4 left-24 right-24 h-14 rounded-[18px];
+    @apply bg-gradient-to-r from-white/80 to-white/60 via-white/10 blur-xs opacity-70;
+  }
+
+  .pill:hover {
+    @apply translate-y-[-2px] scale-105;
+
+    box-shadow:
+      0 8px 25px var(--pill-hover-shadow, var(--color-accent-alpha-70)),
+      0 0 20px var(--pill-hover-glow, var(--color-accent-alpha-40)),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  }
+
+  .pill-label {
+    @apply text-center whitespace-nowrap text-primary-text font-bold text-sm;
+
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.90);
+  }
+
+  .pill-red {
+    --pill-border-color: var(--color-confirm);
+    --pill-shadow-color: #ff000050;
+    --pill-after-bg: radial-gradient(circle at 60% 80%, #fff6 0%, var(--color-confirm-alpha-20) 70%, transparent 100%);
+    --pill-hover-shadow: #ff000070;
+    --pill-hover-glow: #ff000040;
+
+    background: linear-gradient(135deg, var(--color-confirm-alpha-60) 0%, var(--color-confirm-alpha-60) 60%, var(--color-confirm-alpha-25) 100%);
+  }
+
+  .pill-blue {
+    --pill-border-color: var(--color-undo);
+    --pill-shadow-color: #0066ff50;
+    --pill-after-bg: radial-gradient(circle at 40% 80%, #fff6 0%, var(--color-undo-alpha-20) 70%, transparent 100%);
+    --pill-hover-shadow: #0066ff70;
+    --pill-hover-glow: #0066ff40;
+
+    background: linear-gradient(135deg, var(--color-undo-alpha-60) 0%, var(--color-undo-alpha-60) 60%, var(--color-undo-alpha-25) 100%);
+  }
+}

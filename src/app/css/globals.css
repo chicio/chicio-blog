@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "highlight.js/styles/tokyo-night-dark.css";
+@import "./pills.css";
 
 @theme {
     --font-sans: "Open Sans", Arial, sans-serif;
@@ -25,7 +26,13 @@
     --color-box-shadow-light: rgba(0, 255, 65, 0.3);
     --color-divider: #00CC33;
     --color-confirm: #ff2a2a;
+    --color-confirm-alpha-60: #ff2a2aA0;
+    --color-confirm-alpha-25: #ff2a2a40;
+    --color-confirm-alpha-20: #ff2a2a33;
     --color-undo: #33aaff;
+    --color-undo-alpha-60: #33aaffA0;
+    --color-undo-alpha-25: #33aaff40;
+    --color-undo-alpha-20: #33aaff33;
     --color-black-alpha-60: #00000099;
 
     --spacing: 0.25rem;

@@ -12,6 +12,7 @@ export const ImageGlow: FC<ImageGlowProps> = ({
   height,
   placeholder,
   className,
+  blurDataURL,
 }) => (
   <Image
     src={src}
@@ -19,6 +20,7 @@ export const ImageGlow: FC<ImageGlowProps> = ({
     width={width}
     height={height}
     placeholder={placeholder}
+    blurDataURL={blurDataURL}
     className={`${className ? `glow-container ${className}` : ""}`}
   />
 );
