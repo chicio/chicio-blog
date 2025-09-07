@@ -1,6 +1,6 @@
 'use client'
 
-import { Cursor, ErrorText, SuccessText, TerminalLine, TerminalQuoteLine } from '@/components/design-system/atoms/typography/terminal-blocks';
+import { Cursor, ErrorText, QuoteText, SuccessText, TerminalLine, TerminalQuoteLine } from '@/components/design-system/atoms/typography/terminal-blocks';
 import { motion } from 'framer-motion';
 import { FC, useEffect } from 'react';
 import { useTypewriter } from '../../utils/hooks/use-typewriter';
@@ -34,7 +34,7 @@ export const MatrixTerminal: FC<MatrixTerminalProps> = ({ lines, onComplete }) =
       case 'success':
         return <SuccessText>{text}</SuccessText>;
       case 'quote':
-        return <p className='font-bold text-center text-accent italic m-6 font-mono'>{text}</p>;
+        return <QuoteText>{text}</QuoteText>;
       default:
         return text;
     }

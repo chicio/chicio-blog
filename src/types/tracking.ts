@@ -46,6 +46,7 @@ export const tracking = {
     blog_post: "blog_post",
     blog_tags: "blog_tags",
     blog_tag: "blog_tags",
+    blog_search: "blog_search",
     cookie_policy: "cookie_policy",
     privacy_policy: "privacy_policy",
     notfound: "notfound",

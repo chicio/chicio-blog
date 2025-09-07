@@ -1,124 +1,60 @@
 "use client";
 
 import { SearchablePostFields } from "@/types/search";
-import Link from "next/link";
+import { tracking } from "@/types/tracking";
 import { ChangeEvent, FC } from "react";
 import { BiSearchAlt } from "react-icons/bi";
-import styled, { css, TransientProps } from "styled-components";
-import { glassmorphism } from "../../atoms/effects/glassmorphism";
+import { StandardInternalLinkWithTracking } from "../../atoms/links/standard-internal-link-with-tracking";
 import { InputField } from "../../atoms/typography/input-field";
-import { mediaQuery } from "../../utils/media-query";
 import { useGlassmorphism } from "../../utils/hooks/use-glassmorphism";
 
-
-const SearchHitCard = styled.div`
-  ${glassmorphism};
-  margin: 12px;
-
-  ${mediaQuery.inputDevice.mouse} {
-    cursor: pointer;
-  }
-`;
-
-const SearchLink = styled(Link)`
-  text-decoration: none;
-  display: block;
-  width: 100%;
-  height: 100%;
-  padding: ${(props) => props.theme.spacing[4]};
-`;
-
-const SearchBoxContainer = styled.div<TransientProps<{ startSearch: boolean }>>`
-  transform: translate(0, 0);
-  margin-left: auto;
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  color: ${(props) => props.theme.colors.primaryTextColor};
-  border-radius: 50%;
-
-  ${mediaQuery.minWidth.sm} {
-    position: static;
-    margin-left: auto;
-  }
-
-  ${mediaQuery.inputDevice.mouse} {
-    &:hover,
-    &:hover * {
-      border-color: ${(props) => props.theme.colors.accentColor};
-    }
-
-    &:hover span {
-      color: ${(props) => props.theme.colors.accentColor};
-    }
-
-    &:hover {
-      background: ${(props) =>
-        !props.$startSearch && `${props.theme.colors.accentColor}1A`};
-      box-shadow: ${(props) =>
-        !props.$startSearch &&
-        `0 4px 12px ${props.theme.colors.accentColor}33`};
-    }
-  }
-`;
-
-interface StartSearchProps {
+export const SearchBox: FC<{
   startSearch: boolean;
-}
-
-const SearchAltContainer = styled.span<TransientProps<StartSearchProps>>`
-  position: absolute;
-  top: 50%;
-  right: -3px;
-  transform: translate(-50%, -50%);
-  transition: 0.2s;
-
-  ${(props) =>
-    props.$startSearch &&
-    css`
-      opacity: 0;
-      z-index: -1;
-    `}
-`;
-
-interface OnClickProp {
   onClick: () => void;
-}
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+}> = ({ startSearch, onClick, onChange }) => {
+  const hideOnStart = startSearch ? "opacity-0 -z-1" : "";
 
-export const SearchBox: FC<
-  StartSearchProps &
-    OnClickProp & { onChange: (e: ChangeEvent<HTMLInputElement>) => void }
-> = ({ startSearch, onClick, onChange }) => (
-  <SearchBoxContainer $startSearch={startSearch}>
-    <InputField
-      className={`h-[35px] p-2.5 text-transparent active:text-accent focus:text-accent transition-all duration-300 ${startSearch ? "w-[150px]" : "w-[35px]"}`}
-      aria-label="Search"
-      placeholder={startSearch ? "Search" : ""}
-      onChange={onChange}
-      disabled={!startSearch}
-    />
-    <SearchAltContainer $startSearch={startSearch} onClick={onClick}>
-      <BiSearchAlt className="size-5" />
-    </SearchAltContainer>
-  </SearchBoxContainer>
-);
+  return (
+    <div className="absolute top-2.5 right-2.5 xs:static translate-0 ml-auto [&:hover_*]:border-accent rounded-full hover:shadow-lg">
+      <InputField
+        className={`active:text-accent hover:border-accent focus:text-accent h-[35px] p-2.5 text-transparent transition-all duration-300 ${startSearch ? "w-[130px]" : "w-[35px]"}`}
+        aria-label="Search"
+        placeholder={startSearch ? "Search" : ""}
+        onChange={onChange}
+        disabled={!startSearch}
+      />
+      <span
+        className={`absolute hover:text-accent top-[50%] right-[-3px] translate-x-[-50%] translate-y-[-50%] transition-all duration-200 ${hideOnStart}`}
+        onClick={onClick}
+      >
+        <BiSearchAlt className="size-5" />
+      </span>
+    </div>
+  );
+};
 
 export const SearchHits: FC<{ results: SearchablePostFields[] }> = ({
   results,
 }) => {
   const { glassmorphismClass } = useGlassmorphism();
-  
-  return (
-    <div className={`${glassmorphismClass}container-fixed remove-scroll-width overflow-scroll glow-container hide-scrollbar absolute top-24 left-0 right-0 h-[80dvh] w-[95%] xs:w-full`}>
-      {results.map((result, index) => (
-        <SearchHitCard key={"SearchResult" + index}>
-          <SearchLink href={result.slug}>
-              <h4>{result.title}</h4>
-              <p>{result.description}</p>
-            </SearchLink>
-          </SearchHitCard>
-        ))}
-      </div>
-    );
-  };
 
+  return (
+    <div
+      className={`${glassmorphismClass}container-fixed remove-scroll-width glow-container hide-scrollbar xs:w-full absolute top-24 right-0 left-0 h-[80dvh] w-[95%] overflow-scroll`}
+    >
+      {results.map((result, index) => (
+        <div className={`${glassmorphismClass} m-4 p-4`} key={"SearchResult" + index}>
+          <StandardInternalLinkWithTracking className="no-underline" to={result.slug} trackingData={{
+            category: tracking.category.blog_search,
+            label: tracking.label.body,
+            action: tracking.action.open_blog_post
+          }}>
+            <h4>{result.title}</h4>
+            <p>{result.description}</p>
+          </StandardInternalLinkWithTracking>
+        </div>
+      ))}
+    </div>
+  );
+};

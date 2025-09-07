@@ -88,7 +88,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
             variants={contentVariants}
             initial="collapsed"
             animate={shouldOpenMenu ? "expanded" : "collapsed"}
-            className="xs:flex-row xs:py-0 xs:px-5 m-0 flex min-h-[55px] flex-col items-center pt-[55px]"
+            className="flex flex-col xs:flex-row items-center xs:py-0 xs:px-5 m-0  min-h-[55px] pt-[55px]"
           >
             <MenuItemWithTracking
               className="w-full xs:w-auto sm:mr-5"
