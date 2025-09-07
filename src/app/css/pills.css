@@ -10,7 +10,7 @@
       0 4px 15px var(--pill-shadow-color),
       inset 0 1px 0 rgba(255, 255, 255, 0.2);
   }
-  
+
   .pill::before {
     @apply content-[""] pointer-events-none;
     @apply absolute top-1.5 left-3 right-3 h-4 rounded-[22px];
@@ -44,8 +44,14 @@
     --pill-after-bg: radial-gradient(circle at 60% 80%, #fff6 0%, var(--color-confirm-alpha-20) 70%, transparent 100%);
     --pill-hover-shadow: #ff000070;
     --pill-hover-glow: #ff000040;
+  }
 
+  .pill-red-glass {
     background: linear-gradient(135deg, var(--color-confirm-alpha-60) 0%, var(--color-confirm-alpha-60) 60%, var(--color-confirm-alpha-25) 100%);
+  }
+
+  .pill-red-glass-lite {
+    @apply bg-confirm;
   }
 
   .pill-blue {
@@ -54,7 +60,13 @@
     --pill-after-bg: radial-gradient(circle at 40% 80%, #fff6 0%, var(--color-undo-alpha-20) 70%, transparent 100%);
     --pill-hover-shadow: #0066ff70;
     --pill-hover-glow: #0066ff40;
+  }
 
+  .pill-blue-glass {
     background: linear-gradient(135deg, var(--color-undo-alpha-60) 0%, var(--color-undo-alpha-60) 60%, var(--color-undo-alpha-25) 100%);
+  }
+
+  .pill-blue-glass-lite {
+    @apply bg-undo;
   }
 }

@@ -1,5 +1,6 @@
 import Image, { ImageProps } from "next/image";
 import { FC } from "react";
+import { imageShimmerPlaceholder } from "./image-shimmer-placeholder";
 
 interface ImageGlowProps extends ImageProps {
   className?: string;
@@ -19,7 +20,7 @@ export const ImageGlow: FC<ImageGlowProps> = ({
     alt={alt}
     width={width}
     height={height}
-    placeholder={placeholder}
+    placeholder={placeholder ? placeholder : imageShimmerPlaceholder}
     blurDataURL={blurDataURL}
     className={`${className ? `glow-container ${className}` : ""}`}
   />

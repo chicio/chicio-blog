@@ -21,7 +21,7 @@ export const MotionSettingsProvider = ({ children }: { children: ReactNode }) =>
 
   return (
     <MotionSettingsContext.Provider value={{ motionEnabled, toggleMotion }}>
-      <MotionConfig reducedMotion={motionEnabled ? "user" : "always"}>
+      <MotionConfig reducedMotion={motionEnabled ? "never" : "always"}>
         {children}
       </MotionConfig>
     </MotionSettingsContext.Provider>

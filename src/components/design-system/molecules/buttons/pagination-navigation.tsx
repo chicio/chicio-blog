@@ -1,16 +1,6 @@
-'use client'
-
-import styled from "styled-components";
+import { tracking } from "@/types/tracking";
 import { FC } from "react";
-import {tracking} from "@/types/tracking";
 import { BluePillLink, RedPillLink } from "../links/pills-links";
-
-const CenterHorizontallyContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  gap: ${(props) => props.theme.spacing[4]};
-  padding: ${(props) => props.theme.spacing[4]};
-`;
 
 export interface PageNavigationProps {
   trackingCategory: string;
@@ -27,7 +17,7 @@ export const PaginationNavigation: FC<PageNavigationProps> = ({
   nextPageUrl,
   nextPageTrackingAction,
 }) => (
-  <CenterHorizontallyContainer>
+  <div className="flex justify-center gap-5 p-5">
     {previousPageUrl && (
       <BluePillLink
         to={previousPageUrl}
@@ -52,5 +42,5 @@ export const PaginationNavigation: FC<PageNavigationProps> = ({
         Next
       </RedPillLink>
     )}
-  </CenterHorizontallyContainer>
+  </div>
 );

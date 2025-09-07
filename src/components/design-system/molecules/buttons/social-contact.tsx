@@ -1,8 +1,5 @@
-'use client'
-
 import { CallToActionExternalWithTracking } from "@/components/design-system/atoms/call-to-actions/call-to-action-external-with-tracking";
 import { FC, ReactElement } from "react";
-import styled from "styled-components";
 
 export interface SocialContactProps {
   link: string;
@@ -12,11 +9,6 @@ export interface SocialContactProps {
   icon: ReactElement;
 }
 
-const CallToActionBlock = styled(CallToActionExternalWithTracking)`
-  display: block;
-  min-width: auto;
-`;
-
 export const SocialContact: FC<SocialContactProps> = ({
   link,
   trackingAction,
@@ -24,7 +16,8 @@ export const SocialContact: FC<SocialContactProps> = ({
   trackingLabel,
   icon,
 }) => (
-  <CallToActionBlock
+  <CallToActionExternalWithTracking
+    className="min-w-auto"
     href={link}
     trackingData={{
       action: trackingAction,
@@ -35,5 +28,5 @@ export const SocialContact: FC<SocialContactProps> = ({
     rel="noopener noreferrer"
   >
     {icon}
-  </CallToActionBlock>
+  </CallToActionExternalWithTracking>
 );
