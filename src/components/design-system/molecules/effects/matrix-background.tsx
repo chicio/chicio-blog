@@ -1,41 +1,5 @@
-'use client'
-
-import styled from "styled-components";
-import { MatrixRain } from "../../atoms/effects/matrix-rain";
 import { FC, ReactNode } from "react";
-
-const MatrixBackgroundDiv = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  z-index: 1;
-`;
-
-const Container = styled.div`
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  height: 100vh;
-  min-height: 100vh;
-  width: 100%;
-`;
-
-const ContentWrapper = styled.div`
-  scroll-snap-align: start;
-  position: relative;
-  z-index: 2;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  height: 100%;
-  width: 100%;
-`;
+import { MatrixRain } from "../../atoms/effects/matrix-rain";
 
 interface ContainerFullscreenWithMatrixProps {
   children: ReactNode;
@@ -48,12 +12,12 @@ export const MatrixBackground: FC<ContainerFullscreenWithMatrixProps> = ({
   fontSize = 16,
   density = 0.95
 }) => (
-  <Container>
-    <MatrixBackgroundDiv>
+  <div className="relative flex flex-col justify-center items-center h-dvh min-h-dvh w-full">
+    <div className="absolute top-0 left-0 w-full h-full overflow-hidden">
       <MatrixRain fontSize={fontSize} density={density} />
-    </MatrixBackgroundDiv>
-    <ContentWrapper>
+    </div>
+    <div className="relative z-10 flex flex-col justify-center items-center h-full w-full snap-start">
       {children}
-    </ContentWrapper>
-  </Container>
+    </div>
+  </div>
 );

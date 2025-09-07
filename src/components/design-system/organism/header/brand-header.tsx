@@ -123,7 +123,7 @@ interface DesktopHeaderProps {
 
 export const BrandHeader: FC<DesktopHeaderProps> = ({ big }) => (
   <Container $compact={!big}>
-    <BrandHeaderLogo compact={!big} />
     <MatrixHeaderBackground big={big} />
+    <BrandHeaderLogo compact={!big} />
   </Container>
 );

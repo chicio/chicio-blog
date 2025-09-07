@@ -149,6 +149,7 @@
     --animate-pulse: pulse 2s infinite;
     --animate-bounce: bounce 2s infinite;
     --animate-opacity: opacity 0.3s;
+    --animate-blink: blink 1s infinite;
 
     @keyframes glitch {
 
@@ -214,6 +215,18 @@
 
         100% {
             opacity: 1;
+        }
+    }
+
+    @keyframes blink {
+        0%,
+        50% {
+            opacity: 1;
+        }
+
+        51%,
+        100% {
+            opacity: 0;
         }
     }
 }

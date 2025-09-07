@@ -1,4 +1,4 @@
-import { MediaGrid } from "@/components/design-system/molecules/containers/media-grid";
+import { MediaGrid } from "@/components/sections/clowns/components/media-grid";
 import { MatrixHeaderBackground } from "@/components/design-system/molecules/effects/matrix-header-background";
 import { GenericHeader } from "@/components/design-system/organism/header/generic-header";
 import { PageTemplate } from "@/components/design-system/templates/page-template";

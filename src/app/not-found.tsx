@@ -1,6 +1,6 @@
 import { MatrixRain } from "@/components/design-system/atoms/effects/matrix-rain";
 import { MatrixTerminal } from "@/components/design-system/molecules/effects/matrix-terminal";
-import { MatrixChoice } from "@/components/design-system/molecules/buttons/matrix-choice";
+import { BluePillLink, RedPillLink } from "@/components/design-system/molecules/links/pills-links";
 import { tracking } from "@/types/tracking";
 
 const terminalLines = [
@@ -12,21 +12,35 @@ const terminalLines = [
 
 export default function notFoundPage() {
   return (
-    <div className="container-fullscreen min-h-screen relative bg-black text-accent-color overflow-hidden">
+    <div className="container-fullscreen text-accent-color relative min-h-screen overflow-hidden bg-black">
       <MatrixRain fontSize={14} density={0.975} />
       <div className="relative z-10 flex flex-col items-center justify-center gap-2 p-2">
-        <h1 className="heading animate-glitch text-accent font-bold text-[72px] sm:text-[100px] glow-text">
+        <h1 className="heading animate-glitch text-accent glow-text text-[72px] font-bold sm:text-[100px]">
           404
         </h1>
         <MatrixTerminal lines={terminalLines} />
-        <MatrixChoice
-          redPillHref="/blog"
-          bluePillHref="/"
-          redPillText="Wake up!"
-          bluePillText="Stay asleep"
-          trackingCategory={tracking.category.notfound}
-          trackingLabel={tracking.label.body}
-        />
+        <div className="flex flex-row gap-4 mt-3">
+          <BluePillLink
+            to="/"
+            trackingData={{
+              category: tracking.category.notfound,
+              label: tracking.label.body,
+              action: tracking.action.blue_pill,
+            }}
+          >
+            Stay asleep
+          </BluePillLink>
+          <RedPillLink
+            to="/blog"
+            trackingData={{
+              category: tracking.category.notfound,
+              label: tracking.label.body,
+              action: tracking.action.red_pill,
+            }}
+          >
+            Wake up!
+          </RedPillLink>
+        </div>
       </div>
     </div>
   );

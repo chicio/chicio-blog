@@ -1,6 +1,5 @@
 import { ImageGlow } from "@/components/design-system/atoms/effects/image-glow";
 import { StandardExternalLinkWithTracking } from "@/components/design-system/atoms/links/standard-external-link-with-tracking";
-import { imageBlur } from "@/components/design-system/utils/components/image-blur";
 import { Author } from "@/types/author";
 import { tracking } from "@/types/tracking";
 import { FC } from "react";
@@ -31,8 +30,6 @@ export const PostAuthors: FC<PostAuthorsProps> = ({
             src={author.image}
             width={30}
             height={30}
-            placeholder={"blur"}
-            blurDataURL={imageBlur}
           />
           <p>
             {enableUrl && (

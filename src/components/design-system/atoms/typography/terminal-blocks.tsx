@@ -1,63 +1,17 @@
-"use client";
+import { FC, PropsWithChildren } from "react";
 
-import styled from "styled-components";
-import { glowText } from "../effects/glow";
-import { mediaQuery } from "../../utils/media-query";
+export const TerminalLine: FC<PropsWithChildren> = ({ children }) => {
+  return <div className="text-shadow-md mb-2 font-mono font-bold leading-tight text-accent break-words text-xs sm:text-base">{children}</div>;
+};
 
-export const TerminalLine = styled.div`
-  ${glowText};
-  margin-bottom: ${(props) => props.theme.spacing[1]};
-  font-family: "Courier New", monospace;
-  font-weight: bold;
-  line-height: 1.4;
-  color: ${(props) => props.theme.colors.accentColor};
-  font-size: 0.8rem;
-  word-break: break-word;
+export const TerminalQuoteLine: FC<PropsWithChildren> = ({ children }) => {
+  return <div className="my-2 leading-tight break-words text-xs sm:text-base text-center">{children}</div>;
+};
 
-  ${mediaQuery.minWidth.sm} {
-    font-size: 0.875rem;
-  }
+export const Cursor: FC<PropsWithChildren> = ({ children }) => <span className="animate-blink">{children}</span>;
 
-  ${mediaQuery.minWidth.md} {
-    font-size: 0.95rem;
-  }
-`;
+export const ErrorText: FC<PropsWithChildren> = ({ children }) => <span className="text-confirm font-bold">{children}</span>;
 
-export const TerminalQuoteLine = styled.div`
-  margin-bottom: ${(props) => props.theme.spacing[1]};
-  line-height: 1.4;
-  font-size: 0.8rem;
-  word-break: break-word;
+export const SuccessText: FC<PropsWithChildren> = ({ children }) => <span className="text-accent text-shadow-md">{children}</span>; 
 
-  ${mediaQuery.minWidth.sm} {
-    font-size: 0.875rem;
-  }
-
-  ${mediaQuery.minWidth.md} {
-    font-size: 0.95rem;
-  }
-`;
-
-export const Cursor = styled.span`
-  animation: blink 1s infinite;
-  @keyframes blink {
-    0%,
-    50% {
-      opacity: 1;
-    }
-    51%,
-    100% {
-      opacity: 0;
-    }
-  }
-`;
-
-export const ErrorText = styled.span`
-  color: #ff6b6b;
-  font-weight: bold;
-`;
-
-export const SuccessText = styled.span`
-  color: ${(props) => props.theme.colors.accentColor};
-  ${glowText}
-`;
+export const QuoteText: FC<PropsWithChildren> = ({ children }) => <span className="w-full text-center font-bold text-accent italic m-6 font-mono">{children}</span>;

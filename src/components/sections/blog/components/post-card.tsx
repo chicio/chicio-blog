@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { borderRadius } from "@/components/design-system/atoms/effects/border";
 import { glassmorphism } from "@/components/design-system/atoms/effects/glassmorphism";
@@ -13,6 +13,7 @@ import styled, { css, TransientProps } from "styled-components";
 import { PostAuthors } from "./post-authors";
 import { PostMeta } from "./post-meta";
 import { PostTags } from "./post-tags";
+import { imageShimmerPlaceholder } from "@/components/design-system/atoms/effects/image-shimmer-placeholder";
 
 interface BigCardProps {
   big: boolean;
@@ -99,6 +100,7 @@ export const PostCard: FC<PostCardProps> = ({
           src={image}
           width={1000}
           height={500}
+          placeholder={imageShimmerPlaceholder}
         />
       </PostCardLink>
       <PostCardMetaContainer>
@@ -118,7 +120,7 @@ export const PostCard: FC<PostCardProps> = ({
             enableUrl={false}
           />
           <PostMeta date={date} readingTime={readingTime} />
-          <p className='mx-0 text-shadow-md'>{`${description} [...]`}</p>
+          <p className="mx-0 text-shadow-md">{`${description} [...]`}</p>
         </PostCardLink>
         {tags && (
           <PostTags

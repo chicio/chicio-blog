@@ -56,6 +56,7 @@ export const ChatWelcome: FC<ChatWelcomeProps> = ({
       </p>
       {exampleQuestions.map((question) => (
         <Button
+          className="flex items-center gap-2"
           key={question}
           onClick={() => handleExampleQuestionsSelection(question)}
           type="button"
@@ -67,23 +68,3 @@ export const ChatWelcome: FC<ChatWelcomeProps> = ({
     </ExampleQuestions>
   </GlassmorphismBackground>
 );
-
-
-
-// export const Button2 = styled.button`
-//   ${glassmorphism};
-//   background-color: transparent;
-//   padding: ${(props) => props.theme.spacing[2]}
-//     ${(props) => props.theme.spacing[2]};
-//   color: ${(props) => props.theme.colors.textAbovePrimaryColor};
-//   cursor: pointer;
-//   text-align: left;
-//   display: flex;
-//   align-items: center;
-//   gap: ${(props) => props.theme.spacing[2]};
-
-//   ${mediaQuery.minWidth.sm} {
-//     padding: ${(props) => props.theme.spacing[4]}
-//       ${(props) => props.theme.spacing[4]};
-//   }
-// `;

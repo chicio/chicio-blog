@@ -7,7 +7,7 @@ import { mdExtension } from "@/lib/posts/files";
 import { postsDirectory } from "@/lib/posts/post-dir";
 import { Pagination } from "@/types/pagination";
 
-const postsPerPage = 11;
+const postsPerPage = 7;
 
 const generateFileNameFrom = (
   year: string,

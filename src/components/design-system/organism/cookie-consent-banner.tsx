@@ -1,58 +1,16 @@
 "use client";
 
 import { hasConsented, writeConsent } from "@/lib/consents/consents";
+import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import styled from "styled-components";
-import { motion, AnimatePresence } from "framer-motion";
-import { glassmorphism } from "../atoms/effects/glassmorphism";
 import {
   BluePillButton,
   RedPillButton,
 } from "../molecules/buttons/pills-buttons";
-import { mediaQuery } from "../utils/media-query";
-
-const BannerContainer = styled(motion.div)`
-  ${glassmorphism}
-  position: fixed;
-  padding: ${(props) => props.theme.spacing[3]};
-  bottom: ${(props) => props.theme.spacing[3]};
-  left: 0;
-  right: 0;
-  margin: 0 auto;
-  z-index: 900;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-  max-width: 95%;
-
-  ${mediaQuery.minWidth.lg} {
-    max-width: 60%;
-    flex-direction: row;
-    align-items: center;
-  }
-
-  ${mediaQuery.maxWidth.xs} {
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-  }
-`;
-
-const PillsContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: ${(props) => props.theme.spacing[3]};
-`;
-
-const RedPillText = styled.span`
-  color: ${(props) => props.theme.colors.confirmColor};
-`;
-
-const BluePillText = styled.span`
-  color: ${(props) => props.theme.colors.undoColor};
-`;
+import { useGlassmorphism } from "../utils/hooks/use-glassmorphism";
 
 export const CookieConsentBanner = () => {
+  const { glassmorphismClass } = useGlassmorphism();
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -69,36 +27,37 @@ export const CookieConsentBanner = () => {
   return (
     <AnimatePresence>
       {visible && (
-          <BannerContainer
-            initial={{ opacity: 0, y: 100 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2, ease: "linear" }}
-            role="dialog"
-            aria-live="polite"
-          >
-            <p className="text-shadow-md">
-              This website uses cookies. Take the{" "}
-              <RedPillText>red pill</RedPillText>, and you’ll see how deep the
-              rabbit hole goes. Take the <BluePillText>blue pill</BluePillText>,
-              and the story ends, you wake up in your browser and believe
-              whatever you want.
-            </p>
-            <PillsContainer>
-              <BluePillButton
-                onClick={() => handle("rejected")}
-                aria-label="Reject cookie"
-              >
-                Sleep (Reject)
-              </BluePillButton>
-              <RedPillButton
-                onClick={() => handle("accepted")}
-                aria-label="Accept cookie"
-              >
-                Wake up (Accept)
-              </RedPillButton>
-            </PillsContainer>
-          </BannerContainer>
+        <motion.div
+          className={`${glassmorphismClass}fixed right-0 bottom-5 left-0 mx-auto my-0 p-4 flex max-w-[95%] flex-col items-center gap-4 lg:max-w-[60%] lg:flex-row z-50`}
+          initial={{ opacity: 0, y: 100 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2, ease: "linear" }}
+          role="dialog"
+          aria-live="polite"
+        >
+          <p className="text-shadow-md">
+            This website uses cookies. Take the{" "}
+            <span className="text-confirm">red pill</span>, and you’ll see how
+            deep the rabbit hole goes. Take the{" "}
+            <span className="text-undo">blue pill</span>, and the story ends,
+            you wake up in your browser and believe whatever you want.
+          </p>
+          <div className="flex flex-row gap-4">
+            <BluePillButton
+              onClick={() => handle("rejected")}
+              aria-label="Reject cookie"
+            >
+              Sleep (Reject)
+            </BluePillButton>
+            <RedPillButton
+              onClick={() => handle("accepted")}
+              aria-label="Accept cookie"
+            >
+              Wake up (Accept)
+            </RedPillButton>
+          </div>
+        </motion.div>
       )}
     </AnimatePresence>
   );
