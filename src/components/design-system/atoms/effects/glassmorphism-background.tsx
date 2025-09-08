@@ -14,14 +14,19 @@ const containerVariants: Variants = {
   },
 };
 
-export const GlassmorphismBackground: FC<PropsWithChildren> = ({
+interface GlassmorphismBackgroundProps {
+  className?: string;
+}
+
+export const GlassmorphismBackground: FC<PropsWithChildren<GlassmorphismBackgroundProps>> = ({
+  className,
   children,
 }) => {
     const { glassmorphismClass } = useGlassmorphism();
 
     return (
       <motion.div
-        className={`${glassmorphismClass}relative p-5 md:p-9`}
+        className={`${glassmorphismClass}relative p-5 md:p-9 ${className}`}
         variants={containerVariants}
         initial="hidden"
         animate="visible"

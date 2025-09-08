@@ -1,20 +1,5 @@
-import { mediaQuery } from "@/components/design-system/utils/media-query";
 import { FC, useState } from "react";
-import styled from "styled-components";
 import { useGlassmorphism } from "../../utils/hooks/use-glassmorphism";
-
-const TitleGroup = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: ${(props) => props.theme.spacing[2]};
-  margin-bottom: ${(props) => props.theme.spacing[1]};
-
-  ${mediaQuery.maxWidth.sm} {
-    gap: ${(props) => props.theme.spacing[1]};
-    margin-bottom: ${(props) => props.theme.spacing[0]};
-  }
-`;
 
 export interface ChatHeaderProps {
   title: string;
@@ -37,10 +22,10 @@ export const GenericHeader: FC<ChatHeaderProps> = ({ title, subtitle, logo, visi
 
   return (
     <div className={`${glassmorphismClass}text-center px-3 py-3 sm:px-5 sm:py-4 my-4 sm:my-7 mx-0`} onClick={toggleSubtitle}>
-      <TitleGroup>
+      <div className="flex flex-row items-center justify-center mb-1 sm:mb-2 gap-2 sm:gap-3">
         {logo}
         <h3>{title}</h3>
-      </TitleGroup>
+      </div>
       <p className='text-shadow-md text-center text-sm sm:text-base'>
         {subtitle}
       </p>

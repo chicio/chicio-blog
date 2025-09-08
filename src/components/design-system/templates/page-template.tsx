@@ -1,5 +1,5 @@
 import {
-  ContentContainer,
+    ContentContainer,
 } from "@/components/design-system/molecules/containers/content-container";
 import { Footer } from "@/components/design-system/organism/footer";
 import { Menu } from "@/components/design-system/organism/menu";
