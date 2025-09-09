@@ -44,7 +44,7 @@ export const SearchHits: FC<{ results: SearchablePostFields[] }> = ({
       className={`${glassmorphismClass}container-fixed remove-scroll-width glow-container hide-scrollbar xs:w-full absolute top-24 right-0 left-0 h-[80dvh] w-[95%] overflow-scroll`}
     >
       {results.map((result, index) => (
-        <div className={`${glassmorphismClass} m-4 p-4`} key={"SearchResult" + index}>
+        <div className={`${glassmorphismClass} m-2 md:m-4 p-2`} key={"SearchResult" + index}>
           <StandardInternalLinkWithTracking className="no-underline" to={result.slug} trackingData={{
             category: tracking.category.blog_search,
             label: tracking.label.body,

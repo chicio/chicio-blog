@@ -1,6 +1,3 @@
-"use client";
-
-import styled from "styled-components";
 import {
   BiLogoDevTo,
   BiLogoFacebookSquare,
@@ -16,14 +13,6 @@ import { siteMetadata } from "@/types/site-metadata";
 import { tracking } from "@/types/tracking";
 import { SocialContact } from "../molecules/buttons/social-contact";
 
-const SocialContactsContainers = styled.div`
-  display: flex;
-  justify-content: center;
-  padding: ${(props) => props.theme.spacing[0]};
-  text-align: center;
-  flex-wrap: wrap;
-`;
-
 export interface SocialContactsProps {
   trackingCategory: string;
   trackingLabel: string;
@@ -36,7 +25,7 @@ export const SocialContacts: FC<SocialContactsProps> = ({
   const links = siteMetadata.contacts.links;
 
   return (
-    <SocialContactsContainers>
+    <div className="flex justify-center items-center p-0 text-center flex-wrap">
       <SocialContact
         link={links.github}
         trackingAction={tracking.action.open_github}
@@ -93,6 +82,6 @@ export const SocialContacts: FC<SocialContactsProps> = ({
         trackingLabel={trackingLabel}
         icon={<BiLogoInstagram size={30} title={"Instagram"} />}
       />
-    </SocialContactsContainers>
+    </div>
   );
 };
