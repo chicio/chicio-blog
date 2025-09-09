@@ -32,7 +32,7 @@ export const ArtGallery: FC = () => {
               style={{ width: "100%" }}
             >
               <div
-                className={`${glassmorphismClass}flex h-full flex-col p-2`}
+                className={`${glassmorphismClass} flex h-full flex-col p-2`}
                 onClick={() => setCurrentImage(imageUrl)}
               >
                 <div className="h-full flex-1 overflow-hidden rounded-xl">

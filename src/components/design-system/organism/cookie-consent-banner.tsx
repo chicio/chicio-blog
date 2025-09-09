@@ -28,7 +28,7 @@ export const CookieConsentBanner = () => {
     <AnimatePresence>
       {visible && (
         <motion.div
-          className={`${glassmorphismClass}fixed right-0 bottom-5 left-0 mx-auto my-0 p-4 flex max-w-[95%] flex-col items-center gap-4 lg:max-w-[60%] lg:flex-row z-50`}
+          className={`${glassmorphismClass} fixed right-0 bottom-5 left-0 mx-auto my-0 p-4 flex max-w-[95%] flex-col items-center gap-4 lg:max-w-[60%] lg:flex-row z-50`}
           initial={{ opacity: 0, y: 100 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0 }}

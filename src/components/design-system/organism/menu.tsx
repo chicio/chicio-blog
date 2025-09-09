@@ -30,14 +30,14 @@ const menuVariants: Variants = {
   hidden: {
     y: -menuHeightNumber,
     transition: {
-      type: "spring",
+      type: "tween",
       duration: 0.3,
     },
   },
   visible: {
     y: 0,
     transition: {
-      type: "spring",
+      type: "tween",
       duration: 0.3,
     },
   },
@@ -83,7 +83,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
         animate={shouldHideMenu ? "hidden" : "visible"}
         initial="visible"
       >
-        <div className={`${glassmorphismClass}xs:border-r-1 xs:border-l-1 mx-auto my-0 w-full overflow-hidden rounded-t-none border-t-0 border-r-0 border-l-0`}>
+        <div className={`${glassmorphismClass} xs:border-r-1 xs:border-l-1 mx-auto my-0 w-full overflow-hidden rounded-t-none border-t-0 border-r-0 border-l-0`}>
           <motion.div
             variants={contentVariants}
             initial="collapsed"

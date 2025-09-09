@@ -4,6 +4,6 @@ import { useReducedMotions } from "./use-reduced-motions";
     const shouldReduceMotion = useReducedMotions();
 
     return {
-      glassmorphismClass: `${!shouldReduceMotion ? "glassmorphism " : "glassmorphism-lite "}`,
+      glassmorphismClass: `${!shouldReduceMotion ? "glassmorphism" : "glassmorphism-lite"}`,
     };
   };

@@ -4,14 +4,15 @@ import { MatrixHeaderBackground } from "@/components/design-system/molecules/eff
 import { DejavuEasterEgg } from "@/components/sections/easter-eggs/dejavu";
 import { FC } from "react";
 import logoImage from "../../../../../public/images/logo.png";
-import { GlassmorphismBackground } from "../../atoms/effects/glassmorphism-background";
 import { ImageGlow } from "../../atoms/effects/image-glow";
+import { useGlassmorphism } from "../../utils/hooks/use-glassmorphism";
 
 interface BrandHeaderProps {
   big: boolean;
 }
 
 export const BrandHeader: FC<BrandHeaderProps> = ({ big }) => {
+  const { glassmorphismClass } = useGlassmorphism();
   const height = big ? "h-auto" : "h-[150px] md:h-[180px]";
   const margins = big ? "my-8" : "my-5";
 
@@ -20,10 +21,8 @@ export const BrandHeader: FC<BrandHeaderProps> = ({ big }) => {
       <MatrixHeaderBackground big={big} />
       <DejavuEasterEgg>
         <div className={`flex items-center ${margins}`}>
-          <GlassmorphismBackground className="w-full">
-            <div
-              style={{ display: "flex", alignItems: "center", width: "100%" }}
-            >
+          <div className={`${glassmorphismClass} w-full p-5 md:p-9 z-40`}>
+            <div className="flex w-full items-center">
               <ImageGlow
                 src={logoImage}
                 alt={"blog logo"}
@@ -33,13 +32,15 @@ export const BrandHeader: FC<BrandHeaderProps> = ({ big }) => {
                 className="mr-3 h-[50px] w-[50px] object-cover sm:h-[80px] sm:w-[80px]"
               />
               <div className="flex flex-col justify-start">
-                <span className="text-accent m-0 block font-mono font-bold text-2xl sm:text-4xl uppercase text-shadow-lg">CHICIO CODING</span>
+                <span className="text-accent m-0 block font-mono text-2xl font-bold uppercase text-shadow-lg sm:text-4xl">
+                  CHICIO CODING
+                </span>
                 <span className="text-primary-text font-mono text-xs font-normal text-shadow-md sm:text-lg">
                   Pixels. Code. Unplugged.
                 </span>
               </div>
             </div>
-          </GlassmorphismBackground>
+          </div>
         </div>
       </DejavuEasterEgg>
     </div>

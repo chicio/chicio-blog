@@ -60,7 +60,7 @@ export const MatrixTerminal: FC<MatrixTerminalProps> = ({ lines, onComplete }) =
 
   return (
     <motion.div
-      className={`${glassmorphismClass}w-[95%] sm:w-[600px] p-4 min-h-[150px] sm:min-h-[200px]`}
+      className={`${glassmorphismClass} w-[95%] sm:w-[600px] p-4 min-h-[150px] sm:min-h-[200px]`}
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.2, ease: "easeOut" }}

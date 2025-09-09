@@ -1,9 +1,6 @@
-'use client'
-
-import styled from "styled-components";
-import { FC } from "react";
-import {generateTagSlug} from "@/lib/tags/tags";
 import { Tag } from "@/components/design-system/molecules/buttons/tag";
+import { generateTagSlug } from "@/lib/tags/tags";
+import { FC } from "react";
 
 export interface PostTagsProps {
   tags: ReadonlyArray<string | null>;
@@ -11,16 +8,12 @@ export interface PostTagsProps {
   trackingLabel: string;
 }
 
-const PostTagsContainer = styled.div`
-  margin: ${(props) => props.theme.spacing[4]} 0;
-`;
-
 export const PostTags: FC<PostTagsProps> = ({
   tags,
   trackingCategory,
   trackingLabel,
 }) => (
-  <PostTagsContainer>
+  <div className="mx-0 my-5">
     {tags!.map((tag) => (
       <Tag
         tag={tag!}
@@ -31,5 +24,5 @@ export const PostTags: FC<PostTagsProps> = ({
         trackingLabel={trackingLabel}
       />
     ))}
-  </PostTagsContainer>
+  </div>
 );

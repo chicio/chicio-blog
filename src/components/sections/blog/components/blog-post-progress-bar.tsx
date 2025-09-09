@@ -1,36 +1,19 @@
 "use client";
 
-import React from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import styled from "styled-components";
 import {
-  TerminalLine,
-  SuccessText,
   Cursor,
+  SuccessText,
+  TerminalLine,
 } from "@/components/design-system/atoms/typography/terminal-blocks";
+import { useGlassmorphism } from "@/components/design-system/utils/hooks/use-glassmorphism";
+import {
+  ScrollDirection,
+  useScrollDirection,
+} from "@/components/design-system/utils/hooks/use-scroll-direction";
+import { motion } from "framer-motion";
+import React from "react";
 import { useReadingProgress } from "../hooks/use-reading-progress";
-import { glassmorphism } from "../../../design-system/atoms/effects/glassmorphism";
-import { ScrollDirection, useScrollDirection } from "@/components/design-system/utils/hooks/use-scroll-direction";
-
-const ProgressBarWrapper = styled(motion.div)`
-  ${glassmorphism};
-  position: fixed;
-  top: 0;
-  z-index: 100;
-  width: 100%;
-  padding: ${(props) => props.theme.spacing[1]} 0;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-  border-top: none;
-`;
-
-const ProgressBar = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
+import { useReducedMotions } from "@/components/design-system/utils/hooks/use-reduced-motions";
 
 const getBar = (percentage: number, length = 24) => {
   const filled = Math.round((percentage / 100) * length);
@@ -39,13 +22,14 @@ const getBar = (percentage: number, length = 24) => {
 };
 
 const getStatusLine = (
-  status: "uploading" | "connected" | "complete" = "uploading"
+  status: string,
+  shouldReduceMotion: boolean,
 ) => {
   switch (status) {
     case "uploading":
       return (
         <TerminalLine>
-          {"> Uploading knowledge..."} <Cursor>_</Cursor>
+          {"> Uploading knowledge..."} {!shouldReduceMotion ? <Cursor>_</Cursor> : null}
         </TerminalLine>
       );
     case "complete":
@@ -60,25 +44,32 @@ const getStatusLine = (
 };
 
 export const BlogPostProgressBar: React.FC = () => {
-  const { percentage, started, status } = useReadingProgress('blog-post-container');
+  const shouldReduceMotion = useReducedMotions();
+  const { glassmorphismClass } = useGlassmorphism();
+  const { percentage, started, status } = useReadingProgress(
+    "blog-post-container",
+  );
   const direction = useScrollDirection();
+  const isVisible = started && direction === ScrollDirection.down;
 
   return (
-    <AnimatePresence>
-      {started && direction === ScrollDirection.down && (
-        <ProgressBarWrapper
-          initial={{ y: -60, opacity: 0 }}
-          animate={{ y: 0, opacity: 1, transition: { delay: 0.1, duration: 0.4, ease: "linear" } }}
-          exit={{ y: -60, opacity: 0, transition: { duration: 0.2, ease: "linear" } }}
-        >
-          <ProgressBar>
-            {getStatusLine(status)}
-            <TerminalLine>
-              <SuccessText>{getBar(percentage)}</SuccessText>
-            </TerminalLine>
-          </ProgressBar>
-        </ProgressBarWrapper>
-      )}
-    </AnimatePresence>
+    <motion.div
+      key="blog-post-progress-bar"
+      className={`${glassmorphismClass} fixed top-0 z-[60] w-full rounded-tl-none rounded-tr-none border-t-0 px-0 py-2`}
+      initial={false}
+      animate={{
+        y: isVisible ? 0 : -100,
+        pointerEvents: isVisible ? "auto" : "none",
+        transition: { delay: 0.2, duration: 0.4, ease: "linear" },
+      }}
+      style={{ pointerEvents: isVisible ? "auto" : "none" }}
+    >
+      <div className="flex w-full flex-col items-center justify-center">
+        {getStatusLine(status, shouldReduceMotion)}
+        <TerminalLine>
+          <SuccessText>{getBar(percentage)}</SuccessText>
+        </TerminalLine>
+      </div>
+    </motion.div>
   );
 };

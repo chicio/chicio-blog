@@ -1,15 +1,7 @@
-'use client'
+import { FC, PropsWithChildren } from "react";
 
-import styled from "styled-components";
-import {mediaQuery} from "@/components/design-system/utils/media-query";
-
-export const PostsRowContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-
-  ${mediaQuery.minWidth.md} {
-    flex-direction: row;
-    justify-content: space-between;
-  }
-`;
+export const PostsRowContainer: FC<PropsWithChildren> = ({ children }) => (
+  <div className="flex w-full flex-col md:flex-row md:justify-between">
+    {children}
+  </div>
+);

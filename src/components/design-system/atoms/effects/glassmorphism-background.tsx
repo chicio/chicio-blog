@@ -26,7 +26,7 @@ export const GlassmorphismBackground: FC<PropsWithChildren<GlassmorphismBackgrou
 
     return (
       <motion.div
-        className={`${glassmorphismClass}relative p-5 md:p-9 ${className}`}
+        className={`${glassmorphismClass} relative p-5 md:p-9 ${className}`}
         variants={containerVariants}
         initial="hidden"
         animate="visible"

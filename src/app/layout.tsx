@@ -4,7 +4,7 @@ import { FloatingChatButton } from "@/components/design-system/molecules/buttons
 import { ThemePage } from "@/components/design-system/templates/theme-page";
 import { theme } from "@/components/design-system/themes/theme";
 import { CookieConsentBanner } from "@/components/design-system/organism/cookie-consent-banner";
-import { SharedHead } from "@/components/design-system/utils/components/share-head";
+import Head from "next/head";
 import StyledComponentsRegistry from "@/components/styled-components-registry";
 import { TrackingOptIn } from "@/components/design-system/organism/tracking-optin";
 import { Viewport } from "next";
@@ -34,7 +34,9 @@ export default function RootLayout({
       lang="en"
       className={`${courierPrime.className} ${openSans.className}`}
     >
-      <SharedHead />
+      <Head>
+        <link rel="author" href="/humans.txt" type="text/plain" />
+      </Head>
       <body>
         <StyledComponentsRegistry>
           <ThemePage theme={theme}>
