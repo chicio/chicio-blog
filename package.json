@@ -1,6 +1,6 @@
 {
   "name": "chicio-blog",
-  "version": "2.7.2",
+  "version": "2.8.0",
   "private": true,
   "scripts": {
     "search-index": "tsx src/lib/posts/search.ts",

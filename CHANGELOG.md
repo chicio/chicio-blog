@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.8.0](https://github.com/chicio/chicio-blog/compare/v2.7.2...v2.8.0) (2025-09-09)
+
+### Features
+
+* **tailwind:** migrated blog components to tailwind - part 1 ([f58b235](https://github.com/chicio/chicio-blog/commit/f58b2353cc0af0a3fb5cb5fc2d9711142af7f7e5))
+
 ## [2.7.2](https://github.com/chicio/chicio-blog/compare/v2.7.1...v2.7.2) (2025-09-09)
 
 ## [2.7.1](https://github.com/chicio/chicio-blog/compare/v2.7.0...v2.7.1) (2025-09-07)
