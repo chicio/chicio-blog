@@ -21,7 +21,7 @@ export const BrandHeader: FC<BrandHeaderProps> = ({ big }) => {
       <MatrixHeaderBackground big={big} />
       <DejavuEasterEgg>
         <div className={`flex items-center ${margins}`}>
-          <div className={`${glassmorphismClass} w-full p-5 md:p-9 z-40`}>
+          <div className={`${glassmorphismClass} w-full p-5 md:p-9 z-30`}>
             <div className="flex w-full items-center">
               <ImageGlow
                 src={logoImage}
