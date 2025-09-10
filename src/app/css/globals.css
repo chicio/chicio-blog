@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@import "highlight.js/styles/tokyo-night-dark.css";
 @import "./pills.css";
 
 @theme {
@@ -219,6 +218,7 @@
     }
 
     @keyframes blink {
+
         0%,
         50% {
             opacity: 1;
@@ -321,10 +321,38 @@
         @apply w-full h-px bg-gradient-to-r from-general-background-light via-accent to-general-background-light border-0;
     }
 
+    .katex-display .katex {
+        @apply hide-scrollbar inline-block whitespace-nowrap max-w-full overflow-x-scroll;
+    }
+
     /** custom rules **/
 
     #blog-post-container p {
         @apply my-4;
+    }
+
+    #blog-post-container figure figcaption {
+        @apply text-secondary-text text-base leading-normal text-center italic mt-2 mb-3;
+    }
+
+    #blog-post-container iframe {
+        @apply w-full h-auto aspect-video border border-solid border-accent-alpha-40 rounded-xl hover:border-accent active:border-accent focus:border-accent shadow-lg transition-all duration-500 hover:scale-102;
+    }
+
+    #blog-post-container img {
+        @apply w-full border border-solid border-accent-alpha-40 rounded-xl hover:border-accent active:border-accent focus:border-accent shadow-lg transition-all duration-500 hover:scale-102;
+    }
+
+    #blog-post-container p code {
+        color: #d2a8ff;
+    }
+
+    #blog-post-container li code {
+        color: #d2a8ff;
+    }
+
+    #blog-post-container pre {
+        @apply hide-scrollbar overflow-hidden border border-solid border-accent-alpha-40 rounded-xl hover:border-accent active:border-accent focus:border-accent shadow-lg transition-all duration-500 hover:scale-101;
     }
 
     body.glitch-active {
