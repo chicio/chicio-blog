@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.9.0](https://github.com/chicio/chicio-blog/compare/v2.8.0...v2.9.0) (2025-09-10)
+
+### Features
+
+* **performance:** save animation settings in local storage :rocket: ([fad4940](https://github.com/chicio/chicio-blog/commit/fad4940c7a3d92994d82fe4ccc4789a3bf14a2b6))
+* **tailwind:** fix search menu z index :rocket: ([5c90f89](https://github.com/chicio/chicio-blog/commit/5c90f8931f21a922119b6e0555ffea6125a3d8f9))
+* **tailwind:** migrate blog section completed :rocket: ([a7da536](https://github.com/chicio/chicio-blog/commit/a7da5367ae5ff09c084b92eb18f95020c3a08341))
+
 ## [2.8.0](https://github.com/chicio/chicio-blog/compare/v2.7.2...v2.8.0) (2025-09-09)
 
 ### Features
