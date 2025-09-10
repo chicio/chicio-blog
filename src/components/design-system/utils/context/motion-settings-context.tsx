@@ -1,7 +1,8 @@
 "use client";
 
-import { createContext, useContext, useState, ReactNode } from "react";
+import { hasMotion, writeMotion } from "@/lib/motion/motion";
 import { MotionConfig } from "framer-motion";
+import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 
 interface MotionSettingsContextType {
   motionEnabled: boolean;
@@ -17,7 +18,18 @@ export const useMotionSettings = () => useContext(MotionSettingsContext);
 
 export const MotionSettingsProvider = ({ children }: { children: ReactNode }) => {
   const [motionEnabled, setMotionEnabled] = useState(true);
-  const toggleMotion = () => setMotionEnabled((v) => !v);
+
+  useEffect(() => {
+    setMotionEnabled(hasMotion());
+  }, []);
+
+  useEffect(() => {
+    writeMotion(motionEnabled ? "on" : "off");
+  }, [motionEnabled]);
+
+  const toggleMotion = () => {
+    setMotionEnabled((v) => !v);
+  };
 
   return (
     <MotionSettingsContext.Provider value={{ motionEnabled, toggleMotion }}>
