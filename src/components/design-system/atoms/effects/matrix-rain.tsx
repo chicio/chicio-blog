@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, use, memo } from "react";
 import { MatrixRainDrawContext } from "@/types/matrix-rain";
 import { useReducedMotions } from "../../utils/hooks/use-reduced-motions";
 
@@ -17,7 +17,7 @@ const backgroundColor = `#00110010`;
 
 const setCanvasSize = (
   canvas: HTMLCanvasElement,
-  context: CanvasRenderingContext2D
+  context: CanvasRenderingContext2D,
 ) => {
   const rect = canvas.getBoundingClientRect();
   const dpr = window.devicePixelRatio || 1;
@@ -31,7 +31,7 @@ const initializeDrops = (canvas: HTMLCanvasElement, fontSize: number) => {
   const drops = [];
   for (let x = 0; x < columns; x++) {
     drops[x] = Math.floor(
-      (Math.random() * (canvas.height / window.devicePixelRatio)) / fontSize
+      (Math.random() * (canvas.height / window.devicePixelRatio)) / fontSize,
     );
   }
   return drops;
@@ -41,7 +41,7 @@ const initialize = (
   canvas: HTMLCanvasElement,
   context: CanvasRenderingContext2D,
   fontSize: number,
-  frameRate: number
+  frameRate: number,
 ): MatrixRainDrawContext => {
   setCanvasSize(canvas, context);
 
@@ -58,19 +58,19 @@ const initialize = (
 
 const observe = (
   canvas: HTMLCanvasElement,
-  handleVisibilityChange: (isVisible: boolean) => void
+  handleVisibilityChange: (isVisible: boolean) => void,
 ) => {
   const observer = new window.IntersectionObserver(
     ([entry]) => {
       return handleVisibilityChange(
-        entry.isIntersecting || entry.intersectionRect.height > 0
+        entry.isIntersecting || entry.intersectionRect.height > 0,
       );
     },
     {
       root: null,
       rootMargin: "-50px 0px -50px 0px",
       threshold: 0,
-    }
+    },
   );
   observer.observe(canvas);
   return observer;
@@ -82,7 +82,7 @@ interface MatrixRainProps {
   density: number;
 }
 
-export const MatrixRain: React.FC<MatrixRainProps> = ({
+export const MatrixRainRenderer: React.FC<MatrixRainProps> = ({
   fontSize,
   frameRate = 20,
   density,
@@ -90,6 +90,11 @@ export const MatrixRain: React.FC<MatrixRainProps> = ({
   const shouldReduceMotion = useReducedMotions();
   const [isVisible, setIsVisible] = useState(true);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const lastWidth = useRef(0);
+
+  useEffect(() => {
+    lastWidth.current = window.innerWidth;
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -129,8 +134,11 @@ export const MatrixRain: React.FC<MatrixRainProps> = ({
       frameRate
     );
 
-    const start = () => {
-      matrixRainDrawContext = initialize(canvas, context, fontSize, frameRate);
+    const resize = () => {
+       if (window.innerWidth !== lastWidth.current) {
+         lastWidth.current = window.innerWidth;
+         matrixRainDrawContext = initialize(canvas, context, fontSize, frameRate);
+       }
     };
 
     const draw = () => {
@@ -181,8 +189,7 @@ export const MatrixRain: React.FC<MatrixRainProps> = ({
       } else {
         matrixRainDrawContext.animationFrameId = requestAnimationFrame(frame);
       }
-
-      window.addEventListener("resize", start);
+      window.addEventListener("resize", resize);
     };
 
     renderingLoop();
@@ -191,9 +198,17 @@ export const MatrixRain: React.FC<MatrixRainProps> = ({
       if (matrixRainDrawContext.animationFrameId) {
         cancelAnimationFrame(matrixRainDrawContext.animationFrameId);
       }
-      window.removeEventListener("resize", start);
+      window.removeEventListener("resize", resize);
     };
   }, [fontSize, frameRate, density, isVisible, shouldReduceMotion]);
 
-  return <canvas className="absolute top-0 left-0 w-full h-full pointer-events-none block" ref={canvasRef} />;
+  return (
+    <canvas
+      className="pointer-events-none absolute top-0 left-0 block h-full w-full"
+      ref={canvasRef}
+    />
+  );
 };
+
+
+export const MatrixRain = memo(MatrixRainRenderer);
