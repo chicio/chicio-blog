@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useRef, useEffect, useState, use, memo } from "react";
 import { MatrixRainDrawContext } from "@/types/matrix-rain";
+import React, { memo, useEffect, useRef, useState } from "react";
 import { useReducedMotions } from "../../utils/hooks/use-reduced-motions";
 
 const matrix = "ﾊﾐﾋｰｳｼﾅﾓﾆｻﾜﾂｵﾘｱﾎﾃﾏｹﾒｴｶｷﾑﾕﾗｾﾈｽﾀﾇﾍ012345789Z:.=*+-<>".split("");
