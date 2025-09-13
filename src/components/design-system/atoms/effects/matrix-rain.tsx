@@ -3,6 +3,7 @@
 import { MatrixRainDrawContext } from "@/types/matrix-rain";
 import React, { memo, useEffect, useRef, useState } from "react";
 import { useReducedMotions } from "../../utils/hooks/use-reduced-motions";
+import { debounce } from "@/lib/debounce/debounce";
 
 const matrix = "ﾊﾐﾋｰｳｼﾅﾓﾆｻﾜﾂｵﾘｱﾎﾃﾏｹﾒｴｶｷﾑﾕﾗｾﾈｽﾀﾇﾍ012345789Z:.=*+-<>".split("");
 const colors = [
@@ -131,30 +132,37 @@ export const MatrixRainRenderer: React.FC<MatrixRainProps> = ({
       canvas,
       context,
       fontSize,
-      frameRate
+      frameRate,
     );
 
-    const resize = () => {
-       if (window.innerWidth !== lastWidth.current) {
-         lastWidth.current = window.innerWidth;
-         matrixRainDrawContext = initialize(canvas, context, fontSize, frameRate);
-       }
-    };
+    const resize = debounce(() => {
+      if (window.innerWidth !== lastWidth.current) {
+        console.log("resize");
+        lastWidth.current = window.innerWidth;
+        matrixRainDrawContext = initialize(
+          canvas,
+          context,
+          fontSize,
+          frameRate,
+        );
+        renderingLoop();
+      }
+    }, 300);
 
-    const draw = () => {
+    const drawFrame = () => {
       context.font = matrixRainDrawContext.font;
       context.fillStyle = backgroundColor;
       context.fillRect(
         0,
         0,
         matrixRainDrawContext.width,
-        matrixRainDrawContext.height
+        matrixRainDrawContext.height,
       );
 
       for (let i = 0; i < matrixRainDrawContext.drops.length; i++) {
         const text = matrix[Math.floor(Math.random() * matrix.length)];
         const color = colors.find(
-          ({ threshold }) => Math.random() < threshold
+          ({ threshold }) => Math.random() < threshold,
         )!.color;
         context.fillStyle = color;
         const x = i * fontSize;
@@ -175,7 +183,7 @@ export const MatrixRainRenderer: React.FC<MatrixRainProps> = ({
         return;
       }
 
-      draw();
+      drawFrame();
 
       matrixRainDrawContext.lastFrameTimestamp = now;
       matrixRainDrawContext.animationFrameId = requestAnimationFrame(frame);
@@ -184,7 +192,7 @@ export const MatrixRainRenderer: React.FC<MatrixRainProps> = ({
     const renderingLoop = () => {
       if (shouldReduceMotion) {
         for (let i = 0; i < frameRate; i++) {
-          draw();
+          drawFrame();
         }
       } else {
         matrixRainDrawContext.animationFrameId = requestAnimationFrame(frame);
@@ -209,6 +217,5 @@ export const MatrixRainRenderer: React.FC<MatrixRainProps> = ({
     />
   );
 };
-
 
 export const MatrixRain = memo(MatrixRainRenderer);
