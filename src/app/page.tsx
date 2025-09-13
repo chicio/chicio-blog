@@ -5,7 +5,6 @@ import { JsonLd } from "@/components/design-system/utils/components/jsond-ld";
 import { JobsTimeline } from "@/components/sections/home/components/jobs-timeline";
 import { ProfilePresentation } from "@/components/sections/home/components/profile-presentation";
 import { Projects } from "@/components/sections/home/components/projects";
-import { SnapScrollContainer } from "@/components/sections/home/components/snap-scroll-container";
 import { Technologies } from "@/components/sections/home/components/technologies";
 import { createMetadata } from "@/lib/seo/seo";
 import { siteMetadata } from "@/types/site-metadata";
@@ -23,7 +22,7 @@ export const metadata = createMetadata({
 export default function Home() {
   return (
     <>
-      <SnapScrollContainer data-snap-container="true">
+      <div className="h-screen overflow-y-auto snap-y snap-mandatory" data-snap-container="true">
         <MatrixBackground fontSize={16} density={0.95}>
           <ProfilePresentation author={siteMetadata.author} />
         </MatrixBackground>
@@ -35,7 +34,7 @@ export default function Home() {
           trackingCategory={tracking.category.home}
         />
         <DownArrowButton />
-      </SnapScrollContainer>
+      </div>
       <JsonLd
         ogPageType="website"
         url={siteMetadata.siteUrl}

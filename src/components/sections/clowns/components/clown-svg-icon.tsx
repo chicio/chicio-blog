@@ -1,22 +1,8 @@
-'use client';
-
 import React from "react";
-import styled from "styled-components";
-
-const SvgWrapper = styled.div`
-  display: inline-block;
-  width: 64px;
-  height: 64px;
-  svg {
-    width: 100%;
-    height: 100%;
-    filter: drop-shadow(0 0 8px #00ff41);
-  }
-`;
 
 export const ClownSvgIcon: React.FC = () => (
-  <SvgWrapper>
-    <svg fill="#00ff41" viewBox="0 0 512.001 512.001" xmlns="http://www.w3.org/2000/svg">
+  <div className="inline-block w-16 h-16">
+    <svg className="w-full h-full " fill="#00ff41" viewBox="0 0 512.001 512.001" xmlns="http://www.w3.org/2000/svg">
       <g>
         <g>
           <g>
@@ -60,5 +46,5 @@ export const ClownSvgIcon: React.FC = () => (
         </g>
       </g>
     </svg>
-  </SvgWrapper>
+  </div>
 );

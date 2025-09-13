@@ -1,17 +1,9 @@
-import styled from "styled-components";
 import { CallToActionInternalWithTracking } from "@/components/design-system/atoms/call-to-actions/call-to-action-internal-with-tracking";
-import { tracking } from "@/types/tracking";
 import { slugs } from "@/types/slug";
-
-const CTAContainer = styled.div`
-  display: flex;
-  gap: ${(props) => props.theme.spacing[4]};
-  justify-content: center;
-  margin-top: ${(props) => props.theme.spacing[6]};
-`;
+import { tracking } from "@/types/tracking";
 
 export const ProfileCTAs = () => (
-  <CTAContainer>
+  <div className="flex justify-center mt-7 gap-5">
     <CallToActionInternalWithTracking
       trackingData={{
         action: tracking.action.open_blog,
@@ -32,5 +24,5 @@ export const ProfileCTAs = () => (
     >
       Art
     </CallToActionInternalWithTracking>
-  </CTAContainer>
+  </div>
 );
