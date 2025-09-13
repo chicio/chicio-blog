@@ -137,7 +137,6 @@ export const MatrixRainRenderer: React.FC<MatrixRainProps> = ({
 
     const resize = debounce(() => {
       if (window.innerWidth !== lastWidth.current) {
-        console.log("resize");
         lastWidth.current = window.innerWidth;
         matrixRainDrawContext = initialize(
           canvas,

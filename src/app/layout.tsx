@@ -41,11 +41,9 @@ export default function RootLayout({
         <StyledComponentsRegistry>
           <ThemePage theme={theme}>
             {children}
-            <div className="fixed right-3 bottom-3 z-40 md:right-9 md:bottom-5">
-              <FloatingChatButton />
-            </div>
-            <div className="fixed bottom-3 left-3 z-40 md:bottom-5 md:left-9">
+            <div className="fixed right-3 bottom-3 z-40 flex flex-col gap-4 md:right-9 md:bottom-5">
               <MotionButton />
+              <FloatingChatButton />
             </div>
             <CookieConsentBanner />
           </ThemePage>
