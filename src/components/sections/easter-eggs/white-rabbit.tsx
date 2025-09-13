@@ -1,9 +1,7 @@
 import { RedPillButton } from "@/components/design-system/molecules/buttons/pills-buttons";
 import { MatrixTerminal } from "@/components/design-system/molecules/effects/matrix-terminal";
-import { mediaQuery } from "@/components/design-system/utils/media-query";
 import { EasterEggSearchResult, EasterEggTerminalLines } from "@/types/search";
 import { FC, useState } from "react";
-import { styled } from "styled-components";
 import { CenterContainer } from "./center-container";
 
 export const neoRoomNumber = "101";
@@ -27,14 +25,6 @@ export const whiteRabbitEasterEgg = (
   return null;
 };
 
-const PlaySoundContainer = styled.div<{ $visible: boolean }>`
-  visibility: ${$props => $props.$visible ? 'visible' : 'hidden'};
-
-  ${mediaQuery.minWidth.sm} {
-    visibility: hidden;
-  }
-`;
-
 export const NeoRoomEasterEgg: FC<{ lines: EasterEggTerminalLines }> = ({
   lines,
 }) => {
@@ -50,7 +40,7 @@ export const NeoRoomEasterEgg: FC<{ lines: EasterEggTerminalLines }> = ({
           audio.play();
         }}
       />
-     <PlaySoundContainer $visible={isCompleted}>
+     <div style={{ visibility: isCompleted ? 'visible' : 'hidden' }}>
         <RedPillButton
           onClick={() => {
             const audio = new Audio("/sounds/knock-knock.mp3");
@@ -59,7 +49,7 @@ export const NeoRoomEasterEgg: FC<{ lines: EasterEggTerminalLines }> = ({
         >
           Knock, knock
         </RedPillButton>
-      </PlaySoundContainer>
+      </div>
     </CenterContainer>
   );
 };
