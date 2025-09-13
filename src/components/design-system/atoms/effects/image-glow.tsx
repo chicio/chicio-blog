@@ -9,6 +9,7 @@ interface ImageGlowProps extends ImageProps {
 export const ImageGlow: FC<ImageGlowProps> = ({
   src,
   alt,
+  fill,
   width,
   height,
   placeholder,
@@ -18,6 +19,7 @@ export const ImageGlow: FC<ImageGlowProps> = ({
   <Image
     src={src}
     alt={alt}
+    fill={fill}
     width={width}
     height={height}
     placeholder={placeholder ? placeholder : imageShimmerPlaceholder}

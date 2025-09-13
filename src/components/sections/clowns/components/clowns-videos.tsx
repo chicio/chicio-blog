@@ -1,26 +1,6 @@
 "use client";
 
-import styled from "styled-components";
 import { useShuffleArray } from "@/components/design-system/utils/hooks/use-shuffle-array";
-import { glowContainer } from "@/components/design-system/atoms/effects/glow";
-import { ClownsPageTemplate } from "./clowns-page-template";
-
-const VideoWrapper = styled.div`
-  ${glowContainer};
-  position: relative;
-  width: 100%;
-  padding-top: 56.25%;
-  overflow: hidden;
-
-  iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border: 0;
-  }
-`;
 
 export const ClownsVideos = () => {
   const videos = useShuffleArray(
@@ -34,21 +14,18 @@ export const ClownsVideos = () => {
       "https://www.youtube.com/embed/l0XKdAl3uV4",
       "https://www.youtube.com/embed/8L2jFgx3Kb8",
     ],
-    4
+    4,
   );
 
-  return (
-    <ClownsPageTemplate>
-      {videos.map((video, index) => (
-        <VideoWrapper key={index}>
-          <iframe
-            src={`${video}?autoplay=1&mute=1`}
-            title={`Clown Video ${index + 1}`}
-            allow="autoplay; encrypted-media"
-            allowFullScreen
-          ></iframe>
-        </VideoWrapper>
-      ))}
-    </ClownsPageTemplate>
-  );
+  return videos.map((video, index) => (
+    <div className="relative glow-container w-full pt-[56.25%] overflow-hidden" key={index}>
+      <iframe
+      className="absolute top-0 left-0 w-full h-full border-0"
+        src={`${video}?autoplay=1&mute=1`}
+        title={`Clown Video ${index + 1}`}
+        allow="autoplay; encrypted-media"
+        allowFullScreen
+      ></iframe>
+    </div>
+  ));
 };

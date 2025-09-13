@@ -1,3 +1,5 @@
+'use client';
+
 import { FC, useState } from "react";
 import { useGlassmorphism } from "../../utils/hooks/use-glassmorphism";
 

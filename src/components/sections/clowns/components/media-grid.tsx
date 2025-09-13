@@ -1,3 +1,5 @@
+'use client';
+
 import styled from 'styled-components';
 import { mediaQuery } from '../../../design-system/utils/media-query';
 

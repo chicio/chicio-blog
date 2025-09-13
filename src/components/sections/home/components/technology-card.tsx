@@ -50,11 +50,10 @@ const ExperienceYears = styled.span`
 `;
 
 const cardVariants: Variants = {
-  hidden: { scale: 0, opacity: 0 },
+  hidden: { scale: 0 },
   visible: {
     scale: 1,
-    opacity: 1,
-    transition: { duration: 0.4, type: "spring", stiffness: 100 },
+    transition: { duration: 0.4, type: "tween", ease: "linear" },
   },
 };
 

@@ -1,49 +1,8 @@
-import styled, { TransientProps } from "styled-components";
+import { Button } from "@/components/design-system/atoms/buttons/button";
+import { ImageGlow } from "@/components/design-system/atoms/effects/image-glow";
+import { Overlay } from "@/components/design-system/atoms/effects/overlay";
 import { motion, Variants } from "framer-motion";
 import { FC } from "react";
-import { glassmorphism } from "@/components/design-system/atoms/effects/glassmorphism";
-import { Overlay } from "@/components/design-system/atoms/effects/overlay";
-import { Button } from "@/components/design-system/atoms/buttons/button";
-
-const zIndex = 400;
-
-interface ModalContainerProps {
-  zIndex: number;
-}
-
-const ModalWrapper = styled.div<{ $zIndex: number }>`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: ${(props) => props.$zIndex};
-`;
-
-const ModalContainer = styled(motion.div)<TransientProps<ModalContainerProps>>`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: min(95vw, 700px);
-  max-width: 95vw;
-  height: auto;
-  max-height: 90vh;
-  padding: ${(props) => props.theme.spacing[4]};
-  ${glassmorphism};
-  box-shadow: 0 8px 32px 0 rgba(0, 255, 70, 0.25);
-  border-radius: 24px;
-  overflow: auto;
-  @media (max-width: 600px) {
-    width: 98vw;
-    max-width: 98vw;
-    padding: ${(props) => props.theme.spacing[2]};
-  }
-`;
 
 const modalVariants: Variants = {
   hidden: { opacity: 0 },
@@ -53,16 +12,6 @@ const modalVariants: Variants = {
   },
   exit: { opacity: 0, scale: 0.85, transition: { duration: 0.2 } },
 };
-
-const ModalImage = styled.img`
-  width: 100%;
-  height: auto;
-  max-height: 60vh;
-  object-fit: contain;
-  border-radius: 16px;
-  margin-bottom: 16px;
-  background-color: ${(props) => props.theme.colors.generalBackground};
-`;
 
 export interface ModalWithImageProps {
   imageUrl: string;
@@ -77,18 +26,24 @@ export const ModalWithImage: FC<ModalWithImageProps> = ({
 }) => (
   <>
     <Overlay onClick={onClick} delay={0.15}>
-      <ModalWrapper $zIndex={zIndex}>
-        <ModalContainer
-          $zIndex={zIndex}
-          variants={modalVariants}
-          initial="hidden"
-          animate="visible"
-          exit="exit"
-        >
-          <ModalImage src={imageUrl} alt={imageAlt} />
-          <Button className="text-primary-text" onClick={onClick}><p>Close</p></Button>
-        </ModalContainer>
-      </ModalWrapper>
+      <motion.div
+        variants={modalVariants}
+        initial="hidden"
+        animate="visible"
+        exit="exit"
+        className="fixed flex flex-col justify-center items-center top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full p-8rounded-xl overflow-auto"
+      >
+        <ImageGlow
+          fill={true}
+          className="bg-general-background relative! mb-4 w-[95%]! sm:w-[60%]! h-[60%]! sm:max-h-[60%]! rounded-xl object-contain"
+          src={imageUrl}
+          alt={imageAlt}
+          style={{ objectFit: "contain" }}
+        />
+        <Button className="relative text-primary-text" onClick={onClick}>
+          <p>Close</p>
+        </Button>
+      </motion.div>
     </Overlay>
   </>
 );
