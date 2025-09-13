@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.10.0](https://github.com/chicio/chicio-blog/compare/v2.9.0...v2.10.0) (2025-09-13)
+
+### Features
+
+* **performance:** :zap: improved resize rendering of matrix rrain with debounce ([266baf5](https://github.com/chicio/chicio-blog/commit/266baf5f9d0ae27379d8401e5827256ea0719263))
+* **performance:** clean imports from matrix rain :rocket: ([9799ae2](https://github.com/chicio/chicio-blog/commit/9799ae2cd8024c6a76c23cca6f8cea998fd7be46))
+* **performance:** rerender only on width change matrix rain :rocket: ([1e741b6](https://github.com/chicio/chicio-blog/commit/1e741b65cf1f1083d7ada7248565db559b793d77))
+* **tailwind:** migrated all clowns + small home compoents to tailwind :rocket: ([33fec2e](https://github.com/chicio/chicio-blog/commit/33fec2e810d86a4a91b3bede7aff8e3c455ca841))
+* **tailwind:** migrated clown sections to tailwind :rocket: ([0c7bd31](https://github.com/chicio/chicio-blog/commit/0c7bd317f2e8a8ef5148cd9a78116eda822431df))
+* **tailwind:** migrated white rabbit easter egg ([112402f](https://github.com/chicio/chicio-blog/commit/112402fc9bff70aab5e2321ff9c613769c9bd485))
+* **ux:** :lipstick: added pulse animation to motion button ([49d9519](https://github.com/chicio/chicio-blog/commit/49d95198bbb22499df2af9dcae5744be7b177312))
+* **ux:** :lipstick: floating buttons now in bottom left corner ([c1d95f5](https://github.com/chicio/chicio-blog/commit/c1d95f5ee0baf6cf9f75a74b0d757e84f80399e7))
+
 ## [2.9.0](https://github.com/chicio/chicio-blog/compare/v2.8.0...v2.9.0) (2025-09-10)
 
 ### Features
