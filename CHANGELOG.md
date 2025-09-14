@@ -1,5 +1,14 @@
 # Changelog
 
+## [3.0.0](https://github.com/chicio/chicio-blog/compare/v2.10.0...v3.0.0) (2025-09-14)
+
+### Features
+
+* **tailwind:** :fire: removed styled components deps and files setup ([003860c](https://github.com/chicio/chicio-blog/commit/003860ce3c5885bcb23ac0947848c55214ede761))
+* **tailwind:** :lipstick: migrated all chat to tailwind ([4712963](https://github.com/chicio/chicio-blog/commit/4712963833242dbba511ad9edd4a4d11b3420207))
+* **tailwind:** :lipstick: migrated all missing homepage componets to tailwind ([86429cc](https://github.com/chicio/chicio-blog/commit/86429ccec91ad84f84913c908e56a850690d1d04))
+* **tailwind:** :lipstick: projects migrated to tailwind ([aaee664](https://github.com/chicio/chicio-blog/commit/aaee66432eabff48b1672813877d813d90e90401))
+
 ## [2.10.0](https://github.com/chicio/chicio-blog/compare/v2.9.0...v2.10.0) (2025-09-13)
 
 ### Features
