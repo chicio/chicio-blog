@@ -1,70 +1,22 @@
 import { FC } from "react";
-import styled from "styled-components";
-import { mediaQuery } from "@/components/design-system/utils/media-query";
-import { motion } from "framer-motion";
-import { TechnologyCard } from "./technology-card";
 import { useTechnologies } from "../hooks/useTechnologies";
-
-const SkillsGrid = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${(props) => props.theme.spacing[8]};
-  margin-top: ${(props) => props.theme.spacing[8]};
-  width: 100%;
-
-  ${mediaQuery.minWidth.md} {
-    gap: ${(props) => props.theme.spacing[12]};
-  }
-`;
-
-const SkillCategory = styled(motion.div)`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  width: 100%;
-
-  ${mediaQuery.minWidth.md} {
-    align-items: center;
-  }
-`;
-
-const CategoryTitle = styled(motion.h3)`
-  color: ${(props) => props.theme.colors.accentColor};
-  font-size: ${(props) => props.theme.fontSizes[4]};
-  margin-bottom: ${(props) => props.theme.spacing[4]};
-  text-align: center;
-  width: 100%;
-
-  ${mediaQuery.minWidth.md} {
-    font-size: ${(props) => props.theme.fontSizes[5]};
-    margin-bottom: ${(props) => props.theme.spacing[6]};
-  }
-`;
-
-const TechnologiesGrid = styled(motion.div)`
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: ${(props) => props.theme.spacing[6]};
-  margin: 0 auto;
-`;
+import { TechnologyCard } from "./technology-card";
 
 export const TechnologiesSkillsGrid: FC = () => {
   const { technologies } = useTechnologies();
 
   return (
-    <SkillsGrid>
+    <div className="mt-9 flex w-full flex-col gap-9 md:gap-12">
       {Object.entries(technologies).map(([category, techs]) => (
-        <SkillCategory key={category}>
-          <CategoryTitle>{category}</CategoryTitle>
-          <TechnologiesGrid>
+        <div className="flex w-full flex-col items-center" key={category}>
+          <h3 className="mb-5">{category}</h3>
+          <div className="mx-auto my-0 flex w-full flex-wrap justify-center gap-8">
             {techs.map((tech, index) => (
               <TechnologyCard tech={tech} index={index} key={tech.name} />
             ))}
-          </TechnologiesGrid>
-        </SkillCategory>
+          </div>
+        </div>
       ))}
-    </SkillsGrid>
+    </div>
   );
 };
