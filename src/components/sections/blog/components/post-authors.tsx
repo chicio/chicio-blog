@@ -30,6 +30,7 @@ export const PostAuthors: FC<PostAuthorsProps> = ({
             src={author.image}
             width={30}
             height={30}
+            noPlaceholder={true}
           />
           <p>
             {enableUrl && (

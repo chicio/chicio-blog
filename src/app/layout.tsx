@@ -1,11 +1,9 @@
 import "./css/globals.css";
 
 import { FloatingChatButton } from "@/components/design-system/molecules/buttons/chat-button";
-import { ThemePage } from "@/components/design-system/templates/theme-page";
-import { theme } from "@/components/design-system/themes/theme";
+import { MotionPage } from "@/components/design-system/templates/motion-page";
 import { CookieConsentBanner } from "@/components/design-system/organism/cookie-consent-banner";
 import Head from "next/head";
-import StyledComponentsRegistry from "@/components/styled-components-registry";
 import { TrackingOptIn } from "@/components/design-system/organism/tracking-optin";
 import { Viewport } from "next";
 import { ReactNode } from "react";
@@ -38,16 +36,14 @@ export default function RootLayout({
         <link rel="author" href="/humans.txt" type="text/plain" />
       </Head>
       <body>
-        <StyledComponentsRegistry>
-          <ThemePage theme={theme}>
+          <MotionPage>
             {children}
             <div className="fixed right-3 bottom-3 z-40 flex flex-col gap-4 md:right-9 md:bottom-5">
               <MotionButton />
               <FloatingChatButton />
             </div>
             <CookieConsentBanner />
-          </ThemePage>
-        </StyledComponentsRegistry>
+          </MotionPage>
         <TrackingOptIn />
       </body>
     </html>

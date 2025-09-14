@@ -3,13 +3,14 @@
 import { searchIndexFileName } from "@/lib/posts/files";
 import { SearchablePostFields, SearchResult } from "@/types/search";
 import elasticlunr from "elasticlunr";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState, useMemo, useCallback } from "react";
+import { debounce } from "@/lib/debounce/debounce";
 
 const hasMinimumCharsToSearch = (query: string): boolean => query.length >= 3;
 
 const searchFor = (
   query: string,
-  searchIndex: elasticlunr.Index<SearchablePostFields>
+  searchIndex: elasticlunr.Index<SearchablePostFields>,
 ): SearchResult => {
   if (query && hasMinimumCharsToSearch(query) && searchIndex) {
     return {
@@ -20,11 +21,11 @@ const searchFor = (
     };
   }
   return { type: "search", results: [] };
-}
+};
 
 export const useSearch = (
   startSearch: boolean,
-  easterEgg: (query: string) => SearchResult | null
+  easterEgg: (query: string) => SearchResult | null,
 ) => {
   const [search, setSearch] = useState<SearchResult>({
     type: "search",
@@ -41,26 +42,34 @@ export const useSearch = (
       });
   }, []);
 
-  const handleSearch = async (e: ChangeEvent<HTMLInputElement>) => {
-    if (!startSearch) {
-      return;
-    }
+  const debouncedSearch = useMemo(
+    () =>
+      debounce((value: string) => {
+        if (searchIndex) {
+          setSearch(searchFor(value, searchIndex));
+        } else {
+          setSearch({ type: "search", results: [] });
+        }
+      }, 300),
+    [searchIndex],
+  );
+
+  const handleSearch = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+      if (!startSearch) {
+        return;
+      }
 
     const value = e.target.value.trim();
 
     const easterEggResult = easterEgg(value);
-    
+
     if (easterEggResult) {
       setSearch(easterEggResult);
       return;
     }
 
-    if (searchIndex) {
-      setSearch(searchFor(value, searchIndex));
-    } else {
-      setSearch({ type: "search", results: [] });
-    }
-  };
+    debouncedSearch(value);
+  }, [debouncedSearch, easterEgg, startSearch]);
 
   const resetSearch = () => setSearch({ type: "search", results: [] });
 

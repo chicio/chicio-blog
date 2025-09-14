@@ -36,7 +36,7 @@ export const PostCard: FC<PostCardProps> = ({
   description,
   trackingCategory,
 }) => (
-  <div className={`relative glow-container mt-5 ${big ? "w-full" : "w-full md:w-[48%]"}`} key={slug}>
+  <div className={`relative glow-container bg-general-background-light mt-5 ${big ? "w-full" : "w-full md:w-[48%]"}`} key={slug}>
     <StandardInternalLinkWithTracking
       to={slug}
       trackingData={{

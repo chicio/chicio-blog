@@ -4,26 +4,32 @@ import { imageShimmerPlaceholder } from "./image-shimmer-placeholder";
 
 interface ImageGlowProps extends ImageProps {
   className?: string;
+  noPlaceholder?: boolean;
 }
 
-export const ImageGlow: FC<ImageGlowProps> = ({
-  src,
-  alt,
-  fill,
-  width,
-  height,
-  placeholder,
-  className,
-  blurDataURL,
-}) => (
-  <Image
-    src={src}
-    alt={alt}
-    fill={fill}
-    width={width}
-    height={height}
-    placeholder={placeholder ? placeholder : imageShimmerPlaceholder}
-    blurDataURL={blurDataURL}
-    className={`${className ? `glow-container ${className}` : ""}`}
-  />
-);
+export const ImageGlow: FC<ImageGlowProps> = (props) => {
+  const {
+    src,
+    alt,
+    fill,
+    width,
+    height,
+    placeholder,
+    className,
+    blurDataURL,
+    noPlaceholder,
+  } = props;
+
+  return (
+    <Image
+      src={src}
+      alt={alt}
+      fill={fill}
+      width={width}
+      height={height}
+      {...(!noPlaceholder ? { placeholder: placeholder ? placeholder : imageShimmerPlaceholder } : {})}
+      blurDataURL={blurDataURL}
+      className={className ? `glow-container ${className}` : ""}
+    />
+  );
+};

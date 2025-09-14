@@ -1,6 +1,5 @@
 import type { MetadataRoute } from "next";
 import { siteMetadata } from "@/types/site-metadata";
-import { theme } from "@/components/design-system/themes/theme";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
@@ -9,8 +8,8 @@ export default function manifest(): MetadataRoute.Manifest {
     description: siteMetadata.title,
     start_url: "/",
     display: "standalone",
-    background_color: theme.colors.generalBackground,
-    theme_color: theme.colors.generalBackground,
+    background_color: '#001100',
+    theme_color: '#001100',
     icons: [
       {
         src: "/icon1.png",
