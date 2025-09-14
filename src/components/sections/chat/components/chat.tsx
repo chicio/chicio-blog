@@ -1,6 +1,6 @@
 "use client";
 
-import { RedPill } from "@/components/design-system/atoms/effects/pills";
+import { RedPillNoReflection } from "@/components/design-system/atoms/effects/pills";
 import { ChatIcon } from "@/components/design-system/atoms/icons/chat-icon";
 import { ContentContainer } from "@/components/design-system/molecules/containers/content-container";
 import { MatrixHeaderBackground } from "@/components/design-system/molecules/effects/matrix-header-background";
@@ -11,8 +11,6 @@ import { GenericHeader } from "../../../design-system/organism/header/generic-he
 import { useFabrizioChat } from "../hooks/useFabrizioChat";
 import { ChatInput } from "./chat-input";
 import { ChatMessage } from "./chat-message";
-import { MessagesContainer } from "./chat-messages";
-import { ToolStatusPill } from "./chat-tools";
 import { ChatWelcome } from "./chat-welcome";
 import { Markdown } from "./markdown";
 
@@ -41,7 +39,7 @@ export const Chat: FC = () => {
           logo={<ChatIcon />}
           visible={!hasMessages}
         />
-        <MessagesContainer>
+        <div className="hide-scrollbar pb-[calc(140px+env(safe-area-inset-bottom,0px))] flex flex-1 flex-col gap-3 overflow-visible pt-6 sm:pt-10 sm:pb-[140px]">
           {messages.length === 0 && (
             <ChatWelcome
               exampleQuestions={exampleQuestions}
@@ -66,9 +64,9 @@ export const Chat: FC = () => {
                         ? `completed`
                         : `in progress…`;
                     return (
-                      <ToolStatusPill key={`${message.id}-tool-${idx}`}>
-                        <RedPill>{`Blog Knowledge - ${statusText}`}</RedPill>
-                      </ToolStatusPill>
+                      <div className="my-3 mx-0 w-fit" key={`${message.id}-tool-${idx}`}>
+                        <RedPillNoReflection pillBodyClassName="h-8" pillLabelClassName="text-xs">{`Blog Knowledge - ${statusText}`}</RedPillNoReflection>
+                      </div>
                     );
                   }
                 }
@@ -82,7 +80,7 @@ export const Chat: FC = () => {
             </ChatMessage>
           )}
           <div ref={messagesEndRef} />
-        </MessagesContainer>
+        </div>
         <ChatInput
           input={input}
           handleSubmit={handleSubmit}

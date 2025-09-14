@@ -17,12 +17,6 @@
     @apply bg-gradient-to-r from-white/80 to-white/60 via-white/10 blur-xs opacity-85;
   }
 
-  .pill::after {
-    @apply content-[""] pointer-events-none;
-    @apply absolute bottom-4 left-24 right-24 h-14 rounded-[18px];
-    @apply bg-gradient-to-r from-white/80 to-white/60 via-white/10 blur-xs opacity-70;
-  }
-
   .pill:hover {
     @apply translate-y-[-2px] scale-105;
 
@@ -68,5 +62,9 @@
 
   .pill-blue-glass-lite {
     @apply bg-undo;
+  }
+
+  .pill-no-reflection::before {
+    content: none !important;
   }
 }
