@@ -2,18 +2,8 @@
 
 import { motion, stagger, Variants } from "framer-motion";
 import { FC } from "react";
-import styled from "styled-components";
 import { TechnologiesExperience } from "./technologies-experience";
 import { TechnologiesSkillsGrid } from "./technologies-skills-grid";
-
-const ContentWrapper = styled.div`
-  max-width: 1200px;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: ${(props) => props.theme.spacing[10]};
-  z-index: 2;
-`;
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -40,7 +30,7 @@ export interface TechnologiesProps {
 
 export const Technologies: FC<TechnologiesProps> = ({ author }) => (
   <div className="container-fluid flex max-w-6xl snap-start flex-col py-9">
-    <ContentWrapper>
+    <div className='max-w-[1200px] w-full flex flex-col z-10 gap-10'>
       <motion.div
         variants={containerVariants}
         initial="hidden"
@@ -58,6 +48,6 @@ export const Technologies: FC<TechnologiesProps> = ({ author }) => (
           <TechnologiesSkillsGrid />
         </motion.div>
       </motion.div>
-    </ContentWrapper>
+    </div>
   </div>
 );

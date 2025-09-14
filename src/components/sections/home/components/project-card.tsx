@@ -1,58 +1,9 @@
 import { CallToActionExternalWithTracking } from "@/components/design-system/atoms/call-to-actions/call-to-action-external-with-tracking";
 import { GlassmorphismBackground } from "@/components/design-system/atoms/effects/glassmorphism-background";
 import { ImageGlow } from "@/components/design-system/atoms/effects/image-glow";
-import { mediaQuery } from "@/components/design-system/utils/media-query";
 import { Project } from "@/types/projects";
 import { motion, Variants } from "framer-motion";
 import { FC } from "react";
-import styled from "styled-components";
-
-const ProjectContainer = styled(motion.div)`
-  margin: ${(props) => props.theme.spacing[4]} auto;
-  max-width: 1200px;
-`;
-
-const ProjectContentContainer = styled.div`
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-`;
-
-const ProjectImageContainer = styled(motion.div)`
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-  position: relative;
-  padding: 0;
-  margin-top: ${(props) => props.theme.spacing[3]};
-
-  ${mediaQuery.minWidth.md} {
-    margin-top: 0;
-    padding: ${(props) => props.theme.spacing[6]};
-    align-self: stretch;
-  }
-`;
-
-const CallToActionContainer = styled.div`
-  margin-top: ${(props) => props.theme.spacing[6]};
-  display: flex;
-  gap: ${(props) => props.theme.spacing[3]};
-  flex-wrap: wrap;
-`;
-
-const ProjectItem = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${(props) => props.theme.spacing[4]};
-
-  ${mediaQuery.minWidth.md} {
-    flex-direction: row;
-    gap: ${(props) => props.theme.spacing[4]};
-    margin: ${(props) => props.theme.spacing[4]} auto;
-  }
-`;
 
 const cardVariants: Variants = {
   hidden: {
@@ -78,7 +29,8 @@ const cardVariants: Variants = {
 export type ProjectProps = { project: Project };
 
 export const ProjectCard: FC<ProjectProps> = ({ project }) => (
-  <ProjectContainer
+  <motion.div
+    className="mx-auto my-5 max-w-[1200px]"
     variants={cardVariants}
     whileHover="hover"
     initial="hidden"
@@ -86,8 +38,8 @@ export const ProjectCard: FC<ProjectProps> = ({ project }) => (
     viewport={{ once: true, amount: 0.2 }}
   >
     <GlassmorphismBackground>
-      <ProjectItem>
-        <ProjectContentContainer>
+      <div className="flex flex-col gap-5 md:flex-row md:my-5 md:mx-auto">
+        <div className="flex flex-col flex-1">
           <h3 className="mb-3">{project.name}</h3>
           <p>{project.description}</p>
           <ul>
@@ -95,7 +47,7 @@ export const ProjectCard: FC<ProjectProps> = ({ project }) => (
               <li key={`${project.name}${feature}`}>{feature}</li>
             ))}
           </ul>
-          <CallToActionContainer>
+          <div className="mt-7 flex flex-wrap gap-4">
             {project.callToActions.map((callToAction) => (
               <CallToActionExternalWithTracking
                 key={callToAction.label}
@@ -111,11 +63,11 @@ export const ProjectCard: FC<ProjectProps> = ({ project }) => (
                 {callToAction.label}
               </CallToActionExternalWithTracking>
             ))}
-          </CallToActionContainer>
-        </ProjectContentContainer>
-        <ProjectImageContainer>
+          </div>
+        </div>
+        <div className="flex flex-1 justify-center items-center overflow-hidden relative p-0 mt-4 md:mt-0 md:p-7 self-stretch">
           <ImageGlow
-            className="relative object-cover w-full h-auto max-w-[500px] md:h-[100%] md:w-auto md:max-w-full"
+            className="relative h-auto w-full max-w-[500px] object-cover md:h-[100%] md:w-auto md:max-w-full"
             width={500}
             height={500}
             alt={project.name}
@@ -126,8 +78,8 @@ export const ProjectCard: FC<ProjectProps> = ({ project }) => (
               maxWidth: "500px",
             }}
           />
-        </ProjectImageContainer>
-      </ProjectItem>
+        </div>
+      </div>
     </GlassmorphismBackground>
-  </ProjectContainer>
+  </motion.div>
 );
