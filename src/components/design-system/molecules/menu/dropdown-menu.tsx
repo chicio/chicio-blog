@@ -1,8 +1,9 @@
-import { FC, useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { BiChevronDown } from "react-icons/bi";
-import { MenuItemWithTracking } from "./menu-item-with-tracking";
 import { TrackingData } from "@/types/tracking";
+import { AnimatePresence, motion } from "framer-motion";
+import { FC, useRef, useState } from "react";
+import { BiChevronDown } from "react-icons/bi";
+import { useReducedMotions } from "../../utils/hooks/use-reduced-motions";
+import { MenuItemWithTracking } from "./menu-item-with-tracking";
 
 export interface DropdownMenuItem {
   label: string;
@@ -25,6 +26,7 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
   className = "",
   chevronClassName = "",
 }) => {
+  const shouldReduceMotions = useReducedMotions();
   const [open, setOpen] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const selected = items.some(item => item.selected);
@@ -39,13 +41,13 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
 
   return (
     <div
-      className={`relative ${className} z-50`}
+      className={`relative z-50 mb-4 sm:mb-0`}
       tabIndex={-1}
       onBlur={handleBlur}
     >
       <button
         ref={buttonRef}
-        className={`xs:px-6 xs:py-1 hover:bg-accent-alpha-10 hover:text-accent hover:border-accent relative flex flex-nowrap items-center justify-center gap-2 rounded-xl border border-solid px-2 py-2 text-center text-sm leading-normal no-underline transition-all duration-300 text-shadow-md md:text-base ${open || selected ? "border-accent bg-accent-alpha-15 text-accent" : "border-transparent"}`}
+        className={`${className} xs:px-6 xs:py-1 hover:bg-accent-alpha-10 hover:text-accent hover:border-accent relative flex flex-nowrap items-center justify-center gap-2 rounded-xl border border-solid px-2 py-2 text-center text-sm leading-normal text-shadow-md md:text-base ${open || selected ? "border-accent bg-accent-alpha-15 text-accent" : "border-transparent"}`}
         aria-haspopup="menu"
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
@@ -63,7 +65,7 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.18 }}
-            className={`glow-container xs:min-w-[180px] sm:bg-general-background/90 relative mt-2 w-full rounded-xl py-2 sm:absolute sm:right-0 sm:left-0 sm:w-auto`}
+            className={`glow-container xs:min-w-[180px] ${shouldReduceMotions ? "sm:bg-general-background" : "sm:bg-general-background/90"} relative mt-2 w-full rounded-xl py-2 sm:absolute sm:right-0 sm:left-0 sm:w-auto`}
             tabIndex={-1}
             role="menu"
           >
