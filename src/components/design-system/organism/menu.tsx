@@ -49,14 +49,16 @@ const contentVariants: Variants = {
     height: "55px",
     transition: {
       type: "tween",
-      duration: 0.5,
+      ease: [0.4, 0, 0.2, 1],
+      duration: 0.6,
     },
   },
   expanded: {
     height: "100dvh",
     transition: {
       type: "tween",
-      duration: 0.5,
+      ease: [0.4, 0, 0.2, 1],
+      duration: 0.6,
     },
   },
 };
