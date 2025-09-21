@@ -128,20 +128,6 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
             >
               Blog
             </MenuItemWithTracking>
-            <MenuItemWithTracking
-              key="art"
-              className="xs:mb-0 xs:w-auto mb-2 w-80 sm:mr-5"
-              to={slugs.art}
-              selected={pathname === slugs.art}
-              trackingData={{
-                action: tracking.action.open_art,
-                category: trackingCategory,
-                label: tracking.label.header,
-              }}
-              onClickCallback={() => setShouldOpenMenu(false)}
-            >
-              Art
-            </MenuItemWithTracking>
             <DropdownMenu
               label="The Author"
               className="xs:mb-0 xs:w-auto z-50 mb-2 w-80 sm:mr-5"
@@ -155,6 +141,17 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
                     label: tracking.label.header,
                   },
                   selected: pathname === slugs.aboutMe,
+                  onClickCallback: () => setShouldOpenMenu(false),
+                },
+                {
+                  label: "Art",
+                  to: slugs.art,
+                  trackingData: {
+                    action: tracking.action.open_art,
+                    category: trackingCategory,
+                    label: tracking.label.header,
+                  },
+                  selected: pathname === slugs.art,
                   onClickCallback: () => setShouldOpenMenu(false),
                 },
                 {

@@ -3,7 +3,9 @@ import { AnimatePresence, motion } from "framer-motion";
 import { FC, useRef, useState } from "react";
 import { BiChevronDown } from "react-icons/bi";
 import { useReducedMotions } from "../../utils/hooks/use-reduced-motions";
+import { useIsMobile } from "../../utils/hooks/use-is-mobile";
 import { MenuItemWithTracking } from "./menu-item-with-tracking";
+import { debounce } from "@/lib/debounce/debounce";
 
 export interface DropdownMenuItem {
   label: string;
@@ -26,6 +28,7 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
   className = "",
   chevronClassName = "",
 }) => {
+  const isMobile = useIsMobile();
   const shouldReduceMotions = useReducedMotions();
   const [open, setOpen] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -64,7 +67,7 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
           <motion.div
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.18 }}
+            transition={isMobile ? { duration: 0 } : { duration: 0.3 }}
             className={`glow-container xs:min-w-[180px] ${shouldReduceMotions ? "sm:bg-general-background" : "sm:bg-general-background/90"} relative mt-2 w-full rounded-xl py-2 sm:absolute sm:right-0 sm:left-0 sm:w-auto`}
             tabIndex={-1}
             role="menu"
@@ -77,7 +80,6 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
                 selected={item.selected ?? false}
                 className="m-2"
                 onClickCallback={() => {
-                  setOpen(false);
                   item.onClickCallback?.();
                 }}
               >
