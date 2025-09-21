@@ -16,13 +16,14 @@ import { usePathname } from "next/navigation";
 import { FC, useState } from "react";
 import { Overlay } from "../atoms/effects/overlay";
 import { Close } from "../molecules/menu/close";
+import { DropdownMenu } from "../molecules/menu/dropdown-menu";
 import { HamburgerMenu } from "../molecules/menu/hamburger-menu";
 import { MenuItemWithTracking } from "../molecules/menu/menu-item-with-tracking";
+import { useGlassmorphism } from "../utils/hooks/use-glassmorphism";
 import {
   ScrollDirection,
   useScrollDirection,
 } from "../utils/hooks/use-scroll-direction";
-import { useGlassmorphism } from "../utils/hooks/use-glassmorphism";
 
 export const menuHeightNumber = 55;
 
@@ -45,15 +46,20 @@ const menuVariants: Variants = {
 
 const contentVariants: Variants = {
   collapsed: {
-    maxHeight: menuHeightNumber,
+    height: "55px",
     transition: {
       type: "tween",
+      ease: [0.4, 0, 0.2, 1],
+      duration: 0.6,
     },
   },
   expanded: {
-    maxHeight: 400,
+    height: "100dvh",
     transition: {
       type: "tween",
+      ease: [0.4, 0, 0.2, 1],
+      duration: 0.6,
+      delay: 0.3,
     },
   },
 };
@@ -83,15 +89,17 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
         animate={shouldHideMenu ? "hidden" : "visible"}
         initial="visible"
       >
-        <div className={`${glassmorphismClass} xs:border-r-1 xs:border-l-1 mx-auto my-0 w-full overflow-hidden rounded-t-none border-t-0 border-r-0 border-l-0`}>
+        <div
+          className={`${glassmorphismClass} xs:border-r-1 xs:border-l-1 mx-auto my-0 w-full overflow-hidden rounded-t-none border-t-0 border-r-0 border-l-0 sm:overflow-visible`}
+        >
           <motion.div
             variants={contentVariants}
             initial="collapsed"
             animate={shouldOpenMenu ? "expanded" : "collapsed"}
-            className="flex flex-col xs:flex-row items-center xs:py-0 xs:px-5 m-0  min-h-[55px] pt-[55px]"
+            className={`xs:flex-row xs:py-0 xs:px-5 m-0 flex min-h-[55px] flex-col items-center pt-[55px] ${shouldOpenMenu ? "hide-scrollbar touch-pan-y overflow-y-scroll" : ""}`}
           >
             <MenuItemWithTracking
-              className="w-full xs:w-auto sm:mr-5"
+              className="xs:w-auto w-full sm:mr-5"
               key="home"
               to={"/"}
               selected={pathname === "/"}
@@ -106,7 +114,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
             </MenuItemWithTracking>
             <MenuItemWithTracking
               key="blog"
-              className="w-80 mb-2 xs:mb-0 xs:w-auto sm:mr-5"
+              className="xs:mb-0 xs:w-auto mb-2 w-80 sm:mr-5"
               to={slugs.blog}
               selected={
                 pathname.includes(slugs.blog) && pathname !== slugs.aboutMe
@@ -120,48 +128,45 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
             >
               Blog
             </MenuItemWithTracking>
-            <MenuItemWithTracking
-              key="art"
-              className="w-80 mb-2 xs:mb-0 xs:w-auto sm:mr-5"
-              to={slugs.art}
-              selected={pathname === slugs.art}
-              trackingData={{
-                action: tracking.action.open_art,
-                category: trackingCategory,
-                label: tracking.label.header,
-              }}
-              onClickCallback={() => setShouldOpenMenu(false)}
-            >
-              Art
-            </MenuItemWithTracking>
-            <MenuItemWithTracking
-              key="aboutMe"
-              className="w-80 mb-2 xs:mb-0 xs:w-auto sm:mr-5"
-              to={slugs.aboutMe}
-              selected={pathname === slugs.aboutMe}
-              trackingData={{
-                action: tracking.action.open_about_me,
-                category: trackingCategory,
-                label: tracking.label.header,
-              }}
-              onClickCallback={() => setShouldOpenMenu(false)}
-            >
-              About me
-            </MenuItemWithTracking>
-            <MenuItemWithTracking
-              key="chat"
-              className="w-80 mb-2 xs:mb-0 xs:w-auto sm:mr-5"
-              to={slugs.chat}
-              selected={pathname === slugs.chat}
-              trackingData={{
-                action: tracking.action.open_chat,
-                category: trackingCategory,
-                label: tracking.label.header,
-              }}
-              onClickCallback={() => setShouldOpenMenu(false)}
-            >
-              Chat
-            </MenuItemWithTracking>
+            <DropdownMenu
+              label="The Author"
+              className="xs:mb-0 xs:w-auto z-50 mb-2 w-80 sm:mr-5"
+              items={[
+                {
+                  label: "About me",
+                  to: slugs.aboutMe,
+                  trackingData: {
+                    action: tracking.action.open_about_me,
+                    category: trackingCategory,
+                    label: tracking.label.header,
+                  },
+                  selected: pathname === slugs.aboutMe,
+                  onClickCallback: () => setShouldOpenMenu(false),
+                },
+                {
+                  label: "Art",
+                  to: slugs.art,
+                  trackingData: {
+                    action: tracking.action.open_art,
+                    category: trackingCategory,
+                    label: tracking.label.header,
+                  },
+                  selected: pathname === slugs.art,
+                  onClickCallback: () => setShouldOpenMenu(false),
+                },
+                {
+                  label: "Chat",
+                  to: slugs.chat,
+                  trackingData: {
+                    action: tracking.action.open_chat,
+                    category: trackingCategory,
+                    label: tracking.label.header,
+                  },
+                  selected: pathname === slugs.chat,
+                  onClickCallback: () => setShouldOpenMenu(false),
+                },
+              ]}
+            />
             {!startSearch && (
               <div className="xs:hidden absolute top-2.5 left-2.5">
                 {!shouldOpenMenu && (
@@ -195,7 +200,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
         {(shouldOpenMenu || startSearch) && (
           <Overlay
             key="menu-overlay"
-            delay={0.1}
+            delay={0.05}
             onClick={() => {
               if (shouldOpenMenu) {
                 setShouldOpenMenu(false);

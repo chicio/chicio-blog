@@ -50,11 +50,11 @@ export const useSearch = (
         } else {
           setSearch({ type: "search", results: [] });
         }
-      }, 300),
+      }, 100),
     [searchIndex],
   );
 
-  const handleSearch = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+  const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
       if (!startSearch) {
         return;
       }
@@ -63,13 +63,15 @@ export const useSearch = (
 
     const easterEggResult = easterEgg(value);
 
+    console.log({ easterEggResult });
+
     if (easterEggResult) {
       setSearch(easterEggResult);
       return;
     }
 
     debouncedSearch(value);
-  }, [debouncedSearch, easterEgg, startSearch]);
+  };
 
   const resetSearch = () => setSearch({ type: "search", results: [] });
 
