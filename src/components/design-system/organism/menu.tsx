@@ -16,14 +16,14 @@ import { usePathname } from "next/navigation";
 import { FC, useState } from "react";
 import { Overlay } from "../atoms/effects/overlay";
 import { Close } from "../molecules/menu/close";
+import { DropdownMenu } from "../molecules/menu/dropdown-menu";
 import { HamburgerMenu } from "../molecules/menu/hamburger-menu";
 import { MenuItemWithTracking } from "../molecules/menu/menu-item-with-tracking";
-import { DropdownMenu } from "../molecules/menu/dropdown-menu";
+import { useGlassmorphism } from "../utils/hooks/use-glassmorphism";
 import {
   ScrollDirection,
   useScrollDirection,
 } from "../utils/hooks/use-scroll-direction";
-import { useGlassmorphism } from "../utils/hooks/use-glassmorphism";
 
 export const menuHeightNumber = 55;
 
@@ -59,6 +59,7 @@ const contentVariants: Variants = {
       type: "tween",
       ease: [0.4, 0, 0.2, 1],
       duration: 0.6,
+      delay: 0.3,
     },
   },
 };
@@ -95,7 +96,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
             variants={contentVariants}
             initial="collapsed"
             animate={shouldOpenMenu ? "expanded" : "collapsed"}
-            className="xs:flex-row xs:py-0 xs:px-5 m-0 flex min-h-[55px] flex-col items-center pt-[55px]"
+            className={`xs:flex-row xs:py-0 xs:px-5 m-0 flex min-h-[55px] flex-col items-center pt-[55px] ${shouldOpenMenu ? "hide-scrollbar touch-pan-y overflow-y-scroll" : ""}`}
           >
             <MenuItemWithTracking
               className="xs:w-auto w-full sm:mr-5"
@@ -202,7 +203,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
         {(shouldOpenMenu || startSearch) && (
           <Overlay
             key="menu-overlay"
-            delay={0.1}
+            delay={0.05}
             onClick={() => {
               if (shouldOpenMenu) {
                 setShouldOpenMenu(false);
