@@ -1,5 +1,11 @@
 # Changelog
 
+## [3.1.0](https://github.com/chicio/chicio-blog/compare/v3.0.0...v3.1.0) (2025-09-21)
+
+### Features
+
+* **ux:** :lipstick: Menu dropdown ([#87](https://github.com/chicio/chicio-blog/issues/87)) ([18cd496](https://github.com/chicio/chicio-blog/commit/18cd4960cd76487bb983ceb5900e23bb3a728ad3))
+
 ## [3.0.0](https://github.com/chicio/chicio-blog/compare/v2.10.0...v3.0.0) (2025-09-14)
 
 ### Features
