@@ -46,15 +46,17 @@ const menuVariants: Variants = {
 
 const contentVariants: Variants = {
   collapsed: {
-    maxHeight: menuHeightNumber,
+    height: "55px",
     transition: {
       type: "tween",
+      duration: 0.5,
     },
   },
   expanded: {
-    maxHeight: 400,
+    height: "100dvh",
     transition: {
       type: "tween",
+      duration: 0.5,
     },
   },
 };
