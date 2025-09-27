@@ -96,10 +96,10 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
             variants={contentVariants}
             initial="collapsed"
             animate={shouldOpenMenu ? "expanded" : "collapsed"}
-            className={`xs:flex-row xs:py-0 xs:px-5 m-0 flex min-h-[55px] flex-col items-center pt-[55px] ${shouldOpenMenu ? "hide-scrollbar touch-pan-y overflow-y-scroll" : ""}`}
+            className={`xs:flex-row xs:py-0 xs:px-5 m-0 flex min-h-[55px] flex-col items-center gap-1 pt-[55px] ${shouldOpenMenu ? "hide-scrollbar touch-pan-y overflow-y-scroll" : ""}`}
           >
             <MenuItemWithTracking
-              className="xs:w-auto w-full sm:mr-5"
+              className="xs:w-auto w-full"
               key="home"
               to={"/"}
               selected={pathname === "/"}
@@ -114,7 +114,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
             </MenuItemWithTracking>
             <MenuItemWithTracking
               key="blog"
-              className="xs:mb-0 xs:w-auto mb-2 w-80 sm:mr-5"
+              className="xs:mb-0 xs:w-auto mb-2 w-80"
               to={slugs.blog}
               selected={
                 pathname.includes(slugs.blog) && pathname !== slugs.aboutMe
@@ -129,8 +129,25 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
               Blog
             </MenuItemWithTracking>
             <DropdownMenu
+              label="DSA"
+              className="xs:mb-0 xs:w-auto z-50 mb-2 w-80"
+              items={[
+                {
+                  label: "Arrays",
+                  to: slugs.arrays,
+                  trackingData: {
+                    action: tracking.action.open_dsa_arrays,
+                    category: trackingCategory,
+                    label: tracking.label.header,
+                  },
+                  selected: pathname === slugs.arrays,
+                  onClickCallback: () => setShouldOpenMenu(false),
+                },
+              ]}
+            />
+            <DropdownMenu
               label="The Author"
-              className="xs:mb-0 xs:w-auto z-50 mb-2 w-80 sm:mr-5"
+              className="xs:mb-0 xs:w-auto z-50 mb-2 w-80"
               items={[
                 {
                   label: "About me",

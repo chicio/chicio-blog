@@ -37,7 +37,8 @@ export const tracking = {
     open_blog_tag: "open_blog_tag",
     pull_to_refresh: "pull_to_refresh",
     red_pill: "red_pill",
-    blue_pill: "blue_pill"
+    blue_pill: "blue_pill",
+    open_dsa_arrays: "open_dsa_arrays",
   },
   category: {
     home: "home",
