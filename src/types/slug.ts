@@ -1,5 +1,3 @@
-import { array } from "zod";
-
 const blog = '/blog'
 const blogPost = `${blog}/post`;
 const dsa = `/data-structures-and-algorithms`;

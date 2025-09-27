@@ -1,0 +1,148 @@
+import { MemoryContiguityDiagram } from "../../components/sections/dsa/MemoryContiguityDiagram";
+import { DynamicArrayVisualizer } from "../../components/sections/dsa/DynamicArrayVisualizer";
+
+# Arrays
+
+Arrays are one of the most fundamental data structures in computer science. They store elements in contiguous memory and allow **O(1) access by index**.
+
+---
+
+## 1. Static vs. Dynamic Arrays
+
+### Static Arrays
+
+- **C**
+```c
+int arr[5] = {1, 2, 3, 4, 5};
+```
+- **C++**
+```cpp
+int arr[5] = {1, 2, 3, 4, 5};
+```
+- **Java**
+```java
+int[] arr = {1, 2, 3, 4, 5};
+```
+- **Kotlin**
+```kotlin
+val arr = intArrayOf(1, 2, 3, 4, 5)
+```
+
+### Dynamic Arrays
+
+- **C**
+```c
+#include <stdlib.h>
+int* arr = malloc(2 * sizeof(int));
+arr[0] = 1; arr[1] = 2;
+arr = realloc(arr, 3 * sizeof(int));
+arr[2] = 3;
+```
+- **C++**
+```cpp
+#include <vector>
+std::vector<int> arr = {1,2,3};
+arr.push_back(4);
+```
+- **Java**
+```java
+import java.util.ArrayList;
+ArrayList<Integer> arr = new ArrayList<>();
+arr.add(10);
+arr.add(20);
+```
+- **Python**
+```python
+arr = [1, 2, 3]
+arr.append(4)
+```
+- **TypeScript**
+```typescript
+let arr: number[] = [1,2,3];
+arr.push(4)
+```
+- **Swift**
+```swift
+var arr = [1,2,3]
+arr.append(4)
+```
+- **Kotlin**
+```kotlin
+val arr = mutableListOf(1,2,3)
+arr.add(4)
+```
+
+---
+
+## 2. Operations and Time Complexity
+
+| Operation         | Static Array | Dynamic Array |
+|-------------------|--------------|---------------|
+| Access by index   | O(1)         | O(1)          |
+| Update by index   | O(1)         | O(1)          |
+| Insert at end     | Not allowed  | Amortized O(1)|
+| Insert at middle  | O(n)         | O(n)          |
+| Delete at end     | O(n)         | O(1)          |
+| Delete at middle  | O(n)         | O(n)          |
+
+---
+
+## 3. Memory Contiguity
+
+Memory for arrays is allocated contiguously. This allows **constant-time access** and cache-friendly operations.
+
+<MemoryContiguityDiagram />
+
+---
+
+## 4. Dynamic Array Growth
+
+The capacity of a dynamic array doubles when full. This ensures that most insertions remain O(1) on average (amortized complexity).
+
+<DynamicArrayVisualizer />
+
+---
+
+## 5. Core Techniques with Arrays
+
+### Two Pointers
+Used to traverse an array from two directions or speeds.
+
+{/* <TypeScriptSnippet
+code={`function moveZeroes(nums: number[]): void {
+  let i = 0;
+  for (let j = 0; j < nums.length; j++) {
+    if (nums[j] !== 0) {
+      [nums[i], nums[j]] = [nums[j], nums[i]];
+      i++;
+    }
+  }
+}`} 
+language="typescript"
+/> */}
+
+### Prefix/Suffix Arrays
+Precompute cumulative results for fast queries (e.g., Product of Array Except Self).
+
+### Greedy Iteration
+Choose the local optimal decision while traversing the array.  
+Example: Best Time to Buy and Sell Stock II.
+
+---
+
+## 6. Practice Problems
+
+  **Technique:** Two Pointers / In-place  
+  **LeetCode:** [link](https://leetcode.com/problems/move-zeroes/)  
+  **Solution:** [GitHub link]
+
+  **Technique:** Boyer–Moore Voting  
+  **LeetCode:** [link](https://leetcode.com/problems/majority-element/)  
+  **Solution:** [GitHub link]
+
+
+---
+
+## 7. Conclusion
+
+Arrays are foundational. Mastering dynamic/static arrays, amortized insertions, and techniques like **two pointers** or **prefix sums** prepares you for advanced data structure problems.
