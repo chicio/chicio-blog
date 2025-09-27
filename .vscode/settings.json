@@ -1,7 +1,7 @@
 {
     "conventionalCommits.scopes": [
-        "tailwind",
         "performance",
-        "ux"
+        "ux",
+        "capabilities"
     ]
 }
