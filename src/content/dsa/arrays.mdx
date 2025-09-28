@@ -1,148 +1,194 @@
 import { MemoryContiguityDiagram } from "../../components/sections/dsa/MemoryContiguityDiagram";
 import { DynamicArrayVisualizer } from "../../components/sections/dsa/DynamicArrayVisualizer";
+import { CacheLocalityDiagram } from "../../components/sections/dsa/CacheLocalityDiagram";
+import { Accordion } from "../../components/sections/dsa/Accordion";
+
+///https://www.geeksforgeeks.org/dsa/difference-between-static-arrays-and-dynamic-arrays/
 
 # Arrays
 
-Arrays are one of the most fundamental data structures in computer science. They store elements in contiguous memory and allow **O(1) access by index**.
+Arrays are one of the most fundamental data structures in computer science. 
+They provide a way to store elements in a contiguous block of memory, allowing efficient access and manipulation.
 
----
+## What is an Array?
 
-## 1. Static vs. Dynamic Arrays
+An **array** is a collection of elements identified by an index or a key, stored in contiguous memory locations.
 
-### Static Arrays
+### Static vs Dynamic Arrays
 
-- **C**
+- **Static Arrays**: fixed size, allocated at compile-time (C, C++).  
+- **Dynamic Arrays**: flexible size, can grow/shrink during execution (Python, Java, TypeScript, Swift, Kotlin).  
+
+### Examples
+
+Below you can find examples of both static and dynamic arrays in various programming languages.
+
+#### Static Arrays
+
+**C**  
 ```c
 int arr[5] = {1, 2, 3, 4, 5};
 ```
-- **C++**
+
+**C++**  
 ```cpp
 int arr[5] = {1, 2, 3, 4, 5};
 ```
-- **Java**
+
+#### Dynamic Arrays
+
+**Java**  
 ```java
-int[] arr = {1, 2, 3, 4, 5};
-```
-- **Kotlin**
-```kotlin
-val arr = intArrayOf(1, 2, 3, 4, 5)
+int[] arr = new int[5];
 ```
 
-### Dynamic Arrays
-
-- **C**
-```c
-#include <stdlib.h>
-int* arr = malloc(2 * sizeof(int));
-arr[0] = 1; arr[1] = 2;
-arr = realloc(arr, 3 * sizeof(int));
-arr[2] = 3;
-```
-- **C++**
-```cpp
-#include <vector>
-std::vector<int> arr = {1,2,3};
-arr.push_back(4);
-```
-- **Java**
-```java
-import java.util.ArrayList;
-ArrayList<Integer> arr = new ArrayList<>();
-arr.add(10);
-arr.add(20);
-```
-- **Python**
+**Python**  
 ```python
-arr = [1, 2, 3]
-arr.append(4)
+arr = [1, 2, 3, 4, 5]
 ```
-- **TypeScript**
+
+**TypeScript**  
 ```typescript
-let arr: number[] = [1,2,3];
-arr.push(4)
+let arr: number[] = [1, 2, 3, 4, 5];
 ```
-- **Swift**
+
+**Swift**  
 ```swift
-var arr = [1,2,3]
-arr.append(4)
+var arr: [Int] = [1, 2, 3, 4, 5]
 ```
-- **Kotlin**
+
+**Kotlin**  
 ```kotlin
-val arr = mutableListOf(1,2,3)
-arr.add(4)
+val arr = arrayListOf(1, 2, 3, 4, 5)
 ```
 
----
+## Operations and Time Complexity
 
-## 2. Operations and Time Complexity
-
-| Operation         | Static Array | Dynamic Array |
-|-------------------|--------------|---------------|
-| Access by index   | O(1)         | O(1)          |
-| Update by index   | O(1)         | O(1)          |
-| Insert at end     | Not allowed  | Amortized O(1)|
-| Insert at middle  | O(n)         | O(n)          |
-| Delete at end     | O(n)         | O(1)          |
-| Delete at middle  | O(n)         | O(n)          |
-
----
-
-## 3. Memory Contiguity
-
-Memory for arrays is allocated contiguously. This allows **constant-time access** and cache-friendly operations.
+| Operation       | Average Case | Worst Case |
+|-----------------|--------------|------------|
+| Access          | O(1)         | O(1)       |
+| Search          | O(n)         | O(n)       |
+| Insert (end)    | O(1)         | O(n)       |
+| Insert (middle) | O(n)         | O(n)       |
+| Delete (end)    | O(1)         | O(n)       |
+| Delete (middle) | O(n)         | O(n)       |
 
 <MemoryContiguityDiagram />
 
 ---
 
-## 4. Dynamic Array Growth
+## Cache Locality and Performance
 
-The capacity of a dynamic array doubles when full. This ensures that most insertions remain O(1) on average (amortized complexity).
+One reason arrays are **fast** is because of **cache locality**.  
+Since elements are stored **contiguously**, the CPU can prefetch upcoming values efficiently.  
+
+<CacheLocalityDiagram />
+
+**Key Insight:** Iterating over an array is faster than traversing a linked list because the CPU cache works optimally with contiguous memory.
+
+## Dynamic Array Growth
+
+Dynamic arrays resize when capacity is reached.
 
 <DynamicArrayVisualizer />
 
----
+**Key Insight:** resizing is costly (O(n)), but happens infrequently, so average insertion remains O(1).
 
-## 5. Core Techniques with Arrays
+## Arrays as Building Blocks
 
-### Two Pointers
-Used to traverse an array from two directions or speeds.
+Arrays form the foundation for other data structures:
 
-{/* <TypeScriptSnippet
-code={`function moveZeroes(nums: number[]): void {
-  let i = 0;
-  for (let j = 0; j < nums.length; j++) {
-    if (nums[j] !== 0) {
-      [nums[i], nums[j]] = [nums[j], nums[i]];
-      i++;
-    }
-  }
-}`} 
-language="typescript"
-/> */}
+- **Stack** (LIFO): push/pop on top of array.  
+- **Queue** (FIFO): enqueue/dequeue using circular buffer.  
+- **Hash Tables**: arrays for buckets.  
+- **Heaps**: binary heap stored as array.  
 
-### Prefix/Suffix Arrays
-Precompute cumulative results for fast queries (e.g., Product of Array Except Self).
+For example below you can find a small example of a stack implemented using an array in Python:
 
-### Greedy Iteration
-Choose the local optimal decision while traversing the array.  
-Example: Best Time to Buy and Sell Stock II.
+```python
+stack = []
 
----
+stack.append(10) # push
+stack.append(20)
+print(stack.pop()) # pop => 20
+```
 
-## 6. Practice Problems
+## Techniques
 
-  **Technique:** Two Pointers / In-place  
-  **LeetCode:** [link](https://leetcode.com/problems/move-zeroes/)  
-  **Solution:** [GitHub link]
+Here are the main **array techniques** with descriptions and examples:
 
-  **Technique:** Boyer–Moore Voting  
-  **LeetCode:** [link](https://leetcode.com/problems/majority-element/)  
-  **Solution:** [GitHub link]
+### Two-Pointer Technique
+Used for problems involving pairs or subsequences.  
+**Example**: Move Zeroes.
+
+```python
+def moveZeroes(nums):
+    left = 0
+    for right in range(len(nums)):
+        if nums[right] != 0:
+            nums[left], nums[right] = nums[right], nums[left]
+            left += 1
+```
+
+### Prefix Sum
+Helps compute cumulative sums efficiently.  
+**Example**: Product of Array Except Self.
+
+### Sliding Window
+For subarray/subsequence problems.  
+**Example**: Best Time to Buy and Sell Stock.
+
+### Hashing
+Use hashmaps for frequency or fast lookup.  
+**Example**: Majority Element.
+
+### Sorting
+Sometimes sorting simplifies the problem.  
+**Example**: First Missing Positive.
+
+<Accordion title="Why use these techniques?">
+They are reusable blueprints for solving many array-related problems efficiently.
+</Accordion>
+
+## Exercises
+
+Below is the full list of practice problems with solution links.
+
+- [Move Zeroes](https://leetcode.com/problems/move-zeroes/) — *Two Pointers*  
+  [Solution](https://github.com/your-github/leetcode-solutions)
+
+- [Majority Element](https://leetcode.com/problems/majority-element/) — *Hashing / Boyer-Moore Voting*  
+  [Solution](https://github.com/your-github/leetcode-solutions)
+
+- [Remove Duplicates from Sorted Array](https://leetcode.com/problems/remove-duplicates-from-sorted-array/) — *Two Pointers*  
+  [Solution](https://github.com/your-github/leetcode-solutions)
+
+- [Best Time to Buy and Sell Stock](https://leetcode.com/problems/best-time-to-buy-and-sell-stock/) — *Sliding Window*  
+  [Solution](https://github.com/your-github/leetcode-solutions)
+
+- [Rotate Array](https://leetcode.com/problems/rotate-array/) — *Array Rotation*  
+  [Solution](https://github.com/your-github/leetcode-solutions)
+
+- [Product of Array Except Self](https://leetcode.com/problems/product-of-array-except-self/) — *Prefix Product*  
+  [Solution](https://github.com/your-github/leetcode-solutions)
+
+- [Best Time to Buy and Sell Stock II](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/) — *Greedy / Sliding Window*  
+  [Solution](https://github.com/your-github/leetcode-solutions)
+
+- [Number of Zero-Filled Subarrays](https://leetcode.com/problems/number-of-zero-filled-subarrays/) — *Counting*  
+  [Solution](https://github.com/your-github/leetcode-solutions)
+
+- [Increasing Triplet Subsequence](https://leetcode.com/problems/increasing-triplet-subsequence/) — *Greedy*  
+  [Solution](https://github.com/your-github/leetcode-solutions)
+
+- [First Missing Positive](https://leetcode.com/problems/first-missing-positive/) — *Index Mapping / In-Place Hashing*  
+  [Solution](https://github.com/your-github/leetcode-solutions)
 
 
----
+## 9. Key Insights
 
-## 7. Conclusion
-
-Arrays are foundational. Mastering dynamic/static arrays, amortized insertions, and techniques like **two pointers** or **prefix sums** prepares you for advanced data structure problems.
+- Arrays are **contiguous memory structures**.  
+- Cache locality makes arrays faster than linked lists for iteration.  
+- Dynamic arrays balance flexibility with resizing cost.  
+- Arrays are **building blocks** for stacks, queues, heaps, and hash tables.  
+- Techniques like **two pointers, prefix sums, sliding windows** are essential for array-based problem solving.
