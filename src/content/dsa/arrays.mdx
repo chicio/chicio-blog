@@ -94,6 +94,18 @@ Dynamic arrays resize when capacity is reached.
 
 **Key Insight:** resizing is costly (O(n)), but happens infrequently, so average insertion remains O(1).
 
+## Detailed Comparison
+
+| Feature | Static Array | Dynamic Array |
+|---------|--------------|---------------|
+| **Size** | Fixed at compile-time | Flexible, resizes at runtime |
+| **Memory** | Allocated once | Can grow/shrink, may require reallocation |
+| **Efficiency** | Fast access, no resizing cost | Amortized O(1) insertion, but resizing costs O(n) |
+| **Flexibility** | Rigid, not suited for unknown sizes | Very flexible, suited for dynamic data |
+| **Languages** | C, C++ | Python, Java, Swift, Kotlin, TypeScript |
+
+**Key Insight:** Static arrays are better when the size is known and fixed; dynamic arrays excel when flexibility is needed.
+
 ## Arrays as Building Blocks
 
 Arrays form the foundation for other data structures:
