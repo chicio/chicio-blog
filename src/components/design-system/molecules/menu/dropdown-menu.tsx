@@ -5,7 +5,6 @@ import { BiChevronDown } from "react-icons/bi";
 import { useReducedMotions } from "../../utils/hooks/use-reduced-motions";
 import { useIsMobile } from "../../utils/hooks/use-is-mobile";
 import { MenuItemWithTracking } from "./menu-item-with-tracking";
-import { debounce } from "@/lib/debounce/debounce";
 
 export interface DropdownMenuItem {
   label: string;
@@ -64,10 +63,8 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
       </button>
       <AnimatePresence>
         {open && (
-          <motion.div
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={isMobile ? { duration: 0 } : { duration: 0.3 }}
+          <div
+            key={"dropdown-menu"}
             className={`glow-container xs:min-w-[180px] ${shouldReduceMotions ? "sm:bg-general-background" : "sm:bg-general-background/90"} relative mt-2 w-full rounded-xl py-2 sm:absolute sm:right-0 sm:left-0 sm:w-auto`}
             tabIndex={-1}
             role="menu"
@@ -86,7 +83,7 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
                 {item.label}
               </MenuItemWithTracking>
             ))}
-          </motion.div>
+          </div>
         )}
       </AnimatePresence>
     </div>
