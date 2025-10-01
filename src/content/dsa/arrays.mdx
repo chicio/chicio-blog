@@ -1,9 +1,5 @@
-import { MemoryContiguityDiagram } from "../../components/sections/dsa/MemoryContiguityDiagram";
 import { DynamicArrayVisualizer } from "../../components/sections/dsa/DynamicArrayVisualizer";
-import { CacheLocalityDiagram } from "../../components/sections/dsa/CacheLocalityDiagram";
 import { Accordion } from "../../components/sections/dsa/Accordion";
-
-///https://www.geeksforgeeks.org/dsa/difference-between-static-arrays-and-dynamic-arrays/
 
 # Arrays
 
@@ -12,55 +8,25 @@ They provide a way to store elements in a contiguous block of memory, allowing e
 
 ## What is an Array?
 
-An **array** is a collection of elements identified by an index or a key, stored in contiguous memory locations.
+An **array** is a fundamental data structure that stores a collection of elements of the same type in contiguous memory locations. 
+Each element in the array can be accessed directly using its index, which makes operations like retrieval and traversal very efficient. 
+Arrays are widely used because they provide a simple and systematic way to organize data in memory.
 
-### Static vs Dynamic Arrays
+Arrays are important in computer science and programming because they form the foundation for more advanced data structures such 
+as matrices, heaps, hash tables, and even dynamic arrays. They allow developers to efficiently store and process large amounts of data, 
+making them essential for algorithms in searching, sorting, and optimization.
 
-- **Static Arrays**: fixed size, allocated at compile-time (C, C++).  
-- **Dynamic Arrays**: flexible size, can grow/shrink during execution (Python, Java, TypeScript, Swift, Kotlin).  
+### Memory Representation
 
-### Examples
+At the memory level, arrays are stored in consecutive memory addresses. The index of an element acts as an offset from the base address of the array. 
+For example, if the base address of the array is $A[0]$, and each element at position $i$ where $0 < i < \text{Length}(A)$ has a size $\text{Size}(A[i])$, then the
+ address of $A[i]$ can be calculated as:
 
-Below you can find examples of both static and dynamic arrays in various programming languages.
+$$
+\text{Address}(A[i]) = \text{BaseAddress}(A[0]) + i \times \text{Size}(A[i])
+$$
 
-#### Static Arrays
-
-**C**  
-```c
-int arr[5] = {1, 2, 3, 4, 5};
-```
-
-**C++**  
-```cpp
-int arr[5] = {1, 2, 3, 4, 5};
-```
-
-#### Dynamic Arrays
-
-**Java**  
-```java
-int[] arr = new int[5];
-```
-
-**Python**  
-```python
-arr = [1, 2, 3, 4, 5]
-```
-
-**TypeScript**  
-```typescript
-let arr: number[] = [1, 2, 3, 4, 5];
-```
-
-**Swift**  
-```swift
-var arr: [Int] = [1, 2, 3, 4, 5]
-```
-
-**Kotlin**  
-```kotlin
-val arr = arrayListOf(1, 2, 3, 4, 5)
-```
+This direct mapping ensures constant-time access $O(1)$ to any element in the array.
 
 ## Operations and Time Complexity
 
@@ -73,38 +39,189 @@ val arr = arrayListOf(1, 2, 3, 4, 5)
 | Delete (end)    | O(1)         | O(n)       |
 | Delete (middle) | O(n)         | O(n)       |
 
-<MemoryContiguityDiagram />
+### Classification of Arrays
 
----
+Arrays can be classified in two main ways:
 
-## Cache Locality and Performance
+1. **Based on Size**  
+   - **Static Arrays**: The size of the array is fixed at compile time and cannot be changed later. 
+   These arrays are simple and efficient but lack flexibility.  
+   - **Dynamic Arrays**: The size of the array can change at runtime. When the array reaches its capacity, 
+   it automatically resizes to accommodate more elements. This provides flexibility at the cost of some performance overhead during resizing.
 
-One reason arrays are **fast** is because of **cache locality**.  
-Since elements are stored **contiguously**, the CPU can prefetch upcoming values efficiently.  
+2. **Based on Dimensions**  
+   - **One-dimensional Arrays**: A linear list of elements accessed using a single index.  
+   - **Multi-dimensional Arrays**: Arrays with two or more indices. For example, a two-dimensional array represents data in rows 
+   and columns (like a matrix), while higher dimensions extend this concept to 3D or beyond.
 
-<CacheLocalityDiagram />
+### Static vs Dynamic Arrays
 
-**Key Insight:** Iterating over an array is faster than traversing a linked list because the CPU cache works optimally with contiguous memory.
+An array can be either *static* or *dynamic*, depending on whether its size is fixed or flexible at runtime. 
 
-## Dynamic Array Growth
+#### Static Arrays
 
-Dynamic arrays resize when capacity is reached.
+The size of a **static array** is fixed at compile-time or at allocation, and cannot change during execution.
+The memory is allocated once, and it remains contiguous throughout the life of the array. 
+These arrays are often allocated on the **stack** (in languages like C) or in a fixed block of memory. 
+Because there is no overhead to resizing, operations like indexing are extremely efficient (O(1) in time). 
+Static arrays are simpler and safer in contexts where the maximum size is known in advance.
+
+The advantages of static arrays:
+- No resizing overhead or runtime allocation cost.  
+- Memory layout is predictable.  
+- Lower overhead in memory management (no reallocation).  
+
+The disadvantages of static arrays:
+- Inflexible: cannot grow beyond the allocated size.  
+- Potentially wasteful if the allocated size is much larger than what’s used.  
+- Not suitable when data size is dynamic or unknown.
+
+#### Dynamic Arrays
+
+A **dynamic array** can grow (or sometimes shrink) during runtime, adjusting to the number of elements it needs to hold.  
+Internally, a dynamic array maintains a `capacity`, that is the total allocated space, and a `size`, that is the number of elements in use.  
+When the size reaches the `capacity` and a new element is added, the dynamic array will **resize**.  
+The typical pattern is:
+
+- if `size == capacity`, allocate a new buffer, usually of size `capacity * 2`.  
+- copy all existing elements to the new buffer.  
+- free the old buffer (or let GC collect it).  
+- continue adding the new element.
+
+This doubling strategy ensures that while a single resize is expensive ($O(n)$), over many insertions the **amortized cost per insertion** remains $O(1)$.  
 
 <DynamicArrayVisualizer />
 
-**Key Insight:** resizing is costly (O(n)), but happens infrequently, so average insertion remains O(1).
+The advantages of dynamic arrays are:
+- flexible: can grow as needed.  
+- efficient amortized insertion at the end: even though occasionally resizing costs $O(n)$, the average cost per insertion remains $O(1)$.  
+- better suited to real-world usage with unpredictable data volume.  
 
-## Detailed Comparison
+The disadvantages of dynamic arrays are:
+- resizing costs (allocation + copying) can be expensive.  
+- memory overhead: capacity might exceed actual size, causing unused (wasted) space.  
+- in certain scenarios, repeated resizing or too-aggressive resizing strategy can degrade performance.
 
-| Feature | Static Array | Dynamic Array |
-|---------|--------------|---------------|
-| **Size** | Fixed at compile-time | Flexible, resizes at runtime |
-| **Memory** | Allocated once | Can grow/shrink, may require reallocation |
-| **Efficiency** | Fast access, no resizing cost | Amortized O(1) insertion, but resizing costs O(n) |
-| **Flexibility** | Rigid, not suited for unknown sizes | Very flexible, suited for dynamic data |
-| **Languages** | C, C++ | Python, Java, Swift, Kotlin, TypeScript |
+#### Summary Table
 
-**Key Insight:** Static arrays are better when the size is known and fixed; dynamic arrays excel when flexibility is needed.
+| Feature               | Static Array                                     | Dynamic Array                                  |
+|-----------------------|--------------------------------------------------|------------------------------------------------|
+| **Size**              | Fixed at compile/alloc time                      | Flexible, can resize during runtime            |
+| **Memory allocation** | Once, contiguous                                 | May reallocate and copy                        |
+| **Access time**       | O(1)                                             | O(1)                                           |
+| **Insertion at end**  | Only if free slot exists, otherwise not possible | Amortized O(1); worst-case O(n) when resizing  |
+| **Memory overhead**   | Minimal (exact)                                  | Potential extra (unused capacity)              |
+| **Use case**          | When maximum size is known                       | When size is not known or variable             |
+
+
+### Examples
+
+Below you can find examples of both static and dynamic arrays in various programming languages.
+
+#### Static Arrays
+
+**C**  
+```c
+int arr[5] = {1, 2, 3, 4, 5}; 
+```
+
+**Java**
+```Java
+int[] arr = new int[5]; 
+arr[0] = 1;
+arr[1] = 2;
+```
+
+#### Dynamic Arrays
+
+**Java**
+```Java
+import java.util.ArrayList;
+ArrayList<Integer> arr = new ArrayList<>();
+arr.add(1);
+arr.add(2);
+arr.add(3);
+```
+
+**Python**
+```Python
+arr = [1, 2, 3, 4, 5] 
+arr.append(6)
+```
+
+**TypeScript**
+```TypeScript
+let arr: number[] = [1, 2, 3, 4, 5]; 
+arr.push(6);
+```
+
+**Swift**
+```Swift
+var arr: [Int] = [1, 2, 3, 4, 5] // Swift arrays are dynamic
+arr.append(6)
+```
+
+**Kotlin**
+```Kotlin
+val arr = arrayListOf(1, 2, 3, 4, 5) // dynamic array
+arr.add(6)
+```
+
+## Cache Locality and Performance
+
+One of the main reasons arrays are considered **fast** compared to other data structures (like linked lists) is because of **cache locality**.
+
+### What is Cache Locality?
+
+Modern CPUs rely on a **memory hierarchy**:
+- **Registers** (fastest, smallest)
+- **Cache (L1, L2, L3)**
+- **Main Memory (RAM)**
+- **Disk (slowest)**
+
+Accessing data in **cache** is magnitudes faster than accessing RAM.  
+Cache locality refers to the idea that data close together in memory is more likely to be accessed quickly because the 
+CPU fetches it into cache in blocks called **cache lines** (typically 32–128 bytes).
+
+### Why Arrays Benefit
+
+Arrays store elements in **contiguous memory locations**.  
+This means when the CPU loads one element, it also pulls in its **neighbors** into the cache. Iterating sequentially over an array is therefore very fast.
+In contrast, data structures like **linked lists** scatter nodes throughout memory. 
+Even though the logical order is preserved, each access may require fetching from different memory locations, causing **cache misses** and degraded performance.
+
+### Types of Locality
+
+There are two important types of cache locality:
+- **Spatial Locality**: accessing elements stored close together (e.g., `arr[i]` then `arr[i+1]`). Arrays excel here.  
+- **Temporal Locality**: reusing the same element multiple times within a short time frame (e.g., repeated access to `arr[i]`).  
+
+Arrays can take advantage of **both**, but spatial locality is where they shine the most.
+
+### Example
+
+Suppose we iterate through an array of 1 million integers:
+
+```typescript
+const arr: number[] = Array.from({ length: 1_000_000 }, (_, i) => i + 1);
+let total = 0;
+
+for (let i = 0; i < arr.length; i++) {
+  total += arr[i];
+}
+
+console.log(total);
+```
+
+This loop runs very fast because of sequential access:
+	•	When the CPU accesses arr[0], it loads a cache line containing several consecutive elements.
+	•	Subsequent accesses like arr[1], arr[2], etc., are already in the cache, so the CPU does not need to fetch from main memory.
+	•	This reduces memory latency drastically compared to non-contiguous structures like linked lists.
+	•	Even though the loop performs 1 million operations, the effective memory fetch cost is much lower thanks to spatial locality, 
+  which allows the CPU to process multiple elements per cache line fetch.
+
+Cache locality explains why algorithms with the same time complexity (e.g., O(n) traversal of an array vs linked list) can have very different 
+real-world performance.
 
 ## Arrays as Building Blocks
 
@@ -114,16 +231,6 @@ Arrays form the foundation for other data structures:
 - **Queue** (FIFO): enqueue/dequeue using circular buffer.  
 - **Hash Tables**: arrays for buckets.  
 - **Heaps**: binary heap stored as array.  
-
-For example below you can find a small example of a stack implemented using an array in Python:
-
-```python
-stack = []
-
-stack.append(10) # push
-stack.append(20)
-print(stack.pop()) # pop => 20
-```
 
 ## Techniques
 
@@ -157,10 +264,6 @@ Use hashmaps for frequency or fast lookup.
 ### Sorting
 Sometimes sorting simplifies the problem.  
 **Example**: First Missing Positive.
-
-<Accordion title="Why use these techniques?">
-They are reusable blueprints for solving many array-related problems efficiently.
-</Accordion>
 
 ## Exercises
 
@@ -196,11 +299,3 @@ Below is the full list of practice problems with solution links.
 - [First Missing Positive](https://leetcode.com/problems/first-missing-positive/) — *Index Mapping / In-Place Hashing*  
   [Solution](https://github.com/your-github/leetcode-solutions)
 
-
-## 9. Key Insights
-
-- Arrays are **contiguous memory structures**.  
-- Cache locality makes arrays faster than linked lists for iteration.  
-- Dynamic arrays balance flexibility with resizing cost.  
-- Arrays are **building blocks** for stacks, queues, heaps, and hash tables.  
-- Techniques like **two pointers, prefix sums, sliding windows** are essential for array-based problem solving.
