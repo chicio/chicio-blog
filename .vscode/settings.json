@@ -2,6 +2,7 @@
     "conventionalCommits.scopes": [
         "performance",
         "ux",
-        "capabilities"
+        "capabilities",
+        "content"
     ]
 }
