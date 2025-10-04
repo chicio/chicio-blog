@@ -42,15 +42,14 @@ export const useSearch = (
       });
   }, []);
 
-  const debouncedSearch = useMemo(
-    () =>
-      debounce((value: string) => {
+  const searchUsing = useMemo(
+      () => (value: string) => {
         if (searchIndex) {
           setSearch(searchFor(value, searchIndex));
         } else {
           setSearch({ type: "search", results: [] });
         }
-      }, 100),
+      },
     [searchIndex],
   );
 
@@ -60,7 +59,6 @@ export const useSearch = (
       }
 
     const value = e.target.value.trim();
-
     const easterEggResult = easterEgg(value);
 
     console.log({ easterEggResult });
@@ -70,7 +68,7 @@ export const useSearch = (
       return;
     }
 
-    debouncedSearch(value);
+    searchUsing(value);
   };
 
   const resetSearch = () => setSearch({ type: "search", results: [] });

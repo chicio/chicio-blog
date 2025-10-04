@@ -5,7 +5,6 @@ import { BiChevronDown } from "react-icons/bi";
 import { useReducedMotions } from "../../utils/hooks/use-reduced-motions";
 import { useIsMobile } from "../../utils/hooks/use-is-mobile";
 import { MenuItemWithTracking } from "./menu-item-with-tracking";
-import { debounce } from "@/lib/debounce/debounce";
 
 export interface DropdownMenuItem {
   label: string;
@@ -50,7 +49,7 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
     >
       <button
         ref={buttonRef}
-        className={`${className} xs:px-6 xs:py-1 hover:bg-accent-alpha-10 hover:text-accent hover:border-accent relative flex flex-nowrap items-center justify-center gap-2 rounded-xl border border-solid px-2 py-2 text-center text-sm leading-normal text-shadow-md md:text-base ${open || selected ? "border-accent bg-accent-alpha-15 text-accent" : "border-transparent"}`}
+        className={`${className} xs:pl-4 xs:pr-1 xs:py-1 hover:bg-accent-alpha-10 hover:text-accent hover:border-accent relative flex flex-nowrap items-center justify-center gap-2 rounded-xl border border-solid px-1 py-2 text-center text-sm leading-normal text-shadow-md md:text-base ${open || selected ? "border-accent bg-accent-alpha-15 text-accent" : "border-transparent"}`}
         aria-haspopup="menu"
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
@@ -64,10 +63,8 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
       </button>
       <AnimatePresence>
         {open && (
-          <motion.div
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={isMobile ? { duration: 0 } : { duration: 0.3 }}
+          <div
+            key={"dropdown-menu"}
             className={`glow-container xs:min-w-[180px] ${shouldReduceMotions ? "sm:bg-general-background" : "sm:bg-general-background/90"} relative mt-2 w-full rounded-xl py-2 sm:absolute sm:right-0 sm:left-0 sm:w-auto`}
             tabIndex={-1}
             role="menu"
@@ -86,7 +83,7 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
                 {item.label}
               </MenuItemWithTracking>
             ))}
-          </motion.div>
+          </div>
         )}
       </AnimatePresence>
     </div>

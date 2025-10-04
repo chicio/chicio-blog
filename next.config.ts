@@ -1,4 +1,23 @@
 import type { NextConfig } from "next";
+import createMDX from "@next/mdx";
+
+const withMDX = createMDX({
+  options: {
+    remarkPlugins: [
+      "remark-emoji",
+      "remark-gfm",
+      "remark-math",
+      "remark-rehype",
+      "remark-frontmatter",
+      "remark-mdx-frontmatter",
+    ],
+    rehypePlugins: [
+      "rehype-highlight",
+      "rehype-katex",
+      "@microflash/rehype-figure",
+    ],
+  },
+});
 
 const nextConfig: NextConfig = {
   async redirects() {
@@ -17,4 +36,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+export default withMDX(nextConfig);
