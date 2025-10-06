@@ -321,11 +321,27 @@
         @apply w-full h-px bg-gradient-to-r from-general-background-light via-accent to-general-background-light border-0;
     }
 
+    table {
+        @apply w-full table-auto mx-auto border rounded-xl overflow-hidden border-collapse shadow-lg my-4;
+    }
+
+    th {
+        @apply px-4 py-3 text-left font-bold text-accent bg-primary-dark;
+    }
+    
+    td {
+        @apply px-4 py-2 text-left text-primary-text;
+    }
+
+    tbody tr:nth-child(even) td {
+        background-color: var(--color-general-background-light);
+    }
+    
+    /** custom rules **/
+
     .katex-display .katex {
         @apply hide-scrollbar inline-block whitespace-nowrap max-w-full overflow-x-scroll;
     }
-
-    /** custom rules **/
 
     #blog-post-container p {
         @apply my-4;
@@ -353,22 +369,6 @@
 
     #blog-post-container pre {
         @apply hide-scrollbar overflow-hidden border border-solid border-accent-alpha-40 rounded-xl hover:border-accent active:border-accent focus:border-accent shadow-lg transition-all duration-500 hover:scale-101;
-    }
-
-    #blog-post-container table {
-        @apply w-full table-auto border rounded-xl overflow-hidden border-collapse shadow-lg my-4;
-    }
-
-    #blog-post-container th {
-        @apply px-4 py-3 text-left font-bold text-accent bg-primary-dark;
-    }
-    
-    #blog-post-container td {
-        @apply px-4 py-2 text-left text-primary-text;
-    }
-
-    #blog-post-container tbody tr:nth-child(even) td {
-        background-color: var(--color-general-background-light);
     }
 
     body.glitch-active {

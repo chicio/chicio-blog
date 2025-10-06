@@ -99,7 +99,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
             className={`xs:flex-row xs:py-0 xs:px-5 m-0 flex min-h-[55px] flex-col items-center gap-1 pt-[55px] ${shouldOpenMenu ? "hide-scrollbar touch-pan-y overflow-y-scroll" : ""}`}
           >
             <MenuItemWithTracking
-              className="xs:w-auto w-full"
+              className="xs:mb-0 xs:w-auto mb-2 w-80"
               key="home"
               to={"/"}
               selected={pathname === "/"}

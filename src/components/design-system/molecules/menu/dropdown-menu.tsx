@@ -1,9 +1,8 @@
 import { TrackingData } from "@/types/tracking";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { FC, useRef, useState } from "react";
 import { BiChevronDown } from "react-icons/bi";
 import { useReducedMotions } from "../../utils/hooks/use-reduced-motions";
-import { useIsMobile } from "../../utils/hooks/use-is-mobile";
 import { MenuItemWithTracking } from "./menu-item-with-tracking";
 
 export interface DropdownMenuItem {
@@ -27,7 +26,6 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
   className = "",
   chevronClassName = "",
 }) => {
-  const isMobile = useIsMobile();
   const shouldReduceMotions = useReducedMotions();
   const [open, setOpen] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -43,7 +41,7 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
 
   return (
     <div
-      className={`relative z-50 mb-4 sm:mb-0`}
+      className={`relative z-50 mb-0 xs:mb-4 sm:mb-0`}
       tabIndex={-1}
       onBlur={handleBlur}
     >

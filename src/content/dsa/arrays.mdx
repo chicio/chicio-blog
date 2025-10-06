@@ -1,5 +1,5 @@
-import { DynamicArrayVisualizer } from "../../components/sections/dsa/DynamicArrayVisualizer";
-import { Accordion } from "../../components/sections/dsa/Accordion";
+import { DynamicArrayVisualizer } from "../../components/sections/dsa/dynamic-array-visualizer";
+import { InteractiveBlock } from "../../components/sections/dsa/interactive-block";
 
 # Arrays
 
@@ -92,7 +92,10 @@ The typical pattern is:
 
 This doubling strategy ensures that while a single resize is expensive ($O(n)$), over many insertions the **amortized cost per insertion** remains $O(1)$.  
 
-<DynamicArrayVisualizer />
+<InteractiveBlock title="Dynamic Array Visualization">
+  <DynamicArrayVisualizer />
+</InteractiveBlock>
+
 
 The advantages of dynamic arrays are:
 - flexible: can grow as needed.  
@@ -108,12 +111,12 @@ The disadvantages of dynamic arrays are:
 
 | Feature               | Static Array                                     | Dynamic Array                                  |
 |-----------------------|--------------------------------------------------|------------------------------------------------|
-| **Size**              | Fixed at compile/alloc time                      | Flexible, can resize during runtime            |
-| **Memory allocation** | Once, contiguous                                 | May reallocate and copy                        |
-| **Access time**       | O(1)                                             | O(1)                                           |
-| **Insertion at end**  | Only if free slot exists, otherwise not possible | Amortized O(1); worst-case O(n) when resizing  |
-| **Memory overhead**   | Minimal (exact)                                  | Potential extra (unused capacity)              |
-| **Use case**          | When maximum size is known                       | When size is not known or variable             |
+| Size              | Fixed at compile/alloc time                      | Flexible, can resize during runtime            |
+| Memory allocation | Once, contiguous                                 | May reallocate and copy                        |
+| Access time       | O(1)                                             | O(1)                                           |
+| Insertion at end  | Only if free slot exists, otherwise not possible | Amortized O(1); worst-case O(n) when resizing  |
+| Memory overhead   | Minimal (exact)                                  | Potential extra (unused capacity)              |
+| Use case          | When maximum size is known                       | When size is not known or variable             |
 
 
 ## Examples
@@ -236,68 +239,26 @@ Arrays form the foundation for other data structures:
 
 ## Techniques
 
-Here are the main **array techniques** with descriptions and examples:
+Here are the main **array techniques**. Some of them will be covered deeply in later articles
 
-### Two-Pointer Technique
-Used for problems involving pairs or subsequences.  
-**Example**: Move Zeroes.
-
-```python
-def moveZeroes(nums):
-    left = 0
-    for right in range(len(nums)):
-        if nums[right] != 0:
-            nums[left], nums[right] = nums[right], nums[left]
-            left += 1
-```
-
-### Prefix Sum
-Helps compute cumulative sums efficiently.  
-**Example**: Product of Array Except Self.
-
-### Sliding Window
-For subarray/subsequence problems.  
-**Example**: Best Time to Buy and Sell Stock.
-
-### Hashing
-Use hashmaps for frequency or fast lookup.  
-**Example**: Majority Element.
-
-### Sorting
-Sometimes sorting simplifies the problem.  
-**Example**: First Missing Positive.
+* *Two-Pointer Technique*, used for problems involving pairs or subsequences.  
+* *Prefix Sum*, helps compute cumulative sums efficiently.  
+* *Sliding Window*, useful for subarray problems with constraints.
+* *Hashing*, use hashmaps for frequency or fast lookup.  
+* *Sorting*, sometimes sorting simplifies the problem.  
 
 ## Exercises
 
-Below is the full list of practice problems with solution links.
-
-- [Move Zeroes](https://leetcode.com/problems/move-zeroes/) — *Two Pointers*  
-  [Solution](https://github.com/your-github/leetcode-solutions)
-
-- [Majority Element](https://leetcode.com/problems/majority-element/) — *Hashing / Boyer-Moore Voting*  
-  [Solution](https://github.com/your-github/leetcode-solutions)
-
-- [Remove Duplicates from Sorted Array](https://leetcode.com/problems/remove-duplicates-from-sorted-array/) — *Two Pointers*  
-  [Solution](https://github.com/your-github/leetcode-solutions)
-
-- [Best Time to Buy and Sell Stock](https://leetcode.com/problems/best-time-to-buy-and-sell-stock/) — *Sliding Window*  
-  [Solution](https://github.com/your-github/leetcode-solutions)
-
-- [Rotate Array](https://leetcode.com/problems/rotate-array/) — *Array Rotation*  
-  [Solution](https://github.com/your-github/leetcode-solutions)
-
-- [Product of Array Except Self](https://leetcode.com/problems/product-of-array-except-self/) — *Prefix Product*  
-  [Solution](https://github.com/your-github/leetcode-solutions)
-
-- [Best Time to Buy and Sell Stock II](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/) — *Greedy / Sliding Window*  
-  [Solution](https://github.com/your-github/leetcode-solutions)
-
-- [Number of Zero-Filled Subarrays](https://leetcode.com/problems/number-of-zero-filled-subarrays/) — *Counting*  
-  [Solution](https://github.com/your-github/leetcode-solutions)
-
-- [Increasing Triplet Subsequence](https://leetcode.com/problems/increasing-triplet-subsequence/) — *Greedy*  
-  [Solution](https://github.com/your-github/leetcode-solutions)
-
-- [First Missing Positive](https://leetcode.com/problems/first-missing-positive/) — *Index Mapping / In-Place Hashing*  
-  [Solution](https://github.com/your-github/leetcode-solutions)
+| Exercise | Technique | Solution |
+|----------|-----------|----------|
+| [Move Zeroes](https://leetcode.com/problems/move-zeroes/) | Two Pointers | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/arrays/move-zeros.ts) |
+| [Majority Element](https://leetcode.com/problems/majority-element/) | Hashing / Boyer-Moore Voting | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/arrays/majority-element.ts) |
+| [Remove Duplicates from Sorted Array](https://leetcode.com/problems/remove-duplicates-from-sorted-array/) | Two Pointers | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/arrays/remove-duplicates.ts) |
+| [Best Time to Buy and Sell Stock](https://leetcode.com/problems/best-time-to-buy-and-sell-stock/) | Sliding Window | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/arrays/best-time-to-buy-and-sell-stock.ts) |
+| [Rotate Array](https://leetcode.com/problems/rotate-array/) | Array Rotation | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/arrays/rotate-array.ts) |
+| [Product of Array Except Self](https://leetcode.com/problems/product-of-array-except-self/) | Prefix Product | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/arrays/product-of-array-except-self.ts) |
+| [Best Time to Buy and Sell Stock II](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/) | Greedy / Sliding Window | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/arrays/best-time-to-buy-and-sell-stock-ii.ts) |
+| [Number of Zero-Filled Subarrays](https://leetcode.com/problems/number-of-zero-filled-subarrays/) | Counting | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/arrays/number-of-zero-filled-subarrays.ts) |
+| [Increasing Triplet Subsequence](https://leetcode.com/problems/increasing-triplet-subsequence/) | Greedy | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/arrays/increasing-triplet-subsequence.ts) |
+| [First Missing Positive](https://leetcode.com/problems/first-missing-positive/) | Index Mapping / In-Place Hashing | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/arrays/first-missing-positive.ts) |
 
