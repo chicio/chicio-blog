@@ -8,7 +8,6 @@ import { PostAuthors } from "./post-authors";
 import { PostMeta } from "./post-meta";
 import { PostTags } from "./post-tags";
 import { RecentPosts } from "./read-next";
-import { ReadingContent } from "@/components/design-system/templates/reading/reading-content";
 
 interface PostProps {
   post: Post;
