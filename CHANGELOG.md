@@ -1,5 +1,25 @@
 # Changelog
 
+## [3.2.0](https://github.com/chicio/chicio-blog/compare/v3.1.0...v3.2.0) (2025-10-07)
+
+### Features
+
+* **capabilities:** :package: setup mdx dependecies ([79483e8](https://github.com/chicio/chicio-blog/commit/79483e846a75d0614360dde29fabce07d09971c9))
+* **capabilities:** :sparkles: added new menu entry for DSA + nextjs config for mdx context ([7201820](https://github.com/chicio/chicio-blog/commit/72018202a67a31a608474d5cb2b7c4a3fc9be6cd))
+* **capabilities:** :sparkles: adding infos before rewriting article ([17805fa](https://github.com/chicio/chicio-blog/commit/17805fad4a9b4094d4b318e19ece667cc9fa30a7))
+* **capabilities:** :sparkles: cleanup various menu component ([3550089](https://github.com/chicio/chicio-blog/commit/355008944d468a9ca016979a1dd9f945a145dce8))
+* **capabilities:** :sparkles: raw content and raw pages setup completed ([078e3d8](https://github.com/chicio/chicio-blog/commit/078e3d8893e1e21e04ac7ede80198eb83ee15b40))
+* **capabilities:** :sparkles: setup mdx context for array - starting refactoring to share layout for content page ([0397847](https://github.com/chicio/chicio-blog/commit/0397847934bcb7116e2365705c2d398f2608a761))
+* **content:** :sparkles: array article preparation ([e2c271f](https://github.com/chicio/chicio-blog/commit/e2c271fc70717e0a9797867b94223648967f472c))
+* **content:** :sparkles: arrays dsa article ready to be published ([49f2015](https://github.com/chicio/chicio-blog/commit/49f201582215cc3073b5fd434459c68988ce082e))
+* **content:** :sparkles: arrays page content is ready ([a973a1a](https://github.com/chicio/chicio-blog/commit/a973a1aefaaee5c1f5763bcda8f0f89e439031d1))
+* **content:** :sparkles: reading content page template ([5b642fe](https://github.com/chicio/chicio-blog/commit/5b642fe84e3bdcd633c320d43ce09e522385d4da))
+* **ux:** :art: fix style for markdown tables ([4673086](https://github.com/chicio/chicio-blog/commit/4673086cabd876dfa14c1e3e1588023604b4c5d1))
+
+### Bug Fixes
+
+* **content:** :fire: removed unused imports ([ccfb0f0](https://github.com/chicio/chicio-blog/commit/ccfb0f0c58b8f9df0feaba8f9815d2793cc586ef))
+
 ## [3.1.0](https://github.com/chicio/chicio-blog/compare/v3.0.0...v3.1.0) (2025-09-21)
 
 ### Features
