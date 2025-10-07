@@ -1,0 +1,264 @@
+import { DynamicArrayVisualizer } from "../../components/sections/dsa/components/dynamic-array-visualizer";
+import { InteractiveBlock } from "../../components/sections/dsa/components/interactive-block";
+
+# Arrays
+
+Arrays are one of the most fundamental data structures in computer science. 
+They provide a way to store elements in a contiguous block of memory, allowing efficient access and manipulation.
+
+## What is an Array?
+
+An **array** is a fundamental data structure that stores a collection of elements of the same type in contiguous memory locations. 
+Each element in the array can be accessed directly using its index, which makes operations like retrieval and traversal very efficient. 
+Arrays are widely used because they provide a simple and systematic way to organize data in memory.
+
+Arrays are important in computer science and programming because they form the foundation for more advanced data structures such 
+as matrices, heaps, hash tables, and even dynamic arrays. They allow developers to efficiently store and process large amounts of data, 
+making them essential for algorithms in searching, sorting, and optimization.
+
+### Memory Representation
+
+At the memory level, arrays are stored in consecutive memory addresses. The index of an element acts as an offset from the base address of the array. 
+For example, if the base address of the array is $A[0]$, and each element at position $i$ where $0 < i < \text{Length}(A)$ has a size $\text{Size}(A[i])$, then the
+ address of $A[i]$ can be calculated as:
+
+$$
+\text{Address}(A[i]) = \text{BaseAddress}(A[0]) + i \times \text{Size}(A[i])
+$$
+
+This direct mapping ensures constant-time access $O(1)$ to any element in the array.
+
+## Operations and Time Complexity
+
+Below are the common operations performed on arrays along with their average and worst-case time complexities:
+
+| Operation       | Average Case | Worst Case |
+|-----------------|--------------|------------|
+| Access          | O(1)         | O(1)       |
+| Search          | O(n)         | O(n)       |
+| Insert (end)    | O(1)         | O(n)       |
+| Insert (middle) | O(n)         | O(n)       |
+| Delete (end)    | O(1)         | O(n)       |
+| Delete (middle) | O(n)         | O(n)       |
+
+## Classification of Arrays
+
+Arrays can be classified in two main ways:
+
+1. **Based on Size**  
+   - **Static Arrays**: The size of the array is fixed at compile time and cannot be changed later. 
+   These arrays are simple and efficient but lack flexibility.  
+   - **Dynamic Arrays**: The size of the array can change at runtime. When the array reaches its capacity, 
+   it automatically resizes to accommodate more elements. This provides flexibility at the cost of some performance overhead during resizing.
+
+2. **Based on Dimensions**  
+   - **One-dimensional Arrays**: A linear list of elements accessed using a single index.  
+   - **Multi-dimensional Arrays**: Arrays with two or more indices. For example, a two-dimensional array represents data in rows 
+   and columns (like a matrix), while higher dimensions extend this concept to 3D or beyond.
+
+### Static vs Dynamic Arrays
+
+An array can be either *static* or *dynamic*, depending on whether its size is fixed or flexible at runtime. 
+
+#### Static Arrays
+
+The size of a **static array** is fixed at compile-time or at allocation, and cannot change during execution.
+The memory is allocated once, and it remains contiguous throughout the life of the array. 
+These arrays are often allocated on the **stack** (in languages like C) or in a fixed block of memory. 
+Because there is no overhead to resizing, operations like indexing are extremely efficient (O(1) in time). 
+Static arrays are simpler and safer in contexts where the maximum size is known in advance.
+
+The advantages of static arrays:
+- No resizing overhead or runtime allocation cost.  
+- Memory layout is predictable.  
+- Lower overhead in memory management (no reallocation).  
+
+The disadvantages of static arrays:
+- Inflexible: cannot grow beyond the allocated size.  
+- Potentially wasteful if the allocated size is much larger than what’s used.  
+- Not suitable when data size is dynamic or unknown.
+
+#### Dynamic Arrays
+
+A **dynamic array** can grow (or sometimes shrink) during runtime, adjusting to the number of elements it needs to hold.  
+Internally, a dynamic array maintains a `capacity`, that is the total allocated space, and a `size`, that is the number of elements in use.  
+When the size reaches the `capacity` and a new element is added, the dynamic array will **resize**.  
+The typical pattern is:
+
+- if `size == capacity`, allocate a new buffer, usually of size `capacity * 2`.  
+- copy all existing elements to the new buffer.  
+- free the old buffer (or let GC collect it).  
+- continue adding the new element.
+
+This doubling strategy ensures that while a single resize is expensive ($O(n)$), over many insertions the **amortized cost per insertion** remains $O(1)$.  
+
+<InteractiveBlock title="Dynamic Array Visualization">
+  <DynamicArrayVisualizer />
+</InteractiveBlock>
+
+
+The advantages of dynamic arrays are:
+- flexible: can grow as needed.  
+- efficient amortized insertion at the end: even though occasionally resizing costs $O(n)$, the average cost per insertion remains $O(1)$.  
+- better suited to real-world usage with unpredictable data volume.  
+
+The disadvantages of dynamic arrays are:
+- resizing costs (allocation + copying) can be expensive.  
+- memory overhead: capacity might exceed actual size, causing unused (wasted) space.  
+- in certain scenarios, repeated resizing or too-aggressive resizing strategy can degrade performance.
+
+#### Summary Table
+
+| Feature               | Static Array                                     | Dynamic Array                                  |
+|-----------------------|--------------------------------------------------|------------------------------------------------|
+| Size              | Fixed at compile/alloc time                      | Flexible, can resize during runtime            |
+| Memory allocation | Once, contiguous                                 | May reallocate and copy                        |
+| Access time       | O(1)                                             | O(1)                                           |
+| Insertion at end  | Only if free slot exists, otherwise not possible | Amortized O(1); worst-case O(n) when resizing  |
+| Memory overhead   | Minimal (exact)                                  | Potential extra (unused capacity)              |
+| Use case          | When maximum size is known                       | When size is not known or variable             |
+
+
+## Examples
+
+Below you can find examples of both static and dynamic arrays in various programming languages.
+
+### Static Arrays
+
+**C**  
+```c
+int arr[5] = {1, 2, 3, 4, 5}; 
+```
+
+**Java**
+```Java
+int[] arr = new int[5]; 
+arr[0] = 1;
+arr[1] = 2;
+```
+
+### Dynamic Arrays
+
+**Java**
+```Java
+import java.util.ArrayList;
+ArrayList<Integer> arr = new ArrayList<>();
+arr.add(1);
+arr.add(2);
+arr.add(3);
+```
+
+**Python**
+```Python
+arr = [1, 2, 3, 4, 5] 
+arr.append(6)
+```
+
+**TypeScript**
+```TypeScript
+let arr: number[] = [1, 2, 3, 4, 5]; 
+arr.push(6);
+```
+
+**Swift**
+```Swift
+var arr: [Int] = [1, 2, 3, 4, 5] // Swift arrays are dynamic
+arr.append(6)
+```
+
+**Kotlin**
+```Kotlin
+val arr = arrayListOf(1, 2, 3, 4, 5) // dynamic array
+arr.add(6)
+```
+
+## Cache Locality and Performance
+
+One of the main reasons arrays are considered **fast** compared to other data structures (like linked lists) is because of **cache locality**.
+
+### What is Cache Locality?
+
+Modern CPUs rely on a **memory hierarchy**:
+- **Registers** (fastest, smallest)
+- **Cache (L1, L2, L3)**
+- **Main Memory (RAM)**
+- **Disk (slowest)**
+
+Accessing data in **cache** is magnitudes faster than accessing RAM.  
+Cache locality refers to the idea that data close together in memory is more likely to be accessed quickly because the 
+CPU fetches it into cache in blocks called **cache lines** (typically 32–128 bytes).
+
+### Why Arrays Benefit
+
+Arrays store elements in **contiguous memory locations**.  
+This means when the CPU loads one element, it also pulls in its **neighbors** into the cache. Iterating sequentially over an array is therefore very fast.
+In contrast, data structures like **linked lists** scatter nodes throughout memory. 
+Even though the logical order is preserved, each access may require fetching from different memory locations, causing **cache misses** and degraded performance.
+
+### Types of Locality
+
+There are two important types of cache locality:
+- **Spatial Locality**: accessing elements stored close together (e.g., `arr[i]` then `arr[i+1]`). Arrays excel here.  
+- **Temporal Locality**: reusing the same element multiple times within a short time frame (e.g., repeated access to `arr[i]`).  
+
+Arrays can take advantage of **both**, but spatial locality is where they shine the most.
+
+### Example
+
+Suppose we iterate through an array of 1 million integers:
+
+```typescript
+const arr: number[] = Array.from({ length: 1_000_000 }, (_, i) => i + 1);
+let total = 0;
+
+for (let i = 0; i < arr.length; i++) {
+  total += arr[i];
+}
+
+console.log(total);
+```
+
+This loop runs very fast because of sequential access:
+	•	When the CPU accesses arr[0], it loads a cache line containing several consecutive elements.
+	•	Subsequent accesses like arr[1], arr[2], etc., are already in the cache, so the CPU does not need to fetch from main memory.
+	•	This reduces memory latency drastically compared to non-contiguous structures like linked lists.
+	•	Even though the loop performs 1 million operations, the effective memory fetch cost is much lower thanks to spatial locality, 
+  which allows the CPU to process multiple elements per cache line fetch.
+
+Cache locality explains why algorithms with the same time complexity (e.g., O(n) traversal of an array vs linked list) can have very different 
+real-world performance.
+
+## Arrays as Building Blocks
+
+Arrays form the foundation for other data structures:
+
+- **Stack** (LIFO): push/pop on top of array.  
+- **Queue** (FIFO): enqueue/dequeue using circular buffer.  
+- **Hash Tables**: arrays for buckets.  
+- **Heaps**: binary heap stored as array.  
+
+## Techniques
+
+Here are the main **array techniques**. Some of them will be covered deeply in later articles
+
+* *Two-Pointer Technique*, used for problems involving pairs or subsequences.  
+* *Prefix Sum*, helps compute cumulative sums efficiently.  
+* *Sliding Window*, useful for subarray problems with constraints.
+* *Hashing*, use hashmaps for frequency or fast lookup.  
+* *Sorting*, sometimes sorting simplifies the problem.  
+
+## Exercises
+
+| Exercise | Technique | Solution |
+|----------|-----------|----------|
+| [Move Zeroes](https://leetcode.com/problems/move-zeroes/) | Two Pointers | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/arrays/move-zeros.ts) |
+| [Majority Element](https://leetcode.com/problems/majority-element/) | Hashing / Boyer-Moore Voting | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/arrays/majority-element.ts) |
+| [Remove Duplicates from Sorted Array](https://leetcode.com/problems/remove-duplicates-from-sorted-array/) | Two Pointers | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/arrays/remove-duplicates.ts) |
+| [Best Time to Buy and Sell Stock](https://leetcode.com/problems/best-time-to-buy-and-sell-stock/) | Sliding Window | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/arrays/best-time-to-buy-and-sell-stock.ts) |
+| [Rotate Array](https://leetcode.com/problems/rotate-array/) | Array Rotation | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/arrays/rotate-array.ts) |
+| [Product of Array Except Self](https://leetcode.com/problems/product-of-array-except-self/) | Prefix Product | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/arrays/product-of-array-except-self.ts) |
+| [Best Time to Buy and Sell Stock II](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/) | Greedy / Sliding Window | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/arrays/best-time-to-buy-and-sell-stock-ii.ts) |
+| [Number of Zero-Filled Subarrays](https://leetcode.com/problems/number-of-zero-filled-subarrays/) | Counting | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/arrays/number-of-zero-filled-subarrays.ts) |
+| [Increasing Triplet Subsequence](https://leetcode.com/problems/increasing-triplet-subsequence/) | Greedy | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/arrays/increasing-triplet-subsequence.ts) |
+| [First Missing Positive](https://leetcode.com/problems/first-missing-positive/) | Index Mapping / In-Place Hashing | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/arrays/first-missing-positive.ts) |
+
