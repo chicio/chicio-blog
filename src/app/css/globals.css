@@ -343,31 +343,31 @@
         @apply hide-scrollbar inline-block whitespace-nowrap max-w-full overflow-x-scroll;
     }
 
-    #blog-post-container p {
+    #reading-content-container p {
         @apply my-4;
     }
 
-    #blog-post-container figure figcaption {
+    #reading-content-container figure figcaption {
         @apply text-secondary-text text-base leading-normal text-center italic mt-2 mb-3;
     }
 
-    #blog-post-container iframe {
+    #reading-content-container iframe {
         @apply w-full h-auto aspect-video border border-solid border-accent-alpha-40 rounded-xl hover:border-accent active:border-accent focus:border-accent shadow-lg transition-all duration-500 hover:scale-102;
     }
 
-    #blog-post-container img {
+    #reading-content-container img {
         @apply w-full border border-solid border-accent-alpha-40 rounded-xl hover:border-accent active:border-accent focus:border-accent shadow-lg transition-all duration-500 hover:scale-102;
     }
 
-    #blog-post-container p code {
+    #reading-content-container p code {
         color: #d2a8ff;
     }
 
-    #blog-post-container li code {
+    #reading-content-container li code {
         color: #d2a8ff;
     }
 
-    #blog-post-container pre {
+    #reading-content-container pre {
         @apply hide-scrollbar overflow-hidden border border-solid border-accent-alpha-40 rounded-xl hover:border-accent active:border-accent focus:border-accent shadow-lg transition-all duration-500 hover:scale-101;
     }
 

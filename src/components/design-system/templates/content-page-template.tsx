@@ -2,14 +2,14 @@ import { PageTemplate } from "@/components/design-system/templates/page-template
 import { BrandHeader } from "@/components/design-system/organism/header/brand-header";
 import { FC, ReactNode } from "react";
 
-export interface BlogPageProps {
+export interface ContentPageProps {
   author: string;
   trackingCategory: string;
   big?: boolean;
   children?: ReactNode;
 }
 
-export const BlogPageTemplate: FC<BlogPageProps> = ({
+export const ContentPageTemplate: FC<ContentPageProps> = ({
   children,
   author,
   trackingCategory,

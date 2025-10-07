@@ -1,6 +1,5 @@
+import { ReadingContentPageTemplate } from "@/components/design-system/templates/reading-content-page-template";
 import { JsonLd } from "@/components/design-system/utils/components/jsond-ld";
-import { BlogPageTemplate } from "@/components/sections/blog/components/blog-page-template";
-import { BlogPostProgressBar } from "@/components/sections/blog/components/blog-post-progress-bar";
 import { Post } from "@/types/post";
 import { siteMetadata } from "@/types/site-metadata";
 import { tracking } from "@/types/tracking";
@@ -9,6 +8,7 @@ import { PostAuthors } from "./post-authors";
 import { PostMeta } from "./post-meta";
 import { PostTags } from "./post-tags";
 import { RecentPosts } from "./read-next";
+import { ReadingContent } from "@/components/design-system/templates/reading/reading-content";
 
 interface PostProps {
   post: Post;
@@ -19,30 +19,37 @@ export const BlogPostContent: FC<PostProps> = ({ post }) => {
 
   return (
     <>
-      <BlogPostProgressBar />
-      <BlogPageTemplate
+      <ReadingContentPageTemplate
         author={siteMetadata.author}
         trackingCategory={tracking.category.blog_post}
+        beforeContent={
+          <>
+            <h1 className="leading-tight">{frontmatter.title}</h1>
+            <PostAuthors
+              postAuthors={frontmatter.authors}
+              trackingCategory={tracking.category.blog_post}
+              trackingLabel={tracking.label.body}
+              enableUrl={true}
+            />
+            <PostMeta
+              date={frontmatter.date.formatted}
+              readingTime={readingTime.text}
+            />
+          </>
+        }
+        afterContent={
+          <>
+            <PostTags
+              tags={frontmatter.tags}
+              trackingCategory={tracking.category.blog_post}
+              trackingLabel={tracking.label.body}
+            />
+            <RecentPosts currentSlug={frontmatter.slug.formatted} />
+          </>
+        }
       >
-        <h1 className="leading-tight">{frontmatter.title}</h1>
-        <PostAuthors
-          postAuthors={frontmatter.authors}
-          trackingCategory={tracking.category.blog_post}
-          trackingLabel={tracking.label.body}
-          enableUrl={true}
-        />
-        <PostMeta
-          date={frontmatter.date.formatted}
-          readingTime={readingTime.text}
-        />
-        <div id="blog-post-container" dangerouslySetInnerHTML={{ __html: content }} />
-        <PostTags
-          tags={frontmatter.tags}
-          trackingCategory={tracking.category.blog_post}
-          trackingLabel={tracking.label.body}
-        />
-        <RecentPosts currentSlug={frontmatter.slug.formatted} />
-      </BlogPageTemplate>
+        <div dangerouslySetInnerHTML={{ __html: content }} />
+      </ReadingContentPageTemplate>
       <JsonLd
         ogPageType="article"
         url={`${siteMetadata.siteUrl}${frontmatter.slug.formatted}`}

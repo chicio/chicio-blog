@@ -1,20 +1,18 @@
 import "highlight.js/styles/tokyo-night-dark.css";
 import "katex/dist/katex.min.css";
 
-import { BlogPageTemplate } from "@/components/sections/blog/components/blog-page-template";
-import Arrays from "../../../content/dsa/arrays.mdx";
+import { ReadingContentPageTemplate } from "@/components/design-system/templates/reading-content-page-template";
 import { siteMetadata } from "@/types/site-metadata";
 import { tracking } from "@/types/tracking";
+import Arrays from "../../../content/dsa/arrays.mdx";
 
-export default function array() {
+export default function ArraysPage() {
   return (
-    <BlogPageTemplate
+    <ReadingContentPageTemplate
       author={siteMetadata.author}
-      trackingCategory={tracking.category.art}
+      trackingCategory={tracking.category.dsa}
     >
-      <div id="blog-post-container">
-        <Arrays />
-      </div>
-    </BlogPageTemplate>
+      <Arrays />
+    </ReadingContentPageTemplate>
   );
 }

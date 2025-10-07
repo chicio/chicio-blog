@@ -12,7 +12,7 @@ import {
 } from "@/components/design-system/utils/hooks/use-scroll-direction";
 import { motion } from "framer-motion";
 import React from "react";
-import { useReadingProgress } from "../hooks/use-reading-progress";
+import { useReadingProgress } from "../utils/hooks/use-reading-progress";
 import { useReducedMotions } from "@/components/design-system/utils/hooks/use-reduced-motions";
 
 const getBar = (percentage: number, length = 24) => {
@@ -43,18 +43,20 @@ const getStatusLine = (
   }
 };
 
-export const BlogPostProgressBar: React.FC = () => {
+interface ContentProgressBarProps { 
+  contentId: string
+}
+
+export const ContentProgressBar: React.FC<ContentProgressBarProps> = ({ contentId }) => {
   const shouldReduceMotion = useReducedMotions();
   const { glassmorphismClass } = useGlassmorphism();
-  const { percentage, started, status } = useReadingProgress(
-    "blog-post-container",
-  );
+  const { percentage, started, status } = useReadingProgress(contentId);
   const direction = useScrollDirection();
   const isVisible = started && direction === ScrollDirection.down;
 
   return (
     <motion.div
-      key="blog-post-progress-bar"
+      key="content-progress-bar"
       className={`${glassmorphismClass} fixed top-0 z-[60] w-full rounded-tl-none rounded-tr-none border-t-0 px-0 py-2`}
       initial={false}
       animate={{
