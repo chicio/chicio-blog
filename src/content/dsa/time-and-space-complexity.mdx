@@ -1,0 +1,147 @@
+# Time and Space Complexity
+
+Understanding **time and space complexity** is essential for analyzing how algorithms scale and for performing well in coding interviews.  
+This article covers everything you need to know about time and space complexity, including worked examples, mathematical notations, and practical guidance.
+
+<ComplexityChart />
+
+## 1. Introduction
+
+Algorithm analysis allows developers to **predict performance** and **compare solutions** without relying solely on code execution.  
+It explains how runtime and memory usage grow as input size increases. Understanding complexity is key to optimizing algorithms and avoiding bottlenecks.
+
+## 2. Time Complexity
+
+Time complexity measures **how execution time grows with input size**. Key cases include:
+
+- **Worst Case:** Maximum time an algorithm takes
+- **Best Case:** Minimum time
+- **Average Case:** Expected time over all inputs
+
+### Big O, Ω, Θ Notations
+
+- **O(f(n))**: upper bound, worst-case growth \(T(n) \leq c \cdot f(n)\)
+- **Ω(f(n))**: lower bound, best-case growth \(T(n) \geq c \cdot f(n)\)
+- **Θ(f(n))**: tight bound, exact asymptotic growth \(T(n) = Θ(f(n))\)
+
+Example: Linear search
+```python
+def linear_search(arr, target):
+    for i, x in enumerate(arr):
+        if x == target:
+            return i
+    return -1
+```
+- Best case: O(1) (target at index 0)  
+- Worst case: O(n) (target at end or absent)  
+- Average case: O(n/2) → Θ(n)
+
+### Typical Complexity Classes
+
+| Complexity | Example Algorithms |
+|------------|------------------|
+| O(1) | Access array element, push/pop in stack |
+| O(log n) | Binary search, balanced BST search |
+| O(n) | Linear search, sum of array |
+| O(n log n) | Merge Sort, Quick Sort average |
+| O(n^2) | Bubble Sort, Insertion Sort |
+| O(2^n) | Recursive Fibonacci, Subset sum |
+| O(n!) | Travelling Salesman (brute force) |
+
+<ComplexityChart />
+
+## 3. Space Complexity
+
+Space complexity measures **memory usage** relative to input size.
+
+- Variables: O(1)  
+- Arrays of size n: O(n)  
+- Recursion stack: O(depth of recursion)  
+
+Example: Recursive Fibonacci (Python)
+```python
+def fib(n):
+    if n <= 1:
+        return n
+    return fib(n-1) + fib(n-2)
+```
+- Time: O(2^n)  
+- Space: O(n) due to recursion stack
+
+## 4. Amortized Analysis
+
+Some operations are expensive occasionally (e.g., dynamic array resizing).  
+Amortized analysis averages cost over multiple operations.
+
+Example: dynamic array push
+<DynamicArrayVisualizer />
+
+Methods:
+- Aggregate Method
+- Accounting Method
+- Potential Method
+
+## 5. Recurrences and Master Theorem
+
+Recursions are often represented as recurrences: \(T(n) = a T(n/b) + f(n)\)  
+
+Master Theorem solves them quickly for divide-and-conquer algorithms.
+
+Example: Merge Sort  
+\(T(n) = 2T(n/2) + Θ(n) → Θ(n log n)\)
+
+<RecurrenceTree />
+
+## 6. Tail Recursion
+
+Tail recursion allows **constant stack usage**. Example:
+
+```python
+def factorial(n, acc=1):
+    if n == 0:
+        return acc
+    return factorial(n-1, n*acc)
+```
+- Space complexity: O(1) (tail call optimization)  
+
+Example languages: Java, C++, Python, TypeScript, Swift, Kotlin
+
+## 7. Dynamic Programming Complexity Breakdown
+
+DP problems can be analyzed using a grid/matrix for **subproblem storage**. Example: 0/1 Knapsack, Fibonacci, Grid paths.
+
+<DPGrid />
+
+- Time: O(number of subproblems * cost per subproblem)  
+- Space: O(number of subproblems)  
+
+Worked example: Fibonacci DP
+```python
+def fib_dp(n):
+    dp = [0]*(n+1)
+    dp[1] = 1
+    for i in range(2, n+1):
+        dp[i] = dp[i-1] + dp[i-2]
+    return dp[n]
+```
+- Time: O(n)  
+- Space: O(n)
+
+## 8. Practical Interview-style Examples
+
+Step-by-step calculation of time and space is critical in interviews. Example approaches:
+- Count operations inside loops and recursions
+- Identify dominant terms
+- Consider nested loops and multiple recursive calls
+
+<StepByStepAnalysis />
+
+## 9. Summary and Key Insights
+
+- Time complexity: growth of execution time  
+- Space complexity: memory consumption  
+- Big O, Ω, Θ: upper, lower, tight bounds  
+- Amortized analysis: average cost over operations  
+- Recurrences: Master Theorem for divide-and-conquer  
+- DP: grid/matrix for subproblems  
+- Tail recursion: constant stack usage when optimized  
