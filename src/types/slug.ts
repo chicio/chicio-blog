@@ -14,4 +14,5 @@ export const slugs = {
   chat: "/chat",
   cookiePolicy: "/cookie-policy",
   arrays: `${dsa}/arrays`,
+  timeAndSpaceComplexity: `${dsa}/time-and-space-complexity`,
 };

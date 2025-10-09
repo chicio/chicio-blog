@@ -1,9 +1,56 @@
 # Time and Space Complexity
 
-Understanding **time and space complexity** is essential for analyzing how algorithms scale and for performing well in coding interviews.  
+Understanding **time and space complexity** is essential for analyzing how algorithms scale.  
 This article covers everything you need to know about time and space complexity, including worked examples, mathematical notations, and practical guidance.
 
-<ComplexityChart />
+## What is Algorithm Analysis?
+
+When we talk about algorithms, one of the first questions that comes to mind is:  
+**“How efficient is it?”**
+
+This question is at the core of **algorithm analysis**, a branch of computer science that helps us understand how an algorithm behaves as the input size grows.  
+Efficiency is not just about speed — it’s also about **how much memory an algorithm consumes** while running.  
+That’s where **time complexity** and **space complexity** come in.
+
+### Why Algorithm Analysis Matters
+
+Two algorithms may solve the same problem, but one can be significantly faster or use much less memory than the other.  
+For example, consider sorting: a simple algorithm like **Bubble Sort** may take several seconds to sort a large dataset, while **Merge Sort** or **Quick Sort** can handle it in a fraction of the time.  
+
+Algorithm analysis provides a **mathematical framework** to predict how an algorithm will scale, without actually running it.  
+This is especially critical when designing software that must handle **large-scale data** — think of web search engines, streaming platforms, or real-time financial systems.  
+Even a small efficiency improvement can save **millions of operations** when applied at scale.
+
+<PerformanceComparisonChart />
+
+### Intuition Behind Time and Space Complexity
+
+At its core, time complexity measures **how the number of operations grows** with respect to input size (denoted as `n`).  
+Space complexity measures **how much extra memory** (RAM or stack) the algorithm requires to execute.
+
+Here’s a simple analogy:
+> Imagine you are packing boxes.  
+> The **time complexity** tells you *how long it will take to pack all the boxes*,  
+> while the **space complexity** tells you *how many packing tables you’ll need* to organize everything efficiently.
+
+Both metrics are crucial.  
+An algorithm that runs fast but consumes too much memory may still be unusable in memory-limited environments (like mobile devices or embedded systems).  
+Conversely, an algorithm that is memory-efficient but slow may not meet performance requirements.
+
+### Real-World Examples
+
+- **Google Search:** must sort and rank billions of results in milliseconds.  
+- **Navigation apps:** compute shortest paths (like Dijkstra’s algorithm) in real-time.  
+- **Machine learning:** training models with millions of parameters requires careful optimization of time and space trade-offs.
+
+In all these cases, developers use algorithmic analysis to **choose the best trade-off** between computation time and resource consumption.
+
+<TimeVsSpaceTradeoffVisualizer />
+
+
+
+
+
 
 ## 1. Introduction
 
@@ -48,7 +95,7 @@ def linear_search(arr, target):
 | O(2^n) | Recursive Fibonacci, Subset sum |
 | O(n!) | Travelling Salesman (brute force) |
 
-<ComplexityChart />
+{/* <ComplexityChart /> */}
 
 ## 3. Space Complexity
 
@@ -74,7 +121,7 @@ Some operations are expensive occasionally (e.g., dynamic array resizing).
 Amortized analysis averages cost over multiple operations.
 
 Example: dynamic array push
-<DynamicArrayVisualizer />
+{/* <DynamicArrayVisualizer /> */}
 
 Methods:
 - Aggregate Method
@@ -90,7 +137,7 @@ Master Theorem solves them quickly for divide-and-conquer algorithms.
 Example: Merge Sort  
 \(T(n) = 2T(n/2) + Θ(n) → Θ(n log n)\)
 
-<RecurrenceTree />
+{/* <RecurrenceTree /> */}
 
 ## 6. Tail Recursion
 
@@ -110,7 +157,7 @@ Example languages: Java, C++, Python, TypeScript, Swift, Kotlin
 
 DP problems can be analyzed using a grid/matrix for **subproblem storage**. Example: 0/1 Knapsack, Fibonacci, Grid paths.
 
-<DPGrid />
+{/* <DPGrid /> */}
 
 - Time: O(number of subproblems * cost per subproblem)  
 - Space: O(number of subproblems)  
@@ -134,7 +181,7 @@ Step-by-step calculation of time and space is critical in interviews. Example ap
 - Identify dominant terms
 - Consider nested loops and multiple recursive calls
 
-<StepByStepAnalysis />
+{/* <StepByStepAnalysis /> */}
 
 ## 9. Summary and Key Insights
 
