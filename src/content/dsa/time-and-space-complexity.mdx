@@ -1,3 +1,6 @@
+import { PerformanceComparisonChart } from "../../components/sections/dsa/components/performance-comparison-chart";
+import { TimeVsSpaceTradeoffVisualizer } from "../../components/sections/dsa/components/time-space-tradeoff";
+
 # Time and Space Complexity
 
 Understanding **time and space complexity** is essential for analyzing how algorithms scale.  
@@ -43,19 +46,15 @@ Conversely, an algorithm that is memory-efficient but slow may not meet performa
 - **Navigation apps:** compute shortest paths (like Dijkstra’s algorithm) in real-time.  
 - **Machine learning:** training models with millions of parameters requires careful optimization of time and space trade-offs.
 
-In all these cases, developers use algorithmic analysis to **choose the best trade-off** between computation time and resource consumption.
+In all these cases, developers use algorithmic analysis to **choose the best trade-off** between computation time and resource consumption.  
+The chart below visualizes how different algorithmic complexity classes trade time for space.  
+As we move toward higher-order complexities like **O(n²)**, both execution time and memory usage typically increase.  
+In practice, optimizing one dimension (e.g., speed) often comes at the cost of the other (e.g., memory).
 
 <TimeVsSpaceTradeoffVisualizer />
 
 
-
-
-
-
-## 1. Introduction
-
-Algorithm analysis allows developers to **predict performance** and **compare solutions** without relying solely on code execution.  
-It explains how runtime and memory usage grow as input size increases. Understanding complexity is key to optimizing algorithms and avoiding bottlenecks.
+---- 
 
 ## 2. Time Complexity
 
