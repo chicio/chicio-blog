@@ -1,5 +1,6 @@
 import { PerformanceComparisonChart } from "../../components/sections/dsa/components/performance-comparison-chart";
 import { TimeVsSpaceTradeoffVisualizer } from "../../components/sections/dsa/components/time-space-tradeoff";
+import { ComplexityGrowthVisualizer } from "../../components/sections/dsa/components/complexity-growth-visualizer";
 
 # Time and Space Complexity
 
@@ -53,48 +54,144 @@ In practice, optimizing one dimension (e.g., speed) often comes at the cost of t
 
 <TimeVsSpaceTradeoffVisualizer />
 
+## Time Complexity
 
----- 
+Understanding **time complexity** is crucial to analyzing how efficiently an algorithm performs.  
+At a high level, time complexity measures the **amount of computational work** an algorithm requires relative to the input size $n$.  
 
-## 2. Time Complexity
+For example, consider searching for an element in a list of $n$ items:
 
-Time complexity measures **how execution time grows with input size**. Key cases include:
+- If you check each element one by one (linear search), the work grows proportionally to $n$.  
+- If the list is sorted and you use binary search, the work grows logarithmically to $\log_2 n$.
 
-- **Worst Case:** Maximum time an algorithm takes
-- **Best Case:** Minimum time
-- **Average Case:** Expected time over all inputs
+### Best, Worst, and Average Case
 
-### Big O, Ω, Θ Notations
+Time complexity can vary depending on the scenario:
 
-- **O(f(n))**: upper bound, worst-case growth \(T(n) \leq c \cdot f(n)\)
-- **Ω(f(n))**: lower bound, best-case growth \(T(n) \geq c \cdot f(n)\)
-- **Θ(f(n))**: tight bound, exact asymptotic growth \(T(n) = Θ(f(n))\)
+- **Best Case:** The minimum amount of work required. For linear search, this occurs if the target is the first element. 
+- **Worst Case:** The maximum work possible. For linear search, if the target is not present, we examine all $n$ elements.
+- **Average Case:** The expected work across all possible inputs.
 
-Example: Linear search
-```python
-def linear_search(arr, target):
-    for i, x in enumerate(arr):
-        if x == target:
-            return i
-    return -1
-```
-- Best case: O(1) (target at index 0)  
-- Worst case: O(n) (target at end or absent)  
-- Average case: O(n/2) → Θ(n)
+### Big O, Ω, and Θ Notations
 
-### Typical Complexity Classes
+When we analyze algorithms, we are often less interested in their exact running time and more in how that time grows as the input size increases. 
+This is the essence of **asymptotic analysis**, a method that studies the behavior of algorithms as the input size $n$ approaches infinity.
+Let’s explore the three most common notations used to describe this growth.
 
-| Complexity | Example Algorithms |
-|------------|------------------|
-| O(1) | Access array element, push/pop in stack |
-| O(log n) | Binary search, balanced BST search |
-| O(n) | Linear search, sum of array |
-| O(n log n) | Merge Sort, Quick Sort average |
-| O(n^2) | Bubble Sort, Insertion Sort |
-| O(2^n) | Recursive Fibonacci, Subset sum |
-| O(n!) | Travelling Salesman (brute force) |
+#### Big O Notation — the Upper Bound
 
-{/* <ComplexityChart /> */}
+**Big O** gives us the *worst-case* growth rate of an algorithm — an upper limit on how many steps it could take.
+
+$$
+O(f(n)) = \{ g(n) : \exists c > 0, \exists n_0 > 0, \forall n > n_0, \ 0 \le g(n) \le c \cdot f(n) \}
+$$
+
+This means that beyond some point $n_0$, the algorithm’s running time $g(n)$ will never grow faster than a constant multiple of $f(n)$.
+For example, if a loop runs up to $n$ times, its complexity is $O(n)$.  
+Even if it actually runs $3n + 2$ times, we still say it’s $O(n)$, because constants don’t matter in asymptotic analysis.
+
+$$
+3n + 2 = O(n)
+$$
+
+Big O notation is often used as a general approximation. When we say *“this algorithm is O(n²)”*, we usually mean “it won’t be worse than quadratic time.”
+
+#### Omega (Ω) Notation — the Lower Bound
+
+If Big O tells us how bad things can get, **Ω (Omega)** tells us how good they can get — the *best-case* scenario.
+
+$$
+\Omega(f(n)) = \{ g(n) : \exists c > 0, \exists n_0 > 0, \forall n > n_0, \ 0 \le c \cdot f(n) \le g(n) \}
+$$
+
+So, $g(n) = \Omega(f(n))$ means the algorithm will take *at least* proportional to $f(n)$ time.
+A simple linear search that stops when the element is found could take:
+- $\Omega(1)$ time (if the target is the first element),
+- but $O(n)$ time (if it’s the last or missing).
+
+#### Theta (Θ) Notation — the Tight Bound
+
+When both upper and lower bounds match, we use **Θ (Theta)** to say the algorithm’s growth rate is *asymptotically tight*.
+
+$$
+\Theta(f(n)) = \{ g(n) : \exists c_1, c_2 > 0, \exists n_0 > 0, \forall n > n_0, \ c_1 f(n) \le g(n) \le c_2 f(n) \}
+$$
+
+For example, if an algorithm always iterates through all $n$ elements exactly once, its runtime is:
+$$
+T(n) = \Theta(n)
+$$
+
+This means it’s both $O(n)$ *and* $\Omega(n)$.
+
+#### **Interpreting These Formulas in Practice**
+
+Let’s summarize intuitively:
+
+| Notation | Describes | Meaning |
+|-----------|------------|----------|
+| **O(f(n))** | Upper bound | The algorithm *will not* be slower than this |
+| **Ω(f(n))** | Lower bound | The algorithm *will not* be faster than this |
+| **Θ(f(n))** | Tight bound | The algorithm *always* behaves like this asymptotically |
+
+## Typical Complexity Classes
+
+Understanding **complexity classes** helps you quickly estimate *how scalable* an algorithm is.  
+While Big O notation tells you how fast the runtime grows, complexity classes give you a **visual and conceptual map** of the most common growth rates you'll encounter in practice.
+     
+### The Intuition Behind Growth
+
+As we saw before, every algorithm’s runtime (or memory usage) changes as the size of its input, $n$, grows.  
+The relationship between the two, expressed as $f(n)$ — describes *how fast* the cost increases.  
+We classify these relationships into **complexity classes**. Each class defines a family of functions that grow at roughly the same rate.  
+Here’s what that means intuitively:
+
+| Complexity Class|Name | Growth Description | Example Algorithm |
+|-----------------|------|-------------------|-------------------|
+| **O(1)**        |  Constant | Execution time stays constant regardless of input size | Accessing an element in an array |
+| **O(log n)**    | Logarithmic | Increases slowly as n grows — each step reduces the problem size significantly | Binary Search |
+| **O(n)**        | Linear | Cost grows directly in proportion to n | Linear Search, Traversing a list |
+| **O(n log n)**  | Log-linear | Common in efficient divide-and-conquer algorithms | Merge Sort, Quick Sort (average) |
+| **O(n^2)**      | Quadratic | Typical of algorithms with nested loops | Bubble Sort, Selection Sort |
+| **O(2^n)**      | Exponential | Doubles with each new element — extremely expensive | Recursive Fibonacci |
+| **O(n!)**       | Factorial | Explodes combinatorially — often infeasible beyond small n | Traveling Salesman Problem (brute force) |
+
+### Visualizing Growth Rates
+
+Imagine you increase the size of your input $n$. How much longer does your program take?
+This is where asymptotic analysis becomes visually intuitive. Let’s compare several common classes:
+
+- $O(1)$: constant line, no growth
+- $O(\log n)$: slow, gentle curve  
+- $O(n)$: straight diagonal, grows proportionally  
+- $O(n \log n)$: faster than linear, slower than quadratic  
+- $O(n^2)$: parabolic, typical for nested iterations  
+- $O(2^n)$: skyrockets quickly, typical of exhaustive recursion  
+- $O(n!)$: off the charts, factorial explosion
+
+These curves show **how scalable** an algorithm can be. The steeper the curve, the worse the scalability.
+Even though constant factors and implementation details matter in practice, the shape of these curves dominates for large $n$.
+
+<ComplexityGrowthVisualizer />
+
+### Comparing Growth Formally
+
+Formally, we can say that for sufficiently large $n$:
+
+$$
+O(1) \subset O(\log n) \subset O(n) \subset O(n \log n) \subset O(n^2) \subset O(2^n) \subset O(n!)
+$$
+
+This chain expresses increasing **asymptotic cost**: each subsequent class grows faster than the previous one.
+
+A good mental model:
+- Constant and logarithmic → **excellent scalability**  
+- Linear to quadratic → **acceptable for medium inputs**  
+- Exponential or factorial → **theoretical only**, rarely practical
+
+
+
+
 
 ## 3. Space Complexity
 

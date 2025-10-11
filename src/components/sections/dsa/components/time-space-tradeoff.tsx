@@ -2,18 +2,19 @@
 
 import { FC } from "react";
 import {
-  ScatterChart,
+  CartesianGrid,
+  LabelList,
+  Legend,
+  ResponsiveContainer,
   Scatter,
+  ScatterChart,
+  Tooltip,
   XAxis,
   YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  Legend,
-  LabelList,
   ZAxis,
   type LabelProps,
 } from "recharts";
+import { ChartTooltip } from "./tooltip";
 
 const data = [
   { time: 1, space: 1, name: "O(1)" },
@@ -25,7 +26,8 @@ const data = [
 
 // Renderer custom per forzare una singola riga
 const renderLabel = ({ x, y, value }: LabelProps) => {
-  if (typeof x !== "number" || typeof y !== "number" || value == null) return null;
+  if (typeof x !== "number" || typeof y !== "number" || value == null)
+    return null;
 
   return (
     <text
@@ -44,8 +46,8 @@ const renderLabel = ({ x, y, value }: LabelProps) => {
 
 export const TimeVsSpaceTradeoffVisualizer: FC = () => {
   return (
-    <div className="bg-general-background h-80 w-full glow-container shadow-sm my-4">
-      <ResponsiveContainer >
+    <div className="bg-general-background glow-container my-4 h-80 w-full shadow-sm">
+      <ResponsiveContainer>
         <ScatterChart margin={{ top: 40, right: 40, bottom: 40, left: 40 }}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis
@@ -71,13 +73,10 @@ export const TimeVsSpaceTradeoffVisualizer: FC = () => {
             domain={[0, 11]}
           />
           <ZAxis range={[80, 120]} />
-          <Tooltip cursor={{ strokeDasharray: "3 3" }} />
+          <Tooltip cursor={{ strokeDasharray: "3 3" }} content={ChartTooltip} />
           <Legend wrapperStyle={{ color: "var(--color-accent)" }} />
           <Scatter data={data} fill="#00FF41" name="Complexity Class">
-            <LabelList
-              dataKey="name"
-              content={renderLabel}
-            />
+            <LabelList dataKey="name" content={renderLabel} />
           </Scatter>
         </ScatterChart>
       </ResponsiveContainer>
