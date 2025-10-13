@@ -2,6 +2,7 @@ import { PerformanceComparisonChart } from "../../components/sections/dsa/compon
 import { TimeVsSpaceTradeoffVisualizer } from "../../components/sections/dsa/components/time-space-tradeoff";
 import { ComplexityGrowthVisualizer } from "../../components/sections/dsa/components/complexity-growth-visualizer";
 import { SpaceComplexityVisualizer } from "../../components/sections/dsa/components/space-complexity-visualizer";
+import { AmortizedAnalysis } from "../../components/sections/dsa/components/amortized-analysis";
 
 # Time and Space Complexity
 
@@ -219,18 +220,84 @@ For example:
 
 <SpaceComplexityVisualizer />
 
-## 4. Amortized Analysis
+## Amortized Analysis
 
-Some operations are expensive occasionally (e.g., dynamic array resizing).  
-Amortized analysis averages cost over multiple operations.
+So far, we have discussed *time* and *space* complexity as measures of how algorithms scale.  
+However, not all operations cost the same every time they are executed. 
+Some may be **cheap most of the time**, but **expensive occasionally**, and yet, the overall average cost remains small.  
+This is where **amortized analysis** comes into play.
 
-Example: dynamic array push
-{/* <DynamicArrayVisualizer /> */}
+### Why Amortized Analysis Is Needed
 
-Methods:
-- Aggregate Method
-- Accounting Method
-- Potential Method
+In a standard time complexity analysis, we typically look at the *worst-case* cost of a single operation.  
+But this can be misleading when certain costly operations are rare and balanced out by many inexpensive ones.
+Amortized analysis helps us compute the **average cost per operation over a sequence of operations**, even when some of them are expensive.  
+It gives a more realistic measure of an algorithm’s long-term efficiency.
+
+### Example: Dynamic Array Growth
+
+Consider a **dynamic array** (like a `std::vector` in C++ or `ArrayList` in Java).  
+When it runs out of space, it allocates a new, larger array (usually double the current size) and copies all elements over.  
+At first glance, this reallocation looks expensive: it takes $O(n)$ time because all elements are copied.  
+However, this happens infrequently.
+
+Let’s analyze this:
+
+- Start with an empty array of size 1.
+- Every time we insert and exceed the capacity, we double the array.
+- Copying elements happens only during resizing.
+
+Although the **resize operation** itself takes $O(n)$ time, because all existing elements must be copied into the new array, this doesn’t happen very often.  
+Let’s analyze the total cost across all insertions to see why the average remains constant.
+
+When inserting elements into a dynamic array:
+
+- The **first** element is inserted in constant time.
+- The **second** insertion triggers a resize (the capacity doubles from 1 → 2), so we copy 1 element.
+- The **third** insertion triggers another resize (2 → 4), so we copy 2 elements.
+- The **fifth** insertion triggers another (4 → 8), so we copy 4 elements.
+- And so on…
+
+Each time the array doubles, the number of copies equals the current capacity before resizing.  
+So the total work done over $n$ insertions is:
+
+$$
+1 + 2 + 4 + 8 + \dots + \frac{n}{2} < 2n
+$$
+
+That’s a **geometric series**, which sums to less than $2n$.  
+Even though individual resize operations cost more, they happen less and less frequently.
+
+Now, dividing the **total cost (≈ 2n)** by the **number of insertions (n)** gives an *average* cost per insertion of:
+
+$$
+\frac{2n}{n} = 2 = O(1)
+$$
+
+So while **some operations are expensive**, the average cost over a long sequence remains **constant time**. That’s what we mean by *amortized $O(1)$*.
+
+<AmortizedAnalysis />
+
+### Methods of Amortized Analysis
+
+There are three classical approaches to performing amortized analysis:
+
+- [Aggregate Method](https://www.geeksforgeeks.org/dsa/introduction-to-amortized-analysis/)
+   - Calculate the total cost of all operations and divide by the number of operations.  
+   - Used in the dynamic array example above.
+
+- [Accounting Method](https://en.wikipedia.org/wiki/Accounting_method_%28computer_science%29)
+   - Assign an artificial “charge” to each operation.  
+   - Some operations pay more than their real cost, saving “credit” for future expensive ones.
+
+- [Potential Method](https://en.wikipedia.org/wiki/Potential_method)
+   - Define a *potential function* that represents stored energy or work saved for future use.  
+   - Similar in idea to the accounting method, but more mathematical in nature.  
+   - Commonly used in data structure amortized proofs (e.g., union–find, Fibonacci heaps).
+
+---
+---
+---
 
 ## 5. Recurrences and Master Theorem
 
