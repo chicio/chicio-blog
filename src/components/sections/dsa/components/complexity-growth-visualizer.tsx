@@ -45,41 +45,79 @@ const generateData = (maxN = 8): ComplexityData[] => {
   return data;
 };
 
-export const ComplexityGrowthVisualizer: React.FC = () => {
-  const data = generateData(8);
-
-  return (
-    <div className="glow-container h-[400px] w-full p-5">
-      <ResponsiveContainer>
-        <LineChart data={data}>
-          <XAxis
-            dataKey="n"
-            label={{
-              value: "Input size (n)",
-              position: "insideBottom",
-              dy: 10,
-            }}
-          />
-          <YAxis
-            label={{
-              value: "Operations (arbitrary units)",
-              angle: -90,
-              offset: 0,
-              position: "insideLeft",
-              style: { textAnchor: "middle" },
-            }}
-          />
-          <Tooltip content={ChartTooltip} />
-          <Legend verticalAlign="top" />
-          <Line type="monotone" dataKey="o1" stroke="#4ade80" dot={false} name="O(1)" />
-          <Line type="monotone" dataKey="ologn" stroke="#60a5fa" dot={false} name="O(log n)" />
-          <Line type="monotone" dataKey="on" stroke="#facc15" dot={false} name="O(n)" />
-          <Line type="monotone" dataKey="onlogn" stroke="#fb923c" dot={false} name="O(n log n)" />
-          <Line type="monotone" dataKey="on2" stroke="#ef4444" dot={false} name="O(n²)" />
-          <Line type="monotone" dataKey="o2n" stroke="#c084fc" dot={false} name="O(2ⁿ)" />
-          <Line type="monotone" dataKey="onfact" stroke="#ec4899" dot={false} name="O(n!)" />
-        </LineChart>
-      </ResponsiveContainer>
-    </div>
-  );
-};
+export const ComplexityGrowthVisualizer: React.FC = () => (
+  <div className="glow-container h-[400px] w-full p-5">
+    <ResponsiveContainer>
+      <LineChart data={generateData(8)}>
+        <XAxis
+          dataKey="n"
+          height={50}
+          label={{
+            value: "Input size (n)",
+            position: "insideBottom",
+          }}
+        />
+        <YAxis
+          label={{
+            value: "Operations (arbitrary units)",
+            angle: -90,
+            offset: 10,
+            position: "insideLeft",
+            style: { textAnchor: "middle" },
+          }}
+        />
+        <Tooltip content={ChartTooltip} />
+        <Legend verticalAlign="top" />
+        <Line
+          type="monotone"
+          dataKey="o1"
+          stroke="#4ade80"
+          dot={false}
+          name="O(1)"
+        />
+        <Line
+          type="monotone"
+          dataKey="ologn"
+          stroke="#60a5fa"
+          dot={false}
+          name="O(log n)"
+        />
+        <Line
+          type="monotone"
+          dataKey="on"
+          stroke="#facc15"
+          dot={false}
+          name="O(n)"
+        />
+        <Line
+          type="monotone"
+          dataKey="onlogn"
+          stroke="#fb923c"
+          dot={false}
+          name="O(n log n)"
+        />
+        <Line
+          type="monotone"
+          dataKey="on2"
+          stroke="#ef4444"
+          dot={false}
+          name="O(n²)"
+        />
+        <Line
+          type="monotone"
+          dataKey="o2n"
+          stroke="#c084fc"
+          dot={false}
+          name="O(2ⁿ)"
+        />
+        <Line
+          type="monotone"
+          dataKey="onfact"
+          stroke="#ec4899"
+          dot={false}
+          name="O(n!)"
+        />
+      </LineChart>
+    </ResponsiveContainer>
+  </div>
+);

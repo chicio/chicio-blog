@@ -1,6 +1,7 @@
 import { PerformanceComparisonChart } from "../../components/sections/dsa/components/performance-comparison-chart";
 import { TimeVsSpaceTradeoffVisualizer } from "../../components/sections/dsa/components/time-space-tradeoff";
 import { ComplexityGrowthVisualizer } from "../../components/sections/dsa/components/complexity-growth-visualizer";
+import { SpaceComplexityVisualizer } from "../../components/sections/dsa/components/space-complexity-visualizer";
 
 # Time and Space Complexity
 
@@ -134,7 +135,7 @@ Let’s summarize intuitively:
 | **Ω(f(n))** | Lower bound | The algorithm *will not* be faster than this |
 | **Θ(f(n))** | Tight bound | The algorithm *always* behaves like this asymptotically |
 
-## Typical Complexity Classes
+### Typical Complexity Classes
 
 Understanding **complexity classes** helps you quickly estimate *how scalable* an algorithm is.  
 While Big O notation tells you how fast the runtime grows, complexity classes give you a **visual and conceptual map** of the most common growth rates you'll encounter in practice.
@@ -189,27 +190,34 @@ A good mental model:
 - Linear to quadratic → **acceptable for medium inputs**  
 - Exponential or factorial → **theoretical only**, rarely practical
 
+## Space Complexity
+
+Just like **time complexity** measures *how fast* an algorithm grows in execution time, **space complexity** measures *how much memory* it needs as the input size increases.
+
+It includes:
+- **Input space**, memory required to store the input data.
+- **Auxiliary space**, temporary memory used during execution (e.g., variables, recursion stack, buffers, etc.).
+- **Output space**, memory used to store the output.
+
+In asymptotic notation, we usually refer to the **auxiliary space complexity**, since the input and output are typically fixed by the problem definition.
+
+For example:
+- An algorithm that uses a few extra variables has $O(1)$ space complexity (constant space).
+- One that allocates an array of size $n$ has $O(n)$ space complexity.
+- A recursive algorithm that goes $n$ levels deep in its call stack will also use $O(n)$ memory due to the function call frames.
+
+### Examples
+
+| Algorithm / Data Structure | Space Complexity | Explanation |
+|-----------------------------|------------------|--------------|
+| Iterative sum of array      | O(1)             | Uses only a few variables, regardless of array size |
+| Recursive factorial         | O(n)             | Each recursive call adds a frame to the call stack |
+| Merge Sort                  | O(n)             | Requires temporary arrays during merging |
+| Dynamic Programming (e.g., Fibonacci table) | O(n) | Stores intermediate results in a table |
+| In-place QuickSort          | O(log n)         | Recursion depth proportional to log n (average case) |
 
 
-
-
-## 3. Space Complexity
-
-Space complexity measures **memory usage** relative to input size.
-
-- Variables: O(1)  
-- Arrays of size n: O(n)  
-- Recursion stack: O(depth of recursion)  
-
-Example: Recursive Fibonacci (Python)
-```python
-def fib(n):
-    if n <= 1:
-        return n
-    return fib(n-1) + fib(n-2)
-```
-- Time: O(2^n)  
-- Space: O(n) due to recursion stack
+<SpaceComplexityVisualizer />
 
 ## 4. Amortized Analysis
 

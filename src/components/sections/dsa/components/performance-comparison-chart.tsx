@@ -24,7 +24,6 @@ export const PerformanceComparisonChart: FC = () => (
   <div className="glow-container h-[400px] w-full p-5">
     <ResponsiveContainer>
       <LineChart data={data}>
-        <CartesianGrid strokeDasharray="3 3" />
         <XAxis
           dataKey="n"
           label={{
