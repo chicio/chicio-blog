@@ -3,6 +3,7 @@ import { TimeVsSpaceTradeoffVisualizer } from "../../components/sections/dsa/com
 import { ComplexityGrowthVisualizer } from "../../components/sections/dsa/components/complexity-growth-visualizer";
 import { SpaceComplexityVisualizer } from "../../components/sections/dsa/components/space-complexity-visualizer";
 import { AmortizedAnalysis } from "../../components/sections/dsa/components/amortized-analysis";
+import { RecurrenceTree } from "../../components/sections/dsa/components/recurrence-tree";
 
 # Time and Space Complexity
 
@@ -295,22 +296,64 @@ There are three classical approaches to performing amortized analysis:
    - Similar in idea to the accounting method, but more mathematical in nature.  
    - Commonly used in data structure amortized proofs (e.g., union–find, Fibonacci heaps).
 
----
----
----
+## Recurrences and Master Theorem
 
-## 5. Recurrences and Master Theorem
+When analyzing **recursive algorithms**, it’s not enough to count loops or statements. 
+We must also understand how the algorithm *calls itself* and how much work is done at each level of recursion.
+This leads us to the concept of a **recurrence relation**, a mathematical expression that describes the running time of a recursive algorithm in terms of smaller instances of itself.
 
-Recursions are often represented as recurrences: \(T(n) = a T(n/b) + f(n)\)  
+### Writing Recurrence Relations
 
-Master Theorem solves them quickly for divide-and-conquer algorithms.
+A recurrence expresses the total running time $T(n)$ as:
 
-Example: Merge Sort  
-\(T(n) = 2T(n/2) + Θ(n) → Θ(n log n)\)
+$$
+T(n) = a \cdot T\left(\frac{n}{b}\right) + f(n)
+$$
 
-{/* <RecurrenceTree /> */}
+where:
 
-## 6. Tail Recursion
+- **a** = number of recursive subproblems  
+- **n/b** = size of each subproblem  
+- **f(n)** = non-recursive work (e.g., splitting, merging, comparisons)
+
+Let’s look at a few examples:
+
+- **Binary Search:** $T(n) = T(n/2) + O(1)$, only one recursive call per step, constant extra work, so complexity is **O(log n)**
+- **Merge Sort:** $T(n) = 2T(n/2) + O(n)$, two recursive calls, linear merge work, so complexity is **O(n log n)**
+- **QuickSort (average case):** $T(n) = 2T(n/2) + O(n)$, same form, but constants differ due to partitioning behavior
+- **QuickSort (worst case):** $T(n) = 2T(n-1) + O(n)$, unbalanced partitioning leads to linear depth
+
+These examples show that many recursive algorithms follow a **divide and conquer** pattern. But how can we *formally* find the 
+asymptotic solution to these recurrences?
+
+### The Master Theorem
+
+The **Master Theorem** provides a direct way to determine the asymptotic behavior of recurrences of the form:
+
+$$
+T(n) = a \, T\left(\frac{n}{b}\right) + f(n)
+$$
+
+Let $n^{\log_b a}$ represent the total work done by recursive calls.
+
+We then compare $f(n)$ (the non-recursive part) to $n^{\log_b a}$:
+
+| Case | Condition | Complexity |
+|------|------------|-------------|
+| **1. Subproblem dominates** | $f(n) = O(n^{\log_b a - \varepsilon})$ | $T(n) = \Theta(n^{\log_b a})$ |
+| **2. Balanced growth** | $f(n) = \Theta(n^{\log_b a} \log^k n)$ | $T(n) = \Theta(n^{\log_b a} \log^{k+1} n)$ |
+| **3. Work dominates** | $f(n) = \Omega(n^{\log_b a + \varepsilon})$ and regularity holds | $T(n) = \Theta(f(n))$ |
+
+The theorem helps us bypass long recursive expansions by classifying growth behavior into these three regimes.
+
+### Intuitive Visualization
+
+The total cost of a recursive algorithm can be visualized as a **recursion tree**, where each level represents recursive calls and the sum across levels gives the total time.
+Below is a visual simulation that shows how costs accumulate for a recurrence such as $T(n) = 2T(n/2) + n$, which corresponds to **Merge Sort**:
+
+<RecurrenceTree />
+
+## Tail Recursion
 
 Tail recursion allows **constant stack usage**. Example:
 
