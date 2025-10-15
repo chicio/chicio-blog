@@ -4,6 +4,7 @@ import { ComplexityGrowthVisualizer } from "../../components/sections/dsa/compon
 import { SpaceComplexityVisualizer } from "../../components/sections/dsa/components/space-complexity-visualizer";
 import { AmortizedAnalysis } from "../../components/sections/dsa/components/amortized-analysis";
 import { RecurrenceTree } from "../../components/sections/dsa/components/recurrence-tree";
+import { StackFrameComparisonChart } from "../../components/sections/dsa/components/stack-frame-comparison-chart";
 
 # Time and Space Complexity
 
@@ -355,17 +356,85 @@ Below is a visual simulation that shows how costs accumulate for a recurrence su
 
 ## Tail Recursion
 
-Tail recursion allows **constant stack usage**. Example:
+When analyzing recursive algorithms, a special case called **tail recursion** is particularly important. 
+A **tail-recursive function** is one where the recursive call is the **last operation** performed. Its result is immediately returned without further computation.
+Formally, a recursive function is *tail-recursive* if:
 
-```python
-def factorial(n, acc=1):
-    if n == 0:
-        return acc
-    return factorial(n-1, n*acc)
+$$
+f(x) = 
+\begin{cases}
+\text{base case result}, & \text{if condition} \\
+f(\text{simpler input}), & \text{otherwise}
+\end{cases}
+$$
+
+and no additional operations follow the recursive call.
+
+### Why Tail Recursion Matters
+
+Tail recursion allows the compiler or interpreter to optimize recursive calls by detecting when the last operation of a function is a call to itself.
+In such cases, there is no need to keep the current function’s stack frame, since no further computation will occur after the recursive call returns.
+Instead, the current frame can be reused for the next call, effectively transforming recursion into iteration under the hood.
+This optimization, known as Tail Call Optimization (TCO), prevents stack growth and makes recursive algorithms as memory-efficient as their iterative counterparts.
+Some languages, like Scheme or Scala, guarantee TCO at the language level, while others, including Python and JavaScript, do not, meaning deep recursion can still lead to a stack overflow.
+
+In other words:
+
+- A regular recursive function has **O(n)** space complexity (due to stack frames).  
+- A tail-recursive function, if optimized, can run in **O(1)** space.
+
+### Example: Factorial
+
+**Regular recursion (not tail-recursive):**
+
+```typescript
+function factorial(n: number): number {
+  if (n === 0) {
+    return 1;
+  }
+  
+  return n * factorial(n - 1);
+}
 ```
-- Space complexity: O(1) (tail call optimization)  
 
-Example languages: Java, C++, Python, TypeScript, Swift, Kotlin
+Here, the multiplication happens *after* the recursive call returns, so the result must be stored. No TCO is possible.
+
+**Tail-recursive version:**
+
+```typescript
+function factorialTail(n: number, acc: number = 1): number {
+  if (n === 0) {
+    return acc;
+  }
+  
+  return factorialTail(n - 1, n * acc);
+}
+
+```
+
+In this version, the recursive call is the **final action**. All intermediate work is accumulated in `acc`. 
+With tail-call optimization, this version runs in constant space.
+
+<StackFrameComparisonChart />
+
+### Tail Recursion Across Languages
+
+| Language | Tail Call Optimization Support |
+|-----------|--------------------------------|
+| **C / C++** | Supported by some compilers (e.g., GCC with `-O2`) |
+| **Python** | ❌ Not supported |
+| **Java** | ❌ Not supported |
+| **Scala** | ✅ Supported with `@tailrec` annotation |
+| **Swift** | ✅ Supported by default in optimized builds |
+| **Rust** | ❌ No native TCO, but can be simulated with loops |
+| **Scheme / Lisp** | ✅ Fully supported (as part of the spec) |
+
+### Complexity Considerations
+
+While **time complexity** of a tail-recursive function is the same as the non-tail version,  
+its **space complexity** improves dramatically — from **O(n)** to **O(1)**, if the compiler performs TCO.
+Tail recursion is therefore a powerful optimization pattern,  
+especially for algorithms that involve deep but linear recursion, such as factorials, Fibonacci (iterative form), and list traversals.
 
 ## 7. Dynamic Programming Complexity Breakdown
 
