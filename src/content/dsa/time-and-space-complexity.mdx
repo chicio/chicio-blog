@@ -431,47 +431,67 @@ With tail-call optimization, this version runs in constant space.
 
 ### Complexity Considerations
 
-While **time complexity** of a tail-recursive function is the same as the non-tail version,  
-its **space complexity** improves dramatically — from **O(n)** to **O(1)**, if the compiler performs TCO.
-Tail recursion is therefore a powerful optimization pattern,  
-especially for algorithms that involve deep but linear recursion, such as factorials, Fibonacci (iterative form), and list traversals.
+While **time complexity** of a tail-recursive function is the same as the non-tail version, its **space complexity** improves dramatically, from **O(n)** to **O(1)**, if the compiler performs TCO.
+Tail recursion is therefore a powerful optimization pattern,  especially for algorithms that involve deep but linear recursion, such as factorials, Fibonacci (iterative form), and list traversals.
 
-## 7. Dynamic Programming Complexity Breakdown
+## Practical Interview-style Examples
 
-DP problems can be analyzed using a grid/matrix for **subproblem storage**. Example: 0/1 Knapsack, Fibonacci, Grid paths.
+This section walks through a few common algorithmic problems quickly, showing **step-by-step** how to calculate **time** and **space complexity**. 
+All examples use **TypeScript**.
 
-{/* <DPGrid /> */}
+## Linear Search
 
-- Time: O(number of subproblems * cost per subproblem)  
-- Space: O(number of subproblems)  
-
-Worked example: Fibonacci DP
-```python
-def fib_dp(n):
-    dp = [0]*(n+1)
-    dp[1] = 1
-    for i in range(2, n+1):
-        dp[i] = dp[i-1] + dp[i-2]
-    return dp[n]
+```ts
+function linearSearch(arr: number[], target: number): number {
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i] === target) return i;
+  }
+  return -1;
+}
 ```
-- Time: O(n)  
-- Space: O(n)
 
-## 8. Practical Interview-style Examples
+**Analysis:**  
+- Loop runs at most `n` times, so **O(n) time**  
+- Constant extra variables, so **O(1) space**
 
-Step-by-step calculation of time and space is critical in interviews. Example approaches:
-- Count operations inside loops and recursions
-- Identify dominant terms
-- Consider nested loops and multiple recursive calls
+## Binary Search
 
-{/* <StepByStepAnalysis /> */}
+```ts
+function binarySearch(arr: number[], target: number): number {
+  let left = 0, right = arr.length - 1;
+  while (left <= right) {
+    const mid = Math.floor((left + right) / 2);
+    if (arr[mid] === target) return mid;
+    else if (arr[mid] < target) left = mid + 1;
+    else right = mid - 1;
+  }
+  return -1;
+}
+```
 
-## 9. Summary and Key Insights
+**Analysis:**  
+- Each iteration halves search space, so **O(log n) time**  
+- Constant extra variables, so **O(1) space**
 
-- Time complexity: growth of execution time  
-- Space complexity: memory consumption  
-- Big O, Ω, Θ: upper, lower, tight bounds  
-- Amortized analysis: average cost over operations  
-- Recurrences: Master Theorem for divide-and-conquer  
-- DP: grid/matrix for subproblems  
-- Tail recursion: constant stack usage when optimized  
+## Merge Sort
+
+```ts
+function mergeSort(arr: number[]): number[] {
+  if (arr.length <= 1) return arr;
+  const mid = Math.floor(arr.length / 2);
+  const left = mergeSort(arr.slice(0, mid));
+  const right = mergeSort(arr.slice(mid));
+  const result: number[] = [];
+  let i = 0, j = 0;
+  while (i < left.length && j < right.length) {
+    if (left[i] < right[j]) result.push(left[i++]);
+    else result.push(right[j++]);
+  }
+  return result.concat(left.slice(i)).concat(right.slice(j));
+}
+```
+
+**Analysis:**  
+- Recurrence: T(n) = 2T(n/2) + O(n)  
+- Master Theorem, so **O(n log n) time**  
+- Extra array for merging, so **O(n) space**
