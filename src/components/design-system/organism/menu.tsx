@@ -133,6 +133,17 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
               className="xs:mb-0 xs:w-auto z-50 mb-2 w-80"
               items={[
                 {
+                  label: "Time and space complexity",
+                  to: slugs.timeAndSpaceComplexity,
+                  trackingData: {
+                    action: tracking.action.open_dsa_time_and_space_complexity,
+                    category: trackingCategory,
+                    label: tracking.label.header,
+                  },
+                  selected: pathname === slugs.timeAndSpaceComplexity,
+                  onClickCallback: () => setShouldOpenMenu(false),
+                },
+                {
                   label: "Arrays",
                   to: slugs.arrays,
                   trackingData: {

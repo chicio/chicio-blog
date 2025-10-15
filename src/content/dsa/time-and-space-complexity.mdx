@@ -1,0 +1,497 @@
+import { PerformanceComparisonChart } from "../../components/sections/dsa/components/performance-comparison-chart";
+import { TimeVsSpaceTradeoffVisualizer } from "../../components/sections/dsa/components/time-space-tradeoff";
+import { ComplexityGrowthVisualizer } from "../../components/sections/dsa/components/complexity-growth-visualizer";
+import { SpaceComplexityVisualizer } from "../../components/sections/dsa/components/space-complexity-visualizer";
+import { AmortizedAnalysis } from "../../components/sections/dsa/components/amortized-analysis";
+import { RecurrenceTree } from "../../components/sections/dsa/components/recurrence-tree";
+import { StackFrameComparisonChart } from "../../components/sections/dsa/components/stack-frame-comparison-chart";
+
+# Time and Space Complexity
+
+Understanding **time and space complexity** is essential for analyzing how algorithms scale.  
+This article covers everything you need to know about time and space complexity, including worked examples, mathematical notations, and practical guidance.
+
+## What is Algorithm Analysis?
+
+When we talk about algorithms, one of the first questions that comes to mind is:  
+**“How efficient is it?”**
+
+This question is at the core of **algorithm analysis**, a branch of computer science that helps us understand how an algorithm behaves as the input size grows.  
+Efficiency is not just about speed — it’s also about **how much memory an algorithm consumes** while running.  
+That’s where **time complexity** and **space complexity** come in.
+
+### Why Algorithm Analysis Matters
+
+Two algorithms may solve the same problem, but one can be significantly faster or use much less memory than the other.  
+For example, consider sorting: a simple algorithm like **Bubble Sort** may take several seconds to sort a large dataset, while **Merge Sort** or **Quick Sort** can handle it in a fraction of the time.  
+
+Algorithm analysis provides a **mathematical framework** to predict how an algorithm will scale, without actually running it.  
+This is especially critical when designing software that must handle **large-scale data** — think of web search engines, streaming platforms, or real-time financial systems.  
+Even a small efficiency improvement can save **millions of operations** when applied at scale.
+
+<PerformanceComparisonChart />
+
+### Intuition Behind Time and Space Complexity
+
+At its core, time complexity measures **how the number of operations grows** with respect to input size (denoted as `n`).  
+Space complexity measures **how much extra memory** (RAM or stack) the algorithm requires to execute.
+
+Here’s a simple analogy:
+> Imagine you are packing boxes.  
+> The **time complexity** tells you *how long it will take to pack all the boxes*,  
+> while the **space complexity** tells you *how many packing tables you’ll need* to organize everything efficiently.
+
+Both metrics are crucial.  
+An algorithm that runs fast but consumes too much memory may still be unusable in memory-limited environments (like mobile devices or embedded systems).  
+Conversely, an algorithm that is memory-efficient but slow may not meet performance requirements.
+
+### Real-World Examples
+
+- **Google Search:** must sort and rank billions of results in milliseconds.  
+- **Navigation apps:** compute shortest paths (like Dijkstra’s algorithm) in real-time.  
+- **Machine learning:** training models with millions of parameters requires careful optimization of time and space trade-offs.
+
+In all these cases, developers use algorithmic analysis to **choose the best trade-off** between computation time and resource consumption.  
+The chart below visualizes how different algorithmic complexity classes trade time for space.  
+As we move toward higher-order complexities like **O(n²)**, both execution time and memory usage typically increase.  
+In practice, optimizing one dimension (e.g., speed) often comes at the cost of the other (e.g., memory).
+
+<TimeVsSpaceTradeoffVisualizer />
+
+## Time Complexity
+
+Understanding **time complexity** is crucial to analyzing how efficiently an algorithm performs.  
+At a high level, time complexity measures the **amount of computational work** an algorithm requires relative to the input size $n$.  
+
+For example, consider searching for an element in a list of $n$ items:
+
+- If you check each element one by one (linear search), the work grows proportionally to $n$.  
+- If the list is sorted and you use binary search, the work grows logarithmically to $\log_2 n$.
+
+### Best, Worst, and Average Case
+
+Time complexity can vary depending on the scenario:
+
+- **Best Case:** The minimum amount of work required. For linear search, this occurs if the target is the first element. 
+- **Worst Case:** The maximum work possible. For linear search, if the target is not present, we examine all $n$ elements.
+- **Average Case:** The expected work across all possible inputs.
+
+### Big O, Ω, and Θ Notations
+
+When we analyze algorithms, we are often less interested in their exact running time and more in how that time grows as the input size increases. 
+This is the essence of **asymptotic analysis**, a method that studies the behavior of algorithms as the input size $n$ approaches infinity.
+Let’s explore the three most common notations used to describe this growth.
+
+#### Big O Notation — the Upper Bound
+
+**Big O** gives us the *worst-case* growth rate of an algorithm — an upper limit on how many steps it could take.
+
+$$
+O(f(n)) = \{ g(n) : \exists c > 0, \exists n_0 > 0, \forall n > n_0, \ 0 \le g(n) \le c \cdot f(n) \}
+$$
+
+This means that beyond some point $n_0$, the algorithm’s running time $g(n)$ will never grow faster than a constant multiple of $f(n)$.
+For example, if a loop runs up to $n$ times, its complexity is $O(n)$.  
+Even if it actually runs $3n + 2$ times, we still say it’s $O(n)$, because constants don’t matter in asymptotic analysis.
+
+$$
+3n + 2 = O(n)
+$$
+
+Big O notation is often used as a general approximation. When we say *“this algorithm is O(n²)”*, we usually mean “it won’t be worse than quadratic time.”
+
+#### Omega (Ω) Notation — the Lower Bound
+
+If Big O tells us how bad things can get, **Ω (Omega)** tells us how good they can get — the *best-case* scenario.
+
+$$
+\Omega(f(n)) = \{ g(n) : \exists c > 0, \exists n_0 > 0, \forall n > n_0, \ 0 \le c \cdot f(n) \le g(n) \}
+$$
+
+So, $g(n) = \Omega(f(n))$ means the algorithm will take *at least* proportional to $f(n)$ time.
+A simple linear search that stops when the element is found could take:
+- $\Omega(1)$ time (if the target is the first element),
+- but $O(n)$ time (if it’s the last or missing).
+
+#### Theta (Θ) Notation — the Tight Bound
+
+When both upper and lower bounds match, we use **Θ (Theta)** to say the algorithm’s growth rate is *asymptotically tight*.
+
+$$
+\Theta(f(n)) = \{ g(n) : \exists c_1, c_2 > 0, \exists n_0 > 0, \forall n > n_0, \ c_1 f(n) \le g(n) \le c_2 f(n) \}
+$$
+
+For example, if an algorithm always iterates through all $n$ elements exactly once, its runtime is:
+$$
+T(n) = \Theta(n)
+$$
+
+This means it’s both $O(n)$ *and* $\Omega(n)$.
+
+#### **Interpreting These Formulas in Practice**
+
+Let’s summarize intuitively:
+
+| Notation | Describes | Meaning |
+|-----------|------------|----------|
+| **O(f(n))** | Upper bound | The algorithm *will not* be slower than this |
+| **Ω(f(n))** | Lower bound | The algorithm *will not* be faster than this |
+| **Θ(f(n))** | Tight bound | The algorithm *always* behaves like this asymptotically |
+
+### Typical Complexity Classes
+
+Understanding **complexity classes** helps you quickly estimate *how scalable* an algorithm is.  
+While Big O notation tells you how fast the runtime grows, complexity classes give you a **visual and conceptual map** of the most common growth rates you'll encounter in practice.
+     
+### The Intuition Behind Growth
+
+As we saw before, every algorithm’s runtime (or memory usage) changes as the size of its input, $n$, grows.  
+The relationship between the two, expressed as $f(n)$ — describes *how fast* the cost increases.  
+We classify these relationships into **complexity classes**. Each class defines a family of functions that grow at roughly the same rate.  
+Here’s what that means intuitively:
+
+| Complexity Class|Name | Growth Description | Example Algorithm |
+|-----------------|------|-------------------|-------------------|
+| **O(1)**        |  Constant | Execution time stays constant regardless of input size | Accessing an element in an array |
+| **O(log n)**    | Logarithmic | Increases slowly as n grows — each step reduces the problem size significantly | Binary Search |
+| **O(n)**        | Linear | Cost grows directly in proportion to n | Linear Search, Traversing a list |
+| **O(n log n)**  | Log-linear | Common in efficient divide-and-conquer algorithms | Merge Sort, Quick Sort (average) |
+| **O(n^2)**      | Quadratic | Typical of algorithms with nested loops | Bubble Sort, Selection Sort |
+| **O(2^n)**      | Exponential | Doubles with each new element — extremely expensive | Recursive Fibonacci |
+| **O(n!)**       | Factorial | Explodes combinatorially — often infeasible beyond small n | Traveling Salesman Problem (brute force) |
+
+### Visualizing Growth Rates
+
+Imagine you increase the size of your input $n$. How much longer does your program take?
+This is where asymptotic analysis becomes visually intuitive. Let’s compare several common classes:
+
+- $O(1)$: constant line, no growth
+- $O(\log n)$: slow, gentle curve  
+- $O(n)$: straight diagonal, grows proportionally  
+- $O(n \log n)$: faster than linear, slower than quadratic  
+- $O(n^2)$: parabolic, typical for nested iterations  
+- $O(2^n)$: skyrockets quickly, typical of exhaustive recursion  
+- $O(n!)$: off the charts, factorial explosion
+
+These curves show **how scalable** an algorithm can be. The steeper the curve, the worse the scalability.
+Even though constant factors and implementation details matter in practice, the shape of these curves dominates for large $n$.
+
+<ComplexityGrowthVisualizer />
+
+### Comparing Growth Formally
+
+Formally, we can say that for sufficiently large $n$:
+
+$$
+O(1) \subset O(\log n) \subset O(n) \subset O(n \log n) \subset O(n^2) \subset O(2^n) \subset O(n!)
+$$
+
+This chain expresses increasing **asymptotic cost**: each subsequent class grows faster than the previous one.
+
+A good mental model:
+- Constant and logarithmic → **excellent scalability**  
+- Linear to quadratic → **acceptable for medium inputs**  
+- Exponential or factorial → **theoretical only**, rarely practical
+
+## Space Complexity
+
+Just like **time complexity** measures *how fast* an algorithm grows in execution time, **space complexity** measures *how much memory* it needs as the input size increases.
+
+It includes:
+- **Input space**, memory required to store the input data.
+- **Auxiliary space**, temporary memory used during execution (e.g., variables, recursion stack, buffers, etc.).
+- **Output space**, memory used to store the output.
+
+In asymptotic notation, we usually refer to the **auxiliary space complexity**, since the input and output are typically fixed by the problem definition.
+
+For example:
+- An algorithm that uses a few extra variables has $O(1)$ space complexity (constant space).
+- One that allocates an array of size $n$ has $O(n)$ space complexity.
+- A recursive algorithm that goes $n$ levels deep in its call stack will also use $O(n)$ memory due to the function call frames.
+
+### Examples
+
+| Algorithm / Data Structure | Space Complexity | Explanation |
+|-----------------------------|------------------|--------------|
+| Iterative sum of array      | O(1)             | Uses only a few variables, regardless of array size |
+| Recursive factorial         | O(n)             | Each recursive call adds a frame to the call stack |
+| Merge Sort                  | O(n)             | Requires temporary arrays during merging |
+| Dynamic Programming (e.g., Fibonacci table) | O(n) | Stores intermediate results in a table |
+| In-place QuickSort          | O(log n)         | Recursion depth proportional to log n (average case) |
+
+
+<SpaceComplexityVisualizer />
+
+## Amortized Analysis
+
+So far, we have discussed *time* and *space* complexity as measures of how algorithms scale.  
+However, not all operations cost the same every time they are executed. 
+Some may be **cheap most of the time**, but **expensive occasionally**, and yet, the overall average cost remains small.  
+This is where **amortized analysis** comes into play.
+
+### Why Amortized Analysis Is Needed
+
+In a standard time complexity analysis, we typically look at the *worst-case* cost of a single operation.  
+But this can be misleading when certain costly operations are rare and balanced out by many inexpensive ones.
+Amortized analysis helps us compute the **average cost per operation over a sequence of operations**, even when some of them are expensive.  
+It gives a more realistic measure of an algorithm’s long-term efficiency.
+
+### Example: Dynamic Array Growth
+
+Consider a **dynamic array** (like a `std::vector` in C++ or `ArrayList` in Java).  
+When it runs out of space, it allocates a new, larger array (usually double the current size) and copies all elements over.  
+At first glance, this reallocation looks expensive: it takes $O(n)$ time because all elements are copied.  
+However, this happens infrequently.
+
+Let’s analyze this:
+
+- Start with an empty array of size 1.
+- Every time we insert and exceed the capacity, we double the array.
+- Copying elements happens only during resizing.
+
+Although the **resize operation** itself takes $O(n)$ time, because all existing elements must be copied into the new array, this doesn’t happen very often.  
+Let’s analyze the total cost across all insertions to see why the average remains constant.
+
+When inserting elements into a dynamic array:
+
+- The **first** element is inserted in constant time.
+- The **second** insertion triggers a resize (the capacity doubles from 1 → 2), so we copy 1 element.
+- The **third** insertion triggers another resize (2 → 4), so we copy 2 elements.
+- The **fifth** insertion triggers another (4 → 8), so we copy 4 elements.
+- And so on…
+
+Each time the array doubles, the number of copies equals the current capacity before resizing.  
+So the total work done over $n$ insertions is:
+
+$$
+1 + 2 + 4 + 8 + \dots + \frac{n}{2} < 2n
+$$
+
+That’s a **geometric series**, which sums to less than $2n$.  
+Even though individual resize operations cost more, they happen less and less frequently.
+
+Now, dividing the **total cost (≈ 2n)** by the **number of insertions (n)** gives an *average* cost per insertion of:
+
+$$
+\frac{2n}{n} = 2 = O(1)
+$$
+
+So while **some operations are expensive**, the average cost over a long sequence remains **constant time**. That’s what we mean by *amortized $O(1)$*.
+
+<AmortizedAnalysis />
+
+### Methods of Amortized Analysis
+
+There are three classical approaches to performing amortized analysis:
+
+- [Aggregate Method](https://www.geeksforgeeks.org/dsa/introduction-to-amortized-analysis/)
+   - Calculate the total cost of all operations and divide by the number of operations.  
+   - Used in the dynamic array example above.
+
+- [Accounting Method](https://en.wikipedia.org/wiki/Accounting_method_%28computer_science%29)
+   - Assign an artificial “charge” to each operation.  
+   - Some operations pay more than their real cost, saving “credit” for future expensive ones.
+
+- [Potential Method](https://en.wikipedia.org/wiki/Potential_method)
+   - Define a *potential function* that represents stored energy or work saved for future use.  
+   - Similar in idea to the accounting method, but more mathematical in nature.  
+   - Commonly used in data structure amortized proofs (e.g., union–find, Fibonacci heaps).
+
+## Recurrences and Master Theorem
+
+When analyzing **recursive algorithms**, it’s not enough to count loops or statements. 
+We must also understand how the algorithm *calls itself* and how much work is done at each level of recursion.
+This leads us to the concept of a **recurrence relation**, a mathematical expression that describes the running time of a recursive algorithm in terms of smaller instances of itself.
+
+### Writing Recurrence Relations
+
+A recurrence expresses the total running time $T(n)$ as:
+
+$$
+T(n) = a \cdot T\left(\frac{n}{b}\right) + f(n)
+$$
+
+where:
+
+- **a** = number of recursive subproblems  
+- **n/b** = size of each subproblem  
+- **f(n)** = non-recursive work (e.g., splitting, merging, comparisons)
+
+Let’s look at a few examples:
+
+- **Binary Search:** $T(n) = T(n/2) + O(1)$, only one recursive call per step, constant extra work, so complexity is **O(log n)**
+- **Merge Sort:** $T(n) = 2T(n/2) + O(n)$, two recursive calls, linear merge work, so complexity is **O(n log n)**
+- **QuickSort (average case):** $T(n) = 2T(n/2) + O(n)$, same form, but constants differ due to partitioning behavior
+- **QuickSort (worst case):** $T(n) = 2T(n-1) + O(n)$, unbalanced partitioning leads to linear depth
+
+These examples show that many recursive algorithms follow a **divide and conquer** pattern. But how can we *formally* find the 
+asymptotic solution to these recurrences?
+
+### The Master Theorem
+
+The **Master Theorem** provides a direct way to determine the asymptotic behavior of recurrences of the form:
+
+$$
+T(n) = a \, T\left(\frac{n}{b}\right) + f(n)
+$$
+
+Let $n^{\log_b a}$ represent the total work done by recursive calls.
+
+We then compare $f(n)$ (the non-recursive part) to $n^{\log_b a}$:
+
+| Case | Condition | Complexity |
+|------|------------|-------------|
+| **1. Subproblem dominates** | $f(n) = O(n^{\log_b a - \varepsilon})$ | $T(n) = \Theta(n^{\log_b a})$ |
+| **2. Balanced growth** | $f(n) = \Theta(n^{\log_b a} \log^k n)$ | $T(n) = \Theta(n^{\log_b a} \log^{k+1} n)$ |
+| **3. Work dominates** | $f(n) = \Omega(n^{\log_b a + \varepsilon})$ and regularity holds | $T(n) = \Theta(f(n))$ |
+
+The theorem helps us bypass long recursive expansions by classifying growth behavior into these three regimes.
+
+### Intuitive Visualization
+
+The total cost of a recursive algorithm can be visualized as a **recursion tree**, where each level represents recursive calls and the sum across levels gives the total time.
+Below is a visual simulation that shows how costs accumulate for a recurrence such as $T(n) = 2T(n/2) + n$, which corresponds to **Merge Sort**:
+
+<RecurrenceTree />
+
+## Tail Recursion
+
+When analyzing recursive algorithms, a special case called **tail recursion** is particularly important. 
+A **tail-recursive function** is one where the recursive call is the **last operation** performed. Its result is immediately returned without further computation.
+Formally, a recursive function is *tail-recursive* if:
+
+$$
+f(x) = 
+\begin{cases}
+\text{base case result}, & \text{if condition} \\
+f(\text{simpler input}), & \text{otherwise}
+\end{cases}
+$$
+
+and no additional operations follow the recursive call.
+
+### Why Tail Recursion Matters
+
+Tail recursion allows the compiler or interpreter to optimize recursive calls by detecting when the last operation of a function is a call to itself.
+In such cases, there is no need to keep the current function’s stack frame, since no further computation will occur after the recursive call returns.
+Instead, the current frame can be reused for the next call, effectively transforming recursion into iteration under the hood.
+This optimization, known as Tail Call Optimization (TCO), prevents stack growth and makes recursive algorithms as memory-efficient as their iterative counterparts.
+Some languages, like Scheme or Scala, guarantee TCO at the language level, while others, including Python and JavaScript, do not, meaning deep recursion can still lead to a stack overflow.
+
+In other words:
+
+- A regular recursive function has **O(n)** space complexity (due to stack frames).  
+- A tail-recursive function, if optimized, can run in **O(1)** space.
+
+### Example: Factorial
+
+**Regular recursion (not tail-recursive):**
+
+```typescript
+function factorial(n: number): number {
+  if (n === 0) {
+    return 1;
+  }
+  
+  return n * factorial(n - 1);
+}
+```
+
+Here, the multiplication happens *after* the recursive call returns, so the result must be stored. No TCO is possible.
+
+**Tail-recursive version:**
+
+```typescript
+function factorialTail(n: number, acc: number = 1): number {
+  if (n === 0) {
+    return acc;
+  }
+  
+  return factorialTail(n - 1, n * acc);
+}
+
+```
+
+In this version, the recursive call is the **final action**. All intermediate work is accumulated in `acc`. 
+With tail-call optimization, this version runs in constant space.
+
+<StackFrameComparisonChart />
+
+### Tail Recursion Across Languages
+
+| Language | Tail Call Optimization Support |
+|-----------|--------------------------------|
+| **C / C++** | Supported by some compilers (e.g., GCC with `-O2`) |
+| **Python** | ❌ Not supported |
+| **Java** | ❌ Not supported |
+| **Scala** | ✅ Supported with `@tailrec` annotation |
+| **Swift** | ✅ Supported by default in optimized builds |
+| **Rust** | ❌ No native TCO, but can be simulated with loops |
+| **Scheme / Lisp** | ✅ Fully supported (as part of the spec) |
+
+### Complexity Considerations
+
+While **time complexity** of a tail-recursive function is the same as the non-tail version, its **space complexity** improves dramatically, from **O(n)** to **O(1)**, if the compiler performs TCO.
+Tail recursion is therefore a powerful optimization pattern,  especially for algorithms that involve deep but linear recursion, such as factorials, Fibonacci (iterative form), and list traversals.
+
+## Practical Interview-style Examples
+
+This section walks through a few common algorithmic problems quickly, showing **step-by-step** how to calculate **time** and **space complexity**. 
+All examples use **TypeScript**.
+
+## Linear Search
+
+```ts
+function linearSearch(arr: number[], target: number): number {
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i] === target) return i;
+  }
+  return -1;
+}
+```
+
+**Analysis:**  
+- Loop runs at most `n` times, so **O(n) time**  
+- Constant extra variables, so **O(1) space**
+
+## Binary Search
+
+```ts
+function binarySearch(arr: number[], target: number): number {
+  let left = 0, right = arr.length - 1;
+  while (left <= right) {
+    const mid = Math.floor((left + right) / 2);
+    if (arr[mid] === target) return mid;
+    else if (arr[mid] < target) left = mid + 1;
+    else right = mid - 1;
+  }
+  return -1;
+}
+```
+
+**Analysis:**  
+- Each iteration halves search space, so **O(log n) time**  
+- Constant extra variables, so **O(1) space**
+
+## Merge Sort
+
+```ts
+function mergeSort(arr: number[]): number[] {
+  if (arr.length <= 1) return arr;
+  const mid = Math.floor(arr.length / 2);
+  const left = mergeSort(arr.slice(0, mid));
+  const right = mergeSort(arr.slice(mid));
+  const result: number[] = [];
+  let i = 0, j = 0;
+  while (i < left.length && j < right.length) {
+    if (left[i] < right[j]) result.push(left[i++]);
+    else result.push(right[j++]);
+  }
+  return result.concat(left.slice(i)).concat(right.slice(j));
+}
+```
+
+**Analysis:**  
+- Recurrence: T(n) = 2T(n/2) + O(n)  
+- Master Theorem, so **O(n log n) time**  
+- Extra array for merging, so **O(n) space**

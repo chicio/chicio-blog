@@ -39,6 +39,7 @@ export const tracking = {
     red_pill: "red_pill",
     blue_pill: "blue_pill",
     open_dsa_arrays: "open_dsa_arrays",
+    open_dsa_time_and_space_complexity: "open_dsa_time_and_space_complexity",
   },
   category: {
     home: "home",

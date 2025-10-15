@@ -41,7 +41,7 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
 
   return (
     <div
-      className={`relative z-50 mb-0 xs:mb-4 sm:mb-0`}
+      className={`relative z-50 mb-0`}
       tabIndex={-1}
       onBlur={handleBlur}
     >
@@ -63,7 +63,7 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
         {open && (
           <div
             key={"dropdown-menu"}
-            className={`glow-container xs:min-w-[180px] ${shouldReduceMotions ? "sm:bg-general-background" : "sm:bg-general-background/90"} relative mt-2 w-full rounded-xl py-2 sm:absolute sm:right-0 sm:left-0 sm:w-auto`}
+            className={`glow-container ${shouldReduceMotions ? "sm:bg-general-background" : "sm:bg-general-background/90"} relative mt-2 min-w-max w-auto rounded-xl py-2 sm:absolute sm:right-0 sm:left-0 sm:w-auto`}
             tabIndex={-1}
             role="menu"
           >
@@ -73,7 +73,7 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
                 to={item.to}
                 trackingData={item.trackingData}
                 selected={item.selected ?? false}
-                className="m-2"
+                className="m-2 xs:whitespace-nowrap"
                 onClickCallback={() => {
                   item.onClickCallback?.();
                 }}

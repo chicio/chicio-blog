@@ -371,6 +371,12 @@
         @apply hide-scrollbar overflow-hidden border border-solid border-accent-alpha-40 rounded-xl hover:border-accent active:border-accent focus:border-accent shadow-lg transition-all duration-500 hover:scale-101;
     }
 
+    ul.recharts-default-legend li.recharts-legend-item::before {
+        content: unset !important;
+        display: none !important;
+        all: unset;
+    }
+
     body.glitch-active {
         @apply animate-glitch duration-300;
         animation-duration: 300ms !important;
