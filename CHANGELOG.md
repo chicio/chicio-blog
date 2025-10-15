@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.3.0](https://github.com/chicio/chicio-blog/compare/v3.1.0...v3.3.0) (2025-10-15)
+
+### Features
+
+* **capabilities:** :sparkles: DSA Section ([#93](https://github.com/chicio/chicio-blog/issues/93)) ([b984a81](https://github.com/chicio/chicio-blog/commit/b984a81a56c160dace17c5339729f956b4cd7d18))
+* **content:** :sparkles: Time and space complexity ([#106](https://github.com/chicio/chicio-blog/issues/106)) ([1fc9ee3](https://github.com/chicio/chicio-blog/commit/1fc9ee33277013e38d4782f3dc98d392b7d46190))
+
 ## [3.1.0](https://github.com/chicio/chicio-blog/compare/v3.0.0...v3.1.0) (2025-09-21)
 
 ### Features
