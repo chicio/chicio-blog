@@ -84,13 +84,13 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
   return (
     <>
       <motion.div
-        className="menu-container container-fixed xs:pl-3 xs:pr-3 fixed top-0 right-0 left-0 z-50 p-0"
+        className={`${glassmorphismClass} menu-container xs:pl-3 xs:pr-3 fixed top-0 right-0 left-0 z-50 p-0 w-full rounded-tl-none rounded-tr-none border-t-0 hover:scale-100`}
         variants={menuVariants}
         animate={shouldHideMenu ? "hidden" : "visible"}
         initial="visible"
       >
         <div
-          className={`${glassmorphismClass} xs:border-r-1 xs:border-l-1 mx-auto my-0 w-full overflow-hidden rounded-t-none border-t-0 border-r-0 border-l-0 sm:overflow-visible`}
+          className={`container-fixed mx-auto my-0 w-full overflow-hidden sm:overflow-visible`}
         >
           <motion.div
             variants={contentVariants}

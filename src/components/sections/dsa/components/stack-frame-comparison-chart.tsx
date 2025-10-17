@@ -9,7 +9,6 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-  CartesianGrid,
 } from "recharts";
 import { ChartTooltip } from "./tooltip";
 
