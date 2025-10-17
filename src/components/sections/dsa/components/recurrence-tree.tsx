@@ -1,7 +1,6 @@
 'use client';
 
 import {
-  CartesianGrid,
   Legend,
   Line,
   LineChart,

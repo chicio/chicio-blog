@@ -1,17 +1,14 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { FC } from "react";
 import {
-  CartesianGrid,
-  Label,
   Legend,
   Line,
   LineChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
-  YAxis,
+  YAxis
 } from "recharts";
 import { ChartTooltip } from "./tooltip";
 

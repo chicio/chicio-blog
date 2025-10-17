@@ -2,7 +2,6 @@
 
 import { FC, useMemo } from "react";
 import {
-  CartesianGrid,
   Legend,
   Line,
   LineChart,
