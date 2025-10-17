@@ -5,7 +5,6 @@ import { SocialContacts } from "@/components/design-system/organism/social-conta
 import { tracking } from "@/types/tracking";
 import { motion, Variants } from "framer-motion";
 import { FC } from "react";
-import { ProfileCTAs } from "./profile-ctas";
 import { ProfilePhoto } from "./profile-photo";
 
 const itemVariants: Variants = {
@@ -50,9 +49,6 @@ export const ProfilePresentation: FC<ProfilePresentationProps> = ({
           trackingCategory={tracking.category.home}
           trackingLabel={tracking.label.body}
         />
-      </motion.div>
-      <motion.div variants={itemVariants}>
-        <ProfileCTAs />
       </motion.div>
     </GlassmorphismBackground>
   </div>
