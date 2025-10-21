@@ -2,7 +2,7 @@
 
 import { SearchablePostFields } from "@/types/search";
 import { tracking } from "@/types/tracking";
-import { ChangeEvent, FC, useEffect, useRef } from "react";
+import { ChangeEvent, FC, useRef } from "react";
 import { BiSearchAlt } from "react-icons/bi";
 import { StandardInternalLinkWithTracking } from "../../atoms/links/standard-internal-link-with-tracking";
 import { InputField } from "../../atoms/typography/input-field";
