@@ -90,7 +90,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
         initial="visible"
       >
         <div
-          className={`container-fixed mx-auto my-0 w-full overflow-hidden sm:overflow-visible`}
+          className={`menu-container container-fixed mx-auto my-0 w-full overflow-hidden sm:overflow-visible`}
         >
           <motion.div
             variants={contentVariants}
