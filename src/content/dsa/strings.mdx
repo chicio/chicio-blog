@@ -4,36 +4,68 @@ import { FrequencyMapChart } from "../../components/sections/dsa/components/freq
 # Strings
 
 Strings are one of the most fundamental data types in computer science.  
-They serve as the foundation for text processing, pattern recognition, and encoding/decoding operations in almost every system — from compilers to machine learning pipelines.
+They serve as the foundation for text processing, pattern recognition, and encoding/decoding operations in almost every system — from compilers to web applications, databases, and machine learning pipelines.
 
 ## What is a string?
 
-A **string** is a sequence of characters, often represented as an array of `char` or a sequence of Unicode code points.
-In most programming languages (including JavaScript and TypeScript), strings are **immutable** — meaning each modification produces a new string.
+A **string** is a sequence of characters, often represented as an array of `char` or a sequence of Unicode code points.  
+Strings can store letters, digits, symbols, and whitespace, and are used to represent both human-readable text and machine-readable data (like JSON or XML).
 
-Example:
+### Immutability vs Mutability
+
+In most modern programming languages, strings are **immutable**, meaning that any operation that appears to modify a string actually creates a **new string in memory**. 
+This has important implications for both **time** and **space** complexity when manipulating strings.
 
 ```typescript
 let s = "hello";
-s += " world"; // Creates a new string, not modifying the old one
-```
+s += " world"; // Creates a new string, old string remains unchanged
+``` 
 
-This immutability affects both **time** and **space** complexity when manipulating strings.
+Immutability matters for:
+	•	safety, because immutable strings are thread-safe and easier to reason about in concurrent environments.
+	•	predictability, because functions that operate on strings cannot inadvertently modify inputs elsewhere in the code.
+	•	performance considerations, because every modification creates a new string, which may lead to increased memory allocations and slower concatenation for large strings. Efficient string handling techniques, like using StringBuilder in Java or array joins in JavaScript, are often necessary.
+
+
+## Internal representation
+
+Internally, strings are often stored as contiguous arrays of characters or bytes, sometimes with additional metadata like length and encoding.
+Operations like concatenation, slicing, and replacement may require copying these arrays or adjusting indices depending on mutability.
 
 <StringVisualization />
 
 ## Operations and Time Complexity
 
-Below are the common operations performed on string along with their average and worst-case time complexities:
+The **time complexity** of insertion and deletion operations on strings depends heavily on **where the operation occurs** and whether the string is **immutable** or **mutable**:
 
-| Operation       | Average Case | Worst Case |
-|------------|--------------|-----------------|------------------|
-| Indexing | Accessing `s[i]` | O(1) | O(1) |
-| Concatenation | `s1 + s2` | O(n + m) | O(n + m) |
-| Substring | `s.slice(i, j)` | O(k) | O(k) |
-| Comparison | Check equality | O(n) | O(1) |
-| Reversal | Reverse string | O(n) | O(n) |
+Insert/Delete at the end of the string:
+  - **Immutable strings** (e.g., JavaScript `String`, Python `str`, Java `String`) require creating a **new string** with the added/removed character, often resulting in **O(n)** time.  
+  - **Mutable strings** (e.g., C `char[]`, Java `StringBuilder`, Swift `String`) can append or remove characters at the end in **O(1)** time if there is pre-allocated buffer space.  
+  - In languages with optimized concatenation (like Python’s `str.join`), sequences of appends can behave almost like **O(1) amortized** per operation.
 
+Insert/Delete in the middle of the string:
+  - Regardless of immutability, you need to **shift all subsequent characters** to accommodate the change.  
+  - This means the operation always costs **O(n)** in time, where `n` is the length of the string.  
+
+Below you can find a table that summarize all the info above and show the time complexity of common string operations:
+
+| Operation        | Average Case | Worst Case |
+|------------------|--------------|------------|
+| Access (indexing)| O(1)         | O(1)       |
+| Search           | O(n)         | O(n)       |
+| Concatenation    | O(n + m)     | O(n + m)   |
+| Substring        | O(k)         | O(k)       |
+| Comparison       | O(n)         | O(n)       |
+| Insert (end)     | O(1)         | O(n)       |
+| Insert (middle)  | O(n)         | O(n)       |
+| Delete (end)     | O(1)         | O(n)       |
+| Delete (middle)  | O(n)         | O(n)       |
+| Reverse          | O(n)         | O(n)       |
+
+---
+---
+---
+XXXXXX
 ## 3. Frequency Counting and Hash Maps
 
 A frequent technique in string problems is **character frequency counting**, often used for:
