@@ -1,0 +1,102 @@
+import { StringVisualization } from "../../components/sections/dsa/components/string-visualization";
+import { FrequencyMapChart } from "../../components/sections/dsa/components/frequency-map-chart";
+
+# Strings
+
+Strings are one of the most fundamental data types in computer science.  
+They serve as the foundation for text processing, pattern recognition, and encoding/decoding operations in almost every system — from compilers to machine learning pipelines.
+
+## What is a string?
+
+A **string** is a sequence of characters, often represented as an array of `char` or a sequence of Unicode code points.
+In most programming languages (including JavaScript and TypeScript), strings are **immutable** — meaning each modification produces a new string.
+
+Example:
+
+```typescript
+let s = "hello";
+s += " world"; // Creates a new string, not modifying the old one
+```
+
+This immutability affects both **time** and **space** complexity when manipulating strings.
+
+<StringVisualization />
+
+## Operations and Time Complexity
+
+Below are the common operations performed on string along with their average and worst-case time complexities:
+
+| Operation       | Average Case | Worst Case |
+|------------|--------------|-----------------|------------------|
+| Indexing | Accessing `s[i]` | O(1) | O(1) |
+| Concatenation | `s1 + s2` | O(n + m) | O(n + m) |
+| Substring | `s.slice(i, j)` | O(k) | O(k) |
+| Comparison | Check equality | O(n) | O(1) |
+| Reversal | Reverse string | O(n) | O(n) |
+
+## 3. Frequency Counting and Hash Maps
+
+A frequent technique in string problems is **character frequency counting**, often used for:
+- Checking **anagrams**
+- Detecting **palindromes**
+- Building **histograms** for text analysis
+
+Example (TypeScript):
+
+```typescript
+function buildFrequencyMap(s: string): Record<string, number> {
+  const freq: Record<string, number> = {};
+  for (const char of s) {
+    freq[char] = (freq[char] ?? 0) + 1;
+  }
+  return freq;
+}
+```
+
+<FrequencyMapChart />
+
+This technique runs in **O(n)** time and **O(1)** space (since alphabet size is bounded).
+
+
+## Pattern Matching
+
+Pattern matching involves searching for substrings within a larger text.
+
+### Naïve Approach
+- For each position, compare substring → **O(n × m)**  
+- Simple but inefficient for long strings.
+
+### Efficient Algorithms
+- **KMP (Knuth–Morris–Pratt):** Preprocesses pattern using prefix table → **O(n + m)**
+- **Rabin–Karp:** Hash-based matching → **O(n + m)** average, **O(n × m)** worst case
+- **Boyer–Moore:** Skips portions of the text using heuristics → **O(n / m)** average
+
+< PatternMatchingDiagram />
+
+## Techniques
+
+- **Reverse a string** (iterative or recursive)
+- **Check palindrome**
+- **Find first unique character**
+- **Group anagrams**
+- **Longest substring without repeating characters** (Sliding window — covered in a future article)
+
+These problems test your understanding of:
+- Hash maps (frequency)
+- Two-pointer patterns
+- String immutability
+
+## Exercises
+
+| Exercise | Technique | Solution |
+|----------|-----------|----------|
+| [Move Zeroes](https://leetcode.com/problems/move-zeroes/) | Two Pointers | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/arrays/move-zeros.ts) |
+| [Majority Element](https://leetcode.com/problems/majority-element/) | Hashing / Boyer-Moore Voting | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/arrays/majority-element.ts) |
+| [Remove Duplicates from Sorted Array](https://leetcode.com/problems/remove-duplicates-from-sorted-array/) | Two Pointers | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/arrays/remove-duplicates.ts) |
+| [Best Time to Buy and Sell Stock](https://leetcode.com/problems/best-time-to-buy-and-sell-stock/) | Sliding Window | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/arrays/best-time-to-buy-and-sell-stock.ts) |
+| [Rotate Array](https://leetcode.com/problems/rotate-array/) | Array Rotation | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/arrays/rotate-array.ts) |
+| [Product of Array Except Self](https://leetcode.com/problems/product-of-array-except-self/) | Prefix Product | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/arrays/product-of-array-except-self.ts) |
+| [Best Time to Buy and Sell Stock II](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/) | Greedy / Sliding Window | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/arrays/best-time-to-buy-and-sell-stock-ii.ts) |
+| [Number of Zero-Filled Subarrays](https://leetcode.com/problems/number-of-zero-filled-subarrays/) | Counting | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/arrays/number-of-zero-filled-subarrays.ts) |
+| [Increasing Triplet Subsequence](https://leetcode.com/problems/increasing-triplet-subsequence/) | Greedy | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/arrays/increasing-triplet-subsequence.ts) |
+| [First Missing Positive](https://leetcode.com/problems/first-missing-positive/) | Index Mapping / In-Place Hashing | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/arrays/first-missing-positive.ts) |

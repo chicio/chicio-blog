@@ -13,6 +13,7 @@ export const slugs = {
   art: "/art",
   chat: "/chat",
   cookiePolicy: "/cookie-policy",
-  arrays: `${dsa}/arrays`,
   timeAndSpaceComplexity: `${dsa}/time-and-space-complexity`,
+  arrays: `${dsa}/arrays`,
+  strings: `${dsa}/strings`,
 };
