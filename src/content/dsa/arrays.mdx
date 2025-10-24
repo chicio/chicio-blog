@@ -30,7 +30,18 @@ This direct mapping ensures constant-time access $O(1)$ to any element in the ar
 
 ## Operations and Time Complexity
 
-Below are the common operations performed on arrays along with their average and worst-case time complexities:
+The **time complexity** of insertion and deletion operations in arrays depends on **where the operation occurs** and the **array type**:
+
+Insert/Delete at the end of the array:
+   - **Static arrays** (fixed-size, e.g., C `int arr[10]`) cannot grow, so inserting beyond capacity requires creating a new array, costing **O(n)**.  
+   - **Dynamic arrays** (e.g., JavaScript `Array`, Python `list`, Java `ArrayList`) usually have extra capacity, so appending at the end is **O(1) amortized**.  
+   - Deleting the last element is generally **O(1)** since no shifting is required.
+
+Insert/Delete in the middle of the array:
+   - All elements after the insertion/deletion point must be **shifted** to maintain contiguity.  
+   - This shifting leads to **O(n)** time complexity in both static and dynamic arrays, regardless of the array’s capacity.
+
+Below you can find a table that summarize all the info above and show the time complexity of common array operations:
 
 | Operation       | Average Case | Worst Case |
 |-----------------|--------------|------------|

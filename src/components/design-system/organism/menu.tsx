@@ -154,6 +154,17 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
                   selected: pathname === slugs.arrays,
                   onClickCallback: () => setShouldOpenMenu(false),
                 },
+                {
+                  label: "Strings",
+                  to: slugs.strings,
+                  trackingData: {
+                    action: tracking.action.open_dsa_strings,
+                    category: trackingCategory,
+                    label: tracking.label.header,
+                  },
+                  selected: pathname === slugs.strings,
+                  onClickCallback: () => setShouldOpenMenu(false),
+                },
               ]}
             />
             <DropdownMenu

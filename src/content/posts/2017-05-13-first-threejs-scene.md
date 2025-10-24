@@ -1,7 +1,6 @@
 ---
 title: "A physically based scene with three.js"
-description: "In this post I will show you how to create a scene using ThreeJS with support for Physically Based
-Rendering"
+description: "In this post I will show you how to create a scene using ThreeJS with support for Physically Based Rendering"
 date: 2017-05-13
 image: /images/posts/threejs-scene.jpg
 tags: [computer graphics, threejs, web development, javascript]
