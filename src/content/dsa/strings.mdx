@@ -62,18 +62,21 @@ Below you can find a table that summarize all the info above and show the time c
 | Delete (middle)  | O(n)         | O(n)       |
 | Reverse          | O(n)         | O(n)       |
 
----
----
----
-XXXXXX
-## 3. Frequency Counting and Hash Maps
+## Techniques
 
-A frequent technique in string problems is **character frequency counting**, often used for:
-- Checking **anagrams**
-- Detecting **palindromes**
-- Building **histograms** for text analysis
+In this section, we’ll explore some of the **most common algorithmic techniques** applied to string problems.  
+Many of these are also applicable to arrays, but strings introduce additional challenges due to **immutability**, **character encoding**, and **pattern-based logic**.
 
-Example (TypeScript):
+### Frequency Counting
+
+One of the most versatile tools in string manipulation is **frequency counting**, a technique that maps each character to its number of occurrences.  
+It’s commonly used in problems involving:
+
+- **Anagram detection**  
+- **Palindrome checks**  
+- **Text histograms** or **feature extraction** in natural language processing (NLP) tasks
+
+Example in TypeScript:
 
 ```typescript
 function buildFrequencyMap(s: string): Record<string, number> {
@@ -85,50 +88,38 @@ function buildFrequencyMap(s: string): Record<string, number> {
 }
 ```
 
-<FrequencyMapChart />
+This algorithm runs in $O(n)$ time and uses $O(1)$ auxiliary space, assuming a fixed-size alphabet (e.g., ASCII).
+For Unicode strings, space complexity becomes $O(k)$, where $k$ is the number of unique characters.
 
-This technique runs in **O(n)** time and **O(1)** space (since alphabet size is bounded).
+### Pattern Matching
 
+Another cornerstone of string algorithms is pattern matching: finding one or more substrings inside a larger text.
 
-## Pattern Matching
+The brute-force (naive) method checks each position and compares character by character. The time complexity is $O(n × m)$, 
+where n is the text length and m is the pattern length. Simple but inefficient for large inputs. 
+There are also optimized algorithms for pattern matching. You can find some of the most popular ones below.
 
-Pattern matching involves searching for substrings within a larger text.
+*[Knuth–Morris–Pratt (KMP)](https://en.wikipedia.org/wiki/Knuth–Morris–Pratt_algorithm)*
+	-	Builds a prefix table (LPS array) to skip redundant comparisons.
+	-	Time complexity: $O(n + m)$
+	-	Excellent for deterministic searches.
 
-### Naïve Approach
-- For each position, compare substring → **O(n × m)**  
-- Simple but inefficient for long strings.
+*[Rabin–Karp](https://en.wikipedia.org/wiki/Rabin–Karp_algorithm)*
+	-	Uses rolling hash to compare substring hashes instead of characters.
+	-	Average: $O(n + m)$
+	-	Worst case: $O(n × m)$ (hash collisions)
 
-### Efficient Algorithms
-- **KMP (Knuth–Morris–Pratt):** Preprocesses pattern using prefix table → **O(n + m)**
-- **Rabin–Karp:** Hash-based matching → **O(n + m)** average, **O(n × m)** worst case
-- **Boyer–Moore:** Skips portions of the text using heuristics → **O(n / m)** average
-
-< PatternMatchingDiagram />
-
-## Techniques
-
-- **Reverse a string** (iterative or recursive)
-- **Check palindrome**
-- **Find first unique character**
-- **Group anagrams**
-- **Longest substring without repeating characters** (Sliding window — covered in a future article)
-
-These problems test your understanding of:
-- Hash maps (frequency)
-- Two-pointer patterns
-- String immutability
+*[Boyer–Moore](https://en.wikipedia.org/wiki/Boyer–Moore_algorithm)*
+	-	Applies heuristics (“bad character” and “good suffix”) to skip ahead.
+	-	Average: $O(n / m)$ — very efficient on natural language text.
 
 ## Exercises
 
 | Exercise | Technique | Solution |
 |----------|-----------|----------|
-| [Move Zeroes](https://leetcode.com/problems/move-zeroes/) | Two Pointers | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/arrays/move-zeros.ts) |
-| [Majority Element](https://leetcode.com/problems/majority-element/) | Hashing / Boyer-Moore Voting | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/arrays/majority-element.ts) |
-| [Remove Duplicates from Sorted Array](https://leetcode.com/problems/remove-duplicates-from-sorted-array/) | Two Pointers | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/arrays/remove-duplicates.ts) |
-| [Best Time to Buy and Sell Stock](https://leetcode.com/problems/best-time-to-buy-and-sell-stock/) | Sliding Window | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/arrays/best-time-to-buy-and-sell-stock.ts) |
-| [Rotate Array](https://leetcode.com/problems/rotate-array/) | Array Rotation | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/arrays/rotate-array.ts) |
-| [Product of Array Except Self](https://leetcode.com/problems/product-of-array-except-self/) | Prefix Product | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/arrays/product-of-array-except-self.ts) |
-| [Best Time to Buy and Sell Stock II](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/) | Greedy / Sliding Window | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/arrays/best-time-to-buy-and-sell-stock-ii.ts) |
-| [Number of Zero-Filled Subarrays](https://leetcode.com/problems/number-of-zero-filled-subarrays/) | Counting | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/arrays/number-of-zero-filled-subarrays.ts) |
-| [Increasing Triplet Subsequence](https://leetcode.com/problems/increasing-triplet-subsequence/) | Greedy | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/arrays/increasing-triplet-subsequence.ts) |
-| [First Missing Positive](https://leetcode.com/problems/first-missing-positive/) | Index Mapping / In-Place Hashing | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/arrays/first-missing-positive.ts) |
+| [Is Subsequence](https://leetcode.com/problems/is-subsequence/) | Two Pointers | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/strings/is-subsequence.ts) |
+| [Valid Palindrome](https://leetcode.com/problems/valid-palindrome/) | Two Pointers / Filtering | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/strings/valid-palindrome.ts) |
+| [Longest Common Prefix](https://leetcode.com/problems/longest-common-prefix/) | Character Comparison / Prefix Scan | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/strings/longest-common-prefix.ts) |
+| [Zigzag Conversion](https://leetcode.com/problems/zigzag-conversion/) | Simulation / Index Mapping | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/strings/zigzag-conversion.ts) |
+| [Reverse Words in a String](https://leetcode.com/problems/reverse-words-in-a-string/) | Splitting / String Manipulation | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/strings/reverse-words.ts) |
+| [Guess the Word](https://leetcode.com/problems/guess-the-word/) | Minimax / Constraint Filtering | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/strings/guess-the-word.ts) |
