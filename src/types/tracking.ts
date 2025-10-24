@@ -38,6 +38,7 @@ export const tracking = {
     pull_to_refresh: "pull_to_refresh",
     red_pill: "red_pill",
     blue_pill: "blue_pill",
+    open_down_arrow: "open_down_arrow",
     open_dsa_time_and_space_complexity: "open_dsa_time_and_space_complexity",
     open_dsa_arrays: "open_dsa_arrays",
     open_dsa_strings: "open_dsa_strings",

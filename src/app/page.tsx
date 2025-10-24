@@ -36,7 +36,7 @@ export default function Home() {
           trackingCategory={tracking.category.home}
         />
         <div className="fixed right-0 bottom-3 left-0 z-40 mx-auto my-0 flex items-center justify-center md:bottom-4">
-          <DownArrowIcon />
+          <DownArrowIcon trackingCategory={tracking.category.home} />
         </div>
       </div>
       <JsonLd
