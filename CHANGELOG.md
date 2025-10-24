@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.4.0](https://github.com/chicio/chicio-blog/compare/v3.3.0...v3.4.0) (2025-10-24)
+
+### Features
+
+* **content:** ✨ Strings ([#115](https://github.com/chicio/chicio-blog/issues/115)) ([867bd54](https://github.com/chicio/chicio-blog/commit/867bd54562f1d39d76a83be8e1600f641bd31e72))
+* **ux:** :sparkles: down arro icon clickable + hide on scroll ([7c6505d](https://github.com/chicio/chicio-blog/commit/7c6505de5fb64e39f7fe9b8ae616d87baa415a5f))
+* **ux:** :sparkles: menu in homepage ([#107](https://github.com/chicio/chicio-blog/issues/107)) ([6f6910b](https://github.com/chicio/chicio-blog/commit/6f6910b7fdb2eb0e4e4446b9bb2849a1b033d8bd))
+
+### Bug Fixes
+
+* **ux:** 🐛 Search bar on mobile needs improvement [#108](https://github.com/chicio/chicio-blog/issues/108) ([#114](https://github.com/chicio/chicio-blog/issues/114)) ([99bb7f8](https://github.com/chicio/chicio-blog/commit/99bb7f810a0c7af50926b8dc243c035c4a51ec51))
+
 ## [3.3.0](https://github.com/chicio/chicio-blog/compare/v3.1.0...v3.3.0) (2025-10-15)
 
 ### Features
