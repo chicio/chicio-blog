@@ -1,6 +1,6 @@
 import { TrackingData } from "@/types/tracking";
 import { AnimatePresence } from "framer-motion";
-import { FC, useRef, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { BiChevronDown } from "react-icons/bi";
 import { useReducedMotions } from "../../utils/hooks/use-reduced-motions";
 import { MenuItemWithTracking } from "./menu-item-with-tracking";
@@ -29,7 +29,14 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
   const shouldReduceMotions = useReducedMotions();
   const [open, setOpen] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
-  const selected = items.some(item => item.selected);
+  const selected = items.some((item) => item.selected);
+
+  useEffect(() => {
+    if (!open) return;
+    const handleScroll = () => setOpen(false);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [open]);
 
   const handleBlur = (
     e: React.FocusEvent<HTMLButtonElement | HTMLDivElement>,
@@ -40,11 +47,7 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
   };
 
   return (
-    <div
-      className={`relative z-50 mb-0`}
-      tabIndex={-1}
-      onBlur={handleBlur}
-    >
+    <div className={`relative z-50 mb-0`} tabIndex={-1} onBlur={handleBlur}>
       <button
         ref={buttonRef}
         className={`${className} xs:pl-4 xs:pr-1 xs:py-1 hover:bg-accent-alpha-10 hover:text-accent hover:border-accent relative flex flex-nowrap items-center justify-center gap-2 rounded-xl border border-solid px-1 py-2 text-center text-sm leading-normal text-shadow-md md:text-base ${open || selected ? "border-accent bg-accent-alpha-15 text-accent" : "border-transparent"}`}
@@ -63,7 +66,7 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
         {open && (
           <div
             key={"dropdown-menu"}
-            className={`glow-container ${shouldReduceMotions ? "sm:bg-general-background" : "sm:bg-general-background/90"} relative mt-2 min-w-max w-auto rounded-xl py-2 sm:absolute sm:right-0 sm:left-0 sm:w-auto`}
+            className={`glow-container ${shouldReduceMotions ? "sm:bg-general-background" : "sm:bg-general-background/90"} relative mt-2 w-auto min-w-max rounded-xl py-2 sm:absolute sm:right-0 sm:left-0 sm:w-auto`}
             tabIndex={-1}
             role="menu"
           >
@@ -73,7 +76,7 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
                 to={item.to}
                 trackingData={item.trackingData}
                 selected={item.selected ?? false}
-                className="m-2 xs:whitespace-nowrap"
+                className="xs:whitespace-nowrap m-2"
                 onClickCallback={() => {
                   item.onClickCallback?.();
                 }}
