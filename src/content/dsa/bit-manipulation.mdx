@@ -1,1 +1,298 @@
+import { BitwiseVisualizer } from "../../components/sections/dsa/components/bitwise-visualizer";
+
 # Bit manipulation
+
+Bit manipulation is one of the most powerful, yet often overlooked, tools in computer science.  
+It allows direct control over how data is represented and processed at the hardware level, unlocking performance optimizations, compression techniques, 
+and algorithmic tricks that are impossible to achieve efficiently with higher-level abstractions.
+
+At its core, bit manipulation operates on the binary representation of integers (0s and 1s). This enables:
+
+- **Performance optimizations:** Operations like multiplication/division by powers of two, or toggling flags, can be done in constant time.
+- **Memory efficiency:** Packing multiple boolean flags or small integers into a single integer reduces memory usage.
+- **Algorithmic tricks:** Many problems in competitive programming and low-level systems benefit from bitwise logic (masking, parity checks, subset generation).
+
+Understanding bitwise operators is therefore crucial for both **low-level programming** and **algorithmic problem solving**.
+
+## What is a Bit?
+
+A bit (binary digit) is the smallest unit of information in computing.
+It can take only two possible values:
+- 0 → represents off, false, or low voltage
+- 1 → represents on, true, or high voltage
+
+A group of 8 bits forms a byte, which can represent 256 unique values (from 0 to 255).
+Every piece of digital data, numbers, characters, images, and even machine instructions, is ultimately encoded as a sequence of bits.
+
+| Decimal | Binary | 
+|----------|---------
+| 1 | `00000001` 
+| 5 | `00000101` 
+| 255 | `11111111`
+
+### Binary Representation of Numbers
+
+Computers use **binary representation** to store numbers.  
+Each position in a binary number represents a power of 2, starting from the rightmost bit (least significant bit):
+
+$$
+(1011)_2 = 1 \times 2^3 + 0 \times 2^2 + 1 \times 2^1 + 1 \times 2^0 = 8 + 0 + 2 + 1 = 11
+$$
+
+#### Negative Numbers and Two’s Complement
+
+To represent negative integers, computers use **two’s complement**, a binary encoding that makes addition and subtraction straightforward.
+
+Steps to get the two’s complement of a number:
+- Invert all bits.
+- Add 1 to the result.
+
+Example: Representing `-5` in 8-bit binary
+
+5  = 00000101
+NOT = 11111010
++1  = 11111011 → (-5)
+
+This approach provides:
+- A single representation for zero (`00000000`)
+- Efficient arithmetic with both positive and negative integers
+- Hardware-level simplicity
+
+### Why Manipulate Bits?
+
+Bit-level operations are the foundation of high-performance computing.
+They allow you to:
+- Optimize arithmetic operations
+- Compress data (pack multiple flags or states in a single integer)
+- Implement checksums, hashing, encryption, and error detection
+- Control hardware registers, memory maps, and network protocols
+
+```typescript
+// Toggle a flag using bitwise operators
+const FLAG_A = 1 << 0; // 0001
+const FLAG_B = 1 << 1; // 0010
+
+let state = 0;
+state |= FLAG_A; // enable A -> 0001
+state |= FLAG_B; // enable B -> 0011
+state &= ~FLAG_A; // disable A -> 0010
+```
+
+### Core Bitwise Operators
+
+The following table summarizes the **core bitwise operators**.  
+Each operator manipulates the bits of integers directly:
+
+- **AND (`&`)**: Produces `1` if both bits are `1`, otherwise `0`.
+- **OR (`|`)**: Produces `1` if at least one bit is `1`.
+- **XOR (`^`)**: Produces `1` if exactly one bit is `1`.
+- **NOT (`~`)**: Inverts all bits (0 ↔ 1).
+- **Shift Left (`<<`)**: Moves bits to the left, adding zeros on the right.
+- **Shift Right (`>>`)**: Moves bits to the right, preserving the sign.
+- **Unsigned Shift Right (`>>>`)**: Moves bits to the right, filling zeros regardless of sign.
+
+| Operator | Symbol | Description |
+|----------|--------|------------|
+| AND      | `&`      | Bitwise AND between two integers |
+| OR       | `\|`     | Bitwise OR between two integers |
+| XOR      | `^`      | Bitwise XOR between two integers |
+| NOT      | `~`      | Bitwise NOT (invert all bits) |
+| Shift L  | `<<`     | Shift bits left (multiply by 2^n) |
+| Shift R  | `>>`     | Shift bits right (divide by 2^n, preserves sign) |
+| Uns. SR  | `>>>`    | Shift bits right, fills zeros (ignores sign) |
+
+**Note:**  
+- Left shift multiplies by powers of 2.  
+- Right shift divides by powers of 2 (arithmetic keeps sign, logical does not).  
+- XOR is very useful for swapping values and detecting differences.  
+- NOT inverts bits and uses two’s complement for negative numbers.
+
+<BitwiseVisualizer />
+
+
+
+----
+----
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+### Binary Representation
+
+A number is represented as a sequence of bits.  
+For example, the decimal number `13` is `1101` in binary.
+
+| Decimal | Binary |
+|----------|---------|
+| 0 | 0000 |
+| 1 | 0001 |
+| 2 | 0010 |
+| 3 | 0011 |
+| 4 | 0100 |
+| 5 | 0101 |
+| 6 | 0110 |
+| 7 | 0111 |
+| 8 | 1000 |
+| 9 | 1001 |
+
+### Two’s Complement Representation
+
+Computers represent negative numbers using **two’s complement**.  
+To compute the two’s complement of a number:
+
+1. Write its binary form.
+2. Invert all bits.
+3. Add 1.
+
+Example: for `5` (0101), `-5` becomes `1011`.
+
+This ensures that addition and subtraction work uniformly for signed integers.
+
+---
+
+## 2. Core Bitwise Operators
+
+| Operator | Symbol | Example | Description |
+|-----------|---------|----------|-------------|
+| AND | `&` | `5 & 3 = 1` | 1 if both bits are 1 |
+| OR | `|` | `5 | 3 = 7` | 1 if at least one bit is 1 |
+| XOR | `^` | `5 ^ 3 = 6` | 1 if bits differ |
+| NOT | `~` | `~5 = -6` | Inverts all bits |
+| Left Shift | `<<` | `5 << 1 = 10` | Multiplies by 2 |
+| Right Shift | `>>` | `5 >> 1 = 2` | Divides by 2 (integer division) |
+
+---
+
+## 3. Frequency Counting and Bit Tricks
+
+Some problems can be simplified by representing **sets or states** using bitmasks.  
+For example, a 32-bit integer can represent the presence/absence of 32 elements.
+
+### Example – Single Number
+
+Given an array where every element appears twice except one, find that single element.
+
+```typescript
+function singleNumber(nums: number[]): number {
+  return nums.reduce((acc, n) => acc ^ n, 0);
+}
+```
+
+Because `a ^ a = 0` and `a ^ 0 = a`, pairs cancel out, leaving the unique number.  
+Time complexity: **O(n)**, Space: **O(1)**.
+
+---
+
+## 4. Counting Bits
+
+This technique determines the number of 1s (set bits) in binary representation.  
+It’s fundamental for problems like *Counting Bits* and *Number of 1 Bits*.
+
+### Example – Brian Kernighan’s Algorithm
+
+```typescript
+function hammingWeight(n: number): number {
+  let count = 0;
+  while (n !== 0) {
+    n &= n - 1; // clears the lowest set bit
+    count++;
+  }
+  return count;
+}
+```
+
+Each iteration removes one set bit — runs in **O(k)** where k is the number of 1s.
+
+### Dynamic Programming Approach – Counting Bits
+
+In *Counting Bits*, you build an array where `dp[i]` stores the number of set bits in `i`.
+
+```typescript
+function countBits(n: number): number[] {
+  const dp = new Array(n + 1).fill(0);
+  for (let i = 1; i <= n; i++) {
+    dp[i] = dp[i >> 1] + (i & 1);
+  }
+  return dp;
+}
+```
+
+This relies on the fact that shifting right divides by 2 and drops the least significant bit.
+
+---
+
+## 5. Bit Range Operations and Tricks
+
+Some problems require manipulating entire ranges or reversing bit order. These often rely on recognizing **patterns** in binary.
+
+### Example – Bitwise AND of Numbers Range
+
+```typescript
+function rangeBitwiseAnd(left: number, right: number): number {
+  let shift = 0;
+  while (left < right) {
+    left >>= 1;
+    right >>= 1;
+    shift++;
+  }
+  return left << shift;
+}
+```
+
+This finds the **common prefix** of `left` and `right` — all differing bits become 0.
+
+### Example – Reverse Bits
+
+```typescript
+function reverseBits(n: number): number {
+  let result = 0;
+  for (let i = 0; i < 32; i++) {
+    result = (result << 1) | (n & 1);
+    n >>= 1;
+  }
+  return result >>> 0;
+}
+```
+
+Reverses all 32 bits of a number.
+
+---
+
+## 6. Arithmetic with Bitwise Operations
+
+Bitwise operators can reimplement arithmetic without using `+`, `-`, `*`, or `/`.
+
+### Addition
+
+```typescript
+function getSum(a: number, b: number): number {
+  while (b !== 0) {
+    const carry = (a & b) << 1;
+    a = a ^ b;
+    b = carry;
+  }
+  return a;
+}
+```
+
+### Subtraction
+
+```typescript
+function subtract(a: number, b: number): number {
+  return getSum(a, getSum(~b, 1));
+}
+```
+
+### Multiplication and Division
+
+Multiplication can be done via shifting and adding; division via repeated subtraction and shifting — though less common in interviews.
+
+---
+
+## 7. Summary
+
+Bit manipulation provides elegant, low-level control for algorithmic optimization.  
+It’s useful in:
+
+- **Optimization:** Avoiding extra memory and loops.
+- **Masking:** Representing subsets or boolean states.
+- **System design:** Compression, encryption, graphics.
+
+Mastering these operations allows you to write algorithms that are both **faster** and **smarter**.
