@@ -25,6 +25,57 @@ import {
   useScrollDirection,
 } from "../utils/hooks/use-scroll-direction";
 
+const dsaDropdownItems = (
+  trackingCategory: string,
+  pathname: string,
+  onClickCallback: () => void,
+) => [
+  {
+    label: "Time and space complexity",
+    to: slugs.timeAndSpaceComplexity,
+    trackingData: {
+      action: tracking.action.open_dsa_time_and_space_complexity,
+      category: trackingCategory,
+      label: tracking.label.header,
+    },
+    selected: pathname === slugs.timeAndSpaceComplexity,
+    onClickCallback,
+  },
+  {
+    label: "Arrays",
+    to: slugs.arrays,
+    trackingData: {
+      action: tracking.action.open_dsa_arrays,
+      category: trackingCategory,
+      label: tracking.label.header,
+    },
+    selected: pathname === slugs.arrays,
+    onClickCallback,
+  },
+  {
+    label: "Strings",
+    to: slugs.strings,
+    trackingData: {
+      action: tracking.action.open_dsa_strings,
+      category: trackingCategory,
+      label: tracking.label.header,
+    },
+    selected: pathname === slugs.strings,
+    onClickCallback,
+  },
+    {
+    label: "Bit manipulation",
+    to: slugs.bitManipulation,
+    trackingData: {
+      action: tracking.action.open_dsa_bit_manipulation,
+      category: trackingCategory,
+      label: tracking.label.header,
+    },
+    selected: pathname === slugs.bitManipulation,
+    onClickCallback,
+  },
+];
+
 export const menuHeightNumber = 55;
 
 const menuVariants: Variants = {
@@ -84,7 +135,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
   return (
     <>
       <motion.div
-        className={`${glassmorphismClass} xs:pl-3 xs:pr-3 fixed top-0 right-0 left-0 z-50 p-0 rounded-tl-none rounded-tr-none border-t-0 hover:scale-100 menu-container`}
+        className={`${glassmorphismClass} xs:pl-3 xs:pr-3 menu-container fixed top-0 right-0 left-0 z-50 rounded-tl-none rounded-tr-none border-t-0 p-0 hover:scale-100`}
         variants={menuVariants}
         animate={shouldHideMenu ? "hidden" : "visible"}
         initial="visible"
@@ -131,41 +182,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
             <DropdownMenu
               label="DSA"
               className="xs:mb-0 xs:w-auto z-50 mb-2 w-80"
-              items={[
-                {
-                  label: "Time and space complexity",
-                  to: slugs.timeAndSpaceComplexity,
-                  trackingData: {
-                    action: tracking.action.open_dsa_time_and_space_complexity,
-                    category: trackingCategory,
-                    label: tracking.label.header,
-                  },
-                  selected: pathname === slugs.timeAndSpaceComplexity,
-                  onClickCallback: () => setShouldOpenMenu(false),
-                },
-                {
-                  label: "Arrays",
-                  to: slugs.arrays,
-                  trackingData: {
-                    action: tracking.action.open_dsa_arrays,
-                    category: trackingCategory,
-                    label: tracking.label.header,
-                  },
-                  selected: pathname === slugs.arrays,
-                  onClickCallback: () => setShouldOpenMenu(false),
-                },
-                {
-                  label: "Strings",
-                  to: slugs.strings,
-                  trackingData: {
-                    action: tracking.action.open_dsa_strings,
-                    category: trackingCategory,
-                    label: tracking.label.header,
-                  },
-                  selected: pathname === slugs.strings,
-                  onClickCallback: () => setShouldOpenMenu(false),
-                },
-              ]}
+              items={dsaDropdownItems(trackingCategory, pathname, () => setShouldOpenMenu(false))}
             />
             <DropdownMenu
               label="The Author"

@@ -42,6 +42,7 @@ export const tracking = {
     open_dsa_time_and_space_complexity: "open_dsa_time_and_space_complexity",
     open_dsa_arrays: "open_dsa_arrays",
     open_dsa_strings: "open_dsa_strings",
+    open_dsa_bit_manipulation: "open_dsa_bit_manipulation",
   },
   category: {
     home: "home",
