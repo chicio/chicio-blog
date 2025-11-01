@@ -16,4 +16,5 @@ export const slugs = {
   timeAndSpaceComplexity: `${dsa}/time-and-space-complexity`,
   arrays: `${dsa}/arrays`,
   strings: `${dsa}/strings`,
+  bitManipulation: `${dsa}/bit-manipulation`,
 };
