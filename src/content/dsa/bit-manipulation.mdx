@@ -109,125 +109,103 @@ Each operator manipulates the bits of integers directly:
 
 <BitwiseVisualizer />
 
+## Fundamental Bit Tricks
 
+Bit manipulation becomes truly powerful when we start combining simple bitwise operators into reusable **patterns**.  
+Let's see some of the common bit manipulation tricks used in algorithms that are the foundation for all the others.
 
-----
-----
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-### Binary Representation
+### Check, Set, Clear, Toggle a Bit
 
-A number is represented as a sequence of bits.  
-For example, the decimal number `13` is `1101` in binary.
+The most common bit manipulation operations involve controlling the value of a **specific bit** at index `i` in a binary number.
 
-| Decimal | Binary |
-|----------|---------|
-| 0 | 0000 |
-| 1 | 0001 |
-| 2 | 0010 |
-| 3 | 0011 |
-| 4 | 0100 |
-| 5 | 0101 |
-| 6 | 0110 |
-| 7 | 0111 |
-| 8 | 1000 |
-| 9 | 1001 |
+| Operation | Expression | Description |
+|------------|-------------|-------------|
+| **Check**  | `(n & (1 << i)) !== 0` | Returns `true` if bit `i` is set |
+| **Set**    | `n \| (1 << i)` | Sets bit `i` to `1` |
+| **Clear**  | `n & ~(1 << i)` | Clears bit `i` (sets it to `0`) |
+| **Toggle** | `n ^ (1 << i)` | Flips bit `i` (1 → 0, 0 → 1) |
 
-### Two’s Complement Representation
+Each of these works because `(1 << i)` creates a **bitmask** with a `1` only in the `i`-th position:
 
-Computers represent negative numbers using **two’s complement**.  
-To compute the two’s complement of a number:
+$$
+(1 << i) = 2^i
+$$
 
-1. Write its binary form.
-2. Invert all bits.
-3. Add 1.
+Suppose `n = 42`, `101010` in binary, and `i = 1`.
 
-Example: for `5` (0101), `-5` becomes `1011`.
+- **Check:** `(42 & (1 << 1)) !== 0 → (101010 & 000010) → true`
+- **Set:** `42 | (1 << 1) = 42` (already 1)
+- **Clear:** `42 & ~(1 << 1) → (101010 & 111101) = 101000 (40)`
+- **Toggle:** `42 ^ (1 << 1) → (101010 ^ 000010) = 101000 (40)`
 
-This ensures that addition and subtraction work uniformly for signed integers.
+### Count Bits Efficiently, the `n & (n - 1)` Trick
 
----
+This classic trick, used in [**Hamming Weight**](https://en.wikipedia.org/wiki/Hamming_weight) and **Number of 1 Bits**, allows us to count the number of `1` bits in O(k), 
+where *k* is the number of bits set (not the total number of bits).
+Subtracting 1 flips all bits after the least significant set bit (including it).  
+When we AND `n` with `n - 1`, that least significant set bit is cleared.
 
-## 2. Core Bitwise Operators
+$$
+n = (101100)_2 \\
+n - 1 = (101011)_2 \\
+n\text{ }  \& \text{ }  (n - 1) = (101000)_2
+$$
 
-| Operator | Symbol | Example | Description |
-|-----------|---------|----------|-------------|
-| AND | `&` | `5 & 3 = 1` | 1 if both bits are 1 |
-| OR | `|` | `5 | 3 = 7` | 1 if at least one bit is 1 |
-| XOR | `^` | `5 ^ 3 = 6` | 1 if bits differ |
-| NOT | `~` | `~5 = -6` | Inverts all bits |
-| Left Shift | `<<` | `5 << 1 = 10` | Multiplies by 2 |
-| Right Shift | `>>` | `5 >> 1 = 2` | Divides by 2 (integer division) |
-
----
-
-## 3. Frequency Counting and Bit Tricks
-
-Some problems can be simplified by representing **sets or states** using bitmasks.  
-For example, a 32-bit integer can represent the presence/absence of 32 elements.
-
-### Example – Single Number
-
-Given an array where every element appears twice except one, find that single element.
+Each iteration removes one `1` from the binary representation, so the loop runs exactly as many times as there are `1` bits.
 
 ```typescript
-function singleNumber(nums: number[]): number {
-  return nums.reduce((acc, n) => acc ^ n, 0);
-}
-```
-
-Because `a ^ a = 0` and `a ^ 0 = a`, pairs cancel out, leaving the unique number.  
-Time complexity: **O(n)**, Space: **O(1)**.
-
----
-
-## 4. Counting Bits
-
-This technique determines the number of 1s (set bits) in binary representation.  
-It’s fundamental for problems like *Counting Bits* and *Number of 1 Bits*.
-
-### Example – Brian Kernighan’s Algorithm
-
-```typescript
-function hammingWeight(n: number): number {
+function countBits(n: number): number {
   let count = 0;
   while (n !== 0) {
-    n &= n - 1; // clears the lowest set bit
+    n &= n - 1;
     count++;
   }
   return count;
 }
 ```
 
-Each iteration removes one set bit — runs in **O(k)** where k is the number of 1s.
+This algorithm is O(k) in time, where k is the number of bits set to 1, and O(1) in space,dramatically faster than scanning all 32 bits when only a few are set.
 
-### Dynamic Programming Approach – Counting Bits
+### Reverse bits
 
-In *Counting Bits*, you build an array where `dp[i]` stores the number of set bits in `i`.
+Reversing bits is a classic low-level operation, often used in networking, image processing, or hash functions.
+We progressively build the reversed number by:
+ - shifting the result left.
+ - adding the least significant bit (LSB) of n.
+ - shifting n right to process the next bit.
 
 ```typescript
-function countBits(n: number): number[] {
-  const dp = new Array(n + 1).fill(0);
-  for (let i = 1; i <= n; i++) {
-    dp[i] = dp[i >> 1] + (i & 1);
+function reverseBits(n: number): number {
+  let result = 0;
+  for (let i = 0; i < 32; i++) {
+    result = (result << 1) | (n & 1);
+    n >>>= 1;
   }
-  return dp;
+  return result >>> 0; 
 }
 ```
 
-This relies on the fact that shifting right divides by 2 and drops the least significant bit.
+### Bitwise AND of Numbers Range
 
----
+This problem shows another elegant bitwise principle:
+Only bits that are common to all numbers in the range remain 1.
 
-## 5. Bit Range Operations and Tricks
+Example
+For numbers 5 (0101) to 7 (0111):
 
-Some problems require manipulating entire ranges or reversing bit order. These often rely on recognizing **patterns** in binary.
+$$
+5 & 6 & 7 = 0100₂ = 4
+$$
 
-### Example – Bitwise AND of Numbers Range
+Notice that only the leftmost bits that don’t change across the range are preserved.
+
+Efficient Approach
+Instead of ANDing every number, we can repeatedly shift both left and right until they are equal, thus isolating the common prefix.
 
 ```typescript
 function rangeBitwiseAnd(left: number, right: number): number {
   let shift = 0;
-  while (left < right) {
+  while (left !== right) {
     left >>= 1;
     right >>= 1;
     shift++;
@@ -236,23 +214,11 @@ function rangeBitwiseAnd(left: number, right: number): number {
 }
 ```
 
-This finds the **common prefix** of `left` and `right` — all differing bits become 0.
+This runs in O(log n) time, proportional to the number of bits needed to represent left (or right).
 
-### Example – Reverse Bits
-
-```typescript
-function reverseBits(n: number): number {
-  let result = 0;
-  for (let i = 0; i < 32; i++) {
-    result = (result << 1) | (n & 1);
-    n >>= 1;
-  }
-  return result >>> 0;
-}
-```
-
-Reverses all 32 bits of a number.
-
+----
+----
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 ---
 
 ## 6. Arithmetic with Bitwise Operations
