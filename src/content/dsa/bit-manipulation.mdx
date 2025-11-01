@@ -140,7 +140,7 @@ Suppose `n = 42`, `101010` in binary, and `i = 1`.
 
 ### Count Bits Efficiently, the `n & (n - 1)` Trick
 
-This classic trick, used in [**Hamming Weight**](https://en.wikipedia.org/wiki/Hamming_weight) and **Number of 1 Bits**, allows us to count the number of `1` bits in O(k), 
+This classic trick, used in [**Hamming Weight**](https://en.wikipedia.org/wiki/Hamming_weight) and **Number of 1 Bits**, allows us to count the number of `1` bits in $O(k)$, 
 where *k* is the number of bits set (not the total number of bits).
 Subtracting 1 flips all bits after the least significant set bit (including it).  
 When we AND `n` with `n - 1`, that least significant set bit is cleared.
@@ -164,7 +164,7 @@ function countBits(n: number): number {
 }
 ```
 
-This algorithm is O(k) in time, where k is the number of bits set to 1, and O(1) in space,dramatically faster than scanning all 32 bits when only a few are set.
+This algorithm is O(k) in time, where k is the number of bits set to 1, and $O(1)$ in space,dramatically faster than scanning all 32 bits when only a few are set.
 
 ### Reverse bits
 
@@ -189,17 +189,8 @@ function reverseBits(n: number): number {
 
 This problem shows another elegant bitwise principle:
 Only bits that are common to all numbers in the range remain 1.
-
-Example
-For numbers 5 (0101) to 7 (0111):
-
-$$
-5 & 6 & 7 = 0100₂ = 4
-$$
-
+For numbers 5 (0101) to 7 (0111): 5 & 6 & 7 = 0100₂ = 4.
 Notice that only the leftmost bits that don’t change across the range are preserved.
-
-Efficient Approach
 Instead of ANDing every number, we can repeatedly shift both left and right until they are equal, thus isolating the common prefix.
 
 ```typescript
@@ -216,49 +207,106 @@ function rangeBitwiseAnd(left: number, right: number): number {
 
 This runs in O(log n) time, proportional to the number of bits needed to represent left (or right).
 
-----
-----
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
----
+## Reimplementing Arithmetic Using Bits
 
-## 6. Arithmetic with Bitwise Operations
-
-Bitwise operators can reimplement arithmetic without using `+`, `-`, `*`, or `/`.
+One of the most illuminating applications of bit manipulation is **reimplementing arithmetic operations** directly using bitwise operators.  
+This builds on the classic problem [Sum of Two Integers](https://leetcode.com/problems/sum-of-two-integers/).
 
 ### Addition
 
+We can sum two numbers `a` and `b` using only bitwise operations. The fundamental idea is to separate the **sum without carry** from the **carry itself**.
+
 ```typescript
-function getSum(a: number, b: number): number {
+function add(a: number, b: number): number {
   while (b !== 0) {
-    const carry = (a & b) << 1;
-    a = a ^ b;
-    b = carry;
+    const carry = a & b;     // carry bits
+    a = a ^ b;               // sum without carry
+    b = carry << 1;           // shift carry
   }
   return a;
 }
 ```
 
+Let's see how it works step-by-step. Suppose we want to add a = 5, 0101 in binary, and b = 3, 0011 in binary.
+
+The first operation is to identify the carry bits, so bits that are both 1, we can do this with the `&` operator.
+The we can sum the two numbers without considering the carry using the `^` operator.
+Finally, we shift the carry bits to the left by one position, as they need to be added to the next higher bit.
+Now we just have to repeat the process until there are no carry bits left.
+
 ### Subtraction
+
+We can subtract two numbers `a` and `b` using only bitwise operations, leveraging the **two's complement** representation of negative numbers.
 
 ```typescript
 function subtract(a: number, b: number): number {
-  return getSum(a, getSum(~b, 1));
+  return add(a, add(~b, 1)); // a + (-b) using two's complement
 }
 ```
 
-### Multiplication and Division
+First we calculate the two complement of `b` (which is `-b`) by inverting its bits with `~b` and adding `1`.  
+This let us transform the subtraction into an addition problem, which we can solve using our previously defined `add` function:
 
-Multiplication can be done via shifting and adding; division via repeated subtraction and shifting — though less common in interviews.
+$$
+a - b = a + (-b)
+$$
 
----
+Now we can use the `add` function/algorithm we saw before to compute the subtraction result.
 
-## 7. Summary
+### Multiplication
 
-Bit manipulation provides elegant, low-level control for algorithmic optimization.  
-It’s useful in:
+Multiplication can be implemented using repeated addition combined with bit shifts. The idea is to examine each bit of the multiplier b one by one. 
+If a bit is set (1), we add the current value of a (appropriately shifted) to the result. 
+After each step, a is doubled by shifting left, while b is halved by shifting right. 
+This mirrors the manual process of binary multiplication, where each row corresponds to a shifted version of the multiplicand added conditionally according to the bits of the multiplier.
 
-- **Optimization:** Avoiding extra memory and loops.
-- **Masking:** Representing subsets or boolean states.
-- **System design:** Compression, encryption, graphics.
+```typescript
+function multiply(a: number, b: number): number {
+  let result = 0;
+  while (b !== 0) {
+    if (b & 1) { 
+      result = add(result, a); // add a when LSB of b is 1
+    }
+    a <<= 1;                  // double a
+    b >>= 1;                  // halve b
+  }
+  return result;
+}
+```
+Conceptually, the process accumulates contributions from a only where b has 1s in its binary representation, producing the correct product 
+efficiently using only bitwise operations and addition.
 
-Mastering these operations allows you to write algorithms that are both **faster** and **smarter**.
+### Division
+
+Division can be implemented using repeated subtraction combined with bit shifts. The idea is to iterate through each bit position from 
+the most significant bit down to the least significant, checking whether the divisor, shifted left by the current bit, fits into the 
+current dividend.
+When it does, we subtract the shifted divisor from the dividend and set the corresponding bit in the quotient. 
+This process continues for all bit positions, progressively building the quotient from high to low bits. 
+Conceptually, each bit in the quotient represents a power-of-two multiple of the divisor that fits into the remaining dividend, 
+analogous to performing long division in binary. The final quotient is obtained after processing all bit positions, giving the integer result of the division.
+
+```typescript
+function divide(dividend: number, divisor: number): number {
+  let quotient = 0;
+  for (let i = 31; i >= 0; i--) {
+    if ((dividend >> i) >= divisor) {
+      dividend = subtract(dividend, divisor << i);
+      quotient |= 1 << i;
+    }
+  }
+  return quotient;
+}
+```
+
+## Exercises
+
+| Exercise | Technique | Solution |
+|----------|-----------|----------|
+| [Single Number](https://leetcode.com/problems/single-number/) | XOR Property | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/bit-manipulation/single-number.ts) |
+| [Number of 1 Bits](https://leetcode.com/problems/number-of-1-bits/) | n & (n - 1) Trick | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/bit-manipulation/number-of-1-bits.ts) |
+| [Counting Bits](https://leetcode.com/problems/counting-bits/) | DP + Bit Count Relation | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/bit-manipulation/counting-bits.ts) |
+| [Reverse Bits](https://leetcode.com/problems/reverse-bits/) | Bitwise Reversal | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/bit-manipulation/reverse-bits.ts) |
+| [Bitwise AND of Numbers Range](https://leetcode.com/problems/bitwise-and-of-numbers-range/) | Common Prefix Masking | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/bit-manipulation/bitwise-and-range.ts) |
+| [Single Number III](https://leetcode.com/problems/single-number-iii/) | XOR + Mask Partition | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/bit-manipulation/single-number-iii.ts) |
+| [Sum of Two Integers](https://leetcode.com/problems/sum-of-two-integers/) | XOR + Carry | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/bit-manipulation/sum-of-two-integers.ts) |
