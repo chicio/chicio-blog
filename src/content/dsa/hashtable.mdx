@@ -1,0 +1,61 @@
+
+# Hashtable
+
+	1.	Introduction
+	•	Che cos’è una hash table e perché esistono.
+	•	Dizionari / mappe come astrazione.
+	•	Lookup O(1) ammortizzato, esempi concreti (frequency counting, caching, grouping).
+	2.	Hash Functions
+	•	Obiettivo: mappare chiavi arbitrarie in indici.
+	•	Proprietà desiderate: uniformità, velocità, determinismo.
+	•	Esempi per interi e stringhe.
+	•	Perché le collisioni sono inevitabili.
+	3.	Collision Resolution
+	•	Chaining
+	•	Come funziona, esempi visivi.
+	•	Open Addressing
+	•	Linear probing, quadratic probing, double hashing.
+	•	Clustering.
+	•	Confronto pratico.
+	•	Componenti visivi: <CollisionChainDiagram />, <OpenAddressingVisualizer />. (da valutare)
+	4.	Load Factor & Resizing
+	•	Load factor = n / m.
+	•	Quando avviene il resize.
+	•	Perché la complessità rimane ammortizzata O(1).
+	•	<HashMapResizeVisualizer />.
+	5.	Core Operations & Complexity
+	•	Insert
+	•	Search
+	•	Delete
+	•	Worst case degeneracy e perché in pratica non accade (hashing moderno e resizing).
+	6.	Implementing a HashMap (Design HashMap)
+	•	Mini–implementazione in TypeScript.
+	•	Chaining o open addressing, a scelta (possiamo fare entrambe).
+	•	Gestione del resize.
+	•	Casi limite.
+	7.	Common pitfalls & interview tips
+	•	Chiavi mutable
+	•	Collisions
+	•	Load factor
+	•	Perché gli intervistatori chiedono la progettazione di HashMap
+	8.	Exercises
+	•	Tabella come negli articoli precedenti:
+	•	Nome esercizio
+	•	Tecnica coinvolta
+	•	Link LeetCode
+	•	Link soluzione GitHub
+
+Esercizi
+	•	Design HashMap (Easy)
+	•	Maximum Number of Balloons (Easy)
+	•	Number of Good Pairs (Easy)
+	•	Isomorphic Strings (Easy)
+	•	Ransom Note (Easy)
+	•	Contains Duplicate II (Easy)
+	•	Group Anagrams (Medium)
+	•	Encode and Decode TinyURL (Medium)
+	•	Reorganize String (Medium)
+	•	Longest Consecutive Sequence (Medium)
+	•	Split Array into Consecutive Subsequences (Medium)
+	•	Number of Matching Subsequences (Medium)
+	•	Number of Good Ways to Split a String (Medium)
