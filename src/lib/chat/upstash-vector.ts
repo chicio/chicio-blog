@@ -10,7 +10,7 @@ export async function upsert(vectoreData: VectorData[]) {
   await index.upsert(vectoreData)
 }
 
-export async function findRelevantContent(query: string, k = 4) {
+export async function findRelevantContent(query: string, k = 2) {
   const result = await index.query({
     data: query,
     topK: k,
