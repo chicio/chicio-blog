@@ -1,15 +1,90 @@
 
 # Hashtable
 
-	1.	Introduction
-	•	Che cos’è una hash table e perché esistono.
-	•	Dizionari / mappe come astrazione.
-	•	Lookup O(1) ammortizzato, esempi concreti (frequency counting, caching, grouping).
-	2.	Hash Functions
-	•	Obiettivo: mappare chiavi arbitrarie in indici.
-	•	Proprietà desiderate: uniformità, velocità, determinismo.
-	•	Esempi per interi e stringhe.
-	•	Perché le collisioni sono inevitabili.
+A **hash table** is a data structure that stores key–value pairs and allows extremely fast lookups, insertions, and deletions, typically in **O(1)** average time.  
+In other words, if you know the key, you can retrieve the associated value almost instantly, regardless of how much data is stored.
+
+You can think of a hash table as a more powerful version of an array.  
+While arrays allow fast access by index (`arr[10]`), hash tables generalize the idea so that **any** data can be used as a key: numbers, strings, objects, etc.
+
+This is why most programming languages expose hash tables as built-in dictionary types:
+
+- **JavaScript / TypeScript:** `Map` and object literals (`{}`)
+- **Python:** `dict`
+- **Java:** `HashMap`
+- **Go:** `map`
+
+In practice, hash tables are everywhere:
+
+- counting how many times each character appears in a string
+- checking if an element was seen before (duplicate detection)
+- grouping anagrams
+- caching and memoization
+- tracking frequencies or states in algorithms and graph problems
+
+### Why are they so fast?
+
+Hash tables work by converting a key into an **index** of an internal array using a function called a **hash function**.  
+Instead of searching linearly through elements, the hash function jumps directly to the memory location where the value should be stored:
+
+$$
+index = hash(key)
+$$
+
+If the hash function distributes keys well, most operations have **O(1) amortized** complexity, meaning they take constant time on average, 
+even if occasionally a slower operation occurs (we’ll see why later).
+
+Because of this combination of flexibility and performance, hash tables are one of the most important data structures in algorithms and system design.  
+If you know how to use them effectively, many seemingly complex problems become simple.
+
+## Hash Functions
+
+A **hash function** is the core component of a hash table.  
+Its job is simple: take a key of any type (number, string, object) and convert it into an integer index of an internal array, as we already saw before.
+
+This allows a hash table to perform lookups without searching through all elements: it knows exactly **where** to store and retrieve a value.
+
+### What makes a good hash function?
+
+A practical hash function must satisfy three properties:
+
+- **Deterministic**: the same key must always produce the same hash. If `"abc"` sometimes mapped to index `3` and other times to `9`, retrieval would be impossible.
+- **Fast**: hashing should be constant time. If hashing were slow, hash tables would not provide O(1) operations.
+- **Uniform**: keys should be spread across the table as evenly as possible. If many keys map to the same index, performance degrades.
+
+For example, integers can be hashed using a simple function like the one below. 
+This returns a number in the range [0, size - 1], which is a valid index in the hash table.
+
+```ts
+function hashInt(x: number, size: number): number {
+  return x % size;
+}
+```
+
+Strings require combining characters into a single numeric value.
+A common method is to treat the string as a polynomial.
+
+```ts
+function hashString(s: string, size: number): number {
+  let hash = 0;
+  for (let i = 0; i < s.length; i++) {
+    hash = (hash * 31 + s.charCodeAt(i)) % size;
+  }
+  return hash;
+}
+```
+
+Even with a great hash function, multiple keys may map to the same index:
+- the table has a finite number of slots
+- but keys come from a potentially infinite domain
+
+By the pigeonhole principle, collisions must exist.
+
+What matters is not avoiding collisions completely (that’s impossible),
+but handling them efficiently. That leads to the next topic: collision resolution.
+
+
+---
 	3.	Collision Resolution
 	•	Chaining
 	•	Come funziona, esempi visivi.

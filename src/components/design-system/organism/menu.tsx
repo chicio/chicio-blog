@@ -63,7 +63,7 @@ const dsaDropdownItems = (
     selected: pathname === slugs.strings,
     onClickCallback,
   },
-    {
+  {
     label: "Bit manipulation",
     to: slugs.bitManipulation,
     trackingData: {
@@ -72,6 +72,17 @@ const dsaDropdownItems = (
       label: tracking.label.header,
     },
     selected: pathname === slugs.bitManipulation,
+    onClickCallback,
+  },
+  {
+    label: "Hash Tables",
+    to: slugs.hashTables,
+    trackingData: {
+      action: tracking.action.open_dsa_hash_tables,
+      category: trackingCategory,
+      label: tracking.label.header,
+    },
+    selected: pathname === slugs.hashTables,
     onClickCallback,
   },
 ];
@@ -182,7 +193,9 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
             <DropdownMenu
               label="DSA"
               className="xs:mb-0 xs:w-auto z-50 mb-2 w-80"
-              items={dsaDropdownItems(trackingCategory, pathname, () => setShouldOpenMenu(false))}
+              items={dsaDropdownItems(trackingCategory, pathname, () =>
+                setShouldOpenMenu(false),
+              )}
             />
             <DropdownMenu
               label="The Author"

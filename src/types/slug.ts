@@ -17,4 +17,5 @@ export const slugs = {
   arrays: `${dsa}/arrays`,
   strings: `${dsa}/strings`,
   bitManipulation: `${dsa}/bit-manipulation`,
+  hashTables: `${dsa}/hashtables`,
 };
