@@ -1,5 +1,19 @@
 # Changelog
 
+## [3.5.0](https://github.com/chicio/chicio-blog/compare/v3.4.0...v3.5.0) (2025-11-08)
+
+### Features
+
+* **capabilities:** :arrow_up: NextJS 16 ([#122](https://github.com/chicio/chicio-blog/issues/122)) ([67b64cf](https://github.com/chicio/chicio-blog/commit/67b64cf0484a3198fdef77482b383873d5f8055e))
+* **capabilities:** :sparkles: dropdown closes when user starts to scroll ([113419b](https://github.com/chicio/chicio-blog/commit/113419bc7000b057cfbad7945459976cfc02532d))
+* **content:** :sparkles: new blog post ([81ac4be](https://github.com/chicio/chicio-blog/commit/81ac4be929fda17f3d16f3065f21c9ab288b9a6b))
+* **content:** ✨ Bit manipulation ([#121](https://github.com/chicio/chicio-blog/issues/121)) ([609c5ad](https://github.com/chicio/chicio-blog/commit/609c5ad2d8948a36e3bd105ff41c7350ebfef349))
+* **content:** ✨ Hashtable ([#128](https://github.com/chicio/chicio-blog/issues/128)) ([ffe3518](https://github.com/chicio/chicio-blog/commit/ffe351823a21f42644e500cfa19eea653cc53158))
+
+### Bug Fixes
+
+* **performance:** :ambulance: reduce upstash retrieved data ([c78f029](https://github.com/chicio/chicio-blog/commit/c78f029a73d8d8c31c1afffa466440ee6f5f227e))
+
 ## [3.4.0](https://github.com/chicio/chicio-blog/compare/v3.3.0...v3.4.0) (2025-10-24)
 
 ### Features
