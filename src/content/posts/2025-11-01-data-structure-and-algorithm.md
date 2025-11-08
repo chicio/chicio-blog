@@ -40,3 +40,60 @@ Whether you’re preparing for interviews, sharpening your fundamentals, or just
 | [**Arrays**](/data-structures-and-algorithms/arrays) | Mastering array traversal, manipulation, and common algorithmic patterns. |
 | [**Strings**](/data-structures-and-algorithms/strings) | Efficiently solving problems that deal with text and pattern matching. |
 | [**Bit Manipulation**](/data-structures-and-algorithms/bit-manipulation) | Unlocking the power of bits for optimization, encoding, and clever tricks. |
+| [**Hash Tables**](/data-structures-and-algorithms/hashtables) | Efficient key-value storage and retrieval with near-constant time lookups. |
+| **Two Pointers (Soon available)** | Using two pointers to solve array and string problems efficiently. |
+| **Prefix Sum (Soon available)** | Precomputing cumulative sums to answer range queries quickly. |
+| **Sliding Window - Fixed Size (Soon available)** | Maintaining a window of fixed length to compute running results. |
+| **Sliding Window - Dynamic Size (Soon available)** | Adjusting window size dynamically for problems like substring search. |
+| **Kadane's Algorithm (Soon available)** | Finding maximum subarray sum in linear time. |
+| **Matrix (2D Array) (Soon available)** | Solving problems on 2D grids, matrices, and performing transformations. |
+| **Linked List (Soon available)** | Singly and doubly linked list operations, in-place reversal, and traversal. |
+| **LinkedList In-place Reversal (Soon available)** | Techniques to reverse linked lists partially or fully. |
+| **Fast and Slow Pointers (Soon available)** | Detecting cycles, middle elements, and related patterns. |
+| **Stacks (Soon available)** | LIFO data structure for expression evaluation, parsing, and monotonic stacks. |
+| **Monotonic Stack (Soon available)** | Solving next greater/lesser element problems efficiently. |
+| **Queues (Soon available)** | FIFO data structure and applications in BFS and scheduling. |
+| **Monotonic Queue (Soon available)** | Optimized sliding window max/min computations. |
+| **Bucket Sort (Soon available)** | Sorting and counting problems using bucketization. |
+| **Recursion (Soon available)** | Solving problems using self-referential function calls. |
+| **Divide and Conquer (Soon available)** | Breaking problems into subproblems and combining results. |
+| **Merge Sort (Soon available)** | Classic divide-and-conquer sorting algorithm. |
+| **QuickSort / QuickSelect (Soon available)** | Efficient sorting and kth element selection. |
+| **Binary Search (Soon available)** | Searching in sorted arrays, variants, and optimizations. |
+| **Backtracking (Soon available)** | Generating combinations, permutations, and solving constraint problems. |
+| **Tree Traversal - Level Order (Soon available)** | BFS traversal techniques for binary trees. |
+| **Tree Traversal - Pre Order (Soon available)** | DFS pre-order traversal and recursion patterns. |
+| **Tree Traversal - In Order (Soon available)** | DFS in-order traversal, useful for BSTs. |
+| **Tree Traversal - Post-Order (Soon available)** | DFS post-order traversal, useful for tree reconstruction. |
+| **BST / Ordered Set (Soon available)** | Binary search trees and ordered data set operations. |
+| **Tries (Soon available)** | Prefix trees for efficient string storage and retrieval. |
+| **Heaps (Soon available)** | Priority queues and heap-based algorithms. |
+| **Two Heaps (Soon available)** | Solving median and top-k problems using two heaps. |
+| **Top K Elements (Soon available)** | Finding largest/smallest elements efficiently. |
+| **Intervals (Soon available)** | Interval merging, scheduling, and overlap problems. |
+| **K-Way Merge (Soon available)** | Merging multiple sorted arrays or lists efficiently. |
+| **Data Structure Design (Soon available)** | Designing custom data structures for specific tasks. |
+| **Greedy (Soon available)** | Making optimal local choices to reach global solutions. |
+| **Depth First Search (DFS) (Soon available)** | Traversing graphs and trees using recursion or stack. |
+| **Breadth First Search (BFS) (Soon available)** | Level-wise traversal for shortest paths and connectivity. |
+| **Topological Sort (Soon available)** | Ordering nodes in DAGs respecting dependencies. |
+| **Union Find (Soon available)** | Disjoint set operations for connectivity and cycle detection. |
+| **Minimum Spanning Tree (Soon available)** | MST algorithms like Kruskal and Prim. |
+| **Shortest Path (Soon available)** | Dijkstra, Bellman-Ford, and related algorithms. |
+| **Eulerian Circuit (Soon available)** | Traversal visiting every edge exactly once. |
+| **1-D DP (Soon available)** | Dynamic programming on linear structures. |
+| **Knapsack DP (Soon available)** | Solving 0/1 knapsack and subset sum problems. |
+| **Unbounded Knapsack DP (Soon available)** | Knapsack problems with unlimited item repetitions. |
+| **Longest Increasing Subsequence DP (Soon available)** | Finding increasing subsequences in arrays. |
+| **2D (Grid) DP (Soon available)** | DP on grids, path counting, and matrix transformations. |
+| **String DP (Soon available)** | DP applied to strings for subsequence and substring problems. |
+| **Tree / Graph DP (Soon available)** | Dynamic programming on hierarchical and graph structures. |
+| **Bitmask DP (Soon available)** | Using bitmasks to represent subsets in DP. |
+| **Digit DP (Soon available)** | Solving problems based on digit positions in numbers. |
+| **Probability DP (Soon available)** | DP for expected value and probability problems. |
+| **State Machine DP (Soon available)** | DP using states and transitions. |
+| **String Matching (Soon available)** | KMP, Rabin-Karp, and other substring search algorithms. |
+| **Binary Indexed Tree / Segment Tree (Soon available)** | Range queries and updates efficiently. |
+| **Maths / Geometry (Soon available)** | Number theory, combinatorics, and geometric algorithms. |
+| **Line Sweep (Soon available)** | Processing events sorted by coordinate for interval problems. |
+| **Suffix Array (Soon available)** | Advanced string processing and pattern matching. |
