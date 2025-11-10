@@ -1,0 +1,74 @@
+# Two pointers
+
+
+
+---
+# Two Pointers Technique
+
+## 1. Introduction
+- What the Two Pointers technique is and why it exists.
+- When and why it is better than naive nested loops (`O(n²)` → `O(n)`).
+- Common use cases: searching, partitioning, deduplication, comparing extremes.
+- **Note:** Sliding Window is related but will be discussed in its own article.
+
+## 2. The Two Main Variants
+- **Opposite-direction pointers (left–right):** pointers start at the ends and move inward.
+- **Same-direction pointers (fast–slow):** both move in the same direction at different speeds.
+- Guidelines on when to use each variant.
+
+## 3. Classic Patterns
+
+### 3.1 Sorted array + opposite pointers
+- Efficient on sorted arrays for searching pairs or shrinking search space.
+- Example: finding a target sum.
+- Mini-diagram:
+
+[1, 2, 3, 4, 5]
+L           R
+
+### 3.2 Searching for optimal boundaries
+- Problems requiring maximizing/minimizing areas, distances, or sums.
+- Example: “Container With Most Water”.
+- Diagram:
+
+height[i]   height[j]
+|         |
+|         |
+L–––––––R
+
+
+### 3.3 Three Pointers / Extensions
+- Extending to 3 pointers for problems like 3Sum.
+- Deduplication in arrays or strings.
+- Pivot + two-pointer approach.
+
+### 3.4 Fast & Slow Pointers
+- Detecting cycles in arrays or linked lists.
+- Skipping duplicates efficiently.
+- Finding midpoints.
+- Diagram:
+
+slow -> moves 1 step
+fast -> moves 2 steps
+cycle detection
+
+## 4. Time & Space Complexity
+- Reduces naive `O(n²)` to `O(n)` for most use cases.
+- Requires sorted input for certain patterns.
+- Space complexity: **O(1)** in almost all cases.
+- Edge cases where it fails (unsorted input, complex conditions).
+
+## 5. Common Pitfalls
+- Forgetting the array must be sorted for certain variants.
+- Integer overflow when calculating areas.
+- Handling duplicates incorrectly.
+- Confusing with Sliding Window (separate article).
+
+## 6. Exercises
+| Problem | Difficulty | Link / Solution |
+|---------|-----------|----------------|
+| Merge Sorted Array | Easy | Soon available |
+| Two Sum II – Input Array Is Sorted | Medium | Soon available |
+| Container With Most Water | Medium | Soon available |
+| 3Sum | Medium | Soon available |
+| Trapping Rain Water | Hard | Soon available |
