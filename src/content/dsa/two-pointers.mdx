@@ -1,0 +1,203 @@
+# Two pointers
+
+The **Two Pointers** technique is one of the most versatile patterns in algorithm design.  
+Instead of scanning an array with nested loops (which often leads to an inefficient $O(n²)$ approach), 
+we place **two indices** on strategic positions and move them intelligently in order to solve the problem in **linear time $O(n)$**.
+
+At its core, the idea is simple:
+
+```txt
+array = [ 2, 7, 11, 15 ]
+          ^          ^
+          L          R
+```
+
+Here, `L` and `R` are our two pointers, starting at the leftmost and rightmost ends of the array.
+By eliminating unnecessary comparisons and shrinking the search space step by step, Two Pointers often transforms a brute-force 
+solution into an elegant and efficient one.
+
+Many problems boil down to comparing values that lie at different positions in an array.  
+Instead of checking **every pair**, we can often infer where to move next:
+
+- If a sum is too small → move the left pointer right
+- If a sum is too large → move the right pointer left
+- If two values match → process and advance
+
+This directional movement gives us efficiency:  $O(n²)$ becomes $O(n)$ time and $O(1)$ space in most cases.
+Two Pointers applies to a wide range of real problems:
+
+- Searching pairs in sorted arrays  
+- Comparing values at opposite ends  
+- Partitioning arrays (e.g., move negatives left, positives right)  
+- Deduplication (remove repeated elements in sorted arrays)  
+- Cycle detection in linked lists (fast/slow variant)  
+- Reversing sequences in place
+
+A special case of the two pointers technique is the **Sliding Window**, where both pointers move in the **same direction** while maintaining a window over the data (e.g., longest substring, max sum subarray).  
+It’s closely related, but deserves its **own dedicated article**, so we'll cover it separately.
+
+## The Two Main Variants
+
+Although the name “Two Pointers” looks generic, most problems fall into two major categories.
+
+### Opposite-direction pointers (Left–Right)
+Both pointers start at opposite ends of a structure (usually a sorted array) and move toward each other.
+
+```txt
+array = [ 2, 7, 11, 15 ]
+          ^          ^
+          L          R
+```
+
+At each step, you compare values at `L` and `R` and decide which pointer to move.  
+This variant is ideal when:
+
+- the array is sorted
+- you can shrink the search space from both ends
+- you are checking combinations that depend on ordering (sum, distance, area)
+
+### Same-direction pointers (Fast–Slow)
+Both pointers move in the same direction, but at different speeds.
+
+```txt
+array = [ 2, 7, 11, 15 ]
+          ^  ^        
+          S  F        
+```
+
+- The **fast** pointer scans ahead.
+- The **slow** pointer updates a result, compresses data, or validates state.
+
+Use cases:
+- removing duplicates in-place
+- finding the middle of a linked list
+- cycle detection
+
+A famous example is [**Floyd’s Cycle Finding Algorithm (Tortoise and Hare)**](https://en.wikipedia.org/wiki/Cycle_detection):
+- `slow` moves 1 step at a time
+- `fast` moves 2 steps at a time
+- if there is a cycle, they will eventually meet
+
+This trick solves linked-list cycle problems in **O(n)** time and **O(1)** extra space.
+
+## Classic Patterns
+
+Here below you can find the most common patterns that utilize the Two Pointers technique.
+
+### Sorted Array + Opposite Pointers
+
+When an array is sorted, we can efficiently search for pairs or shrink the search space by placing one pointer on the left and one on the right.
+
+Main use cases
+- Find pairs that match a condition (e.g., nums[L] + nums[R] == target)
+- Incrementally reduce the search space
+- Move L to increase the total, move R to decrease it
+
+```typescript
+let L = 0
+let R = n - 1
+
+while (L < R) {
+    if (nums[L] + nums[R] == target) { /* ✅ found */ }
+    
+    if (nums[L] + nums[R] < target) { 
+        L++ 
+    } else { 
+        R-- 
+    }
+}
+```
+
+### Searching for Optimal Boundaries
+
+Some problems do not ask for an exact pair but for the best possible pair:
+- maximum area
+- maximum/minimum distance
+- largest difference
+- best window size
+
+A classical example is the “Container With Most Water” problem: two pointers start at the edges and move 
+toward the center while tracking the best possible area.
+
+In this case/technique, *always move the pointer with the smaller height*, because moving the taller one cannot improve the area.
+
+### Three Pointers / Extensions
+
+A natural extension of two pointers is to introduce a pivot and then apply the two-pointer logic on the remaining sub-array.
+
+Used in problems like:
+* 3Sum
+* triplet matching
+* deduplication in arrays or strings
+
+A typical structure:
+
+```typescript
+for (let i = 0; i < nums.length; i++) {
+    if (i > 0 && nums[i] === nums[i - 1]) {
+        continue; // skip pivot duplicates
+    }
+
+    let L = i + 1;
+    let R = nums.length - 1;
+
+    while (L < R) {
+        const sum = nums[i] + nums[L] + nums[R];
+
+        if (sum === 0) {
+            // found result
+            L++;
+            R--;
+
+            // skip duplicates on L
+            while (L < R && nums[L] === nums[L - 1]) L++;
+
+            // skip duplicates on R
+            while (L < R && nums[R] === nums[R + 1]) R--;
+
+        } else if (sum < 0) {
+            L++;   // we need a bigger sum
+        } else {
+            R--;   // we need a smaller sum
+        }
+    }
+}
+```
+
+### Fast & Slow Pointers
+
+In this pattern, both pointers move toward the same direction, but at different speeds:
+* slow moves by +1
+* fast moves by +2
+
+Used for:
+* finding the middle of a linked list
+* skipping duplicates efficiently
+* detecting cycles
+
+The most famous implementation is [Floyd’s Cycle Finding Algorithm]((https://en.wikipedia.org/wiki/Cycle_detection)) (already mentioned above).
+
+```typescript
+let slow = head;
+let fast = head;
+
+while (fast !== null && fast.next !== null) {
+    slow = slow.next;        // +1 step
+    fast = fast.next.next;   // +2 steps
+
+    if (slow === fast) {
+        // ✅ cycle detected
+        break;
+    }
+}
+```
+
+## Exercises
+
+| Exercise | Technique | Solution |
+|----------|-----------|----------|
+| [Merge Sorted Array](https://leetcode.com/problems/merge-sorted-array/) | Opposite-direction Two Pointers | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/two-pointers/merge-sorted-array.ts) |
+| [Two Sum II - Input Array Is Sorted](https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/) | Opposite-direction Two Pointers | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/two-pointers/two-sum-II-input-array-is-sorted.ts) |
+| [Container With Most Water](https://leetcode.com/problems/container-with-most-water/) | Opposite-direction Two Pointers / Optimal Boundaries | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/two-pointers/container-with-most-water.ts) |
+| [3Sum](https://leetcode.com/problems/3sum/) | Three Pointers / Deduplication | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/two-pointers/3sum.ts) |
+| [Trapping Rain Water](https://leetcode.com/problems/trapping-rain-water/) | Two Pointers / Boundary Scanning | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/two-pointers/trapping-rain-water.ts) |
