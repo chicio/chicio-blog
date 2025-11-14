@@ -322,13 +322,13 @@
     }
 
     table {
-        @apply w-full table-auto mx-auto border rounded-xl overflow-hidden border-collapse shadow-lg my-4;
+        @apply w-full table-auto mx-auto border-collapse;
     }
 
     th {
         @apply px-4 py-3 text-left font-bold text-accent bg-primary-dark;
     }
-    
+
     td {
         @apply px-4 py-2 text-left text-primary-text;
     }
@@ -336,7 +336,11 @@
     tbody tr:nth-child(even) td {
         background-color: var(--color-general-background-light);
     }
-    
+
+    .table-wrapper {
+        @apply overflow-x-auto rounded-xl border border-accent shadow-lg my-4;
+    }
+
     /** custom rules **/
 
     .katex-display .katex {
