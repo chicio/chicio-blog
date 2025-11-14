@@ -1,1 +1,66 @@
 # Prefix Sum
+
+# Prefix Sum – A Complete Guide
+
+## 1. Introduction
+- What prefix sums are and the core intuition.
+- Why they are powerful: transform range operations from **O(n)** to **O(1)**.
+- Where they appear in algorithmic problems (subarrays, ranges, balancing sequences).
+- Formal definition:  
+  `prefix[i] = nums[0] + nums[1] + ... + nums[i]`
+- Visual example with a small array.
+- Key property:  
+  `rangeSum(L, R) = prefix[R] - prefix[L - 1]`
+
+## 2. Naive vs Prefix Sum
+- Naive range-sum computation: **O(n)** per query.
+- Prefix-sum approach: preprocessing **O(n)** + queries **O(1)**.
+- When prefix sums are not optimal (dynamic updates, online queries).
+
+## 3. Patterns
+
+### 3.1 Standard Prefix Sum
+- How to compute the prefix array.
+- How to compute range queries in constant time.
+- Example with diagram and TypeScript snippet.
+
+### 3.2 Prefix Sum + Hash Map
+- Used for problems where the goal is to find subarrays with a target sum.
+- Store prefix sums in a hash map to detect subarray ranges quickly.
+- Core idea:  
+  If `prefix[j] - prefix[i] = k`, then the subarray `(i+1 ... j)` sums to `k`.
+
+### 3.3 Prefix Sum Modulo K
+- Technique for problems requiring divisibility checks.
+- Key property:  
+  If  
+  `(prefix[j] - prefix[i]) % k == 0`  
+  then  
+  `prefix[j] % k == prefix[i] % k`.
+- Requires storing modulo frequencies in a hash map.
+
+### 3.4 Balance Tracking (+1 / -1)
+- Used for problems involving binary arrays or balancing conditions.
+- Transform the array:  
+  - `0 → -1`  
+  - `1 → +1`
+- Then use prefix sums to find the largest subarray with sum = 0 (balanced).
+- Technique used in “Contiguous Array”.
+
+## 4. Time & Space Complexity
+- Preprocessing: **O(n)**
+- Query complexity: **O(1)** for range sums.
+- Hash-map variations: **O(n)** average.
+- Space usage:  
+  - Prefix array: **O(n)**  
+  - Hash map: **O(n)**  
+
+## 5. Exercises
+
+| Exercise | Technique | Solution |
+|----------|-----------|----------|
+| Range Sum Query – Immutable | Classic Prefix Sum | Soon available |
+| Subarray Sum Equals K | Prefix Sum + Hash Map | Soon available |
+| Subarray Sums Divisible by K | Prefix Sum + Modulo Buckets | Soon available |
+| Continuous Subarray Sum | Prefix Sum + Modulo Constraints | Soon available |
+| Contiguous Array | Balance Tracking + Prefix Sum | Soon available |
