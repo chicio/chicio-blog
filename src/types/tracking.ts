@@ -44,6 +44,7 @@ export const tracking = {
     open_dsa_strings: "open_dsa_strings",
     open_dsa_bit_manipulation: "open_dsa_bit_manipulation",
     open_dsa_hash_tables: "open_dsa_hash_tables",
+    open_dsa_two_pointers: "open_dsa_two_pointers",
   },
   category: {
     home: "home",

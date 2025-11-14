@@ -85,6 +85,17 @@ const dsaDropdownItems = (
     selected: pathname === slugs.hashTables,
     onClickCallback,
   },
+    {
+    label: "Two Pointers",
+    to: slugs.twoPointers,
+    trackingData: {
+      action: tracking.action.open_dsa_two_pointers,
+      category: trackingCategory,
+      label: tracking.label.header,
+    },
+    selected: pathname === slugs.twoPointers,
+    onClickCallback,
+  },
 ];
 
 export const menuHeightNumber = 55;
