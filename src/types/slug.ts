@@ -19,4 +19,5 @@ export const slugs = {
   bitManipulation: `${dsa}/bit-manipulation`,
   hashTables: `${dsa}/hashtables`,
   twoPointers: `${dsa}/two-pointers`,
+  prefixSum: `${dsa}/prefix-sum`,
 };

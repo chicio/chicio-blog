@@ -45,6 +45,7 @@ export const tracking = {
     open_dsa_bit_manipulation: "open_dsa_bit_manipulation",
     open_dsa_hash_tables: "open_dsa_hash_tables",
     open_dsa_two_pointers: "open_dsa_two_pointers",
+    open_dsa_prefix_sum: "open_dsa_prefix_sum",
   },
   category: {
     home: "home",

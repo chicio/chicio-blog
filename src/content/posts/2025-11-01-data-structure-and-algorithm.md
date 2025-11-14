@@ -42,7 +42,7 @@ Whether you’re preparing for interviews, sharpening your fundamentals, or just
 | [**Bit Manipulation**](/data-structures-and-algorithms/bit-manipulation) | Unlocking the power of bits for optimization, encoding, and clever tricks. |
 | [**Hash Tables**](/data-structures-and-algorithms/hashtables) | Efficient key-value storage and retrieval with near-constant time lookups. |
 | [**Two Pointers**](/data-structures-and-algorithms/two-pointers) | Using two pointers to solve array and string problems efficiently. |
-| **Prefix Sum (Soon available)** | Precomputing cumulative sums to answer range queries quickly. |
+| [**Prefix Sum**](/data-structures-and-algorithms/prefix-sum) | Precomputing cumulative sums to answer range queries quickly. |
 | **Sliding Window - Fixed Size (Soon available)** | Maintaining a window of fixed length to compute running results. |
 | **Sliding Window - Dynamic Size (Soon available)** | Adjusting window size dynamically for problems like substring search. |
 | **Kadane's Algorithm (Soon available)** | Finding maximum subarray sum in linear time. |
