@@ -1,66 +1,167 @@
 # Prefix Sum
 
-# Prefix Sum – A Complete Guide
+The **Prefix Sum** technique is one of the simplest—and most powerful—patterns in algorithm design.  
+Its purpose is straightforward: **precompute cumulative information so that later queries become trivial**.
 
-## 1. Introduction
-- What prefix sums are and the core intuition.
-- Why they are powerful: transform range operations from **O(n)** to **O(1)**.
-- Where they appear in algorithmic problems (subarrays, ranges, balancing sequences).
-- Formal definition:  
-  `prefix[i] = nums[0] + nums[1] + ... + nums[i]`
-- Visual example with a small array.
-- Key property:  
-  `rangeSum(L, R) = prefix[R] - prefix[L - 1]`
+At its core, the idea is:
 
-## 2. Naive vs Prefix Sum
-- Naive range-sum computation: **O(n)** per query.
-- Prefix-sum approach: preprocessing **O(n)** + queries **O(1)**.
-- When prefix sums are not optimal (dynamic updates, online queries).
+- Instead of recomputing sums over and over, compute them once in a cumulative array  
+- and reuse that information in $O(1)$.
 
-## 3. Patterns
+## What is a Prefix Sum?
 
-### 3.1 Standard Prefix Sum
-- How to compute the prefix array.
-- How to compute range queries in constant time.
-- Example with diagram and TypeScript snippet.
+Given an array `nums`, the **prefix sum array** `prefix` is defined as:
 
-### 3.2 Prefix Sum + Hash Map
-- Used for problems where the goal is to find subarrays with a target sum.
-- Store prefix sums in a hash map to detect subarray ranges quickly.
-- Core idea:  
-  If `prefix[j] - prefix[i] = k`, then the subarray `(i+1 ... j)` sums to `k`.
+$$ 
+\text{prefix}[i] = \text{nums}[0] + \text{nums}[1] + \ldots + \text{nums}[i] 
+$$
 
-### 3.3 Prefix Sum Modulo K
-- Technique for problems requiring divisibility checks.
-- Key property:  
-  If  
-  `(prefix[j] - prefix[i]) % k == 0`  
-  then  
-  `prefix[j] % k == prefix[i] % k`.
-- Requires storing modulo frequencies in a hash map.
+This means each prefix element stores the sum from the start up to index `i`.
+Without prefix sums, computing the sum of a range $(L, R)$ requires scanning the array, so $O(n)$ per query.
+With prefix sums:  
 
-### 3.4 Balance Tracking (+1 / -1)
-- Used for problems involving binary arrays or balancing conditions.
-- Transform the array:  
-  - `0 → -1`  
-  - `1 → +1`
-- Then use prefix sums to find the largest subarray with sum = 0 (balanced).
-- Technique used in “Contiguous Array”.
+$$
+\text{rangeSum}(L, R) = \text{prefix}[R] - \text{prefix}[L - 1] 
+$$
 
-## 4. Time & Space Complexity
-- Preprocessing: **O(n)**
-- Query complexity: **O(1)** for range sums.
-- Hash-map variations: **O(n)** average.
-- Space usage:  
-  - Prefix array: **O(n)**  
-  - Hash map: **O(n)**  
+So, **O(1)** per query after an initial **O(n)** preprocessing
 
-## 5. Exercises
+This transformation is why prefix sums appear a lot in algorithmic problems involving:
+
+- subarrays
+- range queries
+- balancing binary arrays
+- tracking running differences
+- divisibility conditions (mod k prefix sums)
+
+
+Generalizing what we saw earlier, we can write a general definition of prefix sum.  
+Once you compute the cumulative array `prefix`, **any range sum becomes a simple subtraction**:
+
+$$
+\text{rangeSum}(L, R) = \text{prefix}[R] - \text{prefix}[L - 1]
+$$
+
+This works because $\text{prefix}[R]$ contains the sum from the start up to $R$,  
+while $\text{prefix}[L - 1]$ contains the sum up to just before the range begins.  
+Subtracting the two removes everything outside the interval and leaves only the sum of the subarray $L...R$.
+
+There is one small edge case: when the range starts at index 0.  
+In that situation, there's nothing before the range, so the formula simplifies to:
+
+$$
+\text{rangeSum}(0, R) = \text{prefix}[R]
+$$
+
+This compact idea, “a range sum is just the difference of two prefix sums”, is the foundation of all prefix-sum techniques.  
+
+## Patterns
+
+Below are some common patterns that build upon the basic prefix sum idea.
+
+### Standard Prefix Sum
+
+The most fundamental version of the technique. 
+It leverages the standard definition of prefix sums and code it.
+You precompute an auxiliary array `prefix[]` where each entry contains
+the cumulative sum from the start of the array up to index `i`.
+
+### Find subarrays with target sum k
+
+When the goal is to **find subarrays** with a specific target sum, the
+standard prefix array isn't enough. 
+We need to know **how many times a certain prefix sum has appeared
+before**.  
+The idea behind this the following one. If
+
+$$
+\text{prefix}[j] - \text{prefix}[i] = k
+$$
+
+then the subarray $(i+1 \ldots j)$ sums to $k$.
+This means:
+
+$$
+\text{prefix}[i] = \text{prefix}[j] - k
+$$
+
+So for each j, we only need to check whether $\text{prefix}[j] - k$ has appeared before.  
+A hash map (prefix → frequency) lets us do this in O(1).
+
+So during a scan of the array:
+
+-   Let `currentPrefix` be the running sum.
+-   Check if `currentPrefix - k` has been seen before.
+-   Use a hash map to store frequencies of prefix sums.
+
+This unlocks problems like **Subarray Sum Equals K**.
+
+### Subarray divisible by target value k
+
+Some problems ask whether a subarray sum is **divisible by `k`**.
+Key identity:
+
+$$
+( \text{prefix}[j] - \text{prefix}[i] ) \ \% \ k == 0
+$$    
+    
+implies
+
+$$
+\text{prefix}[j] \% k == \text{prefix}[i] \% k
+$$
+
+So instead of storing prefix sums themselves, we store:
+
+$$
+\text{prefix}[i] \% k
+$$
+
+in a hash map with their frequencies.
+Every time we encounter a prefix sum whose modulo k has appeared before, it means that the “excess amount” beyond a multiple of k is the same as in a previous prefix.
+Because both prefixes leave the same remainder when divided by k, the region between them must add up to an exact multiple of k.
+Therefore, each previous occurrence of that remainder corresponds to a new subarray whose sum is divisible by k.
+
+### Balance Tracking (+1 / -1)
+
+Used in problems involving binary arrays or balancing conditions.  
+Transform the array:
+
+-   `0 → -1`
+-   `1 → +1`
+
+After this transformation, a **balanced** subarray (equal number of 0s
+and 1s) becomes a subarray with sum = 0.  
+Then the problem becomes "Find the longest subarray whose prefix sums repeat".  
+Because if:
+
+$$
+\text{prefix}[j] == \text{prefix}[i]
+$$
+
+then the subarray $(i+1 ... j)$ sums to 0.
+
+This technique is central in **Contiguous Array**.
+
+
+## Time & Space Complexity
+
+Below you can find a summary table of time and space complexities for each pattern discussed.
+
+| Operation / Pattern | Time Complexity | Space Complexity |
+|---|---|---|
+| Build prefix array | O(n) | O(n) |
+| Range sum query (L, R) | O(1) | O(n) |
+| Prefix sum + hash map (target sum) | O(n) average | O(n) |
+| Prefix sum modulo K | O(n) average | O(n) |
+| Balance tracking (+1 / -1 transform) | O(n) | O(n) |
+
+## Exercises
 
 | Exercise | Technique | Solution |
 |----------|-----------|----------|
-| Range Sum Query – Immutable | Classic Prefix Sum | Soon available |
-| Subarray Sum Equals K | Prefix Sum + Hash Map | Soon available |
-| Subarray Sums Divisible by K | Prefix Sum + Modulo Buckets | Soon available |
-| Continuous Subarray Sum | Prefix Sum + Modulo Constraints | Soon available |
-| Contiguous Array | Balance Tracking + Prefix Sum | Soon available |
+| [Range Sum Query – Immutable](https://leetcode.com/problems/range-sum-query-immutable/) | Classic Prefix Sum | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/prefix-sum/range-sum-query-immutable.ts) |
+| [Subarray Sum Equals K](https://leetcode.com/problems/subarray-sum-equals-k/) | Prefix Sum + Hash Map | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/prefix-sum/subarray-sum-equals-k.ts) |
+| [Subarray Sums Divisible by K](https://leetcode.com/problems/subarray-sums-divisible-by-k/) | Prefix Sum + Modulo Buckets | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/prefix-sum/subarray-sums-divisible-by-k.ts) |
+| [Continuous Subarray Sum](https://leetcode.com/problems/continuous-subarray-sum/) | Prefix Sum + Modulo Constraints | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/prefix-sum/continuous-subarray-sum.ts) |
+| [Contiguous Array](https://leetcode.com/problems/contiguous-array/) | Balance Tracking + Prefix Sum | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/prefix-sum/contiguous-array.ts) |
