@@ -85,7 +85,7 @@ const dsaDropdownItems = (
     selected: pathname === slugs.hashTables,
     onClickCallback,
   },
-    {
+  {
     label: "Two Pointers",
     to: slugs.twoPointers,
     trackingData: {
@@ -94,6 +94,17 @@ const dsaDropdownItems = (
       label: tracking.label.header,
     },
     selected: pathname === slugs.twoPointers,
+    onClickCallback,
+  },
+  {
+    label: "Prefix Sum",
+    to: slugs.prefixSum,
+    trackingData: {
+      action: tracking.action.open_dsa_prefix_sum,
+      category: trackingCategory,
+      label: tracking.label.header,
+    },
+    selected: pathname === slugs.prefixSum,
     onClickCallback,
   },
 ];
