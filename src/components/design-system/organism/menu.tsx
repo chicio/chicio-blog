@@ -107,6 +107,17 @@ const dsaDropdownItems = (
     selected: pathname === slugs.prefixSum,
     onClickCallback,
   },
+  {
+    label: "Sliding Window",
+    to: slugs.slidingWindow,
+    trackingData: {
+      action: tracking.action.open_dsa_sliding_window,
+      category: trackingCategory,
+      label: tracking.label.header,
+    },
+    selected: pathname === slugs.slidingWindow,
+    onClickCallback,
+  },  
 ];
 
 export const menuHeightNumber = 55;
