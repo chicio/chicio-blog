@@ -1,9 +1,52 @@
 # Sliding Window
 
-1. Introduction
-	•	What the Sliding Window pattern solves
-	•	When to use it (recognizing sliding window problems)
-	•	Differences vs brute force O(n²) approaches
+The **Sliding Window** pattern is one of the most powerful techniques in algorithmic problem-solving.  
+It transforms problems that would normally require **O(n²)** brute-force solutions into clean, efficient **O(n)** approaches by maintaining a “window” 
+over a portion of the data and adjusting it as you process the input.
+
+At its core, a sliding window lets you examine **contiguous segments** of an array or string without recomputing information from scratch every time.  
+Instead of restarting from zero for each possible subarray or substring, you *reuse* previous computations and update the window incrementally.
+
+Sliding window is ideal when the problem involves:
+
+- **Contiguous subarrays / substrings**
+- **Finding a best window** (max/min length, max/min sum, longest/shortest segment)
+- **Counting or matching patterns within a range**
+- **Maintaining a constraint** (e.g., “at most K zeros”, “all frequencies match”, “no repeated characters”)
+
+If the problem involves checking or optimizing a **continuous segment** of a sequence, sliding window is often the correct approach.
+Look for these signals in the problem statement:
+
+- “Find the *longest/shortest* substring/subarray where…”
+- “Find a window of size *k*…”
+- “Count subarrays where the sum/average/number of distinct elements satisfies…”
+- “Return all substrings that match a pattern…”
+- “Find the minimum window that contains all characters…”
+
+If the word **subarray** or **substring** appears—and the subarray must be **contiguous**—this is an immediate hint.
+
+Usually, a naïve brute-force approach for the problems above checks every possible subarray:
+
+```txt
+for L in range(n):
+for R in range(L, n):
+check subarray nums[L:R]
+```
+
+This leads to:
+
+- $O(n²)$ time to enumerate the subarrays  
+- plus additional computation inside the inner loop
+
+Sliding window avoids recomputing work.  
+Instead, it grows or shrinks the window by **one step at a time**, preserving most of the previously computed information.
+This transformation often reduces complexity to $O(n)$.
+
+Sliding window is not just an optimization—it is a **paradigm shift** in how you iterate over collections.  
+Once you recognize the structure of these problems, the sliding window template becomes your go-to tool for a whole class of subarray and substring challenges.
+
+
+---
 
 2. Sliding Window vs Two Pointers
 	•	Conceptual differences
@@ -46,3 +89,11 @@
 	•	Why sliding window is almost always O(n)
 
 8. Exercises list
+
+Two sections merged into one list but maintaining categories:
+
+8.1 Fixed-Size Sliding Window Exercises
+
+| Problem | Technique | Link |
+
+8.2 Dynamic-Size Sliding Window Exercises
