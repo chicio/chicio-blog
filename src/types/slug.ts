@@ -20,4 +20,5 @@ export const slugs = {
   hashTables: `${dsa}/hashtables`,
   twoPointers: `${dsa}/two-pointers`,
   prefixSum: `${dsa}/prefix-sum`,
+  slidingWindow: `${dsa}/sliding-window`,
 };

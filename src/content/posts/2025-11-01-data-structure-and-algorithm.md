@@ -43,8 +43,7 @@ Whether you’re preparing for interviews, sharpening your fundamentals, or just
 | [**Hash Tables**](/data-structures-and-algorithms/hashtables) | Efficient key-value storage and retrieval with near-constant time lookups. |
 | [**Two Pointers**](/data-structures-and-algorithms/two-pointers) | Using two pointers to solve array and string problems efficiently. |
 | [**Prefix Sum**](/data-structures-and-algorithms/prefix-sum) | Precomputing cumulative sums to answer range queries quickly. |
-| **Sliding Window - Fixed Size (Soon available)** | Maintaining a window of fixed length to compute running results. |
-| **Sliding Window - Dynamic Size (Soon available)** | Adjusting window size dynamically for problems like substring search. |
+| [**Sliding Window**](/data-structures-and-algorithms/sliding-window) | Maintaining a window of fixed/dynamic length to compute running results. |
 | **Kadane's Algorithm (Soon available)** | Finding maximum subarray sum in linear time. |
 | **Matrix (2D Array) (Soon available)** | Solving problems on 2D grids, matrices, and performing transformations. |
 | **Linked List (Soon available)** | Singly and doubly linked list operations, in-place reversal, and traversal. |
