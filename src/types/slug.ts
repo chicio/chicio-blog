@@ -21,4 +21,5 @@ export const slugs = {
   twoPointers: `${dsa}/two-pointers`,
   prefixSum: `${dsa}/prefix-sum`,
   slidingWindow: `${dsa}/sliding-window`,
+  kadaneAlgorithm: `${dsa}/kadane-algorithm`,
 };

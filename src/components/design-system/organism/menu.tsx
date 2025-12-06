@@ -118,6 +118,17 @@ const dsaDropdownItems = (
     selected: pathname === slugs.slidingWindow,
     onClickCallback,
   },  
+  {
+    label: "Kadane's Algorithm",
+    to: slugs.kadaneAlgorithm,
+    trackingData: {
+      action: tracking.action.open_dsa_kadane_algorithm,
+      category: trackingCategory,
+      label: tracking.label.header,
+    },
+    selected: pathname === slugs.kadaneAlgorithm,
+    onClickCallback,
+  },
 ];
 
 export const menuHeightNumber = 55;

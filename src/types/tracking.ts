@@ -47,6 +47,7 @@ export const tracking = {
     open_dsa_two_pointers: "open_dsa_two_pointers",
     open_dsa_prefix_sum: "open_dsa_prefix_sum",
     open_dsa_sliding_window: "open_dsa_sliding_window",
+    open_dsa_kadane_algorithm: "open_dsa_kadane_algorithm",
   },
   category: {
     home: "home",
