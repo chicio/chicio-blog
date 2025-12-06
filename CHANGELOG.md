@@ -1,5 +1,19 @@
 # Changelog
 
+## [3.6.0](///compare/v3.5.0...v3.6.0) (2025-12-06)
+
+### Features
+
+* **capabilities:** :sparkles: claude code setup 9c1b061
+* **content:** :sparkles: kadane's algorithm ([#143](undefined/undefined/undefined/issues/143)) 428840b
+* **content:** :sparkles: Prefix Sum ([#130](undefined/undefined/undefined/issues/130)) b138b1b
+* **content:** :sparkles: Sliding Window ([#132](undefined/undefined/undefined/issues/132)) e92f30d
+* **content:** ✨ Two pointers ([#129](undefined/undefined/undefined/issues/129)) 96b2005
+
+### Bug Fixes
+
+* **ux:** :bug: table layout now is correct also on mobile devices 81b564a
+
 ## [3.5.0](https://github.com/chicio/chicio-blog/compare/v3.4.0...v3.5.0) (2025-11-08)
 
 ### Features
