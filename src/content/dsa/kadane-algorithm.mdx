@@ -1,1 +1,30 @@
 # Kadane's algorithm
+
+
+---
+
+## 1. Introduction
+- What Kadane’s Algorithm solves: finding the maximum sum subarray efficiently.
+- Key intuition: dynamic programming approach that tracks current maximum and global maximum.
+- Time complexity advantage over naive O(n²) approaches.
+
+## 2. The Algorithm
+- Step-by-step explanation of the core idea:
+  - Maintain `currentMax` for the max ending at current index.
+  - Update `globalMax` if `currentMax` is greater.
+- Pseudocode / TypeScript snippet.
+- Optional React visualization:
+  - Highlight current element, `currentMax`, and `globalMax`.
+  - Show running sum accumulation and reset when negative.
+
+## 4. Time & Space Complexity
+- Standard Kadane: **O(n)** time, **O(1)** space.
+
+## 5. Exercises
+
+| Problem | Technique | Solution |
+|---------|-----------|----------|
+| [Maximum Subarray](https://leetcode.com/problems/maximum-subarray/) | Kadane's Algorithm | Soon available |
+| [Maximum Sum Circular Subarray](https://leetcode.com/problems/maximum-sum-circular-subarray/) | Kadane + Total Sum Trick | Soon available |
+| [Maximum Product Subarray](https://leetcode.com/problems/maximum-product-subarray/) | Kadane-style Tracking of Max/Min | Soon available |
+| [Best Sightseeing Pair](https://leetcode.com/problems/best-sightseeing-pair/) | Kadane-style Transformation | Soon available |
