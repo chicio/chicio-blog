@@ -9,3 +9,8 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "weekly"
+    assignees:
+      - "chicio"
+    commit-message:
+      # Prefix all commit messages with "npm: "
+      prefix: ":arrow_up: "      

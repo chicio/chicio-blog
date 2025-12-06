@@ -3,6 +3,7 @@
         "performance",
         "ux",
         "capabilities",
-        "content"
+        "content",
+        "ci"
     ]
 }
