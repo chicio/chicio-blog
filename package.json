@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@ai-sdk/groq": "^2.0.28",
-    "@ai-sdk/react": "^2.0.72",
+    "@ai-sdk/react": "^2.0.101",
     "@mdx-js/loader": "^3.1.1",
     "@mdx-js/react": "^3.1.1",
     "@microflash/rehype-figure": "^2.1.4",
