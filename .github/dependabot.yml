@@ -13,4 +13,4 @@ updates:
       - "chicio"
     commit-message:
       # Prefix all commit messages with "npm: "
-      prefix: ":arrow_up: "      
+      prefix: "chore(deps): :arrow_up: "      
