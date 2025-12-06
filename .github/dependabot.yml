@@ -12,5 +12,4 @@ updates:
     assignees:
       - "chicio"
     commit-message:
-      # Prefix all commit messages with "npm: "
       prefix: "chore(deps): :arrow_up: "      
