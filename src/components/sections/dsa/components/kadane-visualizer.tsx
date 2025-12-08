@@ -64,7 +64,7 @@ export const KadaneVisualizer: React.FC<KadaneVisualizerProps> = ({ nums }) => {
           <div
             key={i}
             className={`px-3 py-2 rounded ${
-              highlighted.includes(i) ? "bg-primary-dark text-white" : "bg-general-background-light text-black"
+              highlighted.includes(i) ? "bg-secondary text-white" : "bg-general-background-light text-white"
             }`}
           >
             {num}

@@ -42,91 +42,14 @@ const dsaDropdownItems = (
     onClickCallback,
   },
   {
-    label: "Arrays",
-    to: slugs.arrays,
+    label: "Roadmap",
+    to: slugs.roadmap,
     trackingData: {
-      action: tracking.action.open_dsa_arrays,
+      action: tracking.action.open_dsa_roadmap,
       category: trackingCategory,
       label: tracking.label.header,
     },
-    selected: pathname === slugs.arrays,
-    onClickCallback,
-  },
-  {
-    label: "Strings",
-    to: slugs.strings,
-    trackingData: {
-      action: tracking.action.open_dsa_strings,
-      category: trackingCategory,
-      label: tracking.label.header,
-    },
-    selected: pathname === slugs.strings,
-    onClickCallback,
-  },
-  {
-    label: "Bit manipulation",
-    to: slugs.bitManipulation,
-    trackingData: {
-      action: tracking.action.open_dsa_bit_manipulation,
-      category: trackingCategory,
-      label: tracking.label.header,
-    },
-    selected: pathname === slugs.bitManipulation,
-    onClickCallback,
-  },
-  {
-    label: "Hash Tables",
-    to: slugs.hashTables,
-    trackingData: {
-      action: tracking.action.open_dsa_hash_tables,
-      category: trackingCategory,
-      label: tracking.label.header,
-    },
-    selected: pathname === slugs.hashTables,
-    onClickCallback,
-  },
-  {
-    label: "Two Pointers",
-    to: slugs.twoPointers,
-    trackingData: {
-      action: tracking.action.open_dsa_two_pointers,
-      category: trackingCategory,
-      label: tracking.label.header,
-    },
-    selected: pathname === slugs.twoPointers,
-    onClickCallback,
-  },
-  {
-    label: "Prefix Sum",
-    to: slugs.prefixSum,
-    trackingData: {
-      action: tracking.action.open_dsa_prefix_sum,
-      category: trackingCategory,
-      label: tracking.label.header,
-    },
-    selected: pathname === slugs.prefixSum,
-    onClickCallback,
-  },
-  {
-    label: "Sliding Window",
-    to: slugs.slidingWindow,
-    trackingData: {
-      action: tracking.action.open_dsa_sliding_window,
-      category: trackingCategory,
-      label: tracking.label.header,
-    },
-    selected: pathname === slugs.slidingWindow,
-    onClickCallback,
-  },  
-  {
-    label: "Kadane's Algorithm",
-    to: slugs.kadaneAlgorithm,
-    trackingData: {
-      action: tracking.action.open_dsa_kadane_algorithm,
-      category: trackingCategory,
-      label: tracking.label.header,
-    },
-    selected: pathname === slugs.kadaneAlgorithm,
+    selected: pathname === slugs.roadmap,
     onClickCallback,
   },
 ];
@@ -234,13 +157,22 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
             >
               Blog
             </MenuItemWithTracking>
-            <DropdownMenu
-              label="DSA"
-              className="xs:mb-0 xs:w-auto z-50 mb-2 w-80"
-              items={dsaDropdownItems(trackingCategory, pathname, () =>
-                setShouldOpenMenu(false),
-              )}
-            />
+            <MenuItemWithTracking
+              key="dsa"
+              className="xs:mb-0 xs:w-auto mb-2 w-80"
+              to={slugs.roadmap}
+              selected={
+                pathname.includes(slugs.roadmap) && pathname !== slugs.aboutMe
+              }
+              trackingData={{
+                action: tracking.action.open_dsa_roadmap,
+                category: trackingCategory,
+                label: tracking.label.header,
+              }}
+              onClickCallback={() => setShouldOpenMenu(false)}
+            >
+              DSA
+            </MenuItemWithTracking>
             <DropdownMenu
               label="The Author"
               className="xs:mb-0 xs:w-auto z-50 mb-2 w-80"
