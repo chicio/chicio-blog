@@ -37,7 +37,7 @@
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "react-icons": "^5.5.0",
-    "react-is": "19.2.0",
+    "react-is": "19.2.1",
     "react-markdown": "^10.1.0",
     "reading-time": "^1.5.0",
     "recharts": "^3.2.1",
