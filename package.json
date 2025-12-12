@@ -30,7 +30,7 @@
     "elasticlunr": "^0.9.5",
     "framer-motion": "^12.23.12",
     "gray-matter": "^4.0.3",
-    "katex": "^0.16.25",
+    "katex": "^0.16.27",
     "marked": "^17.0.1",
     "next": "16.0.10",
     "postcss": "^8.5.6",
