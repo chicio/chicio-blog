@@ -1,1 +1,130 @@
-# Matrix
+# Matrix (2D array)
+
+Matrix (2D array) problems are a very common category in algorithmic problem solving and competitive programming.
+
+They primarily focus on:
+- navigating rows and columns correctly
+- managing boundaries and indices
+- applying consistent traversal rules
+- performing transformations directly on the input structure
+
+Unlike patterns such as [Sliding Window](/data-structures-and-algorithms/sliding-window) or [Kadane’s Algorithm](/data-structures-and-algorithms/kadane-algorithm), matrix problems 
+rarely introduce complex algorithmic optimizations.  
+Instead, they emphasize **precision, correctness, and a clear mental model of how the grid is traversed and updated**.
+
+Once the main traversal or transformation pattern is identified, the solution is usually straightforward to implement and runs in linear time with respect to the number of cells.
+
+## Traversal Patterns
+
+Most matrix problems are not about complex algorithms, but about **how you move inside the grid**.  
+Understanding traversal patterns is the key to solving 2D array exercises correctly and cleanly.
+
+### Row-wise Traversal
+
+The simplest pattern scans the matrix row by row, from left to right.
+
+```ts
+for (let r = 0; r < rows; r++) {
+  for (let c = 0; c < cols; c++) {
+    // process matrix[r][c]
+  }
+}
+```
+
+This traversal is commonly used when:
+- checking row-based constraints (e.g. Sudoku rows)
+- aggregating values row by row
+- performing straightforward transformations
+
+### Column-wise Traversal
+
+This pattern scans the matrix column by column, from top to bottom.
+
+```ts
+for (let c = 0; c < cols; c++) {
+  for (let r = 0; r < rows; r++) {
+    // process matrix[r][c]
+  }
+}
+```
+
+It is useful when:
+- validating column-based rules,
+- computing column aggregates,
+- or when the problem explicitly refers to columns.
+
+### Directional Traversal
+
+Directional traversal moves through the matrix following a specific direction.
+It is often used as a building block for more complex patterns.
+
+```ts
+/// left to right
+for (let c = left; c <= right; c++) {
+  // process matrix[top][c]
+}
+
+/// top to bottom
+for (let r = top; r <= bottom; r++) {
+  // process matrix[r][right]
+}
+
+/// right to left
+for (let c = right; c >= left; c--) {
+  // process matrix[bottom][c]
+}
+
+/// bottom to top
+for (let r = bottom; r >= top; r--) {
+  // process matrix[r][left]
+}
+```
+### Spiral Traversal
+
+Spiral traversal processes the matrix layer by layer, shrinking its boundaries after each full cycle.
+
+```ts
+let top = 0;
+let bottom = rows - 1;
+let left = 0;
+let right = cols - 1;
+
+while (top <= bottom && left <= right) {
+  // left → right
+  for (let c = left; c <= right; c++) {
+    // process matrix[top][c]
+  }
+  top++;
+
+  // top → bottom
+  for (let r = top; r <= bottom; r++) {
+    // process matrix[r][right]
+  }
+  right--;
+
+  if (top <= bottom) {
+    // right → left
+    for (let c = right; c >= left; c--) {
+      // process matrix[bottom][c]
+    }
+    bottom--;
+  }
+
+  if (left <= right) {
+    // bottom → top
+    for (let r = bottom; r >= top; r--) {
+      // process matrix[r][left]
+    }
+    left++;
+  }
+}
+```
+
+### Simulation-Based Traversal
+
+Some problems require updating the matrix over multiple steps rather than producing a single traversal order.
+
+Typical characteristics:
+- the next state depends on neighboring cells,
+- in-place updates may require temporary markers,
+- or a copy of the matrix to preserve the previous state.
