@@ -11,7 +11,7 @@ export async function POST(req: Request) {
   const result = streamText({
     model: groq("llama-3.3-70b-versatile"),
     // model: groq("llama-3.1-8b-instant"),
-    messages: convertToModelMessages(messages),
+    messages: await convertToModelMessages(messages),
     system: createSystemPrompt(),
     maxOutputTokens: 1000,
     temperature: 0.5,
