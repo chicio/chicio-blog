@@ -128,3 +128,52 @@ Typical characteristics:
 - the next state depends on neighboring cells,
 - in-place updates may require temporary markers,
 - or a copy of the matrix to preserve the previous state.
+
+## Time & Space Complexity
+
+Matrix problems are usually bounded by the size of the grid itself.  
+In most cases, the complexity is dictated by how many times each cell is visited.
+
+Below is a summary of the most common patterns and their complexities.
+
+| Pattern / Operation | Time Complexity | Space Complexity |
+|---------------------|-----------------|------------------|
+| Full matrix traversal | $O(m × n)$ | $O(1)$ |
+| Row-wise / column-wise scan | $O(m × n)$ | $O(1)$ |
+| Spiral traversal | $O(m × n)$ | $O(1)$ |
+| In-place matrix rotation | $O(m × n)$ | $O(1)$ |
+| Validation (rows + cols + boxes) | $O(m × n)$ | $O(1)$ |
+| Simulation with temporary state | $O(m × n)$ | $O(m × n)$ |
+
+It is important to note that:
+- Most matrix problems require visiting **every cell at least once**, making **O(m × n)** unavoidable.
+- Well-designed solutions avoid extra data structures and work **in-place** whenever possible.
+- Additional space is only required when:
+  - previous state must be preserved (e.g. simulations),
+  - temporary markers or auxiliary grids are needed.
+
+Understanding these constraints helps focus on **correct traversal and boundary handling**, rather than over-optimizing time complexity.
+
+## Exercises
+
+Below is a curated list of classic matrix problems that cover the most important 2D array patterns.
+
+| Problem | Technique | Solution |
+|--------|-----------|----------|
+| [Spiral Matrix](https://leetcode.com/problems/spiral-matrix/) | Directional traversal + boundary shrink | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/matrix/spiral-matrix.ts) |
+| [Rotate Image](https://leetcode.com/problems/rotate-image/) | In-place transpose + row reversal | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/matrix/rotate-image.ts) |
+| [Set Matrix Zeroes](https://leetcode.com/problems/set-matrix-zeroes/) | In-place markers (first row/column) | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/matrix/set-matrix-zeroes.ts) |
+| [Valid Sudoku](https://leetcode.com/problems/valid-sudoku/) | Constraint validation (rows, columns, boxes) | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/matrix/valid-sudoku.ts) |
+| [Game of Life](https://leetcode.com/problems/game-of-life/) | In-place state encoding / simulation | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/matrix/game-of-life.ts) |
+
+These exercises collectively reinforce:
+- correct matrix traversal,
+- boundary management,
+- in-place transformations,
+- and careful handling of intermediate states.
+
+
+<CourseNavigation previousTopic={{
+  title: "Kadane's algorithm",
+  url: "/data-structures-and-algorithms/kadane-algorithm"
+}} />
