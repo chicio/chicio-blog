@@ -14,6 +14,204 @@ Key points to keep in mind:
 
 Understanding these fundamentals is crucial before diving into more advanced linked list patterns such as **two pointers**, **reversals**, and **cycle detection**.
 
+## Operations
+
+Before tackling advanced patterns, it’s important to master the basic operations on a linked list.
+All the snippets below are based on a `ListNode` data structure with the following definition.
+
+```typescript
+class ListNode {
+  val: number;
+  next: ListNode | null;
+  constructor(val: number) {
+    this.val = val;
+    this.next = null;
+  }
+}
+```
+
+When working with linked lists, edge cases often arise when inserting or deleting nodes at the head of the list. 
+To handle these cases cleanly, we introduce a dummy node: a temporary node placed before the head. 
+This allows all operations to be implemented uniformly, without special checks for the head.  
+
+For traversing a linked list, you typically start from the head and follow the `next` pointers until you reach the end (`null`).
+
+```typescript
+function traverse(head: ListNode | null): void {
+    const dummy = new ListNode(0);
+    dummy.next = head;
+
+    let curr: ListNode | null = dummy.next;
+
+    while (curr) {
+        console.log(curr.val);
+        curr = curr.next;
+    }
+};
+```
+
+The same technique can be applied to other operations like insertion and deletion, making the code cleaner and easier to manage.
+For example to insert a new node at a given position:
+
+```typescript
+function insertAtPosition(head: ListNode | null, val: number, pos: number): ListNode | null {
+  const dummy = new ListNode(0);
+  dummy.next = head;
+  
+  let prev: ListNode | null = dummy;
+  let index = 0;
+
+  while (prev && index < pos) {
+    prev = prev.next;
+    index++;
+  }
+
+  if (prev) {
+    const newNode = new ListNode(val);
+    newNode.next = prev.next;
+    prev.next = newNode;
+  }
+
+  return dummy.next;
+}
+```     
+
+The same dummy node approach can be used for deletion by adjusting the `next` pointers to skip over the target node:
+
+```typescript
+function deleteByValue(head: ListNode | null, target: number): ListNode | null {
+  const dummy = new ListNode(0);
+  dummy.next = head;
+
+  let prev: ListNode | null = dummy;
+  let curr: ListNode | null = dummy.next;
+
+  while (curr) {
+    if (curr.val === target) {
+      prev!.next = curr.next;
+      break;
+    }
+
+    prev = curr;
+    curr = curr.next;
+  }
+
+  return dummy.next;
+}
+```
+
+### Reversal
+
+Reversing a linked list is another importat operation that requires careful pointer manipulation. 
+There are differet type of reversal techniques, from full reversal to partial reversal of a sublist.  
+A full reversal can be achieved iteratively by maintaining three pointers: `prev`, `curr`, and `next`.
+
+```typescript
+function reverseList(head: ListNode | null): ListNode | null {
+  let prev: ListNode | null = null;
+  let curr: ListNode | null = head;
+
+  while (curr) {
+    const next = curr.next;
+    curr.next = prev;
+    prev = curr;
+    curr = next;
+  }
+
+  return prev;
+}
+```
+
+A reversal between two positions `m` and `n` can be done by first navigating to the `m-th` node, then reversing the sublist up to the `n-th` node.
+
+```typescript
+function reverseBetween(head: ListNode | null, m: number, n: number): ListNode | null {
+  const dummy = new ListNode(0);
+  dummy.next = head;
+  let prev: ListNode | null = dummy;
+
+  for (let i = 1; i < m; i++) {
+    prev = prev!.next;
+  }
+
+  let start = prev!.next;
+  let then = start!.next;
+
+  for (let i = 0; i < n - m; i++) {
+    start!.next = then!.next;
+    then!.next = prev!.next;
+    prev!.next = then;
+    then = start!.next;
+  }
+
+  return dummy.next;
+}
+```
+
+Reversing nodes in k-groups involves similar logic, but requires checking if there are at least `k` nodes left to reverse.
+
+```typescript
+function reverseKGroup(head: ListNode | null, k: number): ListNode | null {
+  const dummy = new ListNode(0);
+  dummy.next = head;
+  let prev: ListNode | null = dummy;
+
+  while (true) {
+    let node: ListNode | null = prev;
+    for (let i = 0; i < k && node; i++) node = node.next;
+    if (!node) break;
+
+    let curr = prev!.next;
+    let nextPrev = curr;
+    let next: ListNode | null = null;
+
+    for (let i = 0; i < k; i++) {
+      const temp = curr!.next;
+      curr!.next = next;
+      next = curr;
+      curr = temp;
+    }
+
+    const temp = prev!.next;
+    prev!.next = next;
+    nextPrev!.next = curr;
+    prev = nextPrev;
+  }
+
+  return dummy.next;
+}
+```
+
+---
+
+## 3. Reversal Techniques
+- Full reversal
+- Partial reversal (Reverse Linked List II, k-group)
+- Fast & slow pointers for finding midpoints
+
+## 4. Advanced Patterns
+- Detecting cycles (Floyd’s algorithm)
+- Palindrome check
+- Partitioning, rotating, merging
+- Copying with random pointers
+
+## 5. Time & Space Complexity
+- O(n) traversal operations
+- O(1) insertion/deletion at head
+- O(n) insertion/deletion at tail or arbitrary position
+- Space: O(1) for all in-place operations
+- Complexity for advanced patterns (e.g., cycle detection, palindrome)
+
+## 6. Exercises
+- Table with Problem, Technique, Solution
+- Include all exercises from the three original linked list sections
+
+```typescript
+let current = head;
+while (current) {
+  console.log(current.val);
+  current = current.next;
+}
 
 
 <CourseNavigation 
