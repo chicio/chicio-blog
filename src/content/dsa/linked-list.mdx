@@ -1,0 +1,24 @@
+import { CourseNavigation } from "../../components/sections/dsa/components/course-navigation";
+
+# Linked list
+
+A **linked list** is a data structure consisting of nodes, where each node contains a value and a reference (pointer) to the next node. Unlike arrays, linked lists 
+do **not store elements contiguously** in memory. This makes insertion and deletion operations more flexible but requires careful pointer management.
+
+Key points to keep in mind:
+
+- The **head** points to the first element, and losing it can result in losing access to the entire list
+- **Traversal** requires following `next` pointers until `null` is reached
+- Linked lists can easily form **cycles**, which must be handled to avoid infinite loops
+- Operations that are trivial in arrays, like accessing the i-th element, require **O(n)** traversal in linked lists
+
+Understanding these fundamentals is crucial before diving into more advanced linked list patterns such as **two pointers**, **reversals**, and **cycle detection**.
+
+
+
+<CourseNavigation 
+  previousTopic={{
+    title: "Matrix (2D Array)",
+    url: "/data-structures-and-algorithms/matrix"
+  }} 
+/>
