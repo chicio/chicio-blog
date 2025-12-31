@@ -20,7 +20,7 @@ const data = [
 ];
 
 export const PerformanceComparisonChart: FC = () => (
-  <div className="glow-container h-[400px] w-full p-5">
+  <div className="glow-container h-[400px] w-full p-5 mb-6">
     <ResponsiveContainer>
       <LineChart data={data}>
         <XAxis
