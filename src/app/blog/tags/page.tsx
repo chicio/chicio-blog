@@ -9,7 +9,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return createMetadata({
     author: siteMetadata.author,
     title: siteMetadata.title,
-    url: slugs.blog.tags,
+    slug: slugs.blog.tags,
     imageUrl: siteMetadata.featuredImage,
     ogPageType: "website",
   });

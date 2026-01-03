@@ -8,7 +8,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return createMetadata({
     author: siteMetadata.author,
     title: siteMetadata.title,
-    url: slugs.art,
+    slug: slugs.art,
     imageUrl: siteMetadata.featuredImage,
     ogPageType: "website",
   });

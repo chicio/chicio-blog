@@ -28,7 +28,7 @@ const defaultKeywords = [
 export const createMetadata = ({
    author,
    title,
-   url,
+   slug: url,
    imageUrl,
    ogPageType,
    description,
@@ -36,7 +36,7 @@ export const createMetadata = ({
 }: {
     author: string,
     title: string,
-    url: string,
+    slug: string,
     imageUrl: string,
     ogPageType: OgPageType,
     description?: string,

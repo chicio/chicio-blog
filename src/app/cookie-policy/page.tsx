@@ -9,7 +9,7 @@ import { tracking } from "@/types/tracking";
 export const metadata = createMetadata({
   author: siteMetadata.author,
   title: siteMetadata.title,
-  url: slugs.cookiePolicy,
+  slug: slugs.cookiePolicy,
   imageUrl: siteMetadata.featuredImage,
   ogPageType: "website",
 });

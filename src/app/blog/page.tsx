@@ -6,7 +6,7 @@ import { slugs } from "@/types/slug";
 export const metadata = createMetadata({
   author: siteMetadata.author,
   title: siteMetadata.title,
-  url: slugs.blog.home,
+  slug: slugs.blog.home,
   imageUrl: siteMetadata.featuredImage,
   ogPageType: "website",
 });

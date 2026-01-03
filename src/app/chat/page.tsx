@@ -7,7 +7,7 @@ export const metadata = {
   ...createMetadata({
     author: siteMetadata.author,
     title: siteMetadata.title,
-    url: slugs.chat,
+    slug: slugs.chat,
     imageUrl: siteMetadata.featuredImage,
     ogPageType: "website",
   }),
