@@ -8,14 +8,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const tags = getTags();
   const totalPages = getPostsTotalPages(posts);
   const blogPaginationPages: MetadataRoute.Sitemap = [];
+  const defaultImage = [`${siteMetadata.siteUrl}${siteMetadata.featuredImage}`];
 
   for (let i = 1; i <= totalPages; i++) {
     blogPaginationPages.push({
-      url: `${siteMetadata.siteUrl}${slugs.blogPostsPage}/${i}`,
+      url: `${siteMetadata.siteUrl}${slugs.blog.blogPostsPage}/${i}`,
       lastModified: new Date(),
       changeFrequency: "yearly",
       priority: 1,
-      images: [`${siteMetadata.siteUrl}${siteMetadata.featuredImage}`],
+      images: defaultImage,
     });
   }
 
@@ -25,18 +26,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
       changeFrequency: "yearly",
       priority: 1,
-      images: [`${siteMetadata.siteUrl}${siteMetadata.featuredImage}`],
+      images: defaultImage,
     },
     {
       url: `${siteMetadata.siteUrl}${slugs.blog}`,
       lastModified: new Date(),
       changeFrequency: "yearly",
       priority: 1,
-      images: [`${siteMetadata.siteUrl}${siteMetadata.featuredImage}`],
+      images: defaultImage,
     },
     ...blogPaginationPages,
     {
-      url: `${siteMetadata.siteUrl}${slugs.blogArchive}`,
+      url: `${siteMetadata.siteUrl}${slugs.blog.blogArchive}`,
       lastModified: new Date(),
       changeFrequency: "yearly",
       priority: 1,
@@ -49,17 +50,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
       images: [`${siteMetadata.siteUrl}${post.frontmatter.image}`],
     })),
     {
-      url: `${siteMetadata.siteUrl}${slugs.tags}`,
+      url: `${siteMetadata.siteUrl}${slugs.blog.tags}`,
       lastModified: new Date(),
       changeFrequency: "yearly",
       priority: 1,
-      images: [`${siteMetadata.siteUrl}${siteMetadata.featuredImage}`],
+      images: defaultImage,
     },
     ...tags.map((tag) => ({
       url: `${siteMetadata.siteUrl}/${tag.slug}`,
       lastModified: new Date(),
       priority: 1,
-      images: [`${siteMetadata.siteUrl}${siteMetadata.featuredImage}`],
+      images: defaultImage,
     })),
     {
       url: `${siteMetadata.siteUrl}${slugs.art}`,
@@ -68,5 +69,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
       images: [`${siteMetadata.siteUrl}${siteMetadata.featuredArtImage}`],
     },
+    ...Object.values(slugs.dsa).map((key) => ({
+      url: `${siteMetadata.siteUrl}${key}`,
+      lastModified: new Date(),
+      changeFrequency: "yearly",
+      priority: 1,
+      images: defaultImage,
+    }))
   ];
 }

@@ -1,3 +1,4 @@
+import { slugs } from "../../types/slug";
 import { CourseNavigation } from "../../components/sections/dsa/components/course-navigation";
 
 # Hashtable
@@ -365,10 +366,10 @@ Last but not least, we implement `remove`, which also hashes the key to find its
 <CourseNavigation 
    previousTopic={{
       title: "Bit manipulation",
-      url: "/data-structures-and-algorithms/bit-manipulation"
+      url: slugs.dsa.bitManipulation
    }} 
    nextTopic={{
       title: "Two Pointers",
-      url: "/data-structures-and-algorithms/two-pointers"
+      url: slugs.dsa.twoPointers
    }}
 />

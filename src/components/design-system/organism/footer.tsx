@@ -27,7 +27,7 @@ export const Footer: FC<FooterProps> = ({ author, trackingCategory }) => (
           Home
         </MenuItemWithTracking>
         <MenuItemWithTracking
-          to={slugs.blog}
+          to={slugs.blog.home}
           trackingData={{
             action: tracking.action.open_blog,
             category: trackingCategory,
@@ -49,7 +49,7 @@ export const Footer: FC<FooterProps> = ({ author, trackingCategory }) => (
           Art
         </MenuItemWithTracking>
         <MenuItemWithTracking
-          to={slugs.aboutMe}
+          to={slugs.blog.aboutMe}
           trackingData={{
             action: tracking.action.open_about_me,
             category: trackingCategory,
@@ -60,7 +60,7 @@ export const Footer: FC<FooterProps> = ({ author, trackingCategory }) => (
           About Me
         </MenuItemWithTracking>
         <MenuItemWithTracking
-          to={slugs.blogArchive}
+          to={slugs.blog.blogArchive}
           trackingData={{
             action: tracking.action.open_blog_archive,
             category: trackingCategory,
@@ -71,7 +71,7 @@ export const Footer: FC<FooterProps> = ({ author, trackingCategory }) => (
           Archive
         </MenuItemWithTracking>
         <MenuItemWithTracking
-          to={slugs.tags}
+          to={slugs.blog.tags}
           trackingData={{
             action: tracking.action.open_blog_tags,
             category: trackingCategory,

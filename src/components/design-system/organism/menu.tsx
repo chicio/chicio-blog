@@ -25,35 +25,6 @@ import {
   useScrollDirection,
 } from "../utils/hooks/use-scroll-direction";
 
-const dsaDropdownItems = (
-  trackingCategory: string,
-  pathname: string,
-  onClickCallback: () => void,
-) => [
-  {
-    label: "Time and space complexity",
-    to: slugs.timeAndSpaceComplexity,
-    trackingData: {
-      action: tracking.action.open_dsa_time_and_space_complexity,
-      category: trackingCategory,
-      label: tracking.label.header,
-    },
-    selected: pathname === slugs.timeAndSpaceComplexity,
-    onClickCallback,
-  },
-  {
-    label: "Roadmap",
-    to: slugs.roadmap,
-    trackingData: {
-      action: tracking.action.open_dsa_roadmap,
-      category: trackingCategory,
-      label: tracking.label.header,
-    },
-    selected: pathname === slugs.roadmap,
-    onClickCallback,
-  },
-];
-
 export const menuHeightNumber = 55;
 
 const menuVariants: Variants = {
@@ -144,9 +115,9 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
             <MenuItemWithTracking
               key="blog"
               className="xs:mb-0 xs:w-auto mb-2 w-80"
-              to={slugs.blog}
+              to={slugs.blog.home}
               selected={
-                pathname.includes(slugs.blog) && pathname !== slugs.aboutMe
+                pathname.includes(slugs.blog.home) && pathname !== slugs.blog.aboutMe
               }
               trackingData={{
                 action: tracking.action.open_home,
@@ -160,9 +131,9 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
             <MenuItemWithTracking
               key="dsa"
               className="xs:mb-0 xs:w-auto mb-2 w-80"
-              to={slugs.roadmap}
+              to={slugs.dsa.roadmap}
               selected={
-                pathname.includes(slugs.roadmap) && pathname !== slugs.aboutMe
+                pathname.includes(slugs.dsa.roadmap) && pathname !== slugs.blog.aboutMe
               }
               trackingData={{
                 action: tracking.action.open_dsa_roadmap,
@@ -179,13 +150,13 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
               items={[
                 {
                   label: "About me",
-                  to: slugs.aboutMe,
+                  to: slugs.blog.aboutMe,
                   trackingData: {
                     action: tracking.action.open_about_me,
                     category: trackingCategory,
                     label: tracking.label.header,
                   },
-                  selected: pathname === slugs.aboutMe,
+                  selected: pathname === slugs.blog.aboutMe,
                   onClickCallback: () => setShouldOpenMenu(false),
                 },
                 {

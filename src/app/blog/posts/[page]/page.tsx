@@ -19,7 +19,7 @@ export async function generateMetadata({
   return createMetadata({
     author: siteMetadata.author,
     title: siteMetadata.title,
-    url: `${siteMetadata.siteUrl}${slugs.blogPostsPage}/${page}`,
+    url: `${siteMetadata.siteUrl}${slugs.blog.blogPostsPage}/${page}`,
     imageUrl: siteMetadata.featuredImage,
     ogPageType: "website",
   });

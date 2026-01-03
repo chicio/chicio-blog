@@ -1,3 +1,4 @@
+import { slugs } from "../../types/slug";
 import { PerformanceComparisonChart } from "../../components/sections/dsa/components/performance-comparison-chart";
 import { TimeVsSpaceTradeoffVisualizer } from "../../components/sections/dsa/components/time-space-tradeoff";
 import { ComplexityGrowthVisualizer } from "../../components/sections/dsa/components/complexity-growth-visualizer";
@@ -495,8 +496,9 @@ function mergeSort(arr: number[]): number[] {
 - Master Theorem, so **O(n log n) time**  
 - Extra array for merging, so **O(n) space**
 
-
-<CourseNavigation nextTopic={{
-  title: "Arrays",
-  url: "/data-structures-and-algorithms/arrays"
-}} />
+<CourseNavigation 
+  nextTopic={{
+    title: "Arrays",
+    url: slugs.dsa.arrays
+  }} 
+/>

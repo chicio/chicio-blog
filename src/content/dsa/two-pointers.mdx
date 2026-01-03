@@ -1,3 +1,4 @@
+import { slugs } from "../../types/slug";
 import { CourseNavigation } from "../../components/sections/dsa/components/course-navigation";
 
 # Two pointers
@@ -207,10 +208,10 @@ while (fast !== null && fast.next !== null) {
 <CourseNavigation 
    previousTopic={{
       title: "Hash Tables",
-      url: "/data-structures-and-algorithms/hashtables"
+      url: slugs.dsa.hashTables
    }} 
    nextTopic={{
       title: "Prefix sum",
-      url: "/data-structures-and-algorithms/prefix-sum"
+      url: slugs.dsa.prefixSum
    }}
 />

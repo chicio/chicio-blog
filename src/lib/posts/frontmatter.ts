@@ -21,7 +21,7 @@ const generatePostSlugFrom = (filename: string): PostSlug => {
     month,
     day,
     text: text,
-    formatted: `${slugs.blogPost}/${year}/${month}/${day}/${text}`,
+    formatted: `${slugs.blog.blogPost}/${year}/${month}/${day}/${text}`,
   };
 };
 
