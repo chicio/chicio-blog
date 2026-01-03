@@ -6,6 +6,7 @@ import { getPostsUsing } from "@/lib/posts/posts-with-parser";
 import { mdExtension } from "@/lib/posts/files";
 import { postsDirectory } from "@/lib/posts/post-dir";
 import { Pagination } from "@/types/pagination";
+import { generateTagSlug } from "../tags/tags";
 
 const postsPerPage = 7;
 
@@ -113,7 +114,7 @@ export const getTags = () => {
           tagValue: tag,
           count: 1,
           tagSlugText,
-          slug: `${slugs.blog.tag}/${tagSlugText}`,
+          slug: generateTagSlug(tag),
         });
       }
     })
