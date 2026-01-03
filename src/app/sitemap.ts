@@ -11,7 +11,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   for (let i = 1; i <= totalPages; i++) {
     blogPaginationPages.push({
-      url: `${siteMetadata.siteUrl}${slugs.blogPostsPage}/${i}`,
+      url: `${siteMetadata.siteUrl}${slugs.blog.blogPostsPage}/${i}`,
       lastModified: new Date(),
       changeFrequency: "yearly",
       priority: 1,
@@ -36,7 +36,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     ...blogPaginationPages,
     {
-      url: `${siteMetadata.siteUrl}${slugs.blogArchive}`,
+      url: `${siteMetadata.siteUrl}${slugs.blog.blogArchive}`,
       lastModified: new Date(),
       changeFrequency: "yearly",
       priority: 1,
@@ -49,7 +49,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       images: [`${siteMetadata.siteUrl}${post.frontmatter.image}`],
     })),
     {
-      url: `${siteMetadata.siteUrl}${slugs.tags}`,
+      url: `${siteMetadata.siteUrl}${slugs.blog.tags}`,
       lastModified: new Date(),
       changeFrequency: "yearly",
       priority: 1,

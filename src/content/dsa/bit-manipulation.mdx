@@ -1,3 +1,4 @@
+import { slugs } from "../../types/slug";
 import { BitwiseVisualizer } from "../../components/sections/dsa/components/bitwise-visualizer";
 import { CourseNavigation } from "../../components/sections/dsa/components/course-navigation";
 
@@ -316,10 +317,10 @@ function divide(dividend: number, divisor: number): number {
 <CourseNavigation 
    previousTopic={{
       title: "Strings",
-      url: "/data-structures-and-algorithms/strings"
+      url:  slugs.dsa.strings
    }} 
    nextTopic={{
       title: "Hash Tables",
-      url: "/data-structures-and-algorithms/hashtables"
+      url: slugs.dsa.hashTables
    }}
 />

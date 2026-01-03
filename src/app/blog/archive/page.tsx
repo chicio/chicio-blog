@@ -11,7 +11,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return createMetadata({
     author: siteMetadata.author,
     title: siteMetadata.title,
-    url: `${siteMetadata.siteUrl}${slugs.blogArchive}`,
+    url: `${siteMetadata.siteUrl}${slugs.blog.blogArchive}`,
     imageUrl: siteMetadata.featuredImage,
     ogPageType: "website",
   });

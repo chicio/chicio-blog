@@ -72,9 +72,9 @@ export const getPostsPaginationFor: (page: number) => Pagination | undefined = (
     const start = (page - 1) * postsPerPage;
     const paginatedPosts = posts.slice(start, start + postsPerPage);
     const previousPageUrl =
-      page > 1 ? `${slugs.blogPostsPage}/${page - 1}` : undefined;
+      page > 1 ? `${slugs.blog.blogPostsPage}/${page - 1}` : undefined;
     const nextPageUrl =
-      page < totalPages ? `${slugs.blogPostsPage}/${page + 1}` : undefined;
+      page < totalPages ? `${slugs.blog.blogPostsPage}/${page + 1}` : undefined;
 
     const postsGrouped = groupArrayBy(
       paginatedPosts.slice(1, paginatedPosts.length),
@@ -113,7 +113,7 @@ export const getTags = () => {
           tagValue: tag,
           count: 1,
           tagSlugText,
-          slug: `${slugs.tag}/${tagSlugText}`,
+          slug: `${slugs.blog.tag}/${tagSlugText}`,
         });
       }
     })
