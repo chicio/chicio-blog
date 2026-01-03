@@ -10,8 +10,6 @@ import { siteMetadata } from "@/types/site-metadata";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-export const revalidate = false
-
 export async function generateMetadata({
   params,
 }: NextPostParameters): Promise<Metadata> {
