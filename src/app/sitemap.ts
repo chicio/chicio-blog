@@ -8,6 +8,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const tags = getTags();
   const totalPages = getPostsTotalPages(posts);
   const blogPaginationPages: MetadataRoute.Sitemap = [];
+  const defaultImage = [`${siteMetadata.siteUrl}${siteMetadata.featuredImage}`];
 
   for (let i = 1; i <= totalPages; i++) {
     blogPaginationPages.push({
@@ -15,7 +16,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
       changeFrequency: "yearly",
       priority: 1,
-      images: [`${siteMetadata.siteUrl}${siteMetadata.featuredImage}`],
+      images: defaultImage,
     });
   }
 
@@ -25,14 +26,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
       changeFrequency: "yearly",
       priority: 1,
-      images: [`${siteMetadata.siteUrl}${siteMetadata.featuredImage}`],
+      images: defaultImage,
     },
     {
       url: `${siteMetadata.siteUrl}${slugs.blog}`,
       lastModified: new Date(),
       changeFrequency: "yearly",
       priority: 1,
-      images: [`${siteMetadata.siteUrl}${siteMetadata.featuredImage}`],
+      images: defaultImage,
     },
     ...blogPaginationPages,
     {
@@ -53,13 +54,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
       changeFrequency: "yearly",
       priority: 1,
-      images: [`${siteMetadata.siteUrl}${siteMetadata.featuredImage}`],
+      images: defaultImage,
     },
     ...tags.map((tag) => ({
       url: `${siteMetadata.siteUrl}/${tag.slug}`,
       lastModified: new Date(),
       priority: 1,
-      images: [`${siteMetadata.siteUrl}${siteMetadata.featuredImage}`],
+      images: defaultImage,
     })),
     {
       url: `${siteMetadata.siteUrl}${slugs.art}`,
@@ -68,5 +69,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
       images: [`${siteMetadata.siteUrl}${siteMetadata.featuredArtImage}`],
     },
+    ...Object.values(slugs.dsa).map((key) => ({
+      url: `${siteMetadata.siteUrl}${key}`,
+      lastModified: new Date(),
+      changeFrequency: "yearly",
+      priority: 1,
+      images: defaultImage,
+    }))
   ];
 }
