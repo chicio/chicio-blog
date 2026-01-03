@@ -29,7 +29,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       images: defaultImage,
     },
     {
-      url: `${siteMetadata.siteUrl}${slugs.blog}`,
+      url: `${siteMetadata.siteUrl}${slugs.blog.home}`,
       lastModified: new Date(),
       changeFrequency: "yearly",
       priority: 1,
