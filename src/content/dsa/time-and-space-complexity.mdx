@@ -1,4 +1,3 @@
-import { slugs } from "../../types/slug";
 import { PerformanceComparisonChart } from "../../components/sections/dsa/components/performance-comparison-chart";
 import { TimeVsSpaceTradeoffVisualizer } from "../../components/sections/dsa/components/time-space-tradeoff";
 import { ComplexityGrowthVisualizer } from "../../components/sections/dsa/components/complexity-growth-visualizer";
@@ -6,7 +5,6 @@ import { SpaceComplexityVisualizer } from "../../components/sections/dsa/compone
 import { AmortizedAnalysis } from "../../components/sections/dsa/components/amortized-analysis";
 import { RecurrenceTree } from "../../components/sections/dsa/components/recurrence-tree";
 import { StackFrameComparisonChart } from "../../components/sections/dsa/components/stack-frame-comparison-chart";
-import { CourseNavigation } from "../../components/sections/dsa/components/course-navigation";
 
 # Time and Space Complexity
 
@@ -495,10 +493,3 @@ function mergeSort(arr: number[]): number[] {
 - Recurrence: T(n) = 2T(n/2) + O(n)  
 - Master Theorem, so **O(n log n) time**  
 - Extra array for merging, so **O(n) space**
-
-<CourseNavigation 
-  nextTopic={{
-    title: "Arrays",
-    url: slugs.dsa.arrays
-  }} 
-/>
