@@ -38,7 +38,7 @@ export const ProfileCard: FC<ProfileCardProps> = ({
     title = "Software Engineer",
     subtitle,
     showSocialContacts = false,
-    trackingCategory = tracking.category.blog,
+    trackingCategory = tracking.category.blog_home,
     trackingLabel = tracking.label.body,
 }) => (
     <div className="w-full py-8 flex items-center justify-center">
