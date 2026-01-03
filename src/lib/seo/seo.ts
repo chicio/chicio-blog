@@ -136,8 +136,11 @@ export function createStructuredData({
                 links.twitter,
                 links.facebook,
                 links.linkedin,
-                links.github
-            ].filter(Boolean)
+                links.github,
+                links.medium,
+                links.devto,
+                links.instagram
+            ]
         }),
         ...(ogPageType !== 'profile' && {
             keywords: keywords || defaultKeywords

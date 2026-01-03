@@ -14,6 +14,7 @@ export async function generateMetadata({ params }: NextTagParameters): Promise<M
     return createMetadata({
         author: siteMetadata.author,
         title: siteMetadata.title,
+        description: siteMetadata.description,
         slug: generateTagSlug(tag),
         imageUrl: siteMetadata.featuredImage,
         ogPageType: 'website',
