@@ -1,6 +1,17 @@
 import { DsaPage } from "@/components/sections/dsa/components/dsa-page";
 import Arrays from "../../../content/dsa/arrays.mdx";
 import { slugs } from "@/types/slug";
+import { createMetadata } from "@/lib/seo/seo";
+import { siteMetadata } from "@/types/site-metadata";
+
+export const metadata = createMetadata({
+  author: siteMetadata.author,
+  title: siteMetadata.title,
+  description: siteMetadata.description,
+  slug: slugs.dsa.arrays,
+  imageUrl: siteMetadata.featuredImage,
+  ogPageType: "website",
+});
 
 export default function ArraysPage() {
   return (
