@@ -1,5 +1,28 @@
 # Changelog
 
+## [3.7.0](///compare/v3.6.0...v3.7.0) (2026-01-03)
+
+### Features
+
+* **capabilities:** :sparkles: json ld for dsa course 82e2099
+* **capabilities:** :sparkles: llms.txt ([#172](undefined/undefined/undefined/issues/172)) d9bbb1b
+* **capabilities:** :sparkles: new dsa course page navigation 5c497c3
+* **capabilities:** :zap: added description for all metadata where it is missing eafbb03
+* **capabilities:** ✨ RSS feed ([#171](undefined/undefined/undefined/issues/171)) 9df4784
+* **content:** :sparkles: about me is now a standalone page 288f7f7
+* **content:** :sparkles: linked list ([#165](undefined/undefined/undefined/issues/165)) 8250288
+* **content:** :sparkles: metadata for dsa pages badb725
+* **content:** ✨ matrix 2D array ([#164](undefined/undefined/undefined/issues/164)) d8fbe5c
+
+### Bug Fixes
+
+* **capabilities:** :ambulance: sitemap wrong entry for blog home 886d6bc
+* **capabilities:** :bug: fix tracking in profile card 2daa44a
+* **capabilities:** :bug: fixed canonical url + og generation from metadataBaseUrl 8db6f54
+* **capabilities:** :bug: now 404 is triggered also for missing post pages d728e82
+* **content:** :ambulance: update search index c3cef6b
+* **content:** :sparkles: improve spacing and text in time and space complexity article dd3a4c7
+
 ## [3.6.0](///compare/v3.5.0...v3.6.0) (2025-12-06)
 
 ### Features
