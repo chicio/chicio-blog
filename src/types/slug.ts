@@ -5,6 +5,7 @@ const dsa = `/data-structures-and-algorithms`;
 
 
 export const slugs = {
+  aboutMe: `/about-me`,
   blog: {
     home: blog,
     blogPostsPage: `${blog}/posts`,
@@ -12,7 +13,6 @@ export const slugs = {
     tags: `${blog}/tags`,
     tag: `${blog}/tag`,
     blogArchive: `${blog}/archive`,
-    aboutMe: `${blogPost}/2017/05/10/about-me`,
   },
   art: "/art",
   chat: "/chat",

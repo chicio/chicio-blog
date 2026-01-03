@@ -50,10 +50,13 @@ export const BlogPostContent: FC<PostProps> = ({ post }) => {
         <div dangerouslySetInnerHTML={{ __html: content }} />
       </ReadingContentPageTemplate>
       <JsonLd
-        ogPageType="article"
+        type="BlogPosting"
         url={`${siteMetadata.siteUrl}${frontmatter.slug.formatted}`}
         imageUrl={frontmatter.image}
         title={frontmatter.title}
+        date={frontmatter.date.formatted}
+        description={frontmatter.description}
+        keywords={frontmatter.tags}
       />
     </>
   );

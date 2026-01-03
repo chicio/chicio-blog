@@ -5,7 +5,7 @@ import { SocialContacts } from "@/components/design-system/organism/social-conta
 import { tracking } from "@/types/tracking";
 import { motion, Variants } from "framer-motion";
 import { FC } from "react";
-import { ProfilePhoto } from "./profile-photo";
+import { ProfilePhoto } from "../../../design-system/organism/profile-photo";
 
 const itemVariants: Variants = {
   hidden: { y: 50, opacity: 0 },

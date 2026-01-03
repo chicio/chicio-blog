@@ -56,6 +56,7 @@ export const tracking = {
     art: "art",
     dsa: "dsa",
     chat: "chat",
+    about_me: "about_me",
     clowns: "clowns"
   },
   label: {

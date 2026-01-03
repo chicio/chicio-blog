@@ -116,9 +116,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
               key="blog"
               className="xs:mb-0 xs:w-auto mb-2 w-80"
               to={slugs.blog.home}
-              selected={
-                pathname.includes(slugs.blog.home) && pathname !== slugs.blog.aboutMe
-              }
+              selected={pathname.includes(slugs.blog.home)}
               trackingData={{
                 action: tracking.action.open_home,
                 category: trackingCategory,
@@ -132,9 +130,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
               key="dsa"
               className="xs:mb-0 xs:w-auto mb-2 w-80"
               to={slugs.dsa.roadmap}
-              selected={
-                pathname.includes(slugs.dsa.roadmap) && pathname !== slugs.blog.aboutMe
-              }
+              selected={pathname.includes(slugs.dsa.roadmap)}
               trackingData={{
                 action: tracking.action.open_dsa_roadmap,
                 category: trackingCategory,
@@ -150,13 +146,13 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
               items={[
                 {
                   label: "About me",
-                  to: slugs.blog.aboutMe,
+                  to: slugs.aboutMe,
                   trackingData: {
                     action: tracking.action.open_about_me,
                     category: trackingCategory,
                     label: tracking.label.header,
                   },
-                  selected: pathname === slugs.blog.aboutMe,
+                  selected: pathname === slugs.aboutMe,
                   onClickCallback: () => setShouldOpenMenu(false),
                 },
                 {

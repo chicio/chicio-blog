@@ -2,7 +2,6 @@ import { siteMetadata } from "@/types/site-metadata";
 import { tracking } from "@/types/tracking";
 import {getPostsForTag, getTags} from "@/lib/posts/posts";
 import { NextTagParameters } from "@/types/page-parameters";
-import { JsonLd } from "@/components/design-system/utils/components/jsond-ld";
 import {Metadata} from "next";
 import {createMetadata} from "@/lib/seo/seo";
 import { BlogGenericPostListPageTemplate } from "@/components/sections/blog/components/blog-generic-post-list-page-template";
@@ -36,19 +35,12 @@ export default async function TagPage({ params }: NextTagParameters) {
   const tagHeader = `${parsedTag} (${posts.length})`;
 
   return (
-    <>
       <BlogGenericPostListPageTemplate
         title={tagHeader}
         posts={posts}
         author={siteMetadata.author}
         trackingCategory={tracking.category.blog_tag}
+        keywords={[tag]}
       />
-      <JsonLd
-        ogPageType="website"
-        url={siteMetadata.siteUrl}
-        imageUrl={siteMetadata.featuredImage}
-        title={siteMetadata.title + " | " + parsedTag}
-      />
-    </>
   );
 }

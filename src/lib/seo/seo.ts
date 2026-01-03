@@ -1,3 +1,4 @@
+import { authors } from "@/types/author";
 import {siteMetadata, SiteMetadataSocialLinks} from "@/types/site-metadata";
 import type {Metadata} from 'next'
 
@@ -78,8 +79,21 @@ export const createMetadata = ({
     }
 });
 
+export type WebsiteJsonLd = 'Website'
+export type PersonJsonLd = 'Person'
+export type BlogJsonLd = 'Blog'
+export type BlogPostingJsonLd = 'BlogPosting'
+export type TechArticleJsonLd = 'TechArticle'
+export type JsonLdType = WebsiteJsonLd | PersonJsonLd | BlogPostingJsonLd | TechArticleJsonLd | BlogJsonLd 
+
+const jsonLdIds: Partial<Record<JsonLdType, string>> = {
+    'Person': `${siteMetadata.siteUrl}/#person`,
+    'Website': `${siteMetadata.siteUrl}/#website`,
+    'Blog': `${siteMetadata.siteUrl}/#blog`,
+};
+
 export function createStructuredData({
-   ogPageType,
+   type,
    url,
    imageUrl,
    author,
@@ -89,7 +103,7 @@ export function createStructuredData({
    description,
    date
 }: {
-    ogPageType: OgPageType
+    type: JsonLdType
     url: string
     imageUrl: string
     author: string
@@ -101,37 +115,37 @@ export function createStructuredData({
 }) {
     const jsonLd = {
         '@context': 'https://schema.org',
-        '@type': ogPageType,
+        '@type': type,
+        '@id': jsonLdIds[type] ?? url,
         name: author,
         url,
         image: imageUrl,
         description: description || title,
-        ...(date && {
+        ...(type === 'BlogPosting' && date && {
             datePublished: date,
             dateModified: date
         }),
-        ...(ogPageType === 'article' && {
+        ...(type === 'BlogPosting' && {
             headline: title.length > 110 ? title.substring(0, 110) : title,
             mainEntityOfPage: {
                 '@type': 'WebPage',
                 '@id': url
             }
         }),
-        ...(ogPageType !== 'profile' && {
+        ...(type !== 'Person' && {
             author: {
+                "@id":  jsonLdIds['Person'],
                 '@type': 'Person',
                 name: author
             },
             publisher: {
-                '@type': 'Organization',
+                "@id":  jsonLdIds['Person'],
+                '@type': 'Person',
                 name: author,
-                logo: {
-                    '@type': 'ImageObject',
-                    url: imageUrl
-                }
+                image: authors.fabrizio_duroni.image
             }
         }),
-        ...(links && {
+        ...(type === 'Person' && links && {
             sameAs: [
                 links.twitter,
                 links.facebook,
@@ -142,7 +156,7 @@ export function createStructuredData({
                 links.instagram
             ]
         }),
-        ...(ogPageType !== 'profile' && {
+        ...(type !== 'Person' && {
             keywords: keywords || defaultKeywords
         })
     }

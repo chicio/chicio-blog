@@ -34,10 +34,11 @@ export const BlogTags: FC<BlogTagsProps> = ({ tags, author }) => {
         </div>
       </ContentPageTemplate>
       <JsonLd
-        ogPageType="website"
+        type="Blog"
         url={siteMetadata.siteUrl}
         imageUrl={siteMetadata.featuredImage}
         title={siteMetadata.title}
+        keywords={tags.map((tag) => tag.tagValue)}
       />
     </>
   );

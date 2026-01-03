@@ -48,7 +48,7 @@ export const BlogHomePageContent: FC<BlogHomeProps> = ({ pagination, author }) =
         />
       </ContentPageTemplate>
       <JsonLd
-        ogPageType="website"
+        type="Blog"
         url={siteMetadata.siteUrl}
         imageUrl={siteMetadata.featuredImage}
         title={siteMetadata.title}

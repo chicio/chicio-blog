@@ -4,22 +4,25 @@ import { Post } from "@/types/post";
 import { tracking } from "@/types/tracking";
 import { FC } from "react";
 import { ContentPageTemplate } from "../../../design-system/templates/content-page-template";
+import { JsonLd } from "@/components/design-system/utils/components/jsond-ld";
+import { siteMetadata } from "@/types/site-metadata";
 
 export interface BlogGenericPostListPageProps {
   title: string;
   posts: Post[];
   author: string;
   trackingCategory: string;
+  keywords?: string[];
 }
 
 export const BlogGenericPostListPageTemplate: FC<
   BlogGenericPostListPageProps
-> = ({ title, posts, author, trackingCategory }) => (
+> = ({ title, posts, author, trackingCategory, keywords }) => (
   <ContentPageTemplate author={author} trackingCategory={trackingCategory}>
     <PageTitle>{title}</PageTitle>
     {posts.map((post) => (
       <div
-        className="container-fluid flex flex-col items-start mb-4 px-0 md:flex-row md:items-center"
+        className="container-fluid mb-4 flex flex-col items-start px-0 md:flex-row md:items-center"
         key={post.frontmatter.slug.formatted}
       >
         <div className="flex-1/6">
@@ -40,5 +43,12 @@ export const BlogGenericPostListPageTemplate: FC<
         </div>
       </div>
     ))}
+    <JsonLd
+      type="Blog"
+      url={siteMetadata.siteUrl}
+      imageUrl={siteMetadata.featuredImage}
+      title={siteMetadata.title}
+      keywords={keywords}
+    />
   </ContentPageTemplate>
 );
