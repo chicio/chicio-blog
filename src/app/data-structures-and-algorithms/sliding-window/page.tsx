@@ -5,8 +5,11 @@ import { slugs } from "@/types/slug";
 export default function SlidingWindowPage() {
   return (
     <DsaPage
+      slug={slugs.dsa.slidingWindow}
+      keywords={["sliding window", "sliding windows"]}
+      description="Data structure and algoritm course. Topic: Sliding Window"    
       previousTopic={{
-        title: "Prefix sum",
+        title: "Prefix Sum",
         url: slugs.dsa.prefixSum,
       }}
       nextTopic={{

@@ -5,6 +5,9 @@ import { slugs } from "@/types/slug";
 export default function BitManipulationPage() {
   return (
     <DsaPage
+      slug={slugs.dsa.bitManipulation}
+      keywords={["bit manipulation", "bits"]}
+      description="Data structure and algoritm course. Topic: Bit Manipulation"
       previousTopic={{
         title: "Strings",
         url: slugs.dsa.strings,

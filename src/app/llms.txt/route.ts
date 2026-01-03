@@ -21,7 +21,7 @@ This website contains technical blog posts about software engineering, computer 
 - [Blog Tags](${siteMetadata.siteUrl}${slugs.blog.tags}): Browse all available topic tags
 - [Chat](${siteMetadata.siteUrl}${slugs.chat}): AI-powered chat interface to discuss blog content
 - [Art](${siteMetadata.siteUrl}${slugs.art}): Creative and artistic projects showcase
-- [About Me](${siteMetadata.siteUrl}${slugs.blog.aboutMe}): Author bio and professional background
+- [About Me](${siteMetadata.siteUrl}${slugs.aboutMe}): Author bio and professional background
 - [Cookie Policy](${siteMetadata.siteUrl}${slugs.cookiePolicy}): Privacy and cookie usage information
 
 ## Blog Posts

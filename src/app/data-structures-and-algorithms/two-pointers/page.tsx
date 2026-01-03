@@ -5,6 +5,9 @@ import { slugs } from "@/types/slug";
 export default function TwoPointersPage() {
   return (
     <DsaPage
+      slug={slugs.dsa.twoPointers}
+      keywords={["two pointers", "two pointer"]}
+      description="Data structure and algoritm course. Topic: Two Pointers"    
       previousTopic={{
         title: "Hash Tables",
         url: slugs.dsa.hashTables,

@@ -15,7 +15,11 @@ export const metadata = createMetadata({
 
 export default function RoadmapPage() {
   return (
-    <DsaPage>
+    <DsaPage
+      slug={slugs.dsa.roadmap}
+      keywords={["roadmap", "data structures", "algorithms"]}
+      description="Data structure and algoritm course. List of all the topics covered."
+    >
       <Roadmap />
     </DsaPage>
   );

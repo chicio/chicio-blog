@@ -5,6 +5,9 @@ import { slugs } from "@/types/slug";
 export default function StringsPage() {
   return (
     <DsaPage
+      slug={slugs.dsa.strings}
+      keywords={["strings", "string"]}
+      description="Data structure and algoritm course. Topic: Strings"    
       previousTopic={{
         title: "Arrays",
         url: slugs.dsa.arrays,

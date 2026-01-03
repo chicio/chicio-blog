@@ -5,6 +5,9 @@ import { slugs } from "@/types/slug";
 export default function HashtablePage() {
   return (
     <DsaPage
+      slug={slugs.dsa.hashTables}
+      keywords={["hash tables", "hash table"]}
+      description="Data structure and algoritm course. Topic: Hash Tables"    
       previousTopic={{
         title: "Bit manipulation",
         url: slugs.dsa.bitManipulation,

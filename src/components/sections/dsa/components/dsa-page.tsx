@@ -6,8 +6,12 @@ import { siteMetadata } from "@/types/site-metadata";
 import { tracking } from "@/types/tracking";
 import { FC, PropsWithChildren } from "react";
 import { CourseNavigation } from "./course-navigation";
+import { JsonLd } from "@/components/design-system/utils/components/jsond-ld";
 
 interface DsaProps {
+  slug: string;
+  keywords: string[];
+  description: string;
   previousTopic?: {
     url: string;
     title: string;
@@ -19,6 +23,8 @@ interface DsaProps {
 }
 
 export const DsaPage: FC<PropsWithChildren<DsaProps>> = ({
+  slug,
+  keywords,
   previousTopic,
   nextTopic,
   children,
@@ -36,6 +42,14 @@ export const DsaPage: FC<PropsWithChildren<DsaProps>> = ({
             nextTopic={nextTopic}
           />
         )}
+        <JsonLd
+          type="TechArticle"
+          url={`${siteMetadata.siteUrl}${slug}`}
+          imageUrl={siteMetadata.featuredImage}
+          title={siteMetadata.title}
+          description={siteMetadata.description}
+          keywords={[...keywords, "data structures", "algorithms"]}
+        />
       </ReadingContentPageTemplate>
     </>
   );
