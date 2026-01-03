@@ -21,7 +21,7 @@ export async function generateMetadata({
   return createMetadata({
     author: siteMetadata.author,
     title: frontmatter.title,
-    url: `${siteMetadata.siteUrl}${frontmatter.slug.formatted}`,
+    url: frontmatter.slug.formatted,
     imageUrl: frontmatter.image,
     description: frontmatter.description,
     ogPageType: "article",

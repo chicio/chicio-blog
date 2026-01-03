@@ -5,8 +5,8 @@ import { NextTagParameters } from "@/types/page-parameters";
 import { JsonLd } from "@/components/design-system/utils/components/jsond-ld";
 import {Metadata} from "next";
 import {createMetadata} from "@/lib/seo/seo";
-import {slugs} from "@/types/slug";
 import { BlogGenericPostListPageTemplate } from "@/components/sections/blog/components/blog-generic-post-list-page-template";
+import { generateTagSlug } from "@/lib/tags/tags";
 
 export async function generateMetadata({ params }: NextTagParameters): Promise<Metadata> {
     const { tag } = await params
@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: NextTagParameters): Promise<M
     return createMetadata({
         author: siteMetadata.author,
         title: siteMetadata.title,
-        url: `${siteMetadata.siteUrl}${slugs.blog.tag}/${tag}`,
+        url: generateTagSlug(tag),
         imageUrl: siteMetadata.featuredImage,
         ogPageType: 'website',
     })

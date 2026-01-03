@@ -15,7 +15,7 @@ import { tracking } from "@/types/tracking";
 export const metadata = createMetadata({
   author: siteMetadata.author,
   title: siteMetadata.title,
-  url: `${siteMetadata.siteUrl}${slugs.blog}`,
+  url: `/`,
   imageUrl: siteMetadata.featuredImage,
   ogPageType: "website",
 });
