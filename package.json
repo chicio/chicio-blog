@@ -6,7 +6,7 @@
     "search-index": "tsx src/lib/posts/search.ts",
     "chat-knowledge-upload": "tsx --env-file=.env.development src/lib/chat/chat-knowledge-upload.ts",
     "predev": "npm run search-index",
-    "dev": "next dev --turbopack",
+    "dev": "next dev",
     "prebuild": "npm run search-index",
     "build": "next build",
     "start": "next start",
@@ -19,8 +19,8 @@
     "@mdx-js/loader": "^3.1.1",
     "@mdx-js/react": "^3.1.1",
     "@microflash/rehype-figure": "^2.1.4",
-    "@next/mdx": "16.0.10",
-    "@next/third-parties": "16.0.1",
+    "@next/mdx": "16.1.1",
+    "@next/third-parties": "16.1.1",
     "@tailwindcss/postcss": "^4.1.18",
     "@types/mdx": "^2.0.13",
     "@upstash/vector": "^1.2.2",
@@ -33,10 +33,10 @@
     "gray-matter": "^4.0.3",
     "katex": "^0.16.27",
     "marked": "^17.0.1",
-    "next": "16.0.10",
+    "next": "16.1.1",
     "postcss": "^8.5.6",
-    "react": "19.2.0",
-    "react-dom": "19.2.0",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
     "react-icons": "^5.5.0",
     "react-is": "19.2.3",
     "react-markdown": "^10.1.0",
@@ -63,10 +63,10 @@
     "@release-it/conventional-changelog": "^10.0.2",
     "@types/elasticlunr": "^0.9.9",
     "@types/node": "^25",
-    "@types/react": "19.2.2",
-    "@types/react-dom": "19.2.2",
+    "@types/react": "19.2.7",
+    "@types/react-dom": "19.2.3",
     "eslint": "^9",
-    "eslint-config-next": "16.0.7",
+    "eslint-config-next": "16.1.1",
     "prettier": "^3.7.4",
     "prettier-plugin-tailwindcss": "^0.7.2",
     "release-it": "^19.1.0",
@@ -76,7 +76,7 @@
     "node": "22.x"
   },
   "overrides": {
-    "@types/react": "19.2.2",
-    "@types/react-dom": "19.2.2"
+    "@types/react": "19.2.7",
+    "@types/react-dom": "19.2.3"
   }
 }
