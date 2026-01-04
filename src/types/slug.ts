@@ -30,5 +30,6 @@ export const slugs = {
     kadaneAlgorithm: `${dsa}/kadane-algorithm`,
     matrix: `${dsa}/matrix`,
     linkedList: `${dsa}/linked-list`,
+    stack: `${dsa}/stack`,
   }
 };
