@@ -34,6 +34,7 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  reactCompiler: true,
 };
 
 export default withMDX(nextConfig);
