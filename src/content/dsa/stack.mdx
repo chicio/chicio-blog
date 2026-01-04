@@ -1,9 +1,62 @@
+import { StackVisualizer } from "../../components/sections/dsa/components/stack-visualizer";
+import { InteractiveBlock } from "../../components/sections/dsa/components/interactive-block";
+
 # Stacks
 
-## 1. Introduction
-- What a stack is: LIFO data structure
-- Core operations: push, pop, peek
-- When to use a stack
+A **stack** is a fundamental **LIFO (Last In, First Out)** data structure: this means that the **last element added** to the stack is the **first one to be removed**. 
+You can think of it like a stack of plates: you always add new plates on top, and when you need a plate, you take the one on top first.
+
+Stacks are simple yet powerful, and they form the basis for many algorithms and data structures. 
+Their strength comes from the fact that operations are **always performed at one end**, called the **top of the stack**. 
+This allows for **constant-time insertion and removal**, which can be very efficient compared to other data structures like arrays or linked lists for certain use cases.
+
+There are three main operations in a stack:
+
+- **Push**: Add an element to the top of the stack. Every new element goes on top, potentially hiding the elements below.
+- **Pop**: Remove the element from the top of the stack. Only the top element can be removed at any time, enforcing the LIFO principle.
+- **Peek / Top**: Inspect the element at the top without removing it. Useful to see what is currently “active” or to make decisions based on the most recent addition.
+
+These operations make stacks ideal for **temporary storage** of data where you only care about the last item added, not the entire collection.
+
+Stacks are often **implicit in algorithms**, even if you don’t see a formal stack object:
+
+- **Backtracking problems**: keep track of choices or moves (e.g., solving a maze or generating permutations).  
+- **Reversals**: reverse a sequence of elements by pushing them onto a stack and popping them in order.  
+- **Nested structures**: parsing expressions, matching parentheses, or evaluating mathematical formulas (e.g., Reverse Polish Notation).  
+- **Function calls**: programming languages use a call stack internally to track function calls and returns.
+
+Stacks can be implemented using **arrays** or **linked lists**, but the key principle remains: **all operations are performed at the top**. 
+This simplicity is why stacks are often a first step in algorithmic thinking, allowing you to manage data in a controlled, sequential manner.
+
+```typescript
+class Stack<T> {
+  private items: T[] = [];
+
+  push(element: T): void {
+    this.items.push(element);
+  }
+
+  pop(): T | undefined {
+    return this.items.pop();
+  }
+
+  peek(): T | undefined {
+    return this.items[this.items.length - 1];
+  }
+
+  isEmpty(): boolean {
+    return this.items.length === 0;
+  }
+
+  size(): number {
+    return this.items.length;
+  }
+}
+```
+
+<InteractiveBlock title="Stack Visualization">
+    <StackVisualizer />
+</InteractiveBlock>
 
 ## 2. Classic Stack Patterns
 - Matching / balancing (parentheses, duplicates)
