@@ -1,5 +1,7 @@
 import { authors } from "@/types/author";
-import {siteMetadata, SiteMetadataSocialLinks} from "@/types/site-metadata";
+import { PostDate } from "@/types/post";
+import { siteMetadata, SiteMetadataSocialLinks} from "@/types/site-metadata";
+import { slugs } from "@/types/slug";
 import type {Metadata} from 'next'
 
 export type OgPageType = 'website' | 'article' | 'profile'
@@ -83,14 +85,16 @@ export type WebsiteJsonLd = 'Website'
 export type PersonJsonLd = 'Person'
 export type BlogJsonLd = 'Blog'
 export type BlogPostingJsonLd = 'BlogPosting'
-export type TechArticleJsonLd = 'TechArticle'
-export type JsonLdType = WebsiteJsonLd | PersonJsonLd | BlogPostingJsonLd | TechArticleJsonLd | BlogJsonLd 
+export type JsonLdType = WebsiteJsonLd | PersonJsonLd | BlogPostingJsonLd | BlogJsonLd 
 
 const jsonLdIds: Partial<Record<JsonLdType, string>> = {
     'Person': `${siteMetadata.siteUrl}/#person`,
     'Website': `${siteMetadata.siteUrl}/#website`,
     'Blog': `${siteMetadata.siteUrl}/#blog`,
 };
+
+const formattedDate = (date: PostDate): string => 
+    `${date.year}-${String(date.month).padStart(2, "0")}-${String(date.day).padStart(2, "0")}T00:00:00+00:00`;
 
 export function createStructuredData({
    type,
@@ -111,7 +115,7 @@ export function createStructuredData({
     links: SiteMetadataSocialLinks
     keywords?: string[]
     description?: string
-    date?: string
+    date?: PostDate
 }) {
     const jsonLd = {
         '@context': 'https://schema.org',
@@ -119,11 +123,11 @@ export function createStructuredData({
         '@id': jsonLdIds[type] ?? url,
         name: author,
         url,
-        image: imageUrl,
+        image: `${siteMetadata.siteUrl}${imageUrl}`,
         description: description || title,
         ...(type === 'BlogPosting' && date && {
-            datePublished: date,
-            dateModified: date
+            datePublished: formattedDate(date),
+            dateModified: formattedDate(date)
         }),
         ...(type === 'BlogPosting' && {
             headline: title.length > 110 ? title.substring(0, 110) : title,
@@ -136,13 +140,16 @@ export function createStructuredData({
             author: {
                 "@id":  jsonLdIds['Person'],
                 '@type': 'Person',
-                name: author
+                name: author,
+                image: authors.fabrizio_duroni.image,
+                url: `${siteMetadata.siteUrl}${slugs.aboutMe}`
             },
             publisher: {
                 "@id":  jsonLdIds['Person'],
                 '@type': 'Person',
                 name: author,
-                image: authors.fabrizio_duroni.image
+                image: authors.fabrizio_duroni.image,
+                url: `${siteMetadata.siteUrl}${slugs.aboutMe}`
             }
         }),
         ...(type === 'Person' && links && {

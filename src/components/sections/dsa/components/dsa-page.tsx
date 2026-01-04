@@ -25,32 +25,26 @@ interface DsaProps {
 export const DsaPage: FC<PropsWithChildren<DsaProps>> = ({
   slug,
   keywords,
+  description,
   previousTopic,
   nextTopic,
   children,
-}) => {
-  return (
-    <>
-      <ReadingContentPageTemplate
-        author={siteMetadata.author}
-        trackingCategory={tracking.category.dsa}
-      >
-        {children}
-        {(previousTopic || nextTopic) && (
-          <CourseNavigation
-            previousTopic={previousTopic}
-            nextTopic={nextTopic}
-          />
-        )}
-        <JsonLd
-          type="TechArticle"
-          url={`${siteMetadata.siteUrl}${slug}`}
-          imageUrl={siteMetadata.featuredImage}
-          title={siteMetadata.title}
-          description={siteMetadata.description}
-          keywords={[...keywords, "data structures", "algorithms"]}
-        />
-      </ReadingContentPageTemplate>
-    </>
-  );
-};
+}) => (
+  <ReadingContentPageTemplate
+    author={siteMetadata.author}
+    trackingCategory={tracking.category.dsa}
+  >
+    {children}
+    {(previousTopic || nextTopic) && (
+      <CourseNavigation previousTopic={previousTopic} nextTopic={nextTopic} />
+    )}
+    <JsonLd
+      type="BlogPosting"
+      url={`${siteMetadata.siteUrl}${slug}`}
+      imageUrl={siteMetadata.featuredImage}
+      title={description}
+      description={siteMetadata.description}
+      keywords={[...keywords, "data structures", "algorithms"]}
+    />
+  </ReadingContentPageTemplate>
+);

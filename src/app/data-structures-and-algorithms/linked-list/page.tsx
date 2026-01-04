@@ -18,7 +18,7 @@ export default function LinkedListPage() {
     <DsaPage
       slug={slugs.dsa.linkedList}
       keywords={["linked list", "linked lists"]}
-      description="Data structure and algoritm course. Topic: Linked List"    
+      description="Data structures and algoritms course. Topic: Linked List"    
       previousTopic={{
         title: "Matrix (2D Array)",
         url: slugs.dsa.matrix,

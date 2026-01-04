@@ -18,7 +18,7 @@ export default function BitManipulationPage() {
     <DsaPage
       slug={slugs.dsa.bitManipulation}
       keywords={["bit manipulation", "bits"]}
-      description="Data structure and algoritm course. Topic: Bit Manipulation"
+      description="Data structures and algoritms course. Topic: Bit Manipulation"
       previousTopic={{
         title: "Strings",
         url: slugs.dsa.strings,

@@ -18,7 +18,7 @@ export default function SlidingWindowPage() {
     <DsaPage
       slug={slugs.dsa.slidingWindow}
       keywords={["sliding window", "sliding windows"]}
-      description="Data structure and algoritm course. Topic: Sliding Window"    
+      description="Data structures and algoritms course. Topic: Sliding Window"    
       previousTopic={{
         title: "Prefix Sum",
         url: slugs.dsa.prefixSum,

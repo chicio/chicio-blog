@@ -18,7 +18,7 @@ export default function ArraysPage() {
     <DsaPage
       slug={slugs.dsa.arrays}
       keywords={["arrays", "array"]}
-      description="Data structure and algoritm course. Topic: Array"
+      description="Data structures and algoritms course. Topic: Array"
       previousTopic={{
         title: "Time and Space Complexity",
         url: slugs.dsa.timeAndSpaceComplexity,

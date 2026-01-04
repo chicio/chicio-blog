@@ -18,7 +18,7 @@ export default function StringsPage() {
     <DsaPage
       slug={slugs.dsa.strings}
       keywords={["strings", "string"]}
-      description="Data structure and algoritm course. Topic: Strings"    
+      description="Data structures and algoritms course. Topic: Strings"    
       previousTopic={{
         title: "Arrays",
         url: slugs.dsa.arrays,

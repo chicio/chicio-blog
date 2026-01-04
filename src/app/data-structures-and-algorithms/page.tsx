@@ -18,7 +18,7 @@ export default function RoadmapPage() {
     <DsaPage
       slug={slugs.dsa.roadmap}
       keywords={["roadmap", "data structures", "algorithms"]}
-      description="Data structure and algoritm course. List of all the topics covered."
+      description="Data structures and algoritms course. List of all the topics covered."
     >
       <Roadmap />
     </DsaPage>

@@ -18,7 +18,7 @@ export default function MatrixPage() {
     <DsaPage
       slug={slugs.dsa.matrix}
       keywords={["matrix", "2d array", "2d arrays"]}
-      description="Data structure and algoritm course. Topic: Matrix (2D Array)"    
+      description="Data structures and algoritms course. Topic: Matrix (2D Array)"    
       previousTopic={{
         title: "Kadane's algorithm",
         url: slugs.dsa.kadaneAlgorithm,

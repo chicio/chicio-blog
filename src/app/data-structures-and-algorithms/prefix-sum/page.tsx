@@ -18,7 +18,7 @@ export default function PrefixSumPage() {
     <DsaPage
       slug={slugs.dsa.prefixSum}
       keywords={["prefix sum", "prefix sums"]}
-      description="Data structure and algoritm course. Topic: Prefix Sum"    
+      description="Data structures and algoritms course. Topic: Prefix Sum"    
       previousTopic={{
         title: "Two Pointers",
         url: slugs.dsa.twoPointers,

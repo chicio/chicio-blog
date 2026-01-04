@@ -54,7 +54,7 @@ export const BlogPostContent: FC<PostProps> = ({ post }) => {
         url={`${siteMetadata.siteUrl}${frontmatter.slug.formatted}`}
         imageUrl={frontmatter.image}
         title={frontmatter.title}
-        date={frontmatter.date.formatted}
+        date={frontmatter.date}
         description={frontmatter.description}
         keywords={frontmatter.tags}
       />

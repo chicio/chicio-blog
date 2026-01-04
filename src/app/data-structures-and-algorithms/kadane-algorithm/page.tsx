@@ -18,7 +18,7 @@ export default function KadanePage() {
     <DsaPage
       slug={slugs.dsa.kadaneAlgorithm}
       keywords={["kadane", "kadane's algorithm"]}
-      description="Data structure and algoritm course. Topic: Kadane's Algorithm"    
+      description="Data structures and algoritms course. Topic: Kadane's Algorithm"    
       previousTopic={{
         title: "Sliding Window",
         url: slugs.dsa.slidingWindow,

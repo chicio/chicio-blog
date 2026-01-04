@@ -19,7 +19,7 @@ export default function TimeAndSpaceComplexityPage() {
     <DsaPage
       slug={slugs.dsa.timeAndSpaceComplexity}
       keywords={["time complexity", "space complexity"]}
-      description="Data structure and algoritm course. Topic: Time and Space Complexity"    
+      description="Data structures and algoritms course. Topic: Time and Space Complexity"    
       nextTopic={{
         title: "Arrays",
         url: slugs.dsa.arrays,
