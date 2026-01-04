@@ -45,7 +45,7 @@ are composed together to calculate the illumination of a surface point: Phong mo
 
 #### **Emissive component**
 
-This is the light component emitted by the surface material. Is a purely additive component. As you can image, few
+This is the light component emitted by the surface material. It is a purely additive component. As you can image, few
 surface material in nature are emissive (e.g.: light  :laughing:). So the emissive illumination $I_{\text{emissive}}$ of
 a surface point is obtained by multiplying the emissive constant of a surface $k_{\text{e}}$ by the light emissive
 intensity $I_{\text{LE}}$ (expressed as we said before as a RGB triplet, and this will be valid for all light intensity
@@ -123,4 +123,4 @@ lighting is (obviously) calculated using the Phong reflection model. The surface
 some constants we discussed
 before [here](http://devernay.free.fr/cours/opengl/materials.html "phong lighting constants")). Nice :smirk:!!!!
 
-![An example model rendered using Phong model in Spectral BRDF explorer](/images/posts/phong-example.jpg)
+![An example model rendered using Phong model in Spectral BRDF explorer](/images/posts/phong-example.png)
