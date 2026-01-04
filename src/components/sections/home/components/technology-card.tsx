@@ -4,7 +4,7 @@ import Image from "next/image";
 import { FC } from "react";
 
 const cardVariants: Variants = {
-  hidden: { scale: 0 },
+  hidden: { scale: 0.8 },
   visible: {
     scale: 1,
     transition: { duration: 0.4, type: "tween", ease: "linear" },
