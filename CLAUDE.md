@@ -51,6 +51,7 @@ src/
 │   │   ├── templates/          # Page-level layouts
 │   │   └── utils/              # Design system utilities
 │   └── sections/               # Feature-specific components
+│       ├── about-me/              # Blog-specific components
 │       ├── blog/              # Blog-specific components
 │       ├── chat/              # Chat UI and hooks
 │       ├── dsa/               # DSA content components
