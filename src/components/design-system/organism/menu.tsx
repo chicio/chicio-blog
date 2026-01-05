@@ -27,6 +27,106 @@ import {
 
 export const menuHeightNumber = 55;
 
+const renderMenuItems = (
+  isMobile: boolean,
+  pathname: string,
+  trackingCategory: string,
+  setShouldOpenMenu: (open: boolean) => void,
+) => {
+  const baseClassName = isMobile
+    ? "mb-2 w-80"
+    : "hidden xs:flex xs:mb-0 xs:w-auto";
+  const dropdownClassName = isMobile
+    ? "z-50 mb-2 w-80"
+    : "hidden xs:flex xs:mb-0 xs:w-auto z-50";
+
+  return (
+    <>
+      <MenuItemWithTracking
+        className={baseClassName}
+        key={`home-${isMobile ? "mobile" : "desktop"}`}
+        to={"/"}
+        selected={pathname === "/"}
+        trackingData={{
+          action: tracking.action.open_home,
+          category: trackingCategory,
+          label: tracking.label.header,
+        }}
+        onClickCallback={() => setShouldOpenMenu(false)}
+      >
+        Home
+      </MenuItemWithTracking>
+      <MenuItemWithTracking
+        key={`blog-${isMobile ? "mobile" : "desktop"}`}
+        className={baseClassName}
+        to={slugs.blog.home}
+        selected={pathname.includes(slugs.blog.home)}
+        trackingData={{
+          action: tracking.action.open_home,
+          category: trackingCategory,
+          label: tracking.label.header,
+        }}
+        onClickCallback={() => setShouldOpenMenu(false)}
+      >
+        Blog
+      </MenuItemWithTracking>
+      <MenuItemWithTracking
+        key={`dsa-${isMobile ? "mobile" : "desktop"}`}
+        className={baseClassName}
+        to={slugs.dsa.roadmap}
+        selected={pathname.includes(slugs.dsa.roadmap)}
+        trackingData={{
+          action: tracking.action.open_dsa_roadmap,
+          category: trackingCategory,
+          label: tracking.label.header,
+        }}
+        onClickCallback={() => setShouldOpenMenu(false)}
+      >
+        DSA
+      </MenuItemWithTracking>
+      <DropdownMenu
+        label="The Author"
+        className={dropdownClassName}
+        items={[
+          {
+            label: "About me",
+            to: slugs.aboutMe,
+            trackingData: {
+              action: tracking.action.open_about_me,
+              category: trackingCategory,
+              label: tracking.label.header,
+            },
+            selected: pathname === slugs.aboutMe,
+            onClickCallback: () => setShouldOpenMenu(false),
+          },
+          {
+            label: "Art",
+            to: slugs.art,
+            trackingData: {
+              action: tracking.action.open_art,
+              category: trackingCategory,
+              label: tracking.label.header,
+            },
+            selected: pathname === slugs.art,
+            onClickCallback: () => setShouldOpenMenu(false),
+          },
+          {
+            label: "Chat",
+            to: slugs.chat,
+            trackingData: {
+              action: tracking.action.open_chat,
+              category: trackingCategory,
+              label: tracking.label.header,
+            },
+            selected: pathname === slugs.chat,
+            onClickCallback: () => setShouldOpenMenu(false),
+          },
+        ]}
+      />
+    </>
+  );
+};
+
 const menuVariants: Variants = {
   hidden: {
     y: -menuHeightNumber,
@@ -44,22 +144,21 @@ const menuVariants: Variants = {
   },
 };
 
-const contentVariants: Variants = {
-  collapsed: {
-    height: "55px",
+const panelVariants: Variants = {
+  closed: {
+    x: "-100%",
     transition: {
       type: "tween",
       ease: [0.4, 0, 0.2, 1],
       duration: 0.6,
     },
   },
-  expanded: {
-    height: "100dvh",
+  open: {
+    x: 0,
     transition: {
       type: "tween",
       ease: [0.4, 0, 0.2, 1],
       duration: 0.6,
-      delay: 0.3,
     },
   },
 };
@@ -83,8 +182,9 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
 
   return (
     <>
+      {/* Top Bar - slides up/down on scroll, hidden on mobile when menu is open */}
       <motion.div
-        className={`${glassmorphismClass} xs:pl-3 xs:pr-3 menu-container fixed top-0 right-0 left-0 z-50 rounded-tl-none rounded-tr-none border-t-0 p-0 hover:scale-100`}
+        className={`${glassmorphismClass} xs:pl-3 xs:pr-3 menu-container fixed top-0 right-0 left-0 z-50 rounded-tl-none rounded-tr-none border-t-0 p-0 hover:scale-100 ${shouldOpenMenu ? "xs:block hidden" : ""}`}
         variants={menuVariants}
         animate={shouldHideMenu ? "hidden" : "visible"}
         initial="visible"
@@ -92,107 +192,24 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
         <div
           className={`menu-container container-fixed mx-auto my-0 w-full overflow-hidden sm:overflow-visible`}
         >
-          <motion.div
-            variants={contentVariants}
-            initial="collapsed"
-            animate={shouldOpenMenu ? "expanded" : "collapsed"}
-            className={`xs:flex-row xs:py-0 xs:px-5 m-0 flex min-h-[55px] flex-col items-center gap-1 pt-[55px] ${shouldOpenMenu ? "hide-scrollbar touch-pan-y overflow-y-scroll" : ""}`}
+          <div
+            className={`xs:flex-row xs:py-0 xs:px-5 xs:pt-0 m-0 flex min-h-[55px] flex-col items-center gap-1 pt-[55px]`}
           >
-            <MenuItemWithTracking
-              className="xs:mb-0 xs:w-auto mb-2 w-80"
-              key="home"
-              to={"/"}
-              selected={pathname === "/"}
-              trackingData={{
-                action: tracking.action.open_home,
-                category: trackingCategory,
-                label: tracking.label.header,
-              }}
-              onClickCallback={() => setShouldOpenMenu(false)}
-            >
-              Home
-            </MenuItemWithTracking>
-            <MenuItemWithTracking
-              key="blog"
-              className="xs:mb-0 xs:w-auto mb-2 w-80"
-              to={slugs.blog.home}
-              selected={pathname.includes(slugs.blog.home)}
-              trackingData={{
-                action: tracking.action.open_home,
-                category: trackingCategory,
-                label: tracking.label.header,
-              }}
-              onClickCallback={() => setShouldOpenMenu(false)}
-            >
-              Blog
-            </MenuItemWithTracking>
-            <MenuItemWithTracking
-              key="dsa"
-              className="xs:mb-0 xs:w-auto mb-2 w-80"
-              to={slugs.dsa.roadmap}
-              selected={pathname.includes(slugs.dsa.roadmap)}
-              trackingData={{
-                action: tracking.action.open_dsa_roadmap,
-                category: trackingCategory,
-                label: tracking.label.header,
-              }}
-              onClickCallback={() => setShouldOpenMenu(false)}
-            >
-              DSA
-            </MenuItemWithTracking>
-            <DropdownMenu
-              label="The Author"
-              className="xs:mb-0 xs:w-auto z-50 mb-2 w-80"
-              items={[
-                {
-                  label: "About me",
-                  to: slugs.aboutMe,
-                  trackingData: {
-                    action: tracking.action.open_about_me,
-                    category: trackingCategory,
-                    label: tracking.label.header,
-                  },
-                  selected: pathname === slugs.aboutMe,
-                  onClickCallback: () => setShouldOpenMenu(false),
-                },
-                {
-                  label: "Art",
-                  to: slugs.art,
-                  trackingData: {
-                    action: tracking.action.open_art,
-                    category: trackingCategory,
-                    label: tracking.label.header,
-                  },
-                  selected: pathname === slugs.art,
-                  onClickCallback: () => setShouldOpenMenu(false),
-                },
-                {
-                  label: "Chat",
-                  to: slugs.chat,
-                  trackingData: {
-                    action: tracking.action.open_chat,
-                    category: trackingCategory,
-                    label: tracking.label.header,
-                  },
-                  selected: pathname === slugs.chat,
-                  onClickCallback: () => setShouldOpenMenu(false),
-                },
-              ]}
-            />
-            {!startSearch && (
+            {renderMenuItems(
+              false,
+              pathname,
+              trackingCategory,
+              setShouldOpenMenu,
+            )}
+            {!startSearch && !shouldOpenMenu && (
               <div className="xs:hidden absolute top-2.5 left-2.5">
-                {!shouldOpenMenu && (
-                  <HamburgerMenu
-                    onClick={() => {
-                      if (!startSearch) {
-                        setShouldOpenMenu(!shouldOpenMenu);
-                      }
-                    }}
-                  />
-                )}
-                {shouldOpenMenu && (
-                  <Close onClick={() => setShouldOpenMenu(!shouldOpenMenu)} />
-                )}
+                <HamburgerMenu
+                  onClick={() => {
+                    if (!startSearch) {
+                      setShouldOpenMenu(true);
+                    }
+                  }}
+                />
               </div>
             )}
             {!shouldOpenMenu && (
@@ -205,29 +222,48 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
                 onChange={handleSearch}
               />
             )}
-          </motion.div>
+          </div>
         </div>
       </motion.div>
       <AnimatePresence>
-        {(shouldOpenMenu || startSearch) && (
+        {shouldOpenMenu && (
+          <motion.div
+            className="xs:hidden bg-general-background fixed top-0 left-0 z-50 h-full w-full touch-pan-y overflow-y-auto"
+            style={{ willChange: "transform" }}
+            variants={panelVariants}
+            initial="closed"
+            animate="open"
+            exit="closed"
+          >
+            <div className="flex flex-col items-center gap-1 p-5 pt-[55px]">
+              <div className="absolute top-2.5 left-2.5">
+                <Close onClick={() => setShouldOpenMenu(false)} />
+              </div>
+              {renderMenuItems(
+                true,
+                pathname,
+                trackingCategory,
+                setShouldOpenMenu,
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {startSearch && (
           <Overlay
             key="menu-overlay"
             delay={0.05}
             onClick={() => {
-              if (shouldOpenMenu) {
-                setShouldOpenMenu(false);
-              }
-              if (startSearch) {
-                setStartSearch(false);
-              }
+              setStartSearch(false);
             }}
           >
             {search.type === "easterEgg" && (
               <NeoRoomEasterEgg lines={search.terminalLines} />
             )}
-            {search.type === "search" &&
-              search.results.length > 0 &&
-              !shouldOpenMenu && <SearchHits results={search.results} />}
+            {search.type === "search" && search.results.length > 0 && (
+              <SearchHits results={search.results} />
+            )}
           </Overlay>
         )}
       </AnimatePresence>
