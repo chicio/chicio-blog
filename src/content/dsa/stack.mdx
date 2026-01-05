@@ -58,10 +58,93 @@ class Stack<T> {
     <StackVisualizer />
 </InteractiveBlock>
 
-## 2. Classic Stack Patterns
-- Matching / balancing (parentheses, duplicates)
-- Parsing / evaluating expressions (RPN, calculator)
-- Backtracking / undo patterns
+## Patterns
+
+Stacks are not just a basic data structure. They encode a very specific way of thinking about problems.  
+Whenever the logic of a problem depends on **what happened most recently**, or when elements must be processed in a **strictly reversed order**, 
+stacks naturally emerge as the right abstraction.
+
+Over time, a small number of recurring **stack patterns** appear again and again across very different problems. 
+Recognizing these patterns is often the key step toward a clean and efficient solution.
+
+### Matching & Balancing
+
+One of the most common uses of stacks is to verify that elements are **properly matched and balanced**.  
+These problems usually involve some notion of *opening* and *closing* elements, and correctness depends on the **order** in which they appear.
+
+The core idea is simple: when you encounter an opening element, you push it onto the stack.  
+When you encounter a closing element, you check whether it correctly matches the element on top of the stack. 
+If it does, you pop the stack; if it doesn’t, the structure is invalid.
+
+At the end of the process, the stack must be empty. Any leftover elements indicate that something was opened but never closed.
+
+This pattern appears in problems such as validating parentheses, removing adjacent duplicates in strings, or computing the longest valid parentheses substring. 
+In all of these cases, the crucial observation is that the **last opened element must be the first one to close**, which is exactly the LIFO behavior provided by a stack.
+
+### Parsing & Evaluating Expressions
+
+Stacks are also fundamental when dealing with **expression parsing and evaluation**, especially when operators and operands are interleaved.
+
+In these problems, you typically process tokens from left to right. Operands are pushed onto the stack, while operators trigger computations using the most recent operands. 
+Once a computation is performed, the result is pushed back onto the stack and may itself be used by later operators.
+
+```typescript
+const stack: string[] = [];
+
+for (const ch of s) {
+  if (ch === "(") {
+    stack.push(ch);
+  } else {
+    if (stack.length === 0) { 
+      return false;
+    }
+    stack.pop();
+  }
+}
+
+return stack.length === 0;
+```
+
+This approach is particularly clear in postfix (Reverse Polish) notation, where operator precedence is encoded in the order of tokens rather than explicit parentheses. 
+However, the same principle also applies to calculator-style problems where you must respect precedence rules while scanning the expression.
+
+Stacks work well here because intermediate results must be remembered temporarily, and operators always depend on the **most recently seen operands**.
+
+```typescript
+const stack: number[] = [];
+
+for (const token of tokens) {
+  if (isNumber(token)) {
+    stack.push(Number(token));
+  } else {
+    const b = stack.pop()!;
+    const a = stack.pop()!;
+    stack.push(applyOperator(a, b, token));
+  }
+}
+```
+
+### Backtracking and Undo Patterns
+
+Another powerful application of stacks is modeling **backtracking and undo behavior**.
+
+Any system where actions must be reversible, such as undoing edits, navigating backward through a history, or reverting to a previous state, can be naturally represented using a stack. 
+Each action is pushed onto the stack as it happens. When an undo is required, the most recent action is popped and reverted.
+
+```typescript
+doAction(action)
+stack.push(action)
+
+//... other code
+
+const last = stack.pop()
+undo(last)
+```
+
+This idea extends beyond user interfaces. Many recursive algorithms, especially depth-first search, rely on an implicit call stack to keep track of execution state. 
+Making this stack explicit often leads to iterative solutions that are easier to control and reason about.
+
+The reason stacks fit so well here is intuitive: when undoing, you always revert the **last action first**, exactly matching the stack’s behavior.
 
 ## 3. Monotonic Stack
 - Definition: a stack maintaining an increasing or decreasing invariant
