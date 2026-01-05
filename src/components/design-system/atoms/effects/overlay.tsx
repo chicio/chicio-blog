@@ -15,7 +15,7 @@ export const Overlay: FC<OverlayProps> = ({ onClick, delay = 0, children }) => {
 
   return (
     <motion.div
-      className="fixed top-0 left-0 w-full h-full bg-black-alpha-60 backdrop-blur-sm z-40"
+      className="fixed top-0 left-0 w-full h-full bg-black-alpha-75 backdrop-blur-sm z-40"
       onClick={onClick}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}

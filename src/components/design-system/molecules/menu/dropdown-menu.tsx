@@ -66,7 +66,7 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
         {open && (
           <div
             key={"dropdown-menu"}
-            className={`glow-container ${shouldReduceMotions ? "sm:bg-general-background" : "sm:bg-general-background/90"} relative mt-2 w-auto min-w-max rounded-xl py-2 sm:absolute sm:right-0 sm:left-0 sm:w-auto`}
+            className={`glow-container ${shouldReduceMotions ? "xs:bg-general-background" : "xs:bg-general-background/90"} relative mt-2 w-auto min-w-max rounded-xl py-2 xs:absolute xs:right-0 xs:left-0 xs:w-auto`}
             tabIndex={-1}
             role="menu"
           >
