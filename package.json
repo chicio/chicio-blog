@@ -60,7 +60,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
-    "@release-it/conventional-changelog": "^10.0.2",
+    "@release-it/conventional-changelog": "^10.0.4",
     "@types/elasticlunr": "^0.9.9",
     "@types/node": "^25",
     "@types/react": "19.2.7",
