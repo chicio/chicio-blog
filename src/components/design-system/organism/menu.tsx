@@ -182,7 +182,6 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
 
   return (
     <>
-      {/* Top Bar - slides up/down on scroll, hidden on mobile when menu is open */}
       <motion.div
         className={`${glassmorphismClass} xs:pl-3 xs:pr-3 menu-container fixed top-0 right-0 left-0 z-50 rounded-tl-none rounded-tr-none border-t-0 p-0 hover:scale-100 ${shouldOpenMenu ? "xs:block hidden" : ""}`}
         variants={menuVariants}
@@ -190,13 +189,13 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
         initial="visible"
       >
         <div
-          className={`menu-container container-fixed mx-auto my-0 w-full overflow-hidden sm:overflow-visible`}
+          className={`menu-container container-fixed mx-auto my-0 w-full overflow-hidden xs:overflow-visible`}
         >
           <div
             className={`xs:flex-row xs:py-0 xs:px-5 xs:pt-0 m-0 flex min-h-[55px] flex-col items-center gap-1 pt-[55px]`}
           >
             {renderMenuItems(
-              false,
+              false, //desktop
               pathname,
               trackingCategory,
               setShouldOpenMenu,
@@ -228,7 +227,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
       <AnimatePresence>
         {shouldOpenMenu && (
           <motion.div
-            className="xs:hidden bg-general-background fixed top-0 left-0 z-50 h-full w-full touch-pan-y overflow-y-auto"
+            className="xs:hidden bg-black-alpha-75 backdrop-blur-sm fixed top-0 left-0 z-50 h-full w-full touch-pan-y overflow-y-auto"
             style={{ willChange: "transform" }}
             variants={panelVariants}
             initial="closed"
@@ -240,7 +239,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
                 <Close onClick={() => setShouldOpenMenu(false)} />
               </div>
               {renderMenuItems(
-                true,
+                true, //mobile
                 pathname,
                 trackingCategory,
                 setShouldOpenMenu,
