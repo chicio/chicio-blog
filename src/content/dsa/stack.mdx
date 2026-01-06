@@ -146,11 +146,63 @@ Making this stack explicit often leads to iterative solutions that are easier to
 
 The reason stacks fit so well here is intuitive: when undoing, you always revert the **last action first**, exactly matching the stack’s behavior.
 
-## 3. Monotonic Stack
-- Definition: a stack maintaining an increasing or decreasing invariant
-- How it works: push while preserving order, pop when invariant violated
-- Amortized O(n) guarantees
-- Typical use cases: next greater/smaller, spans, max area/range
+## Monotonic Stack
+
+A monotonic stack is a conceptual variation of the classic stack in which elements are maintained according to an ordering invariant. 
+The stack can be either monotonically increasing or monotonically decreasing, meaning that elements are always kept in sorted order (from bottom to top) according to that rule.
+
+What makes a monotonic stack special is not the data structure itself (it is still a normal stack) but the *logic that governs when elements are pushed or popped*. 
+Unlike a regular stack, *a push operation may trigger multiple pop operations in order to restore the invariant*.
+
+The typical pattern is to iterate over a sequence (array, list, or stream) one element at a time and compare each value with the element at the top of the stack.
+- If the invariant is preserved, the element is pushed onto the stack
+- If the invariant is violated, elements are popped from the stack until the invariant holds again, and only then the new element is pushed
+
+For example, in a monotonically increasing stack, every new element must be greater than or equal to the top of the stack. 
+If it is smaller, larger elements are popped because they are no longer useful for the problem being solved.
+
+At first glance, this approach might seem inefficient, since a single iteration step can involve multiple pop operations. 
+However, the key insight is that each element is pushed onto the stack exactly once and popped at most once.
+
+As a result, even though individual steps may perform several pops, the total number of operations across the entire iteration is linear. 
+This is why monotonic stack solutions typically run in $O(n)$ time, making them a practical and elegant application of [amortized analysis](/data-structures-and-algorithms/time-and-space-complexity).
+
+Monotonic stacks are especially powerful in problems where, for each element, we need information about the nearest greater or smaller element to the left or right, 
+or about how long a certain condition remains valid.
+
+Conceptually, the stack acts as a filtered memory of the past: it keeps only the elements that can still influence future results and discards all others as soon as they become irrelevant.
+
+Typical problems that benefit from a monotonic stack include:
+- Next Greater / Next Smaller Element, where we want to find the first larger or smaller value relative to each position
+- Span problems (e.g. stock span), where we measure how far a condition extends
+- Maximum range or area problems like Largest Rectangle in Histogram, where ordering constraints define valid intervals
+
+In all these scenarios, a monotonic stack avoids repeated comparisons and quadratic solutions, reducing seemingly complex problems to simple linear scans.
+Below you can find an example implementation of the Next Greater Element problem using a monotonic stack.
+
+```typescript
+function nextGreaterElements(nums: number[]): number[] {
+  const n = nums.length;
+  const result: number[] = Array(n).fill(-1); // default -1 if no greater element
+  const stack: number[] = []; // store indices
+
+  for (let i = 0; i < n; i++) {
+    // Pop elements that are smaller than current number
+    while (stack.length > 0 && nums[i] > nums[stack[stack.length - 1]]) {
+      const idx = stack.pop()!;
+      result[idx] = nums[i];
+    }
+    // Push current index
+    stack.push(i);
+  }
+
+  return result;
+}
+
+// Example usage
+const nums = [2, 1, 2, 4, 3];
+console.log(nextGreaterElements(nums)); // Output: [4, 2, 4, -1, -1]
+```
 
 ## 4. Common Tools and Techniques
 - Frequency maps or auxiliary stacks if needed
