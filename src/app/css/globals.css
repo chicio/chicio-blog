@@ -375,6 +375,78 @@
         @apply hide-scrollbar overflow-hidden border border-solid border-accent-alpha-40 rounded-xl hover:border-accent active:border-accent focus:border-accent shadow-lg transition-all duration-500 hover:scale-101;
     }
 
+    /** Anchor link styles for headings **/
+    #reading-content-container h1,
+    #reading-content-container h2,
+    #reading-content-container h3,
+    #reading-content-container h4,
+    #reading-content-container h5,
+    #reading-content-container h6 {
+        @apply scroll-mt-20;
+    }
+
+    /* Make anchor tags inherit heading styles */
+    #reading-content-container h1 a,
+    #reading-content-container h2 a,
+    #reading-content-container h3 a,
+    #reading-content-container h4 a,
+    #reading-content-container h5 a,
+    #reading-content-container h6 a {
+        color: inherit;
+        font-weight: inherit;
+        font-size: inherit;
+        line-height: inherit;
+        text-shadow: inherit;
+        @apply no-underline relative;
+    }
+
+    /* Show # symbol before heading using ::before pseudo-element */
+    #reading-content-container h1 a::before,
+    #reading-content-container h2 a::before,
+    #reading-content-container h3 a::before,
+    #reading-content-container h4 a::before,
+    #reading-content-container h5 a::before,
+    #reading-content-container h6 a::before {
+        content: "#";
+        @apply text-accent opacity-0 transition-opacity duration-300 absolute;
+    }
+
+    /* Proportional positioning for each heading size */
+    #reading-content-container h1 a::before {
+        @apply -left-12;
+    }
+
+    #reading-content-container h2 a::before {
+        @apply -left-10;
+    }
+
+    #reading-content-container h3 a::before {
+        @apply -left-8;
+    }
+
+    #reading-content-container h4 a::before {
+        @apply -left-7;
+    }
+
+    #reading-content-container h5 a::before {
+        @apply -left-6;
+    }
+
+    #reading-content-container h6 a::before {
+        @apply -left-5;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+        #reading-content-container h1:hover a::before,
+        #reading-content-container h2:hover a::before,
+        #reading-content-container h3:hover a::before,
+        #reading-content-container h4:hover a::before,
+        #reading-content-container h5:hover a::before,
+        #reading-content-container h6:hover a::before {
+            @apply opacity-100;
+        }
+    }
+
     ul.recharts-default-legend li.recharts-legend-item::before {
         content: unset !important;
         display: none !important;
