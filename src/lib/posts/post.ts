@@ -7,6 +7,8 @@ import youtube from "remark-youtube";
 import html from "remark-html";
 import math from "remark-math";
 import rehype from "remark-rehype";
+import slug from "rehype-slug";
+import autolink from "rehype-autolink-headings";
 import katex from "rehype-katex";
 import syntaxHighlight from "rehype-highlight";
 import figure from "@microflash/rehype-figure";
@@ -28,6 +30,11 @@ export const getPostFromFilePath: (
     .use(html)
     .use(math)
     .use(rehype)
+    .use(slug)
+    .use(autolink, {
+      behavior: "wrap",
+      properties: { className: ["heading-anchor"] },
+    })
     .use(katex, { strict: false }) // Render LaTeX with KaTeX
     .use(syntaxHighlight)
     .use(figure)
