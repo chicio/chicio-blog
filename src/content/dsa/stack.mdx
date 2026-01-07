@@ -165,7 +165,7 @@ At first glance, this approach might seem inefficient, since a single iteration 
 However, the key insight is that each element is pushed onto the stack exactly once and popped at most once.
 
 As a result, even though individual steps may perform several pops, the total number of operations across the entire iteration is linear. 
-This is why monotonic stack solutions typically run in $O(n)$ time, making them a practical and elegant application of [amortized analysis](/data-structures-and-algorithms/time-and-space-complexity).
+This is why monotonic stack solutions typically run in $O(n)$ time, making them a practical and elegant application of [amortized analysis](/data-structures-and-algorithms/time-and-space-complexity#amortized-analysis).
 
 Monotonic stacks are especially powerful in problems where, for each element, we need information about the nearest greater or smaller element to the left or right, 
 or about how long a certain condition remains valid.
@@ -204,31 +204,61 @@ const nums = [2, 1, 2, 4, 3];
 console.log(nextGreaterElements(nums)); // Output: [4, 2, 4, -1, -1]
 ```
 
-## 4. Common Tools and Techniques
-- Frequency maps or auxiliary stacks if needed
-- Maintaining invariants
-- Running max/min while traversing
-- Shrinking / expanding the stack conceptually
+## Common Tools and Techniques
 
-## 5. Time & Space Complexity
-- Classic stack operations: O(1) time, O(n) space (for n elements)
-- Monotonic stack: O(n) time (amortized), O(n) space
+When working with stacks, especially beyond the most basic problems, the real challenge is not mastering `push` and `pop`, but understanding *what role the stack plays* in the algorithm.
 
-## 6. Exercises
+In many problems, the stack is responsible for maintaining **order**, while additional data structures are used to keep track of **state**. 
+For example, frequency maps or auxiliary stacks are often introduced when the problem requires more information than ordering alone can provide. 
+A classic case is removing duplicate characters, where the stack enforces lexicographical order while a frequency map tracks remaining occurrences. 
+Similarly, in problems like *Min Stack*, an auxiliary stack is used to preserve historical minimum values.
+
+A central concept in stack-based algorithms is the idea of an **invariant**. 
+Each stack maintains a specific property that must always hold true. In monotonic stacks, this invariant is ordering (either increasing or decreasing). 
+In parentheses-matching problems, the invariant is that the stack contains only valid unmatched opening symbols. 
+Every `push` or `pop` operation exists solely to preserve this invariant, and understanding it is often the key to designing the solution.
+
+Another recurring technique is maintaining **running values** while traversing the input. 
+Maximums, minimums, distances, or areas are frequently computed *when elements are popped from the stack*, not when they are pushed. 
+This is particularly evident in problems like *Largest Rectangle in Histogram* or *Stock Span*, where the moment an invariant is violated reveals meaningful information about the elements being removed.
+
+Finally, it is useful to think of the stack as **dynamically expanding and shrinking**. 
+The stack grows while incoming elements respect its invariant and contracts when that invariant is broken. 
+This behavior mirrors other patterns, such as dynamic sliding windows, but instead of moving across indices, the stack operates over previously seen states. 
+Viewing stack operations through this lens helps unify many seemingly different problems under a single conceptual framework.
+
+## Time & Space Complexity
+
+Stacks provide constant-time operations by restricting access to one end of the data structure.
+This simplicity allows many problems to be solved efficiently in a single pass.
+
+| Operation / Pattern | Time Complexity | Space Complexity |
+|---------------------|-----------------|------------------|
+| Push | $O(1)$ | $O(1)$ |
+| Pop | $O(1)$ | $O(1)$ |
+| Peek / Top | $O(1)$ | $O(1)$ |
+| Stack traversal | $O(n)$ | $O(1)$ |
+| Matching / balancing (parentheses, duplicates) | $O(n)$ | $O(n)$ |
+| Expression evaluation (RPN, calculators) | $O(n)$ | $O(n)$ |
+| Monotonic stack (next greater / smaller) | $O(n)$ amortized | $O(n)$ |
+| Span problems (stock span, temperatures) | $O(n)$ amortized | $O(n)$ |
+| Range / area problems (histogram, max rectangle) | $O(n)$ amortized | $O(n)$ |
+
+## Exercises
 
 | Problem | Technique | Solution |
-|---------|-----------|----------|
-| [Valid Parentheses](https://leetcode.com/problems/valid-parentheses/) | Stack | Soon available |
-| [Remove All Adjacent Duplicates in String](https://leetcode.com/problems/remove-all-adjacent-duplicates-in-string/) | Stack | Soon available |
-| [Min Stack](https://leetcode.com/problems/min-stack/) | Stack | Soon available |
-| [Remove Duplicate Letters](https://leetcode.com/problems/remove-duplicate-letters/) | Stack | Soon available |
-| [Removing Stars From a String](https://leetcode.com/problems/removing-stars-from-a-string/) | Stack | Soon available |
-| [Evaluate Reverse Polish Notation](https://leetcode.com/problems/evaluate-reverse-polish-notation/) | Stack | Soon available |
-| [Basic Calculator II](https://leetcode.com/problems/basic-calculator-ii/) | Stack | Soon available |
-| [Longest Valid Parentheses](https://leetcode.com/problems/longest-valid-parentheses/) | Stack | Soon available |
-| [Next Greater Element I](https://leetcode.com/problems/next-greater-element-i/) | Monotonic Stack | Soon available |
-| [Daily Temperatures](https://leetcode.com/problems/daily-temperatures/) | Monotonic Stack | Soon available |
-| [Online Stock Span](https://leetcode.com/problems/online-stock-span/) | Monotonic Stack | Soon available |
-| [132 Pattern](https://leetcode.com/problems/132-pattern/) | Monotonic Stack | Soon available |
-| [Number of Visible People in a Queue](https://leetcode.com/problems/number-of-visible-people-in-a-queue/) | Monotonic Stack | Soon available |
-| [Largest Rectangle in Histogram](https://leetcode.com/problems/largest-rectangle-in-histogram/) | Monotonic Stack | Soon available |
+|--------|-----------|----------|
+| [Valid Parentheses](https://leetcode.com/problems/valid-parentheses/) | Stack | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/stacks/valid-parentheses.ts) |
+| [Remove All Adjacent Duplicates in String](https://leetcode.com/problems/remove-all-adjacent-duplicates-in-string/) | Stack | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/stacks/remove-all-adjacent-duplicates-in-string.ts) |
+| [Min Stack](https://leetcode.com/problems/min-stack/) | Stack | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/stacks/min-stack.ts) |
+| [Remove Duplicate Letters](https://leetcode.com/problems/remove-duplicate-letters/) | Stack | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/stacks/remove-duplicate-letters.ts) |
+| [Removing Stars From a String](https://leetcode.com/problems/removing-stars-from-a-string/) | Stack | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/stacks/removing-stars-from-a-string.ts) |
+| [Evaluate Reverse Polish Notation](https://leetcode.com/problems/evaluate-reverse-polish-notation/) | Stack | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/stacks/evaluate-reverse-polish-notation.ts) |
+| [Basic Calculator II](https://leetcode.com/problems/basic-calculator-ii/) | Stack | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/stacks/basic-calculator-II.ts) |
+| [Longest Valid Parentheses](https://leetcode.com/problems/longest-valid-parentheses/) | Stack | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/stacks/longest-valid-parentheses.ts) |
+| [Next Greater Element I](https://leetcode.com/problems/next-greater-element-i/) | Monotonic Stack | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/monotonic-stack/next-greater-element-I.ts) |
+| [Daily Temperatures](https://leetcode.com/problems/daily-temperatures/) | Monotonic Stack | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/monotonic-stack/daily-temperatures.ts) |
+| [Online Stock Span](https://leetcode.com/problems/online-stock-span/) | Monotonic Stack | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/monotonic-stack/online-stock-span.ts) |
+| [132 Pattern](https://leetcode.com/problems/132-pattern/) | Monotonic Stack | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/monotonic-stack/132-pattern.ts) |
+| [Number of Visible People in a Queue](https://leetcode.com/problems/number-of-visible-people-in-a-queue/) | Monotonic Stack | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/monotonic-stack/number-of-visible-people-in-a-queue.ts) |
+| [Largest Rectangle in Histogram](https://leetcode.com/problems/largest-rectangle-in-histogram/) | Monotonic Stack | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/monotonic-stack/largest-rectangle-in-histogram.ts) |
