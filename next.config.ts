@@ -12,6 +12,14 @@ const withMDX = createMDX({
       "remark-mdx-frontmatter",
     ],
     rehypePlugins: [
+      "rehype-slug",
+      [
+        "rehype-autolink-headings",
+        {
+          behavior: "wrap",
+          properties: { className: ["heading-anchor"] },
+        },
+      ],
       "rehype-highlight",
       "rehype-katex",
       "@microflash/rehype-figure",
