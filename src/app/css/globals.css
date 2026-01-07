@@ -400,8 +400,6 @@
         @apply no-underline relative;
     }
 
-    /* Show # symbol before heading using ::before pseudo-element */
-    #reading-content-container h1 a::before,
     #reading-content-container h2 a::before,
     #reading-content-container h3 a::before,
     #reading-content-container h4 a::before,
@@ -409,11 +407,6 @@
     #reading-content-container h6 a::before {
         content: "#";
         @apply text-accent opacity-0 transition-opacity duration-300 absolute;
-    }
-
-    /* Proportional positioning for each heading size */
-    #reading-content-container h1 a::before {
-        @apply -left-12;
     }
 
     #reading-content-container h2 a::before {
@@ -437,7 +430,6 @@
     }
 
     @media (hover: hover) and (pointer: fine) {
-        #reading-content-container h1:hover a::before,
         #reading-content-container h2:hover a::before,
         #reading-content-container h3:hover a::before,
         #reading-content-container h4:hover a::before,
