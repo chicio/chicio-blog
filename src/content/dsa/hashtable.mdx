@@ -176,7 +176,7 @@ Conceptually:
 This trade-off is what makes hash tables extremely efficient in practice, even when storing millions of elements.
 For additional details about amortized analysis, refer to the [time and space complexity](/data-structures-and-algorithms/time-and-space-complexity "time and space complexity") article.
 
-## Operations and Time Complexity
+## Time & Space Complexity
 
 A hash table supports three main operations:
 
@@ -184,10 +184,10 @@ A hash table supports three main operations:
 - **Search (get)**
 - **Delete (remove)**
 
-In a well-designed hash table, all three run in **O(1) average time**.  
+In a well-designed hash table, all three run in **$O(1)$ average time**.  
 This is possible because the key is hashed to an index, and the element is accessed directly—no scanning or shifting required.
 
-However, keeping in consideration what we saw in the previous paragraphs, collisions make the worst case **O(n)**: 
+However, keeping in consideration what we saw in the previous paragraphs, collisions make the worst case **$O(n)$**: 
 if every element hashes to the same location, the table degenerates into a list.  
 In practice this almost never happens because:
 
@@ -195,14 +195,13 @@ In practice this almost never happens because:
 - the table automatically resizes when the load factor becomes too high,
 - collision resolution strategies (chaining or open addressing) keep chains small.
 
-This is why hash tables are considered **amortized O(1)** and are widely used for frequency counting, caching, fast lookup tables, and set membership.
-
+This is why hash tables are considered **amortized $O(1)$** and are widely used for frequency counting, caching, fast lookup tables, and set membership.
 
 | Operation | Average Case | Worst Case |
 |-----------|--------------|------------|
-| Insert    | O(1)         | O(n)       |
-| Search    | O(1)         | O(n)       |
-| Delete    | O(1)         | O(n)       |
+| Insert    | $O(1)$         | $O(n)$       |
+| Search    | $O(1)$         | $O(n)$       |
+| Delete    | $O(1)$         | $O(n)$       |
 
 Even though worst-case performance exists in theory, real hash tables in languages like JavaScript, Python, Java, and C++ are engineered so that degeneracy is extremely unlikely.
  This is why they remain the default choice for key–value storage in programming and algorithmic problems.
@@ -309,8 +308,8 @@ For the `get` operation, we simply hash the key to find its bucket and search fo
 
     for (const entry of bucket) {
       if (entry.key === key) {
-		return entry.value;
-	  } 
+		    return entry.value;
+	    } 
     }
 
     return undefined;
