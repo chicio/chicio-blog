@@ -57,7 +57,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       images: defaultImage,
     },
     ...tags.map((tag) => ({
-      url: `${siteMetadata.siteUrl}/${tag.slug}`,
+      url: `${siteMetadata.siteUrl}${tag.slug}`,
       lastModified: new Date(),
       priority: 1,
       images: defaultImage,
