@@ -1,5 +1,24 @@
 # Changelog
 
+## [3.8.0](https://github.com/chicio/chicio-blog/compare/v3.7.0...v3.8.0) (2026-01-08)
+
+### Features
+
+* **capabilities:** :sparkles: anchor links for headings ([#181](https://github.com/chicio/chicio-blog/issues/181)) ([09660b8](https://github.com/chicio/chicio-blog/commit/09660b82afce369827f7f9be65b0d00c237808c2))
+* **capabilities:** ✨ React Compiler ([#173](https://github.com/chicio/chicio-blog/issues/173)) ([d2864b7](https://github.com/chicio/chicio-blog/commit/d2864b71fe34bb76fb630ca3c7653078871464da))
+* **content:** ✨ Stack ([#174](https://github.com/chicio/chicio-blog/issues/174)) ([21f7ad1](https://github.com/chicio/chicio-blog/commit/21f7ad16f8edd434073a04d6b53fa8d9ab14a862))
+* **performance:** :zap: dynamic force static for api routes ([e0fe001](https://github.com/chicio/chicio-blog/commit/e0fe001ea45a0e44dd682fdb05fa13e2003b2e2e))
+* **seo:** :sparkles: added about me page to sitemap ([19b90b8](https://github.com/chicio/chicio-blog/commit/19b90b88ed0eb906f4d8aa354788628f6aee9c5d))
+* **seo:** :sparkles: validated json-ld ([6697562](https://github.com/chicio/chicio-blog/commit/66975621c1998fe26ed2ec0ad76ee4c923dcbd1d))
+* **ux:** ✨ new menu animation for mobile devices ([#180](https://github.com/chicio/chicio-blog/issues/180)) ([0ae1966](https://github.com/chicio/chicio-blog/commit/0ae19660e103cb6ca5ff22d1caec1131685d71dd))
+
+### Bug Fixes
+
+* **capabilities:** :bug: fix page navigation previous link for page 2 ([fbc9406](https://github.com/chicio/chicio-blog/commit/fbc94063e389837ef37fa1b129a9ecff3a495134))
+* **seo:** :ambulance: removed useless slash from tags urls ([9d7aeae](https://github.com/chicio/chicio-blog/commit/9d7aeaeb4e4dadd87fab785ab4b19b3d91d18832))
+* **seo:** :fire: changed descriptions for articles ([a472394](https://github.com/chicio/chicio-blog/commit/a472394c5d20a672bc55efd4adf006c91cb8465a))
+* **seo:** :sparkles: improved llms.txt ([edd7d21](https://github.com/chicio/chicio-blog/commit/edd7d21dd710dd2e41a1ebe333a836778e2fd70b))
+
 ## [3.7.0](///compare/v3.6.0...v3.7.0) (2026-01-03)
 
 ### Features
