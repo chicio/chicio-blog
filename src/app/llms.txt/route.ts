@@ -65,7 +65,7 @@ Interactive tutorials and educational content on fundamental computer science co
 
 ## Additional Information:
 
-- [Blog Pagination](${siteMetadata.siteUrl}${slugs.blog.blogPostsPage}/1): Browse posts page by page
+- [Blog Pagination](${siteMetadata.siteUrl}${slugs.blog.blogPostsPage}/2): Browse posts page by page. Pay attention that the first page is just ${siteMetadata.siteUrl}${slugs.blog.blogPostsPage}.
 - Blog post URLs follow the pattern: ${siteMetadata.siteUrl}${slugs.blog.blogPost}/YYYY/MM/DD/slug
 - Tag URLs follow the pattern: ${siteMetadata.siteUrl}${slugs.blog.tag}/tag-name
 `;
