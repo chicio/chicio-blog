@@ -28,7 +28,7 @@ This website contains technical blog posts about software engineering, computer 
 
 ## Blog Posts
 
-Latest articles with descriptions:
+Articles with descriptions:
 
 ${posts
     .map(
