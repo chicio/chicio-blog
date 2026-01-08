@@ -2,6 +2,8 @@ import { getPosts, getTags } from "@/lib/posts/posts";
 import { siteMetadata } from "@/types/site-metadata";
 import { slugs } from "@/types/slug";
 
+export const dynamic = 'force-static';
+
 export async function GET() {
     const posts = getPosts();
     const tags = getTags();

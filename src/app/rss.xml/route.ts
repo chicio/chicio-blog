@@ -3,6 +3,8 @@ import { authors } from "@/types/author";
 import { siteMetadata } from "@/types/site-metadata";
 import { Feed } from "feed";
 
+export const dynamic = 'force-static';
+
 export async function GET() {
   const posts = getPosts();
 
