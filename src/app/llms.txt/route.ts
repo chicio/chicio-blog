@@ -59,6 +59,9 @@ Interactive tutorials and educational content on fundamental computer science co
 - [Prefix Sum](${siteMetadata.siteUrl}${slugs.dsa.prefixSum}): Range query optimization technique
 - [Sliding Window](${siteMetadata.siteUrl}${slugs.dsa.slidingWindow}): Subarray and substring problem pattern
 - [Kadane's Algorithm](${siteMetadata.siteUrl}${slugs.dsa.kadaneAlgorithm}): Maximum subarray sum solution    
+- [Matrix](${siteMetadata.siteUrl}${slugs.dsa.matrix}): Matrix operations and algorithms
+- [Linked Lists](${siteMetadata.siteUrl}${slugs.dsa.linkedList}): Dynamic data structure for sequential storage
+- [Stack](${siteMetadata.siteUrl}${slugs.dsa.stack}): LIFO and FIFO data structures   
 
 ## Additional Information:
 
