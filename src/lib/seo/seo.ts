@@ -1,5 +1,5 @@
 import { authors } from "@/types/author";
-import { PostDate } from "@/types/post";
+import { PostDate } from "@/types/content/post";
 import { siteMetadata, SiteMetadataSocialLinks} from "@/types/site-metadata";
 import { slugs } from "@/types/slug";
 import type {Metadata} from 'next'

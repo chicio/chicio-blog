@@ -1,4 +1,4 @@
-import AboutMeContent from "../../../../content/about-me/about-me.mdx";
+import AboutMeContent from "../../../../content/about-me/content.mdx";
 import { siteMetadata } from "@/types/site-metadata";
 import { tracking } from "@/types/tracking";
 import { ReadingContentPageTemplate } from "@/components/design-system/templates/reading-content-page-template";

@@ -1,6 +1,6 @@
 import { shuffleArray } from "@/components/design-system/utils/hooks/shuffle-array";
 import { PostsRowContainer } from "@/components/sections/blog/components/posts-row-container";
-import { getPosts } from "@/lib/posts/posts";
+import { getPosts } from "@/lib/content/posts";
 import { FC } from "react";
 import { PostsRow } from "./posts-row";
 
@@ -11,7 +11,7 @@ export interface RecentPostsProps {
 export const RecentPosts: FC<RecentPostsProps> = ({ currentSlug }) => {
   const readNextPosts = shuffleArray(
     getPosts().filter(
-      (post) => post.frontmatter.slug.formatted !== currentSlug,
+      (post) => post.slug.formatted !== currentSlug,
     ),
     2
   );

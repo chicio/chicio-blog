@@ -1,0 +1,364 @@
+---
+title: "Hashtable"
+description: "A hash table is a data structure that stores key-value pairs and allows extremely fast lookups, insertions, and deletions, typically in O(1) average time."
+tags: [hashtable, data structures, algorithms]
+authors: [fabrizio_duroni]
+---
+
+# Hashtable
+
+A **hash table** is a data structure that stores key–value pairs and allows extremely fast lookups, insertions, and deletions, typically in **O(1)** average time.  
+In other words, if you know the key, you can retrieve the associated value almost instantly, regardless of how much data is stored.
+
+You can think of a hash table as a more powerful version of an array.  
+While arrays allow fast access by index (`arr[10]`), hash tables generalize the idea so that **any** data can be used as a key: numbers, strings, objects, etc.
+
+This is why most programming languages expose hash tables as built-in dictionary types:
+
+- **JavaScript / TypeScript:** `Map` and object literals (`{}`)
+- **Python:** `dict`
+- **Java:** `HashMap`
+- **Go:** `map`
+
+In practice, hash tables are everywhere:
+
+- counting how many times each character appears in a string
+- checking if an element was seen before (duplicate detection)
+- grouping anagrams
+- caching and memoization
+- tracking frequencies or states in algorithms and graph problems
+
+### Why are they so fast?
+
+Hash tables work by converting a key into an **index** of an internal array using a function called a **hash function**.  
+Instead of searching linearly through elements, the hash function jumps directly to the memory location where the value should be stored:
+
+$$
+index = hash(key)
+$$
+
+If the hash function distributes keys well, most operations have **O(1) amortized** complexity, meaning they take constant time on average, 
+even if occasionally a slower operation occurs (we’ll see why later).
+
+Because of this combination of flexibility and performance, hash tables are one of the most important data structures in algorithms and system design.  
+If you know how to use them effectively, many seemingly complex problems become simple.
+
+## Hash Functions
+
+A **hash function** is the core component of a hash table.  
+Its job is simple: take a key of any type (number, string, object) and convert it into an integer index of an internal array, as we already saw before.
+
+This allows a hash table to perform lookups without searching through all elements: it knows exactly **where** to store and retrieve a value.
+
+### What makes a good hash function?
+
+A practical hash function must satisfy three properties:
+
+- **Deterministic**: the same key must always produce the same hash. If `"abc"` sometimes mapped to index `3` and other times to `9`, retrieval would be impossible.
+- **Fast**: hashing should be constant time. If hashing were slow, hash tables would not provide O(1) operations.
+- **Uniform**: keys should be spread across the table as evenly as possible. If many keys map to the same index, performance degrades.
+
+For example, integers can be hashed using a simple function like the one below. 
+This returns a number in the range [0, size - 1], which is a valid index in the hash table.
+
+```ts
+function hashInt(x: number, size: number): number {
+  return x % size;
+}
+```
+
+Strings require combining characters into a single numeric value.
+A common method is to treat the string as a polynomial.
+
+```ts
+function hashString(s: string, size: number): number {
+  let hash = 0;
+  for (let i = 0; i < s.length; i++) {
+    hash = (hash * 31 + s.charCodeAt(i)) % size;
+  }
+  return hash;
+}
+```
+
+Even with a great hash function, multiple keys may map to the same index:
+- the table has a finite number of slots
+- but keys come from a potentially infinite domain
+
+By the [pigeonhole principle](https://en.wikipedia.org/wiki/Pigeonhole_principle "pigeonhole principle"), collisions must exist.
+
+What matters is not avoiding collisions completely (that’s impossible),
+but handling them efficiently. That leads to the next topic: collision resolution.
+
+## Collision Resolution
+
+Since different keys may produce the same hash value, a hash table must handle **collisions**.  
+Two major strategies exist: **chaining** and **open addressing**.
+
+### Chaining
+
+With **chaining**, each position in the table stores a **list** (or linked list, or dynamic array) of key–value pairs that hashed to that index.
+
+Example:
+
+| Index | Values                          |
+|-------|---------------------------------|
+| 0     | —                               |
+| 1     | ("cat" → 7), ("car" → 5)        |
+| 2     | —                               |
+| 3     | ("dog" → 2), ("door" → 9), ...  |
+
+If two keys collide (same index), they are simply appended to the bucket list.
+
+Operations:
+
+- **Insert**: compute index + append to bucket, average **O(1)**
+- **Search / Delete**: look only inside that small bucket, average **O(1)**
+
+Chaining is simple and efficient as long as the load factor stays small.
+
+### Open Addressing
+
+In open addressing, the table stores key–value pairs directly inside the array.
+When a collision happens, instead of building a list, the algorithm probes other positions in the array until it finds an empty slot.
+
+Insertion and lookup follow the same procedure:
+	1.	Compute the starting index with the hash function.
+	2.	If the slot is empty → you can insert there.
+	3.	If the slot contains a different key → probe the next location.
+	4.	Continue probing until an empty slot (for insert) or matching key (for lookup) is found.
+
+This is why every slot in open addressing must store both the key and the value: during lookup, the algorithm needs to check whether the key in a shifted position is the one we’re searching for.
+
+There are different probing strategies:
+- Linear probing: check the next cell, then the next, and so on `i, i+1, i+2, …`
+- Quadratic probing: the step size grows quadratically `i+1, i+4, i+9, …`
+- Double hashing: a second hash function decides the step size `i + j * hash2(key)`	
+
+A common challenge in open addressing is clustering, where large consecutive blocks of full cells form over time, slowing down insertion and lookup. 
+Double hashing usually mitigates clustering better than linear or quadratic probing, but it’s slightly more expensive to compute.
+
+Both chaining and open addressing work well in practice, and most languages and runtimes choose one based on memory layout and performance requirements.
+
+### Chaining vs Open Addressing
+
+| Feature | Chaining | Open Addressing |
+|---------|----------|-----------------|
+| Storage | Buckets with lists | All keys stored in table |
+| Memory usage | Higher (extra pointers/arrays) | Lower |
+| Cache friendliness | Lower | Higher |
+| Performance under high load | Degrades gracefully | Can degrade sharply |
+| Deletion | Simple | More complex |
+
+Most real hash tables (like `HashMap` in Java or `Dictionary` in C#) use **chaining**,  
+while performance–critical structures (databases, embedded systems) often use **open addressing**.
+
+The next key concept answers another important question: **how do we keep collisions low in the first place?** Load factor and resizing.
+
+## Load Factor & Resizing
+
+A hash table performs best when it is not too full. The **load factor** measures how full the table is:
+
+$$
+\text{load factor} = \frac{n}{m}
+$$
+
+- $n$ = number of stored entries  
+- $m$ = total number of slots in the table
+
+When the load factor grows too high, collisions become more frequent and operations slow down. 
+To maintain fast lookups, most hash tables automatically **resize** themselves, typically by creating a new array that is 2× larger and re-inserting every key–value pair into it.
+
+Even though rehashing takes $O(n)$ time, it happens infrequently.  
+If each resize doubles the capacity, then the total cost of all future resizes is spread across many insertions. 
+This is why hash table operations (insert, lookup, delete) are considered **amortized O(1)**.
+
+Conceptually:
+
+- Most insertions are constant time.
+- Occasionally, one insertion triggers a resize and costs $O(n)$.
+- Spread over many operations, the *average* cost remains constant time.
+
+This trade-off is what makes hash tables extremely efficient in practice, even when storing millions of elements.
+For additional details about amortized analysis, refer to the [time and space complexity](/data-structures-and-algorithms/time-and-space-complexity "time and space complexity") article.
+
+## Time & Space Complexity
+
+A hash table supports three main operations:
+
+- **Insert (put)**
+- **Search (get)**
+- **Delete (remove)**
+
+In a well-designed hash table, all three run in **$O(1)$ average time**.  
+This is possible because the key is hashed to an index, and the element is accessed directly—no scanning or shifting required.
+
+However, keeping in consideration what we saw in the previous paragraphs, collisions make the worst case **$O(n)$**: 
+if every element hashes to the same location, the table degenerates into a list.  
+In practice this almost never happens because:
+
+- modern hash functions spread keys uniformly,
+- the table automatically resizes when the load factor becomes too high,
+- collision resolution strategies (chaining or open addressing) keep chains small.
+
+This is why hash tables are considered **amortized $O(1)$** and are widely used for frequency counting, caching, fast lookup tables, and set membership.
+
+| Operation | Average Case | Worst Case |
+|-----------|--------------|------------|
+| Insert    | $O(1)$         | $O(n)$       |
+| Search    | $O(1)$         | $O(n)$       |
+| Delete    | $O(1)$         | $O(n)$       |
+
+Even though worst-case performance exists in theory, real hash tables in languages like JavaScript, Python, Java, and C++ are engineered so that degeneracy is extremely unlikely.
+ This is why they remain the default choice for key–value storage in programming and algorithmic problems.
+
+ ## Implementing a HashMap (Design HashMap)
+
+To truly understand how hash tables work, it helps to build one.  
+Below is a simplified but realistic implementation of a `HashMap` in TypeScript using **chaining**.  
+Each bucket in the array stores a small list of key–value pairs. Collisions are handled by appending to the list.
+
+We store:
+
+- an **array of buckets**
+- each bucket is an array of `{ key, value }` pairs
+- a **load factor** threshold triggering a resize
+- a **hash function** that maps keys to indices
+
+```typescript
+type Entry<K, V> = { key: K; value: V };
+
+class HashMap<K extends string | number, V> {
+  private buckets: Entry<K, V>[][] = [];
+  private size = 0;
+  private readonly loadFactor = 0.75;
+
+  constructor(private capacity = 16) {
+    this.buckets = Array.from({ length: capacity }, () => []);
+  }
+
+  private hash(key: K): number {
+    if (typeof key === "number") {
+      return key % this.capacity;
+    }
+    
+	let hash = 0;
+    
+	for (const ch of key) {
+      hash = (hash * 31 + ch.charCodeAt(0)) >>> 0;
+    }
+
+    return hash % this.capacity;
+  }
+
+  // .... other stuff
+```
+
+To implement `insert (put)` we need to:
+- Hash the key to find its bucket.
+- Search inside the bucket:
+- 	if the key already exists → replace value
+- 	otherwise add a new `{ key, value }` pair
+- If the load factor exceeds 0.75, we need to resize resize
+
+In particular, if we need to resize, we need to:
+- allocate a new bucket array with double capacity
+- re-hash all existing entries into their new positions
+
+```typescript
+  // .... other stuff
+
+  put(key: K, value: V): void {
+    const index = this.hash(key);
+    const bucket = this.buckets[index];
+
+    for (const entry of bucket) {
+      if (entry.key === key) {
+        entry.value = value; // update
+        return;
+      }
+    }
+
+    bucket.push({ key, value });
+    this.size++;
+
+    if (this.size / this.capacity > this.loadFactor) {
+      this.resize();
+    }
+  }
+
+  private resize(): void {
+    const oldBuckets = this.buckets;
+    this.capacity *= 2;
+    this.buckets = Array.from({ length: this.capacity }, () => []);
+    this.size = 0;
+
+    for (const bucket of oldBuckets) {
+      for (const entry of bucket) {
+        this.put(entry.key, entry.value); // reinsert
+      }
+    }
+  }
+
+  // .... other stuff
+```
+
+For the `get` operation, we simply hash the key to find its bucket and search for the key inside that bucket.
+
+```typescript 
+  // .... other stuff
+
+  get(key: K): V | undefined {
+    const index = this.hash(key);
+    const bucket = this.buckets[index];
+
+    for (const entry of bucket) {
+      if (entry.key === key) {
+		    return entry.value;
+	    } 
+    }
+
+    return undefined;
+  }
+
+  // .... other stuff
+```
+
+Last but not least, we implement `remove`, which also hashes the key to find its bucket and searches for the key to delete it.
+
+```typescript
+  // .... other stuff
+
+  remove(key: K): boolean {
+    const index = this.hash(key);
+    const bucket = this.buckets[index];
+
+    for (let i = 0; i < bucket.length; i++) {
+      if (bucket[i].key === key) {
+        bucket.splice(i, 1);
+        this.size--;
+        return true;
+      }
+    }
+    return false;
+  }
+
+  // .... other stuff  
+```
+
+## Exercises
+
+| Exercise | Technique | Solution |
+|----------|-----------|----------|
+| [Design HashMap](https://leetcode.com/problems/design-hashmap/) | HashMap Design | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/hash-tables/design-hashmap.ts) |
+| [Maximum Number of Balloons](https://leetcode.com/problems/maximum-number-of-balloons/) | Frequency Counting | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/hash-tables/maximum-number-of-balloons.ts) |
+| [Number of Good Pairs](https://leetcode.com/problems/number-of-good-pairs/) | Hash Map Counting | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/hash-tables/number-of-good-pairs.ts) |
+| [Isomorphic Strings](https://leetcode.com/problems/isomorphic-strings/) | Character Mapping | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/hash-tables/isomorphic-strings.ts) |
+| [Ransom Note](https://leetcode.com/problems/ransom-note/) | Hash Map Counting | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/hash-tables/ransom-note.ts) |
+| [Contains Duplicate II](https://leetcode.com/problems/contains-duplicate-ii/) | Sliding Window + Hash Set | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/hash-tables/contains-duplicate-II.ts) |
+| [Group Anagrams](https://leetcode.com/problems/group-anagrams/) | Hash Map with Sorted Key | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/hash-tables/group-anagrams.ts) |
+| [Encode and Decode TinyURL](https://leetcode.com/problems/encode-and-decode-tinyurl/) | Hash Map / Bi-Directional Map | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/hash-tables/encode-and-decode-tinyurl.ts) |
+| [Reorganize String](https://leetcode.com/problems/reorganize-string/) | Hash Map + Max Heap | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/hash-tables/reorganize-string.ts) |
+| [Longest Consecutive Sequence](https://leetcode.com/problems/longest-consecutive-sequence/) | Hash Set + Sequence Counting | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/hash-tables/longest-consecutive-sequence.ts) |
+| [Split Array into Consecutive Subsequences](https://leetcode.com/problems/split-array-into-consecutive-subsequences/) | Hash Map + Greedy | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/hash-tables/split-array-into-consecutive-subsequences.ts) |
+| [Number of Matching Subsequences](https://leetcode.com/problems/number-of-matching-subsequences/) | Hash Map + Buckets | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/hash-tables/number-of-matching-subsequences.ts) |
+| [Number of Good Ways to Split a String](https://leetcode.com/problems/number-of-good-ways-to-split-a-string/) | Hash Map + Prefix Counting | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/hash-tables/number-of-good-ways-to-split-a-string.ts) |

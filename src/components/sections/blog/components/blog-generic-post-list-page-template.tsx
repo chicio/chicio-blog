@@ -1,6 +1,6 @@
 import { StandardInternalLinkWithTracking } from "@/components/design-system/atoms/links/standard-internal-link-with-tracking";
 import { PageTitle } from "@/components/design-system/molecules/typography/page-title";
-import { Post } from "@/types/post";
+import { Post } from "@/types/content/post";
 import { tracking } from "@/types/tracking";
 import { FC } from "react";
 import { ContentPageTemplate } from "../../../design-system/templates/content-page-template";
@@ -23,7 +23,7 @@ export const BlogGenericPostListPageTemplate: FC<
     {posts.map((post) => (
       <div
         className="container-fluid mb-4 flex flex-col items-start px-0 md:flex-row md:items-center"
-        key={post.frontmatter.slug.formatted}
+        key={post.slug.formatted}
       >
         <div className="flex-1/6">
           <time className="text-xl">{post.frontmatter.date.formatted}</time>
@@ -31,7 +31,7 @@ export const BlogGenericPostListPageTemplate: FC<
         <div className="flex-5/6">
           <StandardInternalLinkWithTracking
             className="text-xl"
-            to={post.frontmatter.slug.formatted}
+            to={post.slug.formatted}
             trackingData={{
               action: tracking.action.open_blog_post,
               category: trackingCategory,

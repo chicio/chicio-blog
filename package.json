@@ -3,7 +3,7 @@
   "version": "3.8.0",
   "private": true,
   "scripts": {
-    "search-index": "tsx src/lib/posts/search.ts",
+    "search-index": "tsx src/lib/content/search.ts",
     "chat-knowledge-upload": "tsx --env-file=.env.production src/lib/chat/chat-knowledge-upload.ts",
     "predev": "npm run search-index",
     "dev": "next dev",

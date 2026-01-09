@@ -1,6 +1,6 @@
 import { siteMetadata } from "@/types/site-metadata";
 import { tracking } from "@/types/tracking";
-import {getPostsForTag, getTags} from "@/lib/posts/posts";
+import {getPostsForTag, getTags} from "@/lib/content/posts";
 import { NextTagParameters } from "@/types/page-parameters";
 import {Metadata} from "next";
 import {createMetadata} from "@/lib/seo/seo";

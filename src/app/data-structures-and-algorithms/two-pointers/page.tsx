@@ -1,5 +1,5 @@
 import { DsaPage } from "@/components/sections/dsa/components/dsa-page";
-import TwoPointers from "../../../content/dsa/two-pointers.mdx";
+import TwoPointers from "../../../content/data-structures-and-algorithms/two-pointers/content.mdx";
 import { slugs } from "@/types/slug";
 import { createMetadata } from "@/lib/seo/seo";
 import { siteMetadata } from "@/types/site-metadata";
@@ -21,7 +21,7 @@ export default function TwoPointersPage() {
       description="Data structures and algoritms course. Topic: Two Pointers"    
       previousTopic={{
         title: "Hash Tables",
-        url: slugs.dsa.hashTables,
+        url: slugs.dsa.hashTable,
       }}
       nextTopic={{
         title: "Prefix sum",

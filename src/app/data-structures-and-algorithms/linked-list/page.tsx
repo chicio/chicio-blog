@@ -1,5 +1,5 @@
 import { DsaPage } from "@/components/sections/dsa/components/dsa-page";
-import LinkedList from "../../../content/dsa/linked-list.mdx";
+import LinkedList from "../../../content/data-structures-and-algorithms/linked-list/content.mdx";
 import { slugs } from "@/types/slug";
 import { createMetadata } from "@/lib/seo/seo";
 import { siteMetadata } from "@/types/site-metadata";

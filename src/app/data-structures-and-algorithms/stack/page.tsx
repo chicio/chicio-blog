@@ -1,5 +1,5 @@
 import { DsaPage } from "@/components/sections/dsa/components/dsa-page";
-import Stack from "../../../content/dsa/stack.mdx";
+import Stack from "../../../content/data-structures-and-algorithms/stack/content.mdx";
 import { slugs } from "@/types/slug";
 import { createMetadata } from "@/lib/seo/seo";
 import { siteMetadata } from "@/types/site-metadata";

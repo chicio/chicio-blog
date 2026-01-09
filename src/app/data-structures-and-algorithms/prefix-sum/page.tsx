@@ -1,5 +1,5 @@
 import { DsaPage } from "@/components/sections/dsa/components/dsa-page";
-import PrefixSum from "../../../content/dsa/prefix-sum.mdx";
+import PrefixSum from "../../../content/data-structures-and-algorithms/prefix-sum/content.mdx";
 import { slugs } from "@/types/slug";
 import { createMetadata } from "@/lib/seo/seo";
 import { siteMetadata } from "@/types/site-metadata";

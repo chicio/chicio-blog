@@ -1,4 +1,4 @@
-import { getPosts, getTags } from "@/lib/posts/posts";
+import { getPosts, getTags } from "@/lib/content/posts";
 import { siteMetadata } from "@/types/site-metadata";
 import { slugs } from "@/types/slug";
 
@@ -33,7 +33,7 @@ Articles with descriptions:
 ${posts
     .map(
         (post) =>
-            `- [${post.frontmatter.title}](${siteMetadata.siteUrl}${post.frontmatter.slug.formatted}): ${post.frontmatter.description}`
+            `- [${post.frontmatter.title}](${siteMetadata.siteUrl}${post.slug.formatted}): ${post.frontmatter.description}`
     )
     .join("\n")}
 
@@ -51,10 +51,10 @@ Interactive tutorials and educational content on fundamental computer science co
 
 - [DSA Roadmap](${siteMetadata.siteUrl}${slugs.dsa.roadmap}): Complete learning path for data structures and algorithms
 - [Time & Space Complexity](${siteMetadata.siteUrl}${slugs.dsa.timeAndSpaceComplexity}): Understanding algorithm efficiency and Big O notation
-- [Arrays](${siteMetadata.siteUrl}${slugs.dsa.arrays}): Fundamental data structure for sequential storage
-- [Strings](${siteMetadata.siteUrl}${slugs.dsa.strings}): String manipulation and pattern matching
+- [Arrays](${siteMetadata.siteUrl}${slugs.dsa.array}): Fundamental data structure for sequential storage
+- [Strings](${siteMetadata.siteUrl}${slugs.dsa.string}): String manipulation and pattern matching
 - [Bit Manipulation](${siteMetadata.siteUrl}${slugs.dsa.bitManipulation}): Binary operations and bitwise techniques
-- [Hash Tables](${siteMetadata.siteUrl}${slugs.dsa.hashTables}): Key-value storage and constant-time lookups
+- [Hash Tables](${siteMetadata.siteUrl}${slugs.dsa.hashTable}): Key-value storage and constant-time lookups
 - [Two Pointers](${siteMetadata.siteUrl}${slugs.dsa.twoPointers}): Efficient array traversal technique
 - [Prefix Sum](${siteMetadata.siteUrl}${slugs.dsa.prefixSum}): Range query optimization technique
 - [Sliding Window](${siteMetadata.siteUrl}${slugs.dsa.slidingWindow}): Subarray and substring problem pattern

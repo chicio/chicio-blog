@@ -1,5 +1,5 @@
 import { createStructuredData, JsonLdType } from "@/lib/seo/seo";
-import { PostDate } from "@/types/post";
+import { PostDate } from "@/types/content/post";
 import { siteMetadata, SiteMetadataSocialLinks } from "@/types/site-metadata";
 import { FC } from "react"
 

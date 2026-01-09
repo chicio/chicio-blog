@@ -1,6 +1,6 @@
 import { ReadingContentPageTemplate } from "@/components/design-system/templates/reading-content-page-template";
 import { JsonLd } from "@/components/design-system/utils/components/jsond-ld";
-import { Post } from "@/types/post";
+import { Post } from "@/types/content/post";
 import { siteMetadata } from "@/types/site-metadata";
 import { tracking } from "@/types/tracking";
 import { FC } from "react";
@@ -44,7 +44,7 @@ export const BlogPostContent: FC<PostProps> = async ({ post }) => {
               trackingCategory={tracking.category.blog_post}
               trackingLabel={tracking.label.body}
             />
-            <RecentPosts currentSlug={frontmatter.slug.formatted} />
+            <RecentPosts currentSlug={post.slug.formatted} />
           </>
         }
       >
@@ -52,7 +52,7 @@ export const BlogPostContent: FC<PostProps> = async ({ post }) => {
       </ReadingContentPageTemplate>
       <JsonLd
         type="BlogPosting"
-        url={`${siteMetadata.siteUrl}${frontmatter.slug.formatted}`}
+        url={`${siteMetadata.siteUrl}${post.slug.formatted}`}
         imageUrl={frontmatter.image}
         title={frontmatter.title}
         date={frontmatter.date}

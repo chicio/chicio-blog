@@ -1,5 +1,5 @@
 import { DsaPage } from "@/components/sections/dsa/components/dsa-page";
-import TimeAndSpaceComplexity from "../../../content/dsa/time-and-space-complexity.mdx";
+import TimeAndSpaceComplexity from "../../../content/data-structures-and-algorithms/time-and-space-complexity/content.mdx";
 import { slugs } from "@/types/slug";
 
 import { createMetadata } from "@/lib/seo/seo";
@@ -22,7 +22,7 @@ export default function TimeAndSpaceComplexityPage() {
       description="Data structures and algoritms course. Topic: Time and Space Complexity"    
       nextTopic={{
         title: "Arrays",
-        url: slugs.dsa.arrays,
+        url: slugs.dsa.array,
       }}
     >
       <TimeAndSpaceComplexity />

@@ -1,5 +1,5 @@
 import { DsaPage } from "@/components/sections/dsa/components/dsa-page";
-import SlidingWindow from "../../../content/dsa/sliding-window.mdx";
+import SlidingWindow from "../../../content/data-structures-and-algorithms/sliding-window/content.mdx";
 import { slugs } from "@/types/slug";
 import { createMetadata } from "@/lib/seo/seo";
 import { siteMetadata } from "@/types/site-metadata";

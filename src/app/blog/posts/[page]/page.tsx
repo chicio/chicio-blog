@@ -3,7 +3,7 @@ import {
   getPosts,
   getPostsPaginationFor,
   getPostsTotalPages,
-} from "@/lib/posts/posts";
+} from "@/lib/content/posts";
 import { createMetadata } from "@/lib/seo/seo";
 import { NextPostPaginationParameters } from "@/types/page-parameters";
 import { siteMetadata } from "@/types/site-metadata";

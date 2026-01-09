@@ -25,8 +25,8 @@ export const BlogHomePageContent: FC<BlogHomeProps> = ({ pagination, author }) =
       >
         <PostCard
           big={true}
-          key={launchPost.frontmatter.slug.formatted}
-          slug={launchPost.frontmatter.slug.formatted}
+          key={launchPost.slug.formatted}
+          slug={launchPost.slug.formatted}
           title={launchPost.frontmatter.title}
           image={launchPost.frontmatter.image}
           authors={launchPost.frontmatter.authors}

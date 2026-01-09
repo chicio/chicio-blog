@@ -1,8 +1,8 @@
 import { siteMetadata } from "@/types/site-metadata";
 import { upsert } from "./upstash-vector";
 import { VectorData } from "@/types/vector-data";
-import { Post } from "@/types/post";
-import { getPosts } from "../posts/posts";
+import { Post } from "@/types/content/post";
+import { getPosts } from "../content/posts";
 
 function chunkContent(content: string, maxChunkSize: number = 1000): string[] {
   const paragraphs = content.split("\n\n").filter((p) => p.trim());
@@ -72,13 +72,13 @@ const getVectorPosts = (posts: Post[]) => {
 
     chunks.forEach((chunk, index) => {
       vectorData.push({
-        id: `${post.frontmatter.slug.formatted}-chunk-${index}`,
+        id: `${post.slug.formatted}-chunk-${index}`,
         data: chunk,
         metadata: {
-          postId: post.frontmatter.slug.formatted,
+          postId: post.slug.formatted,
           postTitle: post.frontmatter.title,
           postDate: post.frontmatter.date.formatted,
-          postUrl: `${siteMetadata.siteUrl}${post.frontmatter.slug.formatted}`,
+          postUrl: `${siteMetadata.siteUrl}${post.slug.formatted}`,
           postDescription: post.frontmatter.description,
           postTags: post.frontmatter.tags,
           postAuthors: post.frontmatter.authors.map((a) => a.name),

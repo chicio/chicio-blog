@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { getPosts, getPostsTotalPages, getTags } from "@/lib/posts/posts";
+import { getPosts, getPostsTotalPages, getTags } from "@/lib/content/posts";
 import { siteMetadata } from "@/types/site-metadata";
 import { slugs } from "@/types/slug";
 
@@ -51,7 +51,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       images: [`${siteMetadata.siteUrl}${siteMetadata.featuredImage}`],
     },
     ...posts.map((post) => ({
-      url: `${siteMetadata.siteUrl}${post.frontmatter.slug.formatted}`,
+      url: `${siteMetadata.siteUrl}${post.slug.formatted}`,
       lastModified: new Date(post.frontmatter.date.formatted),
       priority: 1,
       images: [`${siteMetadata.siteUrl}${post.frontmatter.image}`],

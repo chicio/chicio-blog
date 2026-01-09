@@ -2,8 +2,6 @@ const blog = '/blog'
 const blogPost = `${blog}/post`;
 const dsa = `/data-structures-and-algorithms`;
 
-
-
 export const slugs = {
   aboutMe: `/about-me`,
   blog: {
@@ -20,10 +18,10 @@ export const slugs = {
   dsa: {
     timeAndSpaceComplexity: `${dsa}/time-and-space-complexity`,
     roadmap: `${dsa}`,
-    arrays: `${dsa}/arrays`,
-    strings: `${dsa}/strings`,
+    array: `${dsa}/array`,
+    string: `${dsa}/string`,
     bitManipulation: `${dsa}/bit-manipulation`,
-    hashTables: `${dsa}/hashtables`,
+    hashTable: `${dsa}/hashtable`,
     twoPointers: `${dsa}/two-pointers`,
     prefixSum: `${dsa}/prefix-sum`,
     slidingWindow: `${dsa}/sliding-window`,

@@ -1,4 +1,4 @@
-import { getPosts } from "@/lib/posts/posts";
+import { getPosts } from "@/lib/content/posts";
 import { authors } from "@/types/author";
 import { siteMetadata } from "@/types/site-metadata";
 import { Feed } from "feed";
@@ -25,8 +25,8 @@ export async function GET() {
   posts.forEach((post) => {
     feed.addItem({
       title: post.frontmatter.title,
-      id: `${siteMetadata.siteUrl}${post.frontmatter.slug.formatted}`,
-      link: `${siteMetadata.siteUrl}${post.frontmatter.slug.formatted}`,
+      id: `${siteMetadata.siteUrl}${post.slug.formatted}`,
+      link: `${siteMetadata.siteUrl}${post.slug.formatted}`,
       description: post.frontmatter.description,
       image: `${siteMetadata.siteUrl}${post.frontmatter.image}`,
       date: new Date(post.frontmatter.date.formatted),

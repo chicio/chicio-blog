@@ -1,5 +1,5 @@
 import { DsaPage } from "@/components/sections/dsa/components/dsa-page";
-import Roadmap from "../../content/dsa/roadmap.mdx";
+import Roadmap from "../../content/data-structures-and-algorithms/content.mdx";
 import { createMetadata } from "@/lib/seo/seo";
 import { siteMetadata } from "@/types/site-metadata";
 import { slugs } from "@/types/slug";

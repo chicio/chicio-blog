@@ -1,5 +1,5 @@
 import { DsaPage } from "@/components/sections/dsa/components/dsa-page";
-import BitManipulation from "../../../content/dsa/bit-manipulation.mdx";
+import BitManipulation from "../../../content/data-structures-and-algorithms/bit-manipulation/content.mdx";
 import { slugs } from "@/types/slug";
 import { createMetadata } from "@/lib/seo/seo";
 import { siteMetadata } from "@/types/site-metadata";
@@ -21,11 +21,11 @@ export default function BitManipulationPage() {
       description="Data structures and algoritms course. Topic: Bit Manipulation"
       previousTopic={{
         title: "Strings",
-        url: slugs.dsa.strings,
+        url: slugs.dsa.string,
       }}
       nextTopic={{
         title: "Hash Tables",
-        url: slugs.dsa.hashTables,
+        url: slugs.dsa.hashTable,
       }}
     >
       <BitManipulation />
