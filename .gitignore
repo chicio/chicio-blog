@@ -23,6 +23,7 @@
 # misc
 .DS_Store
 *.pem
+.search-index-cache
 
 # debug
 npm-debug.log*
