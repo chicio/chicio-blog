@@ -1,6 +1,6 @@
 "use client";
 
-import { searchIndexFileName } from "@/lib/posts/files";
+import { searchIndexFileName } from "@/lib/posts/search-filename";
 import { SearchablePostFields, SearchResult } from "@/types/search";
 import elasticlunr from "elasticlunr";
 import { ChangeEvent, useEffect, useState, useMemo } from "react";

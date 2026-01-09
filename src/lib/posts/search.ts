@@ -1,12 +1,12 @@
-import { searchIndexFileName } from "@/lib/posts/files";
+import { searchIndexFileName } from "@/lib/posts/search-filename";
 import { SearchablePostFields } from "@/types/search";
 import elasticlunr from "elasticlunr";
 import fs from "fs";
 import path from "path";
-import { getSearchablePost } from "./searchable-post";
+import { getPosts } from "./posts";
 
 const createSearchIndex = () => {
-  const posts = getSearchablePost();
+  const posts = getPosts();
 
   const index = elasticlunr<SearchablePostFields>(function () {
     this.addField("title");

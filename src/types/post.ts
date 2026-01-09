@@ -36,10 +36,8 @@ export type PostFrontMatter = {
 export type Post = {
   frontmatter: PostFrontMatter;
   readingTime: ReadTimeResults;
+  fileName: string;
   content: string;
 };
 
-export type PostParser = (
-    filePath: string,
-    fileName: string,
-) => Post
+export type PostParser = (fileName: string, extension: string) => Post
