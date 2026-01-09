@@ -4,10 +4,9 @@ import createMDX from "@next/mdx";
 const withMDX = createMDX({
   options: {
     remarkPlugins: [
-      "remark-emoji",
       "remark-gfm",
+      "remark-emoji",
       "remark-math",
-      "remark-rehype",
       "remark-frontmatter",
       "remark-mdx-frontmatter",
     ],

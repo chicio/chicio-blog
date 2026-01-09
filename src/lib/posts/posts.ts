@@ -1,23 +1,18 @@
-import path from "path";
 import { Post, Tag } from "@/types/post";
 import { slugs } from "@/types/slug";
-import { getPostFromFilePath } from "@/lib/posts/post";
+import { getPost } from "@/lib/posts/post";
 import { getPostsUsing } from "@/lib/posts/posts-with-parser";
-import { mdExtension } from "@/lib/posts/files";
-import { postsDirectory } from "@/lib/posts/post-dir";
 import { Pagination } from "@/types/pagination";
 import { generateTagSlug } from "../tags/tags";
 
 const postsPerPage = 7;
 
-const generateFileNameFrom = (
+export const generateFileNameFrom = (
   year: string,
   month: string,
   day: string,
   slug: string
-) => {
-  return `${year}-${month}-${day}-${slug}${mdExtension}`;
-};
+) => `${year}-${month}-${day}-${slug}`;
 
 const groupArrayBy: <T>(array: T[], numberPerGroup: number) => T[][] = (
   data,
@@ -36,7 +31,7 @@ const groupArrayBy: <T>(array: T[], numberPerGroup: number) => T[][] = (
  * POSTS
  */
 
-export const getPosts: () => Post[] = getPostsUsing(getPostFromFilePath);
+export const getPosts: () => Post[] = getPostsUsing(getPost);
 
 export const getPostBy = (
   year: string,
@@ -46,7 +41,7 @@ export const getPostBy = (
 ): Post | undefined => {
   try {
     const fileName = generateFileNameFrom(year, month, day, slug);
-    return getPostFromFilePath(path.join(postsDirectory, fileName), fileName);
+    return getPost(fileName, ".mdx");
   } catch {
     return undefined;
   }

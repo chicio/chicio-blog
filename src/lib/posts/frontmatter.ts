@@ -2,7 +2,6 @@ import {slugs} from "@/types/slug";
 import {PostDate, PostFrontMatter, PostSlug} from "@/types/post";
 import {authors} from "@/types/author";
 import matter from "gray-matter";
-import {mdExtension} from "@/lib/posts/files";
 
 const formatDate = (date: Date): string => {
   return new Intl.DateTimeFormat("en-US", {
@@ -14,7 +13,7 @@ const formatDate = (date: Date): string => {
 
 const generatePostSlugFrom = (filename: string): PostSlug => {
   const [year, month, day, ...slug] = filename.split("-");
-  const text = slug.join("-").replace(mdExtension, "");
+  const text = slug.join("-");
 
   return {
     year,

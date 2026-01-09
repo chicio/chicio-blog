@@ -13,8 +13,9 @@ interface PostProps {
   post: Post;
 }
 
-export const BlogPostContent: FC<PostProps> = ({ post }) => {
-  const { frontmatter, content, readingTime } = post;
+export const BlogPostContent: FC<PostProps> = async ({ post }) => {
+  const { frontmatter, readingTime, fileName } = post;
+  const { default: PostContent } = await import(`@/content/posts/${fileName}.mdx`)
 
   return (
     <>
@@ -47,7 +48,7 @@ export const BlogPostContent: FC<PostProps> = ({ post }) => {
           </>
         }
       >
-        <div dangerouslySetInnerHTML={{ __html: content }} />
+        <PostContent />
       </ReadingContentPageTemplate>
       <JsonLd
         type="BlogPosting"
