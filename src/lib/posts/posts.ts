@@ -1,18 +1,15 @@
-import { Post, Tag } from "@/types/post";
+import { Post, PostParser, Tag } from "@/types/post";
 import { slugs } from "@/types/slug";
-import { getPost } from "@/lib/posts/post";
-import { getPostsUsing } from "@/lib/posts/posts-with-parser";
 import { Pagination } from "@/types/pagination";
 import { generateTagSlug } from "../tags/tags";
+import fs from "fs";
+import path from "path";
+import matter from "gray-matter";
+import { getFrontmatterFrom } from "./frontmatter";
+import calculateReadingTime from "reading-time";
 
+const postsDirectory = path.join(process.cwd(), "src/content/posts");
 const postsPerPage = 7;
-
-export const generateFileNameFrom = (
-  year: string,
-  month: string,
-  day: string,
-  slug: string
-) => `${year}-${month}-${day}-${slug}`;
 
 const groupArrayBy: <T>(array: T[], numberPerGroup: number) => T[][] = (
   data,
@@ -31,6 +28,29 @@ const groupArrayBy: <T>(array: T[], numberPerGroup: number) => T[][] = (
  * POSTS
  */
 
+const getPost: PostParser = (fileName, extension) => {
+  const filePath = path.join(postsDirectory, `${fileName}${extension}`);
+  const fileContents = fs.readFileSync(filePath, "utf8");
+  const fileParsed = matter(fileContents);
+
+  return {
+    frontmatter: getFrontmatterFrom(fileParsed, fileName),
+    readingTime: calculateReadingTime(fileParsed.content),
+    fileName,
+    content: fileParsed.content,
+  };
+};
+
+const getPostsUsing = (parser: PostParser) => (): Post[] =>
+    fs  
+        .readdirSync(postsDirectory)
+        .map((fileName) => { 
+            const { name, ext } = path.parse(fileName);
+            return parser(name, ext);
+        })
+        .sort((a, b) => new Date(b.frontmatter.date.formatted).getTime() - new Date(a.frontmatter.date.formatted).getTime());
+
+
 export const getPosts: () => Post[] = getPostsUsing(getPost);
 
 export const getPostBy = (
@@ -40,7 +60,7 @@ export const getPostBy = (
   slug: string
 ): Post | undefined => {
   try {
-    const fileName = generateFileNameFrom(year, month, day, slug);
+    const fileName = `${year}-${month}-${day}-${slug}`;
     return getPost(fileName, ".mdx");
   } catch {
     return undefined;

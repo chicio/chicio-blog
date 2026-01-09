@@ -20,7 +20,7 @@ const withMDX = createMDX({
         },
       ],
       "rehype-highlight",
-      "rehype-katex",
+      ["rehype-katex", { strict: 'ignore' }],
       "@microflash/rehype-figure",
     ],
   },

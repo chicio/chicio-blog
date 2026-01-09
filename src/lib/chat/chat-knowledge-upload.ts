@@ -2,7 +2,7 @@ import { siteMetadata } from "@/types/site-metadata";
 import { upsert } from "./upstash-vector";
 import { VectorData } from "@/types/vector-data";
 import { Post } from "@/types/post";
-import { getSearchablePost } from "../posts/searchable-post";
+import { getPosts } from "../posts/posts";
 
 function chunkContent(content: string, maxChunkSize: number = 1000): string[] {
   const paragraphs = content.split("\n\n").filter((p) => p.trim());
@@ -57,7 +57,7 @@ const getTitlesArgs = () => {
 };
 
 const getPostWithTitles = (titlesToIndex: string[]) =>
-  getSearchablePost().filter((post) =>
+  getPosts().filter((post) =>
     titlesToIndex.includes(post.frontmatter.title)
   );
 
