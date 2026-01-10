@@ -1,6 +1,6 @@
 import { StandardInternalLinkWithTracking } from "@/components/design-system/atoms/links/standard-internal-link-with-tracking";
 import { PageTitle } from "@/components/design-system/molecules/typography/page-title";
-import { Post } from "@/types/content/post";
+import { Content } from "@/types/content/content";
 import { tracking } from "@/types/configuration/tracking";
 import { FC } from "react";
 import { ContentPageTemplate } from "../../../design-system/templates/content-page-template";
@@ -9,7 +9,7 @@ import { siteMetadata } from "@/types/configuration/site-metadata";
 
 export interface BlogGenericPostListPageProps {
   title: string;
-  posts: Post[];
+  posts: Content[];
   author: string;
   trackingCategory: string;
   keywords?: string[];

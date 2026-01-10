@@ -1,49 +1,175 @@
-import fs from "fs";
 import path from "path";
-import { Content } from "@/types/content/content";
+import fs from "fs";
 import { grayMatterContent } from "./gray-matter";
+import { Content } from "@/types/content/content";
+import { Slug } from "@/types/content/slug";
+import calculateReadingTime from "reading-time";
 
-const contentDirectory = path.join(process.cwd(), "src/content");
+const contentRootDirectory = path.join(process.cwd(), "src/content");
 const contentMdxFileName = "content.mdx";
 
-const findContentFiles = (dir: string, baseDir: string = dir): string[] => {
-    const entries = fs.readdirSync(dir, { withFileTypes: true });
-    const contentDirs: string[] = [];
+const detectRouteParams = (routePath: string): string[] => {
+  const params: string[] = [];
+  let currentPath = routePath;
 
-    for (const entry of entries) {
-        const fullPath = path.join(dir, entry.name);
+  while (fs.existsSync(currentPath)) {
+    const entries = fs.readdirSync(currentPath, { withFileTypes: true });
 
-        if (entry.isDirectory()) {
-            contentDirs.push(...findContentFiles(fullPath, baseDir));
-        } else if (entry.isFile() && entry.name === contentMdxFileName) {
-            const dirPath = path.relative(baseDir, dir);
-            contentDirs.push(dirPath);
-        }
+    if (entries.some((e) => e.isFile() && e.name === "page.tsx")) {
+      break;
     }
 
-    return contentDirs;
+    const nextDir = entries.find((e) => e.isDirectory());
+    
+    if (!nextDir) {
+      break;
+    }
+
+    const nextjsParameterPatternMatch = nextDir.name.match(/^\[([^\]]+)\]$/);
+
+    if (nextjsParameterPatternMatch) {
+      params.push(nextjsParameterPatternMatch[1]);
+    }
+
+    currentPath = path.join(currentPath, nextDir.name);
+  }
+
+  return params;
 };
 
-export const getContent = (): Content[] => {
-    const allContent: Content[] = [];
+const parseContentPath = (
+  routeParams: string[],
+  filePath: string,
+): Record<string, string> => {
+  const segments = filePath.split(path.sep).filter((s) => s.length > 0);
+  const params: Record<string, string> = {};
 
-    const contentDirs = fs.readdirSync(contentDirectory, { withFileTypes: true })
-        .filter(entry => entry.isDirectory() && entry.name !== 'posts')
-        .map(entry => entry.name);
+  for (let i = 0; i < routeParams.length && i < segments.length; i++) {
+    params[routeParams[i]] = segments[i];
+  }
 
-    for (const dir of contentDirs) {
-        const dirPath = path.join(contentDirectory, dir);
-        const contentPaths = findContentFiles(dirPath, contentDirectory);
+  return params;
+};
 
-        for (const relativeDirPath of contentPaths) {
-            const contentFilePath = path.join(contentDirectory, relativeDirPath, contentMdxFileName);
+const findAllContent = (contentDir: string, routeParams: string[]) => {
+  const specificContentDir = path.join(contentRootDirectory, contentDir);
+  const results: {
+    params: Record<string, string>;
+    fullPath: string;
+    relativePath: string;
+  }[] = [];
 
-            allContent.push({
-                frontmatter: grayMatterContent(contentFilePath).frontmatter,
-                slug: `/${relativeDirPath}`,
-            });
-        }
+  const scanDirectory = (currentPath: string) => {
+    if (!fs.existsSync(currentPath)) {
+      console.log(`Directory does not exist: ${currentPath}`);
+      return;
     }
 
-    return allContent;
+    const entries = fs.readdirSync(currentPath, {
+      withFileTypes: true,
+    });
+
+    for (const entry of entries) {
+      const fullPath = path.join(currentPath, entry.name);
+
+      if (entry.isDirectory()) {
+        scanDirectory(fullPath);
+      } else if (entry.isFile() && entry.name === contentMdxFileName) {
+        const relativePath = path.relative(
+          contentRootDirectory,
+          path.dirname(fullPath),
+        );
+        const pathForParams = path.relative(
+          specificContentDir,
+          path.dirname(fullPath),
+        );
+        const params = parseContentPath(routeParams, pathForParams);
+
+        results.push({
+          params,
+          fullPath,
+          relativePath,
+        });
+      }
+    }
+  };
+
+  scanDirectory(specificContentDir);
+
+  return results;
+};
+
+const getContentFilePathFrom = (
+  contentDir: string,
+  routeParams: string[],
+  params: Record<string, string>,
+): string => {
+  const specificContentDir = path.join(contentRootDirectory, contentDir);
+  const pathSegments = routeParams.map((param) => params[param]);
+
+  return path.join(specificContentDir, ...pathSegments, contentMdxFileName);
+};
+
+const generateSlugFrom = (
+  params: Record<string, string>,
+  urlBase: string,
+  routeParams: string[],
+): Slug => {
+  const pathSegments = routeParams
+    .map((routeParam) => params[routeParam])
+    .join("/");
+
+  return {
+    params,
+    formatted: `${urlBase}/${pathSegments}`,
+  };
+};
+
+export const getAllContentFor = (baseUrl: string): Content[] => {
+  const basePath = baseUrl.startsWith("/") ? baseUrl.slice(1) : baseUrl;
+  const routeParams = detectRouteParams(
+    path.join(process.cwd(), `src/app/${basePath}`),
+  );
+  const contents = findAllContent(basePath, routeParams);
+
+  return contents.map((item) => {
+    const { frontmatter, content } = grayMatterContent(item.fullPath);
+
+    return {
+      frontmatter,
+      slug: generateSlugFrom(item.params, baseUrl, routeParams),
+      readingTime: calculateReadingTime(content),
+      contentPath: item.relativePath,
+      content,
+    };
+  });
+};
+
+export const getSingleContentBy = (
+  baseUrl: string,
+  params: Record<string, string>,
+): Content | undefined => {
+  try {
+    const basePath = baseUrl.startsWith("/") ? baseUrl.slice(1) : baseUrl;
+    const routeParams = detectRouteParams(
+      path.join(process.cwd(), `src/app/${basePath}`),
+    );
+    const filePath = getContentFilePathFrom(basePath, routeParams, params);
+    const { frontmatter, content } = grayMatterContent(filePath);
+
+    const relativePath = path.relative(
+      contentRootDirectory,
+      path.dirname(filePath),
+    );
+
+    return {
+      frontmatter,
+      slug: generateSlugFrom(params, baseUrl, routeParams),
+      readingTime: calculateReadingTime(content),
+      contentPath: relativePath,
+      content,
+    };
+  } catch {
+    return undefined;
+  }
 };

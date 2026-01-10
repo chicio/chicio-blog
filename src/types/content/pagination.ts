@@ -1,8 +1,8 @@
-import { Post } from "./post";
+import { Content } from "./content";
 
  export type Pagination = {
-  launchPost: Post;
+  launchPost: Content;
   nextPageUrl: string | undefined;
-  postsGrouped: Post[][];
+  postsGrouped: Content[][];
   previousPageUrl: string | undefined;
 } 

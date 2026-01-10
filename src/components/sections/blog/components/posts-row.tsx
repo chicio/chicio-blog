@@ -1,11 +1,11 @@
 import {FC} from "react";
 import {tracking} from "@/types/configuration/tracking";
-import {Post} from "@/types/content/post";
+import {Content} from "@/types/content/content";
 import {PostsRowContainer} from "@/components/sections/blog/components/posts-row-container";
 import { PostCard } from "./post-card";
 
 interface PostsRowProps {
-  postsGroup: Post[];
+  postsGroup: Content[];
 }
 
 export const PostsRow: FC<PostsRowProps> = ({ postsGroup }) => (

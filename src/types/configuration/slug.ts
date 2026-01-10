@@ -16,8 +16,8 @@ export const slugs = {
   chat: "/chat",
   cookiePolicy: "/cookie-policy",
   dsa: {
+    roadmap: `${dsa}/roadmap`,
     timeAndSpaceComplexity: `${dsa}/time-and-space-complexity`,
-    roadmap: `${dsa}`,
     array: `${dsa}/array`,
     string: `${dsa}/string`,
     bitManipulation: `${dsa}/bit-manipulation`,

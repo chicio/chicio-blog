@@ -1,6 +1,6 @@
 import { ReadingContentPageTemplate } from "@/components/design-system/templates/reading-content-page-template";
 import { JsonLd } from "@/components/design-system/utils/components/jsond-ld";
-import { Post } from "@/types/content/post";
+import { Content } from "@/types/content/content";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { tracking } from "@/types/configuration/tracking";
 import { FC } from "react";
@@ -10,12 +10,12 @@ import { PostTags } from "./post-tags";
 import { RecentPosts } from "./read-next";
 
 interface PostProps {
-  post: Post;
+  post: Content;
 }
 
 export const BlogPostContent: FC<PostProps> = async ({ post }) => {
-  const { frontmatter, readingTime, fileName } = post;
-  const { default: PostContent } = await import(`@/content/posts/${fileName}.mdx`)
+  const { frontmatter, readingTime, contentPath } = post;
+  const { default: PostContent } = await import(`@/content/${contentPath}/content.mdx`)
 
   return (
     <>

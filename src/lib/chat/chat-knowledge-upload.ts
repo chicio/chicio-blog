@@ -1,7 +1,7 @@
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { upsert } from "./upstash-vector";
 import { VectorData } from "@/types/chat/vector-data";
-import { Post } from "@/types/content/post";
+import { Content } from "@/types/content/content";
 import { getPosts } from "../content/posts";
 
 function chunkContent(content: string, maxChunkSize: number = 1000): string[] {
@@ -61,7 +61,7 @@ const getPostWithTitles = (titlesToIndex: string[]) =>
     titlesToIndex.includes(post.frontmatter.title)
   );
 
-const getVectorPosts = (posts: Post[]) => {
+const getVectorPosts = (posts: Content[]) => {
   const vectorData: VectorData[] = [];
 
   for (const post of posts) {

@@ -5,28 +5,27 @@ import fs from "fs";
 import path from "path";
 import crypto from "crypto";
 import { getPosts } from "./posts";
-import { Post } from "@/types/content/post";
-import { getContent } from "@/lib/content/content";
 import { Content } from "@/types/content/content";
+import { getAllContentFor } from "@/lib/content/content";
 
 const CACHE_FILE = ".search-index-cache";
 const cachePath = path.join(process.cwd(), CACHE_FILE);
 
-const computeContentHash = (posts: Post[], content: Content[]): string => {
-  const postsSearchable = posts.map(post => ({
-    slug: post.slug.formatted,
-    title: post.frontmatter.title,
-    description: post.frontmatter.description,
-    tags: post.frontmatter.tags,
-    authors: post.frontmatter.authors.map(a => a.name),
+const computeContentHash = (contents: Content[]): string => {
+  const postsSearchable = contents.map(content => ({
+    slug: content.slug.formatted,
+    title: content.frontmatter.title,
+    description: content.frontmatter.description,
+    tags: content.frontmatter.tags,
+    authors: content.frontmatter.authors.map(a => a.name),
   }));
 
-  const contentSearchable = content.map(c => ({
-    slug: c.slug,
-    title: c.frontmatter.title,
-    description: c.frontmatter.description,
-    tags: c.frontmatter.tags,
-    authors: c.frontmatter.authors,
+  const contentSearchable = contents.map(content => ({
+    slug: content.slug,
+    title: content.frontmatter.title,
+    description: content.frontmatter.description,
+    tags: content.frontmatter.tags,
+    authors: content.frontmatter.authors.map(a => a.name),
   }));
 
   const allContent = [...postsSearchable, ...contentSearchable];
@@ -53,7 +52,7 @@ const saveCachedHash = (hash: string): void => {
   }
 };
 
-const createSearchIndex = (posts: Post[], content: Content[]) => {
+const createSearchIndex = (contents: Content[]) => {
   const index = elasticlunr<SearchablePostFields>(function () {
     this.addField("title");
     this.addField("description");
@@ -62,7 +61,7 @@ const createSearchIndex = (posts: Post[], content: Content[]) => {
     this.setRef("slug");
   });
 
-  posts.forEach((post) =>
+  contents.forEach((post) =>
     index.addDoc({
       slug: post.slug.formatted,
       title: post.frontmatter.title,
@@ -72,13 +71,13 @@ const createSearchIndex = (posts: Post[], content: Content[]) => {
     }),
   );
 
-  content.forEach((c) =>
+  contents.forEach((content) =>
     index.addDoc({
-      slug: c.slug,
-      title: c.frontmatter.title,
-      description: c.frontmatter.description,
-      tags: c.frontmatter.tags,
-      authors: c.frontmatter.authors.map((author) => author.name),
+      slug: content.slug.formatted,
+      title: content.frontmatter.title,
+      description: content.frontmatter.description,
+      tags: content.frontmatter.tags,
+      authors: content.frontmatter.authors.map((author) => author.name),
     }),
   );
 
@@ -89,12 +88,15 @@ const generateAndSaveSearchIndex = () => {
   try {
     console.log('🔍 Checking if search index needs regeneration...');
 
-    const posts = getPosts();
-    const content = getContent();
+    const searchableContent = [
+      ...getPosts(), 
+      ...getAllContentFor("about-me"), 
+      ...getAllContentFor("data-structures-and-algorithms")
+    ];
 
-    console.log(`📊 Content sources: ${posts.length} posts, ${content.length} other content items`);
+    console.log(`📊 Content sources: ${searchableContent.length} posts, ${searchableContent.length} other content items`);
 
-    const currentHash = computeContentHash(posts, content);
+    const currentHash = computeContentHash(searchableContent);
     const cachedHash = getCachedHash();
 
     if (cachedHash === currentHash) {
@@ -103,8 +105,8 @@ const generateAndSaveSearchIndex = () => {
     }
 
     console.log('🚀 Content changed. Starting search index creation...');
-    const index = createSearchIndex(posts, content);
-    console.log(`✅ Index created successfully with ${posts.length + content.length} items!`);
+    const index = createSearchIndex(searchableContent);
+    console.log(`✅ Index created successfully with ${searchableContent.length} items!`);
 
     console.log('🚀 Writing index to file...');
     const serializedIndex = JSON.stringify(index);

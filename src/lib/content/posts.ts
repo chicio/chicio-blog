@@ -1,19 +1,40 @@
-import { Post, PostSlug } from "@/types/content/post";
+import { Content } from "@/types/content/content";
 import { Tag } from "@/types/content/tag";
 import { slugs } from "@/types/configuration/slug";
 import { Pagination } from "@/types/content/pagination";
 import { generateTagSlug } from "../tags/tags";
-import fs from "fs";
-import path from "path";
-import { grayMatterContent } from "@/lib/content/gray-matter";
-import calculateReadingTime from "reading-time";
+import { getAllContentFor, getSingleContentBy } from "./content";
 
-const postsDirectory = path.join(process.cwd(), "src/content/posts");
+/**
+ * POSTS
+ */
+
+export const getPosts = (): Content[] =>
+  getAllContentFor(slugs.blog.blogPost).sort(
+    (post, anotherPost) =>
+      new Date(anotherPost.frontmatter.date.formatted).getTime() -
+      new Date(post.frontmatter.date.formatted).getTime(),
+  );
+
+export const getPostBy = (
+  params: Record<string, string>,
+): Content | undefined => {
+  try {
+    return getSingleContentBy(slugs.blog.blogPost, params);
+  } catch {
+    return undefined;
+  }
+};
+
+/**
+ * PAGINATION
+ */
+
 const postsPerPage = 7;
 
 const groupArrayBy: <T>(array: T[], numberPerGroup: number) => T[][] = (
   data,
-  n
+  n,
 ) => {
   const group = Array(0);
   for (let i = 0, j = 0; i < data.length; i += 1) {
@@ -24,68 +45,11 @@ const groupArrayBy: <T>(array: T[], numberPerGroup: number) => T[][] = (
   return group;
 };
 
-const generatePostSlugFrom = (filename: string): PostSlug => {
-  const [year, month, day, ...slug] = filename.split("-");
-  const text = slug.join("-");
-
-  return {
-    year,
-    month,
-    day,
-    text: text,
-    formatted: `${slugs.blog.blogPost}/${year}/${month}/${day}/${text}`,
-  };
-};
-
-/**
- * POSTS
- */
-
-const getPost = (fileName: string, extension: string): Post => {
-  const filePath = path.join(postsDirectory, `${fileName}${extension}`);
-  const { frontmatter, content } = grayMatterContent(filePath);
-
-  return {
-    frontmatter,
-    slug: generatePostSlugFrom(fileName),
-    readingTime: calculateReadingTime(content),
-    fileName,
-    content,
-  };
-};
-
-export const getPosts = (): Post[] =>
-    fs  
-        .readdirSync(postsDirectory)
-        .map((fileName) => { 
-            const { name, ext } = path.parse(fileName);
-            return getPost(name, ext);
-        })
-        .sort((a, b) => new Date(b.frontmatter.date.formatted).getTime() - new Date(a.frontmatter.date.formatted).getTime());
-
-export const getPostBy = (
-  year: string,
-  month: string,
-  day: string,
-  slug: string
-): Post | undefined => {
-  try {
-    const fileName = `${year}-${month}-${day}-${slug}`;
-    return getPost(fileName, ".mdx");
-  } catch {
-    return undefined;
-  }
-};
-
-/**
- * PAGINATION
- */
-
-export const getPostsTotalPages = (posts: Post[]) =>
+export const getPostsTotalPages = (posts: Content[]) =>
   Math.ceil(posts.length / postsPerPage);
 
 export const getPostsPaginationFor: (page: number) => Pagination | undefined = (
-  page: number
+  page: number,
 ) => {
   try {
     const posts = getPosts();
@@ -97,15 +61,17 @@ export const getPostsPaginationFor: (page: number) => Pagination | undefined = (
 
     const start = (page - 1) * postsPerPage;
     const paginatedPosts = posts.slice(start, start + postsPerPage);
-    const previousPageUrlSlug = page === 2 ? `${slugs.blog.home}` : `${slugs.blog.blogPostsPage}/${page - 1}`;
-    const previousPageUrl =
-      page > 1 ? previousPageUrlSlug : undefined;
+    const previousPageUrlSlug =
+      page === 2
+        ? `${slugs.blog.home}`
+        : `${slugs.blog.blogPostsPage}/${page - 1}`;
+    const previousPageUrl = page > 1 ? previousPageUrlSlug : undefined;
     const nextPageUrl =
       page < totalPages ? `${slugs.blog.blogPostsPage}/${page + 1}` : undefined;
 
     const postsGrouped = groupArrayBy(
       paginatedPosts.slice(1, paginatedPosts.length),
-      2
+      2,
     );
 
     return {
@@ -143,15 +109,15 @@ export const getTags = () => {
           slug: generateTagSlug(tag),
         });
       }
-    })
+    }),
   );
 
   return [...tags.values()].sort((a, b) =>
-    a.tagValue.toLowerCase() < b.tagValue.toLowerCase() ? -1 : 1
+    a.tagValue.toLowerCase() < b.tagValue.toLowerCase() ? -1 : 1,
   );
 };
 
-export const getPostsForTag: (tag: string) => Post[] = (tag: string) => {
+export const getPostsForTag: (tag: string) => Content[] = (tag: string) => {
   const posts = getPosts();
 
   return posts.filter((post) => post.frontmatter.tags.includes(tag));

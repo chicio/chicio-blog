@@ -1,13 +1,11 @@
-import { Author } from "@/types/content/author";
-
-export type ContentFrontmatter = {
-    title: string;
-    description: string;
-    tags: string[];
-    authors: Author[];
-};
+import { ReadTimeResults } from "reading-time";
+import { Frontmatter } from "./frontmatter";
+import { Slug } from "./slug";
 
 export type Content = {
-    frontmatter: ContentFrontmatter;
-    slug: string;
+  frontmatter: Frontmatter;
+  slug: Slug;
+  readingTime: ReadTimeResults;
+  contentPath: string;
+  content: string;
 };

@@ -5,7 +5,6 @@ import { BlogPostContent } from "@/components/sections/blog/components/blog-post
 import { getPostBy, getPosts } from "@/lib/content/posts";
 import { createMetadata } from "@/lib/seo/seo";
 import { NextPostParameters } from "@/types/next/page-parameters";
-import { Post } from "@/types/content/post";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -13,8 +12,8 @@ import { notFound } from "next/navigation";
 export async function generateMetadata({
   params,
 }: NextPostParameters): Promise<Metadata> {
-  const { year, month, day, slug } = await params;
-  const post = getPostBy(year, month, day, slug)!;
+  const receivedParameters = await params;
+  const post = getPostBy(receivedParameters)!;
   
   if (!post) {
     return {};
@@ -34,24 +33,12 @@ export async function generateMetadata({
 }
 
 export async function generateStaticParams() {
-  const posts: Post[] = getPosts();
-
-  return posts.map((post) => ({
-    year: post.slug.year,
-    month: post.slug.month,
-    day: post.slug.day,
-    slug: post.slug.text,
-  }));
+  return getPosts().map((post) => post.slug.params);
 }
 
 export default async function BlogPost({ params }: NextPostParameters) {
-  const { year, month, day, slug } = await params;
-  const post = getPostBy(
-    year,
-    month,
-    day,
-    slug,
-  );
+  const receivedParameters = await params;
+  const post = getPostBy(receivedParameters);
 
   if (!post) {
     notFound();
