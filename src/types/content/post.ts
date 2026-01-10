@@ -1,5 +1,6 @@
 import { ReadTimeResults } from "reading-time";
 import { ContentFrontmatter } from "@/types/content/content";
+import { Frontmatter } from "./frontmatter";
 
 export type Tag = {
   tagValue: string;
@@ -23,17 +24,10 @@ export type PostSlug = {
   formatted: string;
 };
 
-export type PostFrontMatter = ContentFrontmatter & {
-  date: PostDate;
-  image: string;
-};
-
 export type Post = {
-  frontmatter: PostFrontMatter;
+  frontmatter: Frontmatter;
   slug: PostSlug;
   readingTime: ReadTimeResults;
   fileName: string;
   content: string;
 };
-
-export type PostParser = (fileName: string, extension: string) => Post

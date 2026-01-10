@@ -1,17 +1,11 @@
-import { Post, PostParser, PostSlug, Tag } from "@/types/content/post";
+import { Post, PostSlug, Tag } from "@/types/content/post";
 import { slugs } from "@/types/slug";
 import { Pagination } from "@/types/pagination";
 import { generateTagSlug } from "../tags/tags";
 import fs from "fs";
 import path from "path";
-<<<<<<< Updated upstream
-import matter from "gray-matter";
-import { grayMatterPost } from "@/lib/content/gray-matter";
-=======
 import { grayMatterContent } from "@/lib/content/gray-matter";
->>>>>>> Stashed changes
 import calculateReadingTime from "reading-time";
-import { file } from "zod";
 
 const postsDirectory = path.join(process.cwd(), "src/content/posts");
 const postsPerPage = 7;
@@ -46,37 +40,27 @@ const generatePostSlugFrom = (filename: string): PostSlug => {
  * POSTS
  */
 
-const getPost: PostParser = (fileName, extension) => {
+const getPost = (fileName: string, extension: string): Post => {
   const filePath = path.join(postsDirectory, `${fileName}${extension}`);
-<<<<<<< Updated upstream
-  const fileContents = fs.readFileSync(filePath, "utf8");
-  const fileParsed = matter(fileContents);
-
-  const { frontmatter, content} = grayMatterPost(filePath);
-=======
   const { frontmatter, content } = grayMatterContent(filePath);
->>>>>>> Stashed changes
 
   return {
     frontmatter,
     slug: generatePostSlugFrom(fileName),
-    readingTime: calculateReadingTime(fileParsed.content),
+    readingTime: calculateReadingTime(content),
     fileName,
     content,
   };
 };
 
-const getPostsUsing = (parser: PostParser) => (): Post[] =>
+export const getPosts = (): Post[] =>
     fs  
         .readdirSync(postsDirectory)
         .map((fileName) => { 
             const { name, ext } = path.parse(fileName);
-            return parser(name, ext);
+            return getPost(name, ext);
         })
         .sort((a, b) => new Date(b.frontmatter.date.formatted).getTime() - new Date(a.frontmatter.date.formatted).getTime());
-
-
-export const getPosts: () => Post[] = getPostsUsing(getPost);
 
 export const getPostBy = (
   year: string,
