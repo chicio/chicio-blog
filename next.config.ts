@@ -8,7 +8,6 @@ const withMDX = createMDX({
       "remark-emoji",
       "remark-math",
       "remark-frontmatter",
-      "remark-mdx-frontmatter",
     ],
     rehypePlugins: [
       "rehype-slug",
