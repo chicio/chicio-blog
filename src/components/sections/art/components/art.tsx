@@ -1,6 +1,6 @@
 import { ContentPageTemplate } from "@/components/design-system/templates/content-page-template";
-import { siteMetadata } from "@/types/site-metadata";
-import { tracking } from "@/types/tracking";
+import { siteMetadata } from "@/types/configuration/site-metadata";
+import { tracking } from "@/types/configuration/tracking";
 import { ArtGallery } from "./art-gallery";
 import { ArtHeader } from "./art-header";
 

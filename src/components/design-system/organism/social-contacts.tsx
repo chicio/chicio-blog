@@ -9,8 +9,8 @@ import {
 } from "react-icons/bi";
 import { FaXTwitter } from "react-icons/fa6";
 import { FC } from "react";
-import { siteMetadata } from "@/types/site-metadata";
-import { tracking } from "@/types/tracking";
+import { siteMetadata } from "@/types/configuration/site-metadata";
+import { tracking } from "@/types/configuration/tracking";
 import { SocialContact } from "../molecules/buttons/social-contact";
 
 export interface SocialContactsProps {

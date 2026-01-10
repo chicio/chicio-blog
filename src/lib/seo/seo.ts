@@ -1,7 +1,7 @@
 import { authors } from "@/types/content/author";
 import { PostDate } from "@/types/content/post";
-import { siteMetadata, SiteMetadataSocialLinks} from "@/types/site-metadata";
-import { slugs } from "@/types/slug";
+import { siteMetadata, SiteMetadataSocialLinks} from "@/types/configuration/site-metadata";
+import { slugs } from "@/types/configuration/slug";
 import type {Metadata} from 'next'
 
 export type OgPageType = 'website' | 'article' | 'profile'

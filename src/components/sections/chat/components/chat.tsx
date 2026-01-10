@@ -5,7 +5,7 @@ import { ChatIcon } from "@/components/design-system/atoms/icons/chat-icon";
 import { ContentContainer } from "@/components/design-system/molecules/containers/content-container";
 import { MatrixHeaderBackground } from "@/components/design-system/molecules/effects/matrix-header-background";
 import { Menu } from "@/components/design-system/organism/menu";
-import { tracking } from "@/types/tracking";
+import { tracking } from "@/types/configuration/tracking";
 import { FC } from "react";
 import { GenericHeader } from "../../../design-system/organism/header/generic-header";
 import { useFabrizioChat } from "../hooks/useFabrizioChat";

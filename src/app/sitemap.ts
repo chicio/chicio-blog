@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getPosts, getPostsTotalPages, getTags } from "@/lib/content/posts";
-import { siteMetadata } from "@/types/site-metadata";
-import { slugs } from "@/types/slug";
+import { siteMetadata } from "@/types/configuration/site-metadata";
+import { slugs } from "@/types/configuration/slug";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const posts = getPosts();

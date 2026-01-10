@@ -1,5 +1,5 @@
 import { FC, ReactNode } from "react";
-import { TrackingElementProps } from "@/types/tracking";
+import { TrackingElementProps } from "@/types/configuration/tracking";
 import { trackWith } from "@/lib/tracking/tracking";
 import Link from "next/link";
 

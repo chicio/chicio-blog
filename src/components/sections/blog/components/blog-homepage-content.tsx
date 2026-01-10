@@ -1,12 +1,12 @@
 import { PaginationNavigation } from "@/components/design-system/molecules/buttons/pagination-navigation";
 import { ContentPageTemplate } from "@/components/design-system/templates/content-page-template";
 import { JsonLd } from "@/components/design-system/utils/components/jsond-ld";
-import { siteMetadata } from "@/types/site-metadata";
-import { tracking } from "@/types/tracking";
+import { siteMetadata } from "@/types/configuration/site-metadata";
+import { tracking } from "@/types/configuration/tracking";
 import { FC } from "react";
 import { PostCard } from "./post-card";
 import { PostsRow } from "./posts-row";
-import { Pagination } from "@/types/pagination";
+import { Pagination } from "@/types/content/pagination";
 
 interface BlogHomeProps {
   pagination: Pagination;

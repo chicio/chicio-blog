@@ -1,6 +1,6 @@
 import { Homepage } from "@/components/sections/home/components/homepage";
 import { createMetadata } from "@/lib/seo/seo";
-import { siteMetadata } from "@/types/site-metadata";
+import { siteMetadata } from "@/types/configuration/site-metadata";
 
 export const metadata = createMetadata({
   author: siteMetadata.author,

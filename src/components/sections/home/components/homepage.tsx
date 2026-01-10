@@ -7,8 +7,8 @@ import { JobsTimeline } from "@/components/sections/home/components/jobs-timelin
 import { ProfilePresentation } from "@/components/sections/home/components/profile-presentation";
 import { Projects } from "@/components/sections/home/components/projects";
 import { Technologies } from "@/components/sections/home/components/technologies";
-import { siteMetadata } from "@/types/site-metadata";
-import { tracking } from "@/types/tracking";
+import { siteMetadata } from "@/types/configuration/site-metadata";
+import { tracking } from "@/types/configuration/tracking";
 import { FC } from "react";
 
 export const Homepage: FC = () => {

@@ -2,7 +2,7 @@
 
 import { ProfilePhoto } from "@/components/design-system/organism/profile-photo";
 import { useGlassmorphism } from "@/components/design-system/utils/hooks/use-glassmorphism";
-import { siteMetadata } from "@/types/site-metadata";
+import { siteMetadata } from "@/types/configuration/site-metadata";
 
 export const AboutMePhoto = () => {
   const { glassmorphismClass } = useGlassmorphism();

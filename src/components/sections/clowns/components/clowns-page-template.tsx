@@ -2,8 +2,8 @@ import { MediaGrid } from "@/components/sections/clowns/components/media-grid";
 import { MatrixHeaderBackground } from "@/components/design-system/molecules/effects/matrix-header-background";
 import { GenericHeader } from "@/components/design-system/organism/header/generic-header";
 import { PageTemplate } from "@/components/design-system/templates/page-template";
-import { siteMetadata } from "@/types/site-metadata";
-import { tracking } from "@/types/tracking";
+import { siteMetadata } from "@/types/configuration/site-metadata";
+import { tracking } from "@/types/configuration/tracking";
 
 import { ClownSvgIcon } from "@/components/sections/clowns/components/clown-svg-icon";
 import { FC, PropsWithChildren } from "react";

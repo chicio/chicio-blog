@@ -2,7 +2,7 @@
 
 import { GlassmorphismBackground } from "@/components/design-system/atoms/effects/glassmorphism-background";
 import { SocialContacts } from "@/components/design-system/organism/social-contacts";
-import { tracking } from "@/types/tracking";
+import { tracking } from "@/types/configuration/tracking";
 import { motion, Variants } from "framer-motion";
 import { FC } from "react";
 import { ProfilePhoto } from "./profile-photo";

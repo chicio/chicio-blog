@@ -2,7 +2,7 @@ import {
   BluePillLink,
   RedPillLink,
 } from "@/components/design-system/molecules/links/pills-links";
-import { tracking } from "@/types/tracking";
+import { tracking } from "@/types/configuration/tracking";
 import { FC } from "react";
 
 interface CourseNavigationProps {

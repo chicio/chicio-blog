@@ -1,6 +1,6 @@
 "use client";
 
-import { slugs } from "@/types/slug";
+import { slugs } from "@/types/configuration/slug";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChatIcon } from "../../atoms/icons/chat-icon";

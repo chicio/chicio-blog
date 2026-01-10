@@ -1,6 +1,6 @@
 import { getPosts } from "@/lib/content/posts";
 import { authors } from "@/types/content/author";
-import { siteMetadata } from "@/types/site-metadata";
+import { siteMetadata } from "@/types/configuration/site-metadata";
 import { Feed } from "feed";
 
 export const dynamic = 'force-static';

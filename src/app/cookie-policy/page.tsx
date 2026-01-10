@@ -2,9 +2,9 @@ import { StandardExternalLinkWithTracking } from "@/components/design-system/ato
 import { PageTitle } from "@/components/design-system/molecules/typography/page-title";
 import { ContentPageTemplate } from "@/components/design-system/templates/content-page-template";
 import { createMetadata } from "@/lib/seo/seo";
-import { siteMetadata } from "@/types/site-metadata";
-import { slugs } from "@/types/slug";
-import { tracking } from "@/types/tracking";
+import { siteMetadata } from "@/types/configuration/site-metadata";
+import { slugs } from "@/types/configuration/slug";
+import { tracking } from "@/types/configuration/tracking";
 
 export const metadata = createMetadata({
   author: siteMetadata.author,

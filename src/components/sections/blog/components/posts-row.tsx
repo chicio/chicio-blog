@@ -1,5 +1,5 @@
 import {FC} from "react";
-import {tracking} from "@/types/tracking";
+import {tracking} from "@/types/configuration/tracking";
 import {Post} from "@/types/content/post";
 import {PostsRowContainer} from "@/components/sections/blog/components/posts-row-container";
 import { PostCard } from "./post-card";

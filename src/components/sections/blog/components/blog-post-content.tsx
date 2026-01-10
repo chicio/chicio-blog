@@ -1,8 +1,8 @@
 import { ReadingContentPageTemplate } from "@/components/design-system/templates/reading-content-page-template";
 import { JsonLd } from "@/components/design-system/utils/components/jsond-ld";
 import { Post } from "@/types/content/post";
-import { siteMetadata } from "@/types/site-metadata";
-import { tracking } from "@/types/tracking";
+import { siteMetadata } from "@/types/configuration/site-metadata";
+import { tracking } from "@/types/configuration/tracking";
 import { FC } from "react";
 import { PostAuthors } from "./post-authors";
 import { PostMeta } from "./post-meta";

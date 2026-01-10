@@ -1,6 +1,6 @@
 import { getPosts, getTags } from "@/lib/content/posts";
-import { siteMetadata } from "@/types/site-metadata";
-import { slugs } from "@/types/slug";
+import { siteMetadata } from "@/types/configuration/site-metadata";
+import { slugs } from "@/types/configuration/slug";
 
 export const dynamic = 'force-static';
 

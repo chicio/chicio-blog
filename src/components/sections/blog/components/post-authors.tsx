@@ -1,7 +1,7 @@
 import { ImageGlow } from "@/components/design-system/atoms/effects/image-glow";
 import { StandardExternalLinkWithTracking } from "@/components/design-system/atoms/links/standard-external-link-with-tracking";
 import { Author } from "@/types/content/author";
-import { tracking } from "@/types/tracking";
+import { tracking } from "@/types/configuration/tracking";
 import { FC } from "react";
 
 export interface PostAuthorsProps {

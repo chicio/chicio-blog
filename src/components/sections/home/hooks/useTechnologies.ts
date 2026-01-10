@@ -1,4 +1,4 @@
-import { technologies, Technology } from "@/types/technology";
+import { technologies, Technology } from "@/types/home/technology";
 
 export const useTechnologies = () => {
   const groupedTechnologies = technologies.reduce((acc, tech) => {

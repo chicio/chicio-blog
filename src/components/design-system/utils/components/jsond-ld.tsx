@@ -1,6 +1,6 @@
 import { createStructuredData, JsonLdType } from "@/lib/seo/seo";
 import { PostDate } from "@/types/content/post";
-import { siteMetadata, SiteMetadataSocialLinks } from "@/types/site-metadata";
+import { siteMetadata, SiteMetadataSocialLinks } from "@/types/configuration/site-metadata";
 import { FC } from "react"
 
 type JsonLdProps = {

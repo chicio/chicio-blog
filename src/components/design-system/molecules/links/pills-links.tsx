@@ -1,6 +1,6 @@
 "use client";
 
-import { TrackingData } from "@/types/tracking";
+import { TrackingData } from "@/types/configuration/tracking";
 import { FC, PropsWithChildren } from "react";
 import { BluePill, RedPill } from "../../atoms/effects/pills";
 import { StandardInternalLinkWithTracking } from "../../atoms/links/standard-internal-link-with-tracking";

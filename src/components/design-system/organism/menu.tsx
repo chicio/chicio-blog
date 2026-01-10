@@ -9,8 +9,8 @@ import {
   NeoRoomEasterEgg,
   whiteRabbitEasterEgg,
 } from "@/components/sections/easter-eggs/white-rabbit";
-import { slugs } from "@/types/slug";
-import { tracking } from "@/types/tracking";
+import { slugs } from "@/types/configuration/slug";
+import { tracking } from "@/types/configuration/tracking";
 import { AnimatePresence, motion, Variants } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { FC, useState } from "react";

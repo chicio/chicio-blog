@@ -1,4 +1,4 @@
-import { VectorData } from '@/types/vector-data'
+import { VectorData } from '@/types/chat/vector-data'
 import { Index } from '@upstash/vector'
 
 export const index = new Index({

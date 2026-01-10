@@ -1,6 +1,6 @@
 "use client";
 
-import { MatrixRainDrawContext } from "@/types/matrix-rain";
+import { MatrixRainDrawContext } from "@/types/effects/matrix-rain";
 import React, { memo, useEffect, useRef, useState } from "react";
 import { useReducedMotions } from "../../utils/hooks/use-reduced-motions";
 import { debounce } from "@/lib/debounce/debounce";

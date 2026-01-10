@@ -1,7 +1,7 @@
 "use client";
 
 import { trackWith } from "@/lib/tracking/tracking";
-import { TrackingElementProps } from "@/types/tracking";
+import { TrackingElementProps } from "@/types/configuration/tracking";
 import { FC, ReactNode } from "react";
 
 type StandardExternalLinkWithTrackingProps = TrackingElementProps & {

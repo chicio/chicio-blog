@@ -1,8 +1,8 @@
 import { DsaPage } from "@/components/sections/dsa/components/dsa-page";
 import TwoPointers from "../../../content/data-structures-and-algorithms/two-pointers/content.mdx";
-import { slugs } from "@/types/slug";
+import { slugs } from "@/types/configuration/slug";
 import { createMetadata } from "@/lib/seo/seo";
-import { siteMetadata } from "@/types/site-metadata";
+import { siteMetadata } from "@/types/configuration/site-metadata";
 
 export const metadata = createMetadata({
   author: siteMetadata.author,

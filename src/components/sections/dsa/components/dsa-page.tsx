@@ -2,8 +2,8 @@ import "highlight.js/styles/tokyo-night-dark.css";
 import "katex/dist/katex.min.css";
 
 import { ReadingContentPageTemplate } from "@/components/design-system/templates/reading-content-page-template";
-import { siteMetadata } from "@/types/site-metadata";
-import { tracking } from "@/types/tracking";
+import { siteMetadata } from "@/types/configuration/site-metadata";
+import { tracking } from "@/types/configuration/tracking";
 import { FC, PropsWithChildren } from "react";
 import { CourseNavigation } from "./course-navigation";
 import { JsonLd } from "@/components/design-system/utils/components/jsond-ld";

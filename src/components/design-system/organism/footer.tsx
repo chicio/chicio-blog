@@ -1,7 +1,7 @@
 "use client";
 
-import { slugs } from "@/types/slug";
-import { tracking } from "@/types/tracking";
+import { slugs } from "@/types/configuration/slug";
+import { tracking } from "@/types/configuration/tracking";
 import { FC } from "react";
 import { MenuItemWithTracking } from "../molecules/menu/menu-item-with-tracking";
 import { SocialContacts } from "./social-contacts";

@@ -1,6 +1,6 @@
 import { Post, PostSlug, Tag } from "@/types/content/post";
-import { slugs } from "@/types/slug";
-import { Pagination } from "@/types/pagination";
+import { slugs } from "@/types/configuration/slug";
+import { Pagination } from "@/types/content/pagination";
 import { generateTagSlug } from "../tags/tags";
 import fs from "fs";
 import path from "path";

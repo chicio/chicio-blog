@@ -1,4 +1,4 @@
-import { Technology } from "@/types/technology";
+import { Technology } from "@/types/home/technology";
 import { motion, Variants } from "framer-motion";
 import Image from "next/image";
 import { FC } from "react";

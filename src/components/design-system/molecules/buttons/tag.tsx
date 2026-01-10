@@ -1,5 +1,5 @@
 import { StandardInternalLinkWithTracking } from "@/components/design-system/atoms/links/standard-internal-link-with-tracking";
-import { tracking } from "@/types/tracking";
+import { tracking } from "@/types/configuration/tracking";
 import { FC } from "react";
 
 interface TagContentProps {

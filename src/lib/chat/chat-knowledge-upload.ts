@@ -1,6 +1,6 @@
-import { siteMetadata } from "@/types/site-metadata";
+import { siteMetadata } from "@/types/configuration/site-metadata";
 import { upsert } from "./upstash-vector";
-import { VectorData } from "@/types/vector-data";
+import { VectorData } from "@/types/chat/vector-data";
 import { Post } from "@/types/content/post";
 import { getPosts } from "../content/posts";
 

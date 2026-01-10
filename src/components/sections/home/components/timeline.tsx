@@ -1,7 +1,7 @@
 "use client";
 
 import { StandardExternalLinkWithTracking } from "@/components/design-system/atoms/links/standard-external-link-with-tracking";
-import { tracking } from "@/types/tracking";
+import { tracking } from "@/types/configuration/tracking";
 import { motion, Variants } from "framer-motion";
 import Image from "next/image";
 import { FC } from "react";

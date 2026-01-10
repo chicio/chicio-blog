@@ -1,4 +1,4 @@
-import { Post } from "./content/post";
+import { Post } from "./post";
 
  export type Pagination = {
   launchPost: Post;

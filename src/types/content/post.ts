@@ -9,13 +9,6 @@ export type Tag = {
   slug: string;
 };
 
-export type PostDate = {
-  year: number;
-  month: number;
-  day: number;
-  formatted: string;
-};
-
 export type PostSlug = {
   year: string;
   month: string;

@@ -1,4 +1,4 @@
-import { TrackingData } from "@/types/tracking";
+import { TrackingData } from "@/types/configuration/tracking";
 import { AnimatePresence } from "framer-motion";
 import { FC, useEffect, useRef, useState } from "react";
 import { BiChevronDown } from "react-icons/bi";

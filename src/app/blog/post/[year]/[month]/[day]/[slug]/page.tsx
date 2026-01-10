@@ -4,9 +4,9 @@ import "katex/dist/katex.min.css";
 import { BlogPostContent } from "@/components/sections/blog/components/blog-post-content";
 import { getPostBy, getPosts } from "@/lib/content/posts";
 import { createMetadata } from "@/lib/seo/seo";
-import { NextPostParameters } from "@/types/page-parameters";
+import { NextPostParameters } from "@/types/next/page-parameters";
 import { Post } from "@/types/content/post";
-import { siteMetadata } from "@/types/site-metadata";
+import { siteMetadata } from "@/types/configuration/site-metadata";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 

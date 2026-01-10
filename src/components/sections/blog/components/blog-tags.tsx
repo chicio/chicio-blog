@@ -1,7 +1,7 @@
 import { PageTitle } from "@/components/design-system/molecules/typography/page-title";
 import { JsonLd } from "@/components/design-system/utils/components/jsond-ld";
-import { siteMetadata } from "@/types/site-metadata";
-import { tracking } from "@/types/tracking";
+import { siteMetadata } from "@/types/configuration/site-metadata";
+import { tracking } from "@/types/configuration/tracking";
 import { ContentPageTemplate } from "../../../design-system/templates/content-page-template";
 import { FC } from "react";
 import { Tag } from "@/types/content/post";

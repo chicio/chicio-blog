@@ -5,9 +5,9 @@ import {
   getPostsTotalPages,
 } from "@/lib/content/posts";
 import { createMetadata } from "@/lib/seo/seo";
-import { NextPostPaginationParameters } from "@/types/page-parameters";
-import { siteMetadata } from "@/types/site-metadata";
-import { slugs } from "@/types/slug";
+import { NextPostPaginationParameters } from "@/types/next/page-parameters";
+import { siteMetadata } from "@/types/configuration/site-metadata";
+import { slugs } from "@/types/configuration/slug";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 

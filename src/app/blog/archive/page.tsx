@@ -1,8 +1,8 @@
-import { siteMetadata } from "@/types/site-metadata";
-import { tracking } from "@/types/tracking";
+import { siteMetadata } from "@/types/configuration/site-metadata";
+import { tracking } from "@/types/configuration/tracking";
 import { getPosts } from "@/lib/content/posts";
 import { BlogGenericPostListPageTemplate } from "@/components/sections/blog/components/blog-generic-post-list-page-template";
-import { slugs } from "@/types/slug";
+import { slugs } from "@/types/configuration/slug";
 import { Metadata } from "next";
 import { createMetadata } from "@/lib/seo/seo";
 

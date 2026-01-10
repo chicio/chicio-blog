@@ -1,7 +1,7 @@
 "use client";
 
-import { SearchablePostFields } from "@/types/search";
-import { tracking } from "@/types/tracking";
+import { SearchablePostFields } from "@/types/search/search";
+import { tracking } from "@/types/configuration/tracking";
 import { ChangeEvent, FC, useRef } from "react";
 import { BiSearchAlt } from "react-icons/bi";
 import { StandardInternalLinkWithTracking } from "../../atoms/links/standard-internal-link-with-tracking";

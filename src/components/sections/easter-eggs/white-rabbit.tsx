@@ -1,6 +1,6 @@
 import { RedPillButton } from "@/components/design-system/molecules/buttons/pills-buttons";
 import { MatrixTerminal } from "@/components/design-system/molecules/effects/matrix-terminal";
-import { EasterEggSearchResult, EasterEggTerminalLines } from "@/types/search";
+import { EasterEggSearchResult, EasterEggTerminalLines } from "@/types/search/search";
 import { FC, useState } from "react";
 import { CenterContainer } from "./center-container";
 

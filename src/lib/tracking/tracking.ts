@@ -1,5 +1,5 @@
 import { hasConsented } from "@/lib/consents/consents";
-import { TrackingData, TrackingPayload } from "@/types/tracking";
+import { TrackingData, TrackingPayload } from "@/types/configuration/tracking";
 import { sendGAEvent } from "@next/third-parties/google";
 
 export const trackWith = (tracking: TrackingData) => {

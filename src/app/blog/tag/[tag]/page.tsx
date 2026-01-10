@@ -1,7 +1,7 @@
-import { siteMetadata } from "@/types/site-metadata";
-import { tracking } from "@/types/tracking";
+import { siteMetadata } from "@/types/configuration/site-metadata";
+import { tracking } from "@/types/configuration/tracking";
 import {getPostsForTag, getTags} from "@/lib/content/posts";
-import { NextTagParameters } from "@/types/page-parameters";
+import { NextTagParameters } from "@/types/next/page-parameters";
 import {Metadata} from "next";
 import {createMetadata} from "@/lib/seo/seo";
 import { BlogGenericPostListPageTemplate } from "@/components/sections/blog/components/blog-generic-post-list-page-template";

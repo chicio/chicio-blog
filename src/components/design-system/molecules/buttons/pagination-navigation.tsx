@@ -1,4 +1,4 @@
-import { tracking } from "@/types/tracking";
+import { tracking } from "@/types/configuration/tracking";
 import { FC } from "react";
 import { BluePillLink, RedPillLink } from "../links/pills-links";
 

@@ -1,5 +1,5 @@
 import { searchIndexFileName } from "@/lib/content/search-filename";
-import { SearchablePostFields } from "@/types/search";
+import { SearchablePostFields } from "@/types/search/search";
 import elasticlunr from "elasticlunr";
 import fs from "fs";
 import path from "path";
