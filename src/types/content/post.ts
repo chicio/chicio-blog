@@ -35,5 +35,3 @@ export type Post = {
   fileName: string;
   content: string;
 };
-
-export type PostParser = (fileName: string, extension: string) => Post

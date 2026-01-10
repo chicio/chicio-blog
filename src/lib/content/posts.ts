@@ -1,20 +1,18 @@
-import { Post, PostParser, PostSlug, Tag } from "@/types/content/post";
+import { Post, PostSlug, Tag } from "@/types/content/post";
 import { slugs } from "@/types/slug";
 import { Pagination } from "@/types/pagination";
 import { generateTagSlug } from "../tags/tags";
 import fs from "fs";
 import path from "path";
-import matter from "gray-matter";
 import { grayMatterPost } from "@/lib/content/gray-matter";
 import calculateReadingTime from "reading-time";
-import { file } from "zod";
 
 const postsDirectory = path.join(process.cwd(), "src/content/posts");
 const postsPerPage = 7;
 
 const groupArrayBy: <T>(array: T[], numberPerGroup: number) => T[][] = (
   data,
-  n
+  n,
 ) => {
   const group = Array(0);
   for (let i = 0, j = 0; i < data.length; i += 1) {
@@ -42,39 +40,37 @@ const generatePostSlugFrom = (filename: string): PostSlug => {
  * POSTS
  */
 
-const getPost: PostParser = (fileName, extension) => {
+const getPost = (fileName: string, extension: string): Post => {
   const filePath = path.join(postsDirectory, `${fileName}${extension}`);
-  const fileContents = fs.readFileSync(filePath, "utf8");
-  const fileParsed = matter(fileContents);
-
-  const { frontmatter, content} = grayMatterPost(filePath);
+  const { frontmatter, content } = grayMatterPost(filePath);
 
   return {
     frontmatter,
     slug: generatePostSlugFrom(fileName),
-    readingTime: calculateReadingTime(fileParsed.content),
+    readingTime: calculateReadingTime(content),
     fileName,
     content,
   };
 };
 
-const getPostsUsing = (parser: PostParser) => (): Post[] =>
-    fs  
-        .readdirSync(postsDirectory)
-        .map((fileName) => { 
-            const { name, ext } = path.parse(fileName);
-            return parser(name, ext);
-        })
-        .sort((a, b) => new Date(b.frontmatter.date.formatted).getTime() - new Date(a.frontmatter.date.formatted).getTime());
-
-
-export const getPosts: () => Post[] = getPostsUsing(getPost);
+export const getPosts = (): Post[] =>
+  fs
+    .readdirSync(postsDirectory)
+    .map((fileName) => {
+      const { name, ext } = path.parse(fileName);
+      return getPost(name, ext);
+    })
+    .sort(
+      (a, b) =>
+        new Date(b.frontmatter.date.formatted).getTime() -
+        new Date(a.frontmatter.date.formatted).getTime(),
+    );
 
 export const getPostBy = (
   year: string,
   month: string,
   day: string,
-  slug: string
+  slug: string,
 ): Post | undefined => {
   try {
     const fileName = `${year}-${month}-${day}-${slug}`;
@@ -92,7 +88,7 @@ export const getPostsTotalPages = (posts: Post[]) =>
   Math.ceil(posts.length / postsPerPage);
 
 export const getPostsPaginationFor: (page: number) => Pagination | undefined = (
-  page: number
+  page: number,
 ) => {
   try {
     const posts = getPosts();
@@ -104,15 +100,17 @@ export const getPostsPaginationFor: (page: number) => Pagination | undefined = (
 
     const start = (page - 1) * postsPerPage;
     const paginatedPosts = posts.slice(start, start + postsPerPage);
-    const previousPageUrlSlug = page === 2 ? `${slugs.blog.home}` : `${slugs.blog.blogPostsPage}/${page - 1}`;
-    const previousPageUrl =
-      page > 1 ? previousPageUrlSlug : undefined;
+    const previousPageUrlSlug =
+      page === 2
+        ? `${slugs.blog.home}`
+        : `${slugs.blog.blogPostsPage}/${page - 1}`;
+    const previousPageUrl = page > 1 ? previousPageUrlSlug : undefined;
     const nextPageUrl =
       page < totalPages ? `${slugs.blog.blogPostsPage}/${page + 1}` : undefined;
 
     const postsGrouped = groupArrayBy(
       paginatedPosts.slice(1, paginatedPosts.length),
-      2
+      2,
     );
 
     return {
@@ -150,11 +148,11 @@ export const getTags = () => {
           slug: generateTagSlug(tag),
         });
       }
-    })
+    }),
   );
 
   return [...tags.values()].sort((a, b) =>
-    a.tagValue.toLowerCase() < b.tagValue.toLowerCase() ? -1 : 1
+    a.tagValue.toLowerCase() < b.tagValue.toLowerCase() ? -1 : 1,
   );
 };
 
