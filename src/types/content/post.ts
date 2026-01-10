@@ -1,13 +1,6 @@
 import { ReadTimeResults } from "reading-time";
 import { Frontmatter } from "./frontmatter";
 
-export type Tag = {
-  tagValue: string;
-  count: number;
-  tagSlugText: string;
-  slug: string;
-};
-
 export type PostSlug = {
   year: string;
   month: string;

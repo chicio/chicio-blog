@@ -4,7 +4,7 @@ import { siteMetadata } from "@/types/configuration/site-metadata";
 import { tracking } from "@/types/configuration/tracking";
 import { ContentPageTemplate } from "../../../design-system/templates/content-page-template";
 import { FC } from "react";
-import { Tag } from "@/types/content/post";
+import { Tag } from "@/types/content/tag";
 import { Tag as TagItem } from "@/components/design-system/molecules/buttons/tag";
 
 interface BlogTagsProps {

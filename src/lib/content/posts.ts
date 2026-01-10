@@ -1,4 +1,5 @@
-import { Post, PostSlug, Tag } from "@/types/content/post";
+import { Post, PostSlug } from "@/types/content/post";
+import { Tag } from "@/types/content/tag";
 import { slugs } from "@/types/configuration/slug";
 import { Pagination } from "@/types/content/pagination";
 import { generateTagSlug } from "../tags/tags";
