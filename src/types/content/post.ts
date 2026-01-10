@@ -1,5 +1,4 @@
 import { ReadTimeResults } from "reading-time";
-import { ContentFrontmatter } from "@/types/content/content";
 import { Frontmatter } from "./frontmatter";
 
 export type Tag = {

@@ -1,8 +1,8 @@
 import { authors } from "@/types/content/author";
-import { PostDate } from "@/types/content/post";
 import { siteMetadata, SiteMetadataSocialLinks} from "@/types/configuration/site-metadata";
 import { slugs } from "@/types/configuration/slug";
 import type {Metadata} from 'next'
+import { PublishDate } from "@/types/content/frontmatter";
 
 export type OgPageType = 'website' | 'article' | 'profile'
 
@@ -93,7 +93,7 @@ const jsonLdIds: Partial<Record<JsonLdType, string>> = {
     'Blog': `${siteMetadata.siteUrl}/#blog`,
 };
 
-const formattedDate = (date: PostDate): string => 
+const formattedDate = (date: PublishDate): string => 
     `${date.year}-${String(date.month).padStart(2, "0")}-${String(date.day).padStart(2, "0")}T00:00:00+00:00`;
 
 export function createStructuredData({
@@ -115,7 +115,7 @@ export function createStructuredData({
     links: SiteMetadataSocialLinks
     keywords?: string[]
     description?: string
-    date?: PostDate
+    date?: PublishDate
 }) {
     const jsonLd = {
         '@context': 'https://schema.org',

@@ -1,6 +1,6 @@
 import { Author } from "@/types/content/author";
 
-interface PublishDate {
+export interface PublishDate {
   year: number;
   month: number;
   day: number;

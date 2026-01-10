@@ -1,11 +1,11 @@
 import { StaticImageData } from "next/image";
-import lastminuteImage from "../../public/images/carrier/lastminute-group.png";
-import unimibImage from "../../public/images/carrier/unimib.jpg";
-import condenastImage from "../../public/images/carrier/condenast.png";
-import shiImage from "../../public/images/carrier/shi.png";
-import bottinelliImage from "../../public/images/carrier/bottinelli-informatica.png";
-import avanadeImage from "../../public/images/carrier/avanade.png";
-import insubriaImage from "../../public/images/carrier/insubria.png";
+import lastminuteImage from "../../../public/images/carrier/lastminute-group.png";
+import unimibImage from "../../../public/images/carrier/unimib.jpg";
+import condenastImage from "../../../public/images/carrier/condenast.png";
+import shiImage from "../../../public/images/carrier/shi.png";
+import bottinelliImage from "../../../public/images/carrier/bottinelli-informatica.png";
+import avanadeImage from "../../../public/images/carrier/avanade.png";
+import insubriaImage from "../../../public/images/carrier/insubria.png";
 
 export interface TimelineItemData {
   id: string;

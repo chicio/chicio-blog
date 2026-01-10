@@ -1,6 +1,6 @@
 "use client";
 
-import { projects } from "@/types/projects";
+import { projects } from "@/types/home/projects";
 import { motion, stagger, Variants } from "framer-motion";
 import { FC } from "react";
 import { ProjectCard } from "./project-card";

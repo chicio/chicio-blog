@@ -1,6 +1,6 @@
 import { createStructuredData, JsonLdType } from "@/lib/seo/seo";
-import { PostDate } from "@/types/content/post";
 import { siteMetadata, SiteMetadataSocialLinks } from "@/types/configuration/site-metadata";
+import { PublishDate } from "@/types/content/frontmatter";
 import { FC } from "react"
 
 type JsonLdProps = {
@@ -10,7 +10,7 @@ type JsonLdProps = {
     title: string;
     keywords?: string[];
     description?: string;
-    date?: PostDate;
+    date?: PublishDate;
 }
 
 export const JsonLd: FC<JsonLdProps> = ({type, url, imageUrl, title, date, description, keywords}) => (
