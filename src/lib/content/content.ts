@@ -147,14 +147,15 @@ export const getAllContentFor = (baseUrl: string): Content[] => {
 
 export const getSingleContentBy = (
   baseUrl: string,
-  params: Record<string, string>,
+  params?: Record<string, string>,
 ): Content | undefined => {
+  const sanitizedParams = params || {};
   try {
     const basePath = baseUrl.startsWith("/") ? baseUrl.slice(1) : baseUrl;
     const routeParams = detectRouteParams(
       path.join(process.cwd(), `src/app/${basePath}`),
     );
-    const filePath = getContentFilePathFrom(basePath, routeParams, params);
+    const filePath = getContentFilePathFrom(basePath, routeParams, sanitizedParams);
     const { frontmatter, content } = grayMatterContent(filePath);
 
     const relativePath = path.relative(
@@ -164,7 +165,7 @@ export const getSingleContentBy = (
 
     return {
       frontmatter,
-      slug: generateSlugFrom(params, baseUrl, routeParams),
+      slug: generateSlugFrom(sanitizedParams, baseUrl, routeParams),
       readingTime: calculateReadingTime(content),
       contentPath: relativePath,
       content,

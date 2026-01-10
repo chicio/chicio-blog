@@ -1,14 +1,12 @@
 import type { MetadataRoute } from "next";
-import { getPosts, getPostsTotalPages, getTags } from "@/lib/content/posts";
+import { getPostsTotalPages, getTags } from "@/lib/content/posts";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { slugs } from "@/types/configuration/slug";
+import { getIndexableContent } from "@/lib/content/indexable-content";
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const posts = getPosts();
-  const tags = getTags();
-  const totalPages = getPostsTotalPages(posts);
+const getPostListPages = (defaultImage: string[]) => {
+  const totalPages = getPostsTotalPages();
   const blogPaginationPages: MetadataRoute.Sitemap = [];
-  const defaultImage = [`${siteMetadata.siteUrl}${siteMetadata.featuredImage}`];
 
   for (let i = 1; i <= totalPages; i++) {
     blogPaginationPages.push({
@@ -20,16 +18,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     });
   }
 
+  return blogPaginationPages;
+};
+
+export default function sitemap(): MetadataRoute.Sitemap {
+  const defaultImage = [`${siteMetadata.siteUrl}${siteMetadata.featuredImage}`];
+
   return [
     {
       url: siteMetadata.siteUrl,
-      lastModified: new Date(),
-      changeFrequency: "yearly",
-      priority: 1,
-      images: defaultImage,
-    },
-    {
-      url: `${siteMetadata.siteUrl}${slugs.aboutMe}`,
       lastModified: new Date(),
       changeFrequency: "yearly",
       priority: 1,
@@ -42,7 +39,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
       images: defaultImage,
     },
-    ...blogPaginationPages,
+    ...getPostListPages(defaultImage),
     {
       url: `${siteMetadata.siteUrl}${slugs.blog.blogArchive}`,
       lastModified: new Date(),
@@ -50,12 +47,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
       images: [`${siteMetadata.siteUrl}${siteMetadata.featuredImage}`],
     },
-    ...posts.map((post) => ({
-      url: `${siteMetadata.siteUrl}${post.slug.formatted}`,
-      lastModified: new Date(post.frontmatter.date.formatted),
-      priority: 1,
-      images: [`${siteMetadata.siteUrl}${post.frontmatter.image}`],
-    })),
     {
       url: `${siteMetadata.siteUrl}${slugs.blog.tags}`,
       lastModified: new Date(),
@@ -63,7 +54,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
       images: defaultImage,
     },
-    ...tags.map((tag) => ({
+    ...getTags().map((tag) => ({
       url: `${siteMetadata.siteUrl}${tag.slug}`,
       lastModified: new Date(),
       priority: 1,
@@ -76,12 +67,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
       images: [`${siteMetadata.siteUrl}${siteMetadata.featuredArtImage}`],
     },
-    ...Object.values(slugs.dsa).map((key) => ({
-      url: `${siteMetadata.siteUrl}${key}`,
-      lastModified: new Date(),
-      changeFrequency: "yearly",
+    ...getIndexableContent().map((content) => ({
+      url: `${siteMetadata.siteUrl}${content.slug.formatted}`,
+      lastModified: new Date(content.frontmatter.date.formatted),
       priority: 1,
-      images: defaultImage,
-    }))
+      images: [`${siteMetadata.siteUrl}${content.frontmatter.image}`],
+    })),
   ];
 }

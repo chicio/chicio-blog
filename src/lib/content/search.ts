@@ -7,6 +7,9 @@ import crypto from "crypto";
 import { getPosts } from "./posts";
 import { Content } from "@/types/content/content";
 import { getAllContentFor } from "@/lib/content/content";
+import { getAllDataStructuresAndAlgorithmsTopics, getDataStructuresAndAlgorithmsRoadmap } from "./data-structures-and-algorithms";
+import { getAboutMe } from "./about-me";
+import { getIndexableContent } from "./indexable-content";
 
 const CACHE_FILE = ".search-index-cache";
 const cachePath = path.join(process.cwd(), CACHE_FILE);
@@ -88,11 +91,7 @@ const generateAndSaveSearchIndex = () => {
   try {
     console.log('🔍 Checking if search index needs regeneration...');
 
-    const searchableContent = [
-      ...getPosts(), 
-      ...getAllContentFor("about-me"), 
-      ...getAllContentFor("data-structures-and-algorithms")
-    ];
+    const searchableContent = getIndexableContent();
 
     console.log(`📊 Content sources: ${searchableContent.length} posts, ${searchableContent.length} other content items`);
 

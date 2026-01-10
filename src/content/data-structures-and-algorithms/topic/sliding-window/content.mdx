@@ -1,0 +1,222 @@
+---
+title: "Sliding Window"
+description: "The Sliding Window pattern transforms O(n²) problems into O(n) solutions by maintaining a window over data and adjusting it incrementally."
+date: 2025-10-02
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [sliding window, data structures, algorithms]
+authors: [fabrizio_duroni]
+---
+
+# Sliding Window
+
+The **Sliding Window** pattern is one of the most powerful techniques in algorithmic problem-solving.  
+It transforms problems that would normally require **O(n²)** brute-force solutions into clean, efficient **O(n)** approaches by maintaining a “window” 
+over a portion of the data and adjusting it as you process the input.
+
+At its core, a sliding window lets you examine **contiguous segments** of an array or string without recomputing information from scratch every time.  
+Instead of restarting from zero for each possible subarray or substring, you *reuse* previous computations and update the window incrementally.
+
+Sliding window is ideal when the problem involves:
+
+- **Contiguous subarrays / substrings**
+- **Finding a best window** (max/min length, max/min sum, longest/shortest segment)
+- **Counting or matching patterns within a range**
+- **Maintaining a constraint** (e.g., “at most K zeros”, “all frequencies match”, “no repeated characters”)
+
+If the problem involves checking or optimizing a **continuous segment** of a sequence, sliding window is often the correct approach.
+Look for these signals in the problem statement:
+
+- “Find the *longest/shortest* substring/subarray where…”
+- “Find a window of size *k*…”
+- “Count subarrays where the sum/average/number of distinct elements satisfies…”
+- “Return all substrings that match a pattern…”
+- “Find the minimum window that contains all characters…”
+
+If the word **subarray** or **substring** appears—and the subarray must be **contiguous**—this is an immediate hint.
+
+Usually, a naïve brute-force approach for the problems above checks every possible subarray:
+
+```txt
+for L in range(n):
+for R in range(L, n):
+check subarray nums[L:R]
+```
+
+This leads to:
+
+- $O(n²)$ time to enumerate the subarrays  
+- plus additional computation inside the inner loop
+
+Sliding window avoids recomputing work.  
+Instead, it grows or shrinks the window by **one step at a time**, preserving most of the previously computed information.
+This transformation often reduces complexity to $O(n)$.
+
+Sliding window is not just an optimization—it is a **paradigm shift** in how you iterate over collections.  
+Once you recognize the structure of these problems, the sliding window template becomes your go-to tool for a whole class of subarray and substring challenges.
+
+
+## Sliding Window vs Two Pointers
+
+The **Sliding Window** technique is closely related to the [**Two Pointers**](/data-structures-and-algorithms/two-pointers) pattern, and many problems can be solved with either approach depending on how you structure the logic.  
+However, the two patterns serve different purposes, and understanding their conceptual differences will help you choose the right one for each problem.
+
+Main features of the Two Pointers techniques are:
+* typically applied to **sorted arrays** (but not always)
+* uses pointers that **move independently** based on comparisons, conditions, or target values
+* common for problems like pair sums, searching boundaries, merging processes, or shrinking/growing from opposite sides
+* often **not restricted** to contiguous subarrays
+
+Instead Sliding Window as we saw before:  
+- always operates on **contiguous** segments of arrays or strings.  
+- maintains a “window” defined by two pointers, **L** and **R**, where:  
+  - `R` expands the window  
+  - `L` shrinks the window  
+- perfect for scenarios where you must *maintain state* as you shift the window.
+
+So, in short: **Every sliding window uses two pointers, but not every two-pointer technique is a sliding window.**
+
+## Types of Sliding Window
+
+The Sliding Window pattern appears in two main forms: **Fixed-Size** and **Dynamic-Size**.  
+Both use two pointers to represent a window over a contiguous region of the input, but their behavior and use cases differ significantly.
+
+### Fixed-Size Sliding Window
+
+A **Fixed-Size Sliding Window** maintains a window of a *constant length* `k`.  
+You slide this window across the array or string while keeping track of some running information (sum, frequency, number of distinct elements, etc.).
+
+Usually, it works in this way:
+- Expand the window to reach size `k`.
+- Process the current window (e.g., compute sum, update max/min).
+- Slide the window by:
+   - removing the leftmost element,
+   - adding the next right element.
+
+The window size **never changes**.
+
+You are likely dealing with a fixed-size window if:
+
+- The problem says **“subarray of size k”**  
+- The window size `k` is given explicitly  
+- You must compute:
+  - maximum sum of size `k`
+  - average of size `k`
+  - number of distinct elements inside windows of fixed length
+- The output requires *one answer per window position*
+
+This is a general template for a Fixed-Size Sliding Window in TypeScript:
+
+```typescript
+function fixedWindow(nums: number[], k: number): number {
+  let windowSum = 0;
+
+  // Build the first window
+  for (let i = 0; i < k; i++) {
+    windowSum += nums[i];
+  }
+
+  let result = windowSum;
+
+  // Slide the window
+  for (let r = k; r < nums.length; r++) {
+    windowSum += nums[r] - nums[r - k]; // add right, remove left
+    result = Math.max(result, windowSum); // example operation
+  }
+
+  return result;
+}
+```
+
+### Dynamic-Size Sliding Window
+
+A Dynamic-Size Sliding Window adjusts its boundaries based on constraints.
+The window can grow or shrink depending on whether it currently satisfies a condition (e.g., at most one duplicate, sum ≥ target, no more than k replacements).
+
+This is how it typically works:
+- expand right pointer R to include new elements.
+- update the internal state (sum, frequency map, unique count…).
+- when the window violates a constraint:
+	- shrink from the left (L++)
+	- restore validity
+- update the result whenever the window satisfies the condition.
+
+The window size is not fixed, it reacts to the rules of the problem.
+
+You are likely dealing with a *dynamic-size* window if:
+
+- The problem includes phrases like **“longest subarray …”**, **“smallest window …”**, **“shortest substring …”**
+- The window size is **not given** and must be determined by the algorithm
+- The window must satisfy a **variable condition**, such as:
+  - sum ≤ target  
+  - contains all characters of a pattern  
+  - contains at most/at least *k* distinct elements
+- The window grows until it becomes valid, then shrinks to maintain validity
+- The goal is often to:
+  - **find the minimum window** that satisfies a constraint  
+  - **find the maximum window** that remains valid under some rule  
+  - **count** how many valid windows exist
+
+This is a general template for a Dynamic-Size Sliding Window in TypeScript:
+
+```typescript
+function dynamicWindow(s: string): number {
+  let L = 0;
+  const freq = new Map<string, number>();
+  let best = 0;
+
+  for (let R = 0; R < s.length; R++) {
+    const char = s[R];
+    freq.set(char, (freq.get(char) ?? 0) + 1);
+
+    // Shrink while the window is invalid
+    while (windowIsInvalid(freq)) {
+      const leftChar = s[L];
+      freq.set(leftChar, freq.get(leftChar)! - 1);
+      L++;
+    }
+
+    // Update result when window is valid
+    best = Math.max(best, R - L + 1);
+  }
+
+  return best;
+}
+
+function windowIsInvalid(freq: Map<string, number>): boolean {
+  // Placeholder for the specific problem's rule
+  return < place your cindition here >;
+}
+```
+
+## Time & Space Complexity
+
+Below you can find a summary table of time and space complexities for the sliding window pattern, distinguishing between fixed-size and dynamic windows.
+
+| Window Type / Operation        | Time Complexity        | Space Complexity                                |
+|-------------------------------|-------------------------|-------------------------------------------------|
+| Fixed-size sliding window     | O(n)                   | O(1) or O(k)                                    |
+| Dynamic-size sliding window   | O(n)                   | O(1) to O(n) depending on frequency maps        |
+| Expand step (right pointer)   | O(1) per step          | —                                               |
+| Shrink step (left pointer)    | O(1) per step          | —                                               |
+| Full traversal (expand + shrink) | O(n) — each index visited at most twice | — |
+
+The sliding window technique typically runs in **O(n)** time because:
+
+- Both pointers **only move forward**, never backward.  
+- Each element enters and exits the window at most once.  
+- Window updates (sum, frequency map, counters) are always **O(1)**.  
+
+## Exercises
+
+| Problem | Technique | Solution |
+|--------|-----------|----------|
+| [Maximum Average Subarray I](https://leetcode.com/problems/maximum-average-subarray-i/) | Fixed Sliding Window | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/sliding-window/maximum-average-subarray-I.ts) |
+| [Find All Anagrams in a String](https://leetcode.com/problems/find-all-anagrams-in-a-string/) | Fixed Sliding Window | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/sliding-window/find-all-anagrams-in-a-string.ts) |
+| [Permutation in String](https://leetcode.com/problems/permutation-in-string/) | Fixed Sliding Window | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/sliding-window/permutation-in-string.ts) |
+| [Maximum Sum of Distinct Subarrays With Length K](https://leetcode.com/problems/maximum-sum-of-distinct-subarrays-with-length-k/) | Fixed Sliding Window | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/sliding-window/maximum-sum-of-distinct-subarrays-with-length-k.ts) |
+| [Substring with Concatenation of All Words](https://leetcode.com/problems/substring-with-concatenation-of-all-words/) | Fixed Sliding Window | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/sliding-window/substring-with-concatenation-of-all-words.ts) |
+| [Longest Substring Without Repeating Characters](https://leetcode.com/problems/longest-substring-without-repeating-characters/) | Dynamic Sliding Window | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/sliding-window/longest-substring-without-repeating-characters.ts) |
+| [Longest Repeating Character Replacement](https://leetcode.com/problems/longest-repeating-character-replacement/) | Dynamic Sliding Window | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/sliding-window/longest-repeating-character-replacement.ts) |
+| [Minimum Size Subarray Sum](https://leetcode.com/problems/minimum-size-subarray-sum/) | Dynamic Sliding Window | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/sliding-window/minimum-size-subarray-sum.ts) |
+| [Max Consecutive Ones III](https://leetcode.com/problems/max-consecutive-ones-iii/) | Dynamic Sliding Window | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/sliding-window/max-consecutives-one-III.ts) |
+| [Minimum Window Substring](https://leetcode.com/problems/minimum-window-substring/) | Dynamic Sliding Window | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/sliding-window/minimum-window-substring.ts) |

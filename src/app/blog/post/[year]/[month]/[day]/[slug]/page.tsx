@@ -36,7 +36,7 @@ export async function generateStaticParams() {
   return getPosts().map((post) => post.slug.params);
 }
 
-export default async function BlogPost({ params }: NextPostParameters) {
+export default async function BlogPostPage({ params }: NextPostParameters) {
   const receivedParameters = await params;
   const post = getPostBy(receivedParameters);
 

@@ -1,3 +1,4 @@
+import { getAllDataStructuresAndAlgorithmsTopics } from "@/lib/content/data-structures-and-algorithms";
 import { getPosts, getTags } from "@/lib/content/posts";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { slugs } from "@/types/configuration/slug";
@@ -49,19 +50,9 @@ ${tags
 
 Interactive tutorials and educational content on fundamental computer science concepts:
 
-- [DSA Roadmap](${siteMetadata.siteUrl}${slugs.dsa.roadmap}): Complete learning path for data structures and algorithms
-- [Time & Space Complexity](${siteMetadata.siteUrl}${slugs.dsa.timeAndSpaceComplexity}): Understanding algorithm efficiency and Big O notation
-- [Arrays](${siteMetadata.siteUrl}${slugs.dsa.array}): Fundamental data structure for sequential storage
-- [Strings](${siteMetadata.siteUrl}${slugs.dsa.string}): String manipulation and pattern matching
-- [Bit Manipulation](${siteMetadata.siteUrl}${slugs.dsa.bitManipulation}): Binary operations and bitwise techniques
-- [Hash Tables](${siteMetadata.siteUrl}${slugs.dsa.hashTable}): Key-value storage and constant-time lookups
-- [Two Pointers](${siteMetadata.siteUrl}${slugs.dsa.twoPointers}): Efficient array traversal technique
-- [Prefix Sum](${siteMetadata.siteUrl}${slugs.dsa.prefixSum}): Range query optimization technique
-- [Sliding Window](${siteMetadata.siteUrl}${slugs.dsa.slidingWindow}): Subarray and substring problem pattern
-- [Kadane's Algorithm](${siteMetadata.siteUrl}${slugs.dsa.kadaneAlgorithm}): Maximum subarray sum solution    
-- [Matrix](${siteMetadata.siteUrl}${slugs.dsa.matrix}): Matrix operations and algorithms
-- [Linked Lists](${siteMetadata.siteUrl}${slugs.dsa.linkedList}): Dynamic data structure for sequential storage
-- [Stack](${siteMetadata.siteUrl}${slugs.dsa.stack}): LIFO and FIFO data structures   
+${getAllDataStructuresAndAlgorithmsTopics()
+    .map((topic) => `- [${topic.frontmatter.title}](${siteMetadata.siteUrl}${topic.slug.formatted}): ${topic.frontmatter.description}`)
+    .join("\n")}    
 
 ## Additional Information:
 

@@ -27,8 +27,7 @@ export async function generateMetadata({
 }
 
 export async function generateStaticParams() {
-  const posts = getPosts();
-  const totalPages = getPostsTotalPages(posts);
+  const totalPages = getPostsTotalPages();
   const pageParams = [];
 
   for (let page = 2; page <= totalPages; page++) {

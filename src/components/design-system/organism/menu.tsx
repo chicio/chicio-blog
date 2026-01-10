@@ -73,8 +73,8 @@ const renderMenuItems = (
       <MenuItemWithTracking
         key={`dsa-${isMobile ? "mobile" : "desktop"}`}
         className={baseClassName}
-        to={slugs.dsa.roadmap}
-        selected={pathname.includes(slugs.dsa.roadmap)}
+        to={slugs.dataStructuresAndAlgorithms.roadmap}
+        selected={pathname.includes(slugs.dataStructuresAndAlgorithms.roadmap)}
         trackingData={{
           action: tracking.action.open_dsa_roadmap,
           category: trackingCategory,

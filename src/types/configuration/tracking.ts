@@ -54,7 +54,7 @@ export const tracking = {
     privacy_policy: "privacy_policy",
     notfound: "notfound",
     art: "art",
-    dsa: "dsa",
+    data_structures_and_algorithms: "data_structures_and_algorithms",
     chat: "chat",
     about_me: "about_me",
     clowns: "clowns"

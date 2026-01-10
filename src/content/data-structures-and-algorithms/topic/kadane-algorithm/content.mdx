@@ -1,0 +1,79 @@
+---
+title: "Kadane's Algorithm"
+description: "Kadane's Algorithm is a classic algorithm designed to efficiently find the maximum sum subarray within a one-dimensional array of numbers in O(n) time."
+date: 2025-10-03
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [kadane's algorithm, data structures, algorithms]
+authors: [fabrizio_duroni]
+---
+
+import { KadaneVisualizer } from "@/components/sections/data-structures-and-algorithms/components/kadane-visualizer";
+import { InteractiveBlock } from "@/components/sections/data-structures-and-algorithms/components/interactive-block";
+
+# Kadane's algorithm
+
+[Kadane's Algorithm](https://en.wikipedia.org/wiki/Maximum_subarray_problem#Kadane's_algorithm) is a classic algorithm designed to efficiently find the **maximum sum subarray** within a one-dimensional array of numbers.
+
+Instead of checking all possible subarrays—which would take $O(n²)$ time using a naive approach—Kadane's Algorithm leverages a **dynamic programming insight**: it 
+keeps track of the maximum sum **ending at the current position** (`currentMax`) and updates a **global maximum** (`globalMax`) as it scans through the array.
+
+The key intuition is simple yet powerful: at each element, you either **extend the current subarray** or **start a new subarray** from the current element if doing 
+so gives a larger sum. This strategy allows the algorithm to process the array in **linear time $O(n)$**, making it extremely efficient even for large inputs.
+
+Kadane's Algorithm forms the foundation for many maximum-sum variations, including circular arrays, maximum product subarrays, 
+and other problems where a running optimum needs to be tracked.
+
+Before proceeding, let's remember some properties of the **maximum sum subarray** problem:
+
+- if the array contains all non-negative numbers, then the problem is trivial, a maximum subarray is the entire array
+- if the array contains all non-positive numbers, then a solution is any subarray of size 1 containing the maximal value of the array (or the empty subarray, if it is permitted)
+- several different sub-arrays may have the same maximum sum
+
+## The Algorithm
+
+Kadane’s Algorithm works by **scanning the array once** and keeping track of two values at each step:
+
+- `currentMax`: the maximum subarray sum **ending at the current index**.
+- `globalMax`: the overall maximum subarray sum found so far.
+
+A step -by-step breakdown of the algorithm is as follows:
+- Initialize `currentMax` and `globalMax` with the first element of the array.
+- Iterate through the array starting from the second element:
+   - Update `currentMax` as the **maximum between the current element and `currentMax + current element`**. This decides whether to **extend the current subarray** or **start a new one**.
+   - Update `globalMax` if `currentMax` is larger.
+- After the iteration, `globalMax` contains the maximum sum subarray.
+
+
+```typescript
+function kadane(nums: number[]): number {
+  let currentMax = nums[0];
+  let globalMax = nums[0];
+
+  for (let i = 1; i < nums.length; i++) {
+    currentMax = Math.max(nums[i], currentMax + nums[i]);
+    globalMax = Math.max(globalMax, currentMax);
+  }
+
+  return globalMax;
+}
+```
+
+<InteractiveBlock title="Kadane's Algorithm Visualization">
+    <KadaneVisualizer nums={[1, -2, 3, 5, -1, 2]}/>
+</InteractiveBlock>
+
+## Time & Space Complexity
+
+Kadane's Algorithm is extremely efficient compared to naive approaches:
+
+- **Time Complexity: $O(n)$, each element is visited exactly once to update `currentMax` and `globalMax`.
+- **Space Complexity: $O(1)$, only a few variables are maintained (`currentMax`, `globalMax`, optional subarray indices).  
+
+## Exercises
+
+| Problem | Technique | Solution |
+|---------|-----------|----------|
+| [Maximum Subarray](https://leetcode.com/problems/maximum-subarray/) | Kadane's Algorithm | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/kadane-algorithm/maximum-subarray.ts) |
+| [Maximum Sum Circular Subarray](https://leetcode.com/problems/maximum-sum-circular-subarray/) | Kadane + Total Sum Trick | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/kadane-algorithm/max-subarray-sum-circular.ts) |
+| [Maximum Product Subarray](https://leetcode.com/problems/maximum-product-subarray/) | Kadane-style Tracking of Max/Min | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/kadane-algorithm/max-product-subarray.ts) |
+| [Best Sightseeing Pair](https://leetcode.com/problems/best-sightseeing-pair/) | Kadane-style Transformation | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/kadane-algorithm/best-sightseeing-pair.ts) |

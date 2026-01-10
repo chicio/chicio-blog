@@ -45,20 +45,18 @@ const groupArrayBy: <T>(array: T[], numberPerGroup: number) => T[][] = (
   return group;
 };
 
-export const getPostsTotalPages = (posts: Content[]) =>
-  Math.ceil(posts.length / postsPerPage);
+export const getPostsTotalPages = () => Math.ceil(getPosts().length / postsPerPage)
 
 export const getPostsPaginationFor: (page: number) => Pagination | undefined = (
   page: number,
 ) => {
   try {
-    const posts = getPosts();
-    const totalPages = getPostsTotalPages(posts);
+    const totalPages = getPostsTotalPages();
 
     if (totalPages < page) {
       throw new Error("Page does not exists");
     }
-
+    const posts = getPosts();
     const start = (page - 1) * postsPerPage;
     const paginatedPosts = posts.slice(start, start + postsPerPage);
     const previousPageUrlSlug =

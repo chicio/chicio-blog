@@ -8,3 +8,6 @@ export type NextPostPaginationParameters = NextParameters<PostPaginationParamete
 
 export type PostParameters = { year: string, month: string, day: string, slug: string };
 export type NextPostParameters = NextParameters<PostParameters>
+
+export type DataStructuresAndAlgorithmsParameters = { topic: string };
+export type NextDataStructuresAndAlgorithmsParameters = NextParameters<DataStructuresAndAlgorithmsParameters>
