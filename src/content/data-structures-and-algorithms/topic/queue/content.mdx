@@ -1,0 +1,61 @@
+---
+title: "Queue"
+description: "A queue is a fundamental FIFO (First In, First Out) data structure where the first element added is the first one to be removed."
+date: 2026-01-10
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [queue, queues, data structures, algorithms]
+authors: [fabrizio_duroni]
+---
+
+# Queue & Monotonic Queue
+
+## 1. Introduction
+- What a queue is: FIFO data structure
+- Core operations: enqueue, dequeue, peek
+- Differences vs stack (FIFO vs LIFO)
+- When a queue is the natural choice
+
+## 2. Queue Fundamentals
+- Conceptual model of a queue
+- Common implementations:
+  - Array-based queue
+  - Circular queue
+  - Linked-list-based queue
+- Performance implications and common pitfalls
+- Real-world intuition (buffering, scheduling, task processing)
+
+## 3. Classic Queue Patterns
+- Simulation problems (turns, processes, time-based events)
+- Reordering and revealing elements
+- Queue + index techniques
+- When a simple queue is sufficient
+
+## 4. Monotonic Queue
+- Definition: queue maintaining a monotonic order
+- Increasing vs decreasing monotonic queues
+- Core invariant and why it works
+- Why monotonic queues enable O(n) solutions
+
+## 5. Common Tools and Techniques
+- Using a deque instead of a simple queue
+- Storing indices vs values
+- Pairing values with positions
+- Removing invalid or dominated elements
+- Recognizing when a monotonic queue is required
+
+## 6. Time & Space Complexity
+- Complexity of standard queue operations
+- Complexity of monotonic queue operations
+- Amortized analysis intuition
+
+## 7. Exercises
+
+| Problem | Technique | Solution |
+|--------|----------|----------|
+| Number of Recent Calls | Queue | Link |
+| Time Needed to Buy Tickets | Queue | Link |
+| Reveal Cards In Increasing Order | Queue | Link |
+| Longest Continuous Subarray With Absolute Diff ≤ Limit | Monotonic Queue | Link |
+| Jump Game VI | Monotonic Queue | Link |
+| Sliding Window Maximum | Monotonic Queue | Link |
+| Max Value of Equation | Monotonic Queue | Link |
