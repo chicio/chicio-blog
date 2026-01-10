@@ -1,5 +1,5 @@
 import { getPosts } from "@/lib/content/posts";
-import { authors } from "@/types/author";
+import { authors } from "@/types/content/author";
 import { siteMetadata } from "@/types/site-metadata";
 import { Feed } from "feed";
 

@@ -4,8 +4,12 @@ import { Pagination } from "@/types/pagination";
 import { generateTagSlug } from "../tags/tags";
 import fs from "fs";
 import path from "path";
+<<<<<<< Updated upstream
 import matter from "gray-matter";
 import { grayMatterPost } from "@/lib/content/gray-matter";
+=======
+import { grayMatterContent } from "@/lib/content/gray-matter";
+>>>>>>> Stashed changes
 import calculateReadingTime from "reading-time";
 import { file } from "zod";
 
@@ -44,10 +48,14 @@ const generatePostSlugFrom = (filename: string): PostSlug => {
 
 const getPost: PostParser = (fileName, extension) => {
   const filePath = path.join(postsDirectory, `${fileName}${extension}`);
+<<<<<<< Updated upstream
   const fileContents = fs.readFileSync(filePath, "utf8");
   const fileParsed = matter(fileContents);
 
   const { frontmatter, content} = grayMatterPost(filePath);
+=======
+  const { frontmatter, content } = grayMatterContent(filePath);
+>>>>>>> Stashed changes
 
   return {
     frontmatter,

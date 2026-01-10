@@ -1,6 +1,6 @@
 import { imageShimmerPlaceholder } from "@/components/design-system/atoms/effects/image-shimmer-placeholder";
 import { StandardInternalLinkWithTracking } from "@/components/design-system/atoms/links/standard-internal-link-with-tracking";
-import { Author } from "@/types/author";
+import { Author } from "@/types/content/author";
 import { tracking } from "@/types/tracking";
 import Image from "next/image";
 import { FC } from "react";

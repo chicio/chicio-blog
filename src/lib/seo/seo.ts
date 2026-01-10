@@ -1,4 +1,4 @@
-import { authors } from "@/types/author";
+import { authors } from "@/types/content/author";
 import { PostDate } from "@/types/content/post";
 import { siteMetadata, SiteMetadataSocialLinks} from "@/types/site-metadata";
 import { slugs } from "@/types/slug";

@@ -1,4 +1,4 @@
-import { Author } from "@/types/author";
+import { Author } from "@/types/content/author";
 
 export type ContentFrontmatter = {
     title: string;
