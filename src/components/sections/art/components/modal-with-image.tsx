@@ -1,8 +1,9 @@
 import { Button } from "@/components/design-system/atoms/buttons/button";
 import { ImageGlow } from "@/components/design-system/atoms/effects/image-glow";
 import { Overlay } from "@/components/design-system/atoms/effects/overlay";
-import { motion, Variants } from "framer-motion";
+import { Variants } from "framer-motion";
 import { FC } from "react";
+import { MotionDiv } from "@/components/design-system/molecules/animation/motion-div";
 
 const modalVariants: Variants = {
   hidden: { opacity: 0 },
@@ -26,7 +27,7 @@ export const ModalWithImage: FC<ModalWithImageProps> = ({
 }) => (
   <>
     <Overlay onClick={onClick} delay={0.15}>
-      <motion.div
+      <MotionDiv
         variants={modalVariants}
         initial="hidden"
         animate="visible"
@@ -43,7 +44,7 @@ export const ModalWithImage: FC<ModalWithImageProps> = ({
         <Button className="relative text-primary-text" onClick={onClick}>
           <p>Close</p>
         </Button>
-      </motion.div>
+      </MotionDiv>
     </Overlay>
   </>
 );

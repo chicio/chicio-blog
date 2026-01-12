@@ -1,18 +1,11 @@
-/**
- * @author Fabrizio Duroni
- */
-
 import { useSyncExternalStore } from "react";
 import { hasMotion, motionChangeEvent } from "@/lib/motion/motion";
 
-/**
- * Subscribe to motion setting changes within the current tab.
- * New tabs automatically read from localStorage on mount via getSnapshot.
- */
 const subscribe = (callback: () => void) => {
-    if (typeof window === "undefined") return () => {};
+    if (typeof window === "undefined") { 
+        return () => {};
+    }
 
-    // Listen to custom event for same-tab synchronization
     const handleMotionChange = () => {
         callback();
     };

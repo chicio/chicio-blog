@@ -11,7 +11,7 @@ import {
 } from "@/components/sections/easter-eggs/white-rabbit";
 import { slugs } from "@/types/configuration/slug";
 import { tracking } from "@/types/configuration/tracking";
-import { AnimatePresence, motion, Variants } from "framer-motion";
+import { AnimatePresence, Variants } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { FC, useState } from "react";
 import { Overlay } from "../atoms/effects/overlay";
@@ -24,6 +24,7 @@ import {
   ScrollDirection,
   useScrollDirection,
 } from "../utils/hooks/use-scroll-direction";
+import { MotionDiv } from "../molecules/animation/motion-div";
 
 export const menuHeightNumber = 55;
 
@@ -182,7 +183,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
 
   return (
     <>
-      <motion.div
+      <MotionDiv
         className={`${glassmorphismClass} xs:pl-3 xs:pr-3 menu-container fixed top-0 right-0 left-0 z-50 rounded-tl-none rounded-tr-none border-t-0 p-0 hover:scale-100 ${shouldOpenMenu ? "xs:block hidden" : ""}`}
         variants={menuVariants}
         animate={shouldHideMenu ? "hidden" : "visible"}
@@ -223,10 +224,10 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
             )}
           </div>
         </div>
-      </motion.div>
+      </MotionDiv>
       <AnimatePresence>
         {shouldOpenMenu && (
-          <motion.div
+          <MotionDiv
             className="xs:hidden bg-black-alpha-75 backdrop-blur-sm fixed top-0 left-0 z-50 h-full w-full touch-pan-y overflow-y-auto"
             style={{ willChange: "transform" }}
             variants={panelVariants}
@@ -245,7 +246,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
                 setShouldOpenMenu,
               )}
             </div>
-          </motion.div>
+          </MotionDiv>
         )}
       </AnimatePresence>
       <AnimatePresence>

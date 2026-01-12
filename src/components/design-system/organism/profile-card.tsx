@@ -3,9 +3,10 @@
 import { GlassmorphismBackground } from "@/components/design-system/atoms/effects/glassmorphism-background";
 import { SocialContacts } from "@/components/design-system/organism/social-contacts";
 import { tracking } from "@/types/configuration/tracking";
-import { motion, Variants } from "framer-motion";
+import { Variants } from "framer-motion";
 import { FC } from "react";
 import { ProfilePhoto } from "./profile-photo";
+import { MotionDiv } from "../molecules/animation/motion-div";
 
 const itemVariants: Variants = {
     hidden: { y: 20, opacity: 0 },
@@ -43,35 +44,35 @@ export const ProfileCard: FC<ProfileCardProps> = ({
 }) => (
     <div className="w-full py-8 flex items-center justify-center">
         <GlassmorphismBackground>
-            <motion.div
+            <MotionDiv
                 variants={itemVariants}
                 whileHover={{ scale: 1.05 }}
                 transition={{ type: "spring" as const, stiffness: 300, damping: 20 }}
             >
                 <ProfilePhoto author={author} />
-            </motion.div>
-            <motion.div variants={itemVariants}>
+            </MotionDiv>
+            <MotionDiv variants={itemVariants}>
                 <h2 className="mx-0 mt-3 text-center text-primary-text">{author}</h2>
-            </motion.div>
-            <motion.div variants={itemVariants}>
+            </MotionDiv>
+            <MotionDiv variants={itemVariants}>
                 <p className="text-center text-secondary-text mt-0 mr-0 mb-0 ml-0">
                     {title}
                 </p>
-            </motion.div>
+            </MotionDiv>
             {subtitle && (
-                <motion.div variants={itemVariants}>
+                <MotionDiv variants={itemVariants}>
                     <p className="text-center text-secondary-text text-sm mt-1 mb-0">
                         {subtitle}
                     </p>
-                </motion.div>
+                </MotionDiv>
             )}
             {showSocialContacts && (
-                <motion.div variants={itemVariants} className="mt-6">
+                <MotionDiv variants={itemVariants} className="mt-6">
                     <SocialContacts
                         trackingCategory={trackingCategory}
                         trackingLabel={trackingLabel}
                     />
-                </motion.div>
+                </MotionDiv>
             )}
         </GlassmorphismBackground>
     </div>
