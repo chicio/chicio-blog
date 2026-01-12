@@ -5,22 +5,27 @@ import {
     MotionOffIcon,
     MotionOnIcon,
 } from "../../atoms/icons/motion-toggle-icon";
-import { useMotionSettings } from "../../utils/context/motion-settings-context";
+import { writeMotion } from "@/lib/motion/motion";
+import { useMotionStore } from "../../utils/hooks/use-motion-store";
 
 export const MotionButton = () => {
-  const { motionEnabled, toggleMotion } = useMotionSettings();
-  const pathname = usePathname();
+    const motionEnabled = useMotionStore();
+    const pathname = usePathname();
 
-  if (pathname.startsWith("/chat")) {
-    return null;
-  }
-  
-  return (
-    <div
-      aria-label={motionEnabled ? "Disattiva animazioni" : "Attiva animazioni"}
-      onClick={toggleMotion}
-    >
-      {motionEnabled ? <MotionOnIcon /> : <MotionOffIcon />}
-    </div>
-  );
+    if (pathname.startsWith("/chat")) {
+        return null;
+    }
+
+    const toggleMotion = () => {
+        writeMotion(motionEnabled ? "off" : "on");
+    };
+
+    return (
+        <div
+            aria-label={motionEnabled ? "Disattiva animazioni" : "Attiva animazioni"}
+            onClick={toggleMotion}
+        >
+            {motionEnabled ? <MotionOnIcon /> : <MotionOffIcon />}
+        </div>
+    );
 };
