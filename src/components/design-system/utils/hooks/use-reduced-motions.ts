@@ -1,26 +1,26 @@
 import { useEffect, useState } from "react";
-import { useMotionSettings } from "../context/motion-settings-context";
+import { useMotionStore } from "./use-motion-store";
 
 interface NavigatorWithDevice extends Navigator {
-  deviceMemory?: number;
-  connection?: { saveData?: boolean };
+    deviceMemory?: number;
+    connection?: { saveData?: boolean };
 }
 
 export function useReducedMotions() {
-  const { motionEnabled } = useMotionSettings();
-  const [lowEndDevice, setLowEndDevice] = useState(false);
+    const motionEnabled = useMotionStore();
+    const [lowEndDevice, setLowEndDevice] = useState(false);
 
-  useEffect(() => {
-    const nav = navigator as NavigatorWithDevice;
-    const memory = nav.deviceMemory ?? 4;
-    const cores = nav.hardwareConcurrency ?? 4;
-    const saveData = nav.connection?.saveData ?? false;
-    const isLow = memory <= 2 || cores <= 2 || saveData;
+    useEffect(() => {
+        const nav = navigator as NavigatorWithDevice;
+        const memory = nav.deviceMemory ?? 4;
+        const cores = nav.hardwareConcurrency ?? 4;
+        const saveData = nav.connection?.saveData ?? false;
+        const isLow = memory <= 2 || cores <= 2 || saveData;
 
-    setLowEndDevice(isLow);
-  }, []);
+        setLowEndDevice(isLow);
+    }, []);
 
-  const shouldReduceMotion = !motionEnabled || lowEndDevice;
+    const shouldReduceMotion = !motionEnabled || lowEndDevice;
 
-  return shouldReduceMotion;
+    return shouldReduceMotion;
 }

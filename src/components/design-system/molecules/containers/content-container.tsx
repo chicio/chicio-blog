@@ -1,5 +1,3 @@
-"use client";
-
 import { FC, PropsWithChildren } from "react";
 
 export const ContentContainer: FC<PropsWithChildren> = ({ children }) => (

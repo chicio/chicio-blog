@@ -1,8 +1,9 @@
 import { CallToActionExternalWithTracking } from "@/components/design-system/atoms/call-to-actions/call-to-action-external-with-tracking";
 import { ImageGlow } from "@/components/design-system/atoms/effects/image-glow";
 import { Project } from "@/types/home/projects";
-import { motion, Variants } from "framer-motion";
+import { Variants } from "framer-motion";
 import { FC } from "react";
+import { MotionDiv } from "@/components/design-system/molecules/animation/motion-div";
 
 const cardVariants: Variants = {
   hidden: {
@@ -28,7 +29,7 @@ const cardVariants: Variants = {
 export type ProjectProps = { project: Project };
 
 export const ProjectCard: FC<ProjectProps> = ({ project }) => (
-  <motion.div
+  <MotionDiv
     className="mx-auto my-5 max-w-[1200px]"
     variants={cardVariants}
     whileHover="hover"
@@ -78,5 +79,5 @@ export const ProjectCard: FC<ProjectProps> = ({ project }) => (
         />
       </div>
     </div>
-  </motion.div>
+  </MotionDiv>
 );

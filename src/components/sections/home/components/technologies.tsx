@@ -1,9 +1,10 @@
 "use client";
 
-import { motion, stagger, Variants } from "framer-motion";
+import { stagger, Variants } from "framer-motion";
 import { FC } from "react";
 import { TechnologiesExperience } from "./technologies-experience";
 import { TechnologiesSkillsGrid } from "./technologies-skills-grid";
+import { MotionDiv } from "@/components/design-system/molecules/animation/motion-div";
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -31,7 +32,7 @@ export interface TechnologiesProps {
 export const Technologies: FC<TechnologiesProps> = ({ author }) => (
   <div className="container-fluid flex max-w-6xl snap-start flex-col py-9">
     <div className='max-w-[1200px] w-full flex flex-col z-10 gap-10'>
-      <motion.div
+      <MotionDiv
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
@@ -40,14 +41,14 @@ export const Technologies: FC<TechnologiesProps> = ({ author }) => (
           amount: 0.1,
         }}
       >
-        <motion.div variants={itemVariants}>
+        <MotionDiv variants={itemVariants}>
           <TechnologiesExperience author={author} />
-        </motion.div>
+        </MotionDiv>
 
-        <motion.div variants={itemVariants}>
+        <MotionDiv variants={itemVariants}>
           <TechnologiesSkillsGrid />
-        </motion.div>
-      </motion.div>
+        </MotionDiv>
+      </MotionDiv>
     </div>
   </div>
 );

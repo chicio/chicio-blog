@@ -1,7 +1,6 @@
 import "./css/globals.css";
 
 import { FloatingChatButton } from "@/components/design-system/molecules/buttons/chat-button";
-import { MotionPage } from "@/components/design-system/templates/motion-page";
 import { CookieConsentBanner } from "@/components/design-system/organism/cookie-consent-banner";
 import Head from "next/head";
 import { TrackingOptIn } from "@/components/design-system/organism/tracking-optin";
@@ -25,27 +24,25 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({
-  children,
+    children,
 }: Readonly<{ children: ReactNode }>) {
-  return (
-    <html
-      lang="en"
-      className={`${courierPrime.className} ${openSans.className}`}
-    >
-      <Head>
-        <link rel="author" href="/humans.txt" type="text/plain" />
-      </Head>
-      <body>
-          <MotionPage>
-            {children}
-            <div className="fixed right-3 bottom-3 z-40 flex flex-col gap-4 md:right-9 md:bottom-5">
-              <MotionButton />
-              <FloatingChatButton />
-            </div>
-            <CookieConsentBanner />
-          </MotionPage>
-        <TrackingOptIn />
-      </body>
-    </html>
-  );
+    return (
+        <html
+            lang="en"
+            className={`${courierPrime.className} ${openSans.className}`}
+        >
+            <Head>
+                <link rel="author" href="/humans.txt" type="text/plain" />
+            </Head>
+            <body>
+                {children}
+                <div className="fixed right-3 bottom-3 z-40 flex flex-col gap-4 md:right-9 md:bottom-5">
+                    <MotionButton />
+                    <FloatingChatButton />
+                </div>
+                <CookieConsentBanner />
+                <TrackingOptIn />
+            </body>
+        </html>
+    );
 }

@@ -1,8 +1,9 @@
 'use client'
 
-import { motion, stagger, Variants } from "framer-motion";
+import { stagger, Variants } from "framer-motion";
 import { FC, PropsWithChildren } from "react";
 import { useGlassmorphism } from "../../utils/hooks/use-glassmorphism";
+import { MotionDiv } from "../../molecules/animation/motion-div";
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -25,14 +26,14 @@ export const GlassmorphismBackground: FC<PropsWithChildren<GlassmorphismBackgrou
     const { glassmorphismClass } = useGlassmorphism();
 
     return (
-      <motion.div
+      <MotionDiv
         className={`${glassmorphismClass} relative p-5 md:p-9 ${className}`}
         variants={containerVariants}
         initial="hidden"
         animate="visible"
       >
         {children}
-      </motion.div>
+      </MotionDiv>
     );
   };
 

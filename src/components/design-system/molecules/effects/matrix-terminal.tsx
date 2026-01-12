@@ -1,10 +1,10 @@
 'use client'
 
 import { Cursor, ErrorText, QuoteText, SuccessText, TerminalLine, TerminalQuoteLine } from '@/components/design-system/atoms/typography/terminal-blocks';
-import { motion } from 'framer-motion';
 import { FC, useEffect } from 'react';
 import { useTypewriter } from '../../utils/hooks/use-typewriter';
 import { useGlassmorphism } from '../../utils/hooks/use-glassmorphism';
+import { MotionDiv } from '../animation/motion-div';
 
 interface TerminalLine {
   text: string;
@@ -59,7 +59,7 @@ export const MatrixTerminal: FC<MatrixTerminalProps> = ({ lines, onComplete }) =
   };
 
   return (
-    <motion.div
+    <MotionDiv
       className={`${glassmorphismClass} w-[95%] sm:w-[600px] p-4 min-h-[150px] sm:min-h-[200px]`}
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
@@ -67,6 +67,6 @@ export const MatrixTerminal: FC<MatrixTerminalProps> = ({ lines, onComplete }) =
     >
       {completedLines.map((line, index) => renderLine(line, line.text, false, index))}
       {currentLine && renderLine(currentLine, currentText, true, completedLines.length)}
-    </motion.div>
+    </MotionDiv>
   );
 };

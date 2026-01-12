@@ -1,7 +1,7 @@
 'use client'
 
 import { useLockBodyScroll } from "@/components/design-system/utils/hooks/use-lock-body-scroll";
-import { motion } from "framer-motion";
+import { MotionDiv } from "../../molecules/animation/motion-div";
 import { FC, ReactNode } from "react";
 
 export interface OverlayProps {
@@ -14,7 +14,7 @@ export const Overlay: FC<OverlayProps> = ({ onClick, delay = 0, children }) => {
   useLockBodyScroll();
 
   return (
-    <motion.div
+    <MotionDiv
       className="fixed top-0 left-0 w-full h-full bg-black-alpha-75 backdrop-blur-sm z-40"
       onClick={onClick}
       initial={{ opacity: 0 }}
@@ -29,6 +29,6 @@ export const Overlay: FC<OverlayProps> = ({ onClick, delay = 0, children }) => {
       }}
     >
       {children}
-    </motion.div>
+    </MotionDiv>
   );
 };

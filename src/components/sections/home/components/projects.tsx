@@ -1,10 +1,11 @@
 "use client";
 
 import { projects } from "@/types/home/projects";
-import { motion, stagger, Variants } from "framer-motion";
+import { stagger, Variants } from "framer-motion";
 import { FC } from "react";
 import { ProjectCard } from "./project-card";
 import { SectionTitle } from "./section-title";
+import { MotionDiv } from "@/components/design-system/molecules/animation/motion-div";
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -18,7 +19,7 @@ const containerVariants: Variants = {
 
 export const Projects: FC = () => (
   <div className="container-fluid flex max-w-6xl snap-start flex-col py-9">
-    <motion.div
+    <MotionDiv
       className="mx-auto my-0 flex max-w-[1400px] flex-1 flex-col items-center"
       variants={containerVariants}
       initial="hidden"
@@ -33,6 +34,6 @@ export const Projects: FC = () => (
           return <ProjectCard key={project.name} project={project} />;
         })}
       </div>
-    </motion.div>
+    </MotionDiv>
   </div>
 );

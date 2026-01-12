@@ -2,10 +2,10 @@
 
 import { useGlassmorphism } from "@/components/design-system/utils/hooks/use-glassmorphism";
 import { artDescriptions } from "@/types/art/art";
-import { motion } from "framer-motion";
 import Image from "next/image";
 import { FC, useState } from "react";
 import { ModalWithImage } from "./modal-with-image";
+import { MotionDiv } from "@/components/design-system/molecules/animation/motion-div";
 
 export const ArtGallery: FC = () => {
   const [currentImage, setCurrentImage] = useState<string | null>(null);
@@ -21,7 +21,7 @@ export const ArtGallery: FC = () => {
         {artDescriptions.map((art, i) => {
           const imageUrl = `/images/art/${art.name}`;
           return (
-            <motion.div
+            <MotionDiv
               key={art.name}
               variants={cardVariants}
               className="flex-1 h-full"
@@ -48,7 +48,7 @@ export const ArtGallery: FC = () => {
                   {art.description}
                 </p>
               </div>
-            </motion.div>
+            </MotionDiv>
           );
         })}
       </div>

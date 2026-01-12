@@ -10,10 +10,10 @@ import {
   ScrollDirection,
   useScrollDirection,
 } from "@/components/design-system/utils/hooks/use-scroll-direction";
-import { motion } from "framer-motion";
 import React from "react";
 import { useReadingProgress } from "../utils/hooks/use-reading-progress";
 import { useReducedMotions } from "@/components/design-system/utils/hooks/use-reduced-motions";
+import { motion } from "framer-motion";
 
 const getBar = (percentage: number, length = 24) => {
   const filled = Math.round((percentage / 100) * length);

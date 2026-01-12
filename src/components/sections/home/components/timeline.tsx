@@ -2,11 +2,12 @@
 
 import { StandardExternalLinkWithTracking } from "@/components/design-system/atoms/links/standard-external-link-with-tracking";
 import { tracking } from "@/types/configuration/tracking";
-import { motion, Variants } from "framer-motion";
+import { Variants } from "framer-motion";
 import Image from "next/image";
 import { FC } from "react";
 import { BiBriefcase, BiSolidGraduation } from "react-icons/bi";
 import { useTimeline } from "../hooks/useTimeline";
+import { MotionDiv } from "@/components/design-system/molecules/animation/motion-div";
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -68,7 +69,7 @@ export const Timeline: FC = () => {
   };
 
   return (
-    <motion.div
+    <MotionDiv
       className="flex flex-col gap-4 relative py-4 max-w-[1400px] md:gap-6 md:py-6"
       variants={containerVariants}
       initial="hidden"
@@ -80,7 +81,7 @@ export const Timeline: FC = () => {
         aria-hidden="true"
       />
       {timeline.map((item) => (
-        <motion.div
+        <MotionDiv
           className="relative flex w-full gap-2 md:gap-4"
           key={item.id}
           variants={itemVariants}
@@ -89,7 +90,7 @@ export const Timeline: FC = () => {
           <div className="bg-primary text-text-above-primary relative flex h-[40px] w-[40px] flex-shrink-0 items-center justify-center rounded-full md:h-[48px] md:w-[48px]">
             {getIcon(item.type)}
           </div>
-          <motion.div className="w-0 min-w-0 flex-1" variants={cardVariants}>
+          <MotionDiv className="w-0 min-w-0 flex-1" variants={cardVariants}>
             <div className="glow-container p-4 md:p-8">
               <div className="flex w-full flex-col gap-1">
                 {item.link ? (
@@ -137,9 +138,9 @@ export const Timeline: FC = () => {
                 </div>
               </div>
             </div>
-          </motion.div>
-        </motion.div>
+          </MotionDiv>
+        </MotionDiv>
       ))}
-    </motion.div>
+    </MotionDiv>
   );
 };
