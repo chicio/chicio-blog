@@ -29,7 +29,7 @@
     "ai": "^6.0.7",
     "elasticlunr": "^0.9.5",
     "feed": "^5.1.0",
-    "framer-motion": "^12.23.26",
+    "framer-motion": "^12.26.1",
     "gray-matter": "^4.0.3",
     "katex": "^0.16.27",
     "marked": "^17.0.1",
