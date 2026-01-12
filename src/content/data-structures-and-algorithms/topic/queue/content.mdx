@@ -1,0 +1,135 @@
+---
+title: "Queue"
+description: "A queue is a fundamental FIFO (First In, First Out) data structure where the first element added is the first one to be removed."
+date: 2026-01-10
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [queue, queues, data structures, algorithms]
+authors: [fabrizio_duroni]
+---
+
+# Queue
+
+A **queue** is a linear data structure that follows the **First-In, First-Out (FIFO)** principle: the first element inserted is the first one to be removed.
+
+Queues model real-world scenarios where order matters, such as people waiting in line, tasks scheduled for execution, or requests handled by a server. 
+Because of this natural ordering, queues often appear in problems involving **simulation, scheduling, and streaming data**.
+
+The core operations of a queue are:
+
+- **enqueue**: insert an element at the back of the queue
+- **dequeue**: remove the element from the front of the queue
+- **peek / front**: inspect the front element without removing it
+
+All these operations are expected to run in **$O(1)$** time with the right implementation.
+
+A queue is usually the right tool when:
+
+- Events or tasks must be processed in arrival order
+- You are simulating time-based or turn-based systems
+- Elements are consumed progressively from the front
+- The problem explicitly describes a “line”, “waiting”, or “processing in order”
+
+As we will see, this simple idea extends naturally to more advanced patterns such as **monotonic queues**, which allow efficient solutions to otherwise expensive problems. 
+The position of insertion and removal is fixed, which enforces the FIFO ordering.
+
+There are multiple ways to implement a queue, each with different trade-offs. The most straightforward implementation uses an array:
+
+- `enqueue`, push at the end of the array
+- `dequeue`, remove from the front of the array
+
+While enqueue is $O(1)$, removing from the front requires shifting elements, making `dequeue` **O(n)** in many languages. 
+This approach is simple but often inefficient.
+
+```ts
+class Queue<T> {
+  private data: (T | undefined)[];
+  private head = 0;
+  private tail = 0;
+  private size = 0;
+
+  constructor(private capacity: number) {
+    this.data = new Array(capacity);
+  }
+
+  enqueue(value: T): boolean {
+    if (this.size === this.capacity) return false;
+
+    this.data[this.tail] = value;
+    this.tail = (this.tail + 1) % this.capacity;
+    this.size++;
+    return true;
+  }
+
+  dequeue(): T | undefined {
+    if (this.size === 0) return undefined;
+
+    const value = this.data[this.head];
+    this.data[this.head] = undefined;
+    this.head = (this.head + 1) % this.capacity;
+    this.size--;
+    return value;
+  }
+
+  peek(): T | undefined {
+    return this.size === 0 ? undefined : this.data[this.head];
+  }
+
+  isEmpty(): boolean {
+    return this.size === 0;
+  }
+}
+```
+
+Other common queue implementations include:
+
+- **Array-based queue**: simple to implement, but naïvely using `shift()` causes element shifting and degrades performance to O(n) per dequeue.
+- **Circular queue**: tracks `head` and `tail` indices, reuses freed space, and treats the array as circular to guarantee O(1) enqueue and dequeue.
+- **Linked-list-based queue**: inserts at the tail and removes from the head in O(1) time, at the cost of extra memory for node pointers.
+
+## Monotonic Queue
+
+A **monotonic queue** is a specialized type of queue that maintains its elements in a **strictly increasing or decreasing order**. 
+Unlike a standard queue, where elements are only processed in FIFO order, a monotonic queue actively enforces an **invariant**: 
+every new element added preserves the monotonic property, and elements that would violate the order are removed immediately.
+
+There are two main types:
+
+- **Increasing monotonic queue:** elements are stored in ascending order. The front always holds the smallest element.  
+- **Decreasing monotonic queue:** elements are stored in descending order. The front always holds the largest element.
+
+This invariant makes monotonic queues extremely powerful for problems involving **sliding windows or range-based queries**, 
+such as computing the maximum or minimum over a moving window. Because each element is **added and removed at most once**, 
+operations on a monotonic queue run in **amortized $O(n)$ time**, even for sequences where naive approaches would be $O(n^2)$.  
+
+By carefully combining the FIFO behavior with the monotonic invariant, you can solve a wide range of problems efficiently without additional 
+sorting or scanning steps.
+
+## Time & Space Complexity
+
+Queues provide predictable performance characteristics that make them ideal for simulation, scheduling, and streaming-style problems. 
+Understanding where each cost comes from is essential, especially when choosing between a simple queue and a monotonic queue.
+Standard queue operations are designed to work in constant time when implemented correctly (using a circular buffer, deque, or linked list). 
+Monotonic queues add a small layer of logic on top, but still preserve linear-time behavior thanks to amortized analysis.
+
+| Operation / Pattern | Time Complexity | Space Complexity |
+|---------------------|-----------------|------------------|
+| Enqueue | $O(1)$ | $O(1)$ |
+| Dequeue | $O(1)$ | $O(1)$ |
+| Peek (front) | $O(1)$ | $O(1)$ |
+| Queue traversal | $O(n)$ | $O(1)$ |
+| Simulation with queue | $O(n)$ | $O(n)$ |
+| Sliding window (simple queue) | $O(n)$ | $O(k)$ |
+| Monotonic queue operations | $O(n)$ (amortized) | $O(n)$ |
+| Sliding window min/max | $O(n)$ | $O(k)$ |
+
+## Exercises
+
+| Problem | Technique | Solution |
+|--------|----------|----------|
+| [Number of Recent Calls](https://leetcode.com/problems/number-of-recent-calls/) | Queue | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/queue/number-of-recent-calls.ts) |
+| [Time Needed to Buy Tickets](https://leetcode.com/problems/time-needed-to-buy-tickets/) | Queue | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/queue/time-needed-to-buy-tickets.ts) |
+| [Reveal Cards In Increasing Order](https://leetcode.com/problems/reveal-cards-in-increasing-order/) | Queue | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/queue/reveal-cards-in-increasing-order.ts) |
+| [Longest Continuous Subarray With Absolute Diff ≤ Limit](https://leetcode.com/problems/longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit/) | Monotonic Queue | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/monotonic-queue/longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit.ts) |
+| [Jump Game VI](https://leetcode.com/problems/jump-game-vi/) | Monotonic Queue | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/monotonic-queue/jump-game-VI.ts) |
+| [Sliding Window Maximum](https://leetcode.com/problems/sliding-window-maximum/) | Monotonic Queue | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/monotonic-queue/sliding-window-maximum.ts) |
+| [Max Value of Equation](https://leetcode.com/problems/max-value-of-equation/) | Monotonic Queue | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/monotonic-queue/max-value-of-equation.ts) |
