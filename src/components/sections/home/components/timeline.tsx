@@ -1,13 +1,11 @@
-"use client";
-
 import { StandardExternalLinkWithTracking } from "@/components/design-system/atoms/links/standard-external-link-with-tracking";
 import { tracking } from "@/types/configuration/tracking";
 import { Variants } from "framer-motion";
 import Image from "next/image";
 import { FC } from "react";
 import { BiBriefcase, BiSolidGraduation } from "react-icons/bi";
-import { useTimeline } from "../hooks/useTimeline";
 import { MotionDiv } from "@/components/design-system/molecules/animation/motion-div";
+import { timelineData } from "@/types/home/timeline";
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -58,7 +56,6 @@ const cardVariants: Variants = {
 };
 
 export const Timeline: FC = () => {
-  const { timeline } = useTimeline();
 
   const getIcon = (type: "work" | "education") => {
     return type === "work" ? (
@@ -80,7 +77,7 @@ export const Timeline: FC = () => {
         className="from-primary/50 via-primary/20 to-primary/50 pointer-events-none absolute top-0 bottom-0 left-5 z-0 w-0.5 bg-gradient-to-b md:left-6 md:w-[3px]"
         aria-hidden="true"
       />
-      {timeline.map((item) => (
+      {timelineData.map((item) => (
         <MotionDiv
           className="relative flex w-full gap-2 md:gap-4"
           key={item.id}

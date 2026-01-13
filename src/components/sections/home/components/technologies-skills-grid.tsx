@@ -1,9 +1,9 @@
 import { FC } from "react";
-import { useTechnologies } from "../hooks/useTechnologies";
 import { TechnologyCard } from "./technology-card";
+import { technologiesGroups } from "@/types/home/technology";
 
 export const TechnologiesSkillsGrid: FC = () => {
-  const { technologies } = useTechnologies();
+  const { technologies } = technologiesGroups();
 
   return (
     <div className="mt-9 flex w-full flex-col gap-9 md:gap-12">
