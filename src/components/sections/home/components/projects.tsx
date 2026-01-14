@@ -17,7 +17,7 @@ const containerVariants: Variants = {
   },
 };
 
-export const Projects: FC = () => (
+const Projects: FC = () => (
   <div className="container-fluid flex max-w-6xl snap-start flex-col py-9">
     <MotionDiv
       className="mx-auto my-0 flex max-w-[1400px] flex-1 flex-col items-center"
@@ -37,3 +37,5 @@ export const Projects: FC = () => (
     </MotionDiv>
   </div>
 );
+
+export default Projects;

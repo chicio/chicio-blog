@@ -1,8 +1,4 @@
-import { RedPillButton } from "@/components/design-system/molecules/buttons/pills-buttons";
-import { MatrixTerminal } from "@/components/design-system/molecules/effects/matrix-terminal";
 import { EasterEggSearchResult, EasterEggTerminalLines } from "@/types/search/search";
-import { FC, useState } from "react";
-import { CenterContainer } from "./center-container";
 
 export const neoRoomNumber = "101";
 
@@ -25,31 +21,3 @@ export const whiteRabbitEasterEgg = (
   return null;
 };
 
-export const NeoRoomEasterEgg: FC<{ lines: EasterEggTerminalLines }> = ({
-  lines,
-}) => {
-  const [isCompleted, setIsCompleted] = useState<boolean>(false);
-  
-  return (
-    <CenterContainer>
-      <MatrixTerminal
-        lines={lines}
-        onComplete={() => {
-          setIsCompleted(true);
-          const audio = new Audio("/sounds/knock-knock.mp3");
-          audio.play();
-        }}
-      />
-     <div style={{ visibility: isCompleted ? 'visible' : 'hidden' }}>
-        <RedPillButton
-          onClick={() => {
-            const audio = new Audio("/sounds/knock-knock.mp3");
-            audio.play();
-          }}
-        >
-          Knock, knock
-        </RedPillButton>
-      </div>
-    </CenterContainer>
-  );
-};

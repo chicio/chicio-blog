@@ -9,7 +9,7 @@ import {
 } from "../molecules/buttons/pills-buttons";
 import { useGlassmorphism } from "../utils/hooks/use-glassmorphism";
 
-export const CookieConsentBanner = () => {
+const CookieConsentBanner = () => {
   const { glassmorphismClass } = useGlassmorphism();
   const [visible, setVisible] = useState(false);
 
@@ -58,3 +58,5 @@ export const CookieConsentBanner = () => {
     </AnimatePresence>
   );
 };
+
+export default CookieConsentBanner;

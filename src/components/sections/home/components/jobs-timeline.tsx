@@ -16,7 +16,7 @@ const containerVariants: Variants = {
   },
 };
 
-export const JobsTimeline: FC = () => (
+const JobsTimeline: FC = () => (
   <div className="container-fluid snap-start flex flex-col max-w-6xl py-9">
     <MotionDiv
       variants={containerVariants}
@@ -29,3 +29,5 @@ export const JobsTimeline: FC = () => (
     </MotionDiv>
   </div>
 );
+
+export default JobsTimeline;

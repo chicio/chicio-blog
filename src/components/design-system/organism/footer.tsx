@@ -9,7 +9,7 @@ export interface FooterProps {
   trackingCategory: string;
 }
 
-export const Footer: FC<FooterProps> = ({ author, trackingCategory }) => (
+const Footer: FC<FooterProps> = ({ author, trackingCategory }) => (
   <footer className="bg-primary-dark border-t-accent relative w-full shrink-0 snap-start border-t-2 border-solid shadow-lg">
     <div className="flex flex-col w-full items-center">
       <div className="grid grid-cols-2 gap-3 py-7 px-5 w-full sm:grid-cols-[repeat(6,auto)] sm:justify-center sm:max-w-4xl sm:mx-auto">
@@ -93,3 +93,5 @@ export const Footer: FC<FooterProps> = ({ author, trackingCategory }) => (
     </div>
   </footer>
 );
+
+export default Footer;

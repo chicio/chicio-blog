@@ -6,7 +6,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { useEffect, useState } from "react";
 
-export const TrackingOptIn = () => {
+const TrackingOptIn = () => {
   const [enabled, setEnabled] = useState(true);
 
   useEffect(() => {
@@ -31,3 +31,5 @@ export const TrackingOptIn = () => {
     </>
   );
 };
+
+export default TrackingOptIn;

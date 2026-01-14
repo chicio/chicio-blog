@@ -8,7 +8,7 @@ import {
 import { writeMotion } from "@/lib/motion/motion";
 import { useMotionStore } from "../../utils/hooks/use-motion-store";
 
-export const MotionButton = () => {
+const MotionButton = () => {
     const motionEnabled = useMotionStore();
     const pathname = usePathname();
 
@@ -22,10 +22,12 @@ export const MotionButton = () => {
 
     return (
         <div
-            aria-label={motionEnabled ? "Disattiva animazioni" : "Attiva animazioni"}
+            aria-label={motionEnabled ? "Enable animation" : "Disable animation"}
             onClick={toggleMotion}
         >
             {motionEnabled ? <MotionOnIcon /> : <MotionOffIcon />}
         </div>
     );
 };
+
+export default MotionButton;

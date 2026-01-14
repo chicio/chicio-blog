@@ -25,11 +25,11 @@ const itemVariants: Variants = {
   },
 };
 
-export interface TechnologiesProps {
+interface TechnologiesProps {
   author: string;
 }
 
-export const Technologies: FC<TechnologiesProps> = ({ author }) => (
+const Technologies: FC<TechnologiesProps> = ({ author }) => (
   <div className="container-fluid flex max-w-6xl snap-start flex-col py-9">
     <div className='max-w-[1200px] w-full flex flex-col z-10 gap-10'>
       <MotionDiv
@@ -52,3 +52,5 @@ export const Technologies: FC<TechnologiesProps> = ({ author }) => (
     </div>
   </div>
 );
+
+export default Technologies;

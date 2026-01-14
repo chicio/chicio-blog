@@ -34,12 +34,14 @@ export const useSearch = (
     useState<elasticlunr.Index<SearchablePostFields>>();
 
   useEffect(() => {
-    fetch(`/${searchIndexFileName}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setSearchIndex(elasticlunr.Index.load<SearchablePostFields>(data));
-      });
-  }, []);
+    if (startSearch && !searchIndex) {
+      fetch(`/${searchIndexFileName}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setSearchIndex(elasticlunr.Index.load<SearchablePostFields>(data));
+        });
+    }
+  }, [startSearch, searchIndex]);
 
   const searchUsing = useMemo(
       () => (value: string) => {

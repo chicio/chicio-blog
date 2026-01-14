@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChatIcon } from "../../atoms/icons/chat-icon";
 
-export const FloatingChatButton = () => {
+const FloatingChatButton = () => {
   const pathname = usePathname();
 
   if (pathname.startsWith("/chat")) {
@@ -20,3 +20,5 @@ export const FloatingChatButton = () => {
     </div>
   );
 };
+
+export default FloatingChatButton;
