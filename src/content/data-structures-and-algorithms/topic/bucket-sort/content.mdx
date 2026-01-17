@@ -1,0 +1,32 @@
+# Bucket sort
+
+- Overview of Bucket Sort
+- When it is useful: sorting numbers with bounded range or frequency-based sorting
+- Relation to counting sort and radix sort
+- how does it works
+-- Step 1: Create buckets (arrays, lists) to hold elements
+-- Step 2: Scatter elements into buckets according to a mapping function
+-- Step 3: Sort individual buckets (usually with insertion sort)
+-- Step 4: Concatenate buckets
+- Complexity analysis and why it can be O(n) for uniform distribution
+
+Codice che implementa l'algoritmo in typescript
+
+## Practical Use Cases
+- Sorting floating-point numbers in [0,1)
+- Frequency counting (characters, words)
+- Finding maximum gaps
+
+## Time & Space Complexity
+- Best case: O(n + k) where k is number of buckets
+- Average case: O(n + n²/k + k)
+- Worst case: O(n²) if all elements fall into the same bucket
+- Space: O(n + k)
+
+## Exercises
+
+| Problem | Technique | Solution |
+|---------|-----------|----------|
+| Sort Characters By Frequency | Bucket Sort | Soon available |
+| Top K Frequent Words | Bucket Sort | Soon available |
+| Maximum Gap | Bucket Sort | Soon available |
