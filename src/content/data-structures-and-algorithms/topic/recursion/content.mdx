@@ -1,0 +1,94 @@
+---
+title: "Recursion"
+description: "A deep dive into recursion as a problem-solving technique, with practical TypeScript examples."
+date: 2026-01-18
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [recursion, recursive algorithms, data structures, algorithms]
+authors: [fabrizio_duroni]
+---
+import { RecursiveCallStackVisualizer } from "@/components/sections/data-structures-and-algorithms/components/recursion-visualizer";
+import { InteractiveBlock } from "@/components/sections/data-structures-and-algorithms/components/interactive-block";
+
+# Recursion
+
+Recursion is one of the most fundamental ideas in computer science, yet it is also one of the most misunderstood. 
+At a surface level, recursion is simply the ability of a function to call itself. At a deeper level, however, recursion is a *model of computation* 
+that allows us to describe complex behavior in terms of simpler, self-similar subproblems.
+
+From a theoretical perspective, recursion does not provide additional expressive power compared to iteration. Any recursive algorithm can be 
+rewritten using loops and explicit state, typically by simulating the call stack manually. The choice between recursion and iteration is therefore 
+not about *what* can be computed, but about *how clearly* a problem’s structure is expressed. In many cases, recursion makes that structure explicit 
+and easier to reason about.
+
+A recursive algorithm is built around two complementary ideas. The first is a **base case**, which represents the simplest instance of the problem 
+and can be solved directly. The second is a **recursive step**, which reduces the original problem to one or more smaller instances of the same problem. 
+Correct recursive reasoning depends on the guarantee that each recursive step makes measurable progress toward a base case, ensuring termination.
+
+In practice, recursion is closely tied to the call stack. Each function invocation creates a new stack frame that stores local variables and return 
+addresses. Understanding recursion therefore requires understanding how the call stack evolves over time, not just how values are computed. This 
+execution model has concrete implications: recursive solutions consume stack space, have limits on depth, and may behave very differently across languages and runtimes.
+
+Some recursive functions are **tail-recursive**, meaning that the recursive call is the last operation performed by the function. In languages or 
+runtimes that support tail-call optimization, such functions can be executed using constant stack space, effectively behaving like loops. However, 
+in JavaScript and TypeScript, tail-call optimization is not reliably applied, so recursive depth must always be considered explicitly.
+
+## The Anatomy of a Recursive Function
+
+Every recursive function, regardless of complexity, follows the same fundamental structure. Understanding this structure is essential not only for writing 
+correct recursive code, but also for reasoning about its correctness, termination, and complexity.
+
+At its core, a recursive function is defined by three elements: a base case, a recursive case, and a notion of progress.
+
+The **base case** represents the simplest instance of the problem, one that can be solved directly without further recursion. 
+It acts as an anchor point for the computation. Without a base case, recursion has no stopping condition and will inevitably lead to infinite recursion.
+
+The **recursive case** defines how the problem is reduced to one or more smaller instances of the same problem. This reduction must preserve 
+the structure of the original problem while moving closer to the base case.
+
+Equally important, though often implicit, is the idea of **progress**. Each recursive call must operate on a strictly smaller or simpler input according 
+to some well-defined measure. This measure is what guarantees that the recursion will eventually terminate.
+
+To make these ideas concrete, consider the following simple recursive function:
+
+```ts
+function sum(n: number): number {
+  if (n === 0) {
+    return 0; // base case
+  }
+
+  return n + sum(n - 1); // recursive case
+}
+```
+
+Here, the progress measure is the value of n. Each recursive call reduces n by one, and the recursion terminates when n reaches zero.
+
+## Recursion and the Call Stack
+
+While recursion is often explained in terms of mathematical definitions, it is executed through a very concrete mechanism: the call stack.
+
+Each time a recursive function is invoked, a new stack frame is created. This frame contains the function’s local variables and the information 
+needed to resume execution after the recursive call returns. As recursion deepens, stack frames accumulate. When a base case is reached, the call 
+stack begins to unwind, returning values back through the chain of calls.
+
+Understanding this stack-based execution model is crucial. Many bugs in recursive code arise not from incorrect logic, but from an incomplete 
+mental model of how values flow back up the call stack.
+
+To help build this intuition, the following interactive visualization shows how stack frames are created and resolved during a recursive computation.
+
+Notice how the base case does not “stay” on the stack. It immediately produces a value, and the stack starts unwinding. Recursive results are 
+not computed while descending, but while returning.
+
+<InteractiveBlock title="Recursion">
+    <RecursiveCallStackVisualizer />
+</InteractiveBlock>
+
+## Recursive Reasoning
+
+When reasoning about a recursive function, it is often useful to think in terms of assumptions. Instead of tracing the entire execution, we 
+assume that the recursive call correctly solves a smaller version of the problem, and then focus on how the current step uses that result.
+
+In the sum example, we assume that `sum(n - 1)` correctly computes the sum of all integers from 0 to n - 1. Given that assumption, it becomes 
+straightforward to see why adding n produces the correct result for `sum(n)`.
+
+This style of reasoning mirrors mathematical induction and forms the foundation for proving the correctness of recursive algorithms. It will reappear 
+throughout this article as we explore structural recursion, divide-and-conquer strategies, and recursive parsing.
