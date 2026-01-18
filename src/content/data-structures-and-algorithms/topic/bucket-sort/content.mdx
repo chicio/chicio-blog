@@ -9,34 +9,97 @@ authors: [fabrizio_duroni]
 
 # Bucket sort
 
-- Overview of Bucket Sort
-- When it is useful: sorting numbers with bounded range or frequency-based sorting
-- Relation to counting sort and radix sort
+Bucket Sort is a distribution-based sorting algorithm that works by dividing elements into several "buckets" and then sorting each bucket individually. 
+It is particularly effective for sorting numbers that fall within a bounded range or when sorting elements based on their frequency.
+Bucket Sort shines when the input data has some form of **structure or constraint** that can be exploited.
 
-- how does it works
--- Step 1: Create buckets (arrays, lists) to hold elements
--- Step 2: Scatter elements into buckets according to a mapping function
--- Step 3: Sort individual buckets (usually with insertion sort)
--- Step 4: Concatenate buckets
-- Complexity analysis and why it can be O(n) for uniform distribution
+It is particularly effective when:
+- The values fall within a **known or limited range**, allowing elements to be distributed evenly across buckets.
+- The problem is **frequency-based**, such as sorting characters, words, or numbers by how often they appear.
+- The goal is not full sorting, but **deriving information from distribution**, such as finding maximum gaps or ranges.
 
-Codice che implementa l'algoritmo in typescript
+In these scenarios, Bucket Sort reduces the problem from a global ordering task to a set of smaller, more manageable local sorts. 
+When the data is reasonably well distributed, this leads to very efficient performance.
+
+Bucket Sort belongs to the family of **distribution-based sorting algorithms**, along with **Counting Sort** and **Radix Sort**.
+
+All three share the same core idea: instead of comparing elements directly, they **group elements based on their value or position** and 
+then reconstruct the final ordering.
+
+- [**Counting Sort**](https://it.wikipedia.org/wiki/Counting_sort) uses direct indexing to count occurrences of each value.
+- [**Radix Sort**](https://en.wikipedia.org/wiki/Radix_sort) processes digits or characters incrementally, grouping elements by position.
+- **Bucket Sort** generalizes this idea by placing elements into ranges (buckets) and sorting within each range.
+
+Because of this, Bucket Sort can be seen as a flexible middle ground: more general than Counting Sort, but less rigid than Radix Sort, 
+making it a powerful tool when value distribution can be reasonably predicted.
+
+```ts
+function bucketSort(arr: number[], bucketCount: number = 5): number[] {
+  if (arr.length <= 1) return arr;
+
+  // Determine min and max values
+  const minValue = Math.min(...arr);
+  const maxValue = Math.max(...arr);
+
+  // Initialize buckets
+  const buckets: number[][] = Array.from({ length: bucketCount }, () => []);
+
+  // **** Scatter elements into buckets ****
+  // Rule to distribute CAN CHANGE based on the REQUIREMENTS of the problem.
+  // ----
+  for (const num of arr) {
+    const index = Math.floor(((num - minValue) / (maxValue - minValue + 1)) * bucketCount);
+    buckets[index].push(num);
+  }
+  // ----
+
+  // **** Sort individual buckets and concatenate ****
+  // Sort CAN CHANGE based on the REQUIREMENTS of the problem.
+  // ----
+  const sortedArray: number[] = [];
+  for (const bucket of buckets) {
+    bucket.sort((a, b) => a - b); // using built-in sort (can use insertion sort)
+    sortedArray.push(...bucket);
+  }
+  // ----
+
+  return sortedArray;
+}
+
+// Example usage
+const numbers = [0.42, 0.32, 0.23, 0.52, 0.25, 0.47];
+console.log(bucketSort(numbers, 5));
+```
 
 ## Practical Use Cases
-- Sorting floating-point numbers in [0,1)
-- Frequency counting (characters, words)
-- Finding maximum gaps
+
+Bucket Sort is not a general-purpose sorting algorithm, but it can be extremely efficient when the input data has known and favorable characteristics.
+
+A classic use case is sorting floating-point numbers in the range `[0, 1)`. When values are uniformly distributed, each element can be mapped directly to a bucket using a simple 
+arithmetic formula. Because each bucket ends up containing only a small number of elements, the cost of sorting inside buckets is minimal, allowing Bucket Sort to run
+ in linear time in practice.
+
+Another common application involves frequency-based problems, such as sorting characters or words by how often they appear. 
+In these scenarios, buckets represent frequency values rather than numeric ranges. Elements are placed directly into the bucket corresponding to their count, 
+and iterating over the buckets in order produces the desired result without relying on comparison-based sorting.
+
+Bucket Sort is also useful in problems that require analyzing the distribution of values rather than fully sorting them. A notable example 
+is finding the maximum gap between adjacent elements in sorted order. By storing only the minimum and maximum values in each bucket, it is possible 
+to compute the result efficiently without performing a complete sort, achieving linear time complexity.
 
 ## Time & Space Complexity
-- Best case: O(n + k) where k is number of buckets
-- Average case: O(n + n²/k + k)
-- Worst case: O(n²) if all elements fall into the same bucket
-- Space: O(n + k)
+
+Bucket Sort’s efficiency strongly depends on how evenly elements are distributed across buckets:
+
+- **Best Case — Time Complexity: $O(n + k)$**, when elements are uniformly distributed and each bucket contains only a few items.
+- **Average Case — Time Complexity: $O(n + n^2 / k + k)$**, assuming a reasonably balanced distribution of elements among buckets.
+- **Worst Case — Time Complexity: $O(n^2)$**, when all elements fall into a single bucket, degrading to the internal sorting algorithm.
+- **Space Complexity: $O(n + k)$**, due to the additional memory required to store buckets.
 
 ## Exercises
 
 | Problem | Technique | Solution |
 |---------|-----------|----------|
-| Sort Characters By Frequency | Bucket Sort | Soon available |
-| Top K Frequent Words | Bucket Sort | Soon available |
-| Maximum Gap | Bucket Sort | Soon available |
+| [Sort Characters By Frequency](https://leetcode.com/problems/sort-characters-by-frequency/) | Bucket Sort | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/bucket-sort/sort-characters-by-frequency.ts) |
+| [Top K Frequent Words](https://leetcode.com/problems/top-k-frequent-words/) | Bucket Sort | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/bucket-sort/top-k-frequent-words.ts) |
+| [Maximum Gap](https://leetcode.com/problems/maximum-gap/) | Bucket Sort | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/bucket-sort/maximum-gap.ts) |
