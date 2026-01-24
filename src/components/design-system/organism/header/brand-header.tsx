@@ -13,8 +13,8 @@ interface BrandHeaderProps {
 
 export const BrandHeader: FC<BrandHeaderProps> = ({ big }) => {
   const { glassmorphismClass } = useGlassmorphism();
-  const height = big ? "h-auto" : "h-[150px] md:h-[180px]";
-  const margins = big ? "my-8" : "my-5";
+  const height = big ? "h-auto" : "h-[170px] md:h-[200px]";
+  const margins = big ? "mt-14 mb-8" : "mt-12";
 
   return (
     <div className={`block ${height}`}>

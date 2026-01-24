@@ -23,7 +23,7 @@ export const GenericHeader: FC<ChatHeaderProps> = ({ title, subtitle, logo, visi
   }
 
   return (
-    <div className={`${glassmorphismClass} text-center px-3 py-3 sm:px-5 sm:py-4 my-4 sm:my-7 mx-0 z-30`} onClick={toggleSubtitle}>
+    <div className={`${glassmorphismClass} text-center px-3 py-3 sm:px-5 sm:py-4 my-8 sm:my-12 mx-0 z-30`} onClick={toggleSubtitle}>
       <div className="flex flex-row items-center justify-center mb-1 sm:mb-2 gap-2 sm:gap-3">
         {logo}
         <h3>{title}</h3>
