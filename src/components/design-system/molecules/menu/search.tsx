@@ -23,7 +23,7 @@ export const SearchBox: FC<{
   };
 
   return (
-    <div className="xs:static [&:hover_*]:border-accent absolute top-2.5 right-2.5 ml-auto translate-0 rounded-full hover:shadow-lg">
+    <div className="xs:static [&:hover_*]:border-accent absolute top-3.5 right-2.5 ml-auto sm:mr-3 translate-0 rounded-full hover:shadow-lg">
       <InputField
         ref={inputRef}
         className={`active:text-accent hover:border-accent focus:text-accent h-[35px] p-2.5 text-transparent transition-all duration-300 ${startSearch ? "w-[130px]" : "w-[35px]"}`}

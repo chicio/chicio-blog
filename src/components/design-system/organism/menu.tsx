@@ -5,9 +5,7 @@ import {
   SearchHits,
 } from "@/components/design-system/molecules/menu/search";
 import { useSearch } from "@/components/design-system/utils/hooks/use-search";
-import {
-  whiteRabbitEasterEgg,
-} from "@/components/sections/easter-eggs/white-rabbit";
+import { whiteRabbitEasterEgg } from "@/components/sections/easter-eggs/white-rabbit";
 import { slugs } from "@/types/configuration/slug";
 import { tracking } from "@/types/configuration/tracking";
 import { AnimatePresence, Variants } from "framer-motion";
@@ -24,14 +22,12 @@ import {
   useScrollDirection,
 } from "../utils/hooks/use-scroll-direction";
 import { MotionDiv } from "../molecules/animation/motion-div";
-import dynamic from 'next/dynamic';
+import dynamic from "next/dynamic";
 
 const NeoRoomEasterEgg = dynamic(
   () => import("@/components/sections/easter-eggs/neo-room-easter-egg"),
   { ssr: false },
 );
-
-export const menuHeightNumber = 55;
 
 const renderMenuItems = (
   isMobile: boolean,
@@ -135,7 +131,7 @@ const renderMenuItems = (
 
 const menuVariants: Variants = {
   hidden: {
-    y: -menuHeightNumber,
+    y: -80,
     transition: {
       type: "tween",
       duration: 0.3,
@@ -189,45 +185,41 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
   return (
     <>
       <MotionDiv
-        className={`${glassmorphismClass} xs:pl-3 xs:pr-3 menu-container fixed top-0 right-0 left-0 z-50 rounded-tl-none rounded-tr-none border-t-0 p-0 hover:scale-100 ${shouldOpenMenu ? "xs:block hidden" : ""}`}
+        className={`menu-container container-fixed fixed right-0 left-0 z-50 my-3 ${shouldOpenMenu ? "xs:block hidden" : ""}`}
         variants={menuVariants}
         animate={shouldHideMenu ? "hidden" : "visible"}
         initial="visible"
       >
         <div
-          className={`menu-container container-fixed xs:overflow-visible mx-auto my-0 w-full overflow-hidden`}
+          className={`${glassmorphismClass} xs:overflow-visible xs:flex-row xs:py-0 xs:pt-0 m-0 my-0 flex min-h-16 flex-col items-center gap-1 overflow-hidden px-2`}
         >
-          <div
-            className={`xs:flex-row xs:py-0 xs:px-5 xs:pt-0 m-0 flex min-h-[55px] flex-col items-center gap-1 pt-[55px]`}
-          >
-            {renderMenuItems(
-              false, //desktop
-              pathname,
-              trackingCategory,
-              setShouldOpenMenu,
-            )}
-            {!startSearch && !shouldOpenMenu && (
-              <div className="xs:hidden absolute top-2.5 left-2.5">
-                <HamburgerMenu
-                  onClick={() => {
-                    if (!startSearch) {
-                      setShouldOpenMenu(true);
-                    }
-                  }}
-                />
-              </div>
-            )}
-            {!shouldOpenMenu && (
-              <SearchBox
-                startSearch={startSearch}
+          {renderMenuItems(
+            false, //desktop
+            pathname,
+            trackingCategory,
+            setShouldOpenMenu,
+          )}
+          {!startSearch && !shouldOpenMenu && (
+            <div className="xs:hidden absolute top-3.5 left-2.5">
+              <HamburgerMenu
                 onClick={() => {
-                  resetSearch();
-                  setStartSearch(!startSearch);
+                  if (!startSearch) {
+                    setShouldOpenMenu(true);
+                  }
                 }}
-                onChange={handleSearch}
               />
-            )}
-          </div>
+            </div>
+          )}
+          {!shouldOpenMenu && (
+            <SearchBox
+              startSearch={startSearch}
+              onClick={() => {
+                resetSearch();
+                setStartSearch(!startSearch);
+              }}
+              onChange={handleSearch}
+            />
+          )}
         </div>
       </MotionDiv>
       <AnimatePresence>

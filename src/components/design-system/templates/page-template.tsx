@@ -22,7 +22,7 @@ export const PageTemplate: FC<BlogPageProps> = ({
     <Menu trackingCategory={trackingCategory} />
     <ContentContainer>
       {header}
-      <div className="mt-8">{children}</div>
+      <div className="mt-4">{children}</div>
     </ContentContainer>
     <Footer author={author} trackingCategory={trackingCategory} />
   </>
