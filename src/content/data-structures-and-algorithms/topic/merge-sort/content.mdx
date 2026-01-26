@@ -1,0 +1,117 @@
+---
+title: "Merge Sort"
+description: "A deep dive into Merge Sort as a divide-and-conquer algorithm, from array sorting to linked lists and advanced counting problems."
+date: 2026-01-25
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [merge sort, divide and conquer, sort, sorting, data structures, algorithms]
+authors: [fabrizio_duroni]
+---
+
+# Merge Sort
+
+Merge Sort is often introduced as a classic comparison-based sorting algorithm with a guaranteed time complexity of $O(n \log n)$. 
+While this statement is technically correct, it is also deeply incomplete. What makes Merge Sort truly important is not the final complexity bound, 
+but the structure of the algorithm itself.
+
+At its core, Merge Sort is one of the cleanest and most instructive examples of the [divide and conquer](/data-structures-and-algorithms/topic/recursion#divide--conquer) paradigm. 
+The problem of sorting is recursively decomposed into smaller, identical subproblems, and the results are combined in a deterministic and well-defined way. 
+This separation between problem decomposition and result composition is the key idea that gives Merge Sort its expressive power.
+
+Unlike other sorting algorithms, the work performed by Merge Sort is not concentrated in clever partitioning or pivot selection. 
+The divide step is trivial, while the merge step carries almost all the algorithmic responsibility. 
+This design makes the behavior of the algorithm predictable and easy to reason about, even under different constraints and data representations.
+
+For this reason, Merge Sort should be studied not only as a way to sort arrays, but as a reusable algorithmic pattern. 
+The same recursive structure can be adapted to contexts where random access is not available, such as linked lists, or extended to solve problems that go beyond sorting, 
+including counting relationships between elements across subarrays.
+
+In this article, we will analyze Merge Sort from this structural point of view. 
+The goal is to understand why the algorithm works and where it naturally applies, building a mental model that can later be reused in more advanced 
+scenarios rather than memorizing yet another sorting routine.
+
+## Algorithm
+
+Merge Sort applies the [divide and conquer](/data-structures-and-algorithms/topic/recursion#divide--conquer) paradigm in a particularly disciplined way. 
+The problem is recursively divided until it becomes trivial, and all meaningful work is deferred to the phase where partial results are combined.  
+
+The algorithm operates according to **three conceptual steps**.  
+
+First, the input array is divided into two halves. This step is purely structural and does 
+not depend on the values of the elements. The division continues recursively until each subarray contains at most one element. At that point, the subarray 
+is already sorted by definition.  
+
+Second, each half is sorted independently by the recursive calls. No assumptions are made about the order of elements during this phase, and no 
+comparisons are performed across the two halves yet.  
+
+Finally, the two sorted halves are merged into a single sorted array. This merge phase is where the algorithm enforces global order and where all comparisons between elements actually occur. 
+The key insight is that Merge Sort does not try to sort the array incrementally. Instead, it guarantees that whenever two elements are compared, they already belong to two sorted sequences. This invariant dramatically simplifies the logic and makes the algorithm both predictable and easy to reason about.
+
+The recursive structure of Merge Sort is straightforward. Given an array of length n:
+- If n is less than or equal to 1, the array is already sorted.
+- Otherwise, the array is split into two subarrays of roughly equal size.
+- Each subarray is sorted recursively.
+- The two sorted subarrays are merged.
+
+This structure ensures that the same logic is applied uniformly at every level of recursion, regardless of the input size.
+
+```typescript
+function mergeSort(arr: number[]): number[] {
+  if (arr.length <= 1) {
+    return arr;
+  }
+
+  const mid = Math.floor(arr.length / 2);
+  const left = mergeSort(arr.slice(0, mid));
+  const right = mergeSort(arr.slice(mid));
+
+  return merge(left, right);
+}
+
+function merge(left: number[], right: number[]): number[] {
+  const result: number[] = [];
+  let i = 0;
+  let j = 0;
+
+  while (i < left.length && j < right.length) {
+    if (left[i] <= right[j]) {
+      result.push(left[i]);
+      i++;
+    } else {
+      result.push(right[j]);
+      j++;
+    }
+  }
+
+  while (i < left.length) {
+    result.push(left[i]);
+    i++;
+  }
+
+  while (j < right.length) {
+    result.push(right[j]);
+    j++;
+  }
+
+  return result;
+}
+```
+
+## Time and Space Complexity
+
+At each recursion level, all elements are processed once during the merge phase, resulting in $O(n)$ work per level.
+
+The recursion depth is $O(\log n)$, since the input is repeatedly divided by two.
+- Time complexity: $O(n \log n)$
+- Best, average, and worst case are identical.
+
+For what concerns space complexity, Merge Sort requires additional memory to merge subarrays.
+- Auxiliary space: $O(n)$
+- Recursion stack: $O(\log n)$
+- Total space complexity: $O(n)$
+
+## Exercises
+
+| Problem | Technique | Solution |
+|--------|----------|----------|
+| [Sort List](https://leetcode.com/problems/sort-list/) | Merge Sort on Linked List | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/merge-sort/sort-list.ts) |
+| [Reverse Pairs](https://leetcode.com/problems/reverse-pairs/) | Merge Sort + Counting | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/merge-sort/reverse-pairs.ts) |

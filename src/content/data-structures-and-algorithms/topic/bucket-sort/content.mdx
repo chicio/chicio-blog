@@ -7,31 +7,32 @@ tags: [bucket sort, sort, sorting, data structures, algorithms]
 authors: [fabrizio_duroni]
 ---
 
-# Bucket sort
+# Bucket Sort
 
-Bucket Sort is a distribution-based sorting algorithm that works by dividing elements into several "buckets" and then sorting each bucket individually. 
-It is particularly effective for sorting numbers that fall within a bounded range or when sorting elements based on their frequency.
-Bucket Sort shines when the input data has some form of **structure or constraint** that can be exploited.
+Bucket Sort is not a general-purpose sorting algorithm. 
+Its value does not come from guaranteeing optimal performance in all scenarios, but from exploiting specific properties of the input data.
 
-It is particularly effective when:
-- The values fall within a **known or limited range**, allowing elements to be distributed evenly across buckets.
-- The problem is **frequency-based**, such as sorting characters, words, or numbers by how often they appear.
-- The goal is not full sorting, but **deriving information from distribution**, such as finding maximum gaps or ranges.
+Rather than ordering elements through comparisons, Bucket Sort approaches sorting as a distribution problem. 
+Elements are grouped into a finite number of buckets based on a known rule, and ordering emerges naturally from the way these buckets are traversed and combined.
 
-In these scenarios, Bucket Sort reduces the problem from a global ordering task to a set of smaller, more manageable local sorts. 
-When the data is reasonably well distributed, this leads to very efficient performance.
+This shift in perspective is what makes Bucket Sort interesting. When the input data exhibits structure, such as a 
+bounded range of values or a meaningful notion of frequency, the global sorting problem can be reduced to a collection of smaller and simpler local operations.
 
-Bucket Sort belongs to the family of **distribution-based sorting algorithms**, along with **Counting Sort** and **Radix Sort**.
+## Algorithm
 
-All three share the same core idea: instead of comparing elements directly, they **group elements based on their value or position** and 
-then reconstruct the final ordering.
+At a high level, Bucket Sort proceeds in three conceptual phases.
 
-- [**Counting Sort**](https://it.wikipedia.org/wiki/Counting_sort) uses direct indexing to count occurrences of each value.
-- [**Radix Sort**](https://en.wikipedia.org/wiki/Radix_sort) processes digits or characters incrementally, grouping elements by position.
-- **Bucket Sort** generalizes this idea by placing elements into ranges (buckets) and sorting within each range.
+First, the algorithm defines a fixed number of buckets and a rule that assigns each input element to one of them. 
+This rule depends on the constraints of the problem and encodes how values are distributed across the domain.
 
-Because of this, Bucket Sort can be seen as a flexible middle ground: more general than Counting Sort, but less rigid than Radix Sort, 
-making it a powerful tool when value distribution can be reasonably predicted.
+Second, elements are scattered into buckets according to this rule. At this stage, no global ordering is enforced.
+ The algorithm only ensures that elements assigned to earlier buckets should appear before elements assigned to later buckets in the final result.
+
+Finally, each bucket is processed independently, typically by applying a simple comparison-based sort. 
+The final sorted output is obtained by concatenating the buckets in order.
+
+The correctness of Bucket Sort relies on a single invariant: if an element belongs to bucket `i` and another element belongs to bucket `j`, 
+with `i < j`, then the first element must appear before the second in the final ordering.
 
 ```ts
 function bucketSort(arr: number[], bucketCount: number = 5): number[] {
@@ -65,36 +66,19 @@ function bucketSort(arr: number[], bucketCount: number = 5): number[] {
 
   return sortedArray;
 }
-
-// Example usage
-const numbers = [0.42, 0.32, 0.23, 0.52, 0.25, 0.47];
-console.log(bucketSort(numbers, 5));
 ```
 
-## Practical Use Cases
+## Time and Space Complexity
 
-Bucket Sort is not a general-purpose sorting algorithm, but it can be extremely efficient when the input data has known and favorable characteristics.
+The performance of Bucket Sort depends on how evenly elements are distributed across buckets.
 
-A classic use case is sorting floating-point numbers in the range `[0, 1)`. When values are uniformly distributed, each element can be mapped directly to a bucket using a simple 
-arithmetic formula. Because each bucket ends up containing only a small number of elements, the cost of sorting inside buckets is minimal, allowing Bucket Sort to run
- in linear time in practice.
+When elements are reasonably balanced across buckets, each bucket contains only a small number of elements, and the overall time complexity 
+approaches linear behavior.
+The Expected time complexity is $O(n)$, assuming uniform distribution. The Worst case: $O(n^2)$, when all elements fall into a single bucket.
 
-Another common application involves frequency-based problems, such as sorting characters or words by how often they appear. 
-In these scenarios, buckets represent frequency values rather than numeric ranges. Elements are placed directly into the bucket corresponding to their count, 
-and iterating over the buckets in order produces the desired result without relying on comparison-based sorting.
+Bucket Sort requires additional memory to store buckets and their contents. The	expected space complexity is $O(n + k)$, where $k$ is the number of buckets.
 
-Bucket Sort is also useful in problems that require analyzing the distribution of values rather than fully sorting them. A notable example 
-is finding the maximum gap between adjacent elements in sorted order. By storing only the minimum and maximum values in each bucket, it is possible 
-to compute the result efficiently without performing a complete sort, achieving linear time complexity.
-
-## Time & Space Complexity
-
-Bucket Sort’s efficiency strongly depends on how evenly elements are distributed across buckets:
-
-- **Best Case — Time Complexity: $O(n + k)$**, when elements are uniformly distributed and each bucket contains only a few items.
-- **Average Case — Time Complexity: $O(n + n^2 / k + k)$**, assuming a reasonably balanced distribution of elements among buckets.
-- **Worst Case — Time Complexity: $O(n^2)$**, when all elements fall into a single bucket, degrading to the internal sorting algorithm.
-- **Space Complexity: $O(n + k)$**, due to the additional memory required to store buckets.
+This dependency on extra space is the primary tradeoff of the algorithm.
 
 ## Exercises
 
