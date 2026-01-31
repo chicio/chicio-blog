@@ -3,40 +3,11 @@ import { ImageGlow } from "@/components/design-system/atoms/effects/image-glow";
 import { Project } from "@/types/home/projects";
 import { Variants } from "framer-motion";
 import { FC } from "react";
-import { MotionDiv } from "@/components/design-system/molecules/animation/motion-div";
-
-const cardVariants: Variants = {
-  hidden: {
-    opacity: 0,
-    y: 50,
-    scale: 0.95,
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: {
-      duration: 0.6,
-      ease: "easeOut",
-    },
-  },
-  hover: {
-    scale: 1.02,
-    transition: { duration: 0.3, ease: "easeOut" },
-  },
-};
 
 export type ProjectProps = { project: Project };
 
 export const ProjectCard: FC<ProjectProps> = ({ project }) => (
-  <MotionDiv
-    className="mx-auto my-5 max-w-[1200px]"
-    variants={cardVariants}
-    whileHover="hover"
-    initial="hidden"
-    whileInView="visible"
-    viewport={{ once: true, amount: 0.2 }}
-  >
+  <div className="mx-auto w-full"  >
     <div className="glow-container p-4 md:p-8 flex flex-col gap-5 md:mx-auto md:my-5 md:flex-row">
       <div className="flex flex-1 flex-col">
         <h3 className="mb-3">{project.name}</h3>
@@ -79,5 +50,5 @@ export const ProjectCard: FC<ProjectProps> = ({ project }) => (
         />
       </div>
     </div>
-  </MotionDiv>
+  </div>
 );
