@@ -11,7 +11,7 @@ export const Button: FC<ButtonProps> = ({ className, children, ...props }) => {
   const { glassmorphismClass } = useGlassmorphism();
   
   return (
-    <button className={`${glassmorphismClass} bg-transparent p-3 sm:p-5 text-text-above-primary cursor-pointer text-left flex items-center gap-3${className ? ` ${className}` : ""}`} {...props}>
+    <button className={`${glassmorphismClass} bg-transparent p-3 sm:p-5 text-primary-text cursor-pointer text-left flex items-center gap-3${className ? ` ${className}` : ""}`} {...props}>
       {children}
     </button>
   );
