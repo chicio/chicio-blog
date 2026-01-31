@@ -1,5 +1,21 @@
 # Changelog
 
+## [3.9.0](https://github.com/chicio/chicio-blog/compare/v3.8.0...v3.9.0) (2026-01-31)
+
+### Features
+
+* **capabilities:** :sparkles: indexing of all content for search (dsa, about-me etc) ([f975cfc](https://github.com/chicio/chicio-blog/commit/f975cfc05b66b6109709612c37d4b42c3829d34b))
+* **capabilities:** :sparkles: MDX for post content ([#182](https://github.com/chicio/chicio-blog/issues/182)) ([0b250d1](https://github.com/chicio/chicio-blog/commit/0b250d19a2911bf1d2b5753d2a1d990898d58fe4))
+* **content:** :sparkles: About me full biography + home faster then light ([#200](https://github.com/chicio/chicio-blog/issues/200)) ([1e3ed21](https://github.com/chicio/chicio-blog/commit/1e3ed212451f31935812844848413e9f515567dc))
+* **content:** :sparkles: Bucket sort ([#190](https://github.com/chicio/chicio-blog/issues/190)) ([e9fe05a](https://github.com/chicio/chicio-blog/commit/e9fe05a9a7d40a441adb3b1b24ee2b3c3d5c2eab))
+* **content:** :sparkles: Merge sort ([#198](https://github.com/chicio/chicio-blog/issues/198)) ([3c22506](https://github.com/chicio/chicio-blog/commit/3c225068c7725ac8db8217af7c5abf896f252fb0))
+* **content:** :sparkles: Queue ([#183](https://github.com/chicio/chicio-blog/issues/183)) ([e984ce7](https://github.com/chicio/chicio-blog/commit/e984ce78754b1151a8e9bc78a6ec51a8be8839e4))
+* **content:** :sparkles: Recursion ([#191](https://github.com/chicio/chicio-blog/issues/191)) ([9ff7587](https://github.com/chicio/chicio-blog/commit/9ff75872ca56612cfb6572c4e5c5ed1aeba4dfb3))
+* **performance:** :zap: avoid search index creation if content didn't change ([86ca7e2](https://github.com/chicio/chicio-blog/commit/86ca7e2a74e9cb6818ac0f8f27293ecaffe80c99))
+* **performance:** :zap: dynamic imports + defer search index ([fd68d69](https://github.com/chicio/chicio-blog/commit/fd68d6922cb02dd2e35f6e08cd13396e8f7241c3))
+* **ux:** :sparkles: menu floating ([a16d84f](https://github.com/chicio/chicio-blog/commit/a16d84f38722352b704c66befdc16514531cfa5a))
+* **ux:** :sparkles: title animation with cursor to simulate prompt header ([b999490](https://github.com/chicio/chicio-blog/commit/b999490f87215ae853a58092a3f8b04edb9832d3))
+
 ## [3.8.0](https://github.com/chicio/chicio-blog/compare/v3.7.0...v3.8.0) (2026-01-08)
 
 ### Features
