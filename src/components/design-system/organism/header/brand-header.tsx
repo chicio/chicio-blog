@@ -5,6 +5,7 @@ import { DejavuEasterEgg } from "@/components/sections/easter-eggs/dejavu";
 import { FC } from "react";
 import logoImage from "../../../../../public/images/logo.png";
 import { ImageGlow } from "../../atoms/effects/image-glow";
+import { Cursor } from "../../atoms/typography/terminal-blocks";
 import { useGlassmorphism } from "../../utils/hooks/use-glassmorphism";
 
 interface BrandHeaderProps {
@@ -33,7 +34,7 @@ export const BrandHeader: FC<BrandHeaderProps> = ({ big }) => {
               />
               <div className="flex flex-col justify-start">
                 <span className="text-accent m-0 block font-mono text-2xl font-bold uppercase text-shadow-lg sm:text-4xl">
-                  CHICIO CODING
+                  <span className="text-shadow-md">{'> '}</span>CHICIO CODING<Cursor>_</Cursor>
                 </span>
                 <span className="text-primary-text font-mono text-xs font-normal text-shadow-md sm:text-lg">
                   Pixels. Code. Unplugged.
