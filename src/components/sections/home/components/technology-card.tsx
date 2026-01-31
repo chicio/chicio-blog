@@ -1,30 +1,14 @@
 import { Technology } from "@/types/home/technology";
-import { Variants } from "framer-motion";
 import Image from "next/image";
 import { FC } from "react";
-import { MotionDiv } from "@/components/design-system/molecules/animation/motion-div";
 
-const cardVariants: Variants = {
-  hidden: { scale: 0.8 },
-  visible: {
-    scale: 1,
-    transition: { duration: 0.4, type: "tween", ease: "linear" },
-  },
-};
-
-export const TechnologyCard: FC<{ tech: Technology; index: number }> = ({
+export const TechnologyCard: FC<{ tech: Technology }> = ({
   tech,
-  index,
 }) => {
   return (
-    <MotionDiv
-      className="glow-container max-width-[150px] flex min-h-[140px] w-full cursor-pointer flex-col items-center justify-between p-5 sm:max-w-[250px]"
+    <div
+      className="glow-container max-width-[130px] flex min-h-[120px] w-full cursor-pointer flex-col items-center justify-between p-5 sm:max-w-[200px]"
       key={tech.name}
-      variants={cardVariants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true }}
-      transition={{ delay: index * 0.1 }}
     >
       <Image
         className="object-contain mb-3"
@@ -36,6 +20,6 @@ export const TechnologyCard: FC<{ tech: Technology; index: number }> = ({
       />
       <span className="text-primary-text text-base font-medium">{tech.name}</span>
       <span className="text-secondary text-sm mt-2">{tech.years}</span>
-    </MotionDiv>
+    </div>
   );
 };

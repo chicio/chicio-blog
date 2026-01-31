@@ -355,13 +355,14 @@
         @apply text-secondary-text text-base leading-normal text-center italic mt-2 mb-3;
     }
 
+    #reading-content-container figure img {
+        @apply w-full border border-solid border-accent-alpha-40 rounded-xl hover:border-accent active:border-accent focus:border-accent shadow-lg transition-all duration-500 hover:scale-102;
+    }
+
     #reading-content-container iframe {
         @apply w-full h-auto aspect-video border border-solid border-accent-alpha-40 rounded-xl hover:border-accent active:border-accent focus:border-accent shadow-lg transition-all duration-500 hover:scale-102;
     }
 
-    #reading-content-container img {
-        @apply w-full border border-solid border-accent-alpha-40 rounded-xl hover:border-accent active:border-accent focus:border-accent shadow-lg transition-all duration-500 hover:scale-102;
-    }
 
     #reading-content-container p code {
         color: #d2a8ff;
