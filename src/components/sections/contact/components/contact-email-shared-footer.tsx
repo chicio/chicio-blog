@@ -16,35 +16,29 @@ export function EmailFooter() {
                     fabrizioduroni.it
                 </a>
             </Text>
-            <Text style={footerText}>
-                <span style={prompt}>{">"}</span> Follow the white rabbit 🐰
-            </Text>
             <Text style={footerCreditText}>
-                Made with 💝 by Fabrizio Duroni 'Chicio'
+                <span style={prompt}>{">"} Made with 💝 by Fabrizio Duroni 'Chicio'</span>
             </Text>
         </Section>
     );
 }
 
-// Styles
 const footer = {
-    padding: "10px 0 0 0",
-};
-
-const footerText = {
-    color: emailColors.secondary,
-    fontSize: "12px",
-    margin: "4px 0",
-    padding: "0",
-    fontFamily: emailFonts.mono,
+    width: "100%",
+    backgroundColor: emailColors.backgroundLight,
+    borderTop: `2px solid ${emailColors.accentAlpha40}`,
+    borderRadius: "0 0 8px 8px",
+    padding: "20px",
+    marginTop: "20px",
 };
 
 const footerLinkText = {
-    color: emailColors.secondary,
+    color: emailColors.accent,
     fontSize: "14px",
-    margin: "6px 0",
+    margin: "0 0 10px 0",
     padding: "0",
     fontFamily: emailFonts.mono,
+    textAlign: "center" as const,
 };
 
 const footerLink = {
@@ -55,13 +49,13 @@ const footerLink = {
 };
 
 const footerCreditText = {
-    color: emailColors.primaryText,
+    color: emailColors.secondary,
     fontSize: "11px",
-    margin: "10px 0 0 0",
+    margin: "0",
     padding: "0",
     fontFamily: emailFonts.mono,
     textAlign: "center" as const,
-    opacity: 0.8,
+    opacity: 0.7,
 };
 
 const prompt = {

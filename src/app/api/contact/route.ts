@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
     const { data: confirmationData, error: confirmationError } = await resend.emails.send({
       from: "Fabrizio Duroni <contact@fabrizioduroni.it>",
       to: [email],
-      subject: "Chicio Coding - Message Received",
+      subject: `Chicio Coding - Wake up, ${name}... The Matrix has you.`,
       react: ContactConfirmationEmail({ name, message }),
     });
 

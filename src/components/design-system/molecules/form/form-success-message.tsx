@@ -9,10 +9,14 @@ export const FormSuccessMessage: FC<FormSuccessMessageProps> = ({
   message,
 }) => {
   return (
-    <div className="glow-container rounded-lg border border-accent-color bg-accent-color/10 p-4">
-      <div className="flex items-center gap-3">
-        <BiCheckCircle size={24} className="text-accent shrink-0" />
-        <p className="text-accent font-bold">{message}</p>
+    <div className="glow-container rounded-lg border border-accent-color bg-accent-color/10 p-6">
+      <div className="flex items-center gap-4">
+        <BiCheckCircle size={38} className="text-accent mt-1 shrink-0" />
+        <div className="flex flex-col gap-2">
+          <p className="text-accent text-lg font-bold leading-relaxed">
+            {message}
+          </p>
+        </div>
       </div>
     </div>
   );

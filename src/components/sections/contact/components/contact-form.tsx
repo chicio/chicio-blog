@@ -172,7 +172,7 @@ export const ContactForm: FC<ContactFormProps> = ({ trackingCategory }) => {
         />
         <FormErrorSummary errors={errors} />
         {isSuccess && (
-          <FormSuccessMessage message="Message sent successfully! I'll get back to you soon." />
+          <FormSuccessMessage message="Message sent! You should receive a confirmation email in your inbox shortly. I'll get back to you as soon as possible." />
         )}
         {isSubmitting && (
           <LoadingBar message="Sending message" />

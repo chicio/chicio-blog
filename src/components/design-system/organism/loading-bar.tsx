@@ -36,7 +36,7 @@ export const LoadingBar: React.FC<LoadingBarProps> = ({
   return (
     <div className="flex w-full flex-col items-center justify-center">
       <TerminalLine>
-        {`> ${message}`} <Cursor>_</Cursor>
+        {`> ${message}`} <Cursor/>
       </TerminalLine>
       <TerminalLine>
         {getAnimatedBar(position)}

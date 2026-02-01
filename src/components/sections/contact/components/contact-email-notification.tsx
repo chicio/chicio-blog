@@ -8,6 +8,7 @@ import { Body, Container, Head, Html, Hr, Preview, Section, Text } from "@react-
 import { EmailBrandHeader } from "./contact-email-shared-brand-header";
 import { emailColors, emailFonts } from "./contact-email-shared-colors";
 import { EmailFooter } from "./contact-email-shared-footer";
+import { MessageSummary } from "./contact-email-shared-message-summary";
 
 interface ContactNotificationEmailProps {
     name: string;
@@ -30,9 +31,6 @@ export function ContactNotificationEmail({
             <Body style={main}>
                 <Container style={container}>
                     <EmailBrandHeader />
-
-
-                    {/* Sender Info */}
                     <Section style={terminalSection}>
                         <Text style={terminalLine}>
                             <span style={prompt}>{">"}</span> FROM: {name}
@@ -41,21 +39,8 @@ export function ContactNotificationEmail({
                             <span style={prompt}>{">"}</span> EMAIL: {email}
                         </Text>
                     </Section>
-
                     <Hr style={divider} />
-
-                    {/* Message */}
-                    <Section style={terminalSection}>
-                        <Text style={messageLabel}>
-                            <span style={prompt}>{">"}</span> MESSAGE:
-                        </Text>
-                        <Section style={messageBox}>
-                            <Text style={messageText}>{message}</Text>
-                        </Section>
-                    </Section>
-
-                    <Hr style={divider} />
-
+                    <MessageSummary message={message} />
                     <EmailFooter />
                 </Container>
             </Body>
@@ -115,31 +100,4 @@ const divider = {
     borderStyle: "dashed" as const,
     borderWidth: "1px 0 0 0",
     margin: "15px 0",
-};
-
-const messageLabel = {
-    color: emailColors.accent,
-    fontSize: "14px",
-    fontWeight: "bold" as const,
-    margin: "0 0 10px 0",
-    padding: "0",
-    fontFamily: emailFonts.mono,
-};
-
-const messageBox = {
-    backgroundColor: emailColors.backgroundLight,
-    border: `1px solid ${emailColors.accentAlpha40}`,
-    borderRadius: "4px",
-    padding: "15px",
-    marginTop: "10px",
-};
-
-const messageText = {
-    color: emailColors.primaryText,
-    fontSize: "14px",
-    lineHeight: "1.6",
-    whiteSpace: "pre-wrap" as const,
-    margin: "0",
-    padding: "0",
-    fontFamily: emailFonts.mono,
 };

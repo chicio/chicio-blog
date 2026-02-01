@@ -3,6 +3,7 @@ import { tracking } from "@/types/configuration/tracking";
 import { FC } from "react";
 import { MenuItemWithTracking } from "../molecules/menu/menu-item-with-tracking";
 import { SocialContacts } from "./social-contacts";
+import { Cursor, TerminalLine } from "../atoms/typography/terminal-blocks";
 
 export interface FooterProps {
   author: string;
@@ -86,9 +87,9 @@ const Footer: FC<FooterProps> = ({ author, trackingCategory }) => (
           trackingCategory={trackingCategory}
           trackingLabel={tracking.label.footer}
         />
-        <p className="m-0 text-center text-sm md:text-base">
-          {`Made with 💝 by ${author} 'Chicio'`}
-        </p>
+        <TerminalLine>
+          {`> Made with 💝 by ${author} 'Chicio'`}<Cursor />
+        </TerminalLine>
       </div>
     </div>
   </footer>

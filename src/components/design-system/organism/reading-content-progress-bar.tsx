@@ -29,7 +29,7 @@ const getStatusLine = (
     case "uploading":
       return (
         <TerminalLine>
-          {"> Uploading knowledge..."} {!shouldReduceMotion ? <Cursor>_</Cursor> : null}
+          {"> Uploading knowledge..."} {!shouldReduceMotion ? <Cursor/> : null}
         </TerminalLine>
       );
     case "complete":

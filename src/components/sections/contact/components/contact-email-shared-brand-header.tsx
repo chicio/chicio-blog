@@ -4,6 +4,14 @@ import { emailColors, emailFonts } from "./contact-email-shared-colors";
 export function EmailBrandHeader() {
     return (
         <Section style={brandHeaderBox}>
+            {/* Background Image */}
+            <Img
+                src="https://www.fabrizioduroni.it/images/email/matrix-rain.png"
+                alt=""
+                style={backgroundImage}
+            />
+            
+            {/* Content */}
             <table style={{ width: "100%", position: "relative" as const, zIndex: 1 }}>
                 <tbody>
                     <tr>
@@ -37,10 +45,6 @@ export function EmailBrandHeader() {
 
 const brandHeaderBox = {
     backgroundColor: emailColors.backgroundAlpha60,
-    backgroundImage: "url('https://www.fabrizioduroni.it/images/email/matrix-rain.png')",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    backgroundRepeat: "no-repeat",
     border: `1px solid ${emailColors.accentAlpha40}`,
     borderRadius: "12px",
     padding: "20px",
@@ -50,9 +54,22 @@ const brandHeaderBox = {
     overflow: "hidden" as const,
 };
 
+const backgroundImage = {
+    position: "absolute" as const,
+    top: "0",
+    left: "0",
+    width: "100%",
+    height: "100%",
+    objectFit: "cover" as const,
+    borderRadius: "0 0 12px 12px",
+    opacity: 0.3,
+    zIndex: 0,
+};
+
 const logoStyle = {
     display: "block",
-    borderRadius: "4px",
+    border: `1px solid ${emailColors.accentAlpha40}`,
+    borderRadius: "12px",
 };
 
 const brandTitle = {
