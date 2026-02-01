@@ -118,6 +118,17 @@ const renderMenuItems = (
             selected: pathname === slugs.chat,
             onClickCallback: () => setShouldOpenMenu(false),
           },
+          {
+            label: "Contact me",
+            to: slugs.contact,
+            trackingData: {
+              action: tracking.action.open_contact,
+              category: trackingCategory,
+              label: tracking.label.header,
+            },
+            selected: pathname === slugs.contact,
+            onClickCallback: () => setShouldOpenMenu(false),
+          },
         ]}
       />
     </>

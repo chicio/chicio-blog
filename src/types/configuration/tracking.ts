@@ -25,6 +25,7 @@ export const tracking = {
     open_about_me: "open_about_me",
     open_art: "open_art",
     open_chat: "open_chat",
+    open_contact: "open_contact",
     open_blog_archive: "open_blog_archive",
     open_blog_tags: "open_blog_tags",
     open_http_cookie_policy: "open_http_cookie_policy",
@@ -44,6 +45,7 @@ export const tracking = {
   },
   category: {
     home: "home",
+    contact: "contact",
     blog_home: "blog_home",
     blog_archive: "blog_archive",
     blog_post: "blog_post",

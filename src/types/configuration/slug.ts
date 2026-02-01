@@ -14,6 +14,7 @@ export const slugs = {
   },
   art: "/art",
   chat: "/chat",
+  contact: "/contact",
   cookiePolicy: "/cookie-policy",
   dataStructuresAndAlgorithms: {
     roadmap: `${dsa}/roadmap`,
