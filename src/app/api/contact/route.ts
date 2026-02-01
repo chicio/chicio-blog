@@ -83,8 +83,7 @@ export async function POST(request: NextRequest) {
     });
 
     if (confirmationError) {
-      console.error("Confirmation email error:", confirmationError);
-      console.warn("Notification sent but confirmation failed");
+      console.warn("Notification sent but confirmation failed:", confirmationError);
     }
 
     await incrementRateLimit(clientIp);
