@@ -16,7 +16,7 @@ export const ChatInput: FC<{
       onSubmit={handleSubmit}
     >
       <InputField
-        className="glow-container flex-9/12 pt-3 pr-9 pb-3 pl-4 backdrop-blur-2xl"
+        className="flex-9/12 pt-3 pr-9 pb-3 pl-4 backdrop-blur-2xl"
         value={input}
         onChange={handleInputChange}
         placeholder="Ask me anything..."

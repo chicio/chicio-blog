@@ -9,5 +9,5 @@ export const InputField: FC<InputFieldProps> = ({
   className,
   ...props
 }) => (
-  <input className={`glow-border rounded-xl bg-none outline-none text-accent${className ? ` ${className}` : ""}`} {...props} />
+  <input className={`glow-container rounded-xl bg-none outline-none text-accent${className ? ` ${className}` : ""}`} {...props} />
 );

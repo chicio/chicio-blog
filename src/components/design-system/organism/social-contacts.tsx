@@ -11,6 +11,7 @@ import { FaXTwitter } from "react-icons/fa6";
 import { FC } from "react";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { tracking } from "@/types/configuration/tracking";
+import { slugs } from "@/types/configuration/slug";
 import { SocialContact } from "../molecules/buttons/social-contact";
 
 export interface SocialContactsProps {
@@ -41,11 +42,11 @@ export const SocialContacts: FC<SocialContactsProps> = ({
         icon={<BiLogoLinkedin size={30} title={"Linkedin"} />}
       />
       <SocialContact
-        link={`mailto:${siteMetadata.contacts.email}`}
-        trackingAction={tracking.action.send_mail}
+        link={slugs.contact}
+        trackingAction={tracking.action.open_contact}
         trackingCategory={trackingCategory}
         trackingLabel={trackingLabel}
-        icon={<BiEnvelope size={30} title={"mail"} />}
+        icon={<BiEnvelope size={30} title={"Write to me"} />}
       />
       <SocialContact
         link={links.medium}

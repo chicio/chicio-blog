@@ -34,7 +34,7 @@ export const BrandHeader: FC<BrandHeaderProps> = ({ big }) => {
               />
               <div className="flex flex-col justify-start">
                 <span className="text-accent m-0 block font-mono text-2xl font-bold uppercase text-shadow-lg sm:text-4xl">
-                  <span className="text-shadow-md">{'> '}</span>CHICIO CODING<Cursor>_</Cursor>
+                  <span className="text-shadow-md">{'> '}</span>CHICIO CODING<Cursor/>
                 </span>
                 <span className="text-primary-text font-mono text-xs font-normal text-shadow-md sm:text-lg">
                   Pixels. Code. Unplugged.

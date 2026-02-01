@@ -53,7 +53,7 @@ export const MatrixTerminal: FC<MatrixTerminalProps> = ({ lines, onComplete }) =
       <TerminalLine key={`line-${index}`}>
         <span>{'> '}</span>
         {renderLineContent(text, line.type)}
-        {showCursor && <Cursor>_</Cursor>}
+        {showCursor && <Cursor />}
       </TerminalLine>
     );
   };
