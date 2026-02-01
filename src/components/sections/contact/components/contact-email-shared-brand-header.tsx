@@ -1,44 +1,27 @@
-import { Heading, Img, Section, Text } from "@react-email/components";
+import { Heading, Img, Section, Text, Row, Column } from "@react-email/components";
 import { emailColors, emailFonts } from "./contact-email-shared-colors";
 
 export function EmailBrandHeader() {
     return (
         <Section style={brandHeaderBox}>
-            {/* Background Image */}
-            <Img
-                src="https://www.fabrizioduroni.it/images/email/matrix-rain.png"
-                alt=""
-                style={backgroundImage}
-            />
-            
-            {/* Content */}
-            <table style={{ width: "100%", position: "relative" as const, zIndex: 1 }}>
-                <tbody>
-                    <tr>
-                        <td
-                            style={{
-                                verticalAlign: "middle",
-                                paddingRight: "12px",
-                            }}
-                        >
-                            <Img
-                                src="https://www.fabrizioduroni.it/images/logo.png"
-                                alt="Chicio Coding Logo"
-                                width={60}
-                                height={60}
-                                style={logoStyle}
-                            />
-                        </td>
-                        <td style={{ verticalAlign: "middle" }}>
-                            <Heading style={brandTitle}>
-                                <span style={prompt}>{">"}</span> CHICIO CODING
-                                <span style={cursor}>_</span>
-                            </Heading>
-                            <Text style={brandSubtitle}>Pixels. Code. Unplugged.</Text>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <Row>
+                <Column style={{ width: "60px", verticalAlign: "middle", paddingRight: "12px" }}>
+                    <Img
+                        src="https://www.fabrizioduroni.it/images/logo.png"
+                        alt="Chicio Coding Logo"
+                        width={60}
+                        height={60}
+                        style={logoStyle}
+                    />
+                </Column>
+                <Column style={{ verticalAlign: "middle" }}>
+                    <Heading style={brandTitle}>
+                        <span style={prompt}>{">"}</span> CHICIO CODING
+                        <span style={cursor}>_</span>
+                    </Heading>
+                    <Text style={brandSubtitle}>Pixels. Code. Unplugged.</Text>
+                </Column>
+            </Row>
         </Section>
     );
 }
@@ -54,17 +37,6 @@ const brandHeaderBox = {
     overflow: "hidden" as const,
 };
 
-const backgroundImage = {
-    position: "absolute" as const,
-    top: "0",
-    left: "0",
-    width: "100%",
-    height: "100%",
-    objectFit: "cover" as const,
-    borderRadius: "0 0 12px 12px",
-    opacity: 0.3,
-    zIndex: 0,
-};
 
 const logoStyle = {
     display: "block",
