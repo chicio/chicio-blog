@@ -183,7 +183,6 @@ export const ContactForm: FC<ContactFormProps> = ({ trackingCategory }) => {
             onChange={(e) => setHoneypot(e.target.value)}
             tabIndex={-1}
             autoComplete="off"
-            aria-hidden="true"
           />
         </div>
         <FormErrorSummary show={Object.keys(errors).length > 0} errorName="Form incomplete" errorsList={errors} />
