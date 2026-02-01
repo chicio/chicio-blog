@@ -1,5 +1,5 @@
 import { createSystemPrompt } from "@/lib/chat/llm-prompt";
-import { findRelevantContent } from "@/lib/chat/upstash-vector";
+import { findRelevantContent } from "@/lib/upstash/upstash-vector";
 import { groq } from "@ai-sdk/groq";
 import { convertToModelMessages, stepCountIs, streamText, tool, UIMessage } from "ai";
 import z from "zod";

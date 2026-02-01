@@ -1,10 +1,16 @@
 import { Resend } from "resend";
 import { NextRequest, NextResponse } from "next/server";
-import { render } from "@react-email/render";
 import { ContactNotificationEmail } from "@/components/sections/contact/components/contact-email-notification";
 import { ContactConfirmationEmail } from "@/components/sections/contact/components/contact-email-confirmation";
+import { checkRateLimitFor, incrementRateLimit } from "@/lib/rate-limit/rate-limit";
+import { getClientIp } from "@/lib/network/network";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
+
+const successResponse = {
+  body: { success: true },
+  init: { status: 200 },
+};
 
 const validation = (name: string, email: string, message: string): { body: { error: string}, init: ResponseInit } | undefined => {
   if (!name || !email || !message) {
@@ -31,7 +37,22 @@ const validation = (name: string, email: string, message: string): { body: { err
 
 export async function POST(request: NextRequest) {
   try {
-    const { name, email, message } = await request.json();
+    const { name, email, message, honeypot } = await request.json();
+    
+    if (honeypot) {
+      return NextResponse.json(successResponse.body, successResponse.init);
+    }
+    
+    const clientIp = getClientIp(request.headers);
+    const rateLimitResult = await checkRateLimitFor(clientIp);
+    
+    if (!rateLimitResult.success) {
+      return NextResponse.json(
+        { error: rateLimitResult.error },
+        { status: 429 },
+      );
+    }
+    
     const validationError = validation(name, email, message);
     
     if (validationError) {
@@ -54,7 +75,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { data: confirmationData, error: confirmationError } = await resend.emails.send({
+    const { error: confirmationError } = await resend.emails.send({
       from: "Fabrizio Duroni <contact@fabrizioduroni.it>",
       to: [email],
       subject: `Chicio Coding - Wake up, ${name}... The Matrix has you.`,
@@ -66,11 +87,9 @@ export async function POST(request: NextRequest) {
       console.warn("Notification sent but confirmation failed");
     }
 
-    return NextResponse.json({ 
-      success: true, 
-      id: confirmationData?.id,
-      confirmationSent: !confirmationError 
-    }, { status: 200 });
+    await incrementRateLimit(clientIp);
+
+    return NextResponse.json(successResponse.body, successResponse.init);
   } catch (error) {
     console.error("Contact form error:", error);
     return NextResponse.json(

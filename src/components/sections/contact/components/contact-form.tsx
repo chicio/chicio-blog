@@ -28,6 +28,7 @@ export const ContactForm: FC<ContactFormProps> = ({ trackingCategory }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [honeypot, setHoneypot] = useState(""); // Anti-bot honeypot field
   const [errors, setErrors] = useState<{
     name?: string;
     email?: string;
@@ -35,7 +36,7 @@ export const ContactForm: FC<ContactFormProps> = ({ trackingCategory }) => {
   }>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [submitError, setSubmitError] = useState<{ submit?: string }>({});
 
   const validateForm = (): boolean => {
     const newErrors: { name?: string; email?: string; message?: string } = {};
@@ -61,12 +62,14 @@ export const ContactForm: FC<ContactFormProps> = ({ trackingCategory }) => {
   };
 
   const handleSubmit = async () => {
+    setIsSuccess(false);
+
     if (!validateForm()) {
       return;
     }
 
     setIsSubmitting(true);
-    setSubmitError(null);
+    setSubmitError({});
 
     try {
       const response = await fetch("/api/contact", {
@@ -74,7 +77,7 @@ export const ContactForm: FC<ContactFormProps> = ({ trackingCategory }) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ name, email, message }),
+        body: JSON.stringify({ name, email, message, honeypot }),
       });
 
       const data = await response.json();
@@ -96,16 +99,14 @@ export const ContactForm: FC<ContactFormProps> = ({ trackingCategory }) => {
       });
 
       setIsSuccess(true);
-      // setName("");
-      // setEmail("");
-      // setMessage("");
+      setName("");
+      setEmail("");
+      setMessage("");
       setErrors({});
     } catch (error) {
       console.error("Contact form error:", error);
       setSubmitError(
-        error instanceof Error
-          ? error.message
-          : "Failed to send message. Please try again.",
+        { submit: (error as Error).message}
       );
     } finally {
       setIsSubmitting(false);
@@ -116,8 +117,9 @@ export const ContactForm: FC<ContactFormProps> = ({ trackingCategory }) => {
     setName("");
     setEmail("");
     setMessage("");
+    setHoneypot("");
     setErrors({});
-    setSubmitError(null);
+    setSubmitError({});
     setIsSuccess(false);
 
     trackWith({
@@ -170,7 +172,22 @@ export const ContactForm: FC<ContactFormProps> = ({ trackingCategory }) => {
           disabled={isSubmitting}
           hasError={!!errors.message}
         />
-        <FormErrorSummary errors={errors} />
+        {/* Honeypot field - hidden from users, visible to bots */}
+        <div className="absolute -left-2499.75 -top-2499.75 opacity-0">
+          <FormField
+            label="Additional Information"
+            icon={<BiMessageDetail size={20} />}
+            type="text"
+            name="website"
+            value={honeypot}
+            onChange={(e) => setHoneypot(e.target.value)}
+            tabIndex={-1}
+            autoComplete="off"
+            aria-hidden="true"
+          />
+        </div>
+        <FormErrorSummary show={Object.keys(errors).length > 0} errorName="Form incomplete" errorsList={errors} />
+        <FormErrorSummary show={!!submitError?.submit} errorName={submitError?.submit} />
         {isSuccess && (
           <FormSuccessMessage message="Message sent! You should receive a confirmation email in your inbox shortly. I'll get back to you as soon as possible." />
         )}

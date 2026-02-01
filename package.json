@@ -24,6 +24,7 @@
     "@react-email/components": "^1.0.6",
     "@tailwindcss/postcss": "^4.1.18",
     "@types/mdx": "^2.0.13",
+    "@upstash/redis": "^1.36.1",
     "@upstash/vector": "^1.2.2",
     "@vercel/analytics": "^1.6.1",
     "@vercel/speed-insights": "^1.3.1",
