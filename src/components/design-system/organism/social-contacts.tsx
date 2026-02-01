@@ -5,7 +5,7 @@ import {
   BiLogoInstagram,
   BiLogoLinkedin,
   BiLogoMedium,
-  BiEnvelope
+  BiEnvelope,
 } from "react-icons/bi";
 import { FaXTwitter } from "react-icons/fa6";
 import { FC } from "react";
@@ -13,6 +13,7 @@ import { siteMetadata } from "@/types/configuration/site-metadata";
 import { tracking } from "@/types/configuration/tracking";
 import { slugs } from "@/types/configuration/slug";
 import { SocialContact } from "../molecules/buttons/social-contact";
+import { CallToActionInternalWithTracking } from "../atoms/call-to-actions/call-to-action-internal-with-tracking";
 
 export interface SocialContactsProps {
   trackingCategory: string;
@@ -26,7 +27,7 @@ export const SocialContacts: FC<SocialContactsProps> = ({
   const links = siteMetadata.contacts.links;
 
   return (
-    <div className="flex justify-center items-center p-0 text-center flex-wrap">
+    <div className="flex flex-wrap items-center justify-center p-0 text-center">
       <SocialContact
         link={links.github}
         trackingAction={tracking.action.open_github}
@@ -41,13 +42,17 @@ export const SocialContacts: FC<SocialContactsProps> = ({
         trackingLabel={trackingLabel}
         icon={<BiLogoLinkedin size={30} title={"Linkedin"} />}
       />
-      <SocialContact
-        link={slugs.contact}
-        trackingAction={tracking.action.open_contact}
-        trackingCategory={trackingCategory}
-        trackingLabel={trackingLabel}
-        icon={<BiEnvelope size={30} title={"Write to me"} />}
-      />
+      <CallToActionInternalWithTracking
+        to={slugs.contact}
+        trackingData={{
+          category: trackingCategory,
+          label: trackingLabel,
+          action: tracking.action.open_contact,
+        }}
+        className="min-w-auto!"
+      >
+        <BiEnvelope size={30} />
+      </CallToActionInternalWithTracking>
       <SocialContact
         link={links.medium}
         trackingAction={tracking.action.open_medium}
