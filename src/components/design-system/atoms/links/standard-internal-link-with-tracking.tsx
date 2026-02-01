@@ -9,14 +9,16 @@ type StandardInternalLinkWithTrackingProps = TrackingElementProps & {
   to: string;
   className?: string;
   children?: ReactNode;
+  prefetch?: boolean;
 };
 
 export const StandardInternalLinkWithTracking: FC<
   StandardInternalLinkWithTrackingProps
-> = ({ children, className, to, trackingData }) => (
+> = ({ children, className, to, trackingData, prefetch = false }) => (
   <Link
     className={className}
     href={to}
+    prefetch={prefetch}
     onClick={() => {
       trackWith(trackingData);
     }}

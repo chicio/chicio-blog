@@ -9,13 +9,15 @@ type CallToActionInternalWithTrackingProps = TrackingElementProps & {
   to: string;
   className?: string;
   children?: ReactNode;
+  prefetch?: boolean;
 };
 
 export const CallToActionInternalWithTracking: FC<CallToActionInternalWithTrackingProps> =
-  ({ children, className, to, trackingData }) => (
+  ({ children, className, to, trackingData, prefetch = false }) => (
     <Link
       className={`call-to-action${className ? ` ${className}` : ""}`}
       href={to}
+      prefetch={prefetch}
       onClick={() => {
         trackWith(trackingData);
       }}

@@ -8,11 +8,15 @@ import { LayoutAdditionalContent } from "@/components/design-system/templates/la
 
 export const openSans = Open_Sans({
   subsets: ["latin"],
+  display: "swap",
+  preload: true,
 });
 
 export const courierPrime = Courier_Prime({
   subsets: ["latin"],
   weight: ["400", "700"],
+  display: "swap",
+  preload: true,
 });
 
 export const viewport: Viewport = {

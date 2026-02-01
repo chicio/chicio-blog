@@ -28,7 +28,7 @@ const CookieConsentBanner = () => {
     <AnimatePresence>
       {visible && (
         <div
-          className={`${glassmorphismClass} fixed right-0 bottom-5 left-0 mx-auto my-0 p-4 flex max-w-[95%] flex-col items-center gap-4 lg:max-w-[60%] lg:flex-row z-50`}
+          className={`${glassmorphismClass} backdrop-blur-2xl! fixed right-0 bottom-5 left-0 mx-auto my-0 p-4 flex max-w-[95%] flex-col items-center gap-4 lg:max-w-[60%] lg:flex-row z-50`}
           role="dialog"
           aria-live="polite"
         >

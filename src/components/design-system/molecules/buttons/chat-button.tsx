@@ -14,7 +14,7 @@ const FloatingChatButton = () => {
 
   return (
     <div className="z-40">
-      <Link aria-label="chat" target="_blank" href={slugs.chat} passHref >
+      <Link prefetch={false} aria-label="chat" target="_blank" href={slugs.chat} passHref>
         <ChatIcon />
       </Link>
     </div>

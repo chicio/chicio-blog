@@ -33,6 +33,7 @@ export const MenuItemWithTracking: FC<MenuItemWithTrackingProps> = ({
   return (
     <Link
       href={to}
+      prefetch={false}
       className={`relative ${transition} ${color} ${spacing} ${text} ${border} ${flex} ${background} ${hover}${className ? ` ${className}` : ""}`}
       onClick={() => {
         trackWith(trackingData);

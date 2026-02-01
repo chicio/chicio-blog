@@ -24,11 +24,6 @@ import {
 import { MotionDiv } from "../molecules/animation/motion-div";
 import dynamic from "next/dynamic";
 
-const NeoRoomEasterEgg = dynamic(
-  () => import("@/components/sections/easter-eggs/neo-room-easter-egg"),
-  { ssr: false },
-);
-
 const renderMenuItems = (
   isMobile: boolean,
   pathname: string,
@@ -182,6 +177,15 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
   const shouldHideMenu =
     pathname === slugs.chat ? false : direction === ScrollDirection.down;
 
+  const NeoRoomEasterEgg =
+    startSearch && search.type === "easterEgg"
+      ? dynamic(
+          () =>
+            import("@/components/sections/easter-eggs/neo-room-easter-egg"),
+          { ssr: false },
+        )
+      : null;
+
   return (
     <>
       <MotionDiv
@@ -255,7 +259,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
               setStartSearch(false);
             }}
           >
-            {search.type === "easterEgg" && (
+            {search.type === "easterEgg" && NeoRoomEasterEgg && (
               <NeoRoomEasterEgg lines={search.terminalLines} />
             )}
             {search.type === "search" && search.results.length > 0 && (
