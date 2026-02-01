@@ -41,9 +41,9 @@ export const ProfilePresentation: FC<ProfilePresentationProps> = ({
         <h1 className="mx-0 mt-3 text-center text-primary-text">{author}</h1>
       </MotionDiv>
       <MotionDiv variants={itemVariants}>
-        <h3 className="text-center text-secondary-text mt-0 mr-0 mb-6 ml-0">
+        <h2 className="text-2xl! text-center text-secondary-text mt-0 mr-0 mb-6 ml-0">
           Software Engineer
-        </h3>
+        </h2>
       </MotionDiv>
       <MotionDiv variants={itemVariants}>
         <SocialContacts
