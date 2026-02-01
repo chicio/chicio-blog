@@ -5,7 +5,7 @@ import {
   setValueFor,
 } from "../upstash/upstash-redis";
 
-const RATE_LIMIT_WINDOW = 24 * 60 * 60; // 24 hours in seconds
+const RATE_LIMIT_WINDOW = 24 * 60 * 60; // Rate limit window in seconds (24 hours)
 const FORM_SUBMIT_LIMIT = 5; // Maximum submit per IP per day
 const THROTTLE_SECONDS = 60; // Minimum seconds between submissions
 
