@@ -1,5 +1,15 @@
 # Changelog
 
+## [3.10.0](https://github.com/chicio/chicio-blog/compare/v3.9.0...v3.10.0) (2026-02-04)
+
+### Features
+
+* **accessibility:** :sparkles: added aria-name on button for cookie consent banner ([0ec5028](https://github.com/chicio/chicio-blog/commit/0ec50286c42b5a46ff4f99a8bf5f55364dca67ec))
+* **capabilities:** :sparkles: email social contacts points to contact page ([bb011a6](https://github.com/chicio/chicio-blog/commit/bb011a65b001b1e8a22fc9fcab2a02536de35d5c))
+* **capabilities:** :sparkles: simplified email template by removing matrix image ([5e52d3c](https://github.com/chicio/chicio-blog/commit/5e52d3c7a1526c1189c1839c17330e002af3f1fb))
+* **capabilities:** ✨ Contact form ([#201](https://github.com/chicio/chicio-blog/issues/201)) ([d0c92c9](https://github.com/chicio/chicio-blog/commit/d0c92c98b5f423059a788d4a34e529f0c13034d8))
+* **performance:** :sparkles: Removed blocking resources and prefetch only what is really needed for the homepage ([8784c14](https://github.com/chicio/chicio-blog/commit/8784c1481a3b96df4eabd172af2b13d05d3ea3f9))
+
 ## [3.9.0](https://github.com/chicio/chicio-blog/compare/v3.8.0...v3.9.0) (2026-01-31)
 
 ### Features
