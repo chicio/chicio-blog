@@ -43,8 +43,10 @@ is already sorted by definition.
 Second, each half is sorted independently by the recursive calls. No assumptions are made about the order of elements during this phase, and no 
 comparisons are performed across the two halves yet.  
 
-Finally, the two sorted halves are merged into a single sorted array. This merge phase is where the algorithm enforces global order and where all comparisons between elements actually occur. 
-The key insight is that Merge Sort does not try to sort the array incrementally. Instead, it guarantees that whenever two elements are compared, they already belong to two sorted sequences. This invariant dramatically simplifies the logic and makes the algorithm both predictable and easy to reason about.
+Finally, the two sorted halves are merged into a single sorted array. This merge phase is where the algorithm enforces global order and where 
+all comparisons between elements actually occur. 
+The key insight is that Merge Sort does not try to sort the array incrementally. Instead, it guarantees that whenever two elements are compared, 
+they already belong to two sorted sequences. This invariant dramatically simplifies the logic and makes the algorithm both predictable and easy to reason about.
 
 The recursive structure of Merge Sort is straightforward. Given an array of length n:
 - If n is less than or equal to 1, the array is already sorted.

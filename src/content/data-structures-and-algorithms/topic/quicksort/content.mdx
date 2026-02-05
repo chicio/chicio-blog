@@ -1,0 +1,138 @@
+---
+title: "Quick Sort"
+description: "An in-depth look at Quick Sort as a divide-and-conquer algorithm, focusing on partitioning, expected complexity, and selection problems."
+date: 2026-02-05
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [quick sort, quick select, data structures, algorithms]
+authors: [fabrizio_duroni]
+---
+
+# Quick Sort
+
+Quick Sort is often presented as one of the fastest comparison-based sorting algorithms in practice, despite having a theoretical worst-case 
+time complexity of $O(n^2)$.
+This apparent contradiction is usually resolved with a brief mention of randomness or average-case analysis, and then quickly forgotten.
+However, reducing Quick Sort to a performance anecdote misses the core reason why the algorithm is worth studying in depth.
+
+At a structural level, Quick Sort is another instance of the divide and conquer￼ paradigm, but it applies it in a markedly different way compared to Merge Sort.
+Instead of deferring all meaningful work to the phase where partial results are combined, Quick Sort concentrates almost all of its algorithmic 
+responsibility in the divide step itself.
+The array is partitioned around a chosen pivot element, and this single operation enforces a strong global ordering constraint before any recursive call is made.
+
+This design choice leads to two important consequences.
+First, Quick Sort performs the sorting in place, without allocating auxiliary arrays to combine results.
+Second, once the partitioning step is completed, the pivot element is already in its final position, and never needs to be moved again.
+The recursive calls that follow operate on strictly smaller subarrays, each of which can be processed independently.
+
+Unlike Merge Sort, the shape of the recursion tree in Quick Sort is not fixed.
+It depends on how balanced the partitions are, which in turn depends on the pivot selection strategy and the input distribution.
+This sensitivity introduces the possibility of highly unbalanced recursion, and therefore a quadratic worst case.
+At the same time, it is precisely this flexibility that allows Quick Sort to achieve excellent cache locality and outstanding performance in real-world scenarios.
+
+For these reasons, Quick Sort should not be studied merely as a faster alternative to Merge Sort.
+It represents a different way of thinking about divide and conquer, where ordering constraints are established early and propagated downward through recursion.
+Understanding this perspective is essential not only to reason about the algorithm itself, but also to recognize how the same structural idea naturally extends 
+to selection problems, such as finding the k-th largest element in an array, without fully sorting the data.
+
+## Algorithm
+
+Quick Sort applies the [divide and conquer](/data-structures-and-algorithms/topic/recursion#divide--conquer) paradigm by shifting the algorithmic focus entirely onto the division phase.  
+Instead of splitting the input into independent subproblems and later combining their results, Quick Sort establishes a partial global order upfront through a process known as *partitioning*.
+
+Given an array segment, the algorithm selects a *pivot* element and rearranges the elements so that all values smaller than the pivot appear to its left, while all values greater than the pivot appear to its right.  
+This operation does not fully sort the array, but it enforces a crucial invariant: once the partitioning step is complete, the pivot is already in its final sorted position.
+
+After partitioning, the algorithm recursively applies the same procedure to the subarray on the left of the pivot and to the subarray on the right.  
+The pivot itself is excluded from further recursion, since its relative order with respect to all other elements has already been determined.
+
+This structure can be summarized as follows for an array segment delimited by indices `low` and `high`:
+- If the segment contains zero or one element, it is already sorted.
+- Otherwise, choose a pivot and partition the segment around it.
+- Recursively apply Quick Sort to the left and right partitions.
+
+Unlike Merge Sort, the recursive decomposition does not guarantee balanced subproblems.  
+The quality of the partition depends on the pivot choice, and different choices may lead to very different recursion trees.  
+Nevertheless, the algorithm remains correct regardless of how unbalanced the partitions are, as long as the partitioning invariant is preserved.
+
+The pivot element can be selected using different strategies, each of which affects the shape of the recursion but not the correctness of the algorithm.  
+A common and simple choice is to use the last element of the array segment as the pivot.  
+While this approach is easy to implement, it may lead to highly unbalanced partitions when the input is already partially ordered.
+
+An alternative strategy is to select a random element as the pivot.  
+Randomization does not change the worst-case complexity, but it makes the occurrence of degenerate cases extremely unlikely in practice.  
+For this reason, randomized pivot selection is often preferred in production-grade implementations.
+
+A more deterministic approach is the *median-of-three* strategy, where the pivot is chosen as the median of the first, middle, and last elements of the segment.  
+This heuristic reduces the likelihood of poor partitions on partially sorted inputs, while preserving the in-place nature of the algorithm.
+
+A typical in-place implementation relies on swapping elements within the original array, avoiding any auxiliary storage.  
+The following TypeScript example illustrates a standard implementation using a single pivot placed at the end of the segment.
+
+```typescript
+function quickSort(arr: number[], low = 0, high = arr.length - 1): void {
+  if (low >= high) {
+    return;
+  }
+
+  const pivotIndex = partition(arr, low, high);
+  quickSort(arr, low, pivotIndex - 1);
+  quickSort(arr, pivotIndex + 1, high);
+}
+
+function partition(arr: number[], low: number, high: number): number {
+  const pivot = arr[high];
+  let i = low;
+
+  for (let j = low; j < high; j++) {
+    if (arr[j] <= pivot) {
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+      i++;
+    }
+  }
+
+  [arr[i], arr[high]] = [arr[high], arr[i]];
+  return i;
+}
+```
+
+In this implementation, the partition function rearranges the array segment so that all elements smaller than or equal to the pivot are 
+placed before index i, while all greater elements are placed after it.
+Once the pivot is swapped into position i, the partitioning invariant holds, and the algorithm can safely recurse on the two resulting subarrays.
+
+The same structural idea extends naturally to selection problems.
+If the goal is not to fully sort the array, but to find a specific order statistic, such as the k-th largest element, the recursion can be 
+restricted to only one side of the partition.
+This variation, known as Quick Select, follows the same partitioning logic as Quick Sort, but avoids unnecessary work by discarding the half 
+of the array that cannot contain the desired element.
+
+By concentrating all ordering decisions in the partition step, Quick Sort exposes a powerful algorithmic pattern.
+Once the partitioning invariant is clearly understood, both sorting and selection emerge as straightforward applications of the same underlying 
+divide and conquer structure.
+
+## Time and Space Complexity
+
+At each recursion level, all elements in the current subarray are processed once during the partitioning step, resulting in $O(n)$ work per level.
+
+The recursion depth depends on how balanced the partitions are.
+- In the average case, the depth is $O(\log n)$.
+- In the worst case, the depth is $O(n)$.
+
+For this reason:
+- Average time complexity: $O(n \log n)$
+- Worst-case time complexity: $O(n^2)$
+
+For what concerns space complexity, Quick Sort performs all rearrangements in place and does not require auxiliary arrays.
+- Auxiliary space: $O(1)$
+- Recursion stack (average case): $O(\log n)$
+- Recursion stack (worst case): $O(n)$
+
+As a result:
+- Average space complexity: $O(\log n)$
+- Worst-case space complexity: $O(n)$
+
+## Exercises
+
+| Problem | Technique | Solution |
+|--------|----------|----------|
+| [Sort Colors](https://leetcode.com/problems/sort-colors/) | Quick Sort / Partitioning | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/quick-sort-quick-select/sort-colors.ts) |
+| [Kth Largest Element in an Array](https://leetcode.com/problems/kth-largest-element-in-an-array/) | Quick Select | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/quick-sort-quick-select/kth-largest-element-in-an-array.ts) |
