@@ -1,6 +1,20 @@
 import { FC } from "react";
 import { TechnologyCard } from "./technology-card";
-import { technologiesGroups } from "@/types/home/technology";
+import { technologies, Technology } from "@/content/home/technology";
+
+export const technologiesGroups = () => {
+  const groupedTechnologies = technologies.reduce((acc, tech) => {
+    if (!acc[tech.category]) {
+      acc[tech.category] = [];
+    }
+    acc[tech.category].push(tech);
+    return acc;
+  }, {} as Record<string, Technology[]>);
+
+  return {
+    technologies: groupedTechnologies,
+  }
+}
 
 export const TechnologiesSkillsGrid: FC = () => {
   const { technologies } = technologiesGroups();

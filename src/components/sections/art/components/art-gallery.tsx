@@ -1,7 +1,7 @@
 "use client";
 
 import { useGlassmorphism } from "@/components/design-system/utils/hooks/use-glassmorphism";
-import { artDescriptions } from "@/types/art/art";
+import { artDescriptions } from "@/content/art/art";
 import Image from "next/image";
 import { FC, useState } from "react";
 import { ModalWithImage } from "./modal-with-image";

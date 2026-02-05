@@ -3,7 +3,7 @@ import { tracking } from "@/types/configuration/tracking";
 import Image from "next/image";
 import { FC } from "react";
 import { BiBriefcase, BiSolidGraduation } from "react-icons/bi";
-import { timelineData } from "@/types/home/timeline";
+import { timelineData } from "@/content/home/timeline";
 
 export const Timeline: FC = () => {
   const getIcon = (type: "work" | "education") => {

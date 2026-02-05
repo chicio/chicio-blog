@@ -1,4 +1,4 @@
-import { Technology } from "@/types/home/technology";
+import { Technology } from "@/content/home/technology";
 import Image from "next/image";
 import { FC } from "react";
 

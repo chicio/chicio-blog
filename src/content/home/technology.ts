@@ -52,17 +52,3 @@ export const technologies: Technology[] = [
   { name: 'Java', image: javaImage, years: '15+ years', category: categories.languages },
   { name: 'Objective-C', image: objectiveC, years: '15+ years', category: categories.languages },
 ];
-
-export const technologiesGroups = () => {
-  const groupedTechnologies = technologies.reduce((acc, tech) => {
-    if (!acc[tech.category]) {
-      acc[tech.category] = [];
-    }
-    acc[tech.category].push(tech);
-    return acc;
-  }, {} as Record<string, Technology[]>);
-
-  return {
-    technologies: groupedTechnologies,
-  }
-}

@@ -1,4 +1,4 @@
-import { projects } from "@/types/home/projects";
+import { projects } from "@/content/home/projects";
 import { FC } from "react";
 import { ProjectCard } from "./project-card";
 
