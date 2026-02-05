@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.11.0](https://github.com/chicio/chicio-blog/compare/v3.10.0...v3.11.0) (2026-02-05)
+
+### Features
+
+* **content:** :sparkles: centralized all content, including non markdown one, in content folder ([fa4e8ef](https://github.com/chicio/chicio-blog/commit/fa4e8ef2416c670c3d4d168d27de03a01ef30216))
+* **content:** :sparkles: Quicksort ([#207](https://github.com/chicio/chicio-blog/issues/207)) ([76ce31b](https://github.com/chicio/chicio-blog/commit/76ce31b9e4b67d14027dad086396748286c3507b))
+
 ## [3.10.0](https://github.com/chicio/chicio-blog/compare/v3.9.0...v3.10.0) (2026-02-04)
 
 ### Features
