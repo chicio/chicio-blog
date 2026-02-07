@@ -125,7 +125,10 @@ const generateSlugFrom = (
   };
 };
 
-export const getAllContentFor = (baseUrl: string): Content[] => {
+export const getAllContentFor = <TMeta>(
+  baseUrl: string,
+  metadataAdapter?: (raw: unknown) => TMeta,
+): Content<TMeta>[] => {
   const basePath = baseUrl.startsWith("/") ? baseUrl.slice(1) : baseUrl;
   const routeParams = detectRouteParams(
     path.join(process.cwd(), `src/app/${basePath}`),
@@ -133,7 +136,7 @@ export const getAllContentFor = (baseUrl: string): Content[] => {
   const contents = findAllContent(basePath, routeParams);
 
   return contents.map((item) => {
-    const { frontmatter, content } = grayMatterContent(item.fullPath);
+    const { frontmatter, content } = grayMatterContent<TMeta>(item.fullPath, metadataAdapter);
 
     return {
       frontmatter,
@@ -145,10 +148,11 @@ export const getAllContentFor = (baseUrl: string): Content[] => {
   });
 };
 
-export const getSingleContentBy = (
+export const getSingleContentBy = <TMeta>(
   baseUrl: string,
   params?: Record<string, string>,
-): Content | undefined => {
+  metadataAdapter?: (raw: unknown) => TMeta,
+): Content<TMeta> | undefined => {
   const sanitizedParams = params || {};
   try {
     const basePath = baseUrl.startsWith("/") ? baseUrl.slice(1) : baseUrl;
@@ -156,7 +160,7 @@ export const getSingleContentBy = (
       path.join(process.cwd(), `src/app/${basePath}`),
     );
     const filePath = getContentFilePathFrom(basePath, routeParams, sanitizedParams);
-    const { frontmatter, content } = grayMatterContent(filePath);
+    const { frontmatter, content } = grayMatterContent<TMeta>(filePath, metadataAdapter);
 
     const relativePath = path.relative(
       contentRootDirectory,
