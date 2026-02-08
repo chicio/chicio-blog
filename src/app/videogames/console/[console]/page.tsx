@@ -29,11 +29,11 @@ export async function generateMetadata({
   });
 }
 
-// export async function generateStaticParams() {
-//   return getAllConsoles().map(
-//     (console) => console.slug.params,
-//   );
-// }
+export async function generateStaticParams() {
+  return getAllConsoles().map(
+    (console) => console.slug.params,
+  );
+}
 
 export default async function VideogamesConsolePage({
   params,

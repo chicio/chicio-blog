@@ -8,15 +8,20 @@ import calculateReadingTime from "reading-time";
 const contentRootDirectory = path.join(process.cwd(), "src/content");
 const contentMdxFileName = "content.mdx";
 
+const getSegmentsFromDynamicSlug = (slug: string): string[] =>
+  slug.split("/").filter((segment) => segment.length > 0);
+
+const dynamicRouteParamFrom = (segment: string) => segment.match(/^\[([^\]]+)\]$/)?.[1];
+
 const parseContentPath = (
-  routeParams: {name: string; positionInSlug: number}[],
+  routeParams: { name: string; positionInSlug: number }[],
   filePath: string,
 ): Record<string, string> => {
   const segments = filePath.split(path.sep).filter((s) => s.length > 0);
   const params: Record<string, string> = {};
 
   for (let i = 0; i < routeParams.length && i < segments.length; i++) {
-    const param = routeParams[i]
+    const param = routeParams[i];
     params[param.name] = segments[param.positionInSlug];
   }
 
@@ -30,16 +35,17 @@ const findAllContent = (dynamicSlug: string) => {
     relativePath: string;
   }[] = [];
 
-  const segments = dynamicSlug.split(path.sep).filter((s) => s.length > 0);
+  const segments = getSegmentsFromDynamicSlug(dynamicSlug);
   const directories: string[] = [segments[0]];
-  const routeParams: {name: string; positionInSlug: number}[] = [];
+  const routeParams: { name: string; positionInSlug: number }[] = [];
   let currentSegmentPosition = 1;
 
   while (currentSegmentPosition < segments.length) {
-    const currentSegment = segments[currentSegmentPosition];
     let currentLevelDimension = directories.length;
+    const currentSegment = segments[currentSegmentPosition];
+    const dynamicRouteParam = dynamicRouteParamFrom(currentSegment);
 
-    if (currentSegment.match(/^\[([^\]]+)\]$/)) {
+    if (dynamicRouteParam) {
       while (currentLevelDimension > 0) {
         const currentDirectory = directories.shift()!;
         const entries = fs.readdirSync(
@@ -55,7 +61,7 @@ const findAllContent = (dynamicSlug: string) => {
         currentLevelDimension--;
       }
       routeParams.push({
-        name: currentSegment.match(/^\[([^\]]+)\]$/)![1],
+        name: dynamicRouteParam,
         positionInSlug: currentSegmentPosition,
       });
     } else {
@@ -95,20 +101,20 @@ const calculateSlugFrom = (
   params: Record<string, string>,
   dynamicSlug: string,
 ): string => {
-    const slug = dynamicSlug.split("/").map((segment) => {
-    const nextjsParameterPatternMatch = segment.match(/^\[([^\]]+)\]$/);
+  const slug = getSegmentsFromDynamicSlug(dynamicSlug)
+    .map((segment) => {
+      const dynamicRouteParam = dynamicRouteParamFrom(segment);
 
-    if (nextjsParameterPatternMatch) {
-      const paramName = nextjsParameterPatternMatch[1];
-      const paramValue = params[paramName];
-      return paramValue
-    } else {
-      return segment;
-    }
-  }).join("/");
+      if (dynamicRouteParam) {
+        return params[dynamicRouteParam];
+      } else {
+        return segment;
+      }
+    })
+    .join("/");
 
-  return slug;
-}  
+  return `/${slug}`;
+};
 
 const generateSlugFrom = (
   params: Record<string, string>,
@@ -130,16 +136,11 @@ export const getAllContentForPro = <TMeta>(
     relativePath: string;
   }[] = findAllContent(dynamicSlug);
 
-  console.log("contents", contents);
-  // console.log("routeParams", routeParams);
-
   return contents.map((item) => {
     const { frontmatter, content } = grayMatterContent<TMeta>(
       item.fullPath,
       metadataAdapter,
     );
-
-    // console.log("AAAA", routeParams, item.params, dynamicSlug)
 
     return {
       frontmatter,
@@ -158,7 +159,11 @@ export const getSingleContentProBy = <TMeta>(
 ): Content<TMeta> | undefined => {
   const sanitizedParams = params || {};
   try {
-    const filePath = path.join(contentRootDirectory, calculateSlugFrom(sanitizedParams, dynamicSlug), contentMdxFileName);
+    const filePath = path.join(
+      contentRootDirectory,
+      calculateSlugFrom(sanitizedParams, dynamicSlug),
+      contentMdxFileName,
+    );
     const { frontmatter, content } = grayMatterContent<TMeta>(
       filePath,
       metadataAdapter,
