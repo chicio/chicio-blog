@@ -14,8 +14,8 @@ interface PostProps {
 }
 
 export const BlogPostContent: FC<PostProps> = async ({ post }) => {
-  const { frontmatter, readingTime, contentFileRelativePath: contentPath } = post;
-  const { default: PostContent } = await import(`@/content/${contentPath}/content.mdx`)
+  const { frontmatter, readingTime, contentFileRelativePath } = post;
+  const { default: PostContent } = await import(`@/content/${contentFileRelativePath}/content.mdx`)
 
   return (
     <>
