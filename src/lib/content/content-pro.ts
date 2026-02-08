@@ -2,72 +2,73 @@ import path from "path";
 import fs from "fs";
 import { grayMatterContent } from "./gray-matter";
 import { Content } from "@/types/content/content";
-import { Slug } from "@/types/content/slug";
 import calculateReadingTime from "reading-time";
 
 const contentRootDirectory = path.join(process.cwd(), "src/content");
 const contentMdxFileName = "content.mdx";
 
 const getSegmentsFromDynamicSlug = (slug: string): string[] =>
-  slug.split("/").filter((segment) => segment.length > 0);
+  slug.split('/').filter((segment) => segment.length > 0);
 
-const dynamicRouteParamFrom = (segment: string) => segment.match(/^\[([^\]]+)\]$/)?.[1];
+const dynamicRouteParamFrom = (segment: string) =>
+  segment.match(/^\[([^\]]+)\]$/)?.[1];
 
-const parseContentPath = (
-  routeParams: { name: string; positionInSlug: number }[],
+const extractParametersValueFrom = (
   filePath: string,
+  routeParams: { name: string; positionInSlug: number }[],
 ): Record<string, string> => {
   const segments = filePath.split(path.sep).filter((s) => s.length > 0);
   const params: Record<string, string> = {};
 
-  for (let i = 0; i < routeParams.length && i < segments.length; i++) {
-    const param = routeParams[i];
-    params[param.name] = segments[param.positionInSlug];
+  for (const routeParam of routeParams) {
+    params[routeParam.name] = segments[routeParam.positionInSlug];
   }
 
   return params;
 };
 
-const findAllContent = (dynamicSlug: string) => {
-  const results: {
-    params: Record<string, string>;
-    fullPath: string;
-    relativePath: string;
-  }[] = [];
+const getAllFoldersContainedIn = (directory: string) => {
+  const directories: string[] = [];
+  const entries = fs.readdirSync(path.join(contentRootDirectory, directory), {
+    withFileTypes: true,
+  });
 
+  for (const entry of entries) {
+    if (entry.isDirectory()) {
+      directories.push(path.join(directory, entry.name));
+    }
+  }
+  
+  return directories;
+};
+
+const findAllContent = (dynamicSlug: string) => {
   const segments = getSegmentsFromDynamicSlug(dynamicSlug);
-  const directories: string[] = [segments[0]];
-  const routeParams: { name: string; positionInSlug: number }[] = [];
+  const directoriesQueue: string[] = [segments[0]];
+  const detectedDynamicRouteParams: { name: string; positionInSlug: number }[] =
+    [];
   let currentSegmentPosition = 1;
 
   while (currentSegmentPosition < segments.length) {
-    let currentLevelDimension = directories.length;
+    let currentLevelDimension = directoriesQueue.length;
     const currentSegment = segments[currentSegmentPosition];
     const dynamicRouteParam = dynamicRouteParamFrom(currentSegment);
 
     if (dynamicRouteParam) {
       while (currentLevelDimension > 0) {
-        const currentDirectory = directories.shift()!;
-        const entries = fs.readdirSync(
-          path.join(contentRootDirectory, currentDirectory),
-          { withFileTypes: true },
-        );
-
-        entries.forEach((entry) => {
-          if (entry.isDirectory()) {
-            directories.push(currentDirectory + "/" + entry.name);
-          }
-        });
+        const currentDirectory = directoriesQueue.shift()!;
+        const folders = getAllFoldersContainedIn(currentDirectory);
+        directoriesQueue.push(...folders);
         currentLevelDimension--;
       }
-      routeParams.push({
+      detectedDynamicRouteParams.push({
         name: dynamicRouteParam,
         positionInSlug: currentSegmentPosition,
       });
     } else {
       while (currentLevelDimension > 0) {
-        const currentDirectory = directories.shift()!;
-        directories.push(currentDirectory + "/" + currentSegment);
+        const currentDirectory = directoriesQueue.shift()!;
+        directoriesQueue.push(path.join(currentDirectory, currentSegment));
         currentLevelDimension--;
       }
     }
@@ -75,24 +76,17 @@ const findAllContent = (dynamicSlug: string) => {
     currentSegmentPosition++;
   }
 
-  directories.forEach((directory) => {
-    const fullPath = path.join(
-      contentRootDirectory,
-      directory,
-      contentMdxFileName,
-    );
-    const relativePath = path.relative(
-      contentRootDirectory,
-      path.dirname(fullPath),
-    );
-    const params = parseContentPath(routeParams, directory);
+  const results = [];
+
+  for (const directory of directoriesQueue) {
+    const relativePath = path.join(directory, contentMdxFileName);
 
     results.push({
-      params,
-      fullPath,
+      fullPath: path.join(contentRootDirectory, relativePath),
       relativePath,
+      params: extractParametersValueFrom(directory, detectedDynamicRouteParams),
     });
-  });
+  }
 
   return results;
 };
@@ -116,16 +110,6 @@ const calculateSlugFrom = (
   return `/${slug}`;
 };
 
-const generateSlugFrom = (
-  params: Record<string, string>,
-  dynamicSlug: string,
-): Slug => {
-  return {
-    params,
-    formatted: calculateSlugFrom(params, dynamicSlug),
-  };
-};
-
 export const getAllContentForPro = <TMeta>(
   dynamicSlug: string,
   metadataAdapter?: (raw: unknown) => TMeta,
@@ -144,9 +128,12 @@ export const getAllContentForPro = <TMeta>(
 
     return {
       frontmatter,
-      slug: generateSlugFrom(item.params, dynamicSlug),
+      slug: {
+        params: item.params,
+        formatted: calculateSlugFrom(item.params, dynamicSlug),
+      },
       readingTime: calculateReadingTime(content),
-      contentPath: item.relativePath,
+      contentFileRelativePath: item.relativePath,
       content,
     };
   });
@@ -159,16 +146,12 @@ export const getSingleContentProBy = <TMeta>(
 ): Content<TMeta> | undefined => {
   const sanitizedParams = params || {};
   try {
-    const filePath = path.join(
-      contentRootDirectory,
-      calculateSlugFrom(sanitizedParams, dynamicSlug),
-      contentMdxFileName,
-    );
+    const slug = calculateSlugFrom(sanitizedParams, dynamicSlug);
+    const filePath = path.join(contentRootDirectory, slug, contentMdxFileName);
     const { frontmatter, content } = grayMatterContent<TMeta>(
       filePath,
       metadataAdapter,
     );
-
     const relativePath = path.relative(
       contentRootDirectory,
       path.dirname(filePath),
@@ -176,9 +159,12 @@ export const getSingleContentProBy = <TMeta>(
 
     return {
       frontmatter,
-      slug: generateSlugFrom(sanitizedParams, dynamicSlug),
+      slug: {
+        params: sanitizedParams,
+        formatted: slug,
+      },
       readingTime: calculateReadingTime(content),
-      contentPath: relativePath,
+      contentFileRelativePath: relativePath,
       content,
     };
   } catch {

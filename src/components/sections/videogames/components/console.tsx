@@ -17,7 +17,7 @@ export const Console: FC<PropsWithChildren<ConsoleProps>> = async ({
   console,
   consoleSlug
 }) => {
-  const { contentPath } = console;
+  const { contentFileRelativePath: contentPath } = console;
   const { default: ConsoleContent } = await import(`@/content/${contentPath}/content.mdx`)
   const games = getAllGamesForConsole(consoleSlug);
   

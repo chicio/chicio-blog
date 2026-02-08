@@ -17,7 +17,7 @@ export const Game: FC<PropsWithChildren<GameProps>> = async ({
   game,
   console
 }) => {
-  const { contentPath } = game;
+  const { contentFileRelativePath: contentPath } = game;
   const { default: GameContent } = await import(`@/content/${contentPath}/content.mdx`)
   
   return <ReadingContentPageTemplate

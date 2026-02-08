@@ -171,7 +171,7 @@ export const getSingleContentBy = <TMeta>(
       frontmatter,
       slug: generateSlugFrom(sanitizedParams, baseUrl, routeParams),
       readingTime: calculateReadingTime(content),
-      contentPath: relativePath,
+      contentFileRelativePath: relativePath,
       content,
     };
   } catch {

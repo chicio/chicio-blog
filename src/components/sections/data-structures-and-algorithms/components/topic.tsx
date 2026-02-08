@@ -20,7 +20,7 @@ export const Topic: FC<PropsWithChildren<DsaProps>> = async ({
   previousTopic,
   nextTopic
 }) => {
-  const { contentPath } = topic;
+  const { contentFileRelativePath: contentPath } = topic;
   const { default: TopicContent } = await import(`@/content/${contentPath}/content.mdx`)
   
   return <ReadingContentPageTemplate

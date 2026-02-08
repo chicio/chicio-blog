@@ -6,6 +6,6 @@ export type Content<TMeta = unknown> = {
     frontmatter: Frontmatter<TMeta>;
     slug: Slug;
     readingTime: ReadTimeResults;
-    contentPath: string;
+    contentFileRelativePath: string;
     content: string;
 };
