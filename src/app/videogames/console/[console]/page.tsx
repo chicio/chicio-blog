@@ -3,7 +3,7 @@ import { NextVideogamesConsoleParameters, NextVideogamesGameParameters } from "@
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getAllGames, getConsole, getGame } from "@/lib/content/videogames";
+import { getAllConsoles, getAllGames, getConsole, getGame } from "@/lib/content/videogames";
 import { Console } from "@/components/sections/videogames/components/console";
 
 export async function generateMetadata({
@@ -29,11 +29,11 @@ export async function generateMetadata({
   });
 }
 
-export async function generateStaticParams() {
-  return getAllGames().map(
-    (game) => game.slug.params,
-  );
-}
+// export async function generateStaticParams() {
+//   return getAllConsoles().map(
+//     (console) => console.slug.params,
+//   );
+// }
 
 export default async function VideogamesConsolePage({
   params,

@@ -1,7 +1,7 @@
 import { Content } from "@/types/content/content";
-import { getAllContentFor, getSingleContentBy } from "./content";
 import { slugs } from "@/types/configuration/slug";
 import { ConsoleMetadata, GameMetadata } from "@/types/content/videogames";
+import { getAllContentForPro, getSingleContentProBy } from "./content-pro";
 
 const consoleMetadataAdapter = (raw: unknown): ConsoleMetadata => {
   const { releaseYear, manufacturer } = raw as Record<string, string>;
@@ -10,39 +10,66 @@ const consoleMetadataAdapter = (raw: unknown): ConsoleMetadata => {
     releaseYear,
     manufacturer,
   };
-}
+};
 
 const gamesMetadataAdapter = (raw: unknown): GameMetadata => {
-  const { releaseYear, manufacturer, consoleSlug } = raw as Record<string, string>;
+  const { releaseYear, manufacturer, consoleSlug } = raw as Record<
+    string,
+    string
+  >;
 
   return {
     releaseYear,
     manufacturer,
     consoleSlug,
   };
-}
+};
 
-export const getConsole = (params: Record<string, string>): Content<ConsoleMetadata> | undefined =>
-  getSingleContentBy<ConsoleMetadata>(slugs.videogames.console, params, consoleMetadataAdapter);
+export const getConsole = (
+  params: Record<string, string>,
+): Content<ConsoleMetadata> | undefined =>
+  getSingleContentProBy<ConsoleMetadata>(
+    slugs.videogames.console,
+    params,
+    consoleMetadataAdapter,
+  );
 
 export const getAllConsoles = (): Content<ConsoleMetadata>[] =>
-  getAllContentFor<ConsoleMetadata>(slugs.videogames.console, consoleMetadataAdapter).sort(
+  getAllContentForPro<ConsoleMetadata>(
+    slugs.videogames.console,
+    consoleMetadataAdapter,
+  ).sort(
     (console, anotherConsole) =>
       new Date(console.frontmatter.date.formatted).getTime() -
       new Date(anotherConsole.frontmatter.date.formatted).getTime(),
   );
 
-export const getGame = (params: Record<string, string>): Content<GameMetadata> | undefined =>
-  getSingleContentBy<GameMetadata>(slugs.videogames.game, params, gamesMetadataAdapter);
+export const getGame = (
+  params: Record<string, string>,
+): Content<GameMetadata> | undefined =>
+  getSingleContentProBy<GameMetadata>(
+    slugs.videogames.game,
+    params,
+    gamesMetadataAdapter,
+  );
 
 export const getAllGames = (): Content<GameMetadata>[] =>
-  getAllContentFor<GameMetadata>(slugs.videogames.game, gamesMetadataAdapter).sort(
+  getAllContentForPro<GameMetadata>(
+    slugs.videogames.game,
+    gamesMetadataAdapter,
+  ).sort(
     (game, anotherGame) =>
       new Date(game.frontmatter.date.formatted).getTime() -
       new Date(anotherGame.frontmatter.date.formatted).getTime(),
   );
 
-export const getAllGamesForConsole = (consoleSlug: string): Content<GameMetadata>[] => 
-  getAllGames().filter((game) => game.frontmatter.metadata?.consoleSlug === consoleSlug);
-  
-
+export const getAllGamesForConsole = (
+  consoleSlug: string,
+): Content<GameMetadata>[] =>
+  getAllContentForPro<GameMetadata>(slugs.videogames.game, gamesMetadataAdapter)
+    .sort(
+      (game, anotherGame) =>
+        new Date(game.frontmatter.date.formatted).getTime() -
+        new Date(anotherGame.frontmatter.date.formatted).getTime(),
+    )
+    .filter((game) => game.frontmatter.metadata?.consoleSlug === consoleSlug);

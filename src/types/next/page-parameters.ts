@@ -15,5 +15,5 @@ export type NextDataStructuresAndAlgorithmsParameters = NextParameters<DataStruc
 export type VideogamesConsoleParameters = { console: string };
 export type NextVideogamesConsoleParameters = NextParameters<VideogamesConsoleParameters>
 
-export type VideogamesGameParameters = { game: string };
+export type VideogamesGameParameters = { console: string, game: string };
 export type NextVideogamesGameParameters = NextParameters<VideogamesGameParameters>

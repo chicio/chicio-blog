@@ -23,7 +23,7 @@ export const slugs = {
   },
   videogames: {
     timeline: `${videogames}/timeline`,
-    console: `${videogames}/console`,
-    game: `${videogames}/game`,
+    console: `${videogames}/console/[console]`,
+    game: `${videogames}/console/[console]/game/[game]/`,
   }
 };
