@@ -28,7 +28,7 @@
     "@upstash/vector": "^1.2.2",
     "@vercel/analytics": "^1.6.1",
     "@vercel/speed-insights": "^1.3.1",
-    "ai": "^6.0.7",
+    "ai": "^6.0.77",
     "elasticlunr": "^0.9.5",
     "feed": "^5.2.0",
     "framer-motion": "^12.27.0",
