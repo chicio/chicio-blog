@@ -7,6 +7,7 @@ import { FC } from "react";
 import { PostAuthors } from "./post-authors";
 import { PostMeta } from "./post-meta";
 import { PostTags } from "./post-tags";
+import { TerminalLink } from "@/components/design-system/molecules/links/terminal-link";
 
 interface BigCardProps {
   big: boolean;
@@ -81,6 +82,11 @@ export const PostCard: FC<PostCardProps> = ({
           trackingLabel={tracking.label.body}
         />
       )}
+      <TerminalLink to={slug} trackingData={{
+        action: tracking.action.open_blog_post,
+        category: trackingCategory,
+        label: tracking.label.body,
+      }} label="Read more"/>
     </div>
   </div>
 );

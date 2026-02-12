@@ -22,10 +22,10 @@ export const Timeline: FC = () => {
       />
       {timelineData.map((item) => (
         <div
-          className="relative flex w-full gap-2 md:gap-4"
+          className="relative flex flex-row w-full gap-2 md:gap-4"
           key={item.id}
         >
-          <div className="bg-primary text-text-above-primary relative flex h-[40px] w-[40px] flex-shrink-0 items-center justify-center rounded-full md:h-[48px] md:w-[48px]">
+          <div className="bg-primary text-text-above-primary relative flex h-[40px] w-[40px] flex-shrink-0 items-center justify-center rounded-full md:h-13 md:w-13">
             {getIcon(item.type)}
           </div>
           <div className="w-0 min-w-0 flex-1">

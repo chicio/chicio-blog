@@ -17,7 +17,8 @@ interface TypewriterState {
 
 export const useTypewriter = (
   lines: TypewriterLine[],
-  speed: number = 50
+  speed: number = 50,
+  shouldStart: boolean = true
 ): TypewriterState => {
   const [lineIndex, setLineIndex] = useState(0);
   const [charIndex, setCharIndex] = useState(0);
@@ -29,11 +30,12 @@ export const useTypewriter = (
   const currentText = currentLine ? currentLine.text.substring(0, charIndex) : '';
 
   useEffect(() => {
-    if (isComplete) return;
+    if (isComplete || !shouldStart) {
+      return;
+    } 
 
     const line = lines[lineIndex];
 
-    // Se stiamo aspettando il delay iniziale della riga
     if (isWaitingForDelay) {
       const delayTimer = setTimeout(() => {
         setIsWaitingForDelay(false);
@@ -56,7 +58,7 @@ export const useTypewriter = (
 
       return () => clearTimeout(timer);
     }
-  }, [lineIndex, charIndex, lines, speed, isComplete, isWaitingForDelay]);
+  }, [lineIndex, charIndex, lines, speed, isComplete, isWaitingForDelay, shouldStart]);
 
   return {
     completedLines,

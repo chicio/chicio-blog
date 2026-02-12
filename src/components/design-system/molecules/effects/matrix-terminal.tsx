@@ -4,6 +4,7 @@ import { Cursor, ErrorText, QuoteText, SuccessText, TerminalLine, TerminalQuoteL
 import { FC, useEffect } from 'react';
 import { useTypewriter } from '../../utils/hooks/use-typewriter';
 import { useGlassmorphism } from '../../utils/hooks/use-glassmorphism';
+import { useInView } from '../../utils/hooks/use-in-view';
 import { MotionDiv } from '../animation/motion-div';
 
 interface TerminalLine {
@@ -18,7 +19,8 @@ interface MatrixTerminalProps {
 }
 
 export const MatrixTerminal: FC<MatrixTerminalProps> = ({ lines, onComplete }) => {
-  const { completedLines, currentLine, currentText } = useTypewriter(lines);
+  const [ref, isInView] = useInView<HTMLDivElement>({ threshold: 0.1, triggerOnce: true });
+  const { completedLines, currentLine, currentText } = useTypewriter(lines, 50, isInView);
   const { glassmorphismClass } = useGlassmorphism();
 
   useEffect(() => {
@@ -59,14 +61,16 @@ export const MatrixTerminal: FC<MatrixTerminalProps> = ({ lines, onComplete }) =
   };
 
   return (
-    <MotionDiv
-      className={`${glassmorphismClass} w-[95%] sm:w-[600px] p-4 min-h-[150px] sm:min-h-[200px]`}
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.2, ease: "easeOut" }}
-    >
-      {completedLines.map((line, index) => renderLine(line, line.text, false, index))}
-      {currentLine && renderLine(currentLine, currentText, true, completedLines.length)}
-    </MotionDiv>
+    <div ref={ref}>
+      <MotionDiv
+        className={`${glassmorphismClass} w-[95%] sm:w-[600px] p-4 min-h-[150px] sm:min-h-[200px]`}
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.2, ease: "easeOut" }}
+      >
+        {completedLines.map((line, index) => renderLine(line, line.text, false, index))}
+        {currentLine && renderLine(currentLine, currentText, true, completedLines.length)}
+      </MotionDiv>
+    </div>
   );
 };

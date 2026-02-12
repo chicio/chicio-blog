@@ -1,4 +1,4 @@
-import { VideogamesTimeline } from "@/components/sections/videogames/components/timeline";
+import { Videogames } from "@/components/sections/videogames/components/videogames";
 import { createMetadata } from "@/lib/seo/seo";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { slugs } from "@/types/configuration/slug";
@@ -9,14 +9,14 @@ export async function generateMetadata(): Promise<Metadata> {
     author: siteMetadata.author,
     title: siteMetadata.title,
     description: siteMetadata.description,
-    slug: slugs.videogames.timeline,
+    slug: slugs.videogames.home,
     imageUrl: siteMetadata.featuredImage,
     ogPageType: "website",
   });
 }
 
-export default async function VideogamesTimelinePage() {
+export default function VideogamesHomePage() {
   return (
-    <VideogamesTimeline />
+    <Videogames />
   );
 }

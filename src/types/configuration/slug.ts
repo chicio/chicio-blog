@@ -21,7 +21,8 @@ export const slugs = {
     topic: `${dsa}/topic/[topic]`,
   },
   videogames: {
-    timeline: `${videogames}/timeline`,
+    home: videogames,
+    collection: `${videogames}/collection`,
     console: `${videogames}/console/[console]`,
     game: `${videogames}/console/[console]/game/[game]/`,
   }
