@@ -10,20 +10,6 @@ import { tracking } from "@/types/configuration/tracking";
 import { VideogameCollectionDataCard } from "./videogame-collection-data-card";
 import { ConsoleCard } from "@/components/sections/videogames/components/console-card";
 
-const getGeneration = (releaseYear: string): string => {
-  const year = parseInt(releaseYear);
-  if (year >= 1972 && year <= 1977) return "1st";
-  if (year >= 1976 && year <= 1992) return "2nd";
-  if (year >= 1983 && year <= 2003) return "3rd";
-  if (year >= 1987 && year <= 2004) return "4th";
-  if (year >= 1993 && year <= 2005) return "5th";
-  if (year >= 1998 && year <= 2013) return "6th";
-  if (year >= 2005 && year <= 2017) return "7th";
-  if (year >= 2012 && year <= 2020) return "8th";
-  if (year >= 2020) return "9th";
-  return "Unknown";
-};
-
 export const VideogamesCollection: React.FC = () => {
   const consoles = getAllConsoles();
   const games = getAllGames();
@@ -59,34 +45,13 @@ export const VideogamesCollection: React.FC = () => {
         ></VideogameCollectionDataCard>
       </div>
       <div className="flex flex-col gap-6">
-        {consoles.map((console) => {
-          const gamesForConsole = getAllGamesForConsole(
-            console.frontmatter.metadata?.name || "",
-          );
-          const acquiredYear = parseInt(
-            console.frontmatter.date.formatted.split("-")[0],
-          );
-
-          return (
+        {consoles.map((console) => (
             <ConsoleCard
+              console={console}
+              gamesCount={getAllGamesForConsole(console.frontmatter.metadata?.name || "",).length}
               key={console.frontmatter.metadata?.name}
-              year={console.frontmatter.metadata?.releaseYear || ""}
-              id={console.frontmatter.metadata?.sku || ""}
-              gamesCount={gamesForConsole.length}
-              brand={console.frontmatter.metadata?.manufacturer || ""}
-              name={console.frontmatter.metadata?.name || ""}
-              released={console.frontmatter.metadata?.releaseYear || ""}
-              acquired={console.frontmatter.date.formatted.split("-")[0]}
-              generation={getGeneration(
-                console.frontmatter.metadata?.releaseYear || "",
-              )}
-              description={console.frontmatter.description}
-              imageSrc={console.frontmatter.image}
-              imageAlt={console.frontmatter.title}
-              href={console.slug.formatted}
             />
-          );
-        })}
+        ))}
       </div>
     </ReadingContentPageTemplate>
   );

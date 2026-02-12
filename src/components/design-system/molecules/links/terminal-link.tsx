@@ -14,7 +14,7 @@ export const TerminalLink: React.FC<{
             className={`font-mono text-lg`}
         >
             <span className="text-shadow-sm">
-                {"> "} {label} <Cursor />
+                {"> "} {label}<Cursor />
             </span>
         </StandardInternalLinkWithTracking>
     );
