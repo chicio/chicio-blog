@@ -10,6 +10,7 @@ import { PageTitle } from "@/components/design-system/molecules/typography/page-
 import { GameInformation } from "./game-information";
 import { TerminalLink } from "@/components/design-system/molecules/links/terminal-link";
 import { slugs } from "@/types/configuration/slug";
+import { buildSlug } from "@/lib/slug/slug-builder";
 
 interface GameProps {
   game: Content<GameMetadata>;
@@ -52,7 +53,7 @@ export const Game: FC<PropsWithChildren<GameProps>> = async ({
       <GameContent />
       <div className="mt-8 flex flex-row justify-center">
         <TerminalLink
-          to={slugs.videogames.console.replace("[console]", console)}
+          to={buildSlug(slugs.videogames.console, { console })}
           label={`Back to ${game.frontmatter.metadata?.console}`}
           trackingData={{
             category: tracking.category.videogames,
