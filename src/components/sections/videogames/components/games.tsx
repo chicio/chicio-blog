@@ -7,11 +7,10 @@ import { ReadingContentPageTemplate } from "@/components/design-system/templates
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { ConsoleHeader } from "./console-header";
 import { tracking } from "@/types/configuration/tracking";
-import { TerminalLink } from "@/components/design-system/molecules/links/terminal-link";
-import { BluePillLink } from "@/components/design-system/molecules/links/pills-links";
 import { slugs } from "@/types/configuration/slug";
 import { buildSlug } from "@/lib/slug/slug-builder";
 import { VideogameNavigation } from "./videogame-navigation";
+import { JsonLd } from "@/components/design-system/utils/components/jsond-ld";
 
 interface GamesProps {
   console: Content<ConsoleMetadata>;
@@ -38,6 +37,14 @@ export const Games: FC<GamesProps> = ({ console, consoleSlug }) => {
           action: tracking.action.open_videogame_console,
           title: `Back to ${console.frontmatter.metadata!.name}`,
         }}
+      />
+      <JsonLd
+        type="Website"
+        url={`${siteMetadata.siteUrl}${console.slug.formatted}`}
+        imageUrl={console.frontmatter.image}
+        title={console.frontmatter.title}
+        description={console.frontmatter.description}
+        keywords={console.frontmatter.tags}
       />
     </ReadingContentPageTemplate>
   );

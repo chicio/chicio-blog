@@ -11,6 +11,7 @@ import { VideogameCollectionDataCard } from "./videogame-collection-data-card";
 import { ConsoleCard } from "@/components/sections/videogames/components/console-card";
 import { slugs } from "@/types/configuration/slug";
 import { VideogameNavigation } from "./videogame-navigation";
+import { JsonLd } from "@/components/design-system/utils/components/jsond-ld";
 
 export const VideogamesCollection: React.FC = () => {
   const consoles = getAllConsoles();
@@ -64,6 +65,12 @@ export const VideogamesCollection: React.FC = () => {
           action: tracking.action.open_videogame_game,
           title: "Back to Videogames introduction",
         }}
+      />
+      <JsonLd
+        type="Website"
+        url={siteMetadata.siteUrl}
+        imageUrl={siteMetadata.featuredImage}
+        title={siteMetadata.title}
       />
     </ReadingContentPageTemplate>
   );

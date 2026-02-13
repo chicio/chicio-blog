@@ -24,7 +24,7 @@ export async function generateMetadata({
     slug: game.slug.formatted,
     imageUrl: frontmatter.image,
     description: frontmatter.description,
-    ogPageType: "website", //TODO: review og page type
+    ogPageType: "website",
     keywords: frontmatter.tags,
   });
 }

@@ -25,7 +25,7 @@ export async function generateMetadata({
     slug: console.slug.formatted,
     imageUrl: frontmatter.image,
     description: frontmatter.description,
-    ogPageType: "website", //TODO: review og page type
+    ogPageType: "website",
     keywords: frontmatter.tags,
   });
 }

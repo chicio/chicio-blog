@@ -63,7 +63,7 @@ export const Game: FC<PropsWithChildren<GameProps>> = async ({
         url={`${siteMetadata.siteUrl}${game.slug.formatted}`}
         imageUrl={game.frontmatter.image}
         title={game.frontmatter.title}
-        description={siteMetadata.description}
+        description={game.frontmatter.description}
         keywords={game.frontmatter.tags}
       />
     </ReadingContentPageTemplate>

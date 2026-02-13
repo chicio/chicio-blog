@@ -78,9 +78,9 @@ export const Console: FC<PropsWithChildren<ConsoleProps>> = async ({
       <JsonLd
         type="BlogPosting"
         url={`${siteMetadata.siteUrl}${console.slug.formatted}`}
-        imageUrl={siteMetadata.featuredImage}
+        imageUrl={console.frontmatter.image}
         title={console.frontmatter.title}
-        description={siteMetadata.description}
+        description={console.frontmatter.description}
         keywords={console.frontmatter.tags}
       />
     </ReadingContentPageTemplate>
