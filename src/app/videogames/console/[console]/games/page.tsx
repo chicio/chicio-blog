@@ -5,6 +5,7 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getAllConsoles, getAllGames, getConsole, getGame } from "@/lib/content/videogames";
 import { Console } from "@/components/sections/videogames/components/console";
+import { Games } from "@/components/sections/videogames/components/games";
 
 export async function generateMetadata({
   params,
@@ -39,14 +40,13 @@ export default async function VideogamesGamesForConsolePage({
   params,
 }: NextVideogamesConsoleParameters) {
   const receivedParameters = await params;
-  const console =
-    getConsole(receivedParameters);
+  const console = getConsole(receivedParameters);
 
   if (!console) {
     notFound();
   }
 
   return (
-    <Console console={console} />
+    <Games console={console} />
   );
 }

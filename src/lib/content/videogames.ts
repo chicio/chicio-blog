@@ -4,11 +4,12 @@ import { ConsoleMetadata, GameMetadata } from "@/types/content/videogames";
 import { getAllContentFor, getSingleContentBy } from "./content";
 
 const consoleMetadataAdapter = (raw: unknown): ConsoleMetadata => {
-  const { releaseYear, manufacturer, name, sku, acquiredYear, bits, generation } = raw as Record<string, string>;
+  const { releaseYear, manufacturer, manufacturerLogo, name, sku, acquiredYear, bits, generation } = raw as Record<string, string>;
 
   return {
     releaseYear,
     manufacturer,
+    manufacturerLogo,
     name,
     sku,
     acquiredYear,
@@ -18,7 +19,7 @@ const consoleMetadataAdapter = (raw: unknown): ConsoleMetadata => {
 };
 
 const gamesMetadataAdapter = (raw: unknown): GameMetadata => {
-  const { releaseYear, manufacturer, console } = raw as Record<
+  const { releaseYear, manufacturer, console, developer, publisher, genre } = raw as Record<
     string,
     string
   >;
@@ -27,6 +28,9 @@ const gamesMetadataAdapter = (raw: unknown): GameMetadata => {
     releaseYear,
     manufacturer,
     console,
+    developer,
+    publisher,
+    genre,
   };
 };
 

@@ -19,7 +19,7 @@ export const ChatWelcome: FC<ChatWelcomeProps> = ({
       </p>
       {exampleQuestions.map((question) => (
         <Button
-          className="flex items-center gap-2"
+          className="flex items-center gap-4 my-2"
           key={question}
           onClick={() => handleExampleQuestionsSelection(question)}
           type="button"

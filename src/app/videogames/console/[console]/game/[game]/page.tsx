@@ -30,7 +30,6 @@ export async function generateMetadata({
 }
 
 export async function generateStaticParams() {
-  console.log("generateStaticParams for game page");
   return getAllGames().map(
     (game) => game.slug.params,
   );

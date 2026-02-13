@@ -5,47 +5,80 @@ import { FC, PropsWithChildren } from "react";
 import { JsonLd } from "@/components/design-system/utils/components/jsond-ld";
 import { Content } from "@/types/content/content";
 import { getAllGamesForConsole } from "@/lib/content/videogames";
-import { StandardInternalLinkWithTracking } from "@/components/design-system/atoms/links/standard-internal-link-with-tracking";
 import { ConsoleMetadata } from "@/types/content/videogames";
+import { ImageGlow } from "@/components/design-system/atoms/effects/image-glow";
+import { ConsoleTimeInformation } from "./console-time-information";
+import { IoGameControllerOutline } from "react-icons/io5";
+import { TerminalLink } from "@/components/design-system/molecules/links/terminal-link";
+import { ConsoleHeader } from "./console-header";
+import { GameGrid } from "./games-grid";
 
 interface ConsoleProps {
   console: Content<ConsoleMetadata>;
-  consoleSlug: string;
 }
 
 export const Console: FC<PropsWithChildren<ConsoleProps>> = async ({
   console,
-  consoleSlug
 }) => {
   const { contentFileRelativePath: contentPath } = console;
-  const { default: ConsoleContent } = await import(`@/content/${contentPath}/content.mdx`)
-  const games = getAllGamesForConsole(consoleSlug);
-  
-  return <ReadingContentPageTemplate
-    author={siteMetadata.author}
-    trackingCategory={tracking.category.videogames}
-  >
-    <ConsoleContent />
-    {games.length > 0 && (games.map((game) => (
-      <div key={game.slug.formatted}>
-        <h2>{game.frontmatter.title}</h2>
-        <p>{game.frontmatter.description}</p>
-        <StandardInternalLinkWithTracking to={game.slug.formatted} trackingData={ {
-          category: tracking.category.videogames,
-          label: tracking.label.body,
-          action: tracking.action.open_videogame_game,
-        }}>
-          Read more
-        </StandardInternalLinkWithTracking>
+  const { default: ConsoleContent } = await import(
+    `@/content/${contentPath}/content.mdx`
+  );
+  const games = getAllGamesForConsole(console.frontmatter.metadata!.name).slice(
+    0,
+    3,
+  );
+
+  return (
+    <ReadingContentPageTemplate
+      author={siteMetadata.author}
+      trackingCategory={tracking.category.videogames}
+    >
+      <ConsoleHeader
+        name={console.frontmatter.metadata!.name}
+        manufacturer={console.frontmatter.metadata!.manufacturer}
+        manufacturerLogo={console.frontmatter.metadata!.manufacturerLogo}
+      />
+      <ImageGlow
+        src={console.frontmatter.image}
+        alt={console.frontmatter.title}
+        width={800}
+        height={450}
+        className="mb-6 h-full max-h-96 w-full object-cover"
+      />
+
+      <ConsoleTimeInformation
+        releaseYear={console.frontmatter.metadata?.releaseYear}
+        acquiredYear={console.frontmatter.metadata?.acquiredYear}
+        bits={console.frontmatter.metadata?.bits}
+        generation={console.frontmatter.metadata?.generation}
+        className="mb-6"
+      />
+      <ConsoleContent />
+      <h2 className="mb-4">
+        <IoGameControllerOutline className="text-primary mr-2 inline" />
+        Games
+      </h2>
+      <GameGrid games={games} />
+      <div className="mt-4 flex flex-row justify-center">
+        <TerminalLink
+          to={`${console.slug.formatted}/games`}
+          label="See more"
+          trackingData={{
+            category: tracking.category.videogames,
+            label: tracking.label.body,
+            action: tracking.action.open_videogame_game,
+          }}
+        />
       </div>
-    )))}
-    <JsonLd
-      type="BlogPosting"
-      url={`${siteMetadata.siteUrl}${console.slug.formatted}`}
-      imageUrl={siteMetadata.featuredImage}
-      title={console.frontmatter.title}
-      description={siteMetadata.description}
-      keywords={console.frontmatter.tags}
-    />
-  </ReadingContentPageTemplate>
+      <JsonLd
+        type="BlogPosting"
+        url={`${siteMetadata.siteUrl}${console.slug.formatted}`}
+        imageUrl={siteMetadata.featuredImage}
+        title={console.frontmatter.title}
+        description={siteMetadata.description}
+        keywords={console.frontmatter.tags}
+      />
+    </ReadingContentPageTemplate>
+  );
 };
