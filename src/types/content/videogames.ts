@@ -11,9 +11,10 @@ export type ConsoleMetadata = {
 
 export type GameMetadata = {
   releaseYear: string;
-  manufacturer: string;
   console: string;
   developer: string;
   publisher: string;
   genre: string;
+  pegiRating: string;
+  region: string;
 }
