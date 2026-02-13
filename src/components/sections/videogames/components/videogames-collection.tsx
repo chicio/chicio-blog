@@ -9,6 +9,8 @@ import { siteMetadata } from "@/types/configuration/site-metadata";
 import { tracking } from "@/types/configuration/tracking";
 import { VideogameCollectionDataCard } from "./videogame-collection-data-card";
 import { ConsoleCard } from "@/components/sections/videogames/components/console-card";
+import { slugs } from "@/types/configuration/slug";
+import { VideogameNavigation } from "./videogame-navigation";
 
 export const VideogamesCollection: React.FC = () => {
   const consoles = getAllConsoles();
@@ -46,13 +48,23 @@ export const VideogamesCollection: React.FC = () => {
       </div>
       <div className="flex flex-col gap-6">
         {consoles.map((console) => (
-            <ConsoleCard
-              console={console}
-              gamesCount={getAllGamesForConsole(console.frontmatter.metadata?.name || "",).length}
-              key={console.frontmatter.metadata?.name}
-            />
+          <ConsoleCard
+            console={console}
+            gamesCount={
+              getAllGamesForConsole(console.frontmatter.metadata?.name || "")
+                .length
+            }
+            key={console.frontmatter.metadata?.name}
+          />
         ))}
       </div>
+      <VideogameNavigation
+        previous={{
+          url: slugs.videogames.home,
+          action: tracking.action.open_videogame_game,
+          title: "Back to Videogames introduction",
+        }}
+      />
     </ReadingContentPageTemplate>
   );
 };

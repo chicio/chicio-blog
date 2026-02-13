@@ -8,12 +8,17 @@ import { siteMetadata } from "@/types/configuration/site-metadata";
 import { ConsoleHeader } from "./console-header";
 import { tracking } from "@/types/configuration/tracking";
 import { TerminalLink } from "@/components/design-system/molecules/links/terminal-link";
+import { BluePillLink } from "@/components/design-system/molecules/links/pills-links";
+import { slugs } from "@/types/configuration/slug";
+import { buildSlug } from "@/lib/slug/slug-builder";
+import { VideogameNavigation } from "./videogame-navigation";
 
 interface GamesProps {
   console: Content<ConsoleMetadata>;
+  consoleSlug: string;
 }
 
-export const Games: FC<GamesProps> = ({ console }) => {
+export const Games: FC<GamesProps> = ({ console, consoleSlug }) => {
   const games = getAllGamesForConsole(console.frontmatter.metadata!.name);
 
   return (
@@ -27,17 +32,13 @@ export const Games: FC<GamesProps> = ({ console }) => {
         manufacturerLogo={console.frontmatter.metadata!.manufacturerLogo}
       />
       <GameGrid games={games} />
-      <div className="mt-8 flex flex-row justify-center">
-        <TerminalLink
-          to={`${console.slug.formatted}`}
-          label="Back to console"
-          trackingData={{
-            category: tracking.category.videogames,
-            label: tracking.label.body,
-            action: tracking.action.open_videogame_game,
-          }}
-        />
-      </div>
+      <VideogameNavigation
+        previous={{
+          url: buildSlug(slugs.videogames.console, { console: consoleSlug }),
+          action: tracking.action.open_videogame_console,
+          title: `Back to ${console.frontmatter.metadata!.name}`,
+        }}
+      />
     </ReadingContentPageTemplate>
   );
 };

@@ -43,7 +43,9 @@ export const tracking = {
     open_dsa_time_and_space_complexity: "open_dsa_time_and_space_complexity",
     open_dsa_roadmap: "open_dsa_roadmap",
     open_videogame_game: "open_videogame_game",
-    open_videogame_console: "open_videogame_console",},
+    open_videogame_console: "open_videogame_console",
+    open_videogame_games: "open_videogame_games",
+    open_videogame_collection: "open_videogame_collection",},
   category: {
     home: "home",
     contact: "contact",

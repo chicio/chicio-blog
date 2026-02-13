@@ -10,6 +10,7 @@ import {
   RedPillLink,
 } from "@/components/design-system/molecules/links/pills-links";
 import { slugs } from "@/types/configuration/slug";
+import { VideogameNavigation } from "./videogame-navigation";
 
 export const Videogames: React.FC = () => (
   <ReadingContentPageTemplate
@@ -47,28 +48,18 @@ export const Videogames: React.FC = () => (
           },
         ]}
       />
-      <div className="mt-3 flex flex-row gap-4">
-        <BluePillLink
-          to={'/'}
-          trackingData={{
-            category: tracking.category.notfound,
-            label: tracking.label.body,
-            action: tracking.action.blue_pill,
-          }}
-        >
-          Home
-        </BluePillLink>
-        <RedPillLink
-          to={slugs.videogames.collection}
-          trackingData={{
-            category: tracking.category.notfound,
-            label: tracking.label.body,
-            action: tracking.action.red_pill,
-          }}
-        >
-          Show Collection
-        </RedPillLink>
-      </div>
+      <VideogameNavigation  
+        previous={{
+          url: '/',
+          action: tracking.action.open_home,
+          title: "Home" 
+        }}
+        next={{
+          url: slugs.videogames.collection,
+          action: tracking.action.open_videogame_collection,
+          title: "Collection"
+        }}
+      />
     </div>
     <JsonLd
       type="Website"

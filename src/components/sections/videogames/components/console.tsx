@@ -8,23 +8,30 @@ import { getAllGamesForConsole } from "@/lib/content/videogames";
 import { ConsoleMetadata } from "@/types/content/videogames";
 import { ConsoleTimeInformation } from "./console-time-information";
 import { IoGameControllerOutline } from "react-icons/io5";
-import { TerminalLink } from "@/components/design-system/molecules/links/terminal-link";
 import { ConsoleHeader } from "./console-header";
 import { GameGrid } from "./games-grid";
 import { ImageCarousel } from "@/components/design-system/organism/image-carousel";
+import { slugs } from "@/types/configuration/slug";
+import { buildSlug } from "@/lib/slug/slug-builder";
+import { VideogameNavigation } from "./videogame-navigation";
 
 interface ConsoleProps {
   console: Content<ConsoleMetadata>;
+  consoleSlug: string;
 }
 
 export const Console: FC<PropsWithChildren<ConsoleProps>> = async ({
   console,
+  consoleSlug,
 }) => {
   const { contentFileRelativePath: contentPath } = console;
   const { default: ConsoleContent } = await import(
     `@/content/${contentPath}/content.mdx`
   );
-  const games = getAllGamesForConsole(console.frontmatter.metadata!.name).slice(0, 3);
+  const games = getAllGamesForConsole(console.frontmatter.metadata!.name).slice(
+    0,
+    3,
+  );
 
   return (
     <ReadingContentPageTemplate
@@ -37,10 +44,12 @@ export const Console: FC<PropsWithChildren<ConsoleProps>> = async ({
         manufacturerLogo={console.frontmatter.metadata!.manufacturerLogo}
       />
       <ImageCarousel
-        images={console.frontmatter.metadata?.gallery || [console.frontmatter.image]}
+        images={
+          console.frontmatter.metadata?.gallery || [console.frontmatter.image]
+        }
         alt={console.frontmatter.title}
         className="mb-6"
-      /> 
+      />
       <ConsoleTimeInformation
         releaseYear={console.frontmatter.metadata?.releaseYear}
         acquiredYear={console.frontmatter.metadata?.acquiredYear}
@@ -49,22 +58,23 @@ export const Console: FC<PropsWithChildren<ConsoleProps>> = async ({
         className="mb-6"
       />
       <ConsoleContent />
-      <h2 className="mb-4">
+      <h2 className="mb-4 flex items-center">
         <IoGameControllerOutline className="text-primary mr-2 inline" />
         Games
       </h2>
       <GameGrid games={games} />
-      <div className="mt-4 flex flex-row justify-center">
-        <TerminalLink
-          to={`${console.slug.formatted}/games`}
-          label="See more"
-          trackingData={{
-            category: tracking.category.videogames,
-            label: tracking.label.body,
-            action: tracking.action.open_videogame_game,
-          }}
-        />
-      </div>
+      <VideogameNavigation
+        previous={{
+          url: slugs.videogames.collection,
+          action: tracking.action.open_videogame_game,
+          title: "Back to collection",
+        }}
+        next={{
+          url: buildSlug(slugs.videogames.games, { console: consoleSlug }),
+          action: tracking.action.open_videogame_games,
+          title: "See more games",
+        }}
+      />
       <JsonLd
         type="BlogPosting"
         url={`${siteMetadata.siteUrl}${console.slug.formatted}`}

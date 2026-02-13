@@ -47,6 +47,6 @@ export default async function VideogamesGamesForConsolePage({
   }
 
   return (
-    <Games console={console} />
+    <Games console={console} consoleSlug={receivedParameters.console} />
   );
 }

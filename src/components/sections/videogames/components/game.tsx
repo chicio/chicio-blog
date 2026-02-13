@@ -11,6 +11,8 @@ import { GameInformation } from "./game-information";
 import { TerminalLink } from "@/components/design-system/molecules/links/terminal-link";
 import { slugs } from "@/types/configuration/slug";
 import { buildSlug } from "@/lib/slug/slug-builder";
+import { BluePillLink } from "@/components/design-system/molecules/links/pills-links";
+import { VideogameNavigation } from "./videogame-navigation";
 
 interface GameProps {
   game: Content<GameMetadata>;
@@ -37,7 +39,7 @@ export const Game: FC<PropsWithChildren<GameProps>> = async ({
         alt={game.frontmatter.title}
         className="mb-6"
       />
-      <GameInformation 
+      <GameInformation
         releaseYear={game.frontmatter.metadata?.releaseYear}
         acquiredYear={game.frontmatter.metadata?.acquiredYear}
         developer={game.frontmatter.metadata?.developer}
@@ -49,17 +51,13 @@ export const Game: FC<PropsWithChildren<GameProps>> = async ({
         className="mb-6"
       />
       <GameContent />
-      <div className="mt-8 flex flex-row justify-center">
-        <TerminalLink
-          to={buildSlug(slugs.videogames.games, { console })}
-          label={`Back to ${game.frontmatter.metadata?.console} games`}
-          trackingData={{
-            category: tracking.category.videogames,
-            label: tracking.label.body,
-            action: tracking.action.open_videogame_game,
-          }}
-        />
-      </div>
+      <VideogameNavigation
+        previous={{
+          url: buildSlug(slugs.videogames.games, { console }),
+          action: tracking.action.open_videogame_console,
+          title: `Back to ${game.frontmatter.metadata?.console}`,
+        }}
+      />
       <JsonLd
         type="Website"
         url={`${siteMetadata.siteUrl}${game.slug.formatted}`}

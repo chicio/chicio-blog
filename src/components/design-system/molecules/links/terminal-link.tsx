@@ -13,7 +13,7 @@ export const TerminalLink: React.FC<{
     <StandardInternalLinkWithTracking
       to={to}
       trackingData={trackingData}
-      className={`font-mono text-lg`}
+      className={`font-mono text-lg no-underline hover:no-underline`}
     >
       <span className="text-shadow-sm">
         {"> "} {label}
