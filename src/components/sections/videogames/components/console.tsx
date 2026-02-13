@@ -24,10 +24,7 @@ export const Console: FC<PropsWithChildren<ConsoleProps>> = async ({
   const { default: ConsoleContent } = await import(
     `@/content/${contentPath}/content.mdx`
   );
-  const games = getAllGamesForConsole(console.frontmatter.metadata!.name).slice(
-    0,
-    3,
-  );
+  const games = getAllGamesForConsole(console.frontmatter.metadata!.name).slice(0, 3);
 
   return (
     <ReadingContentPageTemplate

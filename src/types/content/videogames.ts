@@ -11,6 +11,7 @@ export type ConsoleMetadata = {
 
 export type GameMetadata = {
   releaseYear: string;
+  acquiredYear: string;
   console: string;
   developer: string;
   publisher: string;

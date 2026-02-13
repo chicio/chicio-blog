@@ -19,17 +19,20 @@ const consoleMetadataAdapter = (raw: unknown): ConsoleMetadata => {
 };
 
 const gamesMetadataAdapter = (raw: unknown): GameMetadata => {
-  const { releaseYear, console, developer, publisher, genre } = raw as Record<
+  const { releaseYear, console, developer, publisher, genre, pegiRating, region, acquiredYear } = raw as Record<
     string,
     string
   >;
 
   return {
     releaseYear,
+    acquiredYear,
     console,
     developer,
     publisher,
     genre,
+    pegiRating,
+    region,
   };
 };
 
