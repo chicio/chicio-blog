@@ -7,6 +7,7 @@ import { FC } from "react";
 import { PostAuthors } from "./post-authors";
 import { PostMeta } from "./post-meta";
 import { PostTags } from "./post-tags";
+import { TerminalLink } from "@/components/design-system/molecules/links/terminal-link";
 
 interface BigCardProps {
   big: boolean;
@@ -36,7 +37,10 @@ export const PostCard: FC<PostCardProps> = ({
   description,
   trackingCategory,
 }) => (
-  <div className={`relative glow-container bg-general-background-light mt-5 ${big ? "w-full" : "w-full md:w-[48%]"}`} key={slug}>
+  <div
+    className={`glow-container bg-general-background-light flex flex-col relative mt-5 ${big ? "w-full" : "w-full md:w-[48%]"}`}
+    key={slug}
+  >
     <StandardInternalLinkWithTracking
       to={slug}
       trackingData={{
@@ -54,7 +58,7 @@ export const PostCard: FC<PostCardProps> = ({
         placeholder={imageShimmerPlaceholder}
       />
     </StandardInternalLinkWithTracking>
-    <div className="p-5">
+    <div className="flex flex-1 flex-col p-5">
       <StandardInternalLinkWithTracking
         className="no-underline hover:no-underline"
         to={slug}
@@ -82,5 +86,15 @@ export const PostCard: FC<PostCardProps> = ({
         />
       )}
     </div>
+    <TerminalLink
+      className="mt-auto mb-4 mx-5 align-self-start justify-self-start"
+      to={slug}
+      trackingData={{
+        action: tracking.action.open_blog_post,
+        category: trackingCategory,
+        label: tracking.label.body,
+      }}
+      label="Read more"
+    />
   </div>
 );

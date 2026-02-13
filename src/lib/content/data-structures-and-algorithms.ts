@@ -15,7 +15,8 @@ export const getDataStructuresAndAlgorithmsTopic = (params: Record<string, strin
 export const getDataStructuresAndAlgorithmsTopicWithNavigation =
  (params: Record<string, string>): { topic: Content; previousTopic?: Content; nextTopic?: Content } | undefined => {
   const topics = getAllDataStructuresAndAlgorithmsTopics()
-  const topicIndex = topics.findIndex(t => t.slug.formatted === `${slugs.dataStructuresAndAlgorithms.topic}/${params.topic}`);
+  const slugToFind = slugs.dataStructuresAndAlgorithms.topic.replace('[topic]', params.topic);
+  const topicIndex = topics.findIndex(t => t.slug.formatted === slugToFind);
 
   if (topicIndex === -1) {
     return undefined;

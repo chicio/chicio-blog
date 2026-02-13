@@ -42,7 +42,10 @@ export const tracking = {
     open_down_arrow: "open_down_arrow",
     open_dsa_time_and_space_complexity: "open_dsa_time_and_space_complexity",
     open_dsa_roadmap: "open_dsa_roadmap",
-  },
+    open_videogame_game: "open_videogame_game",
+    open_videogame_console: "open_videogame_console",
+    open_videogame_games: "open_videogame_games",
+    open_videogame_collection: "open_videogame_collection",},
   category: {
     home: "home",
     contact: "contact",
@@ -57,6 +60,7 @@ export const tracking = {
     notfound: "notfound",
     art: "art",
     data_structures_and_algorithms: "data_structures_and_algorithms",
+    videogames: "videogames",
     chat: "chat",
     about_me: "about_me",
     clowns: "clowns"

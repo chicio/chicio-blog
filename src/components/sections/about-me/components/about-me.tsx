@@ -5,8 +5,7 @@ import { ReadingContentPageTemplate } from "@/components/design-system/templates
 import { JsonLd } from "@/components/design-system/utils/components/jsond-ld";
 import { AboutMeTableOfContents } from "./about-me-table-of-contents";
 
-export const AboutMe: React.FC = () => {
-  return (
+export const AboutMe: React.FC = () => 
     <ReadingContentPageTemplate
       author={siteMetadata.author}
       trackingCategory={tracking.category.about_me}
@@ -19,6 +18,4 @@ export const AboutMe: React.FC = () => {
         imageUrl={siteMetadata.featuredImage}
         title={siteMetadata.title}
       />
-    </ReadingContentPageTemplate>
-  );
-};
+    </ReadingContentPageTemplate>;

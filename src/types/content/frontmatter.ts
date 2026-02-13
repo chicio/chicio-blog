@@ -5,13 +5,14 @@ export interface PublishDate {
   month: number;
   day: number;
   formatted: string;
-};
+}
 
-export type Frontmatter = {
+export type Frontmatter<TMeta = unknown> = {
   title: string;
   description: string;
   tags: string[];
   authors: Author[];
   date: PublishDate;
   image: string;
+  metadata?: TMeta;
 };

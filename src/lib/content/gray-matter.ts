@@ -11,23 +11,28 @@ const formatDate = (date: Date): string => {
   }).format(date);
 };
 
-const generatePublishDate = (date: Date) => 
-  ({
-    year: date.getFullYear(),
-    month: date.getMonth() + 1,
-    day: date.getDate(),
-    formatted: formatDate(date),
-  })
+const generatePublishDate = (date: Date) => ({
+  year: date.getFullYear(),
+  month: date.getMonth() + 1,
+  day: date.getDate(),
+  formatted: formatDate(date),
+});
 
-const parseWithGrayMatter = (filePath: string): matter.GrayMatterFile<string> => {
+const parseWithGrayMatter = (
+  filePath: string,
+): matter.GrayMatterFile<string> => {
   const fileContents = fs.readFileSync(filePath, "utf8");
   return matter(fileContents);
-}
+};
 
-export const grayMatterContent = (
+export const grayMatterContent = <TMeta = unknown>(
   filePath: string,
-): { frontmatter: Frontmatter; content: string } => {
+  metadataAdapter?: (raw: unknown) => TMeta,
+): { frontmatter: Frontmatter<TMeta>; content: string } => {
   const fileParsed = parseWithGrayMatter(filePath);
+  const metadata = metadataAdapter
+    ? metadataAdapter(fileParsed.data?.metadata)
+    : undefined;
 
   return {
     frontmatter: {
@@ -37,6 +42,7 @@ export const grayMatterContent = (
       tags: fileParsed.data.tags,
       authors: fileParsed.data.authors.map((author: string) => authors[author]),
       image: fileParsed.data.image,
+      metadata,
     },
     content: fileParsed.content,
   };

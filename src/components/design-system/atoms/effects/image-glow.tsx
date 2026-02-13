@@ -18,6 +18,7 @@ export const ImageGlow: FC<ImageGlowProps> = (props) => {
     className,
     blurDataURL,
     noPlaceholder,
+    ...restProps
   } = props;
 
   return (
@@ -30,6 +31,7 @@ export const ImageGlow: FC<ImageGlowProps> = (props) => {
       {...(!noPlaceholder ? { placeholder: placeholder ? placeholder : imageShimmerPlaceholder } : {})}
       blurDataURL={blurDataURL}
       className={className ? `glow-container ${className}` : ""}
+      {...restProps}
     />
   );
 };

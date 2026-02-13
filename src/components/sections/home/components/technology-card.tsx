@@ -7,7 +7,7 @@ export const TechnologyCard: FC<{ tech: Technology }> = ({
 }) => {
   return (
     <div
-      className="glow-container max-width-[130px] flex min-h-[120px] w-full cursor-pointer flex-col items-center justify-between p-5 sm:max-w-[200px]"
+      className="glow-container flex min-h-[120px] w-full cursor-pointer flex-col items-center justify-between p-5 sm:max-w-[200px]"
       key={tech.name}
     >
       <Image

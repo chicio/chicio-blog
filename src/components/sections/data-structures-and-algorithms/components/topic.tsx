@@ -20,8 +20,8 @@ export const Topic: FC<PropsWithChildren<DsaProps>> = async ({
   previousTopic,
   nextTopic
 }) => {
-  const { contentPath } = topic;
-  const { default: TopicContent } = await import(`@/content/${contentPath}/content.mdx`)
+  const { contentFileRelativePath } = topic;
+  const { default: TopicContent } = await import(`@/content/${contentFileRelativePath}/content.mdx`)
   
   return <ReadingContentPageTemplate
     author={siteMetadata.author}
