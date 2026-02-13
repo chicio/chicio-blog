@@ -6,12 +6,12 @@ import { JsonLd } from "@/components/design-system/utils/components/jsond-ld";
 import { Content } from "@/types/content/content";
 import { getAllGamesForConsole } from "@/lib/content/videogames";
 import { ConsoleMetadata } from "@/types/content/videogames";
-import { ImageGlow } from "@/components/design-system/atoms/effects/image-glow";
 import { ConsoleTimeInformation } from "./console-time-information";
 import { IoGameControllerOutline } from "react-icons/io5";
 import { TerminalLink } from "@/components/design-system/molecules/links/terminal-link";
 import { ConsoleHeader } from "./console-header";
 import { GameGrid } from "./games-grid";
+import { ImageCarousel } from "@/components/design-system/organism/image-carousel";
 
 interface ConsoleProps {
   console: Content<ConsoleMetadata>;
@@ -36,14 +36,11 @@ export const Console: FC<PropsWithChildren<ConsoleProps>> = async ({
         manufacturer={console.frontmatter.metadata!.manufacturer}
         manufacturerLogo={console.frontmatter.metadata!.manufacturerLogo}
       />
-      <ImageGlow
-        src={console.frontmatter.image}
+      <ImageCarousel
+        images={console.frontmatter.metadata?.gallery || [console.frontmatter.image]}
         alt={console.frontmatter.title}
-        width={800}
-        height={450}
-        className="mb-6 h-full max-h-96 w-full object-cover"
-      />
-
+        className="mb-6"
+      /> 
       <ConsoleTimeInformation
         releaseYear={console.frontmatter.metadata?.releaseYear}
         acquiredYear={console.frontmatter.metadata?.acquiredYear}
