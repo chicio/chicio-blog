@@ -4,35 +4,40 @@ import { ConsoleMetadata, GameMetadata } from "@/types/content/videogames";
 import { getAllContentFor, getSingleContentBy } from "./content";
 
 const consoleMetadataAdapter = (raw: unknown): ConsoleMetadata => {
-  const { releaseYear, manufacturer, manufacturerLogo, name, sku, acquiredYear, bits, generation } = raw as Record<string, string>;
+  const { releaseYear, manufacturer, manufacturerLogo, name, sku, acquiredYear, bits, generation, gallery } = raw as Record<
+    string,     
+    string | string[]
+  >;
 
   return {
-    releaseYear,
-    manufacturer,
-    manufacturerLogo,
-    name,
-    sku,
-    acquiredYear,
-    bits,
-    generation,
+    releaseYear: releaseYear as string,
+    manufacturer: manufacturer as string,
+    manufacturerLogo: manufacturerLogo as string,
+    name: name as string,
+    sku: sku as string,
+    acquiredYear: acquiredYear as string,
+    bits: bits as string,
+    generation: generation as string,
+    gallery: gallery as string[]
   };
 };
 
 const gamesMetadataAdapter = (raw: unknown): GameMetadata => {
-  const { releaseYear, console, developer, publisher, genre, pegiRating, region, acquiredYear } = raw as Record<
+  const { releaseYear, console, developer, publisher, genre, pegiRating, region, acquiredYear, gallery } = raw as Record<
     string,
-    string
+    string | string[]
   >;
 
   return {
-    releaseYear,
-    acquiredYear,
-    console,
-    developer,
-    publisher,
-    genre,
-    pegiRating,
-    region,
+    releaseYear: releaseYear as string,
+    acquiredYear: acquiredYear as string,
+    console: console as string,
+    developer: developer as string,
+    publisher: publisher as string,
+    genre: genre as string,
+    pegiRating: pegiRating as string,
+    region: region as string,
+    gallery: gallery as string[],
   };
 };
 

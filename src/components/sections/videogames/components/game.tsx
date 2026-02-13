@@ -5,7 +5,7 @@ import { FC, PropsWithChildren } from "react";
 import { JsonLd } from "@/components/design-system/utils/components/jsond-ld";
 import { Content } from "@/types/content/content";
 import { GameMetadata } from "@/types/content/videogames";
-import { ImageGlow } from "@/components/design-system/atoms/effects/image-glow";
+import { ImageCarousel } from "@/components/design-system/organism/image-carousel";
 import { PageTitle } from "@/components/design-system/molecules/typography/page-title";
 import { GameInformation } from "./game-information";
 import { TerminalLink } from "@/components/design-system/molecules/links/terminal-link";
@@ -32,12 +32,10 @@ export const Game: FC<PropsWithChildren<GameProps>> = async ({
       trackingCategory={tracking.category.videogames}
     >
       <PageTitle>{game.frontmatter.title}</PageTitle>
-      <ImageGlow
-        src={game.frontmatter.image}
+      <ImageCarousel
+        images={game.frontmatter.metadata?.gallery || [game.frontmatter.image]}
         alt={game.frontmatter.title}
-        width={800}
-        height={450}
-        className="mb-6 h-full max-h-96 w-full object-cover"
+        className="mb-6"
       />
       <GameInformation 
         releaseYear={game.frontmatter.metadata?.releaseYear}
@@ -47,14 +45,14 @@ export const Game: FC<PropsWithChildren<GameProps>> = async ({
         genre={game.frontmatter.metadata?.genre}
         pegiRating={game.frontmatter.metadata?.pegiRating}
         region={game.frontmatter.metadata?.region}
-        console={console}
+        console={game.frontmatter.metadata?.console}
         className="mb-6"
       />
       <GameContent />
       <div className="mt-8 flex flex-row justify-center">
         <TerminalLink
-          to={buildSlug(slugs.videogames.console, { console })}
-          label={`Back to ${game.frontmatter.metadata?.console}`}
+          to={buildSlug(slugs.videogames.games, { console })}
+          label={`Back to ${game.frontmatter.metadata?.console} games`}
           trackingData={{
             category: tracking.category.videogames,
             label: tracking.label.body,
@@ -63,9 +61,9 @@ export const Game: FC<PropsWithChildren<GameProps>> = async ({
         />
       </div>
       <JsonLd
-        type="BlogPosting"
+        type="Website"
         url={`${siteMetadata.siteUrl}${game.slug.formatted}`}
-        imageUrl={siteMetadata.featuredImage}
+        imageUrl={game.frontmatter.image}
         title={game.frontmatter.title}
         description={siteMetadata.description}
         keywords={game.frontmatter.tags}

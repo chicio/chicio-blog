@@ -7,6 +7,7 @@ export type ConsoleMetadata = {
   manufacturerLogo: string;
   name: string;
   sku: string;
+  gallery: string[];
 }
 
 export type GameMetadata = {
@@ -18,4 +19,5 @@ export type GameMetadata = {
   genre: string;
   pegiRating: string;
   region: string;
+  gallery: string[];
 }

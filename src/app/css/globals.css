@@ -341,6 +341,10 @@
         @apply overflow-x-auto rounded-xl border border-accent shadow-lg my-4;
     }
 
+    figcaption {
+        @apply text-secondary-text text-base leading-normal text-center italic mt-2 mb-3;
+    }
+
     /** custom rules **/
 
     .katex-display .katex {
