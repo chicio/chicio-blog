@@ -36,13 +36,13 @@ export const ConsoleCard: FC<ConsoleCardProps> = ({ console, gamesCount }) => (
         action: tracking.action.open_videogame_console,
       }}
     >
-      <div className="border-accent-alpha-40 bg-black relative h-96 overflow-hidden border-b">
+      <div className="border-accent-alpha-40 bg-black relative h-96 flex justify-center items-center overflow-hidden border-b">
         <Image
           src={console.frontmatter.metadata!.logo}
           alt={console.frontmatter.title}
           width={800}
           height={450}
-          className=" w-full h-96 object-contain p-6"
+          className="w-full h-96 object-contain p-6"
         />
         <div className="glow-border bg-general-background-light absolute top-4 right-2 flex items-center px-3 py-2">
           <span className="text-primary font-mono text-xs text-shadow-sm">
