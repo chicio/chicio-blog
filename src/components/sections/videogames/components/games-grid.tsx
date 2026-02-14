@@ -39,11 +39,11 @@ export const GameGrid: FC<GamesGridProps> = ({ games }) => (
                 className="object-cover h-full w-full"
                 priority={true}
               />
-              <div className="absolute bottom-0 left-0 w-full p-4 flex justify-center items-center">
-                <GlassmorphismBackground className="w-full p-2! bg-black-alpha-75">
-                  <h5 className="text-white text-lg font-semibold text-center px-2">
+              <div className="absolute bottom-0 left-0 w-full p-2 flex justify-center items-center">
+                <GlassmorphismBackground className="w-full p-1! bg-black-alpha-75">
+                  <p className="text-white text-center px-2">
                     {game.frontmatter.title}
-                  </h5>
+                  </p>
                 </GlassmorphismBackground>
               </div>
             </StandardInternalLinkWithTracking>

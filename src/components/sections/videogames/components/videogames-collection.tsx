@@ -12,13 +12,14 @@ import { ConsoleCard } from "@/components/sections/videogames/components/console
 import { slugs } from "@/types/configuration/slug";
 import { VideogameNavigation } from "./videogame-navigation";
 import { JsonLd } from "@/components/design-system/utils/components/jsond-ld";
+import { ContentPageTemplate } from "@/components/design-system/templates/content-page-template";
 
 export const VideogamesCollection: React.FC = () => {
   const consoles = getAllConsoles();
   const games = getAllGames();
 
   return (
-    <ReadingContentPageTemplate
+    <ContentPageTemplate
       author={siteMetadata.author}
       trackingCategory={tracking.category.videogames}
     >
@@ -72,6 +73,6 @@ export const VideogamesCollection: React.FC = () => {
         imageUrl={siteMetadata.featuredImage}
         title={siteMetadata.title}
       />
-    </ReadingContentPageTemplate>
+    </ContentPageTemplate>
   );
 };
