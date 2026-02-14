@@ -1,4 +1,5 @@
 export type ConsoleMetadata = {
+  logo: string;
   releaseYear: string;
   acquiredYear: string;
   bits: string;

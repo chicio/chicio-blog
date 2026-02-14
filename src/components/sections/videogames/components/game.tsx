@@ -4,19 +4,16 @@ import { tracking } from "@/types/configuration/tracking";
 import { FC, PropsWithChildren } from "react";
 import { JsonLd } from "@/components/design-system/utils/components/jsond-ld";
 import { Content } from "@/types/content/content";
-import { GameMetadata } from "@/types/content/videogames";
+import { ConsoleMetadata, GameMetadata } from "@/types/content/videogames";
 import { ImageCarousel } from "@/components/design-system/organism/image-carousel";
 import { PageTitle } from "@/components/design-system/molecules/typography/page-title";
 import { GameInformation } from "./game-information";
-import { TerminalLink } from "@/components/design-system/molecules/links/terminal-link";
-import { slugs } from "@/types/configuration/slug";
-import { buildSlug } from "@/lib/slug/slug-builder";
-import { BluePillLink } from "@/components/design-system/molecules/links/pills-links";
 import { VideogameNavigation } from "./videogame-navigation";
+import { ConsoleLogos } from "./console-logos";
 
 interface GameProps {
   game: Content<GameMetadata>;
-  console: string;
+  console: Content<ConsoleMetadata>;
 }
 
 export const Game: FC<PropsWithChildren<GameProps>> = async ({
@@ -34,6 +31,12 @@ export const Game: FC<PropsWithChildren<GameProps>> = async ({
       trackingCategory={tracking.category.videogames}
     >
       <PageTitle>{game.frontmatter.title}</PageTitle>
+      <ConsoleLogos
+        manufacturer={console.frontmatter.metadata!.manufacturer}
+        manufacturerLogo={console.frontmatter.metadata!.manufacturerLogo}
+        logo={console.frontmatter.metadata!.logo}
+        url={console.slug.formatted}
+      />
       <ImageCarousel
         images={game.frontmatter.metadata?.gallery || [game.frontmatter.image]}
         alt={game.frontmatter.title}
@@ -53,7 +56,7 @@ export const Game: FC<PropsWithChildren<GameProps>> = async ({
       <GameContent />
       <VideogameNavigation
         previous={{
-          url: buildSlug(slugs.videogames.games, { console }),
+          url: console.slug.formatted,
           action: tracking.action.open_videogame_console,
           title: `Back to ${game.frontmatter.metadata?.console}`,
         }}

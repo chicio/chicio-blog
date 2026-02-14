@@ -7,8 +7,6 @@ import { ReadingContentPageTemplate } from "@/components/design-system/templates
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { ConsoleHeader } from "./console-header";
 import { tracking } from "@/types/configuration/tracking";
-import { slugs } from "@/types/configuration/slug";
-import { buildSlug } from "@/lib/slug/slug-builder";
 import { VideogameNavigation } from "./videogame-navigation";
 import { JsonLd } from "@/components/design-system/utils/components/jsond-ld";
 
@@ -29,11 +27,13 @@ export const Games: FC<GamesProps> = ({ console, consoleSlug }) => {
         name={console.frontmatter.metadata!.name}
         manufacturer={console.frontmatter.metadata!.manufacturer}
         manufacturerLogo={console.frontmatter.metadata!.manufacturerLogo}
+        logo={console.frontmatter.metadata!.logo}
+        url={console.slug.formatted}
       />
       <GameGrid games={games} />
       <VideogameNavigation
         previous={{
-          url: buildSlug(slugs.videogames.console, { console: consoleSlug }),
+          url: console.slug.formatted,
           action: tracking.action.open_videogame_console,
           title: `Back to ${console.frontmatter.metadata!.name}`,
         }}

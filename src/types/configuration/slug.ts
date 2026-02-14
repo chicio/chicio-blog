@@ -25,6 +25,5 @@ export const slugs = {
     collection: `${videogames}/collection`,
     console: `${videogames}/console/[console]`,
     game: `${videogames}/console/[console]/game/[game]`,
-    games: `${videogames}/console/[console]/games`,
   }
 };

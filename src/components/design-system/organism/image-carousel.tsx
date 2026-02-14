@@ -104,7 +104,6 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [direction, setDirection] = useState(0);
 
   if (images.length === 1) {
     return (
@@ -114,7 +113,7 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
           alt={alt}
           width={800}
           height={450}
-          className="h-96 w-full cursor-pointer object-cover"
+          className="h-96 w-full cursor-pointer object-contain bg-general-background-light overflow-hidden"
           onClick={() => setIsFullscreen(true)}
         />
         {caption && <figcaption>{caption}</figcaption>}
@@ -131,12 +130,10 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
   }
 
   const goToPrevious = () => {
-    setDirection(-1);
     setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
   };
 
   const goToNext = () => {
-    setDirection(1);
     setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
   };
 
@@ -176,7 +173,7 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
                 width={800}
                 height={450}
                 loading={index === 0 ? "eager" : "lazy"}
-                className="h-96 w-full cursor-pointer object-cover"
+                className="h-96 w-full cursor-pointer object-contain bg-general-background-light overflow-hidden"
                 onClick={() => setIsFullscreen(true)}
               />
             </MotionDiv>
@@ -191,7 +188,6 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
           images={images}
           currentIndex={currentIndex}
           onSelect={(index) => {
-            setDirection(index > currentIndex ? 1 : -1);
             setCurrentIndex(index);
           }}
           glassmorphism

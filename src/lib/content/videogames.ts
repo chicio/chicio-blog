@@ -4,12 +4,13 @@ import { ConsoleMetadata, GameMetadata } from "@/types/content/videogames";
 import { getAllContentFor, getSingleContentBy } from "./content";
 
 const consoleMetadataAdapter = (raw: unknown): ConsoleMetadata => {
-  const { releaseYear, manufacturer, manufacturerLogo, name, sku, acquiredYear, bits, generation, gallery } = raw as Record<
+  const { logo, releaseYear, manufacturer, manufacturerLogo, name, sku, acquiredYear, bits, generation, gallery } = raw as Record<
     string,     
     string | string[]
   >;
 
   return {
+    logo: logo as string,
     releaseYear: releaseYear as string,
     manufacturer: manufacturer as string,
     manufacturerLogo: manufacturerLogo as string,

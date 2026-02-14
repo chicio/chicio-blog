@@ -6,7 +6,7 @@ import { TerminalLink } from "@/components/design-system/molecules/links/termina
 import { ConsoleMetadata } from "@/types/content/videogames";
 import { Content } from "@/types/content/content";
 import { ConsoleTimeInformation } from "./console-time-information";
-import { ConsoleLogo } from "./console-logo";
+import { ManufacturerLogo } from "./manufacturer-logo";
 
 export interface ConsoleCardProps {
   console: Content<ConsoleMetadata>;
@@ -36,13 +36,13 @@ export const ConsoleCard: FC<ConsoleCardProps> = ({ console, gamesCount }) => (
         action: tracking.action.open_videogame_console,
       }}
     >
-      <div className="border-accent-alpha-40 relative max-h-96 overflow-hidden border-b">
+      <div className="border-accent-alpha-40 bg-black relative h-96 overflow-hidden border-b">
         <Image
-          src={console.frontmatter.image}
+          src={console.frontmatter.metadata!.logo}
           alt={console.frontmatter.title}
           width={800}
           height={450}
-          className="h-full w-full object-cover"
+          className=" w-full h-96 object-contain p-6"
         />
         <div className="glow-border bg-general-background-light absolute top-4 right-2 flex items-center px-3 py-2">
           <span className="text-primary font-mono text-xs text-shadow-sm">
@@ -65,7 +65,7 @@ export const ConsoleCard: FC<ConsoleCardProps> = ({ console, gamesCount }) => (
           <h2 className="text-primary font-bold text-shadow-sm">
             {console.frontmatter.metadata?.name}
           </h2>
-          <ConsoleLogo
+          <ManufacturerLogo
             logoUrl={console.frontmatter.metadata!.manufacturerLogo}
             name={console.frontmatter.metadata!.manufacturer}
           />

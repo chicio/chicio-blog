@@ -12,7 +12,6 @@ import { ConsoleHeader } from "./console-header";
 import { GameGrid } from "./games-grid";
 import { ImageCarousel } from "@/components/design-system/organism/image-carousel";
 import { slugs } from "@/types/configuration/slug";
-import { buildSlug } from "@/lib/slug/slug-builder";
 import { VideogameNavigation } from "./videogame-navigation";
 
 interface ConsoleProps {
@@ -28,10 +27,7 @@ export const Console: FC<PropsWithChildren<ConsoleProps>> = async ({
   const { default: ConsoleContent } = await import(
     `@/content/${contentPath}/content.mdx`
   );
-  const games = getAllGamesForConsole(console.frontmatter.metadata!.name).slice(
-    0,
-    3,
-  );
+  const games = getAllGamesForConsole(console.frontmatter.metadata!.name);
 
   return (
     <ReadingContentPageTemplate
@@ -42,6 +38,7 @@ export const Console: FC<PropsWithChildren<ConsoleProps>> = async ({
         name={console.frontmatter.metadata!.name}
         manufacturer={console.frontmatter.metadata!.manufacturer}
         manufacturerLogo={console.frontmatter.metadata!.manufacturerLogo}
+        logo={console.frontmatter.metadata!.logo}
       />
       <ImageCarousel
         images={
@@ -68,11 +65,6 @@ export const Console: FC<PropsWithChildren<ConsoleProps>> = async ({
           url: slugs.videogames.collection,
           action: tracking.action.open_videogame_game,
           title: "Back to collection",
-        }}
-        next={{
-          url: buildSlug(slugs.videogames.games, { console: consoleSlug }),
-          action: tracking.action.open_videogame_games,
-          title: "See more games",
         }}
       />
       <JsonLd
