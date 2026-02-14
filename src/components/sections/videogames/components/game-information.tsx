@@ -7,6 +7,7 @@ import { IoNewspaperOutline } from "react-icons/io5";
 import { GiVibratingShield } from "react-icons/gi";
 import { GiGameConsole } from "react-icons/gi";
 import { MdOutlinePlace } from "react-icons/md";
+import { BiCalendar } from "react-icons/bi";
 
 interface GameInformationProps {
   className?: string;
@@ -34,7 +35,7 @@ export const GameInformation: FC<GameInformationProps> = ({
   return (
     <div className={`grid grid-cols-1 gap-4 md:grid-cols-2 ${className}`}>
       {releaseYear && <ReleaseYear releaseYear={releaseYear} />}
-      {acquiredYear && <ReleaseYear releaseYear={acquiredYear} />}
+      {acquiredYear &&   <InfoPill icon={<BiCalendar />} label="Acquired" value={acquiredYear} />}
       {developer && (
         <InfoPill icon={<MdOutlineDeveloperBoard />} label="Developer" value={developer} />
       )}

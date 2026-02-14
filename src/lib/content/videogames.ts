@@ -56,8 +56,7 @@ export const getAllConsoles = (): Content<ConsoleMetadata>[] =>
     consoleMetadataAdapter,
   ).sort(
     (console, anotherConsole) =>
-      new Date(console.frontmatter.date.formatted).getTime() -
-      new Date(anotherConsole.frontmatter.date.formatted).getTime(),
+      parseInt(console.frontmatter.metadata!.releaseYear) - parseInt(anotherConsole.frontmatter.metadata!.releaseYear),
   );
 
 export const getGame = (
@@ -85,7 +84,7 @@ export const getAllGamesForConsole = (
   getAllContentFor<GameMetadata>(slugs.videogames.game, gamesMetadataAdapter)
     .sort(
       (game, anotherGame) =>
-        new Date(game.frontmatter.date.formatted).getTime() -
-        new Date(anotherGame.frontmatter.date.formatted).getTime(),
+              parseInt(game.frontmatter.metadata!.releaseYear) - parseInt(anotherGame.frontmatter.metadata!.releaseYear),
+
     )
     .filter((game) => game.frontmatter.metadata?.console === consoleName);
