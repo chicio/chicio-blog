@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.12.0](https://github.com/chicio/chicio-blog/compare/v3.11.0...v3.12.0) (2026-02-14)
+
+### Features
+
+* ✨ Videogames section ([#213](https://github.com/chicio/chicio-blog/issues/213)) ([7448cc0](https://github.com/chicio/chicio-blog/commit/7448cc04b9fca4d3b2188f1b5abe015857667915))
+* **capabilities:** :sparkles: simplified videogames navigation ([f0b1a86](https://github.com/chicio/chicio-blog/commit/f0b1a8693b48c1806c59f111fecdf69847901a09))
+* **content:** :sparkles: added all console logo + setup all videogames folders ([7c0016c](https://github.com/chicio/chicio-blog/commit/7c0016ce3ea10b8466aa18b58ecf3abe36e3d25c))
+* **content:** :sparkles: added foto for nes games ([e70bc65](https://github.com/chicio/chicio-blog/commit/e70bc65f7f206bb0e2269b24702049ffae966529))
+* **content:** :sparkles: gameboy content ([5e4d5f8](https://github.com/chicio/chicio-blog/commit/5e4d5f88ba18cd8cf31efa6d26ce0d11001c1310))
+* **content:** :sparkles: nes games added ([512f3b3](https://github.com/chicio/chicio-blog/commit/512f3b35d8cb0fc3119e5ee1d6562addfff28a20))
+* **performance:** :ambulance: fix images sizes for nes ([dbb1851](https://github.com/chicio/chicio-blog/commit/dbb1851e56e45e4e32abefe6faffa6c051de4ff3))
+
 ## [3.11.0](https://github.com/chicio/chicio-blog/compare/v3.10.0...v3.11.0) (2026-02-05)
 
 ### Features
