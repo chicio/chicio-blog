@@ -91,6 +91,7 @@ function partition(arr: number[], low: number, high: number): number {
   }
 
   [arr[i], arr[high]] = [arr[high], arr[i]];
+  
   return i;
 }
 ```
