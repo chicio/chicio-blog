@@ -2,7 +2,7 @@
 title: "Nintendo Entertainment System (NES)"
 description: "The Nintendo Entertainment System (NES) was a groundbreaking console that revolutionized the gaming industry with its 8-bit graphics and extensive game library. It saved the gaming industry after the 1983 crash."
 date: 2026-02-13
-image: /images/posts/data-structures-and-algorithms-featured.png
+image: /images/videogames/console/nintendo-entertainment-system/1.jpg
 tags: [nes, nintendo, console, gaming]
 authors: [fabrizio_duroni]
 metadata:
@@ -15,11 +15,20 @@ metadata:
     manufacturerLogo: "/images/videogames/console/manufacturer/nintendo.png"
     name: "Nintendo Entertainment System (NES)"
     sku: "NES-001"
+    gallery:
+        - "/images/videogames/console/nintendo-entertainment-system/1.jpg"
+        - "/images/videogames/console/nintendo-entertainment-system/2.jpg"
+        - "/images/videogames/console/nintendo-entertainment-system/3.jpg"
+        - "/images/videogames/console/nintendo-entertainment-system/4.jpg"
+        - "/images/videogames/console/nintendo-entertainment-system/5.jpg"
+        - "/images/videogames/console/nintendo-entertainment-system/6.jpg"
+        - "/images/videogames/console/nintendo-entertainment-system/7.jpg"
 ---
 
 import { FaLightbulb } from "react-icons/fa";
 import { MDXTitleWithIcon } from "@/components/sections/videogames/components/mdx-title-with-icon";
 import { FiCpu } from "react-icons/fi";
+import { ImageCarousel } from "@/components/design-system/organism/image-carousel";
 
 ## <MDXTitleWithIcon icon={<FiCpu className="text-shadow-lg" />}> Technical specifications</MDXTitleWithIcon>
 
@@ -40,16 +49,25 @@ import { FiCpu } from "react-icons/fi";
 I received the NES by sheer luck. It was the winter of 1992, and at the time I owned only one console, the one that had introduced me 
 to the world of video games: the [Gameboy](/videogames/console/gameboy). Fortunately, I had a cousin who was also passionate about video games, 
 but at some point she decided to "get rid" of her NES.  
-My parents agreed to buy it, and from that moment until the [Playstation](/videogames/console/playstation1), the NES was my main console.  
+
+My parents agreed to buy it, and from that moment until the [Playstation](/videogames/console/playstation1), the NES was my main home console.  
 I spent days playing [Super Mario Bros 3](/videogames/console/nintendo-entertainment-system/game/super-mario-bros-3), [Faxanadu](/videogames/console/nintendo-entertainment-system/game/faxanadu), 
 [Mario and Yoshi](/videogames/console/nintendo-entertainment-system/game/mario-and-yoshi), and [Track & Field In Barcelona](/videogames/console/nintendo-entertainment-system/game/track-and-field).  
 
-...game photos...
+<ImageCarousel 
+    images={[
+        "/images/videogames/game/super-mario-bros-3/gameplay-1.png",
+        "/images/videogames/game/faxanadu/gameplay-1.png",
+        "/images/videogames/game/mario-and-yoshi/gameplay-1.png",
+        "/images/videogames/game/robocop/gameplay-1.jpg",
+    ]} 
+    caption="Some of the games I played the most on NES"
+/>
 
 I wore out one of the two controllers I had so much that, in the end, one tore. I still own it, patched up with electrical tape to hold it together.  
 It remains, however, a memory of a wonderful period, when my passion for computing started to emerge, thanks in part to the NES.
 
-...controller photos...
+![My NES controller, patched up with electrical tape](/images/videogames/console/nintendo-entertainment-system/8.png)
 
 ## <MDXTitleWithIcon icon={<FaLightbulb className="text-shadow-lg" />}>Trivia & Fun Facts</MDXTitleWithIcon>
 
