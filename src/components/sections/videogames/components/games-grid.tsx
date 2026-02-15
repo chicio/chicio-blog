@@ -41,7 +41,7 @@ export const GameGrid: FC<GamesGridProps> = ({ games }) => (
               />
               <div className="absolute bottom-0 left-0 w-full p-2 flex justify-center items-center">
                 <GlassmorphismBackground className="w-full p-1! bg-black-alpha-75">
-                  <p className="text-white text-center px-2">
+                  <p className="text-white text-center px-2 my-1">
                     {game.frontmatter.title}
                   </p>
                 </GlassmorphismBackground>
