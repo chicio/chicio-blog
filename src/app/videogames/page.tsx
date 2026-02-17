@@ -1,4 +1,4 @@
-import { Videogames } from "@/components/sections/videogames/components/videogames";
+import { VideogamesCollection } from "@/components/sections/videogames/components/videogames-collection";
 import { createMetadata } from "@/lib/seo/seo";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { slugs } from "@/types/configuration/slug";
@@ -15,8 +15,8 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
-export default function VideogamesHomePage() {
+export default function VideogamesCollectionPage() {
   return (
-    <Videogames />
+    <VideogamesCollection />
   );
 }

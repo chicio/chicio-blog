@@ -62,7 +62,7 @@ export const Console: FC<PropsWithChildren<ConsoleProps>> = async ({
       <GameGrid games={games} />
       <VideogameNavigation
         previous={{
-          url: slugs.videogames.collection,
+          url: slugs.videogames.home,
           action: tracking.action.open_videogame_game,
           title: "Back to collection",
         }}

@@ -1,5 +1,4 @@
 import { PageTitle } from "@/components/design-system/molecules/typography/page-title";
-import { ReadingContentPageTemplate } from "@/components/design-system/templates/reading-content-page-template";
 import {
   getAllConsoles,
   getAllGames,
@@ -9,8 +8,6 @@ import { siteMetadata } from "@/types/configuration/site-metadata";
 import { tracking } from "@/types/configuration/tracking";
 import { VideogameCollectionDataCard } from "./videogame-collection-data-card";
 import { ConsoleCard } from "@/components/sections/videogames/components/console-card";
-import { slugs } from "@/types/configuration/slug";
-import { VideogameNavigation } from "./videogame-navigation";
 import { JsonLd } from "@/components/design-system/utils/components/jsond-ld";
 import { ContentPageTemplate } from "@/components/design-system/templates/content-page-template";
 
@@ -25,7 +22,7 @@ export const VideogamesCollection: React.FC = () => {
     >
       <PageTitle>My Videogames Collection</PageTitle>
       <p>
-        A journey through gaming history that started in 1992. From 8-bit
+        A journey through Videogames history that I started in 1992. From 8-bit
         consoles to modern powerhouses, each one tells a story of technological
         evolution and countless hours of gameplay. A place where my mind can
         breathe.
@@ -60,13 +57,6 @@ export const VideogamesCollection: React.FC = () => {
           />
         ))}
       </div>
-      <VideogameNavigation
-        previous={{
-          url: slugs.videogames.home,
-          action: tracking.action.open_videogame_game,
-          title: "Back to Videogames introduction",
-        }}
-      />
       <JsonLd
         type="Website"
         url={siteMetadata.siteUrl}
