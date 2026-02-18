@@ -7,6 +7,7 @@ import { Button } from "../atoms/buttons/button";
 import { MotionDiv } from "../molecules/animation/motion-div";
 import { useGlassmorphism } from "../utils/hooks/use-glassmorphism";
 import Image from "next/image";
+import { imageShimmerPlaceholder } from "../atoms/effects/image-shimmer-placeholder";
 
 interface NavigationButtonsProps {
   onPrevious: () => void;
@@ -175,6 +176,7 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
                 loading={index === 0 ? "eager" : "lazy"}
                 className="h-96 w-full cursor-pointer object-contain bg-general-background-light overflow-hidden"
                 onClick={() => setIsFullscreen(true)}
+                placeholder={imageShimmerPlaceholder}
               />
             </MotionDiv>
           ))}

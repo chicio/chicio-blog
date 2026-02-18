@@ -4,10 +4,6 @@ import { FC } from "react";
 import Image from "next/image";
 import { StandardInternalLinkWithTracking } from "@/components/design-system/atoms/links/standard-internal-link-with-tracking";
 import { tracking } from "@/types/configuration/tracking";
-import { BiCalendar } from "react-icons/bi";
-import { InfoPill } from "./info-pill";
-import { TbDeviceGamepad2 } from "react-icons/tb";
-import { TerminalLink } from "@/components/design-system/molecules/links/terminal-link";
 import { GlassmorphismBackground } from "@/components/design-system/atoms/effects/glassmorphism-background";
 
 interface GamesGridProps {
