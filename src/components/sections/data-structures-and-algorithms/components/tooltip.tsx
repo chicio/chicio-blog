@@ -1,6 +1,6 @@
 type ChartTooltipProps = {
   active?: boolean;
-  payload?: Array<{ name: string; value: number }>;
+  payload?: ReadonlyArray<{ name: string; value: number }>;
   label?: string | number;
 };
 

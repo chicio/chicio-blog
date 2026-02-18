@@ -12,7 +12,7 @@ const data = [
 export const FrequencyMapChart: React.FC = () => {
   return (
     <div className="h-64 w-full p-4 bg-purple-50 rounded-xl">
-      <ResponsiveContainer>
+      <ResponsiveContainer width={'100%'} height={'100%'} initialDimension={{width : 320, height: 300}}>
         <BarChart data={data}>
           <XAxis dataKey="char" />
           <YAxis />

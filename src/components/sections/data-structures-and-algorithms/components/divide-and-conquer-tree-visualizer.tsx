@@ -30,7 +30,7 @@ export const DivideAndConquerTreeVisualizer: FC = () => {
 
   return (
     <div className="glow-container h-[350px] w-full p-5">
-      <ResponsiveContainer>
+      <ResponsiveContainer width={'100%'} height={'100%'} initialDimension={{width : 320, height: 300}}>
         <LineChart data={data}>
           <XAxis
             dataKey="level"

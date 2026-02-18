@@ -47,7 +47,7 @@ const renderLabel = ({ x, y, value }: LabelProps) => {
 export const TimeVsSpaceTradeoffVisualizer: FC = () => {
   return (
     <div className="bg-general-background glow-container my-4 h-80 w-full shadow-sm">
-      <ResponsiveContainer>
+      <ResponsiveContainer width={'100%'} height={'100%'} initialDimension={{width : 320, height: 300}}>
         <ScatterChart margin={{ top: 40, right: 40, bottom: 40, left: 40 }}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis
