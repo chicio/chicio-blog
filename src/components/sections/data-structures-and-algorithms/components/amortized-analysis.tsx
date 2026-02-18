@@ -20,11 +20,10 @@ export const AmortizedAnalysis: FC = () => {
     let totalCost = 0;
 
     for (let i = 1; i <= 50; i++) {
-      let cost = 1; // normal insertion cost
+      let cost = 1; 
       if (i > capacity) {
-        // resizing happens
         capacity *= 2;
-        cost = i; // copying all elements
+        cost = i;
       }
       totalCost += cost;
       const amortized = totalCost / i;
@@ -35,8 +34,8 @@ export const AmortizedAnalysis: FC = () => {
   }, []);
 
   return (
-    <div className="glow-container h-[400px] w-full p-5">
-      <ResponsiveContainer>
+    <div className="glow-container h-100 w-full p-5">
+      <ResponsiveContainer width={'100%'} height={'100%'} initialDimension={{width : 320, height: 300}}>
         <LineChart data={data}>
           <XAxis
             dataKey="operation"

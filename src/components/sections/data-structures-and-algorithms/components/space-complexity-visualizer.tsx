@@ -29,7 +29,7 @@ const data = () => {
 export const SpaceComplexityVisualizer: FC = () => {
   return (
     <div className="glow-container h-[400px] w-full p-5">
-      <ResponsiveContainer>
+      <ResponsiveContainer width={'100%'} height={'100%'} initialDimension={{width : 320, height: 300}}>
         <LineChart data={data()}>
           <XAxis
             dataKey="n"

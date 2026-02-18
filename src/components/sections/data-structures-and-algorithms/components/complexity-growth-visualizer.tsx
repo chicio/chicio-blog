@@ -47,7 +47,7 @@ const generateData = (maxN = 8): ComplexityData[] => {
 
 export const ComplexityGrowthVisualizer: React.FC = () => (
   <div className="glow-container h-[400px] w-full p-5">
-    <ResponsiveContainer>
+    <ResponsiveContainer width={'100%'} height={'100%'} initialDimension={{width : 320, height: 300}}>
       <LineChart data={generateData(8)}>
         <XAxis
           dataKey="n"
