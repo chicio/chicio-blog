@@ -11,6 +11,7 @@
     --color-primary-dark: #003D10;
     --color-primary-light: #39FF14;
     --color-general-background: #001100;
+    --color-general-background-alpha-60: #001100A0;
     --color-text-above-primary: #000000;
     --color-primary-text: #E8FFE8;
     --color-secondary-text: #00CC33;
@@ -494,7 +495,7 @@
     }
 
     .glassmorphism {
-        @apply border border-solid border-accent-alpha-40 rounded-xl hover:border-accent active:border-accent focus:border-accent shadow-lg transition-transform duration-300 hover:scale-102 backdrop-blur-sm;
+        @apply border border-solid border-accent-alpha-40 rounded-xl hover:border-accent active:border-accent focus:border-accent shadow-lg transition-transform duration-300 hover:scale-102 backdrop-blur-sm bg-general-background-alpha-60;
     }
 }
 
