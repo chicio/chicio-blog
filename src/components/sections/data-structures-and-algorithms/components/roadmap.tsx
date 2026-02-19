@@ -2,7 +2,9 @@ import "highlight.js/styles/tokyo-night-dark.css";
 import "katex/dist/katex.min.css";
 
 import { ReadingContentPageTemplate } from "@/components/design-system/templates/reading-content-page-template";
+import { BreadcrumbItem } from "@/components/design-system/molecules/breadcrumbs/breadcrumb";
 import { siteMetadata } from "@/types/configuration/site-metadata";
+import { slugs } from "@/types/configuration/slug";
 import { tracking } from "@/types/configuration/tracking";
 import { FC, PropsWithChildren } from "react";
 import { JsonLd } from "@/components/design-system/utils/components/jsond-ld";

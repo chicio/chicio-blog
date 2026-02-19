@@ -1,10 +1,11 @@
 import { ReadingContentPageTemplate } from "@/components/design-system/templates/reading-content-page-template";
+import { BreadcrumbItem } from "@/components/design-system/molecules/breadcrumbs/breadcrumb";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { tracking } from "@/types/configuration/tracking";
 import { FC, PropsWithChildren } from "react";
 import { JsonLd } from "@/components/design-system/utils/components/jsond-ld";
 import { Content } from "@/types/content/content";
-import { getAllGamesForConsole } from "@/lib/content/videogames";
+import { getAllConsoles, getAllGamesForConsole } from "@/lib/content/videogames";
 import { ConsoleMetadata } from "@/types/content/videogames";
 import { ConsoleTimeInformation } from "./console-time-information";
 import { IoGameControllerOutline } from "react-icons/io5";
@@ -28,11 +29,19 @@ export const Console: FC<PropsWithChildren<ConsoleProps>> = async ({
     `@/content/${contentPath}/content.mdx`
   );
   const games = getAllGamesForConsole(console.frontmatter.metadata!.name);
+  const allConsoles = getAllConsoles();
+  const currentConsoleIndex = allConsoles.findIndex((c) => c.slug.formatted === console.slug.formatted);
+  const previousConsole = allConsoles[currentConsoleIndex - 1];
+  const nextConsole = allConsoles[currentConsoleIndex + 1];
 
   return (
     <ReadingContentPageTemplate
       author={siteMetadata.author}
       trackingCategory={tracking.category.videogames}
+      breadcrumbs={[
+        { label: "Videogames", href: slugs.videogames.home, isCurrent: false, trackingData: { action: tracking.action.open_videogame_collection, category: tracking.category.videogames, label: tracking.label.body } },
+        { label: console.frontmatter.metadata!.name, href: console.slug.formatted, isCurrent: true },
+      ] satisfies BreadcrumbItem[]}
     >
       <ConsoleHeader
         name={console.frontmatter.metadata!.name}
@@ -61,11 +70,24 @@ export const Console: FC<PropsWithChildren<ConsoleProps>> = async ({
       </h2>
       <GameGrid games={games} />
       <VideogameNavigation
-        previous={{
-          url: slugs.videogames.home,
-          action: tracking.action.open_videogame_game,
-          title: "Back to collection",
-        }}
+        previous={
+          previousConsole
+            ? {
+                url: previousConsole.slug.formatted,
+                action: tracking.action.open_videogame_console,
+                title: previousConsole.frontmatter.metadata!.name,
+              }
+            : undefined
+        }
+        next={
+          nextConsole
+            ? {
+                url: nextConsole.slug.formatted,
+                action: tracking.action.open_videogame_console,
+                title: nextConsole.frontmatter.metadata!.name,
+              }
+            : undefined
+        }
       />
       <JsonLd
         type="BlogPosting"

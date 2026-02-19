@@ -1,4 +1,5 @@
 import { ReadingContentPageTemplate } from "@/components/design-system/templates/reading-content-page-template";
+import { BreadcrumbItem } from "@/components/design-system/molecules/breadcrumbs/breadcrumb";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { tracking } from "@/types/configuration/tracking";
 import { FC, PropsWithChildren } from "react";
@@ -10,6 +11,8 @@ import { PageTitle } from "@/components/design-system/molecules/typography/page-
 import { GameInformation } from "./game-information";
 import { VideogameNavigation } from "./videogame-navigation";
 import { ConsoleLogos } from "./console-logos";
+import { slugs } from "@/types/configuration/slug";
+import { getAllGamesForConsole } from "@/lib/content/videogames";
 
 interface GameProps {
   game: Content<GameMetadata>;
@@ -21,6 +24,10 @@ export const Game: FC<PropsWithChildren<GameProps>> = async ({
   console,
 }) => {
   const { contentFileRelativePath: contentPath } = game;
+  const gamesForConsole = getAllGamesForConsole(console.frontmatter.metadata!.name);
+  const currentIndex = gamesForConsole.findIndex((g) => g.slug.formatted === game.slug.formatted);
+  const previousGame = gamesForConsole[currentIndex - 1];
+  const nextGame = gamesForConsole[currentIndex + 1];
   const { default: GameContent } = await import(
     `@/content/${contentPath}/content.mdx`
   );
@@ -29,6 +36,11 @@ export const Game: FC<PropsWithChildren<GameProps>> = async ({
     <ReadingContentPageTemplate
       author={siteMetadata.author}
       trackingCategory={tracking.category.videogames}
+      breadcrumbs={[
+        { label: "Videogames", href: slugs.videogames.home, isCurrent: false, trackingData: { action: tracking.action.open_videogame_collection, category: tracking.category.videogames, label: tracking.label.body } },
+        { label: console.frontmatter.metadata!.name, href: console.slug.formatted, isCurrent: false, trackingData: { action: tracking.action.open_videogame_console, category: tracking.category.videogames, label: tracking.label.body } },
+        { label: game.frontmatter.title, href: game.slug.formatted, isCurrent: true },
+      ] satisfies BreadcrumbItem[]}
     >
       <PageTitle>{game.frontmatter.title}</PageTitle>
       <ConsoleLogos
@@ -55,11 +67,24 @@ export const Game: FC<PropsWithChildren<GameProps>> = async ({
       />
       <GameContent />
       <VideogameNavigation
-        previous={{
-          url: console.slug.formatted,
-          action: tracking.action.open_videogame_console,
-          title: `Back to ${game.frontmatter.metadata?.console}`,
-        }}
+        previous={
+          previousGame
+            ? {
+                url: previousGame.slug.formatted,
+                action: tracking.action.open_videogame_game,
+                title: previousGame.frontmatter.title,
+              }
+            : undefined
+        }
+        next={
+          nextGame
+            ? {
+                url: nextGame.slug.formatted,
+                action: tracking.action.open_videogame_game,
+                title: nextGame.frontmatter.title,
+              }
+            : undefined
+        }
       />
       <JsonLd
         type="Website"

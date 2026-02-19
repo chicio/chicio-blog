@@ -1,7 +1,9 @@
 import { ReadingContentPageTemplate } from "@/components/design-system/templates/reading-content-page-template";
+import { BreadcrumbItem } from "@/components/design-system/molecules/breadcrumbs/breadcrumb";
 import { JsonLd } from "@/components/design-system/utils/components/jsond-ld";
 import { Content } from "@/types/content/content";
 import { siteMetadata } from "@/types/configuration/site-metadata";
+import { slugs } from "@/types/configuration/slug";
 import { tracking } from "@/types/configuration/tracking";
 import { FC } from "react";
 import { PostAuthors } from "./post-authors";
@@ -22,6 +24,10 @@ export const BlogPostContent: FC<PostProps> = async ({ post }) => {
       <ReadingContentPageTemplate
         author={siteMetadata.author}
         trackingCategory={tracking.category.blog_post}
+        breadcrumbs={[
+          { label: "Blog", href: slugs.blog.home, isCurrent: false, trackingData: { action: tracking.action.open_blog, category: tracking.category.blog_post, label: tracking.label.body } },
+          { label: frontmatter.title, href: post.slug.formatted, isCurrent: true },
+        ] satisfies BreadcrumbItem[]}
         beforeContent={
           <>
             <h1 className="leading-tight">{frontmatter.title}</h1>

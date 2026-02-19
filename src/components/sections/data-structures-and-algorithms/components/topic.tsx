@@ -2,7 +2,9 @@ import "highlight.js/styles/tokyo-night-dark.css";
 import "katex/dist/katex.min.css";
 
 import { ReadingContentPageTemplate } from "@/components/design-system/templates/reading-content-page-template";
+import { BreadcrumbItem } from "@/components/design-system/molecules/breadcrumbs/breadcrumb";
 import { siteMetadata } from "@/types/configuration/site-metadata";
+import { slugs } from "@/types/configuration/slug";
 import { tracking } from "@/types/configuration/tracking";
 import { FC, PropsWithChildren } from "react";
 import { CourseNavigation } from "./course-navigation";
@@ -26,6 +28,10 @@ export const Topic: FC<PropsWithChildren<DsaProps>> = async ({
   return <ReadingContentPageTemplate
     author={siteMetadata.author}
     trackingCategory={tracking.category.data_structures_and_algorithms}
+    breadcrumbs={[
+      { label: "DSA", href: slugs.dataStructuresAndAlgorithms.roadmap, isCurrent: false, trackingData: { action: tracking.action.open_dsa_roadmap, category: tracking.category.data_structures_and_algorithms, label: tracking.label.body } },
+      { label: topic.frontmatter.title, href: topic.slug.formatted, isCurrent: true },
+    ] satisfies BreadcrumbItem[]}
   >
     <TopicContent />
     {(previousTopic || nextTopic) && (

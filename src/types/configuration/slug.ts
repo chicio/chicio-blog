@@ -1,6 +1,6 @@
 const blog = '/blog'
-const dsa = `/data-structures-and-algorithms`;
 const videogames = '/videogames';
+const dsa = `/data-structures-and-algorithms`;
 
 export const slugs = {
   aboutMe: `/about-me`,
@@ -17,6 +17,7 @@ export const slugs = {
   contact: "/contact",
   cookiePolicy: "/cookie-policy",
   dataStructuresAndAlgorithms: {
+    home: dsa,
     roadmap: `${dsa}/roadmap`,
     topic: `${dsa}/topic/[topic]`,
   },
