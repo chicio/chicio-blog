@@ -7,13 +7,22 @@ import {
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { tracking } from "@/types/configuration/tracking";
 import { VideogameCollectionDataCard } from "./videogame-collection-data-card";
-import { ConsoleCard } from "@/components/sections/videogames/components/console-card";
 import { JsonLd } from "@/components/design-system/utils/components/jsond-ld";
 import { ContentPageTemplate } from "@/components/design-system/templates/content-page-template";
+import { VideogamesViewSwitcher } from "@/components/sections/videogames/components/videogames-view-switcher";
 
 export const VideogamesCollection: React.FC = () => {
   const consoles = getAllConsoles();
-  const games = getAllGames();
+  const gamesSortedByReleaseYear = getAllGames().sort(
+    (a, b) =>
+      parseInt(a.frontmatter.metadata?.releaseYear ?? "0") -
+      parseInt(b.frontmatter.metadata?.releaseYear ?? "0"),
+  );
+  const consolesWithGameCount = consoles.map((console) => ({
+    console,
+    gamesCount: getAllGamesForConsole(console.frontmatter.metadata?.name ?? "")
+      .length,
+  }));
 
   return (
     <ContentPageTemplate
@@ -33,7 +42,7 @@ export const VideogamesCollection: React.FC = () => {
           label="Consoles"
         ></VideogameCollectionDataCard>
         <VideogameCollectionDataCard
-          quantity={games.length}
+          quantity={gamesSortedByReleaseYear.length}
           label="Games"
         ></VideogameCollectionDataCard>
         <VideogameCollectionDataCard
@@ -45,18 +54,10 @@ export const VideogamesCollection: React.FC = () => {
           label="Years"
         ></VideogameCollectionDataCard>
       </div>
-      <div className="flex flex-col gap-6">
-        {consoles.map((console) => (
-          <ConsoleCard
-            console={console}
-            gamesCount={
-              getAllGamesForConsole(console.frontmatter.metadata?.name || "")
-                .length
-            }
-            key={console.frontmatter.metadata?.name}
-          />
-        ))}
-      </div>
+      <VideogamesViewSwitcher
+        consolesWithGameCount={consolesWithGameCount}
+        games={gamesSortedByReleaseYear}
+      />
       <JsonLd
         type="Website"
         url={siteMetadata.siteUrl}

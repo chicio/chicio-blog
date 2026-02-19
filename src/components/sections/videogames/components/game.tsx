@@ -12,7 +12,7 @@ import { GameInformation } from "./game-information";
 import { VideogameNavigation } from "./videogame-navigation";
 import { ConsoleLogos } from "./console-logos";
 import { slugs } from "@/types/configuration/slug";
-import { getAllGamesForConsole } from "@/lib/content/videogames";
+import { getAllGames, getAllGamesForConsole } from "@/lib/content/videogames";
 
 interface GameProps {
   game: Content<GameMetadata>;
@@ -24,10 +24,10 @@ export const Game: FC<PropsWithChildren<GameProps>> = async ({
   console,
 }) => {
   const { contentFileRelativePath: contentPath } = game;
-  const gamesForConsole = getAllGamesForConsole(console.frontmatter.metadata!.name);
-  const currentIndex = gamesForConsole.findIndex((g) => g.slug.formatted === game.slug.formatted);
-  const previousGame = gamesForConsole[currentIndex - 1];
-  const nextGame = gamesForConsole[currentIndex + 1];
+  const games = getAllGames();
+  const currentIndex = games.findIndex((g) => g.slug.formatted === game.slug.formatted);
+  const previousGame = games[currentIndex - 1];
+  const nextGame = games[currentIndex + 1];
   const { default: GameContent } = await import(
     `@/content/${contentPath}/content.mdx`
   );
