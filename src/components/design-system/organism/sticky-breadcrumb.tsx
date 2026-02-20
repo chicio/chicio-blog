@@ -1,7 +1,5 @@
 "use client";
 
-// @author Fabrizio Duroni
-
 import { FC } from "react";
 import { motion } from "framer-motion";
 import { IoMdArrowRoundBack } from "react-icons/io";
@@ -10,19 +8,17 @@ import { BreadcrumbItem, Breadcrumb } from "@/components/design-system/molecules
 import { StandardInternalLinkWithTracking } from "@/components/design-system/atoms/links/standard-internal-link-with-tracking";
 import { useInView } from "@/components/design-system/utils/hooks/use-in-view";
 import { ScrollDirection, useScrollDirection } from "@/components/design-system/utils/hooks/use-scroll-direction";
-import { useReducedMotions } from "@/components/design-system/utils/hooks/use-reduced-motions";
 import { useGlassmorphism } from "@/components/design-system/utils/hooks/use-glassmorphism";
 
 type ClickableBreadcrumbItem = Extract<BreadcrumbItem, { isCurrent: false }>;
 
-interface StickyBreadcrumbWrapperProps {
+interface StickyBreadcrumbProps {
     items: BreadcrumbItem[];
 }
 
-export const StickyBreadcrumbWrapper: FC<StickyBreadcrumbWrapperProps> = ({ items }) => {
+export const StickyBreadcrumb: FC<StickyBreadcrumbProps> = ({ items }) => {
     const [ref, isInView] = useInView<HTMLDivElement>({ threshold: 0 });
     const direction = useScrollDirection();
-    const shouldReduceMotion = useReducedMotions();
     const { glassmorphismClass } = useGlassmorphism();
 
     const parentItem =
@@ -38,11 +34,10 @@ export const StickyBreadcrumbWrapper: FC<StickyBreadcrumbWrapperProps> = ({ item
             {parentItem && (
                 <motion.div
                     aria-hidden={!isVisible}
-                    className={`${glassmorphismClass} container-fixed fixed top-16 right-0 left-0 z-55 my-3 px-3 py-2 font-mono text-base`}
+                    className={`${glassmorphismClass} container-fixed fixed top-20 right-0 left-0 z-55 my-3 px-3 py-2 font-mono text-base`}
                     initial={false}
                     animate={{
-                        y: shouldReduceMotion ? 0 : isVisible ? 0 : -200,
-                        opacity: shouldReduceMotion ? (isVisible ? 1 : 0) : 1,
+                        y: isVisible ? 0 : -200,
                         pointerEvents: isVisible ? "auto" : "none",
                         transition: { delay: 0.1, duration: 0.4, ease: "linear" },
                     }}
