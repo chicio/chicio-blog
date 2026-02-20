@@ -57,7 +57,7 @@ export const ContentProgressBar: React.FC<ContentProgressBarProps> = ({ contentI
   return (
     <motion.div
       key="content-progress-bar"
-      className={`${glassmorphismClass} fixed top-0 z-60 w-full rounded-tl-none rounded-tr-none border-t-0 px-0 py-2 sm:py-1`}
+      className={`${glassmorphismClass} fixed top-0 z-60 w-full rounded-tl-none rounded-tr-none border-t-0 px-0 py-2`}
       initial={false}
       animate={{
         y: isVisible ? 0 : -100,
@@ -66,8 +66,8 @@ export const ContentProgressBar: React.FC<ContentProgressBarProps> = ({ contentI
       }}
       style={{ pointerEvents: isVisible ? "auto" : "none" }}
     >
-      <div className="flex w-full flex-col items-center justify-center">
-        <div className="sm:hidden">{getStatusLine(status, shouldReduceMotion)}</div>
+      <div className="flex w-full flex-col items-center justify-center sm:text-sm">
+        {getStatusLine(status, shouldReduceMotion)}
         <TerminalLine>
           <SuccessText>{getBar(percentage)}</SuccessText>
         </TerminalLine>
