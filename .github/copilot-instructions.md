@@ -122,6 +122,7 @@ This project is a Next.js (App Router) blog with a Matrix-inspired UI, using Rea
    ```bash
    cd agent && git rebase main
    ```
+4. create a dedicated branch for the feature in the `agent/` worktree before starting. Ask the name of the branch.   
 
 ### Recreating the worktree from scratch
 
