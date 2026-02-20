@@ -106,5 +106,67 @@ This project is a Next.js (App Router) blog with a Matrix-inspired UI, using Rea
 - **Issue Templates**: [`.github/ISSUE_TEMPLATE/`](.github/ISSUE_TEMPLATE/)
 - **Security Policy**: [`SECURITY.md`](SECURITY.md)
 
+## AI Agent Worktree
+
+**IMPORTANT**: When asked to implement any feature or code change, always work in the `agent/` git worktree, NOT in the main workspace root. The `agent/` worktree runs on a dedicated branch and port, keeping work-in-progress isolated from the production branch.
+
+### Working on a feature
+
+1. All file edits go to `agent/` paths (e.g. `agent/src/...`)
+2. Start the dev server from the worktree:
+   ```bash
+   cd agent && npm run dev -- -p 3001
+   ```
+   The app runs at http://localhost:3001
+3. To keep the `agent` branch up to date with `main`:
+   ```bash
+   cd agent && git rebase main
+   ```
+
+### Recreating the worktree from scratch
+
+If the `agent/` worktree is deleted, recreate it with these steps:
+
+```bash
+# 1. Create the worktree on the agent branch
+git worktree add agent agent
+
+# 2. Install dependencies
+cd agent && npm install
+
+# 3. Apply the local-only next.config.ts patch (adds turbopack.root to avoid
+#    lock conflicts with the parent workspace when running on a separate port)
+cd agent
+cat >> /dev/null <<'PATCH'
+Add to next.config.ts inside nextConfig, before the `images` key:
+
+  turbopack: {
+    root: path.join(__dirname, '..'),
+  },
+
+Also add at the top: import path from "path";
+PATCH
+
+# 4. Mark the file as skip-worktree so the local patch is never committed
+git update-index --skip-worktree next.config.ts
+```
+
+The exact diff to apply to `next.config.ts` (local only, never commit):
+```typescript
+import path from "path"; // add this import
+
+// inside nextConfig:
+turbopack: {
+    root: path.join(__dirname, '..'),
+},
+```
+
+> To temporarily commit a legitimate change to `next.config.ts`:
+> ```bash
+> git update-index --no-skip-worktree next.config.ts
+> # stage & commit your change
+> git update-index --skip-worktree next.config.ts
+> ```
+
 ---
 For more, see [`README.md`](README.md), [`src/types`](src/types), and [`src/lib`](src/lib). Keep this file up to date with new patterns or workflows.

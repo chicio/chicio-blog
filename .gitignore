@@ -11,11 +11,11 @@
 !.yarn/versions
 
 # testing
-/coverage
+coverage
 
 # next.js
-/.next/
-/out/
+.next/
+out/
 
 # production
 /build
@@ -133,3 +133,6 @@ fabric.properties
 # Built Visual Studio Code Extensions
 *.vsix
 .idea/copilotDiffState.xml
+
+# Git worktrees
+agent/
