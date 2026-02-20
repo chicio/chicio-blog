@@ -2,7 +2,7 @@ import { FC, ReactNode } from "react";
 import { ContentProgressBar } from "../organism/reading-content-progress-bar";
 import { ContentPageTemplate } from "./content-page-template";
 import { BreadcrumbItem } from "../molecules/breadcrumbs/breadcrumb";
-import { StickyBreadcrumbWrapper } from "../organism/sticky-breadcrumb";
+import { StickyBreadcrumb } from "../organism/sticky-breadcrumb";
 
 export interface ContentPageProps {
     author: string;
@@ -32,7 +32,7 @@ export const ReadingContentPageTemplate: FC<ContentPageProps> = ({
             trackingCategory={trackingCategory}
             big={big}
         >
-            {breadcrumbs && <StickyBreadcrumbWrapper items={breadcrumbs} />}
+            {breadcrumbs && <StickyBreadcrumb items={breadcrumbs} />}
             {beforeContent}
             <div id={contentId}>{children}</div>
             {afterContent}
