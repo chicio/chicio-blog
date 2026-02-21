@@ -4,10 +4,18 @@ import { ConsoleMetadata, GameMetadata } from "@/types/content/videogames";
 import { getAllContentFor, getSingleContentBy } from "./content";
 
 const consoleMetadataAdapter = (raw: unknown): ConsoleMetadata => {
-  const { logo, releaseYear, manufacturer, manufacturerLogo, name, sku, acquiredYear, bits, generation, gallery } = raw as Record<
-    string,     
-    string | string[]
-  >;
+  const {
+    logo,
+    releaseYear,
+    manufacturer,
+    manufacturerLogo,
+    name,
+    sku,
+    acquiredYear,
+    bits,
+    generation,
+    gallery,
+  } = raw as Record<string, string | string[]>;
 
   return {
     logo: logo as string,
@@ -19,7 +27,7 @@ const consoleMetadataAdapter = (raw: unknown): ConsoleMetadata => {
     acquiredYear: acquiredYear as string,
     bits: bits as string,
     generation: generation as string,
-    gallery: gallery as string[]
+    gallery: gallery as string[],
   };
 };
 
@@ -57,7 +65,8 @@ export const getAllConsoles = (): Content<ConsoleMetadata>[] =>
     consoleMetadataAdapter,
   ).sort(
     (console, anotherConsole) =>
-      parseInt(console.frontmatter.metadata!.releaseYear) - parseInt(anotherConsole.frontmatter.metadata!.releaseYear),
+      parseInt(console.frontmatter.metadata!.releaseYear) -
+      parseInt(anotherConsole.frontmatter.metadata!.releaseYear),
   );
 
 export const getGame = (
@@ -85,7 +94,7 @@ export const getAllGamesForConsole = (
   getAllContentFor<GameMetadata>(slugs.videogames.game, gamesMetadataAdapter)
     .filter((game) => game.frontmatter.metadata?.console === consoleName)
     .sort(
-    (game, anotherGame) =>
-      new Date(game.frontmatter.metadata!.releaseYear).getTime() -
-      new Date(anotherGame.frontmatter.metadata!.releaseYear).getTime(),
-  );
+      (game, anotherGame) =>
+        new Date(game.frontmatter.metadata!.releaseYear).getTime() -
+        new Date(anotherGame.frontmatter.metadata!.releaseYear).getTime(),
+    );

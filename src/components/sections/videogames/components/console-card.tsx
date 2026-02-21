@@ -38,11 +38,18 @@ export const ConsoleCard: FC<ConsoleCardProps> = ({ console, gamesCount }) => (
     >
       <div className="border-accent-alpha-40 bg-black relative h-96 flex justify-center items-center overflow-hidden border-b">
         <Image
-          src={console.frontmatter.metadata!.logo}
+          src={console.frontmatter.metadata!.gallery[0]}
           alt={console.frontmatter.title}
           width={800}
           height={400}
-          className="w-full h-80 object-contain p-6"
+          className="absolute w-full h-96 object-cover blur-lg"  
+        />
+        <Image
+          src={console.frontmatter.metadata!.gallery[0]}
+          alt={console.frontmatter.title}
+          width={800}
+          height={400}
+          className="relative z-10 w-full h-100 object-contain p-6"
         />
         <div className="glow-border bg-general-background-light absolute top-4 right-2 flex items-center px-3 py-2">
           <span className="text-primary font-mono text-xs text-shadow-sm">
