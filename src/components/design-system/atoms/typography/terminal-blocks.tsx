@@ -1,11 +1,11 @@
 import { FC, PropsWithChildren } from "react";
 
 export const TerminalLine: FC<PropsWithChildren> = ({ children }) => {
-  return <div className="text-shadow-md mb-2 font-mono font-bold leading-tight text-accent break-words text-xs sm:text-base">{children}</div>;
+  return <div className="text-shadow-md mb-2 font-mono font-bold leading-tight text-accent break-words text-xs sm:text-sm">{children}</div>;
 };
 
 export const TerminalQuoteLine: FC<PropsWithChildren> = ({ children }) => {
-  return <div className="my-2 leading-tight break-words text-xs sm:text-base text-center">{children}</div>;
+  return <div className="my-2 leading-tight break-words text-xs sm:text-sm text-center">{children}</div>;
 };
 
 export const Cursor: FC<PropsWithChildren> = () => <span className="animate-blink">_</span>;
