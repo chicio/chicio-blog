@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import { StandardInternalLinkWithTracking } from "@/components/design-system/atoms/links/standard-internal-link-with-tracking";
 import { tracking } from "@/types/configuration/tracking";
