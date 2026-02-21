@@ -84,4 +84,8 @@ export const getAllGamesForConsole = (
 ): Content<GameMetadata>[] =>
   getAllContentFor<GameMetadata>(slugs.videogames.game, gamesMetadataAdapter)
     .filter((game) => game.frontmatter.metadata?.console === consoleName)
-    .sort((game, anotherGame) => game.frontmatter.title.localeCompare(anotherGame.frontmatter.title));
+    .sort(
+    (game, anotherGame) =>
+      new Date(game.frontmatter.metadata!.releaseYear).getTime() -
+      new Date(anotherGame.frontmatter.metadata!.releaseYear).getTime(),
+  );
