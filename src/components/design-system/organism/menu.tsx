@@ -108,6 +108,17 @@ const renderMenuItems = (
             onClickCallback: () => setShouldOpenMenu(false),
           },
           {
+            label: "Videogames",
+            to: slugs.videogames.home,
+            trackingData: {
+              action: tracking.action.open_videogame_collection,
+              category: trackingCategory,
+              label: tracking.label.header,
+            },
+            selected: pathname === slugs.videogames.home,
+            onClickCallback: () => setShouldOpenMenu(false),
+          },
+          {
             label: "Chat",
             to: slugs.chat,
             trackingData: {
@@ -191,8 +202,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
   const NeoRoomEasterEgg =
     startSearch && search.type === "easterEgg"
       ? dynamic(
-          () =>
-            import("@/components/sections/easter-eggs/neo-room-easter-egg"),
+          () => import("@/components/sections/easter-eggs/neo-room-easter-egg"),
           { ssr: false },
         )
       : null;
