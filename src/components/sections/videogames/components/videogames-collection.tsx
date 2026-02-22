@@ -10,6 +10,7 @@ import { VideogameCollectionDataCard } from "./videogame-collection-data-card";
 import { JsonLd } from "@/components/design-system/utils/components/jsond-ld";
 import { ContentPageTemplate } from "@/components/design-system/templates/content-page-template";
 import { VideogamesViewSwitcher } from "@/components/sections/videogames/components/videogames-view-switcher";
+import { StandardInternalLinkWithTracking } from "@/components/design-system/atoms/links/standard-internal-link-with-tracking";
 
 export const VideogamesCollection: React.FC = () => {
   const consoles = getAllConsoles();
@@ -31,10 +32,20 @@ export const VideogamesCollection: React.FC = () => {
     >
       <PageTitle>My Videogames Collection</PageTitle>
       <p>
-        A journey through Videogames history that I started in 1992. From 8-bit
+        My journey through Videogames that I started in 1992. From 8-bit
         consoles to modern powerhouses, each one tells a story of technological
-        evolution and countless hours of gameplay. A place where my mind can
-        breathe.
+        evolution and countless hours of gameplay. Videogames are{" "}
+        <StandardInternalLinkWithTracking
+          to="/about-me"
+          trackingData={{
+            category: tracking.category.videogames,
+            action: tracking.action.open_about_me,
+            label: tracking.label.body,
+          }}
+        >
+          one of the reason why I became a software engineer
+        </StandardInternalLinkWithTracking>
+        .
       </p>
       <div className="mt-10 mb-8 grid grid-cols-2 gap-4 md:grid-cols-4">
         <VideogameCollectionDataCard
