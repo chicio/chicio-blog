@@ -49,9 +49,9 @@ export const ConsoleCard: FC<ConsoleCardProps> = ({ console, gamesCount }) => (
           alt={console.frontmatter.title}
           width={800}
           height={400}
-          className="relative z-10 w-full h-100 object-contain p-6"
+          className="relative z-10 w-full h-100 object-contain"
         />
-        <div className="glow-border bg-general-background-light absolute top-4 right-2 flex items-center px-3 py-2">
+        <div className="glow-border bg-general-background-light absolute top-4 right-2 flex items-center px-3 py-2 z-20">
           <span className="text-primary font-mono text-xs text-shadow-sm">
             {console.frontmatter.metadata?.sku}
           </span>
