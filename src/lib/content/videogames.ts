@@ -1,6 +1,6 @@
 import { Content } from "@/types/content/content";
 import { slugs } from "@/types/configuration/slug";
-import { ConsoleMetadata, GameMetadata } from "@/types/content/videogames";
+import { ConsoleMetadata, GameFormat, GameMetadata } from "@/types/content/videogames";
 import { getAllContentFor, getSingleContentBy } from "./content";
 
 const consoleMetadataAdapter = (raw: unknown): ConsoleMetadata => {
@@ -32,9 +32,9 @@ const consoleMetadataAdapter = (raw: unknown): ConsoleMetadata => {
 };
 
 const gamesMetadataAdapter = (raw: unknown): GameMetadata => {
-  const { releaseYear, console, developer, publisher, genre, pegiRating, region, acquiredYear, gallery } = raw as Record<
+  const { releaseYear, console, developer, publisher, genre, pegiRating, region, acquiredYear, gallery, format } = raw as Record<
     string,
-    string | string[]
+    string | string[] | GameFormat
   >;
 
   return {
@@ -47,6 +47,7 @@ const gamesMetadataAdapter = (raw: unknown): GameMetadata => {
     pegiRating: pegiRating as string,
     region: region as string,
     gallery: gallery as string[],
+    format: format as GameFormat,
   };
 };
 

@@ -5,9 +5,11 @@ import { StandardInternalLinkWithTracking } from "@/components/design-system/ato
 import { tracking } from "@/types/configuration/tracking";
 import { GlassmorphismBackground } from "@/components/design-system/atoms/effects/glassmorphism-background";
 import { useInViewList } from "@/components/design-system/utils/hooks/use-in-view-list";
-import { GameMetadata } from "@/types/content/videogames";
+import { GameFormat, GameMetadata } from "@/types/content/videogames";
 import { Content } from "@/types/content/content";
 import { FC } from "react";
+import { BsDisc } from "react-icons/bs";
+import { BsCloud } from "react-icons/bs";
 
 interface GameCardProps {
   game: Content<GameMetadata>;
@@ -54,6 +56,11 @@ export const GameCard: FC<GameCardProps> = ({ game }) => {
                 {game.frontmatter.title}
               </p>
             </GlassmorphismBackground>
+          </div>
+          <div className="glow-border bg-general-background-light absolute top-1 right-1 z-20 flex items-center px-2 py-2">
+            <span className="text-primary font-mono text-base text-shadow-sm">
+              {game.frontmatter.metadata?.format === GameFormat.Physical ? <BsDisc /> : <BsCloud />}
+            </span>
           </div>
         </StandardInternalLinkWithTracking>
       )}

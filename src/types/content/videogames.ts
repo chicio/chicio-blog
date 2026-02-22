@@ -11,6 +11,11 @@ export type ConsoleMetadata = {
   gallery: string[];
 }
 
+export enum GameFormat {
+  Physical = "Physical",
+  Digital = "Digital",
+}
+
 export type GameMetadata = {
   releaseYear: string;
   acquiredYear: string;
@@ -21,4 +26,5 @@ export type GameMetadata = {
   pegiRating: string;
   region: string;
   gallery: string[];
+  format: GameFormat;
 }
