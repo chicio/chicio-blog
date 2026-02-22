@@ -50,7 +50,7 @@ const BreadcrumbContent: FC<BreadcrumbContentProps> = ({
           <StandardInternalLinkWithTracking
             to={parentItem.href}
             trackingData={parentItem.trackingData}
-            className="min-w-0 truncate py-2 text-sm"
+            className="min-w-0 truncate py-1 text-sm"
           >
             {parentItem.label}
           </StandardInternalLinkWithTracking>
