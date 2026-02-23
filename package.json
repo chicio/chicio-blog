@@ -33,7 +33,7 @@
     "feed": "^5.2.0",
     "framer-motion": "^12.27.0",
     "gray-matter": "^4.0.3",
-    "katex": "^0.16.27",
+    "katex": "^0.16.32",
     "marked": "^17.0.1",
     "next": "16.1.6",
     "postcss": "^8.5.6",
