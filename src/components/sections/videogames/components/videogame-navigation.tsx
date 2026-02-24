@@ -22,7 +22,7 @@ export const VideogameNavigation: FC<VideogameNavigationProps> = ({
   previous,
   next,
 }) => (
-  <div className="mt-8 flex flex-row justify-center gap-4">
+  <div className="mt-8 flex flex-row flex-wrap justify-center gap-4">
     {previous && (
       <BluePillLink
         to={previous.url}
