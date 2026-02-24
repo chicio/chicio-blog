@@ -26,5 +26,5 @@ export type GameMetadata = {
   pegiRating: string;
   region: string;
   gallery: string[];
-  format: GameFormat;
+  formats: GameFormat[];
 }

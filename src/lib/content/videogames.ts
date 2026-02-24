@@ -32,9 +32,9 @@ const consoleMetadataAdapter = (raw: unknown): ConsoleMetadata => {
 };
 
 const gamesMetadataAdapter = (raw: unknown): GameMetadata => {
-  const { releaseYear, console, developer, publisher, genre, pegiRating, region, acquiredYear, gallery, format } = raw as Record<
+  const { releaseYear, console, developer, publisher, genre, pegiRating, region, acquiredYear, gallery, formats } = raw as Record<
     string,
-    string | string[] | GameFormat
+    string | string[] | GameFormat[]
   >;
 
   return {
@@ -47,7 +47,7 @@ const gamesMetadataAdapter = (raw: unknown): GameMetadata => {
     pegiRating: pegiRating as string,
     region: region as string,
     gallery: gallery as string[],
-    format: format as GameFormat,
+    formats: formats as GameFormat[],
   };
 };
 

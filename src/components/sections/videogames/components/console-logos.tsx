@@ -27,7 +27,7 @@ export const ConsoleLogos: FC<ConsoleLogosProps> = ({
           action: tracking.action.open_videogame_console,
         }}
       >
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2">
           <ManufacturerLogo logoUrl={manufacturerLogo} name={manufacturer} />
 
           <ImageGlow
@@ -40,7 +40,7 @@ export const ConsoleLogos: FC<ConsoleLogosProps> = ({
         </div>
       </StandardInternalLinkWithTracking>
     ) : (
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2">
         <ManufacturerLogo logoUrl={manufacturerLogo} name={manufacturer} />
 
         <ImageGlow

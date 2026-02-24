@@ -13,6 +13,7 @@ import { VideogameNavigation } from "./videogame-navigation";
 import { ConsoleLogos } from "./console-logos";
 import { slugs } from "@/types/configuration/slug";
 import { getAllGames, getAllGamesForConsole } from "@/lib/content/videogames";
+import { GameFormatIcon } from "./game-format-icon";
 
 interface GameProps {
   game: Content<GameMetadata>;
@@ -25,7 +26,9 @@ export const Game: FC<PropsWithChildren<GameProps>> = async ({
 }) => {
   const { contentFileRelativePath: contentPath } = game;
   const games = getAllGames();
-  const currentIndex = games.findIndex((g) => g.slug.formatted === game.slug.formatted);
+  const currentIndex = games.findIndex(
+    (g) => g.slug.formatted === game.slug.formatted,
+  );
   const previousGame = games[currentIndex - 1];
   const nextGame = games[currentIndex + 1];
   const { default: GameContent } = await import(
@@ -36,19 +39,52 @@ export const Game: FC<PropsWithChildren<GameProps>> = async ({
     <ReadingContentPageTemplate
       author={siteMetadata.author}
       trackingCategory={tracking.category.videogames}
-      breadcrumbs={[
-        { label: "Videogames", href: slugs.videogames.home, isCurrent: false, trackingData: { action: tracking.action.open_videogame_collection, category: tracking.category.videogames, label: tracking.label.body } },
-        { label: console.frontmatter.metadata!.name, href: console.slug.formatted, isCurrent: false, trackingData: { action: tracking.action.open_videogame_console, category: tracking.category.videogames, label: tracking.label.body } },
-        { label: game.frontmatter.title, href: game.slug.formatted, isCurrent: true },
-      ] satisfies BreadcrumbItem[]}
+      breadcrumbs={
+        [
+          {
+            label: "Videogames",
+            href: slugs.videogames.home,
+            isCurrent: false,
+            trackingData: {
+              action: tracking.action.open_videogame_collection,
+              category: tracking.category.videogames,
+              label: tracking.label.body,
+            },
+          },
+          {
+            label: console.frontmatter.metadata!.name,
+            href: console.slug.formatted,
+            isCurrent: false,
+            trackingData: {
+              action: tracking.action.open_videogame_console,
+              category: tracking.category.videogames,
+              label: tracking.label.body,
+            },
+          },
+          {
+            label: game.frontmatter.title,
+            href: game.slug.formatted,
+            isCurrent: true,
+          },
+        ] satisfies BreadcrumbItem[]
+      }
     >
       <PageTitle>{game.frontmatter.title}</PageTitle>
-      <ConsoleLogos
-        manufacturer={console.frontmatter.metadata!.manufacturer}
-        manufacturerLogo={console.frontmatter.metadata!.manufacturerLogo}
-        logo={console.frontmatter.metadata!.logo}
-        url={console.slug.formatted}
-      />
+
+      <div className="flex flex-row gap-2">
+        <ConsoleLogos
+          manufacturer={console.frontmatter.metadata!.manufacturer}
+          manufacturerLogo={console.frontmatter.metadata!.manufacturerLogo}
+          logo={console.frontmatter.metadata!.logo}
+          url={console.slug.formatted}
+        />
+        {game.frontmatter.metadata?.formats.map((format) => (
+          <span className="glow-container bg-general-background h-14 text-primary px-2 py-2 font-mono text-base flex flex-col justify-center items-center text-shadow-sm">
+            <GameFormatIcon format={format} />
+            <span>{format}</span>
+          </span>
+        ))}
+      </div>
       <ImageCarousel
         images={game.frontmatter.metadata?.gallery || [game.frontmatter.image]}
         alt={game.frontmatter.title}
