@@ -1,5 +1,62 @@
 # Changelog
 
+## [3.13.0](https://github.com/chicio/chicio-blog/compare/v3.12.0...v3.13.0) (2026-02-24)
+
+### Features
+
+* **capabilities:** :alien: update llm instructions to use git worktree flow ([aeb377a](https://github.com/chicio/chicio-blog/commit/aeb377a59f34b9d6d15ba38987b55d2779aef60c))
+* **capabilities:** :sparkles: added instruction for worktree branch creation ([#220](https://github.com/chicio/chicio-blog/issues/220)) ([950a7d2](https://github.com/chicio/chicio-blog/commit/950a7d2b2d3fa2d22b5540f034212fdf672b1612))
+* **capabilities:** :sparkles: Breadcrumbs ([80a28f7](https://github.com/chicio/chicio-blog/commit/80a28f7f2bfa377ec2f9fdd35b3bf109da5b402a))
+* **capabilities:** :sparkles: games can be distinguished between physical and cloud ([095e451](https://github.com/chicio/chicio-blog/commit/095e4515be6570ef1d65f6ad0a6fcfbb5187786d))
+* **capabilities:** :sparkles: videogames collection view switcher ([eb5d497](https://github.com/chicio/chicio-blog/commit/eb5d497fab7305072881fd6b88982dda345fe03f))
+* **content:** :fire: fix build with agent folder ([948bfc6](https://github.com/chicio/chicio-blog/commit/948bfc68af5ee0c45d7ec15b7c66748318403449))
+* **content:** :fire: fix format string in article ([0e387d5](https://github.com/chicio/chicio-blog/commit/0e387d57cb2ae9f5fb72a260a60c9b4e6143d36c))
+* **content:** :fire: removed poor design videogames home in favour of collection page ([ea3e395](https://github.com/chicio/chicio-blog/commit/ea3e39583fc1c80cdf117ab40f3eb84fc6b875eb))
+* **content:** :sparkles: added all console images ([da76f38](https://github.com/chicio/chicio-blog/commit/da76f3834b0a89026a62077ae4ad3db3f42e7c2b))
+* **content:** :sparkles: added all gameboy games ([b0f929a](https://github.com/chicio/chicio-blog/commit/b0f929aa3f50f70e53562619dd8e1ca7cc8daf00))
+* **content:** :sparkles: added another bunch of ps1 games ([6724af0](https://github.com/chicio/chicio-blog/commit/6724af01e73aa0f05a05b79de0eebc6879224885))
+* **content:** :sparkles: added content for ps4 ([a3b2ce5](https://github.com/chicio/chicio-blog/commit/a3b2ce50f28db00800d0f6ad9ba5c22cdce017e7))
+* **content:** :sparkles: added format icon in game page ([751db3b](https://github.com/chicio/chicio-blog/commit/751db3b2058a7790baf01269d2c34b0999a4e7c4))
+* **content:** :sparkles: added gameboy games to the catalog ([fd7b973](https://github.com/chicio/chicio-blog/commit/fd7b973fa2e132848c8efda021886002187c11ec))
+* **content:** :sparkles: added images for consoles ([dba70a9](https://github.com/chicio/chicio-blog/commit/dba70a9b9885502490d33127a5b569c36b6d30bc))
+* **content:** :sparkles: added new gameboy games ([fc52e6e](https://github.com/chicio/chicio-blog/commit/fc52e6ed532f7ce319561ffde9c9062980489d05))
+* **content:** :sparkles: added ps1 gallery ([d7e4a93](https://github.com/chicio/chicio-blog/commit/d7e4a938078ab181da267d15f90d625d37c8c4d1))
+* **content:** :sparkles: added ps2 games images + setup content ([d5bd30b](https://github.com/chicio/chicio-blog/commit/d5bd30b9b2eee6b7f5074fc04161d572af1b01be))
+* **content:** :sparkles: added ps4 and ps3 raw images for games ([f1a1c5f](https://github.com/chicio/chicio-blog/commit/f1a1c5fdd63ae4ef63ed5623f1983cfb3ea1b1dc))
+* **content:** :sparkles: adding ps1 games ([358c7c6](https://github.com/chicio/chicio-blog/commit/358c7c61ec26d568298ce27ff6d90688d1701de7))
+* **content:** :sparkles: Binary search ([#214](https://github.com/chicio/chicio-blog/issues/214)) ([73797a7](https://github.com/chicio/chicio-blog/commit/73797a7b45e6da12d202acac6ba74b74d7e0202e))
+* **content:** :sparkles: completed all content for NES (games included) ([78cbed2](https://github.com/chicio/chicio-blog/commit/78cbed27c785f642e9602218b6b1c9e68e7c65cd))
+* **content:** :sparkles: completed ps1 collection upload ([c09251a](https://github.com/chicio/chicio-blog/commit/c09251a516d537def6185754177f686bc3292f6a))
+* **content:** :sparkles: covers for ps3 and ps4 games ([5235c8a](https://github.com/chicio/chicio-blog/commit/5235c8a1710d53310acfeef5c3f98cf08a79b2d8))
+* **content:** :sparkles: covers ps3 ([d9b143d](https://github.com/chicio/chicio-blog/commit/d9b143df084e7d4fed0c8a68635de89cbea06215))
+* **content:** :sparkles: data for ps5 games ([82dccbb](https://github.com/chicio/chicio-blog/commit/82dccbb2c26eb0631d4d7b89be22d4d408fb4b56))
+* **content:** :sparkles: dded digital games ([1507d13](https://github.com/chicio/chicio-blog/commit/1507d13ee75bcca856c4b6ac6343bd5c1ee5c7e6))
+* **content:** :sparkles: Exposed videogames menu ([96d9e1c](https://github.com/chicio/chicio-blog/commit/96d9e1ce8ed5ac1dda4b627a9fdf5d2d1750696c))
+* **content:** :sparkles: fix content of data structure article ([72e428c](https://github.com/chicio/chicio-blog/commit/72e428cd82e34725ded9c610765f08683bba1158))
+* **content:** :sparkles: game content raw created for ps3 and ps4 ([b52c694](https://github.com/chicio/chicio-blog/commit/b52c694bdf1a5e7ab9be83a9e03fc860221776c9))
+* **content:** :sparkles: game data for ps3 games + games are now indexed ([d509d21](https://github.com/chicio/chicio-blog/commit/d509d2196a64423016e8eeaca53d699882293d00))
+* **content:** :sparkles: game data for ps4 completed ([71a3ed9](https://github.com/chicio/chicio-blog/commit/71a3ed9fd18f6f3d8ba072d7ac5b9a10be8b3d46))
+* **content:** :sparkles: game folders for ps3 and ps4 ([fb2b30a](https://github.com/chicio/chicio-blog/commit/fb2b30a09070c8eee16f620ab4c0b59e3460038c))
+* **content:** :sparkles: games for ps5 + images raw added ([a652ad6](https://github.com/chicio/chicio-blog/commit/a652ad69d1f469ff17d9c2cc6722bc2ee7824e6d))
+* **content:** :sparkles: improved console topics titles ([b08a27f](https://github.com/chicio/chicio-blog/commit/b08a27f80010942941eb7b691ae1da0def167e14))
+* **content:** :sparkles: improved covers for nes game ([7caaac3](https://github.com/chicio/chicio-blog/commit/7caaac36bbbffc8dac7629d35a4b8ab05aba3a1c))
+* **content:** :sparkles: ps2 + psp completed ([9ecfb21](https://github.com/chicio/chicio-blog/commit/9ecfb211588cc25e615da344b8e9f6181269e2ac))
+* **content:** :sparkles: ps5 games covers ([e9d45f5](https://github.com/chicio/chicio-blog/commit/e9d45f51f6d6494b020a0c64a60d099abf53a2a3))
+* **content:** :sparkles: starting ps1 game catalog ([80055d4](https://github.com/chicio/chicio-blog/commit/80055d480d83bddfd6090ace5b3ab91dca0910f0))
+* **content:** :sparkles: update wrong cover ([2908ef9](https://github.com/chicio/chicio-blog/commit/2908ef991d9c01ce155a3222e323d40441ff27c0))
+* **content:** :sparkles: updated content ([b0c7800](https://github.com/chicio/chicio-blog/commit/b0c7800f0d715d0ab041f82d595ebb1d035c1a39))
+* **content:** :zap: added more ps1 games ([3b4c3af](https://github.com/chicio/chicio-blog/commit/3b4c3af9d2b618d7f8f8ef13b9bd1eaab6d458d2))
+* **ux:** :sparkles: implemented simple virtual list using intersection observer ([226168e](https://github.com/chicio/chicio-blog/commit/226168ea156816cfdb2ab518532d743a770f89e8))
+* **ux:** :sparkles: improved spacing for label in game grid ([b2ef1e5](https://github.com/chicio/chicio-blog/commit/b2ef1e5512e1cafcb9829788dc4aed833cf71a77))
+* **ux:** :sparkles: increased contrast for glassmorphism ([ef929bb](https://github.com/chicio/chicio-blog/commit/ef929bb474fd982e7f633a8606dd83dd8bdcd351))
+* **ux:** :sparkles: reduced padding spacing for breadcrumb ([e7c79bc](https://github.com/chicio/chicio-blog/commit/e7c79bc794d75c5e0b6ec9ea1e0b62fd74b532af))
+* **ux:** :sparkles: sticky breadcrumb on reading pages ([#221](https://github.com/chicio/chicio-blog/issues/221)) ([99a3bd4](https://github.com/chicio/chicio-blog/commit/99a3bd46c7e7c32dc15ef575f7ccbdf946870136))
+
+### Bug Fixes
+
+* **content:** :bug: update content.mdx to fix gameplay carousel ([49c9e16](https://github.com/chicio/chicio-blog/commit/49c9e16a36779c3687f8fc1d1bb79e154d4027ed))
+* **content:** :sparkles: inverted icons for format ([734a29e](https://github.com/chicio/chicio-blog/commit/734a29ec15419b81d0504b0be1d77e82a74b2fc8))
+
 ## [3.12.0](https://github.com/chicio/chicio-blog/compare/v3.11.0...v3.12.0) (2026-02-14)
 
 ### Features
