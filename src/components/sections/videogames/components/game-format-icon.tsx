@@ -4,8 +4,8 @@ import { BsDisc } from "react-icons/bs";
 import { BsCloud } from "react-icons/bs";
 
 const icons = {
-    [GameFormat.Physical]: <BsCloud />,
-    [GameFormat.Digital]: <BsDisc />
+    [GameFormat.Physical]: <BsDisc />,
+    [GameFormat.Digital]: <BsCloud />
 }
 
 interface GameFormatIconProps {
