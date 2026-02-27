@@ -21,7 +21,7 @@ export const GameCard: FC<GameCardProps> = ({ game }) => {
     <div
       ref={ref}
       className="glow-container relative h-80 w-full overflow-hidden rounded-lg shadow-lg"
-      key={game.slug.formatted}
+      key={game.frontmatter.title}
     >
       {isInView && (
         <StandardInternalLinkWithTracking
@@ -58,7 +58,7 @@ export const GameCard: FC<GameCardProps> = ({ game }) => {
           </div>
           <div className="absolute top-1 right-1 z-20 flex flex-row gap-1 items-center ">
             {game.frontmatter.metadata?.formats.map((format) => (
-              <span className="glow-border bg-general-background-light px-2 py-2 text-primary font-mono text-base text-shadow-sm">
+              <span key={format} className="glow-border bg-general-background-light px-2 py-2 text-primary font-mono text-base text-shadow-sm">
                 <GameFormatIcon format={format} />
               </span>
             ))}

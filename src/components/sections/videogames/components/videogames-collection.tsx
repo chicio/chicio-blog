@@ -14,11 +14,7 @@ import { StandardInternalLinkWithTracking } from "@/components/design-system/ato
 
 export const VideogamesCollection: React.FC = () => {
   const consoles = getAllConsoles();
-  const gamesSortedByReleaseYear = getAllGames().sort(
-    (a, b) =>
-      parseInt(a.frontmatter.metadata?.releaseYear ?? "0") -
-      parseInt(b.frontmatter.metadata?.releaseYear ?? "0"),
-  );
+  const gamesSortedByReleaseYear = getAllGames();
   const consolesWithGameCount = consoles.map((console) => ({
     console,
     gamesCount: getAllGamesForConsole(console.frontmatter.metadata?.name ?? "")
