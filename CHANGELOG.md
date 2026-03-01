@@ -1,5 +1,18 @@
 # Changelog
 
+## [3.14.0](https://github.com/chicio/chicio-blog/compare/v3.13.0...v3.14.0) (2026-03-01)
+
+### Features
+
+* **content:** :sparkles: added data for wii and switch games ([89b2961](https://github.com/chicio/chicio-blog/commit/89b296134e6638f605215bbf8fb4d0662b74628d))
+* **content:** :sparkles: Added images and content for wii and switch ([f1e21e0](https://github.com/chicio/chicio-blog/commit/f1e21e0a5bb137fe56e601f50318e986ae2c150c))
+* **content:** :sparkles: Backtracking ([#229](https://github.com/chicio/chicio-blog/issues/229)) ([c2a846c](https://github.com/chicio/chicio-blog/commit/c2a846c3b42c653662ebca2a88ff99211e15ebd7))
+* **content:** :sparkles: completed data insert for ps3 ([605e6fe](https://github.com/chicio/chicio-blog/commit/605e6fecd1684e417dbd86008634f5f49f6cf3dc))
+
+### Bug Fixes
+
+* **content:** :sparkles: fix title for game ([9eee3a3](https://github.com/chicio/chicio-blog/commit/9eee3a3dc160a6db9e0083850b6d3488cc3dbad0))
+
 ## [3.13.0](https://github.com/chicio/chicio-blog/compare/v3.12.0...v3.13.0) (2026-02-24)
 
 ### Features
