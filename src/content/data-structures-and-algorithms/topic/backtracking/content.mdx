@@ -1,0 +1,120 @@
+---
+title: "Backtracking"
+description: "Deep dive into the backtracking technique, a fundamental approach for combinatorial problems, permutation generation, and constraint satisfaction tasks."
+date: 2026-03-01
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [backtracking, recursion, combinatorics, data structures, algorithms]
+authors: [fabrizio_duroni]
+---
+
+import { InteractiveBlock } from "@/components/sections/data-structures-and-algorithms/components/interactive-block";
+import { BacktrackingVisualizer } from "@/components/sections/data-structures-and-algorithms/components/backtracking-visualizer";
+
+# Backtracking
+
+Backtracking is a powerful algorithmic technique used to solve **combinatorial problems**, **constraint satisfaction problems**, and problems that require exploring multiple 
+possible solutions efficiently. At its core, backtracking is a form of **depth-first search** over a **decision tree**, where each node represents a choice point and branches 
+represent possible options. 
+
+Unlike simple recursion, backtracking involves a systematic exploration of all potential candidates, **rolling back** choices when a path cannot lead to a valid solution. 
+This rollback mechanism ensures that we do not continue down paths that violate constraints, improving efficiency.
+
+For example, consider generating all sequences of length `n` composed of 0s and 1s. Backtracking explores every possible sequence, but it does so **incrementally**, 
+building sequences step by step, and discarding partial sequences if they violate constraints (for instance, if we had a rule forbidding consecutive 1s).
+
+Below is a visualization of a simple backtracking process, to generate all the possible combination of 0 and 1 of length 3.
+The example shows how the algorithm explores a decision tree, makes choices, and backtracks when necessary.
+ 
+<InteractiveBlock title="Backtracking Visualization">
+    <BacktrackingVisualizer />
+</InteractiveBlock>
+
+## Core Principles of Backtracking
+
+Backtracking is built on a few fundamental principles that guide how we explore possible solutions efficiently. 
+Understanding these principles is essential to applying backtracking correctly to a wide range of problems.
+
+- **Decision Points**: at each step in a problem, we often have multiple options to choose from. 
+These points, called decision points, form the nodes of the implicit decision tree. Each branch from a node represents a choice.
+
+- **Exploring Choices**: backtracking systematically explores each choice at a decision point.
+ This exploration is typically done via recursion, incrementally building a candidate solution step by step.
+
+- **Constraint Checking**: before proceeding deeper along a branch, backtracking often evaluates whether the current partial solution violates any constraints. 
+If a constraint is violated, that branch is abandoned early. This process is known as pruning.
+
+- **Rollback (Backtracking Step)**: after exploring a branch (either successfully or unsuccessfully), we must remove the last choice and return to the previous decision point. 
+This rollback ensures that all possible solutions are explored without retaining invalid paths.
+
+- **Base Case**: Every backtracking recursion requires a base case that determines when a complete candidate solution has been reached. 
+When this condition is satisfied, the solution can be recorded or processed accordingly.
+
+For example, in generating all permutations of a set of numbers, the decision points correspond to positions in the permutation. 
+At each position, we explore choices that have not yet been used, check for uniqueness constraints if necessary, and rollback after completing each recursive path.
+
+By internalizing these principles, you can approach a wide variety of problems—ranging from sequence generation to constraint satisfaction—without being tied to any specific problem or dataset.
+ Backtracking is a **thinking framework**, not just a coding pattern.
+
+ Backtracking can be implemented using a consistent **skeleton** that captures the core mechanics: decision points, recursion, constraint checking, and rollback. This skeleton can then be adapted to specific problems, such as generating permutations, combinations, or solving constraint satisfaction tasks like N-Queens.
+
+## Implementation
+
+Here is a **general TypeScript template** for backtracking:
+
+```ts
+function backtrack(path: any[], choices: any[]): void {
+  // Base case: record or process a complete solution
+  // NB: isComplete should be implemented based on the problem requirements
+  if (isComplete(path)) {
+    processSolution(path);
+    return;
+  }
+
+  for (const choice of choices) {
+    // Constraint check / pruning
+    // NB: isValid should be implemented based on the problem requirements
+    if (!isValid(path, choice)) continue;
+
+    // Make a choice
+    path.push(choice);
+
+    // Explore further
+    // NB: getNextChoices should be implemented based on the problem requirements
+    backtrack(path, getNextChoices(path, choices));
+
+    // Rollback: undo the choice
+    path.pop();
+  }
+}
+
+// Start backtracking
+const initialChoices = [0, 1];
+backtrack([], initialChoices);
+```
+
+This skeleton captures the essence of backtracking, including the core priciples we discussed in the section before.
+By customizing `isComplete`, `isValid`, and `getNextChoices` for a particular problem, this skeleton can handle a wide range of backtracking tasks in a structured and maintainable way.
+
+## Time and Space Complexity
+
+The generic backtracking skeleton explores a **decision tree** where each level corresponds to a choice in the current path.  
+
+- **Time complexity** is generally **exponential in the depth** of the recursion, because in the worst case all possible combinations of choices are explored. 
+Pruning (see `isValid` function above) can reduce the actual number of paths visited.  
+- **Space complexity** is dominated by the recursion stack and the current path, typically **linear in the recursion depth**. 
+If all solutions are stored, space grows proportionally to the number of solutions times their size.  
+
+In short, backtracking trades **time for completeness**, exploring all potential solutions while using minimal additional space.
+
+## Exercises
+
+| Problem | Technique | Solution |
+|--------|----------|----------|
+| [Generate Parentheses](https://leetcode.com/problems/generate-parentheses/) | Backtracking | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/backtracking/generate-parentheses.ts) |
+| [Permutations](https://leetcode.com/problems/permutations/) | Backtracking | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/backtracking/permutations.ts) |
+| [Subsets](https://leetcode.com/problems/subsets/) | Backtracking | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/backtracking/subsets.ts) |
+| [Combination Sum](https://leetcode.com/problems/combination-sum/) | Backtracking | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/backtracking/combination-sum.ts) |
+| [Combination Sum II](https://leetcode.com/problems/combination-sum-ii/) | Backtracking | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/backtracking/combination-sum-II.ts) |
+| [Letter Combinations of a Phone Number](https://leetcode.com/problems/letter-combinations-of-a-phone-number/) | Backtracking | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/backtracking/letter-combinations-of-a-phone-number.ts) |
+| [Palindrome Partitioning](https://leetcode.com/problems/palindrome-partitioning/) | Backtracking | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/backtracking/palindrome-partitioning.ts) |
+| [N-Queens](https://leetcode.com/problems/n-queens/) | Backtracking | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/backtracking/n-queens.ts) |

@@ -1,12 +1,12 @@
 "use client";
 
 import { BluePillButton, RedPillButton } from "@/components/design-system/molecules/buttons/pills-buttons";
-import { useState } from "react";
+import { FC, useState } from "react";
 
 const initialCapacity = 4;
 const initialArray = [1, 2, 3]
 
-export function DynamicArrayVisualizer() {
+export const DynamicArrayVisualizer: FC = () => {
   const [arr, setArr] = useState(initialArray);
   const [capacity, setCapacity] = useState(initialCapacity);
 
