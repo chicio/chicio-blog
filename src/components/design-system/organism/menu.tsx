@@ -216,7 +216,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
         initial="visible"
       >
         <div
-          className={`${glassmorphismClass} xs:overflow-visible flex-row xs:py-0 xs:pt-0 m-0 my-0 flex min-h-16 flex-col items-center gap-1 overflow-hidden px-2`}
+          className={`${glassmorphismClass} xs:overflow-visible flex-row xs:py-0 xs:pt-0 m-0 my-0 flex min-h-16 items-center gap-1 overflow-hidden px-2`}
         >
           {renderMenuItems(
             false, //desktop
