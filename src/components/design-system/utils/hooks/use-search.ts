@@ -3,7 +3,7 @@
 import { searchIndexFileName } from "@/lib/content/search-filename";
 import { SearchablePostFields, SearchResult } from "@/types/search/search";
 import elasticlunr from "elasticlunr";
-import { ChangeEvent, useEffect, useState, useMemo } from "react";
+import { ChangeEvent, useEffect, useState, useMemo, useTransition } from "react";
 
 const hasMinimumCharsToSearch = (query: string): boolean => query.length >= 3;
 
@@ -32,13 +32,16 @@ export const useSearch = (
   });
   const [searchIndex, setSearchIndex] =
     useState<elasticlunr.Index<SearchablePostFields>>();
+  const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
     if (startSearch && !searchIndex) {
       fetch(`/${searchIndexFileName}`)
         .then((res) => res.json())
         .then((data) => {
-          setSearchIndex(elasticlunr.Index.load<SearchablePostFields>(data));
+          startTransition(() => {
+            setSearchIndex(elasticlunr.Index.load<SearchablePostFields>(data));
+          });
         });
     }
   }, [startSearch, searchIndex]);
@@ -46,7 +49,7 @@ export const useSearch = (
   const searchUsing = useMemo(
       () => (value: string) => {
         if (searchIndex) {
-          setSearch(searchFor(value, searchIndex));
+          startTransition(() => setSearch(searchFor(value, searchIndex)));
         } else {
           setSearch({ type: "search", results: [] });
         }
@@ -78,5 +81,6 @@ export const useSearch = (
     handleSearch,
     resetSearch,
     search,
+    isPending,
   };
 };

@@ -2,7 +2,7 @@
 
 import { SearchablePostFields } from "@/types/search/search";
 import { tracking } from "@/types/configuration/tracking";
-import { ChangeEvent, FC, useRef } from "react";
+import { ChangeEvent, FC, memo, useRef } from "react";
 import { BiSearchAlt } from "react-icons/bi";
 import { StandardInternalLinkWithTracking } from "../../atoms/links/standard-internal-link-with-tracking";
 import { InputField } from "../../atoms/typography/input-field";
@@ -43,34 +43,35 @@ export const SearchBox: FC<{
   );
 };
 
-export const SearchHits: FC<{ results: SearchablePostFields[] }> = ({
-  results,
-}) => {
-  const { glassmorphismClass } = useGlassmorphism();
+export const SearchHits: FC<{ results: SearchablePostFields[]; isPending: boolean }> = memo(
+  ({ results }) => {
+    const { glassmorphismClass } = useGlassmorphism();
 
-  return (
-    <div
-      className={`${glassmorphismClass} container-fixed remove-scroll-width glow-container hide-scrollbar xs:w-full absolute top-24 right-0 left-0 h-[80dvh] w-[95%] overflow-scroll`}
-    >
-      {results.map((result, index) => (
-        <div
-          className={`${glassmorphismClass} m-2 p-4 md:m-4`}
-          key={"SearchResult" + index}
-        >
-          <StandardInternalLinkWithTracking
-            className="no-underline"
-            to={result.slug}
-            trackingData={{
-              category: tracking.category.blog_search,
-              label: tracking.label.body,
-              action: tracking.action.open_blog_post,
-            }}
+    return (
+      <div
+        className={`${glassmorphismClass} container-fixed remove-scroll-width glow-container hide-scrollbar xs:w-full absolute top-24 right-0 left-0 h-[80dvh] w-[95%] overflow-scroll`}
+      >
+        {results.map((result, index) => (
+          <div
+            className={`${glassmorphismClass} m-2 p-4 md:m-4`}
+            key={"SearchResult" + index}
           >
-            <h4>{result.title}</h4>
-            <p>{result.description}</p>
-          </StandardInternalLinkWithTracking>
-        </div>
-      ))}
-    </div>
-  );
-};
+            <StandardInternalLinkWithTracking
+              className="no-underline"
+              to={result.slug}
+              trackingData={{
+                category: tracking.category.blog_search,
+                label: tracking.label.body,
+                action: tracking.action.open_blog_post,
+              }}
+            >
+              <h4>{result.title}</h4>
+              <p>{result.description}</p>
+            </StandardInternalLinkWithTracking>
+          </div>
+        ))}
+      </div>
+    );
+  },
+  (_, nextProps) => nextProps.isPending,
+);
