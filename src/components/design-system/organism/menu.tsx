@@ -191,7 +191,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
   const direction = useScrollDirection();
   const [shouldOpenMenu, setShouldOpenMenu] = useState(false);
   const [startSearch, setStartSearch] = useState(false);
-  const { handleSearch, resetSearch, search } = useSearch(
+  const { handleSearch, resetSearch, search, isPending } = useSearch(
     startSearch,
     whiteRabbitEasterEgg,
   );
@@ -284,7 +284,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
               <NeoRoomEasterEgg lines={search.terminalLines} />
             )}
             {search.type === "search" && search.results.length > 0 && (
-              <SearchHits results={search.results} />
+              <SearchHits results={search.results} isPending={isPending} />
             )}
           </Overlay>
         )}
