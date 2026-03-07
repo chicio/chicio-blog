@@ -1,0 +1,310 @@
+---
+title: "Tree Traversals: BFS and DFS"
+description: "Comprehensive guide on tree traversal techniques including BFS (level-order) and DFS (pre-, in-, post-order)."
+date: 2026-03-07
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [tree, trees, bfs, dfs, traversal, data structures, algorithms]
+authors: [fabrizio_duroni]
+---
+
+# Tree Traversals: BFS and DFS
+
+Tree traversals are a fundamental concept when dealing with binary trees and other hierarchical data structures. 
+Understanding the different traversal strategies allows engineers to navigate trees efficiently, 
+extract meaningful information, and solve complex problems, from pathfinding and hierarchy analysis to serialization and deserialization of 
+tree structures.
+
+At a high level, tree traversals can be categorized into two families: **Breadth-First Search (BFS)** and **Depth-First Search (DFS)**. 
+
+**Breadth-First Search (BFS)** explores the tree level by level, visiting all nodes at the current depth before moving to the next. 
+This strategy is naturally suited for problems where the notion of "distance from the root" is important, such as finding the shortest 
+path or computing the width of a tree.
+
+**Depth-First Search (DFS)**, on the other hand, explores as far as possible along each branch before [backtracking](/data-structures-and-algorithms/topic/backtracking).
+DFS can be further divided into pre-order, in-order, and post-order traversals, each following a specific visiting order for the 
+root and its subtrees. DFS is ideal for tasks such as tree reconstruction, path calculations, or evaluating hierarchical structures 
+recursively. Its implementation can be either recursive, leveraging the call stack, or iterative, using an explicit stack.
+
+Choosing between BFS and DFS depends on the problem’s nature. BFS provides a natural way to process nodes in increasing depth, while 
+DFS often simplifies recursive reasoning and is memory-efficient for deep but narrow trees when implemented recursively.
+
+In the following sections, we will explore each traversal technique in depth, discussing usage scenarios, TypeScript implementations, 
+and relevant variants, giving you a strong foundation to tackle related coding problems confidently.
+
+For all the example, consider the following `TreeNode` structure:
+
+```typescript
+interface TreeNode {
+  val: number;
+  left: TreeNode | null;
+  right: TreeNode | null;
+}
+```
+
+## Breadth-First Search (BFS)
+
+As we mentioned before, Breadth-First Search (BFS) on trees processes nodes **level by level**, starting from the 
+root and moving down to each subsequent depth. This approach is particularly effective when the problem requires knowledge of a node's 
+distance from the root, the width of a tree, or when we want to process nodes in a top-down manner.
+
+The fundamental mechanism behind BFS is the **queue**, which ensures that nodes are visited in the order they appear on each level. 
+As nodes are dequeued for processing, their children are enqueued, guaranteeing that all nodes at the current level are handled before 
+moving to the next.
+
+BFS is commonly used in scenarios such as:
+
+- **Computing tree width or height**: By tracking the number of nodes at each level, we can calculate the width of the tree or find the maximum width across all levels.  
+- **Right-side view**: Capturing the rightmost node at each level to generate a side view of the tree.  
+- **Zigzag or spiral traversal**: Alternating the order of nodes at each level for specific output formats.  
+- **Shortest path in unweighted trees**: BFS naturally finds the shortest path from the root to any node due to its level-by-level exploration.
+
+Below you can find the typescript implementation of a BFS traversal that returns the values of nodes level by leve.
+The  implementation traverses the tree iteratively, using a queue to maintain nodes of the current level. 
+Each iteration processes all nodes at one level before moving to the next, preserving the BFS order.
+
+```typescript
+function bfs(root: TreeNode | null): number[][] {
+  if (!root) return [];
+
+  const result: number[][] = [];
+  const queue: TreeNode[] = [root];
+
+  while (queue.length > 0) {
+    const levelSize = queue.length;
+    const currentLevel: number[] = [];
+
+    for (let i = 0; i < levelSize; i++) {
+      const node = queue.shift()!;
+      currentLevel.push(node.val);
+
+      if (node.left) { 
+        queue.push(node.left);
+      }
+
+      if (node.right) { 
+        queue.push(node.right);
+      }   
+    }
+
+    result.push(currentLevel);
+  }
+
+  return result;
+}
+```
+
+## Depth-First Search (DFS)
+
+Depth-First Search (DFS) explores a tree **by following each branch as deep as possible before backtracking**. 
+Unlike BFS, which processes nodes level by level, DFS prioritizes depth, making it especially suitable for recursive reasoning, 
+tree reconstruction, and path-related problems. DFS can be implemented either recursively, leveraging the call stack, or iteratively 
+using an explicit stack.
+
+DFS can be divided into three common traversal strategies: **Pre-order**, **In-order**, and **Post-order**. 
+Each strategy defines a specific visiting order of the root and its subtrees.
+
+### Pre-Order Traversal
+
+In pre-order traversal, we visit the **root node first**, followed by the **left subtree**, and then the **right subtree**. 
+This order is particularly useful for tasks such as copying a tree, serializing it, or evaluating hierarchical expressions.
+
+Possible usage scenarios for pre-order traversal include:
+- Serializing and deserializing a binary tree.
+- Constructing a copy of a tree.
+- Path sum problems where root-to-leaf paths are considered.
+
+
+```typescript
+function preorderDFS(root: TreeNode | null): number[] {
+  const result: number[] = [];
+
+  function dfs(node: TreeNode | null) {
+    if (!node) {
+        return;
+    } 
+
+    result.push(node.val);
+    
+    dfs(node.left);
+    dfs(node.right);
+  }
+
+  dfs(root);
+
+  return result;
+}
+
+function preorderDFSIterative(root: TreeNode | null): number[] {
+  if (!root) { 
+    return [];
+  }
+  const stack: TreeNode[] = [root];
+  const result: number[] = [];
+
+  while (stack.length > 0) {
+    const node = stack.pop()!;
+    result.push(node.val);
+
+    if (node.right) { 
+      stack.push(node.right);
+    }
+    if (node.left) { 
+      stack.push(node.left);
+    }
+  }
+
+  return result;
+}
+```
+
+### In-Order Traversal
+
+In in-order traversal, we visit the **left subtree first**, then the **root node**, and finally the **right subtree**. 
+For binary search trees (BSTs), this traversal produces nodes in sorted order, making it ideal for BST validation and finding 
+the kth smallest element.
+
+Usage Possible usage scenarios for in-order traversal include:
+- Validating a BST.
+- Finding minimum or kth elements in a BST.
+- Implementing BST iterators.
+
+```typescript
+function inorderDFS(root: TreeNode | null): number[] {
+  const result: number[] = [];
+
+  function dfs(node: TreeNode | null) {
+    if (!node) return;
+    dfs(node.left);
+    result.push(node.val);
+    dfs(node.right);
+  }
+
+  dfs(root);
+
+  return result;
+}
+
+function inorderDFSIterative(root: TreeNode | null): number[] {
+  const result: number[] = [];
+  const stack: TreeNode[] = [];
+  let current: TreeNode | null = root;
+
+  while (current || stack.length > 0) {
+    while (current) {
+      stack.push(current);
+      current = current.left;
+    }
+    current = stack.pop()!;
+    result.push(current.val);
+    current = current.right;
+  }
+
+  return result;
+}
+```
+
+### Post-Order Traversal
+
+In post-order traversal, we visit the **left subtree first**, then the **right subtree**, and finally the **root node**. 
+This strategy is particularly effective for tree reconstruction, deletion, or flattening operations where child nodes must 
+be processed before their parent.
+
+Usage Possible usage scenarios for post-order traversal include:
+- Deleting nodes and returning a forest.
+- Calculating values that depend on child subtrees.
+- Flattening a tree into a linked list.
+
+```typescript
+function postorderDFS(root: TreeNode | null): number[] {
+  const result: number[] = [];
+
+  function dfs(node: TreeNode | null) {
+    if (!node) {
+        return;
+    }
+
+    dfs(node.left);
+    dfs(node.right);
+    
+    result.push(node.val);
+  }
+
+  dfs(root);
+
+  return result;
+}
+
+function postorderDFSIterative(root: TreeNode | null): number[] {
+  if (!root) return [];
+  const stack1: TreeNode[] = [root];
+  const stack2: TreeNode[] = [];
+  const result: number[] = [];
+
+  while (stack1.length > 0) {
+    const node = stack1.pop()!;
+    stack2.push(node);
+
+    if (node.left) { 
+        stack1.push(node.left);
+    }
+    if (node.right) {
+        stack1.push(node.right);
+    }
+  }
+
+  while (stack2.length > 0) {
+    result.push(stack2.pop()!.val);
+  }
+
+  return result;
+}
+```
+
+## Time and Space Complexity
+
+Understanding the time and space complexity of tree traversals is crucial for choosing the right traversal strategy in coding interviews and real-world applications. 
+While BFS and DFS both visit every node once, their memory requirements differ due to the underlying data structures used for traversal.
+
+| Traversal Type | Time Complexity | Space Complexity | Notes |
+|----------------|----------------|-----------------|-------|
+| BFS (Level-Order) | $O(n)$ | $O(w)$ | `w` is the maximum number of nodes at any level (maximum width). BFS uses a queue to store nodes at the current level. |
+| DFS Pre-order (Recursive) | $O(n)$ | $O(h)$ | `h` is the height of the tree. Recursive call stack stores nodes along the current path. |
+| DFS In-order (Recursive) | $O(n)$ | $O(h)$ | Same as pre-order. Iterative version uses an explicit stack of size ≤ h. |
+| DFS Post-order (Recursive) | $O(n)$ | $O(h)$ | Same reasoning as other DFS traversals. Iterative version may use two stacks. |
+
+## Exercises
+
+| Problem | Technique | Solution |
+|--------|----------|----------|
+| [Binary Tree Level Order Traversal](https://leetcode.com/problems/binary-tree-level-order-traversal/) | BFS | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/tree-traversal-level-order/binary-tree-level-order-traversal.ts) |
+| [Binary Tree Right Side View](https://leetcode.com/problems/binary-tree-right-side-view/) | BFS | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/tree-traversal-level-order/binary-tree-right-side-view.ts) |
+| [Binary Tree Zigzag Level Order Traversal](https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/) | BFS | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/tree-traversal-level-order/binary-tree-zigzag-level-order-traversal.ts) |
+| [Populating Next Right Pointers in Each Node II](https://leetcode.com/problems/populating-next-right-pointers-in-each-node-ii/) | BFS | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/tree-traversal-level-order/populating-next-right-pointers-in-each-node-II.ts) |
+| [Maximum Width of Binary Tree](https://leetcode.com/problems/maximum-width-of-binary-tree/) | BFS | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/tree-traversal-level-order/maximum-width-of-binary-tree.ts) |
+| [Binary Tree Preorder Traversal](https://leetcode.com/problems/binary-tree-preorder-traversal/) | DFS Pre-order | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/tree-traversal-pre-order/binary-tree-preorder-traversal.ts) |
+| [Same Tree](https://leetcode.com/problems/same-tree/) | DFS Pre-order | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/tree-traversal-pre-order/same-tree.ts) |
+| [Symmetric Tree](https://leetcode.com/problems/symmetric-tree/) | DFS Pre-order | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/tree-traversal-pre-order/symmetric-tree.ts) |
+| [Binary Tree Paths](https://leetcode.com/problems/binary-tree-paths/) | DFS Pre-order | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/tree-traversal-pre-order/binary-tree-paths.ts) |
+| [Convert Sorted Array to Binary Search Tree](https://leetcode.com/problems/convert-sorted-array-to-binary-search-tree/) | DFS Pre-order | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/tree-traversal-pre-order/convert-sorted-array-to-binary-search-tree.ts) |
+| [Count Complete Tree Nodes](https://leetcode.com/problems/count-complete-tree-nodes/) | DFS Pre-order | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/tree-traversal-pre-order/count-complete-tree-nodes.ts) |
+| [Path Sum III](https://leetcode.com/problems/path-sum-iii/) | DFS Pre-order | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/tree-traversal-pre-order/path-sum-III.ts) |
+| [Maximum Difference Between Node and Ancestor](https://leetcode.com/problems/maximum-difference-between-node-and-ancestor/) | DFS Pre-order | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/tree-traversal-pre-order/maximum-difference-between-node-and-ancestor.ts) |
+| [Construct Binary Tree from Preorder and Inorder Traversal](https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/) | DFS Pre-order | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/tree-traversal-pre-order/construct-binary-tree-from-preorder-and-inorder-traversal.ts) |
+| [Construct Binary Tree from Inorder and Postorder Traversal](https://leetcode.com/problems/construct-binary-tree-from-inorder-and-postorder-traversal/) | DFS Post-order | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/tree-traversal-pre-order/construct-binary-tree-from-inorder-and-postorder-traversal.ts) |
+| [Serialize and Deserialize Binary Tree](https://leetcode.com/problems/serialize-and-deserialize-binary-tree/) | DFS | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/tree-traversal-pre-order/serialize-and-deserialize-binary-tree.ts) |
+| [Binary Tree Inorder Traversal](https://leetcode.com/problems/binary-tree-inorder-traversal/) | DFS In-order | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/tree-traversal-in-order/minimum-distance-between-BTS-nodes.ts) |
+| [Minimum Absolute Difference in BST](https://leetcode.com/problems/minimum-absolute-difference-in-bst/) | DFS In-order | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/tree-traversal-in-order/minimum-absolute-difference-in-BST.ts) |
+| [Validate Binary Search Tree](https://leetcode.com/problems/validate-binary-search-tree/) | DFS In-order | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/tree-traversal-in-order/validate-binary-search-tree.ts) |
+| [Kth Smallest Element in a BST](https://leetcode.com/problems/kth-smallest-element-in-a-bst/) | DFS In-order | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/tree-traversal-in-order/kth-smallest-element-in-a-bts.ts) |
+| [Binary Search Tree Iterator](https://leetcode.com/problems/binary-search-tree-iterator/) | DFS In-order | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/tree-traversal-in-order/binary-search-tree-iterator.ts) |
+| [Binary Tree Postorder Traversal](https://leetcode.com/problems/binary-tree-postorder-traversal/) | DFS Post-order | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/tree-traversal-post-order/binary-tree-postorder-traversal.ts) |
+| [Invert Binary Tree](https://leetcode.com/problems/invert-binary-tree/) | DFS Post-order | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/tree-traversal-post-order/invert-binary-tree.ts) |
+| [Diameter of Binary Tree](https://leetcode.com/problems/diameter-of-binary-tree/) | DFS Post-order | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/tree-traversal-post-order/diameter-of-binary-tree.ts) |
+| [Delete Nodes And Return Forest](https://leetcode.com/problems/delete-nodes-and-return-forest/) | DFS Post-order | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/tree-traversal-post-order/delete-nodes-and-return-forest.ts) |
+| [Lowest Common Ancestor of a Binary Tree](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/) | DFS Post-order | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/tree-traversal-post-order/lowest-common-ancestor-of-a-binary-tree.ts) |
+| [Find Duplicate Subtrees](https://leetcode.com/problems/find-duplicate-subtrees/) | DFS Post-order | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/tree-traversal-post-order/find-duplicate-subtrees.ts) |
+| [Flatten Binary Tree to Linked List](https://leetcode.com/problems/flatten-binary-tree-to-linked-list/) | DFS Post-order | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/tree-traversal-post-order/flatten-binary-tree-to-linked-list.ts) |
+| [Distribute Coins in Binary Tree](https://leetcode.com/problems/distribute-coins-in-binary-tree/) | DFS Post-order | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/tree-traversal-post-order/distribute-coins-in-binary-tree.ts) |
+| [Binary Tree Maximum Path Sum](https://leetcode.com/problems/binary-tree-maximum-path-sum/) | DFS Post-order | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/tree-traversal-post-order/binary-tree-maximum-path-sum.ts) |
+| [Construct Binary Tree from Inorder and Postorder Traversal](https://leetcode.com/problems/construct-binary-tree-from-inorder-and-postorder-traversal/) | DFS Post-order | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/tree-traversal-post-order/construct-binary-tree-from-inorder-and-postorder-traversal.ts) |
+| [Serialize and Deserialize Binary Tree](https://leetcode.com/problems/serialize-and-deserialize-binary-tree/) | DFS | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/tree-traversal-post-order/serialize-and-deserialize-binary-tree.ts) |
