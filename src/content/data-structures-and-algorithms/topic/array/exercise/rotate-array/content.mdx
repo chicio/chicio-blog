@@ -1,0 +1,46 @@
+---
+title: "Rotate Array"
+description: "Given an array, rotate it to the right by k steps, where k is non-negative, using an in-place reversal technique."
+date: 2025-09-26
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [arrays, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Array Rotation"
+  leetcodeUrl: "https://leetcode.com/problems/rotate-array/"
+---
+# Rotate Array
+
+Leetcode Problem 189: [Rotate Array](https://leetcode.com/problems/rotate-array/description/)
+
+## Problem Summary
+Given an array, rotate the array to the right by `k` steps, where `k` is non-negative.
+
+## Techniques
+- Reverse the entire array
+- Reverse the first `k` elements
+- Reverse the remaining elements
+
+## Solution
+```ts
+function rotate(nums: number[], k: number): void {
+    const kModulo = k % nums.length
+
+    for(let i = 0, j = nums.length - 1; i < j; i++, j--) {
+        [nums[i], nums[j]] = [nums[j], nums[i]]
+    }
+
+    for(let i = 0, j = kModulo - 1; i < j; i++, j--) {
+        [nums[i], nums[j]] = [nums[j], nums[i]]
+    }
+
+    for(let i = kModulo, j = nums.length - 1; i < j; i++, j--) {
+        [nums[i], nums[j]] = [nums[j], nums[i]]
+    }
+}
+
+const example = [1,2,3,4,5,6,7]
+rotate(example, 3)
+
+console.log(example)
+```

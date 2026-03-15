@@ -1,0 +1,46 @@
+---
+title: "First Missing Positive"
+description: "Given an unsorted integer array nums, return the smallest missing positive integer. The algorithm must run in O(n) time and use constant extra space."
+date: 2025-09-26
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [arrays, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Index Mapping / In-Place Hashing"
+  leetcodeUrl: "https://leetcode.com/problems/first-missing-positive/"
+---
+# First Missing Positive
+
+Leetcode Problem 41: [First Missing Positive](https://leetcode.com/problems/first-missing-positive/description/)
+
+## Problem Summary
+Given an unsorted integer array `nums`, return the smallest missing positive integer. You must implement an algorithm that runs in `O(n)` time and uses constant extra space.
+
+## Techniques
+- Cycle sort algorithm
+- In-place rearrangement of elements
+
+## Solution
+```ts
+function firstMissingPositive(nums: number[]): number {
+    /// https://en.wikipedia.org/wiki/Cycle_sort
+    for (let i = 0; i < nums.length; i++) {
+        while (nums[i] > 0 && nums[i] <= nums.length && nums[i] !== nums[nums[i] - 1]) {
+            let temp = nums[nums[i] - 1];
+            nums[nums[i] - 1] = nums[i];
+            nums[i] = temp;
+        }
+    }
+
+    for (let i = 0; i < nums.length; i++) {
+        if (nums[i] !== i + 1) {
+            return i + 1
+        }
+    }
+
+    return nums.length + 1
+};
+
+console.log(firstMissingPositive([7,8,9,11,12]))
+console.log(firstMissingPositive([3,4,-1,1]))
+```

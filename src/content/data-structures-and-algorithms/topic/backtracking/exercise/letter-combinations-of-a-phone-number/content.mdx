@@ -1,0 +1,64 @@
+---
+title: "Letter Combinations of a Phone Number"
+description: "Given a string containing digits from 2-9 inclusive, return all possible letter combinations that the number could represent. Return the answer in any order."
+date: 2026-03-15
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [backtracking, recursion, combinatorics, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Backtracking"
+  leetcodeUrl: "https://leetcode.com/problems/letter-combinations-of-a-phone-number/"
+---
+# Letter Combinations of a Phone Number
+
+Leetcode Problem 17: [Letter Combinations of a Phone Number](https://leetcode.com/problems/letter-combinations-of-a-phone-number/description/)
+
+## Problem Summary
+Given a string of digits (2 to 9), return all possible letter combinations those digits could represent on a classic phone keypad. Each digit maps to two or three letters, and the result should include every possible way to pick one letter per digit.
+
+## Techniques
+- Hash Table
+- String
+- Backtracking
+
+## Solution
+```ts
+const numbersToLetters: Record<number, string[]> = {
+    2: ["a", "b", "c"],
+    3: ["d", "e", "f"],
+    4: ["g", "h", "i"],
+    5: ["j", "k", "l"],
+    6: ["m", "n", "o"],
+    7: ["p", "q", "r", "s"],
+    8: ["t", "u", "v"],
+    9: ["w", "x", "y", "z"],
+}
+
+function backtrackLetterCombinations(results: string[], digits: string[]): string[] {
+    if (digits.length === 0) {
+        return results
+    }
+
+    let currentDigit = parseInt(digits.pop()!)
+    let currentChars = numbersToLetters[currentDigit]!
+    let newResults = []
+
+    for (const char of currentChars) {
+        for (const result of results) {
+            newResults.push(`${char}${result}`)
+        }
+    }
+
+    return backtrackLetterCombinations(newResults, digits)
+}
+
+function letterCombinations(digits: string): string[] {
+    if (digits.length === 0) {
+        return []
+    }
+
+    return backtrackLetterCombinations([''], digits.split(""))
+}
+
+console.log(letterCombinations("23")) // ["ad","ae","af","bd","be","bf","cd","ce","cf"]
+```

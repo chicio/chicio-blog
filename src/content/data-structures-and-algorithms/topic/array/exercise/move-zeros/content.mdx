@@ -1,0 +1,43 @@
+---
+title: "Move Zeroes"
+description: "Given an integer array nums, move all 0s to the end of it while maintaining the relative order of the non-zero elements, in-place."
+date: 2025-09-26
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [arrays, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Two Pointers"
+  leetcodeUrl: "https://leetcode.com/problems/move-zeroes/"
+---
+# Move Zeroes
+
+Leetcode Problem 283: [Move Zeroes](https://leetcode.com/problems/move-zeroes/description/)
+
+## Problem Summary
+Given an integer array `nums`, move all `0`'s to the end of it while maintaining the relative order of the non-zero elements.
+
+## Techniques
+- In-place rearrangement
+- Two-pointer technique
+
+## Solution
+```ts
+function moveZeroes(nums: number[]): void {
+    let firstZero = 0
+    let tempElement = Infinity
+
+    for (let current = 0; current < nums.length; current++) {
+        tempElement = nums[current]
+        nums[current] = 0
+
+        if (tempElement !== 0) {
+            nums[firstZero] = tempElement
+            firstZero++
+        }
+    }
+}
+
+let nums = [0,1,0,3,12];
+moveZeroes(nums)
+console.log(nums)
+```

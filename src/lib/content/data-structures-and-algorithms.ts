@@ -1,6 +1,12 @@
 import { Content } from "@/types/content/content";
 import { getAllContentFor, getSingleContentBy } from "./content";
 import { slugs } from "@/types/configuration/slug";
+import { ExerciseMetadata } from "@/types/content/data-structures-and-algorithms";
+
+const exerciseMetadataAdapter = (raw: unknown): ExerciseMetadata => {
+  const { technique, leetcodeUrl } = raw as Record<string, string>;
+  return { technique, leetcodeUrl };
+};
 
 export const getAllDataStructuresAndAlgorithmsTopics = (): Content[] =>
   getAllContentFor(slugs.dataStructuresAndAlgorithms.topic).sort(
@@ -35,3 +41,19 @@ export const getDataStructuresAndAlgorithmsTopicWithNavigation =
 
 export const getDataStructuresAndAlgorithmsRoadmap = (): Content =>
     getSingleContentBy(slugs.dataStructuresAndAlgorithms.roadmap)!;
+
+export const getExercisesContent = (): Content =>
+    getSingleContentBy(slugs.dataStructuresAndAlgorithms.exercises)!;
+
+export const getAllExercises = (): Content<ExerciseMetadata>[] =>
+  getAllContentFor<ExerciseMetadata>(slugs.dataStructuresAndAlgorithms.exercise, exerciseMetadataAdapter).sort(
+    (a, b) =>
+      new Date(a.frontmatter.date.formatted).getTime() -
+      new Date(b.frontmatter.date.formatted).getTime(),
+  );
+
+export const getExercise = (params: Record<string, string>): Content<ExerciseMetadata> | undefined =>
+  getSingleContentBy<ExerciseMetadata>(slugs.dataStructuresAndAlgorithms.exercise, params, exerciseMetadataAdapter);
+
+export const getAllExercisesForTopic = (topic: string): Content<ExerciseMetadata>[] =>
+  getAllExercises().filter((e) => e.slug.params.topic === topic);;

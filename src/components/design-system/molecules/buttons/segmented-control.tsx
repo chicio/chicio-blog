@@ -1,8 +1,5 @@
 "use client";
 
-// Author: Fabrizio Duroni
-
-import { FC } from "react";
 import { GlassmorphismBackground } from "@/components/design-system/atoms/effects/glassmorphism-background";
 
 export type SegmentOption<T extends string> = {

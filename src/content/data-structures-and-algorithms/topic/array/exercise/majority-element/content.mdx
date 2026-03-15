@@ -1,0 +1,54 @@
+---
+title: "Majority Element"
+description: "Given an array nums of size n, return the majority element — the element that appears more than ⌊n / 2⌋ times. The majority element always exists in the array."
+date: 2025-09-26
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [arrays, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Hashing / Boyer-Moore Voting"
+  leetcodeUrl: "https://leetcode.com/problems/majority-element/"
+---
+# Majority Element
+
+Leetcode Problem 169: [Majority Element](https://leetcode.com/problems/majority-element/description/)
+
+## Problem Summary
+Given an array `nums` of size `n`, return the majority element. The majority element is the element that appears more than `⌊n / 2⌋` times. You may assume that the majority element always exists in the array.
+
+## Techniques
+- Boyer-Moore Voting Algorithm
+- Linear time complexity
+- Constant space complexity
+
+## Solution
+```ts
+function majorityElement(nums: number[]): number {
+    let candidate = 0;
+    let count = 0;
+
+    for (const num of nums) {
+        if (count === 0) {
+            candidate = num;
+        }
+        count += (num === candidate) ? 1 : -1;
+    }
+
+    count = 0;
+
+    for (const num of nums) {
+        if (num === candidate) {
+            count++;
+        }
+    }
+
+    if (count > nums.length / 2) {
+        return candidate;
+    } else {
+        return -1
+    }
+}
+
+const test = [2, 2, 1, 1, 1, 2, 2];
+console.log(majorityElement(test))
+```

@@ -1,0 +1,42 @@
+---
+title: "Best Time to Buy and Sell Stock"
+description: "Given an array of stock prices where prices[i] is the price on the i-th day, find the maximum profit by choosing a single day to buy and a different future day to sell."
+date: 2025-09-26
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [arrays, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Sliding Window"
+  leetcodeUrl: "https://leetcode.com/problems/best-time-to-buy-and-sell-stock/"
+---
+# Best Time to Buy and Sell Stock
+
+Leetcode Problem 121: [Best Time to Buy and Sell Stock](https://leetcode.com/problems/best-time-to-buy-and-sell-stock/description/)
+
+## Problem Summary
+You are given an array `prices` where `prices[i]` is the price of a given stock on the `i-th` day. You want to maximize your profit by choosing a single day to buy one stock and choosing a different day in the future to sell that stock. Return the maximum profit you can achieve from this transaction. If you cannot achieve any profit, return `0`.
+
+## Techniques
+- Single pass through the array
+- Track the minimum price seen so far
+- Calculate the maximum profit achievable
+
+## Solution
+```ts
+function maxProfit(prices: number[]): number {
+    let minPrice = Infinity
+    let maxProfit = 0
+
+    for(let i = 0; i < prices.length; i++) {
+        if (prices[i] < minPrice) {
+            minPrice = prices[i]
+        } else {
+            maxProfit = Math.max(maxProfit, prices[i] - minPrice)
+        }
+    }
+
+    return maxProfit
+}
+
+console.log(maxProfit([7,1,5,3,6,4]))
+```
