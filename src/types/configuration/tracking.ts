@@ -42,6 +42,8 @@ export const tracking = {
     open_down_arrow: "open_down_arrow",
     open_dsa_time_and_space_complexity: "open_dsa_time_and_space_complexity",
     open_dsa_roadmap: "open_dsa_roadmap",
+    open_dsa_topic: "open_dsa_topic",
+    open_dsa_exercises: "open_dsa_exercises",
     open_videogame_game: "open_videogame_game",
     open_videogame_console: "open_videogame_console",
     open_videogame_games: "open_videogame_games",

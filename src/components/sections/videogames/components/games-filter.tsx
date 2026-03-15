@@ -1,4 +1,3 @@
-// Author: Fabrizio Duroni
 "use client";
 
 import { ChangeEvent, FC } from "react";

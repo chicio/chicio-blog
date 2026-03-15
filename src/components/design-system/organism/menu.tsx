@@ -67,20 +67,34 @@ const renderMenuItems = (
       >
         Blog
       </MenuItemWithTracking>
-      <MenuItemWithTracking
-        key={`dsa-${isMobile ? "mobile" : "desktop"}`}
-        className={baseClassName}
-        to={slugs.dataStructuresAndAlgorithms.roadmap}
-        selected={pathname.includes(slugs.dataStructuresAndAlgorithms.home)}
-        trackingData={{
-          action: tracking.action.open_dsa_roadmap,
-          category: trackingCategory,
-          label: tracking.label.header,
-        }}
-        onClickCallback={() => setShouldOpenMenu(false)}
-      >
-        DSA
-      </MenuItemWithTracking>
+      <DropdownMenu
+        label="DSA"
+        className={dropdownClassName}
+        items={[
+          {
+            label: "Roadmap",
+            to: slugs.dataStructuresAndAlgorithms.roadmap,
+            trackingData: {
+              action: tracking.action.open_dsa_roadmap,
+              category: trackingCategory,
+              label: tracking.label.header,
+            },
+            selected: pathname === slugs.dataStructuresAndAlgorithms.roadmap,
+            onClickCallback: () => setShouldOpenMenu(false),
+          },
+          {
+            label: "Exercises",
+            to: slugs.dataStructuresAndAlgorithms.exercises,
+            trackingData: {
+              action: tracking.action.open_dsa_exercises,
+              category: trackingCategory,
+              label: tracking.label.header,
+            },
+            selected: pathname === slugs.dataStructuresAndAlgorithms.exercises,
+            onClickCallback: () => setShouldOpenMenu(false),
+          },
+        ]}
+      />
       <DropdownMenu
         label="The Author"
         className={dropdownClassName}

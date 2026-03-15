@@ -1,0 +1,43 @@
+---
+title: "Increasing Triplet Subsequence"
+description: "Given an integer array nums, return true if there exists a triple of indices (i, j, k) such that i < j < k and nums[i] < nums[j] < nums[k]."
+date: 2025-09-26
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [arrays, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Greedy"
+  leetcodeUrl: "https://leetcode.com/problems/increasing-triplet-subsequence/"
+---
+# Increasing Triplet Subsequence
+
+Leetcode Problem 334: [Increasing Triplet Subsequence](https://leetcode.com/problems/increasing-triplet-subsequence/description/)
+
+## Problem Summary
+Given an integer array `nums`, return `true` if there exists a triple of indices `(i, j, k)` such that `i < j < k` and `nums[i] < nums[j] < nums[k]`. If no such indices exist, return `false`.
+
+## Techniques
+- Track the smallest and second smallest elements
+- Check for a third element greater than both
+
+## Solution
+```ts
+function increasingTriplet(nums: number[]): boolean {
+    let currentI = Infinity
+    let currentJ = Infinity
+
+    for (let current = 0; current < nums.length; current++) {
+        if (nums[current] <= currentI) {
+            currentI = nums[current]
+        } else if (nums[current] <= currentJ) {
+            currentJ = nums[current]
+        } else {
+            return true
+        }
+    }
+
+    return false
+};
+
+console.log([2,1,5,0,4,6])
+```

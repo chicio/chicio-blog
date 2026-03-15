@@ -12,6 +12,9 @@ export type NextPostParameters = NextParameters<PostParameters>
 export type DataStructuresAndAlgorithmsParameters = { topic: string };
 export type NextDataStructuresAndAlgorithmsParameters = NextParameters<DataStructuresAndAlgorithmsParameters>
 
+export type DataStructuresAndAlgorithmsExerciseParameters = { topic: string; exercise: string };
+export type NextDataStructuresAndAlgorithmsExerciseParameters = NextParameters<DataStructuresAndAlgorithmsExerciseParameters>
+
 export type VideogamesConsoleParameters = { console: string };
 export type NextVideogamesConsoleParameters = NextParameters<VideogamesConsoleParameters>
 

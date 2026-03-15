@@ -1,0 +1,49 @@
+---
+title: "Permutations"
+description: "Given an array `nums` of distinct integers, return all the possible permutations. You can return the answer in **any order**."
+date: 2026-03-15
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [backtracking, recursion, combinatorics, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Backtracking"
+  leetcodeUrl: "https://leetcode.com/problems/permutations/"
+---
+# Permutations
+
+Leetcode Problem 46: [Permutations](https://leetcode.com/problems/permutations/description/)
+
+## Problem Summary
+Given an array of distinct integers, return every possible ordering (permutation) of those numbers. The result can be returned in any order and must include all n factorial arrangements.
+
+## Techniques
+- Array
+- Backtracking
+
+## Solution
+```ts
+function backtrackingPermutation(
+    results: number[][],
+    elements: number[],
+    start: number
+) {
+    if (start === elements.length) {
+        results.push([...elements]);
+        return;
+    }
+
+    for (let i = start; i < elements.length; i++) {
+        [elements[start], elements[i]] = [elements[i], elements[start]]
+        backtrackingPermutation(results, elements, start + 1);
+        [elements[start], elements[i]] = [elements[i], elements[start]]
+    }
+}
+
+function permute(nums: number[]): number[][] {
+    const results: number[][] = [];
+    backtrackingPermutation(results, nums, 0);
+    return results;
+}
+
+console.log(permute([1, 2, 3]));
+```

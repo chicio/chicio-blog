@@ -29,16 +29,20 @@ const extractParametersValueFrom = (
 
 const getAllFoldersContainedIn = (directory: string) => {
   const directories: string[] = [];
-  const entries = fs.readdirSync(path.join(contentRootDirectory, directory), {
-    withFileTypes: true,
-  });
+  const fullPath = path.join(contentRootDirectory, directory);
+
+  if (!fs.existsSync(fullPath)) {
+    return directories;
+  }
+
+  const entries = fs.readdirSync(fullPath, { withFileTypes: true });
 
   for (const entry of entries) {
     if (entry.isDirectory()) {
       directories.push(path.join(directory, entry.name));
     }
   }
-  
+
   return directories;
 };
 

@@ -1,0 +1,38 @@
+---
+title: "Best Time to Buy and Sell Stock II"
+description: "Given an array of stock prices, you can buy and sell the stock multiple times — find the maximum total profit you can achieve."
+date: 2025-09-26
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [arrays, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Greedy / Sliding Window"
+  leetcodeUrl: "https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/"
+---
+# Best Time to Buy and Sell Stock II
+
+Leetcode Problem 122: [Best Time to Buy and Sell Stock II](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/description/)
+
+## Problem Summary
+You are given an array `prices` where `prices[i]` is the price of a given stock on the `i-th` day. You can buy and sell the stock multiple times, but you must sell the stock before you buy again. Return the maximum profit you can achieve from these transactions.
+
+## Techniques
+- Greedy approach
+- Sum all increasing price differences
+
+## Solution
+```ts
+function maxProfit2(prices: number[]): number {
+    let maxProfit = 0
+
+    for (let i = 1; i < prices.length; i++) {
+        if (prices[i] > prices[i - 1]) {
+            maxProfit += prices[i] - prices[i - 1]
+        }
+    }
+
+    return maxProfit
+}
+
+console.log(maxProfit2([7,1,5,3,6,4]))
+```

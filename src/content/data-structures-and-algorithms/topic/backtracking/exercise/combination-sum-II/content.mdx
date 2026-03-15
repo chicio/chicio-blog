@@ -1,0 +1,59 @@
+---
+title: "Combination Sum II"
+description: "Given a collection of candidate numbers (`candidates`) and a target number (`target`), find all unique combinations in `candidates` where the candidate numbers sum to `target`."
+date: 2026-03-15
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [backtracking, recursion, combinatorics, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Backtracking"
+  leetcodeUrl: "https://leetcode.com/problems/combination-sum-ii/"
+---
+# Combination Sum II
+
+Leetcode Problem 40: [Combination Sum II](https://leetcode.com/problems/combination-sum-ii/description/)
+
+## Problem Summary
+Given a collection of integers that may contain duplicates and a target value, find all unique combinations that sum to the target. Each number in the input may only be used once. The result must not contain duplicate combinations, even though the input may have repeated values.
+
+## Techniques
+- Array
+- Backtracking
+
+## Solution
+```ts
+function backtrackCombinationSum2(
+    results: number[][],
+    candidates: number[],
+    target: number,
+    currentCandidate: number,
+    combination: number[]
+) {
+    if (target < 0) {
+        return
+    }
+
+    if (target === 0) {
+        results.push([...combination])
+        return
+    }
+
+    for (let i = currentCandidate; i < candidates.length; i++) {
+        if (i > currentCandidate && candidates[i] === candidates[i - 1]) {
+            continue;
+        }
+
+        combination.push(candidates[i])
+        backtrackCombinationSum2(results, candidates, target - candidates[i], i + 1, combination)
+        combination.pop()
+    }
+}
+
+function combinationSum2(candidates: number[], target: number): number[][] {
+    const results: number[][] = []
+    backtrackCombinationSum2(results, candidates.sort((a, b) => a - b), target, 0, [])
+    return results
+}
+
+console.log(combinationSum2([10,1,2,7,6,1,5], 8)) // [[1,1,6],[1,2,5],[1,7],[2,6]]
+```

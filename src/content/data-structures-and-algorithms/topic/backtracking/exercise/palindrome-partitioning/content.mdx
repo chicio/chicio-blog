@@ -1,0 +1,74 @@
+---
+title: "Palindrome Partitioning"
+description: "Given a string `s`, partition `s` such that every substring of the partition is a **palindrome**. Return *all possible palindrome partitioning of *`s`."
+date: 2026-03-15
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [backtracking, recursion, combinatorics, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Backtracking"
+  leetcodeUrl: "https://leetcode.com/problems/palindrome-partitioning/"
+---
+# Palindrome Partitioning
+
+Leetcode Problem 131: [Palindrome Partitioning](https://leetcode.com/problems/palindrome-partitioning/description/)
+
+## Problem Summary
+Given a string, split it into one or more substrings such that every part is a palindrome. Return all possible ways to partition the string that satisfy this condition.
+
+## Techniques
+- String
+- Dynamic Programming
+- Backtracking
+
+## Solution
+```ts
+const palindromeMemoization = new Set<string>();
+
+function isPalindromeString(s: string): boolean {
+    if (palindromeMemoization.has(s)) {
+        return true
+    }
+
+    let left = 0
+    let right = s.length - 1;
+
+    while (left < right) {
+        if (s[left++] !== s[right--]) {
+            return false;
+        }
+    }
+
+    palindromeMemoization.add(s)
+
+    return true;
+}
+
+function backtrackPartition(
+    results: string[][],
+    currentPalindromes: string[],
+    s: string,
+    start: number
+) {
+    if (s.length <= start) {
+        return results.push([...currentPalindromes])
+    }
+
+    for (let i = start; i < s.length; i++) {
+        let substring = s.substring(start, i + 1)
+        if (isPalindromeString(substring)) {
+            currentPalindromes.push(substring)
+            backtrackPartition(results, currentPalindromes, s, i + 1)
+            currentPalindromes.pop()
+        }
+    }
+}
+
+function partition(s: string): string[][] {
+    let results: string[][] = []
+    backtrackPartition(results, [], s, 0)
+    return results
+}
+
+console.log(partition("aab")) // [["a","a","b"],["aa","b"]]
+```

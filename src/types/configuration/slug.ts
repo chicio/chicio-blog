@@ -20,6 +20,8 @@ export const slugs = {
     home: dsa,
     roadmap: `${dsa}/roadmap`,
     topic: `${dsa}/topic/[topic]`,
+    exercise: `${dsa}/topic/[topic]/exercise/[exercise]`,
+    exercises: `${dsa}/exercises`,
   },
   videogames: {
     home: videogames,

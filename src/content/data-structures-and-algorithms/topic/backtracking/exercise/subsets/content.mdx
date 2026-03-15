@@ -1,0 +1,43 @@
+---
+title: "Subsets"
+description: "Given an integer array `nums` of **unique** elements, return *all possible* *subsets* *(the power set)*."
+date: 2026-03-15
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [backtracking, recursion, combinatorics, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Backtracking"
+  leetcodeUrl: "https://leetcode.com/problems/subsets/"
+---
+# Subsets
+
+Leetcode Problem 78: [Subsets](https://leetcode.com/problems/subsets/description/)
+
+## Problem Summary
+Given an array of unique integers, return all possible subsets of that array, including the empty set and the full array itself. The result must contain no duplicate subsets and can be returned in any order.
+
+## Techniques
+- Array
+- Backtracking
+- Bit Manipulation
+
+## Solution
+```ts
+function backtrackSubsets(results: number[][], nums: number[], current: number[], start: number) {
+    results.push([...current])
+
+    for (let i = start; i < nums.length; i++) {
+        current.push(nums[i])
+        backtrackSubsets(results, nums, current, i + 1)
+        current.pop()
+    }
+}
+
+function subsets(nums: number[]): number[][] {
+    const results: number[][] = []
+    backtrackSubsets(results, nums, [], 0)
+    return results
+}
+
+console.log(subsets([1, 2, 3])) // [[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]
+```

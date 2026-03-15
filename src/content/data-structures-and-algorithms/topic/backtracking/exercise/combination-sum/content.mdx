@@ -1,0 +1,55 @@
+---
+title: "Combination Sum"
+description: "Given an array of **distinct** integers `candidates` and a target integer `target`, return *a list of all **unique combinations** of *`candidates`* where the chosen numbers sum to *`target`*.* You ..."
+date: 2026-03-15
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [backtracking, recursion, combinatorics, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Backtracking"
+  leetcodeUrl: "https://leetcode.com/problems/combination-sum/"
+---
+# Combination Sum
+
+Leetcode Problem 39: [Combination Sum](https://leetcode.com/problems/combination-sum/description/)
+
+## Problem Summary
+Given a list of distinct positive integers and a target value, find all unique combinations of numbers from the list that sum exactly to the target. Each number can be reused as many times as needed. The order of numbers within a combination does not matter, but no two combinations in the result may contain the same multiset of numbers.
+
+## Techniques
+- Array
+- Backtracking
+
+## Solution
+```ts
+function backtrackCombinationSum(
+    candidates: number[],
+    results: number[][],
+    target: number,
+    start: number,
+    combination: number[]
+) {
+    if (results.length >= 150 || target < 0) {
+        return
+    }
+
+    if (target === 0) {
+        results.push([...combination])
+        return
+    }
+
+    for (let i = start; i < candidates.length; i++) {
+        combination.push(candidates[i])
+        backtrackCombinationSum(candidates, results, target - candidates[i], i, combination)
+        combination.pop()
+    }
+}
+
+function combinationSum(candidates: number[], target: number): number[][] {
+    let results: number[][] = []
+    backtrackCombinationSum(candidates, results, target, 0, [])
+    return results
+}
+
+console.log(combinationSum([2,3,6,7], 7)) // [[2,2,3],[7]]
+```

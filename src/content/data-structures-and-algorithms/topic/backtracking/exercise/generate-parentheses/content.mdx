@@ -1,0 +1,48 @@
+---
+title: "Generate Parentheses"
+description: "Given `n` pairs of parentheses, write a function to *generate all combinations of well-formed parentheses*."
+date: 2026-03-15
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [backtracking, recursion, combinatorics, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Backtracking"
+  leetcodeUrl: "https://leetcode.com/problems/generate-parentheses/"
+---
+# Generate Parentheses
+
+Leetcode Problem 22: [Generate Parentheses](https://leetcode.com/problems/generate-parentheses/description/)
+
+## Problem Summary
+Given a number `n`, generate all possible strings made of exactly `n` opening and `n` closing parentheses such that every string is well-formed, meaning every opening bracket has a matching closing bracket in the correct order.
+
+## Techniques
+- String
+- Dynamic Programming
+- Backtracking
+
+## Solution
+```ts
+function backtrackingParenthesis(result: string[], open: number, closed: number, n: number, current: string) {
+    if (current.length === n * 2) {
+        result.push(current)
+        return
+    }
+
+    if (open < n) {
+        backtrackingParenthesis(result, open + 1, closed, n, current + '(')
+    }
+
+    if (closed < open) {
+        backtrackingParenthesis(result, open, closed + 1, n, current + ')')
+    }
+}
+
+function generateParenthesis(n: number): string[] {
+    const result: string[] = []
+    backtrackingParenthesis(result, 0, 0, n, '')
+    return result
+}
+
+console.log(generateParenthesis(3)) // ["((()))","(()())","(())()","()(())","()()()"]
+```

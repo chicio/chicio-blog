@@ -1,0 +1,38 @@
+---
+title: "Remove Duplicates from Sorted Array"
+description: "Given a sorted array nums, remove duplicates in-place so each unique element appears only once and return the count of unique elements."
+date: 2025-09-26
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [arrays, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Two Pointers"
+  leetcodeUrl: "https://leetcode.com/problems/remove-duplicates-from-sorted-array/"
+---
+# Remove Duplicates from Sorted Array
+
+Leetcode Problem 26: [Remove Duplicates from Sorted Array](https://leetcode.com/problems/remove-duplicates-from-sorted-array/description/)
+
+## Problem Summary
+Given an integer array `nums` sorted in non-decreasing order, remove the duplicates in-place such that each unique element appears only once. The relative order of the elements should be kept the same. Return `k` after placing the final result in the first `k` slots of `nums`.
+
+## Techniques
+- Two-pointer technique
+- In-place modification
+
+## Solution
+```ts
+function removeDuplicates(nums: number[]): number {
+    let leftLimit = 0
+
+    for (let current = 1; current < nums.length; current++) {
+        if (nums[leftLimit] !== nums[current]) {
+            nums[++leftLimit] = nums[current]
+        }
+    }
+
+    return leftLimit + 1
+};
+
+console.log(removeDuplicates([0,0,1,1,1,2,2,3,3,4]))
+```

@@ -1,26 +1,24 @@
 "use client";
 
-// Author: Fabrizio Duroni
-
 import { FC } from "react";
 import { GlassmorphismBackground } from "@/components/design-system/atoms/effects/glassmorphism-background";
 
-export type SegmentOption<T extends string> = {
+export type SegmentOption = {
     label: string;
-    value: T;
+    value: string;
 };
 
-type SegmentedControlProps<T extends string> = {
-    options: SegmentOption<T>[];
-    value: T;
-    onChange: (value: T) => void;
+type SegmentedControlProps = {
+    options: SegmentOption[];
+    value: string;
+    onChange: (value: string) => void;
 };
 
-export const SegmentedControl = <T extends string>({
+export const SegmentedControl: FC<SegmentedControlProps> = ({
     options,
     value,
     onChange,
-}: SegmentedControlProps<T>) => (
+}: SegmentedControlProps) => (
     <GlassmorphismBackground className="rounded-full p-1! gap-1">
         {options.map((option) => {
             const isActive = option.value === value;

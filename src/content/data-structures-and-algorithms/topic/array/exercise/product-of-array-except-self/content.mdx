@@ -1,0 +1,44 @@
+---
+title: "Product of Array Except Self"
+description: "Given an integer array nums, return an array where each element is the product of all other elements, without using division, in O(n) time."
+date: 2025-09-26
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [arrays, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Prefix Product"
+  leetcodeUrl: "https://leetcode.com/problems/product-of-array-except-self/"
+---
+# Product of Array Except Self
+
+Leetcode Problem 238: [Product of Array Except Self](https://leetcode.com/problems/product-of-array-except-self/description/)
+
+## Problem Summary
+Given an integer array `nums`, return an array `answer` such that `answer[i]` is equal to the product of all the elements of `nums` except `nums[i]`. You must write an algorithm that runs in `O(n)` time and without using the division operation.
+
+## Techniques
+- Prefix and suffix products
+- Two-pass approach
+
+## Solution
+```ts
+function productExceptSelf(nums: number[]): number[] {
+    let result = []
+    let prefix = 1
+    let suffix = 1
+
+    for (let i = 0; i < nums.length; i++) {
+        result[i] = prefix
+        prefix = nums[i] * prefix
+    }
+
+    for (let i = nums.length - 1; i >= 0; i--) {
+        result[i] = result[i] * suffix
+        suffix = nums[i] * suffix
+    }
+
+    return result
+}
+
+console.log(productExceptSelf([1,2,3,4]))
+```
