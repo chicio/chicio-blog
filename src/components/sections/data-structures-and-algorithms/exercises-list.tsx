@@ -21,11 +21,14 @@ export const Exercises: FC = () => {
 
   return (
     <>
-      {Object.entries(exercisesByTopic).map(([topicKey, topicExercises]) => {
-        const topic = topics.find((t) => t.slug.params.topic === topicKey);
+      {topics
+        .filter((topic) => exercisesByTopic[topic.slug.params.topic])
+        .map((topic) => {
+        const topicKey = topic.slug.params.topic;
+        const topicExercises = exercisesByTopic[topicKey];
         return (
           <div key={topicKey}>
-            <h2>{topic?.frontmatter.title ?? topicKey}</h2>
+            <h2>{topic.frontmatter.title}</h2>
             <div className="table-wrapper">
               <table>
                 <thead>
