@@ -1,0 +1,52 @@
+---
+title: "Longest Common Prefix"
+description: "Write a function to find the longest common prefix string amongst an array of strings."
+date: 2026-03-15
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [strings, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Character Comparison / Prefix Scan"
+  leetcodeUrl: "https://leetcode.com/problems/longest-common-prefix/"
+---
+# Longest Common Prefix
+
+[Longest Common Prefix](https://leetcode.com/problems/longest-common-prefix/description/)
+
+## Problem Summary
+Given an array of strings `strs`, find and return the **longest common prefix** — the longest string that appears as a leading substring in every string of the array.
+
+If the strings share no common starting characters, return an empty string `""`.
+
+
+- The array contains between **1 and 200 strings**.
+- Each string has a length between **0 and 200 characters** (strings can be empty).
+- Non-empty strings consist only of lowercase English letters.
+
+## Techniques
+- Array
+- String
+- Trie
+
+## Solution
+```ts
+function longestCommonPrefix(strs: string[]): string {
+    strs.sort()
+
+    const first = strs[0] ?? ""
+    const last = strs[strs.length - 1] ?? ""
+    const minStringLength = Math.min(first.length, last.length)
+    let i = 0
+    let common = ""
+
+    while (first.charAt(i) === last.charAt(i) && i < minStringLength) {
+        common = common + first.charAt(i)
+        i++
+    }
+
+    return common
+}
+
+console.log(longestCommonPrefix(["flower","flow","flight"]))
+console.log(longestCommonPrefix(["dog","racecar","car"]))
+```

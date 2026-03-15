@@ -1,0 +1,108 @@
+---
+title: "Guess the Word"
+description: "You are given an array of unique strings `words` where `words[i]` is six letters long. One word of `words` was chosen as a secret word."
+date: 2026-03-15
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [strings, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Minimax / Constraint Filtering"
+  leetcodeUrl: "https://leetcode.com/problems/guess-the-word/"
+---
+# Guess the Word
+
+Leetcode Problem 843: [Guess the Word](https://leetcode.com/problems/guess-the-word/)
+
+## Problem Summary
+You are given an array of unique 6-letter strings `words`, one of which is a hidden **secret word**. Your goal is to identify the secret word by making guesses through a provided `Master` API object, staying within a limited number of allowed attempts.
+
+Each call to `Master.guess(word)` behaves as follows:
+- Returns `-1` if the guessed word is **not** in the `words` array.
+- Returns an integer from **0 to 6** representing the number of characters that exactly match the secret word in both **value and position**.
+
+You must successfully guess the secret word within `allowedGuesses` attempts. If you exceed the limit or never guess the secret word, you fail the test case. Note: a simple brute-force approach (guessing all words in order) is considered an insufficient strategy — you are expected to use the feedback from each guess to intelligently narrow down the candidates.
+
+
+- The word list contains between **1 and 100 words**.
+- Every word is exactly **6 characters long**.
+- Words consist only of lowercase English letters.
+- All words in the list are **unique** (no duplicates).
+- The secret word is always present in the provided list.
+- The number of allowed guesses is between **10 and 30**.
+
+## Techniques
+- Array
+- Math
+- String
+- Interactive
+- Game Theory
+
+## Solution
+```ts
+class Master {
+      guess(word: string): number { return 0}
+}
+
+function findSecretWord(words: string[], master: Master) {
+    let candidates = words
+
+    for (let attempts = 0; attempts < 30; attempts++) {
+        const guess = minMax(candidates); 
+        const matches = master.guess(guess);
+
+        if (matches === guess.length) {
+            return;
+        } else {
+            let newCandidates = []
+
+            for (let i = 0; i < candidates.length; i++) {
+                let matchesForCandidate = 0
+                let candidate = candidates[i]
+
+                for (let k = 0; k < guess.length; k++) {
+                    if (guess.charAt(k) === candidate.charAt(k)) {
+                        matchesForCandidate++
+                    }
+                }
+                
+                if (matches === matchesForCandidate) {
+                    newCandidates.push(candidate)
+                }
+            }
+
+            candidates = newCandidates
+        }
+    }
+};
+
+/// https://en.wikipedia.org/wiki/Minimax
+/// https://brilliant.org/wiki/minimax/
+function minMax(words: string[]): string {
+    let bestWord = words[0];
+    let minMaxSize = Infinity;
+
+    for (const word of words) {
+        const groupSizes: Record<number, number> = {};
+
+        for (const other of words) {
+            let matchCount = 0;
+            for (let k = 0; k < word.length; k++) {
+                if (word[k] === other[k]) {
+                    matchCount++;
+                }
+            }
+
+            groupSizes[matchCount] = (groupSizes[matchCount] || 0) + 1;
+        }
+
+        const maxSize = Math.max(...Object.values(groupSizes));
+
+        if (maxSize < minMaxSize) {
+            minMaxSize = maxSize;
+            bestWord = word;
+        }
+    }
+
+    return bestWord;
+}
+```

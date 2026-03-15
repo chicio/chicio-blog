@@ -1,0 +1,127 @@
+---
+title: "Reverse Words in a String"
+description: "Given an input string `s`, reverse the order of the **words**."
+date: 2026-03-15
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [strings, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Splitting / String Manipulation"
+  leetcodeUrl: "https://leetcode.com/problems/reverse-words-in-a-string/"
+---
+# Reverse Words in a String
+
+Leetcode Problem 151: [Reverse Words in a String](https://leetcode.com/problems/reverse-words-in-a-string/description/)
+
+## Problem Summary
+Given an input string `s`, your task is to reverse the order of the **words** in it and return the result as a single clean string.
+
+A **word** is a sequence of non-space characters. Words in the input are separated by at least one space. The returned string must have the words in reversed order, separated by exactly one space, with no leading or trailing spaces.
+
+**Note:** The input may contain leading or trailing spaces or multiple consecutive spaces between words — all of which must be normalized in the output.
+
+
+- The string length is between **1 and 10,000 characters**.
+- The string may contain uppercase and lowercase English letters, digits, and space characters.
+- The string always contains at least one word (a non-space sequence of characters).
+
+ 
+
+**Follow-up: **If the string data type is mutable in your language, can you solve it **in-place** with `O(1)` extra space?
+
+## Techniques
+- Two Pointers
+- String
+
+## Solution
+```ts
+function reverseWords(s: string): string {
+    const parsedArray = s
+        .trim()
+        .split(' ')
+        .filter(word => word !== '')
+        .map(word => word.trim())
+
+    let front = 0
+    let back = parsedArray.length - 1
+
+    /// without built in reverse.
+    while(front < back) {
+        [parsedArray[front], parsedArray[back]] = [parsedArray[back], parsedArray[front]];
+        front++
+        back--
+    }
+
+    return parsedArray.join(' ')
+}
+
+console.log(reverseWords("the sky is blue"))
+
+// In place reverse
+function reverseWordsInPlace(s: string): string {
+    let chars = []
+
+    for (let i = 0; i < s.length; i++) {
+        chars.push(s.charAt(i))
+    }
+
+    let front = 0
+    let back = chars.length - 1
+
+    while (front < back) {
+        [chars[front++], chars[back--]] = [chars[back], chars[front]]
+    }    
+
+    let start = 0
+    let end = 0
+
+    while (start < chars.length) {
+        if (chars[start] !== ' ') {
+            end = start
+
+            while (end < chars.length && chars[end] !== ' ') {
+                end++;
+            }
+
+            let startForReverse = start
+            let endForReverse = end - 1
+
+            while (startForReverse < endForReverse) {
+                [chars[startForReverse++], chars[endForReverse--]] = [chars[endForReverse], chars[startForReverse]]
+            }
+
+            start = end
+        } else {
+            start++
+        }
+    }
+
+    let current = 0
+
+    while (current < chars.length) {
+        if (chars[current] === ' ' && chars[current + 1] === ' ') {
+            chars.splice(current, 1)
+        } else {
+            current++
+        }
+    }
+
+    if (chars[0] === ' ') {
+        chars.splice(0, 1)
+    }
+
+    if (chars[chars.length - 1] === ' ') {
+        chars.splice(chars.length - 1, 1)
+    }
+
+    let result = ''
+
+    for (let i = 0; i < chars.length; i++) {
+        result += chars[i]
+    }
+
+    return result
+}
+
+console.log(reverseWordsInPlace("the sky is blue"))
+```

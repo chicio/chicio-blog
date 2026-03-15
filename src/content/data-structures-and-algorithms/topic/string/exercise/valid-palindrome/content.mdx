@@ -1,0 +1,50 @@
+---
+title: "Valid Palindrome"
+description: "A phrase is a **palindrome** if, after converting all uppercase letters into lowercase letters and removing all non-alphanumeric characters, it reads the same forward and backward. Alphanumeric cha..."
+date: 2026-03-15
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [strings, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Two Pointers / Filtering"
+  leetcodeUrl: "https://leetcode.com/problems/valid-palindrome/"
+---
+# Valid Palindrome
+
+Leetcode Problem 125: [Valid Palindrome](https://leetcode.com/problems/valid-palindrome/description/)
+
+## Problem Summary
+Given a string `s`, determine whether it is a valid **palindrome** after the following normalization:
+
+1. Convert all uppercase letters to lowercase.
+2. Remove all non-alphanumeric characters (keep only letters `a–z` and digits `0–9`).
+3. Check if the resulting string reads the same forwards and backwards.
+
+Return `true` if the cleaned string is a palindrome, or `false` otherwise. An empty string (after cleaning) is considered a valid palindrome.
+
+
+- The string length is between **1 and 200,000 characters**.
+- The string consists only of printable ASCII characters (any visible character or space).
+
+## Techniques
+- Two Pointers
+- String
+
+## Solution
+```ts
+function isPalindrome(s: string): boolean {
+    let stringWithoutSpaces = s.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()\s@;\"\[\]'\?]/g,"").toLowerCase()
+
+    for (let i = 0, k = stringWithoutSpaces.length - 1; i < stringWithoutSpaces.length / 2; i++, k--) {
+        if (stringWithoutSpaces.charAt(i) !== stringWithoutSpaces.charAt(k)) {
+            return false
+        }
+    }
+
+    return true
+}
+
+console.log(isPalindrome("A man, a plan, a canal: Panama"))
+console.log(isPalindrome("race a car"))
+console.log(isPalindrome(" "))
+```

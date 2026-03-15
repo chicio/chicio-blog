@@ -1,0 +1,69 @@
+---
+title: "Zigzag Conversion"
+description: "The string `\"PAYPALISHIRING\"` is written in a zigzag pattern on a given number of rows like this: (you may want to display this pattern in a fixed font for better legibility)"
+date: 2026-03-15
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [strings, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Simulation / Index Mapping"
+  leetcodeUrl: "https://leetcode.com/problems/zigzag-conversion/"
+---
+# Zigzag Conversion
+
+Leetcode Problem 6: [Zigzag Conversion](https://leetcode.com/problems/zigzag-conversion/description/)
+
+## Problem Summary
+Given a string `s` and a number of rows `numRows`, rearrange its characters by writing them in a **zigzag pattern** across `numRows` rows, then read the result back row by row to produce the output string.
+
+Characters are placed diagonally top-to-bottom filling each row, then diagonally bottom-to-top, and this repeats until all characters are placed. For example, `"PAYPALISHIRING"` written with 3 rows looks like this:
+
+```
+
+P   A   H   N
+A P L S I I G
+Y   I   R
+
+```
+
+And then read line by line: `"PAHNAPLSIIGYIR"`
+
+Write a function `convert(s, numRows)` that performs this transformation and returns the resulting string.
+
+- The string length is between **1 and 1,000 characters**.
+- The string may contain uppercase and lowercase English letters, commas (`,`), and periods (`.`).
+- The number of rows is between **1 and 1,000**.
+
+## Techniques
+- String
+
+## Solution
+```ts
+function convert(s: string, numRows: number): string {
+    if (numRows === 1) {
+        return s
+    }
+
+    let zigZagStrings: string[] = Array(numRows).fill('')
+    let currentArrayIndex = 0
+    let direction: 1 | -1 = 1
+
+    for (let i = 1; i <= s.length; i++) {
+        zigZagStrings[currentArrayIndex] = zigZagStrings[currentArrayIndex] + s.charAt(i - 1)
+
+        if (currentArrayIndex === 0) {
+            direction = 1
+        }
+
+        if (currentArrayIndex === numRows - 1) {
+            direction = -1
+        }
+
+        currentArrayIndex += direction
+    }
+
+    return zigZagStrings.join('')
+}
+
+console.log(convert("PAYPALISHIRING", 3))
+```
