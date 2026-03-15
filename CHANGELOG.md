@@ -1,5 +1,20 @@
 # Changelog
 
+## [3.15.0](https://github.com/chicio/chicio-blog/compare/v3.14.0...v3.15.0) (2026-03-15)
+
+### Features
+
+* **capabilities:** :sparkles: filter games and console by name ([68492c1](https://github.com/chicio/chicio-blog/commit/68492c1edf73b2dc2b1edea41f49764a24c004ed))
+* **content:** :sparkles: DSA exercises ([#242](https://github.com/chicio/chicio-blog/issues/242)) ([76bead3](https://github.com/chicio/chicio-blog/commit/76bead3f5e9ca433112727b4b096af84a0e68f99))
+* **content:** :sparkles: string exercises ([93b5216](https://github.com/chicio/chicio-blog/commit/93b5216d2e1fc2c07c98e26561e1b92085a57be5))
+* **content:** :sparkles: Tree Traversal ([#236](https://github.com/chicio/chicio-blog/issues/236)) ([1a7740c](https://github.com/chicio/chicio-blog/commit/1a7740ca5d681267b05ad83573d7c5e7846cbe72))
+
+### Bug Fixes
+
+* **content:** :sparkles: removed code formatting from frontmatter ([ea8d8de](https://github.com/chicio/chicio-blog/commit/ea8d8dedf3c698342effeb7439fdd0f3ae4b3405))
+* **ux:** :ambulance: fix broken menu when animation were stopped ([5d86480](https://github.com/chicio/chicio-blog/commit/5d864800b9cba32ce39ca86455472b199f76fab4))
+* **ux:** :ambulance: removed duplicated flex rule ([3a4d81e](https://github.com/chicio/chicio-blog/commit/3a4d81e7cdb8ef459e5ac6b9ca251c5b4f3b0aeb))
+
 ## [3.14.0](https://github.com/chicio/chicio-blog/compare/v3.13.0...v3.14.0) (2026-03-01)
 
 ### Features
