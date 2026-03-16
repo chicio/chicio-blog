@@ -14,55 +14,13 @@ metadata:
 Leetcode Problem 205: [Isomorphic Strings](description/)
 
 ## Problem Summary
-Given two strings `s` and `t`, *determine if they are isomorphic*.
+Two strings `s` and `t` are **isomorphic** if there exists a consistent one-to-one character mapping from `s` to `t` — every occurrence of a character in `s` maps to the same character in `t`, and no two distinct characters in `s` map to the same character in `t` (though a character may map to itself).
 
-Two strings `s` and `t` are isomorphic if the characters in `s` can be replaced to get `t`.
-
-All occurrences of a character must be replaced with another character while preserving the order of characters. No two characters may map to the same character, but a character may map to itself.
-
- 
-
-**Example 1:**
-
-**Input:** s = "egg", t = "add"
-
-**Output:** true
-
-**Explanation:**
-
-The strings `s` and `t` can be made identical by:
-
-	
-- Mapping `'e'` to `'a'`.
-	
-- Mapping `'g'` to `'d'`.
-
-**Example 2:**
-
-**Input:** s = "f11", t = "b23"
-
-**Output:** false
-
-**Explanation:**
-
-The strings `s` and `t` can not be made identical as `'1'` needs to be mapped to both `'2'` and `'3'`.
-
-**Example 3:**
-
-**Input:** s = "paper", t = "title"
-
-**Output:** true
-
- 
+Given two strings `s` and `t` of the same length, determine whether they are isomorphic.
 
 **Constraints:**
-
-	
-- `1 <= s.length <= 5 * 104`
-	
-- `t.length == s.length`
-	
-- `s` and `t` consist of any valid ascii character.
+- Both strings have the same length, between **1 and 50,000** characters.
+- Both strings consist of any valid ASCII character.
 
 ## Techniques
 - Hash Table

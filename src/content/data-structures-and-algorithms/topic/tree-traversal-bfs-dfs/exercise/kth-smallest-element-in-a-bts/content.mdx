@@ -14,42 +14,12 @@ metadata:
 Leetcode Problem 230: [Kth Smallest Element in a BST](https://leetcode.com/problems/kth-smallest-element-in-a-bst/description/)
 
 ## Problem Summary
-Given the `root` of a binary search tree, and an integer `k`, return *the* `kth` *smallest value (**1-indexed**) of all the values of the nodes in the tree*.
-
- 
-
-**Example 1:**
-
-```
-
-**Input:** root = [3,1,4,null,2], k = 1
-**Output:** 1
-
-```
-
-**Example 2:**
-
-```
-
-**Input:** root = [5,3,6,2,4,null,null,1], k = 3
-**Output:** 3
-
-```
-
- 
+Given the `root` of a Binary Search Tree and an integer `k`, return the **k-th smallest** value among all the node values. `k = 1` means the smallest value.
 
 **Constraints:**
-
-	
-- The number of nodes in the tree is `n`.
-	
-- `1 <= k <= n <= 104`
-	
-- `0 <= Node.val <= 104`
-
- 
-
-**Follow up:** If the BST is modified often (i.e., we can do insert and delete operations) and you need to find the kth smallest frequently, how would you optimize?
+- The tree has between **1 and 10,000** nodes with unique values.
+- Node values are integers in the range **[0, 10,000]**.
+- `k` is a valid integer between `1` and the number of nodes.
 
 ## Techniques
 - Tree

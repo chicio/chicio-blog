@@ -14,40 +14,18 @@ metadata:
 Leetcode Problem 48: [Rotate Image](https://leetcode.com/problems/rotate-image/description/)
 
 ## Problem Summary
-You are given an `n x n` 2D `matrix` representing an image, rotate the image by **90** degrees (clockwise).
+You are given an `n × n` 2D matrix representing an image. Rotate the entire image **90 degrees clockwise**, modifying the matrix **in-place** without allocating a new one. The element at `(row, col)` moves to position `(col, n-1-row)`.
 
-You have to rotate the image **in-place**, which means you have to modify the input 2D matrix directly. **DO NOT** allocate another 2D matrix and do the rotation.
-
- 
-
-**Example 1:**
-
+For example, rotating a 3×3 matrix:
 ```
-
-**Input:** matrix = [[1,2,3],[4,5,6],[7,8,9]]
-**Output:** [[7,4,1],[8,5,2],[9,6,3]]
-
+1 2 3       7 4 1
+4 5 6  -->  8 5 2
+7 8 9       9 6 3
 ```
-
-**Example 2:**
-
-```
-
-**Input:** matrix = [[5,1,9,11],[2,4,8,10],[13,3,6,7],[15,14,12,16]]
-**Output:** [[15,13,2,5],[14,3,4,1],[12,6,8,9],[16,7,10,11]]
-
-```
-
- 
 
 **Constraints:**
-
-	
-- `n == matrix.length == matrix[i].length`
-	
-- `1 <= n <= 20`
-	
-- `-1000 <= matrix[i][j] <= 1000`
+- The matrix is square with `n` between **1 and 20**.
+- Each element is an integer in the range **[-1,000, 1,000]**.
 
 ## Techniques
 - Array

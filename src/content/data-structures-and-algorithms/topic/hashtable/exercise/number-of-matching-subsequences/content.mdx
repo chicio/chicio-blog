@@ -14,46 +14,11 @@ metadata:
 Leetcode Problem 792: [Number of Matching Subsequences](https://leetcode.com/problems/number-of-matching-subsequences/description/)
 
 ## Problem Summary
-Given a string `s` and an array of strings `words`, return *the number of* `words[i]` *that is a subsequence of* `s`.
-
-A **subsequence** of a string is a new string generated from the original string with some characters (can be none) deleted without changing the relative order of the remaining characters.
-
-	
-- For example, `"ace"` is a subsequence of `"abcde"`.
-
- 
-
-**Example 1:**
-
-```
-
-**Input:** s = "abcde", words = ["a","bb","acd","ace"]
-**Output:** 3
-**Explanation:** There are three strings in words that are a subsequence of s: "a", "acd", "ace".
-
-```
-
-**Example 2:**
-
-```
-
-**Input:** s = "dsahjpjauf", words = ["ahjpjau","ja","ahbwzgqnuk","tnmlanowax"]
-**Output:** 2
-
-```
-
- 
+Given a string `s` and an array of words, return the **number of words** that are subsequences of `s`. A word is a subsequence of `s` if its characters can be found in the same relative order within `s` (not necessarily contiguous).
 
 **Constraints:**
-
-	
-- `1 <= s.length <= 5 * 104`
-	
-- `1 <= words.length <= 5000`
-	
-- `1 <= words[i].length <= 50`
-	
-- `s` and `words[i]` consist of only lowercase English letters.
+- `s` has between **1 and 50,000** characters, all lowercase English letters.
+- There are between **1 and 5,000** words, each with between **1 and 50** lowercase English letters.
 
 ## Techniques
 - Array
