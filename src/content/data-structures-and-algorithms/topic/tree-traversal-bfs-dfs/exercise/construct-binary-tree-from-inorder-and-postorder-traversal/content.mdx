@@ -1,0 +1,107 @@
+---
+title: "Construct Binary Tree from Inorder and Postorder Traversal"
+description: "Given two integer arrays `inorder` and `postorder` where `inorder` is the inorder traversal of a binary tree and `postorder` is the postorder traversal of the same tree, construct and return *the b..."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [tree, trees, bfs, dfs, traversal, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "DFS Post-order"
+  leetcodeUrl: "https://leetcode.com/problems/construct-binary-tree-from-inorder-and-postorder-traversal/"
+---
+# Construct Binary Tree from Inorder and Postorder Traversal
+
+Leetcode Problem 106: [Construct Binary Tree from Inorder and Postorder Traversal](https://leetcode.com/problems/construct-binary-tree-from-inorder-and-postorder-traversal/description/)
+
+## Problem Summary
+Given two integer arrays `inorder` and `postorder` where `inorder` is the inorder traversal of a binary tree and `postorder` is the postorder traversal of the same tree, construct and return *the binary tree*.
+
+ 
+
+**Example 1:**
+
+```
+
+**Input:** inorder = [9,3,15,20,7], postorder = [9,15,7,20,3]
+**Output:** [3,9,20,null,null,15,7]
+
+```
+
+**Example 2:**
+
+```
+
+**Input:** inorder = [-1], postorder = [-1]
+**Output:** [-1]
+
+```
+
+ 
+
+**Constraints:**
+
+	
+- `1 <= inorder.length <= 3000`
+	
+- `postorder.length == inorder.length`
+	
+- `-3000 <= inorder[i], postorder[i] <= 3000`
+	
+- `inorder` and `postorder` consist of **unique** values.
+	
+- Each value of `postorder` also appears in `inorder`.
+	
+- `inorder` is **guaranteed** to be the inorder traversal of the tree.
+	
+- `postorder` is **guaranteed** to be the postorder traversal of the tree.
+
+## Techniques
+- Array
+- Hash Table
+- Divide and Conquer
+- Tree
+- Binary Tree
+
+## Solution
+```ts
+export class TreeNode {
+    val: number
+    left: TreeNode | null
+    right: TreeNode | null
+
+    constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+        this.val = (val === undefined ? 0 : val)
+        this.left = (left === undefined ? null : left)
+        this.right = (right === undefined ? null : right)
+    }
+}
+
+function buildTreeWith(
+    inorder: number[],
+    postorder: number[],
+    inorderRootIndexes: Map<number, number>
+): TreeNode | null {
+    if (inorder.length === 0 || postorder.length === 0) {
+        return null
+    }
+
+    const root = postorder[postorder.length - 1]
+    const rootIndex = inorderRootIndexes.get(root)!
+
+    return new TreeNode(
+        root,
+        buildTree(inorder.slice(0, rootIndex), postorder.slice(0, rootIndex)),
+        buildTree(inorder.slice(rootIndex + 1, inorder.length), postorder.slice(rootIndex, postorder.length - 1))
+    )
+}
+
+function buildTree(inorder: number[], postorder: number[]): TreeNode | null {
+    const inorderIndexes = new Map<number, number>()
+
+    for (let i = 0; i < inorder.length; i++) {
+        inorderIndexes.set(inorder[i], i)
+    }
+
+    return buildTreeWith(inorder, postorder, inorderIndexes)
+}
+```

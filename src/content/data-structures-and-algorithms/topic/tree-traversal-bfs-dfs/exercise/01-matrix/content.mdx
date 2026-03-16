@@ -1,0 +1,132 @@
+---
+title: "01 Matrix"
+description: "Given an `m x n` binary matrix `mat`, return *the distance of the nearest *`0`* for each cell*."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [tree, trees, bfs, dfs, traversal, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "TODO"
+  leetcodeUrl: "https://leetcode.com/problems/01-matrix/"
+---
+# 01 Matrix
+
+Leetcode Problem 542: [01 Matrix](https://leetcode.com/problems/01-matrix/description/)
+
+## Problem Summary
+Given an `m x n` binary matrix `mat`, return *the distance of the nearest *`0`* for each cell*.
+
+The distance between two cells sharing a common edge is `1`.
+
+ 
+
+**Example 1:**
+
+```
+
+**Input:** mat = [[0,0,0],[0,1,0],[0,0,0]]
+**Output:** [[0,0,0],[0,1,0],[0,0,0]]
+
+```
+
+**Example 2:**
+
+```
+
+**Input:** mat = [[0,0,0],[0,1,0],[1,1,1]]
+**Output:** [[0,0,0],[0,1,0],[1,2,1]]
+
+```
+
+ 
+
+**Constraints:**
+
+	
+- `m == mat.length`
+	
+- `n == mat[i].length`
+	
+- `1 <= m, n <= 104`
+	
+- `1 <= m * n <= 104`
+	
+- `mat[i][j]` is either `0` or `1`.
+	
+- There is at least one `0` in `mat`.
+
+ 
+
+**Note:** This question is the same as 1765: https://leetcode.com/problems/map-of-highest-peak/
+
+## Techniques
+- Array
+- Dynamic Programming
+- Breadth-First Search
+- Matrix
+
+## Solution
+```ts
+function updateMatrix(mat: number[][]): number[][] {
+    const rows = mat.length
+    const columns = mat[0].length
+    const queue: [number, number][] = []
+    const distances: number[][] = Array.from({ length: rows }, () =>
+        Array(columns).fill(0)
+    )
+
+    for (let row = 0; row < rows; row++) {
+        for (let column = 0; column < columns; column++) {
+            if (mat[row][column] === 0) {
+                queue.push([row, column])
+            }
+        }
+    }
+
+    while (queue.length > 0) {
+        const [row, column] = queue.shift()!
+        const currentDistance = distances[row][column] + 1
+
+        if (
+            row - 1 >= 0 && 
+            mat[row - 1][column] === 1 && 
+            distances[row - 1][column] === 0
+        ) {
+            distances[row - 1][column] = currentDistance
+            queue.push([row - 1, column])
+        }
+
+        if (
+            column + 1 < columns && 
+            mat[row][column + 1] === 1 && 
+            distances[row][column + 1] === 0
+        ) {
+            distances[row][column + 1] = currentDistance
+            queue.push([row, column + 1])
+        }
+
+        if (
+            row + 1 < rows && 
+            mat[row + 1][column] === 1 && 
+            distances[row + 1][column] === 0            
+        ) {
+            distances[row + 1][column] = currentDistance
+            queue.push([row + 1, column])
+        }
+
+        if (
+            column - 1 >= 0 && 
+            mat[row][column - 1] === 1 &&
+            distances[row][column - 1] === 0
+        ) {
+            distances[row][column - 1] = currentDistance
+            queue.push([row, column - 1])
+        }
+    }
+
+    return distances
+};
+
+console.log(updateMatrix([[0,0,0],[0,1,0],[0,0,0]])) // [[0,0,0],[0,1,0],[0,0,0]]
+console.log(updateMatrix([[0,0,0],[0,1,0],[1,1,1]])) // [[0,0,0],[0,1,0],[1,2,1]]
+```

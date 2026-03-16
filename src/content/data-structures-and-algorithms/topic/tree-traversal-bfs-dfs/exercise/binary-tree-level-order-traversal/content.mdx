@@ -1,0 +1,108 @@
+---
+title: "Binary Tree Level Order Traversal"
+description: "Given the `root` of a binary tree, return *the level order traversal of its nodes' values*. (i.e., from left to right, level by level)."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [tree, trees, bfs, dfs, traversal, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "BFS"
+  leetcodeUrl: "https://leetcode.com/problems/binary-tree-level-order-traversal/"
+---
+# Binary Tree Level Order Traversal
+
+Leetcode Problem 102: [Binary Tree Level Order Traversal](https://leetcode.com/problems/binary-tree-level-order-traversal/description/)
+
+## Problem Summary
+Given the `root` of a binary tree, return *the level order traversal of its nodes' values*. (i.e., from left to right, level by level).
+
+ 
+
+**Example 1:**
+
+```
+
+**Input:** root = [3,9,20,null,null,15,7]
+**Output:** [[3],[9,20],[15,7]]
+
+```
+
+**Example 2:**
+
+```
+
+**Input:** root = [1]
+**Output:** [[1]]
+
+```
+
+**Example 3:**
+
+```
+
+**Input:** root = []
+**Output:** []
+
+```
+
+ 
+
+**Constraints:**
+
+	
+- The number of nodes in the tree is in the range `[0, 2000]`.
+	
+- `-1000 <= Node.val <= 1000`
+
+## Techniques
+- Tree
+- Breadth-First Search
+- Binary Tree
+
+## Solution
+```ts
+export class TreeNode {
+    val: number
+    left: TreeNode | null
+    right: TreeNode | null
+
+    constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+        this.val = (val === undefined ? 0 : val)
+        this.left = (left === undefined ? null : left)
+        this.right = (right === undefined ? null : right)
+    }
+}
+
+function levelOrder(root: TreeNode | null): number[][] {
+    if (!root) {
+        return []
+    }
+
+    let queue: TreeNode[] = [root]
+    let levels: number[][] = []
+
+    while (queue.length > 0) {
+        let levelSize = queue.length
+        const level = []
+
+        while (levelSize > 0) {
+            let current = queue.shift()!
+
+            if (current.left) {
+                queue.push(current.left)
+            }
+
+            if (current.right) {
+                queue.push(current.right)
+            }
+
+            level.push(current.val)
+            levelSize--
+        }
+
+        levels.push(level)
+    }
+
+    return levels
+};
+```

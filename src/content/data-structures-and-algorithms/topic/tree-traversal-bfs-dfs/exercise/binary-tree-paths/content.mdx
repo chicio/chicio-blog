@@ -1,0 +1,90 @@
+---
+title: "Binary Tree Paths"
+description: "Given the `root` of a binary tree, return *all root-to-leaf paths in **any order***."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [tree, trees, bfs, dfs, traversal, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "DFS Pre-order"
+  leetcodeUrl: "https://leetcode.com/problems/binary-tree-paths/"
+---
+# Binary Tree Paths
+
+Leetcode Problem 257: [Binary Tree Paths](https://leetcode.com/problems/binary-tree-paths/description/)
+
+## Problem Summary
+Given the `root` of a binary tree, return *all root-to-leaf paths in **any order***.
+
+A **leaf** is a node with no children.
+
+ 
+
+**Example 1:**
+
+```
+
+**Input:** root = [1,2,3,null,5]
+**Output:** ["1->2->5","1->3"]
+
+```
+
+**Example 2:**
+
+```
+
+**Input:** root = [1]
+**Output:** ["1"]
+
+```
+
+ 
+
+**Constraints:**
+
+	
+- The number of nodes in the tree is in the range `[1, 100]`.
+	
+- `-100 <= Node.val <= 100`
+
+## Techniques
+- String
+- Backtracking
+- Tree
+- Depth-First Search
+- Binary Tree
+
+## Solution
+```ts
+export class TreeNode {
+    val: number
+    left: TreeNode | null
+    right: TreeNode | null
+
+    constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+        this.val = (val === undefined ? 0 : val)
+        this.left = (left === undefined ? null : left)
+        this.right = (right === undefined ? null : right)
+    }
+}
+
+function binaryTreePathsRecursive(root: TreeNode | null, rootToLeafs: string[], path: string) {
+    if (!root) {
+        return
+    }
+
+    if (!root.left && !root.right) {
+        rootToLeafs.push(`${path}${root.val}`)
+        return
+    }
+
+    binaryTreePathsRecursive(root.left, rootToLeafs, `${path}${root.val}->`)
+    binaryTreePathsRecursive(root.right, rootToLeafs, `${path}${root.val}->`)
+}
+
+function binaryTreePaths(root: TreeNode | null): string[] {
+    const rootToLeafs: string[] = []
+    binaryTreePathsRecursive(root, rootToLeafs, "")
+    return rootToLeafs
+};
+```

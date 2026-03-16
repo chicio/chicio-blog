@@ -1,0 +1,92 @@
+---
+title: "Diameter of Binary Tree"
+description: "Given the `root` of a binary tree, return *the length of the **diameter** of the tree*."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [tree, trees, bfs, dfs, traversal, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "DFS Post-order"
+  leetcodeUrl: "https://leetcode.com/problems/diameter-of-binary-tree/"
+---
+# Diameter of Binary Tree
+
+Leetcode Problem 543: [Diameter of Binary Tree](https://leetcode.com/problems/diameter-of-binary-tree/description/)
+
+## Problem Summary
+Given the `root` of a binary tree, return *the length of the **diameter** of the tree*.
+
+The **diameter** of a binary tree is the **length** of the longest path between any two nodes in a tree. This path may or may not pass through the `root`.
+
+The **length** of a path between two nodes is represented by the number of edges between them.
+
+ 
+
+**Example 1:**
+
+```
+
+**Input:** root = [1,2,3,4,5]
+**Output:** 3
+**Explanation:** 3 is the length of the path [4,2,1,3] or [5,2,1,3].
+
+```
+
+**Example 2:**
+
+```
+
+**Input:** root = [1,2]
+**Output:** 1
+
+```
+
+ 
+
+**Constraints:**
+
+	
+- The number of nodes in the tree is in the range `[1, 104]`.
+	
+- `-100 <= Node.val <= 100`
+
+## Techniques
+- Tree
+- Depth-First Search
+- Binary Tree
+
+## Solution
+```ts
+export class TreeNode {
+    val: number
+    left: TreeNode | null
+    right: TreeNode | null
+
+    constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+        this.val = (val === undefined ? 0 : val)
+        this.left = (left === undefined ? null : left)
+        this.right = (right === undefined ? null : right)
+    }
+}
+
+function diameterOfBinaryTree(root: TreeNode | null): number {
+    let maxDiameter = 0
+
+    function height(root: TreeNode | null): number {
+        if (!root) {
+            return 0
+        }
+
+        const leftHeight = height(root.left)
+        const rightHeight = height(root.right)
+
+        maxDiameter = Math.max(maxDiameter, leftHeight + rightHeight)
+
+        return 1 + Math.max(leftHeight, rightHeight)
+    }
+
+    height(root)
+
+    return maxDiameter
+}
+```

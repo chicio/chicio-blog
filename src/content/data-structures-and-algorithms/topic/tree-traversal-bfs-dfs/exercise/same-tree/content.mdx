@@ -1,0 +1,90 @@
+---
+title: "Same Tree"
+description: "Given the roots of two binary trees `p` and `q`, write a function to check if they are the same or not."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [tree, trees, bfs, dfs, traversal, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "DFS Pre-order"
+  leetcodeUrl: "https://leetcode.com/problems/same-tree/"
+---
+# Same Tree
+
+Leetcode Problem 100: [Same Tree](https://leetcode.com/problems/same-tree/description/)
+
+## Problem Summary
+Given the roots of two binary trees `p` and `q`, write a function to check if they are the same or not.
+
+Two binary trees are considered the same if they are structurally identical, and the nodes have the same value.
+
+ 
+
+**Example 1:**
+
+```
+
+**Input:** p = [1,2,3], q = [1,2,3]
+**Output:** true
+
+```
+
+**Example 2:**
+
+```
+
+**Input:** p = [1,2], q = [1,null,2]
+**Output:** false
+
+```
+
+**Example 3:**
+
+```
+
+**Input:** p = [1,2,1], q = [1,1,2]
+**Output:** false
+
+```
+
+ 
+
+**Constraints:**
+
+	
+- The number of nodes in both trees is in the range `[0, 100]`.
+	
+- `-104 <= Node.val <= 104`
+
+## Techniques
+- Tree
+- Depth-First Search
+- Breadth-First Search
+- Binary Tree
+
+## Solution
+```ts
+export class TreeNode {
+    val: number
+    left: TreeNode | null
+    right: TreeNode | null
+
+    constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+        this.val = (val === undefined ? 0 : val)
+        this.left = (left === undefined ? null : left)
+        this.right = (right === undefined ? null : right)
+    }
+}
+
+function isSameTree(p: TreeNode | null, q: TreeNode | null): boolean {
+    if (!p && !q) {
+        return true
+    }
+
+    if (!p || !q) {
+        return false
+    }
+
+    return p.val === q.val && isSameTree(p.left, q.left) && isSameTree(p.right, q.right)
+}
+```

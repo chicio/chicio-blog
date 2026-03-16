@@ -1,0 +1,44 @@
+---
+title: "Max Consecutive Ones III"
+description: "Max Consecutive Ones III"
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [sliding window, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Dynamic Sliding Window"
+  leetcodeUrl: ""
+---
+# Max Consecutive Ones III
+
+Leetcode Problem 1004: [Max Consecutive Ones III](description/)
+
+## Problem Summary
+TODO: Add problem summary.
+
+## Techniques
+- TODO
+
+## Solution
+```ts
+function longestOnes(nums: number[], k: number): number {
+    let prefixSumForCountingZero = 0
+    let startSubarray = 0
+    let maxLength = 0
+
+    for (let i = 0; i < nums.length; i++) {
+        prefixSumForCountingZero = prefixSumForCountingZero + nums[i]
+
+        while (prefixSumForCountingZero <= i - startSubarray - k) {
+            prefixSumForCountingZero = prefixSumForCountingZero - nums[startSubarray]
+            startSubarray++
+        }
+
+        maxLength = Math.max(maxLength, i - startSubarray + 1)
+    }
+
+    return maxLength
+};
+
+console.log(longestOnes([0,0,1,1,0,0,1,1,1,0,1,1,0,0,0,1,1,1,1], 3))
+```

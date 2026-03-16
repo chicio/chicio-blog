@@ -1,0 +1,79 @@
+---
+title: "Number of 1 Bits"
+description: "Given a positive integer `n`, write a function that returns the number of set bits in its binary representation (also known as the Hamming weight)."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [bit manipulation, bit wise, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "n & (n - 1) Trick"
+  leetcodeUrl: "https://leetcode.com/problems/number-of-1-bits/"
+---
+# Number of 1 Bits
+
+Leetcode Problem 191: [Number of 1 Bits](https://leetcode.com/problems/number-of-1-bits/description/)
+
+## Problem Summary
+Given a positive integer `n`, write a function that returns the number of set bits in its binary representation (also known as the Hamming weight).
+
+ 
+
+**Example 1:**
+
+**Input:** n = 11
+
+**Output:** 3
+
+**Explanation:**
+
+The input binary string **1011** has a total of three set bits.
+
+**Example 2:**
+
+**Input:** n = 128
+
+**Output:** 1
+
+**Explanation:**
+
+The input binary string **10000000** has a total of one set bit.
+
+**Example 3:**
+
+**Input:** n = 2147483645
+
+**Output:** 30
+
+**Explanation:**
+
+The input binary string **1111111111111111111111111111101** has a total of thirty set bits.
+
+ 
+
+**Constraints:**
+
+	
+- `1 <= n <= 231 - 1`
+
+ 
+**Follow up:** If this function is called many times, how would you optimize it?
+
+## Techniques
+- Divide and Conquer
+- Bit Manipulation
+
+## Solution
+```ts
+function hammingWeight(n: number): number {
+    let number = 0
+
+    for (let i = 0; i < 32; i++) {
+        number = number + (n & 1)
+        n = n >>> 1
+    }
+
+    return number
+}
+
+console.log(hammingWeight(2147483645))
+```

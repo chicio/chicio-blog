@@ -1,0 +1,97 @@
+---
+title: "Convert Sorted Array to Binary Search Tree"
+description: "Given an integer array `nums` where the elements are sorted in **ascending order**, convert *it to a ****height-balanced*** *binary search tree*."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [tree, trees, bfs, dfs, traversal, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "DFS Pre-order"
+  leetcodeUrl: "https://leetcode.com/problems/convert-sorted-array-to-binary-search-tree/"
+---
+# Convert Sorted Array to Binary Search Tree
+
+Leetcode Problem 108: [Convert Sorted Array to Binary Search Tree](https://leetcode.com/problems/convert-sorted-array-to-binary-search-tree/description/)
+
+## Problem Summary
+Given an integer array `nums` where the elements are sorted in **ascending order**, convert *it to a ****height-balanced*** *binary search tree*.
+
+ 
+
+**Example 1:**
+
+```
+
+**Input:** nums = [-10,-3,0,5,9]
+**Output:** [0,-3,9,-10,null,5]
+**Explanation:** [0,-10,5,null,-3,null,9] is also accepted:
+
+```
+
+**Example 2:**
+
+```
+
+**Input:** nums = [1,3]
+**Output:** [3,1]
+**Explanation:** [1,null,3] and [3,1] are both height-balanced BSTs.
+
+```
+
+ 
+
+**Constraints:**
+
+	
+- `1 <= nums.length <= 104`
+	
+- `-104 <= nums[i] <= 104`
+	
+- `nums` is sorted in a **strictly increasing** order.
+
+## Techniques
+- Array
+- Divide and Conquer
+- Tree
+- Binary Search Tree
+- Binary Tree
+
+## Solution
+```ts
+export class TreeNode {
+    val: number
+    left: TreeNode | null
+    right: TreeNode | null
+
+    constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+        this.val = (val === undefined ? 0 : val)
+        this.left = (left === undefined ? null : left)
+        this.right = (right === undefined ? null : right)
+    }
+}
+
+interface Middle {
+    value: number
+    position: number
+}
+
+function middle(array: number[]): Middle {
+    const position = Math.round((array.length - 1) / 2)
+    return { value: array[Math.round((array.length - 1) / 2)], position }
+}
+
+function sortedArrayToBST(nums: number[]): TreeNode | null {
+    if (nums.length === 0) {
+        return null
+    }
+
+    const middleElement = middle(nums)
+    const root = new TreeNode(
+        middleElement.value,
+        sortedArrayToBST(nums.slice(0, middleElement.position)),
+        sortedArrayToBST(nums.slice(middleElement.position + 1, nums.length))
+    )
+
+    return root
+}
+```

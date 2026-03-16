@@ -1,0 +1,141 @@
+---
+title: "Bus Routes"
+description: "You are given an array `routes` representing bus routes where `routes[i]` is a bus route that the `ith` bus repeats forever."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [tree, trees, bfs, dfs, traversal, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "TODO"
+  leetcodeUrl: "https://leetcode.com/problems/bus-routes/"
+---
+# Bus Routes
+
+Leetcode Problem 815: [Bus Routes](https://leetcode.com/problems/bus-routes/description/)
+
+## Problem Summary
+You are given an array `routes` representing bus routes where `routes[i]` is a bus route that the `ith` bus repeats forever.
+
+	
+- For example, if `routes[0] = [1, 5, 7]`, this means that the `0th` bus travels in the sequence `1 -> 5 -> 7 -> 1 -> 5 -> 7 -> 1 -> ...` forever.
+
+You will start at the bus stop `source` (You are not on any bus initially), and you want to go to the bus stop `target`. You can travel between bus stops by buses only.
+
+Return *the least number of buses you must take to travel from *`source`* to *`target`. Return `-1` if it is not possible.
+
+ 
+
+**Example 1:**
+
+```
+
+**Input:** routes = [[1,2,7],[3,6,7]], source = 1, target = 6
+**Output:** 2
+**Explanation:** The best strategy is take the first bus to the bus stop 7, then take the second bus to the bus stop 6.
+
+```
+
+**Example 2:**
+
+```
+
+**Input:** routes = [[7,12],[4,5,15],[6],[15,19],[9,12,13]], source = 15, target = 12
+**Output:** -1
+
+```
+
+ 
+
+ 
+
+**Constraints:**
+
+	
+- `1 <= routes.length <= 500`.
+	
+- `1 <= routes[i].length <= 105`
+	
+- All the values of `routes[i]` are **unique**.
+	
+- `sum(routes[i].length) <= 105`
+	
+- `0 <= routes[i][j] < 106`
+	
+- `0 <= source, target < 106`
+
+## Techniques
+- Array
+- Hash Table
+- Breadth-First Search
+
+## Solution
+```ts
+function numBusesToDestination(routes: number[][], source: number, target: number): number {
+    if (source === target) {
+        return 0
+    }
+
+    let busesForEachStop = new Map<number, number[]>()
+
+    for (let bus = 0; bus < routes.length; bus++) {
+        let busRoute = routes[bus]
+
+        for (let k = 0; k < busRoute.length; k++) {
+            let stop = busRoute[k]
+
+            if (busesForEachStop.has(stop)) {
+               busesForEachStop.set(stop, [...busesForEachStop.get(stop)!, bus])     
+            } else {
+                busesForEachStop.set(stop, [bus])
+            }
+        }
+    }
+
+    let queue = busesForEachStop.get(source)
+    let visitedStops = new Set<number>()
+    let visitedBuses = new Set<number>(queue)
+    let numberOfBusesNeeded = 1
+
+    while (queue && queue.length > 0) {
+        let currentNumberOfBuses = queue.length
+
+        while (currentNumberOfBuses > 0) {
+            let bus = queue.shift()!
+            let busRoute = routes[bus]
+
+            for (let stopPosition = 0; stopPosition < busRoute.length; stopPosition++) {
+                let stop = busRoute[stopPosition]
+
+                if (visitedStops.has(stop)) {
+                    continue;
+                }
+
+                visitedStops.add(stop)
+
+                if (stop === target) {
+                    return numberOfBusesNeeded
+                }
+
+                const busesForStop = busesForEachStop.get(stop)!
+
+                for (let busForStopPosition = 0; busForStopPosition < busesForStop.length; busForStopPosition++) {
+                    let bus = busesForStop[busForStopPosition]
+                    if (!visitedBuses.has(bus)) {
+                        visitedBuses.add(bus)
+                        queue.push(bus)
+                    }
+                }
+            }
+
+            currentNumberOfBuses--
+        }
+
+        numberOfBusesNeeded++
+    }
+
+    return -1
+};
+
+console.log(numBusesToDestination([[1,2,7],[3,6,7]], 1, 6)) // 2
+console.log(numBusesToDestination([[7,12],[4,5,15],[6],[15,19],[9,12,13]], 15, 12)) // -1
+```
