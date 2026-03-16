@@ -1,0 +1,54 @@
+---
+title: "Same Tree"
+description: "Given the roots of two binary trees `p` and `q`, write a function to check if they are the same or not."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [tree, trees, bfs, dfs, traversal, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "DFS Pre-order"
+  leetcodeUrl: "https://leetcode.com/problems/same-tree/"
+---
+# Same Tree
+
+Leetcode Problem 100: [Same Tree](https://leetcode.com/problems/same-tree/description/)
+
+## Problem Summary
+Given the roots of two binary trees `p` and `q`, return `true` if the trees are **identical** — meaning they have the same structure and the same node values at every corresponding position.
+
+**Constraints:**
+- Both trees have between **0 and 100** nodes.
+- Node values are integers in the range **[-10,000, 10,000]**.
+
+## Techniques
+- Tree
+- Depth-First Search
+- Breadth-First Search
+- Binary Tree
+
+## Solution
+```ts
+export class TreeNode {
+    val: number
+    left: TreeNode | null
+    right: TreeNode | null
+
+    constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+        this.val = (val === undefined ? 0 : val)
+        this.left = (left === undefined ? null : left)
+        this.right = (right === undefined ? null : right)
+    }
+}
+
+function isSameTree(p: TreeNode | null, q: TreeNode | null): boolean {
+    if (!p && !q) {
+        return true
+    }
+
+    if (!p || !q) {
+        return false
+    }
+
+    return p.val === q.val && isSameTree(p.left, q.left) && isSameTree(p.right, q.right)
+}
+```

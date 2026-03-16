@@ -1,0 +1,51 @@
+---
+title: "Number of Recent Calls"
+description: "You have a `RecentCounter` class which counts the number of recent requests within a certain time frame."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [queue, queues, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Queue"
+  leetcodeUrl: "https://leetcode.com/problems/number-of-recent-calls/"
+---
+# Number of Recent Calls
+
+Leetcode Problem 933: [Number of Recent Calls](https://leetcode.com/problems/number-of-recent-calls/description/)
+
+## Problem Summary
+Implement a `RecentCounter` class that tracks the number of recent network requests within a **3,000-millisecond** sliding window. It must support:
+
+- `RecentCounter()` — Initializes the counter with no requests.
+- `ping(t)` — Records a new request at time `t` milliseconds and returns the count of all requests in the inclusive range `[t − 3000, t]`.
+
+All calls to `ping` are made with **strictly increasing** timestamps.
+
+**Constraints:**
+- Timestamps are positive integers up to **1,000,000,000** milliseconds.
+- At most **10,000** calls to `ping` will be made.
+
+## Techniques
+- Design
+- Queue
+- Data Stream
+
+## Solution
+```ts
+class RecentCounter {
+    constructor(
+        private requests: number[] = []
+    ) { }
+
+    ping(t: number): number {
+        let lowerBoundRequests = t - 3000
+        this.requests.push(t)
+
+        while (this.requests[0] < lowerBoundRequests) {
+            this.requests.shift()
+        }
+
+        return this.requests.length
+    }
+}
+```

@@ -1,0 +1,57 @@
+---
+title: "Counting Bits"
+description: "Given an integer `n`, return *an array *`ans`* of length *`n + 1`* such that for each *`i`* *(`0 <= i <= n`)*, *`ans[i]`* is the **number of ***`1`***'s** in the binary representation of *`i`."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [bit manipulation, bit wise, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "DP + Bit Count Relation"
+  leetcodeUrl: "https://leetcode.com/problems/counting-bits/"
+---
+# Counting Bits
+
+Leetcode Problem 338: [Counting Bits](https://leetcode.com/problems/counting-bits/description/)
+
+## Problem Summary
+Given a non-negative integer `n`, return an array `ans` of length `n + 1` where `ans[i]` is the count of `1` bits in the binary representation of `i` (also known as its **popcount**).
+
+The binary representation of small integers follows this pattern:
+
+```
+i  | binary | 1-bit count
+---|--------|-------------
+0  | 0      | 0
+1  | 1      | 1
+2  | 10     | 1
+3  | 11     | 2
+4  | 100    | 1
+5  | 101    | 2
+```
+
+**Follow up:** Can you solve this in `O(n)` time in a single pass without using any built-in popcount function?
+
+**Constraints:**
+- `n` is a non-negative integer up to **100,000**.
+
+## Techniques
+- Dynamic Programming
+- Bit Manipulation
+
+## Solution
+```ts
+function countBits(n: number): number[] {
+    let numberOfOneBitsForEachNumber = Array(n + 1).fill(0)
+
+    for (let i = 1; i <= n; i++) {
+        //dp[n] = dp[n - 2^k] + 1, where 2^k is the largest power of 2 ≤ n.
+        let biggestPowerOfTwoMinorOfI = Math.pow(2, Math.floor(Math.log2(i)))
+        let startingSequence = numberOfOneBitsForEachNumber[i - biggestPowerOfTwoMinorOfI]
+        numberOfOneBitsForEachNumber[i] = startingSequence + 1
+    }
+
+    return numberOfOneBitsForEachNumber
+};
+
+console.log(countBits(8))
+```

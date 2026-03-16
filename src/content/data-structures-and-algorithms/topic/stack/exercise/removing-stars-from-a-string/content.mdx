@@ -1,0 +1,48 @@
+---
+title: "Removing Stars From a String"
+description: "You are given a string `s`, which contains stars `*`."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [stack, stacks, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Stack"
+  leetcodeUrl: ""
+---
+# Removing Stars From a String
+
+Leetcode Problem 2390: [Removing Stars From a String](description/)
+
+## Problem Summary
+Given a string `s` containing letters and `'*'` characters, repeatedly remove the **nearest non-star character to the left** of each `'*'` along with the `'*'` itself. Return the resulting string after all stars are processed. The input is guaranteed to produce a valid result.
+
+**Constraints:**
+- The string has between **1 and 100,000** characters.
+- It consists of lowercase English letters and `'*'`.
+- There are always enough non-star characters to the left for every `'*'`.
+
+## Techniques
+- String
+- Stack
+- Simulation
+
+## Solution
+```ts
+function removeStars(s: string): string {
+    let stack = []
+
+    for (let i = 0; i < s.length; i++) {
+        let currentChar = s.charAt(i)
+        
+        if (currentChar === "*") {
+            stack.pop()
+        } else {
+            stack.push(currentChar)
+        }
+    }
+
+    return stack.join("")
+};
+
+console.log(removeStars("leet**cod*e"))
+```

@@ -1,0 +1,47 @@
+---
+title: "Number of Good Pairs"
+description: "Given an array of integers `nums`, return *the number of **good pairs***."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [hashtable, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Hash Map Counting"
+  leetcodeUrl: "https://leetcode.com/problems/number-of-good-pairs/"
+---
+# Number of Good Pairs
+
+Leetcode Problem 1512: [Number of Good Pairs](https://leetcode.com/problems/number-of-good-pairs/description/)
+
+## Problem Summary
+Given an array of integers, count the number of **good pairs** — pairs of indices `(i, j)` where `i < j` and `nums[i] == nums[j]`.
+
+**Constraints:**
+- The array has between **1 and 100** elements.
+- Each element is a positive integer between **1 and 100**.
+
+## Techniques
+- Array
+- Hash Table
+- Math
+- Counting
+
+## Solution
+```ts
+function numIdenticalPairs(nums: number[]): number {
+    const numbersCount = new Map<number, number>()
+    let countGoodPairs = 0
+
+    for (let i = 0; i < nums.length; i++) {
+        if (numbersCount.has(nums[i])) {
+            countGoodPairs = countGoodPairs + numbersCount.get(nums[i])!
+        }
+
+        numbersCount.set(nums[i], (numbersCount.get(nums[i]) || 0) + 1);
+    }
+
+    return countGoodPairs
+};
+
+console.log(numIdenticalPairs([1,2,3,1,1,3]))
+```

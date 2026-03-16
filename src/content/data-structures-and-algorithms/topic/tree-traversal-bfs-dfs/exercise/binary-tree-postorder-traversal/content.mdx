@@ -1,0 +1,72 @@
+---
+title: "Binary Tree Postorder Traversal"
+description: "Given the `root` of a binary tree, return *the postorder traversal of its nodes' values*."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [tree, trees, bfs, dfs, traversal, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "DFS Post-order"
+  leetcodeUrl: "https://leetcode.com/problems/binary-tree-postorder-traversal/"
+---
+# Binary Tree Postorder Traversal
+
+Leetcode Problem 145: [Binary Tree Postorder Traversal](https://leetcode.com/problems/binary-tree-postorder-traversal/description/)
+
+## Problem Summary
+Given the `root` of a binary tree, return its nodes' values in **post-order** traversal order (left subtree → right subtree → root).
+
+**Constraints:**
+- The tree has between **0 and 100** nodes.
+- Node values are integers in the range **[-100, 100]**.
+
+## Techniques
+- Stack
+- Tree
+- Depth-First Search
+- Binary Tree
+
+## Solution
+```ts
+export class TreeNode {
+    val: number
+    left: TreeNode | null
+    right: TreeNode | null
+
+    constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+        this.val = (val === undefined ? 0 : val)
+        this.left = (left === undefined ? null : left)
+        this.right = (right === undefined ? null : right)
+    }
+}
+
+function postorderTraversal(root: TreeNode | null): number[] {
+    let result: number[] = []
+
+    if (root == null) {
+        return result;
+    }
+
+    let stackVisit: TreeNode[] = [root]
+    let stackVisited: number[] = []
+
+    while (stackVisit.length > 0) {
+        let current = stackVisit.pop()!
+        stackVisited.push(current.val)
+
+        if (current.left) {
+            stackVisit.push(current.left)
+        }
+
+        if (current.right) {
+            stackVisit.push(current.right)
+        }
+    }
+
+    while (stackVisited.length > 0) {
+        result.push(stackVisited.pop()!)
+    }
+
+    return result
+}
+```

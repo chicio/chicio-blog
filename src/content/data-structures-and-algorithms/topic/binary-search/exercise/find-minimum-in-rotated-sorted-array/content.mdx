@@ -1,0 +1,49 @@
+---
+title: "Find Minimum in Rotated Sorted Array"
+description: "Suppose an array of length `n` sorted in ascending order is **rotated** between `1` and `n` times. For example, the array `nums = [0,1,2,4,5,6,7]` might become:"
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [binary search, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Binary Search"
+  leetcodeUrl: "https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/"
+---
+# Find Minimum in Rotated Sorted Array
+
+Leetcode Problem 153: [Find Minimum in Rotated Sorted Array](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/description/)
+
+## Problem Summary
+An ascending array of unique integers has been **rotated** between 1 and `n` times — a rotation moves the last element to the front. For example, rotating `[0,1,2,4,5,6,7]` by 4 gives `[4,5,6,7,0,1,2]`. Given such a rotated sorted array, return its **minimum element**.
+
+Your solution must run in `O(log n)` time.
+
+**Constraints:**
+- The array has between **1 and 5,000** unique elements.
+- All values are unique integers in the range **[-5,000, 5,000]**.
+
+## Techniques
+- Array
+- Binary Search
+
+## Solution
+```ts
+function findMin(nums: number[]): number {
+    let left = 0
+    let right = nums.length - 1
+
+    while (left < right) {
+        const mid = left + Math.floor((right - left) / 2)
+
+        if (nums[mid] > nums[right]) {
+            left = mid + 1
+        } else {
+            right = mid
+        }
+    }
+
+    return nums[left]
+}
+
+console.log(findMin([4,5,6,7,0,1,2]))
+```

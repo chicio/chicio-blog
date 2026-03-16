@@ -1,0 +1,63 @@
+---
+title: "Remove Duplicate Letters"
+description: "Given a string `s`, remove duplicate letters so that every letter appears once and only once. You must make sure your result is **the smallest in lexicographical order** among all possible results."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [stack, stacks, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Stack"
+  leetcodeUrl: "https://leetcode.com/problems/remove-duplicate-letters/"
+---
+# Remove Duplicate Letters
+
+Leetcode Problem 316: [Remove Duplicate Letters](https://leetcode.com/problems/remove-duplicate-letters/description/)
+
+## Problem Summary
+Given a string `s`, remove **duplicate letters** so that every letter appears exactly once. Among all possible results, return the one that is **lexicographically smallest** while still being a subsequence of the original string.
+
+**Constraints:**
+- The string has between **1 and 10,000** characters, consisting of lowercase English letters only.
+
+## Techniques
+- String
+- Stack
+- Greedy
+- Monotonic Stack
+
+## Solution
+```ts
+function removeDuplicateLetters(s: string): string {
+    let lastPositionOfChars = new Map<string, number>()
+
+    for (let i = 0; i < s.length; i++) {
+        lastPositionOfChars.set(s.charAt(i), i)
+    }
+
+    let alreadyUsed = new Set<string>()
+    let result = "" //This is basically a monothonic stack
+
+    for (let i = 0; i < s.length; i++) {
+        let currentChar = s.charAt(i)
+        let topChar = result.charAt(result.length - 1)
+
+        if (!alreadyUsed.has(currentChar) && currentChar > topChar) {
+            result += currentChar
+        }
+
+        if (!alreadyUsed.has(currentChar) && currentChar < topChar) {
+            while ((lastPositionOfChars.get(topChar) ?? -1) > i && topChar > currentChar) {
+                result = result.substring(0, result.length - 1);
+                alreadyUsed.delete(topChar)
+                topChar = result.charAt(result.length - 1)
+            }
+
+            result += currentChar
+        }
+
+        alreadyUsed.add(currentChar)
+    }
+
+    return result
+};
+```

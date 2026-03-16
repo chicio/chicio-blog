@@ -1,0 +1,91 @@
+---
+title: "Open the Lock"
+description: "You have a lock in front of you with 4 circular wheels. Each wheel has 10 slots: `'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'`. The wheels can rotate freely and wrap around: for example we can..."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [tree, trees, bfs, dfs, traversal, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "TODO"
+  leetcodeUrl: ""
+---
+# Open the Lock
+
+Leetcode Problem 752: [Open the Lock](description/)
+
+## Problem Summary
+You have a 4-wheel combination lock where each wheel displays a digit `'0'`–`'9'` and wraps around in both directions. The lock starts at `"0000"` and each move rotates one wheel by one step in either direction. Given a list of `deadend` combinations (reaching any locks the mechanism permanently) and a `target` combination, return the **minimum number of moves** to reach the target from `"0000"` without passing through any deadend. Return `-1` if impossible.
+
+**Constraints:**
+- There are between **1 and 500** dead end codes.
+- Each dead end and the target is a 4-character string of digits.
+- The target is not in the dead ends list.
+
+## Techniques
+- Array
+- Hash Table
+- String
+- Breadth-First Search
+
+## Solution
+```ts
+function setCharAt(str: string, index: number, chr: string | number): string {
+    if(index > str.length-1) {
+        return str;
+    } 
+
+    return str.substring(0,index) + chr + str.substring(index+1);
+}
+
+function openLock(deadends: string[], target: string): number {
+    if (deadends.includes('0000')) {
+        return -1
+    }
+
+    let visited = new Set<string>(
+        ["0000"]
+    )
+    let queue = [
+        "0000"
+    ]
+
+    let moves = 0
+
+    while (queue.length > 0) {
+        let currentLevelSize = queue.length
+
+        while (currentLevelSize > 0) {
+            const currentMove = queue.shift()!
+
+            if (currentMove === target)  {
+                return moves
+            }
+
+            for (let i = 0; i < 4; i++) {
+                const value = Number(currentMove.charAt(i))
+                const upMove = setCharAt(currentMove, i, (value + 1) % 10)
+                const downMove = setCharAt(currentMove, i, (value + 9) % 10)
+
+                if (!deadends.includes(upMove) && !visited.has(upMove)) {
+                    queue.push(upMove)
+                    visited.add(upMove)
+                }
+
+                if (!deadends.includes(downMove) && !visited.has(downMove)) {
+                    queue.push(downMove)
+                    visited.add(downMove)
+                }
+            }
+            currentLevelSize--
+        }
+
+        moves++
+    }
+
+    return -1
+};
+
+console.log(openLock(["0201","0101","0102","1212","2002"], "0202")) // 6
+console.log(openLock(["8888"], "0009")) // 1
+console.log(openLock(["8887","8889","8878","8898","8788","8988","7888","9888"], "8888")) // -1
+```

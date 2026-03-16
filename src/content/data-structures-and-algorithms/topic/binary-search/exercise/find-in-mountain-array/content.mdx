@@ -1,0 +1,116 @@
+---
+title: "Find in Mountain Array"
+description: "*(This problem is an **interactive problem**.)*"
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [binary search, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Binary Search"
+  leetcodeUrl: "https://leetcode.com/problems/find-in-mountain-array/"
+---
+# Find in Mountain Array
+
+Leetcode Problem 1095: [Find in Mountain Array](https://leetcode.com/problems/find-in-mountain-array/description/)
+
+## Problem Summary
+*(This problem is an **interactive problem** — you cannot access the array directly.)*
+
+A **mountain array** is an array of at least 3 elements that strictly increases up to a peak index, then strictly decreases after it. Given a `MountainArray` object, find the **minimum index** at which a `target` value appears. You may only access elements via `MountainArray.get(index)` and retrieve the length via `MountainArray.length()`. Return `-1` if the target does not exist.
+
+**Note:** You are allowed at most **100 calls** to `MountainArray.get()`.
+
+**Constraints:**
+- The mountain array has between **3 and 10,000** elements.
+- Both the target and all array values are non-negative integers up to **1,000,000,000**.
+
+## Techniques
+- Array
+- Binary Search
+- Interactive
+
+## Solution
+```ts
+class MountainArray {
+    get(index: number): number {return 0; }
+    length(): number { return 0; }
+}
+
+function findPeak(mountainArr: MountainArray) {
+    let left = 0
+    let right = mountainArr.length() - 1
+
+    while (left < right) {
+        const mid = left + Math.floor((right - left) / 2)
+
+        if (mountainArr.get(mid) < mountainArr.get(mid + 1)) {
+            left = mid + 1
+        } else {
+            right = mid
+        }
+    }
+
+    return left
+}
+
+function find(
+    target: number,
+    mountainArr: MountainArray,
+    left: number,
+    right: number,
+    condition: (mid: number, target: number) => boolean
+) {
+    let currentLeft = left
+    let currentRight = right
+
+    while (currentLeft <= currentRight) {
+        const midIndex = currentLeft + Math.floor((currentRight - currentLeft) / 2)
+        const mid = mountainArr.get(midIndex)
+
+        if (mid === target) {
+            return midIndex
+        }
+
+        if (condition(mid, target)) {
+            currentLeft = midIndex + 1
+        } else {
+            currentRight = midIndex - 1
+        }
+    }
+
+    return -1
+}
+
+
+function findInMountainArray(target: number, mountainArr: MountainArray) {
+    let peak = findPeak(mountainArr)
+    let left = find(
+        target,
+        mountainArr,
+        0,
+        peak,
+        (mid, target) => mid < target
+    )
+    let right = find(
+        target,
+        mountainArr,
+        peak,
+        mountainArr.length() - 1,
+        (mid, target) => mid > target
+    )
+
+    if (left === -1 && right === -1) {
+        return -1
+    }
+
+    if (left === -1) {
+        return right
+    }
+
+    if (right === -1) {
+        return left
+    }
+
+    return Math.min(left, right)
+};
+```

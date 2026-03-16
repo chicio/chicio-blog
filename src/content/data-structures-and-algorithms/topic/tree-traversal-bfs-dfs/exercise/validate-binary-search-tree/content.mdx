@@ -1,0 +1,70 @@
+---
+title: "Validate Binary Search Tree"
+description: "Given the `root` of a binary tree, *determine if it is a valid binary search tree (BST)*."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [tree, trees, bfs, dfs, traversal, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "DFS In-order"
+  leetcodeUrl: "https://leetcode.com/problems/validate-binary-search-tree/"
+---
+# Validate Binary Search Tree
+
+Leetcode Problem 98: [Validate Binary Search Tree](https://leetcode.com/problems/validate-binary-search-tree/description/)
+
+## Problem Summary
+Given the `root` of a binary tree, determine whether it is a **valid Binary Search Tree** (BST). A valid BST requires that for every node, all values in its **left subtree** are strictly less than the node's value, and all values in its **right subtree** are strictly greater.
+
+**Constraints:**
+- The tree has between **1 and 10,000** nodes.
+- Node values are 64-bit signed integers (using the full range).
+
+## Techniques
+- Tree
+- Depth-First Search
+- Binary Search Tree
+- Binary Tree
+
+## Solution
+```ts
+export class TreeNode {
+    val: number
+    left: TreeNode | null
+    right: TreeNode | null
+
+    constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+        this.val = (val === undefined ? 0 : val)
+        this.left = (left === undefined ? null : left)
+        this.right = (right === undefined ? null : right)
+    }
+}
+
+function isValidBST(root: TreeNode | null): boolean {
+    let stack: TreeNode[] = []
+    let result: number[] = []
+    let current = root
+    let previous: number | null = null
+    let min = Infinity
+
+    while (current || stack.length > 0) {
+        while (current) {
+            stack.push(current)
+            current = current.left
+        }
+
+        current = stack.pop()!
+
+        if (previous !== null) {
+            if (current.val <= previous) {
+                return false
+            }
+        }
+
+        previous = current.val
+        current = current.right
+    }
+
+    return true
+}
+```

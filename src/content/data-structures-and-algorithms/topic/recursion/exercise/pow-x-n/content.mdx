@@ -1,0 +1,49 @@
+---
+title: "Pow(x, n)"
+description: "Implement pow(x, n), which calculates `x` raised to the power `n` (i.e., `xn`)."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [recursion, recursive algorithms, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Recursive Exponentiation"
+  leetcodeUrl: "https://leetcode.com/problems/powx-n/"
+---
+# Pow(x, n)
+
+Leetcode Problem 50: [Pow(x, n)](https://leetcode.com/problems/powx-n/description/)
+
+## Problem Summary
+Implement `pow(x, n)`, computing `x` raised to the power `n`. Handle both positive and negative exponents, and both positive and negative bases.
+
+**Constraints:**
+- `x` is a floating-point number in the open range **(-100.0, 100.0)**.
+- `n` is a 32-bit signed integer in the range **[-(2^31), 2^31 − 1]**.
+- Either `x` is non-zero, or `n` is positive (0^0 and 0^(negative) will not occur).
+
+## Techniques
+- Math
+- Recursion
+
+## Solution
+```ts
+function myPow(x: number, n: number): number {
+    if (n === 0) return 1;
+
+    if (n < 0) {
+        return 1 / myPow(x, -n);
+    }
+
+    const half = myPow(x, Math.floor(n / 2));
+
+    if (n % 2 === 0) {
+        return half * half;
+    } else {
+        return half * half * x;
+    }
+}
+
+console.log(myPow(2, 10));
+console.log(myPow(2, -2));
+console.log(myPow(2.1, 3));
+```

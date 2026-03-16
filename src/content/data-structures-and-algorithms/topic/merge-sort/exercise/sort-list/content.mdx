@@ -1,0 +1,82 @@
+---
+title: "Sort List"
+description: "Given the `head` of a linked list, return *the list after sorting it in **ascending order***."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [merge sort, divide and conquer, sort, sorting, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Merge Sort on Linked List"
+  leetcodeUrl: "https://leetcode.com/problems/sort-list/"
+---
+# Sort List
+
+Leetcode Problem 148: [Sort List](https://leetcode.com/problems/sort-list/description/)
+
+## Problem Summary
+Given the `head` of a singly linked list, sort the list in **ascending order** and return its head.
+
+**Constraints:**
+- The list has between **0 and 50,000** nodes.
+- Each node value is an integer in the range **[-100,000, 100,000]**.
+
+## Techniques
+- Linked List
+- Two Pointers
+- Divide and Conquer
+- Sorting
+- Merge Sort
+
+## Solution
+```ts
+import {ListNode} from "../list-node";
+
+function findMedianOf(head: ListNode | null) {
+    let dummy = new ListNode(-Infinity, head)
+    let slow = dummy
+    let fast = dummy.next
+
+    while (fast?.next) {
+        slow = slow.next!
+        fast = fast.next?.next
+    }
+
+    return slow
+}
+
+function merge(firstHalf: ListNode | null, secondHalf: ListNode | null): ListNode | null {
+    let dummy = new ListNode(-1)
+    let current = dummy
+
+    while (firstHalf && secondHalf) {
+        if (firstHalf.val < secondHalf.val) {
+            current.next = firstHalf
+            firstHalf = firstHalf.next
+        } else {
+            current.next = secondHalf
+            secondHalf = secondHalf.next
+        }
+
+        current = current.next
+    }
+
+    current.next = firstHalf ?? secondHalf
+
+    return dummy.next
+}
+
+function sortList(head: ListNode | null): ListNode | null {
+    if (!head || !head.next) {
+        return head
+    }
+
+    let median = findMedianOf(head)
+    let secondHalf = median.next
+    median.next = null
+
+    return merge(
+        sortList(head),
+        sortList(secondHalf)
+    )
+}
+```

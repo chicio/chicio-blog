@@ -1,0 +1,89 @@
+---
+title: "Binary Search Tree Iterator"
+description: "Implement the `BSTIterator` class that represents an iterator over the **in-order traversal** of a binary search tree (BST):"
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [tree, trees, bfs, dfs, traversal, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "DFS In-order"
+  leetcodeUrl: "https://leetcode.com/problems/binary-search-tree-iterator/"
+---
+# Binary Search Tree Iterator
+
+Leetcode Problem 173: [Binary Search Tree Iterator](https://leetcode.com/problems/binary-search-tree-iterator/description/)
+
+## Problem Summary
+Implement a `BSTIterator` class that traverses a Binary Search Tree (BST) in **in-order** (ascending) one node at a time:
+
+- `BSTIterator(root)` — Initializes the iterator with the root of a BST.
+- `next()` — Returns the next smallest integer in the BST.
+- `hasNext()` — Returns `true` if there is a next element.
+
+Both `next()` and `hasNext()` must run on average in `O(1)` time and use `O(h)` memory, where `h` is the height of the tree.
+
+**Constraints:**
+- The tree has between **1 and 100,000** nodes.
+- Node values are integers in the range **[0, 1,000,000]**.
+- `next()` will always be called only when `hasNext()` is `true`.
+
+## Techniques
+- Stack
+- Tree
+- Design
+- Binary Search Tree
+- Binary Tree
+- Iterator
+
+## Solution
+```ts
+export class TreeNode {
+    val: number
+    left: TreeNode | null
+    right: TreeNode | null
+
+    constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+        this.val = (val === undefined ? 0 : val)
+        this.left = (left === undefined ? null : left)
+        this.right = (right === undefined ? null : right)
+    }
+}
+
+class BSTIterator {
+    private stack: TreeNode[] = []
+
+    constructor(root: TreeNode | null) {
+        this.goLeft(root)
+    }
+
+    private goLeft(root: TreeNode | null) {
+        let current = root
+
+        while (current) {
+            this.stack.push(current)
+            current = current.left
+        }
+    }
+
+    next(): number {
+        let current = this.stack.pop()!
+
+        if (current.right) {
+            this.goLeft(current.right)
+        }
+
+        return current.val
+    }
+
+    hasNext(): boolean {
+        return this.stack.length > 0
+    }
+}
+
+/**
+ * Your BSTIterator object will be instantiated and called as such:
+ * var obj = new BSTIterator(root)
+ * var param_1 = obj.next()
+ * var param_2 = obj.hasNext()
+ */
+```

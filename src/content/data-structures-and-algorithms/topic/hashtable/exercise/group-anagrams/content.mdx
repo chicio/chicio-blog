@@ -1,0 +1,48 @@
+---
+title: "Group Anagrams"
+description: "Given an array of strings `strs`, group the anagrams together. You can return the answer in **any order**."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [hashtable, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Hash Map with Sorted Key"
+  leetcodeUrl: "https://leetcode.com/problems/group-anagrams/"
+---
+# Group Anagrams
+
+Leetcode Problem 49: [Group Anagrams](https://leetcode.com/problems/group-anagrams/description/)
+
+## Problem Summary
+Given an array of strings, group together all strings that are **anagrams** of each other (composed of the same characters with the same frequencies, in any order). Return the groups in any order.
+
+**Constraints:**
+- The array has between **1 and 10,000** strings.
+- Each string has between **0 and 100** characters, consisting of lowercase English letters only.
+
+## Techniques
+- Array
+- Hash Table
+- String
+- Sorting
+
+## Solution
+```ts
+function groupAnagrams(strs: string[]): string[][] {
+    let anagramGroups = new Map<string, string[]>()
+
+    for (let i = 0; i < strs.length; i++) {
+        let sorted = strs[i].split('').sort().join('')
+
+        if (anagramGroups.has(sorted)) {
+            anagramGroups.set(sorted, [...anagramGroups.get(sorted)!, strs[i]])
+        } else {
+            anagramGroups.set(sorted, [strs[i]])
+        }
+    }
+
+    return Array.from(anagramGroups.values())
+};
+
+console.log(groupAnagrams(["eat","tea","tan","ate","nat","bat"]))
+```

@@ -1,0 +1,42 @@
+---
+title: "Best Sightseeing Pair"
+description: "You are given an integer array `values` where values[i] represents the value of the `ith` sightseeing spot. Two sightseeing spots `i` and `j` have a **distance** `j - i` between them."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [kadane's algorithm, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Kadane-style Transformation"
+  leetcodeUrl: "https://leetcode.com/problems/best-sightseeing-pair/"
+---
+# Best Sightseeing Pair
+
+Leetcode Problem 1014: [Best Sightseeing Pair](https://leetcode.com/problems/best-sightseeing-pair/description/)
+
+## Problem Summary
+You are given an array `values` where `values[i]` is the score of the `i`-th sightseeing spot. The **score** of a pair of spots at indices `i < j` is `values[i] + values[j] + i - j` (the sum of their scores minus the distance between them). Return the **maximum score** of any such pair.
+
+**Constraints:**
+- The array has between **2 and 50,000** elements.
+- Each value is a positive integer between **1 and 1,000**.
+
+## Techniques
+- Array
+- Dynamic Programming
+
+## Solution
+```ts
+function maxScoreSightseeingPair(values: number[]): number {
+    let maxElementIPlusIndexI = 0
+    let bestSightseeingPair = 0
+
+    for (let j = 1, i = 0; j < values.length; j++, i++) {
+        maxElementIPlusIndexI = Math.max(maxElementIPlusIndexI, values[i] + i)
+        bestSightseeingPair = Math.max(bestSightseeingPair, maxElementIPlusIndexI + values[j] - j)
+    }
+
+    return bestSightseeingPair
+};
+
+console.log(maxScoreSightseeingPair([5,1,8,2,6]))
+```

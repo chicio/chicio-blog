@@ -1,0 +1,43 @@
+---
+title: "Remove All Adjacent Duplicates In String"
+description: "You are given a string `s` consisting of lowercase English letters. A **duplicate removal** consists of choosing two **adjacent** and **equal** letters and removing them."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [stack, stacks, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Stack"
+  leetcodeUrl: "https://leetcode.com/problems/remove-all-adjacent-duplicates-in-string/"
+---
+# Remove All Adjacent Duplicates In String
+
+Leetcode Problem 1047: [Remove All Adjacent Duplicates In String](https://leetcode.com/problems/remove-all-adjacent-duplicates-in-string/description/)
+
+## Problem Summary
+Given a string `s`, repeatedly remove all **adjacent duplicate pairs** until no more exist. Return the final string. The order of removal does not affect the result.
+
+**Constraints:**
+- The string has between **1 and 20,000** lowercase English characters.
+
+## Techniques
+- String
+- Stack
+
+## Solution
+```ts
+function removeDuplicates(s: string): string {
+    let stack: string[] = []
+
+    for(let i = 0; i < s.length; i++) {
+        let currentChar = s.charAt(i)
+
+        if (stack[stack.length - 1] !== currentChar) {
+            stack.push(currentChar)
+        } else {
+            stack.pop()
+        }
+    }
+
+    return stack.join("")
+};
+```

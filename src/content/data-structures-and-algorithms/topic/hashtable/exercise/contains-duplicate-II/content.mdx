@@ -1,0 +1,46 @@
+---
+title: "Contains Duplicate II"
+description: "Given an integer array `nums` and an integer `k`, return `true` *if there are two **distinct indices** *`i`* and *`j`* in the array such that *`nums[i] == nums[j]`* and *`abs(i - j) <= k`."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [hashtable, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Sliding Window + Hash Set"
+  leetcodeUrl: "https://leetcode.com/problems/contains-duplicate-ii/"
+---
+# Contains Duplicate II
+
+Leetcode Problem 219: [Contains Duplicate II](https://leetcode.com/problems/contains-duplicate-ii/description/)
+
+## Problem Summary
+Given an integer array `nums` and an integer `k`, return `true` if there exist two **distinct indices** `i` and `j` such that `nums[i] == nums[j]` and the absolute difference `|i - j|` is at most `k`.
+
+**Constraints:**
+- The array has between **1 and 100,000** elements.
+- Each element is a 32-bit signed integer.
+- `k` is a non-negative integer up to **100,000**.
+
+## Techniques
+- Array
+- Hash Table
+- Sliding Window
+
+## Solution
+```ts
+function containsNearbyDuplicate(nums: number[], k: number): boolean {
+    let previousNumbersWithIndex = new Map<number, number>()
+
+    for (let i = 0; i < nums.length; i++) { 
+        if (previousNumbersWithIndex.has(nums[i]) && Math.abs(i - previousNumbersWithIndex.get(nums[i])!) <= k) {
+            return true
+        }
+
+        previousNumbersWithIndex.set(nums[i], i)
+    }
+
+    return false
+};
+
+console.log(containsNearbyDuplicate([1,2,3,1], 3))
+```

@@ -1,0 +1,103 @@
+---
+title: "Delete Nodes And Return Forest"
+description: "Given the `root` of a binary tree, each node in the tree has a distinct value."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [tree, trees, bfs, dfs, traversal, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "DFS Post-order"
+  leetcodeUrl: "https://leetcode.com/problems/delete-nodes-and-return-forest/"
+---
+# Delete Nodes And Return Forest
+
+Leetcode Problem 1110: [Delete Nodes And Return Forest](https://leetcode.com/problems/delete-nodes-and-return-forest/description/)
+
+## Problem Summary
+Given the `root` of a binary tree and a list of values to delete, remove all nodes with those values. The remaining nodes form a **forest** (a collection of disjoint trees). Return the roots of all trees in the resulting forest in any order.
+
+**Constraints:**
+- The tree has between **1 and 1,000** nodes with unique values.
+- Node values are integers in the range **[1, 1,000]**.
+- The `to_delete` list has between **1 and 1,000** elements, all valid node values.
+
+## Techniques
+- Array
+- Hash Table
+- Tree
+- Depth-First Search
+- Binary Tree
+
+## Solution
+```ts
+export class TreeNode {
+    val: number
+    left: TreeNode | null
+    right: TreeNode | null
+
+    constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+        this.val = (val === undefined ? 0 : val)
+        this.left = (left === undefined ? null : left)
+        this.right = (right === undefined ? null : right)
+    }
+}
+
+function delNodes(root: TreeNode | null, to_delete: number[]): Array<TreeNode | null> {
+    let result: (TreeNode | null)[] = []
+
+    if (root == null) {
+        return result;
+    }
+
+    let stackVisit: TreeNode[] = [root]
+    let stackVisited: TreeNode[] = []
+    let parents = new Map<TreeNode, TreeNode>()
+
+    while (stackVisit.length > 0) {
+        let current = stackVisit.pop()!
+        stackVisited.push(current)
+
+        if (current.left) {
+            stackVisit.push(current.left)
+            parents.set(current.left, current)
+        }
+
+        if (current.right) {
+            stackVisit.push(current.right)
+            parents.set(current.right, current)
+        }
+    }
+
+    const toDelete = new Set(to_delete)
+
+    while (stackVisited.length > 0) {
+        const current = stackVisited.pop()!
+
+        if (toDelete.has(current.val)) {
+            if (current.left && !toDelete.has(current.left.val)) {
+                result.push(current.left)
+            }
+
+            if (current.right && !toDelete.has(current.right.val)) {
+                result.push(current.right)
+            }
+
+            const parent = parents.get(current)
+
+            if (parent) {
+                if (parent.left === current) {
+                    parent.left = null
+                } else {
+                    parent.right = null
+                }
+            }
+        }
+    }
+
+    if (!toDelete.has(root.val)) {
+        result.push(root)
+    }
+
+    return result
+}
+```

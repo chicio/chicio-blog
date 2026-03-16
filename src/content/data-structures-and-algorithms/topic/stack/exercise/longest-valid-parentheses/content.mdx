@@ -1,0 +1,55 @@
+---
+title: "Longest Valid Parentheses"
+description: "Given a string containing just the characters `'('` and `')'`, return *the length of the longest valid (well-formed) parentheses **substring*."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [stack, stacks, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Stack"
+  leetcodeUrl: ""
+---
+# Longest Valid Parentheses
+
+Leetcode Problem 32: [Longest Valid Parentheses](description/)
+
+## Problem Summary
+Given a string containing only `'('` and `')'` characters, return the length of the longest **valid (well-formed) parentheses substring**.
+
+**Constraints:**
+- The string has between **0 and 30,000** characters.
+- Each character is either `'('` or `')'`.
+
+## Techniques
+- String
+- Dynamic Programming
+- Stack
+
+## Solution
+```ts
+function longestValidParentheses(s: string): number {
+    let maxLen = 0
+    let stack: number[] = [-1]
+
+    for (let i = 0; i < s.length; i++) {
+        let parenthesis = s.charAt(i)
+
+        if (parenthesis === '(') { 
+            stack.push(i)
+        } else {
+            stack.pop()
+
+            if (stack.length === 0) {
+                stack.push(i)
+            } else {
+                maxLen = Math.max(i - stack[stack.length - 1], maxLen)
+            }
+        }
+    }
+
+    return maxLen
+};
+
+console.log(longestValidParentheses(")()())"))
+console.log(longestValidParentheses("(()"))
+```

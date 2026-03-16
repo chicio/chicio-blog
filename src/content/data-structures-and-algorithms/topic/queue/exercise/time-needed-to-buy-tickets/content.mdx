@@ -1,0 +1,54 @@
+---
+title: "Time Needed To Buy Tickets"
+description: "There are `n` people in a line queuing to buy tickets, where the `0th` person is at the **front** of the line and the `(n - 1)th` person is at the **back** of the line."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [queue, queues, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Queue"
+  leetcodeUrl: "https://leetcode.com/problems/time-needed-to-buy-tickets/"
+---
+# Time Needed To Buy Tickets
+
+[Time Needed To Buy Tickets](https://leetcode.com/problems/time-needed-to-buy-tickets/description/)
+
+## Problem Summary
+There are `n` people standing in a queue to buy tickets. The `i`-th person wants to buy `tickets[i]` tickets. Each person buys **one ticket per turn**, then goes to the back of the queue (if they still need more). Find the **total time** for the person at position `k` (0-indexed) to finish buying all their tickets.
+
+**Constraints:**
+- The queue has between **1 and 100** people.
+- Each person wants between **1 and 100** tickets.
+- `k` is a valid index between `0` and `n - 1`.
+
+## Techniques
+- Array
+- Queue
+- Simulation
+
+## Solution
+```ts
+function timeRequiredToBuy(tickets: number[], k: number): number {
+    let numberOfTicketsNeeded = tickets[k]
+    let time = 0
+
+    while (tickets[k] > 0) {
+        tickets[0]--
+        let outOfQueue = tickets.shift()!
+
+        if (outOfQueue > 0) {
+            tickets.push(outOfQueue)
+        }
+
+        time++
+
+        if (k === 0 && outOfQueue === 0) {
+            return time
+        }
+
+        k = k > 0 ? --k % tickets.length : tickets.length - 1
+    }
+
+    return time
+};
+```

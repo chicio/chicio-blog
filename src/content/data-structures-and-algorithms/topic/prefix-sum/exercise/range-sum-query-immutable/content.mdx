@@ -1,0 +1,58 @@
+---
+title: "Range Sum Query - Immutable"
+description: "Given an integer array `nums`, handle multiple queries of the following type:"
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [prefix sum, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Classic Prefix Sum"
+  leetcodeUrl: ""
+---
+# Range Sum Query - Immutable
+
+Leetcode Problem 303: [Range Sum Query - Immutable](description/)
+
+## Problem Summary
+Design a `NumArray` class that preprocesses an integer array `nums` at construction time to efficiently answer multiple **range sum queries**. Each query `sumRange(left, right)` returns the sum of elements from index `left` to `right` inclusive.
+
+- `NumArray(nums)` — Initializes the object with the integer array.
+- `sumRange(left, right)` — Returns the sum of `nums[left]` through `nums[right]` inclusive.
+
+**Constraints:**
+- The array has between **1 and 10,000** elements, each in the range **[-100,000, 100,000]**.
+- Query indices satisfy `0 <= left <= right < nums.length`.
+- At most **10,000** queries will be made.
+
+## Techniques
+- Array
+- Design
+- Prefix Sum
+
+## Solution
+```ts
+class NumArray {
+    private prefixSum: number[]
+
+    constructor(nums: number[]) {
+        let sum = 0;
+        this.prefixSum = nums.map(num => sum += num);
+
+        console.log(this.prefixSum)
+    }
+
+    sumRange(left: number, right: number): number {
+        if (left === 0) {
+            return this.prefixSum[right]
+        } 
+
+        return this.prefixSum[right] - this.prefixSum[left - 1]
+    }
+}
+
+/**
+ * Your NumArray object will be instantiated and called as such:
+ * var obj = new NumArray(nums)
+ * var param_1 = obj.sumRange(left,right)
+ */
+```

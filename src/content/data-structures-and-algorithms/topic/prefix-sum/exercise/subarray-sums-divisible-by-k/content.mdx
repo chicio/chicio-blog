@@ -1,0 +1,57 @@
+---
+title: "Subarray Sums Divisible by K"
+description: "Given an integer array `nums` and an integer `k`, return *the number of non-empty **subarrays** that have a sum divisible by *`k`."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [prefix sum, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Prefix Sum + Modulo Buckets"
+  leetcodeUrl: "https://leetcode.com/problems/subarray-sums-divisible-by-k/"
+---
+# Subarray Sums Divisible by K
+
+Leetcode Problem 974: [Subarray Sums Divisible by K](https://leetcode.com/problems/subarray-sums-divisible-by-k/description/)
+
+## Problem Summary
+Given an integer array `nums` and an integer `k`, return the number of **non-empty subarrays** whose sum is divisible by `k`.
+
+**Constraints:**
+- The array has between **1 and 30,000** elements.
+- Each element is an integer in the range **[-10,000, 10,000]**.
+- `k` is a positive integer between **2 and 10,000**.
+
+## Techniques
+- Array
+- Hash Table
+- Prefix Sum
+
+## Solution
+```ts
+function subarraysDivByK(nums: number[], k: number): number {
+    let prefixSum = 0;
+    let subarrays = 0
+    let previousPrefixSum = new Map<number, number>()
+
+    previousPrefixSum.set(0, 1)
+
+    for (let i = 0; i < nums.length; i++) {
+        prefixSum = prefixSum + nums[i] 
+        let remainder = prefixSum % k;
+
+        if (remainder < 0) { 
+            remainder += k;
+        }
+
+        if (previousPrefixSum.has(remainder)) {
+            subarrays = subarrays + previousPrefixSum.get(remainder)!
+        } 
+          
+        previousPrefixSum.set(remainder, (previousPrefixSum.get(remainder) || 0) + 1)
+    }
+
+    return subarrays    
+};
+
+console.log(subarraysDivByK([4,5,0,-2,-3,1], 5))
+```

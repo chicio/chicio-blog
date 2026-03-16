@@ -1,0 +1,70 @@
+---
+title: "Decode String"
+description: "Given an encoded string, return its decoded string."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [recursion, recursive algorithms, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Recursive Descent / Nested Parsing"
+  leetcodeUrl: "https://leetcode.com/problems/decode-string/"
+---
+# Decode String
+
+Leetcode Problem 394: [Decode String](https://leetcode.com/problems/decode-string/description/)
+
+## Problem Summary
+Given an encoded string following the rule `k[encoded_string]` — meaning the `encoded_string` inside the brackets is repeated exactly `k` times — return the decoded string. `k` is always a positive integer, the original data contains no digits, and brackets are always well-formed and properly nested.
+
+**Constraints:**
+- The encoded string has between **1 and 30** characters.
+- Characters consist of lowercase English letters, digits, and square brackets.
+- All integers in the string are in the range **[1, 300]**.
+- The decoded output will never exceed **100,000** characters.
+
+## Techniques
+- String
+- Stack
+- Recursion
+
+## Solution
+```ts
+function isDigit(char: string): boolean {
+    return /^[0-9]$/.test(char);
+}
+
+function recursiveDecode(s: string, i: number):  [string, number] {
+    let currentChar = s.charAt(i)
+    let result = ""
+
+    while (i < s.length && currentChar !== ']') {
+        if (isDigit(currentChar)) {
+            let times = ""
+
+            while (isDigit(currentChar)) {
+                times += currentChar
+                currentChar = s.charAt(++i);
+            }
+
+            const [decodedSubstring, nextIndex] = recursiveDecode(s, ++i);
+            i = nextIndex;
+
+            result += decodedSubstring.repeat(parseInt(times));
+            currentChar = s.charAt(i)
+        } else {
+            result += currentChar
+            currentChar = s.charAt(++i)
+        }
+    }
+
+    return [result, i + 1]
+}
+
+function decodeString(s: string): string {
+    const [decoded] = recursiveDecode(s, 0)
+
+    return decoded
+}
+
+console.log(decodeString("3[a]2[bc]"))
+```

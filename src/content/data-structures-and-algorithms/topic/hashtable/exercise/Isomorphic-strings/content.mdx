@@ -1,0 +1,52 @@
+---
+title: "Isomorphic Strings"
+description: "Given two strings `s` and `t`, *determine if they are isomorphic*."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [hashtable, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Character Mapping"
+  leetcodeUrl: ""
+---
+# Isomorphic Strings
+
+Leetcode Problem 205: [Isomorphic Strings](description/)
+
+## Problem Summary
+Two strings `s` and `t` are **isomorphic** if there exists a consistent one-to-one character mapping from `s` to `t` — every occurrence of a character in `s` maps to the same character in `t`, and no two distinct characters in `s` map to the same character in `t` (though a character may map to itself).
+
+Given two strings `s` and `t` of the same length, determine whether they are isomorphic.
+
+**Constraints:**
+- Both strings have the same length, between **1 and 50,000** characters.
+- Both strings consist of any valid ASCII character.
+
+## Techniques
+- Hash Table
+- String
+
+## Solution
+```ts
+function isIsomorphic(s: string, t: string): boolean {
+    let letterMappingS = new Map<string, string>()
+    let letterMappingT = new Map<string, string>()
+
+    for (let i = 0; i < s.length; i++) {
+        if (letterMappingS.has(s.charAt(i)) && letterMappingS.get(s.charAt(i)) !== t.charAt(i)) {
+            return false
+        }
+
+        if (letterMappingT.has(t.charAt(i)) && letterMappingT.get(t.charAt(i)) !== s.charAt(i)) {
+            return false
+        }
+
+        letterMappingS.set(s.charAt(i), t.charAt(i))
+        letterMappingT.set(t.charAt(i), s.charAt(i))
+    }
+
+    return true
+}
+
+console.log(isIsomorphic('egg', 'add'))
+```

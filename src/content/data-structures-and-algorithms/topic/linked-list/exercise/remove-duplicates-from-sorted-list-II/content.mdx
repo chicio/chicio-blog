@@ -1,0 +1,58 @@
+---
+title: "Remove Duplicates from Sorted List II"
+description: "Given the `head` of a sorted linked list, *delete all nodes that have duplicate numbers, leaving only distinct numbers from the original list*. Return *the linked list **sorted** as well*."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [linked list, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Dummy Node + Traversal"
+  leetcodeUrl: "https://leetcode.com/problems/remove-duplicates-from-sorted-list-ii/"
+---
+# Remove Duplicates from Sorted List II
+
+Leetcode Problem 82: [Remove Duplicates from Sorted List II](https://leetcode.com/problems/remove-duplicates-from-sorted-list-ii/description/)
+
+## Problem Summary
+Given the `head` of a sorted linked list, delete **all nodes** that have duplicate values (keeping no copies), and return the head of the cleaned-up list.
+
+**Constraints:**
+- The list has between **0 and 300** nodes.
+- Node values are integers in the range **[-100, 100]**, and the list is sorted in non-decreasing order.
+
+## Techniques
+- Linked List
+- Two Pointers
+
+## Solution
+```ts
+import { ListNode } from "../list-node"
+
+function deleteDuplicates(head: ListNode | null): ListNode | null {
+    if (!head) {
+        return null
+    }
+
+    let current: ListNode | null = new ListNode(-1, head)
+
+    while (current) {
+        if (current.next && current.next?.val === current.next?.next?.val) {
+            let value = current.next.val
+            let toBeRemoved: ListNode | null = current.next
+
+            while (toBeRemoved?.val === value) {
+                if (toBeRemoved === head) {
+                    head = head.next
+                }
+                toBeRemoved = toBeRemoved.next
+            }
+
+            current.next = toBeRemoved
+        } else {
+            current = current.next
+        }
+    }
+
+    return head
+}
+```

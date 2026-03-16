@@ -1,0 +1,103 @@
+---
+title: "Valid Sudoku"
+description: "Determine if a `9 x 9` Sudoku board is valid. Only the filled cells need to be validated **according to the following rules**:"
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [matrix, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Constraint validation (rows, columns, boxes)"
+  leetcodeUrl: "https://leetcode.com/problems/valid-sudoku/"
+---
+# Valid Sudoku
+
+Leetcode Problem 36: [Valid Sudoku](https://leetcode.com/problems/valid-sudoku/description/)
+
+## Problem Summary
+Determine whether a partially filled `9 × 9` Sudoku board is **valid** according to these rules:
+
+1. Each **row** must contain the digits `1–9` without repetition.
+2. Each **column** must contain the digits `1–9` without repetition.
+3. Each of the nine **3×3 sub-boxes** must contain the digits `1–9` without repetition.
+
+Empty cells are represented by `'.'`. A valid board is not necessarily solvable — only the filled cells need to satisfy the rules.
+
+```
+5 3 . | . 7 . | . . .
+6 . . | 1 9 5 | . . .
+. 9 8 | . . . | . 6 .
+------+-------+------
+8 . . | . 6 . | . . 3
+4 . . | 8 . 3 | . . 1
+7 . . | . 2 . | . . 6
+------+-------+------
+. 6 . | . . . | 2 8 .
+. . . | 4 1 9 | . . 5
+. . . | . 8 . | . 7 9
+```
+
+**Constraints:**
+- The board is always exactly `9 × 9`.
+- Each cell contains either a digit character `'1'`–`'9'` or `'.'` for empty.
+
+## Techniques
+- Array
+- Hash Table
+- Matrix
+
+## Solution
+```ts
+function isValidSudoku(board: string[][]): boolean {
+    let previous = new Set<string>()
+
+    // Each row must contain the digits 1-9
+    for (let i = 0; i < 9; i++) {
+        previous.clear()
+        for (let j = 0; j < 9; j++) {
+            let element = board[i][j];
+            if (element !== ".") {
+                if (previous.has(element)) {
+                    return false;
+                }
+                previous.add(element);
+            }
+        }
+    }
+
+    // Each column must contain the digits 1-9
+    for (let i = 0; i < 9; i++) {
+        previous.clear()
+        for (let j = 0; j < 9; j++) {
+            let element = board[j][i];
+            if (element !== ".") {
+                if (previous.has(element)) {
+                    return false;
+                }
+                previous.add(element);
+            }
+        }
+    }
+
+    // Each 3x3 submatrix of the grid must contain the digits 1-9
+    for (let gridRow = 0; gridRow < 3; gridRow++) {
+        for (let gridCol = 0; gridCol < 3; gridCol++) {
+            previous.clear()
+            for (let i = gridRow * 3; i < gridRow * 3 + 3; i++) {
+                for (let j = gridCol * 3; j < gridCol * 3 + 3; j++) {
+                    let element = board[i][j];
+                    if (element !== ".") {
+                        if (previous.has(element)) {
+                            return false;
+                        }
+                        previous.add(element);
+                    }
+                }
+            }
+        }
+    }
+
+    return true;
+}
+
+console.log(isValidSudoku([["5","3",".",".","7",".",".",".","."],["6",".",".","1","9","5",".",".","."],[".","9","8",".",".",".",".","6","."],["8",".",".",".","6",".",".",".","3"],["4",".",".","8",".","3",".",".","1"],["7",".",".",".","2",".",".",".","6"],[".","6",".",".",".",".","2","8","."],[".",".",".","4","1","9",".",".","5"],[".",".",".",".","8",".",".","7","9"]]))
+```

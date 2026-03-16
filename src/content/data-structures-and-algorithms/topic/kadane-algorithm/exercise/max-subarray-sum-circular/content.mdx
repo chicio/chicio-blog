@@ -1,0 +1,65 @@
+---
+title: "Maximum Sum Circular Subarray"
+description: "Given a **circular integer array** `nums` of length `n`, return *the maximum possible sum of a non-empty **subarray** of *`nums`."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [kadane's algorithm, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Kadane + Total Sum Trick"
+  leetcodeUrl: "https://leetcode.com/problems/maximum-sum-circular-subarray/"
+---
+# Maximum Sum Circular Subarray
+
+Leetcode Problem 918: [Maximum Sum Circular Subarray](https://leetcode.com/problems/maximum-sum-circular-subarray/description/)
+
+## Problem Summary
+Given a **circular** integer array `nums` of length `n`, return the maximum possible sum of a non-empty contiguous subarray. In a circular array, the end wraps around to the beginning, so a subarray may span across the boundary. Each element may only be included once.
+
+**Constraints:**
+- The array has between **1 and 30,000** elements.
+- Each element is an integer in the range **[-30,000, 30,000]**.
+
+## Techniques
+- Array
+- Divide and Conquer
+- Dynamic Programming
+- Queue
+- Monotonic Queue
+
+## Solution
+```ts
+function maxSubarraySumCircular(nums: number[]): number {
+    let sum = nums[0]
+    let globalMax = sum
+    let total = nums[0]
+
+    //Kadane - max contiguos sum + total sum
+    for (let i = 1; i < nums.length; i++) { 
+        total = total + nums[i]
+        sum = Math.max(nums[i], sum + nums[i])
+        globalMax = Math.max(globalMax, sum)
+    }
+
+    //Kadane - min contiguos sum
+    sum = nums[0];
+    let globalMin = sum;
+   
+    for (let i = 1; i < nums.length; i++) {
+        sum = Math.min(nums[i], sum + nums[i])
+        globalMin = Math.min(globalMin, sum);
+    }
+
+    if (globalMax < 0) {
+        return globalMax
+    }
+
+    return Math.max(
+        globalMax, 
+        total - globalMin
+    )
+};
+
+console.log(maxSubarraySumCircular([5,-3,5]))
+console.log(maxSubarraySumCircular([1,-2,3,-2]))
+```

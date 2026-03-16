@@ -1,0 +1,54 @@
+---
+title: "Maximum Product Subarray"
+description: "Given an integer array `nums`, find a subarray that has the largest product, and return *the product*."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [kadane's algorithm, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Kadane-style Tracking of Max/Min"
+  leetcodeUrl: "https://leetcode.com/problems/maximum-product-subarray/"
+---
+# Maximum Product Subarray
+
+Leetcode Problem 152: [Maximum Product Subarray](https://leetcode.com/problems/maximum-product-subarray/description/)
+
+## Problem Summary
+Given an integer array `nums`, find the contiguous subarray with the **largest product** and return that product. Note that a single-element subarray is valid, and the result is guaranteed to fit in a 32-bit integer.
+
+**Constraints:**
+- The array has between **1 and 20,000** elements.
+- Each element is an integer in the range **[-10, 10]**.
+- The product of any subarray of `nums` is guaranteed to fit in a **32-bit** integer.
+
+## Techniques
+- Array
+- Dynamic Programming
+
+## Solution
+```ts
+function maxProduct(nums: number[]): number {
+    if (nums.length === 0) { 
+        return 0;
+    }
+
+    let maxProduct = nums[0];
+    let minProduct = nums[0];
+    let result = nums[0];
+
+    for (let i = 1; i < nums.length; i++) {
+        if (nums[i] < 0) {
+            [maxProduct, minProduct] = [minProduct, maxProduct];
+        }
+
+        maxProduct = Math.max(nums[i], maxProduct * nums[i]);
+        minProduct = Math.min(nums[i], minProduct * nums[i]);
+
+        result = Math.max(result, maxProduct);
+    }
+
+    return result;
+}
+
+console.log(maxProduct([2,-5,-2,-4,3]))
+```

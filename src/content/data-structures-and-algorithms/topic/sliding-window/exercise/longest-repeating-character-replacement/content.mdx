@@ -1,0 +1,54 @@
+---
+title: "Longest Repeating Character Replacement"
+description: "You are given a string `s` and an integer `k`. You can choose any character of the string and change it to any other uppercase English character. You can perform this operation at most `k` times."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [sliding window, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Dynamic Sliding Window"
+  leetcodeUrl: "https://leetcode.com/problems/longest-repeating-character-replacement/"
+---
+# Longest Repeating Character Replacement
+
+Leetcode Problem 424: [Longest Repeating Character Replacement](https://leetcode.com/problems/longest-repeating-character-replacement/description/)
+
+## Problem Summary
+Given a string `s` and an integer `k`, you can replace at most `k` characters in the string with any other uppercase letter. Return the **length of the longest substring** that contains only one distinct letter after at most `k` replacements.
+
+**Constraints:**
+- The string has between **1 and 100,000** uppercase English characters.
+- `k` is a non-negative integer up to the string length.
+
+## Techniques
+- Hash Table
+- String
+- Sliding Window
+
+## Solution
+```ts
+function characterReplacement(s: string, k: number): number {
+    const charsFrequencies = new Map<string, number>();
+    let maxLength = 0
+    let maxFrequency = 0
+    let startSubstring = 0
+
+    for (let i = 0; i < s.length; i++) {
+        let char = s.charAt(i)
+        charsFrequencies.set(char, (charsFrequencies.get(char) || 0) + 1)
+        maxFrequency = Math.max(maxFrequency, charsFrequencies.get(char)!)
+
+        while (i - startSubstring + 1 - maxFrequency > k) {
+            let startingChar = s.charAt(startSubstring)
+            charsFrequencies.set(startingChar, charsFrequencies.get(startingChar)! - 1)
+            startSubstring++
+        }
+        
+        maxLength = Math.max(maxLength, i - startSubstring + 1)
+    }
+
+    return maxLength
+};
+
+console.log(characterReplacement("KRSCDCSONAJNHLBMDQGIFCPEKPOHQIHLTDIQGEKLRLCQNBOHNDQGHJPNDQPERNFSSSRDEQLFPCCCARFMDLHADJADAGNNSBNCJQOF", 4))
+```

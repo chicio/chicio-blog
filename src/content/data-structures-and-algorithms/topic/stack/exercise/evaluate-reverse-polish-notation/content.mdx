@@ -1,0 +1,57 @@
+---
+title: "Evaluate Reverse Polish Notation"
+description: "You are given an array of strings `tokens` that represents an arithmetic expression in a Reverse Polish Notation."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [stack, stacks, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Stack"
+  leetcodeUrl: ""
+---
+# Evaluate Reverse Polish Notation
+
+Leetcode Problem 150: [Evaluate Reverse Polish Notation](description/)
+
+## Problem Summary
+Evaluate the value of an arithmetic expression given in **Reverse Polish Notation** (postfix). Operands are integers; supported operators are `+`, `-`, `*`, and `/` (integer division truncating toward zero). The expression is guaranteed to be valid.
+
+**Constraints:**
+- The token array has between **1 and 10,000** tokens.
+- Each token is either an integer in the range **[-200, 200]**, or one of `+`, `-`, `*`, `/`.
+- The result is guaranteed to fit in a **32-bit signed integer**.
+
+## Techniques
+- Array
+- Math
+- Stack
+
+## Solution
+```ts
+function evalRPN(tokens: string[]): number {
+    const stack: number[] = []
+    var operations = new Map([
+        ['+', (x: number, y: number) => x + y],
+        ['-', (x: number, y: number) => x - y],
+        ['*', (x: number, y: number) => x * y],
+        ['/', (x: number, y: number) => Math.trunc(x / y)]
+    ]);
+
+    for (let i = 0; i < tokens.length; i++) {
+        const next = tokens[i];
+        const operation = operations.get(next)
+        
+        if (operation) {
+            const y = stack.pop()!
+            const x = stack.pop()!
+            stack.push(operation(x, y))
+        } else {
+            stack.push(Number(next))
+        }
+    }
+
+    return stack.pop()!
+};
+
+console.log(evalRPN(["10","6","9","3","+","-11","*","/","*","17","+","5","+"]))
+```

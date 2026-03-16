@@ -1,0 +1,61 @@
+---
+title: "Binary Tree Inorder Traversal"
+description: "Given the `root` of a binary tree, return *the inorder traversal of its nodes' values*."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [tree, trees, bfs, dfs, traversal, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "DFS In-order"
+  leetcodeUrl: "https://leetcode.com/problems/binary-tree-inorder-traversal/"
+---
+# Binary Tree Inorder Traversal
+
+Leetcode Problem 94: [Binary Tree Inorder Traversal](https://leetcode.com/problems/binary-tree-inorder-traversal/description/)
+
+## Problem Summary
+Given the `root` of a binary tree, return its nodes' values in **in-order** traversal order (left subtree → root → right subtree).
+
+**Constraints:**
+- The tree has between **0 and 100** nodes.
+- Node values are integers in the range **[-100, 100]**.
+
+## Techniques
+- Stack
+- Tree
+- Depth-First Search
+- Binary Tree
+
+## Solution
+```ts
+export class TreeNode {
+    val: number
+    left: TreeNode | null
+    right: TreeNode | null
+
+    constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+        this.val = (val === undefined ? 0 : val)
+        this.left = (left === undefined ? null : left)
+        this.right = (right === undefined ? null : right)
+    }
+}
+
+function inorderTraversal(root: TreeNode | null): number[] {
+    let stack: TreeNode[] = []
+    let result: number[] = []
+    let current = root
+
+    while (current || stack.length > 0) {
+        while (current) {
+            stack.push(current)
+            current = current.left
+        }
+
+        current = stack.pop()!
+        result.push(current.val)
+        current = current.right
+    }
+
+    return result
+}
+```

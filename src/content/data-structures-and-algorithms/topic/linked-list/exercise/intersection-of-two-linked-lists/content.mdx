@@ -1,0 +1,48 @@
+---
+title: "Intersection of Two Linked Lists"
+description: "Given the heads of two singly linked-lists `headA` and `headB`, return *the node at which the two lists intersect*. If the two linked lists have no intersection at all, return `null`."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [linked list, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Pointer Traversal"
+  leetcodeUrl: "https://leetcode.com/problems/intersection-of-two-linked-lists/"
+---
+# Intersection of Two Linked Lists
+
+Leetcode Problem 160: [Intersection of Two Linked Lists](https://leetcode.com/problems/intersection-of-two-linked-lists/description/)
+
+## Problem Summary
+Given the heads of two singly linked lists, return the **node at which the two lists intersect**, or `null` if they do not intersect. The intersection is by reference (same node object), not by value.
+
+**Constraints:**
+- Each list has between **1 and 30,000** nodes.
+- Node values are integers in the range **[1, 50,000]**.
+- The lists may or may not intersect.
+
+## Techniques
+- Hash Table
+- Linked List
+- Two Pointers
+
+## Solution
+```ts
+import { ListNode } from "../list-node"
+
+function getIntersectionNode(headA: ListNode | null, headB: ListNode | null): ListNode | null {
+    if (!headA || !headB) {
+        return null
+    }
+
+    let currentA: ListNode | null = headA
+    let currentB: ListNode | null = headB
+
+    while (currentA !== currentB) {
+        currentA = currentA === null ? headA : currentA.next
+        currentB = currentB === null ? headB : currentB.next
+    }
+
+    return currentA
+};
+```

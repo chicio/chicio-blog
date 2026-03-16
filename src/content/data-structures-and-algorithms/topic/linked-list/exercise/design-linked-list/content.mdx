@@ -1,0 +1,114 @@
+---
+title: "Design Linked List"
+description: "Design your implementation of the linked list. You can choose to use a singly or doubly linked list."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [linked list, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Linked List Design"
+  leetcodeUrl: "https://leetcode.com/problems/design-linked-list/"
+---
+# Design Linked List
+
+Leetcode Problem 707: [Design Linked List](https://leetcode.com/problems/design-linked-list/description/)
+
+## Problem Summary
+Design your own implementation of a singly or doubly linked list. The implementation must support the following operations on a **0-indexed** list:
+
+- `get(index)` — Returns the value at the given index, or `-1` if the index is invalid.
+- `addAtHead(val)` — Inserts a new node with value `val` at the beginning.
+- `addAtTail(val)` — Appends a new node with value `val` at the end.
+- `addAtIndex(index, val)` — Inserts a node before the node at the given index. If `index` equals the list length, append at end. If `index` exceeds length, do not insert.
+- `deleteAtIndex(index)` — Deletes the node at the given index if valid.
+
+**Constraints:**
+- Index and value are non-negative integers up to **1,000**.
+- At most **2,000** method calls will be made in total.
+
+## Techniques
+- Linked List
+- Design
+
+## Solution
+```ts
+import { ListNode } from "../list-node";
+
+class MyLinkedList {
+    private head: ListNode | null = null;
+
+    get(index: number): number {
+        let current = this.head;
+
+        for (let i = 0; i < index; i++) {
+            if (!current) {
+                return -1;
+            }
+
+            current = current.next;
+        }
+
+        return current ? current.val : -1;
+    }
+
+    addAtHead(val: number): void {
+        this.head = new ListNode(val, this.head);
+    }
+
+    addAtTail(val: number): void {
+        if (!this.head) {
+            this.head = new ListNode(val);
+            return;
+        }
+
+        let current = this.head;
+
+        while (current.next !== null) {
+            current = current.next;
+        }
+
+        current.next = new ListNode(val);
+    }
+
+    addAtIndex(index: number, val: number): void {
+        if (index === 0) {
+            this.addAtHead(val);
+            return;
+        }
+
+        let current = this.head;
+
+        for (let i = 0; i < index - 1; i++) {
+            if (!current) return;
+            current = current.next;
+        }
+
+        if (!current) return;
+
+        let newNode = new ListNode(val, current.next);
+        current.next = newNode;
+    }
+
+    deleteAtIndex(index: number): void {
+        if (!this.head) {
+            return;
+        }
+
+        if (index === 0) {
+            this.head = this.head.next;
+            return;
+        }
+
+        let current = this.head;
+
+        for (let i = 0; i < index - 1; i++) {
+            if (!current || !current.next) return;
+            current = current.next;
+        }
+
+        if (current && current.next) {
+            current.next = current.next.next;
+        }
+    }
+}
+```

@@ -1,0 +1,67 @@
+---
+title: "Top K Frequent Words"
+description: "Given an array of strings `words` and an integer `k`, return *the *`k`* most frequent strings*."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [bucket sort, sort, sorting, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Bucket Sort"
+  leetcodeUrl: "https://leetcode.com/problems/top-k-frequent-words/"
+---
+# Top K Frequent Words
+
+Leetcode Problem 692: [Top K Frequent Words](https://leetcode.com/problems/top-k-frequent-words/description/)
+
+## Problem Summary
+Given an array of strings and an integer `k`, return the `k` most frequently occurring strings, sorted by frequency from highest to lowest. Words with equal frequency must be sorted **lexicographically** (alphabetical order).
+
+**Constraints:**
+- The array has between **1 and 500** words.
+- Each word has between **1 and 10** characters, consisting of lowercase English letters only.
+- `k` is a valid integer between `1` and the number of unique words.
+
+## Techniques
+- Array
+- Hash Table
+- String
+- Trie
+- Sorting
+- Heap (Priority Queue)
+- Bucket Sort
+- Counting
+
+## Solution
+```ts
+function topKFrequent(words: string[], k: number): string[] {
+    let wordsFrequencies = new Map<string, number>()
+
+    for (let i = 0; i < words.length; i++) {
+        let currentWord = words[i]
+        wordsFrequencies.set(currentWord, (wordsFrequencies.get(currentWord) || 0) + 1)
+    }
+
+    let bucketsOfFrequencies = new Map<number, string[]>()
+
+    for (const [word, frequency] of wordsFrequencies) {
+        let bucket = bucketsOfFrequencies.get(frequency) || []
+        bucket.push(word)
+        bucketsOfFrequencies.set(frequency, bucket)
+    }
+
+    let result = []
+
+    let sortedFrequencies = Array
+        .from(bucketsOfFrequencies.keys())
+        .sort((a, b) => b - a)
+
+    for (const frequency of sortedFrequencies) {
+        let bucket = bucketsOfFrequencies.get(frequency)!
+        result.push(...bucket.sort())
+    }
+
+    return result.slice(0, k);
+}
+
+console.log(topKFrequent(["i","love","leetcode","i","love","coding"], 2))
+```

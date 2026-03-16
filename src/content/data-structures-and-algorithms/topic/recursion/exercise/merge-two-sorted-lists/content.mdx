@@ -1,0 +1,64 @@
+---
+title: "Merge Two Sorted Lists"
+description: "You are given the heads of two sorted linked lists `list1` and `list2`."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [recursion, recursive algorithms, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Structural Recursion on Linked Lists"
+  leetcodeUrl: "https://leetcode.com/problems/merge-two-sorted-lists/"
+---
+# Merge Two Sorted Lists
+
+Leetcode Problem 21: [Merge Two Sorted Lists](https://leetcode.com/problems/merge-two-sorted-lists/description/)
+
+## Problem Summary
+Given the heads of two sorted linked lists `list1` and `list2`, merge them into one sorted linked list by splicing their nodes together, and return the head of the merged list.
+
+**Constraints:**
+- Each list has between **0 and 50** nodes.
+- Node values are integers in the range **[-100, 100]**.
+- Both lists are already sorted in non-decreasing order.
+
+## Techniques
+- Linked List
+- Recursion
+
+## Solution
+```ts
+import {ListNode} from "../list-node";
+
+function mergeTwoListsRecursive(head: ListNode, list1: ListNode | null, list2: ListNode | null) {
+    if (list1 === null && list2 === null) {
+        return
+    }
+
+    if (list1 === null) {
+        head.next = list2
+        return
+    }
+
+    if (list2 === null) {
+        head.next = list1
+        return
+    }
+
+    if (list1.val < list2.val) {
+        head.next = list1
+        mergeTwoListsRecursive(head.next, list1.next, list2)
+    } else {
+        head.next = list2
+        mergeTwoListsRecursive(head.next, list1, list2.next)
+    }
+}
+
+function mergeTwoLists(list1: ListNode | null, list2: ListNode | null): ListNode | null {
+    let dummy = new ListNode(-1, null)
+    let head = dummy
+
+    mergeTwoListsRecursive(head, list1, list2)
+
+    return dummy.next
+}
+```

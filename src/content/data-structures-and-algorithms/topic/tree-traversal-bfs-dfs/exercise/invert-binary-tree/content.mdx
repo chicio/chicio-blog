@@ -1,0 +1,64 @@
+---
+title: "Invert Binary Tree"
+description: "Given the `root` of a binary tree, invert the tree, and return *its root*."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [tree, trees, bfs, dfs, traversal, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "DFS Post-order"
+  leetcodeUrl: "https://leetcode.com/problems/invert-binary-tree/"
+---
+# Invert Binary Tree
+
+Leetcode Problem 226: [Invert Binary Tree](https://leetcode.com/problems/invert-binary-tree/description/)
+
+## Problem Summary
+Given the `root` of a binary tree, invert the tree (produce its mirror image) by recursively swapping the left and right subtrees of every node, and return the root.
+
+```
+    4               4
+   / \    -->      / \
+  2   7           7   2
+ / \ / \         / \ / \
+1  3 6  9       9  6 3  1
+```
+
+**Constraints:**
+- The tree has between **0 and 100** nodes.
+- Node values are integers in the range **[-100, 100]**.
+
+## Techniques
+- Tree
+- Depth-First Search
+- Breadth-First Search
+- Binary Tree
+
+## Solution
+```ts
+export class TreeNode {
+    val: number
+    left: TreeNode | null
+    right: TreeNode | null
+
+    constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+        this.val = (val === undefined ? 0 : val)
+        this.left = (left === undefined ? null : left)
+        this.right = (right === undefined ? null : right)
+    }
+}
+
+function invertTree(root: TreeNode | null): TreeNode | null {
+    if (root === null) {
+        return root
+    }
+
+    const leftNode = invertTree(root.left)
+    const rightNode = invertTree(root.right)
+
+    root.left = rightNode
+    root.right = leftNode
+
+    return root
+}
+```

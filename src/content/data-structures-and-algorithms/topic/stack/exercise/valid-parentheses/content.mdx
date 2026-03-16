@@ -1,0 +1,57 @@
+---
+title: "Valid Parentheses"
+description: "Given a string `s` containing just the characters `'('`, `')'`, `'{'`, `'}'`, `'['` and `']'`, determine if the input string is valid."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [stack, stacks, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Stack"
+  leetcodeUrl: "https://leetcode.com/problems/valid-parentheses/"
+---
+# Valid Parentheses
+
+[Valid Parentheses](https://leetcode.com/problems/valid-parentheses/description/)
+
+## Problem Summary
+Given a string containing only `'('`, `')'`, `'{'`, `'}'`, `'['`, and `']'` characters, determine if the string is **valid**. A string is valid if:
+
+1. Every opening bracket is closed by the **same type** of bracket.
+2. Brackets are closed in the **correct order** (most recently opened bracket first).
+3. Every closing bracket has a corresponding open bracket of the same type.
+
+**Constraints:**
+- The string has between **1 and 10,000** characters.
+- It consists only of bracket characters `'()[]{}'`.
+
+## Techniques
+- String
+- Stack
+
+## Solution
+```ts
+const parenthesisCombinations: Record<string, string> = {
+    '}' : '{',
+    ']' : '[',
+    ')' : '(',
+}
+
+function isValid(s: string): boolean {
+    let stack: string[] = []
+
+    for (let i = 0; i < s.length; i++) {
+        const parenthesis = s.charAt(i);
+
+        if (parenthesis === '(' || parenthesis === '{' || parenthesis === '[') {
+            stack.push(parenthesis)
+        } else {
+            let lastParenthesis = stack.pop()
+            if (lastParenthesis !== parenthesisCombinations[parenthesis]) {
+                return false
+            }
+        }
+    }
+
+    return stack.length === 0
+};
+```

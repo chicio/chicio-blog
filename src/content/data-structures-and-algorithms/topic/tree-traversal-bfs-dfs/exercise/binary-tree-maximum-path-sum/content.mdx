@@ -1,0 +1,64 @@
+---
+title: "Binary Tree Maximum Path Sum"
+description: "A **path** in a binary tree is a sequence of nodes where each pair of adjacent nodes in the sequence has an edge connecting them. A node can only appear in the sequence **at most once**. Note that ..."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [tree, trees, bfs, dfs, traversal, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "DFS Post-order"
+  leetcodeUrl: "https://leetcode.com/problems/binary-tree-maximum-path-sum/"
+---
+# Binary Tree Maximum Path Sum
+
+Leetcode Problem 124: [Binary Tree Maximum Path Sum](https://leetcode.com/problems/binary-tree-maximum-path-sum/description/)
+
+## Problem Summary
+A **path** in a binary tree is a sequence of nodes where each adjacent pair is connected by an edge, and no node is visited more than once. Given the `root` of a binary tree, return the **maximum sum** of any path. The path does not need to pass through the root or include any particular node.
+
+**Constraints:**
+- The tree has between **1 and 30,000** nodes.
+- Node values are integers in the range **[-1,000, 1,000]**.
+
+## Techniques
+- Dynamic Programming
+- Tree
+- Depth-First Search
+- Binary Tree
+
+## Solution
+```ts
+export class TreeNode {
+    val: number
+    left: TreeNode | null
+    right: TreeNode | null
+
+    constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+        this.val = (val === undefined ? 0 : val)
+        this.left = (left === undefined ? null : left)
+        this.right = (right === undefined ? null : right)
+    }
+}
+
+function maxPathSum(root: TreeNode | null): number {
+    let maxSum = -Infinity
+
+    function sumPath(root: TreeNode | null) {
+        if (!root) {
+            return 0
+        }
+
+        const leftSum = Math.max(0, sumPath(root.left))
+        const rightSum = Math.max(0, sumPath(root.right))
+        const sum = root.val + leftSum + rightSum
+
+        maxSum = Math.max(sum, maxSum)
+
+        return root.val + Math.max(leftSum, rightSum)
+    }
+
+    sumPath(root)
+
+    return maxSum
+};
+```

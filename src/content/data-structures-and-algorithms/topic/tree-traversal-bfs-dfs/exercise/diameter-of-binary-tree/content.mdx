@@ -1,0 +1,62 @@
+---
+title: "Diameter of Binary Tree"
+description: "Given the `root` of a binary tree, return *the length of the **diameter** of the tree*."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [tree, trees, bfs, dfs, traversal, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "DFS Post-order"
+  leetcodeUrl: "https://leetcode.com/problems/diameter-of-binary-tree/"
+---
+# Diameter of Binary Tree
+
+Leetcode Problem 543: [Diameter of Binary Tree](https://leetcode.com/problems/diameter-of-binary-tree/description/)
+
+## Problem Summary
+Given the `root` of a binary tree, return the **diameter** — the length of the longest path between any two nodes in the tree, measured by the number of edges. The path does not need to pass through the root.
+
+**Constraints:**
+- The tree has between **1 and 10,000** nodes.
+- Node values are integers in the range **[-100, 100]**.
+
+## Techniques
+- Tree
+- Depth-First Search
+- Binary Tree
+
+## Solution
+```ts
+export class TreeNode {
+    val: number
+    left: TreeNode | null
+    right: TreeNode | null
+
+    constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+        this.val = (val === undefined ? 0 : val)
+        this.left = (left === undefined ? null : left)
+        this.right = (right === undefined ? null : right)
+    }
+}
+
+function diameterOfBinaryTree(root: TreeNode | null): number {
+    let maxDiameter = 0
+
+    function height(root: TreeNode | null): number {
+        if (!root) {
+            return 0
+        }
+
+        const leftHeight = height(root.left)
+        const rightHeight = height(root.right)
+
+        maxDiameter = Math.max(maxDiameter, leftHeight + rightHeight)
+
+        return 1 + Math.max(leftHeight, rightHeight)
+    }
+
+    height(root)
+
+    return maxDiameter
+}
+```

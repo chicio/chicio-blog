@@ -1,0 +1,79 @@
+---
+title: "Populating Next Right Pointers in Each Node II"
+description: "Given a binary tree"
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [tree, trees, bfs, dfs, traversal, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "BFS"
+  leetcodeUrl: "https://leetcode.com/problems/populating-next-right-pointers-in-each-node-ii/"
+---
+# Populating Next Right Pointers in Each Node II
+
+Leetcode Problem 117: [Populating Next Right Pointers in Each Node II](https://leetcode.com/problems/populating-next-right-pointers-in-each-node-ii/description/)
+
+## Problem Summary
+Given the `root` of a **general** (not necessarily perfect) binary tree where each node has a `next` pointer, populate every node's `next` to point to its **next right neighbor** on the same level. If there is no such neighbor, set `next` to `null`. The initial `next` values are all `null`. You may only use constant extra space.
+
+**Constraints:**
+- The tree has between **0 and 6,000** nodes.
+- Node values are integers in the range **[-100, 100]**.
+
+## Techniques
+- Linked List
+- Tree
+- Depth-First Search
+- Breadth-First Search
+- Binary Tree
+
+## Solution
+```ts
+class _Node1 {
+         val: number
+         left: _Node1 | null
+         right: _Node1 | null
+         next: _Node1 | null
+
+         constructor(val?: number, left?: _Node1, right?: _Node1, next?: _Node1) {
+             this.val = (val===undefined ? 0 : val)
+                 this.left = (left===undefined ? null : left)
+                 this.right = (right===undefined ? null : right)
+                 this.next = (next===undefined ? null : next)
+         }
+}
+
+function connect(root: _Node1 | null): _Node1 | null {
+    if (!root) {
+        return null
+    }
+
+    let queue: _Node1[] = [root]
+
+    while (queue.length > 0) {
+        let levelSize = queue.length
+        let previousNode = null
+
+        while (levelSize > 0) {
+            const currentNode = queue.shift()!
+
+            if (previousNode) {
+                previousNode.next = currentNode
+            }
+
+            if (currentNode.left) {
+                queue.push(currentNode.left)
+            }
+
+            if (currentNode.right) {
+                queue.push(currentNode.right)
+            }
+
+            previousNode = currentNode
+            levelSize--
+        }
+    }
+
+    return root
+}
+```

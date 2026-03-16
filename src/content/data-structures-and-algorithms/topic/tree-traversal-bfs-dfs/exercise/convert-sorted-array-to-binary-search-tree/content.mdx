@@ -1,0 +1,68 @@
+---
+title: "Convert Sorted Array to Binary Search Tree"
+description: "Given an integer array `nums` where the elements are sorted in **ascending order**, convert *it to a ****height-balanced*** *binary search tree*."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [tree, trees, bfs, dfs, traversal, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "DFS Pre-order"
+  leetcodeUrl: "https://leetcode.com/problems/convert-sorted-array-to-binary-search-tree/"
+---
+# Convert Sorted Array to Binary Search Tree
+
+Leetcode Problem 108: [Convert Sorted Array to Binary Search Tree](https://leetcode.com/problems/convert-sorted-array-to-binary-search-tree/description/)
+
+## Problem Summary
+Given an integer array sorted in strictly ascending order, convert it into a **height-balanced** Binary Search Tree (BST) — one where the height difference between the left and right subtrees of every node is at most 1.
+
+**Constraints:**
+- The array has between **1 and 10,000** elements.
+- Each element is a unique integer in the range **[-10,000, 10,000]**.
+
+## Techniques
+- Array
+- Divide and Conquer
+- Tree
+- Binary Search Tree
+- Binary Tree
+
+## Solution
+```ts
+export class TreeNode {
+    val: number
+    left: TreeNode | null
+    right: TreeNode | null
+
+    constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+        this.val = (val === undefined ? 0 : val)
+        this.left = (left === undefined ? null : left)
+        this.right = (right === undefined ? null : right)
+    }
+}
+
+interface Middle {
+    value: number
+    position: number
+}
+
+function middle(array: number[]): Middle {
+    const position = Math.round((array.length - 1) / 2)
+    return { value: array[Math.round((array.length - 1) / 2)], position }
+}
+
+function sortedArrayToBST(nums: number[]): TreeNode | null {
+    if (nums.length === 0) {
+        return null
+    }
+
+    const middleElement = middle(nums)
+    const root = new TreeNode(
+        middleElement.value,
+        sortedArrayToBST(nums.slice(0, middleElement.position)),
+        sortedArrayToBST(nums.slice(middleElement.position + 1, nums.length))
+    )
+
+    return root
+}
+```

@@ -1,0 +1,81 @@
+---
+title: "Reverse Pairs"
+description: "Given an integer array `nums`, return *the number of **reverse pairs** in the array*."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [merge sort, divide and conquer, sort, sorting, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Merge Sort + Counting"
+  leetcodeUrl: "https://leetcode.com/problems/reverse-pairs/"
+---
+# Reverse Pairs
+
+Leetcode Problem 493: [Reverse Pairs](https://leetcode.com/problems/reverse-pairs/description/)
+
+## Problem Summary
+Given an integer array `nums`, count the number of **reverse pairs** — pairs of indices `(i, j)` where `i < j` and `nums[i] > 2 * nums[j]`.
+
+**Constraints:**
+- The array has between **1 and 50,000** elements.
+- Each element is a 32-bit signed integer.
+
+## Techniques
+- Array
+- Binary Search
+- Divide and Conquer
+- Binary Indexed Tree
+- Segment Tree
+- Merge Sort
+- Ordered Set
+
+## Solution
+```ts
+function mergeSortAndCount(nums: number[]): { sorted: number[], count: number } {
+    if (nums.length <= 1) {
+        return { sorted: nums, count: 0 };
+    }
+
+    const mid = Math.floor(nums.length / 2);
+    const left = mergeSortAndCount(nums.slice(0, mid));
+    const right = mergeSortAndCount(nums.slice(mid));
+
+    let count = left.count + right.count;
+    let j = 0;
+
+    for (let i = 0; i < left.sorted.length; i++) {
+        while (j < right.sorted.length && left.sorted[i] > 2 * right.sorted[j]) {
+            j++;
+        }
+        count += j;
+    }
+
+    let merged: number[] = [];
+    let i = 0;
+    j = 0;
+
+    while (i < left.sorted.length && j < right.sorted.length) {
+        if (left.sorted[i] < right.sorted[j]) {
+            merged.push(left.sorted[i++]);
+        } else {
+            merged.push(right.sorted[j++]);
+        }
+    }
+
+    while (i < left.sorted.length) {
+        merged.push(left.sorted[i++]);
+    }
+
+    while (j < right.sorted.length) {
+        merged.push(right.sorted[j++]);
+    }
+
+    return { sorted: merged, count };
+}
+
+function reversePairs(nums: number[]): number {
+    return mergeSortAndCount(nums).count;
+}
+
+console.log(reversePairs([1,3,2,3,1]));
+```

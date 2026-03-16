@@ -1,0 +1,50 @@
+---
+title: "Merge Sorted Array"
+description: "You are given two integer arrays `nums1` and `nums2`, sorted in **non-decreasing order**, and two integers `m` and `n`, representing the number of elements in `nums1` and `nums2` respectively."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [two pointers, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Opposite-direction Two Pointers"
+  leetcodeUrl: ""
+---
+# Merge Sorted Array
+
+Leetcode Problem 88: [Merge Sorted Array](description/)
+
+## Problem Summary
+You are given two integer arrays `nums1` and `nums2`, each sorted in non-decreasing order, with `m` and `n` valid elements respectively. `nums1` has extra space at the end (total length `m + n`) to hold the merged result. Merge `nums2` into `nums1` **in-place** so that `nums1` becomes a single sorted array.
+
+**Constraints:**
+- `nums1` has length `m + n`; `nums2` has length `n`.
+- `m` and `n` are both between **0 and 200**, and `m + n >= 1`.
+- All element values are 32-bit signed integers.
+
+## Techniques
+- Array
+- Two Pointers
+- Sorting
+
+## Solution
+```ts
+function merge(nums1: number[], m: number, nums2: number[], n: number): void {
+    let i = m - 1
+    let j = n - 1
+    let final = m + n - 1
+
+    while (j >= 0) {
+        if (nums1[i] > nums2[j]) {
+            nums1[final] = nums1[i]
+            i--
+        } else {
+            nums1[final] = nums2[j]
+            j--
+        }
+
+        final--
+    }
+};
+
+console.log(merge([1,2,3,0,0,0], 3, [2,5,6], 3))
+```

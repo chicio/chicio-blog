@@ -1,0 +1,58 @@
+---
+title: "Koko Eating Bananas"
+description: "Koko loves to eat bananas. There are `n` piles of bananas, the `ith` pile has `piles[i]` bananas. The guards have gone and will come back in `h` hours."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [binary search, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Binary Search on Answer"
+  leetcodeUrl: "https://leetcode.com/problems/koko-eating-bananas/"
+---
+# Koko Eating Bananas
+
+Leetcode Problem 875: [Koko Eating Bananas](https://leetcode.com/problems/koko-eating-bananas/description/)
+
+## Problem Summary
+There are `n` piles of bananas, and the guards will return in `h` hours. Each hour, Koko picks one pile and eats up to `k` bananas from it — if the pile has fewer than `k` bananas, she eats all of them and waits for the next hour. Find the **minimum integer eating speed** `k` such that Koko can finish all piles before the guards return.
+
+**Constraints:**
+- The number of piles is between **1 and 10,000**, and `h` (available hours) is at least as large as the number of piles.
+- `h` can be at most **1,000,000,000**.
+- Each pile contains between **1 and 1,000,000,000** bananas.
+
+## Techniques
+- Array
+- Binary Search
+
+## Solution
+```ts
+function hoursFor(piles: number[], k: number) {
+    let hoursNeeded = 0;
+
+    for (const pile of piles) {
+        hoursNeeded += Math.ceil(pile / k);
+    }
+
+    return hoursNeeded
+}
+
+function minEatingSpeed(piles: number[], h: number): number {
+    let left = 1
+    let right = Math.max(...piles)
+
+    while (left < right) {
+        const mid = left + Math.floor((right - left) / 2)
+
+        if (hoursFor(piles, mid) > h) {
+            left = mid + 1
+        } else {
+            right = mid
+        }
+    }
+
+    return left
+}
+
+console.log(minEatingSpeed([30,11,23,4,20], 5)); // Output: 30
+```

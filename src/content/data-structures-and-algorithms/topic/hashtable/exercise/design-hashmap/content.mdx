@@ -1,0 +1,112 @@
+---
+title: "Design HashMap"
+description: "Design a HashMap without using any built-in hash table libraries."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [hashtable, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "HashMap Design"
+  leetcodeUrl: ""
+---
+# Design HashMap
+
+Leetcode Problem 706: [Design HashMap](description/)
+
+## Problem Summary
+Design and implement a `HashMap` **without using any built-in hash table libraries**. The implementation must support three operations:
+
+- `put(key, value)` — Inserts or updates the mapping for `key` to `value`.
+- `get(key)` — Returns the value mapped to `key`, or `-1` if no mapping exists.
+- `remove(key)` — Removes the mapping for `key` if it exists.
+
+**Constraints:**
+- Keys and values are non-negative integers up to **1,000,000**.
+- At most **10,000** calls will be made to `put`, `get`, and `remove`.
+
+## Techniques
+- Array
+- Hash Table
+- Linked List
+- Design
+- Hash Function
+
+## Solution
+```ts
+class MyHashMap {
+    private buckets: [number, number][][]
+    private resizeFactor: number
+    private size: number
+    private occupiedBuckets: number
+
+    constructor() {
+        this.size = 32
+        this.buckets =  Array.from({ length: this.size }, () => [])
+        this.resizeFactor = 0.75
+        this.occupiedBuckets = 0
+    }
+
+    put(key: number, value: number): void {
+        if (this.occupiedBuckets / this.size > this.resizeFactor) {
+            this.resize()
+        }
+
+        let hashedKey = this.hash(key, this.size)
+        let bucket = this.buckets[hashedKey]
+
+        for (let pair of bucket) {
+            if (pair[0] === key) {
+                pair[1] = value;
+                return;
+            }
+        }
+
+        bucket.push([key, value]);
+        this.occupiedBuckets++;
+    }
+
+    get(key: number): number {
+        let hashedKey = this.hash(key, this.size)
+        let bucket = this.buckets[hashedKey]
+
+        for (const [currentKey, currentValue] of bucket) {
+            if (key === currentKey) {
+                return currentValue
+            }
+        }
+
+        return -1
+    }
+
+    remove(key: number): void {
+        let hashedKey = this.hash(key, this.size)
+        let bucket = this.buckets[hashedKey]
+        
+        for (let i = 0; i < bucket.length; i++) {
+            if (bucket[i][0] === key) {
+                bucket.splice(i, 1);
+                this.occupiedBuckets--;
+            }
+        }
+    }
+
+    private resize() {
+        const newSize = this.size * 2;
+        const newBuckets: [number, number][][] = Array.from({ length: newSize }, () => []);
+        
+        for (const bucket of this.buckets) {
+            for (const [key, value] of bucket) {
+                const index = this.hash(key, newSize);
+                newBuckets[index].push([key, value]);
+            }
+        }
+
+        this.size = newSize;
+        this.buckets = newBuckets;
+    }
+
+    private hash(key: number, size: number): number {
+        return key % size;
+    }
+}
+```

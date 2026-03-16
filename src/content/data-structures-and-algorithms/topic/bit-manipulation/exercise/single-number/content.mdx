@@ -1,0 +1,33 @@
+---
+title: "Single Number"
+description: "Given a **non-empty** array of integers `nums`, every element appears *twice* except for one. Find that single one."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [bit manipulation, bit wise, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "XOR Property"
+  leetcodeUrl: "https://leetcode.com/problems/single-number/"
+---
+# Single Number
+
+Leetcode Problem 136: [Single Number](https://leetcode.com/problems/single-number/description/)
+
+## Problem Summary
+Given a non-empty array of integers where every element appears exactly **twice** except for one element that appears only once, find and return that single element.
+
+Your solution must use linear time and constant extra space.
+
+**Constraints:**
+- The array has between **1 and 30,000** elements.
+- Values are in the range **[-30,000, 30,000]**.
+- Every element appears twice except for exactly one element.
+
+## Techniques
+- Array
+- Bit Manipulation
+
+## Solution
+```ts
+const singleNumber = (nums: number[]) => nums.reduce((accumulator, current) => accumulator ^ current)
+```

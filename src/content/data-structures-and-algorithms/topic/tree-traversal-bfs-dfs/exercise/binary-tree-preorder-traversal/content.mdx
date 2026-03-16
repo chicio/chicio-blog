@@ -1,0 +1,88 @@
+---
+title: "Binary Tree Preorder Traversal"
+description: "Given the `root` of a binary tree, return *the preorder traversal of its nodes' values*."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [tree, trees, bfs, dfs, traversal, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "DFS Pre-order"
+  leetcodeUrl: "https://leetcode.com/problems/binary-tree-preorder-traversal/"
+---
+# Binary Tree Preorder Traversal
+
+Leetcode Problem 144: [Binary Tree Preorder Traversal](https://leetcode.com/problems/binary-tree-preorder-traversal/description/)
+
+## Problem Summary
+Given the `root` of a binary tree, return its nodes' values in **pre-order** traversal order (root → left subtree → right subtree).
+
+**Constraints:**
+- The tree has between **0 and 100** nodes.
+- Node values are integers in the range **[-100, 100]**.
+
+## Techniques
+- Stack
+- Tree
+- Depth-First Search
+- Binary Tree
+
+## Solution
+```ts
+export class TreeNode {
+    val: number
+    left: TreeNode | null
+    right: TreeNode | null
+
+    constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+        this.val = (val === undefined ? 0 : val)
+        this.left = (left === undefined ? null : left)
+        this.right = (right === undefined ? null : right)
+    }
+}
+
+
+// Iterative Preorder Traversal
+
+function preorderTraversalIterative(root: TreeNode | null): number[] {
+    if (!root) {
+        return []
+    }
+
+    let stack = [root]
+    let preorder: number[] = []
+
+    while (stack.length > 0) {
+        const current = stack.pop()!
+        preorder.push(current.val)
+
+        if (current.right) {
+            stack.push(current.right)
+        }
+
+        if (current.left) {
+            stack.push(current.left)
+        }
+    }
+
+    return preorder
+}
+
+// Recursive Preorder Traversal
+function traverse(node: TreeNode | null, preorder: number[]) {
+    if (!node) {
+        return
+    }
+
+    preorder.push(node.val)
+
+    traverse(node.left, preorder)
+    traverse(node.right, preorder)
+}
+
+function preorderTraversalRecursive(root: TreeNode | null): number[] {
+    const preorder: number[] = []
+
+    traverse(root, preorder)
+    return preorder
+}
+```

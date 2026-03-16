@@ -1,0 +1,65 @@
+---
+title: "Min Stack"
+description: "Design a stack that supports push, pop, top, and retrieving the minimum element in constant time."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [stack, stacks, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Stack"
+  leetcodeUrl: "https://leetcode.com/problems/min-stack/"
+---
+# Min Stack
+
+Leetcode Problem 155: [Min Stack](https://leetcode.com/problems/min-stack/description/)
+
+## Problem Summary
+Design a stack supporting the standard `push`, `pop`, and `top` operations, plus a `getMin()` operation that retrieves the minimum element in the stack. All four operations must run in **O(1)** time.
+
+- `push(val)` — Pushes `val` onto the stack.
+- `pop()` — Removes the top element.
+- `top()` — Returns the top element without removing it.
+- `getMin()` — Returns the current minimum element in the stack.
+
+**Constraints:**
+- Values are 32-bit signed integers.
+- `pop`, `top`, and `getMin` will only be called on a non-empty stack.
+- At most **30,000** method calls will be made.
+
+## Techniques
+- Stack
+- Design
+
+## Solution
+```ts
+class MinStack {
+    constructor(
+        private readonly stack: number[] = [],
+        private readonly minStack: number[] = []
+    ) { }
+
+    push(val: number): void {
+       this.stack.push(val) 
+
+       if (this.minStack.length === 0 || this.minStack[this.minStack.length - 1] >= val) {
+        this.minStack.push(val)
+       }
+    }
+
+    pop(): void {
+       let removed = this.stack.pop() 
+
+       if (this.minStack[this.minStack.length - 1] === removed) {
+        this.minStack.pop()
+       }
+    }
+
+    top(): number {
+        return this.stack[this.stack.length - 1]
+    }
+
+    getMin(): number {
+        return this.minStack[this.minStack.length - 1]
+    }
+}
+```

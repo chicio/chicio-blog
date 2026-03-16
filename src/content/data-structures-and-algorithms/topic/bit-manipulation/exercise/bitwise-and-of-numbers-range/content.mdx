@@ -1,0 +1,48 @@
+---
+title: "Bitwise AND of Numbers Range"
+description: "Given two integers `left` and `right` that represent the range `[left, right]`, return *the bitwise AND of all numbers in this range, inclusive*."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [bit manipulation, bit wise, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Common Prefix Masking"
+  leetcodeUrl: "https://leetcode.com/problems/bitwise-and-of-numbers-range/"
+---
+# Bitwise AND of Numbers Range
+
+Leetcode Problem 201: [Bitwise AND of Numbers Range](https://leetcode.com/problems/bitwise-and-of-numbers-range/description/)
+
+## Problem Summary
+Given two integers `left` and `right` representing an inclusive range `[left, right]`, return the **bitwise AND** of all integers in that range.
+
+**Constraints:**
+- Both `left` and `right` are non-negative integers up to **2,147,483,647** (2^31 − 1).
+- `left <= right`.
+
+## Techniques
+- Bit Manipulation
+
+## Solution
+```ts
+function rangeBitwiseAnd(left: number, right: number): number {
+    let shift = 0
+
+    while (left !== right) {
+        left = left >> 1
+        right = right >> 1
+        shift++
+    }
+
+    return left << shift
+};
+
+// Beautiful solution from ChatGPT notes => use xor to find the different bits and then use the mask to get the result (common bits between left and right)
+function rangeBitwiseAnd2(left: number, right: number): number {
+    let diff = left ^ right;  
+    let mask = ~diff + 1;     
+    return left & mask;
+};
+
+console.log(rangeBitwiseAnd(5, 7))
+```

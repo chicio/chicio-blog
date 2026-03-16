@@ -1,0 +1,52 @@
+---
+title: "Subarray Sum Equals K"
+description: "Given an array of integers `nums` and an integer `k`, return *the total number of subarrays whose sum equals to* `k`."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [prefix sum, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Prefix Sum + Hash Map"
+  leetcodeUrl: "https://leetcode.com/problems/subarray-sum-equals-k/"
+---
+# Subarray Sum Equals K
+
+Leetcode Problem 560: [Subarray Sum Equals K](https://leetcode.com/problems/subarray-sum-equals-k/description/)
+
+## Problem Summary
+Given an integer array `nums` and an integer `k`, return the **total number of contiguous non-empty subarrays** whose elements sum exactly to `k`.
+
+**Constraints:**
+- The array has between **1 and 20,000** elements.
+- Each element is an integer in the range **[-1,000, 1,000]**.
+- `k` is an integer in the range **[-10,000,000, 10,000,000]**.
+
+## Techniques
+- Array
+- Hash Table
+- Prefix Sum
+
+## Solution
+```ts
+function subarraySum(nums: number[], k: number): number {
+    let prefixSum = 0;
+    let subarrays = 0
+    let previousPrefixSum = new Map<number, number>()
+
+    previousPrefixSum.set(0, 1)
+
+    for (let i = 0; i < nums.length; i++) {
+        prefixSum = prefixSum + nums[i] 
+
+        if (previousPrefixSum.has(prefixSum - k)) {
+            subarrays = subarrays + previousPrefixSum.get(prefixSum - k)!
+        } 
+          
+        previousPrefixSum.set(prefixSum,  (previousPrefixSum.get(prefixSum) || 0) + 1)
+    }
+
+    return subarrays
+};
+
+console.log(subarraySum([1,2,3,1,1,1,2,3], 3))
+```

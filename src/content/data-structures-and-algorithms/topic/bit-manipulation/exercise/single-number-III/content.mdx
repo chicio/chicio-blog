@@ -1,0 +1,47 @@
+---
+title: "Single Number III"
+description: "Given an integer array `nums`, in which exactly two elements appear only once and all the other elements appear exactly twice. Find the two elements that appear only once. You can return the answer..."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [bit manipulation, bit wise, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "XOR + Mask Partition"
+  leetcodeUrl: "https://leetcode.com/problems/single-number-iii/"
+---
+# Single Number III
+
+Leetcode Problem 260: [Single Number III](https://leetcode.com/problems/single-number-iii/description/)
+
+## Problem Summary
+Given an integer array where every element appears exactly **twice** except for exactly **two elements** that each appear only once, find and return those two unique elements in any order.
+
+Your solution must run in linear time and use only constant extra space.
+
+**Constraints:**
+- The array has between **2 and 30,000** elements.
+- Each element is a 32-bit signed integer.
+- Exactly two elements appear once; all others appear exactly twice.
+
+## Techniques
+- Array
+- Bit Manipulation
+
+## Solution
+```ts
+// I was going to loop to get the first bit difference but then I found this beautiful solution that leverages 
+// the xor property and the two complements representation.
+function singleNumber3(nums: number[]): number[] {
+    let singleXorOtherSingle = nums.reduce((result, current) => result ^ current, 0)
+    let bitDifference = singleXorOtherSingle & -singleXorOtherSingle
+    let singleGroup = nums.filter(it => it & bitDifference)
+    let otherSingleGroup = nums.filter(it => !(it & bitDifference))
+
+    return [
+        singleGroup.reduce((result, current) => result ^ current, 0),
+        otherSingleGroup.reduce((result, current) => result ^ current, 0)
+    ]
+}
+
+console.log(singleNumber3([1, 2, 1, 3, 2, 5]))
+```

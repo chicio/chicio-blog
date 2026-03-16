@@ -1,0 +1,93 @@
+---
+title: "Number of Matching Subsequences"
+description: "Given a string `s` and an array of strings `words`, return *the number of* `words[i]` *that is a subsequence of* `s`."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [hashtable, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Hash Map + Buckets"
+  leetcodeUrl: "https://leetcode.com/problems/number-of-matching-subsequences/"
+---
+# Number of Matching Subsequences
+
+Leetcode Problem 792: [Number of Matching Subsequences](https://leetcode.com/problems/number-of-matching-subsequences/description/)
+
+## Problem Summary
+Given a string `s` and an array of words, return the **number of words** that are subsequences of `s`. A word is a subsequence of `s` if its characters can be found in the same relative order within `s` (not necessarily contiguous).
+
+**Constraints:**
+- `s` has between **1 and 50,000** characters, all lowercase English letters.
+- There are between **1 and 5,000** words, each with between **1 and 50** lowercase English letters.
+
+## Techniques
+- Array
+- Hash Table
+- String
+- Binary Search
+- Dynamic Programming
+- Trie
+- Sorting
+
+## Solution
+```ts
+function numMatchingSubseq(s: string, words: string[]): number {
+    let dictionaryOfWords = new Map<string, string[]>()
+
+    for (let i = 0; i < words.length; i++) {
+        let currentWord = words[i]
+        let initialChar = currentWord.charAt(0)
+        let currentListOfWords = dictionaryOfWords.get(initialChar)
+
+        if (currentListOfWords)  {
+            currentListOfWords.push(currentWord)
+        } else {
+            currentListOfWords = [currentWord]
+        }
+
+        dictionaryOfWords.set(initialChar, currentListOfWords)
+    }
+
+    let numberOfMatchingSubsequences = 0
+
+    for (let i = 0; i < s.length; i++) {
+        let currentChar = s.charAt(i)
+        let currentListOfWords = dictionaryOfWords.get(currentChar)
+
+        if (currentListOfWords) {
+            let wordsToReAdd = []
+
+            while(currentListOfWords.length > 0) {
+                let currentWord = currentListOfWords.shift() ?? ""
+
+                if (currentWord.length === 1) {
+                    numberOfMatchingSubsequences++
+                } else {
+                    let newCurrentWord = currentWord.substring(1)
+                    wordsToReAdd.push(newCurrentWord)
+                }
+            }
+
+            dictionaryOfWords.set(currentChar, [])
+
+            for (let j = 0; j < wordsToReAdd.length; j++) {
+                let currentWordToReAdd = wordsToReAdd[j]
+                let wordToReadInitialChar = currentWordToReAdd.charAt(0)
+                let listForChar = dictionaryOfWords.get(wordToReadInitialChar)
+
+                if (listForChar)  {
+                    listForChar.push(currentWordToReAdd)
+                } else {
+                    listForChar = [currentWordToReAdd]
+                }
+
+                dictionaryOfWords.set(wordToReadInitialChar, listForChar)                
+            }
+        }
+    }
+
+    return numberOfMatchingSubsequences
+};
+
+console.log(numMatchingSubseq("abcdea", ["a","bb","acd","ace", "aa"]))
+```

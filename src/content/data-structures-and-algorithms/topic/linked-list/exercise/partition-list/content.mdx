@@ -1,0 +1,56 @@
+---
+title: "Partition List"
+description: "Given the `head` of a linked list and a value `x`, partition it such that all nodes **less than** `x` come before nodes **greater than or equal** to `x`."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [linked list, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Two Lists + Merge"
+  leetcodeUrl: "https://leetcode.com/problems/partition-list/"
+---
+# Partition List
+
+[Partition List](https://leetcode.com/problems/partition-list/description/)
+
+## Problem Summary
+Given the `head` of a linked list and a value `x`, partition it so that all nodes with values **less than** `x` come before all nodes with values **greater than or equal to** `x`, while preserving the original relative order within each partition.
+
+**Constraints:**
+- The list has between **0 and 200** nodes.
+- Node values are integers in the range **[-100, 100]**, and `x` is in the range **[-200, 200]**.
+
+## Techniques
+- Linked List
+- Two Pointers
+
+## Solution
+```ts
+import { ListNode } from "../list-node"
+
+function partition(head: ListNode | null, x: number): ListNode | null {
+    let minor = new ListNode(-1, undefined)
+    let major = new ListNode(-1, undefined)
+    let currentMinor = minor
+    let currentMajor = major
+    let current = head
+
+    while(current) {
+        if (current.val < x) {
+            currentMinor.next = current
+            currentMinor = currentMinor.next
+        } else {
+            currentMajor.next = current
+            currentMajor = currentMajor.next
+        }
+
+        current = current.next
+    }
+
+    head = minor.next ? minor.next : head
+    currentMinor.next = major.next
+    currentMajor.next = null
+
+    return head
+};
+```

@@ -1,0 +1,48 @@
+---
+title: "Maximum Average Subarray I"
+description: "You are given an integer array `nums` consisting of `n` elements, and an integer `k`."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [sliding window, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Fixed Sliding Window"
+  leetcodeUrl: "https://leetcode.com/problems/maximum-average-subarray-i/"
+---
+# Maximum Average Subarray I
+
+Leetcode Problem 643: [Maximum Average Subarray I](https://leetcode.com/problems/maximum-average-subarray-i/description/)
+
+## Problem Summary
+Given an integer array `nums` and an integer `k`, find the contiguous subarray of length exactly `k` with the **maximum average value** and return that average. Answers within `10^-5` of the true value are accepted.
+
+**Constraints:**
+- The array has between **1 and 100,000** elements.
+- Each element is an integer in the range **[-10,000, 10,000]**.
+- `k` is between **1** and the array length.
+
+## Techniques
+- Array
+- Sliding Window
+
+## Solution
+```ts
+function findMaxAverage(nums: number[], k: number): number {
+    let sum = 0
+
+    for (let i = 0; i < k; i++) {
+        sum = sum + nums[i]
+    }
+
+    let maxSum = sum
+
+    for (let i = k; i < nums.length; i++) {
+        sum = sum - nums[i - k] + nums[i]
+        maxSum = Math.max(sum, maxSum)
+    }
+
+    return maxSum / k
+};
+
+console.log(findMaxAverage([1,12,-5,-6,50,3], 4))
+```

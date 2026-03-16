@@ -1,0 +1,59 @@
+---
+title: "Number of Good Ways to Split a String"
+description: "You are given a string `s`."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [hashtable, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Hash Map + Prefix Counting"
+  leetcodeUrl: "https://leetcode.com/problems/number-of-good-ways-to-split-a-string/"
+---
+# Number of Good Ways to Split a String
+
+Leetcode Problem 1525: [Number of Good Ways to Split a String](https://leetcode.com/problems/number-of-good-ways-to-split-a-string/description/)
+
+## Problem Summary
+You are given a string `s`. A **good split** is a partition of `s` into two non-empty parts `s = s1 + s2` such that the number of distinct letters in `s1` equals the number of distinct letters in `s2`. Return the number of good splits.
+
+**Constraints:**
+- The string has between **1 and 100,000** characters, consisting of lowercase English letters only.
+
+## Techniques
+- Hash Table
+- String
+- Dynamic Programming
+- Bit Manipulation
+
+## Solution
+```ts
+function numSplits(s: string): number {
+    let leftChars = new Map<string, number>()
+    let rightChars = new Map<string, number>()
+    let goodSplits = 0
+
+    for (const char of s) {
+        rightChars.set(char, (rightChars.get(char) || 0) + 1)
+    }
+
+    for (const char of s) {
+        if (leftChars.size === rightChars.size) {
+            goodSplits++
+        }
+        
+        let countRight = rightChars.get(char) || 0
+
+        if (countRight === 1) {
+            rightChars.delete(char)
+        } else {
+            rightChars.set(char, --countRight)
+        }
+
+        leftChars.set(char, (leftChars.get(char) || 0) + 1)
+    }
+
+    return goodSplits
+};
+
+console.log(numSplits("aacaba"))
+```

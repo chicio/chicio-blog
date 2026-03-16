@@ -1,0 +1,48 @@
+---
+title: "Find Peak Element"
+description: "A peak element is an element that is strictly greater than its neighbors."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [binary search, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Binary Search"
+  leetcodeUrl: "https://leetcode.com/problems/find-peak-element/"
+---
+# Find Peak Element
+
+Leetcode Problem 162: [Find Peak Element](https://leetcode.com/problems/find-peak-element/description/)
+
+## Problem Summary
+A **peak element** is an element that is strictly greater than its immediate neighbors. Given a 0-indexed integer array `nums`, find any peak element and return its index. The array boundaries behave as negative infinity — the first and last elements only need to be greater than their single neighbour to qualify as a peak.
+
+Your solution must run in `O(log n)` time.
+
+**Constraints:**
+- The array has between **1 and 1,000** elements.
+- Each element is a 32-bit signed integer, and no two adjacent elements are equal.
+## Techniques
+- Array
+- Binary Search
+
+## Solution
+```ts
+function findPeakElement(nums: number[]): number {
+    let left = 0;
+    let right = nums.length - 1;
+
+    while (left < right) {
+        let mid = left + Math.floor((right - left) / 2);
+
+        if (nums[mid] > nums[mid + 1]) {
+            right = mid;
+        } else {
+            left = mid + 1;
+        }
+    }
+
+    return left;
+}
+
+console.log(findPeakElement([1,2,1,3,5,6,4]))
+```

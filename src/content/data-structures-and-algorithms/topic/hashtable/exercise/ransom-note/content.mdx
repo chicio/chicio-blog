@@ -1,0 +1,48 @@
+---
+title: "Ransom Note"
+description: "Given two strings `ransomNote` and `magazine`, return `true`* if *`ransomNote`* can be constructed by using the letters from *`magazine`* and *`false`* otherwise*."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [hashtable, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Hash Map Counting"
+  leetcodeUrl: "https://leetcode.com/problems/ransom-note/"
+---
+# Ransom Note
+
+Leetcode Problem 383: [Ransom Note](https://leetcode.com/problems/ransom-note/description/)
+
+## Problem Summary
+Given two strings `ransomNote` and `magazine`, return `true` if the ransom note can be constructed using only characters from the magazine. Each character in the magazine can be used **at most once**.
+
+**Constraints:**
+- Both strings have between **1 and 100,000** characters, consisting of lowercase English letters only.
+
+## Techniques
+- Hash Table
+- String
+- Counting
+
+## Solution
+```ts
+function canConstruct(ransomNote: string, magazine: string): boolean {
+    const magazineLetterCount = new Map<string, number>()
+
+    for(let i = 0; i < magazine.length; i++) {
+        magazineLetterCount.set(magazine.charAt(i), (magazineLetterCount.get(magazine.charAt(i)) || 0) + 1)
+    }
+
+    for (let i = 0; i < ransomNote.length; i++) {
+        if (!magazineLetterCount.has(ransomNote.charAt(i)) || magazineLetterCount.get(ransomNote.charAt(i)) === 0) {
+            return false
+        } else {
+            magazineLetterCount.set(ransomNote.charAt(i), magazineLetterCount.get(ransomNote.charAt(i))! - 1)
+        }
+    }
+
+    return true
+};
+
+console.log("aa", "aab")
+```

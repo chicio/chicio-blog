@@ -1,0 +1,48 @@
+---
+title: "Longest Substring Without Repeating Characters"
+description: "Given a string `s`, find the length of the **longest** **substring** without duplicate characters."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [sliding window, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Dynamic Sliding Window"
+  leetcodeUrl: "https://leetcode.com/problems/longest-substring-without-repeating-characters/"
+---
+# Longest Substring Without Repeating Characters
+
+[Longest Substring Without Repeating Characters](https://leetcode.com/problems/longest-substring-without-repeating-characters/description/)
+
+## Problem Summary
+Given a string `s`, return the **length of the longest substring** that contains no repeating characters.
+
+**Constraints:**
+- The string has between **0 and 50,000** characters.
+- It may contain English letters, digits, symbols, and spaces.
+
+## Techniques
+- Hash Table
+- String
+- Sliding Window
+
+## Solution
+```ts
+function lengthOfLongestSubstring(s: string): number {
+    let currentCharsInSubstring = new Map<string, number>()
+    let maxLength = 0
+    let startSubString = -1
+
+    for (let i = 0; i < s.length; i++) {
+        let currentChar = s.charAt(i)
+
+        if (currentCharsInSubstring.has(currentChar) && currentCharsInSubstring.get(currentChar)! >= startSubString) {
+            startSubString = currentCharsInSubstring.get(currentChar)!
+        }
+
+        currentCharsInSubstring.set(s.charAt(i), i)
+        maxLength = Math.max(maxLength, i - startSubString)
+    }
+
+    return maxLength
+};
+```

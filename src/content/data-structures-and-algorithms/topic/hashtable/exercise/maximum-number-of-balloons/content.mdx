@@ -1,0 +1,57 @@
+---
+title: "Maximum Number of Balloons"
+description: "Given a string `text`, you want to use the characters of `text` to form as many instances of the word **\"balloon\"** as possible."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [hashtable, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Frequency Counting"
+  leetcodeUrl: ""
+---
+# Maximum Number of Balloons
+
+Leetcode Problem 1189: [Maximum Number of Balloons](description/)
+
+## Problem Summary
+Given a string `text`, return the **maximum number of times** the word `"balloon"` can be formed using characters from `text`. Each character from `text` may be used at most once per instance.
+
+**Constraints:**
+- The string has between **1 and 10,000** characters, consisting of lowercase English letters only.
+
+## Techniques
+- Hash Table
+- String
+- Counting
+
+## Solution
+```ts
+function maxNumberOfBalloons(text: string): number {
+    const balloonLetterCount: Record<string, number> = {
+        b: 0,
+        a: 0,
+        l: 0,
+        o: 0,
+        n: 0
+    }
+
+    for (let i = 0; i < text.length; i++) {
+        if (balloonLetterCount[text.charAt(i)] !== undefined) {
+            balloonLetterCount[text.charAt(i)]++
+        }
+    }
+
+    balloonLetterCount['l'] = Math.floor(balloonLetterCount['l'] / 2)
+    balloonLetterCount['o'] = Math.floor(balloonLetterCount['o'] / 2)
+
+    return Math.min(
+        balloonLetterCount['b'], 
+        balloonLetterCount['a'],
+        balloonLetterCount['l'],
+        balloonLetterCount['o'],
+        balloonLetterCount['n']
+    )
+}
+
+console.log(maxNumberOfBalloons("loonbalxballpoon"))
+```

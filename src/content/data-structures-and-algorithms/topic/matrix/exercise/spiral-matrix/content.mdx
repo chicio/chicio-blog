@@ -1,0 +1,127 @@
+---
+title: "Spiral Matrix"
+description: "Given an `m x n` `matrix`, return *all elements of the* `matrix` *in spiral order*."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [matrix, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Directional traversal + boundary shrink"
+  leetcodeUrl: "https://leetcode.com/problems/spiral-matrix/"
+---
+# Spiral Matrix
+
+Leetcode Problem 54: [Spiral Matrix](https://leetcode.com/problems/spiral-matrix/description/)
+
+## Problem Summary
+Given an `m × n` matrix, return all elements in **spiral order** — starting from the top-left corner and traversing clockwise inward layer by layer.
+
+For a 3×4 matrix:
+```
+ 1  2  3  4
+ 5  6  7  8
+ 9 10 11 12
+```
+Spiral order: `[1, 2, 3, 4, 8, 12, 11, 10, 9, 5, 6, 7]`
+
+**Constraints:**
+- The matrix has between **1 and 10** rows and between **1 and 10** columns.
+- Each element is an integer in the range **[-100, 100]**.
+
+## Techniques
+- Array
+- Matrix
+- Simulation
+
+## Solution
+```ts
+// My implementation, very bad one...
+function spiralOrder(matrix: number[][]): number[] {
+    let spirals = []
+    let startingK = 0
+    let endingK = matrix[0].length 
+    let startingJ = 0
+    let endingJ = matrix.length
+
+    while (startingK < endingK && startingJ < endingJ) {
+        let k = startingK
+        let j = startingJ
+
+        spirals.push(matrix[j][k++])
+
+        while (k < endingK) {
+            spirals.push(matrix[j][k++])
+        }
+
+        j++
+        k--
+
+        while (j < endingJ) {
+            spirals.push(matrix[j++][k])
+        }
+
+        j--
+        k--
+
+        if (j > startingJ) {
+            while (k > startingJ) {
+                spirals.push(matrix[j][k--])
+            }
+        }
+
+        if (k >= startingK) {
+            while (j > startingJ) {
+                spirals.push(matrix[j--][k])
+            }
+        }
+
+        startingK++
+        endingK--
+        startingJ++
+        endingJ--
+    }
+
+    return spirals   
+};
+
+/// Ashish implementation, better...
+function spiralOrderBetter(matrix: number[][]): number[] {
+    const result: number[] = [];
+    if (matrix.length === 0) return result;
+    
+    let top = 0, bottom = matrix.length - 1;
+    let left = 0, right = matrix[0].length - 1;
+    
+    while (top <= bottom && left <= right) {
+        // Traverse from left to right along the top row
+        for (let i = left; i <= right; i++) {
+            result.push(matrix[top][i]);
+        }
+        top++;
+        
+        // Traverse from top to bottom along the right column
+        for (let i = top; i <= bottom; i++) {
+            result.push(matrix[i][right]);
+        }
+        right--;
+        
+        if (top <= bottom) {
+            // Traverse from right to left along the bottom row
+            for (let i = right; i >= left; i--) {
+                result.push(matrix[bottom][i]);
+            }
+            bottom--;
+        }
+        
+        if (left <= right) {
+            // Traverse from bottom to top along the left column
+            for (let i = bottom; i >= top; i--) {
+                result.push(matrix[i][left]);
+            }
+            left++;
+        }
+    }
+    
+    return result;
+}
+```

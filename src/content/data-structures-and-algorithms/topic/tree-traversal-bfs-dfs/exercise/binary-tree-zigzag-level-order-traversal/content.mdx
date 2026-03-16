@@ -1,0 +1,81 @@
+---
+title: "Binary Tree Zigzag Level Order Traversal"
+description: "Given the `root` of a binary tree, return *the zigzag level order traversal of its nodes' values*. (i.e., from left to right, then right to left for the next level and alternate between)."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [tree, trees, bfs, dfs, traversal, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "BFS"
+  leetcodeUrl: "https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/"
+---
+# Binary Tree Zigzag Level Order Traversal
+
+Leetcode Problem 103: [Binary Tree Zigzag Level Order Traversal](https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/description/)
+
+## Problem Summary
+Given the `root` of a binary tree, return its node values in **zigzag level order** — alternating between left-to-right and right-to-left on each successive level. Return the result as a list of lists, one per level.
+
+**Constraints:**
+- The tree has between **0 and 2,000** nodes.
+- Node values are integers in the range **[-100, 100]**.
+
+## Techniques
+- Tree
+- Breadth-First Search
+- Binary Tree
+
+## Solution
+```ts
+export class TreeNode {
+    val: number
+    left: TreeNode | null
+    right: TreeNode | null
+
+    constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+        this.val = (val === undefined ? 0 : val)
+        this.left = (left === undefined ? null : left)
+        this.right = (right === undefined ? null : right)
+    }
+}
+
+function zigzagLevelOrder(root: TreeNode | null): number[][] {
+    if (!root) {
+        return []
+    }
+
+    let queue = [root]
+    let levels: number[][] = []
+    let levelIndex = 0
+
+    while (queue.length > 0) {
+        let levelSize = queue.length
+        let level = []
+
+        while (levelSize > 0) {
+            let currentNode: TreeNode = queue.shift()!
+
+            if (levelIndex % 2 === 0) {
+                level.push(currentNode.val)
+            } else {
+                level.unshift(currentNode.val)
+            }
+
+            if (currentNode.left) {
+                queue.push(currentNode.left)
+            }
+
+            if (currentNode.right) {
+                queue.push(currentNode.right)
+            }
+
+            levelSize--
+        }
+
+        levelIndex++
+        levels.push(level)
+    }
+
+    return levels
+}
+```

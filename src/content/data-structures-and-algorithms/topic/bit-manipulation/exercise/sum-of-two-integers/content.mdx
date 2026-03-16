@@ -1,0 +1,44 @@
+---
+title: "Sum of Two Integers"
+description: "Given two integers `a` and `b`, return *the sum of the two integers without using the operators* `+` *and* `-`."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [bit manipulation, bit wise, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "XOR + Carry"
+  leetcodeUrl: "https://leetcode.com/problems/sum-of-two-integers/"
+---
+# Sum of Two Integers
+
+Leetcode Problem 371: [Sum of Two Integers](https://leetcode.com/problems/sum-of-two-integers/description/)
+
+## Problem Summary
+Given two integers `a` and `b`, return their sum **without using the `+` or `-` operators**.
+
+**Constraints:**
+- Both `a` and `b` are integers in the range **[-1,000, 1,000]**.
+
+## Techniques
+- Math
+- Bit Manipulation
+
+## Solution
+```ts
+// Well, this is quite a bit of a challenge. 
+// After getting the general approach, i was getting lost in the loop with temp variables....
+function getSum(a: number, b: number): number {
+    let carry = a & b
+    let sum = a ^ b
+
+    while (carry) {
+        let carryShift = carry << 1
+        carry = sum & carryShift
+        sum = sum ^ carryShift
+    }
+
+    return sum
+};
+
+console.log(getSum(3, 2))
+```

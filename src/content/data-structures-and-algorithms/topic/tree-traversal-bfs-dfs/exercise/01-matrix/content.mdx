@@ -1,0 +1,94 @@
+---
+title: "01 Matrix"
+description: "Given an `m x n` binary matrix `mat`, return *the distance of the nearest *`0`* for each cell*."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [tree, trees, bfs, dfs, traversal, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "TODO"
+  leetcodeUrl: "https://leetcode.com/problems/01-matrix/"
+---
+# 01 Matrix
+
+Leetcode Problem 542: [01 Matrix](https://leetcode.com/problems/01-matrix/description/)
+
+## Problem Summary
+Given an `m × n` binary matrix where cells are either `0` or `1`, return a matrix of the same dimensions where each cell contains the **distance to the nearest `0`**. The distance between two adjacent cells (sharing a side) is `1`.
+
+**Constraints:**
+- The matrix has at most **10,000** total cells.
+- Each cell is either `0` or `1`.
+- There is at least one `0` in the matrix.
+
+## Techniques
+- Array
+- Dynamic Programming
+- Breadth-First Search
+- Matrix
+
+## Solution
+```ts
+function updateMatrix(mat: number[][]): number[][] {
+    const rows = mat.length
+    const columns = mat[0].length
+    const queue: [number, number][] = []
+    const distances: number[][] = Array.from({ length: rows }, () =>
+        Array(columns).fill(0)
+    )
+
+    for (let row = 0; row < rows; row++) {
+        for (let column = 0; column < columns; column++) {
+            if (mat[row][column] === 0) {
+                queue.push([row, column])
+            }
+        }
+    }
+
+    while (queue.length > 0) {
+        const [row, column] = queue.shift()!
+        const currentDistance = distances[row][column] + 1
+
+        if (
+            row - 1 >= 0 && 
+            mat[row - 1][column] === 1 && 
+            distances[row - 1][column] === 0
+        ) {
+            distances[row - 1][column] = currentDistance
+            queue.push([row - 1, column])
+        }
+
+        if (
+            column + 1 < columns && 
+            mat[row][column + 1] === 1 && 
+            distances[row][column + 1] === 0
+        ) {
+            distances[row][column + 1] = currentDistance
+            queue.push([row, column + 1])
+        }
+
+        if (
+            row + 1 < rows && 
+            mat[row + 1][column] === 1 && 
+            distances[row + 1][column] === 0            
+        ) {
+            distances[row + 1][column] = currentDistance
+            queue.push([row + 1, column])
+        }
+
+        if (
+            column - 1 >= 0 && 
+            mat[row][column - 1] === 1 &&
+            distances[row][column - 1] === 0
+        ) {
+            distances[row][column - 1] = currentDistance
+            queue.push([row, column - 1])
+        }
+    }
+
+    return distances
+};
+
+console.log(updateMatrix([[0,0,0],[0,1,0],[0,0,0]])) // [[0,0,0],[0,1,0],[0,0,0]]
+console.log(updateMatrix([[0,0,0],[0,1,0],[1,1,1]])) // [[0,0,0],[0,1,0],[1,2,1]]
+```

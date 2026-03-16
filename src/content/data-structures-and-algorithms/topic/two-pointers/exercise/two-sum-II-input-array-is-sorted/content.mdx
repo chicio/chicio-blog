@@ -1,0 +1,54 @@
+---
+title: "Two Sum II - Input Array Is Sorted"
+description: "Given a **1-indexed** array of integers `numbers` that is already ***sorted in non-decreasing order***, find two numbers such that they add up to a specific `target` number. Let these two numbers b..."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [two pointers, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Opposite-direction Two Pointers"
+  leetcodeUrl: "https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/"
+---
+# Two Sum II - Input Array Is Sorted
+
+Leetcode Problem 167: [Two Sum II - Input Array Is Sorted](https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/description/)
+
+## Problem Summary
+Given a **1-indexed** sorted integer array `numbers` (non-decreasing), find two numbers such that they add up to a specific `target`. Return their indices as `[index1, index2]` where `1 <= index1 < index2 <= numbers.length`. The solution must use only constant extra space.
+
+**Constraints:**
+- The array has between **2 and 30,000** elements, sorted in non-decreasing order.
+- Element values are integers in the range **[-1,000, 1,000]**.
+- The target is an integer in the range **[-1,000, 1,000]**.
+- There is exactly one valid solution.
+
+## Techniques
+- Array
+- Two Pointers
+- Binary Search
+
+## Solution
+```ts
+function twoSum(numbers: number[], target: number): number[] {
+    let first = 0
+    let last = numbers.length - 1
+
+    while (first < last) {
+        let sum = numbers[first] + numbers[last]
+        
+        if (sum === target) {
+            return [++first, ++last]
+        }
+
+        if (sum < target) {
+            first++
+        } else {
+            last--
+        }
+    }
+
+    return [-1, -1]
+};
+
+console.log(twoSum([2,7,11,15], 9))
+```

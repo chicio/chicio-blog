@@ -1,0 +1,51 @@
+---
+title: "Swap Nodes in Pairs"
+description: "Given a linked list, swap every two adjacent nodes and return its head. You must solve the problem without modifying the values in the list's nodes (i.e., only nodes themselves may be changed.)"
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [linked list, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Pointer Manipulation"
+  leetcodeUrl: "https://leetcode.com/problems/swap-nodes-in-pairs/"
+---
+# Swap Nodes in Pairs
+
+Leetcode Problem 24: [Swap Nodes in Pairs](https://leetcode.com/problems/swap-nodes-in-pairs/description/)
+
+## Problem Summary
+Given the `head` of a linked list, swap every two adjacent nodes and return the new head. You must rearrange the nodes themselves — modifying node values is not allowed. If the list has an odd number of nodes, the last node is left in place.
+
+**Constraints:**
+- The list has between **0 and 100** nodes.
+- Node values are non-negative integers up to **100**.
+
+## Techniques
+- Linked List
+- Recursion
+
+## Solution
+```ts
+import { ListNode } from "../list-node"
+
+function swapPairs(head: ListNode | null): ListNode | null {
+    let dummy = new ListNode(-1, head)
+    let current: ListNode | null = dummy
+
+    while (current) {
+        let first: ListNode | null = current.next ?? null
+        let second: ListNode | null = first?.next ?? null
+        let next: ListNode | null = second?.next ?? null
+
+        if (first && second) {
+            current.next = second
+            second.next = first
+            first.next = next
+        }
+
+        current = first
+    }
+
+    return dummy.next
+}
+```

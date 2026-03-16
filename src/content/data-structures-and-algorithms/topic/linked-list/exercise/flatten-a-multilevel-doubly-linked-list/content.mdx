@@ -1,0 +1,73 @@
+---
+title: "Flatten a Multilevel Doubly Linked List"
+description: "You are given a doubly linked list, which contains nodes that have a next pointer, a previous pointer, and an additional **child pointer**. This child pointer may or may not point to a separate dou..."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [linked list, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "DFS / Stack"
+  leetcodeUrl: "https://leetcode.com/problems/flatten-a-multilevel-doubly-linked-list/"
+---
+# Flatten a Multilevel Doubly Linked List
+
+Leetcode Problem 430: [Flatten a Multilevel Doubly Linked List](https://leetcode.com/problems/flatten-a-multilevel-doubly-linked-list/description/)
+
+## Problem Summary
+You are given a doubly linked list where some nodes have an additional `child` pointer pointing to another doubly linked list. **Flatten** the list so that all nodes appear in a single-level doubly linked list, with child lists inserted immediately after their parent node. After flattening, no `child` pointers should remain.
+
+**Constraints:**
+- The total number of nodes across all levels is between **0 and 1,000**.
+- Node values are integers in the range **[1, 100,000]**.
+
+## Techniques
+- Linked List
+- Depth-First Search
+- Doubly-Linked List
+
+## Solution
+```ts
+class _NodeDouble {
+    val: number
+    prev: _NodeDouble | null
+    next: _NodeDouble | null
+    child: _NodeDouble | null
+    
+    constructor(val?: number, prev? : _NodeDouble, next? : _NodeDouble, child? : _NodeDouble) {
+        this.val = (val===undefined ? 0 : val);
+        this.prev = (prev===undefined ? null : prev);
+        this.next = (next===undefined ? null : next);
+        this.child = (child===undefined ? null : child);
+    }
+}
+
+function flatten(head: _NodeDouble | null): _NodeDouble | null {
+    let current: _NodeDouble | null = head
+
+    while (current) {
+        if (current.child) {
+            let currentChild =  current.child
+            
+            while (currentChild.next) {
+                currentChild = currentChild.next
+            }
+
+            let currentNext = current.next
+            
+            if (currentNext) {
+                currentChild.next = currentNext
+                currentNext.prev = currentChild
+            }
+
+            current.next = current.child
+            current.child.prev = current
+
+            current.child = null
+        } 
+          
+        current = current.next
+    }
+
+    return head
+};
+```

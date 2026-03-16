@@ -1,0 +1,99 @@
+---
+title: "Word Ladder"
+description: "A **transformation sequence** from word `beginWord` to word `endWord` using a dictionary `wordList` is a sequence of words `beginWord -> s1 -> s2 -> ... -> sk` such that:"
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [tree, trees, bfs, dfs, traversal, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "TODO"
+  leetcodeUrl: ""
+---
+# Word Ladder
+
+Leetcode Problem 127: [Word Ladder](description/)
+
+## Problem Summary
+A **transformation sequence** from `beginWord` to `endWord` is a sequence of words where each adjacent pair differs by exactly one letter, and every intermediate word must be in the provided `wordList`. Return the **length of the shortest transformation sequence** (number of words), or `0` if no valid sequence exists.
+
+**Constraints:**
+- Word lengths are between **1 and 10** characters, all lowercase English letters.
+- `beginWord` and `endWord` have the same length.
+- The word list has between **1 and 5,000** distinct words, all the same length.
+- `beginWord` is not the same as `endWord`.
+
+## Techniques
+- Hash Table
+- String
+- Breadth-First Search
+
+## Solution
+```ts
+function getPattern(word: string, starPosition: number) {
+    return word.slice(0, starPosition) + '*' + word.slice(starPosition + 1)
+}
+
+function ladderLength(beginWord: string, endWord: string, wordList: string[]): number {
+    const patterns = new Map<string, string[]>()
+
+    for (let wordPosition = 0; wordPosition < wordList.length; wordPosition++) {
+        const word = wordList[wordPosition]
+
+        for (let charPosition = 0; charPosition < word.length; charPosition++) {
+            const pattern = getPattern(word, charPosition)
+
+            if (patterns.has(pattern)) {
+                patterns.set(pattern, [...patterns.get(pattern)!, word])
+            } else {
+                patterns.set(pattern, [word])                
+            }
+        }
+    }
+
+    let numberOfTransformations = 1
+    let queue = [beginWord]
+    const visitedPatterns = new Set<string>()
+    const visitedWords = new Set<string>()
+
+    while (queue && queue.length > 0) {
+        let currentLevelLenght = queue.length
+
+        while (currentLevelLenght > 0) {
+            const word = queue.shift()!
+
+            if (word === endWord) {
+                return numberOfTransformations
+            }
+
+            for (let charPosition = 0; charPosition < word.length; charPosition++) {
+                const newPattern = getPattern(word, charPosition)
+
+                if (!visitedPatterns.has(newPattern)) {
+                    const words = patterns.get(newPattern)
+                    
+                    if (words) {
+                        for (const newWord of words) {
+                            if (!visitedWords.has(newWord)) {
+                                queue.push(newWord)
+                                visitedWords.add(newWord)
+                            }
+                        }
+                    }
+
+                    visitedPatterns.add(newPattern)
+                }
+            }
+
+            currentLevelLenght--
+        }
+
+        numberOfTransformations++
+    }
+
+    return 0
+};
+
+
+console.log(ladderLength("hit", "cog", ["hot","dot","dog","lot","log","cog"])) // 5
+console.log(ladderLength("hit", "cog", ["hot","dot","dog","lot","log"])) // 0
+```

@@ -1,0 +1,87 @@
+---
+title: "Maximum Width of Binary Tree"
+description: "Given the `root` of a binary tree, return *the **maximum width** of the given tree*."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [tree, trees, bfs, dfs, traversal, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "BFS"
+  leetcodeUrl: "https://leetcode.com/problems/maximum-width-of-binary-tree/"
+---
+# Maximum Width of Binary Tree
+
+Leetcode Problem 662: [Maximum Width of Binary Tree](https://leetcode.com/problems/maximum-width-of-binary-tree/description/)
+
+## Problem Summary
+Given the `root` of a binary tree, return the **maximum width** of any level. The width of a level is the distance between the leftmost and rightmost non-null nodes, including null nodes in between (counted as if they occupy positions in a complete binary tree numbering). The answer is guaranteed to fit in a **32-bit signed integer**.
+
+**Constraints:**
+- The tree has between **1 and 3,000** nodes.
+- Node values are integers in the range **[0, 100]**.
+
+## Techniques
+- Tree
+- Depth-First Search
+- Breadth-First Search
+- Binary Tree
+
+## Solution
+```ts
+export class TreeNode {
+    val: number
+    left: TreeNode | null
+    right: TreeNode | null
+
+    constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+        this.val = (val === undefined ? 0 : val)
+        this.left = (left === undefined ? null : left)
+        this.right = (right === undefined ? null : right)
+    }
+}
+
+interface TreeNodeWithPosition {
+    node: TreeNode
+    position: number
+}
+
+function widthOfBinaryTree(root: TreeNode | null): number {
+    if (!root) {
+        return 0
+    }
+
+    let queue: TreeNodeWithPosition[] = [{ node: root, position: 0 }]
+    let maxWidth = 0
+
+    while (queue.length > 0) {
+        let levelSize = queue.length
+        let start = queue[0].position
+        let end = queue[queue.length - 1].position - start
+
+        while (levelSize > 0) {
+            const currentNode = queue.shift()!
+            const normalizedPos = currentNode.position - start
+
+            if (currentNode.node.left) {
+                queue.push({
+                    node: currentNode.node.left,
+                    position: 2 * normalizedPos
+                })
+            }
+
+            if (currentNode.node.right) {
+                queue.push({
+                    node: currentNode.node.right,
+                    position: 2 * normalizedPos + 1
+                })
+            }
+
+            levelSize--
+        }
+
+        maxWidth = Math.max(maxWidth, end + 1)
+    }
+
+    return maxWidth
+}
+```

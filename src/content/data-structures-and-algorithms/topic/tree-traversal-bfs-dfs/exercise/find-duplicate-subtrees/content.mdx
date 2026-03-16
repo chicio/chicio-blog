@@ -1,0 +1,70 @@
+---
+title: "Find Duplicate Subtrees"
+description: "Given the `root` of a binary tree, return all **duplicate subtrees**."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [tree, trees, bfs, dfs, traversal, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "DFS Post-order"
+  leetcodeUrl: "https://leetcode.com/problems/find-duplicate-subtrees/"
+---
+# Find Duplicate Subtrees
+
+Leetcode Problem 652: [Find Duplicate Subtrees](https://leetcode.com/problems/find-duplicate-subtrees/description/)
+
+## Problem Summary
+Given the `root` of a binary tree, find all **duplicate subtrees**. Two subtrees are duplicates if they have the same structure and identical node values at every position. For each group of duplicates, return the root node of any one of them.
+
+**Constraints:**
+- The tree has between **1 and 5,000** nodes.
+- Node values are integers in the range **[-200, 200]**.
+
+## Techniques
+- Hash Table
+- Tree
+- Depth-First Search
+- Binary Tree
+
+## Solution
+```ts
+export class TreeNode {
+    val: number
+    left: TreeNode | null
+    right: TreeNode | null
+
+    constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+        this.val = (val === undefined ? 0 : val)
+        this.left = (left === undefined ? null : left)
+        this.right = (right === undefined ? null : right)
+    }
+}
+
+function findDuplicateSubtrees(root: TreeNode | null): Array<TreeNode | null> {
+    let paths = new Map<string, number>()
+    let results: TreeNode[] = []
+
+    function pathSerialization(root: TreeNode | null): string {
+        if (!root) {
+            return `#`
+        }
+
+        let left = pathSerialization(root.left)
+        let right = pathSerialization(root.right)
+        let serializedPath = `${left},${right},${root.val}`
+
+        if (paths.has(serializedPath) && paths.get(serializedPath)! === 1) {
+            results.push(root)
+            paths.set(serializedPath, paths.get(serializedPath)! + 1)
+        } else {
+            paths.set(serializedPath, (paths.get(serializedPath) || 0) + 1)
+        }
+
+        return serializedPath
+    }
+
+    pathSerialization(root)
+
+    return results
+}
+```

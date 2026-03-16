@@ -1,0 +1,52 @@
+---
+title: "Reverse Bits"
+description: "Reverse bits of a given 32 bits signed integer."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [bit manipulation, bit wise, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Bitwise Reversal"
+  leetcodeUrl: "https://leetcode.com/problems/reverse-bits/"
+---
+# Reverse Bits
+
+Leetcode Problem 190: [Reverse Bits](https://leetcode.com/problems/reverse-bits/description/)
+
+## Problem Summary
+Reverse the bits of a given 32-bit unsigned integer and return the resulting integer. For example:
+
+```
+Integer     | Binary (32 bits)
+------------|----------------------------------
+43261596    | 00000010100101000001111010011100
+964176192   | 00111001011110000010100101000000
+```
+
+Reversing bits of `43261596` produces `964176192`.
+
+**Follow up:** If this function is called many times, how would you optimize it?
+
+**Constraints:**
+- The input is a non-negative even integer in the range **[0, 2^31 − 2]**.
+
+## Techniques
+- Divide and Conquer
+- Bit Manipulation
+
+## Solution
+```ts
+function reverseBits(n: number): number {
+    let reversedN = 0
+
+	for (let i = 0; i < 32; i++) {
+        let currentBit = n & 1
+        reversedN = (reversedN << 1) | currentBit;
+        n = n >>> 1 
+    }
+
+    return reversedN >>> 0
+};
+
+console.log(reverseBits(43261596))
+```

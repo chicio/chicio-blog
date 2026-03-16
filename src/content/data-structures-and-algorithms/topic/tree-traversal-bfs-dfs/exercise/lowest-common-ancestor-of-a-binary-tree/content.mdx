@@ -1,0 +1,93 @@
+---
+title: "Lowest Common Ancestor of a Binary Tree"
+description: "Given a binary tree, find the lowest common ancestor (LCA) of two given nodes in the tree."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [tree, trees, bfs, dfs, traversal, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "DFS Post-order"
+  leetcodeUrl: "https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/"
+---
+# Lowest Common Ancestor of a Binary Tree
+
+Leetcode Problem 236: [Lowest Common Ancestor of a Binary Tree](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/description/)
+
+## Problem Summary
+Given the `root` of a binary tree and two nodes `p` and `q`, return their **Lowest Common Ancestor (LCA)** — the deepest node that has both `p` and `q` as descendants (a node can be a descendant of itself).
+
+**Constraints:**
+- The tree has between **2 and 100,000** nodes with unique values.
+- Node values are integers in the range **[-1,000,000,000, 1,000,000,000]**.
+- Both `p` and `q` are guaranteed to exist in the tree.
+
+## Techniques
+- Tree
+- Depth-First Search
+- Binary Tree
+
+## Solution
+```ts
+export class TreeNode {
+    val: number
+    left: TreeNode | null
+    right: TreeNode | null
+
+    constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+        this.val = (val === undefined ? 0 : val)
+        this.left = (left === undefined ? null : left)
+        this.right = (right === undefined ? null : right)
+    }
+}
+
+function lowestCommonAncestor(root: TreeNode | null, p: TreeNode | null, q: TreeNode | null): TreeNode | null {
+    if (root === null || root === p || root === q) {
+        return root
+    }
+
+    const left = lowestCommonAncestor(root.left, p, q)
+    const right = lowestCommonAncestor(root.right, p, q)
+
+    if (left && right) {
+        return root
+    }
+
+    return left || right
+}
+
+// Iterative solution
+
+function lowestCommonAncestorIterative(root: TreeNode | null, p: TreeNode | null, q: TreeNode | null): TreeNode | null {
+    if (!root || !p || !q) {
+        return null;
+    }
+
+    const stack: TreeNode[] = [root];
+    const parent = new Map<TreeNode, TreeNode | null>();
+    parent.set(root, null);
+
+    while (!parent.has(p) || !parent.has(q)) {
+        const node = stack.pop()!;
+        if (node.left) {
+            parent.set(node.left, node);
+            stack.push(node.left);
+        }
+        if (node.right) {
+            parent.set(node.right, node);
+            stack.push(node.right);
+        }
+    }
+
+    const ancestors = new Set<TreeNode>();
+    while (p !== null) {
+        ancestors.add(p);
+        p = parent.get(p)!;
+    }
+
+    while (!ancestors.has(q)) {
+        q = parent.get(q)!;
+    }
+
+    return q;
+}
+```

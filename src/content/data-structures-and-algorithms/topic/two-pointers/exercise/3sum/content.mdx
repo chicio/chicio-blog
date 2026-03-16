@@ -1,0 +1,70 @@
+---
+title: "3Sum"
+description: "Given an integer array nums, return all the triplets `[nums[i], nums[j], nums[k]]` such that `i != j`, `i != k`, and `j != k`, and `nums[i] + nums[j] + nums[k] == 0`."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [two pointers, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Three Pointers / Deduplication"
+  leetcodeUrl: "https://leetcode.com/problems/3sum/"
+---
+# 3Sum
+
+Leetcode Problem 15: [3Sum](https://leetcode.com/problems/3sum/description/)
+
+## Problem Summary
+Given an integer array `nums`, return all unique triplets `[nums[i], nums[j], nums[k]]` such that `i`, `j`, and `k` are distinct indices and the three values sum to zero. The result must not contain duplicate triplets.
+
+**Constraints:**
+- The array has between **3 and 3,000** elements.
+- Each element is an integer in the range **[-100,000, 100,000]**.
+
+## Techniques
+- Array
+- Two Pointers
+- Sorting
+
+## Solution
+```ts
+function threeSum(nums: number[]): number[][] {
+    nums.sort((a, b) => a - b)
+    let tuples: number[][] = [];
+
+    for (let i = 0; i < nums.length; i++) {
+        let current = nums[i]
+
+        if (i > 0 && current === nums[i - 1]) {
+            continue; 
+        }
+
+        let first = i + 1
+        let last = nums.length - 1
+
+        while (first < last) {
+            let sum = nums[first] + nums[last] + current 
+
+            if (sum > 0) {
+                last--
+            } else if (sum < 0) {
+                first++
+            } else {
+                tuples.push([current, nums[first], nums[last]])
+                first++
+                last--
+
+                while (first < last && nums[first] === nums[first - 1]) { 
+                    first++; 
+                }
+                while (first < last && nums[last] === nums[last + 1]) {
+                    last--;
+                } 
+            }
+        }
+    }
+
+    return tuples
+};
+
+console.log(threeSum([-1,0,1,2,-1,-4]))
+```

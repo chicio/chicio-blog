@@ -1,0 +1,63 @@
+---
+title: "Symmetric Tree"
+description: "Given the `root` of a binary tree, *check whether it is a mirror of itself* (i.e., symmetric around its center)."
+date: 2026-03-16
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [tree, trees, bfs, dfs, traversal, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "DFS Pre-order"
+  leetcodeUrl: "https://leetcode.com/problems/symmetric-tree/"
+---
+# Symmetric Tree
+
+Leetcode Problem 101: [Symmetric Tree](https://leetcode.com/problems/symmetric-tree/description/)
+
+## Problem Summary
+Given the `root` of a binary tree, determine whether the tree is **symmetric** (a mirror image of itself around its center). A tree is symmetric if, at every level, the left subtree is a mirror reflection of the right subtree.
+
+**Constraints:**
+- The tree has between **1 and 1,000** nodes.
+- Node values are integers in the range **[-100, 100]**.
+
+## Techniques
+- Tree
+- Depth-First Search
+- Breadth-First Search
+- Binary Tree
+
+## Solution
+```ts
+export class TreeNode {
+    val: number
+    left: TreeNode | null
+    right: TreeNode | null
+
+    constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+        this.val = (val === undefined ? 0 : val)
+        this.left = (left === undefined ? null : left)
+        this.right = (right === undefined ? null : right)
+    }
+}
+
+function isSymmetricRecursive(p: TreeNode | null, q: TreeNode | null): boolean {
+    if (!p && !q) {
+        return true
+    }
+
+    if (!p || !q) {
+        return false
+    }
+
+    return p.val === q.val && isSymmetricRecursive(p.left, q.right) && isSymmetricRecursive(p.right, q.left)
+}
+
+
+function isSymmetric(root: TreeNode | null): boolean {
+    if (!root) {
+        return true
+    }
+
+    return isSymmetricRecursive(root.left, root.right)
+}
+```
