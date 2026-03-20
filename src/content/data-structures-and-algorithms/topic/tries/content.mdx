@@ -1,0 +1,119 @@
+---
+title: "Tries"
+description: "A comprehensive guide to Trie data structures, exploring their implementation, applications, and use cases."
+date: 2026-03-20
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [tries, trie, prefix tree, data structures, algorithms]
+authors: [fabrizio_duroni]
+---
+
+# Tries
+
+A Trie, also known as a Prefix Tree, is a specialized tree-like data structure designed to efficiently store and retrieve strings. 
+Unlike a binary search tree, which organizes data based on comparisons between elements, a Trie organizes data based on **the characters of the keys themselves**, 
+making it exceptionally well-suited for string search, autocomplete, and dictionary-like operations.
+
+The primary idea behind a Trie is simple: each node represents a single character of a string, and the path from the root to a node corresponds to a prefix of 
+one or more stored strings. By traversing the tree along these paths, we can quickly determine whether a string exists in the collection or retrieve all strings 
+sharing a common prefix.
+
+As we said before, at the heart of a Trie is the **node**, which represents a single character and links to its child nodes. 
+Understanding the structure of a Trie node is crucial, as it directly affects **time and space efficiency**.
+
+A typical Trie node contains two essential elements:
+
+- **Children references**, these point to the next characters in the stored strings. There are multiple ways to represent them:
+   - **Array**: For a small, fixed alphabet (like lowercase English letters), an array of size 26 can store references to child nodes. This allows **constant-time access** per character but may waste memory if the Trie is sparse.
+   - **Hash map**: A dynamic mapping from character to child node. This reduces memory usage for sparse Tries, but introduces a slight overhead for lookups.
+- **End-of-word marker** – a boolean flag indicating whether the path from the root to this node corresponds to a complete valid string.
+
+These elements allow the Trie to efficiently answer queries such as **search** or **prefix lookup**, because traversal only involves moving from one character 
+node to the next along the path of the target string.
+
+Below you can find a TypeScript implementation demonstrating a Trie node and basic operations: insert, search, and prefix search.
+
+```typescript
+class TrieNode {
+  children: Map<string, TrieNode>;
+  isEndOfWord: boolean;
+
+  constructor() {
+    this.children = new Map();
+    this.isEndOfWord = false;
+  }
+}
+
+class Trie {
+  root: TrieNode;
+
+  constructor() {
+    this.root = new TrieNode();
+  }
+
+  insert(word: string) {
+    let node = this.root;
+    for (const char of word) {
+      if (!node.children.has(char)) {
+        node.children.set(char, new TrieNode());
+      }
+      node = node.children.get(char)!;
+    }
+    node.isEndOfWord = true;
+  }
+
+  search(word: string): boolean {
+    let node = this.root;
+    for (const char of word) {
+      if (!node.children.has(char)) return false;
+      node = node.children.get(char)!;
+    }
+    return node.isEndOfWord;
+  }
+
+  startsWith(prefix: string): boolean {
+    let node = this.root;
+    for (const char of prefix) {
+      if (!node.children.has(char)) return false;
+      node = node.children.get(char)!;
+    }
+    return true;
+  }
+}
+
+// Example usage
+const trie = new Trie();
+trie.insert("apple");
+trie.insert("app");
+console.log(trie.search("apple"));  // true
+console.log(trie.search("app"));    // true
+console.log(trie.search("apricot"));// false
+console.log(trie.startsWith("ap")); // true
+```
+
+## Time and Space Complexity
+
+Understanding the **time and space complexity** of Trie operations is crucial for evaluating their efficiency and deciding when to use them over other
+data structures such as hash maps or binary search trees.
+
+Given:
+- **L**: the length of the word being inserted or searched.
+- **A**: the size of the alphabet. For example, A = 26 for lowercase English letters. Space complexity can grow with A, because each node can potentially have up to A children.  
+- **P**: the length of the prefix being queried in a prefix search. Traversal stops after P characters, making prefix search proportional to P.  
+
+| Operation | Time Complexity | Space Complexity | Explanation |
+|-----------|----------------|-----------------|------------|
+| Insert word | O(L) | O(L) | Each character requires a node if it does not exist, hence additional space proportional to the word length. |
+| Search word | O(L) | O(1) | Traversal follows the characters of the word; no extra memory is allocated beyond traversal pointers. |
+| Search prefix | O(P) | O(1) | Traversal stops at the end of the prefix. |
+| Memory usage (overall) | O(AL) | O(AL) |  Each node can have up to A children. Sparse Tries with hash maps reduce memory overhead compared to dense arrays. |
+
+## Exercises
+
+| Problem | Technique | Solution |
+|--------|----------|----------|
+| [Implement Trie (Prefix Tree)](https://leetcode.com/problems/implement-trie-prefix-tree/) | Trie | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/trie/implement-trie-prefix-tree.ts) |
+| [Design Add and Search Words Data Structure](https://leetcode.com/problems/design-add-and-search-words-data-structure/) | Trie | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/trie/design-add-and-search-words-data-structure.ts) |
+| [Search Suggestions System](https://leetcode.com/problems/search-suggestions-system/) | Trie | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/trie/search-suggestions-system.ts) |
+| [Longest Word in Dictionary](https://leetcode.com/problems/longest-word-in-dictionary/) | Trie | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/trie/longest-word-in-dictionary.ts) |
+| [Maximum XOR of Two Numbers in an Array](https://leetcode.com/problems/maximum-xor-of-two-numbers-in-an-array/) | Trie | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/trie/maximum-xor-of-two-numbers-in-an-array.ts) |
+| [Word Search II](https://leetcode.com/problems/word-search-ii/) | Trie + DFS | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/trie/word-search-II.ts) |
