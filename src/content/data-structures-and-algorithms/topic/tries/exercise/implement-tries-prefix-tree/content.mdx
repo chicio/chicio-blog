@@ -1,0 +1,98 @@
+---
+title: "Implement Trie (Prefix Tree)"
+description: "A **trie** (pronounced as \"try\") or **prefix tree** is a tree data structure used to efficiently store and retrieve keys in a dataset of strings. There are various applications of this data structu..."
+date: 2026-03-20
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [tries, trie, prefix tree, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Trie"
+  leetcodeUrl: "https://leetcode.com/problems/implement-trie-prefix-tree/"
+---
+# Implement Trie (Prefix Tree)
+
+Leetcode Problem 208: [Implement Trie (Prefix Tree)](https://leetcode.com/problems/implement-trie-prefix-tree/description/)
+
+## Problem Summary
+A trie (prefix tree) is a structure for storing strings so exact-word and prefix checks are efficient.
+
+Implement a `Trie` class that supports:
+
+- `insert(word)`: store a lowercase word.
+- `search(word)`: return `true` only if that exact word was inserted before.
+- `startsWith(prefix)`: return `true` if at least one inserted word starts with the given prefix.
+
+**Constraints (descriptive):**
+
+- Both `word` and `prefix` lengths are between 1 and 2000 characters.
+- Inputs for `insert`, `search`, and `startsWith` contain only lowercase English letters.
+- The total number of operations across all three methods is at most 3 * 10^4.
+
+## Techniques
+- Hash Table
+- String
+- Design
+- Trie
+
+## Solution
+```ts
+export class TrieNode {
+    constructor(
+        public children: Map<string, TrieNode> = new Map<string, TrieNode>(),
+        public isEndOfWord: boolean = false
+    ) { }
+}
+
+class Trie {
+    private root: TrieNode = new TrieNode()
+
+    insert(word: string): void {
+        let currentNode = this.root
+
+        for (const char of word) {
+            let currentCharNode = currentNode.children.get(char)
+
+            if (!currentCharNode) {
+                currentCharNode = new TrieNode()
+                currentNode.children.set(char, currentCharNode)
+            }
+
+            currentNode = currentCharNode
+        }
+
+        currentNode.isEndOfWord = true
+    }
+
+    search(word: string): boolean {
+        let currentNode = this.root
+
+        for (const char of word) {
+            let currentCharNode = currentNode.children.get(char)
+
+            if (!currentCharNode) {
+                return false
+            }
+
+            currentNode = currentCharNode
+        }
+
+        return currentNode.isEndOfWord
+    }
+
+    startsWith(prefix: string): boolean {
+        let currentNode = this.root
+
+        for (const char of prefix) {
+            let currentCharNode = currentNode.children.get(char)
+
+            if (!currentCharNode) {
+                return false
+            }
+
+            currentNode = currentCharNode
+        }
+
+        return true
+    }
+}
+```

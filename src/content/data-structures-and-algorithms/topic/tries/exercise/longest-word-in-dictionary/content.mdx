@@ -1,0 +1,101 @@
+---
+title: "Longest Word in Dictionary"
+description: "Given an array of strings `words` representing an English Dictionary, return *the longest word in* `words` *that can be built one character at a time by other words in* `words`."
+date: 2026-03-20
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [tries, trie, prefix tree, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Trie"
+  leetcodeUrl: "https://leetcode.com/problems/longest-word-in-dictionary/"
+---
+# Longest Word in Dictionary
+
+Leetcode Problem 720: [Longest Word in Dictionary](https://leetcode.com/problems/longest-word-in-dictionary/description/)
+
+## Problem Summary
+Given a list of lowercase words, find the longest word that can be built one character at a time, where every prefix of that word is also present in the list.
+
+If multiple valid words share the same maximum length, return the lexicographically smallest one. If no word can be built under these rules, return an empty string.
+
+Build direction is strictly left to right, so a valid word of length `k` must have all prefixes of lengths `1..k-1` in the dictionary.
+
+**Constraints (descriptive):**
+
+- The dictionary contains between 1 and 1000 words.
+- Each word length is between 1 and 30.
+- Every word contains only lowercase English letters.
+
+## Techniques
+- Array
+- Hash Table
+- String
+- Trie
+- Sorting
+
+## Solution
+```ts
+
+export class TrieNode {
+    constructor(
+        public children: Map<string, TrieNode> = new Map<string, TrieNode>(),
+        public isEndOfWord: boolean = false
+    ) { }
+}
+
+class TrieCanBeBuilt {
+    private root: TrieNode = new TrieNode()
+
+    insert(word: string): void {
+        let currentNode = this.root
+
+        for (const char of word) {
+            let currentCharNode = currentNode.children.get(char)
+
+            if (!currentCharNode) {
+                currentCharNode = new TrieNode()
+                currentNode.children.set(char, currentCharNode)
+            }
+
+            currentNode = currentCharNode
+        }
+
+        currentNode.isEndOfWord = true
+    }
+
+    canBeBuilt(word: string): boolean {
+        let currentNode = this.root
+
+        for (const char of word) {
+            let currentCharNode = currentNode.children.get(char)
+
+            if (!currentCharNode || !currentCharNode.isEndOfWord) {
+                return false
+            }
+
+            currentNode = currentCharNode
+        }
+
+        return currentNode.isEndOfWord
+    }
+}
+
+function longestWord(words: string[]): string {
+    const search = new TrieCanBeBuilt()
+    let maxString = ""
+
+    for (let word of words) {
+        search.insert(word)
+    }
+
+    for (let word of words) {
+        let canBeBuilt = search.canBeBuilt(word)
+
+        if (canBeBuilt && (word.length > maxString.length || (word.length === maxString.length && word < maxString))) {
+            maxString = word
+        }
+    }
+
+    return maxString
+};
+```

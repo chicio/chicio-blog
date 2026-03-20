@@ -1,0 +1,101 @@
+---
+title: "Search Suggestions System"
+description: "You are given an array of strings `products` and a string `searchWord`."
+date: 2026-03-20
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [tries, trie, prefix tree, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Trie"
+  leetcodeUrl: ""
+---
+
+# Search Suggestions System
+
+[Search Suggestions System](https://leetcode.com/problems/search-suggestions-system/description/)
+
+## Problem Summary
+You are given an array of product names `products` and a query string `searchWord`.
+
+After each character of `searchWord` is typed, return up to three suggestions that share the current prefix. If more than three products match, return the three lexicographically smallest matches.
+
+The final answer is a list of suggestion lists, one for each prefix of `searchWord`.
+
+**Constraints (descriptive):**
+
+- The catalog contains between 1 and 1000 unique product names.
+- Each product name length is between 1 and 3000.
+- The total number of characters across all products is between 1 and 2 * 10^4.
+- Product names contain only lowercase English letters.
+- `searchWord` length is between 1 and 1000 and contains only lowercase English letters.
+
+## Techniques
+- Array
+- String
+- Binary Search
+- Trie
+- Sorting
+- Heap (Priority Queue)
+
+## Solution
+```ts
+class TrieNode {
+    constructor(
+        public children: Map<string, TrieNode> = new Map<string, TrieNode>(),
+        public isEndOfWord: boolean = false,
+        public suggestion: string[] = []
+    ) { }
+}
+
+class TrieSuggester {
+    private root = new TrieNode()
+
+    insert(word: string): void {
+        let currentNode = this.root;
+        for (let i = 0; i < word.length; i++) {
+            const char = word.charAt(i);
+            if (!currentNode.children.has(char)) {
+                currentNode.children.set(char, new TrieNode());
+            }
+
+            currentNode = currentNode.children.get(char)!;
+
+            if (currentNode.suggestion.length < 3) {
+                currentNode.suggestion.push(word);
+            }
+        }
+        currentNode.isEndOfWord = true;
+    }
+
+    searchSuggestions(word: string): string[][] {
+        const result: string[][] = [];
+        let currentNode = this.root
+
+        for (let i = 0; i < word.length; i++) {
+            const char = word.charAt(i);
+
+            if (currentNode.children.has(char)) {
+                currentNode = currentNode.children.get(char)!;
+                result.push(currentNode.suggestion);
+            } else {
+                while (result.length < word.length) {
+                    result.push([]);
+                }
+                break;
+            }
+        }
+
+        return result
+    }
+}
+
+function suggestedProducts(products: string[], searchWord: string): string[][] {
+    let suggester = new TrieSuggester()
+    products.sort();
+    products.map(it => suggester.insert(it))
+
+    return suggester.searchSuggestions(searchWord)
+}
+
+console.log(suggestedProducts(["mobile","mouse","moneypot","monitor","mousepad"], 'mouse'));
+```
