@@ -7,6 +7,8 @@ tags: [bst, binary search tree, ordered set, data structures, algorithms]
 authors: [fabrizio_duroni]
 ---
 
+import { TopicExercises } from "@/components/sections/data-structures-and-algorithms/components/topic-exercises";
+
 # Binary Search Tree and Ordered Set
 
 Binary Search Trees (BSTs) and Ordered Sets are fundamental building blocks in algorithm design. 
@@ -223,7 +225,7 @@ function insertAVL(node: AVLNode | null, val: number): AVLNode {
 }
 ```
 
-## Ordered Set Operations
+## Ordered Set
 
 An **Ordered Set** is an abstract data type that combines the ordering properties of a Binary Search Tree with the uniqueness guarantee of a set.  
 It allows efficient insertions, deletions, and queries while maintaining elements in sorted order.
@@ -358,9 +360,4 @@ Here we summarize the key operations and highlight the differences between **unb
 
 ## Exercises
 
-| Problem | Technique | Solution |
-|--------|----------|----------|
-| [Trim a Binary Search Tree](https://leetcode.com/problems/trim-a-binary-search-tree/) | BST | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/bst/trim-a-binary-search-tree.ts) |
-| [My Calendar I](https://leetcode.com/problems/my-calendar-i/) | Ordered Set / BST | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/bst/my-calendar-I.ts) |
-| [My Calendar II](https://leetcode.com/problems/my-calendar-ii/) | Ordered Set / BST | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/bst/my-calendar-II.ts) |
-| [Stock Price Fluctuation](https://leetcode.com/problems/stock-price-fluctuation/) | BST / Map | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/bst/stock-price-fluctuation.ts) |
+<TopicExercises topic="binary-search-tree" />

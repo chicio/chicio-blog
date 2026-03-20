@@ -1,0 +1,113 @@
+---
+title: "Stock Price Fluctuation"
+description: "You are given a stream of **records** about a particular stock. Each record contains a **timestamp** and the corresponding **price** of the stock at that timestamp."
+date: 2026-03-20
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [bst, binary search tree, ordered set, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "BST / Map"
+  leetcodeUrl: "https://leetcode.com/problems/stock-price-fluctuation/"
+---
+# Stock Price Fluctuation
+
+Leetcode Problem 2034: [Stock Price Fluctuation](https://leetcode.com/problems/stock-price-fluctuation/description/)
+
+## Problem Summary
+You receive stock records as `(timestamp, price)` pairs, but updates can arrive out of order and can correct older values.
+If a timestamp appears again, the new price replaces the previous one for that same timestamp.
+
+You must support these operations efficiently:
+
+- `update(timestamp, price)`: insert or correct the price at that timestamp.
+- `current()`: return the price at the largest timestamp seen so far.
+- `maximum()`: return the highest valid price among current records.
+- `minimum()`: return the lowest valid price among current records.
+
+ASCII view of correction behavior:
+
+```text
+Initial records:
+t=1 -> 10
+t=2 -> 5
+
+Correction arrives:
+update(1, 3)
+
+Current state becomes:
+t=1 -> 3   (10 is obsolete)
+t=2 -> 5
+```
+
+Implement the `StockPrice` class:
+
+- `StockPrice()`: Initialize an empty data structure.
+- `void update(int timestamp, int price)`: Add or replace the value for a timestamp.
+- `int current()`: Return the price at the latest timestamp.
+- `int maximum()`: Return the highest active price.
+- `int minimum()`: Return the lowest active price.
+
+**Constraints:**
+
+- Both `timestamp` and `price` are positive integers in the range `[1, 10^9]`.
+- The total number of calls across all methods is at most `10^5`, so the implementation must stay efficient over many updates.
+- Query methods (`current`, `maximum`, `minimum`) are guaranteed to be called only after at least one `update`.
+
+## Techniques
+- Hash Table
+- Design
+- Heap (Priority Queue)
+- Data Stream
+- Ordered Set
+
+## Solution
+```ts
+/// Impossible to use a BST for this problem because of typescript, I chose another path (heaps)
+
+import {Heap} from "../heap";
+
+interface StockValue {
+    timestamp: number;
+    price: number;
+}
+
+class StockPrice {
+    private maxStock = new Heap<StockValue>((a, b) => b.price - a.price)
+    private minStock = new Heap<StockValue>((a, b) => a.price - b.price)
+    private prices = new Map<number, number>();
+    private latest: number = 0;
+
+    update(timestamp: number, price: number): void {
+        this.prices.set(timestamp, price);
+        this.latest = Math.max(this.latest, timestamp)
+        this.minStock.insert({ price, timestamp })
+        this.maxStock.insert({ price, timestamp })
+    }
+
+    current(): number {
+        return this.prices.get(this.latest)!;
+    }
+
+    maximum(): number {
+        while (true) {
+            const stockValue = this.maxStock.peek()!;
+            if (this.prices.get(stockValue.timestamp) === stockValue.price) {
+                return stockValue.price;
+            }
+
+            this.maxStock.extract();
+        }
+    }
+
+    minimum(): number {
+        while (true) {
+            const stockValue = this.minStock.peek()!;
+            if (this.prices.get(stockValue.timestamp) === stockValue.price) {
+                return stockValue.price;
+            }
+
+            this.minStock.extract();
+        }
+    }
+}
+```

@@ -1,0 +1,82 @@
+---
+title: "Trim a Binary Search Tree"
+description: "Given the `root` of a binary search tree and the lowest and highest boundaries as `low` and `high`, trim the tree so that all its elements lies in `[low, high]`. Trimming the tree should **not** ch..."
+date: 2026-03-20
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [bst, binary search tree, ordered set, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "BST"
+  leetcodeUrl: "https://leetcode.com/problems/trim-a-binary-search-tree/"
+---
+# Trim a Binary Search Tree
+
+Leetcode Problem 669: [Trim a Binary Search Tree](https://leetcode.com/problems/trim-a-binary-search-tree/description/)
+
+## Problem Summary
+Given the root of a Binary Search Tree and a value interval `[low, high]`, remove every node whose value is outside that range.
+
+While trimming, you must preserve the original parent/child ordering among the nodes that remain.
+In other words, if node `A` was an ancestor of node `B` and both survive, that relationship must still hold in the trimmed tree.
+The resulting tree is uniquely determined.
+
+The returned root may be different from the original root if the old root is out of range.
+
+ASCII intuition:
+
+```text
+Original BST:
+    3
+     / \
+    0   4
+     \
+    2
+     /
+    1
+
+Keep values in [1,3]
+
+Trimmed BST:
+    3
+     /
+    2
+   /
+  1
+```
+
+**Constraints:**
+
+- The tree contains between `1` and `10^4` nodes.
+- Every node value is in `[0, 10^4]` and all values are unique.
+- The input is guaranteed to be a valid Binary Search Tree.
+- The trim range is valid and bounded as `0 <= low <= high <= 10^4`.
+
+## Techniques
+- Tree
+- Depth-First Search
+- Binary Search Tree
+- Binary Tree
+
+## Solution
+```ts
+import {TreeNode} from "../tree-node";
+
+function trimBST(root: TreeNode | null, low: number, high: number): TreeNode | null {
+    if (!root) {
+        return null
+    }
+
+    if (root.val < low) {
+        return trimBST(root.right, low, high)
+    }
+
+    if (root.val > high) {
+        return trimBST(root.left, low, high)
+    }
+
+    root.left = trimBST(root.left, low, high)
+    root.right = trimBST(root.right, low, high)
+
+    return root
+}
+```
