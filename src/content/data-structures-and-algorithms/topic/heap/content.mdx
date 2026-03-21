@@ -7,6 +7,8 @@ tags: [heap, heaps, min heap, max heap, priority queue, two heaps, data structur
 authors: [fabrizio_duroni]
 ---
 
+import { TopicExercises } from "@/components/sections/data-structures-and-algorithms/components/topic-exercises";
+
 # Heaps
 
 A heap is a data structure built on a simple but powerful idea: at any point in time, you want instant access to the most important element in a collection, 
@@ -715,7 +717,24 @@ class MedianFinder {
 }
 ```
 
+## The Top K Elements Pattern
+
+Another class of problems related to heaps asks for the $k$ largest, smallest, or most frequent elements in a collection. 
+The naive approach sorts the entire input and takes the first $k$ elements, costing $O(n \log n)$ regardless of $k$. 
+A heap reduces this to $O(n \log k)$ by maintaining a window of exactly $k$ candidates at all times.
+
+The core idea is to use a **min-heap of size $k$** to find the $k$ largest elements, or a **max-heap of size $k$** to find the $k$ smallest. 
+As you scan the input, you insert each element into the heap. Once the heap exceeds size $k$, you extract the root, discarding the element that least belongs among the 
+top $k$ candidates. At the end of the scan, the heap contains exactly the $k$ elements you are looking for.
+
+The same logic extends naturally when the ranking criterion is not the value itself but a derived quantity, such as frequency, distance, or profit. 
+You redefine the comparator accordingly and the heap mechanics remain unchanged. The decision of whether to use a min-heap or a max-heap depends on which 
+element you want to discard when the heap overflows: always discard the one that is least qualified to be in the top $k$.
+
 ## Time and Space Complexity
+
+Below you can find the time and space complexity of the main operations on a binary heap. For the other patterns described here, two heaps and top k elements, the complexities 
+depend on the underlying heap operations and the number of elements involved in each operation.
 
 | Operation | Time Complexity | Space Complexity |
 |-----------|----------------|------------------|
@@ -725,11 +744,4 @@ class MedianFinder {
 
 ## Exercises
 
-| Problem | Technique | Solution |
-|---------|-----------|----------|
-| [Furthest Building You Can Reach](https://leetcode.com/problems/furthest-building-you-can-reach/) | Heap | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/heap/furthest-building-you-can-reach.ts) |
-| [Single-Threaded CPU](https://leetcode.com/problems/single-threaded-cpu/) | Heap | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/heap/single-threaded-cpu.ts) |
-| [Process Tasks Using Servers](https://leetcode.com/problems/process-tasks-using-servers/) | Heap | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/heap/process-tasks-using-servers.ts) |
-| [Find Median from Data Stream](https://leetcode.com/problems/find-median-from-data-stream/) | Two Heaps | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/two-heaps/find-median-from-data-stream.ts) |
-| [IPO](https://leetcode.com/problems/ipo/) | Two Heaps | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/two-heaps/ipo.ts) |
-| [Sliding Window Median](https://leetcode.com/problems/sliding-window-median/) | Two Heaps | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/two-heaps/sliding-window-median.ts) |
+<TopicExercises topic="heap" />
