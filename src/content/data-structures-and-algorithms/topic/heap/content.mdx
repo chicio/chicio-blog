@@ -1,0 +1,735 @@
+---
+title: "Heaps"
+description: "A heap is a complete binary tree stored as an array that enforces a priority ordering, enabling O(log n) insert and extract operations and powering greedy scheduling and two-heaps patterns."
+date: 2026-03-21
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [heap, heaps, min heap, max heap, priority queue, two heaps, data structures, algorithms]
+authors: [fabrizio_duroni]
+---
+
+# Heaps
+
+A heap is a data structure built on a simple but powerful idea: at any point in time, you want instant access to the most important element in a collection, 
+where "most important" is defined by a priority you choose, such as the smallest value, the largest, or any custom ordering.
+
+This need appears constantly in practice. A task scheduler must always pick the highest-priority job next. 
+A pathfinding algorithm must always expand the cheapest node first. A streaming system must maintain a running median over a window of values. 
+In all these cases, a sorted array would work in theory, but it would force you to re-sort on every insertion. A heap solves this with a smarter structural guarantee.
+
+Formally, a heap is a complete binary tree that satisfies the heap property. 
+In a **min-heap**, every node's value is less than or equal to its children's values, which means the minimum element is always at the root. 
+In a **max-heap**, the relationship is reversed: every node's value is greater than or equal to its children's, placing the maximum at the root. 
+The property is local, enforced between each parent and its direct children, but it cascades throughout the tree to guarantee global access to the extremal element in $O(1)$.
+
+The heap does not maintain a fully sorted order. Elements outside the root have no guaranteed relative ordering with their siblings or cousins. 
+This is precisely what makes the heap efficient: it enforces only the ordering constraint that matters, and relaxes everything else to keep insertions and deletions 
+fast at $O(\log n)$.
+
+Some languages have native heap implementations like Java (`PriorityQueue`) or Python (`heapq`). 
+Instead JavaScript and TypeScript do not include a native heap or priority queue in their standard library, so you typically implement it yourself or use a third-party library.
+
+## The Binary Heap Structure
+
+A heap is always a **complete binary tree**: every level is fully filled except possibly the last, which is filled from left to right. 
+This constraint is not aesthetic. It is what makes the array representation possible and efficient.
+
+Because the tree is complete, there are no gaps in the level-order traversal of its nodes. 
+This means you can store the entire tree in a flat array without any pointers, using index arithmetic to navigate between parent and children. Given a node at index $i$:
+
+- its **left child** is at index $2i + 1$
+- its **right child** is at index $2i + 2$
+- its **parent** is at index $\lfloor (i - 1) / 2 \rfloor$
+
+Consider a min-heap containing the following values, stored in an array:
+
+| Index | 0 | 1 | 2 | 3 | 4 | 5 | 6 |
+|-------|---|---|---|---|---|---|---|
+| Value | 1 | 3 | 2 | 7 | 6 | 5 | 4 |
+
+The heap property is enforced at every node: the value at index `0 (1)` is less than or equal to the values at index `1 (3)` and index `2 (2)`. 
+The value at index `1 (3)` is less than or equal to the values at index `3 (7)` and index `4 (6)`. And so on throughout the tree.
+
+Notice that siblings have no ordering relationship with each other: node `3` and node `2` are both children of node `1`, but their relative order 
+is irrelevant to the heap property. The same is true at every level. This is a fundamental difference from a binary search tree, where a full ordering 
+invariant is maintained across the entire structure.
+
+The height of a complete binary tree with $n$ nodes is $\lfloor \log_2 n \rfloor$, which directly bounds the cost of any operation that must traverse 
+from root to leaf or vice versa.
+
+### Bubble Up and Bubble Down, the internal primitives
+
+Every heap operation reduces to one of two corrective procedures: **bubble up** and **bubble down**. 
+Both exist to restore the heap property after it has been locally violated, and both operate by performing a sequence of swaps along a single path in the tree.
+
+Bubble up is called when a new element is added at the bottom of the heap and needs to move upward until it finds its correct position. 
+Starting from the newly inserted node, the procedure compares the node with its parent. If the node violates the heap property relative to its parent, 
+the two are swapped and the process repeats from the parent's position. This continues until the node reaches a position where the heap property is satisfied, 
+or it reaches the root.
+
+```typescript
+private bubbleUp(): void {
+    let index = this.heap.length - 1;
+
+    while (index > 0) {
+        const parentIndex = Math.floor((index - 1) / 2);
+
+        if (this.compare(this.heap[index], this.heap[parentIndex]) >= 0) {
+          break;
+        }
+
+        [this.heap[index], this.heap[parentIndex]] = [this.heap[parentIndex], this.heap[index]];
+        index = parentIndex;
+    }
+}
+```
+
+The comparator drives the direction: for a min-heap, `compare(a, b)` returns a negative number when `a` should be closer to the root than `b`. 
+The condition `>= 0` means "the current node is already in a valid position relative to its parent, stop". 
+Each swap moves the node exactly one level up, and the tree has height $O(\log n)$, so bubble up performs at most $O(\log n)$ swaps.
+
+Bubble down is called when the root is removed and the last element in the array is placed at the top as a temporary replacement. 
+That element is almost certainly out of place, so it must travel downward until the heap property is restored. 
+At each step, the procedure identifies the higher-priority child (the smaller one in a min-heap) and swaps the current node with it if the heap property is violated. 
+The process continues from the child's position.
+
+```typescript
+private bubbleDown(): void {
+    let index = 0;
+
+    while (true) {
+        const left = 2 * index + 1;
+        const right = 2 * index + 2;
+        let smallest = index;
+
+        if (left < this.heap.length && this.compare(this.heap[left], this.heap[smallest]) < 0) {
+            smallest = left;
+        }
+
+        if (right < this.heap.length && this.compare(this.heap[right], this.heap[smallest]) < 0) {
+            smallest = right;
+        }
+
+        if (smallest === index)  { 
+          break;
+        }
+
+        [this.heap[index], this.heap[smallest]] = [this.heap[smallest], this.heap[index]];
+        index = smallest;
+    }
+}
+```
+
+The variable `smallest` tracks the index of the highest-priority element among the current node and its two children. 
+If neither child has higher priority than the current node, `smallest` remains unchanged and the loop terminates. 
+Otherwise, the swap with the higher-priority child ensures that the local heap property is restored at the current level, 
+and the process descends into the subtree that was affected. 
+Like bubble up, this traverses at most one root-to-leaf path, so it also runs in $O(\log n)$.
+
+The asymmetry between the two procedures is worth noting. Bubble up compares against a single parent. 
+Bubble down must consider two children and pick the better candidate before swapping. 
+Choosing the wrong child would restore the property at one position but violate it at the other.
+
+### Operations: Insert, Extract, and Peek
+
+Bubble up and bubble down are internal primitives. The public interface of a heap exposes three operations that build on them: **insert**, **extract**, and **peek**.
+
+To insert a new element, the value is appended to the end of the array, which corresponds to placing it at the leftmost available position in the last level of the tree. 
+This preserves the completeness property immediately, but may violate the heap property if the new value has higher priority than its parent. Bubble up then restores the invariant.
+
+```typescript
+insert(value: T): void {
+    this.heap.push(value);
+    this.bubbleUp();
+}
+```
+
+Extracting the root is the core operation of a heap. The root is always the highest-priority element, so it is the one returned. 
+The challenge is what to do with the rest of the tree after removing it. Deleting the root directly would leave a gap that is difficult to fill without violating completeness.
+
+The standard approach is to swap the root with the last element in the array, remove that last element (which is now the former root), and then apply bubble down to restore 
+the heap property from the new root downward.
+
+```typescript
+extract(): T | null {
+    if (this.heap.length === 0) {
+      return null;
+    }
+
+    if (this.heap.length === 1) { 
+      return this.heap.pop()!;
+    }
+
+    const top = this.heap[0];
+    this.heap[0] = this.heap.pop()!;
+    this.bubbleDown();
+
+    return top;
+}
+```
+
+The single-element case is handled separately because `pop` on a one-element array would empty it, and assigning `this.heap[0]` to the 
+result of `pop` would produce `undefined` rather than the intended value.
+
+A third operation, `peek`, returns the root without removing it. Since the root is always at index 0, this is a direct array access and costs $O(1)$.
+```typescript
+peek(): T | null {
+    return this.heap.length > 0 ? this.heap[0] : null;
+}
+```
+
+Peek is useful when you need to inspect the highest-priority element to decide whether to extract it, without committing to the extraction itself. 
+This pattern appears frequently in scheduling and greedy problems.
+
+### Implementation
+
+Below is a complete implementation of a generic binary heap in TypeScript, supporting both min-heap and max-heap configurations through a comparator function.
+
+```typescript
+type Comparator<T> = (a: T, b: T) => number;
+
+export class Heap<T> {
+    private readonly heap: T[] = [];
+    private readonly compare: Comparator<T>;
+
+    constructor(compare: Comparator<T>) {
+        this.compare = compare;
+    }
+
+    size(): number {
+        return this.heap.length;
+    }
+
+    peek(): T | null {
+        return this.heap.length > 0 ? this.heap[0] : null;
+    }
+
+    insert(value: T): void {
+        this.heap.push(value);
+        this.bubbleUp();
+    }
+
+    extract(): T | null {
+        if (this.heap.length === 0) return null;
+        if (this.heap.length === 1) return this.heap.pop()!;
+
+        const top = this.heap[0];
+        this.heap[0] = this.heap.pop()!;
+        this.bubbleDown();
+
+        return top;
+    }
+
+    private bubbleUp(): void {
+        let index = this.heap.length - 1;
+
+        while (index > 0) {
+            const parentIndex = Math.floor((index - 1) / 2);
+            if (this.compare(this.heap[index], this.heap[parentIndex]) >= 0) break
+
+            [this.heap[index], this.heap[parentIndex]] = [this.heap[parentIndex], this.heap[index]]
+            index = parentIndex;
+        }
+    }
+
+    private bubbleDown(): void {
+        let index = 0;
+
+        while (true) {
+            const left = 2 * index + 1;
+            const right = 2 * index + 2;
+            let smallest = index;
+
+            if (left < this.heap.length && this.compare(this.heap[left], this.heap[smallest]) < 0) {
+                smallest = left;
+            }
+
+            if (right < this.heap.length && this.compare(this.heap[right], this.heap[smallest]) < 0) {
+                smallest = right;
+            }
+
+            if (smallest === index) break;
+
+            [this.heap[index], this.heap[smallest]] = [this.heap[smallest], this.heap[index]];
+            index = smallest;
+        }
+    }
+}
+```
+
+## The Two Heaps Pattern
+
+Some problems require not just access to a single extremal element, but simultaneous access to the maximum of one subset and the minimum of another. A single heap cannot satisfy both requirements at once. The two heaps pattern solves this by maintaining two heaps in parallel: a max-heap over the lower half of the seen elements and a min-heap over the upper half. The boundary between the two halves is exactly where the median lives.
+
+### The Core Invariant
+
+The pattern relies on maintaining two structural invariants at all times:
+
+- the max-heap contains the smaller half of the elements, so its root is the largest among the smaller half
+- the min-heap contains the larger half of the elements, so its root is the smallest among the larger half
+- the two heaps are kept balanced in size: their sizes differ by at most one
+
+When these invariants hold, the median is always directly accessible. If the total number of elements is odd, it sits at the root of the larger heap. If even, it is the average of the two roots.
+```typescript
+class MedianFinder {
+    private low: Heap<number>;  // max-heap: lower half
+    private high: Heap<number>; // min-heap: upper half
+
+    constructor() {
+        this.low = new Heap<number>((a, b) => b - a);
+        this.high = new Heap<number>((a, b) => a - b);
+    }
+
+    addNum(num: number): void {
+        this.low.insert(num);
+
+        // Ensure every element in low is <= every element in high
+        if (this.high.size() > 0 && this.low.peek()! > this.high.peek()!) {
+            this.high.insert(this.low.extract()!);
+        } else {
+            this.high.insert(this.low.extract()!);
+        }
+
+        // Rebalance sizes so they differ by at most one
+        if (this.low.size() < this.high.size()) {
+            this.low.insert(this.high.extract()!);
+        }
+    }
+
+    findMedian(): number {
+        if (this.low.size() > this.high.size()) return this.low.peek()!;
+        return (this.low.peek()! + this.high.peek()!) / 2;
+    }
+}
+```
+
+The insertion procedure always routes a new element through `low` first to simplify the ordering check, then immediately moves the top of `low` into `high`. This guarantees that the ordering invariant is maintained without needing a separate branch. The rebalancing step that follows ensures the size invariant is preserved.
+
+### Extending the Pattern
+
+The two heaps pattern generalizes beyond median finding. In the **IPO** problem, you maintain a min-heap of projects ordered by capital requirement and a max-heap of available projects ordered by profit. As your available capital grows, you unlock new projects from the min-heap and move them into the max-heap, always extracting the most profitable available option. The two heaps together represent the boundary between what is reachable and what is not.
+
+In the **Sliding Window Median** problem, the same two-heap structure maintains the median over a moving window. The added complexity is that elements must be removed from the heap when they leave the window. Since a standard heap does not support arbitrary deletion efficiently, a common approach is to use lazy deletion: mark elements as invalid and skip them during extraction, or track a count of pending deletions per heap.
+```typescript
+function medianSlidingWindow(nums: number[], k: number): number[] {
+    const low = new Heap<number>((a, b) => b - a); // max-heap
+    const high = new Heap<number>((a, b) => a - b); // min-heap
+    const result: number[] = [];
+    const toDelete = new Map<number, number>();
+
+    const balance = () => {
+        if (low.size() > Math.ceil(k / 2)) high.insert(low.extract()!);
+        else if (high.size() > Math.floor(k / 2)) low.insert(high.extract()!);
+    };
+
+    const prune = (heap: Heap<number>) => {
+        while (heap.size() > 0 && (toDelete.get(heap.peek()!) ?? 0) > 0) {
+            const top = heap.extract()!;
+            toDelete.set(top, toDelete.get(top)! - 1);
+        }
+    };
+
+    for (let i = 0; i < nums.length; i++) {
+        // Insert new element
+        if (low.size() === 0 || nums[i] <= low.peek()!) low.insert(nums[i]);
+        else high.insert(nums[i]);
+        balance();
+
+        if (i >= k - 1) {
+            // Record median
+            prune(low);
+            prune(high);
+            const median = k % 2 === 1
+                ? low.peek()!
+                : (low.peek()! + high.peek()!) / 2;
+            result.push(median);
+
+            // Schedule outgoing element for deletion
+            const outgoing = nums[i - k + 1];
+            toDelete.set(outgoing, (toDelete.get(outgoing) ?? 0) + 1);
+            if (outgoing <= (low.peek() ?? -Infinity)) {
+                prune(low);
+            } else {
+                prune(high);
+            }
+            balance();
+        }
+    }
+
+    return result;
+}
+```
+
+## The Two Heaps Pattern
+
+Some problems require not just access to a single extremal element, but simultaneous access to the maximum of one subset and the minimum of another. A single heap cannot satisfy both requirements at once. The two heaps pattern solves this by maintaining two heaps in parallel: a max-heap over the lower half of the seen elements and a min-heap over the upper half. The boundary between the two halves is exactly where the median lives.
+
+### The Core Invariant
+
+The pattern relies on maintaining two structural invariants at all times:
+
+- the max-heap contains the smaller half of the elements, so its root is the largest among the smaller half
+- the min-heap contains the larger half of the elements, so its root is the smallest among the larger half
+- the two heaps are kept balanced in size: their sizes differ by at most one
+
+When these invariants hold, the median is always directly accessible. If the total number of elements is odd, it sits at the root of the larger heap. If even, it is the average of the two roots.
+```typescript
+class MedianFinder {
+    private low: Heap<number>;  // max-heap: lower half
+    private high: Heap<number>; // min-heap: upper half
+
+    constructor() {
+        this.low = new Heap<number>((a, b) => b - a);
+        this.high = new Heap<number>((a, b) => a - b);
+    }
+
+    addNum(num: number): void {
+        this.low.insert(num);
+
+        // Ensure every element in low is <= every element in high
+        if (this.high.size() > 0 && this.low.peek()! > this.high.peek()!) {
+            this.high.insert(this.low.extract()!);
+        } else {
+            this.high.insert(this.low.extract()!);
+        }
+
+        // Rebalance sizes so they differ by at most one
+        if (this.low.size() < this.high.size()) {
+            this.low.insert(this.high.extract()!);
+        }
+    }
+
+    findMedian(): number {
+        if (this.low.size() > this.high.size()) return this.low.peek()!;
+        return (this.low.peek()! + this.high.peek()!) / 2;
+    }
+}
+```
+
+The insertion procedure always routes a new element through `low` first to simplify the ordering check, then immediately moves the top of `low` into `high`. This guarantees that the ordering invariant is maintained without needing a separate branch. The rebalancing step that follows ensures the size invariant is preserved.
+
+### Extending the Pattern
+
+The two heaps pattern generalizes beyond median finding. In the **IPO** problem, you maintain a min-heap of projects ordered by capital requirement and a max-heap of available projects ordered by profit. As your available capital grows, you unlock new projects from the min-heap and move them into the max-heap, always extracting the most profitable available option. The two heaps together represent the boundary between what is reachable and what is not.
+
+In the **Sliding Window Median** problem, the same two-heap structure maintains the median over a moving window. The added complexity is that elements must be removed from the heap when they leave the window. Since a standard heap does not support arbitrary deletion efficiently, a common approach is to use lazy deletion: mark elements as invalid and skip them during extraction, or track a count of pending deletions per heap.
+```typescript
+function medianSlidingWindow(nums: number[], k: number): number[] {
+    const low = new Heap<number>((a, b) => b - a); // max-heap
+    const high = new Heap<number>((a, b) => a - b); // min-heap
+    const result: number[] = [];
+    const toDelete = new Map<number, number>();
+
+    const balance = () => {
+        if (low.size() > Math.ceil(k / 2)) high.insert(low.extract()!);
+        else if (high.size() > Math.floor(k / 2)) low.insert(high.extract()!);
+    };
+
+    const prune = (heap: Heap<number>) => {
+        while (heap.size() > 0 && (toDelete.get(heap.peek()!) ?? 0) > 0) {
+            const top = heap.extract()!;
+            toDelete.set(top, toDelete.get(top)! - 1);
+        }
+    };
+
+    for (let i = 0; i < nums.length; i++) {
+        // Insert new element
+        if (low.size() === 0 || nums[i] <= low.peek()!) low.insert(nums[i]);
+        else high.insert(nums[i]);
+        balance();
+
+        if (i >= k - 1) {
+            // Record median
+            prune(low);
+            prune(high);
+            const median = k % 2 === 1
+                ? low.peek()!
+                : (low.peek()! + high.peek()!) / 2;
+            result.push(median);
+
+            // Schedule outgoing element for deletion
+            const outgoing = nums[i - k + 1];
+            toDelete.set(outgoing, (toDelete.get(outgoing) ?? 0) + 1);
+            if (outgoing <= (low.peek() ?? -Infinity)) {
+                prune(low);
+            } else {
+                prune(high);
+            }
+            balance();
+        }
+    }
+
+    return result;
+}
+```
+
+## The Two Heaps Pattern
+
+Some problems require not just access to a single extremal element, but simultaneous access to the maximum of one subset and the minimum of another. A single heap cannot satisfy both requirements at once. The two heaps pattern solves this by maintaining two heaps in parallel: a max-heap over the lower half of the seen elements and a min-heap over the upper half. The boundary between the two halves is exactly where the median lives.
+
+### The Core Invariant
+
+The pattern relies on maintaining two structural invariants at all times:
+
+- the max-heap contains the smaller half of the elements, so its root is the largest among the smaller half
+- the min-heap contains the larger half of the elements, so its root is the smallest among the larger half
+- the two heaps are kept balanced in size: their sizes differ by at most one
+
+When these invariants hold, the median is always directly accessible. If the total number of elements is odd, it sits at the root of the larger heap. If even, it is the average of the two roots.
+```typescript
+class MedianFinder {
+    private low: Heap<number>;  // max-heap: lower half
+    private high: Heap<number>; // min-heap: upper half
+
+    constructor() {
+        this.low = new Heap<number>((a, b) => b - a);
+        this.high = new Heap<number>((a, b) => a - b);
+    }
+
+    addNum(num: number): void {
+        this.low.insert(num);
+
+        // Ensure every element in low is <= every element in high
+        if (this.high.size() > 0 && this.low.peek()! > this.high.peek()!) {
+            this.high.insert(this.low.extract()!);
+        } else {
+            this.high.insert(this.low.extract()!);
+        }
+
+        // Rebalance sizes so they differ by at most one
+        if (this.low.size() < this.high.size()) {
+            this.low.insert(this.high.extract()!);
+        }
+    }
+
+    findMedian(): number {
+        if (this.low.size() > this.high.size()) return this.low.peek()!;
+        return (this.low.peek()! + this.high.peek()!) / 2;
+    }
+}
+```
+
+The insertion procedure always routes a new element through `low` first to simplify the ordering check, then immediately moves the top of `low` into `high`. This guarantees that the ordering invariant is maintained without needing a separate branch. The rebalancing step that follows ensures the size invariant is preserved.
+
+### Extending the Pattern
+
+The two heaps pattern generalizes beyond median finding. In the **IPO** problem, you maintain a min-heap of projects ordered by capital requirement and a max-heap of available projects ordered by profit. As your available capital grows, you unlock new projects from the min-heap and move them into the max-heap, always extracting the most profitable available option. The two heaps together represent the boundary between what is reachable and what is not.
+
+In the **Sliding Window Median** problem, the same two-heap structure maintains the median over a moving window. The added complexity is that elements must be removed from the heap when they leave the window. Since a standard heap does not support arbitrary deletion efficiently, a common approach is to use lazy deletion: mark elements as invalid and skip them during extraction, or track a count of pending deletions per heap.
+```typescript
+function medianSlidingWindow(nums: number[], k: number): number[] {
+    const low = new Heap<number>((a, b) => b - a); // max-heap
+    const high = new Heap<number>((a, b) => a - b); // min-heap
+    const result: number[] = [];
+    const toDelete = new Map<number, number>();
+
+    const balance = () => {
+        if (low.size() > Math.ceil(k / 2)) high.insert(low.extract()!);
+        else if (high.size() > Math.floor(k / 2)) low.insert(high.extract()!);
+    };
+
+    const prune = (heap: Heap<number>) => {
+        while (heap.size() > 0 && (toDelete.get(heap.peek()!) ?? 0) > 0) {
+            const top = heap.extract()!;
+            toDelete.set(top, toDelete.get(top)! - 1);
+        }
+    };
+
+    for (let i = 0; i < nums.length; i++) {
+        // Insert new element
+        if (low.size() === 0 || nums[i] <= low.peek()!) low.insert(nums[i]);
+        else high.insert(nums[i]);
+        balance();
+
+        if (i >= k - 1) {
+            // Record median
+            prune(low);
+            prune(high);
+            const median = k % 2 === 1
+                ? low.peek()!
+                : (low.peek()! + high.peek()!) / 2;
+            result.push(median);
+
+            // Schedule outgoing element for deletion
+            const outgoing = nums[i - k + 1];
+            toDelete.set(outgoing, (toDelete.get(outgoing) ?? 0) + 1);
+            if (outgoing <= (low.peek() ?? -Infinity)) {
+                prune(low);
+            } else {
+                prune(high);
+            }
+            balance();
+        }
+    }
+
+    return result;
+}
+```
+
+## The Two Heaps Pattern
+
+Some problems require not just access to a single extremal element, but simultaneous access to the maximum of one subset and the minimum of another. A single heap cannot satisfy both requirements at once. The two heaps pattern solves this by maintaining two heaps in parallel: a max-heap over the lower half of the seen elements and a min-heap over the upper half. The boundary between the two halves is exactly where the median lives.
+
+### The Core Invariant
+
+The pattern relies on maintaining two structural invariants at all times:
+
+- the max-heap contains the smaller half of the elements, so its root is the largest among the smaller half
+- the min-heap contains the larger half of the elements, so its root is the smallest among the larger half
+- the two heaps are kept balanced in size: their sizes differ by at most one
+
+When these invariants hold, the median is always directly accessible. If the total number of elements is odd, it sits at the root of the larger heap. If even, it is the average of the two roots.
+```typescript
+class MedianFinder {
+    private low: Heap<number>;  // max-heap: lower half
+    private high: Heap<number>; // min-heap: upper half
+
+    constructor() {
+        this.low = new Heap<number>((a, b) => b - a);
+        this.high = new Heap<number>((a, b) => a - b);
+    }
+
+    addNum(num: number): void {
+        this.low.insert(num);
+
+        // Ensure every element in low is <= every element in high
+        if (this.high.size() > 0 && this.low.peek()! > this.high.peek()!) {
+            this.high.insert(this.low.extract()!);
+        } else {
+            this.high.insert(this.low.extract()!);
+        }
+
+        // Rebalance sizes so they differ by at most one
+        if (this.low.size() < this.high.size()) {
+            this.low.insert(this.high.extract()!);
+        }
+    }
+
+    findMedian(): number {
+        if (this.low.size() > this.high.size()) return this.low.peek()!;
+        return (this.low.peek()! + this.high.peek()!) / 2;
+    }
+}
+```
+
+The insertion procedure always routes a new element through `low` first to simplify the ordering check, then immediately moves the top of `low` into `high`. This guarantees that the ordering invariant is maintained without needing a separate branch. The rebalancing step that follows ensures the size invariant is preserved.
+
+### Extending the Pattern
+
+The two heaps pattern generalizes beyond median finding. In the **IPO** problem, you maintain a min-heap of projects ordered by capital requirement and a max-heap of available projects ordered by profit. As your available capital grows, you unlock new projects from the min-heap and move them into the max-heap, always extracting the most profitable available option. The two heaps together represent the boundary between what is reachable and what is not.
+
+In the **Sliding Window Median** problem, the same two-heap structure maintains the median over a moving window. The added complexity is that elements must be removed from the heap when they leave the window. Since a standard heap does not support arbitrary deletion efficiently, a common approach is to use lazy deletion: mark elements as invalid and skip them during extraction, or track a count of pending deletions per heap.
+```typescript
+function medianSlidingWindow(nums: number[], k: number): number[] {
+    const low = new Heap<number>((a, b) => b - a); // max-heap
+    const high = new Heap<number>((a, b) => a - b); // min-heap
+    const result: number[] = [];
+    const toDelete = new Map<number, number>();
+
+    const balance = () => {
+        if (low.size() > Math.ceil(k / 2)) high.insert(low.extract()!);
+        else if (high.size() > Math.floor(k / 2)) low.insert(high.extract()!);
+    };
+
+    const prune = (heap: Heap<number>) => {
+        while (heap.size() > 0 && (toDelete.get(heap.peek()!) ?? 0) > 0) {
+            const top = heap.extract()!;
+            toDelete.set(top, toDelete.get(top)! - 1);
+        }
+    };
+
+    for (let i = 0; i < nums.length; i++) {
+        // Insert new element
+        if (low.size() === 0 || nums[i] <= low.peek()!) low.insert(nums[i]);
+        else high.insert(nums[i]);
+        balance();
+
+        if (i >= k - 1) {
+            // Record median
+            prune(low);
+            prune(high);
+            const median = k % 2 === 1
+                ? low.peek()!
+                : (low.peek()! + high.peek()!) / 2;
+            result.push(median);
+
+            // Schedule outgoing element for deletion
+            const outgoing = nums[i - k + 1];
+            toDelete.set(outgoing, (toDelete.get(outgoing) ?? 0) + 1);
+            if (outgoing <= (low.peek() ?? -Infinity)) {
+                prune(low);
+            } else {
+                prune(high);
+            }
+            balance();
+        }
+    }
+
+    return result;
+}
+```
+
+## The Two Heaps Pattern
+
+Some problems require not just access to a single extremal element, but simultaneous access to the maximum of one subset and the minimum of another. 
+A single heap cannot satisfy both requirements at once. The two heaps pattern solves this by maintaining two heaps in parallel: a max-heap over the lower half 
+of the seen elements and a min-heap over the upper half. The boundary between the two halves is exactly where the median lives.
+
+The pattern relies on maintaining two structural invariants at all times:
+
+- the max-heap contains the smaller half of the elements, so its root is the largest among the smaller half
+- the min-heap contains the larger half of the elements, so its root is the smallest among the larger half
+- the two heaps are kept balanced in size: their sizes differ by at most one
+
+When these invariants hold, the median is always directly accessible. 
+If the total number of elements is odd, it sits at the root of the larger heap. If even, it is the average of the two roots.
+
+```typescript
+class MedianFinder {
+    private low: Heap<number>;  // max-heap: lower half
+    private high: Heap<number>; // min-heap: upper half
+
+    constructor() {
+        this.low = new Heap<number>((a, b) => b - a);
+        this.high = new Heap<number>((a, b) => a - b);
+    }
+
+    addNum(num: number): void {
+        this.low.insert(num);
+
+        // Always move the top of low into high to maintain the ordering invariant
+        this.high.insert(this.low.extract()!);
+
+        // Rebalance sizes so they differ by at most one
+        if (this.low.size() < this.high.size()) {
+            this.low.insert(this.high.extract()!);
+        }
+    }
+
+    findMedian(): number {
+        if (this.low.size() > this.high.size()){
+           return this.low.peek()!;
+        }
+
+        return (this.low.peek()! + this.high.peek()!) / 2;
+    }
+}
+```
+
+## Time and Space Complexity
+
+| Operation | Time Complexity | Space Complexity |
+|-----------|----------------|------------------|
+| Peek (access root) | $O(1)$ | $O(1)$ |
+| Insert | $O(\log n)$ | $O(1)$ |
+| Extract | $O(\log n)$ | $O(1)$ |
+
+## Exercises
+
+| Problem | Technique | Solution |
+|---------|-----------|----------|
+| [Furthest Building You Can Reach](https://leetcode.com/problems/furthest-building-you-can-reach/) | Heap | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/heap/furthest-building-you-can-reach.ts) |
+| [Single-Threaded CPU](https://leetcode.com/problems/single-threaded-cpu/) | Heap | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/heap/single-threaded-cpu.ts) |
+| [Process Tasks Using Servers](https://leetcode.com/problems/process-tasks-using-servers/) | Heap | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/heap/process-tasks-using-servers.ts) |
+| [Find Median from Data Stream](https://leetcode.com/problems/find-median-from-data-stream/) | Two Heaps | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/two-heaps/find-median-from-data-stream.ts) |
+| [IPO](https://leetcode.com/problems/ipo/) | Two Heaps | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/two-heaps/ipo.ts) |
+| [Sliding Window Median](https://leetcode.com/problems/sliding-window-median/) | Two Heaps | [Solution](https://github.com/chicio/Algomaster-Solutions/blob/main/src/two-heaps/sliding-window-median.ts) |
