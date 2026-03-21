@@ -1,6 +1,6 @@
 ---
 title: "Find Median from Data Stream"
-description: "The **median** is the middle value in an ordered integer list. If the size of the list is even, there is no middle value, and the median is the mean of the two middle values."
+description: "Design a data structure that supports inserting integers from a data stream one at a time and efficiently computing the median of all values added so far."
 date: 2026-03-21
 image: /images/posts/data-structures-and-algorithms-featured.png
 tags: [heap, heaps, min heap, max heap, priority queue, two heaps, data structures, algorithms]
@@ -14,63 +14,43 @@ metadata:
 Leetcode Problem 295: [Find Median from Data Stream](https://leetcode.com/problems/find-median-from-data-stream/description/)
 
 ## Problem Summary
-The **median** is the middle value in an ordered integer list. If the size of the list is even, there is no middle value, and the median is the mean of the two middle values.
+Design a data structure `MedianFinder` that supports dynamically adding integers
+from a data stream and efficiently returning the median of all integers added so
+far at any point.
 
-	
-- For example, for `arr = [2,3,4]`, the median is `3`.
-	
-- For example, for `arr = [2,3]`, the median is `(2 + 3) / 2 = 2.5`.
+The median of a sorted sequence is the single middle element when the count is
+odd, or the average of the two middle elements when the count is even.
 
-Implement the MedianFinder class:
-
-	
-- `MedianFinder()` initializes the `MedianFinder` object.
-	
-- `void addNum(int num)` adds the integer `num` from the data stream to the data structure.
-	
-- `double findMedian()` returns the median of all elements so far. Answers within `10-5` of the actual answer will be accepted.
-
- 
-
-**Example 1:**
-
-```
-
-**Input**
-["MedianFinder", "addNum", "addNum", "findMedian", "addNum", "findMedian"]
-[[], [1], [2], [], [3], []]
-**Output**
-[null, null, null, 1.5, null, 2.0]
-
-**Explanation**
-MedianFinder medianFinder = new MedianFinder();
-medianFinder.addNum(1);    // arr = [1]
-medianFinder.addNum(2);    // arr = [1, 2]
-medianFinder.findMedian(); // return 1.5 (i.e., (1 + 2) / 2)
-medianFinder.addNum(3);    // arr[1, 2, 3]
-medianFinder.findMedian(); // return 2.0
-
-```
-
- 
+Implement:
+- `MedianFinder()` — initializes the object.
+- `void addNum(int num)` — adds `num` to the data structure.
+- `double findMedian()` — returns the current median. Answers within `10⁻⁵`
+  of the actual value are accepted.
 
 **Constraints:**
-
-	
-- `-105 <= num <= 105`
-	
-- There will be at least one element in the data structure before calling `findMedian`.
-	
-- At most `5 * 104` calls will be made to `addNum` and `findMedian`.
-
- 
+- Values added are in the range [−100,000, 100,000].
+- `findMedian` is only called when at least one element has been added.
+- At most 50,000 calls in total to `addNum` and `findMedian`.
 
 **Follow up:**
+- If all integers are in the range [0, 100], how would you optimize your solution?
+- If 99% of integers are in the range [0, 100], how would you optimize your solution?
 
-	
-- If all integer numbers from the stream are in the range `[0, 100]`, how would you optimize your solution?
-	
-- If `99%` of all integer numbers from the stream are in the range `[0, 100]`, how would you optimize your solution?
+```text
+Stream: addNum(1), addNum(2), addNum(3)
+
+After addNum(1): sorted = [1]        → median = 1.0
+After addNum(2): sorted = [1, 2]     → median = (1+2)/2 = 1.5
+After addNum(3): sorted = [1, 2, 3]  → median = 2.0
+
+Two-heap internal state (max-heap left | min-heap right):
+  add(1):  [1]     |  []    → median = maxHeap.top = 1.0
+  add(2):  [1]     |  [2]   → median = (1+2)/2 = 1.5
+  add(3):  [1,2]   |  [3]   → median = maxHeap.top = 2.0
+             ↑                  ↑
+      left max ≤ right min at all times
+```
+
 
 ## Techniques
 - Two Pointers

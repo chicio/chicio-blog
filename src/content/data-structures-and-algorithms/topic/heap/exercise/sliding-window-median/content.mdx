@@ -1,6 +1,6 @@
 ---
 title: "Sliding Window Median"
-description: "The **median** is the middle value in an ordered integer list. If the size of the list is even, there is no middle value. So the median is the mean of the two middle values."
+description: "Given an integer array and a window size k, return the median for each sliding window position as the window moves from left to right across the array."
 date: 2026-03-21
 image: /images/posts/data-structures-and-algorithms-featured.png
 tags: [heap, heaps, min heap, max heap, priority queue, two heaps, data structures, algorithms]
@@ -14,54 +14,35 @@ metadata:
 Leetcode Problem 480: [Sliding Window Median](https://leetcode.com/problems/sliding-window-median/description/)
 
 ## Problem Summary
-The **median** is the middle value in an ordered integer list. If the size of the list is even, there is no middle value. So the median is the mean of the two middle values.
+The **median** is the middle value of a sorted sequence: the single middle
+element when the count is odd, or the average of the two middle elements when
+the count is even.
 
-	
-- For examples, if `arr = [2,3,4]`, the median is `3`.
-	
-- For examples, if `arr = [1,2,3,4]`, the median is `(2 + 3) / 2 = 2.5`.
-
-You are given an integer array `nums` and an integer `k`. There is a sliding window of size `k` which is moving from the very left of the array to the very right. You can only see the `k` numbers in the window. Each time the sliding window moves right by one position.
-
-Return *the median array for each window in the original array*. Answers within `10-5` of the actual value will be accepted.
-
- 
-
-**Example 1:**
-
-```
-
-**Input:** nums = [1,3,-1,-3,5,3,6,7], k = 3
-**Output:** [1.00000,-1.00000,-1.00000,3.00000,5.00000,6.00000]
-**Explanation:** 
-Window position                Median
----------------                -----
-[**1  3  -1**] -3  5  3  6  7        1
- 1 [**3  -1  -3**] 5  3  6  7       -1
- 1  3 [**-1  -3  5**] 3  6  7       -1
- 1  3  -1 [**-3  5  3**] 6  7        3
- 1  3  -1  -3 [**5  3  6**] 7        5
- 1  3  -1  -3  5 [**3  6  7**]       6
-
-```
-
-**Example 2:**
-
-```
-
-**Input:** nums = [1,2,3,4,2,3,1,4,2], k = 3
-**Output:** [2.00000,3.00000,3.00000,3.00000,2.00000,3.00000,2.00000]
-
-```
-
- 
+Given an integer array `nums` and a window size `k`, slide a window of exactly
+`k` elements from left to right across the array. For each window position,
+compute the median of the `k` elements inside it, and return all medians as an
+array. Answers within `10⁻⁵` of the actual value are accepted.
 
 **Constraints:**
+- The array has between 1 and 100,000 elements, and the window size `k` is
+  between 1 and the array length.
+- Array values can span the full 32-bit signed integer range.
 
-	
-- `1 <= k <= nums.length <= 105`
-	
-- `-231 <= nums[i] <= 231 - 1`
+```text
+nums = [1, 3, -1, -3, 5, 3, 6, 7],  k = 3
+
+Window              Sorted window       Median
+──────────────────  ──────────────────  ──────
+[1,  3, -1] ...     [-1,  1,  3]         1.0
+ 1  [3, -1, -3] …   [-3, -1,  3]        -1.0
+ 1   3 [-1, -3,  5]  [-3, -1,  5]       -1.0
+ 1   3  -1 [-3,  5,  3]  [-3,  3,  5]    3.0
+ 1   3  -1  -3  [5,  3,  6]  [ 3,  5,  6]  5.0
+ 1   3  -1  -3   5  [3,  6,  7]  [ 3,  6,  7]  6.0
+
+Output: [1.0, -1.0, -1.0, 3.0, 5.0, 6.0]
+```
+
 
 ## Techniques
 - Array

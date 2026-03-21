@@ -569,10 +569,8 @@ function medianSlidingWindow(nums: number[], k: number): number[] {
 
 ## The Two Heaps Pattern
 
-Some problems require not just access to a single extremal element, but simultaneous access to the maximum of one subset and the minimum of another. A single heap cannot satisfy both requirements at once. The two heaps pattern solves this by maintaining two heaps in parallel: a max-heap over the lower half of the seen elements and a min-heap over the upper half. The boundary between the two halves is exactly where the median lives.
-
-### The Core Invariant
-
+Some problems require not just access to a single extremal element, but simultaneous access to the maximum of one subset and the minimum of another. A single heap cannot satisfy both requirements at once. The two heaps pattern solves this by maintaining two heaps in parallel: a max-heap over the lower half of the seen elements and a min-heap over the upper half. 
+The boundary between the two halves is exactly where the median lives.
 The pattern relies on maintaining two structural invariants at all times:
 
 - the max-heap contains the smaller half of the elements, so its root is the largest among the smaller half
@@ -580,6 +578,7 @@ The pattern relies on maintaining two structural invariants at all times:
 - the two heaps are kept balanced in size: their sizes differ by at most one
 
 When these invariants hold, the median is always directly accessible. If the total number of elements is odd, it sits at the root of the larger heap. If even, it is the average of the two roots.
+
 ```typescript
 class MedianFinder {
     private low: Heap<number>;  // max-heap: lower half
@@ -614,108 +613,6 @@ class MedianFinder {
 ```
 
 The insertion procedure always routes a new element through `low` first to simplify the ordering check, then immediately moves the top of `low` into `high`. This guarantees that the ordering invariant is maintained without needing a separate branch. The rebalancing step that follows ensures the size invariant is preserved.
-
-### Extending the Pattern
-
-The two heaps pattern generalizes beyond median finding. In the **IPO** problem, you maintain a min-heap of projects ordered by capital requirement and a max-heap of available projects ordered by profit. As your available capital grows, you unlock new projects from the min-heap and move them into the max-heap, always extracting the most profitable available option. The two heaps together represent the boundary between what is reachable and what is not.
-
-In the **Sliding Window Median** problem, the same two-heap structure maintains the median over a moving window. The added complexity is that elements must be removed from the heap when they leave the window. Since a standard heap does not support arbitrary deletion efficiently, a common approach is to use lazy deletion: mark elements as invalid and skip them during extraction, or track a count of pending deletions per heap.
-```typescript
-function medianSlidingWindow(nums: number[], k: number): number[] {
-    const low = new Heap<number>((a, b) => b - a); // max-heap
-    const high = new Heap<number>((a, b) => a - b); // min-heap
-    const result: number[] = [];
-    const toDelete = new Map<number, number>();
-
-    const balance = () => {
-        if (low.size() > Math.ceil(k / 2)) high.insert(low.extract()!);
-        else if (high.size() > Math.floor(k / 2)) low.insert(high.extract()!);
-    };
-
-    const prune = (heap: Heap<number>) => {
-        while (heap.size() > 0 && (toDelete.get(heap.peek()!) ?? 0) > 0) {
-            const top = heap.extract()!;
-            toDelete.set(top, toDelete.get(top)! - 1);
-        }
-    };
-
-    for (let i = 0; i < nums.length; i++) {
-        // Insert new element
-        if (low.size() === 0 || nums[i] <= low.peek()!) low.insert(nums[i]);
-        else high.insert(nums[i]);
-        balance();
-
-        if (i >= k - 1) {
-            // Record median
-            prune(low);
-            prune(high);
-            const median = k % 2 === 1
-                ? low.peek()!
-                : (low.peek()! + high.peek()!) / 2;
-            result.push(median);
-
-            // Schedule outgoing element for deletion
-            const outgoing = nums[i - k + 1];
-            toDelete.set(outgoing, (toDelete.get(outgoing) ?? 0) + 1);
-            if (outgoing <= (low.peek() ?? -Infinity)) {
-                prune(low);
-            } else {
-                prune(high);
-            }
-            balance();
-        }
-    }
-
-    return result;
-}
-```
-
-## The Two Heaps Pattern
-
-Some problems require not just access to a single extremal element, but simultaneous access to the maximum of one subset and the minimum of another. 
-A single heap cannot satisfy both requirements at once. The two heaps pattern solves this by maintaining two heaps in parallel: a max-heap over the lower half 
-of the seen elements and a min-heap over the upper half. The boundary between the two halves is exactly where the median lives.
-
-The pattern relies on maintaining two structural invariants at all times:
-
-- the max-heap contains the smaller half of the elements, so its root is the largest among the smaller half
-- the min-heap contains the larger half of the elements, so its root is the smallest among the larger half
-- the two heaps are kept balanced in size: their sizes differ by at most one
-
-When these invariants hold, the median is always directly accessible. 
-If the total number of elements is odd, it sits at the root of the larger heap. If even, it is the average of the two roots.
-
-```typescript
-class MedianFinder {
-    private low: Heap<number>;  // max-heap: lower half
-    private high: Heap<number>; // min-heap: upper half
-
-    constructor() {
-        this.low = new Heap<number>((a, b) => b - a);
-        this.high = new Heap<number>((a, b) => a - b);
-    }
-
-    addNum(num: number): void {
-        this.low.insert(num);
-
-        // Always move the top of low into high to maintain the ordering invariant
-        this.high.insert(this.low.extract()!);
-
-        // Rebalance sizes so they differ by at most one
-        if (this.low.size() < this.high.size()) {
-            this.low.insert(this.high.extract()!);
-        }
-    }
-
-    findMedian(): number {
-        if (this.low.size() > this.high.size()){
-           return this.low.peek()!;
-        }
-
-        return (this.low.peek()! + this.high.peek()!) / 2;
-    }
-}
-```
 
 ## The Top K Elements Pattern
 
