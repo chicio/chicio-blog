@@ -1,0 +1,86 @@
+---
+title: "Furthest Building You Can Reach"
+description: "Given building heights, a supply of bricks and ladders, travel from building 0 as far as possible by optimally choosing when to spend bricks versus ladders for upward climbs."
+date: 2026-03-21
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [heap, heaps, min heap, max heap, priority queue, two heaps, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Heap"
+  leetcodeUrl: "https://leetcode.com/problems/furthest-building-you-can-reach/"
+---
+# Furthest Building You Can Reach
+
+Leetcode Problem 1642: [Furthest Building You Can Reach](https://leetcode.com/problems/furthest-building-you-can-reach/description/)
+
+## Problem Summary
+You are traversing a sequence of buildings with given heights, starting at
+building `0`. Moving from building `i` to building `i+1` works as follows:
+
+- If the next building is no taller, you cross for free.
+- If the next building is taller, you must bridge the height gap using either
+  `heights[i+1] - heights[i]` **bricks** or one **ladder** (covers any gap).
+
+Given a limited supply of `bricks` and `ladders`, use them optimally to travel
+as far as possible. Return the 0-indexed position of the furthest building you
+can reach.
+
+**Constraints:**
+- Up to 100,000 buildings, with heights ranging from 1 to 1,000,000.
+- Available bricks can be up to 1,000,000,000; available ladders can be up to
+  the number of buildings.
+
+```text
+heights = [4, 2, 7, 6, 9, 14, 12],  bricks = 5,  ladders = 1
+
+   14|              █
+    9|           █  █
+    7|        █  █  █
+    6|        █  █  █  █
+    4|  █     █  █  █  █
+    2|  █  █  █  █  █  █  █
+      +───────────────────────
+       0   1   2   3   4   5   6
+
+Ascending gaps (need a resource):
+  1→2: +5  → use 5 bricks   (bricks left = 0)
+  3→4: +3  → use 1 ladder   (ladders left = 0)
+  4→5: +5  → no resources   → stop at building 4
+
+Furthest reachable: index 4
+```
+
+## Techniques
+- Array
+- Greedy
+- Heap (Priority Queue)
+
+## Solution
+```ts
+import {Heap} from "../heap";
+
+function furthestBuilding(heights: number[], bricks: number, ladders: number): number {
+    const gapsSorted = new Heap<number>((a, b) => a - b)
+    let jumps = 0
+
+    for (let i = 1; i < heights.length; i++) {
+        if (heights[i] > heights[i - 1]) {
+            const buildingsGap = heights[i] - heights[i - 1]
+
+            gapsSorted.insert(buildingsGap)
+
+            if (gapsSorted.size() > ladders) {
+                bricks = bricks - gapsSorted.extract()!
+
+                if (bricks < 0) {
+                    return i - 1
+                }
+            }
+        }
+    }
+
+    return heights.length - 1
+}
+
+console.log(furthestBuilding([4,12,2,7,3,18,20,3,19], 10, 2)) // Output: 7
+```

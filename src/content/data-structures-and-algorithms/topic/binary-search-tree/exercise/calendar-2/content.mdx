@@ -1,0 +1,89 @@
+---
+title: "My Calendar II"
+description: "You are implementing a program to use as your calendar. We can add a new event if adding the event will not cause a **triple booking**."
+date: 2026-03-20
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [bst, binary search tree, ordered set, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Ordered Set / BST"
+  leetcodeUrl: "https://leetcode.com/problems/my-calendar-ii/"
+---
+# My Calendar II
+
+Leetcode Problem 731: [My Calendar II](https://leetcode.com/problems/my-calendar-ii/description/)
+
+## Problem Summary
+Design a calendar where **double booking is allowed** but **triple booking is forbidden**.
+
+Each event is represented by a half-open interval `[startTime, endTime)`, so the end boundary is excluded.
+You can accept a new event only if, after insertion, no instant in time belongs to three different events.
+
+ASCII overlap intuition:
+
+```text
+Allowed (max overlap = 2):
+Event A: [10,20)
+Event B:    [15,25)
+
+Rejected if adding Event C creates overlap of 3:
+Event C:      [18,22)
+
+Timeline
+10   15   18   20   22   25
+|----A----)
+    |------B------)
+        |--C--)
+```
+
+Implement the `MyCalendarTwo` class:
+
+- `MyCalendarTwo()`: Initialize an empty calendar.
+- `boolean book(int startTime, int endTime)`: Return `true` if adding this event keeps maximum overlap below `3`; otherwise return `false` and do not add it.
+
+**Constraints:**
+
+- Event boundaries always satisfy `0 <= startTime < endTime <= 10^9`.
+- There are at most `1000` booking requests, so each call should be efficient enough for repeated updates and overlap checks.
+
+## Techniques
+- Array
+- Binary Search
+- Design
+- Segment Tree
+- Prefix Sum
+- Ordered Set
+
+## Solution
+```ts
+class MyCalendarTwo {
+    private timeline: [number, number][] = [];
+
+    book(start: number, end: number): boolean {
+        const temp = [...this.timeline];
+        temp.push([start, 1]);
+        temp.push([end, -1]);
+
+        temp.sort((a, b) => {
+            if (a[0] !== b[0])  {
+                return a[0] - b[0];
+            }
+
+            return a[1] - b[1];
+        });
+
+        let active = 0;
+
+        for (const [_, delta] of temp) {
+            active += delta;
+            if (active >= 3) {
+                return false;
+            }
+        }
+
+        this.timeline = temp;
+
+        return true;
+    }
+}
+```

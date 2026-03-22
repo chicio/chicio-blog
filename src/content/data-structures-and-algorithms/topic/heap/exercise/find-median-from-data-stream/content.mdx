@@ -1,0 +1,94 @@
+---
+title: "Find Median from Data Stream"
+description: "Design a data structure that supports inserting integers from a data stream one at a time and efficiently computing the median of all values added so far."
+date: 2026-03-21
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [heap, heaps, min heap, max heap, priority queue, two heaps, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Two Heaps"
+  leetcodeUrl: "https://leetcode.com/problems/find-median-from-data-stream/"
+---
+# Find Median from Data Stream
+
+Leetcode Problem 295: [Find Median from Data Stream](https://leetcode.com/problems/find-median-from-data-stream/description/)
+
+## Problem Summary
+Design a data structure `MedianFinder` that supports dynamically adding integers
+from a data stream and efficiently returning the median of all integers added so
+far at any point.
+
+The median of a sorted sequence is the single middle element when the count is
+odd, or the average of the two middle elements when the count is even.
+
+Implement:
+- `MedianFinder()` — initializes the object.
+- `void addNum(int num)` — adds `num` to the data structure.
+- `double findMedian()` — returns the current median. Answers within `10⁻⁵`
+  of the actual value are accepted.
+
+**Constraints:**
+- Values added are in the range [−100,000, 100,000].
+- `findMedian` is only called when at least one element has been added.
+- At most 50,000 calls in total to `addNum` and `findMedian`.
+
+**Follow up:**
+- If all integers are in the range [0, 100], how would you optimize your solution?
+- If 99% of integers are in the range [0, 100], how would you optimize your solution?
+
+```text
+Stream: addNum(1), addNum(2), addNum(3)
+
+After addNum(1): sorted = [1]        → median = 1.0
+After addNum(2): sorted = [1, 2]     → median = (1+2)/2 = 1.5
+After addNum(3): sorted = [1, 2, 3]  → median = 2.0
+
+Two-heap internal state (max-heap left | min-heap right):
+  add(1):  [1]     |  []    → median = maxHeap.top = 1.0
+  add(2):  [1]     |  [2]   → median = (1+2)/2 = 1.5
+  add(3):  [1,2]   |  [3]   → median = maxHeap.top = 2.0
+             ↑                  ↑
+      left max ≤ right min at all times
+```
+
+
+## Techniques
+- Two Pointers
+- Design
+- Sorting
+- Heap (Priority Queue)
+- Data Stream
+
+## Solution
+```ts
+import {Heap} from "../heap";
+
+class MedianFinder {
+    private minHeap = new Heap<number>((a,b) => a - b)
+    private maxHeap = new Heap<number>((a,b) => b - a)
+
+    addNum(num: number): void {
+        if (this.maxHeap.size() === 0 || num <= this.maxHeap.peek()!) {
+            this.maxHeap.insert(num)
+        } else {
+            this.minHeap.insert(num)
+        }
+
+        if (this.maxHeap.size() > this.minHeap.size() + 1 ) {
+            this.minHeap.insert(this.maxHeap.extract()!)
+        }
+
+        if (this.minHeap.size() > this.maxHeap.size()) {
+            this.maxHeap.insert(this.minHeap.extract()!);
+        }
+    }
+
+    findMedian(): number {
+        if (this.maxHeap.size() === this.minHeap.size()) {
+            return (this.maxHeap.peek()! + this.minHeap.peek()!) / 2
+        }
+
+        return this.maxHeap.peek()!
+    }
+}
+```

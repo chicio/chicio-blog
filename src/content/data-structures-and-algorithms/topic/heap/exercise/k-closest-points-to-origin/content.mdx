@@ -1,0 +1,75 @@
+---
+title: "K Closest Points to Origin"
+description: "Given an array of 2D points and an integer k, return the k points closest to the origin (0,0) by Euclidean distance."
+date: 2026-03-21
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [heap, heaps, min heap, max heap, priority queue, two heaps, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Top K Elements"
+  leetcodeUrl: "https://leetcode.com/problems/k-closest-points-to-origin/"
+---
+# K Closest Points to Origin
+
+Leetcode Problem 973: [K Closest Points to Origin](https://leetcode.com/problems/k-closest-points-to-origin/description/)
+
+## Problem Summary
+Given an array of 2D points and an integer `k`, return the `k` points closest
+to the origin `(0, 0)`, measured by Euclidean distance `√(x² + y²)`. The
+answer is guaranteed to be unique and can be returned in any order.
+
+**Constraints:**
+- Up to 10,000 points, with `x` and `y` coordinates each in the range
+  [−10,000, 10,000].
+- `k` is between 1 and the total number of points.
+
+```text
+points = [[1,3], [-2,2]],  k = 1
+
+     Y
+  3 ─┤  *(1,3)   d = √(1²+3²)   = √10 ≈ 3.16
+  2 ─┤*(-2,2)   d = √((-2)²+2²) = √8  ≈ 2.83  ← closer
+  1 ─┤
+  0 ─┼──────────── X
+    -2  -1   0   1
+
+k=1 → [[-2, 2]]
+```
+
+
+## Techniques
+- Array
+- Math
+- Divide and Conquer
+- Geometry
+- Sorting
+- Heap (Priority Queue)
+- Quickselect
+
+## Solution
+```ts
+import { Heap } from "../heap"
+
+function kClosest(points: number[][], k: number): number[][] {
+    const kClosestsPoints = new Heap<{ point: number[], distance: number }>((a, b) => b.distance - a.distance)
+    
+    for (const point of points) {
+        const distance = Math.sqrt(Math.pow(point[0], 2) + Math.pow(point[1], 2))
+        kClosestsPoints.insert({ point, distance })
+
+        if (kClosestsPoints.size() > k) {
+            kClosestsPoints.extract()
+        }
+    }
+
+    const result: number[][] = []
+
+    while (kClosestsPoints.size() > 0) {
+        result.push(kClosestsPoints.extract()!.point)
+    }
+
+    return result
+};
+
+console.log(kClosest([[1,3],[-2,2]], 1)) // Output: [[-2,2]]
+```

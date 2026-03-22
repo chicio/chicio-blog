@@ -1,0 +1,100 @@
+---
+title: "Design Add and Search Words Data Structure"
+description: "Design a data structure that supports adding new words and finding if a string matches any previously added string."
+date: 2026-03-20
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [tries, trie, prefix tree, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Trie"
+  leetcodeUrl: "https://leetcode.com/problems/design-add-and-search-words-data-structure/"
+---
+# Design Add and Search Words Data Structure
+
+Leetcode Problem 211: [Design Add and Search Words Data Structure](https://leetcode.com/problems/design-add-and-search-words-data-structure/description/)
+
+## Problem Summary
+Design a data structure that supports two operations over words:
+
+- Add a new lowercase word to the dictionary.
+- Search for a pattern and return whether at least one previously added word matches it.
+
+The search pattern can include the `.` wildcard, which matches any single lowercase letter.
+
+**Constraints (descriptive):**
+
+- Every word or pattern has length between 1 and 25.
+- Words added with `addWord` use only lowercase English letters.
+- Patterns passed to `search` use lowercase English letters and may include `.`.
+- A search pattern contains at most 2 wildcard dots, so wildcard branching is limited.
+- The total number of `addWord` and `search` calls is at most 10^4.
+
+## Techniques
+- String
+- Depth-First Search
+- Design
+- Trie
+
+## Solution
+```ts
+export class TrieNode {
+    constructor(
+        public children: Map<string, TrieNode> = new Map<string, TrieNode>(),
+        public isEndOfWord: boolean = false
+    ) { }
+}
+
+class WordDictionary {
+    private root: TrieNode = new TrieNode()
+
+    addWord(word: string): void {
+        let currentNode = this.root
+
+        for (const char of word) {
+            let currentCharNode = currentNode.children.get(char)
+
+            if (!currentCharNode) {
+                currentCharNode = new TrieNode()
+                currentNode.children.set(char, currentCharNode)
+            }
+
+            currentNode = currentCharNode
+        }
+
+        currentNode.isEndOfWord = true
+    }
+
+    search(word: string): boolean {
+        return this.searchRecursive(word, 0, this.root)
+    }
+
+    private searchRecursive(word: string, index: number, node: TrieNode): boolean {
+        if (index === word.length) {
+            return node.isEndOfWord
+        }
+
+        let currentChar = word.charAt(index)
+
+        if (currentChar === '.') {
+            for (let child of node.children.values()) {
+                if (this.searchRecursive(word, index + 1, child)) {
+                    return true
+                }
+            }
+            return false
+        } else {
+            if (!node.children.has(currentChar)) {
+                return false;
+            }
+            return this.searchRecursive(word, index + 1, node.children.get(currentChar)!)
+        }
+    }
+}
+
+/**
+ * Your WordDictionary object will be instantiated and called as such:
+ * var obj = new WordDictionary()
+ * obj.addWord(word)
+ * var param_2 = obj.search(word)
+ */
+```

@@ -1,0 +1,109 @@
+---
+title: "Single-Threaded CPU"
+description: "Given n tasks each with an enqueue time and processing duration, simulate a single-threaded CPU that always picks the shortest available task. Return the order in which tasks are processed."
+date: 2026-03-21
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [heap, heaps, min heap, max heap, priority queue, two heaps, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Heap"
+  leetcodeUrl: "https://leetcode.com/problems/single-threaded-cpu/"
+---
+# Single-Threaded CPU
+
+Leetcode Problem 1834: [Single-Threaded CPU](https://leetcode.com/problems/single-threaded-cpu/description/)
+
+## Problem Summary
+You have a single-threaded CPU and `n` tasks, each defined by an enqueue time
+and a processing duration. The CPU processes at most one task at a time and
+follows these rules:
+
+- If the CPU is idle with no available tasks, it waits.
+- When the CPU is free and one or more tasks are available, it picks the one
+  with the **shortest processing time** (ties broken by smallest original index).
+- Once a task starts, it runs uninterrupted until completion. The CPU can start
+  a new task immediately after finishing one.
+
+Return the order in which the CPU processes the tasks (by original index).
+
+**Constraints:**
+- Up to 100,000 tasks.
+- Enqueue times and processing durations can each be up to 1,000,000,000.
+
+```text
+tasks = [[1,2], [2,4], [3,2], [4,1]]
+        (idx 0: enqueue=1, proc=2)
+        (idx 1: enqueue=2, proc=4)
+        (idx 2: enqueue=3, proc=2)
+        (idx 3: enqueue=4, proc=1)
+
+t=1:  task 0 available → CPU picks task 0 (proc=2)
+t=2:  task 1 available → CPU busy
+t=3:  task 0 done, tasks {1,2} available → pick task 2 (shorter proc=2 < 4)
+t=4:  task 3 available
+t=5:  task 2 done, tasks {1,3} available → pick task 3 (shorter proc=1 < 4)
+t=6:  task 3 done, task 1 available → pick task 1 (proc=4)
+t=10: task 1 done
+
+Order: [0, 2, 3, 1]
+```
+
+
+## Techniques
+- Array
+- Sorting
+- Heap (Priority Queue)
+
+## Solution
+```ts
+import {Heap} from "../heap";
+
+type Task = {
+    enqueueTime: number;
+    processingTime: number;
+    index: number;
+};
+
+function getOrder(tasks: number[][]): number[] {
+    const tasksWithIndex: Task[] = tasks.map(([enqueue, process], index) => ({
+        enqueueTime: enqueue,
+        processingTime: process,
+        index,
+    }));
+    tasksWithIndex.sort((a, b) => a.enqueueTime - b.enqueueTime);
+
+    const tasksPriority = new Heap<Task>((task, anotherTask) => {
+        if (task.processingTime === anotherTask.processingTime) {
+            return task.index - anotherTask.index
+        }
+
+        return task.processingTime - anotherTask.processingTime
+    })
+
+    let currentTask = 0
+    let currentTime = 0
+    let executionOrder: number[] = []
+
+    while (currentTask < tasksWithIndex.length || tasksPriority.size() > 0) {
+        if (tasksPriority.size() === 0 && tasksWithIndex[currentTask].enqueueTime > currentTime) {
+            currentTime = tasksWithIndex[currentTask].enqueueTime
+        }
+
+        while (currentTask < tasksWithIndex.length &&
+        tasksWithIndex[currentTask].enqueueTime <= currentTime) {
+            tasksPriority.insert(tasksWithIndex[currentTask])
+            currentTask++
+        }
+
+        if (tasksPriority.size() > 0) {
+            const task = tasksPriority.extract()!
+            executionOrder.push(task.index)
+            currentTime += task.processingTime
+        }
+    }
+
+    return executionOrder
+}
+
+console.log(getOrder([[1,2],[2,4],[3,2],[4,1]]))
+```

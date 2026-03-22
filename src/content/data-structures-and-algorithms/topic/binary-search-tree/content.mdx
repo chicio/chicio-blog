@@ -1,0 +1,363 @@
+---
+title: "Binary Search Tree and Ordered Set"
+description: "Deep dive into Binary Search Trees, Ordered Sets, and their applications in advanced algorithmic problems."
+date: 2026-03-20
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [bst, binary search tree, ordered set, data structures, algorithms]
+authors: [fabrizio_duroni]
+---
+
+import { TopicExercises } from "@/components/sections/data-structures-and-algorithms/components/topic-exercises";
+
+# Binary Search Tree and Ordered Set
+
+Binary Search Trees (BSTs) and Ordered Sets are fundamental building blocks in algorithm design. 
+They provide a structured way to store and retrieve data efficiently, especially when order matters. They can help to solve problems 
+that require dynamic sorted data, range queries, or interval management—common patterns.
+
+BSTs and Ordered Sets preserve a strict ordering among elements. This ordering enables operations such as finding the smallest element greater 
+than a given value, retrieving the next or previous item in sorted order, or efficiently computing ranges of elements.
+
+In their simplest form, a BST is a binary tree where, for each node, all values in the left subtree are smaller and all values in the right subtree are larger. 
+This property allows search, insertion, and deletion operations to be performed in $(O(h))$ time, where $h$ is the height of the tree. XXXXX
+
+Ordered Sets build on BSTs by enforcing **uniqueness** and providing convenient operations such as `add`, `remove`, `findNext`, and `findPrev`. 
+Many programming languages implement Ordered Sets using **balanced BSTs**, such as AVL trees or Red-Black trees, to guarantee logarithmic time 
+complexity for these operations even in the worst case.
+
+In this article, we will first explore BST fundamentals, including insertion, search, deletion, and the importance of balancing. 
+Then we will see how these concepts naturally extend to Ordered Sets and their applications in real-world algorithmic problems.
+
+## Binary Search Tree (BST)
+
+A Binary Search Tree is a binary tree data structure where each node satisfies the **BST property**: all values in its left subtree are smaller, 
+and all values in its right subtree are larger. This invariant allows efficient search, insertion, and deletion operations while maintaining a sorted 
+order among elements.
+
+A BST has the following characteristics:
+
+- Each node contains a key (and optionally a value)  
+- The left child contains only nodes with keys less than the node’s key  
+- The right child contains only nodes with keys greater than the node’s key  
+- No duplicate keys (for a strict BST)  
+- The structure allows in-order traversal to produce a sorted sequence of keys  
+
+In an **unbalanced BST**, the height `h` can grow linearly with the number of nodes `n`, leading to $O(n)$ time complexity in worst-case operations. 
+This motivates the use of **balanced BSTs**, which guarantee $O(\log n)$ height.
+
+Operations in a BST rely on recursively or iteratively navigating the tree according to the BST property.  
+Below you can find TypeScript implementations for searching, inserting, and deleting nodes in a unbalanced BST.
+
+#### Search
+
+```typescript
+class TreeNode {
+  constructor(
+    public val: number,
+    public left: TreeNode | null = null,
+    public right: TreeNode | null = null
+  ) {}
+}
+
+function searchBST(root: TreeNode | null, target: number): TreeNode | null {
+  if (!root) {
+    return null;
+  }
+  
+  if (root.val === target) {
+    return root;
+  } 
+
+  return target < root.val ? searchBST(root.left, target) : searchBST(root.right, target);
+}
+
+function insertBST(root: TreeNode | null, val: number): TreeNode {
+  if (!root) {
+    return new TreeNode(val);
+  } 
+
+  if (val < root.val) {
+    root.left = insertBST(root.left, val);
+  } else if (val > root.val) {
+    root.right = insertBST(root.right, val);
+  }
+
+  return root;
+}
+
+function deleteBST(root: TreeNode | null, val: number): TreeNode | null {
+  if (!root) { 
+    return null;
+  } 
+
+  if (val < root.val) {
+    root.left = deleteBST(root.left, val);
+  } else if (val > root.val) {
+    root.right = deleteBST(root.right, val);
+  } else {
+    if (!root.left) { 
+        return root.right; 
+    }
+    if (!root.right) { 
+        return root.left; 
+    }
+
+    let minNode = root.right;
+    
+    while (minNode.left) {
+        minNode = minNode.left;
+    }
+    
+    root.val = minNode.val;
+    root.right = deleteBST(root.right, minNode.val);
+  }
+
+  return root;
+}
+
+```
+
+To maintain efficient O(log n) operations even in the worst case, we introduce **balanced BSTs**. 
+One classical approach is the **AVL Tree**, which automatically adjusts its structure after insertions and deletions to prevent the tree from degenerating.
+
+Some key concepts of AVL trees include:
+- Each node stores a **height** and optionally a **balance factor**  
+- Balance factor = height(right subtree) − height(left subtree)  
+- Allowed balance factors: −1, 0, 1  
+- If a node becomes unbalanced after an insertion or deletion, we perform **rotations** to restore balance
+
+There are four rotation types:
+
+1. **Right rotation (LL case)**  
+2. **Left rotation (RR case)**  
+3. **Left-right rotation (LR case)**  
+4. **Right-left rotation (RL case)**
+
+These rotations preserve the BST property while reducing the height of the taller subtree.
+
+```typescript
+class AVLNode {
+  constructor(
+    public val: number,
+    public left: AVLNode | null = null,
+    public right: AVLNode | null = null,
+    public height: number = 1
+  ) {}
+}
+
+// Helper to get height
+function height(node: AVLNode | null): number {
+  return node ? node.height : 0;
+}
+
+// Right rotation
+function rotateRight(y: AVLNode): AVLNode {
+  const x = y.left!;
+  const T2 = x.right;
+  x.right = y;
+  y.left = T2;
+
+  y.height = Math.max(height(y.left), height(y.right)) + 1;
+  x.height = Math.max(height(x.left), height(x.right)) + 1;
+
+  return x;
+}
+
+// Left rotation
+function rotateLeft(x: AVLNode): AVLNode {
+  const y = x.right!;
+  const T2 = y.left;
+  y.left = x;
+  x.right = T2;
+
+  x.height = Math.max(height(x.left), height(x.right)) + 1;
+  y.height = Math.max(height(y.left), height(y.right)) + 1;
+
+  return y;
+}
+
+// Balance factor
+function getBalance(node: AVLNode | null): number {
+  return node ? height(node.right) - height(node.left) : 0;
+}
+
+// Insert into AVL Tree
+function insertAVL(node: AVLNode | null, val: number): AVLNode {
+  if (!node) {
+    return new AVLNode(val);
+  } 
+
+  if (val < node.val) {
+    node.left = insertAVL(node.left, val);
+  } else if (val > node.val) {
+    node.right = insertAVL(node.right, val);
+  } else {
+    return node; // duplicates not allowed
+  }
+
+  // Update height
+  node.height = 1 + Math.max(height(node.left), height(node.right));
+
+  // Check balance
+  const balance = getBalance(node);
+
+  // Left Heavy
+  if (balance < -1) {
+    if (val < node.left!.val) {
+        return rotateRight(node); // LL
+    } else { // LR
+      node.left = rotateLeft(node.left!);
+      return rotateRight(node);
+    }
+  }
+
+  // Right Heavy
+  if (balance > 1) {
+    if (val > node.right!.val) {
+        return rotateLeft(node); // RR
+    } else { // RL
+      node.right = rotateRight(node.right!);
+      return rotateLeft(node);
+    }
+  }
+
+  return node;
+}
+```
+
+## Ordered Set
+
+An **Ordered Set** is an abstract data type that combines the ordering properties of a Binary Search Tree with the uniqueness guarantee of a set.  
+It allows efficient insertions, deletions, and queries while maintaining elements in sorted order.
+
+The key operations of an Ordered Set include:
+- **Add (insert)**, Insert an element if it does not already exist  
+- **Remove (delete)**, Remove an element if present  
+- **FindNext**, Find the smallest element greater than a given value  
+- **FindPrev**, Find the largest element smaller than a given value  
+- **Range Queries**, Retrieve all elements within a specified interval
+
+
+```typescript
+class OrderedSet {
+  private root: AVLNode | null = null;
+
+  // Insert value
+  add(val: number) {
+    // Note: see AVL tree implementation above
+    this.root = insertAVL(this.root, val);
+  }
+
+  // Delete value
+  remove(val: number) {
+    // Note: see AVL tree implementation above
+    this.root = deleteAVL(this.root, val);
+  }
+
+  // Find smallest element > val
+  findNext(val: number): number | null {
+    let node = this.root;
+    let succ: number | null = null;
+    while (node) {
+      if (node.val > val) {
+        succ = node.val;
+        node = node.left;
+      } else {
+        node = node.right;
+      }
+    }
+    return succ;
+  }
+
+  // Find largest element < val
+  findPrev(val: number): number | null {
+    let node = this.root;
+    let pred: number | null = null;
+    while (node) {
+      if (node.val < val) {
+        pred = node.val;
+        node = node.right;
+      } else {
+        node = node.left;
+      }
+    }
+    return pred;
+  }
+
+  // In-order traversal
+  inorder(): number[] {
+    const result: number[] = [];
+    const dfs = (node: AVLNode | null) => {
+      if (!node) {
+        return;
+      }
+      dfs(node.left);
+      result.push(node.val);
+      dfs(node.right);
+    };
+    dfs(this.root);
+    return result;
+  }
+
+  // Range query: all values between low and high inclusive
+  rangeQuery(low: number, high: number): number[] {
+    const result: number[] = [];
+    const dfs = (node: AVLNode | null) => {
+      if (!node) {
+        return;
+      }
+      if (node.val > low){
+        dfs(node.left);
+      }
+      if (node.val >= low && node.val <= high) {
+        result.push(node.val);
+      }
+      if (node.val < high) {
+        dfs(node.right);
+      }
+    };
+
+    dfs(this.root);
+
+    return result;
+  }
+}
+```
+
+## Time and Space Complexity
+
+Here we summarize the key operations and highlight the differences between **unbalanced** and **balanced BSTs**.
+
+### BST (Unbalanced)
+
+| Operation | Time Complexity | Space Complexity |
+|-----------|----------------|-----------------|
+| Search    | $O(h)$ → $O(n)$ worst-case | $O(1)$ auxiliary, $O(h)$ recursion |
+| Insert    | $O(h)$ → $O(n)$ worst-case | $O(1)$ auxiliary, $O(h)$ recursion |
+| Delete    | $O(h)$ → $O(n)$ worst-case | $O(1)$ auxiliary, $O(h)$ recursion |
+| In-order Traversal | $O(n)$ | $O(h)$ recursion stack |
+
+**Notes:**  
+- `h` = height of the tree; in the worst case of a degenerate tree, `h = n`.  
+- Traversal operations require a recursion stack proportional to tree height.
+
+### BST / Ordered Set (Balanced, AVL)
+
+| Operation | Time Complexity | Space Complexity |
+|-----------|----------------|-----------------|
+| Search    | $O(\log n)$ | $O(1)$ auxiliary, $O(\log n)$ recursion |
+| Insert    | $O(\log n)$ | $O(1)$ auxiliary, $O(\log n)$ recursion |
+| Delete    | $O(\log n)$ | $O(1)$ auxiliary, $O(\log n)$ recursion |
+| FindNext / FindPrev | $O(\log n)$ | $O(1)$ |
+| Range Query | $O(k + \log n)$ | $O(\log n)$ recursion, k = # of returned elements |
+| In-order Traversal | $O(n)$ | $O(\log n)$ recursion stack |
+
+**Highlights:**
+
+- Balanced BSTs guarantee **logarithmic height**, which ensures all dynamic set operations are $O(\log n)$ in worst case.  
+- Operations like `findNext`, `findPrev`, and `rangeQuery` rely on the ordering maintained by the BST, giving **efficient access to successors, predecessors, and intervals**.  
+- Space complexity is dominated by the recursion stack during traversal; auxiliary space is minimal since all adjustments are done **in-place**.  
+
+## Exercises
+
+<TopicExercises topic="binary-search-tree" />

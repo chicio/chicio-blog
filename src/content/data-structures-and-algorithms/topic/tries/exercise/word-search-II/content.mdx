@@ -1,0 +1,118 @@
+---
+title: "Word Search II"
+description: "Given an `m x n` `board` of characters and a list of strings `words`, return *all words on the board*."
+date: 2026-03-20
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [tries, trie, prefix tree, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Trie + DFS"
+  leetcodeUrl: "https://leetcode.com/problems/word-search-ii/"
+---
+# Word Search II
+
+Leetcode Problem 212: [Word Search II](https://leetcode.com/problems/word-search-ii/description/)
+
+## Problem Summary
+Given an `m x n` board of lowercase characters and a list of words, return all words that can be formed on the board.
+
+Each word must be built by moving through sequentially adjacent cells. Adjacency is only horizontal or vertical, and a cell cannot be reused within the same word path.
+
+Adjacency is 4-directional only:
+
+```text
+    (r-1, c)
+       |
+(r, c-1) - (r, c) - (r, c+1)
+       |
+    (r+1, c)
+```
+
+**Constraints (descriptive):**
+
+- The board dimensions are `m x n`, with both `m` and `n` between 1 and 12.
+- Every board cell contains one lowercase English letter.
+- The dictionary includes between 1 and 3 * 10^4 unique words.
+- Each word length is between 1 and 10 and uses lowercase English letters.
+
+## Techniques
+- Array
+- String
+- Backtracking
+- Trie
+- Matrix
+
+## Solution
+```ts
+// Taken from https://github.com/AlgoMaster-io/leetcode-solutions/blob/main/typescript/word-search-ii.md#approach-2-trie--backtracking
+
+class TrieNodeWords {
+    children: { [key: string]: TrieNodeWords } = {}
+    word: string | null = null
+}
+
+function findWords(board: string[][], words: string[]): string[] {
+    const root = new TrieNodeWords()
+
+    const buildTrie = (word: string) => {
+        let node = root
+
+        for (const char of word) {
+            if (!node.children[char]) {
+                node.children[char] = new TrieNodeWords()
+            }
+            node = node.children[char]
+        }
+
+        node.word = word
+    }
+
+    for (const word of words) {
+        buildTrie(word);
+    }
+
+    const result: string[] = [];
+
+    function search(x: number, y: number, node: TrieNodeWords) {
+        if (node.word !== null) {
+            result.push(node.word);
+            node.word = null;
+        }
+
+        // Outside of the boards
+        if (x < 0 || y < 0 || x >= board.length || y >= board[0].length || !node.children[board[x][y]]) {
+            return;
+        }
+
+        const char = board[x][y];
+        const childNode = node.children[char];
+
+        // Visit cell
+        board[x][y] = '#';
+
+        // Explore all directions
+        search(x + 1, y, childNode);
+        search(x - 1, y, childNode);
+        search(x, y + 1, childNode);
+        search(x, y - 1, childNode);
+
+        // Backtracking
+        board[x][y] = char; // Restore original state
+
+        // Optimization: prune leaf node
+        if (Object.keys(childNode.children).length === 0) {
+            delete node.children[char];
+        }
+    }
+
+    for (let i = 0; i < board.length; i++) {
+        for (let j = 0; j < board[0].length; j++) {
+            if (root.children[board[i][j]]) {
+                search(i, j, root);
+            }
+        }
+    }
+
+    return result;
+}
+```

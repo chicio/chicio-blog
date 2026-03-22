@@ -1,0 +1,128 @@
+---
+title: "Process Tasks Using Servers"
+description: "You have n servers (each with a weight) and m tasks (each with a processing duration). Assign each task to the free server with the smallest weight, breaking ties by index. Return the server index assigned to each task."
+date: 2026-03-21
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [heap, heaps, min heap, max heap, priority queue, two heaps, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Heap"
+  leetcodeUrl: "https://leetcode.com/problems/process-tasks-using-servers/"
+---
+# Process Tasks Using Servers
+
+Leetcode Problem 1882: [Process Tasks Using Servers](https://leetcode.com/problems/process-tasks-using-servers/description/)
+
+## Problem Summary
+You have `n` servers (each with a weight) and `m` tasks (each with a processing
+duration in seconds). Task `j` becomes available at second `j` (0-indexed).
+The assignment rules are:
+
+- When a server becomes free and there are queued tasks, the task at the front
+  of the queue is assigned to the **free server with the smallest weight**
+  (ties broken by smallest index).
+- If all servers are busy when a task arrives, it waits in the queue. As soon
+  as any server frees up, the next queued task is dispatched immediately.
+- When multiple servers free at the same time, tasks are assigned in queue
+  order, following weight/index priority.
+
+A server assigned task `j` at time `t` becomes free again at time `t + tasks[j]`.
+
+Return an array `ans` of length `m` where `ans[j]` is the index of the server
+that processes task `j`.
+
+**Constraints:**
+- Both `n` (number of servers) and `m` (number of tasks) can be up to 200,000.
+- Server weights and task durations are positive integers, each at most 200,000.
+
+```text
+Example: servers = [3, 3, 2],  tasks = [1, 2, 3, 2, 1, 2]
+         (server 0→w=3, server 1→w=3, server 2→w=2)
+
+t=0: task 0 arrives → server 2 (lightest, w=2), busy until t=1
+t=1: task 1 arrives, server 2 frees → server 2 (still lightest), busy until t=3
+t=2: task 2 arrives → server 0 (next lightest, w=3), busy until t=5
+t=3: task 3 arrives, server 2 frees → server 2, busy until t=5
+t=4: task 4 arrives → server 1 (only free), busy until t=5
+t=5: task 5 arrives, all free → server 2 (lightest), busy until t=7
+
+Result: ans = [2, 2, 0, 2, 1, 2]
+```
+
+
+## Techniques
+- Array
+- Heap (Priority Queue)
+
+## Solution
+```ts
+import {Heap} from "../heap";
+
+type FreeServer = {
+    weight: number;
+    index: number;
+}
+
+type BusyServer = {
+    freeTime: number;
+    weight: number;
+    index: number;
+}
+
+function assignTasks(servers: number[], tasks: number[]): number[] {
+    const freeServers = new Heap<FreeServer>((server, anotherServer) => {
+        if (server.weight === anotherServer.weight) {
+            return server.index - anotherServer.index
+        }
+
+        return server.weight - anotherServer.weight
+    })
+    const busyServers = new Heap<BusyServer>((server, anotherServer) => {
+        if (server.freeTime !== anotherServer.freeTime) {
+            return server.freeTime - anotherServer.freeTime;
+        }
+
+        if (server.weight !== anotherServer.weight) {
+            return server.weight - anotherServer.weight;
+        }
+
+        return server.index - anotherServer.index;
+    })
+
+    servers.map((weight, index) => freeServers.insert({ weight, index }))
+
+    let time = 0
+    let ans = []
+
+    for (let i = 0; i < tasks.length; i++) {
+        const taskTime = tasks[i];
+        time = Math.max(time, i);
+
+        while (busyServers.size() > 0 && busyServers.peek()!.freeTime <= time) {
+            const newFreeServer = busyServers.extract()!;
+            freeServers.insert({ weight: newFreeServer.weight, index: newFreeServer.index });
+        }
+
+        if (freeServers.size() === 0) {
+            const server = busyServers.extract()!;
+            time = server.freeTime;
+            freeServers.insert({ weight: server.weight, index: server.index });
+
+            while (busyServers.size() > 0 && busyServers.peek()!.freeTime <= time) {
+                const server = busyServers.extract()!;
+                freeServers.insert({ weight: server.weight, index: server.index });
+            }
+        }
+
+        const server = freeServers.extract()!;
+        busyServers.insert({
+            freeTime: time + tasks[i],
+            weight: server.weight,
+            index: server.index
+        });
+        ans.push(server.index)
+    }
+
+    return ans
+}
+```
