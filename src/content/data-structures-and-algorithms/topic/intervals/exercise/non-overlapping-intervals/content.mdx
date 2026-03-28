@@ -14,53 +14,28 @@ metadata:
 [Non Overlapping Intervals](description/)
 
 ## Problem Summary
-Given an array of intervals `intervals` where `intervals[i] = [starti, endi]`, return *the minimum number of intervals you need to remove to make the rest of the intervals non-overlapping*.
+Given an array of intervals, determine the **minimum number of intervals to remove** so that the remaining intervals do **not overlap** with each other.
 
-**Note** that intervals which only touch at a point are **non-overlapping**. For example, `[1, 2]` and `[2, 3]` are non-overlapping.
+**Important Note:** Two intervals are considered **non-overlapping** if they only touch at a single point. For example, `[1,2]` and `[2,3]` are non-overlapping (they touch at point 2), but `[1,3]` and `[2,4]` are overlapping (they share the range `[2,3]`).
 
- 
-
-**Example 1:**
-
+**Visual Example:**
 ```
+Original:
+[1--2]  [2--3]  [3--4]  [1------3]
+         ✗ Overlaps: [1,3] spans multiple intervals
 
-**Input:** intervals = [[1,2],[2,3],[3,4],[1,3]]
-**Output:** 1
-**Explanation:** [1,3] can be removed and the rest of the intervals are non-overlapping.
+Optimal removal: Remove [1,3]
+[1--2]  [2--3]  [3--4]
+✓ Non-overlapping (touching at boundaries is allowed)
 
+Minimum intervals removed: 1
 ```
-
-**Example 2:**
-
-```
-
-**Input:** intervals = [[1,2],[1,2],[1,2]]
-**Output:** 2
-**Explanation:** You need to remove two [1,2] to make the rest of the intervals non-overlapping.
-
-```
-
-**Example 3:**
-
-```
-
-**Input:** intervals = [[1,2],[2,3]]
-**Output:** 0
-**Explanation:** You don't need to remove any of the intervals since they're already non-overlapping.
-
-```
-
- 
 
 **Constraints:**
-
-	
-- `1 <= intervals.length <= 105`
-	
-- `intervals[i].length == 2`
-	
-- `-5 * 104 <= starti < endi <= 5 * 104`
-
+- Input contains between **1 and 100,000** intervals
+- Each interval has exactly **2 elements**: `[start, end]`, where `start < end`
+- Values range from **-50,000 to 50,000**
+- Original array order does not matter; you only need to count removals
 ## Techniques
 - Array
 - Dynamic Programming
