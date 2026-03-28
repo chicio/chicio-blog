@@ -1,0 +1,319 @@
+---
+title: "Intervals"
+description: "Interval merging, scheduling, and overlap problems. Techniques for efficiently handling ranges, detecting conflicts, and optimizing interval-based tasks."
+date: 2026-03-22
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [intervals, merging, scheduling, data structures, algorithms]
+authors: [fabrizio_duroni]
+---
+
+import { TopicExercises } from "@/components/sections/data-structures-and-algorithms/components/topic-exercises";
+
+# Intervals
+
+An interval is one of the simplest abstractions in computer science: a pair of values `[start, end]` that represents a contiguous range.
+Despite its simplicity, intervals appear constantly in real-world problems, from calendar scheduling and resource allocation to computational geometry and network bandwidth management.
+
+The reason intervals form a dedicated topic in algorithm design is that reasoning about ranges introduces a class of problems that pure array or sorting techniques alone cannot fully address.
+You need to think about relationships between intervals: do they overlap? Can they be merged? How many can you attend without conflict?
+
+Most interval problems share a common skeleton. You are given a collection of intervals and asked to perform one of a handful of operations: merge all overlapping ones into a compact representation, insert a new interval while preserving that representation, select the maximum number of non-conflicting intervals, or find the minimum number of "actions" (arrows, removals, splits) to satisfy a global constraint.
+What makes these problems tractable is that sorting unlocks a linear scan through what would otherwise be a quadratic comparison space.
+
+The patterns reported here sit at the intersection of sorting, greedy algorithms, and occasionally heap-based scheduling.
+
+## Interval Overlap Detection and Merge
+
+An interval is typically represented as a pair `[start, end]`, where `start <= end`.
+Two intervals `[a, b]` and `[c, d]` overlap if and only if they share at least one point.
+The cleanest way to reason about this is through the **negation**: two intervals do *not* overlap when one ends strictly before the other begins.
+
+$$
+[a, b] \text{ and } [c, d] \text{ do not overlap} \iff b < c \text{ or } d < a
+$$
+
+Negating this condition gives the overlap predicate:
+
+$$
+[a, b] \text{ and } [c, d] \text{ overlap} \iff a \leq d \text{ and } c \leq b
+$$
+
+In code this translates to a single boolean expression:
+
+```typescript
+// start, end pairs
+type Interval = [number, number];
+
+function overlaps(a: Interval, b: Interval): boolean {
+  return a[0] <= b[1] && b[0] <= a[1];
+}
+```
+
+This formulation handles all overlap configurations in one shot: partial overlap from the left, partial overlap from the right, full containment in either direction, and exact equality.
+
+A subtlety worth keeping in mind is the distinction between intervals that *touch* at a single point and intervals that strictly overlap.
+The intervals `[1, 3]` and `[3, 5]` share the single point `3`.
+Whether this counts as an overlap depends on the problem semantics.
+
+In merging problems, touching intervals are typically merged: `[1, 3]` and `[3, 5]` become `[1, 5]`.
+In scheduling problems that model open intervals (a balloon that occupies the range `(start, end)` without including the endpoints), touching may not count as a collision.
+Always read the problem statement carefully on this point, because it determines whether you use `<` or `<=` in your comparison.
+
+When two intervals do overlap, their union is straightforward to compute:
+
+$$
+\text{merge}([a, b], [c, d]) = [\min(a, c),\ \max(b, d)]
+$$
+```typescript
+function merge(a: Interval, b: Interval): Interval {
+  return [Math.min(a[0], b[0]), Math.max(a[1], b[1])];
+}
+```
+
+This primitive is the building block of every merging and insertion algorithm covered in the following sections.
+Once you can detect overlap and compute the union of two intervals, the rest is a matter of choosing the right traversal order.
+
+## Sorting Strategy: The Foundation of Interval Problems
+
+The naive approach to any interval problem is to compare every pair of intervals, which costs $O(n^2)$ time.
+Sorting reduces this to $O(n \log n)$ and, crucially, enables a single linear pass that processes each interval exactly once.
+The key insight is that once intervals are sorted, you only ever need to compare a new interval against the one immediately before it.
+No interval further back in the sorted order can possibly affect the current one.
+
+The question is: sort by what?
+
+### Sort by start time
+
+Sorting by $start$ is the natural choice when the goal is to **build or maintain a merged representation** of intervals.
+When you process intervals left to right by start time, you are guaranteed that the next interval cannot begin before the current one.
+This means any overlap can only happen at the right boundary of the interval you are currently tracking, and you can resolve it with a single $\max$ comparison.
+
+This is the strategy behind both Merge Intervals and Insert Interval.
+```typescript
+intervals.sort((a, b) => a[0] - b[0]);
+```
+
+### Sort by end time
+
+Sorting by $end$ is the right choice when the goal is to **select as many non-conflicting intervals as possible**, or equivalently, 
+to remove the fewest intervals to eliminate all overlaps.
+
+The intuition comes from classical greedy interval scheduling theory: among all intervals that do not conflict with the ones already selected, always pick the one that ends earliest.
+Ending earliest leaves the maximum remaining time open for future intervals.
+Sorting by end time lets you apply this greedy rule in a single left-to-right pass.
+
+This is the strategy behind Non-overlapping Intervals and Minimum Number of Arrows to Burst Balloons.
+```typescript
+intervals.sort((a, b) => a[1] - b[1]);
+```
+
+### Why the choice matters
+
+The two strategies are not interchangeable. Consider the intervals `[1, 10]`, `[2, 3]`, `[4, 5]`.
+Sorted by start: `[1, 10]`, `[2, 3]`, `[4, 5]`. A merge-style scan would absorb all three into `[1, 10]`.
+Sorted by end: `[2, 3]`, `[4, 5]`, `[1, 10]`. A greedy scheduling scan would select `[2, 3]` and `[4, 5]`, correctly identifying that two non-overlapping intervals fit within the range covered by `[1, 10]`.
+
+The problem statement tells you which lens to apply.
+If you need a compact, lossless representation of all intervals, sort by start.
+If you need to maximise the count of compatible intervals, sort by end.
+Recognising this distinction up front is often the entire key to solving an interval problem correctly.
+
+## Merging Overlapping Intervals
+
+Given a collection of intervals, the goal is to produce the smallest set of non-overlapping intervals that covers exactly the same points.
+This is the most fundamental interval operation, and understanding it deeply makes every other pattern easier to recognise.
+
+The strategy is a direct application of the sort-by-start principle. Once intervals are sorted by their start point, any interval that overlaps with the 
+previous one can only extend it to the right, never to the left.
+This means the merge operation reduces to a single comparison per interval: does the current interval's start fall within the interval we are currently building?
+
+The algorithm proceeds as follows:
+
+- Sort all intervals by start time.
+- Initialise the result with the first interval as the current "active" interval.
+- For each subsequent interval, check if it overlaps with the active interval by comparing its start against the active interval's end.
+- If it overlaps, extend the active interval's end to the maximum of the two ends.
+- If it does not overlap, push the active interval to the result and make the current interval the new active one.
+- After the loop, push the last active interval to the result.
+
+```typescript
+function merge(intervals: number[][]): number[][] {
+  intervals.sort((a, b) => a[0] - b[0]);
+
+  const result: number[][] = [intervals[0]];
+
+  for (let i = 1; i < intervals.length; i++) {
+    const current = intervals[i];
+    const last = result[result.length - 1];
+
+    if (current[0] <= last[1]) {
+      last[1] = Math.max(last[1], current[1]);
+    } else {
+      result.push(current);
+    }
+  }
+
+  return result;
+}
+```
+
+## Inserting an Interval
+
+The Insert Interval problem takes the merging pattern one step further: given a list of non-overlapping intervals already sorted by start time, insert a new interval 
+and return the merged result.
+The list is guaranteed to be in canonical form before the insertion, which means you can exploit its structure instead of re-sorting from scratch.
+
+The algorithm partitions the existing intervals into three groups, processed in a single left-to-right pass:
+
+- **Intervals that end before the new interval begins.** These lie entirely to the left and are unaffected. Copy them directly to the result.
+- **Intervals that overlap with the new interval.** These must be merged into the new interval by expanding its boundaries.
+- **Intervals that start after the new interval ends.** These lie entirely to the right and are unaffected. Copy them directly to the result.
+
+```typescript
+function insert(intervals: number[][], newInterval: number[]): number[][] {
+  const result: number[][] = [];
+  let i = 0;
+  const n = intervals.length;
+
+  // Phase 1: intervals entirely to the left
+  while (i < n && intervals[i][1] < newInterval[0]) {
+    result.push(intervals[i]);
+    i++;
+  }
+
+  // Phase 2: overlapping intervals — merge into newInterval
+  while (i < n && intervals[i][0] <= newInterval[1]) {
+    newInterval[0] = Math.min(newInterval[0], intervals[i][0]);
+    newInterval[1] = Math.max(newInterval[1], intervals[i][1]);
+    i++;
+  }
+  result.push(newInterval);
+
+  // Phase 3: intervals entirely to the right
+  while (i < n && intervals[i][0] > newInterval[1]) {
+    result.push(intervals[i]);
+    i++;
+  }
+
+  return result;
+}
+```
+
+## Greedy Interval Scheduling: Sort by End
+
+A different class of interval problems does not ask you to merge or insert, but to **select** or **eliminate** intervals under a compatibility constraint.
+The canonical formulation is: given a set of intervals, find the maximum number of non-overlapping intervals you can select, or equivalently, the minimum number of 
+intervals you must remove to make the rest non-overlapping.
+
+This is the classical **interval scheduling maximisation problem**, and it has an optimal greedy solution with a clean theoretical justification.
+Among all intervals compatible with the ones already selected, always pick the one that **ends earliest**.
+
+The intuition is straightforward: choosing the interval that ends soonest leaves the maximum amount of time available for future selections.
+Any other choice can only close off more of the timeline, never less.
+This argument can be made rigorous by an exchange argument: if an optimal solution picks interval $X$ instead of the earliest-ending compatible interval $Y$, you can swap $X$ for $Y$ without reducing the count, because $Y$ ends no later than $X$ and therefore conflicts with no more future intervals than $X$ does.
+
+The algorithm is as follows:
+- Sort intervals by end time.
+- Track the end time of the last selected interval, initialised to $-\infty$.
+- For each interval in sorted order, if its start is compatible with the last selected end, select it and update the tracked end.
+
+```typescript
+function eraseOverlapIntervals(intervals: number[][]): number {
+  intervals.sort((a, b) => a[1] - b[1]);
+
+  let count = 0;
+  let lastEnd = -Infinity;
+
+  for (const [start, end] of intervals) {
+    if (start >= lastEnd) {
+      lastEnd = end;
+    } else {
+      count++;
+    }
+  }
+
+  return count;
+}
+```
+
+Here `count` tracks the number of intervals removed, which equals the total count minus the number of intervals selected by the greedy rule.
+
+## Event Scheduling with a Min-Heap
+
+The Maximum Number of Events That Can Be Attended problem looks similar to the greedy scheduling problems from the previous section, but it has a crucial structural difference 
+that makes the sort-by-end greedy scan insufficient.
+
+Each event has a start day and an end day, and you can attend at most one event per day.
+Attending an event means choosing any single day within its range $[start, end]$.
+The goal is to maximise the number of events attended.
+
+In the classical interval scheduling problem, selecting an interval means occupying its entire range.
+Here, selecting an event costs only a single day, which means an event with a wide range does not block the entire timeline.
+A sort-by-end greedy scan fails because it does not account for which days are still free and which events are currently available on those days.
+
+Consider $[[1,2],[1,2],[1,2]]$: three events all running on days 1 and 2.
+The greedy scan would select the first one and then find the next two conflicting, reporting 1.
+But you can attend two events by taking day 1 for one and day 2 for another.
+
+The correct approach is to simulate the passage of time day by day, at each step attending the event that expires soonest among all currently available ones.
+This is another instance of the greedy "earliest deadline first" rule, but applied at the granularity of individual days rather than whole intervals.
+
+A [min-heap](/data-structures-and-algorithms/topic/heap) ordered by end day makes this efficient: on each day, push all events that start on that day into the heap, 
+then pop the event with the smallest end day and attend it.
+Events whose end day has already passed are discarded from the heap without being attended.
+
+```typescript
+function maxEvents(events: number[][]): number {
+  events.sort((a, b) => a[0] - b[0]);
+
+  const minHeap = new Heap<number>((a, b) => a - b);
+  let attended = 0;
+  let i = 0;
+  const n = events.length;
+
+  const minDay = events[0][0];
+  const maxDay = Math.max(...events.map(e => e[1]));
+
+  for (let day = minDay; day <= maxDay; day++) {
+    // Push all events that start on or before today
+    while (i < n && events[i][0] <= day) {
+      minHeap.insert(events[i][1]);
+      i++;
+    }
+
+    // Discard events that have already expired
+    while (minHeap.size() > 0 && minHeap.peek()! < day) {
+      minHeap.extract();
+    }
+
+    // Attend the event ending soonest
+    if (minHeap.size() > 0) {
+      minHeap.extract();
+      attended++;
+    }
+  }
+
+  return attended;
+}
+```
+
+## Time and Space Complexity
+
+All interval algorithms in this topic share a common cost structure: a sorting step dominates the preprocessing, followed by a linear or near-linear scan.
+The differences lie in what the scan does and whether auxiliary space beyond the output is required.
+
+| Algorithm | Time Complexity | Space Complexity |
+|---|---|---|
+| Merge Intervals | $O(n \log n)$ | $O(n)$ |
+| Insert Interval | $O(n)$ | $O(n)$ |
+| Non-overlapping Intervals | $O(n \log n)$ | $O(1)$ |
+| Minimum Arrows to Burst Balloons | $O(n \log n)$ | $O(1)$ |
+| Maximum Events That Can Be Attended | $O((n + D) \log n)$ | $O(n)$ |
+
+A few details worth clarifying.
+Insert Interval runs in $O(n)$ because the input is already sorted, so no sorting step is needed. The three-phase scan visits each interval exactly once.
+Non-overlapping Intervals and Minimum Arrows both require $O(n \log n)$ for sorting and then a single $O(n)$ pass. The extra space is $O(1)$ because neither algorithm builds an output list: they track only a single sca
+
+## Exercises
+
+<TopicExercises topic="intervals" />

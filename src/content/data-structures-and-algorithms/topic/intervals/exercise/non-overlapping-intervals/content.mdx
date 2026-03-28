@@ -1,0 +1,67 @@
+---
+title: "Non Overlapping Intervals"
+description: "Given an array of intervals `intervals` where `intervals[i] = [starti, endi]`, return *the minimum number of intervals you need to remove to make the rest of the intervals non-overlapping*."
+date: 2026-03-28
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [intervals, merging, scheduling, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Greedy Interval Scheduling"
+  leetcodeUrl: ""
+---
+# Non Overlapping Intervals
+
+[Non Overlapping Intervals](description/)
+
+## Problem Summary
+Given an array of intervals, determine the **minimum number of intervals to remove** so that the remaining intervals do **not overlap** with each other.
+
+**Important Note:** Two intervals are considered **non-overlapping** if they only touch at a single point. For example, `[1,2]` and `[2,3]` are non-overlapping (they touch at point 2), but `[1,3]` and `[2,4]` are overlapping (they share the range `[2,3]`).
+
+**Visual Example:**
+```
+Original:
+[1--2]  [2--3]  [3--4]  [1------3]
+         ✗ Overlaps: [1,3] spans multiple intervals
+
+Optimal removal: Remove [1,3]
+[1--2]  [2--3]  [3--4]
+✓ Non-overlapping (touching at boundaries is allowed)
+
+Minimum intervals removed: 1
+```
+
+**Constraints:**
+- Input contains between **1 and 100,000** intervals
+- Each interval has exactly **2 elements**: `[start, end]`, where `start < end`
+- Values range from **-50,000 to 50,000**
+- Original array order does not matter; you only need to count removals
+## Techniques
+- Array
+- Dynamic Programming
+- Greedy
+- Sorting
+
+## Solution
+```ts
+function eraseOverlapIntervals(intervals: number[][]): number {
+    intervals.sort((a, b) => a[0] - b[0])
+
+    let count = 0
+    let last = intervals[0]
+
+    for (let i = 1; i < intervals.length; i++) {
+        if (intervals[i][0] < last[1]) {
+            count++
+
+            if (intervals[i][1] < last[1]) {
+                last = intervals[i];
+            }
+        } else {
+            last = intervals[i]
+        }
+    }
+
+    return count
+};
+```

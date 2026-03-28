@@ -1,0 +1,89 @@
+---
+title: "Maximum Number Of Events That Can Be Attended"
+description: "You are given an array of `events` where `events[i] = [startDayi, endDayi]`. Every event `i` starts at `startDayi` and ends at `endDayi`."
+date: 2026-03-28
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [intervals, merging, scheduling, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Greedy + Min-Heap"
+  leetcodeUrl: "https://leetcode.com/problems/maximum-number-of-events-that-can-be-attended/"
+---
+# Maximum Number Of Events That Can Be Attended
+
+Leetcode Problem 1353: [Maximum Number Of Events That Can Be Attended](https://leetcode.com/problems/maximum-number-of-events-that-can-be-attended/)
+
+## Problem Summary
+You are given an array of events, each represented as `events[i] = [startDay, endDay]`. Each event is active during all days from `startDay` to `endDay` (inclusive), and you can attend it on **any single day** within that range.
+
+**Key constraint:** You can attend **at most one event per day**. Find the **maximum number of events** you can attend by choosing which day to attend each event.
+
+**Visual Example - Timeline Approach:**
+```
+Events:  [1,2], [2,3], [3,4], [1,2]
+
+Day 1:   [1,2]    OR   [1,2]    OR  [1,2]
+         [1,2]        (duplicate)     Event 0
+
+Day 2:   [2,3]   OR    [2,3]   OR  [2,3]
+         [1,2]        Event 1      Event 2 (moved)
+
+Day 3:                  [3,4]     [3,4]
+                        Event 3   Event 3
+
+Optimal schedule: Attend on day 1(Event 0), day 2(Event 1), day 3(Event 2), day 3(duplicate moved to available slot)
+Maximum events attended: 4
+```
+
+**Constraints:**
+- Array contains between **1 and 100,000** events
+- Each event has exactly **2 elements**: `[startDay, endDay]`, where `startDay <= endDay`
+- Days are **positive integers** between **1 and 100,000**
+- You must attend each event on a different day (no two different events on same day)
+## Techniques
+- Array
+- Greedy
+- Sorting
+- Heap (Priority Queue)
+
+## Solution
+```ts
+import { Heap } from "../heap";
+
+function maxEvents(events: number[][]): number {
+    events.sort((a, b) => a[0] - b[0]);
+    const minHeap = new Heap<number>((a, b) => a - b); 
+    let day = 0;
+    let i = 0;
+    let attended = 0;
+
+    while (i < events.length || minHeap.size() > 0) {
+        if (minHeap.size() === 0) {
+            day = Math.max(day, events[i][0]);
+        }
+
+        while (i < events.length && events[i][0] <= day) {
+            minHeap.insert(events[i][1]);
+            i++;
+        }
+
+        while (minHeap.size() > 0 && minHeap.peek()! < day) {
+            minHeap.extract();
+        }
+
+        if (minHeap.size() > 0) {
+            minHeap.extract();
+            attended++;
+            day++;
+        }
+    }
+
+    return attended;
+}
+
+console.log(maxEvents([[1,2],[2,3],[3,4]])); // 3
+console.log(maxEvents([[1,2],[2,3],[3,4],[1,2]])); // 4
+console.log(maxEvents([[1,4],[4,4],[2,2],[3,4],[1,1]])); // 4
+console.log(maxEvents([[1,100000]])); // 1
+console.log(maxEvents([[1,1],[1,2],[1,3],[1,4],[1,5]])); // 5
+```

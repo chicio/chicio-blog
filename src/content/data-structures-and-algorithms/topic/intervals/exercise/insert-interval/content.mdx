@@ -1,0 +1,71 @@
+---
+title: "Insert Interval"
+description: "You are given an array of non-overlapping intervals `intervals` where `intervals[i] = [starti, endi]` represent the start and the end of the `ith` interval and `intervals` is sorted in ascending or..."
+date: 2026-03-28
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [intervals, merging, scheduling, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Interval Insertion"
+  leetcodeUrl: "https://leetcode.com/problems/insert-interval/"
+---
+# Insert Interval
+
+Leetcode Problem 57: [Insert Interval](https://leetcode.com/problems/insert-interval/description/)
+
+## Problem Summary
+You are given an array of **non-overlapping, sorted intervals** where `intervals[i] = [start, end]`, and a **new interval** `newInterval = [start, end]`. Insert the new interval into the existing array such that:
+1. The result remains **sorted** by start positions
+2. **All overlapping intervals are merged** with the new interval
+3. The array contains **no overlapping intervals**
+
+You may return a new array rather than modifying in-place.
+
+**Visual Example:**
+```
+Before insertion:
+[1--2]     [3----5]  [6-7]  [8----10]           [12------16]
+                          
+Insert [4,8]:
+[1--2]     [3----5]  [6-7]  [8----10]           [12------16]
+               [4----------8]
+               (overlaps with [3,5], [6,7], [8,10])
+
+After insertion and merging:
+[1--2]     [3--------10]                         [12------16]
+```
+
+**Constraints:**
+- Input array may be **empty** (0 to 10,000 intervals)
+- Each interval contains exactly **2 elements**: `[start, end]`
+- All values are **non-negative integers** up to **100,000**, with `start <= end`
+- Input intervals are **already sorted** by start position and **do not overlap** with each other
+- New interval values are also in the range **0 to 100,000** with `start <= end`
+## Techniques
+- Array
+
+## Solution
+```ts
+function insert(intervals: number[][], newInterval: number[]): number[][] {
+    const result = []
+    let i = 0
+
+    while (i < intervals.length && intervals[i][1] < newInterval[0]) {
+        result.push(intervals[i++])
+    }
+
+    while (i < intervals.length && intervals[i][0] <= newInterval[1]) {
+        newInterval[0] = Math.min(intervals[i][0], newInterval[0])
+        newInterval[1] = Math.max(intervals[i][1], newInterval[1])
+        i++
+    }
+
+    result.push(newInterval)
+
+    while (i < intervals.length) {
+        result.push(intervals[i++])
+    }
+
+    return result
+};
+```
