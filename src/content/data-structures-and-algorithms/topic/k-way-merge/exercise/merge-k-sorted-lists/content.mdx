@@ -1,0 +1,72 @@
+---
+title: "Merge k Sorted Lists"
+description: "You are given an array of `k` linked-lists `lists`, each linked-list is sorted in ascending order."
+date: 2026-04-04
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [k-way merge, heap, priority queue, merging, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "TODO"
+  leetcodeUrl: "https://leetcode.com/problems/merge-k-sorted-lists/"
+---
+# Merge k Sorted Lists
+
+Leetcode Problem 23: [Merge k Sorted Lists](https://leetcode.com/problems/merge-k-sorted-lists/description/)
+
+## Problem Summary
+You receive `k` linked lists, and each individual list is already sorted in ascending order. Your task is to merge them into a single linked list that preserves the same global ordering.
+
+```text
+list 0: 1 -> 4 -> 5
+list 1: 1 -> 3 -> 4
+list 2: 2 -> 6
+
+merged: 1 -> 1 -> 2 -> 3 -> 4 -> 4 -> 5 -> 6
+```
+
+The challenge is to repeatedly choose the smallest current node among all lists until every node has been appended to the final result.
+
+**Constraints:**
+
+- The input contains exactly `lists.length` lists, so there may be anywhere from `0` to `10^4` lists.
+- Any individual list may be empty, and any non-empty list can contain at most `500` nodes.
+- Node values can range from `-10^4` to `10^4`.
+- Every individual list is already sorted in ascending order.
+- The total number of nodes across all lists never exceeds `10^4`, which bounds the total merge work.
+
+## Techniques
+- Linked List
+- Divide and Conquer
+- Heap (Priority Queue)
+- Merge Sort
+
+## Solution
+```ts
+import { Heap } from "../heap";
+import { ListNode } from "../list-node";
+
+function mergeKLists(lists: Array<ListNode | null>): ListNode | null {
+    const heap = new Heap<ListNode>((a, b) => a.val - b.val);
+
+    for (const node of lists) {
+        if (node !== null) {
+            heap.insert(node);
+        }
+    }
+
+    const dummy = new ListNode(0);
+    let curr = dummy;
+
+    while (heap.size() > 0) {
+        const minNode = heap.extract()!;
+        curr.next = minNode;
+        curr = curr.next;
+
+        if (minNode.next !== null) {
+            heap.insert(minNode.next);
+        }
+    }
+
+    return dummy.next;
+}
+```

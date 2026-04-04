@@ -1,0 +1,155 @@
+---
+title: "K-Way Merge"
+description: "Learn how to efficiently merge multiple sorted data sources using heaps, a fundamental pattern behind many advanced problems."
+date: 2026-04-04
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [k-way merge, heap, priority queue, merging, data structures, algorithms]
+authors: [fabrizio_duroni]
+---
+
+import { TopicExercises } from "@/components/sections/data-structures-and-algorithms/components/topic-exercises";
+
+# K-Way Merge
+
+Merging sorted data is one of the most fundamental operations in computer science. 
+It appears in classic algorithms such as Merge Sort, but also in more advanced problems involving multiple data sources, streaming systems, and real-time processing.
+
+When dealing with two sorted arrays, the solution is straightforward. We can traverse both sequences with two pointers and build the result in linear time. 
+However, as soon as we move from two sequences to many, the problem becomes significantly more complex.
+This is where the K-Way Merge pattern comes into play. The goal is simple in definition but non-trivial in execution. 
+Given k sorted data sources, we want to efficiently produce a globally sorted sequence or extract specific elements such as the smallest ones.
+
+A naive approach would repeatedly scan all k sequences to find the next smallest element. While correct, this leads to poor performance and does not scale.
+The key idea behind K-Way Merge is to avoid redundant work by always keeping track of the next candidate elements in a structured way. 
+This allows us to reduce the problem to a sequence of efficient selections, rather than repeated full scans.
+
+This pattern appears in several important scenarios:
+- merging multiple sorted arrays or linked lists
+- processing sorted streams of data
+- finding top-k elements across multiple sources
+- solving problems where the search space can be explored in sorted order
+
+Understanding K-Way Merge is less about memorizing a specific solution and more about recognizing a powerful abstraction. 
+Once internalized, it becomes a reusable mental model that applies across a wide range of problems.
+
+## From Two-Way to K-Way Merge
+
+Before diving into the full K-Way Merge, it is helpful to recall how a standard two-way merge works. 
+Consider merging two sorted arrays. We can use two pointers, each tracking the current element in its array, and repeatedly take the smaller element:
+
+```ts
+function mergeTwoArrays(arr1: number[], arr2: number[]): number[] {
+  const result: number[] = [];
+  let i = 0, j = 0;
+
+  while (i < arr1.length && j < arr2.length) {
+    if (arr1[i] <= arr2[j]) {
+      result.push(arr1[i++]);
+    } else {
+      result.push(arr2[j++]);
+    }
+  }
+
+  while (i < arr1.length) { 
+    result.push(arr1[i++]);
+  }
+
+  while (j < arr2.length) {
+    result.push(arr2[j++]);
+  }
+
+  return result;
+}
+```
+
+This approach is simple, elegant, and works in $O(n + m)$ time, where $n$ and $m$ are the lengths of the two arrays. 
+The algorithm’s invariant is straightforward: at each step, we always pick the smallest remaining element from either array.
+However, when we generalize to $k$ arrays, this naive approach does not scale. Scanning all $k$ arrays at each step to find the minimum element leads to a time complexity of $O(k \cdot N)$, 
+where $N$ is the total number of elements across all arrays. This quickly becomes inefficient as $k$ grows.
+
+The key insight is that we do not need to scan all arrays each time. Instead, we can track the current candidate elements and efficiently select the next smallest one. 
+This is the foundation of the K-Way Merge pattern, which transforms a linear scan across k sequences into a more scalable process using structured data, typically a heap.
+
+In essence, K-Way Merge is the generalization of two-way merge: the invariant remains the same—always pick the smallest available element—but the technique adapts 
+to efficiently handle multiple sequences simultaneously.
+
+## Heap-Based K-Way Merge
+
+The heart of the K-Way Merge pattern is the **min-heap** (priority queue). The heap keeps track of the next candidate elements from each sorted sequence, allowing us to efficiently 
+extract the smallest element at each step.
+The key invariant is simple: **the heap always contains the smallest unprocessed element from each sequence**. Maintaining this invariant ensures that each extraction yields the next 
+element in global order.
+
+- Initialize a min-heap.
+- Insert the first element from each of the k sequences into the heap. Store both the value and its origin (array index and element index).
+- Repeatedly extract the smallest element from the heap.
+- After extracting, if the sequence from which this element came has more elements, insert the next element from that sequence into the heap.
+- Continue until the heap is empty.
+
+This guarantees $O(N \log k)$ time complexity, where $N$ is the total number of elements across all sequences, because the heap operations scale with $k$, not $N$.
+
+### TypeScript Implementation
+
+```ts
+function kWayMerge(lists: number[][]): number[] {
+  const heap = new MinHeap((a, b) => a.value - b.value);
+  const result: number[] = [];
+
+  for (let i = 0; i < lists.length; i++) {
+    if (lists[i].length > 0) {
+      heap.push({ value: lists[i][0], listIndex: i, elementIndex: 0 });
+    }
+  }
+
+  while (heap.size() > 0) {
+    const node = heap.pop()!;
+    result.push(node.value);
+    const nextIndex = node.elementIndex + 1;
+    if (nextIndex < lists[node.listIndex].length) {
+      heap.push({
+        value: lists[node.listIndex][nextIndex],
+        listIndex: node.listIndex,
+        elementIndex: nextIndex,
+      });
+    }
+  }
+
+  return result;
+}
+```
+
+The heap ensures that we always process the globally smallest element next, while keeping track of the sequence each element comes from. 
+The algorithm scales beautifully with `k`, as the heap never exceeds size `k`.
+
+By internalizing this pattern, you can quickly adapt it to variations such as:
+- extracting the `k` smallest pairs across arrays
+- finding the `k`th smallest element in a sorted matrix
+- computing ranges or intervals covering multiple sequences
+
+The pattern remains the same: maintain a frontier of candidates in a priority queue, and expand incrementally.
+
+## Variations and Problem Mapping
+
+The K-Way Merge pattern we just explored serves as a **core abstraction** that appears in multiple problem variations. 
+Understanding the pattern allows us to recognize its application, even when the surface details differ. 
+
+### Find K Pairs with Smallest Sums
+Instead of merging arrays directly, imagine a virtual matrix formed by the sums of elements from two arrays. 
+The goal is to extract the k smallest sums efficiently. We apply the same principle: maintain a **heap of candidate pairs**, expand from the current minimum, 
+and track visited positions to avoid duplicates.
+
+### Kth Smallest Element in a Sorted Matrix
+A sorted matrix can be viewed as k sorted rows. The task reduces to finding the kth element in the globally sorted order. 
+Using a heap, we push the first element of each row, and repeatedly extract the minimum, adding the next element from the same row. 
+This is conceptually identical to merging k sorted lists, with careful attention to indices.
+
+### Merge K Sorted Lists
+This is the canonical K-Way Merge problem. Each list provides elements in order, and we maintain a **min-heap frontier** to always extract the next smallest element. 
+The heap tracks both the value and the origin list. This directly mirrors our generic implementation and serves as the simplest case study of the pattern.
+
+### Smallest Range Covering Elements from K Lists
+Here, the problem adds a twist: instead of merging, we are tracking a range that covers at least one element from each list. 
+The heap maintains the **current maximum and minimum** from the frontier, and the algorithm expands incrementally to find the smallest possible range. Although the goal is different, the core technique—**maintaining a structured frontier in a heap**—remains identical.
+
+
+<TopicExercises topic="k-way-merge" />

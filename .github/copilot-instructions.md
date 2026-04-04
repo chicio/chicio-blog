@@ -108,7 +108,7 @@ This project is a Next.js (App Router) blog with a Matrix-inspired UI, using Rea
 
 ## AI Agent Worktree
 
-**IMPORTANT**: When asked to implement any feature or code change, always work in the `agent/` git worktree, NOT in the main workspace root. The `agent/` worktree runs on a dedicated branch and port, keeping work-in-progress isolated from the production branch.
+**IMPORTANT**: When asked to implement any feature or code change, ASK THE USER if you need to work in the `agent/` git worktree or in the main workspace root. The `agent/` worktree runs on a dedicated branch and port, keeping work-in-progress isolated from the production branch.
 
 ### Working on a feature
 

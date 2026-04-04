@@ -1,0 +1,101 @@
+---
+title: "Find K Pairs with Smallest Sums"
+description: "You are given two integer arrays `nums1` and `nums2` sorted in **non-decreasing order** and an integer `k`."
+date: 2026-04-04
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [k-way merge, heap, priority queue, merging, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "TODO"
+  leetcodeUrl: "https://leetcode.com/problems/find-k-pairs-with-smallest-sums/"
+---
+# Find K Pairs with Smallest Sums
+
+Leetcode Problem 373: [Find K Pairs with Smallest Sums](https://leetcode.com/problems/find-k-pairs-with-smallest-sums/description/)
+
+## Problem Summary
+You are given two integer arrays, `nums1` and `nums2`, and both arrays are already sorted in non-decreasing order. A valid pair is built by choosing one element from `nums1` and one element from `nums2`.
+
+Your task is to return the first `k` pairs with the smallest sums, as if all possible pairs were ordered from the smallest sum to the largest.
+
+```text
+nums1: [1, 7, 11]
+nums2: [2, 4,  6]
+
+pair sums:
+(1,2)=3   (1,4)=5   (1,6)=7
+(7,2)=9   (7,4)=11  (7,6)=13
+(11,2)=13 (11,4)=15 (11,6)=17
+```
+
+The full Cartesian product can be huge, so the real challenge is to identify the smallest pairs without generating every possible combination first.
+
+**Constraints:**
+
+- Each input array contains at least one value and can have up to `10^5` elements.
+- Values in either array can range from `-10^9` to `10^9`.
+- Both arrays are sorted in non-decreasing order, so duplicates are allowed.
+- The requested number of pairs `k` ranges from `1` to `10^4`.
+- `k` is always valid because it never exceeds the total number of possible pairs, `nums1.length * nums2.length`.
+
+## Techniques
+- Array
+- Heap (Priority Queue)
+
+## Solution
+```ts
+import { Heap } from "../heap"
+
+interface Position {
+    i: number
+    j: number
+}
+
+interface Pair {
+    first: number
+    second: number
+}
+
+function kSmallestPairs(nums1: number[], nums2: number[], k: number): number[][] {
+    const result: number[][] = []
+
+    if (nums1.length === 0 || nums2.length === 0) {
+        return result
+    } 
+
+    const heap = new Heap<{ position: Position, pair: Pair }>((a, b) =>
+        (a.pair.first + a.pair.second) - (b.pair.first + b.pair.second)
+    )
+    const visited = new Set<string>()
+
+    heap.insert({ pair: { first: nums1[0], second: nums2[0] }, position: { i: 0, j: 0} })
+    visited.add("0,0")
+
+    while (k > 0 && heap.size() > 0) {
+        const { position, pair } = heap.extract()!
+        result.push([pair.first, pair.second])
+        k--
+
+        if (position.j + 1 < nums2.length && !visited.has(`${position.i},${position.j + 1}`)) {
+            heap.insert({ 
+                pair: { first: nums1[position.i], second: nums2[position.j + 1] }, 
+                position: { i: position.i, j: position.j + 1 } 
+            })
+            visited.add(`${position.i},${position.j + 1}`)
+        }
+
+        if (position.j === 0 && position.i + 1 < nums1.length && !visited.has(`${position.i + 1},0`)) {
+            heap.insert({ 
+                pair: { first: nums1[position.i + 1], second: nums2[0] }, 
+                position: { i: position.i + 1, j: 0 } 
+            })
+            visited.add(`${position.i + 1},0`)
+        }
+    }
+
+    return result
+}
+
+console.log(kSmallestPairs([1,7,11], [2,4,6], 3)) // [[1,2],[1,4],[1,6]]
+console.log(kSmallestPairs([1,1,2], [1,2,3], 2)) // [[1,1],[1,1]]
+```

@@ -1,0 +1,92 @@
+---
+title: "Smallest Range Covering Elements from K Lists"
+description: "You have `k` lists of sorted integers in **non-decreasing order**. Find the **smallest** range that includes at least one number from each of the `k` lists."
+date: 2026-04-04
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [k-way merge, heap, priority queue, merging, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "TODO"
+  leetcodeUrl: "https://leetcode.com/problems/smallest-range-covering-elements-from-k-lists/"
+---
+# Smallest Range Covering Elements from K Lists
+
+Leetcode Problem 632: [Smallest Range Covering Elements from K Lists](https://leetcode.com/problems/smallest-range-covering-elements-from-k-lists/description/)
+
+## Problem Summary
+You are given `k` sorted lists and must find the tightest interval `[a, b]` such that at least one value from every list lies inside that interval.
+
+An interval is considered smaller if its length is shorter. If two intervals have the same length, the one with the smaller starting value is preferred.
+
+```text
+list 0:  4   10   15   24   26
+list 1:  0    9   12   20
+list 2:  5   18   22   30
+
+range:              [20 ----- 24]
+covered values:      24, 20, 22
+```
+
+This is not a full merge problem. The goal is to keep one candidate from each list inside the same interval and make that shared window as small as possible.
+
+**Constraints:**
+
+- The number of lists is `k`, and it can range from `1` up to `3500`.
+- Each list contains at least one number and at most `50` numbers.
+- Values can be anywhere from `-10^5` to `10^5`.
+- Every list is already sorted in non-decreasing order, so duplicates are allowed and values never decrease as you move through a list.
+
+## Techniques
+- Array
+- Hash Table
+- Greedy
+- Sliding Window
+- Sorting
+- Heap (Priority Queue)
+
+## Solution
+```ts
+import { Heap } from "../heap";
+
+interface Entry {
+  value: number;
+  listIndex: number;
+  elementIndex: number;
+}
+
+function smallestRange(nums: number[][]): number[] {
+  const heap = new Heap<Entry>((a, b) => a.value - b.value);
+  let currentMax = -Infinity;
+
+  for (let i = 0; i < nums.length; i++) {
+    const val = nums[i][0];
+    heap.insert({ value: val, listIndex: i, elementIndex: 0 });
+    currentMax = Math.max(currentMax, val);
+  }
+  
+  let bestRange = [-Infinity, Infinity];
+
+  while (heap.size() === nums.length) {
+    const minEntry = heap.extract()!;
+    const currentMin = minEntry.value;
+
+    if (currentMax - currentMin < bestRange[1] - bestRange[0]) {
+      bestRange = [currentMin, currentMax];
+    }
+
+    const nextIndex = minEntry.elementIndex + 1;
+
+    if (nextIndex < nums[minEntry.listIndex].length) {
+      const nextVal = nums[minEntry.listIndex][nextIndex];
+      heap.insert({ value: nextVal, listIndex: minEntry.listIndex, elementIndex: nextIndex });
+      currentMax = Math.max(currentMax, nextVal);
+    } else {
+      break;
+    }
+  }
+
+  return bestRange;
+}
+
+console.log(smallestRange([[4,10,15,24,26],[0,9,12,20],[5,18,22,30]]));
+```
