@@ -1,0 +1,426 @@
+---
+title: "Chrome Built-in AI: adding on-device summarization to my blog with the Summarizer API"
+description: "How I integrated Chrome's Built-in AI Summarizer API to add TL;DR and Key Points features to my blog posts, with progressive enhancement, streaming responses, and on-device privacy."
+date: 2026-04-05
+image: /images/posts/chrome-built-in-ai-summarizer.jpg
+tags: [web development, chrome, ai, typescript, react]
+authors: [fabrizio_duroni]
+---
+
+import { Youtube } from "@/components/design-system/molecules/video/youtube";
+
+*Learn how I integrated Chrome's Built-in AI Summarizer API to add TL;DR and Key Points features to my blog posts, with progressive enhancement, streaming responses, and on-device privacy.*
+
+---
+
+If you are reading this article on Chrome 138+ on a desktop machine, you may have noticed something new just here before above: an "AI features" box 
+sitting right before the abstract and the other content of this post.
+
+![The AI features box as it appears on supported browsers](/images/posts/chrome-built-in-ai-box.png)
+
+If you open it, you'll find two buttons: "TL;DR" and "Key Points", that generate a summary of the article you're reading, powered entirely by AI running locally in your browser. 
+No server calls, no API keys, no data leaving your machine.
+
+Here's a quick demo of the feature in action:
+
+<Youtube videoId="Xxo3Q17Mkng" />
+
+So, what is this? How does it work? And why did I build it?
+AI is everywhere these days, and I wanted to start to have some AI features on my blog. I already have something, because some time ago i built a [chatbot that speaks about myself](/chat). 
+Another thing where AI is really good this days is summarization and translation (maybe because [LLM are born with for this scope?](/blog/post/2025/03/01/llm) :laughing:).
+Anyway one cool feature to have in a blog related to this, would be to get a quick TL;DR to decide if it's worth your time.
+
+The catch? I didn't want to pay for inference, given the "portfolio" nature of this blog :sweat_smile:, and I want it to be "privacy first", running entirely on the user's device. 
+Turns out, Chrome now ships an on-device AI model that does exactly this: no network, no costs, no privacy trade-off.
+
+The inspiration (and a big thank you!) for the content of this article goes to **my friend and colleague [Alessandro Romano](https://www.linkedin.com/in/alessandroromano92/)**, 
+who attended a conference where he first discovered Chrome's Built-in AI APIs. 
+He immediately shared his excitement with me and wrote a great article about it: [AI in the Browser: No Server, No Costs, No Privacy Trade-off](https://aleromano.com/posts/built-in-browser-ai). 
+His post covers the full landscape of Chrome's AI APIs, including Summarizer, Translator, Language Model, and Writer/Rewriter, plus his own implementation in Astro. 
+Reading it pushed me to integrate the Summarizer API into this blog. If you want a broader overview of these APIs, I highly recommend starting from his article.
+
+## Chrome's Built-in AI APIs
+
+Starting from Chrome 138, Google ships [Built-in AI APIs](https://developer.chrome.com/docs/ai/built-in) that expose Gemini Nano, a lightweight, on-device language model, 
+directly to web developers through JavaScript APIs. The Summarizer API is one of them, and it supports multiple summary types: `tldr`, `key-points`, `teaser`, and `headline`.
+
+The key characteristics that make this interesting are:
+
+- **On-device inference**: the model runs locally, nothing leaves the browser
+- **No API key or billing**: it's bundled with Chrome
+- **Progressive enhancement**: you can feature-detect and show the UI only when available
+- **Streaming support**: results are streamed as the model generates them
+
+The trade-off is that it only works on Chrome 138+ with capable hardware (the browser needs enough memory to load Gemini Nano). 
+This is fine: progressive enhancement means non-Chrome users simply won't see the feature.
+
+## Implementation
+
+Let's walk through how I built this feature, starting from the core logic and working outward to the UI components.
+First, we need to install the official type definitions for the Chrome AI apis, which are published as `@types/dom-chromium-ai`:
+
+```bash
+npm install --save-dev @types/dom-chromium-ai
+```
+
+Before even checking the Summarizer API, I need to know if the device has enough resources. 
+Gemini Nano needs around 8GB of RAM to run properly. I created a `useDeviceCapabilities` hook that reads hardware information from the Navigator API:
+
+```typescript
+interface NavigatorWithDevice extends Navigator {
+    deviceMemory?: number;
+    connection?: { saveData?: boolean };
+}
+
+interface DeviceCapabilities {
+    deviceMemory: number | undefined;
+    cores: number;
+    saveData: boolean;
+    isLowEnd: boolean;
+}
+
+const defaults: DeviceCapabilities = {
+    deviceMemory: undefined,
+    cores: 4,
+    saveData: false,
+    isLowEnd: false,
+};
+
+export function useDeviceCapabilities(): DeviceCapabilities {
+    const [capabilities, setCapabilities] = useState<DeviceCapabilities>(defaults);
+
+    useEffect(() => {
+        const nav = navigator as NavigatorWithDevice;
+        const deviceMemory = nav.deviceMemory;
+        const cores = nav.hardwareConcurrency ?? 4;
+        const saveData = nav.connection?.saveData ?? false;
+        const isLowEnd = (deviceMemory != null && deviceMemory <= 2) || cores <= 2 || saveData;
+
+        setCapabilities({ deviceMemory, cores, saveData, isLowEnd });
+    }, []);
+
+    return capabilities;
+}
+```
+
+One important detail: `deviceMemory` defaults to `undefined` rather than a fallback value like `4`.
+ The `navigator.deviceMemory` API is not available on all browsers, and assuming a value could lead to wrong decisions. 
+ By keeping it `undefined`, the availability check in the summarize hook can handle the case explicitly: if we don't know the device memory, 
+ we don't block the feature (Chrome, which is the only browser that supports both `deviceMemory` and the Summarizer API, will always report it).
+
+
+Than I create the `useChromeSummarize` hook, the core of the feature. This is a hook that encapsulates feature detection, model download monitoring, streaming, and abort handling:
+
+```typescript
+"use client";
+
+import { useCallback, useEffect, useState, useRef } from "react";
+import { useDeviceCapabilities } from "@/components/design-system/utils/hooks/use-device-capabilities";
+
+export type SummaryType = "tldr" | "key-points";
+export type SummaryStatus = "idle" | "downloading" | "loading" | "streaming" | "done" | "error";
+
+export function useChromeSummarize() {
+    const [isAvailable, setIsAvailable] = useState(false);
+    const [status, setStatus] = useState<SummaryStatus>("idle");
+    const [result, setResult] = useState("");
+    const [downloadProgress, setDownloadProgress] = useState(0);
+    const { deviceMemory } = useDeviceCapabilities();
+    const abortRef = useRef<AbortController | null>(null);
+
+    useEffect(() => {
+        const checkAvailability = async () => {
+            if (!("Summarizer" in self) || (deviceMemory !== undefined && deviceMemory < 8)) {
+                return;
+            }
+
+            try {
+                const availability = await self.Summarizer.availability();
+                setIsAvailable(availability !== "unavailable");
+            } catch {
+                setIsAvailable(false);
+            }
+        };
+
+        checkAvailability();
+    }, [deviceMemory]);
+
+    const reset = useCallback(() => {
+        setStatus((current) => {
+            if (current === "downloading") return current;
+            abortRef.current?.abort();
+            abortRef.current = null;
+            return "idle";
+        });
+        setResult("");
+    }, []);
+
+    const summarize = useCallback(async (type: SummaryType, text: string) => {
+        abortRef.current?.abort();
+        abortRef.current = new AbortController();
+
+        try {
+            setStatus("downloading");
+            setDownloadProgress(0);
+
+            const summarizer = await self.Summarizer.create({
+                type,
+                format: "markdown",
+                length: "long",
+                outputLanguage: "en",
+                monitor(monitor: CreateMonitor) {
+                    monitor.addEventListener("downloadprogress", (event: ProgressEvent) => {
+                        if (typeof event.loaded === "number" && typeof event.total === "number" && event.total > 0) {
+                            setDownloadProgress(Math.round((event.loaded / event.total) * 100));
+                            return;
+                        }
+
+                        const loaded = (event as ProgressEvent & { loaded?: number }).loaded;
+                        setDownloadProgress(Math.round((loaded ?? 0) * 100));
+                    });
+                },
+            });
+
+            setStatus("streaming");
+            setResult("");
+
+            const stream = summarizer.summarizeStreaming(text);
+            const reader = stream.getReader();
+            const decoder = new TextDecoder();
+            let fullText = "";
+
+            while (true) {
+                if (abortRef.current?.signal.aborted) {
+                    await reader.cancel();
+                    return;
+                }
+
+                const { done, value } = await reader.read();
+                if (done) break;
+
+                const chunk = typeof value === "string" ? value : decoder.decode(value, { stream: true });
+                if (chunk.length > 0) {
+                    fullText += chunk;
+                    setResult(fullText);
+                }
+            }
+
+            setStatus("done");
+        } catch (error) {
+            if ((error as Error).name === "AbortError") return;
+            setStatus("error");
+        }
+    }, []);
+
+    return { isAvailable, status, result, downloadProgress, summarize, reset };
+}
+```
+
+Let me go through the key design decisions:
+
+**Feature detection** happens in the `useEffect`. It's a two-step gate: first check that the `Summarizer` global exists (meaning Chrome 138+), then check device memory. 
+If `deviceMemory` is `undefined` (API not available), we skip the memory check and let Chrome's own internal checks handle it. If the device reports less than 8GB, we bail out early.
+
+**The `summarize` function** goes through multiple status transitions: `downloading` → `streaming` → `done`. 
+When the user clicks summarize for the first time, Chrome needs to download Gemini Nano (a few hundred MB). The `monitor` callback on `Summarizer.create()` fires `downloadprogress` events 
+that can expose either `loaded/total` bytes or a normalized loaded ratio, so I handle both and convert them to a percentage. 
+On subsequent calls (if the model is already downloaded), this phase completes instantly.
+
+**Streaming** uses `summarizeStreaming()` which returns a `ReadableStream<string>`. 
+I read chunks through a stream reader and append each delta to reconstruct the full output incrementally.
+
+**The `reset` function** has an important subtlety: it does not abort if the current status is `downloading`. 
+This prevents the user from accidentally canceling a model download (which could take a while) just by closing the modal. 
+If you're streaming text, closing the modal aborts; if the model is still downloading, it keeps going in the background so it's ready for the next request.
+
+The Summarizer API returns markdown-formatted text, including headings, bullet points, and bold text. 
+Fortunately, I already had a `Markdown` component built for the chat feature of this blog, which supports GFM, syntax highlighting, math equations, and emoji. 
+I reused it in the `ChromeSummaryModal`:
+
+```tsx
+{(status === "streaming" || status === "done") && content.length > 0 && (
+    <div
+        aria-live="polite"
+        className="w-full text-primary-text leading-relaxed"
+    >
+        <Markdown content={content} id="chrome-ai-summary" />
+    </div>
+)}
+```
+
+The modal itself handles multiple states. During model download, it shows a terminal-style progress bar (reused from the blog's reading progress indicator). 
+While the model processes the text, it shows an animated loader. The streaming and done states render the markdown. 
+And if something goes wrong, an error state with a retry button is displayed:
+
+```tsx
+export const ChromeSummaryModal: FC<ChromeSummaryModalProps> = ({
+    title, content, status, downloadProgress, onClose, onRetry,
+}) => {
+    const shouldReduceMotion = useReducedMotions();
+
+    return (
+        <Overlay onClick={onClose} delay={0.15}>
+            <MotionDiv
+                variants={modalVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                className="glow-border fixed top-1/2 left-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center rounded-xl bg-general-background p-8 w-[90%] sm:w-[70%] md:w-[60%] max-h-[80vh] overflow-auto"
+                onClick={(e: React.MouseEvent) => e.stopPropagation()}
+            >
+                <h2 className="mb-4 text-xl font-bold text-accent">{title}</h2>
+                <hr />
+                <div className="my-4">
+                    {status === "downloading" && (
+                        <TerminalProgressBar
+                            percentage={downloadProgress}
+                            loadingMessage="Downloading AI model..."
+                            completeMessage="Model ready."
+                            shouldReduceMotion={shouldReduceMotion}
+                        />
+                    )}
+
+                    {(status === "loading" || (status === "streaming" && content.length === 0)) && (
+                        <div className="flex flex-col items-center gap-3 py-8">
+                            <Loader size="lg" label="Generating summary" />
+                        </div>
+                    )}
+
+                    {(status === "streaming" || status === "done") && content.length > 0 && (
+                        <div
+                            aria-live="polite"
+                            className="w-full text-primary-text leading-relaxed"
+                        >
+                            <Markdown content={content} id="chrome-ai-summary" />
+                        </div>
+                    )}
+
+                    {status === "error" && (
+                        <div className="flex flex-col items-center gap-3 py-4">
+                            <p className="text-confirm">Something went wrong. Please try again.</p>
+                            <Button onClick={onRetry}>
+                                <p>Retry</p>
+                            </Button>
+                        </div>
+                    )}
+                </div>
+
+                <Button className="relative mt-6 text-primary-text" onClick={onClose}>
+                    <p>Close</p>
+                </Button>
+            </MotionDiv>
+        </Overlay>
+    );
+};
+```
+
+The `TerminalProgressBar` component already existed in the blog's design system; I extracted it during this work from the reading progress bar that appears when scrolling through posts (and that you can see also at the top of this page). 
+It renders a retro terminal-style bar using Unicode block characters (`█` and `░`), which fits nicely with the Matrix-inspired theme of this blog.
+
+Than I create `ChromeAiFeaturesToolbar`, the entry point for the feature. It checks availability via the hook and renders nothing if the API isn't supported, pure progressive enhancement:
+
+```tsx
+export const ChromeAiFeaturesToolbar: FC<ChromeAiFeaturesToolbarProps> = ({
+    contentContainerId,
+}) => {
+    const { isAvailable, status, result, downloadProgress, summarize, reset } =
+        useChromeSummarize();
+    const { glassmorphismClass } = useGlassmorphism();
+    const [modalOpen, setModalOpen] = useState(false);
+    const [modalTitle, setModalTitle] = useState("");
+    const [activeSummaryType, setActiveSummaryType] = useState<SummaryType>("tldr");
+
+    const handleSummarize = useCallback(
+        (type: SummaryType) => {
+            const container = document.getElementById(contentContainerId);
+            if (!container) {
+                return; 
+            }
+            const text = container.innerText;
+            // ... tracking and modal state setup ...
+            summarize(type, text);
+        },
+        [contentContainerId, summarize],
+    );
+
+    if (!isAvailable) {
+        return null;
+    }
+
+    return (
+        <>
+            <div className={`${glassmorphismClass} p-2`}>
+                <Accordion
+                    title={
+                        <h5 className="flex gap-3 items-center">
+                            <SiProbot className="inline text-shadow-md" />
+                            AI features
+                        </h5>
+                    }
+                    onToggle={() => { /* tracking */ }}
+                >
+                    <p>
+                        {"These features require "}
+                        <StandardExternalLinkWithTracking
+                            href="https://developer.chrome.com/docs/ai/built-in"
+                            trackingData={{ /* ... */ }}
+                        >
+                            Chrome 138+
+                        </StandardExternalLinkWithTracking>
+                        {" and capable hardware to run."}
+                    </p>
+                    <div className="mt-2 flex gap-3 overflow-visible">
+                        <Button onClick={() => handleSummarize("tldr")}>
+                            <p>TL;DR</p>
+                        </Button>
+                        <Button onClick={() => handleSummarize("key-points")}>
+                            <p>Key Points</p>
+                        </Button>
+                    </div>
+                </Accordion>
+            </div>
+
+            <AnimatePresence>
+                {modalOpen && (
+                    <ChromeSummaryModal
+                        title={modalTitle}
+                        content={result}
+                        status={status === "idle" ? "loading" : status}
+                        downloadProgress={downloadProgress}
+                        onClose={handleClose}
+                        onRetry={handleRetry}
+                    />
+                )}
+            </AnimatePresence>
+        </>
+    );
+};
+```
+
+The toolbar extracts the article text using `document.getElementById(contentContainerId).innerText`, simple and effective. 
+The content container ID (`reading-content-container`) is already used by the reading progress bar, so it's a natural reuse point.
+
+The `Accordion` component wraps the buttons, keeping them tucked away until the user actively wants them. 
+This avoids UI clutter for a feature that's experimental and only available on specific browsers.
+
+The final step is placing the toolbar in the blog post layout. It goes right after the post metadata (date and reading time), before the article content:
+
+```tsx
+<ChromeAiFeaturesToolbar contentContainerId="reading-content-container" />
+```
+
+Because the component returns `null` when the API isn't available, there's zero visual impact on browsers that don't support it.
+
+## Conclusion
+
+Chrome's Built-in AI APIs represent an exciting shift: real AI capabilities running directly in the browser, with no server costs and no privacy concerns. 
+The Summarizer API is just one piece: as Alessandro covers in [his article](https://aleromano.com/posts/built-in-browser-ai), there are also Translation, Writing, and general-purpose Language Model 
+APIs waiting to be explored. 
+
+The implementation was straightforward: a React hook for the API logic, a modal for the results, and progressive enhancement to keep everything invisible on unsupported browsers. 
+The trickiest parts were handling the model download progress (which only happens on first use) and discovering that the API returns markdown that needs proper rendering.
+These APIs are still experimental and Chrome-only, but that's exactly what progressive enhancement is for. 
+Users on supported browsers get a nice extra feature; everyone else gets the same blog they've always had. 
+No degradation, no broken experiences. 
+
+Thanks again to [Alessandro](https://aleromano.com/posts/built-in-browser-ai) for the inspiration! :heart:

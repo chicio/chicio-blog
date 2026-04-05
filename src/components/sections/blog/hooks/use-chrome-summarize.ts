@@ -54,10 +54,17 @@ export function useChromeSummarize() {
                 format: "markdown",
                 length: "long",
                 outputLanguage: "en",
-                monitor(m: AICreateMonitor) {
-                    m.addEventListener("downloadprogress", ((e: DownloadProgressEvent) => {
-                        setDownloadProgress(Math.round(e.loaded * 100));
-                    }) as EventListener);
+                monitor(monitor: CreateMonitor) {
+                    monitor.addEventListener("downloadprogress", (event: ProgressEvent) => {
+                        if (typeof event.loaded === "number" && typeof event.total === "number" && event.total > 0) {
+                            setDownloadProgress(Math.round((event.loaded / event.total) * 100));
+                            return;
+                        }
+
+                        // Some implementations expose only loaded as a 0..1 ratio.
+                        const loaded = (event as ProgressEvent & { loaded?: number }).loaded;
+                        setDownloadProgress(Math.round((loaded ?? 0) * 100));
+                    });
                 },
             });
 
@@ -65,14 +72,21 @@ export function useChromeSummarize() {
             setResult("");
 
             const stream = summarizer.summarizeStreaming(text);
+            const reader = stream.getReader();
+            const decoder = new TextDecoder();
             let fullText = "";
 
-            for await (const chunk of stream) {
+            while (true) {
                 if (abortRef.current?.signal.aborted) {
+                    await reader.cancel();
                     return;
                 }
-                
-                if ((chunk as string).length > 0) {
+
+                const { done, value } = await reader.read();
+                if (done) break;
+
+                const chunk = typeof value === "string" ? value : decoder.decode(value, { stream: true });
+                if (chunk.length > 0) {
                     fullText += chunk;
                     setResult(fullText);
                 }

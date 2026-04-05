@@ -30,7 +30,10 @@ export const ChromeAiFeaturesToolbar: FC<ChromeAiFeaturesToolbarProps> = ({
   const handleSummarize = useCallback(
     (type: SummaryType) => {
       const container = document.getElementById(contentContainerId);
-      if (!container) return;
+
+      if (!container) {
+        return;
+      }
 
       const text = container.innerText;
       const title = type === "tldr" ? "TL;DR" : "Key Points";
@@ -59,11 +62,15 @@ export const ChromeAiFeaturesToolbar: FC<ChromeAiFeaturesToolbarProps> = ({
 
   const handleRetry = useCallback(() => {
     const container = document.getElementById(contentContainerId);
-    if (!container) return;
+    if (!container) {
+      return;
+    }
     summarize(activeSummaryType, container.innerText);
   }, [contentContainerId, activeSummaryType, summarize]);
 
-  if (!isAvailable) return null;
+  if (!isAvailable) {
+    return null;
+  } 
 
   return (
     <>
