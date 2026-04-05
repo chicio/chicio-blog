@@ -7,7 +7,8 @@ import { TerminalProgressBar } from "@/components/design-system/molecules/termin
 import { useReducedMotions } from "@/components/design-system/utils/hooks/use-reduced-motions";
 import { MotionDiv } from "@/components/design-system/molecules/animation/motion-div";
 import { Variants } from "framer-motion";
-import { FC, useEffect } from "react";
+import { Markdown } from "@/components/sections/chat/components/markdown";
+import { FC, useEffect, useId } from "react";
 
 const modalVariants: Variants = {
     hidden: { opacity: 0 },
@@ -65,19 +66,18 @@ export const ChromeSummaryModal: FC<ChromeSummaryModalProps> = ({
                     />
                 )}
 
-                {status === "loading" && (
+                {(status === "loading" || (status === "streaming" && content.length === 0)) && (
                     <div className="flex flex-col items-center gap-3 py-8">
-                        <Loader size="lg" />
-                        <p className="text-sm text-primary-text">Generating summary...</p>
+                        <Loader size="lg" label="Generating summary" />
                     </div>
                 )}
 
-                {(status === "streaming" || status === "done") && (
+                {(status === "streaming" || status === "done") && content.length > 0 && (
                     <div
                         aria-live="polite"
-                        className="w-full whitespace-pre-wrap text-primary-text leading-relaxed"
+                        className="w-full text-primary-text leading-relaxed"
                     >
-                        {content}
+                        <Markdown content={content} id="chrome-ai-summary" />
                     </div>
                 )}
 

@@ -31,7 +31,7 @@ export function useChromeSummarize(): UseChromeSummarizeReturn {
             if (deviceMemory < 8) return;
 
             try {
-                const availability = await Summarizer.availability();
+                const availability = await self.Summarizer.availability();
                 setIsAvailable(availability !== "unavailable");
             } catch {
                 setIsAvailable(false);
@@ -71,10 +71,11 @@ export function useChromeSummarize(): UseChromeSummarizeReturn {
                 setStatus("downloading");
                 setDownloadProgress(0);
 
-                summarizer = await Summarizer.create({
+                summarizer = await self.Summarizer.create({
                     type,
                     format: "markdown",
                     length: "long",
+                    outputLanguage: "en",
                     monitor(m: AICreateMonitor) {
                         m.addEventListener("downloadprogress", ((e: DownloadProgressEvent) => {
                             setDownloadProgress(Math.round(e.loaded * 100));
@@ -87,19 +88,23 @@ export function useChromeSummarize(): UseChromeSummarizeReturn {
             setStatus("loading");
             setResult("");
 
-            const stream = summarizer.summarizeStreaming(text, {
-                signal: controller.signal,
-            });
+            const stream = summarizer.summarizeStreaming(text);
 
             setStatus("streaming");
             let fullText = "";
 
             for await (const chunk of stream) {
                 if (controller.signal.aborted) return;
-                fullText = chunk;
-                setResult(fullText);
+                const text = typeof chunk === "string" ? chunk : String(chunk);
+                console.log("[ChromeAI] chunk length:", text.length);
+                if (text.length > 0) {
+                    fullText += text;
+                    console.log("[ChromeAI] fullText length:", fullText);
+                    setResult(fullText);
+                }
             }
 
+            console.log("[ChromeAI] done, result length:", fullText.length);
             cacheRef.current.set(type, fullText);
             setStatus("done");
         } catch (error) {

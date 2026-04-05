@@ -2,6 +2,7 @@ interface AISummarizerOptions {
     type?: "tldr" | "key-points" | "teaser" | "headline";
     format?: "markdown" | "plain-text";
     length?: "short" | "medium" | "long";
+    outputLanguage?: string;
     monitor?: (monitor: AICreateMonitor) => void;
 }
 
@@ -25,3 +26,7 @@ interface SummarizerStatic {
 }
 
 declare const Summarizer: SummarizerStatic;
+
+interface WindowOrWorkerGlobalScope {
+    Summarizer: SummarizerStatic;
+}
