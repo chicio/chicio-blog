@@ -9,12 +9,13 @@ const sizeClasses = {
 interface LoaderProps {
     size?: "sm" | "md" | "lg";
     className?: string;
+    label?: string;
 }
 
-export const Loader: FC<LoaderProps> = ({ size = "md", className }) => (
+export const Loader: FC<LoaderProps> = ({ size = "md", className, label = "Loading" }) => (
     <div
         role="status"
-        aria-label="Loading summary"
+        aria-label={label}
         className={`${sizeClasses[size]} animate-spin rounded-full border-accent border-t-transparent${className ? ` ${className}` : ""}`}
     />
 );

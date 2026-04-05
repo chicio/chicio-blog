@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useDeviceCapabilities } from "@/components/design-system/utils/hooks/use-device-capabilities";
 
-type SummaryType = "tldr" | "key-points";
+export type SummaryType = "tldr" | "key-points";
 type SummaryStatus = "idle" | "downloading" | "loading" | "streaming" | "done" | "error";
 
 interface UseChromeSummarizeReturn {

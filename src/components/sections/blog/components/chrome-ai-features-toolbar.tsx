@@ -7,10 +7,8 @@ import { Button } from "@/components/design-system/atoms/buttons/button";
 import { StandardExternalLinkWithTracking } from "@/components/design-system/atoms/links/standard-external-link-with-tracking";
 import { tracking } from "@/types/configuration/tracking";
 import { trackWith } from "@/lib/tracking/tracking";
-import { useChromeSummarize } from "../hooks/use-chrome-summarize";
+import { useChromeSummarize, SummaryType } from "../hooks/use-chrome-summarize";
 import { ChromeSummaryModal } from "./chrome-summary-modal";
-
-type SummaryType = "tldr" | "key-points";
 
 interface ChromeAiFeaturesToolbarProps {
     contentContainerId: string;
