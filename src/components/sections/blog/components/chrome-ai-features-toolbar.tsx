@@ -7,10 +7,10 @@ import { Button } from "@/components/design-system/atoms/buttons/button";
 import { StandardExternalLinkWithTracking } from "@/components/design-system/atoms/links/standard-external-link-with-tracking";
 import { tracking } from "@/types/configuration/tracking";
 import { trackWith } from "@/lib/tracking/tracking";
-import { GlassmorphismBackground } from "@/components/design-system/atoms/effects/glassmorphism-background";
 import { useChromeSummarize, SummaryType } from "../hooks/use-chrome-summarize";
 import { ChromeSummaryModal } from "./chrome-summary-modal";
 import { useGlassmorphism } from "@/components/design-system/utils/hooks/use-glassmorphism";
+import { SiProbot } from "react-icons/si";
 
 interface ChromeAiFeaturesToolbarProps {
   contentContainerId: string;
@@ -69,7 +69,7 @@ export const ChromeAiFeaturesToolbar: FC<ChromeAiFeaturesToolbarProps> = ({
     <>
       <div className={`${glassmorphismClass} p-2`}>
         <Accordion
-          title={<h5>AI features</h5>}
+          title={<h5 className="flex gap-3 items-center"> <SiProbot className="inline text-shadow-md" />AI features</h5>}
           onToggle={() => {
             trackWith({
               action: tracking.action.toggle_chrome_ai_features,

@@ -23,12 +23,12 @@ export function useChromeSummarize(): UseChromeSummarizeReturn {
     const { deviceMemory } = useDeviceCapabilities();
     const abortControllerRef = useRef<AbortController | null>(null);
     const summarizersRef = useRef<Map<SummaryType, AISummarizer>>(new Map());
-    const cacheRef = useRef<Map<SummaryType, string>>(new Map());
 
     useEffect(() => {
         const checkAvailability = async () => {
-            if (!("Summarizer" in self)) return;
-            if (deviceMemory < 8) return;
+            if (!("Summarizer" in self) || (deviceMemory !== undefined && deviceMemory < 8)) {
+                return;
+            }
 
             try {
                 const availability = await self.Summarizer.availability();
@@ -47,20 +47,18 @@ export function useChromeSummarize(): UseChromeSummarizeReturn {
     }, []);
 
     const reset = useCallback(() => {
-        abort();
-        setStatus("idle");
+        setStatus((current) => {
+            if (current === "downloading") {
+                return current;
+            } 
+            abort();
+
+            return "idle";
+        });
         setResult("");
-        setDownloadProgress(0);
     }, [abort]);
 
     const summarize = useCallback(async (type: SummaryType, text: string) => {
-        const cached = cacheRef.current.get(type);
-        if (cached) {
-            setResult(cached);
-            setStatus("done");
-            return;
-        }
-
         abort();
         const controller = new AbortController();
         abortControllerRef.current = controller;
@@ -96,16 +94,12 @@ export function useChromeSummarize(): UseChromeSummarizeReturn {
             for await (const chunk of stream) {
                 if (controller.signal.aborted) return;
                 const text = typeof chunk === "string" ? chunk : String(chunk);
-                console.log("[ChromeAI] chunk length:", text.length);
                 if (text.length > 0) {
                     fullText += text;
-                    console.log("[ChromeAI] fullText length:", fullText);
                     setResult(fullText);
                 }
             }
 
-            console.log("[ChromeAI] done, result length:", fullText.length);
-            cacheRef.current.set(type, fullText);
             setStatus("done");
         } catch (error) {
             if ((error as Error).name === "AbortError") return;
