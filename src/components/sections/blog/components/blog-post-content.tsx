@@ -10,6 +10,7 @@ import { PostAuthors } from "./post-authors";
 import { PostMeta } from "./post-meta";
 import { PostTags } from "./post-tags";
 import { RecentPosts } from "./read-next";
+import { ChromeAiFeaturesToolbar } from "./chrome-ai-features-toolbar";
 
 interface PostProps {
   post: Content;
@@ -41,6 +42,7 @@ export const BlogPostContent: FC<PostProps> = async ({ post }) => {
               date={frontmatter.date.formatted}
               readingTime={readingTime.text}
             />
+            <ChromeAiFeaturesToolbar contentContainerId="reading-content-container" />
           </>
         }
         afterContent={
