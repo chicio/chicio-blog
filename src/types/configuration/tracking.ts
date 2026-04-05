@@ -47,7 +47,11 @@ export const tracking = {
     open_videogame_game: "open_videogame_game",
     open_videogame_console: "open_videogame_console",
     open_videogame_games: "open_videogame_games",
-    open_videogame_collection: "open_videogame_collection",},
+    open_videogame_collection: "open_videogame_collection",
+    toggle_chrome_ai_features: "toggle_chrome_ai_features",
+    chrome_ai_tldr: "chrome_ai_tldr",
+    chrome_ai_key_points: "chrome_ai_key_points",
+    open_chrome_ai_docs: "open_chrome_ai_docs",},
   category: {
     home: "home",
     contact: "contact",
