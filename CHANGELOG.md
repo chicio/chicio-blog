@@ -1,5 +1,26 @@
 # Changelog
 
+## [3.16.0](https://github.com/chicio/chicio-blog/compare/v3.15.0...v3.16.0) (2026-04-06)
+
+### Features
+
+* **capabilities:** Chrome AI features ([#266](https://github.com/chicio/chicio-blog/issues/266)) ([ffc84e6](https://github.com/chicio/chicio-blog/commit/ffc84e676a6345c579988eb3da2fd07f575c6f50))
+* **content:** :fire: remove content waiting for new stuff ([f727862](https://github.com/chicio/chicio-blog/commit/f727862c5d0f77bd11b998a7d215c50a438b1f7e))
+* **content:** :sparkles: added images for other games ([06c1a1d](https://github.com/chicio/chicio-blog/commit/06c1a1d91e18b345689426ac08e368fb43875cd1))
+* **content:** :sparkles: added new game lumines arise ([2a5b0ec](https://github.com/chicio/chicio-blog/commit/2a5b0ec29859667869d6362265e4cd06d6e19ff8))
+* **content:** :sparkles: DSA exercises pt2 ([#248](https://github.com/chicio/chicio-blog/issues/248)) ([84aec13](https://github.com/chicio/chicio-blog/commit/84aec13092b405d1a21960b27a3f1f518cf288b9))
+* **content:** :sparkles: games carousel automatization ([75e5dec](https://github.com/chicio/chicio-blog/commit/75e5dec8a41decc4de498b5d79e3980ed6da6e7a))
+* **content:** :sparkles: new blog post ([af74c32](https://github.com/chicio/chicio-blog/commit/af74c3244a203677ddf285b5e2565d793acbc771))
+* **content:** :zap: k-way-merge ([68cc3b1](https://github.com/chicio/chicio-blog/commit/68cc3b10442e59f29235e07d0637bdb2fe14d5b6))
+* **content:** :zap: new stuff for videogames section ([4df8c0f](https://github.com/chicio/chicio-blog/commit/4df8c0fd6e799216d66903b251d2f4d57434f334))
+* **content:** ✨ multiple dsa topics ([#250](https://github.com/chicio/chicio-blog/issues/250)) ([2906a20](https://github.com/chicio/chicio-blog/commit/2906a20a1cb94a17693dbc289883f4da10750616))
+* **content:** ✨ multiple dsa topics pt2 ([#252](https://github.com/chicio/chicio-blog/issues/252)) ([67ffc1b](https://github.com/chicio/chicio-blog/commit/67ffc1b61eda2b8856f804deda8d27eea908ac0c))
+
+### Bug Fixes
+
+* **capabilities:** :bug: markdown component is now a design system typography element, and is used for all markdown content ([b8d4ae2](https://github.com/chicio/chicio-blog/commit/b8d4ae2b8665fb4186903b9d77f7d7a3018053d1))
+* **content:** :bug: fix wrong exercise content ([82c3b4b](https://github.com/chicio/chicio-blog/commit/82c3b4b9124e9028179ae3409cb2373ba641f04b))
+
 ## [3.15.0](https://github.com/chicio/chicio-blog/compare/v3.14.0...v3.15.0) (2026-03-15)
 
 ### Features
