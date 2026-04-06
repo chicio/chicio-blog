@@ -20,6 +20,8 @@ metadata:
         - /images/videogames/console/nintendo-entertainment-system/game/four-player-tennis/2.jpg
 ---
 
+import { FaGamepad } from "react-icons/fa";
+import { ImageCarousel } from "@/components/design-system/organism/image-carousel";
 import { MDXTitleWithIcon } from "@/components/sections/videogames/components/mdx-title-with-icon";
 import { FaLightbulb } from "react-icons/fa";
 import { FaStar } from "react-icons/fa";
@@ -27,3 +29,13 @@ import { FaStar } from "react-icons/fa";
 ## <MDXTitleWithIcon icon={<FaLightbulb className="text-shadow-lg" />}>Trivia & Fun Facts</MDXTitleWithIcon>
 
 - It is one of the very few games on the NES to support true four-player simultaneous gameplay
+
+## <MDXTitleWithIcon icon={<FaGamepad className="text-shadow-lg" />}>Gameplay</MDXTitleWithIcon>
+
+<ImageCarousel
+    images={[
+        "/images/videogames/console/nintendo-entertainment-system/game/four-player-tennis/gameplay/1.jpg",
+    ]}
+    alt="Four Player Tennis gameplay"
+    caption="IGDB"
+/>

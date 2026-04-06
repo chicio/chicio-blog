@@ -17,7 +17,9 @@ Screenshot sources (in priority order):
   2. Wikimedia Commons (free-licensed images, downloaded into gameplay/ with next available number)
   3. IGDB API (requires IGDB_CLIENT_ID and IGDB_CLIENT_SECRET in .env.others; auto-generates access token, optional fallback)
 
-If fewer than --max-images candidates are found the script exits with an error.
+The script collects up to --max-images candidates.
+If fewer are available, it still creates the carousel with the found images.
+It exits with an error only if no candidate is found.
 
 Usage:
   python3 scripts/add-game-screenshots.py --game-folder <path>
@@ -619,13 +621,16 @@ def main() -> int:
     )
     print(f"✅ Selected: {len(selected)}/{args.max_images}")
 
-    if len(selected) < args.max_images:
+    if len(selected) == 0:
         print(
-            f"❌ Only found {len(selected)} candidates for {key}. "
+            f"❌ No candidates found for {key}. "
             "Add local gameplay images or check Wikimedia Commons / IGDB availability.",
             file=sys.stderr,
         )
         return 1
+
+    if len(selected) < args.max_images:
+        print(f"⚠️  Proceeding with {len(selected)} images (max requested: {args.max_images}).")
 
     try:
         print(f"⬇️  Persisting screenshots...")

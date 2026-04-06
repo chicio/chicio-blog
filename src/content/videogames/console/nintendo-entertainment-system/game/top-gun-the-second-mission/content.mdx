@@ -22,20 +22,26 @@ metadata:
         - /images/videogames/console/nintendo-entertainment-system/game/top-gun-the-second-mission/media/4.jpg
 ---
 
+import { FaGamepad } from "react-icons/fa";
+import { ImageCarousel } from "@/components/design-system/organism/image-carousel";
 import { MDXTitleWithIcon } from "@/components/sections/videogames/components/mdx-title-with-icon";
 import { FaLightbulb } from "react-icons/fa";
 import { FaStar } from "react-icons/fa";
 
-## <MDXTitleWithIcon icon={<FaStar className="text-shadow-lg" />}>My Review</MDXTitleWithIcon>
-
-This was one of the first games I got after purchasing the console. Just like [RoboCop](/videogames/console/nintendo-entertainment-system/game/robocop), this game  
-made me sweat a lot, especially in the early levels. I still remember the frustration of trying to land the plane on the platform without crashing :laughing:.  
-
-![Top Gun: The Second Mission gameplay](/images/videogames/console/nintendo-entertainment-system/game/top-gun-the-second-mission/gameplay/1.png)
-
-There is both a career mode, where you have to complete a series of missions, and a multiplayer mode to challenge a friend.  
-For its time, it was technically impressive, with detailed graphics and engaging gameplay.
-
 ## <MDXTitleWithIcon icon={<FaLightbulb className="text-shadow-lg" />}>Trivia & Fun Facts</MDXTitleWithIcon>
 
 - The "Unsolvable" Ending: the European version contains a hidden Congratulations Screen that only appears if you get a "Game Over" after scoring at least 50,000 points and by pressing a specific buttons combination.
+
+## <MDXTitleWithIcon icon={<FaGamepad className="text-shadow-lg" />}>Gameplay</MDXTitleWithIcon>
+
+<ImageCarousel
+    images={[
+        "/images/videogames/console/nintendo-entertainment-system/game/top-gun-the-second-mission/gameplay/1.png",
+        "/images/videogames/console/nintendo-entertainment-system/game/top-gun-the-second-mission/gameplay/2.jpg",
+        "/images/videogames/console/nintendo-entertainment-system/game/top-gun-the-second-mission/gameplay/3.jpg",
+        "/images/videogames/console/nintendo-entertainment-system/game/top-gun-the-second-mission/gameplay/4.jpg",
+        "/images/videogames/console/nintendo-entertainment-system/game/top-gun-the-second-mission/gameplay/5.jpg",
+    ]}
+    alt="Top Gun: The Second Mission gameplay"
+    caption="Personal Collection · IGDB"
+/>

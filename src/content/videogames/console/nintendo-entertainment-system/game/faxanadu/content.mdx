@@ -21,6 +21,8 @@ metadata:
         - /images/videogames/console/nintendo-entertainment-system/game/faxanadu/media/3.jpg
 ---
 
+import { FaGamepad } from "react-icons/fa";
+import { ImageCarousel } from "@/components/design-system/organism/image-carousel";
 import { MDXTitleWithIcon } from "@/components/sections/videogames/components/mdx-title-with-icon";
 import { FaLightbulb } from "react-icons/fa";
 import { FaStar } from "react-icons/fa";
@@ -30,3 +32,17 @@ import { FaStar } from "react-icons/fa";
 - The game doesn't have like most NES a way to save the game, so it utilizes a password system. Passwords, or "mantras" as they are known in the game, can be 
 obtained from church-dwelling Gurus. Gurus also bestow ranks to the hero when he meets certain experience totals; these determine the amounts of experience and 
 gold a player will possess upon resuming a game via password.
+
+## <MDXTitleWithIcon icon={<FaGamepad className="text-shadow-lg" />}>Gameplay</MDXTitleWithIcon>
+
+<ImageCarousel
+    images={[
+        "/images/videogames/console/nintendo-entertainment-system/game/faxanadu/gameplay/1.png",
+        "/images/videogames/console/nintendo-entertainment-system/game/faxanadu/gameplay/2.jpg",
+        "/images/videogames/console/nintendo-entertainment-system/game/faxanadu/gameplay/3.jpg",
+        "/images/videogames/console/nintendo-entertainment-system/game/faxanadu/gameplay/4.jpg",
+        "/images/videogames/console/nintendo-entertainment-system/game/faxanadu/gameplay/5.jpg",
+    ]}
+    alt="Faxanadu gameplay"
+    caption="Personal Collection · IGDB"
+/>

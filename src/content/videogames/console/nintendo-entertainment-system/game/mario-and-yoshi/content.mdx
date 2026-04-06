@@ -22,6 +22,8 @@ metadata:
         - /images/videogames/console/nintendo-entertainment-system/game/mario-and-yoshi/media/4.jpg
 ---
 
+import { FaGamepad } from "react-icons/fa";
+import { ImageCarousel } from "@/components/design-system/organism/image-carousel";
 import { MDXTitleWithIcon } from "@/components/sections/videogames/components/mdx-title-with-icon";
 import { FaLightbulb } from "react-icons/fa";
 import { FaStar } from "react-icons/fa";
@@ -29,3 +31,16 @@ import { FaStar } from "react-icons/fa";
 ## <MDXTitleWithIcon icon={<FaLightbulb className="text-shadow-lg" />}>Trivia & Fun Facts</MDXTitleWithIcon>
 
 - The game is simply named "Yoshi" in Japan
+
+## <MDXTitleWithIcon icon={<FaGamepad className="text-shadow-lg" />}>Gameplay</MDXTitleWithIcon>
+
+<ImageCarousel
+    images={[
+        "/images/videogames/console/nintendo-entertainment-system/game/mario-and-yoshi/gameplay/1.png",
+        "/images/videogames/console/nintendo-entertainment-system/game/mario-and-yoshi/gameplay/2.jpg",
+        "/images/videogames/console/nintendo-entertainment-system/game/mario-and-yoshi/gameplay/3.jpg",
+        "/images/videogames/console/nintendo-entertainment-system/game/mario-and-yoshi/gameplay/4.jpg",
+    ]}
+    alt="Mario & Yoshi gameplay"
+    caption="Personal Collection · IGDB"
+/>
