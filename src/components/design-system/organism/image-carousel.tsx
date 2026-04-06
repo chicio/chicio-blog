@@ -107,10 +107,12 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   if (images.length === 1) {
+    const singleImage = images[0];
+
     return (
       <div className={className}>
         <ImageGlow
-          src={images[0]}
+          src={singleImage}
           alt={alt}
           width={800}
           height={450}
@@ -124,6 +126,7 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
             currentIndex={0}
             onClose={() => setIsFullscreen(false)}
             alt={alt}
+            caption={caption}
           />
         )}
       </div>
@@ -203,6 +206,7 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
           onClose={() => setIsFullscreen(false)}
           onNavigate={setCurrentIndex}
           alt={alt}
+          caption={caption}
         />
       )}
     </div>
@@ -215,6 +219,7 @@ interface FullscreenModalProps {
   onClose: () => void;
   onNavigate?: (index: number) => void;
   alt: string;
+  caption?: string;
 }
 
 const FullscreenModal: FC<FullscreenModalProps> = ({
@@ -223,24 +228,22 @@ const FullscreenModal: FC<FullscreenModalProps> = ({
   onClose,
   onNavigate,
   alt,
+  caption,
 }) => {
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
-  const [direction, setDirection] = useState(0);
-    const modalRef = useRef<HTMLDivElement>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     modalRef.current?.focus();
   }, []);
 
   const goToPrevious = () => {
-    setDirection(-1);
     const newIndex = currentIndex === 0 ? images.length - 1 : currentIndex - 1;
     setCurrentIndex(newIndex);
     onNavigate?.(newIndex);
   };
 
   const goToNext = () => {
-    setDirection(1);
     const newIndex = currentIndex === images.length - 1 ? 0 : currentIndex + 1;
     setCurrentIndex(newIndex);
     onNavigate?.(newIndex);
@@ -323,7 +326,6 @@ const FullscreenModal: FC<FullscreenModalProps> = ({
               images={images}
               currentIndex={currentIndex}
               onSelect={(index) => {
-                setDirection(index > currentIndex ? 1 : -1);
                 setCurrentIndex(index);
                 onNavigate?.(index);
               }}

@@ -21,25 +21,27 @@ metadata:
         - /images/videogames/console/nintendo-entertainment-system/game/super-mario-bros-3/media/3.jpg
 ---
 
+import { FaGamepad } from "react-icons/fa";
+import { ImageCarousel } from "@/components/design-system/organism/image-carousel";
 import { MDXTitleWithIcon } from "@/components/sections/videogames/components/mdx-title-with-icon";
 import { FaLightbulb } from "react-icons/fa";
 import { FaStar } from "react-icons/fa";
-
-## <MDXTitleWithIcon icon={<FaStar className="text-shadow-lg" />}>My Review</MDXTitleWithIcon>
-
-Super Mario Bros. 3 is the best-selling game for the NES, with over 17 million copies sold worldwide. It is also one of the best-selling video games of all time.  
-It was the second platformer I ever played in my life after Super Mario Land 2 for the Gameboy, and the first I played on a home console.  
-
-This game came to me bundled with the console when I bought it from my cousin.  
-For the time when it was released, the game was technically impressive, an incredible leap compared to the first two installments (which, unfortunately, I do not yet own, but I have played on other platforms).  
-
-![Super Mario Bros. 3 gameplay](/images/videogames/console/nintendo-entertainment-system/game/super-mario-bros-3/gameplay/1.png)
-
-The gameplay is solid, with well-crafted level design and a variety of power-ups that make the game fun and challenging.  
-The game world is vast and full of secrets to discover, with a difficulty level that is well balanced and steadily increases over time.  
-The game is composed of 8 worlds to explore, each with a unique theme and a series of levels to complete.
 
 ## <MDXTitleWithIcon icon={<FaLightbulb className="text-shadow-lg" />}>Trivia & Fun Facts</MDXTitleWithIcon>
 
 - It doesn't matter which chest you open in a mushroom house, because the item you will receive is predetermined by the game (as soon as you enter). So, you can open any chest and still get the same item.
 - The warp whistle is a famous item in the game that allows players to skip levels. There are three warp whistles in total. If you use one in the warp zone, you can jump directly to world 8, the final world of the game.
+
+## <MDXTitleWithIcon icon={<FaGamepad className="text-shadow-lg" />}>Gameplay</MDXTitleWithIcon>
+
+<ImageCarousel
+    images={[
+        "/images/videogames/console/nintendo-entertainment-system/game/super-mario-bros-3/gameplay/1.png",
+        "/images/videogames/console/nintendo-entertainment-system/game/super-mario-bros-3/gameplay/2.jpg",
+        "/images/videogames/console/nintendo-entertainment-system/game/super-mario-bros-3/gameplay/3.jpg",
+        "/images/videogames/console/nintendo-entertainment-system/game/super-mario-bros-3/gameplay/4.jpg",
+        "/images/videogames/console/nintendo-entertainment-system/game/super-mario-bros-3/gameplay/5.jpg",
+    ]}
+    alt="Super Marios Bros. 3 gameplay"
+    caption="Personal Collection · IGDB"
+/>
