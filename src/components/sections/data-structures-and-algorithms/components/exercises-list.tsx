@@ -4,8 +4,9 @@ import {
 } from "@/lib/content/data-structures-and-algorithms";
 import { Content } from "@/types/content/content";
 import { FC } from "react";
+import { Markdown } from "../../../design-system/atoms/typography/markdown";
 
-export const Exercises: FC = () => {
+export const ExercisesList: FC = () => {
   const exercises = getAllExercises();
   const topics = getAllDataStructuresAndAlgorithmsTopics();
 
@@ -45,7 +46,9 @@ export const Exercises: FC = () => {
                           <strong>{exercise.frontmatter.title}</strong>
                         </a>
                       </td>
-                      <td>{exercise.frontmatter.description}</td>
+                      <td>
+                        <Markdown content={exercise.frontmatter.description} id={`${topicKey}-description`} />
+                      </td>
                     </tr>
                   ))}
                 </tbody>

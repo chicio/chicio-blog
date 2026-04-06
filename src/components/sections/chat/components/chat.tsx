@@ -12,7 +12,7 @@ import { useFabrizioChat } from "../hooks/useFabrizioChat";
 import { ChatInput } from "./chat-input";
 import { ChatMessage } from "./chat-message";
 import { ChatWelcome } from "./chat-welcome";
-import { Markdown } from "./markdown";
+import { Markdown } from "../../../design-system/atoms/typography/markdown";
 
 export const Chat: FC = () => {
   const {

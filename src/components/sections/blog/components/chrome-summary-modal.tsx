@@ -7,7 +7,7 @@ import { TerminalProgressBar } from "@/components/design-system/molecules/termin
 import { useReducedMotions } from "@/components/design-system/utils/hooks/use-reduced-motions";
 import { MotionDiv } from "@/components/design-system/molecules/animation/motion-div";
 import { Variants } from "framer-motion";
-import { Markdown } from "@/components/sections/chat/components/markdown";
+import { Markdown } from "@/components/design-system/atoms/typography/markdown";
 import { FC, useEffect, useId } from "react";
 
 const modalVariants: Variants = {

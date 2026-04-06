@@ -1,19 +1,21 @@
 ---
 title: "Max Consecutive Ones III"
-description: "Max Consecutive Ones III"
+description: "Given a binary array `nums` and an integer `k`, return the **maximum number of consecutive `1`s** in the array after flipping at most `k` zeros to ones."
 date: 2026-03-16
 image: /images/posts/data-structures-and-algorithms-featured.png
 tags: [sliding window, data structures, algorithms]
 authors: [fabrizio_duroni]
 metadata:
   technique: "Dynamic Sliding Window"
-  leetcodeUrl: ""
+  leetcodeUrl: "https://leetcode.com/problems/max-consecutive-ones-iii/"
 ---
+
 # Max Consecutive Ones III
 
-Leetcode Problem 1004: [Max Consecutive Ones III](description/)
+Leetcode Problem 1004: [Max Consecutive Ones III](https://leetcode.com/problems/max-consecutive-ones-iii/)
 
 ## Problem Summary
+
 Given a binary array `nums` and an integer `k`, return the **maximum number of consecutive `1`s** in the array after flipping at most `k` zeros to ones.
 
 **Constraints:**
@@ -22,9 +24,12 @@ Given a binary array `nums` and an integer `k`, return the **maximum number of c
 - `k` is a non-negative integer up to the length of the array.
 
 ## Techniques
-- TODO
+
+- sliding window
+- prefix sum
 
 ## Solution
+
 ```ts
 function longestOnes(nums: number[], k: number): number {
     let prefixSumForCountingZero = 0
@@ -44,6 +49,4 @@ function longestOnes(nums: number[], k: number): number {
 
     return maxLength
 };
-
-console.log(longestOnes([0,0,1,1,0,0,1,1,1,0,1,1,0,0,0,1,1,1,1], 3))
 ```

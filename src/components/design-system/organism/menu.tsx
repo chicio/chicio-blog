@@ -5,7 +5,7 @@ import {
   SearchHits,
 } from "@/components/design-system/molecules/menu/search";
 import { useSearch } from "@/components/design-system/utils/hooks/use-search";
-import { whiteRabbitEasterEgg } from "@/components/sections/easter-eggs/white-rabbit";
+import { whiteRabbitEasterEgg } from "@/components/sections/easter-eggs/components/white-rabbit";
 import { slugs } from "@/types/configuration/slug";
 import { tracking } from "@/types/configuration/tracking";
 import { AnimatePresence, Variants } from "framer-motion";
@@ -216,7 +216,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
   const NeoRoomEasterEgg =
     startSearch && search.type === "easterEgg"
       ? dynamic(
-          () => import("@/components/sections/easter-eggs/neo-room-easter-egg"),
+          () => import("@/components/sections/easter-eggs/components/neo-room-easter-egg"),
           { ssr: false },
         )
       : null;
