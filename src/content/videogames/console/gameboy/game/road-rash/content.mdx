@@ -18,3 +18,18 @@ metadata:
     gallery:
         - /images/videogames/console/gameboy/game/road-rash/media/1.jpeg
 ---
+import { FaGamepad } from "react-icons/fa";
+import { MDXTitleWithIcon } from "@/components/sections/videogames/components/mdx-title-with-icon";
+import { ImageCarousel } from "@/components/design-system/organism/image-carousel";
+
+## <MDXTitleWithIcon icon={<FaGamepad className="text-shadow-lg" />}>Gameplay</MDXTitleWithIcon>
+
+<ImageCarousel
+    images={[
+        "/images/videogames/console/gameboy/game/road-rash/gameplay/1.jpg",
+        "/images/videogames/console/gameboy/game/road-rash/gameplay/2.jpg",
+        "/images/videogames/console/gameboy/game/road-rash/gameplay/3.jpg",
+    ]}
+    alt="Road Rash gameplay"
+    caption="IGDB"
+/>

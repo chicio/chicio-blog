@@ -20,3 +20,18 @@ metadata:
         - /images/videogames/console/gameboy/game/donkey-kong/media/2.jpeg
         - /images/videogames/console/gameboy/game/donkey-kong/media/3.jpeg
 ---
+import { FaGamepad } from "react-icons/fa";
+import { MDXTitleWithIcon } from "@/components/sections/videogames/components/mdx-title-with-icon";
+import { ImageCarousel } from "@/components/design-system/organism/image-carousel";
+
+## <MDXTitleWithIcon icon={<FaGamepad className="text-shadow-lg" />}>Gameplay</MDXTitleWithIcon>
+
+<ImageCarousel
+    images={[
+        "/images/videogames/console/gameboy/game/donkey-kong/gameplay/1.jpg",
+        "/images/videogames/console/gameboy/game/donkey-kong/gameplay/2.jpg",
+        "/images/videogames/console/gameboy/game/donkey-kong/gameplay/3.jpg",
+    ]}
+    alt="Donkey Kong gameplay"
+    caption="IGDB"
+/>

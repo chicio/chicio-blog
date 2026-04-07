@@ -23,3 +23,18 @@ metadata:
         - /images/videogames/console/playstation1/game/final-fantasy-7/media/5.jpeg
         - /images/videogames/console/playstation1/game/final-fantasy-7/media/6.jpeg
 ---
+import { FaGamepad } from "react-icons/fa";
+import { MDXTitleWithIcon } from "@/components/sections/videogames/components/mdx-title-with-icon";
+import { ImageCarousel } from "@/components/design-system/organism/image-carousel";
+
+## <MDXTitleWithIcon icon={<FaGamepad className="text-shadow-lg" />}>Gameplay</MDXTitleWithIcon>
+
+<ImageCarousel
+    images={[
+        "/images/videogames/console/playstation1/game/final-fantasy-7/gameplay/1.jpg",
+        "/images/videogames/console/playstation1/game/final-fantasy-7/gameplay/2.jpg",
+        "/images/videogames/console/playstation1/game/final-fantasy-7/gameplay/3.jpg",
+    ]}
+    alt="Final Fantasy VII gameplay"
+    caption="IGDB"
+/>

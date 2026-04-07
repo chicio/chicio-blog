@@ -24,3 +24,18 @@ metadata:
         - /images/videogames/console/playstation3/game/final-fantasy-13-2/media/6.jpeg
         - /images/videogames/console/playstation3/game/final-fantasy-13-2/media/7.jpeg
 ---
+import { FaGamepad } from "react-icons/fa";
+import { MDXTitleWithIcon } from "@/components/sections/videogames/components/mdx-title-with-icon";
+import { ImageCarousel } from "@/components/design-system/organism/image-carousel";
+
+## <MDXTitleWithIcon icon={<FaGamepad className="text-shadow-lg" />}>Gameplay</MDXTitleWithIcon>
+
+<ImageCarousel
+    images={[
+        "/images/videogames/console/playstation3/game/final-fantasy-13-2/gameplay/1.jpg",
+        "/images/videogames/console/playstation3/game/final-fantasy-13-2/gameplay/2.jpg",
+        "/images/videogames/console/playstation3/game/final-fantasy-13-2/gameplay/3.jpg",
+    ]}
+    alt="Final Fantasy XIII-2 gameplay"
+    caption="IGDB"
+/>

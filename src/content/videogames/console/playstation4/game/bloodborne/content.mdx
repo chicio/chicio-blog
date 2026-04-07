@@ -18,3 +18,18 @@ metadata:
     gallery:
         - /images/videogames/console/playstation4/game/bloodborne/cover.jpg
 ---
+import { FaGamepad } from "react-icons/fa";
+import { MDXTitleWithIcon } from "@/components/sections/videogames/components/mdx-title-with-icon";
+import { ImageCarousel } from "@/components/design-system/organism/image-carousel";
+
+## <MDXTitleWithIcon icon={<FaGamepad className="text-shadow-lg" />}>Gameplay</MDXTitleWithIcon>
+
+<ImageCarousel
+    images={[
+        "/images/videogames/console/playstation4/game/bloodborne/gameplay/1.jpg",
+        "/images/videogames/console/playstation4/game/bloodborne/gameplay/2.jpg",
+        "/images/videogames/console/playstation4/game/bloodborne/gameplay/3.jpg",
+    ]}
+    alt="Bloodborne gameplay"
+    caption="IGDB"
+/>

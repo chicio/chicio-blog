@@ -21,3 +21,18 @@ metadata:
         - /images/videogames/console/playstation4/game/metal-gear-solid-5-the-phantom-pain/media/3.jpeg
         - /images/videogames/console/playstation4/game/metal-gear-solid-5-the-phantom-pain/media/4.jpeg
 ---
+import { FaGamepad } from "react-icons/fa";
+import { MDXTitleWithIcon } from "@/components/sections/videogames/components/mdx-title-with-icon";
+import { ImageCarousel } from "@/components/design-system/organism/image-carousel";
+
+## <MDXTitleWithIcon icon={<FaGamepad className="text-shadow-lg" />}>Gameplay</MDXTitleWithIcon>
+
+<ImageCarousel
+    images={[
+        "/images/videogames/console/playstation4/game/metal-gear-solid-5-the-phantom-pain/gameplay/1.jpg",
+        "/images/videogames/console/playstation4/game/metal-gear-solid-5-the-phantom-pain/gameplay/2.jpg",
+        "/images/videogames/console/playstation4/game/metal-gear-solid-5-the-phantom-pain/gameplay/3.jpg",
+    ]}
+    alt="Metal Gear Solid 5 The Phantom Pain gameplay"
+    caption="IGDB"
+/>

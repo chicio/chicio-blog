@@ -2,15 +2,22 @@
 """
 add-game-screenshots.py
 
-Adds a "Game Screenshots" carousel section to a single game MDX file.
+Adds or recreates a "Game Screenshots" carousel section for one game or in batch.
 
-For the given game folder:
+Single game mode (--game-folder):
   1. Collects screenshot candidates (priority: local gameplay/ folder → Wikimedia Commons → IGDB API)
   2. If the gameplay/ folder already has enough images, they are used as-is
   3. Missing images are downloaded from Wikimedia Commons or IGDB into gameplay/
-     and normalised to JPEG 1280px (via macOS sips)
+      and normalised to JPEG 1280px (via macOS sips)
   4. Updates src/content/videogames/console/<console>/game/<game>/content.mdx
-     adding (or replacing) the ## Gameplay section with an ImageCarousel pointing at the images in gameplay/
+      adding (or replacing) the ## Gameplay section with an ImageCarousel pointing at the images in gameplay/
+
+Batch mode (--all-games):
+  1. Scans src/content/videogames/console/*/game/*/content.mdx
+  2. Skips games that already have a Gameplay carousel (unless --force is passed)
+  3. Processes games one by one and continues on errors
+  4. Waits a random delay between processed games (default: 30-120s)
+      to avoid aggressive request bursts; delay is skipped in --dry-run mode
 
 Screenshot sources (in priority order):
   1. Local images already in public/images/.../gameplay/  (kept in place, never re-copied)
@@ -22,15 +29,24 @@ If fewer are available, it still creates the carousel with the found images.
 It exits with an error only if no candidate is found.
 
 Usage:
-  python3 scripts/add-game-screenshots.py --game-folder <path>
+    python3 scripts/add-game-screenshots.py --game-folder <path>
+    python3 scripts/add-game-screenshots.py --all-games
 
-  Required:
-    --game-folder   Path to the game content folder, e.g.:
-                    src/content/videogames/console/nintendo-entertainment-system/game/super-mario-bros-3
+    Required (choose one):
+        --game-folder     Path to one game folder, e.g.:
+                                            src/content/videogames/console/nintendo-entertainment-system/game/super-mario-bros-3
+        --all-games       Scan and process all games under src/content/videogames
 
-  Optional:
-    --max-images    Number of screenshots to collect (default: 3)
-    --dry-run       Print what would be done without writing any file
+    Optional:
+        --max-images      Number of screenshots to collect (default: 3)
+        --dry-run         Compute changes without writing files and without delay
+        --force           Recreate Gameplay carousel even if already present
+        --videogames-root Base folder to discover games in batch mode
+                                            (default: src/content/videogames)
+        --min-delay       Minimum delay in seconds between processed games in batch mode
+                                            (default: 30)
+        --max-delay       Maximum delay in seconds between processed games in batch mode
+                                            (default: 120)
 
 Examples:
   python3 scripts/add-game-screenshots.py \\
@@ -40,6 +56,16 @@ Examples:
       --game-folder src/content/videogames/console/playstation5/game/astrobot \\
       --max-images 3 \\
       --dry-run
+
+  python3 scripts/add-game-screenshots.py \\
+      --all-games \\
+      --dry-run
+
+  python3 scripts/add-game-screenshots.py \\
+      --all-games \\
+      --force \\
+      --min-delay 45 \\
+      --max-delay 150
 """
 
 from __future__ import annotations
@@ -51,6 +77,7 @@ import random
 import re
 import subprocess
 import sys
+import time
 from dataclasses import dataclass
 from html import unescape
 from pathlib import Path
@@ -101,12 +128,17 @@ class SelectedScreenshot:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Add game screenshots carousel section for a single game MDX.",
+        description="Add game screenshots carousel section for one or many game MDX files.",
     )
-    parser.add_argument(
+    mode_group = parser.add_mutually_exclusive_group(required=True)
+    mode_group.add_argument(
         "--game-folder",
-        required=True,
         help="Path like src/content/videogames/console/<console>/game/<game>",
+    )
+    mode_group.add_argument(
+        "--all-games",
+        action="store_true",
+        help="Scan src/content/videogames and process all games missing the Gameplay carousel",
     )
     parser.add_argument(
         "--max-images",
@@ -118,6 +150,28 @@ def parse_args() -> argparse.Namespace:
         "--dry-run",
         action="store_true",
         help="Compute changes but do not write files",
+    )
+    parser.add_argument(
+        "--force",
+        action="store_true",
+        help="Recreate Gameplay carousel even if already present",
+    )
+    parser.add_argument(
+        "--videogames-root",
+        default="src/content/videogames",
+        help="Base folder used to discover games when --all-games is set",
+    )
+    parser.add_argument(
+        "--min-delay",
+        type=int,
+        default=30,
+        help="Minimum delay in seconds between processed games in batch mode",
+    )
+    parser.add_argument(
+        "--max-delay",
+        type=int,
+        default=120,
+        help="Maximum delay in seconds between processed games in batch mode",
     )
     return parser.parse_args()
 
@@ -269,18 +323,14 @@ def get_igdb_access_token(igdb_client_id: str, igdb_client_secret: str) -> str |
         return None
 
 
-def collect_igdb_candidates(title: str, igdb_client_id: str | None, igdb_client_secret: str | None) -> list[Candidate]:
+def collect_igdb_candidates(title: str, igdb_client_id: str | None, igdb_access_token: str | None) -> list[Candidate]:
     """
     Collect screenshot candidates from IGDB API.
     Requires IGDB_CLIENT_ID and IGDB_CLIENT_SECRET environment variables.
     Automatically generates access token via Twitch OAuth.
     Silently returns empty list if credentials are not configured.
     """
-    if not igdb_client_id or not igdb_client_secret:
-        return []
-
-    igdb_access_token = get_igdb_access_token(igdb_client_id, igdb_client_secret)
-    if not igdb_access_token:
+    if not igdb_client_id or not igdb_access_token:
         return []
 
     candidates: list[Candidate] = []
@@ -559,29 +609,35 @@ def update_game_mdx(
         mdx_file.write_text(output, encoding="utf-8")
 
 
-def main() -> int:
-    args = parse_args()
+def has_gameplay_section(mdx_raw: str) -> bool:
+    section_pattern = re.compile(
+        r"## <MDXTitleWithIcon[^\n]*>Gameplay</MDXTitleWithIcon>[\s\S]*?<ImageCarousel",
+    )
+    return bool(section_pattern.search(mdx_raw))
 
-    if args.max_images < 1:
-        print("--max-images must be a positive number", file=sys.stderr)
-        return 1
 
-    # Load IGDB credentials from .env.others
-    env_vars = load_env_file(".env.others")
-    igdb_client_id = env_vars.get("IGDB_CLIENT_ID")
-    igdb_client_secret = env_vars.get("IGDB_CLIENT_SECRET")
+def discover_game_folders(videogames_root: Path) -> list[Path]:
+    game_folders: list[Path] = []
+    for mdx_file in sorted(videogames_root.glob("console/*/game/*/content.mdx")):
+        game_folders.append(mdx_file.parent)
+    return game_folders
 
-    game_folder = Path(args.game_folder).resolve()
+
+def process_game_folder(
+    game_folder: Path,
+    max_images: int,
+    dry_run: bool,
+    igdb_client_id: str | None,
+    igdb_access_token: str | None,
+) -> tuple[bool, str, str | None]:
     mdx_file = game_folder / "content.mdx"
     if not mdx_file.exists():
-        print(f"Unable to find {mdx_file}", file=sys.stderr)
-        return 1
+        return False, game_folder.as_posix(), f"Unable to find {mdx_file}"
 
     try:
         console_slug, game_slug = extract_console_and_game(game_folder)
     except ValueError as error:
-        print(str(error), file=sys.stderr)
-        return 1
+        return False, game_folder.as_posix(), str(error)
 
     print(f"🎮 Starting: {console_slug}/{game_slug}")
 
@@ -602,14 +658,14 @@ def main() -> int:
     gameplay_folder = public_game_folder / "gameplay"
     key = f"{console_slug}/{game_slug}"
 
-    print(f"🔍 Collecting candidates...")
+    print("🔍 Collecting candidates...")
     local_candidates = collect_local_candidates(public_game_folder)
     print(f"  ✓ Local: {len(local_candidates)}")
-    
+
     wikimedia_candidates = collect_wikimedia_candidates(game_title)
     print(f"  ✓ Wikimedia Commons: {len(wikimedia_candidates)}")
-    
-    igdb_candidates = collect_igdb_candidates(game_title, igdb_client_id, igdb_client_secret)
+
+    igdb_candidates = collect_igdb_candidates(game_title, igdb_client_id, igdb_access_token)
     print(f"  ✓ IGDB: {len(igdb_candidates)}")
 
     total_candidates = len(local_candidates) + len(wikimedia_candidates) + len(igdb_candidates)
@@ -617,49 +673,151 @@ def main() -> int:
 
     selected = select_candidates(
         [*local_candidates, *wikimedia_candidates, *igdb_candidates],
-        args.max_images,
+        max_images,
     )
-    print(f"✅ Selected: {len(selected)}/{args.max_images}")
+    print(f"✅ Selected: {len(selected)}/{max_images}")
 
     if len(selected) == 0:
-        print(
-            f"❌ No candidates found for {key}. "
-            "Add local gameplay images or check Wikimedia Commons / IGDB availability.",
-            file=sys.stderr,
+        return (
+            False,
+            key,
+            "No candidates found. Add local gameplay images or check Wikimedia Commons / IGDB availability.",
         )
-        return 1
 
-    if len(selected) < args.max_images:
-        print(f"⚠️  Proceeding with {len(selected)} images (max requested: {args.max_images}).")
+    if len(selected) < max_images:
+        print(f"⚠️  Proceeding with {len(selected)} images (max requested: {max_images}).")
 
     try:
-        print(f"⬇️  Persisting screenshots...")
+        print("⬇️  Persisting screenshots...")
         persisted = persist_screenshots(
             selected,
             gameplay_folder,
             console_slug,
             game_slug,
-            args.dry_run,
+            dry_run,
         )
         print(f"  ✓ Downloaded and normalized: {len(persisted)}")
-        
-        print(f"📝 Updating MDX file...")
-        update_game_mdx(mdx_file, game_title, persisted, args.dry_run)
-        print(f"  ✓ MDX updated")
+
+        print("📝 Updating MDX file...")
+        update_game_mdx(mdx_file, game_title, persisted, dry_run)
+        print("  ✓ MDX updated")
     except (ValueError, RuntimeError, subprocess.CalledProcessError, HTTPError, URLError) as error:
-        print(str(error), file=sys.stderr)
-        return 1
+        return False, key, str(error)
 
     print(f"\n✨ Processed {key}")
     for image in persisted:
         print(f"   • {image.image_web_path} ({image.source_name})")
 
+    return True, key, None
+
+
+def main() -> int:
+    args = parse_args()
+
+    if args.max_images < 1:
+        print("--max-images must be a positive number", file=sys.stderr)
+        return 1
+    if args.min_delay < 0 or args.max_delay < 0:
+        print("--min-delay and --max-delay must be >= 0", file=sys.stderr)
+        return 1
+    if args.min_delay > args.max_delay:
+        print("--min-delay cannot be greater than --max-delay", file=sys.stderr)
+        return 1
+
+    # Load IGDB credentials from .env.others
+    env_vars = load_env_file(".env.others")
+    igdb_client_id = env_vars.get("IGDB_CLIENT_ID")
+    igdb_client_secret = env_vars.get("IGDB_CLIENT_SECRET")
+    igdb_access_token = get_igdb_access_token(igdb_client_id, igdb_client_secret) if igdb_client_id and igdb_client_secret else None
+
+    if igdb_client_id and igdb_client_secret and not igdb_access_token:
+        print("⚠️  IGDB token could not be generated. Proceeding with local + Wikimedia only.")
+
+    if args.game_folder:
+        game_folder = Path(args.game_folder).resolve()
+        success, key, error_message = process_game_folder(
+            game_folder,
+            args.max_images,
+            args.dry_run,
+            igdb_client_id,
+            igdb_access_token,
+        )
+
+        if not success:
+            print(f"❌ {key}: {error_message}", file=sys.stderr)
+            return 1
+
+        if args.dry_run:
+            print("\n💭 Dry run completed. No files were written.")
+        else:
+            print("\n✅ Done! Changes written.")
+        return 0
+
+    videogames_root = Path(args.videogames_root).resolve()
+    game_folders = discover_game_folders(videogames_root)
+    if not game_folders:
+        print(f"No games found under {videogames_root}", file=sys.stderr)
+        return 1
+
+    print(f"🧭 Batch mode: discovered {len(game_folders)} games")
+
+    skipped = 0
+    processed_attempts = 0
+    modified_successfully = 0
+    failed: list[tuple[str, str]] = []
+
+    for index, game_folder in enumerate(game_folders, start=1):
+        mdx_file = game_folder / "content.mdx"
+        key = game_folder.as_posix().split("/src/content/videogames/console/")[-1].replace("/game/", "/")
+
+        if not mdx_file.exists():
+            failed.append((key, f"Missing file: {mdx_file}"))
+            print(f"[{index}/{len(game_folders)}] ❌ {key} -> Missing content.mdx")
+            continue
+
+        raw = mdx_file.read_text(encoding="utf-8")
+        if has_gameplay_section(raw) and not args.force:
+            skipped += 1
+            print(f"[{index}/{len(game_folders)}] ⏭️  Skipping {key} (Gameplay carousel already present)")
+            continue
+
+        if not args.dry_run and processed_attempts > 0:
+            delay = random.randint(args.min_delay, args.max_delay)
+            print(f"⏳ Waiting {delay}s before next processed game...")
+            time.sleep(delay)
+
+        processed_attempts += 1
+        print(f"[{index}/{len(game_folders)}] ▶️  Processing {key}")
+        success, processed_key, error_message = process_game_folder(
+            game_folder,
+            args.max_images,
+            args.dry_run,
+            igdb_client_id,
+            igdb_access_token,
+        )
+
+        if success:
+            modified_successfully += 1
+        else:
+            failed.append((processed_key, error_message or "Unknown error"))
+            print(f"❌ {processed_key}: {error_message}", file=sys.stderr)
+
+    print("\n📦 Batch summary")
+    print(f"  • Discovered games: {len(game_folders)}")
+    print(f"  • Skipped (already had carousel): {skipped}")
+    print(f"  • Processed games: {processed_attempts}")
+    print(f"  • Modified successfully: {modified_successfully}")
+    print(f"  • Errors: {len(failed)}")
+
+    if failed:
+        print("\n❌ Failed games:")
+        for failed_key, failed_reason in failed:
+            print(f"  - {failed_key}: {failed_reason}")
+
     if args.dry_run:
         print("\n💭 Dry run completed. No files were written.")
-    else:
-        print("\n✅ Done! Changes written.")
 
-    return 0
+    return 0 if len(failed) == 0 else 1
 
 
 if __name__ == "__main__":

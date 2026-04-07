@@ -18,3 +18,18 @@ metadata:
     gallery:
         - /images/videogames/console/playstation1/game/time-crisis/media/1.jpeg
 ---
+import { FaGamepad } from "react-icons/fa";
+import { MDXTitleWithIcon } from "@/components/sections/videogames/components/mdx-title-with-icon";
+import { ImageCarousel } from "@/components/design-system/organism/image-carousel";
+
+## <MDXTitleWithIcon icon={<FaGamepad className="text-shadow-lg" />}>Gameplay</MDXTitleWithIcon>
+
+<ImageCarousel
+    images={[
+        "/images/videogames/console/playstation1/game/time-crisis/gameplay/1.jpg",
+        "/images/videogames/console/playstation1/game/time-crisis/gameplay/2.jpg",
+        "/images/videogames/console/playstation1/game/time-crisis/gameplay/3.jpg",
+    ]}
+    alt="Time Crisis gameplay"
+    caption="IGDB"
+/>

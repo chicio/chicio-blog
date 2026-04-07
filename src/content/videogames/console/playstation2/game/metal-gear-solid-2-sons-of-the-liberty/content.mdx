@@ -22,3 +22,18 @@ metadata:
         - /images/videogames/console/playstation2/game/metal-gear-solid-2-sons-of-the-liberty/media/4.jpeg
         - /images/videogames/console/playstation2/game/metal-gear-solid-2-sons-of-the-liberty/media/5.jpeg
 ---
+import { FaGamepad } from "react-icons/fa";
+import { MDXTitleWithIcon } from "@/components/sections/videogames/components/mdx-title-with-icon";
+import { ImageCarousel } from "@/components/design-system/organism/image-carousel";
+
+## <MDXTitleWithIcon icon={<FaGamepad className="text-shadow-lg" />}>Gameplay</MDXTitleWithIcon>
+
+<ImageCarousel
+    images={[
+        "/images/videogames/console/playstation2/game/metal-gear-solid-2-sons-of-the-liberty/gameplay/1.jpg",
+        "/images/videogames/console/playstation2/game/metal-gear-solid-2-sons-of-the-liberty/gameplay/2.jpg",
+        "/images/videogames/console/playstation2/game/metal-gear-solid-2-sons-of-the-liberty/gameplay/3.jpg",
+    ]}
+    alt="Metal Gear Solid 2 Sons Of The Liberty gameplay"
+    caption="IGDB"
+/>

@@ -18,3 +18,18 @@ metadata:
     gallery:
         - /images/videogames/console/playstation5/game/lumines-arise/cover.jpg
 ---
+import { FaGamepad } from "react-icons/fa";
+import { MDXTitleWithIcon } from "@/components/sections/videogames/components/mdx-title-with-icon";
+import { ImageCarousel } from "@/components/design-system/organism/image-carousel";
+
+## <MDXTitleWithIcon icon={<FaGamepad className="text-shadow-lg" />}>Gameplay</MDXTitleWithIcon>
+
+<ImageCarousel
+    images={[
+        "/images/videogames/console/playstation5/game/lumines-arise/gameplay/1.jpg",
+        "/images/videogames/console/playstation5/game/lumines-arise/gameplay/2.jpg",
+        "/images/videogames/console/playstation5/game/lumines-arise/gameplay/3.jpg",
+    ]}
+    alt="Lumines Arise gameplay"
+    caption="IGDB"
+/>

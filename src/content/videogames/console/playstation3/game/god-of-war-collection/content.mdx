@@ -21,3 +21,18 @@ metadata:
         - /images/videogames/console/playstation3/game/god-of-war-collection/media/3.jpeg
         - /images/videogames/console/playstation3/game/god-of-war-collection/media/4.jpeg
 ---
+import { FaGamepad } from "react-icons/fa";
+import { MDXTitleWithIcon } from "@/components/sections/videogames/components/mdx-title-with-icon";
+import { ImageCarousel } from "@/components/design-system/organism/image-carousel";
+
+## <MDXTitleWithIcon icon={<FaGamepad className="text-shadow-lg" />}>Gameplay</MDXTitleWithIcon>
+
+<ImageCarousel
+    images={[
+        "/images/videogames/console/playstation3/game/god-of-war-collection/gameplay/1.jpg",
+        "/images/videogames/console/playstation3/game/god-of-war-collection/gameplay/2.jpg",
+        "/images/videogames/console/playstation3/game/god-of-war-collection/gameplay/3.jpg",
+    ]}
+    alt="God Of War Collection gameplay"
+    caption="IGDB"
+/>

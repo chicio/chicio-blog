@@ -20,3 +20,17 @@ metadata:
         - /images/videogames/console/nintendo-wii/game/super-mario-galaxy-2/media/2.jpeg
         - /images/videogames/console/nintendo-wii/game/super-mario-galaxy-2/media/3.jpeg
 ---
+import { FaGamepad } from "react-icons/fa";
+import { MDXTitleWithIcon } from "@/components/sections/videogames/components/mdx-title-with-icon";
+import { ImageCarousel } from "@/components/design-system/organism/image-carousel";
+
+## <MDXTitleWithIcon icon={<FaGamepad className="text-shadow-lg" />}>Gameplay</MDXTitleWithIcon>
+
+<ImageCarousel
+    images={[
+        "/images/videogames/console/nintendo-wii/game/super-mario-galaxy-2/gameplay/1.jpg",
+        "/images/videogames/console/nintendo-wii/game/super-mario-galaxy-2/gameplay/2.jpg",
+    ]}
+    alt="Super Mario Galaxy 2 gameplay"
+    caption="IGDB"
+/>
