@@ -598,7 +598,7 @@ def interactive_platform_mapping(
     for console in consoles:
         # Filter platforms by case-insensitive substring match on console name words
         console_lower = console.lower()
-        words = console_lower.split()
+        words = [w for w in console_lower.split() if len(w) > 2 and not w.isdigit()]
         candidates = [
             (pid, name) for pid, name in igdb_platforms
             if any(word in name.lower() for word in words)
@@ -617,7 +617,11 @@ def interactive_platform_mapping(
         print(f"  s) Skip (no platform filter)")
 
         while True:
-            choice = input("Choose [number/s to skip]: ").strip().lower()
+            try:
+                choice = input("Choose [number/s to skip]: ").strip().lower()
+            except EOFError:
+                mapping[console] = None
+                break
             if choice == "s":
                 mapping[console] = None
                 break
