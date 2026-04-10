@@ -46,7 +46,10 @@ Interactive platform mapping:
     to filter IGDB searches by platform and to include the console name in Wikimedia
     Commons queries for more precise results.
 
-    The mapping is not persisted — it is rebuilt on every run.
+    The mapping is saved to scripts/igdb-platform-mapping.json and reused on
+    subsequent runs. Use --refresh-platforms to force a new interactive mapping.
+    If new consoles are found that are not in the saved mapping, the interactive
+    prompt runs automatically for those consoles only.
     If IGDB credentials are not configured, the mapping phase is skipped.
 
 Usage:
@@ -62,6 +65,7 @@ Usage:
         --max-images      Number of screenshots to collect (default: 3)
         --dry-run         Compute changes without writing files and without delay
         --force           Recreate Gameplay carousel even if already present
+        --refresh-platforms  Force interactive IGDB platform mapping even if saved
         --videogames-root Base folder to discover games in batch mode
                                             (default: src/content/videogames)
         --min-delay       Minimum delay in seconds between processed games in batch mode
@@ -189,6 +193,11 @@ def parse_args() -> argparse.Namespace:
         "--videogames-root",
         default="src/content/videogames",
         help="Base folder used to discover games when --all-games is set",
+    )
+    parser.add_argument(
+        "--refresh-platforms",
+        action="store_true",
+        help="Force interactive IGDB platform mapping even if a saved mapping exists",
     )
     parser.add_argument(
         "--min-delay",
@@ -634,6 +643,65 @@ def interactive_platform_mapping(
     return mapping
 
 
+PLATFORM_MAPPING_FILE = Path("scripts/igdb-platform-mapping.json")
+
+
+def load_platform_mapping() -> dict[str, int | None] | None:
+    """Load saved platform mapping from JSON file. Returns None if file doesn't exist."""
+    if not PLATFORM_MAPPING_FILE.exists():
+        return None
+    try:
+        with open(PLATFORM_MAPPING_FILE) as f:
+            data = json.load(f)
+        if isinstance(data, dict):
+            return {k: v for k, v in data.items()}
+        return None
+    except (json.JSONDecodeError, OSError):
+        return None
+
+
+def save_platform_mapping(mapping: dict[str, int | None]) -> None:
+    """Save platform mapping to JSON file."""
+    PLATFORM_MAPPING_FILE.parent.mkdir(parents=True, exist_ok=True)
+    with open(PLATFORM_MAPPING_FILE, "w") as f:
+        json.dump(mapping, f, indent=2, sort_keys=True)
+    print(f"💾 Platform mapping saved to {PLATFORM_MAPPING_FILE}")
+
+
+def build_platform_mapping(
+    game_folders: list[Path],
+    igdb_client_id: str,
+    igdb_access_token: str,
+    refresh: bool,
+) -> dict[str, int | None] | None:
+    """Build platform mapping: load from cache or run interactive mapping."""
+    unique_consoles = collect_unique_consoles(game_folders)
+    if not unique_consoles:
+        return None
+
+    # Try loading saved mapping
+    if not refresh:
+        saved = load_platform_mapping()
+        if saved is not None:
+            missing = [c for c in unique_consoles if c not in saved]
+            if not missing:
+                print(f"📂 Using saved platform mapping from {PLATFORM_MAPPING_FILE}")
+                return saved
+            # Only prompt for missing consoles, merge with saved
+            print(f"📂 Saved mapping missing {len(missing)} console(s): {', '.join(missing)}")
+            igdb_platforms = fetch_igdb_platforms(igdb_client_id, igdb_access_token)
+            new_mappings = interactive_platform_mapping(missing, igdb_platforms)
+            merged = {**saved, **new_mappings}
+            save_platform_mapping(merged)
+            return merged
+
+    # Full interactive mapping needed
+    igdb_platforms = fetch_igdb_platforms(igdb_client_id, igdb_access_token)
+    mapping = interactive_platform_mapping(unique_consoles, igdb_platforms)
+    save_platform_mapping(mapping)
+    return mapping
+
+
 def ensure_imports(mdx_body: str) -> str:
     required_imports = [
         'import { ImageCarousel } from "@/components/design-system/organism/image-carousel";',
@@ -837,13 +905,12 @@ def main() -> int:
 
     if args.game_folder:
         game_folder = Path(args.game_folder).resolve()
-        # Bootstrap: collect console and build platform mapping
+        # Bootstrap: build platform mapping
         platform_mapping: dict[str, int | None] | None = None
         if igdb_access_token and igdb_client_id:
-            unique_consoles = collect_unique_consoles([game_folder])
-            if unique_consoles:
-                igdb_platforms = fetch_igdb_platforms(igdb_client_id, igdb_access_token)
-                platform_mapping = interactive_platform_mapping(unique_consoles, igdb_platforms)
+            platform_mapping = build_platform_mapping(
+                [game_folder], igdb_client_id, igdb_access_token, args.refresh_platforms,
+            )
 
         success, key, error_message = process_game_folder(
             game_folder,
@@ -872,13 +939,12 @@ def main() -> int:
 
     print(f"🧭 Batch mode: discovered {len(game_folders)} games")
 
-    # Bootstrap: collect consoles and build platform mapping
+    # Bootstrap: build platform mapping
     platform_mapping: dict[str, int | None] | None = None
     if igdb_access_token and igdb_client_id:
-        unique_consoles = collect_unique_consoles(game_folders)
-        if unique_consoles:
-            igdb_platforms = fetch_igdb_platforms(igdb_client_id, igdb_access_token)
-            platform_mapping = interactive_platform_mapping(unique_consoles, igdb_platforms)
+        platform_mapping = build_platform_mapping(
+            game_folders, igdb_client_id, igdb_access_token, args.refresh_platforms,
+        )
 
     skipped = 0
     processed_attempts = 0
