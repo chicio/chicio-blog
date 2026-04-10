@@ -580,6 +580,62 @@ def fetch_igdb_platforms(igdb_client_id: str, igdb_access_token: str) -> list[tu
         return []
 
 
+def interactive_platform_mapping(
+    consoles: list[str],
+    igdb_platforms: list[tuple[int, str]],
+) -> dict[str, int | None]:
+    """Interactively map console names to IGDB platform IDs."""
+    mapping: dict[str, int | None] = {}
+
+    if not igdb_platforms:
+        print("⚠️  No IGDB platforms available. Skipping platform mapping.")
+        for console in consoles:
+            mapping[console] = None
+        return mapping
+
+    print("\n🎮 Mapping consoles to IGDB platforms...\n")
+
+    for console in consoles:
+        # Filter platforms by case-insensitive substring match on console name words
+        console_lower = console.lower()
+        words = console_lower.split()
+        candidates = [
+            (pid, name) for pid, name in igdb_platforms
+            if any(word in name.lower() for word in words)
+        ]
+
+        if not candidates:
+            print(f'Console: "{console}"')
+            print("  No matching IGDB platforms found.")
+            mapping[console] = None
+            print()
+            continue
+
+        print(f'Console: "{console}"')
+        for idx, (pid, name) in enumerate(candidates, start=1):
+            print(f"  {idx}) {name} (ID: {pid})")
+        print(f"  s) Skip (no platform filter)")
+
+        while True:
+            choice = input("Choose [number/s to skip]: ").strip().lower()
+            if choice == "s":
+                mapping[console] = None
+                break
+            try:
+                choice_idx = int(choice)
+                if 1 <= choice_idx <= len(candidates):
+                    mapping[console] = candidates[choice_idx - 1][0]
+                    break
+                else:
+                    print(f"  Please enter a number between 1 and {len(candidates)}, or 's'.")
+            except ValueError:
+                print("  Please enter a number or 's'.")
+
+        print()
+
+    return mapping
+
+
 def ensure_imports(mdx_body: str) -> str:
     required_imports = [
         'import { ImageCarousel } from "@/components/design-system/organism/image-carousel";',
