@@ -34,9 +34,22 @@ The script collects up to --max-images candidates.
 If fewer are available, it still creates the carousel with the found images.
 It exits with an error only if no candidate is found.
 
+Dependencies:
+    python-frontmatter (declared via PEP 723 inline metadata, auto-installed by uv)
+
+Interactive platform mapping:
+    At startup, the script collects unique metadata.console values from the target
+    content.mdx files and fetches the IGDB platform list. For each console, the user
+    is prompted to select the matching IGDB platform (or skip). This mapping is used
+    to filter IGDB searches by platform and to include the console name in Wikimedia
+    Commons queries for more precise results.
+
+    The mapping is not persisted — it is rebuilt on every run.
+    If IGDB credentials are not configured, the mapping phase is skipped.
+
 Usage:
-    python3 scripts/add-game-screenshots.py --game-folder <path>
-    python3 scripts/add-game-screenshots.py --all-games
+    uv run --script scripts/add-game-screenshots.py --game-folder <path>
+    uv run --script scripts/add-game-screenshots.py --all-games
 
     Required (choose one):
         --game-folder     Path to one game folder, e.g.:
@@ -55,19 +68,19 @@ Usage:
                                             (default: 120)
 
 Examples:
-  python3 scripts/add-game-screenshots.py \\
+  uv run --script scripts/add-game-screenshots.py \\
       --game-folder src/content/videogames/console/nintendo-entertainment-system/game/super-mario-bros-3
 
-  python3 scripts/add-game-screenshots.py \\
+  uv run --script scripts/add-game-screenshots.py \\
       --game-folder src/content/videogames/console/playstation5/game/astrobot \\
       --max-images 3 \\
       --dry-run
 
-  python3 scripts/add-game-screenshots.py \\
+  uv run --script scripts/add-game-screenshots.py \\
       --all-games \\
       --dry-run
 
-  python3 scripts/add-game-screenshots.py \\
+  uv run --script scripts/add-game-screenshots.py \\
       --all-games \\
       --force \\
       --min-delay 45 \\
