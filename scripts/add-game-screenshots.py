@@ -88,10 +88,11 @@ from dataclasses import dataclass
 from html import unescape
 from pathlib import Path
 from typing import Any
-import frontmatter
 from urllib.error import HTTPError, URLError
 from urllib.parse import quote
 from urllib.request import Request, urlopen
+
+import frontmatter
 
 # Scripts are run from the repo root; no config files needed.
 
