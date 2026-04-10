@@ -133,6 +133,12 @@ class SelectedScreenshot:
     attribution: str
 
 
+@dataclass
+class GameMetadata:
+    title: str
+    console: str
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Add game screenshots carousel section for one or many game MDX files.",
@@ -527,17 +533,12 @@ def persist_screenshots(
     return persisted
 
 
-def parse_frontmatter_title(mdx_raw: str, game_slug: str) -> str:
-    match = re.match(r"^---\n([\s\S]*?)\n---", mdx_raw)
-    if not match:
-        return game_slug
-
-    frontmatter = match.group(1)
-    title_match = re.search(r'^title:\s*"?(.+?)"?\s*$', frontmatter, re.MULTILINE)
-    if not title_match:
-        return game_slug
-
-    return title_match.group(1).strip()
+def parse_frontmatter_metadata(mdx_file: Path, game_slug: str) -> GameMetadata:
+    post = frontmatter.load(str(mdx_file))
+    title = post.get("title", game_slug)
+    metadata = post.get("metadata", {})
+    console = metadata.get("console", "") if isinstance(metadata, dict) else ""
+    return GameMetadata(title=str(title).strip(), console=str(console).strip())
 
 
 def ensure_imports(mdx_body: str) -> str:
@@ -649,7 +650,8 @@ def process_game_folder(
     print(f"🎮 Starting: {console_slug}/{game_slug}")
 
     mdx_raw = mdx_file.read_text(encoding="utf-8")
-    game_title = parse_frontmatter_title(mdx_raw, game_slug)
+    game_metadata = parse_frontmatter_metadata(mdx_file, game_slug)
+    game_title = game_metadata.title
     print(f"📄 Title: {game_title}")
 
     public_game_folder = (
