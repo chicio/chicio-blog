@@ -555,6 +555,31 @@ def collect_unique_consoles(game_folders: list[Path]) -> list[str]:
     return sorted(consoles)
 
 
+def fetch_igdb_platforms(igdb_client_id: str, igdb_access_token: str) -> list[tuple[int, str]]:
+    """Fetch all IGDB platforms. Returns list of (id, name) tuples."""
+    headers = {
+        "Client-ID": igdb_client_id,
+        "Authorization": f"Bearer {igdb_access_token}",
+        "User-Agent": USER_AGENT,
+    }
+    query = "fields id, name; limit 500;"
+    try:
+        req = Request(
+            "https://api.igdb.com/v4/platforms",
+            data=query.encode("utf-8"),
+            headers=headers,
+            method="POST",
+        )
+        with urlopen(req, timeout=15) as response:
+            platforms = json.loads(response.read().decode("utf-8"))
+        if not isinstance(platforms, list):
+            return []
+        return [(p["id"], p["name"]) for p in platforms if "id" in p and "name" in p]
+    except (HTTPError, URLError, TimeoutError, json.JSONDecodeError, KeyError) as error:
+        print(f"⚠️  Failed to fetch IGDB platforms: {error}", file=sys.stderr)
+        return []
+
+
 def ensure_imports(mdx_body: str) -> str:
     required_imports = [
         'import { ImageCarousel } from "@/components/design-system/organism/image-carousel";',
