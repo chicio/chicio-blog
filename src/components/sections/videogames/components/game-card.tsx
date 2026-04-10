@@ -5,16 +5,18 @@ import { StandardInternalLinkWithTracking } from "@/components/design-system/ato
 import { tracking } from "@/types/configuration/tracking";
 import { GlassmorphismBackground } from "@/components/design-system/atoms/effects/glassmorphism-background";
 import { useInViewList } from "@/components/design-system/utils/hooks/use-in-view-list";
-import { GameMetadata } from "@/types/content/videogames";
+import { GameMetadata, VideogamesNavigationOrigin } from "@/types/content/videogames";
 import { Content } from "@/types/content/content";
 import { FC } from "react";
 import { GameFormatIcon } from "./game-format-icon";
+import { writeSessionStorage } from "@/lib/session-storage/session-storage";
 
 interface GameCardProps {
   game: Content<GameMetadata>;
+  navigationOrigin?: VideogamesNavigationOrigin;
 }
 
-export const GameCard: FC<GameCardProps> = ({ game }) => {
+export const GameCard: FC<GameCardProps> = ({ game, navigationOrigin = "console" }) => {
   const [ref, isInView] = useInViewList({ rootMargin: "600px" });
 
   return (
@@ -22,6 +24,7 @@ export const GameCard: FC<GameCardProps> = ({ game }) => {
       ref={ref}
       className="glow-container relative h-80 w-full overflow-hidden rounded-lg shadow-lg"
       key={game.frontmatter.title}
+      onClick={() => writeSessionStorage("videogames_navigation_origin", navigationOrigin)}
     >
       {isInView && (
         <StandardInternalLinkWithTracking
