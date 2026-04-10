@@ -61,13 +61,11 @@ export const VideogamesViewSwitcher: React.FC<VideogamesViewSwitcherProps> = ({
     consolesWithGameCount,
     games,
 }) => {
-    const [activeView, setActiveView] = useState<View>("consoles");
+    const [activeView, setActiveView] = useState<View | null>(null);
 
     useEffect(() => {
         const saved = readLocalStorage("videogames_view");
-        if (saved === "consoles" || saved === "games") {
-            setActiveView(saved);
-        }
+        setActiveView(saved === "consoles" || saved === "games" ? saved : "consoles");
     }, []);
 
     const { query, filteredGames, filteredConsoles, handleFilter, resetFilter, isPending } = useGamesFilter(
@@ -80,6 +78,10 @@ export const VideogamesViewSwitcher: React.FC<VideogamesViewSwitcherProps> = ({
         setActiveView(view);
         writeLocalStorage("videogames_view", view);
     };
+
+    if (!activeView) {
+        return null;
+    }
 
     return (
         <div className="flex flex-col gap-6">
