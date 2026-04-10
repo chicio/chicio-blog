@@ -1,5 +1,4 @@
 import { ReadingContentPageTemplate } from "@/components/design-system/templates/reading-content-page-template";
-import { BreadcrumbItem } from "@/components/design-system/molecules/breadcrumbs/breadcrumb";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { tracking } from "@/types/configuration/tracking";
 import { FC, PropsWithChildren } from "react";
@@ -11,9 +10,9 @@ import { PageTitle } from "@/components/design-system/molecules/typography/page-
 import { GameInformation } from "./game-information";
 import { VideogameNavigation } from "./videogame-navigation";
 import { ConsoleLogos } from "./console-logos";
-import { slugs } from "@/types/configuration/slug";
-import { getAllGames, getAllGamesForConsole } from "@/lib/content/videogames";
+import { getAllGames } from "@/lib/content/videogames";
 import { GameFormatIcon } from "./game-format-icon";
+import { GameBreadcrumb } from "./game-breadcrumb";
 
 interface GameProps {
   game: Content<GameMetadata>;
@@ -39,34 +38,13 @@ export const Game: FC<PropsWithChildren<GameProps>> = async ({
     <ReadingContentPageTemplate
       author={siteMetadata.author}
       trackingCategory={tracking.category.videogames}
-      breadcrumbs={
-        [
-          {
-            label: "Videogames",
-            href: slugs.videogames.home,
-            isCurrent: false,
-            trackingData: {
-              action: tracking.action.open_videogame_collection,
-              category: tracking.category.videogames,
-              label: tracking.label.body,
-            },
-          },
-          {
-            label: console.frontmatter.metadata!.name,
-            href: console.slug.formatted,
-            isCurrent: false,
-            trackingData: {
-              action: tracking.action.open_videogame_console,
-              category: tracking.category.videogames,
-              label: tracking.label.body,
-            },
-          },
-          {
-            label: game.frontmatter.title,
-            href: game.slug.formatted,
-            isCurrent: true,
-          },
-        ] satisfies BreadcrumbItem[]
+      beforeContent={
+        <GameBreadcrumb
+          gameTitle={game.frontmatter.title}
+          gameSlug={game.slug.formatted}
+          consoleName={console.frontmatter.metadata!.name}
+          consoleSlug={console.slug.formatted}
+        />
       }
     >
       <PageTitle>{game.frontmatter.title}</PageTitle>
