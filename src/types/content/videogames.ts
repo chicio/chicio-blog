@@ -28,3 +28,5 @@ export type GameMetadata = {
   gallery: string[];
   formats: GameFormat[];
 }
+
+export type VideogamesNavigationOrigin = "all-games" | "console";
