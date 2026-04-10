@@ -1,5 +1,37 @@
 # Changelog
 
+## [3.17.0](https://github.com/chicio/chicio-blog/compare/v3.16.0...v3.17.0) (2026-04-10)
+
+### Features
+
+* **content:** :sparkles: added trivial for all console and modified games images ([f37bd8d](https://github.com/chicio/chicio-blog/commit/f37bd8d33244c4a3bafe9fb5623abf22d1290fe7))
+* **content:** :sparkles: new games images ([273a3e4](https://github.com/chicio/chicio-blog/commit/273a3e43c9db09ca7fb922cf67956d282a70b548))
+* **content:** :sparkles: other videogames content uploaded ([5458735](https://github.com/chicio/chicio-blog/commit/54587352442a0f7fdb9884baac9a02197cb286cf))
+* **content:** :sparkles: Update games images ([f912078](https://github.com/chicio/chicio-blog/commit/f912078fba455a4c7345978936bfb5c100f68b72))
+* **content:** :sparkles: videogames gameplay ([05927e5](https://github.com/chicio/chicio-blog/commit/05927e571793556d4b6660a564cf7a523d761ec3))
+* **scripts:** :floppy_disk: persist IGDB platform mapping with --refresh-platforms flag ([97e3e3b](https://github.com/chicio/chicio-blog/commit/97e3e3b776e77f65a57dd23ac5ebbb4ed2fa2cae))
+* **scripts:** :recycle: clean gameplay folder and restart numbering on carousel rebuild ([efa9fb1](https://github.com/chicio/chicio-blog/commit/efa9fb1a24aa9f14896e4b98b47e717284cfb6ca))
+* **scripts:** add collect_unique_consoles() function ([503e65f](https://github.com/chicio/chicio-blog/commit/503e65f802907784041791dbcc684e68c933806b))
+* **scripts:** add console name to Wikimedia search queries ([48b5135](https://github.com/chicio/chicio-blog/commit/48b513580adde7d96e1394c2b4aa65a8d80215b2))
+* **scripts:** add fetch_igdb_platforms() function ([c19cc98](https://github.com/chicio/chicio-blog/commit/c19cc9881f272f7260640ffa41e5fbf4c521a6ee))
+* **scripts:** add GameMetadata dataclass and parse_frontmatter_metadata() ([40045db](https://github.com/chicio/chicio-blog/commit/40045db746627e7b5f064eee611fabcfc2abff7f))
+* **scripts:** add interactive_platform_mapping() function ([9168cc4](https://github.com/chicio/chicio-blog/commit/9168cc49fd4421c8a54c91b24fa19a84f9a00dc6))
+* **scripts:** add PEP 723 metadata with python-frontmatter dependency ([d493bd7](https://github.com/chicio/chicio-blog/commit/d493bd7134c64814f3c27eb5ce81db072ba5f9c6))
+* **scripts:** add platform filter to IGDB search query ([4f991d3](https://github.com/chicio/chicio-blog/commit/4f991d37b6de226ac33d562d568c4ee19096892f))
+* **scripts:** integrate platform mapping into main() bootstrap and process_game_folder() ([e0022be](https://github.com/chicio/chicio-blog/commit/e0022be9f597e3dd33134e1bd6a33c2a8b57a8b8))
+* **ux:** :sparkles: add GameBreadcrumb client component with dynamic origin ([12a520e](https://github.com/chicio/chicio-blog/commit/12a520e41eb29d7811f7971b3b05d4c27354111f))
+* **ux:** :sparkles: add sessionStorage helpers with fabrizioduroni_ prefix ([f3d41f8](https://github.com/chicio/chicio-blog/commit/f3d41f8c9776e24c6c3ec833633b349c5ced735d))
+* **ux:** :sparkles: add VideogamesNavigationOrigin type ([2e9c17c](https://github.com/chicio/chicio-blog/commit/2e9c17cca7e53c12913bcb6907abef6ddfaf172d))
+* **ux:** :sparkles: pass navigation origin through GameGrid to GameCard ([2178f81](https://github.com/chicio/chicio-blog/commit/2178f815ede26030dcbed3e913aac8b8421a2203))
+* **ux:** :sparkles: persist videogames tab selection in localStorage ([7736c65](https://github.com/chicio/chicio-blog/commit/7736c657316dd70541cca940d53bf9862fae2977))
+* **ux:** :sparkles: wire dynamic GameBreadcrumb into game page ([c6531c2](https://github.com/chicio/chicio-blog/commit/c6531c2d03beeb325392f9ffdef314c255356f1f))
+* **ux:** :sparkles: write navigation origin to sessionStorage on GameCard click ([0b903c9](https://github.com/chicio/chicio-blog/commit/0b903c9451686767436c349c7e83a20b4c446c95))
+
+### Bug Fixes
+
+* **scripts:** filter noisy word matches and handle EOFError in platform mapping ([add5aee](https://github.com/chicio/chicio-blog/commit/add5aeeb8229537b6bcab989d36cafdb839812e8))
+* **scripts:** use array containment syntax for IGDB platform filter ([b5d5085](https://github.com/chicio/chicio-blog/commit/b5d50854117003f077e533ed4919d219209320b1))
+
 ## [3.16.0](https://github.com/chicio/chicio-blog/compare/v3.15.0...v3.16.0) (2026-04-06)
 
 ### Features
