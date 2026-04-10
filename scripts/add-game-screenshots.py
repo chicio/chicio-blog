@@ -542,6 +542,19 @@ def parse_frontmatter_metadata(mdx_file: Path, game_slug: str) -> GameMetadata:
     return GameMetadata(title=str(title).strip(), console=str(console).strip())
 
 
+def collect_unique_consoles(game_folders: list[Path]) -> list[str]:
+    consoles: set[str] = set()
+    for folder in game_folders:
+        mdx_file = folder / "content.mdx"
+        if not mdx_file.exists():
+            continue
+        game_slug = folder.name
+        metadata = parse_frontmatter_metadata(mdx_file, game_slug)
+        if metadata.console:
+            consoles.add(metadata.console)
+    return sorted(consoles)
+
+
 def ensure_imports(mdx_body: str) -> str:
     required_imports = [
         'import { ImageCarousel } from "@/components/design-system/organism/image-carousel";',
