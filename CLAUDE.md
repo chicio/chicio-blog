@@ -219,7 +219,11 @@ GitHub Actions workflow in `.github/workflows/build.yml`:
 
 Uses `release-it` with conventional changelog plugin (`.release-it.json`):
 - Generates `CHANGELOG.md` automatically
-- Follows conventional commits
-- Commit scopes: `performance`, `ux`, `capabilities`, `content`
 - Creates GitHub releases automatically
 - Run: `npm run release`
+
+## Commit convention
+
+- Commit scopes: `performance`, `ux`, `capabilities`, `content`
+- Follows conventional commits
+- Use Gitmojii convention already in place for the commits until today
