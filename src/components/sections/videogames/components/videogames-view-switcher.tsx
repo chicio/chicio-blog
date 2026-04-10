@@ -20,7 +20,7 @@ type View = "consoles" | "games";
 const FilteredGameGrid = memo(
     ({ games, query }: { games: Content<GameMetadata>[]; query: string; isPending: boolean }) =>
         games.length > 0 ? (
-            <GameGrid games={games} />
+            <GameGrid games={games} navigationOrigin="all-games" />
         ) : (
             <div className="text-secondary flex flex-col items-center gap-3 py-16">
                 <IoGameControllerOutline className="text-accent text-shadow-lg size-12" />
