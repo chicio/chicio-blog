@@ -358,7 +358,7 @@ def collect_igdb_candidates(title: str, igdb_client_id: str | None, igdb_access_
 
     # Step 1: Search for the game by name
     try:
-        platform_filter = f" where platforms = ({platform_id});" if platform_id else ""
+        platform_filter = f" where platforms = [{platform_id}];" if platform_id else ""
         search_query = f'search "{title}"; fields id, name;{platform_filter} limit 5;'
         search_url = "https://api.igdb.com/v4/games"
         req = Request(
