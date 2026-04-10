@@ -740,6 +740,7 @@ def process_game_folder(
     dry_run: bool,
     igdb_client_id: str | None,
     igdb_access_token: str | None,
+    platform_mapping: dict[str, int | None] | None = None,
 ) -> tuple[bool, str, str | None]:
     mdx_file = game_folder / "content.mdx"
     if not mdx_file.exists():
@@ -774,10 +775,11 @@ def process_game_folder(
     local_candidates = collect_local_candidates(public_game_folder)
     print(f"  ✓ Local: {len(local_candidates)}")
 
-    wikimedia_candidates = collect_wikimedia_candidates(game_title)
+    wikimedia_candidates = collect_wikimedia_candidates(game_title, game_metadata.console)
     print(f"  ✓ Wikimedia Commons: {len(wikimedia_candidates)}")
 
-    igdb_candidates = collect_igdb_candidates(game_title, igdb_client_id, igdb_access_token)
+    platform_id = platform_mapping.get(game_metadata.console) if platform_mapping else None
+    igdb_candidates = collect_igdb_candidates(game_title, igdb_client_id, igdb_access_token, platform_id)
     print(f"  ✓ IGDB: {len(igdb_candidates)}")
 
     total_candidates = len(local_candidates) + len(wikimedia_candidates) + len(igdb_candidates)
@@ -847,12 +849,21 @@ def main() -> int:
 
     if args.game_folder:
         game_folder = Path(args.game_folder).resolve()
+        # Bootstrap: collect console and build platform mapping
+        platform_mapping: dict[str, int | None] | None = None
+        if igdb_access_token and igdb_client_id:
+            unique_consoles = collect_unique_consoles([game_folder])
+            if unique_consoles:
+                igdb_platforms = fetch_igdb_platforms(igdb_client_id, igdb_access_token)
+                platform_mapping = interactive_platform_mapping(unique_consoles, igdb_platforms)
+
         success, key, error_message = process_game_folder(
             game_folder,
             args.max_images,
             args.dry_run,
             igdb_client_id,
             igdb_access_token,
+            platform_mapping,
         )
 
         if not success:
@@ -872,6 +883,14 @@ def main() -> int:
         return 1
 
     print(f"🧭 Batch mode: discovered {len(game_folders)} games")
+
+    # Bootstrap: collect consoles and build platform mapping
+    platform_mapping: dict[str, int | None] | None = None
+    if igdb_access_token and igdb_client_id:
+        unique_consoles = collect_unique_consoles(game_folders)
+        if unique_consoles:
+            igdb_platforms = fetch_igdb_platforms(igdb_client_id, igdb_access_token)
+            platform_mapping = interactive_platform_mapping(unique_consoles, igdb_platforms)
 
     skipped = 0
     processed_attempts = 0
@@ -906,6 +925,7 @@ def main() -> int:
             args.dry_run,
             igdb_client_id,
             igdb_access_token,
+            platform_mapping,
         )
 
         if success:
