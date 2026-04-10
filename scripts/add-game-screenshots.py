@@ -249,8 +249,11 @@ def collect_local_candidates(public_game_folder: Path) -> list[Candidate]:
     return local_candidates
 
 
-def collect_wikimedia_candidates(title: str) -> list[Candidate]:
-    search_queries = [f"{title} gameplay screenshot", f"{title} screenshot"]
+def collect_wikimedia_candidates(title: str, console_name: str = "") -> list[Candidate]:
+    if console_name:
+        search_queries = [f"{title} {console_name} gameplay screenshot", f"{title} screenshot"]
+    else:
+        search_queries = [f"{title} gameplay screenshot", f"{title} screenshot"]
     candidates: list[Candidate] = []
 
     for query in search_queries:
