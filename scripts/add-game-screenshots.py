@@ -337,7 +337,7 @@ def get_igdb_access_token(igdb_client_id: str, igdb_client_secret: str) -> str |
         return None
 
 
-def collect_igdb_candidates(title: str, igdb_client_id: str | None, igdb_access_token: str | None) -> list[Candidate]:
+def collect_igdb_candidates(title: str, igdb_client_id: str | None, igdb_access_token: str | None, platform_id: int | None = None) -> list[Candidate]:
     """
     Collect screenshot candidates from IGDB API.
     Requires IGDB_CLIENT_ID and IGDB_CLIENT_SECRET environment variables.
@@ -355,7 +355,8 @@ def collect_igdb_candidates(title: str, igdb_client_id: str | None, igdb_access_
 
     # Step 1: Search for the game by name
     try:
-        search_query = f'search "{title}"; fields id, name; limit 5;'
+        platform_filter = f" where platforms = ({platform_id});" if platform_id else ""
+        search_query = f'search "{title}"; fields id, name;{platform_filter} limit 5;'
         search_url = "https://api.igdb.com/v4/games"
         req = Request(
             search_url,
