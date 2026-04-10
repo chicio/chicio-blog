@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+# /// script
+# requires-python = ">=3.12"
+# dependencies = [
+#     "python-frontmatter",
+# ]
+# ///
 """
 add-game-screenshots.py
 
@@ -82,6 +88,7 @@ from dataclasses import dataclass
 from html import unescape
 from pathlib import Path
 from typing import Any
+import frontmatter
 from urllib.error import HTTPError, URLError
 from urllib.parse import quote
 from urllib.request import Request, urlopen
