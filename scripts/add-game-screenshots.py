@@ -25,10 +25,12 @@ Batch mode (--all-games):
   4. Waits a random delay between processed games (default: 30-120s)
       to avoid aggressive request bursts; delay is skipped in --dry-run mode
 
-Screenshot sources (in priority order):
-  1. Local images already in public/images/.../gameplay/  (kept in place, never re-copied)
-  2. Wikimedia Commons (free-licensed images, downloaded into gameplay/ with next available number)
-  3. IGDB API (requires IGDB_CLIENT_ID and IGDB_CLIENT_SECRET in .env.others; auto-generates access token, optional fallback)
+Screenshot sources:
+  1. Wikimedia Commons (free-licensed images, downloaded into gameplay/)
+  2. IGDB API (requires IGDB_CLIENT_ID and IGDB_CLIENT_SECRET in .env.others; auto-generates access token, optional fallback)
+
+When (re)creating a carousel, any existing images in the gameplay/ folder are deleted
+and new images are downloaded from scratch, numbered starting from 1.
 
 The script collects up to --max-images candidates.
 If fewer are available, it still creates the carousel with the found images.
@@ -241,25 +243,6 @@ def list_images_recursive(folder: Path) -> list[Path]:
             images.append(child)
     return images
 
-
-def collect_local_candidates(public_game_folder: Path) -> list[Candidate]:
-    local_candidates: list[Candidate] = []
-
-    folder = public_game_folder / "gameplay"
-    for idx, file_path in enumerate(sorted(list_images_recursive(folder)), start=1):
-        local_candidates.append(
-            Candidate(
-                provider="local-gameplay",
-                safe=True,
-                local_path=file_path,
-                remote_url=None,
-                source_name="Personal Collection",
-                source_url="",
-                description=f"Gameplay screenshot {idx} from local collection",
-            ),
-        )
-
-    return local_candidates
 
 
 def collect_wikimedia_candidates(title: str, console_name: str = "") -> list[Candidate]:
@@ -499,45 +482,39 @@ def persist_screenshots(
 ) -> list[SelectedScreenshot]:
     persisted: list[SelectedScreenshot] = []
 
-    # Next index for newly downloaded images (after any existing files)
-    existing_images = sorted(list_images_recursive(gameplay_dir)) if gameplay_dir.exists() else []
-    next_index = len(existing_images) + 1
+    # Clean up old gameplay images and restart numbering from 1
+    if not dry_run and gameplay_dir.exists():
+        for old_image in list_images_recursive(gameplay_dir):
+            old_image.unlink()
+    next_index = 1
 
     for idx, candidate in enumerate(selected, start=1):
-        if candidate.local_path is not None:
-            # Already in gameplay/ — derive the web path from the existing file, no copy needed.
-            rel = candidate.local_path.relative_to(Path.cwd() / "public")
-            image_web_path = "/" + rel.as_posix()
-            attribution = "Personal Collection"
-            print(f"  [{idx}/{len(selected)}] Using local: {candidate.local_path.name}")
+        output_path = gameplay_dir / f"{next_index}.jpg"
+        temp_path = gameplay_dir / f".__tmp_{next_index}"
+
+        if not dry_run:
+            if not gameplay_dir.exists():
+                gameplay_dir.mkdir(parents=True, exist_ok=True)
+            print(f"  [{idx}/{len(selected)}] Downloading from {candidate.source_name}...")
+            download_file(candidate.remote_url, temp_path)  # type: ignore[arg-type]
+            print(f"    Normalizing to JPEG 1280px...")
+            normalize_image_to_jpg(temp_path, output_path)
+            if temp_path.exists():
+                temp_path.unlink()
         else:
-            # Remote image — download into gameplay/ with the next sequential number.
-            output_path = gameplay_dir / f"{next_index}.jpg"
-            temp_path = gameplay_dir / f".__tmp_{next_index}"
+            print(f"  [{idx}/{len(selected)}] Would download from {candidate.source_name}")
 
-            if not dry_run:
-                if not gameplay_dir.exists():
-                    gameplay_dir.mkdir(parents=True, exist_ok=True)
-                print(f"  [{idx}/{len(selected)}] Downloading from {candidate.source_name}...")
-                download_file(candidate.remote_url, temp_path)  # type: ignore[arg-type]
-                print(f"    Normalizing to JPEG 1280px...")
-                normalize_image_to_jpg(temp_path, output_path)
-                if temp_path.exists():
-                    temp_path.unlink()
-            else:
-                print(f"  [{idx}/{len(selected)}] Would download from {candidate.source_name}")
-
-            image_web_path = (
-                f"/images/videogames/console/{console_slug}/game/{game_slug}/gameplay/{next_index}.jpg"
-            )
-            # Determine attribution based on provider
-            if candidate.provider == "igdb":
-                attribution = "IGDB"
-            elif candidate.provider == "wikimedia":
-                attribution = f"Wikimedia Commons ({candidate.license})" if candidate.license else "Wikimedia Commons"
-            else:
-                attribution = candidate.source_name
-            next_index += 1
+        image_web_path = (
+            f"/images/videogames/console/{console_slug}/game/{game_slug}/gameplay/{next_index}.jpg"
+        )
+        # Determine attribution based on provider
+        if candidate.provider == "igdb":
+            attribution = "IGDB"
+        elif candidate.provider == "wikimedia":
+            attribution = f"Wikimedia Commons ({candidate.license})" if candidate.license else "Wikimedia Commons"
+        else:
+            attribution = candidate.source_name
+        next_index += 1
 
         persisted.append(
             SelectedScreenshot(
@@ -785,8 +762,6 @@ def process_game_folder(
     key = f"{console_slug}/{game_slug}"
 
     print("🔍 Collecting candidates...")
-    local_candidates = collect_local_candidates(public_game_folder)
-    print(f"  ✓ Local: {len(local_candidates)}")
 
     wikimedia_candidates = collect_wikimedia_candidates(game_title, game_metadata.console)
     print(f"  ✓ Wikimedia Commons: {len(wikimedia_candidates)}")
@@ -795,11 +770,11 @@ def process_game_folder(
     igdb_candidates = collect_igdb_candidates(game_title, igdb_client_id, igdb_access_token, platform_id)
     print(f"  ✓ IGDB: {len(igdb_candidates)}")
 
-    total_candidates = len(local_candidates) + len(wikimedia_candidates) + len(igdb_candidates)
+    total_candidates = len(wikimedia_candidates) + len(igdb_candidates)
     print(f"📊 Total candidates: {total_candidates}")
 
     selected = select_candidates(
-        [*local_candidates, *wikimedia_candidates, *igdb_candidates],
+        [*wikimedia_candidates, *igdb_candidates],
         max_images,
     )
     print(f"✅ Selected: {len(selected)}/{max_images}")
