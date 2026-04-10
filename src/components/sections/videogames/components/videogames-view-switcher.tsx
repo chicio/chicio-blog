@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { Content } from "@/types/content/content";
 import { GameMetadata } from "@/types/content/videogames";
 import { ConsoleCard } from "@/components/sections/videogames/components/console-card";
@@ -11,6 +11,7 @@ import {
 } from "@/components/design-system/molecules/buttons/segmented-control";
 import { GamesFilter } from "@/components/sections/videogames/components/games-filter";
 import { ConsoleWithGameCount, useGamesFilter } from "@/components/sections/videogames/hooks/use-games-filter";
+import { readLocalStorage, writeLocalStorage } from "@/lib/local-storage/local-storage";
 import { IoGameControllerOutline } from "react-icons/io5";
 import { GiGameConsole } from "react-icons/gi";
 
@@ -61,6 +62,14 @@ export const VideogamesViewSwitcher: React.FC<VideogamesViewSwitcherProps> = ({
     games,
 }) => {
     const [activeView, setActiveView] = useState<View>("consoles");
+
+    useEffect(() => {
+        const saved = readLocalStorage("videogames_view");
+        if (saved === "consoles" || saved === "games") {
+            setActiveView(saved);
+        }
+    }, []);
+
     const { query, filteredGames, filteredConsoles, handleFilter, resetFilter, isPending } = useGamesFilter(
         games,
         consolesWithGameCount,
@@ -69,6 +78,7 @@ export const VideogamesViewSwitcher: React.FC<VideogamesViewSwitcherProps> = ({
     const handleViewChange = (view: View) => {
         resetFilter();
         setActiveView(view);
+        writeLocalStorage("videogames_view", view);
     };
 
     return (
