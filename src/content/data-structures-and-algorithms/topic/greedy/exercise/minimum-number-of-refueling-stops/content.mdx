@@ -1,0 +1,57 @@
+---
+title: "Minimum Number of Refueling Stops"
+description: "Given a target distance, starting fuel, and gas stations along the way, find the minimum number of refueling stops to reach the destination."
+date: 2026-04-11
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [greedy, algorithms, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Greedy deferred refueling with max-heap"
+  leetcodeUrl: "https://leetcode.com/problems/minimum-number-of-refueling-stops/"
+---
+# Minimum Number of Refueling Stops
+
+Leetcode Problem 871: [Minimum Number of Refueling Stops](https://leetcode.com/problems/minimum-number-of-refueling-stops/description/)
+
+## Problem Summary
+A car starts at position **0** and must travel to a target destination some number of miles east. The car begins with a given amount of fuel and consumes one liter per mile. Along the route there are gas stations, each described by its position and the amount of fuel available. At each station the car may choose to stop and refuel, adding the station's entire fuel supply to its tank. Determine the minimum number of refueling stops needed to reach the target, or return **-1** if it is impossible.
+
+The target distance is at most **1,000,000,000**. There are at most **500** gas stations.
+
+## Techniques
+- Array
+- Dynamic Programming
+- Greedy
+- Heap (Priority Queue)
+
+## Solution
+```ts
+import { Heap } from "../heap";
+
+function minRefuelStops(target: number, startFuel: number, stations: number[][]): number {
+    const stationsRank = new Heap<number>((a, b) => b - a);
+    let tank = startFuel;
+    let refuels = 0;
+    let prevPosition = 0;
+
+    for (let i = 0; i < stations.length; i++) {
+        const [position, fuel] = stations[i];
+
+        while (tank < position && stationsRank.size() > 0) {
+            tank += stationsRank.extract()!;
+            refuels++;
+        }
+
+        if (tank < position) return -1;
+
+        stationsRank.insert(fuel);
+    }
+
+    while (tank < target && stationsRank.size() > 0) {
+        tank += stationsRank.extract()!;
+        refuels++;
+    }
+
+    return tank >= target ? refuels : -1;
+};
+```

@@ -1,0 +1,73 @@
+---
+title: "Task Scheduler"
+description: "Given CPU tasks with cooldown constraints, find the minimum number of intervals needed to complete all tasks."
+date: 2026-04-11
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [greedy, algorithms, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Greedy frequency-based scheduling with heap and cooldown queue"
+  leetcodeUrl: "https://leetcode.com/problems/task-scheduler/"
+---
+# Task Scheduler
+
+Leetcode Problem 621: [Task Scheduler](https://leetcode.com/problems/task-scheduler/description/)
+
+## Problem Summary
+You are given a list of CPU tasks, each identified by an uppercase letter from A to Z, and a cooldown number **n**. Each CPU time unit can either execute one task or remain idle. The constraint is that between two executions of the same task, there must be at least **n** time units of gap (during which other tasks or idle time may occur). Tasks may be completed in any order. Return the minimum number of CPU intervals required to finish all tasks.
+
+The number of tasks is between **1** and **10,000**. The cooldown **n** is between **0** and **100**.
+
+## Techniques
+- Array
+- Hash Table
+- Greedy
+- Sorting
+- Heap (Priority Queue)
+- Counting
+
+## Solution
+```ts
+import { Heap } from "../heap";
+
+type TaskCount = { task: string; count: number }
+type CooldownItem = { task: string; count: number; availableAt: number }
+
+function leastInterval(tasks: string[], n: number): number {
+    const maxHeap = new Heap<TaskCount>((a, b) => b.count - a.count)
+    const frequency = new Map<string, number>()
+
+    for (const t of tasks) {
+        frequency.set(t, (frequency.get(t) || 0) + 1)
+    }
+
+    for (const [task, count] of frequency.entries()) {
+        maxHeap.insert({ task, count })
+    }
+
+    const cooldown: CooldownItem[] = [];
+    let time = 0;
+
+    while (maxHeap.size() > 0 || cooldown.length > 0) {
+        time++;
+        const current = maxHeap.extract()
+
+        if (current) {
+            current.count--
+
+            if (current.count > 0) {
+                cooldown.push({ task: current.task, count: current.count, availableAt: time + n })
+            }
+        }
+
+        if (cooldown.length > 0 && cooldown[0].availableAt === time) {
+            while (cooldown.length > 0 && cooldown[0].availableAt === time) {
+                const ready = cooldown.shift()!
+                maxHeap.insert({ task: ready.task, count: ready.count })
+            }
+        }
+    }
+
+    return time;
+}
+```

@@ -178,6 +178,17 @@ The problem summary must be written cleanly, not raw-copied from LeetCode:
 
 See existing exercises for reference: `topic/queue/exercise/number-of-recent-calls/content.mdx`, `topic/backtracking/exercise/combination-sum/content.mdx`.
 
+### Step 8e: Clean Up Downloaded Exercise Files
+
+After all exercise MDX files have been generated, remove the `exercises/` subfolder that was created in Step 7.
+It was only needed as a temporary staging area for the raw `.ts` files and must not be committed to the repository.
+
+```bash
+rm -rf src/content/data-structures-and-algorithms/topic/<topic-name>/exercises/
+```
+
+Do this automatically without asking the user.
+
 ### Step 9: Propose Article Outline
 
 Based on the exercise list, the topic nature, and any similar topic structure from memory, propose a complete section outline for the article.

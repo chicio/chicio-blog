@@ -54,6 +54,12 @@ Topics within the same group share a similar article layout and can be used as t
 **Template**: data-structure-design
 **Why**: This is a unique article type that doesn't fit the "single data structure" or "single algorithm" pattern. It's about composing multiple primitives. Future topics like "system design" could follow a similar pattern-based organization.
 
+### Group: Greedy / Optimization Paradigms
+**Topics**: greedy, intervals (partial overlap)
+**Pattern**: Intro explaining the paradigm, theoretical foundation section (properties, proofs, DP contrast), multiple technique sections organized by structural pattern (not by exercise), counterexamples/failure modes section, Time & Space Complexity (prose format), Exercises.
+**Template**: greedy
+**Why**: Greedy is a broad paradigm. The article is organized around structural patterns (single-pass, multi-pass, heap-based) with generic illustrative examples, not tightly coupled to specific exercises. The intervals article overlaps because it covers greedy scheduling, but intervals is more narrowly focused on interval-specific operations.
+
 ## Complexity Format Convention
 
 - **Data structures** → use a **table** (operations vs time/space)
