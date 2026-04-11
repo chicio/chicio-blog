@@ -488,24 +488,19 @@ If you cannot show that swapping a non-greedy choice for the greedy choice prese
 
 Greedy algorithms are among the most efficient algorithmic strategies in terms of both time and space, precisely because they avoid the overhead of exploring multiple solution paths or storing intermediate results.
 
-A single-pass greedy algorithm that maintains a constant number of running variables processes each element exactly once, yielding $O(n)$ time and $O(1)$ extra space.
-Problems solved by running surplus tracking, balance counting, or range expansion all fall into this category.
-The running surplus pattern for circular route feasibility, the parenthesis balance tracker, and the range expansion pattern for minimum jumps all exhibit this behavior.
+| Pattern | Examples | Time | Space |
+|---------|----------|------|-------|
+| Single-Pass (constant state) | Running surplus, balance tracking, range expansion | $O(n)$ | $O(1)$ |
+| Multi-Pass (bidirectional) | Left-right constraint reconciliation | $O(n)$ | $O(n)$ |
+| Heap-Based (bounded heap) | Scheduling with cooldowns, deferred selection | $O(n \log k)$ | $O(k)$ |
+| Heap-Based (unbounded heap) | Retroactive refueling, general deferred decisions | $O(n \log n)$ | $O(n)$ |
+| Sort + Greedy Sweep | Ratio sorting with heap pruning | $O(n \log n)$ | $O(n)$ |
 
-Multi-pass greedy algorithms run a constant number of linear passes over the data.
-Each pass is $O(n)$, and the total is still $O(n)$.
-However, multi-pass solutions typically require auxiliary arrays, one per pass, to record the intermediate results that must be reconciled.
-This brings the space complexity to $O(n)$.
-The bidirectional constraint reconciliation pattern (left-to-right pass, right-to-left pass, element-wise merge) is the standard example.
+Single-pass algorithms process each element exactly once with a constant number of running variables, yielding the best possible complexity.
+Multi-pass algorithms run a constant number of linear passes, keeping $O(n)$ time but requiring auxiliary arrays for intermediate results.
+Heap-based algorithms introduce an $O(\log n)$ or $O(\log k)$ factor per element, where $k$ is the number of distinct items in the heap.
+When a sorting step is required as a prerequisite, it dominates at $O(n \log n)$ and the greedy scan that follows does not change the overall bound.
 
-Greedy algorithms that use a heap introduce an $O(\log n)$ or $O(\log k)$ factor per element, where $k$ is the number of distinct items maintained in the heap.
-The total time becomes $O(n \log n)$ or $O(n \log k)$, depending on whether the heap size is bounded by the input size or by some smaller parameter.
-The space cost of the heap is $O(n)$ in the worst case (if all elements may be inserted) or $O(k)$ if the heap size is bounded.
-
-When the greedy algorithm requires a sorting step as a prerequisite (for example, sorting by a derived ratio before sweeping with a heap), the sorting dominates the preprocessing at $O(n \log n)$.
-The greedy scan that follows is either $O(n)$ or $O(n \log k)$, and the overall time is $O(n \log n)$.
-
-In summary, greedy algorithms range from $O(n)$ time and $O(1)$ space at their leanest, to $O(n \log n)$ time and $O(n)$ space when sorting and heap operations are involved.
 This efficiency is a direct consequence of the greedy paradigm's defining property: each element is considered at most a constant number of times, and no element's decision is ever revisited.
 
 ## Exercises
