@@ -220,6 +220,43 @@ For example, if the topic is "Data Structure Design", remove this entire row:
 
 Do this automatically without asking the user. The `<Topics />` component already renders completed topics dynamically, so removing the row from the "not available" table is all that is needed.
 
+### Step 12: Create Pull Request
+
+Once the article, exercises, and roadmap update are finalized, create a pull request on GitHub:
+
+1. Create a new branch from `main` with the topic name (e.g., `feat/content-<topic-name>`)
+2. Stage and commit all new/changed files with a conventional commit message
+3. Push the branch and create a PR using the GitHub CLI:
+   ```bash
+   gh pr create --title "feat(content): :sparkles: <topic name>" --body "$(cat <<'EOF'
+   <topic name> dsa page
+
+   ## Description
+   New dsa page in dsa course for <topic name>.
+
+   ## Motivation and Context
+   Dsa course
+
+   ## How Has This Been Tested?
+   Browser
+
+   ## Types of changes
+   - [ ] Bug fix :bug: (non-breaking change which fixes an issue)
+   - [x] New feature :sparkles: (non-breaking change which adds functionality)
+   - [ ] Breaking change :boom: (fix or feature that would cause existing functionality to change)
+
+   ## Checklist:
+   - [X] My code follows the code style of this project :beers:.
+   - [X] My change requires a change to the documentation :bulb: and I have updated the documentation accordingly.
+   - [X] I have read the [CONTRIBUTING](https://github.com/chicio/chicio.github.io/blob/master/CONTRIBUTING.md) document :busts_in_silhouette:.
+   - [X] I have added tests to cover my changes :tada:.
+   - [X] All new and existing tests passed :white_check_mark:.
+   EOF
+   )"
+   ```
+
+Do this automatically without asking the user.
+
 ## Review Flow
 
 When the user selects a review session in Step 2:
@@ -254,6 +291,43 @@ Examples of memory updates after a review:
 - Refined writing style rule → update `writing_approach.md`
 - Added/changed interactive components → update `component_patterns.md`
 
+### Review Step 5: Create Pull Request
+
+Once all review changes are applied and confirmed by the user, create a pull request on GitHub:
+
+1. Create a new branch from `main` (e.g., `refactor/content-<topic-name>-review`)
+2. Stage and commit all changed files with a conventional commit message
+3. Push the branch and create a PR using the GitHub CLI:
+   ```bash
+   gh pr create --title "refactor(content): :recycle: <topic name> review" --body "$(cat <<'EOF'
+   <topic name> dsa page review
+
+   ## Description
+   <brief description of the review changes applied to the topic>
+
+   ## Motivation and Context
+   Dsa course
+
+   ## How Has This Been Tested?
+   Browser
+
+   ## Types of changes
+   - [ ] Bug fix :bug: (non-breaking change which fixes an issue)
+   - [ ] New feature :sparkles: (non-breaking change which adds functionality)
+   - [ ] Breaking change :boom: (fix or feature that would cause existing functionality to change)
+
+   ## Checklist:
+   - [X] My code follows the code style of this project :beers:.
+   - [X] My change requires a change to the documentation :bulb: and I have updated the documentation accordingly.
+   - [X] I have read the [CONTRIBUTING](https://github.com/chicio/chicio.github.io/blob/master/CONTRIBUTING.md) document :busts_in_silhouette:.
+   - [X] I have added tests to cover my changes :tada:.
+   - [X] All new and existing tests passed :white_check_mark:.
+   EOF
+   )"
+   ```
+
+Do this automatically without asking the user.
+
 ## Article Writing Conventions
 
 ### Format and Language
@@ -262,6 +336,30 @@ Examples of memory updates after a review:
 - Use **Italian-style punctuation**: periods, commas. Avoid dashes (em-dashes, en-dashes) as much as possible
 - Avoid bullet lists unless they are truly needed to show a list of options, algorithm steps, or enumerated items
 - Prefer flowing prose with clear paragraph structure
+
+### Line Formatting (Semantic Line Breaks)
+All MDX prose must use **semantic line breaks**: each sentence or logical clause starts on its own line within a paragraph.
+Lines within the same paragraph are **not** separated by blank lines (so they render as a single paragraph).
+This makes the source readable on a monitor without horizontal scrolling and produces cleaner diffs.
+
+**Rules:**
+- Break after each sentence (ending with `.`, `?`, `!`)
+- Long sentences may be broken at a natural clause boundary (e.g., after a comma or before a conjunction) if the line would exceed ~140 characters
+- Do NOT put blank lines between lines of the same paragraph. Blank lines start a new paragraph
+- Code blocks, tables, and component tags are exempt from this rule
+
+**Example (correct):**
+```mdx
+Backtracking is a powerful algorithmic technique used to solve **combinatorial problems**, **constraint satisfaction problems**,
+and problems that require exploring multiple possible solutions efficiently.
+At its core, backtracking is a form of **depth-first search** over a **decision tree**, where each node represents a choice point
+and branches represent possible options.
+```
+
+**Example (wrong — one infinite line):**
+```mdx
+Backtracking is a powerful algorithmic technique used to solve **combinatorial problems**, **constraint satisfaction problems**, and problems that require exploring multiple possible solutions efficiently. At its core, backtracking is a form of **depth-first search** over a **decision tree**, where each node represents a choice point and branches represent possible options.
+```
 
 ### Content Depth
 - Deep, potentially academic depth
