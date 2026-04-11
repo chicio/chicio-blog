@@ -349,6 +349,8 @@ Do this automatically without asking the user.
 - Use **Italian-style punctuation**: periods, commas. Avoid dashes (em-dashes, en-dashes) as much as possible
 - Avoid bullet lists unless they are truly needed to show a list of options, algorithm steps, or enumerated items
 - Prefer flowing prose with clear paragraph structure
+- Use bold text for highlighting important terms and concepts, but avoid overusing it to prevent visual clutter.
+- Use italics sparingly for emphasis or to denote special terms, but do not rely on it heavily.
 
 ### Line Formatting (Semantic Line Breaks)
 All MDX prose must use **semantic line breaks**: each sentence or logical clause starts on its own line within a paragraph.
