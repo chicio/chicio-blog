@@ -104,6 +104,14 @@ Once the user confirms the topic and exercise folder(s), use the **GitHub CLI (`
    ```
    If there are multiple source folders, fetch from all of them.
 
+**IMPORTANT — Shell Safety Rules (avoid permission prompts):**
+Claude Code's safety analysis blocks certain shell patterns. To avoid permission prompts, follow these rules strictly:
+
+- **Never use `for` loops** to batch-download files. Instead, run each `gh api ... | base64 -d > path` as a **separate Bash command**. You can run multiple Bash commands in parallel.
+- **Never use brace expansion** (`{a,b,c}`) in `mkdir` or any command. Instead, run `mkdir -p` once per directory, or list full paths separated by spaces.
+- **Never use shell variable interpolation in redirect targets** (e.g., `> "$dir/$file"`). Always use **literal, fully-resolved paths** in redirects.
+- **Never use `head`/`cat`/`tail` in `for` loops.** Use the Read tool instead of Bash for reading file contents, or run individual commands per file.
+
 **Note**: Always use `gh` CLI for any GitHub operation (fetching files, listing contents, etc.). Never use raw `curl` calls to the GitHub API.
 
 ### Step 8: Generate Exercise MDX Files
