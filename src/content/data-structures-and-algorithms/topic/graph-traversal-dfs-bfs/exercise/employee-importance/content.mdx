@@ -1,0 +1,64 @@
+---
+title: "Employee Importance"
+description: "Given a list of employees with importance values and subordinate lists, return the total importance of a given employee and all their subordinates."
+date: 2026-04-11
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [graph, dfs, bfs, traversal, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "DFS value propagation on tree-structured graph"
+  leetcodeUrl: "https://leetcode.com/problems/employee-importance/"
+---
+# Employee Importance
+
+Leetcode Problem 690: [Employee Importance](https://leetcode.com/problems/employee-importance/description/)
+
+## Problem Summary
+Given a list of employees where each employee has a unique integer ID, an importance value, and a list of direct subordinate IDs, return the total importance value of a given employee and all their direct and indirect subordinates. There are at most **2,000** employees, and each employee has at most one direct manager.
+
+## Techniques
+- Hash Table
+- Depth-First Search
+- Breadth-First Search
+- Tree
+
+## Solution
+```ts
+class Employee {
+    id: number
+    importance: number
+    subordinates: number[]
+    constructor(id: number, importance: number, subordinates: number[]) {
+        this.id = (id === undefined) ? 0 : id;
+        this.importance = (importance === undefined) ? 0 : importance;
+        this.subordinates = (subordinates === undefined) ? [] : subordinates;
+    }
+}
+
+function employeeImportance(currentEmployee: Employee | undefined, employeesMap: Map<number, Employee>): number {
+    if (!currentEmployee) {
+        return 0
+    }
+
+    let subordinatesImportance = 0
+
+    for (let i = 0; i < currentEmployee.subordinates.length; i++) {
+        subordinatesImportance = subordinatesImportance + employeeImportance(
+            employeesMap.get(currentEmployee.subordinates[i]), 
+            employeesMap
+        )
+    }
+
+    return currentEmployee.importance + subordinatesImportance
+}
+
+function getImportance(employees: Employee[], id: number): number {
+    const employeesMap = new Map<number, Employee>()
+
+    for (const employee of employees) {
+        employeesMap.set(employee.id, employee)
+    }
+
+    return employeeImportance(employeesMap.get(id), employeesMap)
+};
+```

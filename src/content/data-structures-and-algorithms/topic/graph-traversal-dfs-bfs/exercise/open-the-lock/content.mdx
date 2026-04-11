@@ -1,0 +1,86 @@
+---
+title: "Open the Lock"
+description: "Given a lock with 4 circular wheels and a list of deadends, find the minimum number of turns to reach the target combination from 0000."
+date: 2026-04-11
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [graph, dfs, bfs, traversal, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "BFS on implicit state-space graph"
+  leetcodeUrl: "https://leetcode.com/problems/open-the-lock/"
+---
+# Open the Lock
+
+Leetcode Problem 752: [Open the Lock](https://leetcode.com/problems/open-the-lock/description/)
+
+## Problem Summary
+A lock has 4 circular wheels, each with digits **0** through **9** that wrap around (so **9** can turn to **0** and vice versa). The lock starts at `"0000"`. Each move turns one wheel one slot. Given a list of deadend combinations (states that lock the wheels permanently) and a target combination, return the minimum number of moves to reach the target, or **-1** if it is impossible. The deadends list has at most **500** entries, and both deadends and target are 4-character digit strings.
+
+## Techniques
+- Array
+- Hash Table
+- String
+- Breadth-First Search
+
+## Solution
+```ts
+function setCharAt(str: string, index: number, chr: string | number): string {
+    if(index > str.length-1) {
+        return str;
+    } 
+
+    return str.substring(0,index) + chr + str.substring(index+1);
+}
+
+function openLock(deadends: string[], target: string): number {
+    if (deadends.includes('0000')) {
+        return -1
+    }
+
+    let visited = new Set<string>(
+        ["0000"]
+    )
+    let queue = [
+        "0000"
+    ]
+
+    let moves = 0
+
+    while (queue.length > 0) {
+        let currentLevelSize = queue.length
+
+        while (currentLevelSize > 0) {
+            const currentMove = queue.shift()!
+
+            if (currentMove === target)  {
+                return moves
+            }
+
+            for (let i = 0; i < 4; i++) {
+                const value = Number(currentMove.charAt(i))
+                const upMove = setCharAt(currentMove, i, (value + 1) % 10)
+                const downMove = setCharAt(currentMove, i, (value + 9) % 10)
+
+                if (!deadends.includes(upMove) && !visited.has(upMove)) {
+                    queue.push(upMove)
+                    visited.add(upMove)
+                }
+
+                if (!deadends.includes(downMove) && !visited.has(downMove)) {
+                    queue.push(downMove)
+                    visited.add(downMove)
+                }
+            }
+            currentLevelSize--
+        }
+
+        moves++
+    }
+
+    return -1
+};
+
+console.log(openLock(["0201","0101","0102","1212","2002"], "0202")) // 6
+console.log(openLock(["8888"], "0009")) // 1
+console.log(openLock(["8887","8889","8878","8898","8788","8988","7888","9888"], "8888")) // -1
+```

@@ -1,0 +1,59 @@
+---
+title: "Time Needed to Inform All Employees"
+description: "Given a company hierarchy and inform times, find the total time needed for the head to inform all employees."
+date: 2026-04-11
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [graph, dfs, bfs, traversal, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "DFS with time propagation on tree graph"
+  leetcodeUrl: "https://leetcode.com/problems/time-needed-to-inform-all-employees/"
+---
+# Time Needed to Inform All Employees
+
+Leetcode Problem 1376: [Time Needed to Inform All Employees](https://leetcode.com/problems/time-needed-to-inform-all-employees/description/)
+
+## Problem Summary
+A company has **n** employees numbered from **0** to **n - 1**, each with a direct manager given in the `manager` array (the head of the company has manager value **-1**). Each employee has an `informTime` representing the minutes needed to inform all their direct subordinates. When an employee is informed, they can begin informing their own subordinates. Return the total time needed for the head to inform all employees. The number of employees is at most **100,000**.
+
+## Techniques
+- Tree
+- Depth-First Search
+- Breadth-First Search
+
+## Solution
+```ts
+function buildAdjList(n: number, manager: number[]): number[][] {
+    const adj: number[][] = Array.from({ length: n }, () => [])
+
+    for (let employee = 0; employee < n; employee++) {
+        const boss = manager[employee]
+
+        if (boss !== -1) {
+            adj[boss].push(employee)
+        }
+    }
+
+    return adj
+}
+
+function dfs(current: number, hierarchy: number[][], informTime: number[], currentTime: number): number {
+   const employees = hierarchy[current]
+   let maxTime = currentTime
+
+    for (const employee of employees) {
+        maxTime = Math.max(maxTime, dfs(employee, hierarchy, informTime, currentTime + informTime[current]))
+    }
+
+    return maxTime
+}
+
+function numOfMinutes(n: number, headID: number, manager: number[], informTime: number[]): number {
+    const hierarchy = buildAdjList(n, manager)
+    return dfs(headID, hierarchy, informTime, 0)
+};
+
+console.log(numOfMinutes(1, 0, [-1], [0])) // 0
+console.log(numOfMinutes(6, 2, [2,2,-1,2,2,2], [0,0,1,0,0,0])) // 1
+console.log(numOfMinutes(7, 6, [1,2,3,4,5,6,-1], [0,6,5,4,3,2,1])) // 21
+```

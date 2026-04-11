@@ -1,0 +1,706 @@
+---
+title: "Graph Traversal: DFS and BFS"
+description: "A comprehensive guide to graph traversal using Depth-First Search and Breadth-First Search, extending tree traversal techniques to general graphs with cycles, disconnected components, and implicit structures."
+date: 2026-04-11
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [graph, dfs, bfs, traversal, data structures, algorithms]
+authors: [fabrizio_duroni]
+---
+
+import { TopicExercises } from "@/components/sections/data-structures-and-algorithms/components/topic-exercises";
+
+# Graph Traversal: DFS and BFS
+
+In the [tree traversal](/data-structures-and-algorithms/topic/tree-traversal-bfs-dfs) article, we explored how BFS and DFS operate on trees,
+structures where every node has exactly one parent and no cycles exist.
+Trees, however, are a special case.
+The moment we allow multiple paths between nodes, cycles, or disconnected regions, we enter the world of **graphs**,
+and our traversal techniques must adapt to handle these new challenges.
+
+The good news is that the core ideas remain the same.
+DFS still explores as deep as possible before backtracking, and BFS still explores level by level.
+The fundamental difference is that graphs can contain **cycles**, which means a naive traversal can revisit nodes forever.
+The solution is a **visited set** (or equivalent marking mechanism) that prevents re-exploration of nodes already processed.
+This single addition transforms tree traversal into graph traversal.
+
+This article develops graph DFS and BFS as natural generalizations of what you already know from trees.
+We start with the formal definitions and representations that make graph problems precise,
+then extend DFS and BFS with the machinery needed for general graphs,
+and finally explore the patterns and problem families where each traversal strategy excels.
+
+## What is a Graph?
+
+A **graph** $G = (V, E)$ consists of a set of **vertices** (also called **nodes**) $V$ and a set of **edges** $E$,
+where each edge connects a pair of vertices.
+This is the most general structure for modeling pairwise relationships: social networks, road maps, dependency chains,
+state machines, and grid-based puzzles are all naturally expressed as graphs.
+
+The key terminology is concise but essential.
+The **degree** of a vertex is the number of edges incident to it.
+In a directed graph, we distinguish between **in-degree** (edges arriving at the vertex) and **out-degree** (edges leaving it).
+Two vertices connected by an edge are called **neighbors** or **adjacent** vertices.
+A **path** is a sequence of vertices where each consecutive pair is connected by an edge.
+A graph is **connected** if there is a path between every pair of vertices (for directed graphs, the analogous property is called **strongly connected**).
+A **cycle** is a path that starts and ends at the same vertex without repeating any edge.
+
+## Types of Graphs
+
+Graphs come in several flavors, and recognizing which type you are dealing with determines how you represent it,
+how you traverse it, and which algorithms apply.
+
+A **directed graph** (digraph) has edges with a direction: an edge from $u$ to $v$ does not imply an edge from $v$ to $u$.
+Dependency graphs, web links, and state transitions are naturally directed.
+An **undirected graph** has symmetric edges: if $u$ and $v$ are connected, the connection goes both ways.
+Social networks and road maps without one-way streets are undirected.
+
+A **weighted graph** assigns a numerical value (weight) to each edge, representing cost, distance, capacity, or any other metric.
+An **unweighted graph** treats all edges as equal.
+BFS on unweighted graphs guarantees shortest paths, a property that does not carry over to weighted graphs without modification.
+
+A **cyclic graph** contains at least one cycle.
+An **acyclic graph** has none.
+A **directed acyclic graph (DAG)** is particularly important because it admits topological ordering,
+which is the basis for dependency resolution, build systems, and course scheduling.
+
+A **connected graph** has a path between every pair of vertices.
+A **disconnected graph** has multiple **connected components**, isolated subgraphs with no edges between them.
+When traversing a disconnected graph, a single BFS or DFS from one node will not reach all vertices.
+You must iterate over all nodes and start a new traversal from each unvisited one.
+
+A **dense graph** has $|E|$ close to $|V|^2$, meaning most pairs of vertices are connected.
+A **sparse graph** has $|E|$ close to $|V|$, meaning most pairs are not connected.
+The distinction matters for representation choice and algorithm complexity.
+
+One important observation ties this article to the previous one:
+**a tree is a connected acyclic undirected graph**.
+Every tree is a graph, but not every graph is a tree.
+The tree traversal techniques from the [previous article](/data-structures-and-algorithms/topic/tree-traversal-bfs-dfs)
+are therefore special cases of the graph traversal techniques we develop here.
+The key simplification that trees enjoy is the absence of cycles, which means tree traversals do not need a visited set.
+
+## Graph Representations
+
+Before traversing a graph, we need to represent it in memory.
+The choice of representation affects both the time complexity of operations and the ease of implementing algorithms.
+
+### Adjacency list
+
+An adjacency list stores, for each vertex, the list of its neighbors.
+It is the most common representation for sparse graphs and the default choice for most graph traversal problems.
+
+```ts
+// Adjacency list for an undirected graph with 5 nodes
+const graph: number[][] = [
+    [1, 2],    // node 0 connects to 1, 2
+    [0, 3],    // node 1 connects to 0, 3
+    [0, 4],    // node 2 connects to 0, 4
+    [1],       // node 3 connects to 1
+    [2],       // node 4 connects to 2
+];
+```
+
+Accessing all neighbors of a vertex takes $O(\text{degree}(v))$ time, and the total space is $O(|V| + |E|)$.
+This makes adjacency lists efficient for traversal, where the dominant operation is iterating over neighbors.
+
+### Adjacency matrix
+
+An adjacency matrix is a $|V| \times |V|$ boolean (or weighted) matrix where entry $(i, j)$ indicates whether an edge exists
+from vertex $i$ to vertex $j$.
+
+```ts
+// Adjacency matrix for the same graph
+const matrix: number[][] = [
+    [0, 1, 1, 0, 0],
+    [1, 0, 0, 1, 0],
+    [1, 0, 0, 0, 1],
+    [0, 1, 0, 0, 0],
+    [0, 0, 1, 0, 0],
+];
+```
+
+Checking whether two specific vertices are connected takes $O(1)$, but iterating over all neighbors of a vertex
+takes $O(|V|)$ regardless of the actual degree.
+The space is $O(|V|^2)$, which is wasteful for sparse graphs but natural for dense ones.
+Adjacency matrices are most useful when you need fast edge existence queries or when the graph is dense.
+
+### Edge list
+
+An edge list is simply an array of pairs (or triples, for weighted graphs), each representing an edge.
+
+```ts
+const edges: [number, number][] = [
+    [0, 1], [0, 2], [1, 3], [2, 4],
+];
+```
+
+This representation is compact and useful for algorithms that process edges directly (like Kruskal's MST algorithm),
+but it is inefficient for traversal because finding all neighbors of a vertex requires scanning the entire list.
+
+### Implicit graphs (grids)
+
+Many graph problems do not provide an explicit list of vertices and edges.
+Instead, the graph is defined implicitly by a grid or a set of rules.
+A 2D grid of cells is one of the most common implicit graph structures:
+each cell is a vertex, and edges connect each cell to its four (or eight) neighbors.
+
+```ts
+// Implicit graph traversal on a grid
+const directions = [[0, 1], [0, -1], [1, 0], [-1, 0]];
+
+function getNeighbors(row: number, col: number, rows: number, cols: number): [number, number][] {
+    const neighbors: [number, number][] = [];
+
+    for (const [dr, dc] of directions) {
+        const nr = row + dr;
+        const nc = col + dc;
+
+        if (nr >= 0 && nr < rows && nc >= 0 && nc < cols) {
+            neighbors.push([nr, nc]);
+        }
+    }
+
+    return neighbors;
+}
+```
+
+With implicit graphs, there is no need to build an adjacency list upfront.
+The neighbor function generates edges on the fly, keeping memory usage proportional to the grid size rather than the number of edges.
+The visited set typically uses a 2D boolean array matching the grid dimensions.
+
+### Choosing a representation
+
+For most traversal problems, the adjacency list is the right default.
+It provides $O(|V| + |E|)$ time for a full traversal, matches the structure of DFS and BFS naturally,
+and uses space proportional to the graph's actual size rather than its theoretical maximum.
+Adjacency matrices become preferable when the graph is dense or when constant-time edge queries are needed.
+Implicit graphs (grids) should stay implicit, using a neighbor-generation function rather than materializing the full adjacency structure.
+
+## DFS on Graphs
+
+Depth-First Search on trees follows each branch as deep as possible before backtracking.
+On graphs, the algorithm is identical in spirit, but it must handle the possibility of revisiting a node through a cycle.
+The solution is a **visited set** that records which nodes have already been explored.
+Before processing a neighbor, the algorithm checks whether it has been visited.
+If so, it skips the neighbor entirely.
+
+### Template
+
+The recursive template for graph DFS mirrors the tree version with the addition of the visited set.
+
+```ts
+function dfs(
+    node: number,
+    graph: number[][],
+    visited: Set<number>
+): void {
+    visited.add(node);
+
+    for (const neighbor of graph[node]) {
+        if (!visited.has(neighbor)) {
+            dfs(neighbor, graph, visited);
+        }
+    }
+}
+```
+
+The iterative version uses an explicit [stack](/data-structures-and-algorithms/topic/stack), replacing the call stack.
+
+```ts
+function dfsIterative(
+    start: number,
+    graph: number[][]
+): void {
+    const visited = new Set<number>();
+    const stack: number[] = [start];
+
+    while (stack.length > 0) {
+        const node = stack.pop()!;
+
+        if (visited.has(node)) {
+            continue;
+        }
+
+        visited.add(node);
+
+        for (const neighbor of graph[node]) {
+            if (!visited.has(neighbor)) {
+                stack.push(neighbor);
+            }
+        }
+    }
+}
+```
+
+For **disconnected graphs**, a single DFS call from one node will not visit all vertices.
+The standard approach is to wrap the DFS in a loop over all nodes.
+
+```ts
+function dfsAll(graph: number[][]): void {
+    const visited = new Set<number>();
+
+    for (let node = 0; node < graph.length; node++) {
+        if (!visited.has(node)) {
+            dfs(node, graph, visited);
+        }
+    }
+}
+```
+
+Each call to `dfs` in this loop discovers one **connected component**.
+This pattern is the foundation for problems that ask you to count, label, or analyze connected components.
+
+### Connected components and flood fill
+
+The most direct application of graph DFS is identifying connected components.
+On an explicit graph, this means counting how many separate groups of reachable vertices exist.
+On an implicit grid graph, the same idea manifests as **flood fill**: starting from a cell,
+DFS marks all reachable cells that satisfy some condition (same color, same value, land vs. water).
+
+The classic example is counting islands in a grid.
+Each land cell (`'1'`) that has not been visited becomes the seed for a DFS that marks all connected land cells as visited.
+Each seed corresponds to one island.
+
+```ts
+function countComponents(grid: string[][]): number {
+    const rows = grid.length;
+    const cols = grid[0].length;
+    const visited: boolean[][] = Array.from(
+        { length: rows }, () => Array(cols).fill(false)
+    );
+    let count = 0;
+
+    for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+            if (grid[r][c] === '1' && !visited[r][c]) {
+                count++;
+                floodFill(r, c, grid, visited);
+            }
+        }
+    }
+
+    return count;
+}
+
+function floodFill(
+    row: number, col: number,
+    grid: string[][], visited: boolean[][]
+): void {
+    if (
+        row < 0 || col < 0 ||
+        row >= grid.length || col >= grid[0].length ||
+        visited[row][col] || grid[row][col] !== '1'
+    ) {
+        return;
+    }
+
+    visited[row][col] = true;
+
+    floodFill(row + 1, col, grid, visited);
+    floodFill(row - 1, col, grid, visited);
+    floodFill(row, col + 1, grid, visited);
+    floodFill(row, col - 1, grid, visited);
+}
+```
+
+A subtler variant of flood fill works in reverse: instead of flooding inward from each unvisited cell,
+you flood outward from the **boundary**.
+This is useful when you need to identify cells that are *not* reachable from the boundary.
+For example, to capture surrounded regions in a grid, you first mark all boundary-connected cells as safe using DFS from the edges,
+then flip everything that was not marked.
+
+Another important variant is running DFS from multiple boundaries simultaneously.
+The Pacific-Atlantic water flow problem requires determining which cells can drain to both oceans.
+Rather than checking each cell individually (which would be $O(n^2 m^2)$), you run one DFS from all Pacific boundary cells
+and another from all Atlantic boundary cells, then intersect the results.
+This reduces the problem to two linear-time traversals.
+
+### Graph cloning and structure traversal
+
+DFS naturally handles problems that require building a copy of a graph while traversing it.
+The visited map serves a dual purpose: it prevents revisiting nodes *and* it maps each original node to its clone.
+
+When the DFS visits a node for the first time, it creates a clone and stores the mapping.
+When it encounters a node that has already been cloned (through a cycle or a converging path),
+it retrieves the existing clone from the map instead of creating a duplicate.
+This guarantees that the cloned graph has exactly the same structure as the original, including all cycles and shared references.
+
+The same DFS backbone supports path enumeration.
+In a DAG, where cycles are impossible, DFS can enumerate all paths from source to target
+by building a path incrementally, recording it at the target, and backtracking.
+The absence of cycles means no visited set is needed for correctness, though one can be used for optimization.
+
+### Cycle detection and bipartiteness
+
+DFS is the natural tool for cycle detection in both directed and undirected graphs.
+In an undirected graph, a cycle exists if DFS encounters a neighbor that is already visited and is not the immediate parent
+of the current node.
+In a directed graph, cycle detection requires distinguishing between nodes that are currently on the recursion stack
+(indicating a back edge, hence a cycle) and nodes that have been fully processed (indicating a cross or forward edge, not a cycle).
+
+A closely related problem is determining whether a graph is **bipartite**: whether its vertices can be colored with two colors
+such that no two adjacent vertices share the same color.
+DFS performs this check by attempting to **two-color** the graph during traversal.
+When visiting a node, it assigns the opposite color of its parent.
+If it encounters a neighbor that is already colored with the *same* color as the current node, the graph is not bipartite.
+
+```ts
+function isBipartite(graph: number[][]): boolean {
+    const colors = new Array(graph.length).fill(-1);
+
+    for (let i = 0; i < graph.length; i++) {
+        if (colors[i] === -1) {
+            colors[i] = 0;
+
+            if (!dfsBipartite(graph, i, colors)) {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+function dfsBipartite(
+    graph: number[][], node: number, colors: number[]
+): boolean {
+    for (const neighbor of graph[node]) {
+        if (colors[neighbor] === colors[node]) {
+            return false;
+        }
+
+        if (colors[neighbor] === -1) {
+            colors[neighbor] = 1 - colors[node];
+
+            if (!dfsBipartite(graph, neighbor, colors)) {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+```
+
+The outer loop handles disconnected graphs, ensuring every component is checked.
+The coloring array doubles as the visited set: a value of `-1` means unvisited.
+
+### DFS on implicit graphs and grids
+
+Many DFS problems operate on 2D grids where the graph structure is implicit.
+The grid itself serves as both the vertex set and the adjacency structure.
+Each cell has up to four neighbors (or eight, if diagonals are allowed), and the neighbor-generation logic replaces the adjacency list.
+
+A powerful technique on grids is **component labeling with area tracking**.
+Instead of simply marking cells as visited, DFS assigns each connected component a unique label and records its size.
+This preprocessing step transforms $O(n^2)$ per-query component lookups into $O(1)$ lookups.
+
+The "making a large island" problem illustrates this.
+The first phase labels every island with a unique ID and records its area using DFS.
+The second phase iterates over every water cell and checks which distinct island labels are adjacent to it.
+Flipping that water cell would merge those islands, and the total area is the sum of their pre-computed areas plus one.
+The label-and-lookup approach avoids redundant DFS calls and runs in $O(n^2)$ total.
+
+### DFS with value propagation
+
+A common DFS pattern involves propagating computed values through the graph: times, distances, costs, or importance scores.
+The DFS visits each node, computes a value based on its children's values, and returns (or aggregates) the result upward.
+
+In a company hierarchy modeled as a tree, computing the total importance of a subtree requires DFS that
+sums the importance of the root with the recursively computed importance of each subordinate.
+Similarly, computing the time to inform all employees requires DFS that tracks the maximum accumulated time along any path from the root to a leaf.
+
+When the graph is a tree (as hierarchies typically are), no visited set is needed because there are no cycles.
+When the graph may contain cycles (or when a tree is augmented with back-pointers), the visited set becomes essential.
+
+The "all nodes distance K in binary tree" problem combines DFS and BFS on a tree.
+First, DFS builds a parent map, effectively converting the tree into an undirected graph where each node has edges to its children and its parent.
+Then, BFS from the target node explores this undirected graph to find all nodes at distance exactly $k$.
+This technique of augmenting a tree with parent pointers and then running BFS is a general pattern for distance queries on trees.
+
+## BFS on Graphs
+
+Breadth-First Search on trees processes nodes level by level using a [queue](/data-structures-and-algorithms/topic/queue).
+On graphs, BFS retains this structure but adds a visited set to handle cycles, just as DFS does.
+The critical property that distinguishes BFS from DFS on graphs is the **shortest path guarantee**:
+in an unweighted graph, BFS finds the shortest path (minimum number of edges) from the source to every reachable vertex.
+
+This guarantee follows directly from the level-by-level expansion.
+All vertices at distance $d$ from the source are processed before any vertex at distance $d + 1$.
+When a vertex is first discovered by BFS, the path through which it was discovered is necessarily a shortest path.
+
+### Template
+
+```ts
+function bfs(start: number, graph: number[][]): void {
+    const visited = new Set<number>();
+    const queue: number[] = [start];
+    visited.add(start);
+
+    while (queue.length > 0) {
+        const node = queue.shift()!;
+
+        for (const neighbor of graph[node]) {
+            if (!visited.has(neighbor)) {
+                visited.add(neighbor);
+                queue.push(neighbor);
+            }
+        }
+    }
+}
+```
+
+A crucial difference from DFS is *when* the visited mark is applied.
+In BFS, a node is marked as visited **when it is enqueued**, not when it is dequeued.
+This prevents the same node from being added to the queue multiple times,
+which would waste time and could lead to incorrect distance calculations.
+
+For level-by-level processing (where you need to know the current distance or "wave number"),
+the standard technique is to record the queue length at the start of each iteration and process exactly that many nodes.
+
+```ts
+function bfsLevelByLevel(start: number, graph: number[][]): number {
+    const visited = new Set<number>();
+    const queue: number[] = [start];
+    visited.add(start);
+    let distance = 0;
+
+    while (queue.length > 0) {
+        const levelSize = queue.length;
+
+        for (let i = 0; i < levelSize; i++) {
+            const node = queue.shift()!;
+
+            for (const neighbor of graph[node]) {
+                if (!visited.has(neighbor)) {
+                    visited.add(neighbor);
+                    queue.push(neighbor);
+                }
+            }
+        }
+
+        distance++;
+    }
+
+    return distance;
+}
+```
+
+### Single-source and multi-source BFS
+
+Standard BFS starts from a single source vertex and computes distances to all reachable vertices.
+**Multi-source BFS** generalizes this by starting from *multiple* source vertices simultaneously.
+All sources are enqueued at the start with distance zero, and BFS expands outward from all of them in parallel.
+
+Multi-source BFS is equivalent to adding a virtual "super-source" connected to all actual sources with zero-weight edges
+and then running standard BFS from the super-source.
+The result is that each cell's computed distance is the minimum distance to *any* source.
+
+The "01 Matrix" problem is a canonical example: given a binary matrix, compute the distance of each cell to the nearest zero.
+Enqueue all zero cells as sources and run BFS outward. When BFS reaches a non-zero cell for the first time,
+the distance at that moment is the shortest distance to any zero cell.
+
+"Rotting Oranges" is another multi-source BFS problem with a time simulation layer.
+All initially rotten oranges are sources.
+Each BFS level represents one minute, and the oranges that become rotten in that minute are the newly discovered nodes.
+The total number of levels is the answer (the time until all oranges are rotten or the conclusion that some cannot be reached).
+
+```ts
+function multiSourceBFS(
+    grid: number[][], sources: [number, number][]
+): number[][] {
+    const rows = grid.length;
+    const cols = grid[0].length;
+    const distances: number[][] = Array.from(
+        { length: rows }, () => Array(cols).fill(-1)
+    );
+    const queue: [number, number][] = [];
+
+    for (const [r, c] of sources) {
+        distances[r][c] = 0;
+        queue.push([r, c]);
+    }
+
+    const dirs = [[0, 1], [0, -1], [1, 0], [-1, 0]];
+
+    while (queue.length > 0) {
+        const [row, col] = queue.shift()!;
+
+        for (const [dr, dc] of dirs) {
+            const nr = row + dr;
+            const nc = col + dc;
+
+            if (
+                nr >= 0 && nr < rows &&
+                nc >= 0 && nc < cols &&
+                distances[nr][nc] === -1
+            ) {
+                distances[nr][nc] = distances[row][col] + 1;
+                queue.push([nr, nc]);
+            }
+        }
+    }
+
+    return distances;
+}
+```
+
+### BFS on implicit and state-space graphs
+
+Some of the most interesting BFS problems involve graphs that are never constructed explicitly.
+Instead, the "vertices" are **states** and the "edges" are **transitions** between states.
+The graph exists only conceptually, and BFS explores it by generating neighbors on the fly.
+
+The "Open the Lock" problem is a textbook example.
+The state is a 4-digit combination.
+Each move (turning one wheel one slot up or down) produces a neighbor state.
+The deadend combinations are blocked states that cannot be entered.
+BFS from the initial state `"0000"` finds the shortest sequence of moves to reach the target, or determines that no path exists.
+
+The "Word Ladder" problem has a similar structure.
+Each word is a state, and two words are neighbors if they differ by exactly one letter.
+BFS from the start word finds the shortest transformation sequence to the target word.
+To avoid checking all $O(n^2)$ word pairs for adjacency, a common optimization is to use wildcard patterns:
+for each word, replace each character with `'*'` and group words by pattern.
+Two words are neighbors if they share at least one pattern, and the pattern map provides $O(1)$ neighbor lookup.
+
+The key insight with state-space BFS is that the visited set must track *states*, not just positions.
+The state might include the position on the grid plus some additional dimension (remaining resources, collected keys, turn parity),
+and two visits to the same position with different auxiliary state are genuinely different and must both be explored.
+
+### BFS with constraints and extended state
+
+When the problem introduces resource constraints, the BFS state must be extended to encode the constraint.
+The visited structure becomes multi-dimensional to match.
+
+The "Shortest Path in a Grid with Obstacles Elimination" problem allows eliminating up to $k$ obstacles.
+The state is a triple $(row, col, k_{remaining})$.
+Two visits to the same cell are different if they arrive with different values of $k_{remaining}$,
+because having more eliminations available opens up paths that fewer eliminations would block.
+The visited array stores the *best* (highest) $k_{remaining}$ seen at each cell.
+A new visit to a cell is only useful if it arrives with more remaining eliminations than any previous visit.
+
+```ts
+function bfsWithConstraint(
+    grid: number[][], k: number
+): number {
+    const rows = grid.length;
+    const cols = grid[0].length;
+    const visited = Array.from(
+        { length: rows },
+        () => Array(cols).fill(-1)
+    );
+
+    const queue: [number, number, number][] = [[0, 0, k]];
+    visited[0][0] = k;
+    let steps = 0;
+
+    const dirs = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+
+    while (queue.length > 0) {
+        let levelSize = queue.length;
+
+        while (levelSize-- > 0) {
+            const [row, col, kLeft] = queue.shift()!;
+
+            if (row === rows - 1 && col === cols - 1) {
+                return steps;
+            }
+
+            for (const [dr, dc] of dirs) {
+                const nr = row + dr;
+                const nc = col + dc;
+
+                if (nr < 0 || nc < 0 || nr >= rows || nc >= cols) {
+                    continue;
+                }
+
+                const newK = kLeft - grid[nr][nc];
+
+                if (newK >= 0 && newK > visited[nr][nc]) {
+                    visited[nr][nc] = newK;
+                    queue.push([nr, nc, newK]);
+                }
+            }
+        }
+
+        steps++;
+    }
+
+    return -1;
+}
+```
+
+The "Bus Routes" problem pushes this further by changing the granularity of BFS.
+Instead of traversing stop-to-stop, BFS operates at the **route level**: each "node" in the BFS is a bus route, not a stop.
+The neighbors of a route are all other routes that share at least one stop.
+This abstraction reduces the problem size dramatically when routes are large.
+A stop-to-bus mapping is built in preprocessing, and the visited set tracks both visited stops and visited routes
+to avoid redundant exploration.
+
+## Choosing Between DFS and BFS
+
+DFS and BFS are both complete traversal strategies, meaning they will visit every reachable vertex.
+The choice between them depends on the problem's requirements.
+
+**BFS is the right choice when shortest path matters.**
+In unweighted graphs (or graphs where all edges have equal cost), BFS guarantees that the first time it reaches a vertex,
+it has found the shortest path.
+DFS provides no such guarantee.
+Any problem that asks for "minimum number of steps", "shortest transformation sequence", or "fewest moves"
+is a strong signal for BFS.
+
+**DFS is the right choice for exhaustive exploration and structural analysis.**
+Problems that require enumerating all paths, detecting cycles, checking connectivity, computing connected components,
+or performing [backtracking](/data-structures-and-algorithms/topic/backtracking)-style search are natural fits for DFS.
+The recursive structure of DFS aligns with the recursive nature of these problems,
+and the implicit stack provides the backtracking mechanism.
+
+**DFS uses less memory in deep, narrow graphs.**
+The recursive call stack (or explicit stack) holds at most $O(h)$ nodes, where $h$ is the depth of the deepest path explored.
+BFS holds all nodes at the current frontier, which can be $O(w)$ where $w$ is the maximum width.
+For trees and tree-like graphs, DFS typically uses $O(h)$ space while BFS uses $O(w)$, and $h$ is often much smaller than $w$.
+For graphs that are wide and shallow (like grids), the difference is less pronounced.
+
+**BFS naturally supports multi-source queries.**
+When the problem requires computing distances from multiple sources simultaneously,
+multi-source BFS handles this elegantly by enqueuing all sources at the start.
+Achieving the same with DFS would require separate traversals from each source.
+
+In practice, many graph problems can be solved with either strategy, and the choice comes down to which one
+more naturally expresses the solution.
+When the problem requires level-by-level processing, distance computation, or shortest paths, reach for BFS.
+When it requires deep exploration, path building, cycle detection, or recursive decomposition, reach for DFS.
+
+## Time and Space Complexity
+
+The complexity of graph traversal depends on the graph representation and the traversal strategy.
+For both DFS and BFS, every vertex is visited at most once and every edge is examined at most once (twice for undirected graphs),
+giving a consistent time bound across both strategies.
+
+| Algorithm | Time Complexity | Space Complexity | Notes |
+|-----------|----------------|-----------------|-------|
+| DFS (adjacency list) | $O(\|V\| + \|E\|)$ | $O(\|V\|)$ | Visited set plus recursion stack (or explicit stack). Stack depth is at most $\|V\|$ in the worst case. |
+| BFS (adjacency list) | $O(\|V\| + \|E\|)$ | $O(\|V\|)$ | Visited set plus queue. Queue size is at most $\|V\|$ in the worst case (when all vertices are at the same distance from the source). |
+| DFS (adjacency matrix) | $O(\|V\|^2)$ | $O(\|V\|)$ | Checking all potential neighbors of each vertex takes $O(\|V\|)$ per vertex, regardless of actual degree. |
+| BFS (adjacency matrix) | $O(\|V\|^2)$ | $O(\|V\|)$ | Same reasoning as DFS with adjacency matrix. |
+| DFS/BFS on grid ($m \times n$) | $O(m \cdot n)$ | $O(m \cdot n)$ | Each cell is a vertex, and each cell has at most 4 neighbors. The visited array is $m \times n$. |
+| Multi-source BFS | $O(\|V\| + \|E\|)$ | $O(\|V\|)$ | Same as standard BFS. Multiple sources do not increase asymptotic cost. |
+| BFS with extended state | $O(\|V\| \cdot S + \|E\| \cdot S)$ | $O(\|V\| \cdot S)$ | Where $S$ is the size of the auxiliary state dimension (e.g., $k+1$ possible elimination counts). |
+
+The $O(|V| + |E|)$ bound for adjacency list traversal is optimal: you cannot do better than visiting every vertex and every edge once.
+The adjacency matrix bound of $O(|V|^2)$ reflects the cost of scanning each row to find neighbors, even when most entries are zero.
+For sparse graphs ($|E| \ll |V|^2$), the adjacency list representation is strictly superior.
+
+For grid-based problems, $|V| = m \cdot n$ and $|E| = O(m \cdot n)$ (since each cell has at most 4 edges),
+so both time and space are $O(m \cdot n)$.
+The visited array (or in-place grid modification) accounts for the space.
+
+Extended-state BFS multiplies both time and space by the size of the state dimension.
+When the constraint parameter $k$ is bounded by a constant or a small polynomial of $|V|$,
+this remains tractable.
+When $k$ is large, the state space may become prohibitively large and alternative approaches
+(such as Dijkstra's algorithm or A* search) may be needed.
+
+## Exercises
+
+<TopicExercises topic="graph-traversal-dfs-bfs" />

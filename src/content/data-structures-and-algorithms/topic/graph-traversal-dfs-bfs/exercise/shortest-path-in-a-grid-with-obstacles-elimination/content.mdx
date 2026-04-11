@@ -1,0 +1,80 @@
+---
+title: "Shortest Path in a Grid with Obstacles Elimination"
+description: "Find the shortest path in a grid from top-left to bottom-right, with the ability to eliminate up to k obstacles."
+date: 2026-04-11
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [graph, dfs, bfs, traversal, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "BFS with extended state (position + remaining eliminations)"
+  leetcodeUrl: "https://leetcode.com/problems/shortest-path-in-a-grid-with-obstacles-elimination/"
+---
+# Shortest Path in a Grid with Obstacles Elimination
+
+Leetcode Problem 1293: [Shortest Path in a Grid with Obstacles Elimination](https://leetcode.com/problems/shortest-path-in-a-grid-with-obstacles-elimination/description/)
+
+## Problem Summary
+Given an **m x n** grid of **0**s (empty) and **1**s (obstacles), find the length of the shortest path from the top-left corner to the bottom-right corner. You may eliminate (walk through) at most **k** obstacles along the way. Each step moves to an adjacent cell (up, down, left, right). If no such path exists, return **-1**. The grid dimensions are at most **40 x 40**, and **k** is at most **m * n**.
+
+## Techniques
+- Array
+- Breadth-First Search
+- Matrix
+
+## Solution
+```ts
+function shortestPath(grid: number[][], k: number): number {
+    const rows = grid.length;
+    const cols = grid[0].length;
+    const visited = Array.from(
+        { length: rows },
+        () => Array(cols).fill(-1)
+    );
+
+    const queue: [number, number, number][] = [[0, 0, k]];
+    visited[0][0] = k;
+
+    let steps = 0;
+
+    const dirs = [
+        [1, 0],
+        [-1, 0],
+        [0, 1],
+        [0, -1]
+    ];
+
+    while (queue.length > 0) {
+        let levelSize = queue.length;
+
+        while (levelSize-- > 0) {
+            const [row, col, kLeft] = queue.shift()!;
+
+            if (row === rows - 1 && col === cols - 1) {
+                return steps;
+            }
+
+            for (const [dr, dc] of dirs) {
+                const newRow = row + dr;
+                const newColumn = col + dc;
+
+                if (newRow < 0 || newColumn < 0 || newRow >= rows || newColumn >= cols) { 
+                    continue;
+                }
+
+                const newK = kLeft - grid[newRow][newColumn];
+
+                if (newK >= 0 && newK > visited[newRow][newColumn]) {
+                    visited[newRow][newColumn] = newK;
+                    queue.push([newRow, newColumn, newK]);
+                }
+            }
+        }
+
+        steps++;
+    }
+
+    return -1;
+}
+
+console.log(shortestPath([[0,0,0],[1,1,0],[0,0,0],[0,1,1],[0,0,0]], 1)); // Output: 6
+```
