@@ -60,6 +60,12 @@ Topics within the same group share a similar article layout and can be used as t
 **Template**: greedy
 **Why**: Greedy is a broad paradigm. The article is organized around structural patterns (single-pass, multi-pass, heap-based) with generic illustrative examples, not tightly coupled to specific exercises. The intervals article overlaps because it covers greedy scheduling, but intervals is more narrowly focused on interval-specific operations.
 
+### Group: Graph Algorithms
+**Topics**: graph-traversal-dfs-bfs, topological-sort (future), shortest-path (future), minimum-spanning-tree (future)
+**Pattern**: Intro connecting to tree traversal, formal definitions section, graph representations section, then separate DFS and BFS sections organized by sub-patterns (flood fill, state-space search, etc.), choosing between approaches section, complexity table, exercises.
+**Template**: graph-traversal-dfs-bfs
+**Why**: Graph topics build on each other and share the same foundational definitions. Future graph topics (topological sort, shortest path, MST) can reference this article for graph basics and extend DFS/BFS patterns.
+
 ## Complexity Format Convention
 
 - **Data structures** → use a **table** (operations vs time/space)

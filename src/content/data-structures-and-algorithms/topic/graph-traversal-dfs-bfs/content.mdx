@@ -8,6 +8,8 @@ authors: [fabrizio_duroni]
 ---
 
 import { TopicExercises } from "@/components/sections/data-structures-and-algorithms/components/topic-exercises";
+import { InteractiveBlock } from "@/components/sections/data-structures-and-algorithms/components/interactive-block";
+import { GraphPropertiesVisualizer } from "@/components/sections/data-structures-and-algorithms/components/graph-properties-visualizer";
 
 # Graph Traversal: DFS and BFS
 
@@ -30,46 +32,56 @@ and finally explore the patterns and problem families where each traversal strat
 
 ## What is a Graph?
 
-A **graph** $G = (V, E)$ consists of a set of **vertices** (also called **nodes**) $V$ and a set of **edges** $E$,
+A [**graph**](https://en.wikipedia.org/wiki/Graph_(discrete_mathematics)) $G = (V, E)$ consists of a set of **vertices** (also called **nodes**) $V$ and a set of **edges** $E$,
 where each edge connects a pair of vertices.
 This is the most general structure for modeling pairwise relationships: social networks, road maps, dependency chains,
 state machines, and grid-based puzzles are all naturally expressed as graphs.
 
 The key terminology is concise but essential.
-The **degree** of a vertex is the number of edges incident to it.
+The [**degree**](https://en.wikipedia.org/wiki/Degree_(graph_theory)) of a vertex is the number of edges incident to it.
 In a directed graph, we distinguish between **in-degree** (edges arriving at the vertex) and **out-degree** (edges leaving it).
 Two vertices connected by an edge are called **neighbors** or **adjacent** vertices.
-A **path** is a sequence of vertices where each consecutive pair is connected by an edge.
-A graph is **connected** if there is a path between every pair of vertices (for directed graphs, the analogous property is called **strongly connected**).
-A **cycle** is a path that starts and ends at the same vertex without repeating any edge.
+A [**path**](https://en.wikipedia.org/wiki/Path_(graph_theory)) is a sequence of vertices where each consecutive pair is connected by an edge.
+A graph is [**connected**](https://en.wikipedia.org/wiki/Connectivity_(graph_theory)) if there is a path between every pair of vertices
+(for directed graphs, the analogous property is called [**strongly connected**](https://en.wikipedia.org/wiki/Strongly_connected_component)).
+A [**cycle**](https://en.wikipedia.org/wiki/Cycle_(graph_theory)) is a path that starts and ends at the same vertex without repeating any edge.
 
 ## Types of Graphs
 
 Graphs come in several flavors, and recognizing which type you are dealing with determines how you represent it,
 how you traverse it, and which algorithms apply.
 
-A **directed graph** (digraph) has edges with a direction: an edge from $u$ to $v$ does not imply an edge from $v$ to $u$.
+A [**directed graph**](https://en.wikipedia.org/wiki/Directed_graph) (digraph) has edges with a direction: an edge from $u$ to $v$ does not imply an edge from $v$ to $u$.
 Dependency graphs, web links, and state transitions are naturally directed.
-An **undirected graph** has symmetric edges: if $u$ and $v$ are connected, the connection goes both ways.
+An [**undirected graph**](https://en.wikipedia.org/wiki/Graph_(discrete_mathematics)#Undirected_graph) has symmetric edges: if $u$ and $v$ are connected, the connection goes both ways.
 Social networks and road maps without one-way streets are undirected.
 
-A **weighted graph** assigns a numerical value (weight) to each edge, representing cost, distance, capacity, or any other metric.
+A [**weighted graph**](https://en.wikipedia.org/wiki/Graph_(discrete_mathematics)#Weighted_graph) assigns a numerical value (weight) to each edge,
+representing cost, distance, capacity, or any other metric.
 An **unweighted graph** treats all edges as equal.
 BFS on unweighted graphs guarantees shortest paths, a property that does not carry over to weighted graphs without modification.
 
-A **cyclic graph** contains at least one cycle.
+A **cyclic graph** contains at least one [cycle](https://en.wikipedia.org/wiki/Cycle_(graph_theory)).
 An **acyclic graph** has none.
-A **directed acyclic graph (DAG)** is particularly important because it admits topological ordering,
+A [**directed acyclic graph (DAG)**](https://en.wikipedia.org/wiki/Directed_acyclic_graph) is particularly important because it admits
+[topological ordering](https://en.wikipedia.org/wiki/Topological_sorting),
 which is the basis for dependency resolution, build systems, and course scheduling.
 
 A **connected graph** has a path between every pair of vertices.
-A **disconnected graph** has multiple **connected components**, isolated subgraphs with no edges between them.
+A **disconnected graph** has multiple [**connected components**](https://en.wikipedia.org/wiki/Component_(graph_theory)),
+isolated subgraphs with no edges between them.
 When traversing a disconnected graph, a single BFS or DFS from one node will not reach all vertices.
 You must iterate over all nodes and start a new traversal from each unvisited one.
 
 A **dense graph** has $|E|$ close to $|V|^2$, meaning most pairs of vertices are connected.
 A **sparse graph** has $|E|$ close to $|V|$, meaning most pairs are not connected.
 The distinction matters for representation choice and algorithm complexity.
+
+The interactive visualization below illustrates the main graph types described above.
+
+<InteractiveBlock title="Graph Types">
+    <GraphPropertiesVisualizer />
+</InteractiveBlock>
 
 One important observation ties this article to the previous one:
 **a tree is a connected acyclic undirected graph**.
@@ -85,7 +97,7 @@ The choice of representation affects both the time complexity of operations and 
 
 ### Adjacency list
 
-An adjacency list stores, for each vertex, the list of its neighbors.
+An [adjacency list](https://en.wikipedia.org/wiki/Adjacency_list) stores, for each vertex, the list of its neighbors.
 It is the most common representation for sparse graphs and the default choice for most graph traversal problems.
 
 ```ts
@@ -104,8 +116,8 @@ This makes adjacency lists efficient for traversal, where the dominant operation
 
 ### Adjacency matrix
 
-An adjacency matrix is a $|V| \times |V|$ boolean (or weighted) matrix where entry $(i, j)$ indicates whether an edge exists
-from vertex $i$ to vertex $j$.
+An [adjacency matrix](https://en.wikipedia.org/wiki/Adjacency_matrix) is a $|V| \times |V|$ boolean (or weighted) matrix where entry $(i, j)$ indicates
+whether an edge exists from vertex $i$ to vertex $j$.
 
 ```ts
 // Adjacency matrix for the same graph
@@ -125,7 +137,7 @@ Adjacency matrices are most useful when you need fast edge existence queries or 
 
 ### Edge list
 
-An edge list is simply an array of pairs (or triples, for weighted graphs), each representing an edge.
+An [edge list](https://en.wikipedia.org/wiki/Edge_list) is simply an array of pairs (or triples, for weighted graphs), each representing an edge.
 
 ```ts
 const edges: [number, number][] = [
@@ -133,13 +145,14 @@ const edges: [number, number][] = [
 ];
 ```
 
-This representation is compact and useful for algorithms that process edges directly (like Kruskal's MST algorithm),
+This representation is compact and useful for algorithms that process edges directly
+(like [Kruskal's algorithm](https://en.wikipedia.org/wiki/Kruskal%27s_algorithm) for minimum spanning trees),
 but it is inefficient for traversal because finding all neighbors of a vertex requires scanning the entire list.
 
 ### Implicit graphs (grids)
 
 Many graph problems do not provide an explicit list of vertices and edges.
-Instead, the graph is defined implicitly by a grid or a set of rules.
+Instead, the graph is defined [implicitly](https://en.wikipedia.org/wiki/Implicit_graph) by a grid or a set of rules.
 A 2D grid of cells is one of the most common implicit graph structures:
 each cell is a vertex, and edges connect each cell to its four (or eight) neighbors.
 
@@ -177,7 +190,7 @@ Implicit graphs (grids) should stay implicit, using a neighbor-generation functi
 
 ## DFS on Graphs
 
-Depth-First Search on trees follows each branch as deep as possible before backtracking.
+[Depth-First Search](https://en.wikipedia.org/wiki/Depth-first_search) on trees follows each branch as deep as possible before backtracking.
 On graphs, the algorithm is identical in spirit, but it must handle the possibility of revisiting a node through a cycle.
 The solution is a **visited set** that records which nodes have already been explored.
 Before processing a neighbor, the algorithm checks whether it has been visited.
@@ -253,7 +266,7 @@ This pattern is the foundation for problems that ask you to count, label, or ana
 
 The most direct application of graph DFS is identifying connected components.
 On an explicit graph, this means counting how many separate groups of reachable vertices exist.
-On an implicit grid graph, the same idea manifests as **flood fill**: starting from a cell,
+On an implicit grid graph, the same idea manifests as [**flood fill**](https://en.wikipedia.org/wiki/Flood_fill): starting from a cell,
 DFS marks all reachable cells that satisfy some condition (same color, same value, land vs. water).
 
 The classic example is counting islands in a grid.
@@ -337,9 +350,70 @@ of the current node.
 In a directed graph, cycle detection requires distinguishing between nodes that are currently on the recursion stack
 (indicating a back edge, hence a cycle) and nodes that have been fully processed (indicating a cross or forward edge, not a cycle).
 
-A closely related problem is determining whether a graph is **bipartite**: whether its vertices can be colored with two colors
-such that no two adjacent vertices share the same color.
-DFS performs this check by attempting to **two-color** the graph during traversal.
+The standard approach for directed graphs uses **three-state coloring**, often called the WHITE/GRAY/BLACK technique.
+Each node starts as WHITE (unvisited).
+When DFS begins processing a node, it is colored GRAY (in progress, currently on the recursion stack).
+When DFS finishes processing a node and all its descendants, it is colored BLACK (fully processed).
+A cycle exists if and only if DFS encounters a GRAY neighbor, because a GRAY node is an ancestor in the current DFS path,
+and an edge to it closes a cycle.
+Encountering a BLACK neighbor is safe: it means the neighbor was fully explored in a previous branch and no cycle passes through it.
+
+```ts
+enum Color {
+    WHITE = 0,  // unvisited
+    GRAY = 1,   // in progress (on the current recursion stack)
+    BLACK = 2,  // fully processed
+}
+
+function hasCycleDirected(graph: number[][]): boolean {
+    const color: Color[] = new Array(graph.length).fill(Color.WHITE);
+
+    for (let node = 0; node < graph.length; node++) {
+        if (color[node] === Color.WHITE) {
+            if (dfsDetectCycle(node, graph, color)) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+function dfsDetectCycle(
+    node: number,
+    graph: number[][],
+    color: Color[]
+): boolean {
+    color[node] = Color.GRAY;
+
+    for (const neighbor of graph[node]) {
+        if (color[neighbor] === Color.GRAY) {
+            // Back edge: neighbor is on the current recursion stack
+            return true;
+        }
+
+        if (color[neighbor] === Color.WHITE) {
+            if (dfsDetectCycle(neighbor, graph, color)) {
+                return true;
+            }
+        }
+        // If color[neighbor] === Color.BLACK, the neighbor is fully
+        // processed. This is a cross or forward edge, not a cycle.
+    }
+
+    color[node] = Color.BLACK;
+
+    return false;
+}
+```
+
+The outer loop ensures that every node is visited even in disconnected graphs.
+The three-state approach is essential for directed graphs because, unlike undirected graphs, a previously visited node
+does not necessarily indicate a cycle. Only a node that is still being processed (GRAY) confirms one.
+
+A closely related problem is determining whether a graph is [**bipartite**](https://en.wikipedia.org/wiki/Bipartite_graph):
+whether its vertices can be colored with two colors such that no two adjacent vertices share the same color.
+DFS performs this check by attempting to [**two-color**](https://en.wikipedia.org/wiki/Graph_coloring) the graph during traversal.
 When visiting a node, it assigns the opposite color of its parent.
 If it encounters a neighbor that is already colored with the *same* color as the current node, the graph is not bipartite.
 
@@ -419,7 +493,7 @@ This technique of augmenting a tree with parent pointers and then running BFS is
 
 ## BFS on Graphs
 
-Breadth-First Search on trees processes nodes level by level using a [queue](/data-structures-and-algorithms/topic/queue).
+[Breadth-First Search](https://en.wikipedia.org/wiki/Breadth-first_search) on trees processes nodes level by level using a [queue](/data-structures-and-algorithms/topic/queue).
 On graphs, BFS retains this structure but adds a visited set to handle cycles, just as DFS does.
 The critical property that distinguishes BFS from DFS on graphs is the **shortest path guarantee**:
 in an unweighted graph, BFS finds the shortest path (minimum number of edges) from the source to every reachable vertex.
@@ -699,7 +773,7 @@ Extended-state BFS multiplies both time and space by the size of the state dimen
 When the constraint parameter $k$ is bounded by a constant or a small polynomial of $|V|$,
 this remains tractable.
 When $k$ is large, the state space may become prohibitively large and alternative approaches
-(such as Dijkstra's algorithm or A* search) may be needed.
+(such as [Dijkstra's algorithm](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm) or [A* search](https://en.wikipedia.org/wiki/A*_search_algorithm)) may be needed.
 
 ## Exercises
 
