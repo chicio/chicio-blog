@@ -8,6 +8,12 @@ type: project
 
 All topics below have been published. Some may be reviewed later for consistency.
 
+### Greedy / Optimization
+
+| Topic | Sections (H2) | Complexity Format | Interactive Components |
+|-------|---------------|-------------------|----------------------|
+| greedy | Greedy-Choice Property and Optimal Substructure, Single-Pass Greedy (Running Surplus, Balance Tracking, Range Expansion), Multi-Pass Greedy, Greedy with Heaps: Deferred Decisions (Deferred Selection, Ratio Sorting, Scheduling), When Greedy Fails, Time and Space Complexity | Prose | None |
+
 ### Data Structures
 
 | Topic | Sections (H2) | Complexity Format | Interactive Components |

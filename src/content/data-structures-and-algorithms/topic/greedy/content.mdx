@@ -1,0 +1,513 @@
+---
+title: "Greedy Algorithms"
+description: "Greedy algorithms build solutions incrementally by making locally optimal choices at each step, relying on the greedy-choice property and optimal substructure to guarantee global optimality."
+date: 2026-04-11
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [greedy, algorithms, data structures, algorithms]
+authors: [fabrizio_duroni]
+---
+
+import { TopicExercises } from "@/components/sections/data-structures-and-algorithms/components/topic-exercises";
+
+# Greedy Algorithms
+
+A greedy algorithm builds a solution incrementally, one step at a time, by making the choice that looks best **right now** without reconsidering previous decisions.
+At each step, the algorithm commits irrevocably to a locally optimal option and never backtracks.
+This strategy sounds reckless, yet for a well-defined class of problems it produces a globally optimal result.
+
+The power of greedy algorithms lies in their simplicity.
+Where other paradigms explore entire search spaces, maintain tables of subproblem results, or recurse over every possible combination, a greedy algorithm replaces all of that machinery with a single, repeatable decision rule.
+The result is typically a solution that is both easy to implement and extremely efficient, often running in $O(n)$ or $O(n \log n)$ time with $O(1)$ extra space.
+
+The difficulty with greedy algorithms is not implementation but **justification**.
+It is easy to write a greedy procedure, it is much harder to prove that the procedure always yields an optimal answer.
+Many problems that appear amenable to a greedy approach turn out to require a more exhaustive strategy.
+The central skill in mastering greedy algorithms is learning to distinguish the problems where a local rule suffices from those where it does not.
+
+This article develops that skill by first establishing the theoretical foundation that makes greedy correctness possible, then exploring the main structural patterns that greedy solutions follow, and finally examining the situations where greedy reasoning breaks down.
+
+## Greedy-Choice Property and Optimal Substructure
+
+Two properties must hold for a greedy strategy to produce an optimal solution.
+Understanding them is essential not just for proving correctness, but for recognizing whether a greedy approach is viable at all.
+
+### The greedy-choice property
+
+The greedy-choice property states that a globally optimal solution can always be assembled by making locally optimal choices.
+More precisely, there exists an optimal solution that includes the greedy choice made at the first step.
+This does not mean that every optimal solution includes that choice, only that at least one does.
+
+This property distinguishes greedy algorithms from dynamic programming.
+In dynamic programming, the choice at each step depends on the solutions to subproblems that have not yet been solved.
+You must consider all options and combine their results before deciding.
+In a greedy algorithm, the choice is made before solving any subproblems.
+The algorithm commits to the locally best option and only then moves on to the reduced problem.
+
+The standard technique for proving the greedy-choice property is the **exchange argument**.
+The proof proceeds by assuming an optimal solution exists that does not make the greedy choice at the first step, then showing that the greedy choice can be "swapped in" without worsening the solution.
+If the swap preserves optimality, the greedy-choice property holds.
+
+Consider a concrete example: the classical activity selection problem, where the goal is to select the maximum number of non-overlapping activities from a set, each defined by a start and end time.
+The greedy strategy selects the activity that finishes earliest.
+Suppose an optimal solution $O$ does not include the earliest-finishing activity $a$.
+Let $b$ be the first activity in $O$.
+Since $a$ finishes no later than $b$, replacing $b$ with $a$ cannot create any new overlap with the remaining activities in $O$.
+The modified solution has the same number of activities and is still valid.
+Therefore, there is always an optimal solution that includes the greedy choice, and the property holds.
+
+### Optimal substructure
+
+A problem has optimal substructure if an optimal solution to the whole problem contains within it optimal solutions to its subproblems.
+After making the greedy choice, the remaining problem must itself be solvable optimally, and combining the greedy choice with the optimal solution to the remaining problem must yield an optimal solution to the original problem.
+
+This property is shared with dynamic programming. The difference is in how it is exploited.
+Dynamic programming solves all subproblems and combines their results.
+Greedy algorithms solve only the one subproblem that remains after the greedy choice, because the greedy-choice property guarantees that considering the others is unnecessary.
+
+Returning to the activity selection example: once the earliest-finishing activity $a$ is selected, the remaining subproblem consists of all activities that start after $a$ ends.
+An optimal solution to this subproblem, combined with $a$, yields an optimal solution to the original problem.
+The proof follows by contradiction: if a better solution existed for the remaining activities, substituting it into the original would produce a better overall solution, contradicting the optimality of the assumed answer.
+
+### The relationship with dynamic programming
+
+Greedy algorithms and dynamic programming both apply to problems with optimal substructure, but they differ fundamentally in how they handle choices.
+Dynamic programming defers commitment. It solves all subproblems, stores their results, and combines them to find the best overall answer.
+A greedy algorithm commits immediately. It makes the locally best choice and never looks back.
+
+This means greedy algorithms are strictly less general than dynamic programming.
+Every problem solvable by a greedy algorithm can also be solved by dynamic programming (though less efficiently), but the converse is not true.
+The coin change problem is a classic illustration: with denominations like $\{1, 5, 10, 25\}$, a greedy strategy of always picking the largest coin works.
+But with denominations like $\{1, 3, 4\}$ and a target of 6, the greedy algorithm picks $4 + 1 + 1 = 3$ coins, while the optimal solution is $3 + 3 = 2$ coins.
+The greedy-choice property fails here because picking the locally largest denomination can lead to a suboptimal decomposition.
+
+When both approaches apply, greedy is almost always preferable.
+It avoids the overhead of memoization or tabulation, runs in less time, uses less space, and produces simpler code.
+The challenge is verifying that the greedy-choice property holds for the specific problem at hand.
+
+## Single-Pass Greedy
+
+The most common greedy pattern processes the input in a single left-to-right (or right-to-left) scan, maintaining a small amount of state that captures the running effect of all choices made so far.
+At each position, the algorithm applies a local decision rule, updates its state, and moves on.
+No element is visited more than once, and no auxiliary data structure beyond a few variables is needed.
+
+The general shape of a single-pass greedy algorithm is:
+
+```ts
+function singlePassGreedy(input: T[]): Result {
+    let state = initialState;
+
+    for (const element of input) {
+        // Apply local decision rule
+        state = update(state, element);
+    }
+
+    return extractAnswer(state);
+}
+```
+
+The elegance of this pattern lies in the fact that the `update` function encodes the entire greedy logic.
+It does not look ahead, does not backtrack, and does not store history.
+It simply takes the current state and the current element and produces the next state.
+
+### Running surplus and deficit tracking
+
+A large family of single-pass greedy problems asks whether a sequence of gains and costs can sustain some quantity above zero throughout a traversal.
+The technique is to walk through the sequence, accumulating a running surplus (or deficit), and resetting whenever the surplus drops below a threshold.
+
+Consider the problem of distributing fuel along a circular route.
+At each station, you gain some fuel and spend some to reach the next station.
+The question is whether there exists a starting station from which you can complete the full circuit.
+A single pass computes the net fuel at each station.
+If the running surplus ever goes negative, no station from the current start up to this point can be the answer.
+The algorithm resets the surplus and tries the next station as a candidate.
+A separate accumulator tracks the total surplus across all stations. If the total is non-negative, a valid start exists and the candidate found during the scan is correct.
+
+```ts
+function circularRouteFeasibility(gain: number[], cost: number[]): number {
+    let currentSurplus = 0;
+    let totalSurplus = 0;
+    let candidateStart = 0;
+
+    for (let i = 0; i < gain.length; i++) {
+        const net = gain[i] - cost[i];
+        currentSurplus += net;
+        totalSurplus += net;
+
+        if (currentSurplus < 0) {
+            currentSurplus = 0;
+            candidateStart = i + 1;
+        }
+    }
+
+    return totalSurplus >= 0 ? candidateStart : -1;
+}
+```
+
+The correctness of this approach rests on a subtle observation.
+If starting from station $s$ causes the surplus to go negative at station $t$, then every station between $s$ and $t$ (inclusive) would also fail as a starting point.
+The reason is that arriving at any of those intermediate stations from $s$ would have had a non-negative surplus (otherwise the reset would have happened earlier), so starting from any of them directly, without the benefit of that accumulated surplus, can only be worse.
+This eliminates entire ranges of candidates in a single step, allowing the algorithm to find the answer in one pass.
+
+### Balance tracking
+
+Another common single-pass scenario involves tracking a balance between two opposing quantities.
+Parenthesis validation is the canonical example.
+The greedy insight is that you can determine the minimum number of corrections without building an explicit stack.
+A single counter tracks the balance: increment for an opening symbol, decrement for a closing one.
+Whenever the balance goes negative, it means there is an unmatched closing symbol that cannot be fixed by any future opening symbol.
+The algorithm records this as a required correction and resets the balance.
+At the end, any remaining positive balance represents unmatched opening symbols.
+
+```ts
+function minimumCorrections(s: string): number {
+    let unmatchedClose = 0;
+    let openCount = 0;
+
+    for (const ch of s) {
+        if (ch === '(') {
+            openCount++;
+        } else {
+            if (openCount > 0) {
+                openCount--;
+            } else {
+                unmatchedClose++;
+            }
+        }
+    }
+
+    return unmatchedClose + openCount;
+}
+```
+
+The greedy-choice property here is straightforward: matching each closing parenthesis with the nearest preceding unmatched opening one is always at least as good as any other matching.
+No rearrangement or global optimization can reduce the count of insertions needed.
+
+### Range expansion
+
+A third single-pass pattern appears when the goal is to cover as much ground as possible with a limited resource, such as finding the minimum number of jumps to traverse an array where each element specifies a maximum forward step.
+The greedy strategy maintains a "window" of positions reachable with the current number of steps.
+At each position within the window, it records the farthest position reachable from there.
+When the scan reaches the end of the current window, it means one more step is needed, and the window expands to the farthest reachable position.
+
+```ts
+function minimumSteps(reach: number[]): number {
+    let steps = 0;
+    let currentEnd = 0;
+    let farthest = 0;
+
+    for (let i = 0; i < reach.length - 1; i++) {
+        farthest = Math.max(farthest, i + reach[i]);
+
+        if (i === currentEnd) {
+            steps++;
+            currentEnd = farthest;
+        }
+    }
+
+    return steps;
+}
+```
+
+This is effectively a breadth-first traversal disguised as a greedy scan.
+Each "level" of the BFS corresponds to one jump, and the farthest reachable index defines the boundary of the next level.
+The greedy choice is implicit: within each level, always extend the frontier as far as possible, because there is no benefit to jumping short.
+Since any landing position within the current window requires the same number of jumps, picking the one that maximizes future reach is strictly dominant.
+
+## Multi-Pass Greedy
+
+Some problems involve constraints that run in opposing directions, making a single pass insufficient.
+The multi-pass greedy pattern handles this by running multiple passes over the data, each enforcing one direction of constraints, and then reconciling the results.
+
+The key insight is that certain constraints are easy to satisfy locally in one direction but impossible to enforce globally in a single sweep.
+When a problem imposes conditions that depend on both a left neighbor and a right neighbor, a single left-to-right pass can enforce the leftward condition but will miss the rightward one (and vice versa).
+The solution is to decouple the constraints, satisfy each one independently in its natural direction, and then combine them.
+
+Consider the problem of assigning resources along a sequence where each element has a priority value, and higher-priority elements must receive strictly more resources than their lower-priority neighbors on both sides, while minimizing total allocation.
+A single left-to-right pass can enforce the rule that each element gets more than its left neighbor when its priority is higher, but it cannot simultaneously enforce the same rule with respect to the right neighbor without already knowing the right neighbor's allocation.
+
+The multi-pass approach runs two passes:
+
+```ts
+function minimumAllocation(priority: number[]): number {
+    const n = priority.length;
+    const left = new Array(n).fill(1);
+    const right = new Array(n).fill(1);
+
+    // Left-to-right: enforce left-neighbor constraint
+    for (let i = 1; i < n; i++) {
+        if (priority[i] > priority[i - 1]) {
+            left[i] = left[i - 1] + 1;
+        }
+    }
+
+    // Right-to-left: enforce right-neighbor constraint
+    for (let i = n - 2; i >= 0; i--) {
+        if (priority[i] > priority[i + 1]) {
+            right[i] = right[i + 1] + 1;
+        }
+    }
+
+    // Reconcile: take the maximum to satisfy both constraints
+    let total = 0;
+    for (let i = 0; i < n; i++) {
+        total += Math.max(left[i], right[i]);
+    }
+
+    return total;
+}
+```
+
+The first pass produces allocations that respect every leftward comparison.
+The second pass produces allocations that respect every rightward comparison.
+Taking the element-wise maximum guarantees that both sets of constraints are satisfied simultaneously.
+
+Why does this work? Each pass, taken alone, is a standard single-pass greedy.
+The left-to-right pass satisfies the greedy-choice property for left-neighbor constraints: giving an element exactly one more than its left neighbor (when required) is the minimum that satisfies the rule, and no smaller value is possible.
+The same reasoning applies symmetrically to the right-to-left pass.
+The reconciliation step takes the tighter of the two bounds at each position.
+Since each bound is the minimum needed for its respective constraint, their maximum is the minimum value that satisfies both constraints at once.
+
+Multi-pass greedy is not limited to two passes or to left-right symmetry.
+The same idea applies whenever a problem decomposes into independent constraint directions that can each be solved greedily in isolation.
+The general recipe is: identify the independent constraint axes, solve each one with a greedy pass, and merge the results by taking the most restrictive bound at each position.
+
+## Greedy with Heaps: Deferred Decisions
+
+Not every greedy problem can be solved with a simple scan over the input.
+Some require making choices among a dynamically changing set of candidates, where the best candidate at each step depends on what has happened so far.
+In these situations, a [heap](/data-structures-and-algorithms/topic/heap) (priority queue) provides the mechanism that makes the greedy rule efficient.
+
+The core idea is **deferred decision-making**.
+Instead of committing to a choice immediately when a candidate is first encountered, the algorithm collects candidates into a heap and defers the actual decision until the moment it is needed.
+At that point, the heap delivers the best available candidate according to the greedy criterion, whether that is the largest, smallest, or most advantageous by some derived measure.
+
+This pattern appears in two main forms.
+
+### Deferred selection with a max-heap
+
+In some problems, the algorithm processes events in order (often chronological or positional) and at certain points must make the best possible choice from all candidates seen so far.
+The key property is that candidates encountered earlier remain available for selection later.
+
+Consider the problem of traveling along a road with gas stations.
+The car starts with some fuel and must reach a target.
+Rather than deciding at each station whether to refuel (which would require looking ahead), the greedy strategy is to drive as far as possible, and only when the tank runs dry, retroactively "refuel" at the station that would have provided the most fuel.
+A max-heap stores the fuel amounts of all stations passed so far.
+Whenever the car cannot reach the next station (or the target), it extracts the largest fuel amount from the heap, simulating the decision to have stopped there.
+
+```ts
+function minimumRefuelingStops(
+    target: number,
+    startFuel: number,
+    stations: [position: number, fuel: number][]
+): number {
+    const passedStations = new MaxHeap<number>();
+    let tank = startFuel;
+    let stops = 0;
+
+    for (const [position, fuel] of stations) {
+        // Refuel retroactively as needed
+        while (tank < position && passedStations.size() > 0) {
+            tank += passedStations.extract()!;
+            stops++;
+        }
+        if (tank < position) return -1;
+
+        passedStations.insert(fuel);
+    }
+
+    // Handle the final stretch to the target
+    while (tank < target && passedStations.size() > 0) {
+        tank += passedStations.extract()!;
+        stops++;
+    }
+
+    return tank >= target ? stops : -1;
+}
+```
+
+The greedy-choice property holds because whenever a refueling stop is needed, picking the station with the most fuel is strictly dominant.
+Using any other station would leave the tank with less fuel and could only require more stops later, never fewer.
+The heap makes this selection $O(\log n)$ per extraction, and each station is inserted and extracted at most once, giving an overall complexity of $O(n \log n)$.
+
+### Ratio sorting with heap pruning
+
+A more sophisticated variant arises when the greedy criterion involves a ratio or derived quantity, and the algorithm must select a subset of items that minimizes (or maximizes) some aggregate cost.
+The strategy is to sort by the derived quantity and use a heap to maintain the best subset seen so far.
+
+A representative example is hiring a group of workers where each worker has a quality level and a minimum wage expectation.
+All hired workers must be paid proportionally to their quality, using a common ratio of pay to quality, and this ratio must be at least as high as each hired worker's own wage-to-quality ratio.
+The goal is to minimize the total cost of hiring exactly $k$ workers.
+
+The key insight is that if the group's pay ratio is $r$, then the total cost is $r \times \sum q_i$, where $q_i$ are the qualities of the hired workers.
+To minimize total cost, we want both a low ratio $r$ and a low sum of qualities.
+Sorting workers by their ratio $w_i / q_i$ in ascending order and sweeping through them, the current worker's ratio is the binding constraint for the group.
+A max-heap of size $k$ tracks the $k$ smallest qualities seen so far.
+When a new worker is considered, they are added to the heap. If the heap exceeds size $k$, the worker with the highest quality is evicted, reducing the quality sum.
+At each step where the heap contains exactly $k$ workers, the total cost is computed as the current ratio times the quality sum.
+
+```ts
+function minimumGroupCost(
+    quality: number[],
+    wage: number[],
+    k: number
+): number {
+    const workers = quality.map((q, i) => ({
+        ratio: wage[i] / q,
+        quality: q,
+    }));
+    workers.sort((a, b) => a.ratio - b.ratio);
+
+    const maxQualityHeap = new MaxHeap<number>();
+    let qualitySum = 0;
+    let minCost = Infinity;
+
+    for (const worker of workers) {
+        qualitySum += worker.quality;
+        maxQualityHeap.insert(worker.quality);
+
+        if (maxQualityHeap.size() > k) {
+            qualitySum -= maxQualityHeap.extract()!;
+        }
+
+        if (maxQualityHeap.size() === k) {
+            minCost = Math.min(minCost, qualitySum * worker.ratio);
+        }
+    }
+
+    return minCost;
+}
+```
+
+The correctness of this approach follows from the observation that for any fixed pay ratio $r$, the optimal group consists of the $k$ workers with the smallest qualities among those whose individual ratio does not exceed $r$.
+Sorting by ratio and sweeping ensures that every possible binding ratio is considered in order, and the heap maintains the optimal group for each binding ratio.
+
+### Scheduling with priority and cooldowns
+
+A third variant combines frequency analysis with a heap to schedule tasks under constraints.
+When tasks have cooldown requirements (a minimum gap between executions of the same task), the greedy rule is to always execute the most frequent remaining task, as this minimizes idle time.
+A max-heap ordered by frequency provides the next task to execute.
+Tasks that enter a cooldown period are temporarily removed from the heap and re-inserted when their cooldown expires.
+
+```ts
+function minimumScheduleLength(
+    tasks: string[],
+    cooldown: number
+): number {
+    const frequency = new Map<string, number>();
+    for (const task of tasks) {
+        frequency.set(task, (frequency.get(task) ?? 0) + 1);
+    }
+
+    const maxHeap = new MaxHeap<{ task: string; count: number }>(
+        (a, b) => b.count - a.count
+    );
+    for (const [task, count] of frequency) {
+        maxHeap.insert({ task, count });
+    }
+
+    const waitQueue: { task: string; count: number; availableAt: number }[] = [];
+    let time = 0;
+
+    while (maxHeap.size() > 0 || waitQueue.length > 0) {
+        time++;
+
+        const current = maxHeap.extract();
+        if (current) {
+            current.count--;
+            if (current.count > 0) {
+                waitQueue.push({
+                    task: current.task,
+                    count: current.count,
+                    availableAt: time + cooldown,
+                });
+            }
+        }
+
+        // Re-insert tasks whose cooldown has expired
+        while (waitQueue.length > 0 && waitQueue[0].availableAt === time) {
+            const ready = waitQueue.shift()!;
+            maxHeap.insert({ task: ready.task, count: ready.count });
+        }
+    }
+
+    return time;
+}
+```
+
+The greedy insight is that executing the most frequent task first minimizes the chance of being forced into idle slots later.
+If a less frequent task is chosen instead, the most frequent task will need more future slots, and those slots are more likely to conflict with cooldown windows, creating unavoidable idle time.
+The heap ensures that the highest-frequency task is always selected in $O(\log k)$ time, where $k$ is the number of distinct tasks.
+
+## When Greedy Fails
+
+A greedy algorithm that works on a few examples does not necessarily work in general.
+The most common failure mode is a problem where the locally optimal choice at one step forecloses a much better option at a later step.
+Recognizing this pattern is as important as recognizing when greedy succeeds.
+
+### The coin change counterexample
+
+The coin change problem asks for the minimum number of coins to reach a target sum from a given set of denominations.
+With the standard US denominations $\{1, 5, 10, 25\}$, the greedy strategy of always picking the largest denomination that fits works correctly.
+But this is an artifact of the specific denomination set, not a general property of the problem.
+
+With denominations $\{1, 3, 4\}$ and a target of 6, greedy picks $4 + 1 + 1 = 3$ coins.
+The optimal solution is $3 + 3 = 2$ coins.
+The greedy choice of picking 4 first is locally optimal (it reduces the remaining amount by the most) but globally suboptimal because it forces two additional coins instead of one.
+The greedy-choice property fails here: no optimal solution for target 6 includes a coin of value 4.
+
+### The 0/1 knapsack problem
+
+In the fractional knapsack problem, where items can be divided, a greedy strategy that sorts by value-to-weight ratio and takes as much of each item as possible is provably optimal.
+But in the 0/1 knapsack problem, where each item must be taken entirely or not at all, greedy fails.
+
+Consider items with weights $\{10, 20, 30\}$, values $\{60, 100, 120\}$, and a capacity of 50.
+The value-to-weight ratios are $6, 5, 4$.
+Greedy takes the first item (weight 10, value 60) and the second (weight 20, value 100), using 30 of the 50 capacity for a total value of 160.
+It cannot fit the third item.
+But taking the second and third items (weight 50, value 220) is strictly better.
+The greedy choice of the highest-ratio item is locally optimal but excludes a combination that uses the capacity more effectively.
+
+### Recognizing greedy-hostile problems
+
+Several structural clues suggest that greedy may fail:
+
+The problem involves a global constraint (like a total weight or budget) that interacts with individual choices in non-additive ways.
+In the knapsack example, taking a high-ratio item consumes capacity that could have been used for a different, more valuable combination.
+
+The problem's objective function depends on interactions between choices, not just the sum of individual values.
+If the value of choosing item $A$ changes depending on whether item $B$ was also chosen, the problem likely has dependencies that a greedy approach cannot capture.
+
+The problem admits a small counterexample.
+Before committing to a greedy approach, it is worth checking the strategy against a few carefully chosen inputs.
+If the problem has a known connection to NP-hard problems (like general knapsack or graph coloring), a greedy approach is unlikely to be optimal.
+
+The absence of a clean exchange argument is perhaps the strongest signal.
+If you cannot show that swapping a non-greedy choice for the greedy choice preserves optimality, the greedy-choice property probably does not hold, and a different approach is needed.
+
+## Time and Space Complexity
+
+Greedy algorithms are among the most efficient algorithmic strategies in terms of both time and space, precisely because they avoid the overhead of exploring multiple solution paths or storing intermediate results.
+
+A single-pass greedy algorithm that maintains a constant number of running variables processes each element exactly once, yielding $O(n)$ time and $O(1)$ extra space.
+Problems solved by running surplus tracking, balance counting, or range expansion all fall into this category.
+The running surplus pattern for circular route feasibility, the parenthesis balance tracker, and the range expansion pattern for minimum jumps all exhibit this behavior.
+
+Multi-pass greedy algorithms run a constant number of linear passes over the data.
+Each pass is $O(n)$, and the total is still $O(n)$.
+However, multi-pass solutions typically require auxiliary arrays, one per pass, to record the intermediate results that must be reconciled.
+This brings the space complexity to $O(n)$.
+The bidirectional constraint reconciliation pattern (left-to-right pass, right-to-left pass, element-wise merge) is the standard example.
+
+Greedy algorithms that use a heap introduce an $O(\log n)$ or $O(\log k)$ factor per element, where $k$ is the number of distinct items maintained in the heap.
+The total time becomes $O(n \log n)$ or $O(n \log k)$, depending on whether the heap size is bounded by the input size or by some smaller parameter.
+The space cost of the heap is $O(n)$ in the worst case (if all elements may be inserted) or $O(k)$ if the heap size is bounded.
+
+When the greedy algorithm requires a sorting step as a prerequisite (for example, sorting by a derived ratio before sweeping with a heap), the sorting dominates the preprocessing at $O(n \log n)$.
+The greedy scan that follows is either $O(n)$ or $O(n \log k)$, and the overall time is $O(n \log n)$.
+
+In summary, greedy algorithms range from $O(n)$ time and $O(1)$ space at their leanest, to $O(n \log n)$ time and $O(n)$ space when sorting and heap operations are involved.
+This efficiency is a direct consequence of the greedy paradigm's defining property: each element is considered at most a constant number of times, and no element's decision is ever revisited.
+
+## Exercises
+
+<TopicExercises topic="greedy" />

@@ -1,0 +1,68 @@
+---
+title: "Minimum Cost to Hire K Workers"
+description: "Given workers with quality and wage expectations, find the minimum cost to hire exactly k workers while paying proportionally to quality."
+date: 2026-04-11
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [greedy, algorithms, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Greedy ratio sorting with max-heap pruning"
+  leetcodeUrl: "https://leetcode.com/problems/minimum-cost-to-hire-k-workers/"
+---
+# Minimum Cost to Hire K Workers
+
+Leetcode Problem 857: [Minimum Cost to Hire K Workers](https://leetcode.com/problems/minimum-cost-to-hire-k-workers/description/)
+
+## Problem Summary
+There are **n** workers, each with a quality value and a minimum wage expectation. You need to hire exactly **k** workers to form a paid group under two rules: every worker must be paid at least their minimum wage, and each worker's pay must be directly proportional to their quality relative to the other workers in the group. In other words, the ratio of pay to quality must be the same for all hired workers, and this common ratio must be high enough to satisfy every hired worker's minimum wage. Return the minimum total cost to hire **k** workers.
+
+The number of workers is between **1** and **10,000**. Quality and wage values are between **1** and **10,000**.
+
+## Techniques
+- Array
+- Greedy
+- Sorting
+- Heap (Priority Queue)
+
+## Solution
+```ts
+import { Heap } from "../heap"
+
+interface Worker {
+    ratio: number
+    quality: number
+}
+
+function mincostToHireWorkers(quality: number[], wage: number[], k: number): number {
+    const workers: Worker[] = []
+
+    for (let i = 0; i < quality.length; i++) {
+        let currentQuality = quality[i]
+        let ratio = wage[i] / currentQuality
+        workers.push({ ratio, quality: currentQuality })
+    }
+
+    workers.sort((a, b) => a.ratio - b.ratio)
+
+    const maxHeap = new Heap<number>((a, b) => b - a)
+    let sumQualities = 0
+    let result = Infinity
+
+    for (let i = 0; i < workers.length; i++) {
+        let currentWorker = workers[i]
+        sumQualities = sumQualities + currentWorker.quality
+
+        maxHeap.insert(currentWorker.quality)
+
+        if (maxHeap.size() > k) {
+            sumQualities = sumQualities - maxHeap.extract()!
+        }
+
+        if (maxHeap.size() === k) {
+            result = Math.min(result, sumQualities * currentWorker.ratio)
+        }
+    }
+
+    return result
+};
+```

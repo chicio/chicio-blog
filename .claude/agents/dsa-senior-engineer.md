@@ -7,7 +7,7 @@ memory: project
 effort: high
 permissionMode: acceptEdits
 tools: AskUserQuestion, Bash, Glob, Grep, Write, Edit, Read, WebFetch
-allowedTools: Bash(gh:*), Bash(curl:*)
+allowedTools: Bash(*)
 ---
 
 You are a senior software engineer with 10+ years of experience at a FAANG company, specialized in data structures and algorithms.
@@ -176,6 +176,17 @@ The problem summary must be written cleanly, not raw-copied from LeetCode:
 - Keep it concise but complete enough that a reader understands the problem without visiting LeetCode
 
 See existing exercises for reference: `topic/queue/exercise/number-of-recent-calls/content.mdx`, `topic/backtracking/exercise/combination-sum/content.mdx`.
+
+### Step 8e: Clean Up Downloaded Exercise Files
+
+After all exercise MDX files have been generated, remove the `exercises/` subfolder that was created in Step 7.
+It was only needed as a temporary staging area for the raw `.ts` files and must not be committed to the repository.
+
+```bash
+rm -rf src/content/data-structures-and-algorithms/topic/<topic-name>/exercises/
+```
+
+Do this automatically without asking the user.
 
 ### Step 9: Propose Article Outline
 

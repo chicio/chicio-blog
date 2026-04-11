@@ -1,0 +1,51 @@
+---
+title: "Candy"
+description: "Given an array of children's ratings, distribute the minimum number of candies so that each child gets at least one and children with higher ratings get more than their neighbors."
+date: 2026-04-11
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [greedy, algorithms, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Multi-pass greedy with constraint reconciliation"
+  leetcodeUrl: "https://leetcode.com/problems/candy/"
+---
+# Candy
+
+Leetcode Problem 135: [Candy](https://leetcode.com/problems/candy/description/)
+
+## Problem Summary
+There are **n** children standing in a line, each with an integer rating. You must distribute candies such that every child receives at least one candy and any child whose rating is strictly higher than a neighbor receives more candies than that neighbor. Return the minimum total number of candies needed.
+
+The number of children is at most **20,000** and each rating is a non-negative integer up to **20,000**.
+
+## Techniques
+- Array
+- Greedy
+
+## Solution
+```ts
+function candy(ratings: number[]): number {
+    let leftConstraint = Array(ratings.length).fill(1);
+    let rightConstraint = Array(ratings.length).fill(1);
+
+    for (let i = 1; i < ratings.length; i++) {
+        if (ratings[i] > ratings[i - 1]) {
+            leftConstraint[i] = leftConstraint[i - 1] + 1
+        }
+    }
+
+    for (let i = ratings.length - 2; i >= 0; i--) {
+        if (ratings[i] > ratings[i + 1]) {
+            rightConstraint[i] = rightConstraint[i + 1] + 1
+        }
+    }
+
+    let sum = 0
+
+    for (let i = 0; i < ratings.length; i++) {
+        sum = sum + Math.max(leftConstraint[i], rightConstraint[i])
+    }
+
+    return sum
+};
+```

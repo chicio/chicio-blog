@@ -1,0 +1,46 @@
+---
+title: "Minimum Add to Make Parentheses Valid"
+description: "Given a parentheses string, determine the minimum number of insertions needed to make it valid."
+date: 2026-04-11
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [greedy, algorithms, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Greedy balance tracking"
+  leetcodeUrl: "https://leetcode.com/problems/minimum-add-to-make-parentheses-valid/"
+---
+# Minimum Add to Make Parentheses Valid
+
+Leetcode Problem 921: [Minimum Add to Make Parentheses Valid](https://leetcode.com/problems/minimum-add-to-make-parentheses-valid/description/)
+
+## Problem Summary
+A parentheses string is valid if it is empty, is the concatenation of two valid strings, or is a valid string wrapped in a matching pair of parentheses. Given a string consisting only of `'('` and `')'` characters, determine the minimum number of parenthesis insertions (at any position) required to make the string valid.
+
+The string length is between **1** and **1,000**.
+
+## Techniques
+- String
+- Stack
+- Greedy
+
+## Solution
+```ts
+function minAddToMakeValid(s: string): number {
+    let corrections = 0
+    let open = 0
+
+    for (const char of s) {
+        if (char === '(') {
+            open++
+        } else {
+            if (open > 0) {
+                open--
+            } else {
+                corrections++
+            }
+        }
+    }
+
+    return corrections + open
+};
+```

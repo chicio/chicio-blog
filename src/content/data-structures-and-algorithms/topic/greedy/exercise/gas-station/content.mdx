@@ -1,0 +1,44 @@
+---
+title: "Gas Station"
+description: "Given gas available and cost to travel between stations on a circular route, find the starting station index that allows a complete circuit, or return -1."
+date: 2026-04-11
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [greedy, algorithms, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Single-pass greedy with running surplus"
+  leetcodeUrl: "https://leetcode.com/problems/gas-station/"
+---
+# Gas Station
+
+Leetcode Problem 134: [Gas Station](https://leetcode.com/problems/gas-station/description/)
+
+## Problem Summary
+There are **n** gas stations arranged in a circular route. Station **i** provides `gas[i]` units of fuel, and traveling from station **i** to station **i + 1** costs `cost[i]` units. Starting with an empty tank at some station, determine whether you can complete the full circuit clockwise. If a valid starting station exists, return its index. Otherwise, return **-1**. The solution is guaranteed to be unique when it exists.
+
+The number of stations is at most **100,000**. Gas and cost values are non-negative integers up to **10,000**.
+
+## Techniques
+- Array
+- Greedy
+
+## Solution
+```ts
+function canCompleteCircuit(gas: number[], cost: number[]): number {
+    let currentTank = 0
+    let totalTank = 0
+    let resultPosition = 0
+
+    for (let i = 0; i < gas.length; i++) {
+        currentTank = currentTank + gas[i] - cost[i]
+        totalTank = totalTank + gas[i] - cost[i]
+
+        if (currentTank < 0) {
+            currentTank = 0
+            resultPosition = i + 1
+        }
+    }
+
+    return totalTank >= 0 ? resultPosition : -1
+};
+```

@@ -1,0 +1,44 @@
+---
+title: "Jump Game II"
+description: "Given an array where each element represents the maximum forward jump length, find the minimum number of jumps to reach the last index."
+date: 2026-04-11
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [greedy, algorithms, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "BFS-style greedy range expansion"
+  leetcodeUrl: "https://leetcode.com/problems/jump-game-ii/"
+---
+# Jump Game II
+
+Leetcode Problem 45: [Jump Game II](https://leetcode.com/problems/jump-game-ii/description/)
+
+## Problem Summary
+You are positioned at the first index of a zero-indexed integer array. Each element `nums[i]` represents the maximum length of a forward jump from index **i**, meaning you can jump to any index from **i + 1** to **i + nums[i]**. Return the minimum number of jumps needed to reach the last index. It is guaranteed that the last index is always reachable.
+
+The array length is at most **10,000** and each element is a non-negative integer up to **1,000**.
+
+## Techniques
+- Array
+- Dynamic Programming
+- Greedy
+
+## Solution
+```ts
+function jump(nums: number[]): number {
+    let jumps = 0
+    let currentEnd = 0
+    let furthest = 0
+
+    for (let i = 0; i < nums.length - 1; i++) {
+        furthest = Math.max(furthest, i + nums[i])
+
+        if (i === currentEnd) {
+            jumps++
+            currentEnd = furthest
+        }
+    }
+
+    return jumps
+}
+```
