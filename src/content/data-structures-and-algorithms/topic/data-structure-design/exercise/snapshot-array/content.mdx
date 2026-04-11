@@ -1,0 +1,63 @@
+---
+title: "Snapshot Array"
+description: "Implement a SnapshotArray that supports setting values, taking snapshots, and retrieving the value at a given index for a past snapshot."
+date: 2026-04-11
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [data structure design, design, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Versioned Storage (HashMap per Index)"
+  leetcodeUrl: "https://leetcode.com/problems/snapshot-array/"
+---
+# Snapshot Array
+
+Leetcode Problem 1146: [Snapshot Array](https://leetcode.com/problems/snapshot-array/description/)
+
+## Problem Summary
+Implement a `SnapshotArray` that supports an array-like interface with snapshot capabilities. `SnapshotArray(length)` initializes the structure with the given length, where every element starts at **0**. `set(index, val)` sets the element at the given index to the specified value. `snap()` takes a snapshot of the current array state and returns the snapshot id, which is the total number of snapshots taken so far minus one. `get(index, snap_id)` returns the value at the given index at the time the snapshot with the given id was taken.
+
+**Constraints:**
+- The array length is between **1** and **50,000**.
+- Index values are non-negative and less than the array length.
+- Values are non-negative integers up to **1,000,000,000**.
+- Snapshot ids are non-negative and less than the total number of snapshots taken.
+- At most **50,000** calls will be made to `set`, `snap`, and `get`.
+
+## Techniques
+- Array
+- Hash Table
+- Binary Search
+- Design
+
+## Solution
+```ts
+class SnapshotArray {
+    constructor(
+        length: number,
+        private currentSnap: number = 0,
+        private readonly snaps: Map<number, number>[] = Array.from({ length }, () => new Map<number, number>())
+    ) { }
+
+    set(index: number, val: number): void {
+        this.snaps[index].set(this.currentSnap, val)
+    }
+
+    snap(): number {
+        return this.currentSnap++
+    }
+
+    get(index: number, snap_id: number): number {
+        const changes: Map<number, number> = this.snaps[index]
+        
+        while (snap_id >= 0) {
+            if (changes.has(snap_id)) {
+                return changes.get(snap_id)!
+            }
+
+            snap_id--
+        }
+
+        return 0
+    }
+}
+```

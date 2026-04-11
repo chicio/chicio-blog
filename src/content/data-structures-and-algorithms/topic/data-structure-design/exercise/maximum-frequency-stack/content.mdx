@@ -1,0 +1,71 @@
+---
+title: "Maximum Frequency Stack"
+description: "Design a stack-like data structure that pushes elements and pops the most frequent element, breaking ties by recency."
+date: 2026-04-11
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [data structure design, design, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Frequency Map + Frequency-Bucketed Stacks"
+  leetcodeUrl: "https://leetcode.com/problems/maximum-frequency-stack/"
+---
+# Maximum Frequency Stack
+
+Leetcode Problem 895: [Maximum Frequency Stack](https://leetcode.com/problems/maximum-frequency-stack/description/)
+
+## Problem Summary
+Design a stack-like data structure that supports pushing elements and popping the most frequent element. `push(val)` pushes an integer onto the stack. `pop()` removes and returns the element with the highest frequency in the stack. If multiple elements share the same highest frequency, the one closest to the top of the stack (most recently pushed) is removed and returned.
+
+**Constraints:**
+- Values are non-negative integers up to **1,000,000,000**.
+- At most **20,000** calls will be made to `push` and `pop`.
+- It is guaranteed that there will be at least one element in the stack before calling `pop`.
+
+## Techniques
+- Hash Table
+- Stack
+- Design
+- Ordered Set
+
+## Solution
+```ts
+class FreqStack {
+    private valToFreq: Map<number, number>;
+    private freqToStack: Map<number, number[]>;
+    private maxFreq: number;
+
+    constructor() {
+        this.valToFreq = new Map();
+        this.freqToStack = new Map();
+        this.maxFreq = 0;
+    }
+
+    push(val: number): void {
+        const freq = (this.valToFreq.get(val) ?? 0) + 1;
+        this.valToFreq.set(val, freq);
+
+        if (freq > this.maxFreq) {
+            this.maxFreq = freq;
+        }
+
+        if (!this.freqToStack.has(freq)) {
+            this.freqToStack.set(freq, []);
+        }
+
+        this.freqToStack.get(freq)!.push(val);
+    }
+
+    pop(): number {
+        const stack = this.freqToStack.get(this.maxFreq)!;
+        const val = stack.pop()!;
+        this.valToFreq.set(val, this.valToFreq.get(val)! - 1);
+
+        if (stack.length === 0) {
+            this.freqToStack.delete(this.maxFreq);
+            this.maxFreq--;
+        }
+
+        return val;
+    }
+}
+```

@@ -1,0 +1,78 @@
+---
+title: "Time Based Key-Value Store"
+description: "Design a time-based key-value data structure that can store multiple values for the same key at different timestamps."
+date: 2026-04-11
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [data structure design, design, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "HashMap + Binary Search"
+  leetcodeUrl: "https://leetcode.com/problems/time-based-key-value-store/"
+---
+# Time Based Key-Value Store
+
+Leetcode Problem 981: [Time Based Key-Value Store](https://leetcode.com/problems/time-based-key-value-store/description/)
+
+## Problem Summary
+Design a key-value data structure that associates multiple values with the same key at different timestamps and supports temporal lookups. The structure must support two operations. `set(key, value, timestamp)` stores the given key-value pair at the specified timestamp. `get(key, timestamp)` returns the value that was stored for the key at the largest timestamp less than or equal to the given timestamp. If no such value exists, it returns an empty string. All timestamps passed to `set` are strictly increasing.
+
+**Constraints:**
+- Keys and values are strings of lowercase English letters and digits, each up to **100** characters long.
+- Timestamps are positive integers up to **10,000,000**.
+- At most **200,000** calls will be made to `set` and `get`.
+
+## Techniques
+- Hash Table
+- String
+- Binary Search
+- Design
+
+## Solution
+```ts
+class TimeMap {
+    constructor(
+        private readonly store = new Map<string, [number, string][]>()
+    ) { }
+
+    set(key: string, value: string, timestamp: number): void {
+        if (this.store.has(key)) {
+            const values = this.store.get(key)!
+            values.push([timestamp, value])
+            this.store.set(key, values)
+        } else {
+            this.store.set(key, [[timestamp, value]])
+        }
+    }
+
+    get(key: string, timestamp: number): string {
+        const values = this.store.get(key);
+        
+        if (!values) { 
+            return "";
+        }
+
+        return this.binarySearch(timestamp, this.store.get(key)!)
+    }
+
+    private binarySearch(timestamp: number, values: [number, string][]): string {
+        let left = 0
+        let right = values.length - 1
+
+        while (left <= right) {
+            let mid = left + Math.floor((right - left) / 2)
+
+            if(values[mid][0] === timestamp) {
+                return values[mid][1]
+            }
+
+            if (values[mid][0] > timestamp) {
+                right = mid - 1
+            } else {
+                left = mid + 1
+            }
+        }
+
+        return right >= 0 ? values[right][1] : ""
+    }
+}
+```

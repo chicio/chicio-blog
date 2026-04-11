@@ -48,6 +48,12 @@ Topics within the same group share a similar article layout and can be used as t
 **Pattern**: Core concept, then variations mapped to specific problem types. intervals uses a table, k-way-merge uses prose.
 **Template**: intervals (more structured)
 
+### Group: Meta / Design Topics
+**Topics**: data-structure-design
+**Pattern**: Intro explaining the meta-topic, a deep-dive into the canonical problem (LRU cache), then sections organized by compositional pattern (HashMap + X, Versioned Storage, Frequency Tracking, etc.), a thinking framework section, and a complexity table mapping patterns to costs.
+**Template**: data-structure-design
+**Why**: This is a unique article type that doesn't fit the "single data structure" or "single algorithm" pattern. It's about composing multiple primitives. Future topics like "system design" could follow a similar pattern-based organization.
+
 ## Complexity Format Convention
 
 - **Data structures** → use a **table** (operations vs time/space)

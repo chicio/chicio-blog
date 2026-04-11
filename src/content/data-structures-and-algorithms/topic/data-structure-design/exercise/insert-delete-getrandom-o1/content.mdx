@@ -1,0 +1,72 @@
+---
+title: "Insert Delete GetRandom O(1)"
+description: "Implement a data structure that supports insert, delete, and getRandom in average O(1) time."
+date: 2026-04-11
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [data structure design, design, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "HashMap + Dynamic Array"
+  leetcodeUrl: "https://leetcode.com/problems/insert-delete-getrandom-o1/"
+---
+# Insert Delete GetRandom O(1)
+
+Leetcode Problem 380: [Insert Delete GetRandom O(1)](https://leetcode.com/problems/insert-delete-getrandom-o1/description/)
+
+## Problem Summary
+Implement a `RandomizedSet` class that supports three operations, each in **O(1)** average time. `insert(val)` inserts the value into the set if not already present and returns `true`, or `false` if the value was already there. `remove(val)` removes the value from the set if present and returns `true`, or `false` if it was not found. `getRandom()` returns a random element from the current set with each element having an equal probability of being chosen. It is guaranteed that at least one element exists when `getRandom` is called.
+
+**Constraints:**
+- Values range from **-2^31** to **2^31 - 1**.
+- At most **200,000** calls will be made to `insert`, `remove`, and `getRandom`.
+- There will be at least one element in the data structure when `getRandom` is called.
+
+## Techniques
+- Array
+- Hash Table
+- Math
+- Design
+- Randomized
+
+## Solution
+```ts
+class RandomizedSet {
+    constructor(
+        private map: Map<number, number> = new Map(), 
+        private list: number[] = []
+    ) {}
+
+    insert(val: number): boolean {
+        if(this.map.has(val)) {
+            return false
+        }
+
+        const count = this.list.push(val)
+        this.map.set(val, count - 1)
+
+        return true
+    }
+
+    remove(val: number): boolean {
+        if(!this.map.has(val)) {
+            return false;
+        }
+
+        const index: number = this.map.get(val)!; 
+        [this.list[index], this.list[this.list.length - 1]] = [this.list[this.list.length - 1], this.list[index]];
+        this.list.pop(); 
+
+        if (index < this.list.length) {  
+            this.map.set(this.list[index], index);
+        }
+
+        this.map.delete(val);  
+
+        return true;
+    }
+
+    getRandom(): number {
+        return this.list[Math.floor(Math.random() * this.list.length)]
+    }
+}
+```

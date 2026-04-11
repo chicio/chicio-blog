@@ -1,0 +1,346 @@
+---
+title: "Data Structure Design"
+description: "Data structure design is the art of composing primitive structures into custom abstractions that satisfy complex operational requirements under strict time and space constraints."
+date: 2026-04-11
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [data structure design, design, data structures, algorithms]
+authors: [fabrizio_duroni]
+---
+
+import { TopicExercises } from "@/components/sections/data-structures-and-algorithms/components/topic-exercises";
+
+# Data Structure Design
+
+Every data structure studied so far, arrays, linked lists, hash maps, heaps, stacks, solves a narrow class of problems efficiently. 
+An array gives $O(1)$ random access. A hash map gives $O(1)$ key lookup. A heap gives $O(1)$ access to the extremal element. 
+But real problems rarely ask for just one of these guarantees. They ask for several at once, often with constraints that seem contradictory.
+
+Consider a cache that must support $O(1)$ insertion, $O(1)$ lookup by key, **and** automatic eviction of the least recently used entry when capacity is exceeded. 
+No single primitive structure satisfies all three requirements simultaneously. 
+An array cannot remove arbitrary elements in constant time. A hash map cannot track recency order. A doubly linked list cannot look up elements by key. The solution is to combine all three into a composite structure where each component handles the requirement it is best suited for, and the components are wired together so that every public operation remains efficient.
+
+This is the essence of data structure design: composing multiple primitive structures into a single abstraction whose public interface meets a set of operational requirements that no individual component could satisfy alone. The design process always begins with the same question: **what operations must be supported, and at what cost?** The answer determines which primitives to combine and how to connect them.
+
+The compositional patterns that appear across these problems are surprisingly few and remarkably consistent. A hash map almost always serves as the backbone, providing $O(1)$ lookup. What varies is the auxiliary structure wired alongside it: a doubly linked list for ordering, a dynamic array for random access, a stack for recency, a heap for priority, or a per-key history for versioning. Understanding these recurring pairings is the key to approaching any design problem systematically, rather than treating each one as a unique puzzle.
+
+## The LRU Cache
+
+Before exploring the compositional patterns, it is worth examining the Least Recently Used (LRU) cache in depth. 
+The LRU cache is the canonical data structure design problem, and it illustrates every principle that the other problems build upon.
+
+An LRU cache is a fixed-capacity key-value store that automatically evicts the **least recently used** entry when the cache is full and a new entry must be inserted. 
+"Recently used" means any access, whether a read (`get`) or a write (`put`). 
+The most recently accessed entry is the one least likely to be evicted, while the entry that has not been touched for the longest time is the first to go.
+
+This eviction policy is grounded in the principle of temporal locality: if a piece of data was accessed recently, it is likely to be accessed again soon. 
+Operating systems use LRU caches for page replacement, databases use them for query result caching, and web servers use them for session storage. 
+The concept is fundamental enough that it appears in virtually every systems design discussion.
+
+The challenge is that both `get` and `put` must run in $O(1)$ time. This rules out any solution that scans the cache to find the least recently used entry. 
+Let us work through the reasoning.
+
+A hash map alone can provide $O(1)$ lookup and insertion by key, but it has no concept of ordering. There is no way to know which entry was accessed least recently. 
+A doubly linked list can maintain insertion and access order, and can move any node to the front in $O(1)$ if you already have a pointer to it. 
+But a linked list alone cannot look up a node by key without scanning. The composite structure uses both: the hash map stores key-to-node pointers for $O(1)$ lookup, 
+and the doubly linked list maintains recency order with the most recently used node at the head and the least recently used at the tail.
+
+When `get(key)` is called, the hash map locates the node in $O(1)$. The node is then detached from its current position in the list and re-inserted at the head. 
+When `put(key, value)` is called on a new key, a new node is created, inserted at the head of the list, and registered in the hash map. 
+If this causes the capacity to be exceeded, the tail node is removed from both the list and the hash map. Every step is $O(1)$.
+
+```ts
+class DoubleLinkedNode {
+    key: number;
+    value: number;
+    prev: DoubleLinkedNode | null = null;
+    next: DoubleLinkedNode | null = null;
+
+    constructor(key: number, value: number) {
+        this.key = key;
+        this.value = value;
+    }
+}
+
+class LRUCache {
+    constructor(
+        private readonly capacity: number,
+        private cache: Map<number, DoubleLinkedNode> = new Map(),
+        private head: DoubleLinkedNode = new DoubleLinkedNode(0, 0),
+        private tail: DoubleLinkedNode = new DoubleLinkedNode(0, 0),
+    ) {
+        this.head.next = this.tail;
+        this.tail.prev = this.head;
+    }
+
+    get(key: number): number {
+        const node = this.cache.get(key);
+        
+        if (!node) {
+            return -1;
+        }
+
+        this.removeNode(node);
+        this.addNodeToHead(node);
+
+        return node.value;
+    }
+
+    put(key: number, value: number): void {
+        if (this.cache.has(key)) {
+            const node = this.cache.get(key)!;
+            node.value = value;
+            this.removeNode(node);
+            this.addNodeToHead(node);
+            return;
+        }
+
+        const newNode = new DoubleLinkedNode(key, value);
+        this.cache.set(key, newNode);
+        this.addNodeToHead(newNode);
+
+        if (this.cache.size > this.capacity) {
+            const tail = this.popTail();
+            this.cache.delete(tail.key);
+        }
+    }
+
+    private removeNode(node: DoubleLinkedNode) {
+        const prev = node.prev!;
+        const next = node.next!;
+        prev.next = next;
+        next.prev = prev;
+    }
+
+    private addNodeToHead(node: DoubleLinkedNode): void {
+        node.prev = this.head;
+        node.next = this.head.next;
+        this.head.next!.prev = node;
+        this.head.next = node;
+    }
+
+    private popTail(): DoubleLinkedNode {
+        const res = this.tail.prev!;
+        this.removeNode(res);
+        return res;
+    }
+}
+```
+
+The use of sentinel nodes (dummy `head` and `tail`) is a technique worth highlighting. 
+Without sentinels, every list operation would need to check for null boundaries: is this the first node? Is this the last? Sentinels eliminate these edge cases entirely. 
+The real nodes always sit between the two sentinels, so `removeNode`, `addNodeToHead`, and `popTail` each reduce to a fixed sequence of pointer updates with no conditional logic. 
+This is a small but important detail: in a structure where every operation must be $O(1)$, even branching logic is worth eliminating.
+
+The LRU cache embodies the core principle of all data structure design: each component handles the requirement it is best suited for. 
+The hash map handles lookup. The linked list handles ordering. Neither could do the other's job efficiently. Together, they form a structure that satisfies all constraints simultaneously.
+
+## HashMap + Auxiliary Structure
+
+The most common compositional pattern in data structure design pairs a hash map with one auxiliary structure. 
+The hash map provides $O(1)$ key-based access, and the auxiliary structure provides whatever additional capability the problem requires: ordering, random access, temporal lookup, or frequency tracking.
+
+The LRU cache, discussed above, is the purest example of this pattern. The hash map handles lookup by key, and the doubly linked list handles recency ordering. 
+But the same compositional idea appears in problems that require entirely different auxiliary structures.
+
+### HashMap + Dynamic Array
+
+When a data structure must support random element selection with uniform probability, a hash map alone is insufficient. 
+Hash maps have no concept of positional indexing, so you cannot pick a random entry without iterating over the entire map. 
+A dynamic array, on the other hand, supports $O(1)$ random access by index: picking a random element is just selecting a random index and returning the value at that position.
+
+The compositional insight is to maintain both structures in parallel. The hash map stores each value's current index in the array, and the array stores the values themselves. 
+Insertion appends to the array and records the index in the hash map. Deletion is the subtle part: removing an element from the middle of an array is $O(n)$ because it requires shifting. The trick is to swap the element to be removed with the last element in the array, then pop the last element. This swap-and-pop idiom keeps removal at $O(1)$, but it requires updating the hash map entry for the element that was moved to the vacated position.
+
+```ts
+class RandomizedSet {
+    constructor(
+        private map: Map<number, number> = new Map(),
+        private list: number[] = []
+    ) {}
+
+    insert(val: number): boolean {
+        if (this.map.has(val)) {
+            return false;
+        }
+        this.map.set(val, this.list.length);
+        this.list.push(val);
+        return true;
+    }
+
+    remove(val: number): boolean {
+        if (!this.map.has(val)) {
+            return false;
+        }
+
+        const index = this.map.get(val)!;
+        const lastVal = this.list[this.list.length - 1];
+
+        this.list[index] = lastVal;
+        this.map.set(lastVal, index);
+
+        this.list.pop();
+        this.map.delete(val);
+        return true;
+    }
+
+    getRandom(): number {
+        return this.list[Math.floor(Math.random() * this.list.length)];
+    }
+}
+```
+
+The swap-and-pop trick is a general technique that appears well beyond this specific problem. 
+Any time you need $O(1)$ removal from an unordered collection backed by a contiguous array, this is the approach: swap the target with the last element, shrink the array, and fix up whatever index mapping you are maintaining.
+
+### HashMap + Sorted History (Binary Search)
+
+Another frequent pairing combines a hash map with sorted value histories, enabling temporal lookups. 
+The canonical example is a time-based key-value store where `set(key, value, timestamp)` records a value for a key at a specific time, and `get(key, timestamp)` retrieves the most 
+recent value for that key at or before the given timestamp.
+
+The hash map maps each key to its list of (timestamp, value) pairs. 
+Because timestamps are guaranteed to arrive in increasing order, the list for each key is always sorted by timestamp. 
+This sorted order means the `get` operation can use binary search to find the largest timestamp that does not exceed the query timestamp, achieving $O(\log n)$ per lookup instead of $O(n)$.
+
+The key insight here is that the problem's natural constraint (timestamps are strictly increasing) provides the sorted invariant for free. 
+You do not need to sort explicitly or maintain a balanced tree. The append-only nature of the history list, combined with binary search for retrieval, gives you an efficient temporal 
+index with minimal overhead.
+
+## Versioned Storage
+
+Some design problems require the ability to take snapshots of the current state and later query the state as it existed at any past snapshot. 
+The naive approach, copying the entire state on every snapshot, is correct but prohibitively expensive in both time and space. 
+A Snapshot Array with length $n$ and $s$ snapshots would require $O(n \times s)$ space, which is unacceptable when either dimension is large.
+
+The efficient approach uses **copy-on-write** semantics: instead of copying the entire array on every snapshot, you record changes only where they occur. 
+Each index maintains its own sparse history of (snapshot\_id, value) pairs. When `set(index, val)` is called, the value is recorded against the current snapshot id. 
+When `snap()` is called, the snapshot counter is simply incremented. When `get(index, snap_id)` is called, you look up the history for that index and find the most recent 
+entry at or before the requested snapshot id.
+
+This pattern can be implemented in multiple ways. One approach uses a hash map per index, mapping snapshot id to value. 
+On `get`, you walk backward from the requested snapshot id until you find an entry, or return the default value. Another approach stores the history as a sorted array 
+of (snapshot\_id, value) pairs and uses binary search for retrieval, which is more efficient when the number of snapshots is large.
+
+The core principle is **differential storage**: instead of storing complete state at every version, store only the deltas and reconstruct state on demand. 
+This is the same principle behind version control systems, database MVCC (Multi-Version Concurrency Control), and persistent data structures in functional programming.
+
+## Frequency Tracking
+
+A different class of design problems requires operations that depend on element frequency. The maximum frequency stack, for example, must pop the element with the highest frequency, 
+breaking ties by recency. A naive approach that re-scans the entire collection on every pop would be $O(n)$.
+
+The efficient solution uses **frequency bucketing**: a hash map from each value to its current frequency, and a second hash map from each frequency level to a stack of values 
+at that frequency. A `maxFreq` variable tracks the current highest frequency. On `push(val)`, the value's frequency is incremented, and the value is pushed onto the stack for its new frequency level. 
+On `pop()`, the top of the stack at `maxFreq` is removed. If that stack becomes empty, `maxFreq` is decremented.
+
+The elegance of this design is that **every element appears on multiple frequency stacks simultaneously**. When a value is pushed three times, it appears on the stack for frequency 1, the stack for frequency 2, and the stack for frequency 3. This is not duplication. It reflects the fact that when the value is popped from the frequency-3 stack, its frequency drops to 2, where it should still appear. This multi-level presence eliminates the need to move elements between stacks on `pop`.
+
+```ts
+class FreqStack {
+    private valToFreq: Map<number, number>;
+    private freqToStack: Map<number, number[]>;
+    private maxFreq: number;
+
+    constructor() {
+        this.valToFreq = new Map();
+        this.freqToStack = new Map();
+        this.maxFreq = 0;
+    }
+
+    push(val: number): void {
+        const freq = (this.valToFreq.get(val) ?? 0) + 1;
+        this.valToFreq.set(val, freq);
+
+        if (freq > this.maxFreq) {
+            this.maxFreq = freq;
+        }
+
+        if (!this.freqToStack.has(freq)) {
+            this.freqToStack.set(freq, []);
+        }
+
+        this.freqToStack.get(freq)!.push(val);
+    }
+
+    pop(): number {
+        const stack = this.freqToStack.get(this.maxFreq)!;
+        const val = stack.pop()!;
+        this.valToFreq.set(val, this.valToFreq.get(val)! - 1);
+
+        if (stack.length === 0) {
+            this.freqToStack.delete(this.maxFreq);
+            this.maxFreq--;
+        }
+
+        return val;
+    }
+}
+```
+
+Tie-breaking by recency is handled automatically by the fact that each frequency bucket is a stack: the most recently pushed element at a given frequency is the one on top, 
+which is the one that gets popped. There is no additional recency tracking needed.
+
+## Stack-Based Navigation
+
+Navigation histories, such as browser back/forward functionality or undo/redo systems, are natural fits for stack-based designs. 
+The key observation is that navigation follows a **branching timeline** model: moving backward through history and then visiting a new page invalidates all forward history, 
+exactly as clearing a stack would.
+
+A browser history can be modeled with two stacks and a current-page pointer. 
+The back stack holds pages visited before the current one, and the forward stack holds pages that were navigated away from via the back button. 
+Visiting a new URL pushes the current page onto the back stack, sets the new URL as current, and clears the forward stack entirely. 
+Moving back pushes the current page onto the forward stack and pops from the back stack. 
+Moving forward does the reverse.
+
+This design naturally handles the constraint that forward history is invalidated by a new visit: clearing the forward stack is an $O(k)$ operation where $k$ is the number of forward entries, 
+but each entry was pushed exactly once, so the total cost across all operations is amortized $O(1)$ per call.
+
+## Multi-Entity Aggregation with Heaps
+
+The most complex design problems involve multiple entities whose data must be aggregated under dynamic constraints. 
+A simplified Twitter, for example, must aggregate tweets from a user's followed accounts and return the most recent ones, while allowing the follow graph to change at any time.
+
+The compositional structure here typically involves a hash map for each entity dimension (users to their tweets, users to their followees) and a heap for the aggregation query. 
+When `getNewsFeed` is called, the system collects all tweets from the user and their followees, uses a min-heap of size $k$ (where $k$ is the feed limit, typically 10) to extract the top-$k$ most recent tweets. 
+This bounded heap approach processes all candidate tweets in $O(m \log k)$ time, where $m$ is the total number of tweets from relevant users.
+
+A similar pattern appears in the food rating system, which must return the highest-rated food for a given cuisine after arbitrary rating updates. The structure uses a hash map from food to its current metadata (cuisine and rating), and a max-heap per cuisine for efficient retrieval of the top-rated food. When a rating is updated, the new entry is pushed onto the heap without removing the old one. On retrieval, the heap top is validated against the authoritative hash map: if the rating stored in the heap does not match the current rating in the hash map, the entry is stale and is popped (lazy deletion). This continues until a valid entry is found.
+
+Lazy deletion is a powerful technique for heaps: instead of searching for and removing outdated entries (which would be $O(n)$ in a binary heap), you leave them in place and discard them when they surface to the top. The trade-off is that the heap may grow larger than strictly necessary, but each stale entry is processed at most once, keeping the amortized cost manageable.
+
+## A Thinking Framework for Design Problems
+
+Across all the patterns described above, a consistent problem-solving process emerges. 
+It can be distilled into a sequence of questions that apply to any data structure design problem.
+
+The first question is: **what operations must be supported, and at what time complexity?** 
+The answer defines the constraints. If you need $O(1)$ key lookup, a hash map is almost certainly part of the solution. 
+If you need $O(1)$ access to the most recently added or highest-priority element, a stack or a heap is involved.
+
+The second question is: **which requirements conflict?** A single data structure rarely satisfies all requirements.
+ Identify which pairs of requirements cannot be served by the same primitive. $O(1)$ key lookup and $O(1)$ ordering maintenance conflict: hash maps do not order, 
+ and ordered structures do not provide key-based access. This conflict tells you that you need a composite structure.
+
+The third question is: **how do the components communicate?** This is the wiring step. In the LRU cache, the hash map stores pointers into the linked list. 
+In the randomized set, the hash map stores indices into the array. In the frequency stack, one hash map indexes into another. 
+The inter-component references are what make the composite structure work as a single unit.
+
+The fourth question is: **what invariants must be maintained, and what is the cost of maintaining them?** Every composite structure has invariants that must hold after every operation. 
+In the LRU cache, the invariant is that the doubly linked list is ordered by recency and the hash map contains exactly the nodes in the list. 
+Every public operation must update both structures atomically. Understanding the invariants makes the implementation mechanical: for each operation, you enumerate 
+the invariants and ensure each one is restored before the operation returns.
+
+## Time and Space Complexity
+
+| Pattern | Core Operations | Time | Space |
+|---------|----------------|------|-------|
+| HashMap + Doubly Linked List | get, put, evict | $O(1)$ | $O(n)$ |
+| HashMap + Dynamic Array | insert, remove, getRandom | $O(1)$ | $O(n)$ |
+| HashMap + Sorted History | set, get (temporal) | $O(1)$ set, $O(\log m)$ get | $O(n)$ |
+| Versioned Storage | set, snap, get | $O(1)$ set/snap, $O(\log s)$ get | $O(u)$ |
+| Frequency Bucketing | push, pop (by frequency) | $O(1)$ | $O(n)$ |
+| Multi-Entity + Heap | mutate, aggregate top-k | $O(\log n)$ mutate, $O(m \log k)$ query | $O(n)$ |
+
+## Exercises
+
+<TopicExercises topic="data-structure-design" />

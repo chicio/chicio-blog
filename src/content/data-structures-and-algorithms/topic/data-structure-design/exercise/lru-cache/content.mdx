@@ -1,0 +1,110 @@
+---
+title: "LRU Cache"
+description: "Design a data structure that follows the constraints of a Least Recently Used (LRU) cache with O(1) get and put operations."
+date: 2026-04-11
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [data structure design, design, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "HashMap + Doubly Linked List"
+  leetcodeUrl: "https://leetcode.com/problems/lru-cache/"
+---
+# LRU Cache
+
+Leetcode Problem 146: [LRU Cache](https://leetcode.com/problems/lru-cache/description/)
+
+## Problem Summary
+Design a data structure that implements a Least Recently Used (LRU) cache. The cache has a fixed positive capacity and supports two operations. `get(key)` returns the value associated with the key if it exists in the cache, or **-1** otherwise. `put(key, value)` updates the value if the key already exists, or inserts the key-value pair into the cache. If inserting causes the number of keys to exceed the capacity, the least recently used key must be evicted. Both `get` and `put` must run in **O(1)** average time complexity.
+
+**Constraints:**
+- Capacity is between **1** and **3,000**.
+- Keys are non-negative integers up to **10,000**.
+- Values are non-negative integers up to **100,000**.
+- At most **200,000** calls will be made to `get` and `put`.
+
+## Techniques
+- Hash Table
+- Linked List
+- Design
+- Doubly-Linked List
+
+## Solution
+```ts
+class DoubleLinkedNode {
+    key: number;
+    value: number;
+    prev: DoubleLinkedNode | null = null;
+    next: DoubleLinkedNode | null = null;
+
+    constructor(key: number, value: number) {
+        this.key = key;
+        this.value = value;
+    }
+}
+
+class LRUCache {
+    constructor(
+        private readonly capacity: number, 
+        private cache: Map<number, DoubleLinkedNode> = new Map(), 
+        private head: DoubleLinkedNode = new DoubleLinkedNode(0, 0),
+        private tail: DoubleLinkedNode = new DoubleLinkedNode(0, 0),
+    ) { 
+        this.head.next = this.tail;
+        this.tail.prev = this.head;
+    }
+
+    get(key: number): number {
+        const node = this.cache.get(key)
+
+        if (!node) {
+            return -1
+        }
+
+        this.removeNode(node) 
+        this.addNodeToHead(node)
+
+        return node.value
+    }
+
+    put(key: number, value: number): void {
+        if (this.cache.has(key)) {
+            const node = this.cache.get(key)!;
+            node.value = value;
+            this.removeNode(node) 
+            this.addNodeToHead(node)
+            return;
+        }
+
+        const newNode = new DoubleLinkedNode(key, value);
+        this.cache.set(key, newNode);
+        this.addNodeToHead(newNode);
+
+        if (this.cache.size > this.capacity) {
+            const tail = this.popTail();
+            this.cache.delete(tail.key);
+        }
+    }
+
+    private removeNode(node: DoubleLinkedNode) {
+        let prev = node.prev
+        let next = node.next
+        node.prev = null
+        node.next = null
+        prev.next = next
+        next.prev = prev
+    }
+
+    private addNodeToHead(node: DoubleLinkedNode): void {
+        node.prev = this.head;
+        node.next = this.head.next;
+        this.head.next!.prev = node;
+        this.head.next = node;
+    }
+
+    private popTail(): DoubleLinkedNode {
+        const res = this.tail.prev!;
+        this.removeNode(res);
+        return res;
+    }
+}
+```

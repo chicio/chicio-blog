@@ -42,6 +42,12 @@ All topics below have been published. Some may be reviewed later for consistency
 | k-way-merge | From Two-Way to K-Way, Heap-Based Merge, Implementation, Variations and Problem Mapping | Prose (no dedicated section) | None |
 | tree-traversal-bfs-dfs | BFS, DFS (Pre-Order, In-Order, Post-Order), Time and Space Complexity | Table | None |
 
+### Meta / Design
+
+| Topic | Sections (H2) | Complexity Format | Interactive Components |
+|-------|---------------|-------------------|----------------------|
+| data-structure-design | The LRU Cache, HashMap + Auxiliary Structure (HashMap + Dynamic Array, HashMap + Sorted History), Versioned Storage, Frequency Tracking, Stack-Based Navigation, Multi-Entity Aggregation with Heaps, A Thinking Framework for Design Problems, Time and Space Complexity | Table (patterns vs time/space) | None |
+
 ### Foundational
 
 | Topic | Sections (H2) | Complexity Format | Interactive Components |

@@ -1,0 +1,72 @@
+---
+title: "Design Browser History"
+description: "Design a browser history system that supports visiting URLs, navigating back, and navigating forward through history."
+date: 2026-04-11
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [data structure design, design, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Dual Stack Navigation"
+  leetcodeUrl: "https://leetcode.com/problems/design-browser-history/"
+---
+# Design Browser History
+
+Leetcode Problem 1472: [Design Browser History](https://leetcode.com/problems/design-browser-history/description/)
+
+## Problem Summary
+Design a browser history system for a single-tab browser. The browser starts on a given homepage. `visit(url)` navigates to the given URL from the current page, clearing all forward history. `back(steps)` moves back at most the given number of steps in the history, returning the current URL after moving. If there are fewer pages in the back history than the requested steps, it moves back as far as possible. `forward(steps)` moves forward at most the given number of steps in the history, returning the current URL after moving. If there are fewer pages in the forward history than the requested steps, it moves forward as far as possible.
+
+**Constraints:**
+- The homepage and all visited URLs are strings between **1** and **20** characters, consisting of lowercase English letters and dots.
+- At most **5,000** calls will be made to `visit`, `back`, and `forward`.
+- Steps are always at least **1**.
+
+## Techniques
+- Array
+- Linked List
+- Stack
+- Design
+- Doubly-Linked List
+- Data Stream
+
+## Solution
+```ts
+class BrowserHistory {
+    constructor(
+        homepage: string,
+        private currentUrl: string = homepage,
+        private backStack: string[] = [], 
+        private forwardStack: string[] = []
+    ) { }
+
+    visit(url: string): void {
+        this.backStack.push(this.currentUrl)
+        this.currentUrl = url
+        this.forwardStack = []
+    }
+
+    back(steps: number): string {
+        let currentStep = steps
+
+        while (this.backStack.length > 0 && currentStep > 0) {
+            this.forwardStack.push(this.currentUrl)
+            this.currentUrl = this.backStack.pop()!
+            currentStep--
+        }
+        
+        return this.currentUrl
+    }
+
+    forward(steps: number): string {
+        let currentStep = steps
+
+        while (this.forwardStack.length > 0 && currentStep > 0) {
+            this.backStack.push(this.currentUrl)
+            this.currentUrl = this.forwardStack.pop()!
+            currentStep--
+        }
+        
+        return this.currentUrl
+    }
+}
+```

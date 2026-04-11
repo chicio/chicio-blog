@@ -1,0 +1,101 @@
+---
+title: "Design a Food Rating System"
+description: "Design a food rating system that supports modifying food ratings and returning the highest-rated food for a given cuisine."
+date: 2026-04-11
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [data structure design, design, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "HashMap + Heap (Lazy Deletion)"
+  leetcodeUrl: "https://leetcode.com/problems/design-a-food-rating-system/"
+---
+# Design a Food Rating System
+
+Leetcode Problem 2353: [Design a Food Rating System](https://leetcode.com/problems/design-a-food-rating-system/description/)
+
+## Problem Summary
+Design a food rating system that supports two operations. `changeRating(food, newRating)` updates the rating of the specified food item. `highestRated(cuisine)` returns the name of the food item with the highest rating for the given cuisine. If there is a tie, the food with the lexicographically smaller name is returned. The system is initialized with parallel arrays of food names, their cuisines, and their initial ratings.
+
+**Constraints:**
+- The number of food items is between **1** and **20,000**.
+- Food names and cuisine names are strings of lowercase English letters, each up to **10** characters long.
+- Ratings are between **1** and **100,000,000**.
+- All food names are distinct.
+- At most **20,000** calls will be made to `changeRating` and `highestRated`.
+
+## Techniques
+- Array
+- Hash Table
+- String
+- Design
+- Heap (Priority Queue)
+- Ordered Set
+
+## Solution
+```ts
+import { Heap } from "../heap";
+
+interface Food { 
+    cuisine: string, 
+    rating: number 
+}
+
+interface FoodRating {
+    name: string;
+    rating: number;
+}
+
+class FoodRatings {
+    private readonly foods: Map<string, Food> = new Map()
+    private readonly cuisines: Map<string, Heap<FoodRating>> = new Map();
+
+    constructor(
+        foods: string[], 
+        cuisines: string[], 
+        ratings: number[]
+    ) { 
+        for (let i = 0; i < foods.length; i++) {
+            const food = foods[i]
+            const cuisine = cuisines[i]
+            const rating = ratings[i]
+
+            this.foods.set(food, { cuisine, rating })
+
+            if (!this.cuisines.has(cuisine)) {
+                this.cuisines.set(
+                    cuisine, 
+                    new Heap<FoodRating>((a, b) => {
+                        if (a.rating === b.rating) { 
+                            return a.name.localeCompare(b.name)
+                        }
+
+                        return b.rating - a.rating
+                    })
+                );
+            }
+
+            this.cuisines.get(cuisine)!.insert({ name: food, rating });
+        }
+    }
+
+    changeRating(food: string, newRating: number): void {
+        const info = this.foods.get(food)!;
+        info.rating = newRating;
+
+        this.cuisines.get(info.cuisine)!.insert({ name: food, rating: newRating });
+    }
+
+    highestRated(cuisine: string): string {
+        const cuisineSorted = this.cuisines.get(cuisine)!
+
+        while (
+            cuisineSorted.peek() !== null && 
+            cuisineSorted.peek()!.rating !== this.foods.get(cuisineSorted.peek()!.name)!.rating
+        ) {
+            cuisineSorted.extract()
+        }
+
+        return cuisineSorted.peek()!.name
+    }
+}
+```
