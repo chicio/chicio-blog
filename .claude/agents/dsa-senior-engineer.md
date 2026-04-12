@@ -90,7 +90,16 @@ If so, propose the merge to the user.
 
 ### Step 7: Fetch Exercises from GitHub
 
-Once the user confirms the topic and exercise folder(s), use the **GitHub CLI (`gh`)** via Bash for all GitHub operations:
+Once the user confirms the topic and exercise folder(s):
+
+**IMPORTANT — Create a feature branch BEFORE making any changes**:
+Since this agent runs in an isolated worktree starting on `main`, you must create and switch to a feature branch before touching any files:
+```bash
+git checkout -b feat/content-<topic-name>
+```
+This ensures no changes are made directly on `main`.
+
+Then use the **GitHub CLI (`gh`)** via Bash for all GitHub operations:
 
 1. **Create the topic folder** if it does not exist: `src/content/data-structures-and-algorithms/topic/<topic-name>/`
 2. **Create the exercises subfolder**: `src/content/data-structures-and-algorithms/topic/<topic-name>/exercises/`
@@ -243,11 +252,10 @@ Do this automatically without asking the user. The `<Topics />` component alread
 
 ### Step 12: Create Pull Request
 
-Once the article, exercises, and roadmap update are finalized, create a pull request on GitHub:
+Once the article, exercises, and roadmap update are finalized, commit and create a pull request on GitHub (the feature branch was already created in Step 7):
 
-1. Create a new branch from `main` with the topic name (e.g., `feat/content-<topic-name>`)
-2. Stage and commit all new/changed files with a conventional commit message
-3. Push the branch and create a PR using the GitHub CLI:
+1. Stage and commit all new/changed files with a conventional commit message
+2. Push the branch and create a PR using the GitHub CLI:
    ```bash
    gh pr create --title "feat(content): :sparkles: <topic name>" --body "$(cat <<'EOF'
    <topic name> dsa page
@@ -300,15 +308,20 @@ Present a summary of what needs to change and get the user's approval before mak
 
 ### Review Step 3: Apply Changes
 
+**IMPORTANT — Create a feature branch BEFORE making any changes**:
+Since this agent runs in an isolated worktree starting on `main`, you must create and switch to a feature branch before touching any files:
+```bash
+git checkout -b feat/content-<topic-name>-review
+```
+
 Apply the agreed changes to the article(s) and proceed to the next step.
 
 ### Review Step 4: Open PR for Review Changes
 
-Once the article has been reviewed and the modification are approved create a pull request on GitHub:
+Once the article has been reviewed and the modifications are applied, commit and create a pull request on GitHub (the feature branch was already created in Review Step 3):
 
-1. Create a new branch from `main` with the topic name + `-review` (e.g., `feat/content-<topic-name>-review`)
-2. Stage and commit all new/changed files with a conventional commit message
-3. Push the branch and create a PR using the GitHub CLI:
+1. Stage and commit all new/changed files with a conventional commit message
+2. Push the branch and create a PR using the GitHub CLI:
    ```bash
    gh pr create --title "feat(content): :sparkles: <topic name> Review" --body "$(cat <<'EOF'
    <topic name> dsa page review

@@ -378,7 +378,11 @@
     }
 
     #reading-content-container pre {
-        @apply hide-scrollbar overflow-hidden border border-solid border-accent-alpha-40 rounded-xl hover:border-accent active:border-accent focus:border-accent shadow-lg transition-all duration-500 hover:scale-101;
+        @apply hide-scrollbar overflow-hidden;
+    }
+
+    #reading-content-container #code-block {
+        @apply border border-solid border-accent-alpha-40 rounded-xl hover:border-accent active:border-accent focus:border-accent shadow-lg transition-all duration-500 hover:scale-101 overflow-hidden;
     }
 
     /** Anchor link styles for headings **/
