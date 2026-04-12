@@ -1,4 +1,5 @@
 import type { MDXComponents } from 'mdx/types'
+import { CopyCodeBlock } from "@/components/design-system/molecules/code/copy-code-block";
 
 const components: MDXComponents = {
     table: (props) => (
@@ -6,6 +7,7 @@ const components: MDXComponents = {
             <table {...props} />
         </div>
     ),
+    pre: (props) => <CopyCodeBlock {...props} />,
 }
 
 export function useMDXComponents(): MDXComponents {
