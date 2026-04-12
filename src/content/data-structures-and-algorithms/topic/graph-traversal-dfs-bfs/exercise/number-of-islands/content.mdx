@@ -1,0 +1,69 @@
+---
+title: "Number of Islands"
+description: "Given a 2D binary grid representing a map of land and water, return the number of islands formed by horizontally or vertically adjacent land cells."
+date: 2026-04-11
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [graph, dfs, bfs, traversal, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "DFS flood fill on implicit grid graph"
+  leetcodeUrl: "https://leetcode.com/problems/number-of-islands/"
+---
+# Number of Islands
+
+Leetcode Problem 200: [Number of Islands](https://leetcode.com/problems/number-of-islands/description/)
+
+## Problem Summary
+Given an **m x n** 2D binary grid where `'1'` represents land and `'0'` represents water, return the number of islands. An island is a group of adjacent land cells connected horizontally or vertically, and all four edges of the grid are surrounded by water. The grid dimensions are at most **300 x 300**.
+
+## Techniques
+- Array
+- Depth-First Search
+- Breadth-First Search
+- Union-Find
+- Matrix
+
+## Solution
+```ts
+function dfs(grid: string[][], r: number, c: number, visited: boolean[][]): void {
+    if (
+        (r < 0 || c < 0 || r >= grid.length || c >= grid[0].length) || 
+        visited[r][c] ||
+        grid[r][c] !== "1"
+    ) {
+        return
+    }
+
+    visited[r][c] = true;
+
+    dfs(grid, r + 1, c, visited);
+    dfs(grid, r - 1, c, visited);
+    dfs(grid, r, c + 1, visited);
+    dfs(grid, r, c - 1, visited);
+}
+
+function numIslands(grid: string[][]): number {
+    const visited: boolean[][] = Array.from(
+        Array(grid.length), _ => Array(grid[0].length).fill(false)
+    )
+    let islands = 0
+    
+    for (let i = 0; i < grid.length; i++) {
+        for (let j = 0; j < grid[0].length; j++) {
+            if (grid[i][j] === '1' && !visited[i][j]) {
+                islands++
+                dfs(grid, i, j, visited)
+            }
+        }
+    }
+
+    return islands
+};
+
+console.log(numIslands([
+    ["1","1","0","0","0"],
+    ["1","1","0","0","0"],
+    ["0","0","1","0","0"],
+    ["0","0","0","1","1"]
+]))
+```

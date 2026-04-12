@@ -1,0 +1,81 @@
+---
+title: "All Nodes Distance K in Binary Tree"
+description: "Given a binary tree, a target node, and an integer K, return the values of all nodes that are exactly distance K from the target."
+date: 2026-04-11
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [graph, dfs, bfs, traversal, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "DFS parent map construction then BFS from target"
+  leetcodeUrl: "https://leetcode.com/problems/all-nodes-distance-k-in-binary-tree/"
+---
+# All Nodes Distance K in Binary Tree
+
+Leetcode Problem 863: [All Nodes Distance K in Binary Tree](https://leetcode.com/problems/all-nodes-distance-k-in-binary-tree/description/)
+
+## Problem Summary
+Given the root of a binary tree, a target node within the tree, and an integer **k**, return an array of the values of all nodes that have distance exactly **k** from the target node. Distance is measured as the number of edges on the path between two nodes, and the path can go through the parent of either node. The answer can be returned in any order. The tree has at most **500** nodes with unique values, and **k** is at most **1,000**.
+
+## Techniques
+- Hash Table
+- Tree
+- Depth-First Search
+- Breadth-First Search
+- Binary Tree
+
+## Solution
+```ts
+class TreeNode {
+    val: number
+    left: TreeNode | null
+    right: TreeNode | null
+    constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+        this.val = (val===undefined ? 0 : val)
+        this.left = (left===undefined ? null : left)
+        this.right = (right===undefined ? null : right)
+    }
+}
+
+function dfsToConvertToGraph(node: TreeNode | null, par: TreeNode | null, parent: Map<TreeNode, TreeNode | null>) {
+    if (!node) { 
+        return
+    }
+    
+    parent.set(node, par)
+
+    dfsToConvertToGraph(node.left, node, parent)
+    dfsToConvertToGraph(node.right, node, parent)
+}
+
+function distanceK(root: TreeNode | null, target: TreeNode | null, k: number): number[] {
+    // Step 1: parent map
+    const parent = new Map<TreeNode, TreeNode | null>()
+    dfsToConvertToGraph(root, null, parent)
+
+    // Step 2: BFS from target
+    const queue: [TreeNode, number][] = [[target!, 0]]
+    const visited = new Set<TreeNode>()
+    visited.add(target!)
+
+    const result: number[] = []
+
+    while (queue.length > 0) {
+        const [node, dist] = queue.shift()!
+
+        if (dist === k) {
+            result.push(node.val)
+            continue
+        }
+
+        // neighbor(node) = [node.left, node.right, parent[node]]
+        for (const neighbor of [node.left, node.right, parent.get(node)]) {
+            if (neighbor && !visited.has(neighbor)) {
+                visited.add(neighbor)
+                queue.push([neighbor, dist + 1])
+            }
+        }
+    }
+
+    return result;    
+};
+```

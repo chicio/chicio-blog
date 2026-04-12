@@ -1,0 +1,75 @@
+---
+title: "Surrounded Regions"
+description: "Given a matrix of 'X' and 'O', capture all regions of 'O' that are completely surrounded by 'X' by flipping them to 'X'."
+date: 2026-04-11
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [graph, dfs, bfs, traversal, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "DFS boundary flood fill"
+  leetcodeUrl: "https://leetcode.com/problems/surrounded-regions/"
+---
+# Surrounded Regions
+
+Leetcode Problem 130: [Surrounded Regions](https://leetcode.com/problems/surrounded-regions/description/)
+
+## Problem Summary
+Given an **m x n** board containing `'X'` and `'O'`, capture all regions that are completely surrounded by `'X'`. A region is captured by flipping all `'O'`s into `'X'`s in that surrounded region. An `'O'` on the border of the board, or any `'O'` connected to a border `'O'`, is not considered surrounded and must not be flipped. The board dimensions are at most **200 x 200**.
+
+## Techniques
+- Array
+- Depth-First Search
+- Breadth-First Search
+- Union-Find
+- Matrix
+
+## Solution
+```ts
+function dfsRegions(row: number, column: number, board: string[][]) {
+    if (!board[row] || !board[row][column] || board[row][column] === 'X' || board[row][column] === 'T') {
+        return
+    }
+
+    if (board[row][column] === 'O') {
+        board[row][column] = 'T'
+    }
+
+    dfsRegions(row, column - 1, board)
+    dfsRegions(row - 1, column, board)
+    dfsRegions(row, column + 1, board)
+    dfsRegions(row + 1, column, board)
+}
+
+function deleteSafeO(board: string[][], rows: number, columns: number) {
+    for (let i = 0; i < rows; i++) {
+        for (let k = 0; k < columns; k++) {
+            if (board[i][k] === 'O') {
+                board[i][k] = 'X'
+            }
+
+            if (board[i][k] === 'T') {
+                board[i][k] = 'O'
+            }        
+        }
+    }
+}
+
+function solve(board: string[][]): void {
+    const rows = board.length
+    const columns = board[0].length
+
+    for (let c = 0; c < columns; c++) {
+        dfsRegions(0, c, board)
+        dfsRegions(rows - 1, c, board)
+    }
+
+    for (let r = 0; r < rows; r++) {
+        dfsRegions(r, 0, board)
+        dfsRegions(r, columns - 1, board)
+    }
+
+    deleteSafeO(board, rows, columns)
+}
+
+console.log(solve([["X","X","X","X"],["X","O","O","X"],["X","X","O","X"],["X","O","X","X"]]))
+```

@@ -1,0 +1,46 @@
+---
+title: "All Paths From Source to Target"
+description: "Given a directed acyclic graph with n nodes, find all possible paths from node 0 to node n-1."
+date: 2026-04-11
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [graph, dfs, bfs, traversal, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "DFS path enumeration on DAG"
+  leetcodeUrl: "https://leetcode.com/problems/all-paths-from-source-to-target/"
+---
+# All Paths From Source to Target
+
+Leetcode Problem 797: [All Paths From Source to Target](https://leetcode.com/problems/all-paths-from-source-to-target/description/)
+
+## Problem Summary
+Given a directed acyclic graph (DAG) of **n** nodes labeled from **0** to **n - 1**, represented as an adjacency list where `graph[i]` contains all nodes reachable from node **i** by a single edge, find all possible paths from node **0** to node **n - 1** and return them in any order. The graph has at most **15** nodes and is guaranteed to be a DAG.
+
+## Techniques
+- Backtracking
+- Depth-First Search
+- Breadth-First Search
+- Graph
+
+## Solution
+```ts
+function dfs(node: number, graph: number[][], path: number[], result: number[][]) {
+    path.push(node)
+
+    if (node === graph.length - 1) {
+        result.push([...path])
+    } else {
+        for (const child of graph[node]) {
+            dfs(child, graph, path, result)
+        }
+    }
+
+    path.pop()
+}
+
+function allPathsSourceTarget(graph: number[][]): number[][] {
+    const result: number[][] = []
+    dfs(0, graph, [], result)
+    return result
+};
+```

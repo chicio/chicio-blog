@@ -48,6 +48,12 @@ All topics below have been published. Some may be reviewed later for consistency
 | k-way-merge | From Two-Way to K-Way, Heap-Based Merge, Implementation, Variations and Problem Mapping | Prose (no dedicated section) | None |
 | tree-traversal-bfs-dfs | BFS, DFS (Pre-Order, In-Order, Post-Order), Time and Space Complexity | Table | None |
 
+### Graph Traversal
+
+| Topic | Sections (H2) | Complexity Format | Interactive Components |
+|-------|---------------|-------------------|----------------------|
+| graph-traversal-dfs-bfs | What is a Graph?, Types of Graphs, Graph Representations, DFS on Graphs (Connected Components/Flood Fill, Graph Cloning, Cycle Detection/Bipartiteness, DFS on Implicit Graphs/Grids, DFS with Value Propagation), BFS on Graphs (Single-source/Multi-source BFS, BFS on Implicit/State-Space Graphs, BFS with Constraints/Extended State), Choosing Between DFS and BFS, Time and Space Complexity | Table | None |
+
 ### Meta / Design
 
 | Topic | Sections (H2) | Complexity Format | Interactive Components |

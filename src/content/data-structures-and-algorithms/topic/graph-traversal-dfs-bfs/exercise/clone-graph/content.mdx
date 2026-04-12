@@ -1,0 +1,59 @@
+---
+title: "Clone Graph"
+description: "Given a reference to a node in a connected undirected graph, return a deep copy of the entire graph."
+date: 2026-04-11
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [graph, dfs, bfs, traversal, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "DFS with visited map for graph cloning"
+  leetcodeUrl: "https://leetcode.com/problems/clone-graph/"
+---
+# Clone Graph
+
+Leetcode Problem 133: [Clone Graph](https://leetcode.com/problems/clone-graph/description/)
+
+## Problem Summary
+Given a reference to a node in a connected undirected graph, return a deep copy (clone) of the entire graph. Each node contains an integer value and a list of its neighbors. The graph has at most **100** nodes with values from **1** to the number of nodes. There are no repeated edges or self-loops, and the graph is connected so that all nodes can be reached from the given node.
+
+## Techniques
+- Hash Table
+- Depth-First Search
+- Breadth-First Search
+- Graph
+
+## Solution
+```ts
+class _Node2 {
+    val: number
+    neighbors: _Node2[]
+
+    constructor(val?: number, neighbors?: _Node2[]) {
+        this.val = (val===undefined ? 0 : val)
+        this.neighbors = (neighbors===undefined ? [] : neighbors)
+    }
+}
+
+function cloneDfs(currentNode: _Node2 | null, visited: Map<_Node2, _Node2>): _Node2 | null {
+    if (!currentNode) {
+        return null
+    }
+
+    if (visited.has(currentNode)) {
+        return visited.get(currentNode)!
+    }
+
+    const clonedNode = new _Node2(currentNode.val, [])
+    visited.set(currentNode, clonedNode)
+
+    for (const neighbor of currentNode.neighbors) {
+        clonedNode.neighbors.push(cloneDfs(neighbor, visited)!)
+    }
+
+    return clonedNode
+}
+
+function cloneGraph(node: _Node2 | null): _Node2 | null {
+    return cloneDfs(node, new Map<_Node2, _Node2>())
+};
+```
