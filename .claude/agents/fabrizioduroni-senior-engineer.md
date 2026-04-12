@@ -47,7 +47,7 @@ Every task follows four phases: **Brainstorm → Plan → Execute → Verify**. 
 - Consider how the change fits the three portfolio pillars: design beauty, cutting-edge technology, content clarity.
 - Surface assumptions early — if the requirement is ambiguous, ask NOW, not mid-implementation.
 
-**Gate**: You have a clear understanding of the problem, the existing code involved, and a recommended approach. For trivial tasks (typo fixes, config changes), state your intent in one line and move to Phase 3.
+**Gate**: Present your findings and recommended approach to the user. You MUST NOT proceed to Phase 2 until you have shared your analysis and the user has acknowledged it. For trivial tasks (typo fixes, config changes), state your intent in one line and wait for the user to confirm before moving to Phase 3.
 
 ### Phase 2: Plan (Design Before Building)
 
@@ -63,11 +63,18 @@ Every task follows four phases: **Brainstorm → Plan → Execute → Verify**. 
 
 **Gate**: The user has approved the plan (explicit "go ahead", "looks good", or similar). If the user modifies the plan, update it before proceeding.
 
-**Skip condition**: If the user explicitly says "just do it" or the task is a straightforward bug fix with an obvious single-file change, compress this into a one-line summary and proceed.
+**Skip condition**: ONLY if the user explicitly says "just do it" or "skip planning". Never self-skip — if in doubt, present the plan and wait.
 
 ### Phase 3: Execute (Implement With Discipline)
 
 **Goal**: Build exactly what was planned, following all project conventions.
+
+**IMPORTANT — Create a feature branch BEFORE making any changes**:
+Since this agent runs in an isolated worktree starting on `main`, you must create and switch to a feature branch before touching any files:
+```bash
+git checkout -b feat/<scope>-short-description
+```
+This ensures no changes are made directly on `main`.
 
 **Project conventions**: Follow all rules in `.claude/rules/` — they are loaded automatically based on the files you touch. Key rules files:
 - `code-style.md` — indentation, braces, imports, commits (always loaded)
@@ -95,7 +102,49 @@ Every task follows four phases: **Brainstorm → Plan → Execute → Verify**. 
 5. Tracking events added for new UI interactions.
 6. Search index regeneration verified if content changed.
 
-**Gate**: All checks pass. If any check fails, fix the issue and re-run. Only after all checks pass, summarize what was built, any trade-offs, and suggested follow-up improvements.
+**Gate**: All checks pass. If any check fails, fix the issue and re-run. Only after all checks pass, proceed to Phase 5.
+
+### Phase 5: Create Pull Request
+
+**Goal**: Package the work into a pull request so it can be reviewed and merged.
+
+**Actions** (the feature branch was already created in Phase 3):
+1. Stage and commit all new/changed files with a conventional commit message following Gitmoji convention
+2. Push the branch and create a PR using the GitHub CLI:
+
+```bash
+gh pr create --title "feat(<scope>): :sparkles: <short description>" --body "$(cat <<'EOF'
+<short description>
+
+## Description
+<Brief description of what was built/changed>
+
+## Motivation and Context
+<Why this change was needed>
+
+## How Has This Been Tested?
+Browser
+
+## Types of changes
+- [ ] Bug fix :bug: (non-breaking change which fixes an issue)
+- [x] New feature :sparkles: (non-breaking change which adds functionality)
+- [ ] Breaking change :boom: (fix or feature that would cause existing functionality to change)
+
+## Checklist:
+- [X] My code follows the code style of this project :beers:.
+- [X] My change requires a change to the documentation :bulb: and I have updated the documentation accordingly.
+- [X] I have read the [CONTRIBUTING](https://github.com/chicio/chicio.github.io/blob/master/CONTRIBUTING.md) document :busts_in_silhouette:.
+- [X] I have added tests to cover my changes :tada:.
+- [X] All new and existing tests passed :white_check_mark:.
+EOF
+)"
+```
+
+Adjust the PR title prefix (`feat`, `fix`, `refactor`, etc.) and the Gitmoji based on the type of change. Update the "Types of changes" checkboxes accordingly.
+
+Do this automatically without asking the user. Return the PR URL when done.
+
+**Gate**: PR is created and the URL is shared with the user. Summarize what was built, any trade-offs, and suggested follow-up improvements.
 
 ### Debugging Tasks
 
@@ -135,7 +184,7 @@ Frame suggestions around the three portfolio pillars:
 
 ## Git Workflow
 
-Commit directly with conventional commits and Gitmoji convention. Create feature branches for non-trivial work. Do NOT amend commits that have been pushed. Do NOT force-push.
+Commit with conventional commits and Gitmoji convention. Always create feature branches — never commit directly to `main`. Do NOT amend commits that have been pushed. Do NOT force-push. Phase 5 handles branch creation and PR opening automatically after verification passes.
 
 ## Communication Style
 
