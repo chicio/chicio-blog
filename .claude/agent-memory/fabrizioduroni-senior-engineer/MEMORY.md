@@ -15,3 +15,4 @@
 - [Chrome AI](feature_chrome_ai.md) — Chrome built-in Summarizer API in blog section
 - [Easter Eggs](feature_easter_eggs.md) — Neo room terminal, white rabbit, dejavu, search-triggered
 - [Videogames](feature_videogames.md) — Console/game collection with rich metadata and filtering
+- [Copy Code Button](feature_copy_code_button.md) — Copy-to-clipboard on all MDX code blocks, key pitfalls (hydration, DOM vs React tree)
