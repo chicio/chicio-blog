@@ -57,11 +57,15 @@ src/
 │       ├── dsa/               # DSA content components
 │       ├── easter-eggs/       # Matrix rain, white rabbit, etc.
 │       └── home/              # Homepage components
-├── content/
-│   ├── posts/                  # Blog posts (Markdown .md files)
-│   └── dsa/                    # DSA content (MDX .mdx files)
+├── content/                      # All content is MDX (.mdx), filesystem-as-database
+│   ├── about-me/               # Single page (content.mdx)
+│   ├── art/                    # Art metadata (art.ts)
+│   ├── blog/post/              # Blog posts: [year]/[month]/[day]/[slug]/content.mdx
+│   ├── data-structures-and-algorithms/  # DSA: topic/[topic]/content.mdx, .../exercise/[exercise]/content.mdx
+│   ├── home/                   # Homepage data (projects.ts, technology.ts, timeline.ts)
+│   └── videogames/             # Videogames: console/[console]/game/[game]/content.mdx
 ├── lib/                         # Core business logic and utilities
-│   ├── posts/                  # Post parsing, search index generation
+│   ├── content/                # Content discovery, loading, frontmatter parsing (gray-matter)
 │   ├── chat/                   # Chat LLM prompts, Upstash Vector RAG
 │   ├── motion/                 # Framer Motion utilities
 │   ├── local-storage/          # localStorage helpers
@@ -82,20 +86,28 @@ src/
 
 ### Content Management
 
-**Blog Posts** (`src/content/posts/*.md`):
-- Markdown files with frontmatter (title, description, date, image, tags, authors)
-- Parsed using `gray-matter` in `src/lib/posts/`
-- Search index generated from frontmatter via `npm run search-index` (creates `public/search-index.json`)
-- Uses elasticlunr for client-side search
+All content uses **MDX** (`.mdx`) format with a **filesystem-as-database** approach. Each content piece is a `content.mdx` file inside a directory whose path encodes the route parameters.
 
-**DSA Content** (`src/content/dsa/*.mdx`):
-- MDX files that support interactive React components
-- Custom MDX components mapped in `src/mdx-components.tsx`
-- Supports math equations (KaTeX), syntax highlighting, and custom figures
+**Content Structure**:
+- `src/content/blog/post/[year]/[month]/[day]/[slug]/content.mdx` — Blog posts
+- `src/content/data-structures-and-algorithms/topic/[topic]/content.mdx` — DSA topics
+- `src/content/data-structures-and-algorithms/topic/[topic]/exercise/[exercise]/content.mdx` — DSA exercises
+- `src/content/videogames/console/[console]/content.mdx` — Console pages
+- `src/content/videogames/console/[console]/game/[game]/content.mdx` — Game pages
+- `src/content/about-me/content.mdx` — About me page
 
-**Markdown/MDX Processing**:
+**Content Loading** (`src/lib/content/`):
+- `content.ts` — Core content discovery engine, scans filesystem with dynamic slug patterns
+- `gray-matter.ts` — Frontmatter parsing (title, description, date, image, tags, authors, metadata)
+- `posts.ts` — Blog post loading with pagination (7 posts/page)
+- `data-structures-and-algorithms.ts` — DSA content with topic navigation, exercise metadata (technique, leetcodeUrl)
+- `videogames.ts` — Console and game metadata extraction (logo, release year, genre, PEGI, etc.)
+- `search.ts` / `search-filename.ts` — Search index generation (elasticlunr, `public/search-index.json`)
+
+**MDX Processing**:
 - Remark plugins: emoji, GFM, math, frontmatter, YouTube embeds
 - Rehype plugins: syntax highlighting, KaTeX rendering, figure captions
+- Custom MDX components mapped in `src/mdx-components.tsx`
 - Configuration in `next.config.ts`
 
 ### Chat Feature Architecture
@@ -111,36 +123,17 @@ The chat feature uses AI SDK with Groq (Llama 3.3 70B) and RAG via Upstash Vecto
 
 Environment variables required: `UPSTASH_VECTOR_REST_URL`, `UPSTASH_VECTOR_REST_TOKEN`
 
-### Navigation and Menu
+### Navigation, Tracking, and UI Effects
 
-Main menu is in `src/components/design-system/organism/menu.tsx`. Uses `MenuItemWithTracking` for analytics. When adding new sections:
-1. Add section type to `src/types/slug.ts`
-2. Register in menu component
-3. Update tracking events in `src/types/tracking.ts`
-
-### Tracking and Analytics
-
-All navigation and UI interactions are tracked via Google Analytics (gated by cookie consent):
-- Use `trackWith` helper from `src/lib/tracking/`
-- Update `src/types/tracking.ts` for new events
-- Cookie consent managed in `src/lib/consents/`
-
-### UI Effects
-
-**Glassmorphism**: Use `useGlassmorphism` hook for consistent glass effects across UI.
-
-**Motion Settings**: Controlled via `useMotionSettings` hook. Settings stored in localStorage with `fabrizioduroni_` prefix. Users can toggle animations.
-
-**Easter Eggs**: Matrix rain, white rabbit, and other special effects in `src/components/sections/easter-eggs/`.
+See `.claude/rules/sections.md` for section/route conventions and tracking details.
+See `.claude/rules/design-system.md` for Matrix theme, glassmorphism, and motion hooks.
 
 ## Code Style
 
-- **Indentation**: 4 spaces (not tabs)
-- **Line length**: 120 characters max
-- **Prettier**: Configured in `.prettierrc` with Tailwind plugin
-- **ESLint**: Extends Next.js core-web-vitals and TypeScript configs
-- **Author attribution**: Add author name to new files
-- **Import alias**: Use `@/` for imports (maps to `src/` via `tsconfig.json`)
+See `.claude/rules/code-style.md` for full conventions. Key points:
+- 4 spaces, 120 char lines, always use braces on `if`
+- `@/` import alias for `src/`
+- Conventional commits with Gitmoji
 
 ## Technology Stack
 
@@ -158,44 +151,19 @@ All navigation and UI interactions are tracked via Google Analytics (gated by co
 
 ## Common Tasks
 
-### Adding a Blog Post
+### Adding Content
 
-1. Create `src/content/posts/YYYY-MM-DD-slug.md`
-2. Add frontmatter (see existing posts for format):
-   ```yaml
-   ---
-   title: "Post Title"
-   description: "Post description"
-   date: YYYY-MM-DD
-   image: /images/posts/image.jpg
-   tags: [tag1, tag2]
-   authors: [fabrizio_duroni]
-   ---
-   ```
-3. Run `npm run dev` or `npm run build` (search index regenerates automatically)
+See `.claude/rules/mdx-content.md` for full MDX conventions, frontmatter format, writing style, and component imports.
+
+Quick reference: create `src/content/blog/post/YYYY/MM/DD/slug-name/content.mdx` with frontmatter, then `npm run dev` or `npm run build` (search index regenerates automatically).
 
 ### Adding a New Section
 
-1. Create `src/components/sections/<section-name>/`
-2. Add `components/` and `hooks/` subdirectories as needed
-3. Update `src/types/slug.ts` with new section type
-4. Register in `src/components/design-system/organism/menu.tsx`
-5. Update `src/types/tracking.ts` for analytics events
-6. Create route in `src/app/<section-name>/page.tsx`
+See `.claude/rules/sections.md` for the full checklist (slug types, menu, tracking, routes).
 
 ### Extending the Design System
 
-1. Add atoms to `src/components/design-system/atoms/`
-2. Compose molecules from atoms in `src/components/design-system/molecules/`
-3. Build organisms from molecules in `src/components/design-system/organism/`
-4. Create page templates in `src/components/design-system/templates/`
-
-### Updating Chat Personality
-
-Edit `src/lib/chat/llm-prompt.ts` to modify:
-- System prompt and personality
-- RAG instructions
-- Example responses
+See `.claude/rules/design-system.md` for the atomic design hierarchy and Matrix theme rules.
 
 ## Environment Setup
 

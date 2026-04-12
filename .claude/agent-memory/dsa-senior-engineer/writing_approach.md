@@ -52,3 +52,10 @@ All code examples use TypeScript. Code should be clean, well-structured, and idi
 
 **Why:** The Algomaster-Solutions repo uses TypeScript. Consistency across course and exercises.
 **How to apply:** Every code block uses `ts` as the language tag.
+
+## Always Use Curly Braces on If Statements
+
+Never write one-liner `if` statements without braces. Always wrap the body in `{ }`, even for single statements.
+
+**Why:** User's explicit code style preference for readability and consistency.
+**How to apply:** In all code examples (templates, implementations, utilities), use `if (cond) { doSomething(); }`, never `if (cond) doSomething();`.

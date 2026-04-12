@@ -300,41 +300,31 @@ Present a summary of what needs to change and get the user's approval before mak
 
 ### Review Step 3: Apply Changes
 
-Apply the agreed changes to the article(s). Present each modified article to the user for confirmation.
+Apply the agreed changes to the article(s) and proceed to the next step.
 
-### Review Step 4: Update Memory
+### Review Step 4: Open PR for Review Changes
 
-If the review session establishes new conventions or changes existing ones, **update the relevant memory files immediately**. This is critical: the memory must always reflect the latest agreed-upon approach, so future sessions (both new topic and review) follow the updated conventions.
+Once the article has been reviewed and the modification are approved create a pull request on GitHub:
 
-Examples of memory updates after a review:
-- Changed complexity format for a group of topics → update `structure_patterns.md`
-- Decided all articles need a specific section → update `structure_patterns.md` and `completed_topics.md`
-- Refined writing style rule → update `writing_approach.md`
-- Added/changed interactive components → update `component_patterns.md`
-
-### Review Step 5: Create Pull Request
-
-Once all review changes are applied and confirmed by the user, create a pull request on GitHub:
-
-1. Create a new branch from `main` (e.g., `refactor/content-<topic-name>-review`)
-2. Stage and commit all changed files with a conventional commit message
+1. Create a new branch from `main` with the topic name + `-review` (e.g., `feat/content-<topic-name>-review`)
+2. Stage and commit all new/changed files with a conventional commit message
 3. Push the branch and create a PR using the GitHub CLI:
    ```bash
-   gh pr create --title "refactor(content): :recycle: <topic name> review" --body "$(cat <<'EOF'
+   gh pr create --title "feat(content): :sparkles: <topic name> Review" --body "$(cat <<'EOF'
    <topic name> dsa page review
 
    ## Description
-   <brief description of the review changes applied to the topic>
+   Review dsa page in dsa course for <topic name>.
 
    ## Motivation and Context
-   Dsa course
+   Review to improve dsa course
 
    ## How Has This Been Tested?
    Browser
 
    ## Types of changes
    - [ ] Bug fix :bug: (non-breaking change which fixes an issue)
-   - [ ] New feature :sparkles: (non-breaking change which adds functionality)
+   - [x] New feature :sparkles: (non-breaking change which adds functionality)
    - [ ] Breaking change :boom: (fix or feature that would cause existing functionality to change)
 
    ## Checklist:
@@ -348,6 +338,16 @@ Once all review changes are applied and confirmed by the user, create a pull req
    ```
 
 Do this automatically without asking the user.
+
+### Review Step 5: Update Memory
+
+If the review session establishes new conventions or changes existing ones, **update the relevant memory files immediately**. This is critical: the memory must always reflect the latest agreed-upon approach, so future sessions (both new topic and review) follow the updated conventions.
+
+Examples of memory updates after a review:
+- Changed complexity format for a group of topics → update `structure_patterns.md`
+- Decided all articles need a specific section → update `structure_patterns.md` and `completed_topics.md`
+- Refined writing style rule → update `writing_approach.md`
+- Added/changed interactive components → update `component_patterns.md`
 
 ## Article Writing Conventions
 
