@@ -1,9 +1,10 @@
 "use client";
 
-import { FC, useCallback, useState } from "react";
-import { CopiedIcon, CopyIcon } from "../../atoms/icons/copy-icon";
+import { FC, useEffect, useState } from "react";
+import { CopiedIcon, CopyErrorIcon, CopyIcon } from "../../atoms/icons/copy-icon";
 import { trackWith } from "@/lib/tracking/tracking";
 import { tracking } from "@/types/configuration/tracking";
+import { Button } from "../../atoms/buttons/button";
 
 interface CopyCodeButtonProps {
     getText: () => string;
@@ -11,8 +12,18 @@ interface CopyCodeButtonProps {
 
 export const CopyCodeButton: FC<CopyCodeButtonProps> = ({ getText }) => {
     const [copied, setCopied] = useState(false);
+    const [copyError, setCopyError] = useState(false);
+    const [clipboardAvailable, setClipboardAvailable] = useState(false);
 
-    const handleCopy = useCallback(async () => {
+    useEffect(() => {
+        setClipboardAvailable(!!navigator.clipboard);
+    }, []);
+
+    if (!clipboardAvailable) {
+        return null;
+    }
+
+    const handleCopy = async () => {
         const text = getText();
 
         try {
@@ -27,26 +38,28 @@ export const CopyCodeButton: FC<CopyCodeButtonProps> = ({ getText }) => {
                 setCopied(false);
             }, 2000);
         } catch {
-            // Clipboard API not available — silently ignore
+            setCopyError(true);
+            setTimeout(() => {
+                setCopyError(false);
+            }, 2000);
         }
-    }, [getText]);
+    };
 
     return (
-        <button
+        <Button
             onClick={handleCopy}
-            aria-label={copied ? "Copied!" : "Copy code"}
+            aria-label={copied ? "Copied!" : copyError ? "Copy failed" : "Copy code"}
             className={`
-                absolute top-2 right-2
-                p-1.5 rounded-lg
-                border border-solid transition-all duration-300
-                cursor-pointer bg-general-background-alpha-60 backdrop-blur-sm
+                text-primary!
+                sm:absolute sm:top-2 sm:right-2
                 ${copied
-                    ? "border-primary text-primary"
-                    : "border-accent-alpha-40 text-accent hover:border-accent hover:text-accent hover:scale-110"
+                    ? "text-primary"
+                    : copyError
+                        ? "border-confirm text-confirm" : ""
                 }
             `}
         >
-            {copied ? <CopiedIcon /> : <CopyIcon />}
-        </button>
+            {copied ? <CopiedIcon /> : copyError ? <CopyErrorIcon /> : <CopyIcon />}
+        </Button>
     );
 };
