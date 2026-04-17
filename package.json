@@ -53,7 +53,7 @@
     "remark-gfm": "^4.0.1",
     "remark-math": "^6.0.0",
     "remark-rehype": "^11.1.2",
-    "resend": "^6.9.3",
+    "resend": "^6.10.0",
     "tailwindcss": "^4.2.1",
     "tsx": "^4.21.0",
     "zod": "^4.3.6"
