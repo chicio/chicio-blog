@@ -1,9 +1,16 @@
 import { getAllExercisesForTopic } from "@/lib/content/data-structures-and-algorithms";
+import { ExerciseMetadata } from "@/types/content/data-structures-and-algorithms";
 import { FC } from "react";
 
 interface TopicExercisesProps {
     topic: string;
 }
+
+const difficultyColor: Record<ExerciseMetadata["difficulty"], string> = {
+    Easy: "text-green-500",
+    Medium: "text-amber-500",
+    Hard: "text-red-500",
+};
 
 export const TopicExercises: FC<TopicExercisesProps> = ({ topic }) => {
     const exercises = getAllExercisesForTopic(topic);
@@ -16,21 +23,21 @@ export const TopicExercises: FC<TopicExercisesProps> = ({ topic }) => {
                 <thead>
                     <tr>
                         <th>Exercise</th>
-                        <th>Technique</th>
-                        <th>Solution</th>
+                        <th>Difficulty</th>
                     </tr>
                 </thead>
                 <tbody>
                     {exercises.map((exercise) => (
                         <tr key={exercise.slug.formatted}>
                             <td>
-                                <a href={exercise.frontmatter.metadata?.leetcodeUrl} target="_blank" rel="noopener noreferrer">
+                                <a href={exercise.slug.formatted}>
                                     {exercise.frontmatter.title}
                                 </a>
                             </td>
-                            <td>{exercise.frontmatter.metadata?.technique}</td>
                             <td>
-                                <a href={exercise.slug.formatted}>Solution</a>
+                                <span className={`font-semibold ${difficultyColor[exercise.frontmatter.metadata?.difficulty ?? "Easy"]}`}>
+                                    {exercise.frontmatter.metadata?.difficulty}
+                                </span>
                             </td>
                         </tr>
                     ))}
