@@ -1,0 +1,78 @@
+---
+title: "Find Eventual Safe States"
+description: "Given a directed graph, return all nodes where every possible path leads to a terminal node."
+date: 2026-04-17
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [topological sort, graph, dfs, bfs, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "DFS with three-state coloring for cycle detection and safe node classification"
+  leetcodeUrl: "https://leetcode.com/problems/find-eventual-safe-states/"
+  difficulty: "Medium"
+---
+# Find Eventual Safe States
+
+Leetcode Problem 802: [Find Eventual Safe States](https://leetcode.com/problems/find-eventual-safe-states/description/)
+
+## Problem Summary
+You are given a directed graph of **n** nodes labeled from **0** to **n - 1**, represented as a 2D array where **graph[i]** lists all nodes adjacent to node **i** (i.e., there is a directed edge from **i** to each node in **graph[i]**). A **terminal node** has no outgoing edges. A **safe node** is one where every possible path starting from it eventually leads to a terminal node. Return all safe nodes in ascending order. The graph can have up to **10,000** nodes and **40,000** edges, and may contain self-loops.
+
+## Techniques
+- Depth-First Search
+- Breadth-First Search
+- Graph Theory
+- Topological Sort
+
+## Solution
+```ts
+function safeNodeDfs(
+    node: number, 
+    graph: number[][], 
+    visitingNodes: Set<number>,
+    unsafeVisitedNodes: Set<number>,
+    safeVisitedNodes: Set<number>
+): boolean {
+    if (visitingNodes.has(node)) {
+        return false
+    }
+
+    if (safeVisitedNodes.has(node)) {
+        return true
+    }
+
+    if (unsafeVisitedNodes.has(node)) {
+        return false
+    }
+
+    visitingNodes.add(node)
+    const nextNodes = graph[node]
+
+    for (const nextNode of nextNodes) {
+        if(!safeNodeDfs(nextNode, graph, visitingNodes, unsafeVisitedNodes, safeVisitedNodes)) {
+            visitingNodes.delete(node)
+            unsafeVisitedNodes.add(node)
+            return false
+        }
+    }
+
+    visitingNodes.delete(node)
+    safeVisitedNodes.add(node)
+
+    return true
+}
+
+function eventualSafeNodes(graph: number[][]): number[] {
+    const visitingNodes = new Set<number>()
+    const unsafeVisitedNodes = new Set<number>()
+    const safeVisitedNodes = new Set<number>()
+    const results: number[] = []
+
+    for (let node = 0; node < graph.length; node++) {
+        if (safeNodeDfs(node, graph, visitingNodes, unsafeVisitedNodes, safeVisitedNodes)) {
+            results.push(node)
+        }
+    }
+
+    return results
+};
+```
