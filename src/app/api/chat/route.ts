@@ -1,4 +1,5 @@
 import { createSystemPrompt } from "@/lib/chat/llm-prompt";
+import { runGuardrails } from "@/lib/chat/guardrails";
 import { findRelevantContent } from "@/lib/upstash/upstash-vector";
 import { groq } from "@ai-sdk/groq";
 import { convertToModelMessages, stepCountIs, streamText, tool, UIMessage } from "ai";
@@ -6,6 +7,23 @@ import z from "zod";
 
 export async function POST(req: Request) {
   const { messages }: { messages: UIMessage[] } = await req.json();
+
+  const lastUserMessage = messages.findLast((m) => m.role === "user");
+  const lastUserText =
+    lastUserMessage?.parts
+      .filter((p) => p.type === "text")
+      .map((p) => p.text)
+      .join(" ")
+      .trim() ?? "";
+
+  if (lastUserText) {
+    const guardrailResult = await runGuardrails(lastUserText);
+
+    if (!guardrailResult.safe) {
+      return new Response(guardrailResult.blockedReason, { status: 400 });
+    }
+  }
+
   const result = streamText({
     model: groq("llama-3.3-70b-versatile"),
     // model: groq("llama-3.1-8b-instant"),
