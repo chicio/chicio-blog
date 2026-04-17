@@ -1,0 +1,98 @@
+---
+title: "Course Schedule II"
+description: "Given a number of courses and their prerequisites, return a valid ordering to complete all courses, or an empty array if impossible."
+date: 2026-04-17
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [topological sort, graph, dfs, bfs, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "DFS-based topological sort with cycle detection"
+  leetcodeUrl: "https://leetcode.com/problems/course-schedule-ii/"
+  difficulty: "Medium"
+---
+# Course Schedule II
+
+Leetcode Problem 210: [Course Schedule II](https://leetcode.com/problems/course-schedule-ii/description/)
+
+## Problem Summary
+You are given a total of **numCourses** courses labeled from **0** to **numCourses - 1**, and an array of prerequisites where each pair **[a, b]** means you must complete course **b** before taking course **a**. Return a valid ordering to complete all courses. If multiple valid orderings exist, return any one. If it is impossible to finish all courses (due to cyclic dependencies), return an empty array. The number of courses is at most **2,000**, and the number of prerequisite pairs is at most **numCourses * (numCourses - 1)**.
+
+## Techniques
+- Depth-First Search
+- Breadth-First Search
+- Graph Theory
+- Topological Sort
+
+## Solution
+```ts
+function createAdiajencyListForNextCourses(prerequisites: number[][]) {
+    const nextCourses: Map<number, number[]> = new Map()
+
+    for (let i = 0; i < prerequisites.length; i++) {
+        const [course, prerequisiteCourse] = prerequisites[i]
+        let courses = nextCourses.get(prerequisiteCourse)
+
+        if (!courses) {
+            nextCourses.set(prerequisiteCourse, [course])
+        } else {
+            nextCourses.set(prerequisiteCourse, [...courses, course])
+        }
+    }  
+
+    return nextCourses
+}
+
+function topologicalSortingDFS(
+    nextCourses: Map<number, number[]>, 
+    course: number, 
+    visitedNodes: Set<number>, 
+    visitingNodes: Set<number>, 
+    sorting: number[]
+) {
+    if (visitingNodes.has(course)) {
+        return true
+    }
+
+    if (visitedNodes.has(course)) {
+        return false
+    }
+
+    visitingNodes.add(course)
+    const courses = nextCourses.get(course) ?? []
+
+    for (let coursePosition = 0; coursePosition < courses.length; coursePosition++) {
+        const nextCourse = courses[coursePosition]
+        
+        if(topologicalSortingDFS(nextCourses, nextCourse, visitedNodes, visitingNodes, sorting)) {
+            return true
+        }
+    }
+    
+    visitedNodes.add(course)
+    visitingNodes.delete(course)
+    sorting.unshift(course)
+    
+    return false
+}
+
+function topologicalSorting(nextCourses: Map<number, number[]>, numCourses: number) {
+    const visitedNodes = new Set<number>()
+    const visitingNodes = new Set<number>()
+    const sorting: number[] = []
+
+    for (let course = 0; course < numCourses; course++) {
+        if (!visitedNodes.has(course)) {
+            if(topologicalSortingDFS(nextCourses, course, visitedNodes, visitingNodes, sorting)) {
+                return []
+            }
+        }
+    }
+
+    return sorting
+}
+
+function findOrder(numCourses: number, prerequisites: number[][]): number[] {
+    const sorting = topologicalSorting(createAdiajencyListForNextCourses(prerequisites), numCourses)
+    return sorting.length < numCourses ? [] : sorting
+};
+```

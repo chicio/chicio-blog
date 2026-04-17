@@ -1,0 +1,375 @@
+---
+title: "Topological Sort"
+description: "A comprehensive guide to topological sorting on directed acyclic graphs, covering DFS-based and BFS-based approaches, cycle detection, and multi-level dependency resolution."
+date: 2026-04-17
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [topological sort, graph, dfs, bfs, data structures, algorithms]
+authors: [fabrizio_duroni]
+---
+
+import { TopicExercises } from "@/components/sections/data-structures-and-algorithms/components/topic-exercises";
+
+# Topological Sort
+
+In the [graph](/data-structures-and-algorithms/topic/graph) article, we explored how DFS and BFS traverse general graphs,
+handling cycles, disconnected components, and implicit structures.
+One concept that appeared naturally in that discussion was the [**directed acyclic graph (DAG)**](https://en.wikipedia.org/wiki/Directed_acyclic_graph),
+a directed graph with no cycles.
+DAGs arise whenever there is a notion of dependency, precedence, or ordering among items:
+courses with prerequisites, build tasks that depend on each other, compilation units with import chains, or pipeline stages that must execute in sequence.
+
+The central question for DAGs is: **can we arrange all vertices in a linear order such that every directed edge goes from earlier to later?**
+This is the problem of [**topological sorting**](https://en.wikipedia.org/wiki/Topological_sorting).
+A topological ordering is not about "sorting" in the numerical sense.
+It is about finding a linear arrangement that respects all the directed constraints in the graph.
+
+This article develops topological sort from first principles, building on the DFS and BFS foundations from the graph article.
+We cover the two classical algorithms (DFS-based and BFS-based), explain why each works, discuss how to choose between them,
+and explore the variations and applications that appear in practice.
+
+## What is a Topological Ordering?
+
+Given a directed acyclic graph $G = (V, E)$, a **topological ordering** (or **topological sort**) is a linear ordering of all vertices
+such that for every directed edge $(u, v) \in E$, vertex $u$ appears before vertex $v$ in the ordering.
+Equivalently, if there is a path from $u$ to $v$, then $u$ must precede $v$.
+
+The existence of a topological ordering is intimately tied to the absence of cycles.
+If a directed graph contains a cycle $v_1 \to v_2 \to \cdots \to v_k \to v_1$,
+then $v_1$ must come before $v_2$, which must come before $v_3$, and so on, until $v_k$ must come before $v_1$.
+This creates a contradiction: $v_1$ must come both before and after itself.
+Therefore, **a topological ordering exists if and only if the graph is a DAG**.
+This equivalence is the theoretical foundation for every topological sort algorithm: the algorithm either produces a valid ordering
+(proving the graph is a DAG) or detects a cycle (proving it is not).
+
+A DAG may have **multiple valid topological orderings**.
+Consider three tasks $A$, $B$, $C$ where $A$ must come before $B$ and $A$ must come before $C$, but $B$ and $C$ have no constraint between them.
+Both $[A, B, C]$ and $[A, C, B]$ are valid.
+The number of valid orderings depends on how many pairs of vertices are incomparable (not connected by any directed path).
+A [**total order**](https://en.wikipedia.org/wiki/Total_order) exists only when every pair of vertices is comparable,
+which happens only when the DAG is a simple chain.
+In general, topological sort produces one valid ordering among potentially many.
+
+One important structural property of DAGs is that they always contain at least one vertex with **in-degree zero**
+(a vertex with no incoming edges, sometimes called a **source**).
+If every vertex had at least one incoming edge, you could follow incoming edges backward indefinitely, and because the graph is finite,
+you would eventually revisit a vertex, creating a cycle, contradicting the assumption that the graph is acyclic.
+Similarly, every DAG has at least one vertex with **out-degree zero** (a **sink**).
+These source and sink vertices are the starting and ending points for the two classical algorithms.
+
+## DFS-Based Topological Sort
+
+The DFS-based approach leverages a deep insight: in a DFS traversal of a DAG, a vertex finishes (i.e., all its descendants have been fully explored)
+**only after** all vertices reachable from it have finished.
+If we record vertices in the order they finish and then reverse that order, we get a valid topological ordering.
+
+This is often called the **reverse post-order** or **reverse finishing time** approach.
+The "post-order" of DFS is the sequence in which vertices complete their recursive calls.
+In a DAG, if there is an edge $(u, v)$, then $v$ must finish before $u$ does (because DFS explores $v$ from $u$ and $v$'s subtree completes first).
+Reversing the post-order therefore places $u$ before $v$, exactly as required.
+
+### Three-state coloring and cycle detection
+
+As discussed in the [graph article](/data-structures-and-algorithms/topic/graph), DFS on directed graphs uses **three-state coloring**
+(WHITE, GRAY, BLACK) to distinguish between unvisited nodes, nodes currently being explored (on the recursion stack),
+and nodes that have been fully processed.
+This mechanism is essential for topological sort because it simultaneously detects cycles.
+If DFS encounters a GRAY neighbor (a node currently on the recursion stack), a back edge has been found, which means a cycle exists
+and no topological ordering is possible.
+
+The algorithm proceeds as follows.
+Iterate over all vertices. For each unvisited (WHITE) vertex, start a DFS.
+When entering a vertex, color it GRAY.
+Explore all its neighbors recursively.
+If a GRAY neighbor is encountered, a cycle is detected, and the algorithm can abort.
+When all neighbors have been fully explored, color the vertex BLACK and prepend it to the result list
+(or append it and reverse at the end).
+
+```ts
+function topologicalSortDFS(graph: number[][]): number[] | null {
+    const n = graph.length;
+    // 0 = WHITE (unvisited), 1 = GRAY (in progress), 2 = BLACK (done)
+    const color: number[] = new Array(n).fill(0);
+    const result: number[] = [];
+
+    for (let node = 0; node < n; node++) {
+        if (color[node] === 0) {
+            if (dfs(node, graph, color, result)) {
+                return null; // cycle detected
+            }
+        }
+    }
+
+    return result;
+}
+
+function dfs(
+    node: number,
+    graph: number[][],
+    color: number[],
+    result: number[]
+): boolean {
+    color[node] = 1; // GRAY: currently exploring
+
+    for (const neighbor of graph[node]) {
+        if (color[neighbor] === 1) {
+            return true; // back edge: cycle detected
+        }
+
+        if (color[neighbor] === 0) {
+            if (dfs(neighbor, graph, color, result)) {
+                return true;
+            }
+        }
+    }
+
+    color[node] = 2; // BLACK: fully processed
+    result.unshift(node); // prepend to get reverse post-order
+
+    return false;
+}
+```
+
+The outer loop ensures every vertex is visited, even in disconnected DAGs.
+The `result.unshift(node)` call places each finished vertex at the front of the list, building the topological order in reverse post-order.
+An alternative is to use `result.push(node)` and reverse the array at the end, which is equivalent but avoids the $O(n)$ cost of each `unshift`.
+
+### Why reverse post-order works
+
+The correctness of this algorithm rests on a precise property of DFS on DAGs.
+For any edge $(u, v)$ in a DAG, when DFS processes that edge, $v$ is in one of three states.
+If $v$ is WHITE, DFS will recursively explore $v$ before $u$ finishes, so $v$'s finish time is earlier than $u$'s.
+If $v$ is BLACK, $v$ has already finished, so again $v$'s finish time is earlier.
+If $v$ is GRAY, it is currently on the recursion stack, which means there is a path from $v$ to $u$ (through the stack) and an edge from $u$ to $v$,
+forming a cycle, which is impossible in a DAG.
+Therefore, in a DAG, for every edge $(u, v)$, $v$ finishes before $u$.
+Reversing the order of finish times produces $u$ before $v$, which is exactly the topological order constraint.
+
+## BFS-Based Topological Sort (Kahn's Algorithm)
+
+The BFS-based approach, known as [**Kahn's algorithm**](https://en.wikipedia.org/wiki/Topological_sorting#Kahn's_algorithm),
+takes a different perspective.
+Instead of working backward from finish times, it works forward from sources.
+
+The algorithm maintains an **in-degree count** for every vertex.
+Initially, all vertices with in-degree zero are enqueued, because they have no prerequisites and can appear first in the ordering.
+At each step, a vertex is dequeued, appended to the result, and "removed" from the graph by decrementing the in-degree of all its neighbors.
+Any neighbor whose in-degree drops to zero is enqueued, since all its prerequisites have now been placed in the ordering.
+The process repeats until the queue is empty.
+
+If the result contains all $|V|$ vertices, a valid topological ordering has been produced.
+If it contains fewer, some vertices could never reach in-degree zero, which means the graph contains a cycle.
+
+```ts
+function topologicalSortBFS(graph: number[][]): number[] | null {
+    const n = graph.length;
+    const inDegree: number[] = new Array(n).fill(0);
+
+    for (let u = 0; u < n; u++) {
+        for (const v of graph[u]) {
+            inDegree[v]++;
+        }
+    }
+
+    const queue: number[] = [];
+
+    for (let i = 0; i < n; i++) {
+        if (inDegree[i] === 0) {
+            queue.push(i);
+        }
+    }
+
+    const result: number[] = [];
+
+    while (queue.length > 0) {
+        const node = queue.shift()!;
+        result.push(node);
+
+        for (const neighbor of graph[node]) {
+            inDegree[neighbor]--;
+
+            if (inDegree[neighbor] === 0) {
+                queue.push(neighbor);
+            }
+        }
+    }
+
+    return result.length === n ? result : null; // null if cycle detected
+}
+```
+
+### Why Kahn's algorithm works
+
+The invariant is straightforward.
+At every step, the algorithm places a vertex that has no unprocessed prerequisites.
+This is safe because the vertex depends on nothing that has not already been placed.
+By induction, after placing $k$ vertices correctly, the next vertex with zero remaining in-degree can be safely placed at position $k + 1$.
+
+The cycle detection follows from the fact that in a cycle, no vertex can ever reach in-degree zero.
+Every vertex in the cycle has at least one predecessor within the cycle that is never "removed" (because it, too, is stuck waiting for its own predecessor).
+Therefore, all vertices in the cycle remain with in-degree greater than zero, and the result will be smaller than $|V|$.
+
+### Kahn's algorithm and level structure
+
+An interesting property of Kahn's algorithm is that it naturally processes vertices in "waves" or "levels".
+The first wave contains all initial sources (in-degree zero vertices).
+The second wave contains all vertices that become sources after removing the first wave.
+This level structure can be useful for problems that require not just a topological ordering but also the "depth" or "distance"
+of each vertex from the sources.
+
+If you process the queue level by level (as in standard BFS level processing), the level number of each vertex
+corresponds to the length of the longest path from any source to that vertex.
+This information can be valuable for scheduling problems where you want to know the minimum number of sequential stages.
+
+## Choosing Between DFS and BFS
+
+Both algorithms produce a valid topological ordering and both detect cycles, but they have different strengths.
+
+**DFS-based** topological sort is often more natural when the problem already involves DFS exploration.
+If you are performing cycle detection, classifying nodes (safe vs. unsafe, reachable vs. unreachable), or need the three-state coloring for other reasons,
+DFS-based topological sort integrates cleanly with the existing traversal.
+The DFS approach also has a slightly simpler space profile: it does not need to maintain an explicit in-degree array.
+
+**Kahn's algorithm** is more intuitive for problems that are phrased in terms of "peeling away" layers, "removing" nodes,
+or "processing prerequisites before dependents".
+The level-by-level structure makes Kahn's algorithm the natural choice when you need to know how many stages the ordering requires
+or when the problem involves iteratively removing leaves or sources.
+Kahn's algorithm is also purely iterative (no recursion), which avoids potential stack overflow issues on very large graphs.
+
+In practice, the choice often comes down to which perspective matches the problem more closely.
+When the problem says "find an ordering respecting dependencies", either works.
+When the problem says "peel leaves iteratively", Kahn's algorithm is the direct match.
+When the problem involves DFS-based classification (cycle membership, safe states), the DFS approach is more natural.
+
+## Applications and Variations
+
+The exercises for this topic illustrate several important applications and variations of topological sort
+that go beyond the basic "sort a DAG" formulation.
+
+### Safe state detection
+
+The concept of **safe nodes** in a directed graph connects topological thinking to cycle detection.
+A node is "safe" if every possible path starting from it eventually reaches a terminal node (a node with no outgoing edges).
+Equivalently, a node is unsafe if and only if it lies on a cycle or can reach a cycle.
+
+The DFS-based approach classifies nodes using three-state coloring.
+A node currently being explored (GRAY/visiting) that is encountered again indicates a cycle, making that node and all nodes
+on the current recursion path unsafe.
+A node is safe only if all its descendants are safe.
+This is essentially the same three-state coloring used for cycle detection, but instead of simply returning "cycle found",
+the algorithm records which nodes are safe and which are not.
+
+An alternative approach uses a reverse view of the graph and Kahn's algorithm.
+If we reverse all edges, terminal nodes (which had out-degree zero in the original graph) become sources (in-degree zero in the reversed graph).
+Running Kahn's algorithm on the reversed graph peels away nodes layer by layer, and every node that gets processed is safe.
+Nodes that never reach in-degree zero in this reversed BFS are part of or reachable from a cycle, and therefore unsafe.
+
+### Topological peeling on undirected structures
+
+Kahn's algorithm can be adapted beyond directed graphs.
+In an undirected tree, the analog of "in-degree zero" is "degree one" (leaf nodes).
+Iteratively removing leaf nodes and updating degrees is called **topological peeling** or **leaf trimming**.
+
+The Minimum Height Trees problem demonstrates this technique.
+The goal is to find which nodes, when chosen as root, produce a tree with minimum height.
+These nodes are always the **centroids** of the tree: the one or two innermost nodes.
+By iteratively removing all current leaves (degree-1 nodes) and updating their neighbors' degrees,
+the algorithm peels the tree from the outside in, layer by layer.
+When two or fewer nodes remain, they are the centroids and therefore the roots of the minimum height trees.
+
+This is essentially Kahn's algorithm applied to an undirected graph, where "source" means "leaf" instead of "zero in-degree node".
+The process mirrors how BFS finds distances from the boundary inward.
+
+```ts
+function findMinHeightTrees(n: number, edges: number[][]): number[] {
+    if (n === 1) {
+        return [0];
+    }
+
+    const adjacency: number[][] = Array.from({ length: n }, () => []);
+    const degree: number[] = new Array(n).fill(0);
+
+    for (const [u, v] of edges) {
+        adjacency[u].push(v);
+        adjacency[v].push(u);
+        degree[u]++;
+        degree[v]++;
+    }
+
+    const queue: number[] = [];
+
+    for (let i = 0; i < n; i++) {
+        if (degree[i] === 1) {
+            queue.push(i);
+        }
+    }
+
+    let remaining = n;
+
+    while (remaining > 2) {
+        const levelSize = queue.length;
+        remaining -= levelSize;
+
+        for (let i = 0; i < levelSize; i++) {
+            const leaf = queue.shift()!;
+
+            for (const neighbor of adjacency[leaf]) {
+                degree[neighbor]--;
+
+                if (degree[neighbor] === 1) {
+                    queue.push(neighbor);
+                }
+            }
+        }
+    }
+
+    return queue;
+}
+```
+
+The algorithm runs in $O(|V|)$ time because the tree has exactly $|V| - 1$ edges,
+and each edge is processed exactly once when its leaf endpoint is removed.
+
+### Multi-level topological sort
+
+Some problems require topological sorting at multiple granularities simultaneously.
+The Sort Items by Groups Respecting Dependencies problem is a canonical example.
+Items belong to groups, and the output must satisfy two constraints: items within the same group must be adjacent,
+and all dependency constraints between items must be respected.
+
+The solution applies topological sort at two levels.
+First, build a **group-level dependency graph** where groups are vertices and an edge from group $A$ to group $B$
+means some item in $A$ must come before some item in $B$.
+Topologically sort this group graph to determine the order of groups.
+Second, within each group, build an **item-level dependency graph** restricted to items in that group,
+and topologically sort them to determine the internal ordering.
+The final result concatenates the per-group orderings in the group topological order.
+
+This two-level approach generalizes naturally.
+Any time the problem has a hierarchy (items within categories, tasks within phases, operations within modules)
+and dependencies exist both within and across levels,
+you can decompose the problem into multiple topological sorts at different granularities.
+If a cycle exists at either level, the overall problem has no solution.
+
+## Time and Space Complexity
+
+Both the DFS-based and BFS-based (Kahn's) algorithms visit every vertex exactly once and examine every edge exactly once.
+The time and space bounds are identical in the asymptotic sense.
+
+| Algorithm | Time Complexity | Space Complexity | Notes |
+|-----------|----------------|-----------------|-------|
+| DFS-based topological sort | $O(\|V\| + \|E\|)$ | $O(\|V\| + \|E\|)$ | The color array and recursion stack use $O(\|V\|)$. The adjacency list uses $O(\|V\| + \|E\|)$. |
+| Kahn's algorithm (BFS-based) | $O(\|V\| + \|E\|)$ | $O(\|V\| + \|E\|)$ | The in-degree array and queue use $O(\|V\|)$. The adjacency list uses $O(\|V\| + \|E\|)$. |
+| Topological peeling (leaf removal on trees) | $O(\|V\|)$ | $O(\|V\|)$ | Trees have exactly $\|V\| - 1$ edges, so $O(\|V\| + \|E\|) = O(\|V\|)$. |
+| Multi-level topological sort | $O(\|V\| + \|E\|)$ | $O(\|V\| + \|E\|)$ | The group-level and item-level sorts together still process each vertex and edge a constant number of times. |
+
+The $O(|V| + |E|)$ bound is optimal for any algorithm that must inspect all edges to determine the ordering.
+Building the adjacency list from an edge list takes $O(|E|)$, and the traversal itself takes $O(|V| + |E|)$.
+The in-degree computation in Kahn's algorithm is an $O(|V| + |E|)$ preprocessing step that does not change the overall bound.
+
+Cycle detection comes for free in both algorithms.
+The DFS approach detects cycles through back edges (GRAY neighbors), and Kahn's algorithm detects cycles when the result has fewer than $|V|$ vertices.
+Neither approach requires additional work beyond the standard traversal to determine whether the graph is acyclic.
+
+## Exercises
+
+<TopicExercises topic="topological-sort" />

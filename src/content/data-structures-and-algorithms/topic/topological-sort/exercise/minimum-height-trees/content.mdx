@@ -1,0 +1,86 @@
+---
+title: "Minimum Height Trees"
+description: "Given an undirected tree of n nodes, find all root labels that produce trees with the minimum possible height."
+date: 2026-04-17
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [topological sort, graph, dfs, bfs, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Iterative leaf removal (topological peeling) to find tree centroids"
+  leetcodeUrl: "https://leetcode.com/problems/minimum-height-trees/"
+  difficulty: "Medium"
+---
+# Minimum Height Trees
+
+Leetcode Problem 310: [Minimum Height Trees](https://leetcode.com/problems/minimum-height-trees/description/)
+
+## Problem Summary
+You are given an undirected tree of **n** nodes labeled from **0** to **n - 1** and an array of **n - 1** edges. You can choose any node as the root. Among all possible rooted trees, those with the minimum height are called **minimum height trees** (MHTs). The height of a rooted tree is the number of edges on the longest downward path between the root and a leaf. Return a list of all MHT root labels, in any order. The tree can have up to **20,000** nodes, and the input is guaranteed to be a valid tree with no repeated edges.
+
+## Techniques
+- Depth-First Search
+- Breadth-First Search
+- Graph Theory
+- Topological Sort
+
+## Solution
+```ts
+function createAdjacencyListAndDegree(edges: number[][], n: number) {
+    const adjacencyList: number[][] = Array.from({ length: n }, () => [])
+    const degree: number[] = Array(n).fill(0)
+
+    for (const [u, v] of edges) {
+        adjacencyList[u].push(v)
+        adjacencyList[v].push(u)
+        degree[u]++
+        degree[v]++
+    }
+
+    return {
+        adjacencyList,
+        degree
+    }
+}
+
+function prepareQueue(degree: number[], n: number) {
+    const queue: number[] = []
+
+    for (let i = 0; i < n; i ++) {
+        if (degree[i] === 1) {
+            queue.push(i)
+        }
+    }
+
+    return queue    
+}
+
+function findMinHeightTrees(n: number, edges: number[][]): number[] {
+    if (n === 1) {
+        return [0]
+    }
+
+    const { adjacencyList, degree } = createAdjacencyListAndDegree(edges, n)
+    const queue: number[] = prepareQueue(degree, n)
+
+    let remainingNodes = n
+
+    while (remainingNodes > 2) {
+        const levelSize = queue.length
+        remainingNodes -= levelSize
+
+        for (let i = 0; i < levelSize; i++) {
+            const leaf = queue.shift()!
+
+            for (const neighbor of adjacencyList[leaf]) {
+                degree[neighbor]--
+
+                if (degree[neighbor] === 1) {
+                    queue.push(neighbor)
+                }
+            }
+        }
+    }
+
+    return queue
+};
+```

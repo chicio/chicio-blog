@@ -1,0 +1,169 @@
+---
+title: "Sort Items by Groups Respecting Dependencies"
+description: "Sort n items so that items in the same group are adjacent and all dependency constraints are satisfied."
+date: 2026-04-17
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [topological sort, graph, dfs, bfs, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Two-level topological sort (group-level and item-level)"
+  leetcodeUrl: "https://leetcode.com/problems/sort-items-by-groups-respecting-dependencies/"
+  difficulty: "Hard"
+---
+# Sort Items by Groups Respecting Dependencies
+
+Leetcode Problem 1203: [Sort Items by Groups Respecting Dependencies](https://leetcode.com/problems/sort-items-by-groups-respecting-dependencies/description/)
+
+## Problem Summary
+You are given **n** items, each belonging to zero or one of **m** groups. The array **group[i]** gives the group of the i-th item, or **-1** if it belongs to no group. You are also given a **beforeItems** array where **beforeItems[i]** lists all items that must appear before item **i** in the final ordering. Return a sorted list of items such that items in the same group are adjacent and all dependency constraints are respected. If multiple valid orderings exist, return any one. If no valid ordering exists, return an empty list. There can be up to **30,000** items.
+
+## Techniques
+- Depth-First Search
+- Breadth-First Search
+- Graph Theory
+- Topological Sort
+
+## Solution
+```ts
+function constructGraph(n: number, group: number[], beforeItems: number[][]) {
+    const groupGraph = new Map<number, Set<number>>()
+
+    for (let i = 0; i < n; i++) {
+        for (const j of beforeItems[i]) {
+            const gi = group[i]
+            const gj = group[j]
+
+            if (gi !== gj) {
+                if (!groupGraph.has(gj)) {
+                    groupGraph.set(gj, new Set())
+                }
+                groupGraph.get(gj)!.add(gi)
+            }
+        }
+    }
+
+    return groupGraph
+}
+
+function topoSortGroup(
+    items: number[],
+    itemGraph: number[][],
+    itemIndegree: number[]
+): number[] | null {
+    const queue: number[] = []
+    const result: number[] = []
+
+    for (const item of items) {
+        if (itemIndegree[item] === 0) {
+            queue.push(item)
+        }
+    }
+
+    while (queue.length > 0) {
+        const node = queue.shift()!
+        result.push(node)
+
+        for (const next of itemGraph[node]) {
+            itemIndegree[next]--
+            if (itemIndegree[next] === 0) {
+                queue.push(next)
+            }
+        }
+    }
+
+    return result.length === items.length ? result : null
+}
+
+function sortItems(n: number, m: number, group: number[], beforeItems: number[][]): number[] {
+    let nextGroupId = m
+
+    for (let i = 0; i < n; i++) {
+        if (group[i] === -1) {
+            group[i] = nextGroupId
+            nextGroupId++
+        }
+    }
+
+    const graph: Map<number, Set<number>> = constructGraph(n, group, beforeItems)
+    const groupCount = Math.max(...group) + 1
+    const indegree = Array(groupCount).fill(0)
+ 
+    for (const [fromGroup, neighbors] of graph) {
+        for (const toGroup of neighbors) {
+            indegree[toGroup]++
+        }
+    }
+
+    const queue: number[] = []
+
+    for (let g = 0; g < groupCount; g++) {
+        if (indegree[g] === 0) {
+            queue.push(g)
+        }
+    }
+
+    const groupOrder: number[] = []
+
+    while (queue.length > 0) {
+        const g = queue.shift()!
+        groupOrder.push(g)
+
+        const neighbors = graph.get(g)
+
+        if (!neighbors) { 
+            continue
+        }
+
+        for (const next of neighbors) {
+            indegree[next]--
+
+            if (indegree[next] === 0) {
+                queue.push(next)
+            }
+        }
+    }
+
+    if (groupOrder.length !== groupCount) {
+        return []
+    }
+
+    const itemsInGroup = new Map<number, number[]>()
+
+    for (let i = 0; i < n; i++) {
+        const g = group[i]
+        if (!itemsInGroup.has(g)) {
+            itemsInGroup.set(g, [])
+        }
+        itemsInGroup.get(g)!.push(i)
+    }
+
+    const itemGraph = Array.from({ length: n }, () => [] as number[])
+    const itemIndegree = Array(n).fill(0)
+
+    for (let i = 0; i < n; i++) {
+        for (const j of beforeItems[i]) {
+            if (group[i] === group[j]) {
+                itemGraph[j].push(i)
+                itemIndegree[i]++
+            }
+        }
+    }
+
+    const result: number[] = []
+
+    for (const g of groupOrder) {
+        const items = itemsInGroup.get(g) ?? []
+
+        if (items.length === 0) continue
+
+        const sorted = topoSortGroup(items, itemGraph, itemIndegree)
+        if (sorted === null) {
+            return []
+        }
+
+        result.push(...sorted)
+    }
+
+    return result.length === n ? result : []
+};
+```
