@@ -4,8 +4,8 @@ import { slugs } from "@/types/configuration/slug";
 import { ExerciseMetadata } from "@/types/content/data-structures-and-algorithms";
 
 const exerciseMetadataAdapter = (raw: unknown): ExerciseMetadata => {
-  const { technique, leetcodeUrl } = raw as Record<string, string>;
-  return { technique, leetcodeUrl };
+  const { technique, leetcodeUrl, difficulty } = raw as Record<string, string>;
+  return { technique, leetcodeUrl, difficulty: difficulty as ExerciseMetadata["difficulty"] };
 };
 
 export const getAllDataStructuresAndAlgorithmsTopics = (): Content[] =>
