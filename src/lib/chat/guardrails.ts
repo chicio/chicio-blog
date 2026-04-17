@@ -25,6 +25,7 @@ Reply with ONLY the single word "yes" or "no".
 
 Reply "yes" if the message is about any of:
 - Fabrizio Duroni (his career, skills, projects, experience, education, personality, jokes)
+- Fabrizio's personal life (his hobbies, interests, relationship, girlfriend, partner, family, where he lives, lifestyle)
 - Software development, programming, technology, computer science
 - His blog posts, articles, or technical writing
 - General greetings, introductions, or small talk
