@@ -85,14 +85,19 @@ When all neighbors have been fully explored, color the vertex BLACK and prepend 
 (or append it and reverse at the end).
 
 ```ts
+enum Color {
+    WHITE = 0, // unvisited
+    GRAY = 1,  // in progress (on the current recursion stack)
+    BLACK = 2, // fully processed
+}
+
 function topologicalSortDFS(graph: number[][]): number[] | null {
     const n = graph.length;
-    // 0 = WHITE (unvisited), 1 = GRAY (in progress), 2 = BLACK (done)
-    const color: number[] = new Array(n).fill(0);
+    const color: Color[] = new Array(n).fill(Color.WHITE);
     const result: number[] = [];
 
     for (let node = 0; node < n; node++) {
-        if (color[node] === 0) {
+        if (color[node] === Color.WHITE) {
             if (dfs(node, graph, color, result)) {
                 return null; // cycle detected
             }
@@ -105,24 +110,24 @@ function topologicalSortDFS(graph: number[][]): number[] | null {
 function dfs(
     node: number,
     graph: number[][],
-    color: number[],
+    color: Color[],
     result: number[]
 ): boolean {
-    color[node] = 1; // GRAY: currently exploring
+    color[node] = Color.GRAY;
 
     for (const neighbor of graph[node]) {
-        if (color[neighbor] === 1) {
+        if (color[neighbor] === Color.GRAY) {
             return true; // back edge: cycle detected
         }
 
-        if (color[neighbor] === 0) {
+        if (color[neighbor] === Color.WHITE) {
             if (dfs(neighbor, graph, color, result)) {
                 return true;
             }
         }
     }
 
-    color[node] = 2; // BLACK: fully processed
+    color[node] = Color.BLACK;
     result.unshift(node); // prepend to get reverse post-order
 
     return false;
