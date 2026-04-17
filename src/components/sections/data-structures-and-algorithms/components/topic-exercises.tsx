@@ -1,16 +1,10 @@
 import { getAllExercisesForTopic } from "@/lib/content/data-structures-and-algorithms";
-import { ExerciseMetadata } from "@/types/content/data-structures-and-algorithms";
 import { FC } from "react";
+import { difficultyColor } from "./difficulty-color";
 
 interface TopicExercisesProps {
     topic: string;
 }
-
-const difficultyColor: Record<ExerciseMetadata["difficulty"], string> = {
-    Easy: "text-green-500",
-    Medium: "text-amber-500",
-    Hard: "text-red-500",
-};
 
 export const TopicExercises: FC<TopicExercisesProps> = ({ topic }) => {
     const exercises = getAllExercisesForTopic(topic);

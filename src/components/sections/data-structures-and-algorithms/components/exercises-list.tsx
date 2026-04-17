@@ -3,8 +3,10 @@ import {
   getAllExercises,
 } from "@/lib/content/data-structures-and-algorithms";
 import { Content } from "@/types/content/content";
+import { ExerciseMetadata } from "@/types/content/data-structures-and-algorithms";
 import { FC } from "react";
 import { Markdown } from "../../../design-system/atoms/typography/markdown";
+import { difficultyColor } from "./difficulty-color";
 
 export const ExercisesList: FC = () => {
   const exercises = getAllExercises();
@@ -17,7 +19,7 @@ export const ExercisesList: FC = () => {
       acc[topicKey].push(exercise);
       return acc;
     },
-    {} as Record<string, Content[]>,
+    {} as Record<string, Content<ExerciseMetadata>[]>,
   );
 
   return (
@@ -35,6 +37,7 @@ export const ExercisesList: FC = () => {
                 <thead>
                   <tr>
                     <th className="w-2/5">Exercise</th>
+                    <th>Difficulty</th>
                     <th>Description</th>
                   </tr>
                 </thead>
@@ -45,6 +48,11 @@ export const ExercisesList: FC = () => {
                         <a href={exercise.slug.formatted}>
                           <strong>{exercise.frontmatter.title}</strong>
                         </a>
+                      </td>
+                      <td>
+                        <span className={`font-semibold ${difficultyColor[exercise.frontmatter.metadata?.difficulty ?? "Easy"]}`}>
+                          {exercise.frontmatter.metadata?.difficulty}
+                        </span>
                       </td>
                       <td>
                         <Markdown content={exercise.frontmatter.description} id={`${topicKey}-description`} />
