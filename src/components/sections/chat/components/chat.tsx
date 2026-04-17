@@ -75,8 +75,8 @@ export const Chat: FC = () => {
           ))}
           {error && (
             <ChatMessage isUser={false}>
-              Sorry, I have encountered an error while trying to processing your
-              question. Please try again later.
+              {error.message ||
+                "Sorry, I have encountered an error while trying to process your question. Please try again later."}
             </ChatMessage>
           )}
           <div ref={messagesEndRef} />
