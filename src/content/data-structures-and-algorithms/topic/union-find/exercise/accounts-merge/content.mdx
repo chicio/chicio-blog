@@ -1,0 +1,83 @@
+---
+title: "Accounts Merge"
+description: "Given a list of accounts where each account has a name and a list of emails, merge accounts that share a common email and return the merged result."
+date: 2026-04-18
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [union find, graph, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Equivalence Class Merging"
+  leetcodeUrl: "https://leetcode.com/problems/accounts-merge/"
+  difficulty: "Medium"
+---
+# Accounts Merge
+
+Leetcode Problem 721: [Accounts Merge](https://leetcode.com/problems/accounts-merge/description/)
+
+## Problem Summary
+Given a list of accounts where each account is represented as a list of strings, with the first element being the account holder's name and the remaining elements being email addresses, merge all accounts that belong to the same person. Two accounts belong to the same person if they share at least one common email address. Note that two accounts may have the same name but belong to different people. After merging, return the accounts with the name as the first element followed by the emails in sorted order. The number of accounts is at most **1,000**, each account has at most **10** entries, and each string is at most **30** characters long.
+
+## Techniques
+- Array
+- Hash Table
+- String
+- Depth-First Search
+- Breadth-First Search
+- Union-Find
+- Sorting
+
+## Solution
+```ts
+import { UnionFind } from "../union-find"
+
+function accountsMerge(accounts: string[][]): string[][] {
+    const emailToIndex = new Map<string, number>()
+    const emailToName = new Map<string, string>()
+    let index = 0
+
+    for (const account of accounts) {
+        const name = account[0]
+
+        for (let i = 1; i < account.length; i++) {
+            const email = account[i]
+            if (!emailToIndex.has(email)) {
+                emailToIndex.set(email, index++)
+                emailToName.set(email, name)
+            }
+        }
+    }
+
+    const uf = new UnionFind(index)    
+
+    for (const account of accounts) {
+        const firstEmailIndex = emailToIndex.get(account[1])!
+        
+        for (let i = 2; i < account.length; i++) {
+            const emailIndex = emailToIndex.get(account[i])!
+            uf.union(firstEmailIndex, emailIndex)
+        }
+    }
+
+    const rootToEmails = new Map<number, string[]>()
+
+    for (const email of emailToIndex.keys()) {
+        const root = uf.find(emailToIndex.get(email)!)
+        if (!rootToEmails.has(root)) {
+            rootToEmails.set(root, [])
+        }
+        rootToEmails.get(root)!.push(email)
+    }
+
+    const merged: string[][] = []
+
+    for (const emails of rootToEmails.values()) {
+        emails.sort()
+        const name = emailToName.get(emails[0])!
+        merged.push([name, ...emails])
+    }
+
+    return merged
+}
+
+console.log(accountsMerge([["John","johnsmith@mail.com","john00@mail.com"],["John","johnnybravo@mail.com"],["John","johnsmith@mail.com","john_newyork@mail.com"],["Mary","mary@mail.com"]]));
+```
