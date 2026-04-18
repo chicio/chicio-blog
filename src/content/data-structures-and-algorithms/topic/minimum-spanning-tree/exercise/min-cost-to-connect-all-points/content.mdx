@@ -1,0 +1,72 @@
+---
+title: "Min Cost to Connect All Points"
+description: "Find the minimum cost to connect all points on a 2D plane using Manhattan distance."
+date: 2026-04-18
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [minimum spanning tree, union find, graph theory, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  difficulty: "Medium"
+  technique: "Kruskal's Algorithm with Union-Find"
+  leetcodeUrl: "https://leetcode.com/problems/min-cost-to-connect-all-points/"
+---
+# Min Cost to Connect All Points
+
+Leetcode Problem 1584: [Min Cost to Connect All Points](https://leetcode.com/problems/min-cost-to-connect-all-points/description/)
+
+## Problem Summary
+
+Given an array of points representing integer coordinates on a 2D plane, find the minimum cost to connect all points.
+The cost of connecting two points is the **Manhattan distance** between them.
+All points must be connected such that there is exactly one simple path between any two points, forming a spanning tree.
+The number of points can be up to **1,000**, and coordinates range from **-1,000,000** to **1,000,000**.
+All point pairs are distinct.
+
+## Techniques
+
+- Array
+- Union-Find
+- Graph Theory
+- Minimum Spanning Tree
+
+## Solution
+
+```ts
+import { UnionFind } from "../union-find"
+
+function minCostConnectPoints(points: number[][]): number {
+    const edges: number[][] = []
+
+    for (let i = 0; i < points.length; i++) {
+        for (let j = i + 1; j < points.length; j++) {
+            const cost =
+                Math.abs(points[i][0] - points[j][0]) +
+                Math.abs(points[i][1] - points[j][1])
+
+            edges.push([i, j, cost])
+        }
+    }
+
+    edges.sort((a, b) => a[2] - b[2])
+
+    const uf = new UnionFind(points.length)
+    let totalCost = 0
+    let used = 0
+
+    for (const [u, v, cost] of edges) {
+        if (uf.union(u, v)) {
+            totalCost += cost
+            used++
+
+            if (used === points.length - 1) {
+                break
+            }
+        }
+    }
+
+    return totalCost
+}
+
+console.log(minCostConnectPoints([[0,0],[2,2],[3,10],[5,2],[7,0]])) // 20
+console.log(minCostConnectPoints([[3,12],[-2,5],[-4,1]])) // 18
+```

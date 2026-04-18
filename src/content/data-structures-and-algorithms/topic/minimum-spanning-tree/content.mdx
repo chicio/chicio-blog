@@ -1,0 +1,339 @@
+---
+title: "Minimum Spanning Tree"
+description: "A comprehensive guide to Minimum Spanning Trees, covering the cut property, Kruskal's algorithm with Union-Find, Prim's algorithm with a min-heap, and the trade-offs between the two approaches."
+date: 2026-04-18
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [minimum spanning tree, graph, kruskal, prim, data structures, algorithms]
+authors: [fabrizio_duroni]
+---
+
+import { TopicExercises } from "@/components/sections/data-structures-and-algorithms/components/topic-exercises";
+
+# Minimum Spanning Tree
+
+In the [graph traversal](/data-structures-and-algorithms/topic/graph) article, we explored how BFS and DFS visit every reachable vertex in a graph.
+In the [topological sort](/data-structures-and-algorithms/topic/topological-sort) article, we used those traversals to order vertices in directed acyclic graphs.
+Both of those techniques operate on unweighted or uniformly weighted edges, where the goal is reachability or ordering.
+But many real-world problems attach a **cost** to each edge, and the question shifts from "can we reach every vertex?"
+to "what is the cheapest way to connect every vertex?"
+
+Consider the problem of laying cable between a set of buildings.
+Every pair of buildings can be connected, but each potential connection has a different cost depending on distance, terrain, or existing infrastructure.
+We want every building to be reachable from every other building, but we want to minimize the total cost of cable used.
+We do not need redundant connections: a single path between any two buildings is sufficient.
+
+This is the [**Minimum Spanning Tree**](https://en.wikipedia.org/wiki/Minimum_spanning_tree) problem.
+Given a weighted, undirected, connected graph, find the subset of edges that connects all vertices with the minimum possible total weight,
+forming a tree (connected and acyclic).
+The problem appears in network design, circuit wiring, clustering, and approximation algorithms for harder problems like the traveling salesman.
+
+This article develops the theoretical foundation that makes MST algorithms correct (the **cut property**),
+then presents the two classical algorithms, [Kruskal's](https://en.wikipedia.org/wiki/Kruskal%27s_algorithm)
+and [Prim's](https://en.wikipedia.org/wiki/Prim%27s_algorithm),
+with their implementations and the data structures that make them efficient.
+
+## The Minimum Spanning Tree Problem
+
+A [**spanning tree**](https://en.wikipedia.org/wiki/Spanning_tree) of a connected undirected graph $G = (V, E)$
+is a subgraph that includes all $|V|$ vertices and is both connected and acyclic.
+Because it is a tree, it has exactly $|V| - 1$ edges.
+A **minimum spanning tree** (MST) is a spanning tree whose total edge weight is as small as possible.
+
+More formally, given a weight function $w: E \to \mathbb{R}$ that assigns a real-valued weight to each edge,
+the MST is a spanning tree $T \subseteq E$ that minimizes $\sum_{e \in T} w(e)$.
+
+A few properties are worth noting immediately.
+
+A connected graph with $|V|$ vertices and $|E|$ edges always has at least one spanning tree, and therefore at least one MST.
+The MST is **not necessarily unique**: when multiple edges share the same weight,
+different choices can lead to different spanning trees with the same total cost.
+However, when all edge weights are **distinct**, the MST is unique.
+This is because the cut property (discussed next) selects a unique lightest edge for each cut, leaving no room for alternative choices.
+
+Every MST has exactly $|V| - 1$ edges.
+This follows directly from the definition of a tree: a connected acyclic graph on $|V|$ vertices has exactly $|V| - 1$ edges.
+Adding any edge to an MST creates exactly one [cycle](https://en.wikipedia.org/wiki/Cycle_(graph_theory)),
+and removing the heaviest edge from that cycle yields a spanning tree of equal or lesser weight.
+This **cycle property** is the dual of the cut property and provides an alternative lens for understanding MST structure.
+
+## The Cut Property
+
+The [**cut property**](https://en.wikipedia.org/wiki/Minimum_spanning_tree#Cut_property) is the theoretical backbone of all greedy MST algorithms.
+It explains why locally greedy decisions lead to a globally optimal solution, something that is far from obvious
+and distinguishes MST from many other optimization problems where greedy approaches fail.
+
+A [**cut**](https://en.wikipedia.org/wiki/Cut_(graph_theory)) of a graph is a partition of the vertices into two non-empty sets $S$ and $V \setminus S$.
+An edge **crosses** the cut if one endpoint is in $S$ and the other is in $V \setminus S$.
+The set of all edges crossing a given cut is called the **cut-set**.
+
+The cut property states: for any cut of the graph, the lightest edge crossing the cut belongs to every MST
+(assuming edge weights are distinct; if weights can repeat, at least one lightest crossing edge belongs to some MST).
+
+The proof is by contradiction.
+Suppose the lightest crossing edge $e$ is not in some MST $T$.
+Adding $e$ to $T$ creates a cycle (since $T$ is a spanning tree and adding any edge to a tree creates exactly one cycle).
+This cycle must contain at least one other edge $e'$ that also crosses the cut, because the cycle enters and exits the set $S$.
+Since $e$ is the lightest crossing edge, $w(e) < w(e')$.
+Removing $e'$ and keeping $e$ yields a new spanning tree $T' = T \cup \{e\} \setminus \{e'\}$ with strictly smaller total weight, contradicting the assumption that $T$ was a minimum spanning tree.
+
+This property is powerful because it is **local**: it applies to *any* cut, not just a specific one.
+Both Kruskal's and Prim's algorithms work by repeatedly identifying cuts and selecting their lightest crossing edges,
+but they do so in different orders and use different data structures to manage the process.
+
+## Kruskal's Algorithm
+
+[Kruskal's algorithm](https://en.wikipedia.org/wiki/Kruskal%27s_algorithm) builds the MST by processing edges in order of increasing weight.
+It starts with a forest of $|V|$ isolated vertices (each vertex is its own tree) and greedily adds the cheapest edge
+that does not create a cycle.
+After $|V| - 1$ edges have been added, the forest has merged into a single spanning tree.
+
+The algorithm can be summarized in three steps:
+
+1. Sort all edges by weight in non-decreasing order.
+2. Initialize a [Union-Find](/data-structures-and-algorithms/topic/union-find) data structure with $|V|$ elements, one per vertex.
+3. Iterate through the sorted edges. For each edge $(u, v, w)$, check whether $u$ and $v$ are in the same connected component (i.e., `find(u) === find(v)`). If they are, skip the edge (it would create a cycle). If they are not, add the edge to the MST and call `union(u, v)` to merge the two components.
+
+The algorithm terminates when the MST contains $|V| - 1$ edges (or when all edges have been processed).
+
+### Why it works
+
+Kruskal's correctness follows directly from the cut property.
+When the algorithm considers edge $(u, v)$ and $u$ and $v$ are in different components, there exists a cut separating those two components.
+Among all edges crossing this cut that have not yet been added to the MST, $(u, v)$ is the lightest,
+because edges are processed in sorted order and any lighter crossing edge would have already been processed (and either added or skipped because its endpoints were already connected).
+The cut property guarantees that this edge belongs to some MST.
+
+### Implementation
+
+The implementation relies on the [Union-Find](/data-structures-and-algorithms/topic/union-find) data structure for efficient cycle detection.
+As discussed in the Union-Find article, the combination of path compression and union by rank
+makes each `find` and `union` operation run in $O(\alpha(n))$ amortized time, where $\alpha$ is the inverse Ackermann function,
+effectively constant for all practical input sizes.
+
+```ts
+class UnionFind {
+    parent: number[];
+    rank: number[];
+
+    constructor(n: number) {
+        this.parent = Array(n);
+        this.rank = Array(n).fill(0);
+
+        for (let i = 0; i < n; i++) {
+            this.parent[i] = i;
+        }
+    }
+
+    find(x: number): number {
+        if (this.parent[x] !== x) {
+            this.parent[x] = this.find(this.parent[x]);
+        }
+        return this.parent[x];
+    }
+
+    union(x: number, y: number): boolean {
+        const rootX = this.find(x);
+        const rootY = this.find(y);
+
+        if (rootX === rootY) {
+            return false;
+        }
+
+        if (this.rank[rootX] < this.rank[rootY]) {
+            this.parent[rootX] = rootY;
+        } else if (this.rank[rootX] > this.rank[rootY]) {
+            this.parent[rootY] = rootX;
+        } else {
+            this.parent[rootY] = rootX;
+            this.rank[rootX]++;
+        }
+
+        return true;
+    }
+}
+
+type Edge = [number, number, number]; // [u, v, weight]
+
+function kruskal(n: number, edges: Edge[]): Edge[] {
+    edges.sort((a, b) => a[2] - b[2]);
+
+    const uf = new UnionFind(n);
+    const mst: Edge[] = [];
+
+    for (const edge of edges) {
+        const [u, v] = edge;
+
+        if (uf.union(u, v)) {
+            mst.push(edge);
+
+            if (mst.length === n - 1) {
+                break;
+            }
+        }
+    }
+
+    return mst;
+}
+```
+
+The structure is clean: sort once, then scan the edge list linearly, using Union-Find to test and merge components.
+The early termination when `mst.length === n - 1` is an optimization that avoids scanning remaining edges once the tree is complete.
+
+## Prim's Algorithm
+
+[Prim's algorithm](https://en.wikipedia.org/wiki/Prim%27s_algorithm) builds the MST by growing a single tree from an arbitrary starting vertex.
+At each step, it adds the cheapest edge that connects a vertex already in the tree to a vertex not yet in the tree.
+Where Kruskal's algorithm processes edges globally (sorted by weight across the entire graph),
+Prim's algorithm operates locally, always expanding the frontier of the current partial tree.
+
+The algorithm works as follows:
+
+1. Start with an arbitrary vertex and add it to the tree. Insert all its edges into a [min-heap](/data-structures-and-algorithms/topic/heap).
+2. Extract the minimum-weight edge from the heap. If the destination vertex is already in the tree, discard the edge and extract the next one. Otherwise, add the edge to the MST and add the destination vertex to the tree.
+3. Insert all edges from the newly added vertex (that lead to vertices not yet in the tree) into the heap.
+4. Repeat until the tree contains $|V| - 1$ edges.
+
+### Why it works
+
+Prim's correctness also follows from the cut property.
+At every step, the vertices already in the partial tree form one side of a cut, and the remaining vertices form the other side.
+The algorithm selects the lightest edge crossing this cut, which the cut property guarantees belongs to some MST.
+By induction, every edge added by Prim's belongs to an MST, and after $|V| - 1$ edges the result is a complete MST.
+
+### Implementation
+
+The implementation uses a [min-heap](/data-structures-and-algorithms/topic/heap) (priority queue) to efficiently retrieve the cheapest frontier edge.
+The graph is represented as an adjacency list with weights.
+
+```ts
+function prim(n: number, adjList: [number, number][][]): [number, number, number][] {
+    const inMST = new Array<boolean>(n).fill(false);
+    const mst: [number, number, number][] = [];
+
+    // Min-heap storing [weight, from, to]
+    // Using a simple array-based heap for clarity
+    const heap: [number, number, number][] = [];
+
+    const pushHeap = (item: [number, number, number]) => {
+        heap.push(item);
+        let i = heap.length - 1;
+        while (i > 0) {
+            const parent = Math.floor((i - 1) / 2);
+            if (heap[parent][0] <= heap[i][0]) { break; }
+            [heap[parent], heap[i]] = [heap[i], heap[parent]];
+            i = parent;
+        }
+    };
+
+    const popHeap = (): [number, number, number] => {
+        const top = heap[0];
+        const last = heap.pop()!;
+        if (heap.length > 0) {
+            heap[0] = last;
+            let i = 0;
+            while (true) {
+                let smallest = i;
+                const left = 2 * i + 1;
+                const right = 2 * i + 2;
+                if (left < heap.length && heap[left][0] < heap[smallest][0]) { smallest = left; }
+                if (right < heap.length && heap[right][0] < heap[smallest][0]) { smallest = right; }
+                if (smallest === i) { break; }
+                [heap[smallest], heap[i]] = [heap[i], heap[smallest]];
+                i = smallest;
+            }
+        }
+        return top;
+    };
+
+    // Start from vertex 0
+    inMST[0] = true;
+    for (const [neighbor, weight] of adjList[0]) {
+        pushHeap([weight, 0, neighbor]);
+    }
+
+    while (heap.length > 0 && mst.length < n - 1) {
+        const [weight, from, to] = popHeap();
+
+        if (inMST[to]) {
+            continue;
+        }
+
+        inMST[to] = true;
+        mst.push([from, to, weight]);
+
+        for (const [neighbor, w] of adjList[to]) {
+            if (!inMST[neighbor]) {
+                pushHeap([w, to, neighbor]);
+            }
+        }
+    }
+
+    return mst;
+}
+```
+
+The `inMST` boolean array tracks which vertices have been absorbed into the growing tree.
+When a vertex is added, all its edges to non-tree vertices are pushed onto the heap.
+Edges whose destination is already in the tree are simply discarded when popped.
+
+A more sophisticated variant uses a **decrease-key** operation to update the priority of vertices already in the heap,
+rather than inserting duplicate entries.
+This reduces the heap size from $O(|E|)$ to $O(|V|)$ and improves the theoretical complexity,
+but the simpler "lazy deletion" approach shown above is easier to implement and works well in practice for most problem sizes.
+
+## Choosing Between Kruskal's and Prim's
+
+Both algorithms produce a correct MST, but their performance characteristics differ depending on the graph's structure.
+
+Kruskal's algorithm sorts all edges upfront and processes them sequentially.
+Its running time is dominated by the sort: $O(|E| \log |E|)$.
+Since $|E| \leq |V|^2$, we have $\log |E| \leq 2 \log |V|$, so this is also $O(|E| \log |V|)$.
+The Union-Find operations contribute $O(|E| \cdot \alpha(|V|))$, which is effectively linear.
+Kruskal's is the natural choice for **sparse graphs** where $|E|$ is close to $|V|$,
+because the sorting step is efficient and the algorithm does not require an adjacency list, only an edge list.
+
+Prim's algorithm, with a binary heap, runs in $O(|E| \log |V|)$ time:
+each of the $|E|$ edges may be inserted into and extracted from the heap, and each heap operation takes $O(\log |V|)$.
+With a [Fibonacci heap](https://en.wikipedia.org/wiki/Fibonacci_heap), the complexity improves to $O(|E| + |V| \log |V|)$,
+which is better than Kruskal's when $|E|$ is much larger than $|V|$ (dense graphs).
+Prim's is the natural choice for **dense graphs** where $|E|$ is close to $|V|^2$,
+and it is also preferable when the graph is given as an adjacency list (the common representation for traversal problems).
+
+When the graph is **implicit** and dense, as in problems where every pair of points can be connected (a complete graph),
+both algorithms face the challenge of $O(|V|^2)$ edges.
+Kruskal's must sort all $O(|V|^2)$ edges, resulting in $O(|V|^2 \log |V|)$ time.
+Prim's with a binary heap achieves the same bound but avoids materializing and sorting the full edge list upfront,
+since it processes edges lazily as the tree grows.
+For very large complete graphs, Prim's with a Fibonacci heap achieves $O(|V|^2)$,
+which is optimal since simply reading all edge weights takes $O(|V|^2)$ time.
+
+In practice, for competitive programming and interview problems, **Kruskal's with Union-Find** is the more commonly implemented choice
+because of its simplicity: sort the edges, iterate through them, and use Union-Find for cycle detection.
+The implementation is short, clean, and easy to adapt to variations (e.g., finding the MST cost without storing the tree,
+or building the MST from a set of points with Manhattan or Euclidean distances).
+
+## Time and Space Complexity
+
+| Algorithm | Time Complexity | Space Complexity | Best suited for |
+|---|---|---|---|
+| Kruskal's (with Union-Find) | $O(\|E\| \log \|E\|)$ | $O(\|V\| + \|E\|)$ | Sparse graphs, edge-list input |
+| Prim's (with binary heap) | $O(\|E\| \log \|V\|)$ | $O(\|V\| + \|E\|)$ | Dense graphs, adjacency-list input |
+| Prim's (with Fibonacci heap) | $O(\|E\| + \|V\| \log \|V\|)$ | $O(\|V\| + \|E\|)$ | Very dense graphs, theoretical optimality |
+
+For Kruskal's, the $O(|E| \log |E|)$ time comes from sorting the edge list.
+The Union-Find operations over all edges contribute $O(|E| \cdot \alpha(|V|))$, which is effectively $O(|E|)$.
+The space is $O(|V|)$ for the Union-Find structure plus $O(|E|)$ for storing the edge list.
+
+For Prim's with a binary heap, the $O(|E| \log |V|)$ time comes from inserting up to $|E|$ edges into the heap
+(each insertion and extraction is $O(\log |V|)$ in the decrease-key variant, or $O(\log |E|)$ in the lazy variant, which is asymptotically equivalent).
+The space is $O(|V|)$ for the `inMST` array and the MST itself, plus $O(|E|)$ for the heap in the worst case.
+
+For Prim's with a Fibonacci heap, the improved bound comes from the $O(1)$ amortized decrease-key operation.
+Each vertex is extracted from the heap at most once ($O(|V| \log |V|)$ total for extractions),
+and each edge triggers at most one decrease-key ($O(|E|)$ total).
+The Fibonacci heap is rarely used in practice due to its implementation complexity and large constant factors,
+but it establishes the theoretical lower bound for comparison-based MST algorithms on dense graphs.
+
+## Exercises
+
+<TopicExercises topic="minimum-spanning-tree" />
