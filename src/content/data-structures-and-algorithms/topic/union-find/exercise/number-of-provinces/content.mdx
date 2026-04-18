@@ -1,0 +1,50 @@
+---
+title: "Number of Provinces"
+description: "Given an n x n adjacency matrix representing direct connections between cities, return the total number of provinces (groups of directly or indirectly connected cities)."
+date: 2026-04-18
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [union find, graph, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Connected Components"
+  leetcodeUrl: "https://leetcode.com/problems/number-of-provinces/"
+  difficulty: "Medium"
+---
+# Number of Provinces
+
+Leetcode Problem 547: [Number of Provinces](https://leetcode.com/problems/number-of-provinces/description/)
+
+## Problem Summary
+There are **n** cities. Some of them are connected directly, and connectivity is transitive: if city **a** is connected to city **b**, and city **b** is connected to city **c**, then **a** is indirectly connected to **c**. A **province** is a maximal group of directly or indirectly connected cities. Given an **n x n** adjacency matrix where entry **(i, j)** is **1** if cities **i** and **j** are directly connected and **0** otherwise, return the total number of provinces. The number of cities is at most **200**, and the matrix is symmetric with all diagonal entries equal to **1**.
+
+## Techniques
+- Depth-First Search
+- Breadth-First Search
+- Union-Find
+- Graph Theory
+
+## Solution
+```ts
+import { UnionFind } from "../union-find"
+
+function findCircleNum(isConnected: number[][]): number {
+    const n = isConnected.length
+    const uf = new UnionFind(n)
+    let count = n
+
+    for (let i = 0; i < n; i++) {
+        for (let j = 0; j < n; j++) {
+            if (isConnected[i][j] === 1) {
+                if (uf.find(i) !== uf.find(j)) {
+                    uf.union(i, j)
+                    count--
+                }
+            }
+        }
+    }
+
+    return count
+}
+
+console.log(findCircleNum([[1,1,0],[1,1,0],[0,0,1]]))
+```

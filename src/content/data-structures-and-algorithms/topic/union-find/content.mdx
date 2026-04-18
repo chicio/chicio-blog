@@ -1,0 +1,339 @@
+---
+title: "Union Find"
+description: "A comprehensive guide to the Union Find (Disjoint Set Union) data structure, covering the forest representation, path compression, union by rank, inverse Ackermann analysis, and application patterns for dynamic connectivity problems."
+date: 2026-04-18
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [union find, disjoint set, graph, data structures, algorithms]
+authors: [fabrizio_duroni]
+---
+
+import { TopicExercises } from "@/components/sections/data-structures-and-algorithms/components/topic-exercises";
+
+# Union Find
+
+Many problems in graph theory reduce to a single question: **are these two elements connected?**
+In a social network, do two users belong to the same community?
+In a circuit, are two terminals electrically linked?
+In a map of regions, do two cells belong to the same island?
+
+When the graph is static and fully known in advance, a single BFS or DFS traversal can answer all connectivity queries.
+But when edges arrive incrementally, one at a time, rerunning a full traversal after each new edge is prohibitively expensive.
+What we need is a data structure that can absorb new connections efficiently and answer connectivity queries at any point during the process.
+
+The [**Union Find**](https://en.wikipedia.org/wiki/Disjoint-set_data_structure) data structure (also known as **Disjoint Set Union**, or **DSU**)
+solves exactly this problem.
+It maintains a partition of a universe of elements into non-overlapping sets, supports merging any two sets in nearly constant time,
+and answers "do these two elements belong to the same set?" in nearly constant time as well.
+The "nearly constant" qualifier hides one of the most elegant results in algorithm analysis: with two simple optimizations,
+every operation runs in $O(\alpha(n))$ amortized time, where $\alpha$ is the [inverse Ackermann function](https://en.wikipedia.org/wiki/Ackermann_function#Inverse),
+a function that grows so slowly it is effectively constant for any input size that could arise in practice.
+
+This article develops Union Find from its abstract definition through its optimized implementation,
+explains why the combined optimizations achieve the inverse Ackermann bound,
+and explores the application patterns that arise in connectivity, cycle detection, and equivalence class problems.
+
+## The Disjoint Set Abstraction
+
+The Union Find data structure manages a collection of **disjoint sets** over a universe of $n$ elements.
+At any point in time, every element belongs to exactly one set, and no two sets overlap.
+This is a [**partition**](https://en.wikipedia.org/wiki/Partition_of_a_set) of the universe.
+
+The structure supports three operations:
+
+- `makeSet(x)`: create a new set containing only element $x$. Initially, every element is its own singleton set.
+- `find(x)`: return the **representative** (or **root**) of the set containing $x$. Two elements belong to the same set if and only if they have the same representative.
+- `union(x, y)`: merge the set containing $x$ and the set containing $y$ into a single set. If $x$ and $y$ already belong to the same set, the operation has no effect.
+
+The relationship "belongs to the same set" is an [**equivalence relation**](https://en.wikipedia.org/wiki/Equivalence_relation):
+it is reflexive (every element is connected to itself), symmetric (if $x$ is connected to $y$, then $y$ is connected to $x$),
+and transitive (if $x$ is connected to $y$ and $y$ is connected to $z$, then $x$ is connected to $z$).
+The sets in the partition are exactly the [equivalence classes](https://en.wikipedia.org/wiki/Equivalence_class) of this relation.
+Every `union` operation merges two equivalence classes into one.
+
+### The parent-pointer forest
+
+The standard representation uses a **forest of rooted trees**, one tree per set.
+Each element stores a single pointer to its **parent**.
+The root of each tree points to itself and serves as the representative of its set.
+
+For $n$ elements, we maintain a `parent` array of size $n$, initialized so that `parent[i] = i` for all $i$.
+This means every element starts as the root of its own singleton tree.
+
+The `find` operation follows parent pointers from a given element upward until it reaches a root (a node whose parent is itself).
+The `union` operation finds the roots of the two elements' trees and makes one root point to the other,
+effectively merging the two trees into one.
+
+Without any optimizations, a sequence of $n - 1$ unions could produce a single chain of length $n$,
+making `find` operations take $O(n)$ time in the worst case.
+This is no better than a naive linked-list approach.
+The power of Union Find comes entirely from two optimizations that keep the trees almost flat:
+**path compression** and **union by rank**.
+
+## Path Compression
+
+Path compression is an optimization applied during the `find` operation.
+The idea is simple: when we traverse from a node to the root, we make every node along the path point directly to the root.
+This flattens the tree structure, so that future `find` operations on any of those nodes will complete in a single step.
+
+```ts
+find(x: number): number {
+    if (this.parent[x] !== x) {
+        this.parent[x] = this.find(this.parent[x]);
+    }
+    return this.parent[x];
+}
+```
+
+The recursive implementation is elegant.
+When `find(x)` is called, it recursively finds the root of $x$'s tree.
+As the recursion unwinds, it sets the parent of every node on the path to the root.
+After the call, the entire path from $x$ to the root has been compressed: every node now points directly to the root.
+
+Consider a tree where the path from node $a$ to the root passes through nodes $b$, $c$, and $d$.
+Before compression, `find(a)` must traverse four edges.
+After compression, $a$, $b$, $c$, and $d$ all point directly to the root, and any subsequent `find` on these nodes takes $O(1)$.
+
+Path compression does not change which set an element belongs to.
+It only restructures the internal tree to make future queries faster.
+The root remains the same, so the representative of the set is preserved.
+
+By itself, path compression reduces the amortized cost of $m$ operations on $n$ elements to $O(m \log n)$.
+This is already a significant improvement over the unoptimized $O(n)$ worst case, but we can do better.
+
+## Union by Rank
+
+Union by rank is an optimization applied during the `union` operation.
+When merging two trees, we must choose which root becomes the child of the other.
+A bad choice can create tall, unbalanced trees.
+Union by rank makes the smarter choice: it always attaches the shorter tree under the root of the taller tree.
+
+Each node maintains a **rank**, which is an upper bound on the height of the subtree rooted at that node.
+Initially, every node has rank $0$ (it is a leaf and a root simultaneously).
+When two trees are merged:
+
+- If the roots have different ranks, the root with the smaller rank becomes a child of the root with the larger rank. The larger root's rank does not change, because the height of its subtree has not increased.
+- If the roots have equal ranks, one root is chosen arbitrarily as the new root, and its rank is incremented by one. This is the only case where the tree actually grows taller.
+
+```ts
+union(x: number, y: number): boolean {
+    const rootX = this.find(x);
+    const rootY = this.find(y);
+
+    if (rootX === rootY) {
+        return false;
+    }
+
+    if (this.rank[rootX] < this.rank[rootY]) {
+        this.parent[rootX] = rootY;
+    } else if (this.rank[rootX] > this.rank[rootY]) {
+        this.parent[rootY] = rootX;
+    } else {
+        this.parent[rootY] = rootX;
+        this.rank[rootX]++;
+    }
+
+    return true;
+}
+```
+
+The key property of union by rank is that a tree with root rank $r$ contains at least $2^r$ nodes.
+This can be proven by induction: a rank-0 tree has 1 node ($2^0 = 1$), and a tree reaches rank $r$ only when two rank-$(r-1)$ trees merge,
+combining at least $2^{r-1} + 2^{r-1} = 2^r$ nodes.
+Since a tree with $n$ nodes has rank at most $\log_2 n$, the height of any tree is bounded by $O(\log n)$.
+
+By itself, union by rank guarantees that `find` runs in $O(\log n)$ worst case.
+This is the same bound as path compression alone, but the two optimizations complement each other in a way that produces a much stronger result.
+
+An alternative to rank is **union by size**, where each root stores the total number of elements in its subtree.
+The smaller tree is attached under the larger tree, and sizes are updated accordingly.
+The asymptotic behavior is the same: both yield $O(\log n)$ height without path compression,
+and both yield $O(\alpha(n))$ amortized when combined with path compression.
+
+## The Inverse Ackermann Bound
+
+When path compression and union by rank are used together, the amortized time per operation drops to $O(\alpha(n))$,
+where $\alpha$ is the [inverse Ackermann function](https://en.wikipedia.org/wiki/Ackermann_function#Inverse).
+
+The [Ackermann function](https://en.wikipedia.org/wiki/Ackermann_function) $A(m, n)$ is a function that grows extraordinarily fast.
+Even for small inputs, it produces astronomically large values.
+For instance, $A(4, 2) = 2^{2^{2^{65536}}} - 3$, a number with more digits than atoms in the observable universe.
+The inverse Ackermann function $\alpha(n)$ is defined as the smallest $k$ such that $A(k, k) \geq n$.
+Because $A$ grows so fast, $\alpha$ grows almost inconceivably slowly: for any value of $n$ that could appear in practice
+(say, $n \leq 2^{65536}$), $\alpha(n) \leq 4$.
+
+[Robert Tarjan](https://en.wikipedia.org/wiki/Robert_Tarjan) proved in 1975 that a sequence of $m$ `find` and `union` operations
+on a universe of $n$ elements runs in $O(m \cdot \alpha(n))$ total time when both optimizations are applied.
+He also proved that this bound is **tight**: no implementation of the disjoint-set abstract data type can do better in the cell-probe model.
+
+The intuition behind the analysis involves partitioning the nodes into groups based on their rank ranges.
+Path compression rapidly flattens the trees, but the flattening cost can be "charged" to the nodes whose parent pointers are being updated.
+Each node can only be charged a limited number of times within its rank group before its parent pointer is compressed past the group boundary.
+The number of rank groups is $O(\alpha(n))$, and the total charge across all groups over all operations is $O(m \cdot \alpha(n))$.
+
+For all practical purposes, $\alpha(n) \leq 4$, so Union Find operations run in effectively constant amortized time.
+This makes Union Find one of the most efficient data structures known for the dynamic connectivity problem.
+
+## Implementation
+
+The complete implementation combines path compression in `find` and union by rank in `union`.
+The constructor initializes the parent-pointer forest where every element is its own root.
+
+```ts
+class UnionFind {
+    parent: number[];
+    rank: number[];
+
+    constructor(n: number) {
+        this.parent = Array(n);
+        this.rank = Array(n).fill(0);
+
+        for (let i = 0; i < n; i++) {
+            this.parent[i] = i;
+        }
+    }
+
+    find(x: number): number {
+        if (this.parent[x] !== x) {
+            this.parent[x] = this.find(this.parent[x]);
+        }
+        return this.parent[x];
+    }
+
+    union(x: number, y: number): boolean {
+        const rootX = this.find(x);
+        const rootY = this.find(y);
+
+        if (rootX === rootY) {
+            return false;
+        }
+
+        if (this.rank[rootX] < this.rank[rootY]) {
+            this.parent[rootX] = rootY;
+        } else if (this.rank[rootX] > this.rank[rootY]) {
+            this.parent[rootY] = rootX;
+        } else {
+            this.parent[rootY] = rootX;
+            this.rank[rootX]++;
+        }
+
+        return true;
+    }
+}
+```
+
+Several design choices in this implementation deserve attention.
+
+The `union` method returns a `boolean`: `true` if a merge actually happened, `false` if the two elements were already in the same set.
+This is useful for counting connected components (decrement a counter only when `union` returns `true`)
+and for cycle detection (an edge between two elements in the same set creates a cycle).
+
+The elements are 0-indexed integers from $0$ to $n - 1$.
+When a problem uses 1-indexed nodes (as many graph problems do), you can either create a Union Find of size $n + 1$ and ignore index $0$,
+or remap the indices.
+
+A common extension is to track the **number of connected components**.
+Initialize a counter to $n$ and decrement it each time `union` returns `true`.
+Another useful extension is to maintain **component sizes** by storing a `size` array (initialized to $1$ for each element)
+and updating it during `union` by adding the smaller component's size to the larger one's.
+
+## Application Patterns
+
+The exercises associated with Union Find reveal four recurring patterns.
+Each pattern exploits a different aspect of the data structure's capabilities.
+
+### Connected components
+
+The most direct application of Union Find is counting or identifying
+[connected components](https://en.wikipedia.org/wiki/Component_(graph_theory)) in a graph.
+Given a set of edges, process each edge by calling `union` on its two endpoints.
+After processing all edges, elements that share the same `find` result belong to the same component.
+
+To count the number of components, start with a counter equal to $n$ (one component per node)
+and decrement it each time `union` successfully merges two different components.
+The final counter value is the number of connected components.
+
+This pattern applies to adjacency matrices as well.
+Given an $n \times n$ matrix where entry $(i, j)$ indicates whether nodes $i$ and $j$ are directly connected,
+iterate over all pairs and union those that are connected.
+The key advantage of Union Find over BFS/DFS here is that it handles edges incrementally:
+you can add edges one at a time and query the component count at any point, without restarting a traversal.
+
+### Cycle detection
+
+In an undirected graph, an edge $(u, v)$ creates a cycle if and only if $u$ and $v$ are already in the same connected component
+when the edge is processed.
+Union Find detects this naturally: before calling `union(u, v)`, check whether `find(u) === find(v)`.
+If they have the same root, the edge is **redundant**, it connects two already-connected nodes and therefore closes a cycle.
+
+This pattern is the foundation for problems where you must identify which edge, if removed, would turn a graph with exactly one cycle back into a tree.
+Process the edges in order and return the first edge whose endpoints already share a root.
+
+The same idea underlies [Kruskal's algorithm](https://en.wikipedia.org/wiki/Kruskal%27s_algorithm) for minimum spanning trees:
+sort edges by weight, then greedily add each edge unless it would create a cycle (detected by Union Find).
+The cycle detection query is precisely `find(u) === find(v)`.
+
+### Equivalence class merging
+
+Not all Union Find problems operate directly on graph nodes.
+Sometimes the elements to be grouped are non-integer entities, such as strings, coordinates, or composite keys.
+The pattern in these cases is to **map each entity to a unique integer index** using a hash map,
+then perform all Union Find operations on the indices.
+
+Consider a problem where you have a list of accounts, each with a name and a set of email addresses.
+Two accounts belong to the same person if they share at least one email.
+The solution assigns a unique index to each email, unions the indices of emails within the same account,
+and then groups all emails by their root index to reconstruct the merged accounts.
+
+The general template is:
+
+1. Assign unique integer indices to the entities being grouped (using a `Map<Entity, number>`).
+2. For each relationship (shared attribute, common edge, equivalence constraint), union the corresponding indices.
+3. After all unions, iterate over the entities and group them by `find(index)`.
+4. Reconstruct the answer from the grouped entities.
+
+This pattern extends Union Find beyond pure graph connectivity to any problem that involves merging equivalence classes defined by shared attributes.
+
+### Component analysis
+
+Some problems require not just connectivity queries but also **aggregate information about each component**:
+its size, how many elements satisfy a certain property, or which elements it contains.
+
+The approach is to augment the Union Find with additional arrays that store per-component metadata.
+After all unions are complete, iterate over all elements, find each element's root, and accumulate the desired statistics at the root index.
+
+For example, to determine which infected node to remove from a network to minimize malware spread,
+you first build the Union Find from the adjacency matrix, then compute the size of each component
+and count how many initially infected nodes each component contains.
+A component is "saveable" only if it contains exactly one infected node, because removing that node prevents the entire component from being infected.
+Among all saveable components, you choose the one with the largest size (the most nodes saved).
+
+The key insight is that Union Find efficiently partitions the graph into components,
+and then a single linear scan over all nodes can compute any aggregate statistic per component.
+This two-phase approach (build components, then analyze) is a common strategy for problems that combine connectivity with optimization.
+
+## Time and Space Complexity
+
+The table below summarizes the complexity of Union Find operations under different optimization strategies.
+All time complexities are **amortized** over a sequence of $m$ operations on $n$ elements.
+
+| Configuration | `find` | `union` | Space |
+|---|---|---|---|
+| No optimizations | $O(n)$ | $O(n)$ | $O(n)$ |
+| Path compression only | $O(\log n)$ | $O(\log n)$ | $O(n)$ |
+| Union by rank only | $O(\log n)$ | $O(\log n)$ | $O(n)$ |
+| Path compression + union by rank | $O(\alpha(n))$ | $O(\alpha(n))$ | $O(n)$ |
+
+The space complexity is always $O(n)$ regardless of the optimizations used, because the data structure stores a `parent` array
+and (optionally) a `rank` or `size` array, each of size $n$.
+
+The $O(\alpha(n))$ bound with both optimizations is the tightest possible for any implementation of the disjoint-set abstract data type.
+Since $\alpha(n) \leq 4$ for all practical input sizes, Union Find operations are effectively $O(1)$ amortized.
+
+The total cost of building a Union Find from a graph with $V$ vertices and $E$ edges is $O(V + E \cdot \alpha(V))$,
+which simplifies to $O(V + E)$ in practice.
+This makes Union Find competitive with BFS/DFS for static connectivity queries and strictly superior for dynamic scenarios
+where edges are added incrementally and connectivity must be queried at intermediate stages.
+
+## Exercises
+
+<TopicExercises topic="union-find" />

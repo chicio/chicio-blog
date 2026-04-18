@@ -1,0 +1,47 @@
+---
+title: "Redundant Connection"
+description: "Given a graph that started as a tree with one extra edge added, find an edge that can be removed so the resulting graph is a tree."
+date: 2026-04-18
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [union find, graph, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Cycle Detection"
+  leetcodeUrl: "https://leetcode.com/problems/redundant-connection/"
+  difficulty: "Medium"
+---
+# Redundant Connection
+
+Leetcode Problem 684: [Redundant Connection](https://leetcode.com/problems/redundant-connection/description/)
+
+## Problem Summary
+You are given a graph that started as a tree with **n** nodes labeled from **1** to **n**, and then one additional edge was added. The graph is represented as an array of edges where each edge connects two different vertices. Return an edge that can be removed so that the resulting graph is a tree of **n** nodes. If there are multiple valid answers, return the edge that occurs last in the input. The number of edges is between **3** and **1,000**, and there are no repeated edges.
+
+## Techniques
+- Depth-First Search
+- Breadth-First Search
+- Union-Find
+- Graph Theory
+
+## Solution
+```ts
+import { UnionFind } from "../union-find"
+
+function findRedundantConnection(edges: number[][]): number[] {
+    const n = edges.length
+    const uf = new UnionFind(n + 1)
+
+    for (const edge of edges) {
+        const [u, v] = edge
+        if (uf.find(u) === uf.find(v)) {
+            return edge
+        } else {
+            uf.union(u, v)
+        }
+    }
+
+    return [-1, -1]
+}
+
+console.log(findRedundantConnection([[1,2],[2,3],[3,4],[1,4],[1,5]]))
+```
