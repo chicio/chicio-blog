@@ -66,6 +66,12 @@ Topics within the same group share a similar article layout and can be used as t
 **Template**: graph-traversal-dfs-bfs
 **Why**: Graph topics build on each other and share the same foundational definitions. Future graph topics (topological sort, shortest path, MST) can reference this article for graph basics and extend DFS/BFS patterns.
 
+### Group: Union Find / Connectivity
+**Topics**: union-find
+**Pattern**: Intro with the dynamic connectivity motivation, abstract data type section (operations + forest representation), two optimization sections (path compression, union by rank), theoretical analysis section (inverse Ackermann), implementation section, application patterns section organized by problem type (connected components, cycle detection, equivalence class merging, component analysis), complexity table, exercises.
+**Template**: union-find
+**Why**: Union Find is a unique data structure that bridges pure data structure topics and graph algorithm topics. Its article structure follows the data structure pattern (operations table for complexity) but its application patterns connect to graph problems. Future connectivity-related topics could reference this article.
+
 ## Complexity Format Convention
 
 - **Data structures** → use a **table** (operations vs time/space)

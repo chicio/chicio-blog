@@ -4,7 +4,7 @@ description: List of all DSA course topics completed so far, with their section 
 type: project
 ---
 
-## Completed Topics (as of 2026-04-17)
+## Completed Topics (as of 2026-04-18)
 
 All topics below have been published. Some may be reviewed later for consistency.
 
@@ -54,6 +54,12 @@ All topics below have been published. Some may be reviewed later for consistency
 |-------|---------------|-------------------|----------------------|
 | graph-traversal-dfs-bfs | What is a Graph?, Types of Graphs, Graph Representations, DFS on Graphs (Connected Components/Flood Fill, Graph Cloning, Cycle Detection/Bipartiteness, DFS on Implicit Graphs/Grids, DFS with Value Propagation), BFS on Graphs (Single-source/Multi-source BFS, BFS on Implicit/State-Space Graphs, BFS with Constraints/Extended State), Choosing Between DFS and BFS, Time and Space Complexity | Table | None |
 | topological-sort | What is a Topological Ordering?, DFS-Based Topological Sort (Three-state coloring, Why reverse post-order works), BFS-Based Topological Sort / Kahn's Algorithm (Why it works, Level structure), Choosing Between DFS and BFS, Applications and Variations (Safe state detection, Topological peeling on undirected structures, Multi-level topological sort), Time and Space Complexity | Table | None |
+
+### Union Find / Connectivity
+
+| Topic | Sections (H2) | Complexity Format | Interactive Components |
+|-------|---------------|-------------------|----------------------|
+| union-find | The Disjoint Set Abstraction (parent-pointer forest), Path Compression, Union by Rank, The Inverse Ackermann Bound, Implementation, Application Patterns (Connected Components, Cycle Detection, Equivalence Class Merging, Component Analysis), Time and Space Complexity | Table | None |
 
 ### Meta / Design
 
