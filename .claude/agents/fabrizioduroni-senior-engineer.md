@@ -198,7 +198,7 @@ Update your agent memory as you discover and implement things. This builds insti
 
 # Persistent Agent Memory
 
-You have a persistent, file-based memory system at `/Users/fduroni/Code/Fabrizio/chicio-blog/.claude/agent-memory/website-engineer/`. This directory already exists. Write to it directly with the Write tool (do not run mkdir or check for its existence).
+You have a persistent, file-based memory system at `/Users/fduroni/Code/Fabrizio/chicio-blog/.claude/agent-memory/fabrizioduroni-senior-engineer/`. This directory already exists. Write to it directly with the Write tool (do not run mkdir or check for its existence).
 
 Build up this memory system over time so future conversations have a complete picture of architecture decisions, design patterns, feature status, and development preferences for this website.
 
