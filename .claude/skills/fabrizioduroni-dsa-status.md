@@ -1,6 +1,7 @@
 ---
 name: fabrizioduroni-dsa-status
 description: "Show DSA course progress — completed topics, remaining topics, exercise counts"
+user_invocable: true
 ---
 
 # DSA Course Status

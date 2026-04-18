@@ -1,6 +1,7 @@
 ---
 name: fabrizioduroni-release-prep
 description: "Pre-release checklist — verify changelog, lint, build, and version bump before running npm run release"
+user_invocable: true
 ---
 
 # Release Preparation Checklist

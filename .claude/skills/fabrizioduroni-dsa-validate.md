@@ -1,6 +1,7 @@
 ---
 name: fabrizioduroni-dsa-validate
 description: "Validate DSA content integrity — frontmatter, exercise metadata, imports, and structural consistency"
+user_invocable: true
 ---
 
 # DSA Content Validation

@@ -1,6 +1,7 @@
 ---
 name: fabrizioduroni-content-preview
 description: "Verify new blog or DSA content before committing — runs build, validates frontmatter, checks search index"
+user_invocable: true
 ---
 
 # Content Preview Verification

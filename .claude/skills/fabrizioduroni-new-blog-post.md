@@ -1,6 +1,7 @@
 ---
 name: fabrizioduroni-new-blog-post
 description: "Scaffold a new blog post with correct directory structure, frontmatter, and opening template"
+user_invocable: true
 ---
 
 # New Blog Post Scaffold
