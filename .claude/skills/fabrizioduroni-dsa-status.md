@@ -1,4 +1,5 @@
 ---
+name: fabrizioduroni-dsa-status
 description: "Show DSA course progress — completed topics, remaining topics, exercise counts"
 ---
 

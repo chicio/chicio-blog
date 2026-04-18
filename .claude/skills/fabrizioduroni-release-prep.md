@@ -1,4 +1,5 @@
 ---
+name: fabrizioduroni-release-prep
 description: "Pre-release checklist — verify changelog, lint, build, and version bump before running npm run release"
 ---
 
