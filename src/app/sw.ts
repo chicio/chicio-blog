@@ -14,6 +14,14 @@ declare global {
 
 declare const self: ServiceWorkerGlobalScope;
 
+const OFFLINE_IMAGE_PLACEHOLDER = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450">
+  <rect width="800" height="450" fill="#000"/>
+  <rect x="1" y="1" width="798" height="448" fill="none" stroke="#00ff41" stroke-width="1" opacity="0.3"/>
+  <text x="400" y="195" font-family="monospace" font-size="15" fill="#00ff41" text-anchor="middle" opacity="0.9">&gt; IMAGE_UNAVAILABLE</text>
+  <text x="400" y="225" font-family="monospace" font-size="11" fill="#00ff41" text-anchor="middle" opacity="0.5">cached version not found</text>
+  <text x="400" y="248" font-family="monospace" font-size="11" fill="#00ff41" text-anchor="middle" opacity="0.5">reconnect to load_</text>
+</svg>`;
+
 const serwist = new Serwist({
     precacheEntries: self.__SW_MANIFEST,
     skipWaiting: true,
@@ -27,25 +35,32 @@ const serwist = new Serwist({
             handler: new NetworkOnly(),
         },
 
-        // ─── Static images: cache-first, 30-day expiry ─────────────────────
+        // ─── Static images: cache-first, 30-day expiry, SVG placeholder offline ─
         // Uses request.destination (more reliable than file extension matching)
         // and CacheFirst (images are effectively immutable on this site).
-        // defaultCache uses StaleWhileRevalidate for image extensions — we intentionally override.
+        // handlerDidError returns a Matrix-themed SVG when the image is not in
+        // cache and the network is unavailable.
         {
             matcher: ({ request }) => request.destination === "image",
             handler: new CacheFirst({
                 cacheName: "images",
                 plugins: [
                     new ExpirationPlugin({
-                        maxEntries: 200,
+                        maxEntries: 500,
                         maxAgeSeconds: 30 * 24 * 60 * 60,
                         purgeOnQuotaError: true,
                     }),
+                    {
+                        handlerDidError: async () =>
+                            new Response(OFFLINE_IMAGE_PLACEHOLDER, {
+                                headers: { "Content-Type": "image/svg+xml" },
+                            }),
+                    },
                 ],
             }),
         },
 
-        // ─── Navigation: network-first with timeout, 3-day offline fallback ─
+        // ─── Navigation: network-first with timeout, 3-day offline fallback ─────
         // networkTimeoutSeconds ensures the offline page is served promptly
         // on a dead/slow network. defaultCache has no timeout on its HTML rule.
         {
@@ -63,7 +78,7 @@ const serwist = new Serwist({
             }),
         },
 
-        // ─── Everything else: serwist's recommended defaults ────────────────
+        // ─── Everything else: serwist's recommended defaults ─────────────────────
         // Covers: Google Fonts (CacheFirst gstatic, SWR googleapis), static JS/CSS,
         // Next.js image optimisation route, RSC prefetch + RSC payloads,
         // audio/video (with RangeRequestsPlugin), cross-origin requests.
