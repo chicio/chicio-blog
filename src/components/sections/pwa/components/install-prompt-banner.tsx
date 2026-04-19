@@ -7,37 +7,18 @@ import { trackWith } from "@/lib/tracking/tracking";
 import { tracking } from "@/types/configuration/tracking";
 import { useGlassmorphism } from "@/components/design-system/utils/hooks/use-glassmorphism";
 import { BluePillButton, RedPillButton } from "@/components/design-system/molecules/buttons/pills-buttons";
-
-const COOKIE_CONSENT_KEY = "fabrizioduroni_cookieConsent";
+import { hasConsented } from "@/lib/consents/consents";
 
 export const InstallPromptBanner: FC = () => {
     const { glassmorphismClass } = useGlassmorphism();
     const { isInstallable, promptInstall, dismiss } = useInstallPrompt();
-    const [cookieConsentDone, setCookieConsentDone] = useState(false);
+    const [cookieAccepted, setCookieAccepted] = useState(false);
 
     useEffect(() => {
-        // Defer to next tick so any in-flight click handler (cookie banner accept/reject)
-        // has already written to localStorage before we read it.
-        const check = () => {
-            setTimeout(() => {
-                setCookieConsentDone(localStorage.getItem(COOKIE_CONSENT_KEY) !== null);
-            }, 0);
-        };
-
-        check();
-
-        // Same-tab: re-check after any click (catches cookie banner buttons)
-        document.addEventListener("click", check, true);
-        // Cross-tab: re-check when another tab writes consent
-        window.addEventListener("storage", check);
-
-        return () => {
-            document.removeEventListener("click", check, true);
-            window.removeEventListener("storage", check);
-        };
+        setCookieAccepted(hasConsented());
     }, []);
 
-    const visible = isInstallable && cookieConsentDone;
+    const visible = isInstallable && cookieAccepted;
 
     useEffect(() => {
         if (visible) {
