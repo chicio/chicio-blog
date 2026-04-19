@@ -6,7 +6,7 @@ type: project
 
 ## Completed Topics (as of 2026-04-18)
 
-All topics below have been published. Some may be reviewed later for consistency.
+All 27 topics below have been published. Some may be reviewed later for consistency.
 
 ### Greedy / Optimization
 
@@ -54,6 +54,7 @@ All topics below have been published. Some may be reviewed later for consistency
 |-------|---------------|-------------------|----------------------|
 | graph-traversal-dfs-bfs | What is a Graph?, Types of Graphs, Graph Representations, DFS on Graphs (Connected Components/Flood Fill, Graph Cloning, Cycle Detection/Bipartiteness, DFS on Implicit Graphs/Grids, DFS with Value Propagation), BFS on Graphs (Single-source/Multi-source BFS, BFS on Implicit/State-Space Graphs, BFS with Constraints/Extended State), Choosing Between DFS and BFS, Time and Space Complexity | Table | None |
 | topological-sort | What is a Topological Ordering?, DFS-Based Topological Sort (Three-state coloring, Why reverse post-order works), BFS-Based Topological Sort / Kahn's Algorithm (Why it works, Level structure), Choosing Between DFS and BFS, Applications and Variations (Safe state detection, Topological peeling on undirected structures, Multi-level topological sort), Time and Space Complexity | Table | None |
+| minimum-spanning-tree | The Minimum Spanning Tree Problem, The Cut Property, Kruskal's Algorithm (Why it works, Implementation), Prim's Algorithm (Why it works, Implementation), Choosing Between Kruskal's and Prim's, Time and Space Complexity | Table | None |
 
 ### Union Find / Connectivity
 
