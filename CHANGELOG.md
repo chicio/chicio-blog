@@ -1,5 +1,29 @@
 # Changelog
 
+## [3.18.0](https://github.com/chicio/chicio-blog/compare/v3.17.0...v3.18.0) (2026-04-19)
+
+### Features
+
+* **ai:** :sparkles: create new agent for dsa course ([fd82845](https://github.com/chicio/chicio-blog/commit/fd828459e0e3f7a9169a13bcf5b4001f814832ec))
+* **ai:** new agent for development ([e4f7372](https://github.com/chicio/chicio-blog/commit/e4f7372786a51a6ce9b7e270a2f7d29efb19ed1e))
+* **ci:** :sparkles: data structure design ([166ae1f](https://github.com/chicio/chicio-blog/commit/166ae1ff19621b968737d1a29c790d3eb67ccfa4))
+* **content:** :sparkles: add difficulty badges to exercise tables ([#284](https://github.com/chicio/chicio-blog/issues/284)) ([b2cce96](https://github.com/chicio/chicio-blog/commit/b2cce96fc465e489f03d50f87d950173c190cb60))
+* **content:** :sparkles: graph traversal DFS and BFS ([#274](https://github.com/chicio/chicio-blog/issues/274)) ([a3fa4ef](https://github.com/chicio/chicio-blog/commit/a3fa4ef9e323147bc235679fd3b029cf76a17677))
+* **content:** :sparkles: greedy algorithms ([#272](https://github.com/chicio/chicio-blog/issues/272)) ([b5c39ff](https://github.com/chicio/chicio-blog/commit/b5c39ffd5f153f008d36617bac69283a72aa0d5c))
+* **content:** :sparkles: Minimum Spanning Tree ([#287](https://github.com/chicio/chicio-blog/issues/287)) ([b650c97](https://github.com/chicio/chicio-blog/commit/b650c97c602a80c36827a737c1dad90c50b1fd4f))
+* **content:** :sparkles: Shortest Path ([#288](https://github.com/chicio/chicio-blog/issues/288)) ([754cf78](https://github.com/chicio/chicio-blog/commit/754cf78a537e00b61d58283110e7b06492e31f81))
+* **content:** :sparkles: topological sort ([#285](https://github.com/chicio/chicio-blog/issues/285)) ([ac77e69](https://github.com/chicio/chicio-blog/commit/ac77e69b021b22e3dfaeaed4d81cecd5434bee85))
+* **content:** :sparkles: tree and graph content review ([ed02b71](https://github.com/chicio/chicio-blog/commit/ed02b713a362a294330c45378fcd9a067a613270))
+* **content:** :sparkles: Union find ([#286](https://github.com/chicio/chicio-blog/issues/286)) ([52a6658](https://github.com/chicio/chicio-blog/commit/52a66585e0b7c8b642cb1587a2b0f29f8aaf1ecc))
+* **ux:** :shield: add guardrails to chatbot API ([#283](https://github.com/chicio/chicio-blog/issues/283)) ([5a8fbed](https://github.com/chicio/chicio-blog/commit/5a8fbedcb5193bb68f57e4517c29d63f77c14b96))
+* **ux:** :sparkles: add copy-to-clipboard button to all code blocks ([#276](https://github.com/chicio/chicio-blog/issues/276)) ([642a7df](https://github.com/chicio/chicio-blog/commit/642a7df394f4286e0c706d2852cf328c3f9952f4))
+* **ux:** :sparkles: PWA capabilities — offline support, install prompt, background sync ([#289](https://github.com/chicio/chicio-blog/issues/289)) ([9874f7a](https://github.com/chicio/chicio-blog/commit/9874f7ae97baa4b0cfa3e301dd8f0e69e885cf6e))
+
+### Bug Fixes
+
+* **content:** :bug: restore gameboy console gallery images ([e92bc18](https://github.com/chicio/chicio-blog/commit/e92bc183117deea8fb473c0dcbed7a08572808b5))
+* **ux:** :wrench: rename serwist config to .mjs to silence ESM warning ([afd36d7](https://github.com/chicio/chicio-blog/commit/afd36d73aee98bbf67a18b6cf395b5d73ed5c758))
+
 ## [3.17.0](https://github.com/chicio/chicio-blog/compare/v3.16.0...v3.17.0) (2026-04-10)
 
 ### Features
