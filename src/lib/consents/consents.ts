@@ -8,9 +8,9 @@ export const hasConsented = () => {
   return readConsent() === "accepted";
 };
 
-export const CONSENT_CHANGED_EVENT = "cookieConsentChanged";
+export const consentChangeEvent = "cookieConsentChanged";
 
 export const writeConsent = (value: "accepted" | "rejected") => {
   writeLocalStorage(key, value);
-  window.dispatchEvent(new CustomEvent(CONSENT_CHANGED_EVENT, { detail: value }));
+  window.dispatchEvent(new CustomEvent(consentChangeEvent, { detail: value }));
 };

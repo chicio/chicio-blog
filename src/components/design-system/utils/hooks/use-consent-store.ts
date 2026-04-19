@@ -1,15 +1,15 @@
 import { useSyncExternalStore } from "react";
-import { hasConsented, CONSENT_CHANGED_EVENT } from "@/lib/consents/consents";
+import { hasConsented, consentChangeEvent } from "@/lib/consents/consents";
 
 const subscribe = (callback: () => void) => {
     if (typeof window === "undefined") {
         return () => {};
     }
 
-    window.addEventListener(CONSENT_CHANGED_EVENT, callback);
+    window.addEventListener(consentChangeEvent, callback);
 
     return () => {
-        window.removeEventListener(CONSENT_CHANGED_EVENT, callback);
+        window.removeEventListener(consentChangeEvent, callback);
     };
 };
 
@@ -22,7 +22,7 @@ const getServerSnapshot = () => false; // No consent on server
  * Returns true if the user has accepted cookies, false otherwise.
  *
  * Behavior:
- * - Current tab: Changes sync immediately via CONSENT_CHANGED_EVENT
+ * - Current tab: Changes sync immediately via consentChangeEvent
  * - New tabs: Automatically read from localStorage on mount
  * - SSR: Defaults to false to prevent hydration mismatches
  */
