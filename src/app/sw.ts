@@ -2,11 +2,10 @@
 /// <reference lib="esnext" />
 /// <reference lib="webworker" />
 
-import { defaultCache } from "@serwist/turbopack/worker";
+import { defaultCache } from "@serwist/next/worker";
 import type { PrecacheEntry, SerwistGlobalConfig } from "serwist";
 import { CacheFirst, NetworkFirst, NetworkOnly, StaleWhileRevalidate, Serwist, ExpirationPlugin } from "serwist";
 
-// Augment WorkerGlobalScope with Serwist's injected precache manifest
 declare global {
     interface WorkerGlobalScope extends SerwistGlobalConfig {
         __SW_MANIFEST: (PrecacheEntry | string)[] | undefined;
@@ -22,13 +21,13 @@ const serwist = new Serwist({
     navigationPreload: true,
 
     runtimeCaching: [
-        // ─── API routes: never cache, always network ───────────────────────
+        // ─── API routes: never cache (chat and contact must always hit the network)
         {
             matcher: ({ url }) => url.pathname.startsWith("/api/"),
             handler: new NetworkOnly(),
         },
 
-        // ─── Static images: cache-first with 30-day expiry ─────────────────
+        // ─── Static images: cache-first, 30-day expiry ─────────────────────
         {
             matcher: ({ request }) => request.destination === "image",
             handler: new CacheFirst({
@@ -36,14 +35,14 @@ const serwist = new Serwist({
                 plugins: [
                     new ExpirationPlugin({
                         maxEntries: 200,
-                        maxAgeSeconds: 30 * 24 * 60 * 60, // 30 days
+                        maxAgeSeconds: 30 * 24 * 60 * 60,
                         purgeOnQuotaError: true,
                     }),
                 ],
             }),
         },
 
-        // ─── Google Fonts: stale-while-revalidate with 1-year cache ────────
+        // ─── Google Fonts: stale-while-revalidate, 1-year cache ────────────
         {
             matcher: ({ url }) =>
                 url.origin === "https://fonts.googleapis.com" ||
@@ -53,13 +52,13 @@ const serwist = new Serwist({
                 plugins: [
                     new ExpirationPlugin({
                         maxEntries: 10,
-                        maxAgeSeconds: 365 * 24 * 60 * 60, // 1 year
+                        maxAgeSeconds: 365 * 24 * 60 * 60,
                     }),
                 ],
             }),
         },
 
-        // ─── Navigation / pages: network-first with 3-day fallback ─────────
+        // ─── Navigation: network-first, 3-day offline fallback ─────────────
         {
             matcher: ({ request }) => request.mode === "navigate",
             handler: new NetworkFirst({
@@ -67,7 +66,7 @@ const serwist = new Serwist({
                 plugins: [
                     new ExpirationPlugin({
                         maxEntries: 100,
-                        maxAgeSeconds: 3 * 24 * 60 * 60, // 3 days
+                        maxAgeSeconds: 3 * 24 * 60 * 60,
                         purgeOnQuotaError: true,
                     }),
                 ],
@@ -75,11 +74,10 @@ const serwist = new Serwist({
             }),
         },
 
-        // ─── Serwist's defaults cover remaining static assets ───────────────
+        // ─── Everything else: serwist's recommended defaults ────────────────
         ...defaultCache,
     ],
 
-    // Serve /offline when a navigation fails with no cached version
     fallbacks: {
         entries: [
             {

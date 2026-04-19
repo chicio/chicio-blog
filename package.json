@@ -5,10 +5,10 @@
   "scripts": {
     "search-index": "tsx src/lib/content/search.ts",
     "chat-knowledge-upload": "tsx --env-file=.env.production src/lib/chat/chat-knowledge-upload.ts",
-    "predev": "npm run search-index",
+    "predev": "npm run search-index && NODE_ENV=development serwist build",
     "dev": "next dev",
     "prebuild": "npm run search-index",
-    "build": "next build",
+    "build": "next build && serwist build",
     "start": "next start",
     "lint": "eslint .",
     "release": "release-it"
@@ -62,7 +62,8 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@release-it/conventional-changelog": "^10.0.6",
-    "@serwist/turbopack": "^9.5.7",
+    "@serwist/cli": "^9.5.7",
+    "@serwist/next": "^9.5.7",
     "@types/dom-chromium-ai": "^0.0.16",
     "@types/elasticlunr": "^0.9.9",
     "@types/node": "^25",

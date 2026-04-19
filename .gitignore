@@ -147,4 +147,6 @@ agent/
 .worktrees/
 .claude/worktrees
 
-# Serwist / PWA — SW is served via route handler, no public/ artifacts to ignore
+# Serwist / PWA generated files (built by serwist build, not committed)
+public/sw*
+public/swe-worker*

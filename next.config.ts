@@ -1,6 +1,5 @@
 import type { NextConfig } from "next";
 import createMDX from "@next/mdx";
-import { withSerwist } from "@serwist/turbopack";
 
 const withMDX = createMDX({
   options: {
@@ -48,4 +47,4 @@ const nextConfig: NextConfig = {
   reactCompiler: true,
 };
 
-export default withSerwist(withMDX(nextConfig));
+export default withMDX(nextConfig);
