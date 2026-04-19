@@ -60,9 +60,12 @@ const serwist = new Serwist({
             }),
         },
 
-        // ─── Navigation: network-first with timeout, 3-day offline fallback ─────
-        // networkTimeoutSeconds ensures the offline page is served promptly
-        // on a dead/slow network. defaultCache has no timeout on its HTML rule.
+        // ─── Navigation: network-first with timeout, explicit offline fallback ──
+        // networkTimeoutSeconds ensures cache is tried promptly on slow networks.
+        // handlerDidError is required here: Serwist's `fallbacks` config only
+        // attaches to the precache route, not to custom runtimeCaching rules.
+        // Without it, a navigation to an uncached page while offline throws and
+        // the browser spins forever instead of showing the offline page.
         {
             matcher: ({ request }) => request.mode === "navigate",
             handler: new NetworkFirst({
@@ -73,6 +76,10 @@ const serwist = new Serwist({
                         maxAgeSeconds: 3 * 24 * 60 * 60,
                         purgeOnQuotaError: true,
                     }),
+                    {
+                        handlerDidError: async () =>
+                            (await caches.match("/offline")) ?? Response.error(),
+                    },
                 ],
                 networkTimeoutSeconds: 10,
             }),
