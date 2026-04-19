@@ -34,8 +34,10 @@ The answer is accepted if it differs from the correct answer by at most **1e-5**
 ## Solution
 
 ```ts
-import { Edge, HeapNode } from "../dijkstra";
 import { Heap } from "../heap";
+
+type Edge = { node: number; cost: number };
+type HeapNode = { node: number; cost: number };
 
 /// this version of dijkstra's algorithm is for maximization problems, instead of minimization problems.
 /// it tries to find the path with the maximum product of edge weights, instead of the path with the minimum sum of edge weights.

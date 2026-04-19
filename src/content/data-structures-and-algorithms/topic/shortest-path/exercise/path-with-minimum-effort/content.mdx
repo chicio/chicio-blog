@@ -35,7 +35,49 @@ The grid can have up to **100** rows and **100** columns, and heights range from
 ## Solution
 
 ```ts
-import { dijkstraMatrix } from "../dijkstra";
+import { Heap } from "../heap";
+
+type MatrixElement = { row: number; column: number; cost: number };
+
+function dijkstraMatrix(
+    graph: number[][],
+    distanceInit: number,
+    newCostCondition: (currentCost: number, currentValue: number, nextValue: number) => number
+): number {
+    const directions = [[0, 1], [-1, 0], [0, -1], [1, 0]];
+    const rows = graph.length;
+    const columns = graph[0].length;
+    const dist: number[][] = Array.from({ length: rows }, () => Array(columns).fill(Infinity));
+    dist[0][0] = distanceInit;
+
+    const minCostHeap = new Heap<MatrixElement>((a, b) => a.cost - b.cost);
+    minCostHeap.insert({ row: 0, column: 0, cost: distanceInit });
+
+    while (minCostHeap.size() > 0) {
+        const current = minCostHeap.extract()!;
+        const { row, column, cost } = current;
+
+        if (cost > dist[row][column]) {
+            continue;
+        }
+
+        for (const [dr, dc] of directions) {
+            const nr = row + dr;
+            const nc = column + dc;
+
+            if (nr >= 0 && nr < rows && nc >= 0 && nc < columns) {
+                const newCost = newCostCondition(cost, graph[row][column], graph[nr][nc]);
+
+                if (newCost < dist[nr][nc]) {
+                    dist[nr][nc] = newCost;
+                    minCostHeap.insert({ row: nr, column: nc, cost: newCost });
+                }
+            }
+        }
+    }
+
+    return dist[rows - 1][columns - 1];
+}
 
 function minimumEffortPath(heights: number[][]): number {
     return dijkstraMatrix(heights, 0, (currentCost, currentValue, nextValue) => Math.max(currentCost, Math.abs(currentValue - nextValue)));

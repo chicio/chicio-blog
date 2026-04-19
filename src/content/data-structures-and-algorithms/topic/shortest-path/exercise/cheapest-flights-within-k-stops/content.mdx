@@ -34,7 +34,7 @@ There are no multiple flights between the same pair of cities.
 ## Solution
 
 ```ts
-import { Edge } from "../dijkstra";
+type Edge = { node: number; cost: number };
 
 type State = {
     node: number,
