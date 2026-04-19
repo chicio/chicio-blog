@@ -77,8 +77,13 @@ const serwist = new Serwist({
                         purgeOnQuotaError: true,
                     }),
                     {
+                        // caches.match without ignoreSearch would miss the entry:
+                        // Serwist stores non-versioned URLs with the revision as a
+                        // query param (e.g. /offline?__WB_REVISION__=abc123), so
+                        // an exact-URL lookup always returns undefined.
                         handlerDidError: async () =>
-                            (await caches.match("/offline")) ?? Response.error(),
+                            (await caches.match("/offline", { ignoreSearch: true })) ??
+                            Response.error(),
                     },
                 ],
                 networkTimeoutSeconds: 10,
