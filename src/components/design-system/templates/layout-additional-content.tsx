@@ -25,10 +25,7 @@ const MotionButton = dynamic(
 );
 
 const InstallPromptBanner = dynamic(
-  () =>
-    import("@/components/sections/pwa/components/install-prompt-banner").then(
-      (m) => m.InstallPromptBanner,
-    ),
+  () => import("@/components/sections/pwa/components/install-prompt-banner"),
   { ssr: false },
 );
 

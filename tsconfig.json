@@ -37,7 +37,6 @@
   ],
   "exclude": [
     "node_modules",
-    "agent",
-    "public/sw.js"
+    "agent"
   ]
 }
