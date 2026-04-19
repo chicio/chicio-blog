@@ -34,53 +34,25 @@ All source-target pairs are unique.
 ## Solution
 
 ```ts
-type Edge = { node: number; cost: number };
+import { dijkstra, Edge } from "../dijkstra";
 
-function createGraph(times: number[][], n: number) {
-    const graph: Edge[][] = Array.from({ length: n }, () => []);
+function createGraph(times: number[][], n: number) { 
+    const graph: Edge[][] =  Array.from({ length: n }, () => []);
 
     for (const [u, v, w] of times) {
-        graph[u - 1].push({ node: v - 1, cost: w });
+        graph[u - 1].push({ node: v - 1, cost: w }); // -1, nodes are labelled from 1 to n
     }
 
     return graph;
 }
 
-function dijkstra(n: number, graph: Edge[][], start: number): number[] {
-    const dist: number[] = Array(n).fill(Infinity);
-    dist[start] = 0;
-
-    const minCostHeap: { node: number; cost: number }[] = [{ node: start, cost: 0 }];
-
-    while (minCostHeap.length > 0) {
-        minCostHeap.sort((a, b) => a.cost - b.cost);
-        const current = minCostHeap.shift()!;
-        const { node, cost } = current;
-
-        if (cost > dist[node]) {
-            continue;
-        }
-
-        for (const { node: next, cost: weight } of graph[node]) {
-            const newCost = cost + weight;
-
-            if (newCost < dist[next]) {
-                dist[next] = newCost;
-                minCostHeap.push({ node: next, cost: newCost });
-            }
-        }
-    }
-
-    return dist;
-}
-
 function networkDelayTime(times: number[][], n: number, k: number): number {
     const graph: Edge[][] = createGraph(times, n);
-    const distances = dijkstra(n, graph, k - 1);
+    const distances = dijkstra(n, graph, k - 1); // -1, nodes are labelled from 1 to n
     const maxDist = Math.max(...distances);
 
     return maxDist === Infinity ? -1 : maxDist;
-}
+};
 
 console.log(networkDelayTime([[2,1,1],[2,3,1],[3,4,1]], 4, 2)); // 2
 console.log(networkDelayTime([[1,2,1]], 2, 1));

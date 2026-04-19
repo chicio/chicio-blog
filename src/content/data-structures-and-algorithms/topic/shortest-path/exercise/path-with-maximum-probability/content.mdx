@@ -34,27 +34,11 @@ The answer is accepted if it differs from the correct answer by at most **1e-5**
 ## Solution
 
 ```ts
-type Edge = { node: number; cost: number };
-type HeapNode = { node: number; cost: number };
+import { Edge, HeapNode } from "../dijkstra";
+import { Heap } from "../heap";
 
-class Heap<T> {
-    private data: T[] = [];
-    constructor(private compare: (a: T, b: T) => number) {}
-
-    insert(val: T) {
-        this.data.push(val);
-        this.data.sort(this.compare);
-    }
-
-    extract(): T | undefined {
-        return this.data.shift();
-    }
-
-    size(): number {
-        return this.data.length;
-    }
-}
-
+/// this version of dijkstra's algorithm is for maximization problems, instead of minimization problems.
+/// it tries to find the path with the maximum product of edge weights, instead of the path with the minimum sum of edge weights.
 function dijkstraMaximixation(
     n: number,
     graph: Edge[][],
@@ -70,7 +54,7 @@ function dijkstraMaximixation(
         const current = maxCostHeap.extract()!;
         const { node, cost } = current;
 
-        if (cost < dist[node]) {
+        if (cost < dist[node]) { 
             continue;
         }
 
@@ -87,13 +71,13 @@ function dijkstraMaximixation(
     return dist;
 }
 
-function createUndirectedGraph(edges: number[][], succProb: number[], n: number) {
-    const graph: Edge[][] = Array.from({ length: n }, () => []);
+function createUndirectedGraph(edges: number[][], succProb: number[], n: number) { 
+    const graph: Edge[][] =  Array.from({ length: n }, () => []);
 
     for (let i = 0; i < edges.length; i++) {
-        const [u, v] = edges[i];
-        const cost = succProb[i];
-        graph[u].push({ node: v, cost });
+        const [u, v] = edges[i]
+        const cost = succProb[i]
+        graph[u].push({ node: v, cost }); 
         graph[v].push({ node: u, cost });
     }
 
@@ -101,10 +85,10 @@ function createUndirectedGraph(edges: number[][], succProb: number[], n: number)
 }
 
 function maxProbability(n: number, edges: number[][], succProb: number[], start_node: number, end_node: number): number {
-    const graph = createUndirectedGraph(edges, succProb, n);
-    const distances = dijkstraMaximixation(n, graph, start_node);
-    return distances[end_node];
-}
+    const graph = createUndirectedGraph(edges, succProb, n)
+    const distances = dijkstraMaximixation(n, graph, start_node)
+    return distances[end_node]
+};
 
 console.log(maxProbability(3, [[0,1],[1,2],[0,2]], [0.5,0.5,0.2], 0, 2)); // 0.25
 console.log(maxProbability(3, [[0,1],[1,2],[0,2]], [0.5,0.5,0.3], 0, 2)); // 0.3
