@@ -7,7 +7,7 @@ import { trackWith } from "@/lib/tracking/tracking";
 import { tracking } from "@/types/configuration/tracking";
 import { useGlassmorphism } from "@/components/design-system/utils/hooks/use-glassmorphism";
 import { BluePillButton, RedPillButton } from "@/components/design-system/molecules/buttons/pills-buttons";
-import { hasConsented } from "@/lib/consents/consents";
+import { hasConsented, CONSENT_CHANGED_EVENT } from "@/lib/consents/consents";
 
 export const InstallPromptBanner: FC = () => {
     const { glassmorphismClass } = useGlassmorphism();
@@ -16,6 +16,10 @@ export const InstallPromptBanner: FC = () => {
 
     useEffect(() => {
         setCookieAccepted(hasConsented());
+
+        const handleConsentChange = () => setCookieAccepted(hasConsented());
+        window.addEventListener(CONSENT_CHANGED_EVENT, handleConsentChange);
+        return () => window.removeEventListener(CONSENT_CHANGED_EVENT, handleConsentChange);
     }, []);
 
     const visible = isInstallable && cookieAccepted;
@@ -58,7 +62,7 @@ export const InstallPromptBanner: FC = () => {
                     aria-label="Install app banner"
                 >
                     <p className="text-shadow-md">
-                        <span className="text-confirm">&gt; PORTABLE_VERSION_AVAILABLE</span>
+                        <span className="text-primary">&gt; PORTABLE_VERSION_AVAILABLE</span>
                         {" — "}
                         Install this site as an app for offline access and a faster experience.
                     </p>
