@@ -1,0 +1,460 @@
+---
+title: "Shortest Path"
+description: "A comprehensive guide to shortest path algorithms, covering Dijkstra's algorithm with a min-heap, the Bellman-Ford algorithm for graphs with negative weights, and their variations on grids and constrained problems."
+date: 2026-04-19
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [shortest path, graph, dijkstra, bellman-ford, data structures, algorithms]
+authors: [fabrizio_duroni]
+---
+
+import { TopicExercises } from "@/components/sections/data-structures-and-algorithms/components/topic-exercises";
+
+# Shortest Path
+
+In the [graph traversal](/data-structures-and-algorithms/topic/graph) article, we explored how BFS and DFS visit every reachable vertex in a graph.
+A key result from that discussion was that BFS on an **unweighted** graph naturally computes shortest paths:
+because BFS explores vertices level by level, the first time it reaches a vertex is guaranteed to be along a path with the fewest edges.
+In the [minimum spanning tree](/data-structures-and-algorithms/topic/minimum-spanning-tree) article,
+we shifted from reachability to optimization on weighted graphs, asking how to connect all vertices at minimum total cost.
+
+This article addresses a different optimization question on weighted graphs:
+given a source vertex, what is the **cheapest way to reach every other vertex**?
+The distinction from MST is important.
+An MST minimizes the total weight of all selected edges, producing a tree that connects every vertex.
+A shortest-path tree minimizes the individual distance from the source to each vertex,
+and the resulting tree is generally different from the MST.
+
+The problem arises everywhere: routing packets in a network, GPS navigation, scheduling with costs, and game AI pathfinding.
+Two classical algorithms solve it under different constraints.
+[Dijkstra's algorithm](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm) handles graphs with **non-negative** edge weights
+and achieves excellent performance through a greedy strategy backed by a priority queue.
+The [Bellman-Ford algorithm](https://en.wikipedia.org/wiki/Bellman%E2%80%93Ford_algorithm) handles graphs
+with **negative** edge weights (and detects negative cycles) at the cost of higher running time.
+This article develops both algorithms from first principles, proves their correctness,
+and presents their implementations along with variations that appear in practice.
+
+## The Single-Source Shortest Path Problem
+
+The [**single-source shortest path**](https://en.wikipedia.org/wiki/Shortest_path_problem) (SSSP) problem is defined as follows.
+Given a weighted directed graph $G = (V, E)$ with a weight function $w: E \to \mathbb{R}$
+and a distinguished **source** vertex $s \in V$, find, for every vertex $v \in V$,
+the minimum total weight of any path from $s$ to $v$.
+If no path exists, the distance is $\infty$.
+
+The **weight of a path** $p = (v_0, v_1, \ldots, v_k)$ is the sum of its edge weights:
+$w(p) = \sum_{i=0}^{k-1} w(v_i, v_{i+1})$.
+The **shortest-path distance** from $s$ to $v$, denoted $\delta(s, v)$, is the minimum weight over all paths from $s$ to $v$,
+or $\infty$ if $v$ is unreachable.
+
+A central property of shortest paths is [**optimal substructure**](https://en.wikipedia.org/wiki/Optimal_substructure):
+every subpath of a shortest path is itself a shortest path.
+If $p = (s, \ldots, u, \ldots, v)$ is a shortest path from $s$ to $v$,
+then the subpath from $s$ to $u$ must be a shortest path from $s$ to $u$.
+If it were not, we could replace it with a shorter one and get a shorter overall path to $v$, contradicting our assumption.
+This property is the foundation for both Dijkstra's and Bellman-Ford's correctness.
+
+### Relaxation
+
+Both algorithms work through a common operation called [**relaxation**](https://en.wikipedia.org/wiki/Shortest_path_problem#Relaxation).
+Each vertex $v$ maintains a tentative distance $d[v]$, initialized to $\infty$ for all vertices except the source ($d[s] = 0$).
+When we examine an edge $(u, v)$ with weight $w(u, v)$, we check whether the current path through $u$ offers a shorter route to $v$:
+
+$$
+\text{if } d[u] + w(u, v) < d[v], \text{ then } d[v] \leftarrow d[u] + w(u, v)
+$$
+
+This operation is called **relaxing** the edge $(u, v)$.
+It can only **decrease** the tentative distance, never increase it, and it preserves the invariant that $d[v] \geq \delta(s, v)$ at all times.
+The two algorithms differ in the **order** in which they relax edges and the **number of times** each edge is relaxed.
+
+### Negative Weights and Negative Cycles
+
+Edge weights can be negative in many real-world models (e.g., currency exchange where some trades are profitable).
+Negative weights complicate shortest paths because a longer path (in terms of edges) might have a smaller total weight.
+BFS, which works by counting edges, is not applicable.
+
+The real danger is a [**negative-weight cycle**](https://en.wikipedia.org/wiki/Shortest_path_problem#Negative_edge_weights):
+a cycle whose total weight is negative.
+If such a cycle is reachable from the source and leads to the destination,
+then the shortest-path distance is $-\infty$, because we can loop around the cycle arbitrarily many times to reduce the total cost.
+Dijkstra's algorithm **cannot handle negative weights** at all (it may produce incorrect results even without negative cycles).
+Bellman-Ford handles negative weights correctly and can **detect** negative cycles.
+
+## Dijkstra's Algorithm
+
+[Dijkstra's algorithm](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm), published by Edsger Dijkstra in 1959,
+solves the SSSP problem for graphs where all edge weights are **non-negative**.
+It is a [greedy algorithm](https://en.wikipedia.org/wiki/Greedy_algorithm)
+that processes vertices in order of their distance from the source,
+extracting the closest unvisited vertex at each step and relaxing all its outgoing edges.
+
+The algorithm maintains two sets conceptually: **settled** vertices (whose shortest distance has been finalized)
+and **unsettled** vertices (still in the priority queue).
+At each step, the vertex with the smallest tentative distance is extracted from the priority queue and moved to the settled set.
+All its outgoing edges are then relaxed, potentially updating the distances of neighboring vertices.
+
+The algorithm can be summarized as follows:
+
+- Initialize $d[s] = 0$ and $d[v] = \infty$ for all $v \neq s$. Insert all vertices (or just the source) into a [min-heap](/data-structures-and-algorithms/topic/heap) keyed by their tentative distance.
+- Extract the vertex $u$ with the minimum $d[u]$ from the heap. For each outgoing edge $(u, v, w)$, relax the edge: if $d[u] + w < d[v]$, update $d[v]$ and insert (or decrease the key of) $v$ in the heap.
+- Repeat until the heap is empty.
+
+When a vertex is extracted from the heap, its distance is **final**.
+This is the key invariant that distinguishes Dijkstra from Bellman-Ford.
+
+### Why it works
+
+The correctness of Dijkstra's algorithm rests on a single claim: **when a vertex $u$ is extracted from the min-heap,
+$d[u] = \delta(s, u)$** (the tentative distance equals the true shortest-path distance).
+
+The proof is by contradiction.
+Suppose $u$ is the first vertex extracted with $d[u] > \delta(s, u)$.
+Consider the true shortest path $p$ from $s$ to $u$.
+Since $s$ is settled with $d[s] = 0 = \delta(s, s)$, and $u$ is the first vertex extracted with an incorrect distance,
+there must be some edge $(x, y)$ on $p$ where $x$ is settled (with correct distance) and $y$ is unsettled.
+At the time $x$ was settled, the edge $(x, y)$ was relaxed, so $d[y] \leq d[x] + w(x, y) = \delta(s, x) + w(x, y) = \delta(s, y)$.
+Since $y$ appears before $u$ on the shortest path to $u$, and all edge weights are non-negative,
+$\delta(s, y) \leq \delta(s, u) < d[u]$.
+Therefore $d[y] \leq \delta(s, y) \leq \delta(s, u) < d[u]$, which means $y$ would have been extracted before $u$,
+contradicting the assumption that $u$ was extracted first.
+
+This argument breaks down when negative edge weights exist.
+With negative weights, a vertex $y$ beyond the frontier could have $\delta(s, y) < \delta(s, u)$ through a path
+that goes through an unsettled vertex with a negative edge, and Dijkstra would not discover this before settling $u$.
+
+### Implementation
+
+The implementation uses an adjacency list representation and a [min-heap](/data-structures-and-algorithms/topic/heap)
+for efficient extraction of the vertex with the smallest tentative distance.
+Rather than implementing a decrease-key operation, we use the common "lazy deletion" approach:
+when a vertex's distance is updated, we insert a new entry into the heap with the updated cost.
+When an entry is extracted whose cost exceeds the currently known distance, we skip it as outdated.
+
+```ts
+type Comparator<T> = (a: T, b: T) => number;
+
+class Heap<T> {
+    private readonly heap: T[] = [];
+    private readonly compare: Comparator<T>;
+
+    constructor(compare: Comparator<T>) {
+        this.compare = compare;
+    }
+
+    size(): number {
+        return this.heap.length;
+    }
+
+    insert(value: T): void {
+        this.heap.push(value);
+        this.bubbleUp();
+    }
+
+    extract(): T | null {
+        if (this.heap.length === 0) { return null; }
+        if (this.heap.length === 1) { return this.heap.pop()!; }
+
+        const top = this.heap[0];
+        this.heap[0] = this.heap.pop()!;
+        this.bubbleDown();
+
+        return top;
+    }
+
+    private bubbleUp(): void {
+        let index = this.heap.length - 1;
+
+        while (index > 0) {
+            const parentIndex = Math.floor((index - 1) / 2);
+            if (this.compare(this.heap[index], this.heap[parentIndex]) >= 0) { break; }
+
+            [this.heap[index], this.heap[parentIndex]] = [this.heap[parentIndex], this.heap[index]];
+            index = parentIndex;
+        }
+    }
+
+    private bubbleDown(): void {
+        let index = 0;
+
+        while (true) {
+            const left = 2 * index + 1;
+            const right = 2 * index + 2;
+            let smallest = index;
+
+            if (left < this.heap.length && this.compare(this.heap[left], this.heap[smallest]) < 0) {
+                smallest = left;
+            }
+
+            if (right < this.heap.length && this.compare(this.heap[right], this.heap[smallest]) < 0) {
+                smallest = right;
+            }
+
+            if (smallest === index) { break; }
+
+            [this.heap[index], this.heap[smallest]] = [this.heap[smallest], this.heap[index]];
+            index = smallest;
+        }
+    }
+}
+
+type Edge = { node: number; cost: number };
+type HeapNode = { node: number; cost: number };
+
+function dijkstra(n: number, graph: Edge[][], start: number): number[] {
+    const dist: number[] = Array(n).fill(Infinity);
+    dist[start] = 0;
+
+    const minHeap = new Heap<HeapNode>((a, b) => a.cost - b.cost);
+    minHeap.insert({ node: start, cost: 0 });
+
+    while (minHeap.size() > 0) {
+        const { node, cost } = minHeap.extract()!;
+
+        // Skip outdated entries (lazy deletion)
+        if (cost > dist[node]) {
+            continue;
+        }
+
+        for (const { node: next, cost: weight } of graph[node]) {
+            const newCost = cost + weight;
+
+            if (newCost < dist[next]) {
+                dist[next] = newCost;
+                minHeap.insert({ node: next, cost: newCost });
+            }
+        }
+    }
+
+    return dist;
+}
+```
+
+The `dist` array serves a dual purpose: it stores the current tentative distance for each vertex
+and acts as the mechanism for lazy deletion (an extracted entry is stale if its cost exceeds `dist[node]`).
+The lazy approach inserts at most $|E|$ entries into the heap (one per relaxation),
+so the heap size is bounded by $O(|E|)$ and each operation takes $O(\log |E|)$,
+giving a total time of $O(|E| \log |E|)$, which is equivalent to $O(|E| \log |V|)$
+since $\log |E| \leq 2 \log |V|$ for simple graphs.
+
+### Dijkstra on grids
+
+Many problems present the graph **implicitly** as a 2D grid, where each cell is a vertex
+and edges connect adjacent cells (up, down, left, right).
+The weight of an edge is derived from the cell values rather than being given explicitly.
+This is still Dijkstra's algorithm, but the graph representation and cost function change.
+
+A common variant replaces the standard additive cost with a **bottleneck cost**: instead of summing edge weights along the path,
+the cost of a path is the **maximum** of some quantity along its edges.
+For example, "Path with Minimum Effort" defines effort as the maximum absolute height difference between consecutive cells,
+and the goal is to minimize this maximum.
+"Swim in Rising Water" asks for the minimum time (maximum elevation) needed along a path.
+
+The key insight is that Dijkstra's greedy property still holds for bottleneck-style costs.
+If we define the "distance" to a cell as the minimum possible bottleneck cost to reach it,
+extracting the cell with the smallest bottleneck guarantees its distance is final, for the same reason as standard Dijkstra:
+any alternative path through unsettled cells can only have equal or greater bottleneck cost (because all cell values are non-negative).
+
+The implementation replaces the adjacency list with directional neighbors on the grid,
+and the cost aggregation function becomes a parameter:
+
+```ts
+type MatrixElement = { row: number; column: number; cost: number };
+
+function dijkstraMatrix(
+    grid: number[][],
+    initialCost: number,
+    aggregateCost: (currentCost: number, currentValue: number, nextValue: number) => number
+): number {
+    const directions = [[0, 1], [-1, 0], [0, -1], [1, 0]];
+    const rows = grid.length;
+    const columns = grid[0].length;
+    const dist: number[][] = Array.from({ length: rows }, () => Array(columns).fill(Infinity));
+    dist[0][0] = initialCost;
+
+    const minHeap = new Heap<MatrixElement>((a, b) => a.cost - b.cost);
+    minHeap.insert({ row: 0, column: 0, cost: initialCost });
+
+    while (minHeap.size() > 0) {
+        const { row, column, cost } = minHeap.extract()!;
+
+        if (cost > dist[row][column]) {
+            continue;
+        }
+
+        for (const [dr, dc] of directions) {
+            const nr = row + dr;
+            const nc = column + dc;
+
+            if (nr >= 0 && nr < rows && nc >= 0 && nc < columns) {
+                const newCost = aggregateCost(cost, grid[row][column], grid[nr][nc]);
+
+                if (newCost < dist[nr][nc]) {
+                    dist[nr][nc] = newCost;
+                    minHeap.insert({ row: nr, column: nc, cost: newCost });
+                }
+            }
+        }
+    }
+
+    return dist[rows - 1][columns - 1];
+}
+```
+
+The `aggregateCost` parameter controls how edge costs are combined.
+For standard shortest paths on a weighted grid, it would be `(currentCost, _, nextValue) => currentCost + nextValue`.
+For bottleneck problems, it becomes `(currentCost, currentValue, nextValue) => Math.max(currentCost, Math.abs(currentValue - nextValue))`
+or similar variations depending on the problem definition.
+This pattern separates the Dijkstra machinery from the problem-specific cost semantics,
+making the same implementation reusable across different grid-based shortest-path problems.
+
+## Bellman-Ford Algorithm
+
+The [Bellman-Ford algorithm](https://en.wikipedia.org/wiki/Bellman%E2%80%93Ford_algorithm) solves the SSSP problem
+for graphs that may contain **negative edge weights**.
+Unlike Dijkstra, which greedily finalizes vertices one at a time,
+Bellman-Ford takes a more cautious approach: it relaxes **every edge** in the graph, and repeats this process $|V| - 1$ times.
+
+The algorithm is:
+
+- Initialize $d[s] = 0$ and $d[v] = \infty$ for all $v \neq s$.
+- Repeat $|V| - 1$ times: for every edge $(u, v, w)$ in the graph, relax the edge (if $d[u] + w < d[v]$, update $d[v]$).
+- (Optional) Perform one more pass over all edges. If any edge can still be relaxed, a **negative-weight cycle** exists reachable from the source.
+
+### Why it works
+
+The correctness argument is by [induction](https://en.wikipedia.org/wiki/Mathematical_induction) on the number of edges in the shortest path.
+
+After $i$ iterations of the main loop, $d[v]$ is at most the weight of the shortest path from $s$ to $v$ using at most $i$ edges.
+The base case ($i = 0$) is trivial: only $s$ is reachable with zero edges, and $d[s] = 0$.
+For the inductive step, assume after $i$ iterations that $d[u]$ is correct for any vertex $u$ reachable via at most $i$ edges.
+Consider a vertex $v$ whose shortest path uses $i + 1$ edges, with the last edge being $(u, v)$.
+By the inductive hypothesis, $d[u] = \delta(s, u)$ after $i$ iterations.
+In iteration $i + 1$, when edge $(u, v)$ is relaxed, $d[v]$ is updated to $d[u] + w(u, v) = \delta(s, v)$.
+
+Since any shortest path in a graph without negative cycles uses at most $|V| - 1$ edges
+(a path visiting all $|V|$ vertices uses $|V| - 1$ edges, and any longer path would contain a cycle),
+$|V| - 1$ iterations suffice to compute all shortest-path distances.
+
+The negative-cycle detection in the final pass follows from the same reasoning.
+If after $|V| - 1$ iterations some edge $(u, v)$ can still be relaxed,
+then the shortest path to $v$ uses more than $|V| - 1$ edges,
+which is only possible if the path contains a cycle, and that cycle must have negative total weight
+(otherwise the cycle would not decrease the path length).
+
+### Implementation
+
+The implementation iterates over all edges in each pass, using a temporary copy of the distance array
+to ensure that updates within a single pass do not cascade (this is important when the number of passes is constrained,
+as in the "Cheapest Flights Within K Stops" problem).
+
+```ts
+type Edge = { node: number; cost: number };
+
+function bellmanFord(
+    n: number,
+    graph: Edge[][],
+    src: number,
+    maxIterations: number
+): number[] {
+    const dist: number[] = Array(n).fill(Infinity);
+    dist[src] = 0;
+
+    for (let i = 0; i < maxIterations; i++) {
+        const temp = dist.slice();
+
+        for (let u = 0; u < n; u++) {
+            if (dist[u] === Infinity) {
+                continue;
+            }
+
+            for (const { node: v, cost: w } of graph[u]) {
+                if (dist[u] + w < temp[v]) {
+                    temp[v] = dist[u] + w;
+                }
+            }
+        }
+
+        dist.splice(0, n, ...temp);
+    }
+
+    return dist;
+}
+```
+
+The `maxIterations` parameter controls how many relaxation passes to perform.
+For the standard Bellman-Ford algorithm, this is $|V| - 1$.
+For constrained variants (e.g., finding the cheapest path with at most $k$ intermediate stops), it is $k + 1$.
+Using a temporary array `temp` for each pass ensures that iteration $i$ only builds on distances from iteration $i - 1$,
+not on distances updated earlier in the same pass.
+This "level-by-level" propagation is essential for the constrained variant, where each pass corresponds to one additional edge in the path.
+
+To detect negative cycles, add a final pass after the main loop:
+
+```ts
+function hasNegativeCycle(n: number, graph: Edge[][], dist: number[]): boolean {
+    for (let u = 0; u < n; u++) {
+        if (dist[u] === Infinity) {
+            continue;
+        }
+
+        for (const { node: v, cost: w } of graph[u]) {
+            if (dist[u] + w < dist[v]) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+```
+
+If any edge can still be relaxed after $|V| - 1$ passes, a negative-weight cycle is reachable from the source.
+
+## Choosing Between Dijkstra and Bellman-Ford
+
+The two algorithms solve the same problem but under different constraints and with different trade-offs.
+
+Dijkstra's algorithm requires all edge weights to be **non-negative**.
+In return, it is significantly faster: $O(|E| \log |V|)$ with a binary heap,
+or $O(|E| + |V| \log |V|)$ with a [Fibonacci heap](https://en.wikipedia.org/wiki/Fibonacci_heap).
+It processes each vertex at most once (each extraction from the heap is final),
+making it the algorithm of choice for the vast majority of shortest-path problems.
+
+Bellman-Ford handles **negative edge weights** and can detect **negative-weight cycles**.
+Its time complexity is $O(|V| \cdot |E|)$, which is substantially worse than Dijkstra for large graphs.
+It is the necessary choice when negative weights are present,
+and it also serves as the basis for constrained shortest-path variants
+where the number of edges in the path is limited (as in the "at most $k$ stops" problem).
+
+In practice, Dijkstra is the default choice.
+Reach for Bellman-Ford only when the problem involves negative weights,
+negative-cycle detection, or an explicit constraint on the number of edges in the path.
+
+## Time and Space Complexity
+
+| Algorithm | Time Complexity | Space Complexity | Handles negative weights |
+|---|---|---|---|
+| Dijkstra (binary heap, lazy deletion) | $O(\|E\| \log \|V\|)$ | $O(\|V\| + \|E\|)$ | No |
+| Dijkstra (Fibonacci heap) | $O(\|E\| + \|V\| \log \|V\|)$ | $O(\|V\| + \|E\|)$ | No |
+| Dijkstra on grid ($R \times C$) | $O(RC \log(RC))$ | $O(RC)$ | No |
+| Bellman-Ford | $O(\|V\| \cdot \|E\|)$ | $O(\|V\|)$ | Yes |
+| Bellman-Ford (constrained, $k$ stops) | $O(k \cdot \|E\|)$ | $O(\|V\|)$ | Yes |
+
+For Dijkstra with a binary heap and lazy deletion, the $O(|E| \log |V|)$ time comes from inserting at most $|E|$ entries into the heap
+(one per relaxation) and extracting each one.
+Each heap operation costs $O(\log |E|)$, which is $O(\log |V|)$ since $|E| \leq |V|^2$.
+The space is $O(|V|)$ for the distance array plus $O(|E|)$ for the adjacency list and heap entries.
+
+For Dijkstra on a grid with $R$ rows and $C$ columns, the graph has $RC$ vertices and at most $4 \cdot RC$ edges
+(each cell has up to four neighbors), so the complexity is $O(RC \log(RC))$ time and $O(RC)$ space.
+
+For Bellman-Ford, each of the $|V| - 1$ iterations relaxes all $|E|$ edges, giving $O(|V| \cdot |E|)$ total time.
+The space is $O(|V|)$ for the distance array (plus $O(|V|)$ for the temporary copy in each iteration).
+The graph itself requires $O(|V| + |E|)$ space, but this is input storage, not additional space used by the algorithm.
+
+For the constrained variant (at most $k$ stops, i.e., $k + 1$ edges), the number of iterations is $k + 1$ instead of $|V| - 1$,
+giving $O(k \cdot |E|)$ time.
+
+## Exercises
+
+<TopicExercises topic="shortest-path" />
