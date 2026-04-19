@@ -1,26 +1,18 @@
 "use client";
 
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
 import { useInstallPrompt } from "../hooks/use-install-prompt";
 import { trackWith } from "@/lib/tracking/tracking";
 import { tracking } from "@/types/configuration/tracking";
 import { useGlassmorphism } from "@/components/design-system/utils/hooks/use-glassmorphism";
+import { useConsentStore } from "@/components/design-system/utils/hooks/use-consent-store";
 import { BluePillButton, RedPillButton } from "@/components/design-system/molecules/buttons/pills-buttons";
-import { hasConsented, CONSENT_CHANGED_EVENT } from "@/lib/consents/consents";
 
 export const InstallPromptBanner: FC = () => {
     const { glassmorphismClass } = useGlassmorphism();
     const { isInstallable, promptInstall, dismiss } = useInstallPrompt();
-    const [cookieAccepted, setCookieAccepted] = useState(false);
-
-    useEffect(() => {
-        setCookieAccepted(hasConsented());
-
-        const handleConsentChange = () => setCookieAccepted(hasConsented());
-        window.addEventListener(CONSENT_CHANGED_EVENT, handleConsentChange);
-        return () => window.removeEventListener(CONSENT_CHANGED_EVENT, handleConsentChange);
-    }, []);
+    const cookieAccepted = useConsentStore();
 
     const visible = isInstallable && cookieAccepted;
 
