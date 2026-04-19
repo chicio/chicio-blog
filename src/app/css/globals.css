@@ -498,8 +498,16 @@
         @apply border border-solid border-accent-alpha-40 rounded-xl hover:border-accent active:border-accent focus:border-accent shadow-lg transition-transform duration-300 hover:scale-102 bg-general-background;
     }
 
+    .glassmorphism-lite-no-scale {
+        @apply border border-solid border-accent-alpha-40 rounded-xl hover:border-accent active:border-accent focus:border-accent shadow-lg transition-colors duration-300 bg-general-background;
+    }
+
     .glassmorphism {
         @apply border border-solid border-accent-alpha-40 rounded-xl hover:border-accent active:border-accent focus:border-accent shadow-lg transition-transform duration-300 hover:scale-102 backdrop-blur-sm bg-general-background-alpha-60;
+    }
+
+    .glassmorphism-no-scale {
+        @apply border border-solid border-accent-alpha-40 rounded-xl hover:border-accent active:border-accent focus:border-accent shadow-lg transition-colors duration-300 backdrop-blur-sm bg-general-background-alpha-60;
     }
 }
 
