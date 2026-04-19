@@ -4,6 +4,7 @@
 - **Line length**: 120 characters max
 - **Braces**: Always use curly braces on `if` statements, never one-liners (e.g., `if (cond) { doSomething(); }`, not `if (cond) doSomething();`)
 - **Import alias**: Use `@/` for imports (maps to `src/` via `tsconfig.json`)
+- **Export style**: Use named exports for all modules, avoid default exports if possible/not strictly needed
 - **Prettier**: Configured in `.prettierrc` with Tailwind plugin
 - **ESLint**: Extends Next.js core-web-vitals and TypeScript configs
 - **TypeScript**: Strict mode enabled. All shared types in `src/types/`
