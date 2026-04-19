@@ -1,47 +1,43 @@
 "use client";
 
+import { MatrixRain } from "@/components/design-system/atoms/effects/matrix-rain";
+import { MatrixTerminal } from "@/components/design-system/molecules/effects/matrix-terminal";
+import { BluePillLink } from "@/components/design-system/molecules/links/pills-links";
 import { RedPillButton } from "@/components/design-system/molecules/buttons/pills-buttons";
-import { MatrixBackground } from "@/components/design-system/molecules/effects/matrix-background";
-import { TerminalLine, SuccessText, Cursor } from "@/components/design-system/atoms/typography/terminal-blocks";
+import { tracking } from "@/types/configuration/tracking";
 
-const lines = [
-    { text: "INITIALIZING CONNECTION..." },
-    { text: "PING 8.8.8.8 ... REQUEST TIMEOUT" },
-    { text: "PING fabrizioduroni.it ... UNREACHABLE" },
-    { text: "STATUS: CONNECTION_LOST" },
+const terminalLines = [
+    { text: "Connecting to Matrix...", delay: 600 },
+    { text: "PING 8.8.8.8 ... Request timeout", type: "error" as const, delay: 700 },
+    { text: "PING fabrizioduroni.it ... Unreachable", type: "error" as const, delay: 900 },
+    { text: "You are disconnected from the Matrix.", type: "quote" as const, delay: 1200 },
 ];
 
 export default function OfflinePage() {
     return (
-        <MatrixBackground fontSize={14} density={0.97}>
-            <div className="flex flex-col items-center justify-center gap-8 px-6 text-center">
-                <div className="flex flex-col gap-1 rounded-md border border-matrix-primary/30 bg-black/60 p-8 backdrop-blur-sm">
-                    {lines.map(({ text }) => (
-                        <TerminalLine key={text}>
-                            <SuccessText>{`> ${text}`}</SuccessText>
-                        </TerminalLine>
-                    ))}
-                    <TerminalLine>
-                        <SuccessText>{`> `}</SuccessText>
-                        <Cursor />
-                    </TerminalLine>
-                    <div className="mt-4 border-t border-matrix-primary/20 pt-4">
-                        <TerminalLine>
-                            <span className="text-matrix-green/70">
-                                You are disconnected from the Matrix.
-                            </span>
-                        </TerminalLine>
-                        <TerminalLine>
-                            <span className="text-matrix-green/50">
-                                Check your connection and try again.
-                            </span>
-                        </TerminalLine>
-                    </div>
+        <div className="container-fullscreen text-accent-color relative min-h-screen overflow-hidden bg-black">
+            <MatrixRain fontSize={14} density={0.975} />
+            <div className="relative z-10 flex flex-col items-center justify-center gap-2 p-2">
+                <h1 className="heading animate-glitch text-accent text-[72px] font-bold sm:text-[100px]">
+                    OFFLINE
+                </h1>
+                <MatrixTerminal lines={terminalLines} />
+                <div className="flex flex-row gap-4 mt-3">
+                    <BluePillLink
+                        to="/"
+                        trackingData={{
+                            category: tracking.category.pwa,
+                            label: tracking.label.body,
+                            action: tracking.action.blue_pill,
+                        }}
+                    >
+                        Stay cached
+                    </BluePillLink>
+                    <RedPillButton onClick={() => window.location.reload()}>
+                        Try again
+                    </RedPillButton>
                 </div>
-                <RedPillButton onClick={() => window.location.reload()}>
-                    Try Again
-                </RedPillButton>
             </div>
-        </MatrixBackground>
+        </div>
     );
 }
