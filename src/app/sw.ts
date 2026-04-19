@@ -4,7 +4,7 @@
 
 import { defaultCache } from "@serwist/next/worker";
 import type { PrecacheEntry, SerwistGlobalConfig } from "serwist";
-import { CacheFirst, NetworkFirst, NetworkOnly, StaleWhileRevalidate, Serwist, ExpirationPlugin } from "serwist";
+import { CacheFirst, NetworkFirst, NetworkOnly, Serwist, ExpirationPlugin } from "serwist";
 
 declare global {
     interface WorkerGlobalScope extends SerwistGlobalConfig {
@@ -28,6 +28,9 @@ const serwist = new Serwist({
         },
 
         // ─── Static images: cache-first, 30-day expiry ─────────────────────
+        // Uses request.destination (more reliable than file extension matching)
+        // and CacheFirst (images are effectively immutable on this site).
+        // defaultCache uses StaleWhileRevalidate for image extensions — we intentionally override.
         {
             matcher: ({ request }) => request.destination === "image",
             handler: new CacheFirst({
@@ -42,23 +45,9 @@ const serwist = new Serwist({
             }),
         },
 
-        // ─── Google Fonts: stale-while-revalidate, 1-year cache ────────────
-        {
-            matcher: ({ url }) =>
-                url.origin === "https://fonts.googleapis.com" ||
-                url.origin === "https://fonts.gstatic.com",
-            handler: new StaleWhileRevalidate({
-                cacheName: "google-fonts",
-                plugins: [
-                    new ExpirationPlugin({
-                        maxEntries: 10,
-                        maxAgeSeconds: 365 * 24 * 60 * 60,
-                    }),
-                ],
-            }),
-        },
-
-        // ─── Navigation: network-first, 3-day offline fallback ─────────────
+        // ─── Navigation: network-first with timeout, 3-day offline fallback ─
+        // networkTimeoutSeconds ensures the offline page is served promptly
+        // on a dead/slow network. defaultCache has no timeout on its HTML rule.
         {
             matcher: ({ request }) => request.mode === "navigate",
             handler: new NetworkFirst({
@@ -75,6 +64,9 @@ const serwist = new Serwist({
         },
 
         // ─── Everything else: serwist's recommended defaults ────────────────
+        // Covers: Google Fonts (CacheFirst gstatic, SWR googleapis), static JS/CSS,
+        // Next.js image optimisation route, RSC prefetch + RSC payloads,
+        // audio/video (with RangeRequestsPlugin), cross-origin requests.
         ...defaultCache,
     ],
 
