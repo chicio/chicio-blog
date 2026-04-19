@@ -209,7 +209,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
     startSearch,
     whiteRabbitEasterEgg,
   );
-  const { glassmorphismClass } = useGlassmorphism();
+  const { glassmorphismClass } = useGlassmorphism({ noScale: true });
   const shouldHideMenu =
     pathname === slugs.chat ? false : direction === ScrollDirection.down;
 
