@@ -53,6 +53,11 @@ export const tracking = {
     chrome_ai_key_points: "chrome_ai_key_points",
     open_chrome_ai_docs: "open_chrome_ai_docs",
     copy_code_block: "copy_code_block",
+    pwa_install_prompt_shown: "pwa_install_prompt_shown",
+    pwa_install_accepted: "pwa_install_accepted",
+    pwa_install_dismissed: "pwa_install_dismissed",
+    contact_queued_offline: "contact_queued_offline",
+    contact_queue_replayed: "contact_queue_replayed",
   },
   category: {
     home: "home",
@@ -71,7 +76,8 @@ export const tracking = {
     videogames: "videogames",
     chat: "chat",
     about_me: "about_me",
-    clowns: "clowns"
+    clowns: "clowns",
+    pwa: "pwa",
   },
   label: {
     footer: "footer",

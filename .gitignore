@@ -146,3 +146,7 @@ fabric.properties
 agent/
 .worktrees/
 .claude/worktrees
+
+# Serwist / PWA generated files (built by serwist build, not committed)
+public/sw*
+public/swe-worker*

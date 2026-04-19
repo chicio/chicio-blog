@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useState, FormEvent } from "react";
+import { FC, useState, useEffect } from "react";
 import {
   BiEnvelope,
   BiUser,
@@ -9,6 +9,7 @@ import {
 } from "react-icons/bi";
 import { tracking } from "@/types/configuration/tracking";
 import { trackWith } from "@/lib/tracking/tracking";
+import { contactQueue } from "@/lib/background-sync/contact-queue";
 import { PageTitle } from "@/components/design-system/molecules/typography/page-title";
 import { FormField } from "@/components/design-system/molecules/form/form-field";
 import { FormTextarea } from "@/components/design-system/molecules/form/form-textarea";
@@ -36,7 +37,24 @@ export const ContactForm: FC<ContactFormProps> = ({ trackingCategory }) => {
   }>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [isQueued, setIsQueued] = useState(false);
+  const [isOffline, setIsOffline] = useState(false);
   const [submitError, setSubmitError] = useState<{ submit?: string }>({});
+
+  useEffect(() => {
+    setIsOffline(!navigator.onLine);
+
+    const handleOnline = () => setIsOffline(false);
+    const handleOffline = () => setIsOffline(true);
+
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, []);
 
   const validateForm = (): boolean => {
     const newErrors: { name?: string; email?: string; message?: string } = {};
@@ -63,6 +81,7 @@ export const ContactForm: FC<ContactFormProps> = ({ trackingCategory }) => {
 
   const handleSubmit = async () => {
     setIsSuccess(false);
+    setIsQueued(false);
 
     if (!validateForm()) {
       return;
@@ -70,6 +89,25 @@ export const ContactForm: FC<ContactFormProps> = ({ trackingCategory }) => {
 
     setIsSubmitting(true);
     setSubmitError({});
+
+    // Offline path: queue and show feedback immediately
+    if (!navigator.onLine) {
+      contactQueue.enqueue({ name, email, message, honeypot });
+
+      trackWith({
+        action: tracking.action.contact_queued_offline,
+        category: trackingCategory,
+        label: tracking.label.body,
+      });
+
+      setIsQueued(true);
+      setIsSubmitting(false);
+      setName("");
+      setEmail("");
+      setMessage("");
+      setErrors({});
+      return;
+    }
 
     try {
       const response = await fetch("/api/contact", {
@@ -104,10 +142,25 @@ export const ContactForm: FC<ContactFormProps> = ({ trackingCategory }) => {
       setMessage("");
       setErrors({});
     } catch (error) {
-      console.error("Contact form error:", error);
-      setSubmitError(
-        { submit: (error as Error).message}
-      );
+      // Network failure mid-request: queue for retry
+      if (!navigator.onLine) {
+        contactQueue.enqueue({ name, email, message, honeypot });
+
+        trackWith({
+          action: tracking.action.contact_queued_offline,
+          category: trackingCategory,
+          label: tracking.label.body,
+        });
+
+        setIsQueued(true);
+        setName("");
+        setEmail("");
+        setMessage("");
+        setErrors({});
+      } else {
+        console.error("Contact form error:", error);
+        setSubmitError({ submit: (error as Error).message });
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -121,6 +174,7 @@ export const ContactForm: FC<ContactFormProps> = ({ trackingCategory }) => {
     setErrors({});
     setSubmitError({});
     setIsSuccess(false);
+    setIsQueued(false);
 
     trackWith({
       action: tracking.action.blue_pill,
@@ -137,6 +191,11 @@ export const ContactForm: FC<ContactFormProps> = ({ trackingCategory }) => {
           Fill out the form to send me a message. I'll get back to you as soon
           as possible.
         </p>
+        {isOffline && (
+          <p className="mt-2 text-sm font-mono text-yellow-400/80">
+            {">"} You are offline. Your message will be sent automatically when you reconnect.
+          </p>
+        )}
       </div>
       <div className="flex flex-col gap-8">
         <FormField
@@ -189,6 +248,9 @@ export const ContactForm: FC<ContactFormProps> = ({ trackingCategory }) => {
         <FormErrorSummary show={!!submitError?.submit} errorName={submitError?.submit} />
         {isSuccess && (
           <FormSuccessMessage message="Message sent! You should receive a confirmation email in your inbox shortly. I'll get back to you as soon as possible." />
+        )}
+        {isQueued && (
+          <FormSuccessMessage message="You're offline — your message has been saved and will be sent automatically when you reconnect to the internet." />
         )}
         {isSubmitting && (
           <LoadingBar message="Sending message" />
