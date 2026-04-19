@@ -27,7 +27,7 @@ const withMDX = createMDX({
 
 const nextConfig: NextConfig = {
   images: {
-    formats: ["image/avif", "image/webp"], 
+    formats: ["image/avif", "image/webp"],
     minimumCacheTTL: 86400,
   },
   async redirects() {

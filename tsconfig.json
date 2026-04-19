@@ -4,7 +4,8 @@
     "lib": [
       "dom",
       "dom.iterable",
-      "esnext"
+      "esnext",
+      "webworker"
     ],
     "allowJs": true,
     "skipLibCheck": true,
@@ -30,6 +31,7 @@
   },
   "include": [
     "next-env.d.ts",
+    "@serwist/next/typings",
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
