@@ -16,3 +16,7 @@
 - [Easter Eggs](feature_easter_eggs.md) — Neo room terminal, white rabbit, dejavu, search-triggered
 - [Videogames](feature_videogames.md) — Console/game collection with rich metadata and filtering
 - [Copy Code Button](feature_copy_code_button.md) — Copy-to-clipboard on all MDX code blocks, key pitfalls (hydration, DOM vs React tree)
+- [PWA](feature_pwa.md) — Serwist configurator mode, offline caching, install prompt, background sync; critical SW gotchas documented
+
+## Feedback
+- [PWA & State Patterns](feedback_pwa_patterns.md) — useSyncExternalStore for localStorage state, consent-gated UI, banner/error page alignment rules

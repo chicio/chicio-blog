@@ -19,6 +19,7 @@ type: project
 
 ## Design System Hooks (src/components/design-system/utils/hooks/)
 - `useMotionStore` — global motion setting via `useSyncExternalStore`, syncs across tabs
+- `useConsentStore` — cookie consent state via `useSyncExternalStore`; subscribes to `consentChangeEvent` from `src/lib/consents/consents.ts`; mirrors useMotionStore exactly
 - `useGlassmorphism` — returns `.glassmorphism` or `.glassmorphism-lite` based on motion preference
 - `useReducedMotions` — OS prefers-reduced-motion detection
 - `useInView` / `useInViewList` — intersection observer
