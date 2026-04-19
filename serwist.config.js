@@ -1,18 +1,10 @@
-import { spawnSync } from "node:child_process";
 import { serwist } from "@serwist/next/config";
-
-const revision =
-    spawnSync("git", ["rev-parse", "HEAD"], { encoding: "utf-8" }).stdout?.trim() ??
-    crypto.randomUUID();
 
 // serwist.withNextConfig receives the fully resolved Next.js config, so
 // basePath, distDir, and experimental flags stay in sync automatically.
-export default serwist.withNextConfig(async ({ basePath = "" }) => ({
+export default serwist.withNextConfig(async () => ({
     swSrc: "src/app/sw.ts",
     swDest: "public/sw.js",
-    // Ensure the offline fallback page is always precached regardless of
-    // whether the user has visited it.
-    additionalPrecacheEntries: [{ url: `${basePath}/offline`, revision }],
     // Exclude large assets from the precache manifest — they are served
     // by the runtime CacheFirst strategy in sw.ts instead.
     // The default glob patterns include public/**/* which would pull in
