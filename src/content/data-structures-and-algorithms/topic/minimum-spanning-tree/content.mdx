@@ -89,9 +89,9 @@ After $|V| - 1$ edges have been added, the forest has merged into a single spann
 
 The algorithm can be summarized in three steps:
 
-1. Sort all edges by weight in non-decreasing order.
-2. Initialize a [Union-Find](/data-structures-and-algorithms/topic/union-find) data structure with $|V|$ elements, one per vertex.
-3. Iterate through the sorted edges. For each edge $(u, v, w)$, check whether $u$ and $v$ are in the same connected component (i.e., `find(u) === find(v)`). If they are, skip the edge (it would create a cycle). If they are not, add the edge to the MST and call `union(u, v)` to merge the two components.
+- Sort all edges by weight in non-decreasing order.
+- Initialize a [Union-Find](/data-structures-and-algorithms/topic/union-find) data structure with $|V|$ elements, one per vertex.
+- Iterate through the sorted edges. For each edge $(u, v, w)$, check whether $u$ and $v$ are in the same connected component (i.e., `find(u) === find(v)`). If they are, skip the edge (it would create a cycle). If they are not, add the edge to the MST and call `union(u, v)` to merge the two components.
 
 The algorithm terminates when the MST contains $|V| - 1$ edges (or when all edges have been processed).
 
@@ -188,10 +188,10 @@ Prim's algorithm operates locally, always expanding the frontier of the current 
 
 The algorithm works as follows:
 
-1. Start with an arbitrary vertex and add it to the tree. Insert all its edges into a [min-heap](/data-structures-and-algorithms/topic/heap).
-2. Extract the minimum-weight edge from the heap. If the destination vertex is already in the tree, discard the edge and extract the next one. Otherwise, add the edge to the MST and add the destination vertex to the tree.
-3. Insert all edges from the newly added vertex (that lead to vertices not yet in the tree) into the heap.
-4. Repeat until the tree contains $|V| - 1$ edges.
+- Start with an arbitrary vertex and add it to the tree. Insert all its edges into a [min-heap](/data-structures-and-algorithms/topic/heap).
+- Extract the minimum-weight edge from the heap. If the destination vertex is already in the tree, discard the edge and extract the next one. Otherwise, add the edge to the MST and add the destination vertex to the tree.
+- Insert all edges from the newly added vertex (that lead to vertices not yet in the tree) into the heap.
+- Repeat until the tree contains $|V| - 1$ edges.
 
 ### Why it works
 
@@ -202,57 +202,90 @@ By induction, every edge added by Prim's belongs to an MST, and after $|V| - 1$ 
 
 ### Implementation
 
-The implementation uses a [min-heap](/data-structures-and-algorithms/topic/heap) (priority queue) to efficiently retrieve the cheapest frontier edge.
+The implementation uses the generic `Heap` class from the [heap](/data-structures-and-algorithms/topic/heap) article as a min-heap
+to efficiently retrieve the cheapest frontier edge.
 The graph is represented as an adjacency list with weights.
 
 ```ts
+type Comparator<T> = (a: T, b: T) => number;
+
+class Heap<T> {
+    private readonly heap: T[] = [];
+    private readonly compare: Comparator<T>;
+
+    constructor(compare: Comparator<T>) {
+        this.compare = compare;
+    }
+
+    size(): number {
+        return this.heap.length;
+    }
+
+    insert(value: T): void {
+        this.heap.push(value);
+        this.bubbleUp();
+    }
+
+    extract(): T | null {
+        if (this.heap.length === 0) { return null; }
+        if (this.heap.length === 1) { return this.heap.pop()!; }
+
+        const top = this.heap[0];
+        this.heap[0] = this.heap.pop()!;
+        this.bubbleDown();
+
+        return top;
+    }
+
+    private bubbleUp(): void {
+        let index = this.heap.length - 1;
+
+        while (index > 0) {
+            const parentIndex = Math.floor((index - 1) / 2);
+            if (this.compare(this.heap[index], this.heap[parentIndex]) >= 0) { break; }
+
+            [this.heap[index], this.heap[parentIndex]] = [this.heap[parentIndex], this.heap[index]];
+            index = parentIndex;
+        }
+    }
+
+    private bubbleDown(): void {
+        let index = 0;
+
+        while (true) {
+            const left = 2 * index + 1;
+            const right = 2 * index + 2;
+            let smallest = index;
+
+            if (left < this.heap.length && this.compare(this.heap[left], this.heap[smallest]) < 0) {
+                smallest = left;
+            }
+
+            if (right < this.heap.length && this.compare(this.heap[right], this.heap[smallest]) < 0) {
+                smallest = right;
+            }
+
+            if (smallest === index) { break; }
+
+            [this.heap[index], this.heap[smallest]] = [this.heap[smallest], this.heap[index]];
+            index = smallest;
+        }
+    }
+}
+
 function prim(n: number, adjList: [number, number][][]): [number, number, number][] {
     const inMST = new Array<boolean>(n).fill(false);
     const mst: [number, number, number][] = [];
-
-    // Min-heap storing [weight, from, to]
-    // Using a simple array-based heap for clarity
-    const heap: [number, number, number][] = [];
-
-    const pushHeap = (item: [number, number, number]) => {
-        heap.push(item);
-        let i = heap.length - 1;
-        while (i > 0) {
-            const parent = Math.floor((i - 1) / 2);
-            if (heap[parent][0] <= heap[i][0]) { break; }
-            [heap[parent], heap[i]] = [heap[i], heap[parent]];
-            i = parent;
-        }
-    };
-
-    const popHeap = (): [number, number, number] => {
-        const top = heap[0];
-        const last = heap.pop()!;
-        if (heap.length > 0) {
-            heap[0] = last;
-            let i = 0;
-            while (true) {
-                let smallest = i;
-                const left = 2 * i + 1;
-                const right = 2 * i + 2;
-                if (left < heap.length && heap[left][0] < heap[smallest][0]) { smallest = left; }
-                if (right < heap.length && heap[right][0] < heap[smallest][0]) { smallest = right; }
-                if (smallest === i) { break; }
-                [heap[smallest], heap[i]] = [heap[i], heap[smallest]];
-                i = smallest;
-            }
-        }
-        return top;
-    };
+    const heap = new Heap<[number, number, number]>((a, b) => a[0] - b[0]);
 
     // Start from vertex 0
     inMST[0] = true;
     for (const [neighbor, weight] of adjList[0]) {
-        pushHeap([weight, 0, neighbor]);
+        heap.insert([weight, 0, neighbor]);
     }
 
-    while (heap.length > 0 && mst.length < n - 1) {
-        const [weight, from, to] = popHeap();
+    while (heap.size() > 0 && mst.length < n - 1) {
+        const [weight, from, to] = heap.extract()!;
 
         if (inMST[to]) {
             continue;
@@ -263,7 +296,7 @@ function prim(n: number, adjList: [number, number][][]): [number, number, number
 
         for (const [neighbor, w] of adjList[to]) {
             if (!inMST[neighbor]) {
-                pushHeap([w, to, neighbor]);
+                heap.insert([w, to, neighbor]);
             }
         }
     }
