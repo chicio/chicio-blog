@@ -1,10 +1,14 @@
-import type { PrecacheEntry, SerwistGlobalConfig } from "serwist";
-import { CacheFirst, NetworkFirst, NetworkOnly, StaleWhileRevalidate, Serwist } from "serwist";
-import { ExpirationPlugin } from "serwist";
+/// <reference no-default-lib="true" />
+/// <reference lib="esnext" />
+/// <reference lib="webworker" />
 
-// Augment the global ServiceWorkerGlobalScope with Serwist's injected manifest
+import { defaultCache } from "@serwist/turbopack/worker";
+import type { PrecacheEntry, SerwistGlobalConfig } from "serwist";
+import { CacheFirst, NetworkFirst, NetworkOnly, StaleWhileRevalidate, Serwist, ExpirationPlugin } from "serwist";
+
+// Augment WorkerGlobalScope with Serwist's injected precache manifest
 declare global {
-    interface ServiceWorkerGlobalScope extends SerwistGlobalConfig {
+    interface WorkerGlobalScope extends SerwistGlobalConfig {
         __SW_MANIFEST: (PrecacheEntry | string)[] | undefined;
     }
 }
@@ -39,7 +43,7 @@ const serwist = new Serwist({
             }),
         },
 
-        // ─── Google Fonts stylesheets: stale-while-revalidate ──────────────
+        // ─── Google Fonts: stale-while-revalidate with 1-year cache ────────
         {
             matcher: ({ url }) =>
                 url.origin === "https://fonts.googleapis.com" ||
@@ -55,7 +59,7 @@ const serwist = new Serwist({
             }),
         },
 
-        // ─── All other navigation / pages: network-first with 3-day fallback
+        // ─── Navigation / pages: network-first with 3-day fallback ─────────
         {
             matcher: ({ request }) => request.mode === "navigate",
             handler: new NetworkFirst({
@@ -71,29 +75,17 @@ const serwist = new Serwist({
             }),
         },
 
-        // ─── Everything else (scripts, styles, fonts): network-first ────────
-        {
-            matcher: () => true,
-            handler: new NetworkFirst({
-                cacheName: "default",
-                plugins: [
-                    new ExpirationPlugin({
-                        maxEntries: 64,
-                        maxAgeSeconds: 24 * 60 * 60, // 1 day
-                        purgeOnQuotaError: true,
-                    }),
-                ],
-            }),
-        },
+        // ─── Serwist's defaults cover remaining static assets ───────────────
+        ...defaultCache,
     ],
 
-    // Serve /offline when a navigation fails and there's no cached version
+    // Serve /offline when a navigation fails with no cached version
     fallbacks: {
         entries: [
             {
                 url: "/offline",
                 matcher({ request }) {
-                    return request.mode === "navigate";
+                    return request.destination === "document";
                 },
             },
         ],

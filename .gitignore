@@ -147,8 +147,4 @@ agent/
 .worktrees/
 .claude/worktrees
 
-# Serwist / PWA generated files
-public/sw.js
-public/sw.js.map
-public/workbox-*.js
-public/workbox-*.js.map
+# Serwist / PWA — SW is served via route handler, no public/ artifacts to ignore

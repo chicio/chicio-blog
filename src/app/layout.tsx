@@ -4,6 +4,7 @@ import Head from "next/head";
 import { Viewport } from "next";
 import { ReactNode } from "react";
 import { Open_Sans, Courier_Prime } from "next/font/google";
+import { SerwistProvider } from "@/components/sections/pwa/components/serwist-provider";
 import { LayoutAdditionalContent } from "@/components/design-system/templates/layout-additional-content";
 
 export const openSans = Open_Sans({
@@ -36,8 +37,10 @@ export default function RootLayout({
         <link rel="author" href="/humans.txt" type="text/plain" />
       </Head>
       <body>
-        {children}
-        <LayoutAdditionalContent />
+        <SerwistProvider>
+          {children}
+          <LayoutAdditionalContent />
+        </SerwistProvider>
       </body>
     </html>
   );

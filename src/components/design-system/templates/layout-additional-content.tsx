@@ -32,14 +32,6 @@ const InstallPromptBanner = dynamic(
   { ssr: false },
 );
 
-const SerwistRegistration = dynamic(
-  () =>
-    import("@/components/sections/pwa/components/serwist-registration").then(
-      (m) => m.SerwistRegistration,
-    ),
-  { ssr: false },
-);
-
 export const LayoutAdditionalContent: FC = () => {
   useOfflineContactQueue();
 
@@ -52,7 +44,6 @@ export const LayoutAdditionalContent: FC = () => {
       <CookieConsentBanner />
       <TrackingOptIn />
       <InstallPromptBanner />
-      <SerwistRegistration />
     </>
   );
 };
