@@ -87,6 +87,17 @@ This ensures no changes are made directly on `main`.
 - Implement in small, logical steps. After each step, verify it works before moving on.
 - If you discover the plan needs adjustment mid-execution, stop and inform the user before diverging.
 - Do not add scope. Build what was planned, nothing more.
+- **Use LSP as the primary code navigation tool**: The LSP tool provides semantically accurate, type-aware code intelligence. Prefer it over Grep/Glob for all symbol-level work — navigating code, understanding existing code before changes, and refactoring. Available operations:
+  - `goToDefinition` — jump to where a symbol is defined
+  - `findReferences` — find all usages of a symbol across the codebase
+  - `hover` — get the resolved type and documentation for a symbol
+  - `documentSymbol` — list all symbols (functions, classes, variables) in a file
+  - `workspaceSymbol` — search for symbols across the entire workspace
+  - `goToImplementation` — find concrete implementations of interfaces or abstract methods
+  - `prepareCallHierarchy` — get the call hierarchy item at a position
+  - `incomingCalls` — find all callers of a function/method
+  - `outgoingCalls` — find all functions/methods called by a function
+  Use LSP for: understanding code before modifying it (`hover`, `goToDefinition`, `incomingCalls`/`outgoingCalls`), finding all impact sites before refactoring (`findReferences`, `goToImplementation`), exploring file structure (`documentSymbol`), and discovering symbols (`workspaceSymbol`). Fall back to Grep/Glob only for text-pattern searches where LSP has no equivalent (e.g., finding all files that match a string literal or comment).
 
 **Gate**: All planned changes are implemented and you have not deviated from the plan.
 

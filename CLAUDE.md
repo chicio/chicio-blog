@@ -67,6 +67,10 @@ GitHub Actions (`.github/workflows/build.yml`): macOS, Node 22, npm cache, Upsta
 
 `release-it` with conventional changelog (`.release-it.json`). Generates CHANGELOG.md and GitHub releases. Run: `npm run release`
 
+## Code Navigation
+
+Use the LSP tool as the primary code navigation method for all symbol-level work — understanding code, tracing dependencies, and refactoring. It provides semantically accurate, type-aware results that Grep/Glob cannot match. Fall back to Grep/Glob only for text-pattern searches (string literals, comments, file-name patterns).
+
 ## Commit Convention
 
 - Scopes: `performance`, `ux`, `capabilities`, `content`, `ai`, `deps`

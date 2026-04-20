@@ -255,6 +255,10 @@ Examples of memory updates after a review:
 - Refined writing style rule → update `writing_approach.md`
 - Added/changed interactive components → update `component_patterns.md`
 
+## Code Navigation
+
+Use the LSP tool as the primary code navigation method for all symbol-level work — understanding code, tracing dependencies, and refactoring. Available operations: `goToDefinition`, `findReferences`, `hover`, `documentSymbol`, `workspaceSymbol`, `goToImplementation`, `prepareCallHierarchy`, `incomingCalls`, `outgoingCalls`. Fall back to Grep/Glob only for text-pattern searches (string literals, comments, file-name patterns).
+
 ## Article Writing Conventions
 
 ### Format and Language
