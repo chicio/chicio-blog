@@ -9,7 +9,7 @@ mcpServers:
 effort: high
 permissionMode: acceptEdits  
 isolation: worktree
-tools: AskUserQuestion, Bash, Glob, Grep, Write, Edit, Read, WebFetch
+tools: AskUserQuestion, Bash, Glob, Grep, Write, Edit, Read, WebFetch, LSP
 allowedTools: Bash(*)  
 ---
 
@@ -87,17 +87,19 @@ This ensures no changes are made directly on `main`.
 - Implement in small, logical steps. After each step, verify it works before moving on.
 - If you discover the plan needs adjustment mid-execution, stop and inform the user before diverging.
 - Do not add scope. Build what was planned, nothing more.
-- **Use LSP as the primary code navigation tool**: The LSP tool provides semantically accurate, type-aware code intelligence. Prefer it over Grep/Glob for all symbol-level work — navigating code, understanding existing code before changes, and refactoring. Available operations:
-  - `goToDefinition` — jump to where a symbol is defined
-  - `findReferences` — find all usages of a symbol across the codebase
-  - `hover` — get the resolved type and documentation for a symbol
-  - `documentSymbol` — list all symbols (functions, classes, variables) in a file
-  - `workspaceSymbol` — search for symbols across the entire workspace
+- **Use LSP as the primary code navigation tool**: The LSP tool provides semantically accurate, type-aware code intelligence. Prefer it over Grep/Glob for all symbol-level work — navigating code, understanding existing code before changes, and refactoring.
+  **CRITICAL — LSP parameter rules**: Every LSP call requires ALL four parameters: `operation`, `filePath` (must be a real file, NEVER a directory), `line` (1-based), and `character` (1-based). This applies to ALL operations including `workspaceSymbol` and `documentSymbol`. To use LSP, you must first identify a specific file and position. If you don't know which file a symbol is in, use Grep/Glob first to locate it, then use LSP on that file.
+  Available operations:
+  - `goToDefinition` — jump to where a symbol is defined (position cursor on the symbol)
+  - `findReferences` — find all usages of a symbol across the codebase (position cursor on the symbol)
+  - `hover` — get the resolved type and documentation for a symbol (position cursor on the symbol)
+  - `documentSymbol` — list all symbols (functions, classes, variables) in a file (any position in the file works)
+  - `workspaceSymbol` — search for symbols across the entire workspace (any position in the file works, but filePath must be a real file)
   - `goToImplementation` — find concrete implementations of interfaces or abstract methods
   - `prepareCallHierarchy` — get the call hierarchy item at a position
   - `incomingCalls` — find all callers of a function/method
   - `outgoingCalls` — find all functions/methods called by a function
-  Use LSP for: understanding code before modifying it (`hover`, `goToDefinition`, `incomingCalls`/`outgoingCalls`), finding all impact sites before refactoring (`findReferences`, `goToImplementation`), exploring file structure (`documentSymbol`), and discovering symbols (`workspaceSymbol`). Fall back to Grep/Glob only for text-pattern searches where LSP has no equivalent (e.g., finding all files that match a string literal or comment).
+  **Workflow**: When you need to find a symbol you don't have a file for, use Grep to locate it first, then use LSP (`hover`, `goToDefinition`, etc.) on the found file and line for type-aware information. Fall back to Grep/Glob for text-pattern searches where LSP has no equivalent (e.g., string literals, comments).
 
 **Gate**: All planned changes are implemented and you have not deviated from the plan.
 
