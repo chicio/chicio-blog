@@ -9,7 +9,16 @@ mcpServers:
 effort: high
 permissionMode: acceptEdits  
 isolation: worktree
-tools: AskUserQuestion, Bash, Glob, Grep, Write, Edit, Read, WebFetch, LSP
+tools:
+  - AskUserQuestion
+  - Bash
+  - Glob
+  - Grep
+  - Write
+  - Edit
+  - Read
+  - WebFetch
+  - LSP
 allowedTools: Bash(*)  
 ---
 
