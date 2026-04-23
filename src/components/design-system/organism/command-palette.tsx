@@ -1,6 +1,7 @@
 "use client";
 
 import { Overlay } from "@/components/design-system/atoms/effects/overlay";
+import { MatrixRain } from "@/components/design-system/atoms/effects/matrix-rain";
 import { TerminalLine } from "@/components/design-system/atoms/typography/terminal-blocks";
 import { MotionDiv } from "@/components/design-system/molecules/animation/motion-div";
 import { useGlassmorphism } from "@/components/design-system/utils/hooks/use-glassmorphism";
@@ -34,11 +35,24 @@ export const CommandPalette = () => {
     const { glassmorphismClass } = useGlassmorphism({ noScale: true });
     const { handleSearch, resetSearch, search } = useSearch(open, whiteRabbitEasterEgg);
 
+    const close = () => {
+        setOpen(false);
+        setQuery("");
+        resetSearch();
+        setPaletteKey((k) => k + 1);
+    };
+
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             if ((e.metaKey || e.ctrlKey) && e.key === "k") {
                 e.preventDefault();
                 setOpen((prev) => !prev);
+                return;
+            }
+            // Fix: Escape must close the palette. cmdk intercepts Escape on the
+            // input but does not close external state — we must handle it here.
+            if (e.key === "Escape") {
+                close();
             }
         };
 
@@ -58,14 +72,10 @@ export const CommandPalette = () => {
             window.removeEventListener("keydown", handleKeyDown);
             window.removeEventListener(commandPaletteOpenEvent, handleOpenEvent);
         };
+        // close is intentionally omitted: all its inner setters (setOpen,
+        // setQuery, resetSearch, setPaletteKey) are stable React dispatch fns.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
-    const close = () => {
-        setOpen(false);
-        setQuery("");
-        resetSearch();
-        setPaletteKey((k) => k + 1);
-    };
 
     const handleToggleMotion = () => {
         trackWith({
@@ -103,19 +113,26 @@ export const CommandPalette = () => {
     return (
         <AnimatePresence>
             {open && (
-                <Overlay key="command-palette-overlay" delay={0} onClick={close} className="z-50">
+                <Overlay
+                    key="command-palette-overlay"
+                    delay={0}
+                    onClick={close}
+                    className="z-50 overflow-hidden"
+                >
+                    {/* Terminal Matrix rain background — mirrors 404 and offline pages */}
+                    <MatrixRain fontSize={14} density={0.975} />
+
                     {search.type === "easterEgg" ? (
                         <NeoRoomEasterEgg lines={search.terminalLines} />
                     ) : (
                         <div
-                            className="flex justify-center items-start min-h-screen pt-[15vh] px-4"
+                            className="relative z-10 flex justify-center items-start min-h-screen pt-[15vh] px-4"
                             onClick={(e) => e.stopPropagation()}
                         >
                             <MotionDiv
                                 className={`${glassmorphismClass} w-full max-w-[600px] overflow-hidden`}
                                 initial={{ opacity: 0, scale: 0.95, y: -8 }}
                                 animate={{ opacity: 1, scale: 1, y: 0 }}
-                                exit={{ opacity: 0, scale: 0.95, y: -8 }}
                                 transition={{ duration: 0.15, ease: "easeOut" }}
                             >
                                 <Command key={paletteKey} shouldFilter={false} className="flex flex-col">
@@ -137,8 +154,14 @@ export const CommandPalette = () => {
                                         />
                                     </div>
 
-                                    {/* ── List ── */}
-                                    <Command.List className="max-h-[55vh] overflow-y-auto py-2">
+                                    {/* ── List ──
+                                        key changes between "search" and "idle" so cmdk resets
+                                        its internal selection to item 0 when switching modes.
+                                        Without this, the first ↓ press selects from the bottom. */}
+                                    <Command.List
+                                        key={isSearching ? "search" : "idle"}
+                                        className="max-h-[55vh] overflow-y-auto py-2"
+                                    >
                                         {/* Blog post results — only in search mode */}
                                         {isSearching && hasSearchResults && (
                                             <Command.Group>
