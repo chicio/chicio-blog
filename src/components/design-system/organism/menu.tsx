@@ -207,17 +207,23 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
                             <HamburgerMenu onClick={() => setShouldOpenMenu(true)} />
                         </div>
                     )}
-                    {/* Palette trigger — search icon on mobile, ⌘K badge on desktop */}
                     <button
-                        className="ml-auto sm:mr-3 flex items-center gap-1 text-primary-text hover:text-accent transition-colors duration-200 cursor-pointer"
+                        className="ml-auto sm:mr-3 flex items-center cursor-pointer group"
                         onClick={handlePaletteTrigger}
                         aria-label="Open command palette"
                     >
-                        <BiSearchAlt className="size-5 xs:hidden" />
-                        <kbd className="hidden xs:flex items-center gap-0.5 px-2 py-1 rounded-lg font-mono text-xs border border-accent/40 text-accent/70 hover:border-accent hover:text-accent transition-colors duration-200 shadow-sm">
-                            <span>⌘</span>
-                            <span>K</span>
-                        </kbd>
+                        {/* Mobile: icon only */}
+                        <BiSearchAlt className="size-5 xs:hidden text-accent/70 group-hover:text-accent transition-colors duration-200" />
+                        {/* Desktop: search bar — icon + label + shortcut */}
+                        <div className="hidden xs:flex items-center gap-2 px-3 py-1.5 w-48 rounded-lg border border-accent/25 bg-accent/5 group-hover:border-accent/50 group-hover:bg-accent/10 transition-all duration-200">
+                            <BiSearchAlt className="size-3.5 shrink-0 text-accent/50 group-hover:text-accent/70 transition-colors duration-200" />
+                            <span className="flex-1 text-left font-mono text-xs text-accent/40 group-hover:text-accent/60 transition-colors duration-200">
+                                Search...
+                            </span>
+                            <kbd className="flex items-center gap-0.5 px-1.5 py-0.5 rounded font-mono text-[10px] border border-accent/25 text-accent/40 group-hover:border-accent/40 group-hover:text-accent/60 transition-colors duration-200">
+                                <span>⌘</span><span>K</span>
+                            </kbd>
+                        </div>
                     </button>
                 </div>
             </MotionDiv>
