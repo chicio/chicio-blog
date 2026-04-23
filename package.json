@@ -29,6 +29,7 @@
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
     "ai": "^6.0.158",
+    "cmdk": "^1.1.1",
     "elasticlunr": "^0.9.5",
     "feed": "^5.2.0",
     "framer-motion": "^12.34.3",

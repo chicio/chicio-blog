@@ -5,17 +5,18 @@ import { MotionDiv } from "../../molecules/animation/motion-div";
 import { FC, ReactNode } from "react";
 
 export interface OverlayProps {
-  delay: number; 
+  delay: number;
   onClick?: () => void;
   children?: ReactNode;
+  className?: string;
 }
 
-export const Overlay: FC<OverlayProps> = ({ onClick, delay = 0, children }) => {
+export const Overlay: FC<OverlayProps> = ({ onClick, delay = 0, children, className = "" }) => {
   useLockBodyScroll();
 
   return (
     <MotionDiv
-      className="fixed top-0 left-0 w-full h-full bg-black-alpha-75 backdrop-blur-sm z-40"
+      className={`fixed top-0 left-0 w-full h-full bg-black-alpha-75 backdrop-blur-sm z-40 ${className}`}
       onClick={onClick}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
