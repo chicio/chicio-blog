@@ -4,20 +4,31 @@ description: Full PWA implementation — Serwist configurator mode, offline cach
 type: project
 ---
 
-## Status: Complete, on branch feat/ux-pwa-capabilities (PR #289)
+## Status: Complete, merged (PR #289). Precache optimized (2026-04-23).
 
 ## Architecture
 
 ### Serwist — Configurator Mode
 - `next.config.ts` has ZERO Serwist code — clean separation, bundler-agnostic
-- `serwist.config.js` uses `serwist.withNextConfig` to receive resolved Next.js config
+- `serwist.config.mjs` uses `serwist.withNextConfig` to receive resolved Next.js config
 - `serwist build` runs as a post-build step: `next build && serwist build`
 - `predev` also builds SW: `npm run search-index && NODE_ENV=development serwist build`
 - SW output: `public/sw.js` (gitignored via `public/sw*`)
-- Precache: 683 URLs, 65.8 MB (JS/CSS chunks + public assets, NOT images or PDF)
 
-### `globIgnores` (serwist.config.js)
-Must exclude large assets or the precache balloons to 290 MB:
+### Precache Optimization (2026-04-23)
+**Problem**: The original config precached ~685 URLs (590 HTML pages + JS/CSS chunks + static assets). Every visitor's SW install fetched all 685 resources from Vercel's edge cache, each counting as an ISR read. With `skipWaiting: true`, every new deploy triggered re-precaching for all active visitors. This caused ISR reads to spike from ~5k/day to 190k+/day, exceeding Vercel's Hobby plan limit (1,004,960 / 1,000,000 in 30 days).
+
+**Fix**: Three config changes in `serwist.config.mjs`:
+1. `precachePrerendered: false` — stops auto-including all 590+ HTML pages (this is the key one; `@serwist/next` defaults this to `true` and appends `.next/server/{app,pages}/**/*.html` to globPatterns)
+2. `globPatterns: []` — stops including JS chunks and static assets from the build output
+3. `additionalPrecacheEntries: [{ url: "/offline", revision }]` — manually precaches only the offline fallback page (with git HEAD as revision)
+
+**Result**: Precache dropped from 685 entries to 1 (`/offline` only). All other pages are cached at runtime by the `NetworkFirst` handler in `sw.ts` as users navigate. The offline experience is preserved — visited pages work offline, unvisited pages show the `/offline` fallback.
+
+**Important**: The `exclude` option does NOT work with `@serwist/cli` (v9.x) — it throws "Received unrecognized keys: exclude". Use `globPatterns: []` + `precachePrerendered: false` instead.
+
+### `globIgnores` (serwist.config.mjs)
+Still present to exclude large assets from any future glob scanning:
 ```js
 "public/images/**",
 "public/tesi-fabrizio-duroni-770157.pdf",
@@ -37,17 +48,19 @@ Three custom rules prepended before `...defaultCache`:
 
 **Critical gotcha**: Serwist `fallbacks` config only attaches to the precache route, NOT to custom `runtimeCaching` rules. Must add `handlerDidError` explicitly to navigation handler.
 
-**Critical gotcha**: `/offline` must NOT be in `additionalPrecacheEntries` — Serwist's glob scan already picks it up from the `.next/` build output. Adding it manually creates a conflicting-entries error (two different revisions for the same URL).
+**Note**: After the precache optimization, `/offline` IS in `additionalPrecacheEntries` with the git revision — this is now the ONLY precache entry. Previously (when `precachePrerendered` was true), adding it manually caused conflicting-entries errors because Serwist's glob scan also picked it up.
 
 ### `defaultCache` from `@serwist/next/worker`
 - In development: single `NetworkOnly` catch-all (safe, no caching in dev)
 - In production: covers Google Fonts (CacheFirst gstatic 365d, SWR googleapis 7d), static JS/CSS, `/_next/image`, RSC prefetch/RSC payloads (32 entries each), audio/video with RangeRequestsPlugin, cross-origin
 - We intentionally override images (CacheFirst vs SWR) and navigation (adds timeout) and API (NetworkOnly vs NetworkFirst GET)
 
-### Offline Behavior
-- All `/_next/static/` JS/CSS chunks are precached → all page JS available offline immediately
+### Offline Behavior (post-optimization)
+- Only `/offline` is precached — JS/CSS chunks and pages are NO longer precached upfront
+- As users browse, pages are cached by `NetworkFirst` runtime handler (100 entries, 3d expiry)
+- JS/CSS and other static assets are cached by `defaultCache` rules from `@serwist/next/worker`
 - Next.js App Router prefetches RSC payloads for visible links → cached by defaultCache's RSC rules
-- Result: near-complete offline coverage for client-side navigation after any normal browsing session
+- Result: offline coverage for previously visited pages after normal browsing session
 - Hard navigation (refresh/direct URL) to unvisited page → Matrix `/offline` fallback
 - Images not in cache → Matrix SVG placeholder (`> IMAGE_UNAVAILABLE`)
 
