@@ -34,7 +34,7 @@ const GroupLabel: FC<PropsWithChildren> = ({ children }) => (
 
 export const CommandPalette = () => {
     const [open, setOpen] = useState(false);
-    const [query, setQuery] = useState("");
+    const [isSearching, setIsSearching] = useState(false);
 
     const router = useRouter();
     const motionEnabled = useMotionStore();
@@ -43,7 +43,7 @@ export const CommandPalette = () => {
 
     const close = () => {
         setOpen(false);
-        setQuery("");
+        setIsSearching(false);
         resetSearch();
     };
 
@@ -113,7 +113,6 @@ export const CommandPalette = () => {
         close();
     };
 
-    const isSearching = query.trim().length >= 3;
     const hasSearchResults = search.type === "search" && search.results.length > 0;
 
     return (
@@ -142,7 +141,7 @@ export const CommandPalette = () => {
                                             className="bg-transparent outline-none text-accent font-mono text-sm flex-1 placeholder:text-accent/40 caret-accent"
                                             placeholder="type to search blog posts_"
                                             onValueChange={(value) => {
-                                                setQuery(value);
+                                                setIsSearching(value.trim().length >= 3);
                                                 handleSearch({
                                                     target: { value },
                                                 } as ChangeEvent<HTMLInputElement>);
