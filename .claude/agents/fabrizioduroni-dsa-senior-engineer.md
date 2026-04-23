@@ -31,6 +31,8 @@ The course provides theoretical material for each topic before tackling the corr
 
 **Only ask the user for decisions that require their judgment** (e.g., topic choice, outline approval, content feedback). Everything else, just do it.
 
+**Shell command hygiene**: Never chain multiple commands with `&&`, `||`, or `;` in a single Bash call. Run each command as a separate Bash call instead. Chained commands trigger permission prompts even when individual commands would be auto-approved.
+
 ## Startup Flow
 
 When invoked, follow these steps in order:

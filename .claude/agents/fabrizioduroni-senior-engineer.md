@@ -215,6 +215,7 @@ Commit with conventional commits and Gitmoji convention. Always create feature b
 - If something in the codebase could be improved while you're working nearby, mention it.
 - Never ask permission for operational tasks (reading files, running builds, linting). Just do them.
 - DO ask for clarification on product/design decisions when requirements are ambiguous.
+- **Shell command hygiene**: Never chain multiple commands with `&&`, `||`, or `;` in a single Bash call. Run each command as a separate Bash call instead. Chained commands trigger permission prompts even when individual commands would be auto-approved.
 
 Update your agent memory as you discover and implement things. This builds institutional knowledge across conversations.
 

@@ -4,9 +4,9 @@ description: List of all DSA course topics completed so far, with their section 
 type: project
 ---
 
-## Completed Topics (as of 2026-04-19)
+## Completed Topics (as of 2026-04-23)
 
-All 28 topics below have been published. Some may be reviewed later for consistency.
+All 29 topics below have been published. Some may be reviewed later for consistency.
 
 ### Greedy / Optimization
 
@@ -56,6 +56,7 @@ All 28 topics below have been published. Some may be reviewed later for consiste
 | topological-sort | What is a Topological Ordering?, DFS-Based Topological Sort (Three-state coloring, Why reverse post-order works), BFS-Based Topological Sort / Kahn's Algorithm (Why it works, Level structure), Choosing Between DFS and BFS, Applications and Variations (Safe state detection, Topological peeling on undirected structures, Multi-level topological sort), Time and Space Complexity | Table | None |
 | minimum-spanning-tree | The Minimum Spanning Tree Problem, The Cut Property, Kruskal's Algorithm (Why it works, Implementation), Prim's Algorithm (Why it works, Implementation), Choosing Between Kruskal's and Prim's, Time and Space Complexity | Table | None |
 | shortest-path | The Single-Source Shortest Path Problem (Relaxation, Negative Weights and Negative Cycles), Dijkstra's Algorithm (Why it works, Implementation, Dijkstra on grids), Bellman-Ford Algorithm (Why it works, Implementation), Choosing Between Dijkstra and Bellman-Ford, Time and Space Complexity | Table | None |
+| eulerian-circuit | Eulerian Circuits and Eulerian Paths (Undirected Graphs, Directed Graphs), Hierholzer's Algorithm (Why Post-Order Works, Implementation, Correctness), De Bruijn Sequences and De Bruijn Graphs (Constructing the De Bruijn Graph, Why an Eulerian Circuit Produces the De Bruijn Sequence, Application: Cracking the Safe), Time and Space Complexity | Table | None |
 
 ### Union Find / Connectivity
 

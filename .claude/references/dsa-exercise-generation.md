@@ -13,10 +13,13 @@ Use the **GitHub CLI (`gh`)** via Bash for all GitHub operations:
    ```bash
    gh api repos/chicio/Algomaster-Solutions/contents/src/<folder-name> --jq '.[] | select(.name | endswith(".ts")) | .name'
    ```
-4. **Download each `.ts` file** to the exercises subfolder:
+4. **Download each `.ts` file** to the exercises subfolder using two separate steps (never pipe `gh api` output — pipes trigger permission prompts):
+   a. Fetch the base64 content:
    ```bash
-   gh api repos/chicio/Algomaster-Solutions/contents/src/<folder-name>/<file>.ts --jq '.content' | base64 -d > src/content/data-structures-and-algorithms/topic/<topic-name>/exercises/<file>.ts
+   gh api repos/chicio/Algomaster-Solutions/contents/src/<folder-name>/<file>.ts --jq '.content'
    ```
+   b. Decode the base64 output and write the file using the **Write** tool (not Bash redirection). The `gh api` output is base64-encoded — decode it and pass the decoded content to the Write tool to create the `.ts` file at `src/content/data-structures-and-algorithms/topic/<topic-name>/exercises/<file>.ts`.
+
    If there are multiple source folders, fetch from all of them.
 
 ### Shell Safety Rules (avoid permission prompts)
