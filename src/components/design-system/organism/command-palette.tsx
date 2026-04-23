@@ -6,7 +6,6 @@ import { MotionDiv } from "@/components/design-system/molecules/animation/motion
 import { useGlassmorphism } from "@/components/design-system/utils/hooks/use-glassmorphism";
 import { useSearch } from "@/components/design-system/utils/hooks/use-search";
 import { useMotionStore } from "@/components/design-system/utils/hooks/use-motion-store";
-import { useLockBodyScroll } from "@/components/design-system/utils/hooks/use-lock-body-scroll";
 import { commandPaletteOpenEvent } from "@/lib/command-palette/command-palette-events";
 import { writeMotion } from "@/lib/motion/motion";
 import { trackWith } from "@/lib/tracking/tracking";
@@ -34,13 +33,6 @@ const ITEM_CLASS =
 const GroupLabel: FC<PropsWithChildren> = ({ children }) => (
     <div className="px-4 py-1 font-mono text-xs text-accent/50 uppercase tracking-wider">{children}</div>
 );
-
-// Rendered outside AnimatePresence so the lock releases immediately when
-// `open` becomes false — before the Overlay exit animation completes.
-const ScrollLock: FC = () => {
-    useLockBodyScroll();
-    return null;
-};
 
 export const CommandPalette = () => {
     const [open, setOpen] = useState(false);
@@ -128,9 +120,7 @@ export const CommandPalette = () => {
     const hasSearchResults = search.type === "search" && search.results.length > 0;
 
     return (
-        <>
-            {open && <ScrollLock />}
-            <AnimatePresence>
+        <AnimatePresence>
                 {open && (
                     <Overlay key="command-palette-overlay" delay={0} onClick={close} className="z-50">
                         {search.type === "easterEgg" ? (
@@ -246,7 +236,6 @@ export const CommandPalette = () => {
                         )}
                     </Overlay>
                 )}
-            </AnimatePresence>
-        </>
+        </AnimatePresence>
     );
 };
