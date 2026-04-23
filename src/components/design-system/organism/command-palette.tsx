@@ -25,11 +25,9 @@ const NeoRoomEasterEgg = dynamic(
     { ssr: false },
 );
 
-// Shared className for every Command.Item row.
 const ITEM_CLASS =
     "px-4 py-2 cursor-pointer aria-selected:bg-[var(--color-accent-alpha-10)] aria-selected:border-l-2 aria-selected:border-accent transition-colors duration-100";
 
-// Section header inside a Command.Group.
 const GroupLabel: FC<PropsWithChildren> = ({ children }) => (
     <div className="px-4 py-1 font-mono text-xs text-accent/50 uppercase tracking-wider">{children}</div>
 );
@@ -73,8 +71,7 @@ export const CommandPalette = () => {
         };
     }, []);
 
-    // ESC to close — registered only while the palette is open so we never
-    // interfere with other ESC handlers on the page.
+    // ESC to close — only registered while open so we don't interfere with other handlers.
     useEffect(() => {
         if (!open) return;
         const handleEsc = (e: KeyboardEvent) => {
@@ -82,7 +79,7 @@ export const CommandPalette = () => {
         };
         document.addEventListener("keydown", handleEsc, true);
         return () => document.removeEventListener("keydown", handleEsc, true);
-        // close calls stable React setters and resetSearch (which calls setSearch — also stable).
+        // close calls stable React setters; safe stale ref.
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [open]);
 
@@ -121,121 +118,118 @@ export const CommandPalette = () => {
 
     return (
         <AnimatePresence>
-                {open && (
-                    <Overlay key="command-palette-overlay" delay={0} onClick={close} className="z-50">
-                        {search.type === "easterEgg" ? (
-                            <NeoRoomEasterEgg lines={search.terminalLines} />
-                        ) : (
-                            <div
-                                className="flex justify-center items-start min-h-screen pt-[15vh] px-4"
-                                onClick={(e) => e.stopPropagation()}
+            {open && (
+                <Overlay key="command-palette-overlay" delay={0} onClick={close} className="z-50">
+                    {search.type === "easterEgg" ? (
+                        <NeoRoomEasterEgg lines={search.terminalLines} />
+                    ) : (
+                        <div
+                            className="flex justify-center items-start min-h-screen pt-[15vh] px-4"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <MotionDiv
+                                className={`${glassmorphismClass} w-full max-w-[600px] overflow-hidden`}
+                                initial={{ opacity: 0, scale: 0.95, y: -8 }}
+                                animate={{ opacity: 1, scale: 1, y: 0 }}
+                                transition={{ duration: 0.15, ease: "easeOut" }}
                             >
-                                <MotionDiv
-                                    className={`${glassmorphismClass} w-full max-w-[600px] overflow-hidden`}
-                                    initial={{ opacity: 0, scale: 0.95, y: -8 }}
-                                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                                    transition={{ duration: 0.15, ease: "easeOut" }}
-                                >
-                                    <Command shouldFilter={false} className="flex flex-col">
-                                        {/* ── Input ── */}
-                                        <div className="flex items-center gap-2 px-4 py-3 border-b border-accent/20">
-                                            <span className="text-accent font-mono font-bold text-sm text-shadow-md shrink-0">
-                                                {">"}
-                                            </span>
-                                            <Command.Input
-                                                className="bg-transparent outline-none text-accent font-mono text-sm flex-1 placeholder:text-accent/40 caret-accent"
-                                                placeholder="type to search blog posts_"
-                                                onValueChange={(value) => {
-                                                    setQuery(value);
-                                                    handleSearch({
-                                                        target: { value },
-                                                    } as ChangeEvent<HTMLInputElement>);
-                                                }}
-                                                autoFocus
-                                            />
-                                        </div>
+                                <Command shouldFilter={false} className="flex flex-col">
+                                    <div className="flex items-center gap-2 px-4 py-3 border-b border-accent/20">
+                                        <span className="text-accent font-mono font-bold text-sm text-shadow-md shrink-0">
+                                            {">"}
+                                        </span>
+                                        <Command.Input
+                                            className="bg-transparent outline-none text-accent font-mono text-sm flex-1 placeholder:text-accent/40 caret-accent"
+                                            placeholder="type to search blog posts_"
+                                            onValueChange={(value) => {
+                                                setQuery(value);
+                                                handleSearch({
+                                                    target: { value },
+                                                } as ChangeEvent<HTMLInputElement>);
+                                            }}
+                                            autoFocus
+                                        />
+                                    </div>
 
-                                        {/* ── List ──
-                                            key toggles between "search" and "idle" so cmdk resets
-                                            its internal selection index when switching modes —
-                                            without this, the first ↓ selects from the bottom. */}
-                                        <Command.List
-                                            key={isSearching ? "search" : "idle"}
-                                            className="max-h-[55vh] overflow-y-auto py-2"
-                                        >
-                                            {isSearching && hasSearchResults && (
-                                                <Command.Group>
-                                                    <GroupLabel>Blog Posts</GroupLabel>
-                                                    {search.results.map((result, i) => (
-                                                        <Command.Item
-                                                            key={`result-${i}`}
-                                                            value={result.title}
-                                                            className={ITEM_CLASS}
-                                                            onSelect={() => handleSearchResultSelect(result.slug)}
-                                                        >
-                                                            <TerminalLine>
-                                                                {">"} {result.title}
-                                                            </TerminalLine>
-                                                            <p className="font-mono text-xs text-primary-text/60 ml-4 line-clamp-1 leading-tight">
-                                                                {result.description}
-                                                            </p>
-                                                        </Command.Item>
-                                                    ))}
-                                                </Command.Group>
-                                            )}
-
-                                            {isSearching && !hasSearchResults && (
-                                                <div className="px-4 py-6 font-mono text-xs text-accent/40 text-center">
-                                                    {">"} no results found_
-                                                </div>
-                                            )}
-
-                                            {!isSearching && (
-                                                <Command.Group>
-                                                    <GroupLabel>Quick Actions</GroupLabel>
+                                    {/* key toggles between "search" and "idle" so cmdk resets its
+                                        internal selection index when switching modes — without this,
+                                        the first ↓ selects from the bottom. */}
+                                    <Command.List
+                                        key={isSearching ? "search" : "idle"}
+                                        className="max-h-[55vh] overflow-y-auto py-2"
+                                    >
+                                        {isSearching && hasSearchResults && (
+                                            <Command.Group>
+                                                <GroupLabel>Blog Posts</GroupLabel>
+                                                {search.results.map((result, i) => (
                                                     <Command.Item
-                                                        value="open ai chat"
+                                                        key={`result-${i}`}
+                                                        value={result.title}
                                                         className={ITEM_CLASS}
-                                                        onSelect={handleOpenChat}
+                                                        onSelect={() => handleSearchResultSelect(result.slug)}
                                                     >
                                                         <TerminalLine>
-                                                            <BiChat className="inline mr-2 mb-0.5" />
-                                                            {">"} Open AI Chat
+                                                            {">"} {result.title}
                                                         </TerminalLine>
+                                                        <p className="font-mono text-xs text-primary-text/60 ml-4 line-clamp-1 leading-tight">
+                                                            {result.description}
+                                                        </p>
                                                     </Command.Item>
-                                                    <Command.Item
-                                                        value="toggle animations motion"
-                                                        className={ITEM_CLASS}
-                                                        onSelect={handleToggleMotion}
-                                                    >
-                                                        <TerminalLine>
-                                                            {motionEnabled ? (
-                                                                <MdDoDisturb className="inline mr-2 mb-0.5" />
-                                                            ) : (
-                                                                <MdAnimation className="inline mr-2 mb-0.5" />
-                                                            )}
-                                                            {">"} Toggle Animations{" "}
-                                                            <span className="ml-1 text-accent/60 font-mono text-xs">
-                                                                [{motionEnabled ? "ON" : "OFF"}]
-                                                            </span>
-                                                        </TerminalLine>
-                                                    </Command.Item>
-                                                </Command.Group>
-                                            )}
-                                        </Command.List>
+                                                ))}
+                                            </Command.Group>
+                                        )}
 
-                                        {/* ── Footer ── */}
-                                        <div className="px-4 py-2 border-t border-accent/20 font-mono text-xs text-accent/40 flex gap-6">
-                                            <span>↑↓ navigate</span>
-                                            <span>↵ select</span>
-                                            <span>esc close</span>
-                                        </div>
-                                    </Command>
-                                </MotionDiv>
-                            </div>
-                        )}
-                    </Overlay>
-                )}
+                                        {isSearching && !hasSearchResults && (
+                                            <div className="px-4 py-6 font-mono text-xs text-accent/40 text-center">
+                                                {">"} no results found_
+                                            </div>
+                                        )}
+
+                                        {!isSearching && (
+                                            <Command.Group>
+                                                <GroupLabel>Quick Actions</GroupLabel>
+                                                <Command.Item
+                                                    value="open ai chat"
+                                                    className={ITEM_CLASS}
+                                                    onSelect={handleOpenChat}
+                                                >
+                                                    <TerminalLine>
+                                                        <BiChat className="inline mr-2 mb-0.5" />
+                                                        {">"} Open AI Chat
+                                                    </TerminalLine>
+                                                </Command.Item>
+                                                <Command.Item
+                                                    value="toggle animations motion"
+                                                    className={ITEM_CLASS}
+                                                    onSelect={handleToggleMotion}
+                                                >
+                                                    <TerminalLine>
+                                                        {motionEnabled ? (
+                                                            <MdDoDisturb className="inline mr-2 mb-0.5" />
+                                                        ) : (
+                                                            <MdAnimation className="inline mr-2 mb-0.5" />
+                                                        )}
+                                                        {">"} Toggle Animations{" "}
+                                                        <span className="ml-1 text-accent/60 font-mono text-xs">
+                                                            [{motionEnabled ? "ON" : "OFF"}]
+                                                        </span>
+                                                    </TerminalLine>
+                                                </Command.Item>
+                                            </Command.Group>
+                                        )}
+                                    </Command.List>
+
+                                    <div className="px-4 py-2 border-t border-accent/20 font-mono text-xs text-accent/40 flex gap-6">
+                                        <span>↑↓ navigate</span>
+                                        <span>↵ select</span>
+                                        <span>esc close</span>
+                                    </div>
+                                </Command>
+                            </MotionDiv>
+                        </div>
+                    )}
+                </Overlay>
+            )}
         </AnimatePresence>
     );
 };
