@@ -1,0 +1,49 @@
+---
+title: "Cracking the Safe"
+description: "Find a minimum-length string that contains every possible n-digit password over a k-symbol alphabet as a substring."
+date: 2026-04-23
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [eulerian circuit, eulerian path, graph, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Eulerian Circuit (Hierholzer's Algorithm on De Bruijn Graph)"
+  leetcodeUrl: "https://leetcode.com/problems/cracking-the-safe/"
+  difficulty: "Hard"
+---
+# Cracking the Safe
+
+Leetcode Problem 753: [Cracking the Safe](https://leetcode.com/problems/cracking-the-safe/description/)
+
+## Problem Summary
+A safe is protected by a password that is a sequence of **n** digits, where each digit ranges from **0** to **k - 1**. The safe checks the most recent **n** digits entered each time a new digit is typed. Return any string of minimum length that will unlock the safe at some point during entry. In other words, find the shortest string that contains every possible n-digit combination over the k-symbol alphabet as a contiguous substring. The value of **n** is at most **4**, **k** is at most **10**, and the total number of possible passwords (k^n) is at most **4096**.
+
+## Techniques
+- String
+- Depth-First Search
+- Graph Theory
+- Eulerian Circuit
+
+## Solution
+```ts
+function hierholzer(node: string, k: number, visited: Set<string>, path: string[]) {
+    for (let i = 0; i < k; i++) {
+        const edge = node + i;
+
+        if (!visited.has(edge)) {
+            visited.add(edge);
+            hierholzer(edge.slice(1), k, visited, path);
+            path.push(i.toString());
+        }
+    }
+}
+
+function crackSafe(n: number, k: number): string {
+    const visited = new Set<string>();
+    const path: string[] = [];
+    const startNode = "0".repeat(n - 1);
+
+    hierholzer(startNode, k, visited, path);
+
+    return startNode + path.reverse().join("");
+}
+```

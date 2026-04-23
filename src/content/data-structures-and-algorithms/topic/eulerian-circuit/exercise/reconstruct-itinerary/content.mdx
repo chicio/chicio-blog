@@ -1,0 +1,74 @@
+---
+title: "Reconstruct Itinerary"
+description: "Given a list of airline tickets represented as pairs of departure and arrival airports, reconstruct the itinerary in order starting from JFK."
+date: 2026-04-23
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [eulerian circuit, eulerian path, graph, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Eulerian Path (Hierholzer's Algorithm)"
+  leetcodeUrl: "https://leetcode.com/problems/reconstruct-itinerary/"
+  difficulty: "Hard"
+---
+# Reconstruct Itinerary
+
+Leetcode Problem 332: [Reconstruct Itinerary](https://leetcode.com/problems/reconstruct-itinerary/description/)
+
+## Problem Summary
+Given a list of airline tickets where each ticket is a pair of departure and arrival airports, reconstruct the itinerary in order. The itinerary must begin with **"JFK"**. If there are multiple valid itineraries, return the one with the smallest lexical order when read as a single string. All tickets belong to the same person, all tickets must be used exactly once, and at least one valid itinerary is guaranteed to exist. The number of tickets is at most **300**, and airport codes are three uppercase English letters.
+
+## Techniques
+- Array
+- String
+- Depth-First Search
+- Graph Theory
+- Sorting
+- Eulerian Circuit
+
+## Solution
+```ts
+function hierholzer(node: string, graph: Map<string, string[]>, path: string[]) {
+    const neighbors = graph.get(node)
+
+    while (neighbors && neighbors.length > 0) {
+        const next = neighbors.shift()!
+        hierholzer(next, graph, path)
+    }
+
+    path.push(node)
+}
+
+function eulerianPath(start: string, graph: Map<string, string[]>) {
+    const path: string[] = []
+
+    hierholzer(start, graph, path)
+
+    return path.reverse()
+}
+
+function constructGraph(tickets: string[][]) {
+    const graph = new Map<string, string[]>()
+
+    for (const [from, to] of tickets) {
+        const toList = graph.get(from)
+
+        if (toList) {
+            graph.set(from, (graph.get(from) || []).concat(to))
+        } else {
+            graph.set(from, [to])
+        }
+    }
+
+    for (const [from, toList] of graph) {
+        toList.sort()
+    }
+
+    return graph
+}
+
+function findItinerary(tickets: string[][]): string[] {
+    const graph = constructGraph(tickets)
+
+    return eulerianPath("JFK", graph)
+}
+```

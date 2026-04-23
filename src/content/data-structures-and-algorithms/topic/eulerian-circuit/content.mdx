@@ -1,0 +1,269 @@
+---
+title: "Eulerian Circuit"
+description: "A comprehensive guide to Eulerian circuits and paths, covering the necessary and sufficient conditions for their existence, Hierholzer's algorithm, De Bruijn sequences, and applications to graph traversal problems."
+date: 2026-04-23
+image: /images/posts/data-structures-and-algorithms-featured.png
+tags: [eulerian circuit, eulerian path, graph, data structures, algorithms]
+authors: [fabrizio_duroni]
+---
+
+import { TopicExercises } from "@/components/sections/data-structures-and-algorithms/components/topic-exercises";
+
+# Eulerian Circuit
+
+In the [graph traversal](/data-structures-and-algorithms/topic/graph) article, we explored how BFS and DFS visit every reachable **vertex** in a graph.
+In the [topological sort](/data-structures-and-algorithms/topic/topological-sort) article, we used those traversals to impose a linear order on the vertices of a directed acyclic graph.
+In both cases, the focus was on vertices: reaching them, ordering them, or partitioning them into components.
+But some problems shift the focus to **edges**.
+Instead of asking "can we visit every vertex?" the question becomes "can we traverse every edge exactly once?"
+
+This question is, in fact, the oldest problem in graph theory.
+In 1736, [Leonhard Euler](https://en.wikipedia.org/wiki/Leonhard_Euler) studied the [seven bridges of Konigsberg](https://en.wikipedia.org/wiki/Seven_Bridges_of_K%C3%B6nigsberg),
+asking whether it was possible to walk through the city crossing each bridge exactly once and returning to the starting point.
+He proved that it was impossible, and in doing so laid the foundations of graph theory itself.
+The key insight was that the answer depends not on the geometry of the city, but on a simple combinatorial property of the graph: the **degree** of each vertex.
+
+This article develops the theory of [**Eulerian circuits**](https://en.wikipedia.org/wiki/Eulerian_path) and **Eulerian paths**,
+the conditions under which they exist, the classical algorithm for finding them, and a powerful application
+to [De Bruijn sequences](https://en.wikipedia.org/wiki/De_Bruijn_sequence) that connects edge traversal to combinatorial generation.
+
+## Eulerian Circuits and Eulerian Paths
+
+An **Eulerian circuit** (also called an Eulerian tour) of a graph is a closed walk that visits every edge exactly once and returns to the starting vertex.
+An **Eulerian path** is a walk that visits every edge exactly once but may start and end at different vertices.
+Every Eulerian circuit is trivially an Eulerian path, but the converse is not true.
+
+The distinction matters because the existence conditions differ.
+Whether a graph admits an Eulerian circuit, an Eulerian path, or neither depends entirely on the **degree structure** of its vertices.
+
+### Undirected Graphs
+
+For a connected undirected graph, the [degree](https://en.wikipedia.org/wiki/Degree_(graph_theory)) of a vertex is the number of edges incident to it.
+Euler's original theorem, later formalized, gives the complete characterization.
+
+A connected undirected graph has an **Eulerian circuit** if and only if every vertex has **even degree**.
+A connected undirected graph has an **Eulerian path** (but not a circuit) if and only if it has exactly **two vertices of odd degree**.
+If there are more than two vertices of odd degree, the graph has neither an Eulerian circuit nor an Eulerian path.
+
+The intuition behind these conditions is elegant.
+Consider any vertex that the walk passes through (not the start/end vertex of a path).
+Every time the walk enters that vertex along some edge, it must leave along a different edge.
+This pairs up the edges at that vertex: one in, one out, one in, one out.
+If the degree is odd, there will be one edge left over with no partner, and the walk cannot continue.
+For a circuit, the starting vertex must also have this property, because the walk returns to it.
+For a path, the start and end vertices are the exception: the walk uses one "extra" edge to leave the start and one "extra" edge to arrive at the end,
+which is why exactly two odd-degree vertices are permitted.
+
+The formal proof proceeds by induction on the number of edges.
+The base case is a single cycle, which trivially satisfies the even-degree condition.
+For the inductive step, start at any vertex and follow edges (removing each after traversal) until you return to the starting vertex.
+This is always possible because even degree ensures that whenever you enter a vertex, there is an unused edge to leave.
+If all edges have been used, you have the Eulerian circuit.
+If not, the remaining edges form smaller connected components, each with even degree, and by the inductive hypothesis each has its own Eulerian circuit.
+Splicing these smaller circuits into the main circuit at their shared vertices produces the full Eulerian circuit.
+
+### Directed Graphs
+
+For [directed graphs](https://en.wikipedia.org/wiki/Directed_graph), the relevant quantities are the **in-degree** (number of incoming edges) and **out-degree** (number of outgoing edges) of each vertex.
+
+A connected directed graph has an **Eulerian circuit** if and only if every vertex satisfies `in-degree = out-degree`.
+A connected directed graph has an **Eulerian path** (but not a circuit) if and only if there is exactly one vertex where `out-degree - in-degree = 1` (the start),
+exactly one vertex where `in-degree - out-degree = 1` (the end), and all other vertices satisfy `in-degree = out-degree`.
+
+The reasoning is the same as the undirected case, adapted for direction.
+Each time the walk enters a vertex via an incoming edge, it must leave via an outgoing edge.
+At interior vertices, incoming and outgoing edges pair up perfectly when in-degree equals out-degree.
+At the start vertex, there is one extra outgoing edge (the first step of the path), and at the end vertex, there is one extra incoming edge (the last step).
+
+The connectivity requirement also needs care in the directed case.
+The graph must be connected in the sense that the underlying undirected graph (ignoring edge direction) is connected,
+or equivalently, every vertex with nonzero degree belongs to a single [weakly connected component](https://en.wikipedia.org/wiki/Connectivity_(graph_theory)#Connected_vertices_and_graphs).
+
+## Hierholzer's Algorithm
+
+Knowing that an Eulerian circuit exists is one thing; finding it efficiently is another.
+A naive approach might attempt a simple [depth-first search](https://en.wikipedia.org/wiki/Depth-first_search), following edges and removing them as they are traversed.
+But this approach can get stuck.
+Consider a graph where early choices lead into a subgraph that is exhausted before all edges in the rest of the graph have been visited.
+The DFS reaches a dead end, having used only a subset of the edges, and the partial walk cannot be extended.
+
+[**Hierholzer's algorithm**](https://en.wikipedia.org/wiki/Eulerian_path#Hierholzer's_algorithm), published posthumously in 1873,
+solves this problem with an elegant structural insight.
+Instead of trying to avoid dead ends, it embraces them.
+The algorithm performs a DFS that follows edges greedily, and when it reaches a dead end (a vertex with no remaining unused edges),
+it adds that vertex to the result in **post-order**.
+The final result is the reverse of this post-order traversal.
+
+### Why Post-Order Works
+
+The key observation is that a dead end in the DFS is not a failure; it is a signal that the local subgraph has been fully traversed.
+When the DFS backtracks from a dead end, it returns to a vertex that may still have unused edges.
+Those edges lead to other subgraphs that are themselves fully traversable.
+By recording vertices in post-order (at the moment the DFS backtracks past them) and reversing at the end,
+the algorithm effectively splices together the sub-tours in the correct order.
+
+To see why this works, consider the structure of the DFS.
+At any vertex $v$, the DFS explores one outgoing edge, recurses into the neighbor, and eventually returns to $v$ (because the degree conditions guarantee this).
+At that point, $v$ may have more unused edges.
+The DFS explores the next one, recurses, returns, and so on.
+Each of these recursive explorations produces a sub-tour.
+In the post-order recording, the vertices of the last sub-tour explored from $v$ appear first, then the vertices of the previous sub-tour, and so on.
+Reversing the post-order interleaves these sub-tours correctly: the first sub-tour is traversed first, then the second, and so on,
+with $v$ appearing at the splice points.
+
+This is the same structural principle that makes post-order DFS useful in [topological sorting](/data-structures-and-algorithms/topic/topological-sort):
+the last thing to finish is the first thing in the result.
+
+### Implementation
+
+The algorithm is remarkably concise.
+For a directed graph represented as an adjacency list (where each adjacency list is consumed as edges are traversed),
+the implementation is:
+
+```ts
+function hierholzer(
+    node: string,
+    graph: Map<string, string[]>,
+    path: string[]
+) {
+    const neighbors = graph.get(node);
+
+    while (neighbors && neighbors.length > 0) {
+        const next = neighbors.shift()!;
+        hierholzer(next, graph, path);
+    }
+
+    path.push(node);
+}
+
+function eulerianPath(
+    start: string,
+    graph: Map<string, string[]>
+): string[] {
+    const path: string[] = [];
+    hierholzer(start, graph, path);
+    return path.reverse();
+}
+```
+
+The `neighbors.shift()` call removes the first neighbor from the adjacency list, effectively marking the edge as used.
+This is crucial: each edge is traversed exactly once because it is removed from the data structure upon use.
+The recursive call then explores the neighbor, and when the recursion returns (meaning the neighbor has no more unused edges),
+the current node is pushed to the `path` array.
+The final reversal of `path` produces the Eulerian path or circuit.
+
+If the problem requires lexicographic ordering (as in the "Reconstruct Itinerary" problem),
+sorting each adjacency list before running the algorithm ensures that the algorithm always picks the smallest available neighbor first.
+
+The algorithm works identically for Eulerian circuits and Eulerian paths.
+For a circuit, the start vertex can be any vertex (since all degrees are balanced).
+For a path, the start vertex must be the one with `out-degree - in-degree = 1` (in the directed case) or one of the two odd-degree vertices (in the undirected case).
+
+### Correctness
+
+The correctness of Hierholzer's algorithm rests on two facts.
+
+First, the degree conditions guarantee that whenever the DFS enters a vertex, it can leave (except at the designated end vertex of a path).
+This means the DFS always terminates at the correct vertex: the start vertex for a circuit, the end vertex for a path.
+
+Second, the post-order reversal correctly assembles the sub-tours.
+Each time the DFS backtracks past a vertex, that vertex has been fully processed: all of its edges have been traversed.
+The reversal ensures that edges are listed in the order they are first traversed, not the order in which vertices are finished.
+
+## De Bruijn Sequences and De Bruijn Graphs
+
+One of the most elegant applications of Eulerian circuits is the construction of [**De Bruijn sequences**](https://en.wikipedia.org/wiki/De_Bruijn_sequence).
+A De Bruijn sequence of order $n$ over an alphabet of size $k$ is a cyclic string in which every possible string of length $n$ appears exactly once as a contiguous substring.
+For example, over the binary alphabet $\{0, 1\}$ with $n = 2$, the string `00110` contains all four 2-digit binary strings: `00`, `01`, `11`, `10`.
+
+The connection to Eulerian circuits comes through the [**De Bruijn graph**](https://en.wikipedia.org/wiki/De_Bruijn_graph).
+
+### Constructing the De Bruijn Graph
+
+The De Bruijn graph $B(n, k)$ is a directed graph defined as follows.
+
+The **vertices** are all strings of length $n - 1$ over the alphabet $\{0, 1, \ldots, k - 1\}$.
+There are $k^{n-1}$ such vertices.
+
+For each string $s$ of length $n$, there is a **directed edge** from the vertex $s[0..n-2]$ (the first $n - 1$ characters) to the vertex $s[1..n-1]$ (the last $n - 1$ characters).
+The edge is labeled with the last character $s[n-1]$.
+There are $k^n$ such edges, one for each possible $n$-length string.
+
+For example, with $n = 2$ and $k = 2$, the vertices are `0` and `1`, and the four edges are:
+$0 \overset{0}{\rightarrow} 0$ (string `00`), $0 \overset{1}{\rightarrow} 1$ (string `01`), $1 \overset{0}{\rightarrow} 0$ (string `10`), $1 \overset{1}{\rightarrow} 1$ (string `11`).
+
+### Why an Eulerian Circuit Produces the De Bruijn Sequence
+
+Each edge in the De Bruijn graph corresponds to exactly one $n$-length string.
+An Eulerian circuit traverses every edge exactly once, so it traverses every $n$-length string exactly once.
+As the circuit moves along edges, consecutive edges overlap in $n - 2$ characters (because the target of one edge is the source of the next,
+and both are $(n-1)$-length strings sharing $n - 2$ characters).
+This means that recording only the label of each edge (one character per edge), preceded by the starting vertex, produces a string
+of length $k^n + (n - 1)$ that contains every $n$-length string as a contiguous substring.
+
+The De Bruijn graph always has an Eulerian circuit because every vertex has in-degree equal to out-degree.
+Each vertex is an $(n-1)$-length string, and it has exactly $k$ outgoing edges (one for each possible appended character)
+and exactly $k$ incoming edges (one for each possible prepended character).
+Since $k = k$, the balance condition is satisfied at every vertex.
+
+### Application: Cracking the Safe
+
+The "Cracking the Safe" problem asks for the shortest string that contains every $n$-digit password over a $k$-symbol alphabet.
+This is exactly a De Bruijn sequence.
+The solution constructs the De Bruijn graph implicitly and runs Hierholzer's algorithm on it:
+
+```ts
+function hierholzer(
+    node: string,
+    k: number,
+    visited: Set<string>,
+    path: string[]
+) {
+    for (let i = 0; i < k; i++) {
+        const edge = node + i;
+
+        if (!visited.has(edge)) {
+            visited.add(edge);
+            hierholzer(edge.slice(1), k, visited, path);
+            path.push(i.toString());
+        }
+    }
+}
+
+function crackSafe(n: number, k: number): string {
+    const visited = new Set<string>();
+    const path: string[] = [];
+    const startNode = "0".repeat(n - 1);
+
+    hierholzer(startNode, k, visited, path);
+
+    return startNode + path.reverse().join("");
+}
+```
+
+In this implementation, each vertex is an $(n-1)$-length string.
+The edges are represented implicitly: from vertex `node`, appending digit `i` creates the edge string `node + i`,
+and the target vertex is `edge.slice(1)` (the last $n - 1$ characters of the edge string).
+The `visited` set tracks which edges have been traversed (each edge is identified by its $n$-length string).
+The `path` array collects edge labels in post-order, and the final result is the starting vertex concatenated with the reversed path.
+
+The graph is never materialized as an adjacency list.
+Instead, the `for` loop over `0..k-1` generates outgoing edges on the fly, and the `visited` set ensures each edge is used exactly once.
+This implicit representation is memory-efficient and natural for De Bruijn graphs, where the structure is entirely determined by the parameters $n$ and $k$.
+
+## Time and Space Complexity
+
+| Algorithm | Time Complexity | Space Complexity | Notes |
+|-----------|----------------|-----------------|-------|
+| Hierholzer's (explicit graph) | $O(\|E\|)$ | $O(\|E\|)$ | Each edge is visited and removed exactly once. The recursion stack depth is at most $O(\|E\|)$ in the worst case. |
+| Hierholzer's (De Bruijn graph) | $O(k^n)$ | $O(k^n)$ | There are $k^n$ edges in the De Bruijn graph $B(n, k)$. The visited set stores all $k^n$ edge strings. |
+| Degree check (existence test) | $O(\|V\| + \|E\|)$ | $O(1)$ | A single pass over the adjacency list to compute and verify degree conditions. |
+
+Hierholzer's algorithm is optimal: any algorithm that finds an Eulerian circuit must output all $|E|$ edges, so $\Omega(|E|)$ is a lower bound.
+The space usage comes primarily from the recursion stack and the path array, both of which can grow to $O(|E|)$.
+For the De Bruijn graph application, the $k^n$ edges determine both time and space, but since $k^n$ is bounded by 4096 in typical problem constraints,
+the algorithm runs in effectively constant time for practical inputs.
+
+## Exercises
+
+<TopicExercises topic="eulerian-circuit" />
