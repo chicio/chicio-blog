@@ -31,10 +31,15 @@ export const Overlay: FC<OverlayProps> = ({ onClick, delay = 0, children, classN
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{
-                type: "spring",
-                stiffness: 400,
-                damping: 30,
-                duration: 0.25,
+                // Tween (not spring) guarantees a definite end time so AnimatePresence
+                // can reliably unmount after exit and useLockBodyScroll cleanup runs.
+                // A spring with damping < 1 oscillates indefinitely until framer-motion's
+                // resting threshold is met — if that threshold is never crossed (edge cases
+                // in opacity compositing), the overlay stays mounted and body scroll stays
+                // locked, which breaks backdrop-blur on sibling fixed elements (menu,
+                // brand header) because overflow:hidden on <html> corrupts their compositing.
+                duration: delay ? delay + 0.2 : 0.2,
+                ease: "easeOut",
                 delay,
             }}
         >

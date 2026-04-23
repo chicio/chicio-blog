@@ -119,8 +119,20 @@ export const CommandPalette = () => {
                     onClick={close}
                     className="z-50 overflow-hidden"
                 >
-                    {/* Terminal Matrix rain background — mirrors 404 and offline pages */}
-                    <MatrixRain fontSize={14} density={0.975} />
+                    {/*
+                     * Terminal Matrix rain background — same pattern as 404 and offline pages.
+                     * The canvas (absolute top-0 left-0 h-full w-full) needs a RELATIVE-positioned
+                     * ancestor with a definite height to resolve h-full correctly.  Using the
+                     * fixed Overlay div directly as that ancestor is unreliable: when
+                     * useLockBodyScroll sets overflow:hidden on <html>, some browsers
+                     * re-anchor fixed elements to <html> instead of the viewport, making
+                     * h-full on child canvas compute to 0.  The explicit absolute inset-0
+                     * wrapper gives the canvas a definite containing-block regardless of
+                     * what the outer fixed element does.
+                     */}
+                    <div className="absolute inset-0 bg-black overflow-hidden">
+                        <MatrixRain fontSize={14} density={0.975} />
+                    </div>
 
                     {search.type === "easterEgg" ? (
                         <NeoRoomEasterEgg lines={search.terminalLines} />
