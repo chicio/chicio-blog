@@ -189,7 +189,8 @@ For each string $s$ of length $n$, there is a **directed edge** from the vertex 
 The edge is labeled with the last character $s[n-1]$.
 There are $k^n$ such edges, one for each possible $n$-length string.
 
-For example, with $n = 2$ and $k = 2$, the vertices are `0` and `1`, and the edges are: `0 \xrightarrow{0} 0` (string `00`), `0 \xrightarrow{1} 1` (string `01`), `1 \xrightarrow{0} 0` (string `10`), `1 \xrightarrow{1} 1` (string `11`).
+For example, with $n = 2$ and $k = 2$, the vertices are `0` and `1`, and the four edges are:
+$0 \overset{0}{\rightarrow} 0$ (string `00`), $0 \overset{1}{\rightarrow} 1$ (string `01`), $1 \overset{0}{\rightarrow} 0$ (string `10`), $1 \overset{1}{\rightarrow} 1$ (string `11`).
 
 ### Why an Eulerian Circuit Produces the De Bruijn Sequence
 
