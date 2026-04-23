@@ -1,7 +1,6 @@
 "use client";
 
 import { Overlay } from "@/components/design-system/atoms/effects/overlay";
-import { MatrixRain } from "@/components/design-system/atoms/effects/matrix-rain";
 import { TerminalLine } from "@/components/design-system/atoms/typography/terminal-blocks";
 import { MotionDiv } from "@/components/design-system/molecules/animation/motion-div";
 import { useGlassmorphism } from "@/components/design-system/utils/hooks/use-glassmorphism";
@@ -144,30 +143,15 @@ export const CommandPalette = () => {
                     className="z-50"
                     lockScroll={false}
                 >
-                    {/*
-                     * Terminal background — identical structure to the 404 and offline pages.
-                     *
-                     * Why `relative h-screen` (not `absolute inset-0`):
-                     * The canvas is `absolute top-0 left-0 h-full w-full`.  For `h-full` to
-                     * resolve, the containing block needs a DEFINITE height per the CSS spec
-                     * (percentage heights on absolutely positioned elements resolve against the
-                     * containing block's definite height).  `absolute inset-0` gives an inferred
-                     * height but not always a "definite" one — browsers may compute 0 when
-                     * the fixed ancestor has `overflow:hidden` on `<html>` (useLockBodyScroll).
-                     * `h-screen` = `100vh` is an absolute length, always definite, independent
-                     * of ancestor overflow or scroll state.  `relative` makes this div the
-                     * positioning context the canvas resolves against.
-                     */}
-                    <div className="relative w-full h-screen min-h-screen overflow-hidden bg-black">
-                        <MatrixRain fontSize={14} density={0.975} />
-
-                        {search.type === "easterEgg" ? (
-                            <NeoRoomEasterEgg lines={search.terminalLines} />
-                        ) : (
-                            <div
-                                className="relative z-10 flex justify-center items-start min-h-screen pt-[15vh] px-4"
-                                onClick={(e) => e.stopPropagation()}
-                            >
+                    {/* Overlay provides the backdrop (bg-black-alpha-75 + backdrop-blur-sm),
+                        matching the aesthetic of the old menu search screen. */}
+                    {search.type === "easterEgg" ? (
+                        <NeoRoomEasterEgg lines={search.terminalLines} />
+                    ) : (
+                        <div
+                            className="flex justify-center items-start min-h-screen pt-[15vh] px-4"
+                            onClick={(e) => e.stopPropagation()}
+                        >
                                 <MotionDiv
                                     className={`${glassmorphismClass} w-full max-w-[600px] overflow-hidden`}
                                     initial={{ opacity: 0, scale: 0.95, y: -8 }}
@@ -279,7 +263,6 @@ export const CommandPalette = () => {
                                 </MotionDiv>
                             </div>
                         )}
-                    </div>
                 </Overlay>
             )}
         </AnimatePresence>
