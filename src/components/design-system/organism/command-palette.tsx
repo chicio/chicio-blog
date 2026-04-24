@@ -92,7 +92,6 @@ export const CommandPalette = () => {
             action: tracking.action.command_palette_toggle_motion,
         });
         writeMotion(motionEnabled ? "off" : "on");
-        close();
     };
 
     const handleOpenChat = () => {
