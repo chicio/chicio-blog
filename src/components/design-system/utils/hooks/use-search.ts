@@ -3,7 +3,7 @@
 import { searchIndexFileName } from "@/lib/content/search-filename";
 import { SearchablePostFields, SearchResult } from "@/types/search/search";
 import elasticlunr from "elasticlunr";
-import { ChangeEvent, useEffect, useState, useMemo, useTransition } from "react";
+import { ChangeEvent, useCallback, useEffect, useState, useMemo, useTransition } from "react";
 
 const hasMinimumCharsToSearch = (query: string): boolean => query.length >= 3;
 
@@ -65,8 +65,6 @@ export const useSearch = (
     const value = e.target.value.trim();
     const easterEggResult = easterEgg(value);
 
-    console.log({ easterEggResult });
-
     if (easterEggResult) {
       setSearch(easterEggResult);
       return;
@@ -75,7 +73,7 @@ export const useSearch = (
     searchUsing(value);
   };
 
-  const resetSearch = () => setSearch({ type: "search", results: [] });
+  const resetSearch = useCallback(() => setSearch({ type: "search", results: [] }), []);
 
   return {
     handleSearch,

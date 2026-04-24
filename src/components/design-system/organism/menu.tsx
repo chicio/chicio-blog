@@ -208,19 +208,17 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
                         </div>
                     )}
                     <button
-                        className="ml-auto sm:mr-3 flex items-center cursor-pointer group"
+                        className="ml-auto sm:mr-3 group flex items-center gap-2 px-3 py-1.5 w-44 rounded-lg border border-accent/50 bg-accent/10 hover:border-accent hover:bg-accent/20 transition-all duration-200 cursor-pointer"
                         onClick={handlePaletteTrigger}
                         aria-label="Open command palette"
                     >
-                        <div className="flex items-center gap-2 px-3 py-1.5 w-44 rounded-lg border border-accent/50 bg-accent/10 group-hover:border-accent group-hover:bg-accent/20 transition-all duration-200">
-                            <BiSearchAlt className="size-3.5 shrink-0 text-accent/80 group-hover:text-accent transition-colors duration-200" />
-                            <span className="flex-1 text-left font-mono text-xs text-accent/70 group-hover:text-accent transition-colors duration-200">
-                                Search...
-                            </span>
-                            <kbd className="hidden xs:flex items-center gap-0.5 px-1.5 py-0.5 rounded font-mono text-[10px] border border-accent/50 text-accent/70 group-hover:border-accent group-hover:text-accent transition-colors duration-200">
-                                <span>⌘</span><span>K</span>
-                            </kbd>
-                        </div>
+                        <BiSearchAlt className="size-3.5 shrink-0 text-accent/80 group-hover:text-accent transition-colors duration-200" />
+                        <span className="flex-1 text-left font-mono text-xs text-accent/70 group-hover:text-accent transition-colors duration-200">
+                            Search...
+                        </span>
+                        <kbd className="hidden xs:flex items-center gap-0.5 px-1.5 py-0.5 rounded font-mono text-[10px] border border-accent/50 text-accent/70 group-hover:border-accent group-hover:text-accent transition-colors duration-200">
+                            <span>⌘</span><span>K</span>
+                        </kbd>
                     </button>
                 </div>
             </MotionDiv>
