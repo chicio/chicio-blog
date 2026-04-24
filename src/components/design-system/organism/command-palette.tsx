@@ -15,7 +15,7 @@ import { whiteRabbitEasterEgg } from "@/components/sections/easter-eggs/componen
 import { Command } from "cmdk";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import { ChangeEvent, FC, PropsWithChildren, useEffect, useState } from "react";
+import { ChangeEvent, FC, PropsWithChildren, useEffect, useRef, useState } from "react";
 import { BiChat } from "react-icons/bi";
 import { MdAnimation, MdDoDisturb } from "react-icons/md";
 
@@ -34,6 +34,10 @@ const GroupLabel: FC<PropsWithChildren> = ({ children }) => (
 export const CommandPalette = () => {
     const [open, setOpen] = useState(false);
     const [isSearching, setIsSearching] = useState(false);
+    // Tracks whether the panel has been painted at least once in the current
+    // open session. When true, MotionDiv skips its entry initial values so
+    // switching motion ON while the palette is already visible doesn't blink.
+    const panelShown = useRef(false);
 
     const router = useRouter();
     const motionEnabled = useMotionStore();
@@ -44,6 +48,7 @@ export const CommandPalette = () => {
         setOpen(false);
         setIsSearching(false);
         resetSearch();
+        panelShown.current = false;
     };
 
     useEffect(() => {
@@ -123,10 +128,13 @@ export const CommandPalette = () => {
                     {search.type === "easterEgg" ? (
                         <NeoRoomEasterEgg lines={search.terminalLines} />
                     ) : (
-                        <div className="flex justify-center items-start min-h-screen pt-[15vh] px-4">
+                        <div
+                            className="flex justify-center items-start min-h-screen pt-[15vh] px-4"
+                            ref={(el) => { if (el) panelShown.current = true; }}
+                        >
                             <MotionDiv
                                 className={`${glassmorphismClass} w-full max-w-[600px] overflow-hidden`}
-                                initial={{ opacity: 0, scale: 0.95, y: -8 }}
+                                initial={panelShown.current ? false : { opacity: 0, scale: 0.95, y: -8 }}
                                 animate={{ opacity: 1, scale: 1, y: 0 }}
                                 transition={{ duration: 0.15, ease: "easeOut" }}
                                 onClick={(e) => e.stopPropagation()}
