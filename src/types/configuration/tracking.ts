@@ -58,6 +58,10 @@ export const tracking = {
     pwa_install_dismissed: "pwa_install_dismissed",
     contact_queued_offline: "contact_queued_offline",
     contact_queue_replayed: "contact_queue_replayed",
+    command_palette_open: "command_palette_open",
+    command_palette_toggle_motion: "command_palette_toggle_motion",
+    command_palette_open_chat: "command_palette_open_chat",
+    command_palette_search_result_selected: "command_palette_search_result_selected",
   },
   category: {
     home: "home",
@@ -78,6 +82,7 @@ export const tracking = {
     about_me: "about_me",
     clowns: "clowns",
     pwa: "pwa",
+    command_palette: "command_palette",
   },
   label: {
     footer: "footer",
