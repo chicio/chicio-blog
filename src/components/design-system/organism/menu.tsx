@@ -217,7 +217,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
                             <span className="flex-1 text-left font-mono text-xs text-accent/70 group-hover:text-accent transition-colors duration-200">
                                 Search...
                             </span>
-                            <kbd className="flex items-center gap-0.5 px-1.5 py-0.5 rounded font-mono text-[10px] border border-accent/50 text-accent/70 group-hover:border-accent group-hover:text-accent transition-colors duration-200">
+                            <kbd className="hidden xs:flex items-center gap-0.5 px-1.5 py-0.5 rounded font-mono text-[10px] border border-accent/50 text-accent/70 group-hover:border-accent group-hover:text-accent transition-colors duration-200">
                                 <span>⌘</span><span>K</span>
                             </kbd>
                         </div>
