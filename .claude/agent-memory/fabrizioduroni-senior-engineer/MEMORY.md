@@ -18,5 +18,8 @@
 - [Copy Code Button](feature_copy_code_button.md) — Copy-to-clipboard on all MDX code blocks, key pitfalls (hydration, DOM vs React tree)
 - [PWA](feature_pwa.md) — Serwist configurator mode, offline caching, install prompt, background sync; critical SW gotchas documented
 
+## Features (continued)
+- [Command Palette](feature_command_palette.md) — ⌘K palette, MotionDiv blink suppression pattern, stable close/ESC, search pill design
+
 ## Feedback
 - [PWA & State Patterns](feedback_pwa_patterns.md) — useSyncExternalStore for localStorage state, consent-gated UI, banner/error page alignment rules
