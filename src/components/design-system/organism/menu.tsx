@@ -212,15 +212,12 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
                         onClick={handlePaletteTrigger}
                         aria-label="Open command palette"
                     >
-                        {/* Mobile: icon only */}
-                        <BiSearchAlt className="size-5 xs:hidden text-accent/70 group-hover:text-accent transition-colors duration-200" />
-                        {/* Desktop: search bar — icon + label + shortcut */}
-                        <div className="hidden xs:flex items-center gap-2 px-3 py-1.5 w-48 rounded-lg border border-accent/25 bg-accent/5 group-hover:border-accent/50 group-hover:bg-accent/10 transition-all duration-200">
-                            <BiSearchAlt className="size-3.5 shrink-0 text-accent/50 group-hover:text-accent/70 transition-colors duration-200" />
-                            <span className="flex-1 text-left font-mono text-xs text-accent/40 group-hover:text-accent/60 transition-colors duration-200">
+                        <div className="flex items-center gap-2 px-3 py-1.5 w-28 xs:w-40 sm:w-48 rounded-lg border border-accent/50 bg-accent/10 group-hover:border-accent group-hover:bg-accent/20 transition-all duration-200">
+                            <BiSearchAlt className="size-3.5 shrink-0 text-accent/80 group-hover:text-accent transition-colors duration-200" />
+                            <span className="hidden xs:block flex-1 text-left font-mono text-xs text-accent/70 group-hover:text-accent transition-colors duration-200">
                                 Search...
                             </span>
-                            <kbd className="flex items-center gap-0.5 px-1.5 py-0.5 rounded font-mono text-[10px] border border-accent/25 text-accent/40 group-hover:border-accent/40 group-hover:text-accent/60 transition-colors duration-200">
+                            <kbd className="flex items-center gap-0.5 px-1.5 py-0.5 rounded font-mono text-[10px] border border-accent/50 text-accent/70 group-hover:border-accent group-hover:text-accent transition-colors duration-200">
                                 <span>⌘</span><span>K</span>
                             </kbd>
                         </div>
