@@ -15,7 +15,6 @@ import { whiteRabbitEasterEgg } from "@/components/sections/easter-eggs/componen
 import { Command } from "cmdk";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import { AnimatePresence } from "framer-motion";
 import { ChangeEvent, FC, PropsWithChildren, useEffect, useState } from "react";
 import { BiChat } from "react-icons/bi";
 import { MdAnimation, MdDoDisturb } from "react-icons/md";
@@ -47,7 +46,6 @@ export const CommandPalette = () => {
         resetSearch();
     };
 
-    // ⌘K toggle + open-palette custom event — stable, registered once.
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             if ((e.metaKey || e.ctrlKey) && e.key === "k") {
@@ -63,24 +61,28 @@ export const CommandPalette = () => {
                 action: tracking.action.command_palette_open,
             });
         };
-        document.addEventListener("keydown", handleKeyDown, true);
+        
+        window.addEventListener("keydown", handleKeyDown, true);
         window.addEventListener(commandPaletteOpenEvent, handleOpenEvent);
+
         return () => {
-            document.removeEventListener("keydown", handleKeyDown, true);
+            window.removeEventListener("keydown", handleKeyDown, true);
             window.removeEventListener(commandPaletteOpenEvent, handleOpenEvent);
         };
     }, []);
 
-    // ESC to close — only registered while open so we don't interfere with other handlers.
     useEffect(() => {
-        if (!open) return;
+        if (!open) {
+            return;
+        } 
+
         const handleEsc = (e: KeyboardEvent) => {
             if (e.key === "Escape") close();
         };
-        document.addEventListener("keydown", handleEsc, true);
-        return () => document.removeEventListener("keydown", handleEsc, true);
-        // close calls stable React setters; safe stale ref.
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+
+        window.addEventListener("keydown", handleEsc, true);
+        
+        return () => window.removeEventListener("keydown", handleEsc, true);
     }, [open]);
 
     const handleToggleMotion = () => {
@@ -116,21 +118,19 @@ export const CommandPalette = () => {
     const hasSearchResults = search.type === "search" && search.results.length > 0;
 
     return (
-        <AnimatePresence>
+        <>
             {open && (
-                <Overlay key="command-palette-overlay" delay={0} onClick={close} className="z-50">
+                <Overlay delay={0} onClick={close} className="z-50">
                     {search.type === "easterEgg" ? (
                         <NeoRoomEasterEgg lines={search.terminalLines} />
                     ) : (
-                        <div
-                            className="flex justify-center items-start min-h-screen pt-[15vh] px-4"
-                            onClick={(e) => e.stopPropagation()}
-                        >
+                        <div className="flex justify-center items-start min-h-screen pt-[15vh] px-4">
                             <MotionDiv
                                 className={`${glassmorphismClass} w-full max-w-[600px] overflow-hidden`}
                                 initial={{ opacity: 0, scale: 0.95, y: -8 }}
                                 animate={{ opacity: 1, scale: 1, y: 0 }}
                                 transition={{ duration: 0.15, ease: "easeOut" }}
+                                onClick={(e) => e.stopPropagation()}
                             >
                                 <Command shouldFilter={false} className="flex flex-col">
                                     <div className="flex items-center gap-2 px-4 py-3 border-b border-accent/20">
@@ -150,16 +150,13 @@ export const CommandPalette = () => {
                                         />
                                     </div>
 
-                                    {/* key toggles between "search" and "idle" so cmdk resets its
-                                        internal selection index when switching modes — without this,
-                                        the first ↓ selects from the bottom. */}
                                     <Command.List
                                         key={isSearching ? "search" : "idle"}
                                         className="max-h-[55vh] overflow-y-auto py-2"
                                     >
                                         {isSearching && hasSearchResults && (
                                             <Command.Group>
-                                                <GroupLabel>Blog Posts</GroupLabel>
+                                                <GroupLabel>Content</GroupLabel>
                                                 {search.results.map((result, i) => (
                                                     <Command.Item
                                                         key={`result-${i}`}
@@ -229,6 +226,6 @@ export const CommandPalette = () => {
                     )}
                 </Overlay>
             )}
-        </AnimatePresence>
+        </>
     );
 };
