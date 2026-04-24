@@ -222,7 +222,7 @@ export const CommandPalette = () => {
                                         )}
                                     </Command.List>
 
-                                    <div className="px-4 py-2 border-t border-accent/20 font-mono text-xs text-accent/40 flex gap-6">
+                                    <div className="px-4 py-2 border-t border-accent/20 font-mono text-xs text-accent/40 hidden xs:flex gap-6">
                                         <span>↑↓ navigate</span>
                                         <span>↵ select</span>
                                         <span>esc close</span>
