@@ -21,7 +21,7 @@
     "@microflash/rehype-figure": "^2.1.4",
     "@next/mdx": "16.2.2",
     "@next/third-parties": "16.2.4",
-    "@react-email/components": "^1.0.10",
+    "@react-email/components": "^1.0.12",
     "@tailwindcss/postcss": "^4.2.2",
     "@types/mdx": "^2.0.13",
     "@upstash/redis": "^1.36.4",
