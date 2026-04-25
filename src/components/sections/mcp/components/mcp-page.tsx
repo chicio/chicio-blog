@@ -1,11 +1,10 @@
 import { ContentPageTemplate } from "@/components/design-system/templates/content-page-template";
-import { GlassmorphismBackground } from "@/components/design-system/atoms/effects/glassmorphism-background";
 import { PageTitle } from "@/components/design-system/molecules/typography/page-title";
 import { CodeBlock } from "@/components/design-system/molecules/code/code-block";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { tracking } from "@/types/configuration/tracking";
 import { MCP_SITE_URL } from "@/lib/mcp/config";
-import { BiTerminal, BiDesktop, BiGlobe, BiCode, BiWrench, BiPlug, BiInfoCircle } from "react-icons/bi";
+import { BiTerminal, BiDesktop, BiGlobe, BiCode, BiWrench, BiPlug } from "react-icons/bi";
 import { VscCode } from "react-icons/vsc";
 import { FC, ReactNode } from "react";
 
@@ -41,7 +40,7 @@ const TOOLS = [
     {
         name: "search_content",
         params: "query, limit?",
-        description: "Full-text search across all blog posts and DSA content using elasticlunr.",
+        description: "Full-text search across all blog posts and DSA content.",
     },
     {
         name: "list_posts",
@@ -61,7 +60,7 @@ const TOOLS = [
     {
         name: "get_dsa_topics",
         params: "—",
-        description: "List all Data Structures & Algorithms topics available on the site.",
+        description: "List all Data Structures & Algorithms topics.",
     },
     {
         name: "get_dsa_exercises",
@@ -76,8 +75,7 @@ const TOOLS = [
     {
         name: "get_videogame_games",
         params: "console?, genre?",
-        description:
-            'List games in the collection. Filter by console name (from get_videogame_consoles) and/or genre.',
+        description: "List games in the collection. Filter by console name (from get_videogame_consoles) and/or genre.",
     },
     {
         name: "get_about_me",
@@ -87,27 +85,22 @@ const TOOLS = [
     {
         name: "get_site_stats",
         params: "—",
-        description:
-            "Aggregate statistics: post count, tag count, DSA topic/exercise count, videogame console/game count, latest post.",
+        description: "Aggregate statistics: post count, tag count, DSA topics/exercises, videogame consoles/games, latest post.",
     },
 ];
 
-interface SectionProps {
+interface SectionTitleProps {
     icon: ReactNode;
-    title: string;
     children: ReactNode;
 }
 
-const Section: FC<SectionProps> = ({ icon, title, children }) => (
-    <GlassmorphismBackground className="mb-8">
-        <div className="mb-4 flex items-center gap-3">
-            <span className="text-accent text-2xl">{icon}</span>
-            <h2 className="font-mono text-xl" style={{ marginBottom: 0 }}>
-                {title}
-            </h2>
-        </div>
-        {children}
-    </GlassmorphismBackground>
+const SectionTitle: FC<SectionTitleProps> = ({ icon, children }) => (
+    <div className="mb-4 flex items-center gap-3">
+        <span className="text-accent text-2xl">{icon}</span>
+        <h2 className="font-mono text-xl" style={{ marginBottom: 0 }}>
+            {children}
+        </h2>
+    </div>
 );
 
 const McpCodeBlock: FC<{ code: string }> = ({ code }) => (
@@ -131,7 +124,7 @@ interface ClientCardProps {
 }
 
 const ClientCard: FC<ClientCardProps> = ({ icon, title, description, children }) => (
-    <div className="mb-6 rounded-xl border border-accent/15 bg-black/20 p-5">
+    <div className="mb-6">
         <div className="mb-2 flex items-center gap-2">
             <span className="text-accent text-lg">{icon}</span>
             <h3 className="font-mono text-base" style={{ marginBottom: 0 }}>
@@ -145,11 +138,8 @@ const ClientCard: FC<ClientCardProps> = ({ icon, title, description, children })
 
 export const McpPage: FC = () => (
     <ContentPageTemplate author={siteMetadata.author} trackingCategory={tracking.category.mcp}>
-        <div className="mt-3 mb-8">
+        <div className="mt-3">
             <PageTitle>MCP Server</PageTitle>
-        </div>
-
-        <Section icon={<BiInfoCircle />} title="Introduction">
             <p className="mb-4">
                 <a
                     href="https://modelcontextprotocol.io"
@@ -168,58 +158,49 @@ export const McpPage: FC = () => (
                 posts, explore DSA exercises, search content, browse the videogame collection, and more.
                 No authentication required.
             </p>
-            <div className="flex items-center gap-3 rounded-lg border border-accent/30 bg-accent/5 px-4 py-3">
+            <div className="mb-8 flex items-center gap-3 rounded-lg border border-accent/30 bg-accent/5 px-4 py-3">
                 <span className="font-mono text-xs text-accent/60 uppercase tracking-wider shrink-0">
                     Endpoint
                 </span>
                 <code className="font-mono text-sm text-accent break-all">{MCP_URL}</code>
             </div>
-        </Section>
+        </div>
 
-        <Section icon={<BiWrench />} title="Available Tools">
-            <p className="text-primary-text/70 mb-5 text-sm">
+        <div className="mb-8">
+            <SectionTitle icon={<BiWrench />}>Available Tools</SectionTitle>
+            <p className="text-primary-text/70 mb-4 text-sm">
                 All tools are read-only and return JSON. Optional parameters are marked with{" "}
                 <code className="font-mono text-accent">?</code>.
             </p>
-            <div className="overflow-x-auto">
-                <table className="w-full text-sm">
+            <div className="table-wrapper">
+                <table>
                     <thead>
-                        <tr className="border-b border-accent/20">
-                            <th className="pb-2 text-left font-mono text-xs text-accent/60 uppercase tracking-wider pr-4">
-                                Tool
-                            </th>
-                            <th className="pb-2 text-left font-mono text-xs text-accent/60 uppercase tracking-wider pr-4">
-                                Parameters
-                            </th>
-                            <th className="pb-2 text-left font-mono text-xs text-accent/60 uppercase tracking-wider">
-                                Description
-                            </th>
+                        <tr>
+                            <th>Tool</th>
+                            <th>Parameters</th>
+                            <th>Description</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {TOOLS.map((tool, i) => (
-                            <tr key={tool.name} className={i < TOOLS.length - 1 ? "border-b border-accent/10" : ""}>
-                                <td className="py-2.5 pr-4 align-top">
-                                    <code className="font-mono text-xs text-accent whitespace-nowrap">
-                                        {tool.name}
-                                    </code>
+                        {TOOLS.map((tool) => (
+                            <tr key={tool.name}>
+                                <td>
+                                    <code>{tool.name}</code>
                                 </td>
-                                <td className="py-2.5 pr-4 align-top">
-                                    <code className="font-mono text-xs text-primary-text/60 whitespace-nowrap">
-                                        {tool.params}
-                                    </code>
+                                <td>
+                                    <code>{tool.params}</code>
                                 </td>
-                                <td className="py-2.5 align-top text-primary-text/80 text-xs leading-relaxed">
-                                    {tool.description}
-                                </td>
+                                <td>{tool.description}</td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
             </div>
-        </Section>
+        </div>
 
-        <Section icon={<BiPlug />} title="Connect Your AI Assistant">
+        <div className="mb-8">
+            <SectionTitle icon={<BiPlug />}>Connect Your AI Assistant</SectionTitle>
+
             <ClientCard
                 icon={<BiTerminal />}
                 title="Claude Code"
@@ -274,10 +255,7 @@ export const McpPage: FC = () => (
                         label="Claude Desktop (macOS)"
                         path="~/Library/Application Support/Claude/claude_desktop_config.json"
                     />
-                    <ConfigPath
-                        label="Windsurf (macOS)"
-                        path="~/.codeium/windsurf/mcp_config.json"
-                    />
+                    <ConfigPath label="Windsurf (macOS)" path="~/.codeium/windsurf/mcp_config.json" />
                 </div>
                 <McpCodeBlock code={CLAUDE_DESKTOP_WINDSURF_CONFIG} />
                 <p className="mt-3 text-xs text-primary-text/60">
@@ -318,6 +296,6 @@ export const McpPage: FC = () => (
                     Custom connectors may be restricted on Enterprise accounts.
                 </p>
             </ClientCard>
-        </Section>
+        </div>
     </ContentPageTemplate>
 );
