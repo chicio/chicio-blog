@@ -5,7 +5,7 @@ import { CodeBlock } from "@/components/design-system/molecules/code/code-block"
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { tracking } from "@/types/configuration/tracking";
 import { MCP_SITE_URL } from "@/lib/mcp/config";
-import { BiTerminal, BiDesktop, BiGlobe, BiCode } from "react-icons/bi";
+import { BiTerminal, BiDesktop, BiGlobe, BiCode, BiWrench, BiPlug, BiInfoCircle } from "react-icons/bi";
 import { VscCode } from "react-icons/vsc";
 import { FC, ReactNode } from "react";
 
@@ -37,22 +37,77 @@ const VSCODE_CONFIG = `{
   }
 }`;
 
-interface McpClientCardProps {
+const TOOLS = [
+    {
+        name: "search_content",
+        params: "query, limit?",
+        description: "Full-text search across all blog posts and DSA content using elasticlunr.",
+    },
+    {
+        name: "list_posts",
+        params: "tag?, limit?",
+        description: "List blog posts, optionally filtered by tag slug.",
+    },
+    {
+        name: "get_post",
+        params: "year, month, day, slug",
+        description: "Retrieve the full content of a single blog post by its date and slug.",
+    },
+    {
+        name: "get_tags",
+        params: "—",
+        description: "Return all blog tags with their slugs.",
+    },
+    {
+        name: "get_dsa_topics",
+        params: "—",
+        description: "List all Data Structures & Algorithms topics available on the site.",
+    },
+    {
+        name: "get_dsa_exercises",
+        params: "topic?, difficulty?",
+        description: 'List DSA exercises. Filterable by topic slug and difficulty ("Easy", "Medium", "Hard").',
+    },
+    {
+        name: "get_videogame_consoles",
+        params: "—",
+        description: "List all consoles in the collection, sorted by release year.",
+    },
+    {
+        name: "get_videogame_games",
+        params: "console?, genre?",
+        description:
+            'List games in the collection. Filter by console name (from get_videogame_consoles) and/or genre.',
+    },
+    {
+        name: "get_about_me",
+        params: "—",
+        description: "Return the full About Me page content including professional background and skills.",
+    },
+    {
+        name: "get_site_stats",
+        params: "—",
+        description:
+            "Aggregate statistics: post count, tag count, DSA topic/exercise count, videogame console/game count, latest post.",
+    },
+];
+
+// ─── shared primitives ────────────────────────────────────────────────────────
+
+interface SectionProps {
     icon: ReactNode;
     title: string;
-    description: string;
     children: ReactNode;
 }
 
-const McpClientCard: FC<McpClientCardProps> = ({ icon, title, description, children }) => (
-    <GlassmorphismBackground className="mb-6">
-        <div className="mb-3 flex items-center gap-3">
+const Section: FC<SectionProps> = ({ icon, title, children }) => (
+    <GlassmorphismBackground className="mb-8">
+        <div className="mb-4 flex items-center gap-3">
             <span className="text-accent text-2xl">{icon}</span>
             <h2 className="font-mono text-xl" style={{ marginBottom: 0 }}>
                 {title}
             </h2>
         </div>
-        <p className="text-primary-text/80 mb-4 text-sm">{description}</p>
         {children}
     </GlassmorphismBackground>
 );
@@ -70,12 +125,39 @@ const ConfigPath: FC<{ label: string; path: string }> = ({ label, path }) => (
     </div>
 );
 
+// ─── client card ─────────────────────────────────────────────────────────────
+
+interface ClientCardProps {
+    icon: ReactNode;
+    title: string;
+    description: string;
+    children: ReactNode;
+}
+
+const ClientCard: FC<ClientCardProps> = ({ icon, title, description, children }) => (
+    <div className="mb-6 rounded-xl border border-accent/15 bg-black/20 p-5">
+        <div className="mb-2 flex items-center gap-2">
+            <span className="text-accent text-lg">{icon}</span>
+            <h3 className="font-mono text-base" style={{ marginBottom: 0 }}>
+                {title}
+            </h3>
+        </div>
+        <p className="text-primary-text/70 mb-4 text-sm">{description}</p>
+        {children}
+    </div>
+);
+
+// ─── page ─────────────────────────────────────────────────────────────────────
+
 export const McpPage: FC = () => (
     <ContentPageTemplate author={siteMetadata.author} trackingCategory={tracking.category.mcp}>
-        <div className="mt-3">
+        <div className="mt-3 mb-8">
             <PageTitle>MCP Server</PageTitle>
-            <p className="mb-6">
-                This portfolio exposes a public{" "}
+        </div>
+
+        {/* ── Introduction ── */}
+        <Section icon={<BiInfoCircle />} title="Introduction">
+            <p className="mb-4">
                 <a
                     href="https://modelcontextprotocol.io"
                     target="_blank"
@@ -84,19 +166,70 @@ export const McpPage: FC = () => (
                 >
                     Model Context Protocol
                 </a>{" "}
-                server — connect any MCP-compatible AI assistant to browse blog posts, explore DSA
-                exercises, search content, and more. No authentication required.
+                (MCP) is an open standard that lets AI assistants connect to external data sources and
+                tools. Instead of copy-pasting content into a chat, you give the AI a direct, structured
+                connection to the source.
             </p>
-            <div className="mb-6 flex items-center gap-3 rounded-lg border border-accent/30 bg-accent/5 px-4 py-3">
+            <p className="mb-6">
+                This portfolio exposes a public MCP server — connect your AI assistant to browse blog
+                posts, explore DSA exercises, search content, browse the videogame collection, and more.
+                No authentication required.
+            </p>
+            <div className="flex items-center gap-3 rounded-lg border border-accent/30 bg-accent/5 px-4 py-3">
                 <span className="font-mono text-xs text-accent/60 uppercase tracking-wider shrink-0">
                     Endpoint
                 </span>
                 <code className="font-mono text-sm text-accent break-all">{MCP_URL}</code>
             </div>
-        </div>
+        </Section>
 
-        <div className="mt-6 flex flex-col gap-2">
-            <McpClientCard
+        {/* ── Tools ── */}
+        <Section icon={<BiWrench />} title="Available Tools">
+            <p className="text-primary-text/70 mb-5 text-sm">
+                All tools are read-only and return JSON. Optional parameters are marked with{" "}
+                <code className="font-mono text-accent">?</code>.
+            </p>
+            <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                    <thead>
+                        <tr className="border-b border-accent/20">
+                            <th className="pb-2 text-left font-mono text-xs text-accent/60 uppercase tracking-wider pr-4">
+                                Tool
+                            </th>
+                            <th className="pb-2 text-left font-mono text-xs text-accent/60 uppercase tracking-wider pr-4">
+                                Parameters
+                            </th>
+                            <th className="pb-2 text-left font-mono text-xs text-accent/60 uppercase tracking-wider">
+                                Description
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {TOOLS.map((tool, i) => (
+                            <tr key={tool.name} className={i < TOOLS.length - 1 ? "border-b border-accent/10" : ""}>
+                                <td className="py-2.5 pr-4 align-top">
+                                    <code className="font-mono text-xs text-accent whitespace-nowrap">
+                                        {tool.name}
+                                    </code>
+                                </td>
+                                <td className="py-2.5 pr-4 align-top">
+                                    <code className="font-mono text-xs text-primary-text/60 whitespace-nowrap">
+                                        {tool.params}
+                                    </code>
+                                </td>
+                                <td className="py-2.5 align-top text-primary-text/80 text-xs leading-relaxed">
+                                    {tool.description}
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        </Section>
+
+        {/* ── Installation ── */}
+        <Section icon={<BiPlug />} title="Connect Your AI Assistant">
+            <ClientCard
                 icon={<BiTerminal />}
                 title="Claude Code"
                 description="From any terminal with Claude Code installed, run:"
@@ -108,9 +241,9 @@ export const McpPage: FC = () => (
                     Use <code className="font-mono text-accent">--scope user</code> to make it available
                     across all your projects.
                 </p>
-            </McpClientCard>
+            </ClientCard>
 
-            <McpClientCard
+            <ClientCard
                 icon={<BiCode />}
                 title="Cursor"
                 description="Cursor supports HTTP transport natively — no mcp-remote needed. Open Settings → MCP, or create/edit the config file:"
@@ -120,9 +253,9 @@ export const McpPage: FC = () => (
                     <ConfigPath label="Windows" path="%APPDATA%\Cursor\mcp.json" />
                 </div>
                 <McpCodeBlock code={CURSOR_CONFIG} />
-            </McpClientCard>
+            </ClientCard>
 
-            <McpClientCard
+            <ClientCard
                 icon={<VscCode />}
                 title="VS Code + GitHub Copilot"
                 description="Requires VS Code ≥ 1.99 with GitHub Copilot in agent mode. Create .vscode/mcp.json in your workspace, or add it to your user-level MCP config:"
@@ -138,9 +271,9 @@ export const McpPage: FC = () => (
                     <code className="font-mono text-accent">"mcpServers"</code>) and{" "}
                     <code className="font-mono text-accent">"type": "http"</code>.
                 </p>
-            </McpClientCard>
+            </ClientCard>
 
-            <McpClientCard
+            <ClientCard
                 icon={<BiDesktop />}
                 title="Claude Desktop / Windsurf"
                 description="Both apps use the same JSON config format and require mcp-remote as a stdio↔HTTP bridge. Edit the config file for your app:"
@@ -163,9 +296,9 @@ export const McpPage: FC = () => (
                     <code className="font-mono text-accent">{`"env": { "PATH": "/your/node/bin:..." }`}</code>{" "}
                     entry to the server config. Restart the app after saving.
                 </p>
-            </McpClientCard>
+            </ClientCard>
 
-            <McpClientCard
+            <ClientCard
                 icon={<BiGlobe />}
                 title="Claude.ai"
                 description="Connect directly from the claude.ai web interface — no config file needed."
@@ -193,7 +326,7 @@ export const McpPage: FC = () => (
                 <p className="text-xs text-primary-text/60">
                     Custom connectors may be restricted on Enterprise accounts.
                 </p>
-            </McpClientCard>
-        </div>
+            </ClientCard>
+        </Section>
     </ContentPageTemplate>
 );
