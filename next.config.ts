@@ -30,6 +30,9 @@ const nextConfig: NextConfig = {
     formats: ["image/avif", "image/webp"],
     minimumCacheTTL: 86400,
   },
+  outputFileTracingExcludes: {
+    "/api/**": ["public/images/**"],
+  },
   async redirects() {
     return [
       {
