@@ -14,6 +14,7 @@ export const slugs = {
   },
   art: "/art",
   chat: "/chat",
+  mcp: "/mcp",
   contact: "/contact",
   cookiePolicy: "/cookie-policy",
   dataStructuresAndAlgorithms: {

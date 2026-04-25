@@ -87,6 +87,34 @@ const renderMenuItems = (
                 ]}
             />
             <DropdownMenu
+                label="AI"
+                className={dropdownClassName}
+                items={[
+                    {
+                        label: "Chat",
+                        to: slugs.chat,
+                        trackingData: {
+                            action: tracking.action.open_chat,
+                            category: trackingCategory,
+                            label: tracking.label.header,
+                        },
+                        selected: pathname === slugs.chat,
+                        onClickCallback: () => setShouldOpenMenu(false),
+                    },
+                    {
+                        label: "MCP",
+                        to: slugs.mcp,
+                        trackingData: {
+                            action: tracking.action.open_mcp,
+                            category: trackingCategory,
+                            label: tracking.label.header,
+                        },
+                        selected: pathname === slugs.mcp,
+                        onClickCallback: () => setShouldOpenMenu(false),
+                    },
+                ]}
+            />
+            <DropdownMenu
                 label="The Author"
                 className={dropdownClassName}
                 items={[
@@ -121,17 +149,6 @@ const renderMenuItems = (
                             label: tracking.label.header,
                         },
                         selected: pathname === slugs.videogames.home,
-                        onClickCallback: () => setShouldOpenMenu(false),
-                    },
-                    {
-                        label: "Chat",
-                        to: slugs.chat,
-                        trackingData: {
-                            action: tracking.action.open_chat,
-                            category: trackingCategory,
-                            label: tracking.label.header,
-                        },
-                        selected: pathname === slugs.chat,
                         onClickCallback: () => setShouldOpenMenu(false),
                     },
                     {
