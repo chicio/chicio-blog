@@ -10,14 +10,17 @@ authors: [fabrizio_duroni]
 import { BiWrench, BiChat, BiPlug, BiTerminal, BiCode, BiDesktop, BiGlobe } from "react-icons/bi";
 import { VscCode } from "react-icons/vsc";
 import { ParagraphTitleWithIcon } from "@/components/design-system/molecules/typography/paragraph-title-with-icon";
+import { McpEndpoint } from "@/components/sections/mcp/components/mcp-endpoint";
+
+# MCP fabrizioduroni.it
 
 [Model Context Protocol](https://modelcontextprotocol.io) (MCP) is an open standard that lets AI assistants connect to external data sources and tools. Instead of copy-pasting content into a chat, you give the AI a direct, structured connection to the source.
 
-This portfolio exposes a public MCP server — connect your AI assistant to browse blog posts, explore DSA exercises, search content, browse the videogame collection, and more. No authentication required.
+This portfolio exposes a public MCP server. Connect your AI assistant to browse blog posts, explore DSA exercises, search content, browse the videogame collection, and more. No authentication required.
 
-**Endpoint**: `https://fabrizioduroni.it/api/mcp`
+<McpEndpoint />
 
-## <ParagraphTitleWithIcon icon={<BiWrench className="text-accent text-2xl" />}>Available Tools</ParagraphTitleWithIcon>
+## <ParagraphTitleWithIcon icon={<BiWrench className="text-accent" />}>Available Tools</ParagraphTitleWithIcon>
 
 All tools are read-only and return JSON. Optional parameters are marked with `?`.
 
