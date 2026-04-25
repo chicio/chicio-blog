@@ -269,7 +269,7 @@ const UsageExample: FC<UsageExampleData> = ({ tool, query, response }) => (
 export const McpPage: FC = () => (
     <ContentPageTemplate author={siteMetadata.author} trackingCategory={tracking.category.mcp}>
         <div className="mt-3">
-            <PageTitle>MCP Server</PageTitle>
+            <PageTitle>MCP fabrizioduroni.it</PageTitle>
             <p className="mb-4">
                 <a
                     href="https://modelcontextprotocol.io"

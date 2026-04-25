@@ -7,7 +7,7 @@ import { Metadata } from "next";
 export async function generateMetadata(): Promise<Metadata> {
     return createMetadata({
         author: siteMetadata.author,
-        title: "MCP Server | Fabrizio Duroni",
+        title: "MCP fabrizioduroni.it | Fabrizio Duroni",
         description:
             "Connect any MCP-compatible AI assistant to Fabrizio Duroni's portfolio. Browse blog posts, DSA exercises, and more via the Model Context Protocol.",
         slug: slugs.mcp,
