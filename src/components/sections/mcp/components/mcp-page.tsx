@@ -12,7 +12,7 @@ const MCP_URL = `${MCP_SITE_URL}/api/mcp`;
 
 const CLAUDE_DESKTOP_CONFIG = `{
   "mcpServers": {
-    "chicio-portfolio": {
+    "fabrizioduroni.it": {
       "command": "npx",
       "args": ["-y", "mcp-remote@latest", "${MCP_URL}"]
     }
@@ -75,7 +75,7 @@ export const McpPage: FC = () => (
                 description="From any terminal with Claude Code installed, run:"
             >
                 <McpCodeBlock
-                    code={`claude mcp add --transport http chicio-portfolio ${MCP_URL}`}
+                    code={`claude mcp add --transport http fabrizioduroni.it ${MCP_URL}`}
                 />
                 <p className="mt-3 text-xs text-primary-text/60">
                     Use <code className="font-mono text-accent">--scope user</code> to make it available
