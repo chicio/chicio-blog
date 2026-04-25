@@ -705,7 +705,7 @@ def build_platform_mapping(
 def ensure_imports(mdx_body: str) -> str:
     required_imports = [
         'import { ImageCarousel } from "@/components/design-system/organism/image-carousel";',
-        'import { MDXTitleWithIcon } from "@/components/sections/videogames/components/mdx-title-with-icon";',
+        'import { ParagraphTitleWithIcon } from "@/components/design-system/molecules/typography/paragraph-title-with-icon";',
         'import { FaGamepad } from "react-icons/fa";',
     ]
 
@@ -730,7 +730,7 @@ def build_screenshots_section(title: str, screenshots: list[SelectedScreenshot])
     caption = build_caption(screenshots)
 
     section = (
-        "## <MDXTitleWithIcon icon={<FaGamepad className=\"text-shadow-lg\" />}>Gameplay</MDXTitleWithIcon>\n\n"
+        "## <ParagraphTitleWithIcon icon={<FaGamepad className=\"text-shadow-lg\" />}>Gameplay</ParagraphTitleWithIcon>\n\n"
         "<ImageCarousel\n"
         "    images={[\n"
         f"{image_lines}\n"
@@ -746,7 +746,7 @@ def build_screenshots_section(title: str, screenshots: list[SelectedScreenshot])
 def upsert_section(mdx_body: str, section: str) -> str:
     # Match from the Gameplay heading to the next ## heading (exclusive) or end of body
     section_pattern = re.compile(
-        r"## <MDXTitleWithIcon[^\n]*>Gameplay</MDXTitleWithIcon>[\s\S]*?(?=\n## |\Z)"
+        r"## <ParagraphTitleWithIcon[^\n]*>Gameplay</ParagraphTitleWithIcon>[\s\S]*?(?=\n## |\Z)"
     )
 
     if section_pattern.search(mdx_body):
@@ -780,7 +780,7 @@ def update_game_mdx(
 
 def has_gameplay_section(mdx_raw: str) -> bool:
     section_pattern = re.compile(
-        r"## <MDXTitleWithIcon[^\n]*>Gameplay</MDXTitleWithIcon>[\s\S]*?<ImageCarousel",
+        r"## <ParagraphTitleWithIcon[^\n]*>Gameplay</ParagraphTitleWithIcon>[\s\S]*?<ImageCarousel",
     )
     return bool(section_pattern.search(mdx_raw))
 

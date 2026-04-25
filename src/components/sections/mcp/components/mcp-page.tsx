@@ -1,10 +1,11 @@
 import { ContentPageTemplate } from "@/components/design-system/templates/content-page-template";
 import { PageTitle } from "@/components/design-system/molecules/typography/page-title";
+import { ParagraphTitleWithIcon } from "@/components/design-system/molecules/typography/paragraph-title-with-icon";
 import { CodeBlock } from "@/components/design-system/molecules/code/code-block";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { tracking } from "@/types/configuration/tracking";
 import { MCP_SITE_URL } from "@/lib/mcp/config";
-import { BiTerminal, BiDesktop, BiGlobe, BiCode, BiWrench, BiPlug } from "react-icons/bi";
+import { BiTerminal, BiDesktop, BiGlobe, BiCode, BiWrench, BiPlug, BiChat } from "react-icons/bi";
 import { VscCode } from "react-icons/vsc";
 import { FC, ReactNode } from "react";
 
@@ -91,16 +92,15 @@ const TOOLS = [
 
 interface SectionTitleProps {
     icon: ReactNode;
-    children: ReactNode;
+    children: string;
 }
 
 const SectionTitle: FC<SectionTitleProps> = ({ icon, children }) => (
-    <div className="mb-4 flex items-center gap-3">
-        <span className="text-accent text-2xl">{icon}</span>
-        <h2 className="font-mono text-xl" style={{ marginBottom: 0 }}>
+    <h2 className="font-mono text-xl mb-4" style={{ marginBottom: "1rem" }}>
+        <ParagraphTitleWithIcon icon={<span className="text-accent text-2xl">{icon}</span>}>
             {children}
-        </h2>
-    </div>
+        </ParagraphTitleWithIcon>
+    </h2>
 );
 
 const McpCodeBlock: FC<{ code: string }> = ({ code }) => (
@@ -133,6 +133,136 @@ const ClientCard: FC<ClientCardProps> = ({ icon, title, description, children })
         </div>
         <p className="text-primary-text/70 mb-4 text-sm">{description}</p>
         {children}
+    </div>
+);
+
+interface UsageExampleData {
+    tool: string;
+    query: string;
+    response: string;
+}
+
+const USAGE_EXAMPLES: UsageExampleData[] = [
+    {
+        tool: "search_content",
+        query: "Find blog posts about Metal shaders",
+        response: `[
+  {
+    "slug": "/blog/2018/01/26/the-secret-of-writing-shaders-for-both-apple-metal-and-opengl/",
+    "title": "The secret of writing shaders for both Apple Metal and OpenGL",
+    "date": "2018-01-26",
+    "score": 0.94
+  },
+  { "slug": "...", "title": "...", "score": 0.87 }
+]`,
+    },
+    {
+        tool: "list_posts",
+        query: "List the latest blog posts tagged 'swift'",
+        response: `[
+  { "title": "Swift Structured Concurrency", "date": "2023-06-12",
+    "slug": "/blog/2023/06/12/swift-structured-concurrency/", "tags": ["swift"] },
+  { "title": "Swift actors", "date": "2023-04-07", "slug": "...", "tags": ["swift"] }
+]`,
+    },
+    {
+        tool: "get_post",
+        query: "Show me the full Eulerian Circuit post",
+        response: `{
+  "title": "Eulerian Circuit",
+  "date": "2026-04-22",
+  "tags": ["dsa", "graph", "algorithm"],
+  "content": "An Eulerian circuit is a closed trail that visits every edge of a
+graph exactly once...\\n\\n## The algorithm\\n\\nHierholzer's algorithm works
+by repeatedly finding cycles and merging them...\\n[truncated]"
+}`,
+    },
+    {
+        tool: "get_tags",
+        query: "What topics does this blog cover?",
+        response: `[
+  { "name": "JavaScript", "slug": "javascript" },
+  { "name": "Swift",      "slug": "swift" },
+  { "name": "React",      "slug": "react" },
+  { "name": "Three.js",   "slug": "threejs" }
+  // ... 40+ more tags
+]`,
+    },
+    {
+        tool: "get_dsa_topics",
+        query: "What data structure and algorithm topics are covered?",
+        response: `[
+  { "name": "Graph",        "slug": "graph",        "exerciseCount": 12 },
+  { "name": "Tree",         "slug": "tree",         "exerciseCount": 9 },
+  { "name": "Dynamic Prog", "slug": "dynamic-prog", "exerciseCount": 8 }
+  // ... more topics
+]`,
+    },
+    {
+        tool: "get_dsa_exercises",
+        query: "Show me hard graph exercises",
+        response: `[
+  { "title": "Word Ladder",            "difficulty": "Hard", "topic": "graph" },
+  { "title": "Critical Connections",  "difficulty": "Hard", "topic": "graph" },
+  { "title": "Alien Dictionary",      "difficulty": "Hard", "topic": "graph" }
+]`,
+    },
+    {
+        tool: "get_videogame_consoles",
+        query: "What consoles are in your collection?",
+        response: `[
+  { "name": "Nintendo Entertainment System", "manufacturer": "Nintendo", "releaseYear": 1983 },
+  { "name": "Game Boy",                      "manufacturer": "Nintendo", "releaseYear": 1989 },
+  { "name": "PlayStation",                   "manufacturer": "Sony",     "releaseYear": 1994 }
+  // ... 8 more consoles
+]`,
+    },
+    {
+        tool: "get_videogame_games",
+        query: "What PlayStation 5 games do you have?",
+        response: `[
+  { "title": "Astro Bot",                   "genre": "Platform",     "developer": "Team Asobi" },
+  { "title": "Final Fantasy VII Rebirth",   "genre": "Role-Playing", "developer": "Square Enix" },
+  { "title": "God of War: Ragnarök",        "genre": "Action",       "developer": "Santa Monica" }
+  // ... more games
+]`,
+    },
+    {
+        tool: "get_about_me",
+        query: "Tell me about Fabrizio's professional background",
+        response: `{
+  "content": "I'm Fabrizio Duroni, a senior software engineer based in Milan.
+I work at lastminute.com where I lead mobile and full-stack development...
+My passions include 3D graphics, iOS/macOS development, and algorithms.
+[truncated — full profile includes skills, experience, and open-source work]"
+}`,
+    },
+    {
+        tool: "get_site_stats",
+        query: "How much content is on the site?",
+        response: `{
+  "postsCount":             182,
+  "tagsCount":               47,
+  "dsaTopicsCount":          13,
+  "dsaExercisesCount":       91,
+  "videogameConsolesCount":  11,
+  "videogameGamesCount":    148,
+  "latestPost": {
+    "title": "Eulerian Circuit",
+    "date":  "2026-04-22",
+    "url":   "https://fabrizioduroni.it/blog/2026/04/22/eulerian-circuit/"
+  }
+}`,
+    },
+];
+
+const UsageExample: FC<UsageExampleData> = ({ tool, query, response }) => (
+    <div className="mb-6">
+        <code className="mb-2 block font-mono text-xs text-accent">{tool}</code>
+        <p className="mb-2 border-l-2 border-accent/30 pl-3 text-sm italic text-primary-text/70">
+            &ldquo;{query}&rdquo;
+        </p>
+        <McpCodeBlock code={response} />
     </div>
 );
 
@@ -196,6 +326,17 @@ export const McpPage: FC = () => (
                     </tbody>
                 </table>
             </div>
+        </div>
+
+        <div className="mb-8">
+            <SectionTitle icon={<BiChat />}>Usage Examples</SectionTitle>
+            <p className="text-primary-text/70 mb-4 text-sm">
+                Natural language prompts that trigger each tool, with example responses (truncated for
+                brevity).
+            </p>
+            {USAGE_EXAMPLES.map((example) => (
+                <UsageExample key={example.tool} {...example} />
+            ))}
         </div>
 
         <div className="mb-8">
