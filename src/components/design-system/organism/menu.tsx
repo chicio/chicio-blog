@@ -25,8 +25,8 @@ const renderMenuItems = (
     trackingCategory: string,
     setShouldOpenMenu: (open: boolean) => void,
 ) => {
-    const baseClassName = isMobile ? "mb-2 w-80" : "hidden xs:flex xs:mb-0 xs:w-auto";
-    const dropdownClassName = isMobile ? "z-50 mb-2 w-80" : "hidden xs:flex xs:mb-0 xs:w-auto z-50";
+    const baseClassName = isMobile ? "mb-2 w-80" : "hidden sm:flex xs:mb-0 xs:w-auto";
+    const dropdownClassName = isMobile ? "z-50 mb-2 w-80" : "hidden sm:flex xs:mb-0 xs:w-auto z-50";
 
     return (
         <>
@@ -220,11 +220,11 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
                 initial="visible"
             >
                 <div
-                    className={`${glassmorphismClass} xs:overflow-visible flex-row xs:py-0 xs:pt-0 m-0 my-0 flex min-h-16 items-center gap-1 overflow-hidden px-2`}
+                    className={`${glassmorphismClass} sm:overflow-visible flex-row xs:py-0 xs:pt-0 m-0 my-0 flex min-h-16 items-center gap-1 overflow-hidden px-2`}
                 >
                     {renderMenuItems(false, pathname, trackingCategory, setShouldOpenMenu)}
                     {!shouldOpenMenu && (
-                        <div className="xs:hidden">
+                        <div className="sm:hidden">
                             <HamburgerMenu onClick={() => setShouldOpenMenu(true)} />
                         </div>
                     )}
@@ -253,7 +253,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
             <AnimatePresence>
                 {shouldOpenMenu && (
                     <MotionDiv
-                        className="xs:hidden bg-black-alpha-75 fixed top-0 left-0 z-50 h-full w-full touch-pan-y overflow-y-auto backdrop-blur-sm"
+                        className="sm:hidden bg-black-alpha-75 fixed top-0 left-0 z-50 h-full w-full touch-pan-y overflow-y-auto backdrop-blur-sm"
                         style={{ willChange: "transform" }}
                         variants={panelVariants}
                         initial="closed"
