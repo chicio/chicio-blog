@@ -1,0 +1,253 @@
+---
+title: "MCP fabrizioduroni.it"
+description: "Connect any MCP-compatible AI assistant to Fabrizio Duroni's portfolio. Browse blog posts, DSA exercises, search content, and more via the Model Context Protocol."
+date: 2026-04-25
+image: /chicio-coding-feature-graphic.jpg
+tags: [mcp, ai]
+authors: [fabrizio_duroni]
+---
+
+import { BiWrench, BiChat, BiPlug, BiTerminal, BiCode, BiDesktop, BiGlobe } from "react-icons/bi";
+import { VscCode } from "react-icons/vsc";
+import { ParagraphTitleWithIcon } from "@/components/design-system/molecules/typography/paragraph-title-with-icon";
+import { McpEndpoint } from "@/components/sections/mcp/components/mcp-endpoint";
+
+# MCP fabrizioduroni.it
+
+[Model Context Protocol](https://modelcontextprotocol.io) (MCP) is an open standard that lets AI assistants connect to external data sources and tools. Instead of copy-pasting content into a chat, you give the AI a direct, structured connection to the source.
+
+This portfolio exposes a public MCP server. Connect your AI assistant to browse blog posts, explore DSA exercises, search content, browse the videogame collection, and more. No authentication required.
+
+<McpEndpoint />
+
+## <ParagraphTitleWithIcon icon={<BiWrench className="text-accent" />}>Available Tools</ParagraphTitleWithIcon>
+
+All tools are read-only and return JSON. Optional parameters are marked with `?`.
+
+| Tool | Parameters | Description |
+|------|-----------|-------------|
+| `search_content` | `query, limit?` | Full-text search across all blog posts and DSA content. |
+| `list_posts` | `tag?, limit?` | List blog posts, optionally filtered by tag slug. |
+| `get_post` | `year, month, day, slug` | Retrieve the full content of a single blog post by its date and slug. |
+| `get_tags` | — | Return all blog tags with their slugs. |
+| `get_dsa_topics` | — | List all Data Structures & Algorithms topics. |
+| `get_dsa_exercises` | `topic?, difficulty?` | List DSA exercises. Filterable by topic slug and difficulty ("Easy", "Medium", "Hard"). |
+| `get_videogame_consoles` | — | List all consoles in the collection, sorted by release year. |
+| `get_videogame_games` | `console?, genre?` | List games in the collection. Filter by console name (from `get_videogame_consoles`) and/or genre. |
+| `get_about_me` | — | Return the full About Me page content including professional background and skills. |
+| `get_site_stats` | — | Aggregate statistics: post count, tag count, DSA topics/exercises, videogame consoles/games, latest post. |
+
+## <ParagraphTitleWithIcon icon={<BiChat className="text-accent text-2xl" />}>Usage Examples</ParagraphTitleWithIcon>
+
+Natural language prompts that trigger each tool, with example responses (truncated for brevity).
+
+### `search_content`
+
+> *"Find blog posts about Metal shaders"*
+
+```json
+[
+  {
+    "slug": "/blog/2018/01/26/the-secret-of-writing-shaders-for-both-apple-metal-and-opengl/",
+    "title": "The secret of writing shaders for both Apple Metal and OpenGL",
+    "date": "2018-01-26",
+    "score": 0.94
+  },
+  { "slug": "...", "title": "...", "score": 0.87 }
+]
+```
+
+### `list_posts`
+
+> *"List the latest blog posts tagged 'swift'"*
+
+```json
+[
+  { "title": "Swift Structured Concurrency", "date": "2023-06-12",
+    "slug": "/blog/2023/06/12/swift-structured-concurrency/", "tags": ["swift"] },
+  { "title": "Swift actors", "date": "2023-04-07", "slug": "...", "tags": ["swift"] }
+]
+```
+
+### `get_post`
+
+> *"Show me the full Eulerian Circuit post"*
+
+```json
+{
+  "title": "Eulerian Circuit",
+  "date": "2026-04-22",
+  "tags": ["dsa", "graph", "algorithm"],
+  "content": "An Eulerian circuit is a closed trail that visits every edge of a graph exactly once...[truncated]"
+}
+```
+
+### `get_tags`
+
+> *"What topics does this blog cover?"*
+
+```json
+[
+  { "name": "JavaScript", "slug": "javascript" },
+  { "name": "Swift",      "slug": "swift" },
+  { "name": "React",      "slug": "react" },
+  { "name": "Three.js",   "slug": "threejs" }
+]
+```
+
+### `get_dsa_topics`
+
+> *"What data structure and algorithm topics are covered?"*
+
+```json
+[
+  { "name": "Graph",         "slug": "graph",        "exerciseCount": 12 },
+  { "name": "Tree",          "slug": "tree",         "exerciseCount": 9  },
+  { "name": "Dynamic Prog",  "slug": "dynamic-prog", "exerciseCount": 8  }
+]
+```
+
+### `get_dsa_exercises`
+
+> *"Show me hard graph exercises"*
+
+```json
+[
+  { "title": "Word Ladder",          "difficulty": "Hard", "topic": "graph" },
+  { "title": "Critical Connections", "difficulty": "Hard", "topic": "graph" },
+  { "title": "Alien Dictionary",     "difficulty": "Hard", "topic": "graph" }
+]
+```
+
+### `get_videogame_consoles`
+
+> *"What consoles are in your collection?"*
+
+```json
+[
+  { "name": "Nintendo Entertainment System", "manufacturer": "Nintendo", "releaseYear": 1983 },
+  { "name": "Game Boy",                      "manufacturer": "Nintendo", "releaseYear": 1989 },
+  { "name": "PlayStation",                   "manufacturer": "Sony",     "releaseYear": 1994 }
+]
+```
+
+### `get_videogame_games`
+
+> *"What PlayStation 5 games do you have?"*
+
+```json
+[
+  { "title": "Astro Bot",                 "genre": "Platform",     "developer": "Team Asobi"    },
+  { "title": "Final Fantasy VII Rebirth", "genre": "Role-Playing", "developer": "Square Enix"   },
+  { "title": "God of War: Ragnarök",      "genre": "Action",       "developer": "Santa Monica"  }
+]
+```
+
+### `get_about_me`
+
+> *"Tell me about Fabrizio's professional background"*
+
+```json
+{
+  "content": "I'm Fabrizio Duroni, a senior software engineer based in Milan. I work at lastminute.com where I lead mobile and full-stack development...[truncated]"
+}
+```
+
+### `get_site_stats`
+
+> *"How much content is on the site?"*
+
+```json
+{
+  "postsCount":             182,
+  "tagsCount":               47,
+  "dsaTopicsCount":          13,
+  "dsaExercisesCount":       91,
+  "videogameConsolesCount":  11,
+  "videogameGamesCount":    148,
+  "latestPost": {
+    "title": "Eulerian Circuit",
+    "date":  "2026-04-22",
+    "url":   "https://fabrizioduroni.it/blog/2026/04/22/eulerian-circuit/"
+  }
+}
+```
+
+## <ParagraphTitleWithIcon icon={<BiPlug className="text-accent text-2xl" />}>Connect Your AI Assistant</ParagraphTitleWithIcon>
+
+### <ParagraphTitleWithIcon icon={<BiTerminal className="text-accent text-xl" />}>Claude Code</ParagraphTitleWithIcon>
+
+From any terminal with Claude Code installed, run:
+
+```bash
+claude mcp add --transport http fabrizioduroni.it https://fabrizioduroni.it/api/mcp
+```
+
+Use `--scope user` to make it available across all your projects.
+
+### <ParagraphTitleWithIcon icon={<BiCode className="text-accent text-xl" />}>Cursor</ParagraphTitleWithIcon>
+
+Cursor supports HTTP transport natively — no mcp-remote needed. Open Settings → MCP, or create/edit the config file:
+
+- **macOS / Linux**: `~/.cursor/mcp.json`
+- **Windows**: `%APPDATA%\Cursor\mcp.json`
+
+```json
+{
+  "mcpServers": {
+    "fabrizioduroni.it": {
+      "url": "https://fabrizioduroni.it/api/mcp"
+    }
+  }
+}
+```
+
+### <ParagraphTitleWithIcon icon={<VscCode className="text-accent text-xl" />}>VS Code + GitHub Copilot</ParagraphTitleWithIcon>
+
+Requires VS Code ≥ 1.99 with GitHub Copilot in agent mode. Create `.vscode/mcp.json` in your workspace, or add it to your user-level MCP config:
+
+- **Workspace**: `.vscode/mcp.json`
+- **macOS user**: `~/Library/Application Support/Code/User/mcp.json`
+
+```json
+{
+  "servers": {
+    "fabrizioduroni.it": {
+      "type": "http",
+      "url": "https://fabrizioduroni.it/api/mcp"
+    }
+  }
+}
+```
+
+Note the different key names: `"servers"` (not `"mcpServers"`) and `"type": "http"`.
+
+### <ParagraphTitleWithIcon icon={<BiDesktop className="text-accent text-xl" />}>Claude Desktop / Windsurf</ParagraphTitleWithIcon>
+
+Both apps use the same JSON config format and require mcp-remote as a stdio↔HTTP bridge. Edit the config file for your app:
+
+- **Claude Desktop (macOS)**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+- **Windsurf (macOS)**: `~/.codeium/windsurf/mcp_config.json`
+
+```json
+{
+  "mcpServers": {
+    "fabrizioduroni.it": {
+      "command": "npx",
+      "args": ["-y", "mcp-remote@latest", "https://fabrizioduroni.it/api/mcp"]
+    }
+  }
+}
+```
+
+If Node.js is installed in a custom path (e.g. via `n` or `nvm`), add an `"env": { "PATH": "/your/node/bin:..." }` entry to the server config. Restart the app after saving.
+
+### <ParagraphTitleWithIcon icon={<BiGlobe className="text-accent text-xl" />}>Claude.ai</ParagraphTitleWithIcon>
+
+Connect directly from the claude.ai web interface — no config file needed.
+
+1. Open [claude.ai](https://claude.ai) → Settings → Connectors
+2. Click **Add custom connector**
+3. Enter `https://fabrizioduroni.it/api/mcp`
+
+Custom connectors may be restricted on Enterprise accounts.
