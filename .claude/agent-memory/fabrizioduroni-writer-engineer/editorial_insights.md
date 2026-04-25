@@ -99,5 +99,5 @@ Posts are stored at: `src/content/blog/post/[year]/[month]/[day]/[slug]/content.
 - 2023: 4 posts (SwiftUI + Advent of TypeScript)
 - 2024: 6 posts (AoT completion + RN Skia + conference)
 - 2025: 5 posts (so far: TypeScript types, LLM, locale, Skia gradients, DSA)
-- 2026: 1 post (Chrome Built-in AI)
-- **Total: 88 posts**
+- 2026: 2 posts (Chrome Built-in AI, LLM chatbot guardrails)
+- **Total: 89 posts**
