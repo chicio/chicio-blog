@@ -1,15 +1,10 @@
 import { searchIndexFileName } from "@/lib/content/search-filename";
-import { SearchablePostFields } from "@/types/search/search";
-import elasticlunr from "elasticlunr";
 import fs from "fs";
 import path from "path";
 import crypto from "crypto";
-import { getPosts } from "./posts";
 import { Content } from "@/types/content/content";
-import { getAllContentFor } from "@/lib/content/content";
-import { getAllDataStructuresAndAlgorithmsTopics, getDataStructuresAndAlgorithmsRoadmap } from "./data-structures-and-algorithms";
-import { getAboutMe } from "./about-me";
 import { getIndexableContent } from "./indexable-content";
+import { createSearchIndex } from "./search-index-factory";
 
 const CACHE_FILE = ".search-index-cache";
 const cachePath = path.join(process.cwd(), CACHE_FILE);
@@ -55,37 +50,6 @@ const saveCachedHash = (hash: string): void => {
   }
 };
 
-const createSearchIndex = (contents: Content[]) => {
-  const index = elasticlunr<SearchablePostFields>(function () {
-    this.addField("title");
-    this.addField("description");
-    this.addField("tags");
-    this.addField("authors");
-    this.setRef("slug");
-  });
-
-  contents.forEach((post) =>
-    index.addDoc({
-      slug: post.slug.formatted,
-      title: post.frontmatter.title,
-      description: post.frontmatter.description,
-      tags: post.frontmatter.tags,
-      authors: post.frontmatter.authors.map((author) => author.name),
-    }),
-  );
-
-  contents.forEach((content) =>
-    index.addDoc({
-      slug: content.slug.formatted,
-      title: content.frontmatter.title,
-      description: content.frontmatter.description,
-      tags: content.frontmatter.tags,
-      authors: content.frontmatter.authors.map((author) => author.name),
-    }),
-  );
-
-  return index;
-};
 
 const generateAndSaveSearchIndex = () => {
   try {

@@ -1,39 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import elasticlunr from "elasticlunr";
 import z from "zod";
-import { SearchablePostFields } from "@/types/search/search";
-import { getPosts } from "@/lib/content/posts";
-import { getAllDataStructuresAndAlgorithmsTopics, getAllExercises } from "@/lib/content/data-structures-and-algorithms";
-import { getAboutMe } from "@/lib/content/about-me";
-
-const buildSearchIndex = (): elasticlunr.Index<SearchablePostFields> => {
-    const index = elasticlunr<SearchablePostFields>(function () {
-        this.addField("title");
-        this.addField("description");
-        this.addField("tags");
-        this.addField("authors");
-        this.setRef("slug");
-    });
-
-    const allContent = [
-        ...getPosts(),
-        ...getAllDataStructuresAndAlgorithmsTopics(),
-        ...getAllExercises(),
-        getAboutMe(),
-    ];
-
-    allContent.forEach((content) => {
-        index.addDoc({
-            slug: content.slug.formatted,
-            title: content.frontmatter.title,
-            description: content.frontmatter.description,
-            tags: content.frontmatter.tags,
-            authors: content.frontmatter.authors.map((a) => a.name),
-        });
-    });
-
-    return index;
-};
+import { createSearchIndex } from "@/lib/content/search-index-factory";
+import { getIndexableContent } from "@/lib/content/indexable-content";
 
 export const registerSearchContent = (server: McpServer): void => {
     server.registerTool(
@@ -54,7 +22,7 @@ export const registerSearchContent = (server: McpServer): void => {
         async ({ query, limit }) => {
             const safeLimit = Math.min(limit ?? 10, 30);
             try {
-                const index = buildSearchIndex();
+                const index = createSearchIndex(getIndexableContent());
 
                 const results = index.search(query, {
                     fields: {
