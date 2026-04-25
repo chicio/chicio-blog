@@ -1,6 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { getPosts, getTags } from "@/lib/content/posts";
 import { getAllDataStructuresAndAlgorithmsTopics, getAllExercises } from "@/lib/content/data-structures-and-algorithms";
+import { getAllConsoles, getAllGames } from "@/lib/content/videogames";
 import { MCP_SITE_URL } from "@/lib/mcp/config";
 
 export const registerGetSiteStats = (server: McpServer): void => {
@@ -10,13 +11,15 @@ export const registerGetSiteStats = (server: McpServer): void => {
             title: "Get Site Stats",
             description:
                 "Returns aggregate statistics for the portfolio: total post count, tag count, DSA topic count, " +
-                "exercise count, and the most recent post.",
+                "exercise count, videogame console count, game count, and the most recent post.",
         },
         async () => {
             const posts = getPosts();
             const tags = getTags();
             const topics = getAllDataStructuresAndAlgorithmsTopics();
             const exercises = getAllExercises();
+            const consoles = getAllConsoles();
+            const games = getAllGames();
 
             const latestPost = posts[0]
                 ? {
@@ -31,6 +34,8 @@ export const registerGetSiteStats = (server: McpServer): void => {
                 tagsCount: tags.length,
                 dsaTopicsCount: topics.length,
                 dsaExercisesCount: exercises.length,
+                videogameConsolesCount: consoles.length,
+                videogameGamesCount: games.length,
                 latestPost,
             };
 
