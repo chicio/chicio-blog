@@ -1,5 +1,8 @@
 # Memory Index
 
+## Site
+- [Site Info](project_site_info.md) — Production domain is fabrizioduroni.it (not chicio.dev)
+
 ## Architecture
 - [Content System](arch_content_system.md) — Filesystem-as-database with slug patterns, metadata adapters, search indexing
 - [Design System & Matrix Theme](arch_design_system.md) — Atomic design, Matrix palette, glassmorphism/motion hooks
@@ -20,6 +23,9 @@
 
 ## Features (continued)
 - [Command Palette](feature_command_palette.md) — ⌘K palette, MotionDiv blink suppression pattern, stable close/ESC, search pill design
+
+## Features (continued 2)
+- [MCP Portfolio Server](feature_mcp_server.md) — Public MCP server at /api/mcp, 8 filesystem-backed tools, stateless Vercel transport, elasticlunr search
 
 ## Feedback
 - [PWA & State Patterns](feedback_pwa_patterns.md) — useSyncExternalStore for localStorage state, consent-gated UI, banner/error page alignment rules
