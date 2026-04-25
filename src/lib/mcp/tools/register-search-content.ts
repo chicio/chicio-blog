@@ -1,10 +1,39 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import elasticlunr from "elasticlunr";
-import fs from "fs";
-import path from "path";
 import z from "zod";
-import { searchIndexFileName } from "@/lib/content/search-filename";
 import { SearchablePostFields } from "@/types/search/search";
+import { getPosts } from "@/lib/content/posts";
+import { getAllDataStructuresAndAlgorithmsTopics, getAllExercises } from "@/lib/content/data-structures-and-algorithms";
+import { getAboutMe } from "@/lib/content/about-me";
+
+const buildSearchIndex = (): elasticlunr.Index<SearchablePostFields> => {
+    const index = elasticlunr<SearchablePostFields>(function () {
+        this.addField("title");
+        this.addField("description");
+        this.addField("tags");
+        this.addField("authors");
+        this.setRef("slug");
+    });
+
+    const allContent = [
+        ...getPosts(),
+        ...getAllDataStructuresAndAlgorithmsTopics(),
+        ...getAllExercises(),
+        getAboutMe(),
+    ];
+
+    allContent.forEach((content) => {
+        index.addDoc({
+            slug: content.slug.formatted,
+            title: content.frontmatter.title,
+            description: content.frontmatter.description,
+            tags: content.frontmatter.tags,
+            authors: content.frontmatter.authors.map((a) => a.name),
+        });
+    });
+
+    return index;
+};
 
 export const registerSearchContent = (server: McpServer): void => {
     server.registerTool(
@@ -25,10 +54,7 @@ export const registerSearchContent = (server: McpServer): void => {
         async ({ query, limit }) => {
             const safeLimit = Math.min(limit ?? 10, 30);
             try {
-                const indexPath = path.join(process.cwd(), "public", searchIndexFileName);
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const indexData = JSON.parse(fs.readFileSync(indexPath, "utf8")) as any;
-                const index = elasticlunr.Index.load<SearchablePostFields>(indexData);
+                const index = buildSearchIndex();
 
                 const results = index.search(query, {
                     fields: {
