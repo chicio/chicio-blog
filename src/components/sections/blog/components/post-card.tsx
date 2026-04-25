@@ -68,7 +68,7 @@ export const PostCard: FC<PostCardProps> = ({
           label: tracking.label.body,
         }}
       >
-        <h3>{title}</h3>
+        <h3 className="mt-0!">{title}</h3>
         <PostAuthors
           postAuthors={authors}
           trackingCategory={trackingCategory}

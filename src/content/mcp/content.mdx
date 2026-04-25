@@ -175,6 +175,9 @@ Natural language prompts that trigger each tool, with example responses (truncat
 
 ## <ParagraphTitleWithIcon icon={<BiPlug className="text-accent text-2xl" />}>Connect Your AI Assistant</ParagraphTitleWithIcon>
 
+Below you can find detailed instructions to connect various MCP-compatible AI assistants to this MCP. 
+The process usually involves adding a new server/connector in the assistant's settings, specifying the endpoint URL and transport method (HTTP or stdio via mcp-remote).
+
 ### <ParagraphTitleWithIcon icon={<BiTerminal className="text-accent text-xl" />}>Claude Code</ParagraphTitleWithIcon>
 
 From any terminal with Claude Code installed, run:
@@ -220,8 +223,6 @@ Requires VS Code ≥ 1.99 with GitHub Copilot in agent mode. Create `.vscode/mcp
 }
 ```
 
-Note the different key names: `"servers"` (not `"mcpServers"`) and `"type": "http"`.
-
 ### <ParagraphTitleWithIcon icon={<BiDesktop className="text-accent text-xl" />}>Claude Desktop / Windsurf</ParagraphTitleWithIcon>
 
 Both apps use the same JSON config format and require mcp-remote as a stdio↔HTTP bridge. Edit the config file for your app:
@@ -246,8 +247,8 @@ If Node.js is installed in a custom path (e.g. via `n` or `nvm`), add an `"env":
 
 Connect directly from the claude.ai web interface — no config file needed.
 
-1. Open [claude.ai](https://claude.ai) → Settings → Connectors
-2. Click **Add custom connector**
-3. Enter `https://fabrizioduroni.it/api/mcp`
+- Open [claude.ai](https://claude.ai) → Settings → Connectors
+- Click **Add custom connector**
+- Enter `https://fabrizioduroni.it/api/mcp`
 
 Custom connectors may be restricted on Enterprise accounts.
