@@ -1,3 +1,5 @@
+import "highlight.js/styles/tokyo-night-dark.css";
+
 import { McpPage } from "@/components/sections/mcp/components/mcp-page";
 import { createMetadata } from "@/lib/seo/seo";
 import { siteMetadata } from "@/types/configuration/site-metadata";
