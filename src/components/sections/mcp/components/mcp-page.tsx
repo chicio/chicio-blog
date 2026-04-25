@@ -5,16 +5,34 @@ import { CodeBlock } from "@/components/design-system/molecules/code/code-block"
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { tracking } from "@/types/configuration/tracking";
 import { MCP_SITE_URL } from "@/lib/mcp/config";
-import { BiTerminal, BiDesktop, BiGlobe } from "react-icons/bi";
+import { BiTerminal, BiDesktop, BiGlobe, BiCode } from "react-icons/bi";
+import { VscCode } from "react-icons/vsc";
 import { FC, ReactNode } from "react";
 
 const MCP_URL = `${MCP_SITE_URL}/api/mcp`;
 
-const CLAUDE_DESKTOP_CONFIG = `{
+const CLAUDE_DESKTOP_WINDSURF_CONFIG = `{
   "mcpServers": {
     "fabrizioduroni.it": {
       "command": "npx",
       "args": ["-y", "mcp-remote@latest", "${MCP_URL}"]
+    }
+  }
+}`;
+
+const CURSOR_CONFIG = `{
+  "mcpServers": {
+    "fabrizioduroni.it": {
+      "url": "${MCP_URL}"
+    }
+  }
+}`;
+
+const VSCODE_CONFIG = `{
+  "servers": {
+    "fabrizioduroni.it": {
+      "type": "http",
+      "url": "${MCP_URL}"
     }
   }
 }`;
@@ -45,6 +63,13 @@ const McpCodeBlock: FC<{ code: string }> = ({ code }) => (
     </CodeBlock>
 );
 
+const ConfigPath: FC<{ label: string; path: string }> = ({ label, path }) => (
+    <div className="flex items-baseline gap-2">
+        <span className="shrink-0 font-mono text-xs text-accent/60 uppercase tracking-wider">{label}</span>
+        <code className="font-mono text-xs text-primary-text/70">{path}</code>
+    </div>
+);
+
 export const McpPage: FC = () => (
     <ContentPageTemplate author={siteMetadata.author} trackingCategory={tracking.category.mcp}>
         <div className="mt-3">
@@ -63,7 +88,9 @@ export const McpPage: FC = () => (
                 exercises, search content, and more. No authentication required.
             </p>
             <div className="mb-6 flex items-center gap-3 rounded-lg border border-accent/30 bg-accent/5 px-4 py-3">
-                <span className="font-mono text-xs text-accent/60 uppercase tracking-wider shrink-0">Endpoint</span>
+                <span className="font-mono text-xs text-accent/60 uppercase tracking-wider shrink-0">
+                    Endpoint
+                </span>
                 <code className="font-mono text-sm text-accent break-all">{MCP_URL}</code>
             </div>
         </div>
@@ -84,18 +111,57 @@ export const McpPage: FC = () => (
             </McpClientCard>
 
             <McpClientCard
-                icon={<BiDesktop />}
-                title="Claude Desktop"
-                description={`Add the following to your claude_desktop_config.json. On macOS the file is at ~/Library/Application Support/Claude/claude_desktop_config.json.`}
+                icon={<BiCode />}
+                title="Cursor"
+                description="Cursor supports HTTP transport natively — no mcp-remote needed. Open Settings → MCP, or create/edit the config file:"
             >
-                <McpCodeBlock code={CLAUDE_DESKTOP_CONFIG} />
+                <div className="mb-3 flex flex-col gap-1">
+                    <ConfigPath label="macOS / Linux" path="~/.cursor/mcp.json" />
+                    <ConfigPath label="Windows" path="%APPDATA%\Cursor\mcp.json" />
+                </div>
+                <McpCodeBlock code={CURSOR_CONFIG} />
+            </McpClientCard>
+
+            <McpClientCard
+                icon={<VscCode />}
+                title="VS Code + GitHub Copilot"
+                description="Requires VS Code ≥ 1.99 with GitHub Copilot in agent mode. Create .vscode/mcp.json in your workspace, or add it to your user-level MCP config:"
+            >
+                <div className="mb-3 flex flex-col gap-1">
+                    <ConfigPath label="Workspace" path=".vscode/mcp.json" />
+                    <ConfigPath label="macOS user" path="~/Library/Application Support/Code/User/mcp.json" />
+                </div>
+                <McpCodeBlock code={VSCODE_CONFIG} />
                 <p className="mt-3 text-xs text-primary-text/60">
-                    Requires{" "}
-                    <code className="font-mono text-accent">mcp-remote</code> as a stdio↔HTTP bridge.
-                    If Node.js is installed in a custom path (e.g. via <code className="font-mono text-accent">n</code> or{" "}
+                    Note the different key names:{" "}
+                    <code className="font-mono text-accent">"servers"</code> (not{" "}
+                    <code className="font-mono text-accent">"mcpServers"</code>) and{" "}
+                    <code className="font-mono text-accent">"type": "http"</code>.
+                </p>
+            </McpClientCard>
+
+            <McpClientCard
+                icon={<BiDesktop />}
+                title="Claude Desktop / Windsurf"
+                description="Both apps use the same JSON config format and require mcp-remote as a stdio↔HTTP bridge. Edit the config file for your app:"
+            >
+                <div className="mb-3 flex flex-col gap-1">
+                    <ConfigPath
+                        label="Claude Desktop (macOS)"
+                        path="~/Library/Application Support/Claude/claude_desktop_config.json"
+                    />
+                    <ConfigPath
+                        label="Windsurf (macOS)"
+                        path="~/.codeium/windsurf/mcp_config.json"
+                    />
+                </div>
+                <McpCodeBlock code={CLAUDE_DESKTOP_WINDSURF_CONFIG} />
+                <p className="mt-3 text-xs text-primary-text/60">
+                    If Node.js is installed in a custom path (e.g. via{" "}
+                    <code className="font-mono text-accent">n</code> or{" "}
                     <code className="font-mono text-accent">nvm</code>), add an{" "}
                     <code className="font-mono text-accent">{`"env": { "PATH": "/your/node/bin:..." }`}</code>{" "}
-                    entry to the server config. Restart Claude Desktop after saving.
+                    entry to the server config. Restart the app after saving.
                 </p>
             </McpClientCard>
 
