@@ -1,6 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import z from "zod";
 import { getPostBy } from "@/lib/content/posts";
+import { MCP_SITE_URL } from "@/lib/mcp/config";
 
 export const registerGetPost = (server: McpServer): void => {
     server.registerTool(
@@ -39,7 +40,7 @@ export const registerGetPost = (server: McpServer): void => {
                 authors: post.frontmatter.authors.map((a) => a.name),
                 date: post.frontmatter.date.formatted,
                 readingTime: post.readingTime.text,
-                url: `https://chicio.dev${post.slug.formatted}`,
+                url: `${MCP_SITE_URL}${post.slug.formatted}`,
                 content: post.content,
             };
 

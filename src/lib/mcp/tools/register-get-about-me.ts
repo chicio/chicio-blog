@@ -1,5 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { getAboutMe } from "@/lib/content/about-me";
+import { MCP_SITE_URL } from "@/lib/mcp/config";
 
 export const registerGetAboutMe = (server: McpServer): void => {
     server.registerTool(
@@ -16,7 +17,7 @@ export const registerGetAboutMe = (server: McpServer): void => {
                 title: aboutMe.frontmatter.title,
                 description: aboutMe.frontmatter.description,
                 content: aboutMe.content,
-                url: "https://chicio.dev/about-me",
+                url: "${MCP_SITE_URL}/about-me",
             };
 
             return {

@@ -1,6 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import z from "zod";
 import { getPosts, getPostsForTag } from "@/lib/content/posts";
+import { MCP_SITE_URL } from "@/lib/mcp/config";
 
 export const registerListPosts = (server: McpServer): void => {
     server.registerTool(
@@ -29,7 +30,7 @@ export const registerListPosts = (server: McpServer): void => {
                 day: post.slug.params.day,
                 slug: post.slug.params.slug,
                 readingTime: post.readingTime.text,
-                url: `https://chicio.dev${post.slug.formatted}`,
+                url: `${MCP_SITE_URL}${post.slug.formatted}`,
             }));
 
             return {

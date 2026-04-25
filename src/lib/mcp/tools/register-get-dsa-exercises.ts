@@ -1,6 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import z from "zod";
 import { getAllExercises, getAllExercisesForTopic } from "@/lib/content/data-structures-and-algorithms";
+import { MCP_SITE_URL } from "@/lib/mcp/config";
 
 export const registerGetDsaExercises = (server: McpServer): void => {
     server.registerTool(
@@ -33,7 +34,7 @@ export const registerGetDsaExercises = (server: McpServer): void => {
                 technique: exercise.frontmatter.metadata?.technique,
                 leetcodeUrl: exercise.frontmatter.metadata?.leetcodeUrl,
                 date: exercise.frontmatter.date.formatted,
-                url: `https://chicio.dev${exercise.slug.formatted}`,
+                url: `${MCP_SITE_URL}${exercise.slug.formatted}`,
             }));
 
             return {

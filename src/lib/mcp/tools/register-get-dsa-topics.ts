@@ -1,5 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { getAllDataStructuresAndAlgorithmsTopics } from "@/lib/content/data-structures-and-algorithms";
+import { MCP_SITE_URL } from "@/lib/mcp/config";
 
 export const registerGetDsaTopics = (server: McpServer): void => {
     server.registerTool(
@@ -18,7 +19,7 @@ export const registerGetDsaTopics = (server: McpServer): void => {
                 description: topic.frontmatter.description,
                 slug: topic.slug.params.topic,
                 date: topic.frontmatter.date.formatted,
-                url: `https://chicio.dev${topic.slug.formatted}`,
+                url: `${MCP_SITE_URL}${topic.slug.formatted}`,
             }));
 
             return {

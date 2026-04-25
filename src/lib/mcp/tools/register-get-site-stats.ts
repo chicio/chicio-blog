@@ -1,7 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { getPosts } from "@/lib/content/posts";
+import { getPosts, getTags } from "@/lib/content/posts";
 import { getAllDataStructuresAndAlgorithmsTopics, getAllExercises } from "@/lib/content/data-structures-and-algorithms";
-import { getTags } from "@/lib/content/posts";
+import { MCP_SITE_URL } from "@/lib/mcp/config";
 
 export const registerGetSiteStats = (server: McpServer): void => {
     server.registerTool(
@@ -22,7 +22,7 @@ export const registerGetSiteStats = (server: McpServer): void => {
                 ? {
                       title: posts[0].frontmatter.title,
                       date: posts[0].frontmatter.date.formatted,
-                      url: `https://chicio.dev${posts[0].slug.formatted}`,
+                      url: `${MCP_SITE_URL}${posts[0].slug.formatted}`,
                   }
                 : null;
 
