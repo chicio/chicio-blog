@@ -145,7 +145,7 @@ export const CommandPalette = () => {
                                     {">"}
                                 </span>
                                 <Command.Input
-                                    className="bg-transparent outline-none text-accent font-mono text-sm flex-1 placeholder:text-accent/40 caret-accent"
+                                    className="bg-transparent outline-none text-accent font-mono text-base flex-1 placeholder:text-accent/40 caret-accent"
                                     placeholder="type to search blog posts_"
                                     onValueChange={(value) => {
                                         setIsSearching(value.trim().length >= 3);
