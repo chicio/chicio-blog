@@ -92,8 +92,6 @@ const TOOLS = [
     },
 ];
 
-// ─── shared primitives ────────────────────────────────────────────────────────
-
 interface SectionProps {
     icon: ReactNode;
     title: string;
@@ -125,8 +123,6 @@ const ConfigPath: FC<{ label: string; path: string }> = ({ label, path }) => (
     </div>
 );
 
-// ─── client card ─────────────────────────────────────────────────────────────
-
 interface ClientCardProps {
     icon: ReactNode;
     title: string;
@@ -147,15 +143,12 @@ const ClientCard: FC<ClientCardProps> = ({ icon, title, description, children })
     </div>
 );
 
-// ─── page ─────────────────────────────────────────────────────────────────────
-
 export const McpPage: FC = () => (
     <ContentPageTemplate author={siteMetadata.author} trackingCategory={tracking.category.mcp}>
         <div className="mt-3 mb-8">
             <PageTitle>MCP Server</PageTitle>
         </div>
 
-        {/* ── Introduction ── */}
         <Section icon={<BiInfoCircle />} title="Introduction">
             <p className="mb-4">
                 <a
@@ -183,7 +176,6 @@ export const McpPage: FC = () => (
             </div>
         </Section>
 
-        {/* ── Tools ── */}
         <Section icon={<BiWrench />} title="Available Tools">
             <p className="text-primary-text/70 mb-5 text-sm">
                 All tools are read-only and return JSON. Optional parameters are marked with{" "}
@@ -227,7 +219,6 @@ export const McpPage: FC = () => (
             </div>
         </Section>
 
-        {/* ── Installation ── */}
         <Section icon={<BiPlug />} title="Connect Your AI Assistant">
             <ClientCard
                 icon={<BiTerminal />}

@@ -9,3 +9,4 @@
 - **ESLint**: Extends Next.js core-web-vitals and TypeScript configs
 - **TypeScript**: Strict mode enabled. All shared types in `src/types/`
 - **Commits**: Conventional commits with Gitmoji convention. Scopes: `performance`, `ux`, `capabilities`, `content`, `ai`, `deps`
+- **Comments**: No decorative or structural comments. Never use section dividers like `{/* ── Title ── */}`, `// ─── section ───`, `// ---`, or any comment whose only purpose is visual separation. Code structure must be self-evident from component and variable names alone.
