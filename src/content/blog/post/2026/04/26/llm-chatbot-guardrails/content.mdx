@@ -11,15 +11,17 @@ authors: [fabrizio_duroni]
 
 ---
 
-If you've visited the [chat page](/chat) on this blog, you know I have an AI chatbot that can answer questions about me, my work experience, my projects, and software development in general. It's powered by [Groq](https://groq.com/) running Llama 3.3 70B, with a RAG pipeline backed by [Upstash Vector](https://upstash.com/docs/vector/overall/getstarted) that gives the model access to all my blog posts. Pretty cool, right?
+If you've visited the [chat page](/chat) on this blog, you know I have an AI chatbot that can answer questions about me, my work experience, my projects, and software development in general. It's powered by [Groq](https://groq.com/) running Llama 3.3 70B, with a RAG pipeline backed by [Upstash Vector](https://upstash.com/docs/vector/overall/getstarted) that gives the model access to information about me. Pretty cool, right?
 
 But here's the thing: when you expose an LLM-powered chat to the public internet, you're also exposing it to people who will try to break it. Prompt injection attacks, requests for harmful content, completely off-topic queries ("What's the best pasta recipe?"), or attempts to make the chatbot pretend it's someone else entirely. Without guardrails, any of these could turn my portfolio assistant into something I definitely didn't intend.
 
+The idea for this feature actually came from a coffee break conversation with my friend and colleague [Mariano Patafio](https://www.linkedin.com/in/mariano-patafio-4a8b7426/). He was telling me about an AI course he was taking, and we started discussing guardrails. I had to admit that my chatbot didn't have any. That conversation stuck with me, and I decided it was time to fix that.
+
 As I described in [my previous article about LLMs](/blog/post/2025/03/01/llm), understanding how these models work is crucial to using them effectively. In this post, I want to go one level deeper and show you how I protect the chatbot from misuse. I implemented a three-layer guardrail system that checks every incoming user message before it reaches the main LLM. The layers are:
 
-1. **Regex-based prompt injection detection** (synchronous, instant)
-2. **Llama Guard content safety check** (LLM-based, async)
-3. **LLM-as-judge topic relevance check** (LLM-based, async)
+- **Regex-based prompt injection detection** (synchronous, instant)
+- **Llama Guard content safety check** (LLM-based, async)
+- **LLM-as-judge topic relevance check** (LLM-based, async)
 
 Let's see how each layer works and how they fit together in the API route.
 
@@ -39,11 +41,11 @@ My guardrail system follows a pipeline pattern: every user message passes throug
 
 Here's the flow:
 
-1. **Prompt injection check** (regex, synchronous): Fast pattern matching against known injection phrases. Zero latency cost.
-2. **Content safety check** (Llama Guard 3 8B via Groq): A specialized safety model that classifies whether the input is safe or unsafe.
-3. **Topic relevance check** (Llama 3.1 8B via Groq): A lightweight LLM acting as a binary classifier to determine if the message is on-topic for a portfolio chatbot.
+- **Prompt injection check** (regex, synchronous): Fast pattern matching against known injection phrases. Zero latency cost.
+- **Content safety check** (Llama Guard 3 8B via Groq): A specialized safety model that classifies whether the input is safe or unsafe.
+- **Topic relevance check** (Llama 3.1 8B via Groq): A lightweight LLM acting as a binary classifier to determine if the message is on-topic for a portfolio chatbot.
 
-Steps 2 and 3 run in parallel via `Promise.all` to minimize latency. The whole pipeline adds minimal overhead because Groq's inference is extremely fast, and the two LLM checks use small (8B parameter) models.
+The second and third checks run in parallel via `Promise.all` to minimize latency. The whole pipeline adds minimal overhead because Groq's inference is extremely fast, and the two LLM checks use small (8B parameter) models.
 
 Let's look at the implementation.
 
@@ -146,7 +148,9 @@ Let's go through the key aspects:
 
 ### Why a dedicated safety model?
 
-You might wonder: why not just add "don't generate unsafe content" to the system prompt? The answer is that safety models like Llama Guard are specifically trained for this task. They have a much better understanding of content safety boundaries than a general-purpose LLM following an instruction. They're also harder to manipulate through prompt injection precisely because the user's message is treated as data input, not as instructions.
+You might wonder: why not just add "don't generate unsafe content" to the system prompt? The answer is that safety models like Llama Guard are specifically trained for this task through a technique called **supervised fine-tuning (SFT)** on safety-specific datasets. In Llama Guard's case, the model is fine-tuned on thousands of human-annotated examples of safe and unsafe content, organized around a safety taxonomy based on the [MLCommons AI Safety](https://mlcommons.org/ai-safety/) categories. This taxonomy covers hazard categories like violent crimes, child safety, hate speech, self-harm, and more. The training process teaches the model to classify inputs against these categories with high accuracy, producing a structured output that indicates whether the content is safe and, if not, which specific category was violated.
+
+This specialized training gives safety models a much deeper understanding of content safety boundaries than a general-purpose LLM following a system prompt instruction. They're also harder to manipulate through prompt injection precisely because the user's message is treated as data input to classify, not as instructions to follow.
 
 ## Layer 3: LLM-as-judge topic relevance
 
@@ -252,10 +256,10 @@ export const runGuardrails = async (message: string): Promise<GuardrailResult> =
 
 The pipeline follows a clear pattern:
 
-1. **Regex check first** (synchronous): This is instant and free. If it catches an injection attempt, we reject immediately without making any API calls.
-2. **LLM checks in parallel** (`Promise.all`): If the regex check passes, we fire both the safety and relevance checks simultaneously. This is a key optimization: since the two checks are independent of each other, running them in parallel cuts the total latency roughly in half compared to running them sequentially.
-3. **Priority order**: Safety check results are evaluated before relevance results. If a message is both unsafe *and* off-topic, the user sees the safety rejection message (which is more appropriate than "that's off-topic").
-4. **Early returns**: Each check that fails short-circuits the pipeline, returning its specific blocked reason.
+- **Regex check first** (synchronous): This is instant and free. If it catches an injection attempt, we reject immediately without making any API calls.
+- **LLM checks in parallel** (`Promise.all`): If the regex check passes, we fire both the safety and relevance checks simultaneously. This is a key optimization: since the two checks are independent of each other, running them in parallel cuts the total latency roughly in half compared to running them sequentially.
+- **Priority order**: Safety check results are evaluated before relevance results. If a message is both unsafe *and* off-topic, the user sees the safety rejection message (which is more appropriate than "that's off-topic").
+- **Early returns**: Each check that fails short-circuits the pipeline, returning its specific blocked reason.
 
 ## Integrating guardrails in the API route
 
@@ -315,7 +319,7 @@ Let me walk you through the key points:
 - **Message extraction**: The route extracts the last user message from the conversation history. This is important because we only need to check the *latest* message, not the entire conversation. Previous messages have already been checked when they were sent.
 - **Guardrails before inference**: The `runGuardrails` call happens *before* `streamText`. If the message is rejected, we return a `400` response with the blocked reason immediately. The main Llama 3.3 70B model never sees the message, saving both latency and tokens.
 - **HTTP 400 for rejections**: Blocked messages return a `400 Bad Request` status. The client-side chat UI can catch this and display the blocked reason to the user in the chat interface.
-- **RAG tool**: The main model has access to a `getFabrizioDuroniBlogKnowledge` tool that queries my Upstash Vector database to find relevant blog content. This is the RAG pipeline I mentioned at the beginning: my blog posts are chunked, embedded, and stored as vectors, and the model can retrieve them at query time to answer questions about my articles. If you want to know more about RAG, check out the dedicated section in my [LLM hitchhiker's guide](/blog/post/2025/03/01/llm).
+- **RAG tool**: The main model has access to a `getFabrizioDuroniBlogKnowledge` tool that queries my Upstash Vector database to find relevant content about me. At the moment, the vector store contains information about me that the model can retrieve at query time to provide accurate, grounded answers. If you want to know more about RAG, check out the dedicated section in my [LLM hitchhiker's guide](/blog/post/2025/03/01/llm).
 
 ## Conclusion
 
