@@ -51,23 +51,23 @@ export const checkPromptInjection = (message: string): GuardrailResult => {
 export const checkInputSafety = async (message: string): Promise<GuardrailResult> => {
     try {
         const { text } = await generateText({
-            model: groq("meta-llama/llama-guard-3-8b"),
+            model: groq("meta-llama/llama-prompt-guard-2-86m"),
             messages: [{ role: "user", content: message }],
         });
 
-        const isSafe = text.trim().toLowerCase().startsWith("safe");
+        const isSafe = !text.trim().toLowerCase().includes("malicious");
 
         if (!isSafe) {
             return {
                 safe: false,
                 blockedReason:
-                    "I'm not able to respond to that message. I'm here to answer questions about Fabrizio Duroni and his work as a software engineer.",
+                    "I detected a potential prompt injection attempt. I'm here to answer questions about Fabrizio Duroni — feel free to ask me anything about his work, projects, or experience.",
             };
         }
 
         return { safe: true };
     } catch (error) {
-        console.warn("Llama Guard safety check failed, allowing request:", error);
+        console.warn("Prompt Guard safety check failed, allowing request:", error);
         return { safe: true };
     }
 };
