@@ -14,7 +14,7 @@ export const CodeBlock: FC<CodeBlockProps> = ({ children, className, ...rest }) 
     const getText = useCallback(() => preRef.current?.textContent ?? "", []);
 
     return (
-        <div id="code-block" className="relative group flex flex-col sm:block">
+        <div id="code-block" className="relative group flex flex-col sm:block my-4">
             <pre ref={preRef} className={className} {...rest}>
                 {children}
             </pre>
