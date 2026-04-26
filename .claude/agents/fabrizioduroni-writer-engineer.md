@@ -116,6 +116,11 @@ math: false
 - Include meaningful code — real implementations, not stubs
 - Add comments in code when they aid understanding
 
+### MDX Line Length
+- **Prose lines**: Must stay under 300 characters. When a line exceeds this limit, break it at a natural sentence or clause boundary (after periods, commas, or conjunctions).
+- **Code blocks**: NEVER reformat for line length. Code inside fenced code blocks must match the actual source code exactly, regardless of line length.
+- **Frontmatter fields**: Exempt from the 300-character limit. Fields like `title` and `description` must remain on a single line as required by YAML syntax.
+
 ### Internal Links
 - Link to other blog posts using their URL path: `[link text](/blog-post-slug/)`
 - Check existing posts for the exact slug format
