@@ -26,6 +26,7 @@
 
 ## Features (continued 2)
 - [MCP Portfolio Server](feature_mcp_server.md) — Public MCP server at /api/mcp, 10 tools (incl. videogames), stateless, OAuth discovery endpoint, /mcp page with 5 client cards
+- [Mermaid Diagrams](feature_mermaid_diagrams.md) — MDX diagrams via ```mermaid blocks, lazy singleton loader, Matrix theme, no next/dynamic
 
 ## Feedback
 - [PWA & State Patterns](feedback_pwa_patterns.md) — useSyncExternalStore for localStorage state, consent-gated UI, banner/error page alignment rules

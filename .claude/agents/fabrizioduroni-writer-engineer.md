@@ -123,6 +123,7 @@ math: false
 ### MDX Components Available
 - Standard markdown (headings, lists, links, images, code blocks, blockquotes)
 - `<Youtube />` component for video embeds (requires explicit import)
+- **Mermaid diagrams**: Use fenced code blocks with `mermaid` language identifier (` ```mermaid `). No import needed — the diagram is rendered client-side with Matrix theme styling. Supports flowcharts, sequence diagrams, class diagrams, state diagrams, etc. Use diagrams to visualize architecture, data flows, or pipelines instead of static images when possible.
 - Check the codebase for any other custom MDX components available
 
 ---

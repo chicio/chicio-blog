@@ -1,5 +1,7 @@
-import type { MDXComponents } from 'mdx/types'
+import type { MDXComponents } from "mdx/types";
 import { CodeBlock } from "@/components/design-system/molecules/code/code-block";
+import { MermaidDiagram } from "@/components/design-system/molecules/diagram/mermaid-diagram";
+import { extractMermaidDefinition } from "./lib/mermaid/mermaid";
 
 const components: MDXComponents = {
     table: (props) => (
@@ -7,9 +9,17 @@ const components: MDXComponents = {
             <table {...props} />
         </div>
     ),
-    pre: (props) => <CodeBlock {...props} />,
-}
+    pre: (props) => {
+        const mermaidDefinition = extractMermaidDefinition(props.children);
+
+        if (mermaidDefinition) {
+            return <MermaidDiagram definition={mermaidDefinition} />;
+        }
+
+        return <CodeBlock {...props} />;
+    },
+};
 
 export function useMDXComponents(): MDXComponents {
-    return components
+    return components;
 }
