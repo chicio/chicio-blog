@@ -68,7 +68,7 @@ const INJECTION_PATTERNS = [
     /ignore\s+(all\s+)?(previous|prior|above)\s+instructions/i,
     /disregard\s+(all\s+)?(previous|prior|above)\s+instructions/i,
     /forget\s+(all\s+)?(previous|prior|above)\s+instructions/i,
-    /you\s+are\s+now\s+/i,
+    /you\s+are\s+now\s+(?:a\s+|an\s+|my\s+)?(?:different|another|new|unrestricted|unfiltered|evil|jailbroken|free|not|no\s+longer|DAN\b)/i,
     /act\s+as\s+(if\s+you\s+are\s+|a\s+)?(?!Fabrizio)/i,
     /pretend\s+(you\s+are|to\s+be)\s+/i,
     /do\s+anything\s+now/i,
@@ -82,7 +82,7 @@ const INJECTION_PATTERNS = [
 Each pattern targets a well-known injection technique:
 
 - **"Ignore/disregard/forget previous instructions"**: The classic prompt injection. The user tries to make the model forget its system prompt and follow new instructions instead.
-- **"You are now" / "Act as" / "Pretend to be"**: Role-switching attacks where the user tries to change the model's persona. Notice the negative lookahead `(?!Fabrizio)` in the "act as" pattern: it allows users to ask the model to "act as Fabrizio" (which is its legitimate role) while blocking any other role-switching attempt.
+- **"You are now" / "Act as" / "Pretend to be"**: Role-switching attacks where the user tries to change the model's persona. The "you are now" pattern is deliberately specific: it only triggers when followed by role-reassignment or restriction-removal words (like "a different", "unrestricted", "free", "DAN", "no longer"), avoiding false positives on innocent phrases like "what are you now working on?" or "you are now using React?". Notice the negative lookahead `(?!Fabrizio)` in the "act as" pattern: it allows users to ask the model to "act as Fabrizio" (which is its legitimate role) while blocking any other role-switching attempt.
 - **"Do anything now" / "Jailbreak"**: References to well-known jailbreak prompts like [DAN (Do Anything Now)](https://en.wikipedia.org/wiki/Jailbreak_(large_language_model)).
 - **"Override system prompt"**: Direct attempts to tamper with the system configuration.
 - **`[system]` / `<|system|>`**: Injection of fake system-level delimiters that some models treat as special tokens.
@@ -280,7 +280,15 @@ import { createSystemPrompt } from "@/lib/chat/llm-prompt";
 import { runGuardrails } from "@/lib/chat/guardrails";
 import { findRelevantContent } from "@/lib/upstash/upstash-vector";
 import { groq } from "@ai-sdk/groq";
-import { convertToModelMessages, stepCountIs, streamText, tool, UIMessage } from "ai";
+import {
+    convertToModelMessages,
+    createUIMessageStream,
+    createUIMessageStreamResponse,
+    stepCountIs,
+    streamText,
+    tool,
+    UIMessage,
+} from "ai";
 import z from "zod";
 
 export async function POST(req: Request) {
@@ -298,7 +306,16 @@ export async function POST(req: Request) {
     const guardrailResult = await runGuardrails(lastUserText);
 
     if (!guardrailResult.safe) {
-      return new Response(guardrailResult.blockedReason, { status: 400 });
+      return createUIMessageStreamResponse({
+        stream: createUIMessageStream({
+          execute: ({ writer }) => {
+            const blockedMessage = guardrailResult.blockedReason ?? "";
+            writer.write({ type: "text-start", id: "guardrail-block" });
+            writer.write({ type: "text-delta", id: "guardrail-block", delta: blockedMessage });
+            writer.write({ type: "text-end", id: "guardrail-block" });
+          },
+        }),
+      });
     }
   }
 
@@ -327,8 +344,8 @@ export async function POST(req: Request) {
 Let me walk you through the key points:
 
 - **Message extraction**: The route extracts the last user message from the conversation history. This is important because we only need to check the *latest* message, not the entire conversation. Previous messages have already been checked when they were sent.
-- **Guardrails before inference**: The `runGuardrails` call happens *before* `streamText`. If the message is rejected, we return a `400` response with the blocked reason immediately. The main Llama 3.3 70B model never sees the message, saving both latency and tokens.
-- **HTTP 400 for rejections**: Blocked messages return a `400 Bad Request` status. The client-side chat UI can catch this and display the blocked reason to the user in the chat interface.
+- **Guardrails before inference**: The `runGuardrails` call happens *before* `streamText`. If the message is rejected, we return immediately without ever calling the main Llama 3.3 70B model, saving both latency and tokens.
+- **Streamed rejections**: Blocked messages are returned as a proper UI message stream using the Vercel AI SDK's `createUIMessageStreamResponse` and `createUIMessageStream`. This means the blocked reason appears as a normal assistant message in the chat interface, which is exactly what the user expects. An earlier version returned a `400` HTTP status with the blocked reason as plain text in the body. The problem? The `useChat` hook from `@ai-sdk/react` surfaces non-2xx responses through the `error` object with a generic HTTP error message, discarding the actual response body. The user would see "Bad Request" instead of our carefully written redirect message. By returning a valid 200 streamed response, the blocked reason flows through the same rendering path as any other assistant message.
 - **RAG tool**: The main model has access to a `getFabrizioDuroniBlogKnowledge` tool that queries my Upstash Vector database to find relevant content about me. At the moment, the vector store contains information about me that the model can retrieve at query time to provide accurate, grounded answers. If you want to know more about RAG, check out the dedicated section in my [LLM hitchhiker's guide](/blog/post/2025/03/01/llm).
 
 ## Conclusion

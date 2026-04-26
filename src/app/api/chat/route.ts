@@ -2,7 +2,15 @@ import { createSystemPrompt } from "@/lib/chat/llm-prompt";
 import { runGuardrails } from "@/lib/chat/guardrails";
 import { findRelevantContent } from "@/lib/upstash/upstash-vector";
 import { groq } from "@ai-sdk/groq";
-import { convertToModelMessages, stepCountIs, streamText, tool, UIMessage } from "ai";
+import {
+    convertToModelMessages,
+    createUIMessageStream,
+    createUIMessageStreamResponse,
+    stepCountIs,
+    streamText,
+    tool,
+    UIMessage,
+} from "ai";
 import z from "zod";
 
 export async function POST(req: Request) {
@@ -20,7 +28,16 @@ export async function POST(req: Request) {
     const guardrailResult = await runGuardrails(lastUserText);
 
     if (!guardrailResult.safe) {
-      return new Response(guardrailResult.blockedReason, { status: 400 });
+      return createUIMessageStreamResponse({
+        stream: createUIMessageStream({
+          execute: ({ writer }) => {
+            const blockedMessage = guardrailResult.blockedReason ?? "";
+            writer.write({ type: "text-start", id: "guardrail-block" });
+            writer.write({ type: "text-delta", id: "guardrail-block", delta: blockedMessage });
+            writer.write({ type: "text-end", id: "guardrail-block" });
+          },
+        }),
+      });
     }
   }
 

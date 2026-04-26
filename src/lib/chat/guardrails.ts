@@ -10,7 +10,7 @@ const INJECTION_PATTERNS = [
     /ignore\s+(all\s+)?(previous|prior|above)\s+instructions/i,
     /disregard\s+(all\s+)?(previous|prior|above)\s+instructions/i,
     /forget\s+(all\s+)?(previous|prior|above)\s+instructions/i,
-    /you\s+are\s+now\s+/i,
+    /you\s+are\s+now\s+(?:a\s+|an\s+|my\s+)?(?:different|another|new|unrestricted|unfiltered|evil|jailbroken|free|not|no\s+longer|DAN\b)/i,
     /act\s+as\s+(if\s+you\s+are\s+|a\s+)?(?!Fabrizio)/i,
     /pretend\s+(you\s+are|to\s+be)\s+/i,
     /do\s+anything\s+now/i,
@@ -67,7 +67,6 @@ export const checkInputSafety = async (message: string): Promise<GuardrailResult
 
         return { safe: true };
     } catch (error) {
-        // Fail open — if the safety model is unavailable, allow the request through
         console.warn("Llama Guard safety check failed, allowing request:", error);
         return { safe: true };
     }
