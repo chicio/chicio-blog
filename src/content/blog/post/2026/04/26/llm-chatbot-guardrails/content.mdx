@@ -39,13 +39,23 @@ The system prompt alone is not enough to prevent these issues. LLMs can be surpr
 
 My guardrail system follows a pipeline pattern: every user message passes through three sequential checks before reaching the main Llama 3.3 70B model. If any check fails, the message is rejected with a friendly error message, and the main model never sees it.
 
-Here's the flow:
+As you can see in the diagram below, the flow starts with a synchronous regex-based prompt injection check (instant and free). If that passes, two LLM-based checks run in parallel via `Promise.all`: a Llama Guard content safety classification and an LLM-as-judge topic relevance check. Only when all three checks pass does the message reach the main model.
 
-- **Prompt injection check** (regex, synchronous): Fast pattern matching against known injection phrases. Zero latency cost.
-- **Content safety check** (Llama Guard 3 8B via Groq): A specialized safety model that classifies whether the input is safe or unsafe.
-- **Topic relevance check** (Llama 3.1 8B via Groq): A lightweight LLM acting as a binary classifier to determine if the message is on-topic for a portfolio chatbot.
+```mermaid
+graph TD
+    A["User message"] --> B{"Regex prompt\ninjection check"}
+    B -- "Pattern matched" --> C["Reject: friendly\nredirect message"]
+    B -- "Pass" --> D["Promise.all"]
+    D --> E{"Llama Guard 3 8B\ncontent safety"}
+    D --> F{"Llama 3.1 8B\ntopic relevance"}
+    E -- "Unsafe" --> G["Reject: safety\nviolation message"]
+    E -- "Safe" --> H{"Both passed?"}
+    F -- "Off-topic" --> I["Reject: off-topic\nredirect message"]
+    F -- "On-topic" --> H
+    H -- "Yes" --> J["Main Llama 3.3 70B\nmodel + RAG"]
+```
 
-The second and third checks run in parallel via `Promise.all` to minimize latency. The whole pipeline adds minimal overhead because Groq's inference is extremely fast, and the two LLM checks use small (8B parameter) models.
+The whole pipeline adds minimal overhead because Groq's inference is extremely fast, and the two LLM checks use small (8B parameter) models.
 
 Let's look at the implementation.
 

@@ -14,3 +14,6 @@
 ## Editorial Reference
 - [editorial_insights.md](editorial_insights.md) — Co-author registry, article series, tag frequency, voice observations
 - [codebase_content_structure.md](codebase_content_structure.md) — Actual post file paths, image conventions, YAML frontmatter format
+
+## Capabilities Reference
+- [reference_mermaid_support.md](reference_mermaid_support.md) — Mermaid diagrams in MDX: fenced code blocks, no imports, Matrix theme, all diagram types
