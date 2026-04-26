@@ -55,7 +55,8 @@ export const checkInputSafety = async (message: string): Promise<GuardrailResult
             messages: [{ role: "user", content: message }],
         });
 
-        const isSafe = !text.trim().toLowerCase().includes("malicious");
+        const score = parseFloat(text.trim());
+        const isSafe = isNaN(score) || score < 0.5;
 
         if (!isSafe) {
             return {
