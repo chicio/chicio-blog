@@ -35,7 +35,7 @@ Before we dive into the implementation, let's take a step back and understand wh
 
 The system prompt alone is not enough to prevent these issues. LLMs can be surprisingly susceptible to prompt injection, and relying on the model to self-police is like asking the fox to guard the henhouse. You need external checks that run *before* the model sees the message.
 
-## The architecture overview
+## Architecture overview
 
 My guardrail system follows a pipeline pattern: every user message passes through three sequential checks before reaching the main Llama 3.3 70B model. If any check fails, the message is rejected with a friendly error message, and the main model never sees it.
 
