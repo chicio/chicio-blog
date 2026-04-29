@@ -1,5 +1,5 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { getAllConsoles } from "@/lib/content/videogames";
+import { getAllConsoles } from "@/lib/content/videogames/videogames";
 import { MCP_SITE_URL } from "@/lib/mcp/config";
 
 export const registerGetVideogameConsoles = (server: McpServer): void => {

@@ -1,5 +1,5 @@
 import { BlogTags } from "@/components/sections/blog/components/blog-tags";
-import { getTags } from "@/lib/content/posts";
+import { getTags } from "@/lib/content/posts/posts";
 import { createMetadata } from "@/lib/seo/seo";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { slugs } from "@/types/configuration/slug";

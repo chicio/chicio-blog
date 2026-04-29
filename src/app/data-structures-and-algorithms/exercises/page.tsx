@@ -1,5 +1,5 @@
 import { Exercises } from "@/components/sections/data-structures-and-algorithms/components/exercises";
-import { getExercisesContent } from "@/lib/content/data-structures-and-algorithms";
+import { getExercisesContent } from "@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms";
 import { createMetadata } from "@/lib/seo/seo";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { slugs } from "@/types/configuration/slug";

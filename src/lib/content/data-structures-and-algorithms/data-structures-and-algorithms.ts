@@ -1,5 +1,5 @@
 import { Content } from "@/types/content/content";
-import { getAllContentFor, getSingleContentBy } from "./content";
+import { getAllContentFor, getSingleContentBy } from "../content";
 import { slugs } from "@/types/configuration/slug";
 import { ExerciseMetadata } from "@/types/content/data-structures-and-algorithms";
 

@@ -3,7 +3,7 @@ import {
   getAllConsoles,
   getAllGames,
   getAllGamesForConsole,
-} from "@/lib/content/videogames";
+} from "@/lib/content/videogames/videogames";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { tracking } from "@/types/configuration/tracking";
 import { VideogameCollectionDataCard } from "./videogame-collection-data-card";

@@ -1,5 +1,5 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { getTags } from "@/lib/content/posts";
+import { getTags } from "@/lib/content/posts/posts";
 
 export const registerGetTags = (server: McpServer): void => {
     server.registerTool(

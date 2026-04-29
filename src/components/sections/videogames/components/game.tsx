@@ -10,7 +10,7 @@ import { PageTitle } from "@/components/design-system/molecules/typography/page-
 import { GameInformation } from "./game-information";
 import { VideogameNavigation } from "./videogame-navigation";
 import { ConsoleLogos } from "./console-logos";
-import { getAllGames } from "@/lib/content/videogames";
+import { getAllGames } from "@/lib/content/videogames/videogames";
 import { GameFormatIcon } from "./game-format-icon";
 import { GameBreadcrumb } from "./game-breadcrumb";
 

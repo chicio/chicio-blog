@@ -2,7 +2,7 @@ import { siteMetadata } from "@/types/configuration/site-metadata";
 import { upsert } from "../upstash/upstash-vector";
 import { VectorData } from "@/types/chat/vector-data";
 import { Content } from "@/types/content/content";
-import { getPosts } from "../content/posts";
+import { getPosts } from "../content/posts/posts";
 
 function chunkContent(content: string, maxChunkSize: number = 1000): string[] {
   const paragraphs = content.split("\n\n").filter((p) => p.trim());
