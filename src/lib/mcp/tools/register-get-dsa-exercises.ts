@@ -1,6 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import z from "zod";
-import { getAllExercises, getAllExercisesForTopic } from "@/lib/content/data-structures-and-algorithms";
+import { getAllExercises, getAllExercisesForTopic } from "@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms";
 import { MCP_SITE_URL } from "@/lib/mcp/config";
 
 export const registerGetDsaExercises = (server: McpServer): void => {

@@ -28,5 +28,8 @@
 - [MCP Portfolio Server](feature_mcp_server.md) — Public MCP server at /api/mcp, 10 tools (incl. videogames), stateless, OAuth discovery endpoint, /mcp page with 5 client cards
 - [Mermaid Diagrams](feature_mermaid_diagrams.md) — MDX diagrams via ```mermaid blocks, lazy singleton loader, Matrix theme, no next/dynamic
 
+## Features (continued 3)
+- [Markdown Negotiation](feature_markdown_negotiation.md) — Accept: text/markdown support via proxy.ts + /markdown-content/* routes, Next.js 16 proxy convention
+
 ## Feedback
 - [PWA & State Patterns](feedback_pwa_patterns.md) — useSyncExternalStore for localStorage state, consent-gated UI, banner/error page alignment rules

@@ -1,5 +1,5 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { getAboutMe } from "@/lib/content/about-me";
+import { getAboutMe } from "@/lib/content/about-me/about-me";
 import { MCP_SITE_URL } from "@/lib/mcp/config";
 
 export const registerGetAboutMe = (server: McpServer): void => {

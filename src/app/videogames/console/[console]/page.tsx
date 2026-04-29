@@ -3,7 +3,7 @@ import { NextVideogamesConsoleParameters, NextVideogamesGameParameters } from "@
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getAllConsoles, getAllGames, getConsole, getGame } from "@/lib/content/videogames";
+import { getAllConsoles, getAllGames, getConsole, getGame } from "@/lib/content/videogames/videogames";
 import { Console } from "@/components/sections/videogames/components/console";
 
 export async function generateMetadata({

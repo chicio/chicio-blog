@@ -1,6 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import z from "zod";
-import { getPosts, getPostsForTag } from "@/lib/content/posts";
+import { getPosts, getPostsForTag } from "@/lib/content/posts/posts";
 import { MCP_SITE_URL } from "@/lib/mcp/config";
 
 export const registerListPosts = (server: McpServer): void => {

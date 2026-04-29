@@ -1,4 +1,4 @@
-import { getPosts } from "@/lib/content/posts";
+import { getPosts } from "@/lib/content/posts/posts";
 import { authors } from "@/types/content/author";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { Feed } from "feed";

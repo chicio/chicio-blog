@@ -1,7 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { getPosts, getTags } from "@/lib/content/posts";
-import { getAllDataStructuresAndAlgorithmsTopics, getAllExercises } from "@/lib/content/data-structures-and-algorithms";
-import { getAllConsoles, getAllGames } from "@/lib/content/videogames";
+import { getPosts, getTags } from "@/lib/content/posts/posts";
+import { getAllDataStructuresAndAlgorithmsTopics, getAllExercises } from "@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms";
+import { getAllConsoles, getAllGames } from "@/lib/content/videogames/videogames";
 import { MCP_SITE_URL } from "@/lib/mcp/config";
 
 export const registerGetSiteStats = (server: McpServer): void => {

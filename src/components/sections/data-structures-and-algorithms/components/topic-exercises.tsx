@@ -1,4 +1,4 @@
-import { getAllExercisesForTopic } from "@/lib/content/data-structures-and-algorithms";
+import { getAllExercisesForTopic } from "@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms";
 import { FC } from "react";
 import { ExerciseTable } from "./exercise-table";
 

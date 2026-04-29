@@ -10,7 +10,7 @@ import {
   getAllDataStructuresAndAlgorithmsTopics,
   getDataStructuresAndAlgorithmsTopic,
   getDataStructuresAndAlgorithmsTopicWithNavigation,
-} from "@/lib/content/data-structures-and-algorithms";
+} from "@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms";
 import { Topic } from "@/components/sections/data-structures-and-algorithms/components/topic";
 
 export async function generateMetadata({

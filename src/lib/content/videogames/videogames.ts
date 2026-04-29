@@ -1,7 +1,7 @@
 import { Content } from "@/types/content/content";
 import { slugs } from "@/types/configuration/slug";
 import { ConsoleMetadata, GameFormat, GameMetadata } from "@/types/content/videogames";
-import { getAllContentFor, getSingleContentBy } from "./content";
+import { getAllContentFor, getSingleContentBy } from "../content";
 
 const consoleMetadataAdapter = (raw: unknown): ConsoleMetadata => {
   const {
