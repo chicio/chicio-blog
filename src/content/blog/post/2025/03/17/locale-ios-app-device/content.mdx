@@ -1,6 +1,6 @@
 ---
 title: "Which Locale? Decoding the Madness Behind iOS Localization and Language Preferences"
-description: "iOS localization is a wild ride where device and app locales play by their own rules. But don’t worry, after some chaos, Apple’s settings actually matched our expectations. Of course, only after a few twists and turns."
+description: "iOS localization is a wild ride where device and app locales play by their own rules. Under the hood, Apple uses CLDR/ICU language distance matching to pick the best locale for your app. Let’s decode the madness together."
 date: 2025-03-17
 image: /images/posts/which-locale-featured.jpg
 tags: [swift, ios, apple, mobile application development]
@@ -9,7 +9,9 @@ authors: [fabrizio_duroni, antonino_gitto, marco_de_lucchi]
 
 import { Youtube } from "@/components/design-system/molecules/video/youtube";
 
-*iOS localization is a wild ride where device and app locales play by their own rules. But don’t worry, after some chaos, Apple’s settings actually matched our expectations. Of course, only after a few twists and turns*
+*iOS localization is a wild ride where device and app locales play by their own rules.
+Under the hood, Apple uses CLDR/ICU language distance matching to pick the best locale for your app.
+Let’s decode the madness together.*
 
 ---
 
@@ -54,27 +56,121 @@ Here’s how it works in detail, and how iOS chooses the device locale based on 
 
 ![iOS language and region settings](/images/posts/which-locale-settings-ios.jpg)
 
-The *app locale* is the locale the app uses to select translations. This is determined through a specific algorithm (which we’ll call the *app locale algorithm*), as explained in this [Apple documentation article](https://developer.apple.com/library/archive/qa/qa1828/_index.html#//apple_ref/doc/uid/DTS40014938) (which, by the way, wasn’t easy to find! :sweat_smile:).  
+The *app locale* is the locale the app uses to select translations. This is determined through a specific algorithm
+(which we’ll call the *app locale algorithm*), as explained in this
+[Apple documentation article](https://developer.apple.com/library/archive/qa/qa1828/_index.html#//apple_ref/doc/uid/DTS40014938)
+(which, by the way, wasn’t easy to find! :sweat_smile:). The article gives a simplified overview of the process:
 
-Let’s take a look at a key excerpt from the article:
+- iOS walks through the user’s *Preferred Languages* list (from first to last) looking for a match among the app’s
+  supported localizations (the `.lproj` folders, or `.xcstrings` entries in modern Xcode 16+).
+- If the preferred language is a regional variant not directly supported by the app (e.g., `en-IN`), iOS tries to
+  **fall back** to a closer match before moving on to the next preferred language.
+- If no preferred language matches at all, iOS defaults to the app’s development region (`CFBundleDevelopmentRegion`).
 
-> To determine the language for your app, iOS considers not only the user’s language preferences (set in *General → Language & Region*), but also the localizations your app supports. The process works as follows:
->
-> - iOS first checks the user’s most preferred language (the first entry in the *Preferred Languages* list).  
-> - It then verifies whether this language is supported by the app by checking for a corresponding `.lproj` folder in the app bundle. If the folder exists, iOS selects that language. Otherwise, it moves on to the next language in the user’s preferences and repeats the process.  
-> - If the user’s preferred language is a regional variant that is not supported by the app, iOS attempts to fall back to a more generic language before giving up.  
->   - Example: If the user’s preferred language is British English but the app does not include `en-GB.lproj` or `en_GB.lproj`, iOS checks for an `en.lproj` folder and defaults to English if available.  
-> - If none of the user’s preferred languages are supported, iOS defaults to the app’s development region (`CFBundleDevelopmentRegion`).  
+Reading this, you might assume the "fallback" step is a simple operation: strip the region and look for the base
+language (e.g., `en-IN` -> `en`). But that’s not what iOS actually does. The fallback mechanism is powered by
+**CLDR/ICU language distance matching**, which computes a *linguistic distance* between the user’s locale and each
+locale supported by the app, then picks the one with the lowest distance. For example, with a device locale set to
+`en-IN` and an app that supports both `en` and `en-GB`, iOS will pick `en-GB` over `en` — because Indian English is
+linguistically closer to British English than to American English. This might seem counterintuitive at first, but it
+makes perfect sense once you understand the algorithm behind it.
 
+Let’s dive into how this works.
 
-In summary, the app locale algorithm attempts to match the most specific locale supported by your app (as defined in the
-Xcode project settings) with the user's language and dialect preferences in the *Preferred Languages* menu. It starts with
-the most specific option and progressively falls back to less specific ones. If no match is found, the locale defined in
-the `CFBundleDevelopmentRegion` option in the `Info.plist` is used as a fallback.
+### ICU and CLDR: the engine behind locale matching
 
-NB.: in the most recent version of Xcode (16 at the time of this writing), the `.lproj` folder for the localisable string
-has been partially replaced by the string catalogs for translations (`.xcstrings` file), but the algorithm described
-above is still valid.
+The locale matching that Apple describes in the documentation excerpt above is powered by two key components from
+the Unicode ecosystem.
+
+[ICU (International Components for Unicode)](https://icu.unicode.org/) is an open-source C/C++ and Java library
+maintained by the Unicode Consortium. It provides locale matching, formatting (dates, numbers, currencies), collation,
+and full Unicode support. ICU is used by Apple, Google, Microsoft, Adobe, Meta, and many other major tech companies.
+Apple integrates ICU directly into Darwin (the core of macOS and iOS). This is confirmed by an
+[Apple DTS Engineer on the Apple Developer Forums](https://developer.apple.com/forums/thread/71383), who revealed that
+the locale matching implementation uses `ualoc_localizationsToUse` from ICU internally. Apple also exposes
+[`Locale.IdentifierType.icu`](https://developer.apple.com/documentation/foundation/locale/identifiertype/icu) in
+Foundation, further confirming the connection.
+
+[CLDR (Unicode Common Locale Data Repository)](https://cldr.unicode.org/) is the database of localization data
+maintained by the Unicode Consortium. Among many things, it contains the **language distance tables** that ICU uses
+for matching. These distances are hardcoded data in the supplemental `languageInfo.xml` file (they are not calculated
+at runtime).
+
+The chain works like this: **CLDR (data) -> ICU (library) -> Apple Foundation (uses ICU) ->
+`Bundle.preferredLocalizations`**. So when Apple’s documentation says "iOS attempts to fall back to a more generic
+language", the actual mechanism deciding *which* fallback is "more generic" (or rather, linguistically closer) is
+the CLDR/ICU language distance algorithm.
+
+### The language distance matching algorithm
+
+So how does this language distance matching actually work? The algorithm operates in three steps.
+
+**Step 1: Likely subtags (expansion).** Before calculating any distance, each locale is expanded to its full
+`language-script-region` form using CLDR’s "likely subtags" table. This is critical because it gives every locale
+a complete identity for comparison:
+
+| Locale | Expanded form |
+|---|---|
+| `en` | `en-Latn-US` |
+| `en-IN` | `en-Latn-IN` |
+| `en-GB` | `en-Latn-GB` |
+| `en-IE` | `en-Latn-IE` |
+
+The critical point here: **`en` without a region becomes `en-Latn-US`** (American English). This is extremely
+important for understanding the matching behavior.
+
+**Step 2: Field-by-field comparison.** The total distance between two locales is computed as:
+
+```
+total distance = distance(language) + distance(script) + distance(region)
+```
+
+Each field (language, script, region) is compared using lookup tables in CLDR.
+
+**Step 3: Special distance rules.** CLDR defines specific distance rules that reflect linguistic relationships
+between locales. For English, these rules are particularly interesting (source:
+[CLDR Language Matching Charts](https://www.unicode.org/cldr/cldr-aux/charts/33/supplemental/language_matching.html)):
+
+| Desired | Supported | Distance |
+|---|---|---|
+| `en_*_GB` | `en_*_*` (any other English region) | **4** |
+| `en_*_001` (World English) | `en_*_*` | **4** |
+| `en_*_US` | `en_*_*` (any other English region) | **6** |
+| `en_*_*` | `en_*_*` (generic) | **5** |
+
+Notice something? **American English (`en_*_US`) has the highest distance (6) from other English variants.** This is
+not a bug. Most English variants worldwide derive from British English (India, Australia, South Africa, Ireland, New
+Zealand, Singapore...). American English is the exception. CLDR reflects this real-world linguistic reality by giving
+`en-GB` a "closer" relationship to most other English variants.
+
+CLDR also defines **"paradigm locales"** (reference locales considered first in matching): `en-GB`, `es-419`, `pt-BR`,
+`zh-Hant`. This gives additional priority to `en-GB` as an "attractor" for non-American English variants.
+
+The default distance **threshold** is 50. If the distance exceeds this value, the match is discarded entirely.
+
+Here’s the fallback chain for some common English locales, as confirmed by the
+[Apple DTS Engineer](https://developer.apple.com/forums/thread/71383):
+
+```
+en-IN  →  en-GB  →  en
+en-AU  →  en-GB  →  en
+en-DE  →  en-150 (European English) → en-GB → en-001 (International English) → en
+```
+
+Pretty interesting, right? :smirk: This means that for most English regional variants, iOS will prefer `en-GB` over
+a generic `en` (which is actually `en-US`) when both are available.
+
+### A word of caution from Apple
+
+Apple explicitly warns developers **not to hardcode fallback details** in their apps based on these rules. The reasons
+are straightforward:
+
+- Rules can change with ICU/CLDR updates across OS versions
+- The matching behavior is not officially documented at this level of detail
+- It’s considered an implementation detail
+
+So while understanding these mechanics is incredibly useful for debugging, you should always rely on
+`Bundle.preferredLocalizations` and let iOS handle the matching for you.
 
 ### Retrieving the Device and App Locale
 
@@ -87,7 +183,9 @@ Now that we understand how iOS selects the locale, how do we retrieve this infor
     based on the sorting of the *Preferred Languages* selected.  
   - **The first entry in this list represents the locale selected by the app**, based on the **user’s device settings** and the **localizations available in the app bundle**.  
 
-The user can also manually override the app’s locale using the app-specific language settings. However, this menu is only available if multiple languages are selected in *Preferred Languages*. If you want the menu to always be available, you can force it by adding `UIPrefersShowingLanguageSettings` to `Info.plist`.  
+The user can also manually override the app’s locale using the app-specific language settings. However, this menu is
+only available if multiple languages are selected in *Preferred Languages*. If you want the menu to always be
+available, you can force it by adding `UIPrefersShowingLanguageSettings` to `Info.plist`.  
 
 Clear as mud, right? :laughing:  
 
@@ -99,13 +197,15 @@ To illustrate all of this, let’s explore some real-world examples using a smal
 earlier and observe how they behave when the user changes either the device or app locale. Let’s walk through the Xcode
 project setup and the implementation of this app.
 
-The app supports 5 different locales: 
+The app supports 7 different locales: 
 
-* "English (Ireland)"
-* "English (United Kindom)"
-* "German"
-* "Italian"
-* "Italian (Switzerland)"
+- "English"
+- "English (India)"
+- "English (Ireland)"
+- "English (United Kingdom)"
+- "German"
+- "Italian"
+- "Italian (Switzerland)"
 
 By default, the app’s locale is set to "English (United Kingdom)".
 
@@ -113,9 +213,9 @@ By default, the app’s locale is set to "English (United Kingdom)".
 
 In the `Info.plist` of the project we also added some settings:
 
-* `CFBundleDevelopmentRegion` or usually called "Default localization" to be the `$(DEVELOPMENT_REGION)`, that is
-  basically the "English (United Kindom)" default chosen in the previous screen.
-* `UIPrefersShowingLanguageSettings` to true, that as we will see later will enable a cool feature related to the *app
+- `CFBundleDevelopmentRegion` or usually called "Default localization" to be the `$(DEVELOPMENT_REGION)`, that is
+  basically the "English (United Kingdom)" default chosen in the previous screen.
+- `UIPrefersShowingLanguageSettings` to true, that as we will see later will enable a cool feature related to the *app
   language menu*
 
 !["Which Locale?" Info.plist](/images/posts/whichlocale-development-region-show-language-menu.png)
@@ -124,12 +224,12 @@ As we mentioned before, the app consists of a single view, structured into secti
 locale settings using relevant iOS APIs.
 
 The device locale section retrieves and displays:
-* the `Locale.preferredLanguages` 
-* the `"AppleLanguages"` entry in `UserDefaults`
+- the `Locale.preferredLanguages` 
+- the `"AppleLanguages"` entry in `UserDefaults`
 
 The app locale section displays:
-* the `Bundle.preferredLocalizations`, that contains the locale selected by the app based on the device settings
-* the `Bundle.main.localizations`, that contains the locales configured in the screen shown before where it is possible
+- the `Bundle.preferredLocalizations`, that contains the locale selected by the app based on the device settings
+- the `Bundle.main.localizations`, that contains the locales configured in the screen shown before where it is possible
   to add locales supported by the app.
 
 ```swift
@@ -206,80 +306,101 @@ struct LocaleSectionView: View {
 By running the app and modifying the device language settings or overriding the app-specific language settings, we can
 observe how iOS dynamically adjusts both the device locale and the app locale based on user preferences.  
 
-Let's start with a simple case: language selected "English (United Kingdom)" and region "United Kingdom". In this case the
+Let's start with a simple case: language selected "English (United Kingdom)" and region "United Kingdom". In this case
 `Locale.preferredLanguages` (which always matches `AppleLanguages`) returns `en-GB` and
-also `Bundle.preferredLocalization` returns `en-GB`. This behavior makes sense because "English (United Kingdom)" is a
-locale supported by the app, making it an easy match between the device's locale and the app's available localizations.
+also `Bundle.preferredLocalization` returns `en-GB`. This is a straightforward exact match (CLDR distance 0) — the
+device locale `en-GB` is directly supported by the app, so no distance calculation is needed.
 
 ![An example with the default locale set at device level, that matches the app locale](/images/posts/which-locale-en-gb-country-gb.jpg)
 
-Now, let's add some complexity.
-This time, we will select "English (United Kingdom)" as language but set the regions to
-"Italy". What happens in this case? The locale at both device and app level is still "English (United
-Kingdom)". Why? Because the language selected is already a specific dialect, that represents itself a locale
-(because it is a combination of language and region). So the "region" settings in this case is completely ignored, and
-`Bundle.preferredLocalization` will return again `en-GB`.
+Now, let's add some complexity. This time, we will select "English (United Kingdom)" as language but set the region
+to "Italy". What happens in this case? The locale at both device and app level is still "English (United Kingdom)".
+Why? Because the language selected is already a specific dialect, that represents itself a locale (it's a combination
+of language and region). So the "region" setting is completely ignored, and `Bundle.preferredLocalization` will return
+`en-GB` again — still an exact match, still CLDR distance 0.
 
 ![An example of dialect (language + region) selected as language and region that doesn't match the dialect one.](/images/posts/which-locale-en-gb-country-italy.jpg)
 
-The next case is another interesting one. The language selected in this case is "English", without specifying a
-particular dialect, and the region selected is "Ireland". In this case, the locale is calculated as a combination of
-language and region. As a result, both `Locale.preferredLanguages` and `Bundle.preferredLocalization` returns `en-IE`.
+The next case is another interesting one. The language selected is "English", without specifying a particular dialect,
+and the region selected is "Ireland". In this case, the device locale is calculated as a combination of language and
+region, resulting in `en-IE`. Since our app supports `en-IE`, this is again an exact match (CLDR distance 0). Both
+`Locale.preferredLanguages` and `Bundle.preferredLocalization` return `en-IE`.
 
 ![An example with language without dialect (no region specified in the language) an a region that combined with the language created an app supported locale](/images/posts/which-locale-en-country-ie.jpg)
 
-Now, let's make things even more complex. What happens if we select "English" (without a specific dialect) and choose a region
- not associated with that language in our app, like, for example, "Italy". In this case we encounter the first mismatch between
-`Locale.preferredLanguages` and `Bundle.preferredLocalization`. The first one will return `en-IT`, so a very basic
-combination of the preferred language and region device settings. This allows iOS to:
+Now, let's see what happens when there is **no exact match** and CLDR distance matching really kicks in. What happens
+if we select "English" (without a specific dialect) and choose a region not associated with that language in our app,
+like, for example, "Italy"? In this case we encounter the first mismatch between `Locale.preferredLanguages` and
+`Bundle.preferredLocalization`. The first one will return `en-IT`, so a very basic combination of the preferred
+language and region device settings. This allows iOS to:
 
-* translate everything at system level with the "en" language
-* format numbers, dates etc. according to the region, in this case "IT"
+- translate everything at system level with the "en" language
+- format numbers, dates etc. according to the region, in this case "IT"
 
 Even though this behavior might seem counterintuitive at first, it actually makes sense. A user with this configuration
 might be a native English speaker living in Italy, so iOS attempts to mix and match the language and region settings
 accordingly.
 
-On the other hand, `Bundle.preferredLocalization` returns `en-GB`. Why? This follows the algorithm we discussed earlier:
+On the other hand, `Bundle.preferredLocalization` returns `en-GB`. Why? This is where the CLDR/ICU language distance
+matching we discussed earlier kicks in. Let's walk through the calculation:
 
-* iOS tries to match the most similar locale supported by the app to the one derived from the device's language and region settings.
-* In this case, the device locale is `en-IT`, but the app only supports `en-GB` and `en-IE`.
-* Since there's no exact match and no generic en locale available in the app, iOS falls back to the `CFBundleDevelopmentRegion` setting, which defaults to `en-GB`.
+```
+en-IT (desired) vs en-GB (supported):
+  language:  en → en  = 0
+  script:    Latn → Latn = 0
+  region:    IT → GB  = 4  (special CLDR rule: en_*_GB has distance 4 from other EN variants)
+  TOTAL = 4  ← WINS
+
+en-IT (desired) vs en-IE (supported):
+  language:  en → en  = 0
+  script:    Latn → Latn = 0
+  region:    IT → IE  = 5  (generic EN region-to-region distance)
+  TOTAL = 5
+
+en-IT (desired) vs en [= en-US after likely subtags] (supported):
+  language:  en → en  = 0
+  script:    Latn → Latn = 0
+  region:    IT → US  = 6  (special CLDR rule: en_*_US has distance 6 from other EN variants)
+  TOTAL = 6
+```
+
+The `en-GB` locale wins because it has the lowest distance (4) to `en-IT`, thanks to CLDR's recognition that British
+English is linguistically closer to most English regional variants than American English. This is not a simple fallback
+to `CFBundleDevelopmentRegion`. It's a deliberate, data-driven decision by the matching algorithm.
 
 ![An example with a language without dialect and a region that doesn't match in combination any locale supported by the app](/images/posts/which-locale-en-generic-country-italy.jpg)
 
-Let's explore a more complex case, where the device locale configuration includes:
+Let's now explore some more complex cases involving multiple preferred languages, where the device locale
+configuration includes:
 
-* a preferred language selected not supported by the app, eg. `fr`
-* a second preferred language supported by the app, eg. `it`
-* a region not supported by any locale in the app, eg. `FR`
+- a preferred language selected not supported by the app, eg. `fr`
+- a second preferred language supported by the app, eg. `it`
+- a region not supported by any locale in the app, eg. `FR`
 
 This is very tricky (and a common case for users like me that have multiple preferred languages selected in the
-settings). In this case iOS will return `fr-FR` as the locale from `Locale.preferredLanguages`. This makes sense 
-because at system level, the locale considers only the first (main) entry in the language settings when determining the device locale.  
-However `fr-FR` is not supported by the app. But, since the user has `it` as second preferred language,
-`Bundle.preferredLocalization` will return `it` as locale. This happens because the second language matches a generic
-locale (i.e., `it`) supported by the app, even though the region is not directly supported.
+settings). In this case iOS will return `fr-FR` as the locale from `Locale.preferredLanguages`. This makes sense
+because at system level, the locale considers only the first (main) entry in the language settings when determining
+the device locale. However `fr-FR` is not supported by the app, and the CLDR distance between `fr` and any of the
+app's supported languages (`en`, `de`, `it`) is well above the threshold of 50 — they're completely different
+languages. So iOS moves on to the next entry in the preferred languages list and finds `it`, which is an exact match
+(distance 0). `Bundle.preferredLocalization` will return `it` as locale.
 
 ![An example of device locale not supported by the app, but with a second preferred language supported](/images/posts/which-locale-fr-with-fallback-it-country-fr.jpg)
 
-If we remove the `it` language as the second option from the preferred languages, the situation changes. Since there is no
-longer a supported language in the preferred languages list, the `Bundle.preferredLocalization` will not find any match.
-In this case, it will simply fallback to the `CFBundleDevelopmentRegion` (`en-GB`).
-
-This happens because, without a matching supported language, iOS will default to the `CFBundleDevelopmentRegion`
-specified in the app's configuration, ensuring that the app can still present content in a default locale when no other
-match exists.
+If we remove the `it` language as the second option from the preferred languages, the situation changes. Now the only
+preferred language is `fr`, and CLDR distance matching can't find any supported locale close enough (the distance
+between `fr` and `en`, `de`, or `it` is way above the threshold). Since no preferred language produces a match,
+`Bundle.preferredLocalization` falls back to the `CFBundleDevelopmentRegion` (`en-GB`). This is the last resort in
+the matching chain.
 
 ![An example with a device locale not supported by the app](/images/posts/which-locale-fr-country-fr.jpg)
 
-Last but not least, what does happen if the preferred language in the system settings is not supported by the app
-but the region is? For example we have `fr` as preferred language and `ch` as region. In this case, even if we have a
-locale that supports that region (`it-CH`) in the app, the system will first try to match based on the language. In fact
-if there is no match for that language the system fallback to `CFBundleDevelopmentRegion`. 
-
-So the region is only used to resolve conflicts if there is a first match between the language across multiple locales.
-If there is no matching language, the region setting is ignored, and iOS will fall back to `CFBundleDevelopmentRegion`.
+Last but not least, what happens if the preferred language in the system settings is not supported by the app but the
+region is? For example, we have `fr` as preferred language and `ch` as region. In this case, even if we have a locale
+that supports that region (`it-CH`) in the app, the CLDR distance between `fr` and `it` is still above the threshold
+— sharing a region doesn't help when the languages are completely different. The region component only affects the
+distance calculation when the language already matches (as we saw in the `en-IT` example, where the region determined
+whether `en-GB` or `en-US` was closer). If no language matches at all, iOS falls back to `CFBundleDevelopmentRegion`.
 
 ![An example with a device locale not supported by the app, but with a country supported by another locale in the app](/images/posts/which-locale-fr-country-ch.jpg)
 
@@ -302,8 +423,33 @@ example of how this option works.
 
 <Youtube videoId="vWTUY0sBYlQ" />
 
+## Sources
+
+Here are the key references we used to understand the CLDR/ICU language distance matching mechanism:
+
+- [Apple Developer Forums - Language fallback definitions](https://developer.apple.com/forums/thread/71383) — Apple
+  DTS Engineer confirms that iOS uses `ualoc_localizationsToUse` from ICU internally
+- [Apple Documentation - Locale.IdentifierType.icu](https://developer.apple.com/documentation/foundation/locale/identifiertype/icu)
+  — Apple’s Foundation exposes ICU locale identifiers
+- [ICU - International Components for Unicode](https://icu.unicode.org/) — The open-source library used by Apple for
+  locale matching
+- [CLDR Language Matching Charts](https://www.unicode.org/cldr/cldr-aux/charts/33/supplemental/language_matching.html)
+  — The distance tables used by ICU for matching
+- [CLDR Language Distance Data](https://cldr.unicode.org/development/development-process/design-proposals/language-distance-data)
+  — Design proposal for the language distance algorithm
+- [Language matching - @phensley/cldr](https://phensley.github.io/cldr-engine/docs/en/doc-locales-matching) — Excellent
+  explanation of the language matching algorithm
+- [Unicode CLDR Project](https://cldr.unicode.org/) — The Unicode Common Locale Data Repository
+
 ## Conclusion
 
-The codebase for the "Which Locale?" app can be found in this [github repo](https://github.com/chicio/WhichLocale). Feel free to experiment with it and run your
-own tests. Everything should be consistent with what we've covered in this post :rocket:. We'll do our best to keep this
-post updated if anything changes on Apple’s side. See you next time (we hope not again for the "locale madness" topic :laughing:).
+The codebase for the "Which Locale?" app can be found in this
+[GitHub repo](https://github.com/chicio/WhichLocale). Feel free to experiment with it and run your own tests.
+Everything should be consistent with what we’ve covered in this post :rocket:.
+
+Understanding how CLDR and ICU work together behind the scenes is the key to fully grasping iOS locale behavior.
+Without that knowledge, some of the matching results look like bugs when they’re actually deliberate,
+linguistically-informed decisions.
+
+We’ll do our best to keep this post updated if anything changes on Apple’s side. See you next time (we hope not again
+for the "locale madness" topic :laughing:).
