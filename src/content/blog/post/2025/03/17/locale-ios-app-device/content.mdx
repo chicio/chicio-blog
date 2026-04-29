@@ -149,14 +149,7 @@ CLDR also defines **"paradigm locales"** (reference locales considered first in 
 The default distance **threshold** is 50. If the distance exceeds this value, the match is discarded entirely.
 
 Here’s the fallback chain for some common English locales, as confirmed by the
-[Apple DTS Engineer](https://developer.apple.com/forums/thread/71383):
-
-```
-en-IN  →  en-GB  →  en
-en-AU  →  en-GB  →  en
-en-DE  →  en-150 (European English) → en-GB → en-001 (International English) → en
-```
-
+[Apple DTS Engineer](https://developer.apple.com/forums/thread/71383).
 Pretty interesting, right? :smirk: This means that for most English regional variants, iOS will prefer `en-GB` over
 a generic `en` (which is actually `en-US`) when both are available.
 
