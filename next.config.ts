@@ -33,6 +33,23 @@ const nextConfig: NextConfig = {
   outputFileTracingExcludes: {
     "/api/**": ["public/images/**"],
   },
+  async headers() {
+    return [
+      {
+        source: "/",
+        headers: [
+          {
+            key: "Link",
+            value: [
+              '</.well-known/api-catalog>; rel="api-catalog"',
+              '</api/mcp>; rel="service-desc"',
+              '</.well-known/oauth-protected-resource>; rel="describedby"',
+            ].join(", "),
+          },
+        ],
+      },
+    ];
+  },
   async redirects() {
     return [
       {
