@@ -2,12 +2,12 @@
 
 import { Overlay } from "@/components/design-system/atoms/effects/overlay";
 import { TerminalLine } from "@/components/design-system/atoms/typography/terminal-blocks";
-import { MotionDiv } from "@/components/design-system/molecules/animation/motion-div";
 import { useGlassmorphism } from "@/components/design-system/utils/hooks/use-glassmorphism";
 import { useSearch } from "@/components/design-system/utils/hooks/use-search";
 import { useMotionStore } from "@/components/design-system/utils/hooks/use-motion-store";
 import { commandPaletteOpenEvent } from "@/lib/command-palette/command-palette-events";
 import { writeMotion } from "@/lib/motion/motion";
+import { motion } from "framer-motion";
 import { trackWith } from "@/lib/tracking/tracking";
 import { tracking } from "@/types/configuration/tracking";
 import { slugs } from "@/types/configuration/slug";
@@ -15,7 +15,7 @@ import { whiteRabbitEasterEgg } from "@/components/sections/easter-eggs/componen
 import { Command } from "cmdk";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import { ChangeEvent, FC, PropsWithChildren, useCallback, useEffect, useRef, useState } from "react";
+import { ChangeEvent, FC, PropsWithChildren, useCallback, useEffect, useState } from "react";
 import { BiChat } from "react-icons/bi";
 import { MdAnimation, MdDoDisturb } from "react-icons/md";
 
@@ -31,16 +31,40 @@ const GroupLabel: FC<PropsWithChildren> = ({ children }) => (
     <div className="px-4 py-1 font-mono text-xs text-accent/50 uppercase tracking-wider">{children}</div>
 );
 
+const ToggleMotionItem = () => {
+    const motionEnabled = useMotionStore();
+
+    const handleToggleMotion = () => {
+        trackWith({
+            category: tracking.category.command_palette,
+            label: tracking.label.body,
+            action: tracking.action.command_palette_toggle_motion,
+        });
+        writeMotion(motionEnabled ? "off" : "on");
+    };
+
+    return (
+        <Command.Item value="toggle animations motion" className={ITEM_CLASS} onSelect={handleToggleMotion}>
+            <TerminalLine>
+                {motionEnabled ? (
+                    <MdDoDisturb className="inline mr-2 mb-0.5" />
+                ) : (
+                    <MdAnimation className="inline mr-2 mb-0.5" />
+                )}
+                {">"} Toggle Animations{" "}
+                <span className="ml-1 text-accent/60 font-mono text-xs">
+                    [{motionEnabled ? "ON" : "OFF"}]
+                </span>
+            </TerminalLine>
+        </Command.Item>
+    );
+};
+
 export const CommandPalette = () => {
     const [open, setOpen] = useState(false);
     const [isSearching, setIsSearching] = useState(false);
-    // Tracks whether the panel has been painted at least once in the current
-    // open session. When true, MotionDiv skips its entry initial values so
-    // switching motion ON while the palette is already visible doesn't blink.
-    const panelShown = useRef(false);
 
     const router = useRouter();
-    const motionEnabled = useMotionStore();
     const { glassmorphismClass } = useGlassmorphism({ noScale: true });
     const { handleSearch, resetSearch, search } = useSearch(open, whiteRabbitEasterEgg);
 
@@ -48,7 +72,6 @@ export const CommandPalette = () => {
         setOpen(false);
         setIsSearching(false);
         resetSearch();
-        panelShown.current = false;
     }, [resetSearch]);
 
     useEffect(() => {
@@ -82,22 +105,15 @@ export const CommandPalette = () => {
         } 
 
         const handleEsc = (e: KeyboardEvent) => {
-            if (e.key === "Escape") close();
+            if (e.key === "Escape") { 
+                close();
+            }
         };
 
         window.addEventListener("keydown", handleEsc, true);
 
         return () => window.removeEventListener("keydown", handleEsc, true);
     }, [open, close]);
-
-    const handleToggleMotion = () => {
-        trackWith({
-            category: tracking.category.command_palette,
-            label: tracking.label.body,
-            action: tracking.action.command_palette_toggle_motion,
-        });
-        writeMotion(motionEnabled ? "off" : "on");
-    };
 
     const handleOpenChat = () => {
         trackWith({
@@ -121,20 +137,19 @@ export const CommandPalette = () => {
 
     const hasSearchResults = search.type === "search" && search.results.length > 0;
 
-    if (!open) return null;
+    if (!open) { 
+        return null;
+    }
 
     return (
         <Overlay delay={0} onClick={close} className="z-50">
             {search.type === "easterEgg" ? (
                 <NeoRoomEasterEgg lines={search.terminalLines} />
             ) : (
-                <div
-                    className="flex justify-center items-start min-h-screen pt-[15vh] px-4"
-                    ref={(el) => { if (el) panelShown.current = true; }}
-                >
-                    <MotionDiv
-                        className={`${glassmorphismClass} w-full max-w-[600px] overflow-hidden`}
-                        initial={panelShown.current ? false : { opacity: 0, scale: 0.95, y: -8 }}
+                <div className="flex justify-center items-start min-h-screen pt-[15vh] px-4">
+                    <motion.div
+                        className={`${glassmorphismClass} w-full max-w-150 overflow-hidden`}
+                        initial={{ opacity: 0, scale: 0.95, y: -8 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         transition={{ duration: 0.15, ease: "easeOut" }}
                         onClick={(e) => e.stopPropagation()}
@@ -146,7 +161,7 @@ export const CommandPalette = () => {
                                 </span>
                                 <Command.Input
                                     className="bg-transparent outline-none text-accent font-mono text-base flex-1 placeholder:text-accent/40 caret-accent"
-                                    placeholder="type to search blog posts_"
+                                    placeholder="type to search_"
                                     onValueChange={(value) => {
                                         setIsSearching(value.trim().length >= 3);
                                         handleSearch({
@@ -181,13 +196,11 @@ export const CommandPalette = () => {
                                         ))}
                                     </Command.Group>
                                 )}
-
                                 {isSearching && !hasSearchResults && (
                                     <div className="px-4 py-6 font-mono text-xs text-accent/40 text-center">
                                         {">"} no results found_
                                     </div>
                                 )}
-
                                 {!isSearching && (
                                     <Command.Group>
                                         <GroupLabel>Quick Actions</GroupLabel>
@@ -201,34 +214,17 @@ export const CommandPalette = () => {
                                                 {">"} Open AI Chat
                                             </TerminalLine>
                                         </Command.Item>
-                                        <Command.Item
-                                            value="toggle animations motion"
-                                            className={ITEM_CLASS}
-                                            onSelect={handleToggleMotion}
-                                        >
-                                            <TerminalLine>
-                                                {motionEnabled ? (
-                                                    <MdDoDisturb className="inline mr-2 mb-0.5" />
-                                                ) : (
-                                                    <MdAnimation className="inline mr-2 mb-0.5" />
-                                                )}
-                                                {">"} Toggle Animations{" "}
-                                                <span className="ml-1 text-accent/60 font-mono text-xs">
-                                                    [{motionEnabled ? "ON" : "OFF"}]
-                                                </span>
-                                            </TerminalLine>
-                                        </Command.Item>
+                                        <ToggleMotionItem />
                                     </Command.Group>
                                 )}
                             </Command.List>
-
                             <div className="px-4 py-2 border-t border-accent/20 font-mono text-xs text-accent/40 hidden xs:flex gap-6">
                                 <span>↑↓ navigate</span>
                                 <span>↵ select</span>
                                 <span>esc close</span>
                             </div>
                         </Command>
-                    </MotionDiv>
+                    </motion.div>
                 </div>
             )}
         </Overlay>
