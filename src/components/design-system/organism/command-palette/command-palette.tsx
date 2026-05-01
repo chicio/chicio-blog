@@ -4,9 +4,7 @@ import { Overlay } from "@/components/design-system/atoms/effects/overlay";
 import { TerminalLine } from "@/components/design-system/atoms/typography/terminal-blocks";
 import { useGlassmorphism } from "@/components/design-system/utils/hooks/use-glassmorphism";
 import { useSearch } from "@/components/design-system/utils/hooks/use-search";
-import { useMotionStore } from "@/components/design-system/utils/hooks/use-motion-store";
 import { commandPaletteOpenEvent } from "@/lib/command-palette/command-palette-events";
-import { writeMotion } from "@/lib/motion/motion";
 import { motion } from "framer-motion";
 import { trackWith } from "@/lib/tracking/tracking";
 import { tracking } from "@/types/configuration/tracking";
@@ -17,7 +15,7 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, FC, PropsWithChildren, useCallback, useEffect, useState } from "react";
 import { BiChat } from "react-icons/bi";
-import { MdAnimation, MdDoDisturb } from "react-icons/md";
+import { ToggleMotionItem } from "./toggle-motion-item";
 
 const NeoRoomEasterEgg = dynamic(
     () => import("@/components/sections/easter-eggs/components/neo-room-easter-egg"),
@@ -25,42 +23,13 @@ const NeoRoomEasterEgg = dynamic(
 );
 
 const ITEM_CLASS =
-    "px-4 py-2 cursor-pointer aria-selected:bg-[var(--color-accent-alpha-10)] aria-selected:border-l-2 aria-selected:border-accent transition-colors duration-100";
+    "px-4 py-2 cursor-pointer aria-selected:bg-accent-alpha-10 aria-selected:border-l-2 aria-selected:border-accent transition-colors duration-100";
 
 const GroupLabel: FC<PropsWithChildren> = ({ children }) => (
     <div className="px-4 py-1 font-mono text-xs text-accent/50 uppercase tracking-wider">{children}</div>
 );
 
-const ToggleMotionItem = () => {
-    const motionEnabled = useMotionStore();
-
-    const handleToggleMotion = () => {
-        trackWith({
-            category: tracking.category.command_palette,
-            label: tracking.label.body,
-            action: tracking.action.command_palette_toggle_motion,
-        });
-        writeMotion(motionEnabled ? "off" : "on");
-    };
-
-    return (
-        <Command.Item value="toggle animations motion" className={ITEM_CLASS} onSelect={handleToggleMotion}>
-            <TerminalLine>
-                {motionEnabled ? (
-                    <MdDoDisturb className="inline mr-2 mb-0.5" />
-                ) : (
-                    <MdAnimation className="inline mr-2 mb-0.5" />
-                )}
-                {">"} Toggle Animations{" "}
-                <span className="ml-1 text-accent/60 font-mono text-xs">
-                    [{motionEnabled ? "ON" : "OFF"}]
-                </span>
-            </TerminalLine>
-        </Command.Item>
-    );
-};
-
-export const CommandPalette = () => {
+const CommandPalette = () => {
     const [open, setOpen] = useState(false);
     const [isSearching, setIsSearching] = useState(false);
 
@@ -230,3 +199,5 @@ export const CommandPalette = () => {
         </Overlay>
     );
 };
+
+export default CommandPalette;

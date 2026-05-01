@@ -20,7 +20,7 @@ const InstallPromptBanner = dynamic(
 );
 
 const CommandPalette = dynamic(
-    () => import("@/components/design-system/organism/command-palette").then((m) => ({ default: m.CommandPalette })),
+    () => import("@/components/design-system/organism/command-palette/command-palette"),
     { ssr: false },
 );
 
