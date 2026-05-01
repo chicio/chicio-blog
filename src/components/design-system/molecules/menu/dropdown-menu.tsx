@@ -83,6 +83,9 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
                         {items.map((entry, idx) =>
                             isDropdownMenuGroup(entry) ? (
                                 <div key={entry.label + idx}>
+                                    {idx > 0 && (
+                                        <div className="border-secondary-text/30 mx-3 border-t" />
+                                    )}
                                     <span className="text-secondary-text block px-4 pt-3 pb-1 text-sm font-bold uppercase tracking-wider cursor-default select-none">
                                         {entry.label}
                                     </span>
