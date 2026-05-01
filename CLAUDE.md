@@ -10,15 +10,16 @@ This is a Next.js 16 blog (App Router) with a Matrix-inspired UI theme, built by
 
 ```bash
 npm install              # Install dependencies
-npm run dev              # Dev server (auto-generates search index)
+npm run dev              # Dev server (auto-generates search index + copies images)
 npm run build && npm start  # Production build
 npm run lint             # Linting
 npm run search-index     # Search index generation (auto before dev/build)
+npm run copy-images      # Copy content images to public/images/content/ (auto before dev/build)
 npm run chat-knowledge-upload  # Upload blog content to Upstash Vector for RAG
 npm run release          # Release with conventional changelog
 ```
 
-**Important**: Search index regenerates automatically before `dev` and `build` via npm hooks.
+**Important**: Search index and content image copy both run automatically before `dev` and `build` via `src/lib/build/prebuild.ts`.
 
 ## Architecture
 
@@ -42,6 +43,7 @@ src/
 - **Business Logic in lib/**: Components are thin, delegate to `src/lib/`
 - **Type Safety**: Shared types in `src/types/`, TypeScript strict mode
 - **Content as MDX**: Filesystem-as-database. See `.claude/rules/mdx-content.md`
+- **Co-located Images**: Blog post images live in `<post-dir>/images/`, other content images in `src/content/<section>/images/`. A build-time script (`src/lib/images/copy-content-images.ts`) mirrors them to `public/images/content/` with a specular mapping (strips the `images/` segment). The `public/images/content/` directory is gitignored and regenerated on every build.
 - **API Routes**: Chat (Groq + Upstash Vector RAG) and Contact (Resend). See `.claude/rules/api-routes.md`
 - **Testing**: No automated test suite — lint + build + manual browser. See `.claude/rules/testing.md`
 

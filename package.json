@@ -4,10 +4,11 @@
   "private": true,
   "scripts": {
     "search-index": "tsx src/lib/content/search.ts",
+    "copy-images": "tsx src/lib/images/copy-content-images.ts",
     "chat-knowledge-upload": "tsx --env-file=.env.production src/lib/chat/chat-knowledge-upload.ts",
-    "predev": "npm run search-index && NODE_ENV=development serwist build serwist.config.mjs",
+    "predev": "tsx src/lib/build/prebuild.ts && NODE_ENV=development serwist build serwist.config.mjs",
     "dev": "next dev",
-    "prebuild": "npm run search-index",
+    "prebuild": "tsx src/lib/build/prebuild.ts",
     "build": "next build && serwist build serwist.config.mjs",
     "start": "next start",
     "lint": "eslint .",
