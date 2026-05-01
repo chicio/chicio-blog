@@ -3,12 +3,11 @@
   "version": "3.18.0",
   "private": true,
   "scripts": {
-    "search-index": "tsx src/lib/content/search.ts",
     "chat-knowledge-upload": "tsx --env-file=.env.production src/lib/chat/chat-knowledge-upload.ts",
-    "predev": "npm run search-index && NODE_ENV=development serwist build serwist.config.mjs",
+    "predev": "NODE_ENV=development tsx src/lib/build/prebuild.ts",
     "dev": "next dev",
-    "prebuild": "npm run search-index",
-    "build": "next build && serwist build serwist.config.mjs",
+    "prebuild": "tsx src/lib/build/prebuild.ts",
+    "build": "next build",
     "start": "next start",
     "lint": "eslint .",
     "release": "release-it"
