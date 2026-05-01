@@ -10,7 +10,9 @@ function walkDir(dir: string, callback: (filePath: string) => void): void {
     if (!fs.existsSync(dir)) {
         return;
     }
+
     const entries = fs.readdirSync(dir, { withFileTypes: true });
+
     for (const entry of entries) {
         const fullPath = path.join(dir, entry.name);
         if (entry.isDirectory()) {
@@ -49,15 +51,20 @@ function copyContentImages(): void {
 
     walkDir(contentRoot, (filePath) => {
         const ext = path.extname(filePath).toLowerCase();
+        
         if (!IMAGE_EXTENSIONS.has(ext)) {
             return;
         }
+
         const outputPath = computeOutputPath(filePath);
+
         if (!outputPath) {
             return;
         }
+
         fs.mkdirSync(path.dirname(outputPath), { recursive: true });
         fs.copyFileSync(filePath, outputPath);
+        
         count++;
     });
 
