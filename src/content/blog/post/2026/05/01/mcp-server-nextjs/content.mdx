@@ -544,7 +544,7 @@ const CORS_HEADERS: Record<string, string> = {
 export async function GET(): Promise<Response> {
     return Response.json(
         {
-            resource: `${MCP_SITE_URL}/api/mcp`,
+            resource: `MCP_SITE_URL`,
             authorization_servers: [],
         },
         { headers: CORS_HEADERS },
