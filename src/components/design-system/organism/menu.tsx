@@ -59,58 +59,62 @@ const renderMenuItems = (
                 Blog
             </MenuItemWithTracking>
             <DropdownMenu
-                label="DSA"
+                label="Explore"
                 className={dropdownClassName}
                 items={[
                     {
-                        label: "Roadmap",
-                        to: slugs.dataStructuresAndAlgorithms.roadmap,
-                        trackingData: {
-                            action: tracking.action.open_dsa_roadmap,
-                            category: trackingCategory,
-                            label: tracking.label.header,
-                        },
-                        selected: pathname === slugs.dataStructuresAndAlgorithms.roadmap,
-                        onClickCallback: () => setShouldOpenMenu(false),
+                        label: "DSA",
+                        items: [
+                            {
+                                label: "Roadmap",
+                                to: slugs.dataStructuresAndAlgorithms.roadmap,
+                                trackingData: {
+                                    action: tracking.action.open_dsa_roadmap,
+                                    category: trackingCategory,
+                                    label: tracking.label.header,
+                                },
+                                selected: pathname === slugs.dataStructuresAndAlgorithms.roadmap,
+                                onClickCallback: () => setShouldOpenMenu(false),
+                            },
+                            {
+                                label: "Exercises",
+                                to: slugs.dataStructuresAndAlgorithms.exercises,
+                                trackingData: {
+                                    action: tracking.action.open_dsa_exercises,
+                                    category: trackingCategory,
+                                    label: tracking.label.header,
+                                },
+                                selected: pathname === slugs.dataStructuresAndAlgorithms.exercises,
+                                onClickCallback: () => setShouldOpenMenu(false),
+                            },
+                        ],
                     },
                     {
-                        label: "Exercises",
-                        to: slugs.dataStructuresAndAlgorithms.exercises,
-                        trackingData: {
-                            action: tracking.action.open_dsa_exercises,
-                            category: trackingCategory,
-                            label: tracking.label.header,
-                        },
-                        selected: pathname === slugs.dataStructuresAndAlgorithms.exercises,
-                        onClickCallback: () => setShouldOpenMenu(false),
-                    },
-                ]}
-            />
-            <DropdownMenu
-                label="AI"
-                className={dropdownClassName}
-                items={[
-                    {
-                        label: "Chat",
-                        to: slugs.chat,
-                        trackingData: {
-                            action: tracking.action.open_chat,
-                            category: trackingCategory,
-                            label: tracking.label.header,
-                        },
-                        selected: pathname === slugs.chat,
-                        onClickCallback: () => setShouldOpenMenu(false),
-                    },
-                    {
-                        label: "MCP",
-                        to: slugs.mcp,
-                        trackingData: {
-                            action: tracking.action.open_mcp,
-                            category: trackingCategory,
-                            label: tracking.label.header,
-                        },
-                        selected: pathname === slugs.mcp,
-                        onClickCallback: () => setShouldOpenMenu(false),
+                        label: "AI",
+                        items: [
+                            {
+                                label: "Chat",
+                                to: slugs.chat,
+                                trackingData: {
+                                    action: tracking.action.open_chat,
+                                    category: trackingCategory,
+                                    label: tracking.label.header,
+                                },
+                                selected: pathname === slugs.chat,
+                                onClickCallback: () => setShouldOpenMenu(false),
+                            },
+                            {
+                                label: "MCP",
+                                to: slugs.mcp,
+                                trackingData: {
+                                    action: tracking.action.open_mcp,
+                                    category: trackingCategory,
+                                    label: tracking.label.header,
+                                },
+                                selected: pathname === slugs.mcp,
+                                onClickCallback: () => setShouldOpenMenu(false),
+                            },
+                        ],
                     },
                 ]}
             />
