@@ -32,6 +32,7 @@ const GroupLabel: FC<PropsWithChildren> = ({ children }) => (
 const CommandPalette = () => {
     const [open, setOpen] = useState(false);
     const [isSearching, setIsSearching] = useState(false);
+    const [selectedValue, setSelectedValue] = useState("");
 
     const router = useRouter();
     const { glassmorphismClass } = useGlassmorphism({ noScale: true });
@@ -58,7 +59,7 @@ const CommandPalette = () => {
                 action: tracking.action.command_palette_open,
             });
         };
-        
+
         window.addEventListener("keydown", handleKeyDown, true);
         window.addEventListener(commandPaletteOpenEvent, handleOpenEvent);
 
@@ -71,10 +72,10 @@ const CommandPalette = () => {
     useEffect(() => {
         if (!open) {
             return;
-        } 
+        }
 
         const handleEsc = (e: KeyboardEvent) => {
-            if (e.key === "Escape") { 
+            if (e.key === "Escape") {
                 close();
             }
         };
@@ -83,6 +84,10 @@ const CommandPalette = () => {
 
         return () => window.removeEventListener("keydown", handleEsc, true);
     }, [open, close]);
+
+    useEffect(() => {
+        setSelectedValue("");
+    }, [search]);
 
     const handleOpenChat = () => {
         trackWith({
@@ -106,7 +111,7 @@ const CommandPalette = () => {
 
     const hasSearchResults = search.type === "search" && search.results.length > 0;
 
-    if (!open) { 
+    if (!open) {
         return null;
     }
 
@@ -123,7 +128,12 @@ const CommandPalette = () => {
                         transition={{ duration: 0.15, ease: "easeOut" }}
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <Command shouldFilter={false} className="flex flex-col">
+                        <Command
+                            shouldFilter={false}
+                            className="flex flex-col"
+                            value={selectedValue}
+                            onValueChange={setSelectedValue}
+                        >
                             <div className="flex items-center gap-2 px-4 py-3 border-b border-accent/20">
                                 <span className="text-accent font-mono font-bold text-sm text-shadow-md shrink-0">
                                     {">"}
@@ -141,10 +151,7 @@ const CommandPalette = () => {
                                 />
                             </div>
 
-                            <Command.List
-                                key={isSearching ? "search" : "idle"}
-                                className="max-h-[55vh] overflow-y-auto py-2"
-                            >
+                            <Command.List className="max-h-[55vh] overflow-y-auto py-2">
                                 {isSearching && hasSearchResults && (
                                     <Command.Group>
                                         <GroupLabel>Content</GroupLabel>
