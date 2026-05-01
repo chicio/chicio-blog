@@ -1,5 +1,40 @@
 # Changelog
 
+## [3.19.0](https://github.com/chicio/chicio-blog/compare/v3.18.0...v3.19.0) (2026-05-01)
+
+### Features
+
+* **ai:** :robot: added improvement link response headers + api catalog for AI ([1c70cf7](https://github.com/chicio/chicio-blog/commit/1c70cf7391618a3a509bf932de4649fb899ce188))
+* **ai:** :sparkles: new ai skill to bootstrap games ([d149769](https://github.com/chicio/chicio-blog/commit/d149769c152d034900e49139922049eca232fb19))
+* **ai:** :sparkles: new writer agent ([77cb35a](https://github.com/chicio/chicio-blog/commit/77cb35a7566d85dfa610ba837bb9acd1cb64395a))
+* **capabilities:** :sparkles: add Content-Signal directives to robots.txt via raw route handler ([#315](https://github.com/chicio/chicio-blog/issues/315)) ([24fd013](https://github.com/chicio/chicio-blog/commit/24fd013d89b85876bfc13f4026dc47b2e275d71a))
+* **capabilities:** :sparkles: add Markdown for Agents content negotiation ([#316](https://github.com/chicio/chicio-blog/issues/316)) ([a4c123f](https://github.com/chicio/chicio-blog/commit/a4c123f189ae7054e27ed768c4595d3add38ca75))
+* **capabilities:** :sparkles: add MCP portfolio server at /api/mcp ([#302](https://github.com/chicio/chicio-blog/issues/302)) ([bbf60a5](https://github.com/chicio/chicio-blog/commit/bbf60a5572ee80fb950c27a307dcc1d29510515f))
+* **capabilities:** :sparkles: add videogames tools to MCP server ([d7a5340](https://github.com/chicio/chicio-blog/commit/d7a534065163afd7ca6be17e7d22078dbed98f5b))
+* **capabilities:** :sparkles: co-locate content images with MDX files ([#318](https://github.com/chicio/chicio-blog/issues/318)) ([068d098](https://github.com/chicio/chicio-blog/commit/068d098b8edba0f434b804d0a0ae5a57af3f2e3a))
+* **content:** :sparkles: add blog post about LLM chatbot guardrails ([#304](https://github.com/chicio/chicio-blog/issues/304)) ([9ce03da](https://github.com/chicio/chicio-blog/commit/9ce03da46803ede1c4ea721663d5c9a3a33ee326))
+* **content:** :sparkles: Eulerian Circuit ([#297](https://github.com/chicio/chicio-blog/issues/297)) ([80473c9](https://github.com/chicio/chicio-blog/commit/80473c912ce6bd0f3bab72ebf55159a436dee8d2))
+* **content:** :sparkles: MCP server article ([#313](https://github.com/chicio/chicio-blog/issues/313)) ([311ab67](https://github.com/chicio/chicio-blog/commit/311ab67399e6bbd12105ba273ec0eb442fbcfcc2))
+* **ux + capabilities:** :sparkles: add MCP page and top-level AI menu entry + add new MCP tools for videogames ([#303](https://github.com/chicio/chicio-blog/issues/303)) ([254cd93](https://github.com/chicio/chicio-blog/commit/254cd93c07c8e12bbe773d07ecd645afc1aa53b4))
+* **ux + capabilities:** :sparkles: add Mermaid diagram support in MDX ([#306](https://github.com/chicio/chicio-blog/issues/306)) ([aee7fee](https://github.com/chicio/chicio-blog/commit/aee7feecf1abf387ba29737064ab42670216249d))
+* **ux:** :sparkles: add command palette with ⌘K shortcut ([#298](https://github.com/chicio/chicio-blog/issues/298)) ([20815b9](https://github.com/chicio/chicio-blog/commit/20815b9d5d48aa85be203bdc42185740d2dfecbc))
+* **ux:** :sparkles: add Cursor, VS Code and Windsurf to MCP page ([d4ee7c5](https://github.com/chicio/chicio-blog/commit/d4ee7c5a3c5d56ccb29bf14c989614b7bc7152f3))
+* **ux:** :sparkles: add MCP page and top-level AI menu entry ([1033f46](https://github.com/chicio/chicio-blog/commit/1033f469a26a45359176cee1c74209896b6129e9))
+* **ux:** :sparkles: add McpEndpoint component for styled endpoint display in MDX ([362f2fb](https://github.com/chicio/chicio-blog/commit/362f2fb35f8f5e84350a48e761f89b78be7a09c1))
+* **ux:** :sparkles: merge DSA and AI dropdowns into Explore nested dropdown ([#319](https://github.com/chicio/chicio-blog/issues/319)) ([2c58208](https://github.com/chicio/chicio-blog/commit/2c58208729e12eed31aa311fa7f86ef8a54fa38f))
+* **ux:** :sparkles: restructure MCP page into three sections ([a88052f](https://github.com/chicio/chicio-blog/commit/a88052f8a4faf6a692afb45bda19a5893efd852a))
+
+### Bug Fixes
+
+* **ai + content:** :sparkles: replace Llama Guard with Prompt Guard and update guardrails article ([#307](https://github.com/chicio/chicio-blog/issues/307)) ([aa58e52](https://github.com/chicio/chicio-blog/commit/aa58e52f5fba5951872550a4c107acfa09adfb12))
+* **capabilities:** :bug: correct Content-Signal ai-train directive to no ([eeb85a8](https://github.com/chicio/chicio-blog/commit/eeb85a8a3847da4b5b0c649029819f38f9b9dcde))
+* **content:** :sparkles: update iOS locale article with CLDR/ICU distance matching ([#314](https://github.com/chicio/chicio-blog/issues/314)) ([b7a80e8](https://github.com/chicio/chicio-blog/commit/b7a80e80be8122505a51d571346dd7bf2b0357df))
+* **ux:** :bug: fix McpEndpoint horizontal scroll — overflow-x-scroll + whitespace-nowrap ([38af36e](https://github.com/chicio/chicio-blog/commit/38af36e16051a8a813b7f18eaa7a2bf2e00f2f77))
+* **ux:** :bug: prevent iOS PWA zoom on command palette input ([#300](https://github.com/chicio/chicio-blog/issues/300)) ([d621b89](https://github.com/chicio/chicio-blog/commit/d621b8947b8dc442e7ec71a7ff985b494f1549c1))
+* **ux:** :bug: rename MCP server name to fabrizioduroni.it in examples ([deda733](https://github.com/chicio/chicio-blog/commit/deda7335674143f3382df4dfc684e1c795f8d826))
+* **ux:** :bug: use overflow-x-auto on McpEndpoint — scroll only when needed ([b754275](https://github.com/chicio/chicio-blog/commit/b7542759be8c2dd8912b817db816f6f296b3a32c))
+* **ux:** :lipstick: disable hover scale on brand header and menu glassmorphism ([#291](https://github.com/chicio/chicio-blog/issues/291)) ([2716591](https://github.com/chicio/chicio-blog/commit/2716591377fb5f699a993d3d20024261d28f8ae8))
+
 ## [3.18.0](https://github.com/chicio/chicio-blog/compare/v3.17.0...v3.18.0) (2026-04-19)
 
 ### Features
