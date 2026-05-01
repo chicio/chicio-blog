@@ -53,8 +53,8 @@ Interactive platform mapping:
     If IGDB credentials are not configured, the mapping phase is skipped.
 
 Usage:
-    uv run --script scripts/add-game-screenshots.py --game-folder <path>
-    uv run --script scripts/add-game-screenshots.py --all-games
+    uv run --script .claude/skills/fabrizioduroni-new-videogame/add-game-screenshots.py --game-folder <path>
+    uv run --script .claude/skills/fabrizioduroni-new-videogame/add-game-screenshots.py --all-games
 
     Required (choose one):
         --game-folder     Path to one game folder, e.g.:
@@ -74,19 +74,19 @@ Usage:
                                             (default: 120)
 
 Examples:
-  uv run --script scripts/add-game-screenshots.py \\
+  uv run --script .claude/skills/fabrizioduroni-new-videogame/add-game-screenshots.py \\
       --game-folder src/content/videogames/console/nintendo-entertainment-system/game/super-mario-bros-3
 
-  uv run --script scripts/add-game-screenshots.py \\
+  uv run --script .claude/skills/fabrizioduroni-new-videogame/add-game-screenshots.py \\
       --game-folder src/content/videogames/console/playstation5/game/astrobot \\
       --max-images 3 \\
       --dry-run
 
-  uv run --script scripts/add-game-screenshots.py \\
+  uv run --script .claude/skills/fabrizioduroni-new-videogame/add-game-screenshots.py \\
       --all-games \\
       --dry-run
 
-  uv run --script scripts/add-game-screenshots.py \\
+  uv run --script .claude/skills/fabrizioduroni-new-videogame/add-game-screenshots.py \\
       --all-games \\
       --force \\
       --min-delay 45 \\
@@ -643,7 +643,7 @@ def interactive_platform_mapping(
     return mapping
 
 
-PLATFORM_MAPPING_FILE = Path("scripts/igdb-platform-mapping.json")
+PLATFORM_MAPPING_FILE = Path(__file__).parent / "igdb-platform-mapping.json"
 
 
 def load_platform_mapping() -> dict[str, int | None] | None:
@@ -816,17 +816,7 @@ def process_game_folder(
     game_title = game_metadata.title
     print(f"📄 Title: {game_title}")
 
-    public_game_folder = (
-        Path.cwd()
-        / "src"
-        / "content"
-        / "videogames"
-        / "images"
-        / "console"
-        / console_slug
-        / "game"
-        / game_slug
-    )
+    public_game_folder = game_folder / "images"
     gameplay_folder = public_game_folder / "gameplay"
     key = f"{console_slug}/{game_slug}"
 
