@@ -7,3 +7,4 @@
 - [Exercise Difficulty](feedback_exercise_difficulty.md) — Exercise MDX must include difficulty metadata (Easy/Medium/Hard)
 - [Commit All Files](feedback_commit_all_files.md) — Always verify all modified files are staged before declaring work done
 - [Exercise Imports](feedback_exercise_imports.md) — Inline core algorithms in exercises, keep utility imports (Heap, UnionFind)
+- [Image Conventions](image_conventions.md) — DSA images use /images/content/ prefix, co-located with blog posts

@@ -18,9 +18,14 @@ Example: `src/content/blog/post/2025/03/01/llm/content.mdx`
 
 ## Image Conventions
 
-- Featured images use path: `/images/posts/<image-name>.jpg` (in frontmatter)
-- Inline images use markdown: `![alt](/images/posts/<image-name>.png)`
-- Physical location: `public/images/posts/`
+Images are **co-located** with their content. Each blog post directory has an `images/` subfolder containing all images for that post.
+
+- **Physical location**: `src/content/blog/post/<year>/<month>/<day>/<slug>/images/<image-name>.jpg`
+- **Frontmatter path**: `image: /images/content/blog/post/<year>/<month>/<day>/<slug>/<image-name>.jpg`
+- **Inline markdown**: `![alt](/images/content/blog/post/<year>/<month>/<day>/<slug>/<image-name>.png)`
+- **Build-time copy**: A script copies `src/content/**/images/` to `public/images/content/` (specular mapping, `images/` segment stripped). The `public/images/content/` directory is gitignored.
+
+When creating a new blog post, place images in the post's `images/` directory and reference them with the `/images/content/blog/post/<year>/<month>/<day>/<slug>/` prefix.
 
 ## YouTube Component Import
 
