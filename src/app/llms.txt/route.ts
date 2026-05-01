@@ -1,5 +1,5 @@
-import { getAllDataStructuresAndAlgorithmsTopics } from "@/lib/content/data-structures-and-algorithms";
-import { getPosts, getTags } from "@/lib/content/posts";
+import { getAllDataStructuresAndAlgorithmsTopics } from "@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms";
+import { getPosts, getTags } from "@/lib/content/posts/posts";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { slugs } from "@/types/configuration/slug";
 

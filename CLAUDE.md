@@ -71,6 +71,17 @@ GitHub Actions (`.github/workflows/build.yml`): macOS, Node 22, npm cache, Upsta
 
 Use the LSP tool as the primary code navigation method for all symbol-level work — understanding code, tracing dependencies, and refactoring. It provides semantically accurate, type-aware results that Grep/Glob cannot match. Fall back to Grep/Glob only for text-pattern searches (string literals, comments, file-name patterns).
 
+## Markdown Content Negotiation
+
+AI agents and tools that send `Accept: text/markdown` receive a Markdown representation of the requested page instead of HTML.
+
+**Architecture**:
+- `src/middleware.ts` — re-exports `proxy` from `src/proxy.ts` as `middleware`, providing Next.js middleware wiring
+- `src/proxy.ts` — generic proxy: if `Accept: text/markdown`, prepends `/markdown` to the path and rewrites; never needs updating for new pages
+- `src/app/markdown/[[...path]]/route.ts` — single catch-all route handler; dispatches by path segments to per-section markdown generators; statically pre-rendered via `generateStaticParams`
+
+**Adding markdown for a new page**: Add a new path-matching `if` block in the `GET` handler in `src/app/markdown/[[...path]]/route.ts`, add the path to `generateStaticParams`, and write a generator function that uses existing `src/lib/content/` functions.
+
 ## Commit Convention
 
 - Scopes: `performance`, `ux`, `capabilities`, `content`, `ai`, `deps`

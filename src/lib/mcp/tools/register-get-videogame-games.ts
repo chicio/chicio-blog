@@ -1,6 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import z from "zod";
-import { getAllGames, getAllGamesForConsole } from "@/lib/content/videogames";
+import { getAllGames, getAllGamesForConsole } from "@/lib/content/videogames/videogames";
 import { MCP_SITE_URL } from "@/lib/mcp/config";
 
 export const registerGetVideogameGames = (server: McpServer): void => {

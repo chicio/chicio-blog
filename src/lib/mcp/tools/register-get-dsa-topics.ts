@@ -1,5 +1,5 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { getAllDataStructuresAndAlgorithmsTopics } from "@/lib/content/data-structures-and-algorithms";
+import { getAllDataStructuresAndAlgorithmsTopics } from "@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms";
 import { MCP_SITE_URL } from "@/lib/mcp/config";
 
 export const registerGetDsaTopics = (server: McpServer): void => {

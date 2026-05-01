@@ -1,1 +1,1 @@
-export const MCP_SITE_URL = "https://fabrizioduroni.it";
+export const MCP_SITE_URL = "https://www.fabrizioduroni.it";

@@ -2,8 +2,8 @@ import { Content } from "@/types/content/content";
 import { Tag } from "@/types/content/tag";
 import { slugs } from "@/types/configuration/slug";
 import { Pagination } from "@/types/content/pagination";
-import { generateTagSlug } from "../tags/tags";
-import { getAllContentFor, getSingleContentBy } from "./content";
+import { generateTagSlug } from "../../tags/tags";
+import { getAllContentFor, getSingleContentBy } from "../content";
 
 /**
  * POSTS
