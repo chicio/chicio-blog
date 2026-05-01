@@ -1,9 +1,5 @@
-import { execSync } from "child_process";
+import { generateAndSaveSearchIndex } from "@/lib/content/search";
+import { copyContentImages } from "@/lib/images/copy-content-images";
 
-function run(command: string): void {
-    console.log(`\n> ${command}`);
-    execSync(command, { stdio: "inherit" });
-}
-
-run("tsx src/lib/content/search.ts");
-run("tsx src/lib/images/copy-content-images.ts");
+generateAndSaveSearchIndex();
+copyContentImages();

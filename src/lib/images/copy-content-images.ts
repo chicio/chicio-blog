@@ -64,4 +64,4 @@ function copyContentImages(): void {
     console.log(`Copied ${count} images to public/images/content/`);
 }
 
-copyContentImages();
+export { copyContentImages };
