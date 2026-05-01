@@ -95,7 +95,7 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
                                             to={item.to}
                                             trackingData={item.trackingData}
                                             selected={item.selected ?? false}
-                                            className="xs:whitespace-nowrap m-2 ml-6"
+                                            className="xs:whitespace-nowrap m-2 text-center"
                                             onClickCallback={() => {
                                                 item.onClickCallback?.();
                                             }}
