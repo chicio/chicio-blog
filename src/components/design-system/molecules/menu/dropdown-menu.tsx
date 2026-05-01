@@ -83,7 +83,7 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
                         {items.map((entry, idx) =>
                             isDropdownMenuGroup(entry) ? (
                                 <div key={entry.label + idx}>
-                                    <span className="text-secondary-text block px-4 pt-2 pb-1 text-xs font-semibold uppercase tracking-wider cursor-default select-none">
+                                    <span className="text-secondary-text block px-4 pt-3 pb-1 text-sm font-bold uppercase tracking-wider cursor-default select-none">
                                         {entry.label}
                                     </span>
                                     {entry.items.map((item, itemIdx) => (
