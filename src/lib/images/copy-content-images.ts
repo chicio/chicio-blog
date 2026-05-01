@@ -42,7 +42,7 @@ function computeOutputPath(sourcePath: string): string | null {
 }
 
 function copyContentImages(): void {
-    console.log("Cleaning public/images/content/...");
+    console.log("🖼️  Checking content images...");
     cleanDirectory(outputRoot);
 
     let count = 0;
@@ -61,7 +61,7 @@ function copyContentImages(): void {
         count++;
     });
 
-    console.log(`Copied ${count} images to public/images/content/`);
+    console.log(`✅ Copied ${count} images to public/images/content/`);
 }
 
 export { copyContentImages };

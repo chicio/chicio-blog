@@ -3,13 +3,11 @@
   "version": "3.18.0",
   "private": true,
   "scripts": {
-    "search-index": "tsx -e \"import {generateAndSaveSearchIndex} from './src/lib/content/search'; generateAndSaveSearchIndex()\"",
-    "copy-images": "tsx -e \"import {copyContentImages} from './src/lib/images/copy-content-images'; copyContentImages()\"",
     "chat-knowledge-upload": "tsx --env-file=.env.production src/lib/chat/chat-knowledge-upload.ts",
-    "predev": "tsx src/lib/build/prebuild.ts && NODE_ENV=development serwist build serwist.config.mjs",
+    "predev": "NODE_ENV=development tsx src/lib/build/prebuild.ts",
     "dev": "next dev",
     "prebuild": "tsx src/lib/build/prebuild.ts",
-    "build": "next build && serwist build serwist.config.mjs",
+    "build": "next build",
     "start": "next start",
     "lint": "eslint .",
     "release": "release-it"
