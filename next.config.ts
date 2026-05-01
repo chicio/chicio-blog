@@ -31,7 +31,7 @@ const nextConfig: NextConfig = {
     minimumCacheTTL: 86400,
   },
   outputFileTracingExcludes: {
-    "/api/**": ["public/images/**"],
+    "/api/**": ["public/images/**", "src/content/**/images/**"],
   },
   async headers() {
     return [
