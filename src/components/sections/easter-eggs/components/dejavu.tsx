@@ -49,7 +49,7 @@ export const DejavuEasterEgg: FC<PropsWithChildren> = ({ children }) => {
             />
             <ImageGlow
               className="w-[95%] max-w-[600px] h-auto object-contain"
-              src="/images/tattoos/matrix-pills.png"
+              src="/images/content/about-me/tattoos/matrix-pills.png"
               alt="matrix pills"
               width={200}
               height={500}

@@ -85,4 +85,4 @@ const generateAndSaveSearchIndex = () => {
   }
 };
 
-generateAndSaveSearchIndex();
+export { generateAndSaveSearchIndex };

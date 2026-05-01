@@ -514,7 +514,7 @@ def persist_screenshots(
             print(f"  [{idx}/{len(selected)}] Would download from {candidate.source_name}")
 
         image_web_path = (
-            f"/images/videogames/console/{console_slug}/game/{game_slug}/gameplay/{next_index}.jpg"
+            f"/images/content/videogames/console/{console_slug}/game/{game_slug}/gameplay/{next_index}.jpg"
         )
         # Determine attribution based on provider
         if candidate.provider == "igdb":
@@ -818,9 +818,10 @@ def process_game_folder(
 
     public_game_folder = (
         Path.cwd()
-        / "public"
-        / "images"
+        / "src"
+        / "content"
         / "videogames"
+        / "images"
         / "console"
         / console_slug
         / "game"

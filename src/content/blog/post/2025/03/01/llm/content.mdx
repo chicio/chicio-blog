@@ -2,7 +2,7 @@
 title: "Large Language Models (LLMs): a hitchhiker's guide to their galaxy (for newbies like me)"
 description: "Large Language Models (LLMs) are revolutionizing how we interact with technology. This article provides some entry level knowledge about them. A personal selection of topic needed to understand the basics of them."
 date: 2025-03-01
-image: /images/posts/llm-intro.jpg
+image: /images/content/blog/post/2025/03/01/llm/llm-intro.jpg
 tags: [machine learning, llm]
 authors: [fabrizio_duroni]
 ---
@@ -33,7 +33,7 @@ Transformers consist of an *encoder-decoder* architecture:
 
 Below you can see an illustration of the Transformer architecture (from the "attention is all you need" paper linked above):
 
-![The transformer architecture as shown in "Attention Is All You Need" paper.](/images/posts/llm-architecture.jpg)
+![The transformer architecture as shown in "Attention Is All You Need" paper.](/images/content/blog/post/2025/03/01/llm/llm-architecture.jpg)
 
 #### Embeddings
 
@@ -239,7 +239,7 @@ How does it works?
 - Instead of updating $W$, we train only the small matrices $A$ and $B$.
 - During inference, the modified weights are computed as $W + \Delta W$.
 
-![LoRA overview.](/images/posts/llm-lora.jpg)
+![LoRA overview.](/images/content/blog/post/2025/03/01/llm/llm-lora.jpg)
 
 This significantly reduces memory and computational requirements for training. 
 
@@ -266,7 +266,7 @@ There are several key strategies in prompt engineering:
 
 Retrieval-Augmented Generation (RAG) is a hybrid approach that enhances LLMs by dynamically retrieving relevant external knowledge before generating a response. RAG integrates **retrieval mechanisms** to access up-to-date or domain-specific information, improving factual accuracy, reducing [hallucinations](https://en.wikipedia.org/wiki/Hallucination_(artificial_intelligence)), and enabling models to handle specialized queries more effectively without the need of fine tuning of full pretraining.  
 
-![Retrieval-Augmented Generation overview.](/images/posts/llm-rag.jpg)
+![Retrieval-Augmented Generation overview.](/images/content/blog/post/2025/03/01/llm/llm-rag.jpg)
 
 RAG consists of two main components:  
 
