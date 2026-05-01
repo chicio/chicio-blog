@@ -248,7 +248,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
                                 ) : (
                                     <ImCtrl className="size-3" />
                                 )}+
-                                <span className="text-sm vertical-align">K</span>
+                                <span className="text-xs leading-none">K</span>
                             </kbd>
                         )}
                     </button>
