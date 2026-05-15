@@ -72,6 +72,12 @@ Topics within the same group share a similar article layout and can be used as t
 **Template**: union-find
 **Why**: Union Find is a unique data structure that bridges pure data structure topics and graph algorithm topics. Its article structure follows the data structure pattern (operations table for complexity) but its application patterns connect to graph problems. Future connectivity-related topics could reference this article.
 
+### Group: Dynamic Programming
+**Topics**: dp-foundations-1d-dp, knapsack-dp, longest-increasing-subsequence-dp, 2d-grid-dp, string-dp, state-machine-dp, tree-graph-dp, advanced-dp-techniques
+**Pattern**: 8 articles covering 11 AlgoMaster DP sub-topics. Article 1 (DP Foundations & 1D DP) is prerequisite for all others. Key merges: 0/1 + Unbounded Knapsack in one article; Bitmask + Digit + Probability DP in one "Advanced DP Techniques" article.
+**Template**: TBD (Article 1 will establish the template for the group)
+**Why**: DP is a broad paradigm with many sub-patterns. The 8-article plan compresses thin sub-topics while keeping substantial ones standalone. See `dp_article_grouping.md` for full details.
+
 ## Complexity Format Convention
 
 - **Data structures** → use a **table** (operations vs time/space)
