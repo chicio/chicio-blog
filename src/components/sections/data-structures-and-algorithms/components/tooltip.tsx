@@ -1,10 +1,6 @@
-type ChartTooltipProps = {
-  active?: boolean;
-  payload?: ReadonlyArray<{ name: string; value: number }>;
-  label?: string | number;
-};
+import { TooltipContentProps } from "recharts";
 
-export const ChartTooltip = ({ active, payload, label }: ChartTooltipProps) =>
+export const ChartTooltip = ({ active, payload, label }: TooltipContentProps) =>
   active && payload ? (
     <div
       style={{
