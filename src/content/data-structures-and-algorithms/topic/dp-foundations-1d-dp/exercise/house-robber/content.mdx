@@ -1,0 +1,44 @@
+---
+title: "House Robber"
+description: "Given an array representing money in each house along a street, find the maximum amount you can rob without robbing two adjacent houses."
+date: 2026-05-15
+image: /images/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [dynamic programming, 1d dp, memoization, tabulation, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Bottom-up tabulation with adjacency constraint"
+  leetcodeUrl: "https://leetcode.com/problems/house-robber/"
+  difficulty: "Medium"
+---
+# House Robber
+
+Leetcode Problem 198: [House Robber](https://leetcode.com/problems/house-robber/description/)
+
+## Problem Summary
+You are a robber planning to rob houses along a street. Each house contains a certain amount of money. Adjacent houses have connected security systems, so robbing two neighboring houses triggers an alarm. Given an array of non-negative integers representing the money in each house, return the maximum amount you can rob without robbing any two adjacent houses. The array has between **1** and **100** elements, and each value is a non-negative integer up to **400**.
+
+## Techniques
+- Array
+- Dynamic Programming
+
+## Solution
+```ts
+function rob(nums: number[]): number {
+    let withoutPreviousHouse = 0
+    let previousHouse = 0
+
+    for (let i = 0; i < nums.length; i++) {
+        const result = Math.max(
+            nums[i] + withoutPreviousHouse,
+            previousHouse
+        )
+        withoutPreviousHouse = previousHouse
+        previousHouse = result
+    }
+
+    return previousHouse
+};
+
+console.log(rob([1, 2, 3, 1])) // 4
+console.log(rob([2, 7, 9, 3, 1])) // 12
+```
