@@ -12,7 +12,7 @@ The roadmap file was updated on 2026-05-15 to reflect this grouping.
 | # | Article Title | AlgoMaster sub-topics merged | Exercise folders | Status |
 |---|---------------|------------------------------|-----------------|--------|
 | 1 | DP Foundations & 1D DP | Core DP theory + 1D DP | `1D-DP` (4 exercises: Climbing Stairs, Min Cost Climbing Stairs, House Robber, House Robber II) | **Published** (2026-05-15, PR #334) |
-| 2 | Knapsack DP | 0/1 Knapsack + Unbounded Knapsack | `knapsack-DP` + `unbounded-knapsack-DP` (6 exercises) | Not started |
+| 2 | Knapsack DP | 0/1 Knapsack + Unbounded Knapsack | `knapsack-DP` + `unbounded-knapsack-DP` (6 exercises) | **Written** (2026-05-16, PR #335) |
 | 3 | Longest Increasing Subsequence DP | LIS DP | `longest-increasing-subsequence-DP` (3 exercises) | Not started |
 | 4 | 2D Grid DP | 2D Grid DP | `2D-grid-DP` (8 exercises) | Not started |
 | 5 | String DP | String DP | TBD | Not started |

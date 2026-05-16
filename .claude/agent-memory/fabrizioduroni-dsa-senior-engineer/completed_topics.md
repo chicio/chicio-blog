@@ -6,7 +6,7 @@ type: project
 
 ## Completed Topics (as of 2026-05-15)
 
-All 30 topics below have been published. Some may be reviewed later for consistency.
+All 31 topics below have been published. Some may be reviewed later for consistency.
 
 ### Greedy / Optimization
 
@@ -81,3 +81,4 @@ All 30 topics below have been published. Some may be reviewed later for consiste
 | Topic | Sections (H2) | Complexity Format | Interactive Components |
 |-------|---------------|-------------------|----------------------|
 | dp-foundations-1d-dp | The Two Pillars of Dynamic Programming (Optimal substructure, Overlapping subproblems), The DP Problem-Solving Framework (State, Recurrence, Base cases, Computation order, Answer), Memoization vs Tabulation, State Definition and Recurrence Patterns in 1D DP (Counting paths, Cost minimization, Adjacency constraints, Circular constraints), Space Optimization (Rolling variables), A Complete Walkthrough, Dynamic Programming vs Greedy vs Divide-and-Conquer, Time and Space Complexity | Prose | None |
+| knapsack-dp | The Knapsack Abstraction, Space Optimization: From 2D to 1D, Variant Objectives: Boolean Counting and Minimization, The Subset Sum Transformation, The Unbounded Knapsack, Unbounded Knapsack Variants, The Inner Loop Direction: A Unified View, Time and Space Complexity | Prose | None |
