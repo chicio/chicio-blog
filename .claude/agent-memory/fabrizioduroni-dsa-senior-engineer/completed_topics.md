@@ -6,7 +6,7 @@ type: project
 
 ## Completed Topics (as of 2026-05-15)
 
-All 31 topics below have been published. Some may be reviewed later for consistency.
+All 30 topics below have been published. Some may be reviewed later for consistency.
 
 ### Greedy / Optimization
 
@@ -70,15 +70,14 @@ All 31 topics below have been published. Some may be reviewed later for consiste
 |-------|---------------|-------------------|----------------------|
 | data-structure-design | The LRU Cache, HashMap + Auxiliary Structure (HashMap + Dynamic Array, HashMap + Sorted History), Versioned Storage, Frequency Tracking, Stack-Based Navigation, Multi-Entity Aggregation with Heaps, A Thinking Framework for Design Problems, Time and Space Complexity | Table (patterns vs time/space) | None |
 
-### Dynamic Programming
-
-| Topic | Sections (H2) | Complexity Format | Interactive Components |
-|-------|---------------|-------------------|----------------------|
-| dp-foundations-1d-dp | The Two Pillars of Dynamic Programming (Optimal substructure, Overlapping subproblems), The DP Problem-Solving Framework, Memoization vs Tabulation, State Definition and Recurrence Patterns in 1D DP (Counting paths, Cost minimization, Adjacency constraints, Circular constraints), Space Optimization, A Complete Walkthrough, Dynamic Programming vs Greedy vs Divide-and-Conquer, Time and Space Complexity | Prose | None |
-| knapsack-dp | The Knapsack Abstraction (State definition, Recurrence relation, Base cases, Full 2D implementation), Space Optimization: From 2D to 1D (Why the inner loop must go right to left), Variant Objectives (Boolean reachability, Counting subsets, Value maximization), The Subset Sum Transformation (Partition Equal Subset Sum, Target Sum, Last Stone Weight II), The Unbounded Knapsack, Unbounded Knapsack Variants (Minimization, Combination counting, Generated item sets), The Inner Loop Direction: A Unified View, Time and Space Complexity | Prose | None |
-
 ### Foundational
 
 | Topic | Sections (H2) | Complexity Format | Interactive Components |
 |-------|---------------|-------------------|----------------------|
 | time-and-space-complexity | Algorithm Analysis, Big O/Omega/Theta, Complexity Classes, Space Complexity, Amortized Analysis, Recurrences/Master Theorem, Tail Recursion, Practical Examples | Multiple tables | Many (PerformanceComparisonChart, ComplexityGrowthVisualizer, SpaceComplexityVisualizer, AmortizedAnalysis, RecurrenceTree, StackFrameComparisonChart) |
+
+### Dynamic Programming
+
+| Topic | Sections (H2) | Complexity Format | Interactive Components |
+|-------|---------------|-------------------|----------------------|
+| dp-foundations-1d-dp | The Two Pillars of Dynamic Programming (Optimal substructure, Overlapping subproblems), The DP Problem-Solving Framework (State, Recurrence, Base cases, Computation order, Answer), Memoization vs Tabulation, State Definition and Recurrence Patterns in 1D DP (Counting paths, Cost minimization, Adjacency constraints, Circular constraints), Space Optimization (Rolling variables), A Complete Walkthrough, Dynamic Programming vs Greedy vs Divide-and-Conquer, Time and Space Complexity | Prose | None |
