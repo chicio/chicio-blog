@@ -1,0 +1,491 @@
+---
+title: "Knapsack DP"
+description: "A comprehensive guide to knapsack dynamic programming: the 0/1 knapsack pattern for bounded items and the unbounded knapsack pattern for unlimited items, with the critical inner loop direction insight that distinguishes them."
+date: 2026-05-15
+image: /images/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [dynamic programming, knapsack, 0/1 knapsack, unbounded knapsack, data structures, algorithms]
+authors: [fabrizio_duroni]
+---
+
+import { TopicExercises } from "@/components/sections/data-structures-and-algorithms/components/topic-exercises";
+
+# Knapsack DP
+
+The [knapsack problem](https://en.wikipedia.org/wiki/Knapsack_problem) is one of the most studied problems
+in combinatorial optimization and one of the most important families of dynamic programming.
+It models a fundamental question: given a set of items, each with a weight and a value,
+and a container with a fixed capacity, which items should you select to maximize total value without exceeding the capacity?
+
+This seemingly simple formulation captures the essence of an enormous range of practical problems.
+Resource allocation, budget optimization, subset selection, and capacity planning all reduce to some form of knapsack.
+In the DP landscape, the knapsack family occupies a central position because it introduces the concept of
+a **capacity dimension** in the state space, something absent from the
+[one-dimensional DP problems](/data-structures-and-algorithms/topic/dp-foundations-1d-dp) covered previously.
+Where 1D DP uses a single index (position or step number) as its state, knapsack DP uses a second dimension
+representing "how much capacity remains" or "what total have we accumulated so far."
+
+This article covers two fundamental variants: the **0/1 knapsack**, where each item can be used at most once,
+and the **unbounded knapsack**, where each item can be used any number of times.
+These two variants share the same outer structure, the same state space, and nearly identical code.
+The critical difference lies in a single detail: the direction of the inner loop.
+Understanding why that direction matters is the key insight of this entire article.
+
+Before proceeding, make sure you are comfortable with the
+[DP problem-solving framework](/data-structures-and-algorithms/topic/dp-foundations-1d-dp),
+including state definition, recurrence relations, base cases, tabulation, and space optimization.
+Everything in this article builds directly on those foundations.
+
+## The Knapsack Abstraction
+
+The classical [0/1 knapsack problem](https://en.wikipedia.org/wiki/Knapsack_problem#0-1_knapsack_problem)
+is defined as follows.
+You are given $n$ items, each with a weight $w_i$ and a value $v_i$, and a knapsack with capacity $W$.
+You must choose a subset of items such that the total weight does not exceed $W$ and the total value is maximized.
+Each item is either taken or left behind entirely, hence "0/1."
+
+The brute-force approach enumerates all $2^n$ subsets and checks each one.
+This is exponential and impractical for anything beyond trivially small inputs.
+Dynamic programming reduces this to pseudo-polynomial time by exploiting the problem's structure.
+
+### State definition
+
+The natural state for the knapsack problem has two dimensions: which items have been considered,
+and how much capacity has been consumed.
+Define $dp[i][c]$ as the maximum value achievable using only the first $i$ items with a knapsack of capacity $c$.
+
+The first dimension $i$ ranges from $0$ to $n$ (items considered so far).
+The second dimension $c$ ranges from $0$ to $W$ (remaining or used capacity).
+The total number of subproblems is $(n+1) \times (W+1)$, which is polynomial in both $n$ and $W$.
+
+Note that this is [pseudo-polynomial](https://en.wikipedia.org/wiki/Pseudo-polynomial_time):
+the running time depends on the numeric value of $W$, not on the number of bits needed to represent it.
+If $W$ is exponentially large relative to $n$, the DP table becomes impractical.
+For the problem sizes encountered in practice, this is not a concern.
+
+### Recurrence relation
+
+At each item $i$, there are exactly two choices: skip the item or take it.
+
+If you skip item $i$, the result is whatever was achievable with the first $i - 1$ items and the same capacity:
+$dp[i][c] = dp[i-1][c]$.
+
+If you take item $i$ (which is only possible when $w_i \leq c$), you gain $v_i$ but consume $w_i$ of the capacity:
+$dp[i][c] = v_i + dp[i-1][c - w_i]$.
+
+The recurrence combines both choices:
+
+$$dp[i][c] = \max(dp[i-1][c],\ v_i + dp[i-1][c - w_i])$$
+
+Notice that the "take" branch refers to $dp[i-1][c - w_i]$, not $dp[i][c - w_i]$.
+This is crucial: it ensures that item $i$ is counted at most once, because the subproblem $dp[i-1][\cdot]$
+does not include item $i$ in its available set.
+
+### Base cases
+
+$dp[0][c] = 0$ for all $c$: with zero items, no value can be obtained regardless of capacity.
+$dp[i][0] = 0$ for all $i$: with zero capacity, no item can be taken.
+
+### Full 2D implementation
+
+```ts
+function knapsack01_2D(
+    weights: number[],
+    values: number[],
+    capacity: number
+): number {
+    const n = weights.length;
+    const dp: number[][] = Array.from(
+        { length: n + 1 },
+        () => new Array(capacity + 1).fill(0)
+    );
+
+    for (let i = 1; i <= n; i++) {
+        for (let c = 1; c <= capacity; c++) {
+            dp[i][c] = dp[i - 1][c];
+            if (weights[i - 1] <= c) {
+                dp[i][c] = Math.max(
+                    dp[i][c],
+                    values[i - 1] + dp[i - 1][c - weights[i - 1]]
+                );
+            }
+        }
+    }
+
+    return dp[n][capacity];
+}
+```
+
+This runs in $O(n \cdot W)$ time and $O(n \cdot W)$ space.
+
+## Space Optimization: From 2D to 1D
+
+The recurrence $dp[i][c] = \max(dp[i-1][c],\ v_i + dp[i-1][c - w_i])$ depends only on the previous row $dp[i-1][\cdot]$.
+This means we do not need to keep the entire 2D table in memory.
+A single one-dimensional array of size $W + 1$ suffices, as long as we update it correctly.
+
+The space-optimized approach maintains a single array $dp[c]$ that, at the start of each item's iteration,
+holds the values from the previous row.
+The question is: in what order should we update the entries?
+
+### Why the inner loop must go right to left
+
+Consider what happens if we iterate $c$ from left to right (small to large).
+When we compute $dp[c]$, we use $dp[c - w_i]$.
+But $c - w_i < c$, so $dp[c - w_i]$ has already been updated in this iteration of the outer loop.
+That means $dp[c - w_i]$ reflects the state **after** considering item $i$, not before.
+The result is that item $i$'s contribution may be counted multiple times: once when computing $dp[c - w_i]$,
+and again when computing $dp[c]$.
+
+By iterating $c$ from right to left (large to small), we guarantee that when we read $dp[c - w_i]$,
+it still holds its value from the previous iteration of the outer loop (i.e., $dp[i-1][c - w_i]$).
+Each item is considered at most once per capacity value, preserving the 0/1 constraint.
+
+```ts
+function knapsack01_1D(
+    weights: number[],
+    values: number[],
+    capacity: number
+): number {
+    const dp = new Array(capacity + 1).fill(0);
+
+    for (let i = 0; i < weights.length; i++) {
+        for (let c = capacity; c >= weights[i]; c--) {
+            dp[c] = Math.max(dp[c], values[i] + dp[c - weights[i]]);
+        }
+    }
+
+    return dp[capacity];
+}
+```
+
+This runs in $O(n \cdot W)$ time and $O(W)$ space.
+The space reduction from $O(n \cdot W)$ to $O(W)$ is significant and is standard practice for knapsack problems.
+
+## Variant Objectives: Boolean, Counting, and Minimization
+
+The classical knapsack maximizes total value, but the same structure supports several other objectives.
+Each variant changes only the recurrence's combining operation and initialization, not the overall loop structure
+or the inner loop direction.
+
+### Boolean reachability
+
+Instead of maximizing value, ask: "Can we achieve exactly capacity $c$ using a subset of the items?"
+The DP value becomes boolean.
+
+$$dp[c] = dp[c] \lor dp[c - w_i]$$
+
+Initialize $dp[0] = \text{true}$ (the empty subset achieves sum zero) and all other entries to $\text{false}$.
+
+```ts
+function knapsack01_boolean(
+    values: number[],
+    capacity: number
+): boolean {
+    const dp = new Array(capacity + 1).fill(false);
+    dp[0] = true;
+
+    for (const value of values) {
+        for (let c = capacity; c >= value; c--) {
+            dp[c] = dp[c] || dp[c - value];
+        }
+    }
+
+    return dp[capacity];
+}
+```
+
+This is the pattern behind the Partition Equal Subset Sum problem: compute the total sum of the array,
+check if it is even, and then ask whether a subset summing to exactly half the total exists.
+
+### Counting subsets
+
+Instead of asking whether a target is reachable, ask: "How many subsets sum to exactly $c$?"
+The DP value becomes a count.
+
+$$dp[c] = dp[c] + dp[c - w_i]$$
+
+Initialize $dp[0] = 1$ (there is one subset, the empty set, that sums to zero) and all other entries to $0$.
+
+```ts
+function knapsack01_count(
+    values: number[],
+    capacity: number
+): number {
+    const dp = new Array(capacity + 1).fill(0);
+    dp[0] = 1;
+
+    for (const value of values) {
+        for (let c = capacity; c >= value; c--) {
+            dp[c] += dp[c - value];
+        }
+    }
+
+    return dp[capacity];
+}
+```
+
+This is the pattern behind the Target Sum problem, after an algebraic transformation
+that converts the sign-assignment problem into a subset sum counting problem.
+
+### Value maximization
+
+The standard knapsack form: maximize the total value of selected items subject to a capacity constraint.
+
+$$dp[c] = \max(dp[c],\ w_i + dp[c - w_i])$$
+
+Initialize $dp[0] = 0$ and all other entries to $0$.
+
+This is the pattern behind the Last Stone Weight II problem: partition the stones into two groups
+whose total weights are as close as possible, which reduces to finding the maximum sum achievable
+within half the total weight.
+
+## The Subset Sum Transformation
+
+Many problems that do not look like knapsack problems on the surface can be transformed into one
+through algebraic manipulation.
+The key insight is that any problem asking "partition elements into two groups with some property relating their sums"
+can be reduced to a single subset sum problem.
+
+### Partition Equal Subset Sum
+
+Given an array, determine if it can be partitioned into two subsets with equal sum.
+
+If the total sum $S$ is odd, no partition exists (two equal integers cannot sum to an odd number).
+If $S$ is even, the problem reduces to: does a subset summing to $S/2$ exist?
+This is exactly the boolean reachability knapsack with capacity $S/2$.
+
+### Target Sum
+
+Given an array and a target, count the number of ways to assign $+$ and $-$ signs such that the expression equals the target.
+
+Let $P$ be the sum of elements assigned $+$ and $N$ the sum of elements assigned $-$.
+We need $P - N = \text{target}$ and $P + N = S$ (the total sum).
+Adding these two equations: $P = (S + \text{target}) / 2$.
+If $S + \text{target}$ is negative or odd, there are zero ways.
+Otherwise, the problem reduces to: count the number of subsets summing to $(S + \text{target}) / 2$.
+This is the counting knapsack with capacity $(S + \text{target}) / 2$.
+
+### Last Stone Weight II
+
+Given an array of stone weights, smash stones optimally to minimize the last stone's weight.
+
+Every sequence of smashes is equivalent to partitioning the stones into two groups $A$ and $B$
+and computing $|sum(A) - sum(B)|$.
+To minimize this, we want $sum(A)$ and $sum(B)$ as close as possible.
+Since $sum(A) + sum(B) = S$, minimizing $|sum(A) - sum(B)|$ is equivalent to maximizing $sum(B)$
+subject to $sum(B) \leq S/2$.
+This is the standard value maximization knapsack with capacity $\lfloor S/2 \rfloor$.
+The answer is $S - 2 \cdot dp[\lfloor S/2 \rfloor]$.
+
+## The Unbounded Knapsack
+
+The [unbounded knapsack problem](https://en.wikipedia.org/wiki/Knapsack_problem#Unbounded_knapsack_problem)
+relaxes the 0/1 constraint: each item type can be used any number of times.
+You are given $n$ item types, each with a weight $w_i$ and a value $v_i$, and a capacity $W$.
+Select items (with repetition allowed) to maximize total value without exceeding capacity.
+
+The state definition and the outer loop structure remain identical to the 0/1 case.
+The only difference is in the recurrence: when considering item $i$, the "take" branch
+should reference $dp[i][c - w_i]$ (not $dp[i-1][c - w_i]$), because item $i$ remains available
+after being selected.
+
+$$dp[i][c] = \max(dp[i][c],\ v_i + dp[i][c - w_i])$$
+
+In the space-optimized 1D version, this means the inner loop should go **left to right** (small to large).
+When we compute $dp[c]$, we read $dp[c - w_i]$, which has already been updated in this iteration
+of the outer loop, reflecting the possibility that item $i$ was already used.
+This is exactly the "problem" we avoided in the 0/1 case, and it is exactly the behavior we want here.
+
+```ts
+function knapsackUnbound(
+    weights: number[],
+    values: number[],
+    capacity: number
+): number {
+    const dp = new Array(capacity + 1).fill(0);
+
+    for (let i = 0; i < weights.length; i++) {
+        for (let c = weights[i]; c <= capacity; c++) {
+            dp[c] = Math.max(dp[c], values[i] + dp[c - weights[i]]);
+        }
+    }
+
+    return dp[capacity];
+}
+```
+
+The inner loop direction is the **only structural difference** between 0/1 and unbounded knapsack in the 1D formulation.
+Everything else, the outer loop over items, the DP array size, the base case, remains the same.
+This is worth internalizing deeply: the direction of the inner loop encodes whether each item is available once or unlimited times.
+
+## Unbounded Knapsack Variants
+
+Just as the 0/1 knapsack supports boolean, counting, and maximization objectives,
+so does the unbounded knapsack.
+The objective changes, but the left-to-right inner loop direction is preserved in every variant.
+
+### Minimization (Coin Change)
+
+The Coin Change problem asks for the fewest coins needed to make a target amount,
+given an unlimited supply of each denomination.
+This is an unbounded knapsack with minimization instead of maximization.
+
+$$dp[c] = \min(dp[c],\ 1 + dp[c - w_i])$$
+
+Initialize $dp[0] = 0$ (zero coins needed for amount zero) and all other entries to $\infty$.
+If $dp[\text{amount}]$ remains $\infty$ after processing all coins, the amount is unreachable: return $-1$.
+
+```ts
+function knapsackUnboundMinimize(
+    values: number[],
+    capacity: number
+): number {
+    const dp = Array(capacity + 1).fill(Infinity);
+    dp[0] = 0;
+
+    for (const value of values) {
+        for (let c = value; c <= capacity; c++) {
+            dp[c] = Math.min(dp[c], 1 + dp[c - value]);
+        }
+    }
+
+    return dp[capacity] === Infinity ? -1 : dp[capacity];
+}
+```
+
+The "value" of each coin is $1$ (we are counting coins, not their denominations),
+and we minimize instead of maximize.
+The inner loop goes left to right because each coin can be used multiple times.
+
+### Combination counting (Coin Change II)
+
+The Coin Change II problem asks for the number of **combinations** (not permutations) of coins
+that sum to a target amount.
+
+$$dp[c] = dp[c] + dp[c - w_i]$$
+
+Initialize $dp[0] = 1$ and all other entries to $0$.
+
+```ts
+function knapsackUnboundCombinations(
+    values: number[],
+    capacity: number
+): number {
+    const dp = Array(capacity + 1).fill(0);
+    dp[0] = 1;
+
+    for (const value of values) {
+        for (let c = value; c <= capacity; c++) {
+            dp[c] += dp[c - value];
+        }
+    }
+
+    return dp[capacity];
+}
+```
+
+A subtle but important point: iterating the outer loop over items and the inner loop over capacities
+produces **combinations** (order does not matter).
+If the loops were swapped (outer over capacities, inner over items), the result would count
+**permutations** (different orderings of the same coins counted separately).
+The reason is that processing one item at a time across all capacities ensures each item type's
+contribution is accumulated in a fixed order, preventing the same multi-set from being counted
+in different orderings.
+
+### Generated item sets (Perfect Squares)
+
+Some problems require generating the item set before running the knapsack.
+The Perfect Squares problem asks for the fewest perfect squares that sum to $n$.
+The "items" are the perfect squares $1, 4, 9, 16, \ldots$ up to $n$,
+each usable an unlimited number of times.
+
+```ts
+function numSquares(n: number): number {
+    const squares: number[] = [];
+
+    for (let i = 1; i * i <= n; i++) {
+        squares.push(i * i);
+    }
+
+    const dp = Array(n + 1).fill(Infinity);
+    dp[0] = 0;
+
+    for (const sq of squares) {
+        for (let c = sq; c <= n; c++) {
+            dp[c] = Math.min(dp[c], 1 + dp[c - sq]);
+        }
+    }
+
+    return dp[n];
+}
+```
+
+This is structurally identical to Coin Change: unbounded knapsack with minimization.
+The only additional step is generating the item set (the perfect squares up to $n$) before running the DP.
+
+## The Inner Loop Direction: A Unified View
+
+The central insight of this article deserves a focused summary.
+Both the 0/1 and unbounded knapsack share the same skeleton:
+
+```ts
+for (const item of items) {
+    for (let c = ???; ???; ???) {
+        dp[c] = combine(dp[c], transform(item, dp[c - item.weight]));
+    }
+}
+```
+
+The `combine` function is $\max$, $\min$, $+$, or $\lor$ depending on the objective.
+The `transform` function extracts the relevant contribution (item value, count of $1$, boolean reachability).
+
+The inner loop direction determines the item usage constraint:
+
+- **Right to left** ($c$ from $W$ down to $w_i$): when we read $dp[c - w_i]$, it reflects the state
+  **before** item $i$ was considered in this pass. Item $i$ can be used at most once. This is **0/1 knapsack**.
+- **Left to right** ($c$ from $w_i$ up to $W$): when we read $dp[c - w_i]$, it reflects the state
+  **after** item $i$ may have already been used in this pass. Item $i$ can be used any number of times.
+  This is **unbounded knapsack**.
+
+No other structural change is needed.
+The same outer loop, the same array, the same base cases, the same combining operation.
+One line of code, the loop header, determines whether items are bounded or unbounded.
+
+## Time and Space Complexity
+
+The time and space complexity of knapsack DP depends on the number of items $n$ and the capacity $W$.
+
+For the **2D formulation** (which is rarely needed in practice but serves as a reference):
+the DP table has $(n+1) \times (W+1)$ entries, each computed in $O(1)$ time.
+The total time is $O(n \cdot W)$ and the space is $O(n \cdot W)$.
+
+For the **space-optimized 1D formulation** (which is standard):
+the single array has $W + 1$ entries, and we iterate over it once per item.
+The total time remains $O(n \cdot W)$, and the space drops to $O(W)$.
+
+These complexities apply uniformly to all variants: boolean reachability, counting, maximization, and minimization.
+The combining operation ($\lor$, $+$, $\max$, $\min$) does not change the asymptotic cost.
+
+For the specific problems in this article:
+
+The **Partition Equal Subset Sum** problem has $n$ items and capacity $W = S/2$ where $S$ is the array sum.
+With elements up to $100$ and array length up to $200$, $W$ is at most $10{,}000$.
+Time is $O(n \cdot S/2)$ and space is $O(S/2)$.
+
+The **Target Sum** problem has the same structure with capacity $(S + \text{target}) / 2$.
+Time and space scale with $n$ and the derived capacity.
+
+The **Last Stone Weight II** problem has capacity $\lfloor S/2 \rfloor$.
+With up to $30$ stones of weight up to $100$, $W$ is at most $1{,}500$.
+
+The **Coin Change** problem has $n$ coin types and capacity equal to the target amount (up to $10{,}000$).
+Time is $O(n \cdot \text{amount})$ and space is $O(\text{amount})$.
+
+The **Coin Change II** problem has the same complexity bounds.
+
+The **Perfect Squares** problem generates $O(\sqrt{n})$ items and has capacity $n$.
+Time is $O(\sqrt{n} \cdot n) = O(n^{3/2})$ and space is $O(n)$.
+
+## Exercises
+
+<TopicExercises topic="knapsack-dp" />

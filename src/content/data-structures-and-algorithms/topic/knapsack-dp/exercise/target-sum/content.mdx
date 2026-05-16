@@ -1,0 +1,54 @@
+---
+title: "Target Sum"
+description: "Given an integer array and a target, count the number of ways to assign + and - signs to each element so that the expression evaluates to the target."
+date: 2026-05-15
+image: /images/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [dynamic programming, knapsack, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "0/1 Knapsack with subset sum transformation and counting"
+  leetcodeUrl: "https://leetcode.com/problems/target-sum/"
+  difficulty: "Medium"
+---
+# Target Sum
+
+Leetcode Problem 494: [Target Sum](https://leetcode.com/problems/target-sum/description/)
+
+## Problem Summary
+Given an integer array **nums** and an integer **target**, assign either a **+** or **-** sign before each element in the array and concatenate them to form an expression. Return the number of different expressions that evaluate to **target**. The array contains between **1** and **20** elements, each with a value between **0** and **1,000**. The sum of all elements does not exceed **1,000**, and the target is between **-1,000** and **1,000**.
+
+## Techniques
+- Array
+- Dynamic Programming
+- Backtracking
+
+## Solution
+```ts
+function knapsack01_1D_inverted_count(
+    values: number[],
+    capacity: number
+): number {
+    const dp = new Array(capacity + 1).fill(0)
+    dp[0] = 1
+
+    for (const num of values) {
+        for (let i = capacity; i >= num; i--) {
+            dp[i] += dp[i - num]
+        }
+    }
+
+    return dp[capacity];
+}
+
+function findTargetSumWays(nums: number[], target: number): number {
+    const total = nums.reduce((a, b) => a + b, 0)
+
+    if (total + target < 0 || (total + target) % 2 !== 0) {
+        return 0
+    }
+
+    const capacity = (total + target) / 2
+
+    return knapsack01_1D_inverted_count(nums, capacity)
+};
+```

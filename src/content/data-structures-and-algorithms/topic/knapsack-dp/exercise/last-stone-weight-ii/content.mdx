@@ -1,0 +1,54 @@
+---
+title: "Last Stone Weight II"
+description: "Given an array of stone weights, smash stones together optimally to minimize the weight of the last remaining stone."
+date: 2026-05-15
+image: /images/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [dynamic programming, knapsack, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "0/1 Knapsack with value maximization and partition minimization"
+  leetcodeUrl: "https://leetcode.com/problems/last-stone-weight-ii/"
+  difficulty: "Medium"
+---
+# Last Stone Weight II
+
+Leetcode Problem 1049: [Last Stone Weight II](https://leetcode.com/problems/last-stone-weight-ii/description/)
+
+## Problem Summary
+Given an array of integers **stones** where each element represents the weight of a stone, play a game where on each turn you choose any two stones and smash them together. If the two stones have equal weight, both are destroyed. If they have different weights, the lighter stone is destroyed and the heavier stone's weight is reduced by the lighter stone's weight. Return the smallest possible weight of the last remaining stone. If no stones are left, return **0**. The array contains between **1** and **30** stones, each weighing between **1** and **100**.
+
+## Techniques
+- Array
+- Dynamic Programming
+
+## Solution
+```ts
+function knapsack01_1D(
+    values: number[],
+    capacity: number
+): number {
+    const dp = new Array(capacity + 1).fill(0)
+    dp[0] = 0
+
+    for (const num of values) {
+        for (let i = capacity; i >= num; i--) {
+            dp[i] = Math.max(
+                dp[i],
+                num + dp[i - num]
+            )
+        }
+    }
+
+    return dp[capacity];
+}
+
+function lastStoneWeightII(stones: number[]): number {
+    const total = stones.reduce(
+        (stone, anotherStone) => stone + anotherStone, 0
+    )
+    const target = Math.floor(total / 2)
+    const best = knapsack01_1D(stones, target)
+
+    return total - 2 * best
+};
+```

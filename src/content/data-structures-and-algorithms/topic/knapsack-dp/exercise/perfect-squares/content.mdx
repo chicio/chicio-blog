@@ -1,0 +1,49 @@
+---
+title: "Perfect Squares"
+description: "Given an integer n, find the least number of perfect square numbers that sum to n."
+date: 2026-05-15
+image: /images/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [dynamic programming, knapsack, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Unbounded Knapsack with generated item set and minimization"
+  leetcodeUrl: "https://leetcode.com/problems/perfect-squares/"
+  difficulty: "Medium"
+---
+# Perfect Squares
+
+Leetcode Problem 279: [Perfect Squares](https://leetcode.com/problems/perfect-squares/description/)
+
+## Problem Summary
+Given an integer **n**, return the least number of perfect square numbers that sum to **n**. A perfect square is an integer that is the square of another integer (for example, **1**, **4**, **9**, and **16** are perfect squares). The value of **n** is between **1** and **10,000**.
+
+## Techniques
+- Math
+- Dynamic Programming
+- Breadth-First Search
+
+## Solution
+```ts
+function knapsackUnboundMinimizeGenerated(values: number[], capacity: number) {
+    const dp = Array(capacity + 1).fill(Infinity)
+    dp[0] = 0
+
+    for (const value of values) {
+        for (let i = value; i <= capacity; i++) {
+            dp[i] = Math.min(dp[i], 1 + dp[i - value])
+        }
+    }
+
+    return dp[capacity] === Infinity ? -1 : dp[capacity]
+}
+
+function numSquares(n: number): number {
+    const generatedSquares = []
+
+    for (let i = 1; i * i <= n; i++) {
+        generatedSquares.push(i * i)
+    }
+
+    return knapsackUnboundMinimizeGenerated(generatedSquares, n)
+};
+```

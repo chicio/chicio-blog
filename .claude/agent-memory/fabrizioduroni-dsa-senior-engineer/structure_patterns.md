@@ -75,7 +75,7 @@ Topics within the same group share a similar article layout and can be used as t
 ### Group: Dynamic Programming
 **Topics**: dp-foundations-1d-dp, knapsack-dp, longest-increasing-subsequence-dp, 2d-grid-dp, string-dp, state-machine-dp, tree-graph-dp, advanced-dp-techniques
 **Pattern**: 8 articles covering 11 AlgoMaster DP sub-topics. Article 1 (DP Foundations & 1D DP) is prerequisite for all others. Key merges: 0/1 + Unbounded Knapsack in one article; Bitmask + Digit + Probability DP in one "Advanced DP Techniques" article.
-**Template**: TBD (Article 1 will establish the template for the group)
+**Template**: dp-foundations-1d-dp (Article 1, published 2026-05-15). Structure: Two Pillars (theory), Problem-Solving Framework (5-step method), Memoization vs Tabulation, Pattern sections organized by recurrence type, Space Optimization, Complete Walkthrough, Paradigm Comparison, Time and Space Complexity (prose). No interactive components. Complexity in prose format.
 **Why**: DP is a broad paradigm with many sub-patterns. The 8-article plan compresses thin sub-topics while keeping substantial ones standalone. See `dp_article_grouping.md` for full details.
 
 ## Complexity Format Convention
