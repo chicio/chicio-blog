@@ -1,0 +1,38 @@
+---
+title: "Min Cost Climbing Stairs"
+description: "Given an array of step costs, find the minimum cost to reach the top of the staircase, starting from step 0 or step 1, climbing one or two steps at a time."
+date: 2026-05-15
+image: /images/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [dynamic programming, 1d dp, memoization, tabulation, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Bottom-up tabulation with cost minimization"
+  leetcodeUrl: "https://leetcode.com/problems/min-cost-climbing-stairs/"
+  difficulty: "Easy"
+---
+# Min Cost Climbing Stairs
+
+Leetcode Problem 746: [Min Cost Climbing Stairs](https://leetcode.com/problems/min-cost-climbing-stairs/description/)
+
+## Problem Summary
+You are given an integer array where each element represents the cost of stepping on that stair. Once you pay the cost at a step, you can climb either one or two steps forward. You may start from step **0** or step **1**. Return the minimum total cost to reach the top of the staircase (one step beyond the last index). The array has between **2** and **1,000** elements, and each cost is a non-negative integer up to **999**.
+
+## Techniques
+- Array
+- Dynamic Programming
+
+## Solution
+```ts
+function minCostClimbingStairs(cost: number[]): number {
+    const dpCosts = [...cost]
+
+    for (let i = cost.length - 1; i >= 0; i--) {
+        dpCosts[i] = dpCosts[i] + Math.min(dpCosts[i + 1] ?? 0, dpCosts[i + 2] ?? 0)
+    }
+
+    return Math.min(dpCosts[0], dpCosts[1])
+};
+
+console.log(minCostClimbingStairs([10, 15, 20])) // 15
+console.log(minCostClimbingStairs([1, 100, 1, 1, 1, 100, 1, 1, 100, 1])) // 6
+```

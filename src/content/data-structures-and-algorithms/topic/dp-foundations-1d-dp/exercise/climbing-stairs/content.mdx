@@ -1,0 +1,44 @@
+---
+title: "Climbing Stairs"
+description: "Given a staircase with n steps where you can climb one or two steps at a time, determine the number of distinct ways to reach the top."
+date: 2026-05-15
+image: /images/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [dynamic programming, 1d dp, memoization, tabulation, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Bottom-up tabulation with space optimization"
+  leetcodeUrl: "https://leetcode.com/problems/climbing-stairs/"
+  difficulty: "Easy"
+---
+# Climbing Stairs
+
+Leetcode Problem 70: [Climbing Stairs](https://leetcode.com/problems/climbing-stairs/description/)
+
+## Problem Summary
+You are climbing a staircase that has **n** steps. Each time you can climb either **1** or **2** steps. Return the number of distinct ways you can reach the top. The number of steps **n** is a positive integer at most **45**.
+
+## Techniques
+- Math
+- Dynamic Programming
+- Memoization
+
+## Solution
+```ts
+function climbStairs(n: number): number {
+    let one = 1
+    let two = 1
+
+    for (let i = 0; i < n - 1; i++) {
+        const tempOne = one
+        one = one + two
+        two = tempOne
+    }
+
+    return one
+};
+
+console.log(climbStairs(2)) // 2
+console.log(climbStairs(3)) // 3
+console.log(climbStairs(4)) // 5
+console.log(climbStairs(5)) // 8
+```

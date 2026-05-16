@@ -1,0 +1,549 @@
+---
+title: "DP Foundations & 1D DP"
+description: "A comprehensive guide to dynamic programming: optimal substructure, overlapping subproblems, memoization vs tabulation, state definition, recurrence relations, and space optimization, taught through one-dimensional DP problems."
+date: 2026-05-15
+image: /images/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [dynamic programming, 1d dp, memoization, tabulation, data structures, algorithms]
+authors: [fabrizio_duroni]
+---
+
+import { TopicExercises } from "@/components/sections/data-structures-and-algorithms/components/topic-exercises";
+
+# DP Foundations & 1D DP
+
+[Dynamic programming](https://en.wikipedia.org/wiki/Dynamic_programming) is one of the most powerful and general-purpose
+algorithmic paradigms in computer science.
+It transforms problems that would require exponential brute-force search into polynomial-time computations
+by recognizing that the same subproblems arise repeatedly and that their solutions can be stored and reused.
+
+The name itself is a historical curiosity.
+[Richard Bellman](https://en.wikipedia.org/wiki/Richard_E._Bellman) coined the term in the 1950s while working at RAND Corporation,
+choosing "dynamic programming" partly because the word "programming" referred to planning and scheduling (as in
+[linear programming](https://en.wikipedia.org/wiki/Linear_programming)), and partly because the word "dynamic" sounded
+impressive enough to shield the research from political skepticism toward mathematics.
+The name stuck, even though it reveals little about what the technique actually does.
+
+What dynamic programming actually does is systematic.
+It decomposes a problem into smaller subproblems, solves each subproblem once, stores the result, and combines stored results
+to build the answer to the original problem.
+This is only effective when two structural properties hold: **optimal substructure** and **overlapping subproblems**.
+When they do, dynamic programming provides both a way to think about the problem (the recurrence relation)
+and a way to compute the answer efficiently (memoization or tabulation).
+
+I want to be upfront: dynamic programming is, in my experience, the most difficult topic in the entire DSA landscape.
+After studying and solving many DP problems, I am still far from being an expert, and I probably never will be.
+The jump from understanding the theory to recognizing the right state definition and recurrence for a new problem
+remains genuinely hard every single time.
+If you find DP frustrating or intimidating, you are not alone.
+The goal of this article is not to make it look easy, but to lay out the foundations clearly enough
+that you can build intuition through practice.
+
+This article develops the theory of dynamic programming from first principles, then applies it to
+[one-dimensional DP](https://en.wikipedia.org/wiki/Dynamic_programming#Computer_science) problems,
+the simplest and most instructive class.
+Every concept introduced here, state definition, recurrence relations, base cases, memoization, tabulation, and space optimization,
+carries directly into the more complex DP families (knapsack, grid, string, tree) covered in subsequent articles.
+
+## The Two Pillars of Dynamic Programming
+
+Dynamic programming applies when a problem satisfies two structural conditions simultaneously.
+Neither condition alone is sufficient.
+Understanding them deeply is essential for recognizing whether a problem admits a DP solution at all.
+
+### Optimal substructure
+
+A problem has [**optimal substructure**](https://en.wikipedia.org/wiki/Optimal_substructure) if an optimal solution
+to the whole problem can be constructed from optimal solutions to its subproblems.
+More precisely, the optimal value of the original problem can be expressed as a function of the optimal values
+of smaller instances of the same problem.
+
+This property is not unique to dynamic programming.
+[Greedy algorithms](/data-structures-and-algorithms/topic/greedy) also exploit optimal substructure,
+and [divide-and-conquer](/data-structures-and-algorithms/topic/recursion) algorithms like
+[merge sort](/data-structures-and-algorithms/topic/merge-sort) rely on it as well.
+The difference lies in how the property is exploited.
+Greedy algorithms commit to one subproblem after making a local choice.
+Divide-and-conquer algorithms split into independent subproblems.
+Dynamic programming considers **all** subproblems and combines their results, because the subproblems are not independent:
+the optimal choice at each step depends on the solutions to subproblems that have not yet been resolved.
+
+Consider the problem of finding the cheapest path from a source to a destination in a weighted graph.
+If the cheapest path from $A$ to $D$ passes through $B$, then the sub-path from $A$ to $B$ must itself be the cheapest path
+from $A$ to $B$.
+If it were not, we could replace it with a cheaper sub-path, contradicting the optimality of the original path.
+This is optimal substructure.
+[Dijkstra's algorithm](/data-structures-and-algorithms/topic/shortest-path) and
+[Bellman-Ford](/data-structures-and-algorithms/topic/shortest-path) both exploit this property,
+the latter being a textbook example of dynamic programming applied to graphs.
+
+Not every problem has optimal substructure.
+The **longest simple path** problem (finding the longest path in a graph without repeating vertices) does not.
+The longest simple path from $A$ to $D$ through $B$ does not necessarily contain the longest simple path from $A$ to $B$,
+because the vertices used in the $A$-to-$B$ sub-path affect which vertices are available for the $B$-to-$D$ sub-path.
+The subproblems are not independent in the right way, and combining their solutions does not yield a global optimum.
+
+### Overlapping subproblems
+
+A problem has [**overlapping subproblems**](https://en.wikipedia.org/wiki/Overlapping_subproblems) if the same subproblem
+is solved multiple times during a naive recursive computation.
+This is what distinguishes dynamic programming from divide-and-conquer.
+In merge sort, the two halves of the array are independent: sorting the left half does not require results from the right half.
+Each subproblem is solved exactly once, so there is nothing to cache.
+
+In dynamic programming, the recursive decomposition produces a **DAG of subproblems** rather than a tree.
+Multiple branches of the recursion converge on the same subproblem.
+Without caching, each convergence point causes redundant work, and the total work grows exponentially.
+
+The canonical illustration is the [Fibonacci sequence](https://en.wikipedia.org/wiki/Fibonacci_sequence).
+Computing $F(n) = F(n-1) + F(n-2)$ recursively without caching leads to an explosion of redundant calls.
+$F(5)$ calls $F(4)$ and $F(3)$.
+$F(4)$ calls $F(3)$ and $F(2)$.
+$F(3)$ is computed twice, $F(2)$ is computed three times, and the total number of calls grows as $O(2^n)$.
+The subproblem DAG, however, has only $n + 1$ distinct nodes.
+If each subproblem is solved once and its result stored, the total work drops to $O(n)$.
+
+This is the core insight of dynamic programming: **identify the subproblem space, solve each subproblem once, and reuse results**.
+The two implementation strategies for achieving this, memoization and tabulation, differ only in the order of computation and the
+mechanism for storing results.
+
+## The DP Problem-Solving Framework
+
+Every dynamic programming solution follows a consistent intellectual framework.
+The steps below are not just a recipe for writing code.
+They form a way of thinking about the problem that reveals its structure and guides the implementation.
+
+### Step 1: Define the state
+
+The **state** is the minimal set of information that fully characterizes a subproblem.
+In one-dimensional DP, the state is typically a single integer index $i$ that represents the "position" in the problem.
+The DP value at state $i$, written $dp[i]$, represents the answer to the subproblem defined by that position.
+
+Choosing the right state is the most important and most difficult step.
+A good state definition makes the recurrence obvious.
+A poor one makes the problem seem intractable or leads to a state space that is too large.
+
+For the Climbing Stairs problem, where you want to count the number of ways to reach step $n$ by taking 1 or 2 steps at a time,
+the natural state is $dp[i] = $ the number of ways to reach step $i$.
+For the House Robber problem, where you want to maximize the sum of non-adjacent elements, the natural state is
+$dp[i] = $ the maximum amount obtainable considering only the first $i$ houses.
+
+In both cases, the state is a single index, and the DP table is a one-dimensional array.
+This is why these problems are called **1D DP** problems.
+More complex problems require states with two or more dimensions (grid position, string indices, remaining capacity),
+but the framework remains the same.
+
+### Step 2: Write the recurrence relation
+
+The [**recurrence relation**](https://en.wikipedia.org/wiki/Recurrence_relation) expresses $dp[i]$ in terms of smaller subproblems.
+It encodes the decision structure of the problem: at state $i$, what choices are available,
+and how does each choice reduce the problem to a previously solved state?
+
+For Climbing Stairs:
+
+$$dp[i] = dp[i - 1] + dp[i - 2]$$
+
+At step $i$, you either arrived from step $i - 1$ (by taking 1 step) or from step $i - 2$ (by taking 2 steps).
+The total number of ways is the sum of the ways to reach each predecessor.
+
+For House Robber:
+
+$$dp[i] = \max(dp[i - 1],\ nums[i] + dp[i - 2])$$
+
+At house $i$, you either skip it (inheriting the best result from the first $i - 1$ houses)
+or rob it (adding its value to the best result from the first $i - 2$ houses, since you cannot rob adjacent houses).
+
+The recurrence must cover all possible decisions at state $i$ and combine their results
+(summing for counting problems, taking the max for optimization problems, taking the min for cost minimization).
+
+### Step 3: Identify the base cases
+
+[**Base cases**](https://en.wikipedia.org/wiki/Recursion#base_case) are the smallest subproblems whose answers are known directly,
+without further decomposition.
+They anchor the recurrence and prevent infinite regression.
+
+For Climbing Stairs: $dp[0] = 1$ (one way to stay at the ground), $dp[1] = 1$ (one way to reach step 1).
+
+For House Robber: $dp[0] = nums[0]$ (only one house to consider), $dp[1] = \max(nums[0], nums[1])$ (take the better of the first two).
+
+Getting the base cases right is critical.
+An off-by-one error in the base cases propagates through the entire computation and produces a wrong answer.
+The base cases should be verified by hand on the smallest possible inputs before writing any code.
+
+### Step 4: Determine the computation order
+
+The recurrence defines dependencies between subproblems.
+$dp[i]$ depends on $dp[i - 1]$ and $dp[i - 2]$, so both must be computed before $dp[i]$.
+In one-dimensional DP with backward-looking recurrences, this means computing $dp$ values from left to right, starting at the base cases.
+
+In more complex settings (2D grids, tree-shaped subproblems), the computation order requires more care,
+but the principle is always the same: solve subproblems before the problems that depend on them.
+This is a [topological ordering](/data-structures-and-algorithms/topic/topological-sort) of the subproblem DAG.
+
+### Step 5: Extract the answer
+
+The final answer is typically $dp[n]$ (or $dp[n - 1]$, depending on indexing).
+In some problems, the answer may be the maximum or minimum across all states, or a specific entry in a multi-dimensional table.
+Identifying which entry holds the answer is the last step before implementation.
+
+## Memoization vs Tabulation
+
+The two implementation strategies for dynamic programming solve the same subproblems in the same subproblem space,
+but they differ in their traversal order and their mechanism for avoiding redundant computation.
+
+### Memoization (top-down)
+
+[**Memoization**](https://en.wikipedia.org/wiki/Memoization) implements the recurrence as a recursive function and caches results
+in a hash map or array.
+The computation starts from the original problem and recurses into subproblems.
+When a subproblem is encountered for the first time, its result is computed and stored.
+When it is encountered again, the stored result is returned immediately.
+
+```ts
+function climbStairsMemo(n: number): number {
+    const memo = new Map<number, number>();
+
+    function dp(i: number): number {
+        if (i <= 1) {
+            return 1;
+        }
+        if (memo.has(i)) {
+            return memo.get(i)!;
+        }
+        const result = dp(i - 1) + dp(i - 2);
+        memo.set(i, result);
+        return result;
+    }
+
+    return dp(n);
+}
+```
+
+Memoization has several advantages.
+It is a direct translation of the recurrence relation, making it easy to write and verify.
+It only computes subproblems that are actually needed (lazy evaluation), which can save work if large parts
+of the subproblem space are unreachable.
+It naturally handles complex state spaces where the set of reachable states is not easily enumerable in advance.
+
+The disadvantages are the overhead of recursive calls (stack frames, function call costs)
+and the risk of stack overflow for deep recursions.
+In languages without tail call optimization (which includes TypeScript), a recursion depth of $10^4$ or more
+can cause a stack overflow.
+
+### Tabulation (bottom-up)
+
+**Tabulation** fills the DP table iteratively, starting from the base cases and working up to the target state.
+There is no recursion.
+The computation order is explicit, determined by the loop structure, and must respect the dependencies in the recurrence.
+
+```ts
+function climbStairsTab(n: number): number {
+    if (n <= 1) {
+        return 1;
+    }
+    const dp = new Array(n + 1);
+    dp[0] = 1;
+    dp[1] = 1;
+
+    for (let i = 2; i <= n; i++) {
+        dp[i] = dp[i - 1] + dp[i - 2];
+    }
+
+    return dp[n];
+}
+```
+
+Tabulation avoids recursion overhead and stack overflow risks entirely.
+It also tends to be faster in practice because iterative loops have better cache locality than scattered recursive calls.
+The disadvantage is that it computes all subproblems in the table, even those that might not be needed for the final answer.
+For 1D DP problems this is rarely a concern, since the entire table is usually needed, but for sparse multi-dimensional
+state spaces, memoization can be more efficient.
+
+### Choosing between the two
+
+For most problems, both approaches yield the same time and space complexity.
+The choice is largely a matter of convenience and the specific constraints of the problem.
+
+Tabulation is generally preferred when the subproblem space is dense and fully traversable, the computation order is clear,
+and the problem size is large enough that recursion depth becomes a concern.
+Memoization is preferred when the subproblem space is sparse or irregular, or when the recurrence is complex enough that
+a recursive formulation is significantly clearer than an iterative one.
+
+In practice, for 1D DP problems, tabulation is almost always the better choice.
+The subproblem space is a contiguous range of integers, the computation order is a simple left-to-right loop,
+and the iterative implementation is straightforward.
+
+## State Definition and Recurrence Patterns in 1D DP
+
+One-dimensional DP problems share a common structure: the state is a single index,
+and the recurrence expresses the current state as a function of a small, fixed number of previous states.
+The differences between problems lie in what the state represents, what choices are available at each state,
+and how the choices combine.
+
+### Counting paths
+
+The simplest 1D DP pattern counts the number of ways to reach a target state, where at each step a fixed set of transitions
+is available.
+Climbing Stairs is the prototype: from step $i$, you can go to step $i + 1$ or step $i + 2$,
+so the number of ways to reach step $i$ is the sum of the ways to reach its predecessors.
+
+$$dp[i] = dp[i - 1] + dp[i - 2]$$
+
+This pattern generalizes naturally.
+If you could take 1, 2, or 3 steps, the recurrence becomes $dp[i] = dp[i-1] + dp[i-2] + dp[i-3]$.
+If the set of allowed step sizes varies by position, the recurrence adapts accordingly.
+The key insight is that counting problems produce **additive** recurrences: the total count at a state
+is the sum of the counts at all states from which it can be reached.
+
+The base cases for counting problems typically set $dp[0] = 1$ (there is exactly one way to be at the starting position:
+do nothing) and $dp[\text{negative}] = 0$ (there are zero ways to reach a position before the start).
+
+### Cost minimization
+
+A natural extension adds a cost to each step and asks for the minimum total cost to reach the target.
+Min Cost Climbing Stairs is the prototype: each step has a cost, and you want to reach the top
+while spending as little as possible.
+
+$$dp[i] = cost[i] + \min(dp[i + 1],\ dp[i + 2])$$
+
+This formulation computes the minimum cost to reach the top **starting from** step $i$.
+It is a backward formulation: $dp[i]$ depends on $dp[i + 1]$ and $dp[i + 2]$, so the table is filled from right to left.
+Equivalently, a forward formulation defines $dp[i]$ as the minimum cost to reach step $i$, and fills from left to right.
+Both are correct and produce the same answer. The choice is a matter of which direction feels more natural for the problem.
+
+Cost minimization problems produce **min-of-sums** recurrences: at each state, the optimal value
+is the minimum (or maximum) over all choices, where each choice's value is the sum of the local cost and
+the optimal value of the resulting subproblem.
+
+### Adjacency constraints
+
+The House Robber problem introduces a **constraint between consecutive choices**: you cannot select two adjacent elements.
+The state $dp[i]$ represents the maximum value achievable considering only the first $i$ elements,
+and the recurrence captures the binary decision at each position.
+
+$$dp[i] = \max(dp[i - 1],\ nums[i] + dp[i - 2])$$
+
+Either you skip element $i$ (and the best you can do is $dp[i - 1]$)
+or you take element $i$ (and add its value to the best result from the first $i - 2$ elements, since element $i - 1$ is excluded).
+
+This is a fundamental pattern that appears whenever the problem forbids selecting adjacent items:
+task scheduling with cooldowns, coloring problems with neighbor constraints, and many others.
+The recurrence always involves a "take or skip" decision where taking the current item forces a gap before the next eligible item.
+
+### Circular constraints
+
+House Robber II extends the adjacency constraint to a circular arrangement: the first and last elements are also adjacent.
+This means you cannot simply run the same recurrence, because the decision to include the first element
+affects whether the last element is available.
+
+The standard technique is **constraint reduction**: break the circular problem into two linear subproblems
+that together cover all valid solutions.
+Run the linear House Robber on elements $[0, n-2]$ (excluding the last) and on elements $[1, n-1]$ (excluding the first).
+The answer is the maximum of the two results.
+
+This works because every valid selection in the circular arrangement either does not include the last element (covered by
+the first subproblem) or does not include the first element (covered by the second subproblem).
+These two cases are exhaustive and mutually exclusive with respect to the element that they exclude, so taking the maximum
+of the two linear solutions yields the correct answer for the circular problem.
+
+Circular constraint reduction is a general technique.
+Whenever a 1D DP problem has a "wrap-around" condition that links the first and last positions, consider decomposing it
+into two linear subproblems that each fix one end of the circular dependency.
+
+## Space Optimization
+
+The full tabulation approach allocates an array of size $n$ to store all DP values.
+For 1D DP problems, this is often unnecessary.
+If $dp[i]$ depends only on the previous $k$ states (where $k$ is a small constant, typically 1 or 2),
+then only those $k$ states need to be kept in memory at any time.
+
+### Rolling variables
+
+For Climbing Stairs, the recurrence $dp[i] = dp[i-1] + dp[i-2]$ depends on exactly two previous values.
+Instead of an array, two variables suffice.
+
+```ts
+function climbStairs(n: number): number {
+    let prev2 = 1;
+    let prev1 = 1;
+
+    for (let i = 2; i <= n; i++) {
+        const current = prev1 + prev2;
+        prev2 = prev1;
+        prev1 = current;
+    }
+
+    return prev1;
+}
+```
+
+This reduces space from $O(n)$ to $O(1)$ while maintaining the same $O(n)$ time complexity.
+The same technique applies to House Robber, where the recurrence also depends on two previous states.
+
+```ts
+function rob(nums: number[]): number {
+    let prev2 = 0;
+    let prev1 = 0;
+
+    for (let i = 0; i < nums.length; i++) {
+        const current = Math.max(prev1, nums[i] + prev2);
+        prev2 = prev1;
+        prev1 = current;
+    }
+
+    return prev1;
+}
+```
+
+The variable `prev1` holds $dp[i-1]$ (the best result considering the previous house)
+and `prev2` holds $dp[i-2]$ (the best result excluding the previous house).
+At each step, the new value is computed and the variables shift forward.
+
+### When space optimization applies
+
+Space optimization from $O(n)$ to $O(1)$ is possible whenever the recurrence has a **bounded lookback**:
+$dp[i]$ depends on at most $k$ previous values, where $k$ is a constant independent of $n$.
+For the problems in this article, $k = 2$.
+For other problems (e.g., some string DP or grid DP problems), the lookback may span an entire row or column,
+and the optimization reduces space from $O(nm)$ to $O(m)$ by keeping only two rows instead of the full grid.
+
+The trade-off is that space optimization discards intermediate DP values.
+If the problem asks not just for the optimal value but also for the optimal sequence of decisions
+(reconstructing the actual path, not just its cost), the full table must be retained so that the decisions can be traced
+backwards from the final state to the base case.
+
+## A Complete Walkthrough: From Recurrence to Optimized Code
+
+To solidify the framework, let us walk through the House Robber problem from start to finish,
+showing every step of the DP development process.
+
+**Problem**: given an array `nums` of non-negative integers, find the maximum sum of a subsequence
+where no two selected elements are adjacent.
+
+**Step 1: State**. Define $dp[i]$ as the maximum sum achievable using only elements from `nums[0..i]`.
+
+**Step 2: Recurrence**. At position $i$, either skip element $i$ (result is $dp[i-1]$)
+or take it (result is $nums[i] + dp[i-2]$, since $i-1$ must be skipped).
+
+$$dp[i] = \max(dp[i-1],\ nums[i] + dp[i-2])$$
+
+**Step 3: Base cases**. $dp[0] = nums[0]$ and $dp[1] = \max(nums[0], nums[1])$.
+
+**Step 4: Computation order**. Left to right, $i = 2, 3, \ldots, n-1$.
+
+**Step 5: Answer**. $dp[n-1]$.
+
+The full tabulation implementation:
+
+```ts
+function robTabulation(nums: number[]): number {
+    const n = nums.length;
+    if (n === 0) {
+        return 0;
+    }
+    if (n === 1) {
+        return nums[0];
+    }
+
+    const dp = new Array(n);
+    dp[0] = nums[0];
+    dp[1] = Math.max(nums[0], nums[1]);
+
+    for (let i = 2; i < n; i++) {
+        dp[i] = Math.max(dp[i - 1], nums[i] + dp[i - 2]);
+    }
+
+    return dp[n - 1];
+}
+```
+
+Applying space optimization, since $dp[i]$ depends only on $dp[i-1]$ and $dp[i-2]$:
+
+```ts
+function robOptimized(nums: number[]): number {
+    let prev2 = 0;
+    let prev1 = 0;
+
+    for (let i = 0; i < nums.length; i++) {
+        const current = Math.max(prev1, nums[i] + prev2);
+        prev2 = prev1;
+        prev1 = current;
+    }
+
+    return prev1;
+}
+```
+
+The time complexity is $O(n)$ in both cases.
+The space complexity drops from $O(n)$ (full table) to $O(1)$ (rolling variables).
+
+## Dynamic Programming vs Greedy vs Divide-and-Conquer
+
+Dynamic programming sits between [greedy algorithms](/data-structures-and-algorithms/topic/greedy) and brute-force search,
+and it is closely related to [divide-and-conquer](/data-structures-and-algorithms/topic/recursion).
+Understanding the relationships between these paradigms clarifies when each one applies.
+
+**Greedy** algorithms make locally optimal choices and never reconsider.
+They work when the [greedy-choice property](/data-structures-and-algorithms/topic/greedy) holds:
+a globally optimal solution can always be assembled from locally optimal decisions.
+Greedy algorithms are faster (often $O(n)$ or $O(n \log n)$) but less general.
+If the greedy-choice property does not hold, a greedy approach produces suboptimal results.
+
+**Dynamic programming** considers all subproblems and combines their results.
+It works when the problem has optimal substructure and overlapping subproblems.
+It is more expensive than greedy (it must fill a table of subproblem results) but strictly more general.
+Every problem solvable by greedy is also solvable by DP, but not vice versa.
+
+**Divide-and-conquer** splits the problem into independent subproblems, solves them recursively, and combines the results.
+It works when the subproblems do not overlap.
+Merge sort is the classic example: the two halves are independent, so no caching is needed.
+When the subproblems do overlap, divide-and-conquer without caching leads to exponential time, and adding caching
+transforms it into dynamic programming.
+
+The decision tree is:
+
+Does the problem have optimal substructure?
+If not, none of these paradigms apply directly.
+If yes, do the subproblems overlap?
+If not, use divide-and-conquer.
+If yes, does the greedy-choice property hold?
+If yes, use greedy (simpler and faster).
+If not, use dynamic programming.
+
+In practice, the boundary between DP and greedy is often subtle.
+The coin change problem with standard denominations is greedy.
+The same problem with arbitrary denominations requires DP.
+[Kadane's algorithm](/data-structures-and-algorithms/topic/kadane-algorithm) for maximum subarray is sometimes classified
+as greedy (it makes a local "extend or restart" decision) and sometimes as 1D DP (it has a clear state and recurrence).
+The classification matters less than the understanding.
+
+## Time and Space Complexity
+
+The time and space complexity of a one-dimensional DP solution follows directly from the structure of the subproblem space
+and the recurrence relation.
+
+The **subproblem space** for 1D DP is a contiguous range of integers from $0$ (or $1$) to $n$.
+There are $O(n)$ distinct subproblems.
+Each subproblem is solved exactly once, either through memoization (the cache prevents recomputation) or through tabulation
+(each table entry is filled once, in order).
+
+The **per-subproblem work** is determined by the number of choices (transitions) at each state.
+For the problems in this article, each state considers a constant number of transitions (2 for Climbing Stairs
+and House Robber, 2 for Min Cost Climbing Stairs).
+This gives $O(1)$ work per subproblem and $O(n)$ total time.
+
+The **space** for full tabulation is $O(n)$ for the DP array.
+With rolling variables, the space drops to $O(1)$ when the lookback is bounded by a constant.
+Memoization uses $O(n)$ space for the cache plus $O(n)$ for the recursion stack in the worst case.
+
+In general, for a 1D DP problem with $n$ states and $k$ transitions per state:
+
+- **Time**: $O(n \cdot k)$
+- **Space (tabulation)**: $O(n)$, reducible to $O(1)$ if the lookback is bounded
+- **Space (memoization)**: $O(n)$ for the cache, plus $O(n)$ recursion stack depth
+
+For the exercises in this article, $k$ is a small constant (at most 2), so the time complexity is $O(n)$ and the space is
+$O(1)$ with optimization.
+
+## Exercises
+
+<TopicExercises topic="dp-foundations-1d-dp" />

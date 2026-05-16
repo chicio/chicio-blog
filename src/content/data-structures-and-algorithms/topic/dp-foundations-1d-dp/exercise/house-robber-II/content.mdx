@@ -1,0 +1,52 @@
+---
+title: "House Robber II"
+description: "Given an array representing money in houses arranged in a circle, find the maximum amount you can rob without robbing two adjacent houses."
+date: 2026-05-15
+image: /images/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [dynamic programming, 1d dp, memoization, tabulation, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Circular constraint reduction to linear subproblems"
+  leetcodeUrl: "https://leetcode.com/problems/house-robber-ii/"
+  difficulty: "Medium"
+---
+# House Robber II
+
+Leetcode Problem 213: [House Robber II](https://leetcode.com/problems/house-robber-ii/description/)
+
+## Problem Summary
+This problem extends House Robber by arranging the houses in a **circle**, so the first house is adjacent to the last one. Given an array of non-negative integers representing the money in each house, return the maximum amount you can rob without robbing any two adjacent houses. The circular arrangement means that if you rob house **0**, you cannot rob house **n - 1**, and vice versa. The array has between **1** and **100** elements, and each value is a non-negative integer up to **1,000**.
+
+## Techniques
+- Array
+- Dynamic Programming
+
+## Solution
+```ts
+function houseRobber1(nums: number[]): number {
+    let withoutPreviousHouse = 0
+    let previousHouse = 0
+
+    for (let i = 0; i < nums.length; i++) {
+        const result = Math.max(
+            nums[i] + withoutPreviousHouse,
+            previousHouse
+        )
+        withoutPreviousHouse = previousHouse
+        previousHouse = result
+    }
+
+    return previousHouse
+};
+
+function rob2(nums: number[]): number {
+    return Math.max(
+        nums[0],
+        houseRobber1(nums.slice(0, nums.length - 1)),
+        houseRobber1(nums.slice(1))
+    )
+};
+
+console.log(rob2([1, 2, 3, 1]))
+console.log(rob2([2, 7, 9, 3, 1]))
+```
