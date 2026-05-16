@@ -1,0 +1,42 @@
+---
+title: "Coin Change II"
+description: "Given coin denominations and a target amount, count the number of distinct combinations that sum to that amount."
+date: 2026-05-15
+image: /images/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [dynamic programming, knapsack, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Unbounded Knapsack with combination counting"
+  leetcodeUrl: "https://leetcode.com/problems/coin-change-ii/"
+  difficulty: "Medium"
+---
+# Coin Change II
+
+Leetcode Problem 518: [Coin Change II](https://leetcode.com/problems/coin-change-ii/description/)
+
+## Problem Summary
+Given an integer array **coins** representing coins of different denominations and an integer **amount** representing a total amount of money, return the number of combinations that make up that amount. If the amount cannot be made up by any combination of the coins, return **0**. You may assume an infinite supply of each coin denomination. The answer is guaranteed to fit into a signed 32-bit integer. The array contains between **1** and **300** coin types with values between **1** and **5,000**, all unique. The target amount is at most **5,000**.
+
+## Techniques
+- Array
+- Dynamic Programming
+
+## Solution
+```ts
+function knapsackUnboundCombinations(values: number[], capacity: number) {
+    const dp = Array(capacity + 1).fill(0)
+    dp[0] = 1
+
+    for (const value of values) {
+        for (let i = value; i <= capacity; i++) {
+            dp[i] += dp[i - value]
+        }
+    }
+
+    return dp[capacity]
+}
+
+function change(amount: number, coins: number[]): number {
+    return knapsackUnboundCombinations(coins, amount)
+};
+```

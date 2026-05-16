@@ -1,0 +1,43 @@
+---
+title: "Coin Change"
+description: "Given coin denominations and a target amount, find the fewest number of coins needed to make up that amount."
+date: 2026-05-15
+image: /images/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [dynamic programming, knapsack, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Unbounded Knapsack with minimization"
+  leetcodeUrl: "https://leetcode.com/problems/coin-change/"
+  difficulty: "Medium"
+---
+# Coin Change
+
+Leetcode Problem 322: [Coin Change](https://leetcode.com/problems/coin-change/description/)
+
+## Problem Summary
+Given an integer array **coins** representing coins of different denominations and an integer **amount** representing a total amount of money, return the fewest number of coins needed to make up that amount. If the amount cannot be made up by any combination of the coins, return **-1**. You may assume an infinite supply of each coin denomination. The array contains between **1** and **12** coin types, each denomination can be up to **2^31 - 1**, and the target amount is at most **10,000**.
+
+## Techniques
+- Array
+- Dynamic Programming
+- Breadth-First Search
+
+## Solution
+```ts
+function knapsackUnboundMinimize(values: number[], capacity: number) {
+    const dp = Array(capacity + 1).fill(Infinity)
+    dp[0] = 0
+
+    for (const value of values) {
+        for (let i = value; i <= capacity; i++) {
+            dp[i] = Math.min(dp[i], 1 + dp[i - value])
+        }
+    }
+
+    return dp[capacity] === Infinity ? -1 : dp[capacity]
+}
+
+function coinChange(coins: number[], amount: number): number {
+    return knapsackUnboundMinimize(coins, amount)
+};
+```

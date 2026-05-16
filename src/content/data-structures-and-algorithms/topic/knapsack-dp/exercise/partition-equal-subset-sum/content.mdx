@@ -1,0 +1,51 @@
+---
+title: "Partition Equal Subset Sum"
+description: "Given an integer array, determine whether it can be partitioned into two subsets with equal sum."
+date: 2026-05-15
+image: /images/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [dynamic programming, knapsack, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "0/1 Knapsack with boolean reachability"
+  leetcodeUrl: "https://leetcode.com/problems/partition-equal-subset-sum/"
+  difficulty: "Medium"
+---
+# Partition Equal Subset Sum
+
+Leetcode Problem 416: [Partition Equal Subset Sum](https://leetcode.com/problems/partition-equal-subset-sum/description/)
+
+## Problem Summary
+Given an integer array **nums**, return **true** if the array can be partitioned into two subsets such that the sum of the elements in both subsets is equal, or **false** otherwise. The array contains between **1** and **200** elements, each with a value between **1** and **100**.
+
+## Techniques
+- Array
+- Dynamic Programming
+
+## Solution
+```ts
+function knapsack01_1D(
+    values: number[],
+    capacity: number
+): boolean {
+    const dp = new Array(capacity + 1).fill(false)
+    dp[0] = true
+
+    for (const num of values) {
+        for (let i = capacity; i >= num; i--) {
+            dp[i] = dp[i] || dp[i - num]
+        }
+    }
+
+    return dp[capacity];
+}
+
+function canPartition(nums: number[]): boolean {
+    const target = nums.reduce((a, b) => a + b, 0)
+
+    if (target % 2 !== 0) {
+        return false;
+    }
+
+    return knapsack01_1D(nums, target / 2)
+};
+```
