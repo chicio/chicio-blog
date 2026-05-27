@@ -58,7 +58,7 @@
     "resend": "^6.12.3",
     "serwist": "^9.5.11",
     "tailwindcss": "^4.2.1",
-    "tsx": "^4.21.0",
+    "tsx": "^4.22.3",
     "zod": "^4.3.6"
   },
   "devDependencies": {
