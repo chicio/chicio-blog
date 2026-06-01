@@ -26,7 +26,12 @@
       "@/*": [
         "./src/*"
       ]
-    }
+    },
+    "types": [
+      "node",
+      "mdx",
+      "dom-chromium-ai"
+    ]
   },
   "include": [
     "next-env.d.ts",
