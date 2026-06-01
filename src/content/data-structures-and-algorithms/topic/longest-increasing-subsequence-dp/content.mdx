@@ -1,0 +1,462 @@
+---
+title: "Longest Increasing Subsequence DP"
+description: "A comprehensive guide to the Longest Increasing Subsequence problem: the O(n²) DP formulation, the O(n log n) patience sorting optimization, counting and reconstruction variants, and the unifying view through Dilworth's theorem."
+date: 2026-06-01
+image: /images/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [dynamic programming, longest increasing subsequence, patience sorting, data structures, algorithms]
+authors: [fabrizio_duroni]
+---
+
+import { TopicExercises } from "@/components/sections/data-structures-and-algorithms/components/topic-exercises";
+
+# Longest Increasing Subsequence DP
+
+The [Longest Increasing Subsequence](https://en.wikipedia.org/wiki/Longest_increasing_subsequence) problem,
+usually abbreviated as LIS, asks a deceptively simple question.
+Given a sequence of numbers, what is the length of the longest [subsequence](https://en.wikipedia.org/wiki/Subsequence)
+whose elements are strictly increasing?
+A subsequence, unlike a substring, is formed by deleting zero or more elements while preserving the relative order
+of the remaining ones.
+The elements need not be contiguous in the original sequence.
+
+LIS is one of the canonical problems in dynamic programming, and its importance reaches well beyond its plain statement.
+It appears as a sub-routine in problems about [sorting](https://en.wikipedia.org/wiki/Patience_sorting),
+permutation analysis, scheduling, computational biology (it underlies the
+[longest common subsequence](https://en.wikipedia.org/wiki/Longest_common_subsequence) algorithm in important ways),
+and many geometric problems that reduce to ordering tasks.
+More importantly for our purposes, LIS sits at a peculiar crossroads in the DP landscape.
+The natural formulation is a one-dimensional sequence DP with a monotonic constraint between states,
+producing an $O(n^2)$ algorithm.
+That algorithm can then be transformed into an $O(n \log n)$ one by replacing the inner linear scan
+with a [binary search](/data-structures-and-algorithms/topic/binary-search) over a cleverly maintained structure.
+This rare transition from quadratic to log-linear, while preserving the same answer, is itself
+a textbook lesson in algorithm design.
+
+Before continuing, make sure you are comfortable with the
+[DP problem-solving framework](/data-structures-and-algorithms/topic/dp-foundations-1d-dp),
+including state definition, recurrence relations, base cases, tabulation, and space complexity reasoning.
+You should also be at ease with [binary search](/data-structures-and-algorithms/topic/binary-search),
+in particular with the "lower bound" variant that returns the leftmost insertion position in a sorted array.
+The $O(n \log n)$ algorithm leans on that primitive heavily.
+
+## The LIS Abstraction
+
+Formally, given an array $a$ of length $n$, we want to find the largest $k$ such that there exist indices
+$i_1 < i_2 < \ldots < i_k$ with $a[i_1] < a[i_2] < \ldots < a[i_k]$.
+Note the two inequalities: indices must strictly increase (subsequence preservation),
+and values must strictly increase (the "increasing" requirement).
+
+This formulation immediately shows that LIS is not a contiguous-substring problem.
+Brute-force enumeration of all $2^n$ subsequences and checking which ones are increasing is exponential
+and clearly impractical.
+Greedy approaches based on "always pick the next element if it is larger than the last picked"
+fail on simple counterexamples like $[3, 1, 2, 4]$, where the greedy picks $\{3, 4\}$ but the optimum is $\{1, 2, 4\}$.
+
+The structure that DP exploits is the following.
+Suppose we know the length of the LIS that **ends exactly at index $i$** for every $i$.
+Then the answer is the maximum over all such values.
+The LIS ending at index $i$ has a natural recurrence: it is one element longer than the longest LIS
+that ends at some index $j < i$ with $a[j] < a[i]$, or just $1$ if no such $j$ exists.
+This decomposition is the key to the entire DP formulation.
+
+It is worth pausing to appreciate why this works.
+Many sequence DP problems define the state as "the optimum value using the first $i$ elements,"
+which leaves ambiguity about whether the $i$-th element is used.
+LIS instead forces the $i$-th element to be used.
+This eliminates the ambiguity at the cost of an extra reduction step at the end (taking the max over all $i$),
+but it produces a clean recurrence with no "include or skip" branching.
+The reason this works is that the constraint "strictly increasing" couples consecutive picks through their values,
+so the DP value must record what the last picked value was.
+Forcing the last pick to be exactly $a[i]$ makes the state fully specified.
+
+## The O(n²) DP Formulation
+
+Define $dp[i]$ as the length of the longest strictly increasing subsequence of $a$ that **ends at index $i$**
+and uses $a[i]$ as its last element.
+Every index is itself a valid subsequence of length $1$, so the base case is $dp[i] \geq 1$ for all $i$.
+
+The recurrence considers all earlier indices $j < i$ where $a[j] < a[i]$.
+For each such $j$, extending the LIS ending at $j$ by $a[i]$ produces a strictly increasing subsequence of length $dp[j] + 1$
+ending at $i$.
+Taking the maximum over all valid $j$ (and over the trivial "start fresh at $i$" option):
+
+$$dp[i] = 1 + \max \\{ dp[j] : 0 \leq j < i,\ a[j] < a[i] \\}$$
+
+with the convention that the max over an empty set is $0$, recovering $dp[i] = 1$.
+
+The final answer is $\max_{0 \leq i < n} dp[i]$, the longest LIS ending anywhere.
+
+The translation to code is direct. Two nested loops scan all pairs $(j, i)$ with $j < i$,
+and a single linear pass at the end extracts the maximum.
+
+```ts
+function lengthOfLIS(nums: number[]): number {
+    const n = nums.length;
+    const dp = new Array(n).fill(1);
+
+    for (let i = 1; i < n; i++) {
+        for (let j = 0; j < i; j++) {
+            if (nums[j] < nums[i]) {
+                dp[i] = Math.max(dp[i], dp[j] + 1);
+            }
+        }
+    }
+
+    return Math.max(...dp);
+}
+```
+
+The implementation in the Algomaster repo iterates from right to left instead of left to right.
+The two directions are entirely equivalent: one defines $dp[i]$ as the LIS ending at $i$,
+the other as the LIS starting at $i$.
+The recurrence is symmetric and the final answer is the same.
+The left-to-right version is the conventional one and connects more naturally to the $O(n \log n)$ optimization,
+so we adopt it here.
+
+This algorithm runs in $O(n^2)$ time (the double loop) and $O(n)$ space (the $dp$ array).
+For inputs up to roughly $10^4$ elements, this is comfortably fast.
+Beyond that scale, the quadratic time becomes the bottleneck, motivating the optimization that follows.
+
+## The O(n log n) Optimization via Patience Sorting
+
+The $O(n^2)$ algorithm is wasteful in a specific way.
+For every index $i$, it re-scans all earlier indices to find the best $j$ to extend.
+Most of that scanning is unnecessary: many $j$'s contribute nothing because their LIS is shorter than what we already have.
+A smarter algorithm avoids the per-element linear scan by maintaining a structure that answers, in logarithmic time,
+the only question we really need to ask.
+
+That structure is the cornerstone of [patience sorting](https://en.wikipedia.org/wiki/Patience_sorting),
+a solitaire-inspired procedure that, almost as a side effect, computes the LIS length.
+
+### Patience sorting, the card game
+
+Imagine dealing the input numbers, in order, into piles laid out left to right.
+Each new card must go on top of the leftmost pile whose current top card is strictly greater than the new card.
+If no such pile exists, start a new pile to the right.
+Continue until all cards are placed.
+
+The result has a remarkable property: the number of piles at the end equals the length of the LIS.
+This is not a coincidence and not a heuristic, it is exact.
+A proof sketch is given later in the unified section.
+For now, accept it and observe what it gives us: an algorithm that processes each input element by performing
+a single decision (which pile is leftmost with a strictly greater top), then either placing or starting a new pile.
+
+If we can find the leftmost pile with a strictly greater top in logarithmic time, the total runtime is $O(n \log n)$.
+
+### From piles to a tails array
+
+We do not actually need to maintain the piles, only their **top cards**.
+Furthermore, because of how patience sorting works, the sequence of pile tops, from left to right,
+is always strictly increasing.
+This is the crucial structural invariant.
+A new element either replaces the top of some existing pile (decreasing that top, since the new card is smaller)
+or extends the structure by one new pile to the right (the new card is larger than every current top).
+
+Concretely, maintain an array `tails`, where `tails[k]` is the smallest possible tail (last element)
+of any increasing subsequence of length $k + 1$ seen so far.
+This is exactly the top of the $(k+1)$-th pile in the patience sorting view.
+
+When processing $a[i]$:
+- if $a[i]$ is strictly larger than every element in `tails`, append it. A new pile starts, the LIS length grows by one.
+- otherwise, find the leftmost index $k$ such that `tails[k] >= a[i]`, and overwrite `tails[k] = a[i]`. We have found a tail equal or larger than $a[i]$, and replacing it with $a[i]$ keeps the invariant (the new tail is no larger than the old one) while leaving room for future extensions.
+
+The "find the leftmost index" step is a standard binary search for the lower bound of $a[i]$ in the strictly increasing
+`tails` array, costing $O(\log n)$ per element.
+The total runtime is therefore $O(n \log n)$, with $O(n)$ space.
+
+```ts
+function lengthOfLISOptimized(nums: number[]): number {
+    const tails: number[] = [];
+
+    for (const x of nums) {
+        let left = 0;
+        let right = tails.length;
+
+        while (left < right) {
+            const mid = (left + right) >> 1;
+            if (tails[mid] < x) {
+                left = mid + 1;
+            } else {
+                right = mid;
+            }
+        }
+
+        if (left === tails.length) {
+            tails.push(x);
+        } else {
+            tails[left] = x;
+        }
+    }
+
+    return tails.length;
+}
+```
+
+A subtle but critical point: the `tails` array at the end **is not itself a valid LIS** of the input.
+It has the correct length, but its elements may come from positions that violate the original index ordering.
+Reconstructing an actual LIS sequence requires additional bookkeeping, discussed in a later section.
+The optimized algorithm gives the length, not the sequence.
+
+A second subtle point: for strictly increasing LIS, the binary search must find the lower bound
+(leftmost index with `tails[k] >= x`).
+For the non-decreasing variant (where equal values are allowed), the search must find the upper bound
+(leftmost index with `tails[k] > x`).
+Mixing these up silently produces wrong answers.
+The next variant section formalizes this distinction.
+
+## Counting Variant: Number of LIS
+
+Once the length of the LIS is known, a natural follow-up is to count how many distinct LIS exist.
+This requires augmenting the $O(n^2)$ DP with a second array tracking the number of subsequences
+of each maximum length.
+
+Define two arrays:
+- `length[i]`: the length of the LIS ending at index $i$. This is exactly the $dp$ array of the basic formulation.
+- `count[i]`: the number of distinct LIS of length `length[i]` that end at index $i$.
+
+The base case is `length[i] = 1` and `count[i] = 1` for every $i$: each index alone is an LIS of length $1$,
+and there is exactly one such LIS at that index.
+
+The recurrence updates both arrays simultaneously as we scan earlier indices $j < i$ with `nums[j] < nums[i]`:
+- if `length[j] + 1 > length[i]`, we have found a strictly longer LIS ending at $i$. Set `length[i] = length[j] + 1` and reset `count[i] = count[j]`.
+- if `length[j] + 1 === length[i]`, we have found another LIS ending at $i$ with the same maximum length. Add `count[j]` to `count[i]`.
+- otherwise, ignore $j$.
+
+The case analysis is important.
+The strict inequality "resets" the count because we have discovered a new, longer LIS family,
+and only the ways from $j$ contribute.
+The equality "accumulates" the count because we have found an alternative way to reach the same maximum length.
+
+After processing all indices, compute the maximum LIS length and sum the counts of every index that achieves it.
+
+```ts
+function findNumberOfLIS(nums: number[]): number {
+    const n = nums.length;
+    const length = new Array(n).fill(1);
+    const count = new Array(n).fill(1);
+
+    for (let i = 1; i < n; i++) {
+        for (let j = 0; j < i; j++) {
+            if (nums[j] < nums[i]) {
+                if (length[j] + 1 > length[i]) {
+                    length[i] = length[j] + 1;
+                    count[i] = count[j];
+                } else if (length[j] + 1 === length[i]) {
+                    count[i] += count[j];
+                }
+            }
+        }
+    }
+
+    const maxLen = Math.max(...length);
+    let total = 0;
+
+    for (let i = 0; i < n; i++) {
+        if (length[i] === maxLen) {
+            total += count[i];
+        }
+    }
+
+    return total;
+}
+```
+
+The complexity is the same as the basic $O(n^2)$ DP: time $O(n^2)$, space $O(n)$.
+A counting variant of the patience sorting algorithm exists, but it is significantly more involved
+(it requires Fenwick trees indexed by value and per-pile count tracking) and is rarely needed in practice.
+For typical input sizes, the $O(n^2)$ counting DP is the standard choice.
+
+## Dimensional Reduction: Russian Doll Envelopes
+
+Several LIS-like problems present themselves in two or more dimensions.
+The canonical example is the [Russian Doll Envelopes](https://leetcode.com/problems/russian-doll-envelopes/) problem:
+given a set of envelopes, each described by a pair $(w, h)$, find the longest chain such that each envelope
+strictly fits inside the next in both dimensions.
+"Fits inside" means strictly smaller width and strictly smaller height.
+
+A naïve $O(n^2)$ DP would treat each envelope as a node, define `dp[i]` as the longest chain ending at envelope $i$,
+and check fit for every earlier $j$.
+This works but does not exploit the $O(n \log n)$ optimization, because the "tails" structure assumes a one-dimensional
+ordering.
+
+The trick is to **reduce two dimensions to one** by sorting cleverly, then applying the standard LIS on a derived array.
+
+Sort the envelopes by width in ascending order.
+After this sort, any chain in the original problem is necessarily a subsequence of the sorted array.
+Now run LIS on the heights.
+The resulting sequence has strictly increasing widths (by sort order) and strictly increasing heights (by LIS),
+which is exactly what we want.
+
+There is one subtlety.
+When two envelopes share the same width, neither can fit inside the other (the widths are equal, not strictly increasing).
+If both contribute to an LIS on heights, we would count an invalid chain.
+The fix is to break ties by sorting heights in **descending** order within each width group.
+That way, two envelopes with the same width cannot both appear in the height LIS:
+the one with larger height comes first and the one with smaller height comes second,
+producing a non-increasing pattern that the strict LIS rejects.
+
+```ts
+function maxEnvelopes(envelopes: number[][]): number {
+    envelopes.sort((a, b) => {
+        if (a[0] === b[0]) {
+            return b[1] - a[1];
+        }
+        return a[0] - b[0];
+    });
+
+    const heights = envelopes.map((e) => e[1]);
+    const tails: number[] = [];
+
+    for (const h of heights) {
+        let left = 0;
+        let right = tails.length;
+
+        while (left < right) {
+            const mid = (left + right) >> 1;
+            if (tails[mid] < h) {
+                left = mid + 1;
+            } else {
+                right = mid;
+            }
+        }
+
+        if (left === tails.length) {
+            tails.push(h);
+        } else {
+            tails[left] = h;
+        }
+    }
+
+    return tails.length;
+}
+```
+
+The total complexity is $O(n \log n)$: the sort dominates, and the LIS pass adds another $O(n \log n)$.
+Space is $O(n)$ for the `tails` and `heights` arrays.
+
+This dimensional-reduction pattern generalizes.
+Any problem that asks for the longest chain under a partial order whose first coordinate is totally ordered
+and whose second coordinate must also be strictly increasing reduces to LIS, given the right tie-breaking sort.
+Three dimensions and beyond require more sophisticated structures (Fenwick trees over a coordinate-compressed dimension,
+or persistent data structures) and are outside the scope of this article.
+
+## Other LIS Variants
+
+Beyond the canonical LIS, several closely related variants share the same DP skeleton with minor adjustments.
+
+### Longest non-decreasing subsequence
+
+If we relax "strictly increasing" to "non-decreasing" (allowing equal consecutive values),
+the $O(n^2)$ recurrence changes the comparison from `nums[j] < nums[i]` to `nums[j] <= nums[i]`.
+The $O(n \log n)$ algorithm changes the binary search from a lower bound to an upper bound:
+we look for the leftmost index $k$ with `tails[k] > x`.
+The reason is symmetric: in the strict variant we want to overwrite a tail that equals or exceeds $x$
+(forbidding ties), in the non-strict variant we want to overwrite a tail that strictly exceeds $x$
+(permitting ties to extend the previous tail's length).
+
+### Longest bitonic subsequence
+
+A bitonic subsequence first strictly increases and then strictly decreases (or vice versa).
+The longest bitonic subsequence at index $i$ has length `inc[i] + dec[i] - 1`, where `inc[i]` is the LIS length ending at $i$
+(scanning left to right) and `dec[i]` is the LIS length starting at $i$ (scanning right to left, on a reversed array, or equivalently the LDS).
+The subtraction accounts for the peak element being counted in both.
+The answer is the maximum over all $i$.
+Both `inc` and `dec` can be computed in $O(n^2)$ or $O(n \log n)$, so the bitonic variant inherits the same complexity bounds.
+
+### LIS reconstruction
+
+The $O(n^2)$ DP records `length[i]` but not the actual sequence.
+To recover an LIS, maintain a `parent[i]` array storing the index $j$ that achieved the maximum in the recurrence for $i$
+(or $-1$ if `length[i] = 1`).
+After computing the DP, find the index $i^*$ with the maximum `length[i]` and walk backward through `parent` to reconstruct
+the sequence.
+
+The $O(n \log n)$ algorithm is trickier to augment for reconstruction.
+The `tails` array is overwritten during processing and does not directly correspond to LIS elements.
+The standard trick is to record, for each input index $i$, both the position $k$ where it was placed in `tails`
+(its "pile number") and the index of the element it sits on top of in the previous pile
+(its "predecessor" in the LIS).
+After processing, the LIS length is the number of piles, and the actual sequence is reconstructed by starting from
+the last element placed in the rightmost pile and walking back through predecessors.
+This adds $O(n)$ auxiliary space but keeps the runtime at $O(n \log n)$.
+
+## Patience Sorting and Dilworth's Theorem: A Unified View
+
+The connection between patience sorting and LIS feels almost like a magic trick at first.
+A solitaire game produces, as a by-product, the answer to a non-trivial combinatorial problem.
+Underneath the magic, there is a clean theoretical foundation rooted in
+[Dilworth's theorem](https://en.wikipedia.org/wiki/Dilworth%27s_theorem),
+a classical result from order theory.
+
+Consider the input array $a$ as a [poset](https://en.wikipedia.org/wiki/Partially_ordered_set) where
+$a[i] \preceq a[j]$ when $i < j$ and $a[i] \leq a[j]$ (or strict inequality, depending on variant).
+A **chain** in this poset is a subsequence whose elements are increasing under $\preceq$.
+That is exactly an increasing subsequence.
+An **antichain** is a set of elements such that no two are comparable.
+For our LIS poset, an antichain is a subsequence of indices whose corresponding values are strictly decreasing
+(no two satisfy $\preceq$).
+
+Dilworth's theorem states that, in any finite poset, the maximum size of an antichain equals
+the minimum number of chains needed to cover the poset.
+The dual statement, sometimes called Mirsky's theorem, says: the maximum size of a chain equals
+the minimum number of antichains needed to cover the poset.
+
+In our LIS context, the dual is the relevant one. The maximum chain is the LIS.
+The minimum antichain cover is precisely what patience sorting computes: each pile is a strictly decreasing
+sequence (an antichain), and the piles together cover the entire input.
+Greedy placement onto the leftmost feasible pile produces a minimum cover by piles, hence a minimum
+number of antichains, which by the dual theorem equals the LIS length.
+
+That is why patience sorting works.
+It is not a clever trick chosen because someone happened to notice it.
+It is a constructive proof of the dual of Dilworth's theorem applied to the specific poset induced by an array.
+
+This perspective unifies the entire chapter.
+The $O(n^2)$ DP computes, for each index, the length of the longest chain ending there, building up the LIS step by step.
+The $O(n \log n)$ algorithm constructs the minimum antichain cover of the same poset.
+Both produce the LIS length because of the chain/antichain duality.
+The counting variant counts the chains of maximum length.
+The Russian Doll problem applies the same poset on a two-dimensional set, after a sort that linearizes one dimension
+without violating the partial order.
+
+Holding this unified view in mind transforms LIS from a collection of tricks into a single coherent structure.
+
+## Time and Space Complexity
+
+The classical $O(n^2)$ DP scans every pair $(j, i)$ with $j < i$ and performs a constant-time update at each pair.
+The total number of pairs is $\binom{n}{2}$, so the running time is $O(n^2)$.
+The space is $O(n)$ for the $dp$ array (and an additional $O(n)$ for the `count` array in the counting variant,
+or for the `parent` array in the reconstruction variant).
+This formulation is the right starting point and is sufficient for inputs up to roughly $10^4$.
+
+The patience sorting optimization reduces the time to $O(n \log n)$.
+Each of the $n$ elements triggers one binary search over the `tails` array, which has length at most $n$,
+costing $O(\log n)$.
+Total: $O(n \log n)$.
+Space is $O(n)$ for the `tails` array.
+This is the right choice for inputs in the $10^5$ to $10^7$ range.
+
+The Russian Doll Envelopes problem combines a sort (which costs $O(n \log n)$) with the LIS pass on heights
+(also $O(n \log n)$).
+The total time is $O(n \log n)$ and space is $O(n)$.
+
+The counting variant runs in $O(n^2)$ time and $O(n)$ space.
+There is no straightforward way to push the counting variant down to $O(n \log n)$ using only the patience sorting
+structure, since the count of LIS at a given length is not a quantity the tails array tracks.
+More sophisticated approaches using Fenwick trees indexed by value (with coordinate compression) can reach
+$O(n \log n)$ for counting, but they introduce significant implementation complexity.
+
+The bitonic and reconstruction variants inherit the $O(n^2)$ or $O(n \log n)$ complexity of the underlying LIS algorithm
+they augment.
+The reconstruction adds $O(n)$ extra space but no asymptotic time cost.
+
+It is worth noting where these complexities sit in the broader DP landscape.
+The basic $O(n^2)$ LIS is comparable to most one-dimensional sequence DPs.
+The $O(n \log n)$ optimization is rare among DP problems: most sequence DPs do not admit a sub-quadratic
+algorithm without exploiting problem-specific structure.
+LIS is special because the monotonic constraint between states (each new element must be strictly larger than the previous)
+admits the chain/antichain duality that patience sorting exploits.
+
+## Exercises
+
+<TopicExercises topic="longest-increasing-subsequence-dp" />

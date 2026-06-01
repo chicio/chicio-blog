@@ -1,0 +1,61 @@
+---
+title: "Russian Doll Envelopes"
+description: "Given a set of envelopes with width and height, find the maximum number of envelopes that can be nested inside each other."
+date: 2026-06-01
+image: /images/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [dynamic programming, longest increasing subsequence, patience sorting, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Dimensional reduction + O(n log n) LIS via patience sorting"
+  leetcodeUrl: "https://leetcode.com/problems/russian-doll-envelopes/"
+  difficulty: "Hard"
+---
+# Russian Doll Envelopes
+
+Leetcode Problem 354: [Russian Doll Envelopes](https://leetcode.com/problems/russian-doll-envelopes/)
+
+## Problem Summary
+You are given a 2D array **envelopes** where **envelopes[i] = [w_i, h_i]** represents the width and height of an envelope. One envelope fits into another if and only if both its width and height are **strictly smaller** than the other envelope's width and height. Return the maximum number of envelopes you can put one inside the other. The array contains between **1** and **10^5** envelopes, and each dimension is in the range **[1, 10^5]**.
+
+## Techniques
+- Array
+- Binary Search
+- Dynamic Programming
+- Sorting
+
+## Solution
+```ts
+function maxEnvelopes(envelopes: number[][]): number {
+    envelopes.sort((a, b) => {
+        if (a[0] === b[0]) {
+            return b[1] - a[1]
+        }
+
+        return a[0] - b[0]
+    })
+    const heights = envelopes.map(e => e[1])
+    const tails: number[] = []
+
+    for (const h of heights) {
+        let left = 0
+        let right = tails.length
+
+        while (left < right) {
+            const mid = Math.floor((left + right) / 2)
+            if (tails[mid] < h) {
+                left = mid + 1
+            } else {
+                right = mid
+            }
+        }
+
+        if (left === tails.length) {
+            tails.push(h)
+        } else {
+            tails[left] = h
+        }
+    }
+
+    return tails.length
+}
+```
