@@ -1,0 +1,56 @@
+---
+title: "Number of Longest Increasing Subsequence"
+description: "Given an integer array, return the number of longest strictly increasing subsequences."
+date: 2026-06-01
+image: /images/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [dynamic programming, longest increasing subsequence, counting dp, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "LIS counting variant: length + count arrays"
+  leetcodeUrl: "https://leetcode.com/problems/number-of-longest-increasing-subsequence/"
+  difficulty: "Medium"
+---
+# Number of Longest Increasing Subsequence
+
+Leetcode Problem 673: [Number of Longest Increasing Subsequence](https://leetcode.com/problems/number-of-longest-increasing-subsequence/description/)
+
+## Problem Summary
+Given an integer array **nums**, return the number of longest **strictly increasing subsequences**. The test cases are generated so that the answer fits in a 32-bit integer. The array length is between **1** and **2000**, and each value fits in a signed 32-bit integer.
+
+## Techniques
+- Array
+- Dynamic Programming
+- Binary Indexed Tree
+- Segment Tree
+
+## Solution
+```ts
+function findNumberOfLIS(nums: number[]): number {
+    const results = Array(nums.length).fill(1)
+    const resultsCount = Array(nums.length).fill(1)
+
+    for (let i = nums.length - 1; i >= 0; i--) {
+        for (let k = nums.length - 1; k > i; k--) {
+            if (nums[k] > nums[i]) {
+                if (1 + results[k] > results[i]) {
+                    results[i] = 1 + results[k]
+                    resultsCount[i] = resultsCount[k]
+                } else if (1 + results[k] === results[i]) {
+                    resultsCount[i] += resultsCount[k]
+                }
+            }
+        }
+    }
+
+    const maxLen = Math.max(...results)
+    let count = 0
+
+    for (let i = 0; i < results.length; i++) {
+        if (results[i] === maxLen) {
+            count += resultsCount[i]
+        }
+    }
+
+    return count
+};
+```
