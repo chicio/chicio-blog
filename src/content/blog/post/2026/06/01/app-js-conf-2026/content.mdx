@@ -1,6 +1,6 @@
 ---
 title: "App.js Conf 2026: my recap from Krakow"
-description: "My recap of App.js Conf 2026 in Krakow: the talks that stood out, the libraries that landed, the experiments coming next, and a personal note about a colleague's accessibility work that made it to the React Native stage."
+description: "My recap of App.js Conf 2026 in Krakow: the talks that stood out, the libraries that landed, the experiments coming next, and a personal full-circle moment hearing React Native accessibility APIs I contributed to discussed on stage."
 date: 2026-06-01
 image: /images/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026.jpg
 tags:
@@ -21,7 +21,7 @@ math: false
 import { Youtube } from "@/components/design-system/molecules/video/youtube";
 
 _My recap of App.js Conf 2026 in Krakow: the talks that stood out, the libraries that landed, the experiments coming
-next, and a personal note about a colleague's accessibility work that made it to the React Native stage._
+next, and a personal full-circle moment hearing React Native accessibility APIs I contributed to discussed on stage._
 
 ---
 
@@ -230,26 +230,34 @@ code for each platform, so why bother?" The counter is that the hard part has ne
 keeping the mental model consistent across platforms. AI doesn't fix that for you. React Native does, and it does
 it independently of the syntax you happen to be writing in.
 
-##### Britta Hahne: accessibility on the React Native stage
+##### Accessibility in Motion: Britta Evans-Fenton
 
-This was, for me personally, the most meaningful moment of the entire conference. My colleague at lastminute.com,
-**Britta Hahne**, has been doing serious, careful work on accessibility in React Native, and four of her pull
-requests have been merged into the core React Native repository:
+This was, for me personally, the most meaningful moment of the entire conference. **Britta Evans-Fenton**, an
+accessibility advocate working at [Shopify](https://www.shopify.com), gave a talk titled "Accessibility in Motion"
+about animation, motion, and how to design React Native experiences that don't leave users behind. Britta has
+been open about living with a genetic eye condition that will eventually lead to blindness, and that lived
+perspective is part of why her advocacy for accessibility lands so directly: she's not arguing from theory, she's
+arguing from the future she's heading toward.
 
-- [Accessibility flag support for Android in `setAccessibilityFocus`](https://github.com/facebook/react-native/pull/55920)
-- [Fix `isDarkerSystemColorsEnabled` unresolved promise on Android](https://github.com/facebook/react-native/pull/56019)
-- [Improvements to `AccessibilityInfo` on Android](https://github.com/facebook/react-native/pull/56066)
-- [Missing tests and consistency fixes for Promise-based `AccessibilityInfo` methods](https://github.com/facebook/react-native/pull/56150)
+What made the talk personally meaningful to me is that during her demos she walked through a handful of React
+Native accessibility APIs that I had personally contributed bug fixes to as an open source contributor. Sitting
+in the audience and seeing my own merged work referenced on the App.js Conf stage, in a talk about accessibility
+delivered by someone of Britta's stature, was a quiet full-circle moment I did not expect. For context, the four
+pull requests of mine that touch this area and that have been merged into the core React Native repository are:
 
-The reason I'm calling this out is not just because she's a colleague, it's because the conference explicitly
-called out accessibility contributions during the React Native sessions, and seeing her name attached to real,
-merged improvements in the platform was genuinely moving. Accessibility work is often invisible: nobody tweets
-about a fixed promise that no longer hangs indefinitely on Android, but somebody's screen reader experience just
-got measurably better because of it.
+- [Fix `AccessibilityInfo.prefersCrossFadeTransitions` unresolved promise](https://github.com/facebook/react-native/pull/55920)
+- [Fix `AccessibilityInfo.isDarkerSystemColorsEnabled` unresolved promise](https://github.com/facebook/react-native/pull/56019)
+- [Fix `AccessibilityInfo.isHighTextContrastEnabled` unresolved promise](https://github.com/facebook/react-native/pull/56066)
+- [`AccessibilityInfo`: added missing tests for Promise-based methods, align null checks and error message code style](https://github.com/facebook/react-native/pull/56150)
 
-If you work in this space and you ever doubt that the small, careful contributions matter, this is the answer:
-they do, and they end up on the App.js Conf stage. Grateful to Britta and to the team for making space for this
-kind of work.
+None of these are glamorous changes: they're the kind of small, careful fixes that nobody tweets about. Nobody
+celebrates a promise that no longer hangs indefinitely on Android, but somebody's screen reader experience is
+measurably better because of it. Hearing those APIs called out on stage, in a talk this thoughtful, is something
+I'll carry with me for a long time.
+
+Most of all, full credit goes to Britta: the talk was hers, the message was hers, and her work pushing
+accessibility forward in our community matters far more than my small slice of it. If you get the chance to watch
+the recording, do.
 
 ##### React Native + Swift Package Manager
 
@@ -394,8 +402,9 @@ A few takeaways I'm bringing home:
   "development versus production" lifecycle is the right way to think about it.
 - **AI is reshaping roles, not just code.** The AITriforce model and the "think once, not write once" framing are
   both useful tools for thinking about how teams should restructure around AI-assisted development.
-- **Accessibility is real work, and it gets recognized.** Seeing Britta's contributions called out was one of the
-  highlights of the conference for me.
+- **Accessibility is real work, and it gets recognized.** Britta Evans-Fenton's talk, and the chance to hear
+  React Native accessibility APIs I had contributed bug fixes to discussed on stage, was one of the highlights of
+  the conference for me.
 
 ![Software Mansion "Make no mistakes" keycaps](/images/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-make-no-mistakes-keycaps.jpg "Software Mansion 'Make no mistakes' keycaps")
 
