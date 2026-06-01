@@ -1,0 +1,40 @@
+---
+title: "Longest Increasing Subsequence"
+description: "Given an integer array, find the length of the longest strictly increasing subsequence."
+date: 2026-06-01
+image: /images/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [dynamic programming, longest increasing subsequence, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Classical LIS DP, O(n²) tabulation"
+  leetcodeUrl: "https://leetcode.com/problems/longest-increasing-subsequence/"
+  difficulty: "Medium"
+---
+# Longest Increasing Subsequence
+
+Leetcode Problem 300: [Longest Increasing Subsequence](https://leetcode.com/problems/longest-increasing-subsequence/description/)
+
+## Problem Summary
+Given an integer array **nums**, return the length of the longest **strictly increasing subsequence**. A subsequence is a sequence that can be derived from the array by deleting some or no elements without changing the order of the remaining elements. The array length is between **1** and **2500**, and each value is in the range **[-10^4, 10^4]**.
+
+## Techniques
+- Array
+- Dynamic Programming
+- Binary Search
+
+## Solution
+```ts
+function lengthOfLIS(nums: number[]): number {
+    const results = Array(nums.length).fill(1)
+
+    for (let i = nums.length - 1; i >= 0; i--) {
+        for (let k = nums.length - 1; k > i; k--) {
+            if (nums[k] > nums[i]) {
+                results[i] = Math.max(results[i], 1 + results[k])
+            }
+        }
+    }
+
+    return Math.max(...results)
+};
+```
