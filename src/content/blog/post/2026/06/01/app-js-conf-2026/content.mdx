@@ -1,6 +1,6 @@
 ---
 title: "App.js Conf 2026: my recap from Krakow"
-description: "My recap of App.js Conf 2026 in Krakow: the talks that stood out, the libraries that landed, the experiments coming next, and a personal full-circle moment hearing React Native accessibility APIs I contributed to discussed on stage."
+description: "My recap of App.js Conf 2026 in Krakow: talks, libraries, the 'elephant in the room' called AI"
 date: 2026-06-01
 image: /images/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026.jpg
 tags:
@@ -20,8 +20,7 @@ math: false
 
 import { Youtube } from "@/components/design-system/molecules/video/youtube";
 
-_My recap of App.js Conf 2026 in Krakow: the talks that stood out, the libraries that landed, the experiments coming
-next, and a personal full-circle moment hearing React Native accessibility APIs I contributed to discussed on stage._
+*My recap of App.js Conf 2026 in Krakow: talks, libraries, the 'elephant in the room' called AI*
 
 ---
 
@@ -32,345 +31,124 @@ for another React Native conference. This time the destination was Krakow, and t
 Native ecosystem is heading.
 
 In this post I want to share the talks that stood out to me the most, the libraries and tools that were announced or
-demoed on stage, and a few personal thoughts about the direction of the platform. If you want a quick high-level
-overview before diving in, my colleague Omar Mehilli wrote a great
-[LinkedIn recap](https://www.linkedin.com/feed/update/urn:li:activity:7466769383034454016/) that pairs nicely with
-this one.
+demoed on stage, and a few personal thoughts about the direction of the ecosystem and the cofnerence in general. 
 
-#### Some numbers
+## Some numbers
 
 Before getting into the talks, a bit of context about the event:
 
-**Location:** Hala Forum, Krakow  
+**Location:** 12 Świętego Wawrzyńca, 31-060 Kraków
 **Dates:** 27-28 May 2026  
 **Format:** Two days, single track  
-**Organizers:** Software Mansion + Expo
 
-The venue was a big industrial hall on the bank of the Vistula river, the kind of place that fits a conference of
+The venue was a big industrial hall, the kind of place that fits a conference of 
 this size while still feeling intimate enough to bump into the speakers between talks. Krakow itself was a great
-backdrop: the old town, the main square, and the river walk were all within reach during the breaks.
+backdrop: the old town, the main square, and the river walk were all within reach during after the conf (eg. I had 
+the chance to visit Wavel Castel and Rynek Główny).
 
 ![The main stage at App.js Conf 2026, kickoff slide](/images/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-opening.jpeg "The main stage at App.js Conf 2026, kickoff slide")
 
 Now let's dive into the talks.
 
-#### Day 1: Software Mansion releases, Expo SDK 56, and the new debugging story
+## Day 1: Keynotes and incredible talks
 
-The first day was, unsurprisingly, dominated by Software Mansion and Expo. Most of the morning was a long, dense
-keynote-style block where the Software Mansion team walked through the latest releases of pretty much their entire
-open source portfolio, and the afternoon belonged to Expo with the announcement of SDK 56. Let's go through the
-talks that stood out.
+The first day started, unsurprisingly, with two keynotes: one by Software Mansion and another one by Expo. 
+After them a series of talks from "famous devs" from the react native scene took place. I finally had a chance to see 
+William Candillon live.
 
-##### Expo Brownfield: dropping React Native into existing native apps
+### Software Mansion Keynote
 
-One of the first big announcements of the day was **Expo Brownfield**, a new tool to drop React Native into existing
-native apps with a single command. The pitch is straightforward: you install `expo-brownfield`, add a plugin to your
-`app.json`, run `npx expo brownfield`, and you get an AAR or XCFramework that you can drop into your existing native
-project. No more wrestling with the manual integration steps that have historically made brownfield adoption painful.
+The software mansion keynote was held by Krzysztof Magiera, director of engineering at Software Mansion.
+In his keynote, he made a small introduction about how AI is changing the way we write software, speeding up 
+coding writing and moving the focus to building, and testing. 
+He stated that the work done by Software Mansion during the last years in the RN ecosystems put the company in the perfect spot 
+to be the driver of this new way of working.
 
-![Expo Brownfield on stage at App.js Conf 2026](/images/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-expo-brownfield.jpeg "Expo Brownfield: drop React Native into existing native apps")
+He started show all the contributions made by the company in the open source space.  He also mentioned they have a 
+special partnership with Meta that allow them to be more proactive in their contributiuon to React Native itself. 
+This led them to 283 commits in the last year on the React Native repository, with a strong contribution to the animation layer where they 
+brought back into react native some idea originally developed in Reanimated, the famous library they maintain.
+They also made strong contributions to Hermes V1.
 
-This is the kind of thing that, in my experience, makes a real difference for teams that work in large native
-codebases and want to introduce React Native incrementally. The friction of integrating into a brownfield app has
-always been one of the main objections I hear from native developers, and having an official, supported path is
-going to remove a lot of that resistance.
+They also made 752 commits on Expo repo. they contributed in particular to:
 
-##### Reanimated: CSS animations, Worklets, and Core Animation
+- expo browfield
+- expo widget
+- expo modules core
 
-The Reanimated update was one of those segments where every other slide is a feature that on its own would deserve
-a dedicated talk. The headline items were CSS animations and transitions (landed back in July 2025), Worklets as a
-first-class concept, native Core Animation support on iOS (literally announced the day before the conference), and
-CSS pseudoselectors coming soon.
+They are also actively continue to work on their own famous libraries:
+
+- Reanimated, recently reached version 4.4, with support for css selector. They also extracted a few versions ago 
+the worklets packages, so that it can be used in other context
 
 ![Reanimated update on stage at App.js Conf 2026](/images/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-reanimated.jpeg "Reanimated: CSS animations, Worklets, Core Animation, and CSS pseudoselectors")
 
-The performance benchmark slide was honestly the part that stuck with me: side-by-side rendering grids showing JS
-and UI thread activity, with Reanimated keeping everything pinned at 120Hz while the JS counterpart struggled. It
-is one thing to read about runtime performance improvements in release notes, another to see the threads side by
-side on the big screen.
+- React Native screens, with support now for split views (iOS)
+- Detour, a deep link platform (can it replace appsflyer)
+- TypeGPU, presented in an ad-hoc talk that we will see later
+- enriched, a set of libraries for rich text rendering like markdown (should we try it at lastminute.com?)
+- RNRepo: set of prebuilds of famous libraries to speed up the build (should we try it at lastminute.com?)
 
-##### Gesture Handler 3.0
-
-Right after Reanimated came **Gesture Handler 3.0**. The big themes here were native touchables with the platform's
-own ripple effect and accessibility support tied to Core Animation, a new hook-based API that replaces the
-detector-and-handler pattern with per-gesture hooks (more compiler-friendly), and quality-of-life improvements
-around `SharedValue` support in gesture config, `Animated` support, and a non-blocking JS responder.
-
-![Gesture Handler 3.0 on stage at App.js Conf 2026](/images/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-gesture-handler.jpeg "Gesture Handler 3.0: hook API, native touchables, and quality-of-life improvements")
-
-They also mentioned that you can use an "agent skill" to migrate from v2 to v3, which is a small but telling detail:
-even Software Mansion is now shipping AI-assisted upgrade paths as part of their releases. We'll come back to this
-theme later.
-
-##### Bottom Sheet
-
-The new `@swmansion/bottom-sheet` was presented as a ground-up rewrite built on platform primitives for truly native
-performance. The selling points: bring-your-own surface with content-based sizing, inline and modal sheets through
-a single controlled API, and first-class integration with scrollable content, position tracking, and
-programmatic-only detents.
-
-![Software Mansion Bottom Sheet on stage at App.js Conf 2026](/images/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-bottom-sheet.jpeg "The new @swmansion/bottom-sheet, built on native primitives")
-
-If you have ever fought with bottom sheets in React Native, you know that "truly native performance" and
-"controlled API" are not throwaway claims. I'm curious to try this one out on a real project.
-
-##### Argent: the agentic toolkit for mobile
-
-Then came one of the most interesting announcements of the day: **Argent**, described as "an agentic toolkit to
-control, debug, and profile iOS and Android applications". The four pillars on the slide were simulator control and
-interactions, debugging, profiling and optimization, and an inspector.
+He also present a new AI tool called [Argent](https://github.com/software-mansion/argent). 
+It is a An agentic toolkit to control, debug, and profile iOS and Android apps. Using Argent, the llm can inspect the view hierarchy, access the debugger and profiler to debug bugs.
 
 ![Argent on stage at App.js Conf 2026](/images/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-argent.jpeg "Argent: an agentic toolkit to control, debug, and profile iOS and Android applications")
 
-The framing here matters. This is not "AI features bolted onto an existing tool", this is a toolkit designed from
-the start to be driven by an agent that can interact with simulators, read state, and run profiling sessions. It
-sits very naturally next to [Callstack's](https://www.callstack.com) own
-[Agent Device](https://github.com/callstackincubator/agent-device) effort, which is doing something similar from a
-slightly different angle.
+He also announced on stage version 3 of Gesture Handler. It is a new major version created to support the new architecture with a lot of improvement under the hood.
 
-I've been writing about AI tooling on this blog for a while now, from
-[building an MCP server for this blog](/blog/post/2026/05/01/mcp-server-nextjs) to
-[guardrails for LLM chatbots](/blog/post/2026/04/26/llm-chatbot-guardrails) and
-[Chrome's built-in AI Summarizer](/blog/post/2026/04/05/chrome-built-in-ai-summarizer), so seeing this kind of
-deep integration land in the mobile space is genuinely exciting.
+![Gesture Handler 3.0 on stage at App.js Conf 2026](/images/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-gesture-handler.jpeg "Gesture Handler 3.0: hook API, native touchables, and quality-of-life improvements")
 
-##### Expo SDK 56
+Last but not least, they presented a new bottom sheet library. It has been presented as a bottom sheet "that just works" :laughing:.
 
-The afternoon belonged to Expo, with the keynote unveiling **SDK 56**. The board was packed: Expo Router v7, a new
-dashboard, Expo Observe (more on this in a moment), Expo TV, Expo widgets, Expo MCP, `expo-skills`, and Hermes
-improvements.
+![Software Mansion Bottom Sheet on stage at App.js Conf 2026](/images/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-bottom-sheet.jpeg "The new @swmansion/bottom-sheet, built on native primitives")
 
-![Expo SDK 56 release board](/images/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-expo-sdk-56.jpeg "The Expo SDK 56 release board: Router v7, Observe, TV, widgets, MCP, expo-skills, and Hermes")
+### Expo Keynote
 
-The two items I want to single out are **Expo Observe** and **Expo MCP**. Expo Observe is the new observability
-product, which I'll cover in the Day 2 section because the deep dive happened then. Expo MCP fits perfectly into
-the broader story of mobile development becoming AI-aware: an MCP server that lets agents understand and act on
-your Expo project. Given that I just shipped an MCP server for this blog, I have a soft spot for this kind of
-integration.
+.....
 
-##### Evan Bacon: web first, native everywhere
+### Pixelicious
 
-Evan Bacon then took the stage with one of those talks that you wait for at App.js Conf. The slide that summed up
-the whole talk was a single rainbow "hello" on a white background: a deliberately understated way to open a
-high-density set of demos about the convergence of web and native through Expo.
+....
 
-![Evan Bacon on stage with hello slide](/images/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-evan-bacon-hello.jpeg "Evan Bacon opening his talk: web first, native everywhere")
+### How to Build the Fastest Apps: Break the Rules
 
-The line I scribbled down was something along the lines of "the same project, every platform, no walls between
-them". Evan kept hammering on the idea that we should stop thinking about web and native as separate worlds and
-start thinking in terms of a single project that happens to render across surfaces. Coming from someone who has
-been pushing the boundaries with Expo Router and DOM components, this didn't feel like a slogan.
+...
 
-There was also a passing mention of **Expo Desktop**, an experiment by [Jamie Birch](https://github.com/shirakaba)
-to bring Expo apps to the desktop. If you haven't seen it yet, the project lives at
-[expo-desktop](https://github.com/shirakaba/expo-desktop) on GitHub and it's worth a look.
+### Write TypeGPU, Use Anywhere: Composable WebGPU Shaders for React Native and Beyond
 
-#### Day 2: WebGPU, modern React Native, observability, and the AI story
 
-Day 2 shifted gears. Fewer "here's a release" slides, more "here's where we think the platform is going". Below
-are the talks that stood out.
+### Other talks
+ ....
 
-##### React Native: WebGPU, Skia, Redraw
+## Day 2
 
-The day opened with a talk on the next generation of graphics primitives in React Native: **WebGPU**, **Skia**, and
-the new **Redraw** rendering engine. The pitch is that we are finally getting a coherent, cross-platform graphics
-stack that can power everything from animations to 3D and shaders, without the historical patchwork of native
-modules.
+### Expo on Desktop
 
-![React Native WebGPU, Skia, and Redraw on stage](/images/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-webgpu-skia-redraw.jpeg "React Native WebGPU, Skia, and Redraw: the next generation of graphics primitives")
+....
 
-This connects directly to work I've done in the past with
-[React Native Skia for SVG backgrounds and text](/blog/post/2024/03/02/react-native-skia-svg-background-shape-text)
-and [text gradients with React Native Skia](/blog/post/2025/04/02/react-native-skia-text-gradient). Seeing Skia
-become a foundational layer rather than a "cool addon" is a big step. There was also a nod to
-[TypeGPU](https://docs.swmansion.com/TypeGPU/), Software Mansion's TypeScript-first WebGPU library, which is the
-kind of project that makes you want to drop everything and start writing shaders.
+### The Reverse Magic Trick
 
-##### Modern React Native: the new defaults
+...
 
-One of the most useful talks of Day 2 was a side-by-side comparison of "the old way" and "the new way" of building
-React Native apps. The slide that summed it up was a two-column list of APIs to leave behind on the left, and what
-to use instead on the right:
+### React Native without Cocoapods
 
-- `Animated` → **Reanimated**
-- `StyleSheet` → **NativeWind / Uniwind**
-- `FlatList` → **LegendList**
-- `AsyncStorage` → **MMKV / SQLite**
-- `SafeAreaView` → **react-native-safe-area-context**
-- `Image` → **expo-image**
-- `TouchableOpacity` → **Design System**
+...
 
-![Modern React Native defaults slide](/images/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-modern-react-native-defaults.jpeg "The new defaults of modern React Native: what to use, what to leave behind")
+### Accessibility in Motion
 
-This is honestly one of those slides I want to send to every team that is still on the fence about adopting these
-libraries. The ecosystem has matured to the point where these are not "alternatives", they're the default. The talk
-also explicitly reframed why you choose React Native today versus a few years ago:
+....
 
-- **Previously**: multiplatform, faster iteration, smaller teams, ship faster.
-- **Now**: complexity, coordination, consistency, ship faster.
+### Visual Editor for Reanimated
 
-![Why you choose React Native now](/images/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-why-react-native-now.jpeg "Why you choose React Native now: complexity, coordination, consistency, ship faster")
+....
 
-It's a subtle but important shift: the value proposition is no longer just speed of delivery, it's the ability to
-coordinate complexity across platforms with a single mental model.
+### Your E2E Tests Are Lying To You
 
-##### Shared complexity, not shared syntax: the AI angle
+...
 
-Connected to the previous talk was a fascinating set of slides about what AI actually changes for cross-platform
-development. The insight on stage was:
+### It's a great time to be a builder
 
-- **AI reduces typing cost, it does not reduce coordination cost.**
-- **"Write once" was always a side effect.**
-- **"Think once" was the actual benefit.**
-
-![Shared complexity, not shared syntax slide](/images/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-ai-think-once.jpeg "AI reduces typing cost, not coordination cost. The real value of cross-platform is think once.")
-
-This one hit me. The standard objection to cross-platform development used to be "but AI can just generate native
-code for each platform, so why bother?" The counter is that the hard part has never been typing the code, it's
-keeping the mental model consistent across platforms. AI doesn't fix that for you. React Native does, and it does
-it independently of the syntax you happen to be writing in.
-
-##### Accessibility in Motion: Britta Evans-Fenton
-
-This was, for me personally, the most meaningful moment of the entire conference. **Britta Evans-Fenton**, an
-accessibility advocate working at [Shopify](https://www.shopify.com), gave a talk titled "Accessibility in Motion"
-about animation, motion, and how to design React Native experiences that don't leave users behind. Britta has
-been open about living with a genetic eye condition that will eventually lead to blindness, and that lived
-perspective is part of why her advocacy for accessibility lands so directly: she's not arguing from theory, she's
-arguing from the future she's heading toward.
-
-What made the talk personally meaningful to me is that during her demos she walked through a handful of React
-Native accessibility APIs that I had personally contributed bug fixes to as an open source contributor. Sitting
-in the audience and seeing my own merged work referenced on the App.js Conf stage, in a talk about accessibility
-delivered by someone of Britta's stature, was a quiet full-circle moment I did not expect. For context, the four
-pull requests of mine that touch this area and that have been merged into the core React Native repository are:
-
-- [Fix `AccessibilityInfo.prefersCrossFadeTransitions` unresolved promise](https://github.com/facebook/react-native/pull/55920)
-- [Fix `AccessibilityInfo.isDarkerSystemColorsEnabled` unresolved promise](https://github.com/facebook/react-native/pull/56019)
-- [Fix `AccessibilityInfo.isHighTextContrastEnabled` unresolved promise](https://github.com/facebook/react-native/pull/56066)
-- [`AccessibilityInfo`: added missing tests for Promise-based methods, align null checks and error message code style](https://github.com/facebook/react-native/pull/56150)
-
-None of these are glamorous changes: they're the kind of small, careful fixes that nobody tweets about. Nobody
-celebrates a promise that no longer hangs indefinitely on Android, but somebody's screen reader experience is
-measurably better because of it. Hearing those APIs called out on stage, in a talk this thoughtful, is something
-I'll carry with me for a long time.
-
-Most of all, full credit goes to Britta: the talk was hers, the message was hers, and her work pushing
-accessibility forward in our community matters far more than my small slice of it. If you get the chance to watch
-the recording, do.
-
-##### React Native + Swift Package Manager
-
-A short but interesting talk: `npx react-native spm` is now a thing. The command scaffolds a Swift PM-aware Xcode
-project (yours to commit), generates React Native codegen and autolinking wrappers per native module via React
-Native XCFrameworks, and keeps everything in sync on every rebuild when dependencies change.
-
-![React Native Swift Package Manager on stage](/images/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-react-native-spm.jpeg "npx react-native spm: scaffold, generate, and auto-sync")
-
-For anyone who has dealt with the iOS dependency story in React Native, the move toward SPM is welcome. It aligns
-React Native with where Apple's tooling has been pushing for years.
-
-##### Invisible Errors: the real cost of AI-generated code
-
-One of the most thought-provoking talks of the conference was titled "Invisible Errors: The Challenges of AI
-Reliability and Judgment". The framing was:
-
-> We need a deterministic result from a non-deterministic system.
-
-The two failure modes called out on the slide were:
-
-- **Hallucinations**: AI can be confidently wrong, making errors look like valid facts.
-- **Skill gap**: AI might be better at coding than the people who wield it, causing errors they don't understand.
-
-![Invisible Errors talk on stage](/images/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-invisible-errors.jpeg "Invisible Errors: the challenges of AI reliability and judgment")
-
-This dovetails nicely with the [LLM chatbot guardrails](/blog/post/2026/04/26/llm-chatbot-guardrails) work I wrote
-about recently. The framing of "deterministic result from a non-deterministic system" is exactly the design problem
-we keep running into, and the second failure mode (the skill gap) is the one that gets less airtime but matters
-more in the long run.
-
-##### AITriforce: three classes for shipping AI-augmented features
-
-The next AI-themed talk had probably the best slide design of the entire conference: a pixel-art "AITriforce" with
-a chiptune aesthetic. The model proposed was that shipping AI-augmented features needs three "hero classes":
-
-- **PXA / Builder (Product Experience Architect)**: ships features, knows the business logic, moves the product
-  forward with AI. Pairs with AI to build features fast, runs escalations when blocked.
-- **IE / Protector (Integrity Engineer)**: writes the rules, signs the rounds. Owns security, auth, red stop
-  rules. Reviews PXA escalations.
-- **SE / Organizer (Systems Engineer)**: owns architecture, refactors at scale, deep performance, code quality,
-  outlines tech, can get out of a ditch.
-
-![AITriforce on stage](/images/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-aitriforce.jpeg "AITriforce v1.0: three hero classes for shipping AI-augmented features")
-
-![AITriforce three hero classes detail](/images/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-three-hero-classes.jpeg "PXA Builder, IE Protector, SE Organizer: pick one, or all three")
-
-The tagline on the slide was "one triforce, zero yolo-commits". As a framing for how teams are restructuring
-around AI-assisted development, this was one of the cleanest mental models I've seen. It's not "everyone uses AI",
-it's "different roles have different relationships with AI, and you need all three to ship safely".
-
-##### Observability: Expo Observe and the production story
-
-Another talk worth highlighting was on observability. The slide that anchored the talk was the lifecycle of a
-React Native app, split into a "development" half (development setup, build signing, dedicated CI/CD, debugging)
-and a "production" half, with a single highlighted box: **observability**.
-
-![Observability lifecycle slide](/images/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-observability.jpeg "Development versus production lifecycle, with observability as the production cornerstone")
-
-The talk then introduced **Expo Observe**, the new observability product included in SDK 56.
-
-![Introducing Expo Observe](/images/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-observe.jpeg "Introducing Expo Observe: observability built into the Expo platform")
-
-Native crash reporting, JS error reporting, performance tracking, all built natively into the Expo platform. The
-big argument was that observability for React Native has historically been a patchwork of third-party SDKs, each
-with its own performance impact and integration cost. Having a first-party offering integrated with the rest of
-the Expo platform is going to change the calculus for a lot of teams.
-
-##### Keyframer.dev and animatereactnative.com
-
-A really fun talk introduced **[Keyframer.dev](https://keyframer.dev/)**, a visual tool to design animations and
-export them as React Native code. Pair it with **[animatereactnative.com](https://www.animatereactnative.com)**, a
-gallery of production-ready animations you can drop into your app, and you have a pretty compelling end-to-end
-animation workflow that doesn't require you to handcraft every transition.
-
-![Keyframer.dev on stage](/images/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-keyframer.jpeg "Keyframer.dev: design animations visually and export them as React Native code")
-
-##### Tester Army and Autosana: AI testing for mobile
-
-Two AI-driven testing projects also made appearances: **[Tester Army](https://tester.army/)** and
-**[Autosana](https://autosana.ai/)**. Both are tackling the same broad problem (AI-driven E2E and exploratory
-testing for mobile apps) from different angles. Worth keeping an eye on both: the testing space is one of the
-areas where I expect the next 12 months to bring real, practical change for mobile teams.
-
-##### Reverse Magic Trick
-
-One of the more unusual moments of Day 2 was the "Reverse Magic Trick" announcement: a partnership/initiative
-teased in a [tweet from App.js Conf](https://x.com/appjsconf/status/2060279607908000012). I'll let the tweet speak
-for itself rather than try to summarize a teaser, but if you were in the room for it, you know what I mean.
-
-##### RN Repo and a quick mention of `tsgo`
-
-Software Mansion also announced **[RN Repo](https://github.com/software-mansion/rnrepo)**, a centralized hub for
-React Native libraries, examples, and integrations. The idea is to have a single, curated entry point for the
-ecosystem.
-
-There was also a brief mention I caught about `tsgo` (the TypeScript-in-Go port that has been making the rounds
-recently) and some related benchmarking. I didn't catch the full context on stage, so I'm noting it here as a
-pointer rather than a recap: if you've been following the TypeScript performance work, you probably know what was
-being referenced.
-
-##### Tyler Becks: end-to-end testing reimagined
-
-Closing the E2E thread for Day 2 was a talk from **Tyler Becks** on rethinking E2E testing for mobile. The pitch
-was the same shape as the rest of the AI-driven testing talks: less brittle selector-based scripting, more
-agent-driven exploration that understands your app's state. It paired well with the Tester Army and Autosana
-announcements: this is a space that is moving fast, and it's worth tracking.
-
-##### Seth Webster: "It's a great time to be a builder"
-
-_To be filled in by the author._
-
-{/* TODO: Fabrizio to fill in content for Seth Webster's "It's a great time to be a builder" talk */}
+...
 
 #### Watch the recordings
 
@@ -389,39 +167,6 @@ weeks.
 
 #### Conclusion
 
-App.js Conf 2026 left me with the impression that the React Native ecosystem has crossed a threshold. The "is
-this production-ready?" question has been settled for a while, but what I saw in Krakow was something different:
-a maturity where the conversation is about coordination, observability, accessibility, and how AI fits into the
-day-to-day work of building apps, rather than about defending the platform's existence.
+.....
 
-A few takeaways I'm bringing home:
 
-- **The new defaults matter.** The "modern React Native" table is going to be my reference for any new project. If
-  you're still on `Animated`, `StyleSheet`, `FlatList`, and friends, it's time to revisit those choices.
-- **Observability is a first-class concern.** Expo Observe lands at the right time, and the framing of
-  "development versus production" lifecycle is the right way to think about it.
-- **AI is reshaping roles, not just code.** The AITriforce model and the "think once, not write once" framing are
-  both useful tools for thinking about how teams should restructure around AI-assisted development.
-- **Accessibility is real work, and it gets recognized.** Britta Evans-Fenton's talk, and the chance to hear
-  React Native accessibility APIs I had contributed bug fixes to discussed on stage, was one of the highlights of
-  the conference for me.
-
-![Software Mansion "Make no mistakes" keycaps](/images/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-make-no-mistakes-keycaps.jpg "Software Mansion 'Make no mistakes' keycaps")
-
-As always, I brought home some cool gadgets from the conference, and the Software Mansion "Make no mistakes"
-keycaps are by far the coolest of the bunch. Until the next conference.
-
-#### References
-
-- [App.js Conf](https://appjs.co)
-- [Software Mansion blog](https://blog.swmansion.com)
-- [Expo](https://expo.dev)
-- [RN Repo](https://github.com/software-mansion/rnrepo)
-- [TypeGPU](https://docs.swmansion.com/TypeGPU/)
-- [Agent Device by Callstack](https://github.com/callstackincubator/agent-device)
-- [Expo Desktop](https://github.com/shirakaba/expo-desktop)
-- [Keyframer.dev](https://keyframer.dev/)
-- [animatereactnative.com](https://www.animatereactnative.com)
-- [Tester Army](https://tester.army/)
-- [Autosana](https://autosana.ai/)
-- [Omar Mehilli's LinkedIn recap](https://www.linkedin.com/feed/update/urn:li:activity:7466769383034454016/)
