@@ -58,7 +58,7 @@ William Candillon live.
 
 ### Software Mansion Keynote
 
-The software mansion keynote was held by Krzysztof Magiera, director of engineering at Software Mansion.
+The software mansion keynote was held by [Krzysztof Magiera](https://x.com/kzzzf), director of engineering at Software Mansion.
 In his keynote, he made a small introduction about how AI is changing the way we write software, speeding up 
 coding writing and moving the focus to building, and testing. 
 He stated that the work done by Software Mansion during the last years in the RN ecosystems put the company in the perfect spot 
@@ -75,6 +75,8 @@ They also made 752 commits on Expo repo. they contributed in particular to:
 - expo browfield
 - expo widget
 - expo modules core
+
+![Expo brownfield](/images/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-expo-brownfield "Expo brownfield")
 
 They are also actively continue to work on their own famous libraries:
 
@@ -104,21 +106,96 @@ Last but not least, they presented a new bottom sheet library. It has been prese
 
 ### Expo Keynote
 
-.....
+Next there was the Expo Keynote, held by [Charlie Cheever](https://en.wikipedia.org/wiki/Charlie_Cheever), CEO of Expo. 
+He started by showing how react, react native and expo are blowing up in downloads charts. He also shown how RN apps are the one generating more revenues. 
+
+"React native and Expo are winning the AI era", this was a statement he made. This is a consequence of the of the fact that React Native and Expo have a big community, with thousand of open source 
+libraries and apps the LLMs has been trained on. Also the documentation expo has, combined with the support for all the major platforms (iOS, Android and Web).
+
+He mentioned agan argent and agent device as the missing piece to close the feedback loop with AI. Expo should focus on web support, that is more important than ever. 
+He then started shown how Expo is for real universal, starting to support different platforms like Expo TV, that adds the support for Apple TV and Android TV. 
+Additionally he shown Expo UI, a library that contains a set of native components for iOS and android built with SwiftUI and Jetpack Compose, and expo-widget and expo-router
+
+Then he shown some tools created by Expo like Observe, that we will see in detail in a talk I attended on day 2.
+Most of the stuff presented above that is not a standalone product or library, is already available in Expo SDK 56.
+
+![Expo SDK 56 at App.js Conf 2026](/images/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-expo-sdk-56.jpeg "Expo SDK 56")
 
 ### Pixelicious
 
-....
+Next, I finally had a chance to see William Candillon on stage for real. For me, he is like a legend. He is the developer I would like to be.
+
+![William Candillon at App.js Conf 2026](/images/content/blog/post/2026/06/01/app-js-conf-2026-william-candillon-hello.jpeg "William Candillon at App.js Conf 2026")
+
+He started by showing how the react native skia ecosystem is growing fast and how some of the most famous open source contributors and dev content creators 
+are already experimnenting with react native webgpu, introduced last here at appjs conf.
+He also shown Redraw, a new library for 2D rendering that he has recently presented.
+
+He then started to show what he is working on for react native webgpu: aligning the api so that the code can be "copy-pasted" from the web to the native side. 
+For example there was until now some difference in how you start the rendering loop in react native webgpu compared to what you had to do in the web, with an additional 
+`context.present()` call to notify the native UI thread of the start of the loop. Now they are aligned.
+
+![React native skia, webgp and redraw](/images/content/blog/post/2026/06/01/app-js-conf-2026-william-candillon-webgpu-skia-redraw.jpeg "React native skia, webgp and redraw")
+
+He than show a new feature of react native worklets called [bundle mode](https://docs.swmansion.com/react-native-worklets/docs/bundleMode/) allowing devs to execute 
+arbitrary code from your bundle on any thread. This unlock a lot of possibility, like having multiple render executing at the same time (2D and 3D). 
+
+He also shown the work do with [Marc Rousavy](https://github.com/mrousavy), CEO of Margelo and author of [react-native-vision-camera](https://github.com/mrousavy/react-native-vision-camera), to have 
+video and camera streaming plug and play into react native webgpu.
+
+He then switched to react native skia, where he is developing a new backend called Skia Graphite, backed by Dawn Webgpu, the same implementation of webgpu that powers react native webgpu. 
+This means that you can have view that draw using both react native webgpu and react native skia, because their runtime engine is the same. The plan for Skia Graphite is to have it 
+used by everyone by Q4 of 2026.
+
+He finally introduced redraw, a new library that can work with skia and webgpu, that uses typegpu under the hood to enhance the drawing capabilities by passing geometry and 
+fragment shaders as function to the library components.
+
+He closed the talk revealing that his two recent projects started from his tradition to create April's fool videos: 
+
+- April's fool 2024 -> react native gpu
+- April's fool 2025 -> redraw
+
+He show this to leave with a quote that I quite like: "unproductive times never fail to end up being the most productive one". 
 
 ### How to Build the Fastest Apps: Break the Rules
 
-...
+Next in line was [Jay Meistrich](https://github.com/jmeistrich), with a presentation of his two most famous libraries: [Legend List](https://github.com/LegendApp/legend-list) 
+and [Legend State](https://github.com/LegendApp/legend-state). This was quite an interesting talk, because the libraries presented could have bring a lot of benefits into 
+a lot of apps.
+
+LegendList is a list library, probably the fastest on the market. He announced version 3 release during the talk.
+Then he started the real talk: making app really fast. So fast that they can beat native apps. He did a lot of consultancy work in the last here 
+and he so the same problem in multiple code bases: unnecessary rendering.
+The problem is that rendering is used also to coordinates effects and sharing information. React state is oversubscribed, and it is the orchestrator of everything. 
+The solution that Jay propose is to rethink how we think about state, separating the ownership from the subscription to changes. 
+He made some comparison with React, that call this concept signals, or Reanimated with shared value. 
+
+This is why he created LegendState: the solution is to have observable, and the components can read the value of them when needed. This is the same approach used in 
+other frameworks like Svelte and Preact.
+He also made some considerations about legend state and how to convince yout team to use an alternative state library, showing how for most of the basic components 
+of react native we are already using solution from the community and not the standard components.
+
+![React native skia, webgp and redraw](/images/content/blog/post/2026/06/01/app-js-conf-2026-jay-meistrich-legendstate-builtin-components.jpeg "React native skia, webgp and redraw")
+
+He then closed the talk reiterating how much important state architecture is, probably the most important architectural pattern for a react/react native app.
 
 ### Write TypeGPU, Use Anywhere: Composable WebGPU Shaders for React Native and Beyond
 
+The afternoon started with another great talk by [Iwo Plaza](https://github.com/iwoplaza), software engineer at Software Mansion.
+He presented a enw library they developed called [TypeGPU](https://docs.swmansion.com/TypeGPU/). 
+He show how this library makes the developer life easy by writing shaders programs using TypeScript. He started from a demo of
+react native webgpu to show how easy it is to yo write shader as callback using the directive `use gpu`. 
+
+Why a new shader system? The standardize how to write shaders fro different engines, without sacrifing the type safety from TypeScript. 
+By choosing TypeScript they were also able to use a unified set of building tools with respect to the ecosystem.
 
 ### Other talks
- ....
+
+During the day there were other interesting talk, that I will not go into details in this article but you can check in the full live stream you can find here at the bottom.
+In particular I recommend:
+
+- "Is AI making React Native obsolete?"" by Perttu Lähteenlahti
+- "Screens & Routers — The Foundation of Navigation in React Native Apps" by Kacper Kafara & Kuba Tkacz
 
 ## Day 2
 
@@ -145,6 +222,7 @@ Last but not least, they presented a new bottom sheet library. It has been prese
 ### Your E2E Tests Are Lying To You
 
 ...
+
 
 ### It's a great time to be a builder
 
