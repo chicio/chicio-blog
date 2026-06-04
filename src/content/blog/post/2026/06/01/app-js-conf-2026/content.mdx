@@ -76,7 +76,7 @@ They also made 752 commits on Expo repo. they contributed in particular to:
 - expo widget
 - expo modules core
 
-![Expo brownfield](/images/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-expo-brownfield "Expo brownfield")
+![Expo brownfield](/images/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-expo-brownfield.jpeg "Expo brownfield")
 
 They are also actively continue to work on their own famous libraries:
 
@@ -125,7 +125,7 @@ Most of the stuff presented above that is not a standalone product or library, i
 
 Next, I finally had a chance to see William Candillon on stage for real. For me, he is like a legend. He is the developer I would like to be.
 
-![William Candillon at App.js Conf 2026](/images/content/blog/post/2026/06/01/app-js-conf-2026-william-candillon-hello.jpeg "William Candillon at App.js Conf 2026")
+![William Candillon at App.js Conf 2026](/images/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-william-candillon-hello.jpeg "William Candillon at App.js Conf 2026")
 
 He started by showing how the react native skia ecosystem is growing fast and how some of the most famous open source contributors and dev content creators 
 are already experimnenting with react native webgpu, introduced last here at appjs conf.
@@ -135,7 +135,7 @@ He then started to show what he is working on for react native webgpu: aligning 
 For example there was until now some difference in how you start the rendering loop in react native webgpu compared to what you had to do in the web, with an additional 
 `context.present()` call to notify the native UI thread of the start of the loop. Now they are aligned.
 
-![React native skia, webgp and redraw](/images/content/blog/post/2026/06/01/app-js-conf-2026-william-candillon-webgpu-skia-redraw.jpeg "React native skia, webgp and redraw")
+![React native skia, webgp and redraw](/images/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-william-candillon-webgpu-skia-redraw.jpeg "React native skia, webgp and redraw")
 
 He than show a new feature of react native worklets called [bundle mode](https://docs.swmansion.com/react-native-worklets/docs/bundleMode/) allowing devs to execute 
 arbitrary code from your bundle on any thread. This unlock a lot of possibility, like having multiple render executing at the same time (2D and 3D). 
@@ -175,7 +175,7 @@ other frameworks like Svelte and Preact.
 He also made some considerations about legend state and how to convince yout team to use an alternative state library, showing how for most of the basic components 
 of react native we are already using solution from the community and not the standard components.
 
-![React native skia, webgp and redraw](/images/content/blog/post/2026/06/01/app-js-conf-2026-jay-meistrich-legendstate-builtin-components.jpeg "React native skia, webgp and redraw")
+![Why should I change my state library?](/images/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-jay-meistrich-legendstate-builtin-components.jpeg "Why should I change my state library?")
 
 He then closed the talk reiterating how much important state architecture is, probably the most important architectural pattern for a react/react native app.
 
@@ -188,6 +188,14 @@ react native webgpu to show how easy it is to yo write shader as callback using 
 
 Why a new shader system? The standardize how to write shaders fro different engines, without sacrifing the type safety from TypeScript. 
 By choosing TypeScript they were also able to use a unified set of building tools with respect to the ecosystem.
+
+They also had to create [tsover](https://github.com/software-mansion/tsover): a "fork" of TypeScript that add operator overload to the language. 
+This enhance the shading writing experience a lot (eg. simplify array operation a lot).
+
+He also mentioned that TypeGPU is not only about computer graphics: it is also ready to do massive computation on the GPU.
+Obviously, typeGPU has already its own official react integration, [@typeGPU/react](https://docs.swmansion.com/TypeGPU/ecosystem/typegpu-react/).
+
+He concluded the talk with the slogan "Math is cool!" :heart::laughing:
 
 ### Other talks
 
