@@ -19,7 +19,7 @@ export const ArtGallery: FC = () => {
     <>
       <div className="container-fluid mx-0 my-8 grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] items-stretch justify-center gap-x-5 gap-y-5 p-0">
         {artDescriptions.map((art, i) => {
-          const imageUrl = `/images/content/art/${art.name}`;
+          const imageUrl = `/media/content/art/${art.name}`;
           return (
             <MotionDiv
               key={art.name}

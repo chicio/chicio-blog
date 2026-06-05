@@ -31,7 +31,7 @@ const nextConfig: NextConfig = {
     minimumCacheTTL: 86400,
   },
   outputFileTracingExcludes: {
-    "/**": ["public/images/**", "src/content/**/images/**"],
+    "/**": ["public/media/**", "src/content/**/media/**"],
   },
   async headers() {
     return [
@@ -60,6 +60,11 @@ const nextConfig: NextConfig = {
       {
         source: "/:year(\\d{4})/:month(\\d{2})/:day(\\d{2})/:slug",
         destination: "/blog/post/:year/:month/:day/:slug",
+        permanent: true,
+      },
+      {
+        source: "/images/content/:path*",
+        destination: "/media/content/:path*",
         permanent: true,
       },
     ];

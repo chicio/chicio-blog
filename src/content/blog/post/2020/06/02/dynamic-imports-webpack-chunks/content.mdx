@@ -2,7 +2,7 @@
 title: "Lazy loading of JavaScript modules by using dynamic imports and code splitting with Webpack"
 description: "Most of the time you have a big JavaScript codebase for your website but you need only a small fraction of it when a page is requested. Is it possible to load chunks of JavaScript code only when they are really needed? Yes you can with Webpack and its code splitting feature based on a syntax equal to the one of ES2020 dynamic imports."
 date: 2020-06-02
-image: /images/content/blog/post/2020/06/02/dynamic-imports-webpack-chunks/webpack-code-split.jpg
+image: /media/content/blog/post/2020/06/02/dynamic-imports-webpack-chunks/webpack-code-split.jpg
 tags: [web development, javascript, typescript]
 authors: [fabrizio_duroni]
 ---
@@ -105,12 +105,12 @@ two chunk. One is our module (the one with the name `scene-threejs`). The second
 keyword contains all the third party dependencies. Yes, you understood right: Webpack extract automatically the third
 party dependencies from you chunk module in separated files.
 
-![Network inspector for the desktop version of the home of my website](/images/content/blog/post/2020/06/02/dynamic-imports-webpack-chunks/webpack-chunk-desktop.jpg)
+![Network inspector for the desktop version of the home of my website](/media/content/blog/post/2020/06/02/dynamic-imports-webpack-chunks/webpack-chunk-desktop.jpg)
 
 If I access the same page from a mobile device the 3D scene is not loaded and consequently the chunk is not loaded. :
 tada:
 
-![Network inspector for the mobile version of the home of my website](/images/content/blog/post/2020/06/02/dynamic-imports-webpack-chunks/webpack-chunk-mobile.jpg)
+![Network inspector for the mobile version of the home of my website](/media/content/blog/post/2020/06/02/dynamic-imports-webpack-chunks/webpack-chunk-mobile.jpg)
 
 #### Conclusion
 

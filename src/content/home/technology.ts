@@ -1,20 +1,20 @@
 import { StaticImageData } from "next/image";
-import reactImage from "../about-me/images/technologies/react.png";
-import expoImage from "../about-me/images/technologies/expo.png";
-import appleImage from "../about-me/images/technologies/apple.png";
-import androidImage from "../about-me/images/technologies/android.png";
-import nextImage from "../about-me/images/technologies/next.png";
-import gatsbyImage from "../about-me/images/technologies/gatsby.png";
-import springBootImage from "../about-me/images/technologies/spring-boot.png";
-import kubernetesImage from "../about-me/images/technologies/kubernetes.png";
-import dockerImage from "../about-me/images/technologies/docker.png";
-import grafanaImage from "../about-me/images/technologies/grafana.png";
-import swiftImage from "../about-me/images/technologies/swift.png";
-import typescriptImage from "../about-me/images/technologies/typescript.png";
-import javascriptImage from "../about-me/images/technologies/javascript.png";
-import kotlinImage from "../about-me/images/technologies/kotlin.png";
-import javaImage from "../about-me/images/technologies/java.png";
-import objectiveC from "../about-me/images/technologies/objective-c.png";
+import reactImage from "../about-me/media/technologies/react.png";
+import expoImage from "../about-me/media/technologies/expo.png";
+import appleImage from "../about-me/media/technologies/apple.png";
+import androidImage from "../about-me/media/technologies/android.png";
+import nextImage from "../about-me/media/technologies/next.png";
+import gatsbyImage from "../about-me/media/technologies/gatsby.png";
+import springBootImage from "../about-me/media/technologies/spring-boot.png";
+import kubernetesImage from "../about-me/media/technologies/kubernetes.png";
+import dockerImage from "../about-me/media/technologies/docker.png";
+import grafanaImage from "../about-me/media/technologies/grafana.png";
+import swiftImage from "../about-me/media/technologies/swift.png";
+import typescriptImage from "../about-me/media/technologies/typescript.png";
+import javascriptImage from "../about-me/media/technologies/javascript.png";
+import kotlinImage from "../about-me/media/technologies/kotlin.png";
+import javaImage from "../about-me/media/technologies/java.png";
+import objectiveC from "../about-me/media/technologies/objective-c.png";
 
 export const categories = {
   mobile: 'Mobile Development',
