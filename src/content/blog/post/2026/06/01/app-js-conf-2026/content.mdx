@@ -2,7 +2,7 @@
 title: "App.js Conf 2026: my recap from Krakow"
 description: "My recap of App.js Conf 2026 in Krakow: talks, libraries, the 'elephant in the room' called AI"
 date: 2026-06-01
-image: /images/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026.jpg
+image: /media/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026.jpg
 tags:
   [
     react native,
@@ -48,7 +48,7 @@ the chance to visit Wavel Castel and Rynek Główny).
 
 Now let's dive into the talks.
 
-![The main stage at App.js Conf 2026, kickoff slide](/images/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-opening.jpeg "The main stage at App.js Conf 2026, kickoff slide")
+![The main stage at App.js Conf 2026, kickoff slide](/media/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-opening.jpeg "The main stage at App.js Conf 2026, kickoff slide")
 
 ## Day 1: Keynotes and incredible talks
 
@@ -76,14 +76,14 @@ They also made 752 commits on Expo repo. they contributed in particular to:
 - expo widget
 - expo modules core
 
-![Expo brownfield](/images/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-expo-brownfield.jpeg "Expo brownfield")
+![Expo brownfield](/media/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-expo-brownfield.jpeg "Expo brownfield")
 
 They are also actively continue to work on their own famous libraries:
 
 - Reanimated, recently reached version 4.4, with support for css selector. They also extracted a few versions ago 
 the worklets packages, so that it can be used in other context
 
-![Reanimated update on stage at App.js Conf 2026](/images/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-reanimated.jpeg "Reanimated: CSS animations, Worklets, Core Animation, and CSS pseudoselectors")
+![Reanimated update on stage at App.js Conf 2026](/media/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-reanimated.jpeg "Reanimated: CSS animations, Worklets, Core Animation, and CSS pseudoselectors")
 
 - React Native screens, with support now for split views (iOS)
 - Detour, a deep link platform (can it replace appsflyer)
@@ -94,15 +94,15 @@ the worklets packages, so that it can be used in other context
 He also present a new AI tool called [Argent](https://github.com/software-mansion/argent). 
 It is a An agentic toolkit to control, debug, and profile iOS and Android apps. Using Argent, the llm can inspect the view hierarchy, access the debugger and profiler to debug bugs.
 
-![Argent on stage at App.js Conf 2026](/images/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-argent.jpeg "Argent: an agentic toolkit to control, debug, and profile iOS and Android applications")
+![Argent on stage at App.js Conf 2026](/media/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-argent.jpeg "Argent: an agentic toolkit to control, debug, and profile iOS and Android applications")
 
 He also announced on stage version 3 of Gesture Handler. It is a new major version created to support the new architecture with a lot of improvement under the hood.
 
-![Gesture Handler 3.0 on stage at App.js Conf 2026](/images/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-gesture-handler.jpeg "Gesture Handler 3.0: hook API, native touchables, and quality-of-life improvements")
+![Gesture Handler 3.0 on stage at App.js Conf 2026](/media/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-gesture-handler.jpeg "Gesture Handler 3.0: hook API, native touchables, and quality-of-life improvements")
 
 Last but not least, they presented a new bottom sheet library. It has been presented as a bottom sheet "that just works" :laughing:.
 
-![Software Mansion Bottom Sheet on stage at App.js Conf 2026](/images/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-bottom-sheet.jpeg "The new @swmansion/bottom-sheet, built on native primitives")
+![Software Mansion Bottom Sheet on stage at App.js Conf 2026](/media/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-bottom-sheet.jpeg "The new @swmansion/bottom-sheet, built on native primitives")
 
 ### Expo Keynote
 
@@ -119,13 +119,13 @@ Additionally he shown Expo UI, a library that contains a set of native component
 Then he shown some tools created by Expo like Observe, that we will see in detail in a talk I attended on day 2.
 Most of the stuff presented above that is not a standalone product or library, is already available in Expo SDK 56.
 
-![Expo SDK 56 at App.js Conf 2026](/images/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-expo-sdk-56.jpeg "Expo SDK 56")
+![Expo SDK 56 at App.js Conf 2026](/media/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-expo-sdk-56.jpeg "Expo SDK 56")
 
 ### Pixelicious
 
 Next, I finally had a chance to see William Candillon on stage for real. For me, he is like a legend. He is the developer I would like to be.
 
-![William Candillon at App.js Conf 2026](/images/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-william-candillon-hello.jpeg "William Candillon at App.js Conf 2026")
+![William Candillon at App.js Conf 2026](/media/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-william-candillon-hello.jpeg "William Candillon at App.js Conf 2026")
 
 He started by showing how the react native skia ecosystem is growing fast and how some of the most famous open source contributors and dev content creators 
 are already experimnenting with react native webgpu, introduced last here at appjs conf.
@@ -135,7 +135,7 @@ He then started to show what he is working on for react native webgpu: aligning 
 For example there was until now some difference in how you start the rendering loop in react native webgpu compared to what you had to do in the web, with an additional 
 `context.present()` call to notify the native UI thread of the start of the loop. Now they are aligned.
 
-![React native skia, webgp and redraw](/images/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-william-candillon-webgpu-skia-redraw.jpeg "React native skia, webgp and redraw")
+![React native skia, webgp and redraw](/media/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-william-candillon-webgpu-skia-redraw.jpeg "React native skia, webgp and redraw")
 
 He than show a new feature of react native worklets called [bundle mode](https://docs.swmansion.com/react-native-worklets/docs/bundleMode/) allowing devs to execute 
 arbitrary code from your bundle on any thread. This unlock a lot of possibility, like having multiple render executing at the same time (2D and 3D). 
@@ -175,7 +175,7 @@ other frameworks like Svelte and Preact.
 He also made some considerations about legend state and how to convince yout team to use an alternative state library, showing how for most of the basic components 
 of react native we are already using solution from the community and not the standard components.
 
-![Why should I change my state library?](/images/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-jay-meistrich-legendstate-builtin-components.jpeg "Why should I change my state library?")
+![Why should I change my state library?](/media/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-jay-meistrich-legendstate-builtin-components.jpeg "Why should I change my state library?")
 
 He then closed the talk reiterating how much important state architecture is, probably the most important architectural pattern for a react/react native app.
 
@@ -233,6 +233,19 @@ How does it work:
  - the cli checks the current common version between react native macos and react native windows
 
 He closed the talk by showing the official repo, and expressing the hope the project gets upstream in terms of usage and in terms of contributors. 
+
+### The Reverse Magic Trick
+
+Then a talk a little bit different from [Gant Laborde](https://www.linkedin.com/in/gant-laborde/), one of the founders of [Infinite Red](https://infinite.red).
+He made this presentation of a "magic trick", where he had to guess a card taken from a deck from a volunteer. He then let the audience choice which was the card selected, and they matched. 
+
+He made this magic with the collaboration of two dev from Infinite red. It was not full AI automation. It was collaboration between devs, leveraging AI 
+to speed up the generation of a fake image with the card chosen by the audience. 
+
+The general message was: AI without guidance is nothing. Human in the loop is still important. He also shown a way of working with AI development called AI triforce, 
+where the role of engineer shift in a sort of collaboration to overview a specific part of the software development lifecycle.
+
+![AI Triforce](/media/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-ai-triforce.jpeg "AI Triforce")
 
 ### React Native without Cocoapods
 
@@ -294,11 +307,36 @@ He condluded the talk with a question "Did the universal expo bet pay off?". The
 ### Accessibility in Motion
 
 Then it was the time for [Britta Evans-Fenton](https://x.com/13ritta), senior developer at from Shopify. 
+She made a talk about accessibility in apps.
+
+She started asking to the audience how many accessibility features used in the last week? Some of them seems granted/not accessibility related, but they 
+have been created for this purpose. She then introduced the concept of [curb cut](https://en.wikipedia.org/wiki/Curb_cut_effect) effect, a the phenomenon of 
+disability-friendly features being used and appreciated by a larger group than the people they were designed for. She also introduced the concept of [universal design](https://en.wikipedia.org/wiki/Universal_design), 
+that is the design of buildings, products, or environments to make them accessible to all people, regardless of age, disability, or other factors. The general point 
+that connects these concepts is: if you design for the edge, you are building for everyone.
+
+She then started by saying she didn't want to cover the basic API contained in React Native (accessibility props on components). Also, given AI this day,
+for react native not everything is covered like web, because apps tend to be less accessible with respect to the web. 
+
+She then explained why she is so sensitive about accessibility: when she started to work on react native she discovered that she has the same gene of her grand mother that lends to 
+macular degenration, a disease that affect the central vision making you partially blind. This is why she started to be a promoter to make apps more accessible.
+
+She then started with an overview of how we can make apps more accessible. The first wa reduce motion, something that could help people with ADHD, vestibular disorders, 
+photosensitive episelpsy. She then shown the api we can use to understand if this accessibility feature is on, and tweak the animation based on its values. 
+Nice thing, this is an API where I made some small contribution on the React Native project.
+
+![React native accessibility reduce motion API](/media/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-accessibility-reduce-motion.jpeg)
 
 
-### The Reverse Magic Trick
+She then switched to color accessibility, where she explained how important is to have a clear difference between colors that represents different states. 
+She then talk about screen readers. She explained how to tackle cases where pieces of UI appear later on. this should be managed with ad hoc api to set the focus on the right element 
+after and interaction.
+She finally closed the talk with some consideration and possible action to manager differen UI components (Toast, Gesture Swipe etc.).
 
-...
+### What is your app actually doing in production?
+
+Next was [Kadi Kraman](https://github.com/kadikraman), software engineer at Expo.
+She presented a new tool from Expo called [Observe](https://expo.dev/solutions/expo-observe), that stands out as full observability platform for mobile apps.
 
 ### Visual Editor for Reanimated
 
