@@ -42,7 +42,7 @@ export function ContactEmail({
                                         }}
                                     >
                                         <Img
-                                            src="https://www.fabrizioduroni.it/images/logo.png"
+                                            src="https://www.fabrizioduroni.it/media/logo.png"
                                             alt="Chicio Coding Logo"
                                             width={60}
                                             height={60}
