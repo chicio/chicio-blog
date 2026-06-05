@@ -10,6 +10,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
+    "knip": "knip",
     "release": "release-it"
   },
   "dependencies": {
@@ -74,10 +75,11 @@
     "esbuild": "^0.28.0",
     "eslint": "^9",
     "eslint-config-next": "16.2.6",
+    "knip": "^6.16.0",
     "prettier": "^3.8.3",
     "prettier-plugin-tailwindcss": "^0.8.0",
     "release-it": "^20.2.0",
-    "typescript": "^6"
+    "typescript": "^5"
   },
   "engines": {
     "node": "22.x"

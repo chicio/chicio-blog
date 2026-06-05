@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 
 interface NavigatorWithDevice extends Navigator {
     deviceMemory?: number;
@@ -19,18 +19,27 @@ const defaults: DeviceCapabilities = {
     isLowEnd: false,
 };
 
+const computeCapabilities = (): DeviceCapabilities => {
+    if (typeof navigator === "undefined") {
+        return defaults;
+    }
+    const nav = navigator as NavigatorWithDevice;
+    const deviceMemory = nav.deviceMemory;
+    const cores = nav.hardwareConcurrency ?? 4;
+    const saveData = nav.connection?.saveData ?? false;
+    const isLowEnd = (deviceMemory != null && deviceMemory <= 2) || cores <= 2 || saveData;
+    
+    return { deviceMemory, cores, saveData, isLowEnd };
+};
+
+const capabilities = computeCapabilities();
+
+const subscribe = () => () => {};
+
+const getSnapshot = (): DeviceCapabilities => capabilities;
+
+const getServerSnapshot = (): DeviceCapabilities => defaults;
+
 export function useDeviceCapabilities(): DeviceCapabilities {
-    const [capabilities, setCapabilities] = useState<DeviceCapabilities>(defaults);
-
-    useEffect(() => {
-        const nav = navigator as NavigatorWithDevice;
-        const deviceMemory = nav.deviceMemory;
-        const cores = nav.hardwareConcurrency ?? 4;
-        const saveData = nav.connection?.saveData ?? false;
-        const isLowEnd = (deviceMemory != null && deviceMemory <= 2) || cores <= 2 || saveData;
-
-        setCapabilities({ deviceMemory, cores, saveData, isLowEnd });
-    }, []);
-
-    return capabilities;
+    return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 }

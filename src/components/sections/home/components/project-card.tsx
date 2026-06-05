@@ -1,7 +1,6 @@
 import { CallToActionExternalWithTracking } from "@/components/design-system/atoms/call-to-actions/call-to-action-external-with-tracking";
 import { ImageGlow } from "@/components/design-system/atoms/effects/image-glow";
 import { Project } from "@/content/home/projects";
-import { Variants } from "framer-motion";
 import { FC } from "react";
 
 export type ProjectProps = { project: Project };

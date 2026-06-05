@@ -57,7 +57,7 @@ export const Game: FC<PropsWithChildren<GameProps>> = async ({
           url={console.slug.formatted}
         />
         {game.frontmatter.metadata?.formats.map((format) => (
-          <span className="glow-container bg-general-background h-14 text-primary px-2 py-2 font-mono text-base flex flex-col justify-center items-center text-shadow-sm">
+          <span key={format} className="glow-container bg-general-background h-14 text-primary px-2 py-2 font-mono text-base flex flex-col justify-center items-center text-shadow-sm">
             <GameFormatIcon format={format} />
             <span>{format}</span>
           </span>

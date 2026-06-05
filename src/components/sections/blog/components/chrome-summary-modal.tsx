@@ -8,7 +8,7 @@ import { useReducedMotions } from "@/components/design-system/utils/hooks/use-re
 import { MotionDiv } from "@/components/design-system/molecules/animation/motion-div";
 import { Variants } from "framer-motion";
 import { Markdown } from "@/components/design-system/atoms/typography/markdown";
-import { FC, useEffect, useId } from "react";
+import { FC } from "react";
 
 const modalVariants: Variants = {
     hidden: { opacity: 0 },

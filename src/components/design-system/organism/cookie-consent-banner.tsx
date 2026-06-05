@@ -1,32 +1,21 @@
 "use client";
 
-import { hasConsented, writeConsent } from "@/lib/consents/consents";
+import { writeConsent } from "@/lib/consents/consents";
 import { AnimatePresence } from "framer-motion";
-import { useEffect, useState } from "react";
 import {
   BluePillButton,
   RedPillButton,
 } from "../molecules/buttons/pills-buttons";
 import { useGlassmorphism } from "../utils/hooks/use-glassmorphism";
+import { useHasConsentDecision } from "../utils/hooks/use-has-consent-decision";
 
 const CookieConsentBanner = () => {
   const { glassmorphismClass } = useGlassmorphism();
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    if (!hasConsented()) {
-      setVisible(true);
-    }
-  }, []);
-
-  const handle = (accepted: "accepted" | "rejected") => {
-    writeConsent(accepted);
-    setVisible(false);
-  };
+  const decided = useHasConsentDecision();
 
   return (
     <AnimatePresence>
-      {visible && (
+      {!decided && (
         <div
           className={`${glassmorphismClass} backdrop-blur-2xl! fixed right-0 bottom-5 left-0 mx-auto my-0 p-4 flex max-w-[95%] flex-col items-center gap-4 lg:max-w-[60%] lg:flex-row z-50`}
           role="dialog"
@@ -42,13 +31,13 @@ const CookieConsentBanner = () => {
           </p>
           <div className="flex flex-row gap-4">
             <BluePillButton
-              onClick={() => handle("rejected")}
+              onClick={() => writeConsent("rejected")}
               aria-label="Reject cookie"
             >
               Sleep (Reject)
             </BluePillButton>
             <RedPillButton
-              onClick={() => handle("accepted")}
+              onClick={() => writeConsent("accepted")}
               aria-label="Accept cookie"
             >
               Wake up (Accept)

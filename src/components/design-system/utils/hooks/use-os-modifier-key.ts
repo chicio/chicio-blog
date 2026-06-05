@@ -1,20 +1,22 @@
-import { useState, useEffect } from "react";
+import { useSyncExternalStore } from "react";
 
 export type OsModifierKey = "meta" | "ctrl";
 
-/**
- * Detects the OS-specific keyboard modifier key for shortcuts.
- * Returns null during SSR and before hydration to avoid mismatches.
- * - "meta"  → macOS / iPadOS (⌘ Command)
- * - "ctrl"  → Windows / Linux (Ctrl)
- */
+const detectModifierKey = (): OsModifierKey | null => {
+    if (typeof navigator === "undefined") {
+        return null;
+    }
+    return /Mac|iPhone|iPad|iPod/.test(navigator.userAgent) ? "meta" : "ctrl";
+};
+
+const modifierKey = detectModifierKey();
+
+const subscribe = () => () => {};
+
+const getSnapshot = (): OsModifierKey | null => modifierKey;
+
+const getServerSnapshot = (): OsModifierKey | null => null;
+
 export const useOsModifierKey = (): OsModifierKey | null => {
-    const [modifierKey, setModifierKey] = useState<OsModifierKey | null>(null);
-
-    useEffect(() => {
-        const isMac = /Mac|iPhone|iPad|iPod/.test(navigator.userAgent);
-        setModifierKey(isMac ? "meta" : "ctrl");
-    }, []);
-
-    return modifierKey;
+    return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 };

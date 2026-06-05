@@ -1,4 +1,3 @@
-import { GlassmorphismBackground } from "@/components/design-system/atoms/effects/glassmorphism-background";
 import { PageTitle } from "@/components/design-system/molecules/typography/page-title";
 import { FC } from "react";
 

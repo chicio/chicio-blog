@@ -1,6 +1,7 @@
 "use client";
 
 import { FC, useState, useEffect, useRef } from "react";
+import { PanInfo } from "framer-motion";
 import { BiChevronLeft, BiChevronRight, BiX } from "react-icons/bi";
 import { ImageGlow } from "../atoms/effects/image-glow";
 import { Button } from "../atoms/buttons/button";
@@ -126,7 +127,6 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
             currentIndex={0}
             onClose={() => setIsFullscreen(false)}
             alt={alt}
-            caption={caption}
           />
         )}
       </div>
@@ -141,7 +141,7 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
     setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
   };
 
-  const handleDragEnd = (_: any, info: { offset: { x: number } }) => {
+  const handleDragEnd = (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
     const swipeThreshold = 50;
     if (info.offset.x > swipeThreshold) {
       goToPrevious();
@@ -206,7 +206,6 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
           onClose={() => setIsFullscreen(false)}
           onNavigate={setCurrentIndex}
           alt={alt}
-          caption={caption}
         />
       )}
     </div>
@@ -219,7 +218,6 @@ interface FullscreenModalProps {
   onClose: () => void;
   onNavigate?: (index: number) => void;
   alt: string;
-  caption?: string;
 }
 
 const FullscreenModal: FC<FullscreenModalProps> = ({
@@ -228,7 +226,6 @@ const FullscreenModal: FC<FullscreenModalProps> = ({
   onClose,
   onNavigate,
   alt,
-  caption,
 }) => {
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
   const modalRef = useRef<HTMLDivElement>(null);
@@ -255,7 +252,7 @@ const FullscreenModal: FC<FullscreenModalProps> = ({
     if (e.key === "ArrowRight") goToNext();
   };
 
-  const handleDragEnd = (_: any, info: { offset: { x: number } }) => {
+  const handleDragEnd = (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
     const swipeThreshold = 50;
     if (info.offset.x > swipeThreshold) {
       goToPrevious();

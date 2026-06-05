@@ -8,6 +8,10 @@ export const hasConsented = () => {
   return readConsent() === "accepted";
 };
 
+export const hasMadeConsentDecision = () => {
+  return readConsent() !== null;
+};
+
 export const consentChangeEvent = "cookieConsentChanged";
 
 export const writeConsent = (value: "accepted" | "rejected") => {

@@ -5,7 +5,6 @@ import {
   BiEnvelope,
   BiUser,
   BiMessageDetail,
-  BiErrorCircle,
 } from "react-icons/bi";
 import { tracking } from "@/types/configuration/tracking";
 import { trackWith } from "@/lib/tracking/tracking";
@@ -188,7 +187,7 @@ export const ContactForm: FC<ContactFormProps> = ({ trackingCategory }) => {
       <PageTitle>Contact Me</PageTitle>
       <div className="mb-8 text-center">
         <p className="text-matrix-green/70">
-          Fill out the form to send me a message. I'll get back to you as soon
+          Fill out the form to send me a message. I&apos;ll get back to you as soon
           as possible.
         </p>
         {isOffline && (

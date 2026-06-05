@@ -1,23 +1,12 @@
 "use client";
 
-import { hasConsented } from "@/lib/consents/consents";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { useEffect, useState } from "react";
+import { useConsentStore } from "../utils/hooks/use-consent-store";
 
 const TrackingOptIn = () => {
-  const [enabled, setEnabled] = useState(true);
-
-  useEffect(() => {
-    setEnabled(hasConsented());
-    const handler = () => {
-      const hasConsentedTracking = hasConsented();
-      return setEnabled(hasConsentedTracking);
-    };
-    window.addEventListener("storage", handler);
-    return () => window.removeEventListener("storage", handler);
-  }, []);
+  const enabled = useConsentStore();
 
   if (!enabled) {
     return null;

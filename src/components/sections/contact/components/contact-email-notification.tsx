@@ -89,12 +89,6 @@ const terminalLine = {
     fontFamily: emailFonts.mono,
 };
 
-const statusSuccess = {
-    color: emailColors.accent,
-    fontWeight: "bold" as const,
-    textTransform: "uppercase" as const,
-};
-
 const divider = {
     borderColor: emailColors.accentAlpha25,
     borderStyle: "dashed" as const,

@@ -1,6 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
+import { writePwaInstallDecision } from "@/lib/pwa/pwa-install-decision";
+import { usePwaInstallDecision } from "./use-pwa-install-decision";
 
 interface BeforeInstallPromptEvent extends Event {
     prompt(): Promise<void>;
@@ -14,27 +16,41 @@ export interface UseInstallPromptResult {
     dismiss: () => void;
 }
 
+const subscribeStandaloneMode = (callback: () => void) => {
+    if (typeof window === "undefined") {
+        return () => {};
+    }
+    const mediaQuery = window.matchMedia("(display-mode: standalone)");
+    mediaQuery.addEventListener("change", callback);
+    return () => mediaQuery.removeEventListener("change", callback);
+};
+
+const getStandaloneSnapshot = () =>
+    typeof window !== "undefined" &&
+    window.matchMedia("(display-mode: standalone)").matches;
+
+const getStandaloneServerSnapshot = () => false;
+
 export function useInstallPrompt(): UseInstallPromptResult {
+    const isStandalone = useSyncExternalStore(
+        subscribeStandaloneMode,
+        getStandaloneSnapshot,
+        getStandaloneServerSnapshot,
+    );
+    const decision = usePwaInstallDecision();
     const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
-    const [isInstallable, setIsInstallable] = useState(false);
-    const [isInstalled, setIsInstalled] = useState(false);
+
+    const isInstalled = isStandalone || decision === "installed";
+    const isInstallable = deferredPrompt !== null && decision === null && !isInstalled;
 
     useEffect(() => {
-        // Already running in standalone mode (already installed)
-        if (window.matchMedia("(display-mode: standalone)").matches) {
-            setIsInstalled(true);
-            return;
-        }
-
         const handleBeforeInstallPrompt = (e: Event) => {
             e.preventDefault();
             setDeferredPrompt(e as BeforeInstallPromptEvent);
-            setIsInstallable(true);
         };
 
         const handleAppInstalled = () => {
-            setIsInstalled(true);
-            setIsInstallable(false);
+            writePwaInstallDecision("installed");
             setDeferredPrompt(null);
         };
 
@@ -55,17 +71,13 @@ export function useInstallPrompt(): UseInstallPromptResult {
         await deferredPrompt.prompt();
         const { outcome } = await deferredPrompt.userChoice;
 
-        if (outcome === "accepted") {
-            setIsInstalled(true);
-        }
-
+        writePwaInstallDecision(outcome === "accepted" ? "installed" : "dismissed");
         setDeferredPrompt(null);
-        setIsInstallable(false);
     };
 
     const dismiss = () => {
+        writePwaInstallDecision("dismissed");
         setDeferredPrompt(null);
-        setIsInstallable(false);
     };
 
     return { isInstallable, isInstalled, promptInstall, dismiss };

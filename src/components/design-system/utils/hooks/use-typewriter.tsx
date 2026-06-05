@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 interface TypewriterLine {
   text: string;
@@ -22,48 +22,42 @@ export const useTypewriter = (
 ): TypewriterState => {
   const [lineIndex, setLineIndex] = useState(0);
   const [charIndex, setCharIndex] = useState(0);
-  const [completedLines, setCompletedLines] = useState<TypewriterLine[]>([]);
   const [isWaitingForDelay, setIsWaitingForDelay] = useState(true);
 
   const isComplete = lineIndex >= lines.length;
   const currentLine = isComplete ? null : lines[lineIndex];
   const currentText = currentLine ? currentLine.text.substring(0, charIndex) : '';
+  const completedLines = lines.slice(0, lineIndex);
 
   useEffect(() => {
     if (isComplete || !shouldStart) {
       return;
-    } 
+    }
 
     const line = lines[lineIndex];
 
     if (isWaitingForDelay) {
-      const delayTimer = setTimeout(() => {
-        setIsWaitingForDelay(false);
-      }, line.delay || 0);
-
+      const delayTimer = setTimeout(() => setIsWaitingForDelay(false), line.delay || 0);
       return () => clearTimeout(delayTimer);
     }
 
-    const isLineComplete = charIndex >= line.text.length;
-
-    if (isLineComplete) {
-        setCompletedLines(prev => [...prev, line]);
+    const timer = setTimeout(() => {
+      if (charIndex >= line.text.length) {
         setLineIndex(lineIndex + 1);
         setCharIndex(0);
         setIsWaitingForDelay(true);
-    } else {
-      const timer = setTimeout(() => {
+      } else {
         setCharIndex(charIndex + 1);
-      }, speed);
-
-      return () => clearTimeout(timer);
-    }
+      }
+    }, speed);
+    
+    return () => clearTimeout(timer);
   }, [lineIndex, charIndex, lines, speed, isComplete, isWaitingForDelay, shouldStart]);
 
   return {
     completedLines,
     currentLine,
     currentText,
-    isComplete
+    isComplete,
   };
 };

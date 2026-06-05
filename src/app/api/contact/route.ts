@@ -79,7 +79,7 @@ export async function POST(request: NextRequest) {
       from: "Fabrizio Duroni <contact@fabrizioduroni.it>",
       to: [email],
       subject: `Chicio Coding - Wake up, ${name}... The Matrix has you.`,
-      react: ContactConfirmationEmail({ name, message }),
+      react: ContactConfirmationEmail({ message }),
     });
 
     if (confirmationError) {

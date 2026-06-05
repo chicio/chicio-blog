@@ -8,28 +8,31 @@ export const BacktrackingVisualizer: FC = () => {
   const [pathsHistory, setPathsHistory] = useState<string[][]>([]);
   const [isRunning, setIsRunning] = useState(false);
 
-  const choices = ["0", "1"];
-  const maxDepth = 3;
-  const stepDelay = 500; // ms tra ogni passo
+  const stepDelay = 500;
 
-  const backtrackGenerator = function* (currentPath: string[]): Generator<string[], void, unknown> {
-    if (currentPath.length === maxDepth) {
-      setPathsHistory((prev) => [...prev, [...currentPath]]);
-      yield [...currentPath];
+  useEffect(() => {
+    if (!isRunning) {
       return;
     }
 
-    for (const choice of choices) {
-      currentPath.push(choice);
-      yield [...currentPath]; // stato intermedio
-      yield* backtrackGenerator(currentPath); // esplora profondità
-      currentPath.pop(); // rollback
-    }
-  };
+    const choices = ["0", "1"];
+    const maxDepth = 3;
 
-  // Effetto per animare il processo
-  useEffect(() => {
-    if (!isRunning) return;
+    function* backtrackGenerator(currentPath: string[]): Generator<string[], void, unknown> {
+      if (currentPath.length === maxDepth) {
+        setPathsHistory((prev) => [...prev, [...currentPath]]);
+        yield [...currentPath];
+        return;
+      }
+
+      for (const choice of choices) {
+        currentPath.push(choice);
+        yield [...currentPath];
+        yield* backtrackGenerator(currentPath);
+        currentPath.pop();
+      }
+    }
+
     const gen = backtrackGenerator([]);
 
     const interval = setInterval(() => {

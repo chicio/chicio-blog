@@ -1,10 +1,10 @@
 "use client";
 
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import { Breadcrumb, BreadcrumbItem } from "@/components/design-system/molecules/breadcrumbs/breadcrumb";
 import { tracking } from "@/types/configuration/tracking";
 import { slugs } from "@/types/configuration/slug";
-import { readSessionStorage } from "@/lib/session-storage/session-storage";
+import { useVideogamesNavigationOriginStore } from "@/components/sections/videogames/hooks/use-videogames-navigation-origin-store";
 import { VideogamesNavigationOrigin } from "@/types/content/videogames";
 
 interface GameBreadcrumbProps {
@@ -64,14 +64,7 @@ export const GameBreadcrumb: FC<GameBreadcrumbProps> = ({
     consoleName,
     consoleSlug,
 }) => {
-    const [origin, setOrigin] = useState<VideogamesNavigationOrigin | null>(null);
-
-    useEffect(() => {
-        const saved = readSessionStorage("videogames_navigation_origin");
-        if (saved === "all-games" || saved === "console") {
-            setOrigin(saved);
-        }
-    }, []);
+    const origin = useVideogamesNavigationOriginStore();
 
     const items = buildBreadcrumbItems(origin, gameTitle, gameSlug, consoleName, consoleSlug);
 

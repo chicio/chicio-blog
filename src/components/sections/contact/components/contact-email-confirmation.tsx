@@ -14,12 +14,10 @@ import { EmailFooter } from "./contact-email-shared-footer";
 import { MessageSummary } from "./contact-email-shared-message-summary";
 
 interface ContactConfirmationEmailProps {
-  name: string;
   message: string;
 }
 
 export function ContactConfirmationEmail({
-  name,
   message,
 }: ContactConfirmationEmailProps) {
   return (
@@ -46,7 +44,7 @@ export function ContactConfirmationEmail({
               delivered.
             </Text>
             <Text style={confirmationText}>
-              I'll get back to you as soon as possible.
+              I&apos;ll get back to you as soon as possible.
             </Text>
           </Section>
           <Hr style={divider} />
@@ -54,11 +52,11 @@ export function ContactConfirmationEmail({
           <Hr style={divider} />
           <Section style={quoteSection}>
             <Text style={quoteText}>
-              <span style={prompt}>{">"}</span> "Unfortunately, no one can be
-              told what the Matrix is."
+              <span style={prompt}>{">"}</span> &quot;Unfortunately, no one can be
+              told what the Matrix is.&quot;
             </Text>
             <Text style={quoteText}>
-              <span style={prompt}>{">"}</span> "You have to see it for yourself."
+              <span style={prompt}>{">"}</span> &quot;You have to see it for yourself.&quot;
             </Text>
           </Section>
           <EmailFooter />
@@ -115,20 +113,6 @@ const divider = {
   borderStyle: "dashed" as const,
   borderWidth: "1px 0 0 0",
   margin: "15px 0",
-};
-
-const confirmationSection = {
-  padding: "15px 0",
-};
-
-const confirmationTitle = {
-  color: emailColors.accent,
-  fontSize: "16px",
-  fontWeight: "bold" as const,
-  margin: "0 0 15px 0",
-  padding: "0",
-  fontFamily: emailFonts.mono,
-  textTransform: "uppercase" as const,
 };
 
 const confirmationText = {
