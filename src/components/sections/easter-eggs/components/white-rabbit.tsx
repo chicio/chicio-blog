@@ -1,4 +1,4 @@
-import { EasterEggSearchResult, EasterEggTerminalLines } from "@/types/search/search";
+import { EasterEggSearchResult } from "@/types/search/search";
 
 export const neoRoomNumber = "101";
 

@@ -14,12 +14,10 @@ import { EmailFooter } from "./contact-email-shared-footer";
 import { MessageSummary } from "./contact-email-shared-message-summary";
 
 interface ContactConfirmationEmailProps {
-  name: string;
   message: string;
 }
 
 export function ContactConfirmationEmail({
-  name,
   message,
 }: ContactConfirmationEmailProps) {
   return (

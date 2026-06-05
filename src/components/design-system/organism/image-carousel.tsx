@@ -219,7 +219,6 @@ interface FullscreenModalProps {
   onClose: () => void;
   onNavigate?: (index: number) => void;
   alt: string;
-  caption?: string;
 }
 
 const FullscreenModal: FC<FullscreenModalProps> = ({
@@ -228,7 +227,6 @@ const FullscreenModal: FC<FullscreenModalProps> = ({
   onClose,
   onNavigate,
   alt,
-  caption,
 }) => {
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
   const modalRef = useRef<HTMLDivElement>(null);

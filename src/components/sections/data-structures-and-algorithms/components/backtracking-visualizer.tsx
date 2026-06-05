@@ -43,7 +43,7 @@ export const BacktrackingVisualizer: FC = () => {
     }, stepDelay);
 
     return () => clearInterval(interval);
-  }, [isRunning]);
+  }, [isRunning, backtrackGenerator]);
 
   const start = () => {
     setPath([]);

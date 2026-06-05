@@ -27,10 +27,6 @@ export function StackVisualizer() {
     setStack(stack.slice(0, stack.length - 1));
   };
 
-  const reset = () => {
-    setStack(initialStack);
-  };
-
   return (
     <div>
       <div className="mb-2 flex justify-center">

@@ -17,12 +17,10 @@ import { VideogameNavigation } from "./videogame-navigation";
 
 interface ConsoleProps {
   console: Content<ConsoleMetadata>;
-  consoleSlug: string;
 }
 
 export const Console: FC<PropsWithChildren<ConsoleProps>> = async ({
   console,
-  consoleSlug,
 }) => {
   const { contentFileRelativePath: contentPath } = console;
   const { default: ConsoleContent } = await import(
