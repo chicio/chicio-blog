@@ -268,7 +268,28 @@ and then add a declaration to the react-native.config.js file (in a new `spm` se
 
 ### One Codebase, Three Platforms: Making Universal Expo Work in Production
 
-Edwin Vargas.
+The next talk was from [Edwin Vargas](https://www.linkedin.com/in/edwinvrgs/) from [handoff.ai](https://handoff.ai), showing how his team his trying to make e universal app 
+with Expo.
+
+He started with an introduction of how he discovered Universal Expo. They started the company in 2023, and they were trying to scale quickly. This is a consequence of 
+the fact that they needed speed to find their market fit. They started from the *mobile app*. Then they deployed to the web. This didn't come without challenges.
+
+First of all, they were leveraging a lot Facebook/Instagram Ads. This means their web application was goingh to be shown in a non standard browser, especially on android. 
+This is when they discovered an hard true: mobile web is the 4th platform (after web desktop, iOS app and android app). To overcome some of the problem, they tried 
+to push out from the Meta in app Browser top their app the users when they were signing up. they discovered this was bad for conversion. 
+
+They leveraged a lot OTA updates on mobile (EAS) to keep the mobile apps aligned with the web experience. 
+
+One thing that is really interesting, is that even if the codebase is one for all the platforms, they pushed a lot to have platform differences supported in the right way 
+at the right time. For examples, they used libraries for mobile when needed and for web in the other cases. They also pushed a lot to create the perfect design system for their needs 
+to support each platform in the right way.
+
+He condluded the talk with a question "Did the universal expo bet pay off?". The answer was yes because:
+
+- they built complex screen sharing lot of the code 
+- they speed up the development a lot 
+- they were also able to scale the team, from start up to scale up size
+- they were able to learn from customer faster than ever given the fast release track on all platforms
 
 ### Accessibility in Motion
 
