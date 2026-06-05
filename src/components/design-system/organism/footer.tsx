@@ -5,7 +5,7 @@ import { MenuItemWithTracking } from "../molecules/menu/menu-item-with-tracking"
 import { SocialContacts } from "./social-contacts";
 import { Cursor, TerminalLine } from "../atoms/typography/terminal-blocks";
 
-export interface FooterProps {
+interface FooterProps {
   author: string;
   trackingCategory: string;
 }

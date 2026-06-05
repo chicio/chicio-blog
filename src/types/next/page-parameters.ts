@@ -1,22 +1,22 @@
-export type NextParameters<Params> = { params: Promise<Params> }
+type NextParameters<Params> = { params: Promise<Params> }
 
-export type TagParameters = { tag: string }
+type TagParameters = { tag: string }
 export type NextTagParameters = NextParameters<TagParameters>
 
-export type PostPaginationParameters = { page: string }
+type PostPaginationParameters = { page: string }
 export type NextPostPaginationParameters = NextParameters<PostPaginationParameters>
 
-export type PostParameters = { year: string, month: string, day: string, slug: string };
+type PostParameters = { year: string, month: string, day: string, slug: string };
 export type NextPostParameters = NextParameters<PostParameters>
 
-export type DataStructuresAndAlgorithmsParameters = { topic: string };
+type DataStructuresAndAlgorithmsParameters = { topic: string };
 export type NextDataStructuresAndAlgorithmsParameters = NextParameters<DataStructuresAndAlgorithmsParameters>
 
-export type DataStructuresAndAlgorithmsExerciseParameters = { topic: string; exercise: string };
+type DataStructuresAndAlgorithmsExerciseParameters = { topic: string; exercise: string };
 export type NextDataStructuresAndAlgorithmsExerciseParameters = NextParameters<DataStructuresAndAlgorithmsExerciseParameters>
 
-export type VideogamesConsoleParameters = { console: string };
+type VideogamesConsoleParameters = { console: string };
 export type NextVideogamesConsoleParameters = NextParameters<VideogamesConsoleParameters>
 
-export type VideogamesGameParameters = { console: string, game: string };
+type VideogamesGameParameters = { console: string, game: string };
 export type NextVideogamesGameParameters = NextParameters<VideogamesGameParameters>

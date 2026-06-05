@@ -17,7 +17,7 @@ export type SearchablePostFields = {
   authors: string[];
 };
 
-export type ContentSearchResult = { type: "search"; results: SearchablePostFields[] };
+type ContentSearchResult = { type: "search"; results: SearchablePostFields[] };
 
 export type SearchResult =
   | ContentSearchResult

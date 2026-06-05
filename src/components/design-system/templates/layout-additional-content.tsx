@@ -15,7 +15,10 @@ const TrackingOptIn = dynamic(
 );
 
 const InstallPromptBanner = dynamic(
-    () => import("@/components/features/pwa/components/install-prompt-banner"),
+    () =>
+        import("@/components/features/pwa/components/install-prompt-banner").then(
+            (m) => m.InstallPromptBanner,
+        ),
     { ssr: false },
 );
 

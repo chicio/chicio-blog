@@ -55,7 +55,6 @@
     "remark-frontmatter": "^5.0.0",
     "remark-gfm": "^4.0.1",
     "remark-math": "^6.0.0",
-    "remark-rehype": "^11.1.2",
     "resend": "^6.12.3",
     "serwist": "^9.5.11",
     "tailwindcss": "^4.2.1",

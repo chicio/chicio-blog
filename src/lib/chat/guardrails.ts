@@ -34,7 +34,7 @@ Reply "yes" if the message is about any of:
 Reply "no" if the message asks about completely unrelated topics (sports, cooking, weather, politics, entertainment)
 or requests the assistant to perform tasks unrelated to answering questions about Fabrizio (e.g., writing code for the user, translating text, solving math problems).`;
 
-export const checkPromptInjection = (message: string): GuardrailResult => {
+const checkPromptInjection = (message: string): GuardrailResult => {
     const matched = INJECTION_PATTERNS.some((pattern) => pattern.test(message));
 
     if (matched) {
@@ -48,7 +48,7 @@ export const checkPromptInjection = (message: string): GuardrailResult => {
     return { safe: true };
 };
 
-export const checkInputSafety = async (message: string): Promise<GuardrailResult> => {
+const checkInputSafety = async (message: string): Promise<GuardrailResult> => {
     try {
         const { text } = await generateText({
             model: groq("meta-llama/llama-prompt-guard-2-86m"),
@@ -73,7 +73,7 @@ export const checkInputSafety = async (message: string): Promise<GuardrailResult
     }
 };
 
-export const checkTopicRelevance = async (message: string): Promise<GuardrailResult> => {
+const checkTopicRelevance = async (message: string): Promise<GuardrailResult> => {
     try {
         const { text } = await generateText({
             model: groq("llama-3.1-8b-instant"),
