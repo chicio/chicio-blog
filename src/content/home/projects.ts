@@ -51,7 +51,7 @@ export const projects: Record<string, Project> = {
         link: "https://www.fabrizioduroni.it/tesi-fabrizio-duroni-770157.pdf",
       },
     ],
-    image: '/images/content/about-me/projects/spectral-clara-lux-tracer.jpg'
+    image: '/media/content/about-me/projects/spectral-clara-lux-tracer.jpg'
   },
   "spectral-brdf-explorer": {
     name: "Spectral BRDF Explorer",
@@ -75,7 +75,7 @@ export const projects: Record<string, Project> = {
         link: "https://github.com/chicio/Spectral-BRDF-Explorer",
       },
     ],
-    image: '/images/content/about-me/projects/spectral-brdf-explorer.png'
+    image: '/media/content/about-me/projects/spectral-brdf-explorer.png'
 
   },
   id3tageditor: {
@@ -108,7 +108,7 @@ export const projects: Record<string, Project> = {
         link: "https://chicio.github.io/ID3TagEditor/documentation/id3tageditor/",
       },
     ],
-    image: '/images/content/about-me/projects/id3tageditor.jpg'
+    image: '/media/content/about-me/projects/id3tageditor.jpg'
   },
   "range-ui-slider": {
     name: "RangeUISlider",
@@ -141,7 +141,7 @@ export const projects: Record<string, Project> = {
         link: "https://chicio.github.io/RangeUISlider/",
       },
     ],
-    image: '/images/content/about-me/projects/range-ui-slider.png'
+    image: '/media/content/about-me/projects/range-ui-slider.png'
   },
   tabbaruiaction: {
     name: "TabBarUIAction",
@@ -171,7 +171,7 @@ export const projects: Record<string, Project> = {
         link: "https://chicio.github.io/TabBarUIAction/",
       },
     ],
-    image: '/images/content/about-me/projects/tabbaruiaction.png'
+    image: '/media/content/about-me/projects/tabbaruiaction.png'
   },
   mp3id3tagger: {
     name: "Mp3ID3Tagger",
@@ -201,6 +201,6 @@ export const projects: Record<string, Project> = {
         link: "https://github.com/chicio/Mp3ID3Tagger/raw/master/Release/Mp3ID3Tagger.dmg",
       },
     ],
-    image: '/images/content/about-me/projects/mp3id3tagger.jpg'
+    image: '/media/content/about-me/projects/mp3id3tagger.jpg'
   },
 };
