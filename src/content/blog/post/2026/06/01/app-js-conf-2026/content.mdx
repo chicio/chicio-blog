@@ -46,14 +46,14 @@ this size while still feeling intimate enough to bump into the speakers between 
 backdrop: the old town, the main square, and the river walk were all within reach during after the conf (eg. I had 
 the chance to visit Wavel Castel and Rynek Główny).
 
-![The main stage at App.js Conf 2026, kickoff slide](/images/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-opening.jpeg "The main stage at App.js Conf 2026, kickoff slide")
-
 Now let's dive into the talks.
+
+![The main stage at App.js Conf 2026, kickoff slide](/images/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-opening.jpeg "The main stage at App.js Conf 2026, kickoff slide")
 
 ## Day 1: Keynotes and incredible talks
 
 The first day started, unsurprisingly, with two keynotes: one by Software Mansion and another one by Expo. 
-After them a series of talks from "famous devs" from the react native scene took place. I finally had a chance to see 
+After them a series of talks from "famous devs" from the react native scene took place. In particular I finally had a chance to see 
 William Candillon live.
 
 ### Software Mansion Keynote
@@ -207,9 +207,34 @@ In particular I recommend:
 
 ## Day 2
 
+On day 2 there was a mix of talks about different topics. I also had the chance to speak with a lot of people from different companies, to understand their ways of working.
+
 ### Expo on Desktop
 
-....
+The day started with a talk held by [Jamie Birch](https://github.com/shirakaba), a Software Developer based in Japan. 
+He introduced a new open source project he developed: [Expo Desktop](https://github.com/shirakaba/expo-desktop).
+
+He started with an overview of the current state of React Native on Desktop, where there are ad hoc frameworks for react native on different 
+platform: react native macos and react native windows. Unfortunately, generally speaking, the ecosystem on these platform in terms of packages is smaller compared to 
+react native on mobile. Additionally, the variants for macos and windows are usually behind in terms of updates related to react native, pinpointing some version behind the main one.
+Anyway, especially for macOS, 1/3 of the packages available on iOS are already compatible. Also Expo UI it is already compatible without any change.
+
+Expo Desktop is a toll to make Desktop apps first-class on Expo:
+
+- by handling the setup for creating new app matching the user experience on mobile
+- by implementing Expo Prebuild
+- by filling missing parts of the ecosystem
+
+He also stated that the framework is not vibe coded :laughing:. 
+How does it work:
+
+- he ported the config plugins, creating ad hoc variant per system
+- he ported the cli tooling (`npx expo-desktop`)
+ - the cli checks the current common version between react native macos and react native windows
+
+He closed the talk by showing the official repo, and expressing the hope the project gets upstream in terms of usage and in terms of contributors. 
+
+
 
 ### The Reverse Magic Trick
 
