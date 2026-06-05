@@ -16,6 +16,8 @@ export const SelfHostedVideo: FC<Props> = ({ src, poster, caption }) => (
             className="aspect-video w-full rounded-xl border border-solid border-accent-alpha-40 shadow-lg"
         >
             <source src={src} />
+            Your browser does not support the video tag.{" "}
+            <a href={src}>Download the video</a>.
         </video>
         {caption && <figcaption>{caption}</figcaption>}
     </figure>
