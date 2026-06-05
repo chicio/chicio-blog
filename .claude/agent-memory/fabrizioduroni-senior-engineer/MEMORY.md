@@ -8,7 +8,7 @@
 - [Design System & Matrix Theme](arch_design_system.md) — Atomic design, Matrix palette, glassmorphism/motion hooks
 - [Routes & Sections](arch_routes_sections.md) — Complete route map, section components, legacy URL redirects
 - [Next.js Config](arch_next_config.md) — MDX plugins, React Compiler, image optimization, release pipeline
-- [Image Co-location](arch_image_colocation.md) — src/content/**/images/ → public/images/content/ via build-time copy; /images/content/ gitignored
+- [Media Co-location & Public Static Media](arch_image_colocation.md) — all media under public/media/ (content/ gitignored; sounds/, authors/, clowns/, PNGs flat at top level); copy-content-media.ts; 3 redirects; SelfHostedVideo molecule
 
 ## Integrations
 - [Chat Feature](integration_chat.md) — Groq LLM + Upstash Vector RAG, streaming, knowledge upload

@@ -67,6 +67,16 @@ const nextConfig: NextConfig = {
         destination: "/media/content/:path*",
         permanent: true,
       },
+      {
+        source: "/images/:path*",
+        destination: "/media/:path*",
+        permanent: true,
+      },
+      {
+        source: "/sounds/:path*",
+        destination: "/media/sounds/:path*",
+        permanent: true,
+      },
     ];
   },
   reactCompiler: true,

@@ -20,7 +20,7 @@
     "@microflash/rehype-figure": "^2.1.4",
     "@modelcontextprotocol/sdk": "^1.29.0",
     "@next/mdx": "16.2.4",
-    "@next/third-parties": "16.2.6",
+    "@next/third-parties": "16.2.7",
     "@react-email/components": "^1.0.12",
     "@tailwindcss/postcss": "^4.2.2",
     "@types/mdx": "^2.0.13",
@@ -58,8 +58,8 @@
     "resend": "^6.12.3",
     "serwist": "^9.5.11",
     "tailwindcss": "^4.2.1",
-    "tsx": "^4.22.3",
-    "zod": "^4.3.6"
+    "tsx": "^4.22.4",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@release-it/conventional-changelog": "^11.0.0",
@@ -76,7 +76,7 @@
     "eslint-config-next": "16.2.6",
     "prettier": "^3.8.3",
     "prettier-plugin-tailwindcss": "^0.8.0",
-    "release-it": "^20.0.1",
+    "release-it": "^20.2.0",
     "typescript": "^6"
   },
   "engines": {

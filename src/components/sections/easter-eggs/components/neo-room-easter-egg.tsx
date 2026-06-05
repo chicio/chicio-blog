@@ -15,14 +15,14 @@ const NeoRoomEasterEgg: FC<{ lines: EasterEggTerminalLines }> = ({
         lines={lines}
         onComplete={() => {
           setIsCompleted(true);
-          const audio = new Audio("/sounds/knock-knock.mp3");
+          const audio = new Audio("/media/sounds/knock-knock.mp3");
           audio.play();
         }}
       />
      <div style={{ visibility: isCompleted ? 'visible' : 'hidden' }}>
         <RedPillButton
           onClick={() => {
-            const audio = new Audio("/sounds/knock-knock.mp3");
+            const audio = new Audio("/media/sounds/knock-knock.mp3");
             audio.play();
           }}
         >
