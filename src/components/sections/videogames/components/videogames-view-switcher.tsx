@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useEffect, useState } from "react";
+import { memo } from "react";
 import { Content } from "@/types/content/content";
 import { GameMetadata } from "@/types/content/videogames";
 import { ConsoleCard } from "@/components/sections/videogames/components/console-card";
@@ -11,11 +11,10 @@ import {
 } from "@/components/design-system/molecules/buttons/segmented-control";
 import { GamesFilter } from "@/components/sections/videogames/components/games-filter";
 import { ConsoleWithGameCount, useGamesFilter } from "@/components/sections/videogames/hooks/use-games-filter";
-import { readLocalStorage, writeLocalStorage } from "@/lib/local-storage/local-storage";
+import { useVideogamesViewStore } from "@/components/sections/videogames/hooks/use-videogames-view-store";
+import { VideogamesView, writeVideogamesView } from "@/lib/videogames/videogames-view";
 import { IoGameControllerOutline } from "react-icons/io5";
 import { GiGameConsole } from "react-icons/gi";
-
-type View = "consoles" | "games";
 
 const FilteredGameGrid = memo(
     ({ games, query }: { games: Content<GameMetadata>[]; query: string; isPending: boolean }) =>
@@ -29,6 +28,7 @@ const FilteredGameGrid = memo(
         ),
     (_, next) => next.isPending,
 );
+FilteredGameGrid.displayName = "FilteredGameGrid";
 
 const FilteredConsoleList = memo(
     ({ consolesWithGameCount, query }: { consolesWithGameCount: ConsoleWithGameCount[]; query: string; isPending: boolean }) =>
@@ -46,8 +46,9 @@ const FilteredConsoleList = memo(
         ),
     (_, next) => next.isPending,
 );
+FilteredConsoleList.displayName = "FilteredConsoleList";
 
-const viewOptions: SegmentOption<View>[] = [
+const viewOptions: SegmentOption<VideogamesView>[] = [
     { label: "By Console", value: "consoles" },
     { label: "All Games", value: "games" },
 ];
@@ -61,22 +62,16 @@ export const VideogamesViewSwitcher: React.FC<VideogamesViewSwitcherProps> = ({
     consolesWithGameCount,
     games,
 }) => {
-    const [activeView, setActiveView] = useState<View | null>(null);
-
-    useEffect(() => {
-        const saved = readLocalStorage("videogames_view");
-        setActiveView(saved === "consoles" || saved === "games" ? saved : "consoles");
-    }, []);
+    const activeView = useVideogamesViewStore();
 
     const { query, filteredGames, filteredConsoles, handleFilter, resetFilter, isPending } = useGamesFilter(
         games,
         consolesWithGameCount,
     );
 
-    const handleViewChange = (view: View) => {
+    const handleViewChange = (view: VideogamesView) => {
         resetFilter();
-        setActiveView(view);
-        writeLocalStorage("videogames_view", view);
+        writeVideogamesView(view);
     };
 
     if (!activeView) {

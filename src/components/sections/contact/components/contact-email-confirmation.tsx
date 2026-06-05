@@ -44,7 +44,7 @@ export function ContactConfirmationEmail({
               delivered.
             </Text>
             <Text style={confirmationText}>
-              I'll get back to you as soon as possible.
+              I&apos;ll get back to you as soon as possible.
             </Text>
           </Section>
           <Hr style={divider} />
@@ -52,11 +52,11 @@ export function ContactConfirmationEmail({
           <Hr style={divider} />
           <Section style={quoteSection}>
             <Text style={quoteText}>
-              <span style={prompt}>{">"}</span> "Unfortunately, no one can be
-              told what the Matrix is."
+              <span style={prompt}>{">"}</span> &quot;Unfortunately, no one can be
+              told what the Matrix is.&quot;
             </Text>
             <Text style={quoteText}>
-              <span style={prompt}>{">"}</span> "You have to see it for yourself."
+              <span style={prompt}>{">"}</span> &quot;You have to see it for yourself.&quot;
             </Text>
           </Section>
           <EmailFooter />

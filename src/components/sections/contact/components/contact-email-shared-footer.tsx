@@ -17,7 +17,7 @@ export function EmailFooter() {
                 </a>
             </Text>
             <Text style={footerCreditText}>
-                <span style={prompt}>{">"} Made with 💝 by Fabrizio Duroni 'Chicio'</span>
+                <span style={prompt}>{">"} Made with 💝 by Fabrizio Duroni &apos;Chici&apos;</span>
             </Text>
         </Section>
     );

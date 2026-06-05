@@ -9,7 +9,7 @@ import { GameMetadata, VideogamesNavigationOrigin } from "@/types/content/videog
 import { Content } from "@/types/content/content";
 import { FC } from "react";
 import { GameFormatIcon } from "./game-format-icon";
-import { writeSessionStorage } from "@/lib/session-storage/session-storage";
+import { writeVideogamesNavigationOrigin } from "@/lib/videogames/videogames-navigation-origin";
 
 interface GameCardProps {
   game: Content<GameMetadata>;
@@ -24,7 +24,7 @@ export const GameCard: FC<GameCardProps> = ({ game, navigationOrigin = "console"
       ref={ref}
       className="glow-container relative h-80 w-full overflow-hidden rounded-lg shadow-lg"
       key={game.frontmatter.title}
-      onClick={() => writeSessionStorage("videogames_navigation_origin", navigationOrigin)}
+      onClick={() => writeVideogamesNavigationOrigin(navigationOrigin)}
     >
       {isInView && (
         <StandardInternalLinkWithTracking

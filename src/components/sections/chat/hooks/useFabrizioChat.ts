@@ -11,29 +11,24 @@ const exampleQuestions = [
 export const useFabrizioChat = () => {
   const { messages, sendMessage, error } = useChat();
   const [input, setInput] = useState('');
-  const [hasStartedConversation, setHasStartedConversation] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (messages.length > 0 && !hasStartedConversation) {
-      setHasStartedConversation(true);
+    if (messages.length === 0) {
+      return;
     }
-  }, [messages, hasStartedConversation]);
 
-  useEffect(() => {
-    if (hasStartedConversation && messages.length > 0) {
-      const lastMessage = messages[messages.length - 1];
+    const lastMessage = messages[messages.length - 1];
 
-      const isLastMessageDone = lastMessage.role === 'user' ||
-        lastMessage.parts.some(part => part.type === 'text' && part.state === 'done');
+    const isLastMessageDone = lastMessage.role === 'user' ||
+      lastMessage.parts.some(part => part.type === 'text' && part.state === 'done');
 
-      if (isLastMessageDone) {
-        setTimeout(() => {
-          messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-        }, 100);
-      }
+    if (isLastMessageDone) {
+      setTimeout(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+      }, 100);
     }
-  }, [messages, hasStartedConversation]);
+  }, [messages]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -46,8 +41,6 @@ export const useFabrizioChat = () => {
     setInput('');
 
     await sendMessage({ text: messageText });
-
-    setHasStartedConversation(true);
   };
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -55,7 +48,6 @@ export const useFabrizioChat = () => {
   };
 
   const handleExampleQuestionsSelection = async (question: string) => {
-    setHasStartedConversation(true);
     await sendMessage({ text: question });
   };
 
