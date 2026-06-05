@@ -5,7 +5,6 @@ import {
   BiEnvelope,
   BiUser,
   BiMessageDetail,
-  BiErrorCircle,
 } from "react-icons/bi";
 import { tracking } from "@/types/configuration/tracking";
 import { trackWith } from "@/lib/tracking/tracking";

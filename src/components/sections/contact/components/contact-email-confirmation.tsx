@@ -115,20 +115,6 @@ const divider = {
   margin: "15px 0",
 };
 
-const confirmationSection = {
-  padding: "15px 0",
-};
-
-const confirmationTitle = {
-  color: emailColors.accent,
-  fontSize: "16px",
-  fontWeight: "bold" as const,
-  margin: "0 0 15px 0",
-  padding: "0",
-  fontFamily: emailFonts.mono,
-  textTransform: "uppercase" as const,
-};
-
 const confirmationText = {
   color: emailColors.primaryText,
   fontSize: "14px",

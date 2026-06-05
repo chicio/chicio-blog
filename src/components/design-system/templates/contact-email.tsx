@@ -64,10 +64,10 @@ export function ContactEmail({
                     </Section>
                     <Section style={quoteSection}>
                         <Text style={quoteText}>
-                            <span style={prompt}>{">"}</span> "Wake up, {name}..."
+                            <span style={prompt}>{">"}</span> &quot;Wake up, {name}...&quot;
                         </Text>
                         <Text style={quoteText}>
-                            <span style={prompt}>{">"}</span> "The Matrix has you."
+                            <span style={prompt}>{">"}</span> &quot;The Matrix has you.&quot;
                         </Text>
                     </Section>
                     <Hr style={divider} />
@@ -101,12 +101,12 @@ export function ContactEmail({
                     <Hr style={divider} />
                     <Section style={quoteSection}>
                         <Text style={quoteText}>
-                            <span style={prompt}>{">"}</span> "Unfortunately, no one can be
-                            told what the Matrix is."
+                            <span style={prompt}>{">"}</span> &quot;Unfortunately, no one can be
+                            told what the Matrix is.&quot;
                         </Text>
                         <Text style={quoteText}>
-                            <span style={prompt}>{">"}</span> "You have to see it for
-                            yourself."
+                            <span style={prompt}>{">"}</span> &quot;You have to see it for
+                            yourself.&quot;
                         </Text>
                     </Section>
 

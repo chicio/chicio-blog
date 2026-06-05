@@ -1,6 +1,7 @@
 "use client";
 
 import { FC, useState, useEffect, useRef } from "react";
+import { PanInfo } from "framer-motion";
 import { BiChevronLeft, BiChevronRight, BiX } from "react-icons/bi";
 import { ImageGlow } from "../atoms/effects/image-glow";
 import { Button } from "../atoms/buttons/button";
@@ -141,7 +142,7 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
     setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
   };
 
-  const handleDragEnd = (_: any, info: { offset: { x: number } }) => {
+  const handleDragEnd = (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
     const swipeThreshold = 50;
     if (info.offset.x > swipeThreshold) {
       goToPrevious();
@@ -253,7 +254,7 @@ const FullscreenModal: FC<FullscreenModalProps> = ({
     if (e.key === "ArrowRight") goToNext();
   };
 
-  const handleDragEnd = (_: any, info: { offset: { x: number } }) => {
+  const handleDragEnd = (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
     const swipeThreshold = 50;
     if (info.offset.x > swipeThreshold) {
       goToPrevious();
