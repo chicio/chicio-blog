@@ -32,5 +32,8 @@
 ## Features (continued 3)
 - [Markdown Negotiation](feature_markdown_negotiation.md) — Accept: text/markdown support via proxy.ts + /markdown-content/* routes, Next.js 16 proxy convention
 
+## Infrastructure
+- [CI Pipeline](project_ci_pipeline.md) — Three-job workflow (lint, knip, build); lint/knip gate build; ubuntu-latest; npm ci; concurrency cancel; 2026-06-05
+
 ## Feedback
 - [PWA & State Patterns](feedback_pwa_patterns.md) — useSyncExternalStore for localStorage state, consent-gated UI, banner/error page alignment rules

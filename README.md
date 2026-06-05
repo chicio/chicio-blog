@@ -1,6 +1,6 @@
 # [fabrizioduroni.it](https://www.fabrizioduroni.it)
 
-[![Build](https://github.com/chicio/chicio-blog/actions/workflows/build.yml/badge.svg)](https://github.com/chicio/chicio-blog/actions/workflows/build.yml)
+[![Build](https://github.com/chicio/chicio-blog/actions/workflows/ci.yml/badge.svg)](https://github.com/chicio/chicio-blog/actions/workflows/ci.yml)
 [![GitHub license](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/chicio/chicio-blog/blob/master/LICENSE.md)
 [![Status](https://img.shields.io/badge/Status-Ok-green.svg)](https://stats.uptimerobot.com/H8Am1Ay0Vd)
 
@@ -35,4 +35,11 @@ To release a new version run the following command:
 
 ```bash
 npm run release
+```
+
+For linting:
+
+```bash
+npm run lint
+npm run knip
 ```
