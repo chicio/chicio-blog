@@ -16,14 +16,14 @@ import kotlinImage from "../about-me/media/technologies/kotlin.png";
 import javaImage from "../about-me/media/technologies/java.png";
 import objectiveC from "../about-me/media/technologies/objective-c.png";
 
-export const categories = {
+const categories = {
   mobile: 'Mobile Development',
   frontend: 'Frontend Development',
   backend: 'Backend Development',
   languages: 'Programming languages'
 } as const;
 
-export type CategoryType = typeof categories[keyof typeof categories];
+type CategoryType = typeof categories[keyof typeof categories];
 
 export interface Technology {
   name: string;

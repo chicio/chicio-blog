@@ -30,7 +30,7 @@ export type SiteMetadataSocialLinks = {
     instagram: string,
 }
 
-export type SiteMetadata = {
+type SiteMetadata = {
     title: string,
     siteUrl: string,
     featuredImage: string,

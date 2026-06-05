@@ -55,9 +55,6 @@ ContactNotificationEmail.PreviewProps = {
         "I know you're out there. I can feel you now. I know that you're afraid... you're afraid of us. You're afraid of change.",
 } as ContactNotificationEmailProps;
 
-export default ContactNotificationEmail;
-
-// Styles
 const main = {
     backgroundColor: emailColors.background,
     fontFamily: emailFonts.mono,

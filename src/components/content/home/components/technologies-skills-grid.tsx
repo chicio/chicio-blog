@@ -2,7 +2,7 @@ import { FC } from "react";
 import { TechnologyCard } from "./technology-card";
 import { technologies, Technology } from "@/content/home/technology";
 
-export const technologiesGroups = () => {
+const technologiesGroups = () => {
   const groupedTechnologies = technologies.reduce((acc, tech) => {
     if (!acc[tech.category]) {
       acc[tech.category] = [];

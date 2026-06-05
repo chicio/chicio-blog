@@ -77,5 +77,3 @@ export const InstallPromptBanner: FC = () => {
         </AnimatePresence>
     );
 };
-
-export default InstallPromptBanner;

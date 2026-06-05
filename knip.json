@@ -10,5 +10,9 @@
     ],
     "mdx": {
         "entry": ["src/content/**/content.mdx"]
-    }
+    },
+    "ignoreDependencies": [
+        "tailwindcss",
+        "highlight.js"
+    ]
 }

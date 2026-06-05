@@ -83,7 +83,7 @@ interface MatrixRainProps {
   density: number;
 }
 
-export const MatrixRainRenderer: React.FC<MatrixRainProps> = ({
+const MatrixRainRenderer: React.FC<MatrixRainProps> = ({
   fontSize,
   frameRate = 20,
   density,

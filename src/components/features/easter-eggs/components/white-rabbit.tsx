@@ -1,6 +1,6 @@
 import { EasterEggSearchResult } from "@/types/search/search";
 
-export const neoRoomNumber = "101";
+const neoRoomNumber = "101";
 
 export const whiteRabbitEasterEgg = (
   query: string
