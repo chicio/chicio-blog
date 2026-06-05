@@ -245,7 +245,9 @@ to speed up the generation of a fake image with the card chosen by the audience.
 The general message was: AI without guidance is nothing. Human in the loop is still important. He also shown a way of working with AI development called AI triforce, 
 where the role of engineer shift in a sort of collaboration to overview a specific part of the software development lifecycle.
 
-![AI Triforce](/media/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-ai-triforce.jpeg "AI Triforce")
+![AI Triforce](/media/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-three-hero-classes.jpeg "AI Triforce")
+
+![AI Triforce](/media/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-aitriforce.jpeg "AI Triforce")
 
 ### React Native without Cocoapods
 
@@ -275,6 +277,8 @@ The command will add the Package.swift for the deps that still don't have it and
 
 As soon as the setup is done, adding new libraries is easier than before: we just install a library through npm, and if it has a `Package.swift` 
 it will be added automatically as a dep on the native side. 
+
+![React Native without Cocoapods](/media/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-react-native-spm.jpeg "React Native without Cocoapods")
 
 For libraries author, the process is quite simple too. There is the `Package.swift` to add (can be scaffolded with the command above, but christian didn't share any details), 
 and then add a declaration to the react-native.config.js file (in a new `spm` section). At the beginning libraries can skip the step to provide a precompiled binary.
@@ -327,7 +331,6 @@ Nice thing, this is an API where I made some small contribution on the React Nat
 
 ![React native accessibility reduce motion API](/media/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-accessibility-reduce-motion.jpeg)
 
-
 She then switched to color accessibility, where she explained how important is to have a clear difference between colors that represents different states. 
 She then talk about screen readers. She explained how to tackle cases where pieces of UI appear later on. this should be managed with ad hoc api to set the focus on the right element 
 after and interaction.
@@ -338,14 +341,21 @@ She finally closed the talk with some consideration and possible action to manag
 Next was [Kadi Kraman](https://github.com/kadikraman), software engineer at Expo.
 She presented a new tool from Expo called [Observe](https://expo.dev/solutions/expo-observe), that stands out as full observability platform for mobile apps.
 
+![Observability, the missing piece at Expo](/media/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-observe-observability.jpeg "Observability, the missing piece at Expo")
+
+![Introducing Expo Observe](/media/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-observe-expo.jpeg "Introducing Expo Observe")
+
 ### Visual Editor for Reanimated
 
 Then it was the time for [Catalin Miron](https://github.com/catalinmiron), creator of the famous website [animatereactnative.com](https://www.animatereactnative.com) and a series of youtube 
 videos where he show how to create beautiful animations in react native.
 
 He presented a new visual editor for Reanimated, where you can compose animation ready to be copy-pasted in your code. The editor is called [Keyframer](https://keyframer.dev). 
-You can basically draw your animation using keyframes and a lot fo customizations.
-It is available with various pricing tier, including a free one, so check it out. 
+
+![Introducing Keyframer.dev](/media/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-keyframer.jpeg "Keyframer.dev")
+
+The editor took a year of development. You can use it to draw your animation using keyframes and a lot of customizations. 
+The generated components are Reanimated React components. It is available with various pricing tier, including a free one, so check it out. 
 
 ### Your E2E Tests Are Lying To You
 
