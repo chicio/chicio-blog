@@ -1,6 +1,5 @@
 import { BlogHomePageContent } from "@/components/sections/blog/components/blog-homepage-content";
 import {
-  getPosts,
   getPostsPaginationFor,
   getPostsTotalPages,
 } from "@/lib/content/posts/posts";
