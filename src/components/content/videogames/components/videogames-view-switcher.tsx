@@ -3,15 +3,15 @@
 import { memo } from "react";
 import { Content } from "@/types/content/content";
 import { GameMetadata } from "@/types/content/videogames";
-import { ConsoleCard } from "@/components/sections/videogames/components/console-card";
-import { GameGrid } from "@/components/sections/videogames/components/games-grid";
+import { ConsoleCard } from "@/components/content/videogames/components/console-card";
+import { GameGrid } from "@/components/content/videogames/components/games-grid";
 import {
     SegmentedControl,
     SegmentOption,
 } from "@/components/design-system/molecules/buttons/segmented-control";
-import { GamesFilter } from "@/components/sections/videogames/components/games-filter";
-import { ConsoleWithGameCount, useGamesFilter } from "@/components/sections/videogames/hooks/use-games-filter";
-import { useVideogamesViewStore } from "@/components/sections/videogames/hooks/use-videogames-view-store";
+import { GamesFilter } from "@/components/content/videogames/components/games-filter";
+import { ConsoleWithGameCount, useGamesFilter } from "@/components/content/videogames/hooks/use-games-filter";
+import { useVideogamesViewStore } from "@/components/content/videogames/hooks/use-videogames-view-store";
 import { VideogamesView, writeVideogamesView } from "@/lib/videogames/videogames-view";
 import { IoGameControllerOutline } from "react-icons/io5";
 import { GiGameConsole } from "react-icons/gi";

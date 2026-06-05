@@ -1,4 +1,4 @@
-import { Homepage } from "@/components/sections/home/components/homepage";
+import { Homepage } from "@/components/content/home/components/homepage";
 import { createMetadata } from "@/lib/seo/seo";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 

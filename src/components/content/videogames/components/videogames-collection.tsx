@@ -9,7 +9,7 @@ import { tracking } from "@/types/configuration/tracking";
 import { VideogameCollectionDataCard } from "./videogame-collection-data-card";
 import { JsonLd } from "@/components/design-system/utils/components/jsond-ld";
 import { ContentPageTemplate } from "@/components/design-system/templates/content-page-template";
-import { VideogamesViewSwitcher } from "@/components/sections/videogames/components/videogames-view-switcher";
+import { VideogamesViewSwitcher } from "@/components/content/videogames/components/videogames-view-switcher";
 import { StandardInternalLinkWithTracking } from "@/components/design-system/atoms/links/standard-internal-link-with-tracking";
 
 export const VideogamesCollection: React.FC = () => {

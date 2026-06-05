@@ -1,5 +1,5 @@
-import { ClownsPhotosGrid } from "@/components/sections/clowns/components/clowns-photos-grid";
-import { ClownsPageTemplate } from "@/components/sections/clowns/components/clowns-page-template";
+import { ClownsPhotosGrid } from "@/components/content/clowns/components/clowns-photos-grid";
+import { ClownsPageTemplate } from "@/components/content/clowns/components/clowns-page-template";
 
 const ClownsPhotosPage = () => (
   <ClownsPageTemplate>

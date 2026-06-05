@@ -4,7 +4,7 @@ import { FC } from "react";
 import { Breadcrumb, BreadcrumbItem } from "@/components/design-system/molecules/breadcrumbs/breadcrumb";
 import { tracking } from "@/types/configuration/tracking";
 import { slugs } from "@/types/configuration/slug";
-import { useVideogamesNavigationOriginStore } from "@/components/sections/videogames/hooks/use-videogames-navigation-origin-store";
+import { useVideogamesNavigationOriginStore } from "@/components/content/videogames/hooks/use-videogames-navigation-origin-store";
 import { VideogamesNavigationOrigin } from "@/types/content/videogames";
 
 interface GameBreadcrumbProps {

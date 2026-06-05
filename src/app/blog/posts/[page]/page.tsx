@@ -1,4 +1,4 @@
-import { BlogHomePageContent } from "@/components/sections/blog/components/blog-homepage-content";
+import { BlogHomePageContent } from "@/components/content/blog/components/blog-homepage-content";
 import {
   getPostsPaginationFor,
   getPostsTotalPages,

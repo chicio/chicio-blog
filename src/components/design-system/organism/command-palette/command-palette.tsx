@@ -9,7 +9,7 @@ import { motion } from "framer-motion";
 import { trackWith } from "@/lib/tracking/tracking";
 import { tracking } from "@/types/configuration/tracking";
 import { slugs } from "@/types/configuration/slug";
-import { whiteRabbitEasterEgg } from "@/components/sections/easter-eggs/components/white-rabbit";
+import { whiteRabbitEasterEgg } from "@/components/features/easter-eggs/components/white-rabbit";
 import { Command } from "cmdk";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
@@ -26,7 +26,7 @@ import { ToggleMotionItem } from "./toggle-motion-item";
 
 const NeoRoomEasterEgg = dynamic(
   () =>
-    import("@/components/sections/easter-eggs/components/neo-room-easter-egg"),
+    import("@/components/features/easter-eggs/components/neo-room-easter-egg"),
   { ssr: false },
 );
 

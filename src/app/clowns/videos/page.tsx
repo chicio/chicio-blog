@@ -1,5 +1,5 @@
-import { ClownsPageTemplate } from "@/components/sections/clowns/components/clowns-page-template";
-import { ClownsVideos } from "@/components/sections/clowns/components/clowns-videos";
+import { ClownsPageTemplate } from "@/components/content/clowns/components/clowns-page-template";
+import { ClownsVideos } from "@/components/content/clowns/components/clowns-videos";
 
 const ClownsPage = () => (
   <ClownsPageTemplate>

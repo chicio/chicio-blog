@@ -1,5 +1,5 @@
 import { shuffleArray } from "@/components/design-system/utils/hooks/shuffle-array";
-import { PostsRowContainer } from "@/components/sections/blog/components/posts-row-container";
+import { PostsRowContainer } from "@/components/content/blog/components/posts-row-container";
 import { getPosts } from "@/lib/content/posts/posts";
 import { FC } from "react";
 import { PostsRow } from "./posts-row";

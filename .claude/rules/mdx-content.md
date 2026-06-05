@@ -44,7 +44,7 @@ Additional metadata fields per content type:
 ## Component Imports
 - Import components at the top of the MDX file, right after frontmatter
 - Use `@/` import alias: `import { Youtube } from "@/components/design-system/molecules/video/youtube"`
-- DSA topics import from `@/components/sections/data-structures-and-algorithms/components/`
+- DSA topics import from `@/components/content/data-structures-and-algorithms/components/`
 - Only `<table>` is globally mapped in `src/mdx-components.tsx` — all other custom components must be explicitly imported
 
 ## DSA Content Style

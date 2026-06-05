@@ -1,4 +1,4 @@
-import { VideogamesCollection } from "@/components/sections/videogames/components/videogames-collection";
+import { VideogamesCollection } from "@/components/content/videogames/components/videogames-collection";
 import { createMetadata } from "@/lib/seo/seo";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { slugs } from "@/types/configuration/slug";

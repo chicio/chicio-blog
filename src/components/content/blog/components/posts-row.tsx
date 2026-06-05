@@ -1,7 +1,7 @@
 import {FC} from "react";
 import {tracking} from "@/types/configuration/tracking";
 import {Content} from "@/types/content/content";
-import {PostsRowContainer} from "@/components/sections/blog/components/posts-row-container";
+import {PostsRowContainer} from "@/components/content/blog/components/posts-row-container";
 import { PostCard } from "./post-card";
 
 interface PostsRowProps {
