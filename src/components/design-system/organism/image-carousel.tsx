@@ -127,7 +127,6 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
             currentIndex={0}
             onClose={() => setIsFullscreen(false)}
             alt={alt}
-            caption={caption}
           />
         )}
       </div>
@@ -207,7 +206,6 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
           onClose={() => setIsFullscreen(false)}
           onNavigate={setCurrentIndex}
           alt={alt}
-          caption={caption}
         />
       )}
     </div>
