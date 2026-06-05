@@ -19,6 +19,7 @@ math: false
 ---
 
 import { Youtube } from "@/components/design-system/molecules/video/youtube";
+import { SelfHostedVideo } from "@/components/design-system/molecules/video/self-hosted-video";
 
 *My recap of App.js Conf 2026 in Krakow: talks, libraries, the 'elephant in the room' called AI*
 
@@ -143,9 +144,13 @@ arbitrary code from your bundle on any thread. This unlock a lot of possibility,
 He also shown the work do with [Marc Rousavy](https://github.com/mrousavy), CEO of Margelo and author of [react-native-vision-camera](https://github.com/mrousavy/react-native-vision-camera), to have 
 video and camera streaming plug and play into react native webgpu.
 
+<SelfHostedVideo src="/media/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-william-2.mp4" />
+
 He then switched to react native skia, where he is developing a new backend called Skia Graphite, backed by Dawn Webgpu, the same implementation of webgpu that powers react native webgpu. 
 This means that you can have view that draw using both react native webgpu and react native skia, because their runtime engine is the same. The plan for Skia Graphite is to have it 
 used by everyone by Q4 of 2026.
+
+<SelfHostedVideo src="/media/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-william-1.mp4" />
 
 He finally introduced redraw, a new library that can work with skia and webgpu, that uses typegpu under the hood to enhance the drawing capabilities by passing geometry and 
 fragment shaders as function to the library components.

@@ -19,3 +19,13 @@ export const siteMetadata = {
         },
     },
 }
+
+export type SiteMetadataSocialLinks = {
+    twitter: string,
+    facebook: string,
+    linkedin: string,
+    github: string,
+    medium: string,
+    devto: string,
+    instagram: string,
+}
