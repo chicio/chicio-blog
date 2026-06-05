@@ -4,7 +4,7 @@ export interface Author {
     image: string;
 }
 
-const authorImagesFolder = '/media/images/authors/'
+const authorImagesFolder = '/media/authors/'
 
 export const authors: { [authorName: string]: Author } = {
     fabrizio_duroni: {

@@ -5,7 +5,7 @@ export const ProfilePhoto: FC<{ author: string }> = ({ author }) => (
   <div className="flex items-center justify-center">
     <ImageGlow
       className="w-[150px] h-[150px] rounded-full"
-      src="/media/images/authors/fabrizio-duroni.jpg"
+      src="/media/authors/fabrizio-duroni.jpg"
       alt={author}
       width={150}
       height={150}

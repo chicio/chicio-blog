@@ -7,7 +7,7 @@ export function EmailBrandHeader() {
             <Row>
                 <Column style={{ width: "60px", verticalAlign: "middle", paddingRight: "12px" }}>
                     <Img
-                        src="https://www.fabrizioduroni.it/media/images/logo.png"
+                        src="https://www.fabrizioduroni.it/media/logo.png"
                         alt="Chicio Coding Logo"
                         width={60}
                         height={60}

@@ -17,7 +17,7 @@ export const ChatAvatar: FC<{ isUser: boolean }> = ({ isUser }) => {
         <BiUser className="size-5" />
       ) : (
         <Image
-          src="/media/images/chat-avatar.png"
+          src="/media/chat-avatar.png"
           alt="Fabrizio Duroni"
           width={40}
           height={40}

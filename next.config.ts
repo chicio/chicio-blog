@@ -69,7 +69,7 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/images/:path*",
-        destination: "/media/images/:path*",
+        destination: "/media/:path*",
         permanent: true,
       },
       {
