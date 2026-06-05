@@ -2,7 +2,7 @@
 title: "Advent of TypeScript 2023: Connect 4 (Day 23)"
 description: "Connect 4, a classical family Christmas game. Let's see how to tackle it with the typescript type system."
 date: 2024-01-20
-image: /images/content/blog/post/2024/01/20/advent-of-typescript-2023-connect-4/advent-of-typescript-connect-4.jpg
+image: /media/content/blog/post/2024/01/20/advent-of-typescript-2023-connect-4/advent-of-typescript-connect-4.jpg
 tags: [typescript, advent of typescript 2023]
 authors: [fabrizio_duroni]
 ---
@@ -370,7 +370,7 @@ The pain point was that the diagonals to be hardcoded are quite a few, especiall
 x 7), and the fact that the diagonal can be in two directions: from left to right and from right to left :sweat_smile:.
 Below, you can find a schema I created from highlighting visually the diagonals from left to right.
 
-![The diagonals from left to right](/images/content/blog/post/2024/01/20/advent-of-typescript-2023-connect-4/advent-of-typescript-connect-4-diagonals.jpg "The diagonals from left to right.")
+![The diagonals from left to right](/media/content/blog/post/2024/01/20/advent-of-typescript-2023-connect-4/advent-of-typescript-connect-4-diagonals.jpg "The diagonals from left to right.")
 
 The base type I created is the `SequentialElementsWinningFor`.
 It receives an array of board cells, it scans them to see if there is a sequence of four cells with the same chip, 

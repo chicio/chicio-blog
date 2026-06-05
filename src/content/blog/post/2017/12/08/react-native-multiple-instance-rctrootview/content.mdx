@@ -2,7 +2,7 @@
 title: "React Native: use multiple RCTRootView instances in an existing iOS app"
 description: "In this post I show you how it is possible to use multiple RCTRootView instances in an existing iOS app."
 date: 2017-12-08
-image: /images/content/blog/post/2017/12/08/react-native-multiple-instance-rctrootview/react-native-crash-reload-with-debugger.jpg
+image: /media/content/blog/post/2017/12/08/react-native-multiple-instance-rctrootview/react-native-crash-reload-with-debugger.jpg
 tags: [react native, swift, objective-c, ios, apple, mobile application development, javascript]
 authors: [fabrizio_duroni]
 ---
@@ -118,7 +118,7 @@ If we try to run the app something very strange will happen:
 
 * if we do a **live reload while we're in debug mode the app could crash**
 
-![The react native app crashes if we try to do a live reload](/images/content/blog/post/2017/12/08/react-native-multiple-instance-rctrootview/react-native-crash-reload-with-debugger.jpg)
+![The react native app crashes if we try to do a live reload](/media/content/blog/post/2017/12/08/react-native-multiple-instance-rctrootview/react-native-crash-reload-with-debugger.jpg)
 
 What's happening here? Well, there's something wrong in our code. If we take a look at the comments in the code of React
 Native for the `RCTRootView` initializer, we will notice something very strange:
