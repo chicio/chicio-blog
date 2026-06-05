@@ -234,19 +234,50 @@ How does it work:
 
 He closed the talk by showing the official repo, and expressing the hope the project gets upstream in terms of usage and in terms of contributors. 
 
+### React Native without Cocoapods
+
+Next in line there was [Riccardo Cipolleschi](https://github.com/cipolleschi) from Meta and [Christian Falch](https://github.com/chrfalch) from Expo showing how react native team with the help of expo 
+is migrating away from Cocoapods to Swift Package Manager. 
+
+First, Riccardo show the timeline until today of the work done to enable SPM in React Native. He also explained the reason why they are doping this: Cocoapods 
+will be abandoned by the end of the year. They started to work on this in January 2025. The first step is related to the precompiled binaries for react native released some time ago. 
+These are already built using SPM in the internal react native CI. 
+
+Next a public RFC has been published by Christian Falch. This RFC explain the reason why they are doing this (reported above) and the plan on how to do it:
+
+- ship SPM support behind a opt-in flow
+- add CLI and template support so that apps can be created or migrated with official tooling
+- keep support for both CocoaPods and SPM in parallel for some releases
+- define a clear contract for third party libraries and encourage them to ship dual support
+- move SPM to the default when ecosystem is ready
+
+Then Christian shown a live demo of how it will work the integration. The main command will be `npx react-native spm`. 
+The command will add the Package.swift for the deps that still don't have it and will try to rename the old xcodeproj by adding it a `.legacy` extension, so that our app will be loaded using
+ the SPM app project. Opening a project after running this command will show 4 packages:
+
+ - Autolinked, for native packages automatically discovered and linked 
+ - React-GeneratedCode, this is a codegne library
+ - ReactNative, this contains the precompiled binary mentioned at the beginning
+ - Plus, an entry for each library automatically scaffolded by the command above
+
+As soon as the setup is done, adding new libraries is easier than before: we just install a library through npm, and if it has a `Package.swift` 
+it will be added automatically as a dep on the native side. 
+
+For libraries author, the process is quite simple too. There is the `Package.swift` to add (can be scaffolded with the command above, but christian didn't share any details), 
+and then add a declaration to the react-native.config.js file (in a new `spm` section). At the beginning libraries can skip the step to provide a precompiled binary.
+
+### One Codebase, Three Platforms: Making Universal Expo Work in Production
+
+Edwin Vargas.
+
+### Accessibility in Motion
+
+....
 
 
 ### The Reverse Magic Trick
 
 ...
-
-### React Native without Cocoapods
-
-...
-
-### Accessibility in Motion
-
-....
 
 ### Visual Editor for Reanimated
 
