@@ -10,13 +10,19 @@ type: project
 
 ```
 public/media/
-├── content/    # build output — gitignored, regenerated on every build
-├── images/     # static public assets — committed (authors, clowns, branding)
-└── sounds/     # static public assets — committed (knock-knock.mp3)
+├── content/        # build output — gitignored, regenerated on every build
+├── sounds/         # static — knock-knock.mp3
+├── authors/        # static — author profile photos (was images/authors/)
+├── clowns/         # static — easter egg images (was images/clowns/)
+├── chat-avatar.png # static branding (was images/chat-avatar.png)
+├── chicio-art.png  # static branding (was images/chicio-art.png)
+├── icon.png        # static branding (was images/icon.png)
+└── logo.png        # static branding (was images/logo.png)
 ```
 
 `public/images/` and `public/sounds/` were consolidated into `public/media/` in PR #355 (2026-06-05).
 `public/media/content/` was introduced in PR #354 (2026-06-05) for co-located MDX content media.
+`public/media/images/` was flattened directly into `public/media/` (follow-up to PR #355, 2026-06-05).
 
 ## Co-located content media: specular mapping rule
 
@@ -40,13 +46,13 @@ Examples:
 - Projects: `src/content/about-me/media/projects/`
 - Tattoos: `src/content/about-me/media/tattoos/`
 
-## What lives in public/media/images/ (static, committed)
-- `public/media/images/authors/` — author profile photos (15 authors)
-- `public/media/images/clowns/` — easter egg images (clown-1.jpg through clown-9.jpg)
-- `public/media/images/chat-avatar.png`
-- `public/media/images/chicio-art.png`
-- `public/media/images/icon.png`
-- `public/media/images/logo.png`
+## What lives at public/media/ top level (static, committed)
+- `public/media/authors/` — author profile photos (15 authors)
+- `public/media/clowns/` — easter egg images (clown-1.jpg through clown-9.jpg)
+- `public/media/chat-avatar.png`
+- `public/media/chicio-art.png`
+- `public/media/icon.png`
+- `public/media/logo.png`
 
 ## What lives in public/media/sounds/ (static, committed)
 - `public/media/sounds/knock-knock.mp3` — Neo room easter egg door knock sound
@@ -65,22 +71,22 @@ The copy script uses `segments.indexOf("media")` to find the split point. If the
 
 ## Redirects in next.config.ts — ORDER MATTERS
 1. `/images/content/:path*` → `/media/content/:path*` (most specific, from PR #354)
-2. `/images/:path*` → `/media/images/:path*` (general, from PR #355)
+2. `/images/:path*` → `/media/:path*` (general, from PR #355 follow-up flatten)
 3. `/sounds/:path*` → `/media/sounds/:path*` (from PR #355)
 
 All permanent (308). Rule 1 must appear before rule 2 — Next.js evaluates top-to-bottom; the more specific `/images/content/` match would otherwise be swallowed by `/images/`.
 
 ## Static TypeScript imports (filesystem paths, not URL strings)
 These files use TypeScript static import syntax (not URL strings) — URL-string rewrites alone are insufficient:
-- `src/components/design-system/organism/header/brand-header.tsx` — `import logoImage from "../../../../../public/media/images/logo.png"`
+- `src/components/design-system/organism/header/brand-header.tsx` — `import logoImage from "../../../../../public/media/logo.png"`
 - `src/content/home/technology.ts` — imports from `../about-me/media/technologies/`
 - `src/content/home/timeline.ts` — imports from `../about-me/media/carrier/`
 
 ## Runtime URL patterns
 - Co-located content media: `/media/content/...` prefix
-- Static public images: `/media/images/...` prefix
+- Static public images/assets: `/media/...` directly (no `images/` segment — flattened)
 - Static sounds: `/media/sounds/...` prefix
-- Email templates use absolute prod URL: `https://www.fabrizioduroni.it/media/images/logo.png`
+- Email templates use absolute prod URL: `https://www.fabrizioduroni.it/media/logo.png`
 
 ## Molecule: SelfHostedVideo
 `src/components/design-system/molecules/video/self-hosted-video.tsx` — Added in PR #354.
@@ -90,6 +96,7 @@ Renders `<video>` with `src="/media/content/..."` paths for self-hosted `.mp4`/`
 - Original image co-location (PR #318): `images/` dirs, `public/images/content/`, `copy-content-images.ts`
 - PR #354 (2026-06-05): `src/content/**/images/` → `media/`, build output → `public/media/content/`, added video support, added SelfHostedVideo molecule, added `/images/content/` redirect
 - PR #355 (2026-06-05): `public/images/` → `public/media/images/`, `public/sounds/` → `public/media/sounds/`, added `/images/` and `/sounds/` redirects
+- PR #355 follow-up (2026-06-05): flattened `public/media/images/` → `public/media/` (no `images/` subdirectory); updated `/images/` redirect destination from `/media/images/` to `/media/`
 
 ## Note: CLAUDE.md stale reference
 CLAUDE.md in the repo root still mentions "Co-located Images" with old `images/` and `public/images/content/` paths. This is outdated — the actual system uses `media/` everywhere. Do NOT auto-edit CLAUDE.md without explicit user instruction.

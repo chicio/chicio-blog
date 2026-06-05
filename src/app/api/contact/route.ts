@@ -1,7 +1,7 @@
 import { Resend } from "resend";
 import { NextRequest, NextResponse } from "next/server";
-import { ContactNotificationEmail } from "@/components/sections/contact/components/contact-email-notification";
-import { ContactConfirmationEmail } from "@/components/sections/contact/components/contact-email-confirmation";
+import { ContactNotificationEmail } from "@/components/content/contact/components/contact-email-notification";
+import { ContactConfirmationEmail } from "@/components/content/contact/components/contact-email-confirmation";
 import { checkRateLimitFor, incrementRateLimit } from "@/lib/rate-limit/rate-limit";
 import { getClientIp } from "@/lib/network/network";
 
@@ -79,7 +79,7 @@ export async function POST(request: NextRequest) {
       from: "Fabrizio Duroni <contact@fabrizioduroni.it>",
       to: [email],
       subject: `Chicio Coding - Wake up, ${name}... The Matrix has you.`,
-      react: ContactConfirmationEmail({ name, message }),
+      react: ContactConfirmationEmail({ message }),
     });
 
     if (confirmationError) {

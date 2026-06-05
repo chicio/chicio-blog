@@ -30,7 +30,8 @@ src/
 ├── app/                          # Next.js App Router pages and layouts
 ├── components/
 │   ├── design-system/           # Atomic design: atoms → molecules → organisms → templates
-│   └── sections/               # Feature-specific: blog/, chat/, dsa/, easter-eggs/, home/, about-me/
+│   ├── content/                 # Page-content components, one folder per route (mirrors src/content/)
+│   └── features/                # Cross-cutting UI not tied to a route: pwa/, easter-eggs/
 ├── content/                      # All MDX content, filesystem-as-database
 ├── lib/                         # Core business logic and utilities
 └── types/                       # TypeScript type definitions
@@ -39,7 +40,7 @@ src/
 ### Key Patterns
 
 - **Atomic Design System**: atoms → molecules → organisms → templates. See `.claude/rules/design-system.md`
-- **Section Isolation**: Features in `src/components/sections/<section>/` with own `components/` and `hooks/`. See `.claude/rules/sections.md`
+- **Page-Content Isolation**: Each route's components live in `src/components/content/<page>/` with own `components/` and `hooks/`; cross-cutting UI lives in `src/components/features/<feature>/`. See `.claude/rules/content.md`
 - **Business Logic in lib/**: Components are thin, delegate to `src/lib/`
 - **Type Safety**: Shared types in `src/types/`, TypeScript strict mode
 - **Content as MDX**: Filesystem-as-database. See `.claude/rules/mdx-content.md`

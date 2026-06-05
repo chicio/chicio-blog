@@ -17,7 +17,7 @@ export const registerGetAboutMe = (server: McpServer): void => {
                 title: aboutMe.frontmatter.title,
                 description: aboutMe.frontmatter.description,
                 content: aboutMe.content,
-                url: "${MCP_SITE_URL}/about-me",
+                url: `${MCP_SITE_URL}/about-me`,
             };
 
             return {

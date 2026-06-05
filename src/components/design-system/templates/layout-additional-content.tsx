@@ -2,7 +2,7 @@
 
 import { FC } from "react";
 import dynamic from "next/dynamic";
-import { useOfflineContactQueue } from "@/components/sections/pwa/hooks/use-offline-contact-queue";
+import { useOfflineContactQueue } from "@/components/features/pwa/hooks/use-offline-contact-queue";
 
 const CookieConsentBanner = dynamic(
     () => import("@/components/design-system/organism/cookie-consent-banner"),
@@ -15,7 +15,10 @@ const TrackingOptIn = dynamic(
 );
 
 const InstallPromptBanner = dynamic(
-    () => import("@/components/sections/pwa/components/install-prompt-banner"),
+    () =>
+        import("@/components/features/pwa/components/install-prompt-banner").then(
+            (m) => m.InstallPromptBanner,
+        ),
     { ssr: false },
 );
 

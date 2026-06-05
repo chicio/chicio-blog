@@ -1,9 +1,9 @@
 "use client";
 
 import { MatrixHeaderBackground } from "@/components/design-system/molecules/effects/matrix-header-background";
-import { DejavuEasterEgg } from "@/components/sections/easter-eggs/components/dejavu";
+import { DejavuEasterEgg } from "@/components/features/easter-eggs/components/dejavu";
 import { FC } from "react";
-import logoImage from "../../../../../public/images/logo.png";
+import logoImage from "../../../../../public/media/logo.png";
 import { ImageGlow } from "../../atoms/effects/image-glow";
 import { Cursor } from "../../atoms/typography/terminal-blocks";
 import { useGlassmorphism } from "../../utils/hooks/use-glassmorphism";

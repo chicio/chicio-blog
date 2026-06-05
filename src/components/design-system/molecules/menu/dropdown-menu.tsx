@@ -5,7 +5,7 @@ import { BiChevronDown } from "react-icons/bi";
 import { useReducedMotions } from "../../utils/hooks/use-reduced-motions";
 import { MenuItemWithTracking } from "./menu-item-with-tracking";
 
-export interface DropdownMenuItem {
+interface DropdownMenuItem {
     label: string;
     to: string;
     trackingData: TrackingData;
@@ -13,17 +13,17 @@ export interface DropdownMenuItem {
     onClickCallback?: () => void;
 }
 
-export interface DropdownMenuGroup {
+interface DropdownMenuGroup {
     label: string;
     items: DropdownMenuItem[];
 }
 
-export type DropdownMenuEntry = DropdownMenuItem | DropdownMenuGroup;
+type DropdownMenuEntry = DropdownMenuItem | DropdownMenuGroup;
 
-export const isDropdownMenuGroup = (entry: DropdownMenuEntry): entry is DropdownMenuGroup =>
+const isDropdownMenuGroup = (entry: DropdownMenuEntry): entry is DropdownMenuGroup =>
     "items" in entry;
 
-export interface DropdownMenuProps {
+interface DropdownMenuProps {
     label: string;
     items: DropdownMenuEntry[];
     className?: string;

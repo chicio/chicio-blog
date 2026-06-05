@@ -81,11 +81,11 @@ export const createMetadata = ({
     }
 });
 
-export type WebsiteJsonLd = 'Website'
-export type PersonJsonLd = 'Person'
-export type BlogJsonLd = 'Blog'
-export type BlogPostingJsonLd = 'BlogPosting'
-export type JsonLdType = WebsiteJsonLd | PersonJsonLd | BlogPostingJsonLd | BlogJsonLd 
+type WebsiteJsonLd = 'Website'
+type PersonJsonLd = 'Person'
+type BlogJsonLd = 'Blog'
+type BlogPostingJsonLd = 'BlogPosting'
+export type JsonLdType = WebsiteJsonLd | PersonJsonLd | BlogPostingJsonLd | BlogJsonLd
 
 const jsonLdIds: Partial<Record<JsonLdType, string>> = {
     'Person': `${siteMetadata.siteUrl}/#person`,

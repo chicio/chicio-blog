@@ -1,6 +1,6 @@
 import { tracking } from "../../types/configuration/tracking";
 
-export interface ProjectCallToAction {
+interface ProjectCallToAction {
   label: string;
   link: string;
   trackingAction: string;

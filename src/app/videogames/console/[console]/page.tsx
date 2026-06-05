@@ -1,10 +1,10 @@
 import { createMetadata } from "@/lib/seo/seo";
-import { NextVideogamesConsoleParameters, NextVideogamesGameParameters } from "@/types/next/page-parameters";
+import { NextVideogamesConsoleParameters } from "@/types/next/page-parameters";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getAllConsoles, getAllGames, getConsole, getGame } from "@/lib/content/videogames/videogames";
-import { Console } from "@/components/sections/videogames/components/console";
+import { getAllConsoles, getConsole } from "@/lib/content/videogames/videogames";
+import { Console } from "@/components/content/videogames/components/console";
 
 export async function generateMetadata({
   params,
@@ -47,6 +47,6 @@ export default async function VideogamesGamesForConsolePage({
   }
 
   return (
-    <Console console={console} consoleSlug={receivedParameters.console} />
+    <Console console={console} />
   );
 }

@@ -1,0 +1,18 @@
+{
+    "$schema": "https://unpkg.com/knip@6/schema.json",
+    "entry": [
+        "src/app/sw.ts",
+        "src/content/**/content.mdx",
+        "serwist.config.mjs"
+    ],
+    "project": [
+        "src/**/*.{ts,tsx,mdx}"
+    ],
+    "mdx": {
+        "entry": ["src/content/**/content.mdx"]
+    },
+    "ignoreDependencies": [
+        "tailwindcss",
+        "highlight.js"
+    ]
+}

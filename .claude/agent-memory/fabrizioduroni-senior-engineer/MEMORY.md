@@ -8,7 +8,7 @@
 - [Design System & Matrix Theme](arch_design_system.md) — Atomic design, Matrix palette, glassmorphism/motion hooks
 - [Routes & Sections](arch_routes_sections.md) — Complete route map, section components, legacy URL redirects
 - [Next.js Config](arch_next_config.md) — MDX plugins, React Compiler, image optimization, release pipeline
-- [Media Co-location & Public Static Media](arch_image_colocation.md) — all media under public/media/ (content/ gitignored, images/ + sounds/ committed); copy-content-media.ts; 3 redirects; SelfHostedVideo molecule
+- [Media Co-location & Public Static Media](arch_image_colocation.md) — all media under public/media/ (content/ gitignored; sounds/, authors/, clowns/, PNGs flat at top level); copy-content-media.ts; 3 redirects; SelfHostedVideo molecule
 
 ## Integrations
 - [Chat Feature](integration_chat.md) — Groq LLM + Upstash Vector RAG, streaming, knowledge upload
@@ -31,6 +31,9 @@
 
 ## Features (continued 3)
 - [Markdown Negotiation](feature_markdown_negotiation.md) — Accept: text/markdown support via proxy.ts + /markdown-content/* routes, Next.js 16 proxy convention
+
+## Infrastructure
+- [CI Pipeline](project_ci_pipeline.md) — Three-job workflow (lint, knip, build); lint/knip gate build; ubuntu-latest; npm ci; concurrency cancel; 2026-06-05
 
 ## Feedback
 - [PWA & State Patterns](feedback_pwa_patterns.md) — useSyncExternalStore for localStorage state, consent-gated UI, banner/error page alignment rules

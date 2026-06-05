@@ -19,26 +19,3 @@ export const siteMetadata = {
         },
     },
 }
-
-export type SiteMetadataSocialLinks = {
-    twitter: string,
-    facebook: string,
-    linkedin: string,
-    github: string,
-    medium: string,
-    devto: string,
-    instagram: string,
-}
-
-export type SiteMetadata = {
-    title: string,
-    siteUrl: string,
-    featuredImage: string,
-    featuredArtImage: string,
-    author: string,
-    contacts: {
-        email: string,
-        phone: string,
-        links: SiteMetadataSocialLinks,
-    },
-};

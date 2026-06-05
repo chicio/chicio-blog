@@ -9,7 +9,7 @@ import { motion } from "framer-motion";
 import { trackWith } from "@/lib/tracking/tracking";
 import { tracking } from "@/types/configuration/tracking";
 import { slugs } from "@/types/configuration/slug";
-import { whiteRabbitEasterEgg } from "@/components/sections/easter-eggs/components/white-rabbit";
+import { whiteRabbitEasterEgg } from "@/components/features/easter-eggs/components/white-rabbit";
 import { Command } from "cmdk";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
@@ -26,7 +26,7 @@ import { ToggleMotionItem } from "./toggle-motion-item";
 
 const NeoRoomEasterEgg = dynamic(
   () =>
-    import("@/components/sections/easter-eggs/components/neo-room-easter-egg"),
+    import("@/components/features/easter-eggs/components/neo-room-easter-egg"),
   { ssr: false },
 );
 
@@ -42,14 +42,23 @@ const GroupLabel: FC<PropsWithChildren> = ({ children }) => (
 const CommandPalette = () => {
   const [open, setOpen] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
-  const [selectedValue, setSelectedValue] = useState("");
-
-  const router = useRouter();
-  const { glassmorphismClass } = useGlassmorphism({ noScale: true });
+  const [selectedValue, setSelectedValue] = useState("open ai chat");
   const { handleSearch, resetSearch, search } = useSearch(
     open,
     whiteRabbitEasterEgg,
   );
+  const [previousSearch, setPreviousSearch] = useState(search);
+  const router = useRouter();
+  const { glassmorphismClass } = useGlassmorphism({ noScale: true });
+
+  if (previousSearch !== search) {
+    setPreviousSearch(search);
+    setSelectedValue(
+      search.type === "search" && search.results.length > 0
+        ? search.results[0].title
+        : "open ai chat",
+    );
+  }
 
   const close = useCallback(() => {
     setOpen(false);
@@ -97,14 +106,6 @@ const CommandPalette = () => {
 
     return () => window.removeEventListener("keydown", handleEsc, true);
   }, [open, close]);
-
-  useEffect(() => {
-    if (search.type === "search" && search.results.length > 0) {
-      setSelectedValue(search.results[0].title);
-    } else {
-      setSelectedValue("open ai chat");
-    }
-  }, [search]);
 
   const handleOpenChat = () => {
     trackWith({

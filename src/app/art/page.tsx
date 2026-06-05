@@ -1,4 +1,4 @@
-import { Art } from "@/components/sections/art/components/art";
+import { Art } from "@/components/content/art/components/art";
 import { createMetadata } from "@/lib/seo/seo";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { slugs } from "@/types/configuration/slug";
