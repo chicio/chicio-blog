@@ -1,0 +1,434 @@
+---
+title: "App.js Conf 2026: my recap from Krakow"
+description: "My recap of App.js Conf 2026 in Krakow: talks, libraries, the 'elephant in the room' called AI"
+date: 2026-06-01
+image: /media/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-matrix.jpg
+tags:
+  [
+    react native,
+    react,
+    javascript,
+    typescript,
+    mobile application development,
+    conference,
+    expo,
+    software mansion,
+  ]
+authors: [fabrizio_duroni]
+math: false
+---
+
+import { Youtube } from "@/components/design-system/molecules/video/youtube";
+import { SelfHostedVideo } from "@/components/design-system/molecules/video/self-hosted-video";
+
+*My recap of App.js Conf 2026 in Krakow: talks, libraries, the 'elephant in the room' called AI*
+
+---
+
+After [React Universe 2024](/blog/post/2024/10/21/react-universe-2024) in Wrocław, I had the chance to go back to Poland
+for another React/React Native conference. This time the destination was Krakow, and the conference was
+[App.js Conf 2026](https://appjs.co), organized by [Software Mansion](https://swmansion.com) together with
+[Expo](https://expo.dev). Two days, one track, a packed venue, and a lineup that made it very clear where the React
+Native ecosystem is heading.
+
+In this post I want to share the talks that stood out to me the most, the libraries and tools that were announced or
+demoed on stage, and a few personal thoughts about the direction of the ecosystem and the conference in general.
+
+## Some numbers
+
+Before getting into the talks, a bit of context about the event:
+
+**Location:** 12 Świętego Wawrzyńca, 31-060 Kraków
+**Dates:** 27-28 May 2026  
+**Format:** Two days, single track  
+
+The venue was a big industrial hall, the kind of place that fits a conference of 
+this size while still feeling intimate enough to bump into the speakers between talks. Krakow itself was a great
+backdrop: the old town, the main square, and the river walk were all within reach after the conf (eg. I had
+the chance to visit [Wawel Castle](https://wawel.krakow.pl/en) and Rynek Główny).
+
+Now let's dive into the talks.
+
+![The main stage at App.js Conf 2026, kickoff slide](/media/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-opening.jpeg "The main stage at App.js Conf 2026, kickoff slide")
+
+## Day 1: Keynotes and incredible talks
+
+The first day started, unsurprisingly, with two keynotes: one by Software Mansion and another one by Expo.
+After them, a series of talks from "famous devs" of the React Native scene took place. In particular, I finally had a chance to see
+William Candillon live.
+
+### Software Mansion Keynote
+
+The Software Mansion keynote was held by [Krzysztof Magiera](https://x.com/kzzzf), director of engineering at Software Mansion.
+In his keynote, he made a small introduction about how AI is changing the way we write software, speeding up
+code writing and moving the focus to building and testing.
+He stated that the work done by Software Mansion during the last years in the RN ecosystem put the company in the perfect spot
+to be the driver of this new way of working.
+
+He started showing all the contributions made by the company in the open source space. He also mentioned they have a
+special partnership with Meta that allows them to be more proactive in their contribution to React Native itself.
+This led them to 283 commits in the last year on the React Native repository, with a strong contribution to the animation layer where they
+brought back into React Native some ideas originally developed in [Reanimated](https://docs.swmansion.com/react-native-reanimated/), the famous library they maintain.
+They also made strong contributions to Hermes V1.
+
+They also made 752 commits on the Expo repo. They contributed in particular to:
+
+- [Expo Brownfield](https://docs.expo.dev/versions/latest/sdk/brownfield/)
+- [Expo Widgets](https://docs.expo.dev/versions/latest/sdk/widgets/)
+- Expo Modules Core
+
+![Expo brownfield](/media/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-expo-brownfield.jpeg "Expo brownfield")
+
+They also actively continue to work on their own famous libraries:
+
+- Reanimated, recently reached version 4.4, with support for CSS selectors. They also extracted the Worklets package a few versions ago,
+so that it can be used in other contexts.
+
+![Reanimated update on stage at App.js Conf 2026](/media/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-reanimated.jpeg "Reanimated: CSS animations, Worklets, Core Animation, and CSS pseudoselectors")
+
+- [React Native Screens](https://github.com/software-mansion/react-native-screens), with support now for iOS split views
+- [Detour](https://detour.swmansion.com), a deep link platform (can it replace Appsflyer?)
+- [TypeGPU](https://docs.swmansion.com/TypeGPU/), presented in a dedicated talk we will see later
+- [Enriched](https://github.com/software-mansion/react-native-enriched), a set of libraries for rich text rendering like Markdown
+- [RNRepo](https://github.com/software-mansion/rnrepo), a set of prebuilds of famous libraries to speed up the build
+
+He also presented a new AI tool called [Argent](https://github.com/software-mansion/argent).
+It is an agentic toolkit to control, debug, and profile iOS and Android apps. Using Argent, the LLM can inspect the view hierarchy and access the debugger and profiler to investigate bugs.
+
+![Argent on stage at App.js Conf 2026](/media/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-argent.jpeg "Argent: an agentic toolkit to control, debug, and profile iOS and Android applications")
+
+He also announced on stage version 3 of [Gesture Handler](https://github.com/software-mansion/react-native-gesture-handler). It is a new major version created to support the new architecture 
+with a lot of improvements under the hood.
+
+![Gesture Handler 3.0 on stage at App.js Conf 2026](/media/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-gesture-handler.jpeg "Gesture Handler 3.0: hook API, native touchables, and quality-of-life improvements")
+
+Last but not least, they presented a [new bottom sheet library](https://github.com/software-mansion-labs/react-native-bottom-sheet). It was presented as a bottom sheet "that just works" :laughing:.
+
+![Software Mansion Bottom Sheet on stage at App.js Conf 2026](/media/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-bottom-sheet.jpeg "The new @swmansion/bottom-sheet, built on native primitives")
+
+### Expo Keynote
+
+Next there was the Expo Keynote, held by [Charlie Cheever](https://en.wikipedia.org/wiki/Charlie_Cheever), CEO of Expo.
+He started by showing how React, React Native, and Expo are blowing up in download charts. He also showed how RN apps are the ones generating more revenue.
+
+"React Native and Expo are winning the AI era", this was a statement he made. This is a consequence of the fact that React Native and Expo have a big community, with thousands of open source
+libraries and apps that LLMs have been trained on. Also the documentation Expo provides, combined with the support for all the major platforms (iOS, Android, and Web), plays a key role.
+
+He mentioned again [Argent](https://github.com/software-mansion/argent) and [agent-device](https://github.com/callstack/agent-device) as the missing pieces to close the feedback loop with AI.
+Expo should focus on web support, which is more important than ever.
+He then showed how Expo is truly universal, starting to support different platforms like Expo TV, which adds support for Apple TV and Android TV.
+Additionally, he showed Expo UI, a library that contains a set of native components for iOS and Android built with SwiftUI and Jetpack Compose, along with expo-widget and expo-router.
+
+Then he showed some tools created by Expo like [Observe](https://expo.dev/solutions/expo-observe), that we will see in detail in a talk I attended on day 2.
+Most of the things presented above that are not a standalone product or library are already available in Expo SDK 56.
+
+![Expo SDK 56 at App.js Conf 2026](/media/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-expo-sdk-56.jpeg "Expo SDK 56")
+
+### Pixelicious
+
+Next, I finally had a chance to see [William Candillon](https://github.com/wcandillon) on stage for real. For me, he is like a legend. He is the developer I would like to be.
+
+![William Candillon at App.js Conf 2026](/media/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-william-candillon-hello.jpeg "William Candillon at App.js Conf 2026")
+
+He started by showing how the React Native Skia ecosystem is growing fast and how some of the most famous open source contributors and dev content creators
+are already experimenting with [React Native WebGPU](https://github.com/wcandillon/react-native-webgpu), introduced here last year at App.js Conf.
+He also showed Redraw, a new library for 2D rendering that he has recently presented.
+
+He then started to show what he is working on for [React Native WebGPU](https://github.com/wcandillon/react-native-webgpu): aligning the API so that the code can be "copy-pasted" from the web to the native side.
+For example, until now there were some differences in how you started the rendering loop in React Native WebGPU compared to what you had to do on the web, with an additional
+`context.present()` call to notify the native UI thread of the start of the loop. Now they are aligned.
+
+![React Native Skia, WebGPU, and Redraw](/media/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-william-candillon-webgpu-skia-redraw.jpeg "React Native Skia, WebGPU, and Redraw")
+
+He then showed a new feature of React Native Worklets called [bundle mode](https://docs.swmansion.com/react-native-worklets/docs/bundleMode/) allowing devs to execute
+arbitrary code from your bundle on any thread. This unlocks a lot of possibilities, like having multiple renderers executing at the same time (2D and 3D).
+
+He also showed the work done with [Marc Rousavy](https://github.com/mrousavy), CEO of Margelo and author of [react-native-vision-camera](https://github.com/mrousavy/react-native-vision-camera), to have
+video and camera streaming plug-and-play into React Native WebGPU.
+
+<SelfHostedVideo src="/media/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-william-2.mp4" />
+
+He then switched to React Native Skia, where he is trying to add the support for a new backend called [Skia Graphite](https://blog.google/chromium/introducing-skia-graphite-chromes/) (backed by Dawn WebGPU, 
+the same implementation of WebGPU that powers React Native WebGPU released by Google and powering Google Chrome). This means that you can have views that draw using both React Native 
+WebGPU and React Native Skia, because their runtime engine is the same. The plan for Skia Graphite is to have it released to everyone by Q4 of 2026.
+
+<SelfHostedVideo src="/media/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-william-1.mp4" />
+
+He finally introduced [Redraw](https://wcandillon.github.io/redraw/), a new library that can work with Skia and WebGPU, that uses TypeGPU under the hood to enhance the drawing 
+capabilities by passing geometry and fragment shaders as functions to the library components.
+
+He closed the talk revealing that his two recent projects started from his tradition of creating April Fools' videos:
+
+- April Fools' 2024 -> React Native GPU
+- April Fools' 2025 -> Redraw
+
+He showed this to leave us with a quote I liked: 
+
+> unproductive times never fail to end up being the most productive ones
+
+### How to Build the Fastest Apps: Break the Rules
+
+Next in line was [Jay Meistrich](https://github.com/jmeistrich), with a presentation of his two most famous libraries: [Legend List](https://github.com/LegendApp/legend-list)
+and [Legend State](https://github.com/LegendApp/legend-state). This was quite an interesting talk, because the libraries presented could bring a lot of benefits to many apps.
+
+Legend List is a list library, probably the fastest on the market. He announced version 3 release during the talk.
+Then he started the real talk: making apps really fast. So fast that they can beat native apps. He did a lot of consultancy work in the last year
+and he saw the same problem in multiple codebases: unnecessary rendering.
+The problem is that rendering is also used to coordinate effects and share information. React state is oversubscribed, and it is the orchestrator of everything.
+The solution Jay proposes is to rethink how we think about state, separating the ownership from the subscription to changes.
+He made some comparisons with React, which calls this concept signals, or Reanimated with shared values.
+
+This is why he created Legend State: the solution is to have observables, and the components can read their values when needed. This is the same approach used in
+other frameworks like Svelte and Preact.
+He also made some considerations about Legend State and how to convince your team to use an alternative state library, showing how for most of the basic components
+of React Native we are already using solutions from the community and not the standard components.
+
+![Why should I change my state library?](/media/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-jay-meistrich-legendstate-builtin-components.jpeg "Why should I change my state library?")
+
+He then closed the talk reiterating how important state architecture is, probably the most important architectural pattern for a React/React Native app.
+
+### Write TypeGPU, Use Anywhere: Composable WebGPU Shaders for React Native and Beyond
+
+The afternoon started with another great talk by [Iwo Plaza](https://github.com/iwoplaza), software engineer at Software Mansion.
+He presented a new library they developed called [TypeGPU](https://docs.swmansion.com/TypeGPU/).
+He showed how this library makes the developer's life easy by writing shader programs using TypeScript. He started from a demo of
+React Native WebGPU to show how easy it is to write shaders as callbacks using the directive `use gpu`.
+
+Why a new shader system? To standardize how to write shaders for different engines, without sacrificing the type safety from TypeScript.
+By choosing TypeScript, they were also able to use a unified set of build tools aligned with the wider ecosystem.
+
+They also had to create [TSOver](https://github.com/software-mansion/tsover): a "fork" of TypeScript that adds operator overloading to the language.
+This enhances the shader writing experience a lot (eg. simplifies array operations a lot).
+
+He also mentioned that TypeGPU is not only about computer graphics: it is also ready for massive computation on the GPU.
+Obviously, TypeGPU already has its own official React integration, [@typeGPU/react](https://docs.swmansion.com/TypeGPU/ecosystem/typegpu-react/).
+
+He concluded the talk with the slogan "Math is cool!" :heart::laughing:
+
+### Other talks
+
+During the day there were other interesting talks that I will not go into in detail in this article, but you can check them out in the full livestream you can find at the bottom.
+In particular, I recommend:
+
+- "Is AI making React Native obsolete?" by Perttu Lähteenlahti
+- "Screens & Routers — The Foundation of Navigation in React Native Apps" by Kacper Kafara & Kuba Tkacz
+
+## Day 2
+
+On day 2 there was a mix of talks on different topics. I also had the chance to speak with a lot of people from different companies and understand their ways of working.
+
+### Expo on Desktop
+
+The day started with a talk by [Jamie Birch](https://github.com/shirakaba), a software developer based in Japan.
+He introduced a new open source project he developed: [Expo Desktop](https://github.com/shirakaba/expo-desktop).
+
+He started with an overview of the current state of React Native on Desktop, where there are ad hoc frameworks for React Native on different
+platforms: React Native macOS and React Native Windows. Unfortunately, generally speaking, the ecosystem on these platforms in terms of packages is smaller compared to
+React Native on mobile. Additionally, the variants for macOS and Windows are usually behind in terms of updates related to React Native, pinning some versions behind the main one.
+Anyway, especially for macOS, 1/3 of the packages available on iOS are already compatible. Also, Expo UI is already compatible without any change.
+
+Expo Desktop is a tool to make Desktop apps first-class on Expo:
+
+- by handling the setup for creating a new app matching the user experience on mobile
+- by implementing Expo Prebuild
+- by filling missing parts of the ecosystem
+
+He also stated that the framework is not vibe coded :laughing:.
+How does it work:
+
+- he ported the config plugins, creating an ad hoc variant per system
+- he ported the CLI tooling (`npx expo-desktop`)
+  - the CLI checks the current common version between React Native macOS and React Native Windows
+
+He closed the talk by showing the official repo and expressing the hope that the project gets traction both in terms of usage and contributors.
+
+### The Reverse Magic Trick
+
+Then a slightly different talk by [Gant Laborde](https://www.linkedin.com/in/gant-laborde/), one of the founders of [Infinite Red](https://infinite.red).
+He made this presentation of a "magic trick", where he had to guess a card taken from a deck by a volunteer. He then let the audience choose which was the selected card, and they matched.
+
+He performed this magic with the collaboration of two devs from Infinite Red. It was not full AI automation. It was collaboration between devs, leveraging AI
+to speed up the generation of a fake image with the card chosen by the audience.
+
+The general message was: AI without guidance is nothing. Human in the loop is still important. He also showed a way of working with AI development called AI Triforce,
+where the role of the engineer shifts into a sort of collaboration to oversee a specific part of the software development lifecycle.
+
+![AI Triforce](/media/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-three-hero-classes.jpeg "AI Triforce")
+
+![AI Triforce](/media/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-aitriforce.jpeg "AI Triforce")
+
+### React Native without Cocoapods
+
+Next in line were [Riccardo Cipolleschi](https://github.com/cipolleschi) from Meta and [Christian Falch](https://github.com/chrfalch) from Expo, showing how the React Native team, with the help of Expo,
+is migrating away from CocoaPods to Swift Package Manager.
+
+First, Riccardo showed the timeline up to today of the work done to enable SPM in React Native. He also explained the reason why they are doing this: CocoaPods
+will be abandoned by the end of the year. They started to work on this in January 2025. The first step is related to the precompiled binaries for React Native released some time ago.
+These are already built using SPM in the internal React Native CI.
+
+Next, a public [RFC has been published](https://github.com/react-native-community/discussions-and-proposals/pull/994) by Christian Falch. This RFC explains the reason why they are doing this (reported above) and the plan on how to do it:
+
+- ship SPM support behind an opt-in flow
+- add CLI and template support so that apps can be created or migrated with official tooling
+- keep support for both CocoaPods and SPM in parallel for some releases
+- define a clear contract for third party libraries and encourage them to ship dual support
+- make SPM the default when the ecosystem is ready
+
+Then Christian showed a live demo of how the integration will work. The main command will be `npx react-native spm`.
+The command will add the Package.swift for the deps that still don't have it and will try to rename the old xcodeproj by adding a `.legacy` extension to it, so that our app will be loaded using
+the SPM app project. Opening a project after running this command will show 4 packages:
+
+- Autolinked, for native packages automatically discovered and linked
+- React-GeneratedCode, this is a codegen library
+- ReactNative, this contains the precompiled binary mentioned at the beginning
+- Plus, an entry for each library automatically scaffolded by the command above
+
+As soon as the setup is done, adding new libraries is easier than before: you just install a library through npm, and if it has a `Package.swift`
+it will be added automatically as a dependency on the native side.
+
+![React Native without Cocoapods](/media/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-react-native-spm.jpeg "React Native without Cocoapods")
+
+For library authors, the process is quite simple too. There is the `Package.swift` to add (it can be scaffolded with the command above, but Christian didn't share any details),
+and then add a declaration to the react-native.config.js file (in a new `spm` section). At the beginning libraries can skip the step to provide a precompiled binary.
+
+### One Codebase, Three Platforms: Making Universal Expo Work in Production
+
+The next talk was from [Edwin Vargas](https://www.linkedin.com/in/edwinvrgs/) from [handoff.ai](https://handoff.ai), showing how his team is trying to make a universal app
+with Expo.
+
+He started with an introduction of how he discovered Universal Expo. They started the company in 2023, and they were trying to scale quickly. This is a consequence of
+the fact that they needed speed to find their market fit. They started from the *mobile app*. Then they deployed to the web. This didn't come without challenges.
+
+First of all, they were leveraging a lot of Facebook/Instagram Ads. This means their web application was going to be shown in a non-standard browser, especially on Android.
+This is when they discovered a hard truth: mobile web is the 4th platform (after web desktop, iOS app, and Android app). To overcome some of the problems, they tried
+to push users out of the Meta in-app browser into their app when they were signing up. They discovered this was bad for conversion.
+
+They leveraged a lot of OTA updates on mobile (EAS) to keep the mobile apps aligned with the web experience.
+
+One thing that is really interesting is that even if the codebase is shared across all the platforms, they pushed hard to have platform differences supported in the right way
+at the right time. For example, they used libraries built for mobile when needed and for web in the other cases. They also pushed a lot to create the perfect design system for their needs
+to support each platform in the right way.
+
+He concluded the talk with a question "Did the universal Expo bet pay off?". The answer was yes because:
+
+- they built complex screens sharing a lot of the code
+- they sped up development a lot
+- they were also able to scale the team, from startup to scale-up size
+- they were able to learn from customers faster than ever given the fast release track on all platforms
+
+### Accessibility in Motion
+
+Then it was time for [Britta Evans-Fenton](https://x.com/13ritta), senior developer at Shopify.
+She made a talk about accessibility in apps.
+
+She started by asking the audience how many accessibility features they had used in the last week. Some of them seem taken for granted or not accessibility-related, but they
+were created for this purpose. She then introduced the concept of the [curb cut effect](https://en.wikipedia.org/wiki/Curb_cut_effect), the phenomenon of
+disability-friendly features being used and appreciated by a larger group than the people they were designed for. She also introduced the concept of [universal design](https://en.wikipedia.org/wiki/Universal_design),
+that is the design of buildings, products, or environments to make them accessible to all people, regardless of age, disability, or other factors. The general point
+that connects these concepts is: if you design for the edge, you are building for everyone.
+
+She then started by saying she didn't want to cover the basic API contained in React Native (accessibility props on components). Also, in this AI day and age,
+in React Native not everything is covered like on the web, because apps tend to be less accessible compared to the web.
+
+She then explained why she is so sensitive about accessibility: when she started to work on React Native she discovered that she has the same gene as her grandmother, which leads to
+macular degeneration, a disease that affects central vision and makes you partially blind. This is why she became a promoter for making apps more accessible.
+
+She then started with an overview of how we can make apps more accessible. The first one was reduce motion, something that could help people with ADHD, vestibular disorders, and
+photosensitive epilepsy. She then showed the API we can use to understand if this accessibility feature is on, and tweak the animation based on its value.
+Nice thing, this is an API where [I made some small contribution on the React Native project](https://github.com/facebook/react-native/pulls?q=author%3Achicio).
+
+![React native accessibility reduce motion API](/media/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-accessibility-reduce-motion.jpg)
+
+She then switched to color accessibility, where she explained how important it is to have a clear difference between colors that represent different states.
+She then talked about screen readers. She explained how to tackle cases where pieces of UI appear later on. This should be managed with ad hoc APIs to set the focus on the right element
+after an interaction.
+She finally closed the talk with some considerations and possible actions to manage different UI components (Toast, Gesture Swipe, etc.).
+
+### What is your app actually doing in production?
+
+Next was [Kadi Kraman](https://github.com/kadikraman), software engineer at Expo.
+She presented a new tool from Expo called [Observe](https://expo.dev/solutions/expo-observe) that stands out as a full observability platform for mobile apps.
+
+![Observability, the missing piece at Expo](/media/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-observe-observability.jpeg "Observability, the missing piece at Expo")
+
+![Introducing Expo Observe](/media/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-observe-expo.jpeg "Introducing Expo Observe")
+
+### Visual Editor for Reanimated
+
+Then it was time for [Catalin Miron](https://github.com/catalinmiron), creator of the famous website [animatereactnative.com](https://www.animatereactnative.com) and a series of YouTube
+videos where he shows how to create beautiful animations in React Native.
+
+He presented a new visual editor for Reanimated, where you can compose animations ready to be copy-pasted into your code. The editor is called [Keyframer](https://keyframer.dev).
+
+![Introducing Keyframer.dev](/media/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-keyframer.jpeg "Keyframer.dev")
+
+The editor took a year of development. You can use it to draw your animation using keyframes and a lot of customizations. 
+The generated components are Reanimated React components. It is available with various pricing tiers, including a free one, so check it out.
+
+### It's a great time to be a builder
+
+The last talk was held by [Seth Webster](https://www.linkedin.com/in/swebster/) and was called "It's a great time to be a builder".
+This was an inspirational talk, the perfect close for an incredible two-day conf. I liked this talk a lot.
+
+Seth started by telling a personal story. In 2022 his father was fighting the last days of his battle against Parkinson's. His dad had always been a strong man, but
+in his last days he couldn't speak, his hands had clenched shut, and he was unable to leave his bed. In that moment Seth realized that everything he had learned until that day in his life, like product,
+development, and team management, was completely useless, and he felt completely useless too.
+
+Then he started to think he could build something that could help him speak. Some days later, he created "Speak Easy": an app to help his father communicate again (by choosing
+letters using the space bar from an always-scrolling list). In this way he unlocked his father's ability to speak again in his last days.
+Seth reflected on how it was possible for him to build such an app in a short amount of time: thanks to the hundreds of people in the open source community.
+
+> The industry feels weird right now.
+
+ this was the statement he showed after thanking the open source community. It feels like we are constantly flooded with too much information.
+
+> The pace is absurd.
+
+Today we have reached a point where a person can prototype an app over a weekend that would have required months.
+
+> The story is not that developers are disappearing", but the reality is that "the story is that developers are amplified. 
+
+This was the statement from Seth's presentation. Millions of developers are gaining momentum. We are not built for this as human beings, especially the flood of information, 
+but we are going to adapt as we always have. AI shrinks the distance between "I want to make this" and "this exists". AI is making the mechanical parts cheaper.
+
+> The human parts get more valuable": judgment, leadership, taste, product intuition, knowing what to build, communication.
+
+The developers who will succeed in this era are the ones who can understand the systems, direct tools effectively, identify meaningful problems, make good decisions under ambiguity, and turn
+scattered possibilities into coherent products. The industry is becoming a more creative one, not less, because of AI.
+
+> I'm a builder. It's one hell of a time to be a builder.
+
+This was the final statement from Seth, engaging the audience to scream the phrase with him. .
+
+### Other talks
+
+As for day one, also during the second day there were other interesting talks that I will not go into in detail in this article, but you can check them out in the full livestream you can find at the bottom.
+In particular, I recommend:
+
+- "Your E2E Tests Are Lying To You" by Tyler Becks
+- "Bringing Privacy-Preserving Cryptography to Mobile Apps" by Ya-wen Jeng
+
+## Watch the recordings
+
+If you want to watch the full conference, both days were livestreamed by Software Mansion. Day 1:
+
+<Youtube videoId="4H8iRPN0Q2M" />
+
+Day 2:
+
+<Youtube videoId="dvpeMlwPNnw" />
+
+## Conclusion
+
+The React and React Native ecosystem is more vibrant than ever. From cutting-edge computer graphics frameworks to universal apps and enterprise-grade tooling, app developers have never been
+in such a good spot to create amazing apps. AI can accelerate the mechanical parts, but it is still engineering culture that will drive the most successful developers into a new era of
+software development.
+
+We are in a historical moment where we can witness the birth of the next generation of builders, like what happened almost 20 years ago when mobile apps became a thing, and 35 years ago with
+the web revolution.
+
+It will not be easy to adapt to all of this. I have to admit it is not easy for me, since I have always loved the "mechanical part" of software engineering.
+As Seth mentioned in his talk, the amount of information flooding into our brains right now is unbearable. I'm struggling to keep up with all the information and news these days.
+But I will adapt, as I always have during this almost 20-year-long career journey, and during my almost 40-year-long life journey :laughing:.
+
+The future is uncertain, as it always has been. Let's keep up the passion for our work, and let's build something :heart:.
