@@ -18,6 +18,8 @@ const components: MDXComponents = {
 
         return <CodeBlock {...props} />;
     },
+    // eslint-disable-next-line @next/next/no-img-element
+    img: ({ alt, ...props }) => <img loading="lazy" decoding="async" alt={alt ?? ""} {...props} />,
 };
 
 export function useMDXComponents(): MDXComponents {
