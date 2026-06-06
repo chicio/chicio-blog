@@ -76,7 +76,7 @@ export const ChromeAiFeaturesToolbar: FC<ChromeAiFeaturesToolbarProps> = ({
     <>
       <div className={`${glassmorphismClass} p-2`}>
         <Accordion
-          title={<h5 className="flex gap-3 items-center"> <SiProbot className="inline text-shadow-md" />AI features</h5>}
+          title={<h5 className="flex gap-3 items-center mt-0"> <SiProbot className="inline text-shadow-md" />AI features</h5>}
           onToggle={() => {
             trackWith({
               action: tracking.action.toggle_chrome_ai_features,
