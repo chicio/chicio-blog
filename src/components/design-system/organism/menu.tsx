@@ -233,23 +233,30 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
                         </div>
                     )}
                     <button
-                        className="ml-auto sm:mr-3 group flex items-center gap-2 px-3 py-1.5 w-auto md:w-48 rounded-lg border border-accent bg-accent/10 hover:border-accent hover:bg-accent/20 transition-all duration-200 cursor-pointer min-h-10"
+                        className="ml-auto sm:mr-3 group flex items-center gap-2 px-3 py-1.5 w-auto md:w-60 rounded-lg border border-accent bg-accent/10 hover:border-accent hover:bg-accent/20 transition-all duration-200 cursor-pointer min-h-10"
                         onClick={handlePaletteTrigger}
                         aria-label="Open command palette"
                     >
                         <BiSearchAlt className="size-3.5 shrink-0 text-accent group-hover:text-accent transition-colors duration-200" />
-                        <span className="hidden md:block flex-1 text-left font-mono text-sm leading-none text-accent group-hover:text-accent transition-colors duration-200">
+                        <span className="hidden md:block flex-1 text-left font-mono text-sm leading-none text-accent/40 group-hover:text-accent/60 transition-colors duration-200">
                             Search...
                         </span>
                         {modifierKey !== null && (
-                            <kbd className="hidden md:inline-flex items-center gap-0.5 px-1.5 py-2 rounded font-mono text-sm leading-none border border-accent/50 text-accent/70 group-hover:border-accent group-hover:text-accent transition-colors duration-200">
-                                {modifierKey === "meta" ? (
-                                    <LuCommand className="size-[0.6rem] -translate-y-px" />
-                                ) : (
-                                    <ImCtrl className="size-[0.6rem] -translate-y-px" />
-                                )}
-                                <span className="leading-none ml-1.5"> + K</span>
-                            </kbd>
+                            <span className="hidden md:inline-flex items-center gap-1">
+                                <kbd className="inline-flex items-center justify-center size-6 rounded font-mono text-sm leading-none border border-accent/50 text-accent/70 group-hover:border-accent group-hover:text-accent transition-colors duration-200">
+                                    {modifierKey === "meta" ? (
+                                        <LuCommand className="size-3" />
+                                    ) : (
+                                        <ImCtrl className="size-3" />
+                                    )}
+                                </kbd>
+                                <span className="font-mono text-sm leading-none text-accent/70 group-hover:text-accent transition-colors duration-200">
+                                    +
+                                </span>
+                                <kbd className="inline-flex items-center justify-center size-6 rounded font-mono text-base leading-none border border-accent/50 text-accent/70 group-hover:border-accent group-hover:text-accent transition-colors duration-200">
+                                    K
+                                </kbd>
+                            </span>
                         )}
                     </button>
                 </div>
