@@ -26,7 +26,7 @@ import { SelfHostedVideo } from "@/components/design-system/molecules/video/self
 ---
 
 After [React Universe 2024](/blog/post/2024/10/21/react-universe-2024) in Wrocław, I had the chance to go back to Poland
-for another React Native conference. This time the destination was Krakow, and the conference was
+for another React/React Native conference. This time the destination was Krakow, and the conference was
 [App.js Conf 2026](https://appjs.co), organized by [Software Mansion](https://swmansion.com) together with
 [Expo](https://expo.dev). Two days, one track, a packed venue, and a lineup that made it very clear where the React
 Native ecosystem is heading.
@@ -68,13 +68,12 @@ to be the driver of this new way of working.
 He started showing all the contributions made by the company in the open source space. He also mentioned they have a
 special partnership with Meta that allows them to be more proactive in their contribution to React Native itself.
 This led them to 283 commits in the last year on the React Native repository, with a strong contribution to the animation layer where they
-brought back into React Native some ideas originally developed in Reanimated, the famous library they maintain.
+brought back into React Native some ideas originally developed in [Reanimated](https://docs.swmansion.com/react-native-reanimated/), the famous library they maintain.
 They also made strong contributions to Hermes V1.
 
 They also made 752 commits on the Expo repo. They contributed in particular to:
-
-- Expo Brownfield
-- Expo Widget
+- [Expo Brownfield](https://docs.expo.dev/versions/latest/sdk/brownfield/)
+- [Expo Widgets](https://docs.expo.dev/versions/latest/sdk/widgets/)
 - Expo Modules Core
 
 ![Expo brownfield](/media/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-expo-brownfield.jpeg "Expo brownfield")
@@ -86,7 +85,7 @@ so that it can be used in other contexts.
 
 ![Reanimated update on stage at App.js Conf 2026](/media/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-reanimated.jpeg "Reanimated: CSS animations, Worklets, Core Animation, and CSS pseudoselectors")
 
-- React Native Screens, with support now for split views (iOS)
+- [React Native Screens](https://github.com/software-mansion/react-native-screens), with support now for iOS split views
 - [Detour](https://detour.swmansion.com), a deep link platform (can it replace Appsflyer?)
 - [TypeGPU](https://docs.swmansion.com/TypeGPU/), presented in a dedicated talk we will see later
 - [Enriched](https://github.com/software-mansion/react-native-enriched), a set of libraries for rich text rendering like Markdown
@@ -97,11 +96,12 @@ It is an agentic toolkit to control, debug, and profile iOS and Android apps. Us
 
 ![Argent on stage at App.js Conf 2026](/media/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-argent.jpeg "Argent: an agentic toolkit to control, debug, and profile iOS and Android applications")
 
-He also announced on stage version 3 of Gesture Handler. It is a new major version created to support the new architecture with a lot of improvements under the hood.
+He also announced on stage version 3 of [Gesture Handler](https://github.com/software-mansion/react-native-gesture-handler). It is a new major version created to support the new architecture 
+with a lot of improvements under the hood.
 
 ![Gesture Handler 3.0 on stage at App.js Conf 2026](/media/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-gesture-handler.jpeg "Gesture Handler 3.0: hook API, native touchables, and quality-of-life improvements")
 
-Last but not least, they presented a new bottom sheet library. It was presented as a bottom sheet "that just works" :laughing:.
+Last but not least, they presented a [new bottom sheet library](https://github.com/software-mansion-labs/react-native-bottom-sheet). It was presented as a bottom sheet "that just works" :laughing:.
 
 ![Software Mansion Bottom Sheet on stage at App.js Conf 2026](/media/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-bottom-sheet.jpeg "The new @swmansion/bottom-sheet, built on native primitives")
 
@@ -118,22 +118,22 @@ Expo should focus on web support, which is more important than ever.
 He then showed how Expo is truly universal, starting to support different platforms like Expo TV, which adds support for Apple TV and Android TV.
 Additionally, he showed Expo UI, a library that contains a set of native components for iOS and Android built with SwiftUI and Jetpack Compose, along with expo-widget and expo-router.
 
-Then he showed some tools created by Expo like Observe, that we will see in detail in a talk I attended on day 2.
+Then he showed some tools created by Expo like [Observe](https://expo.dev/solutions/expo-observe), that we will see in detail in a talk I attended on day 2.
 Most of the things presented above that are not a standalone product or library are already available in Expo SDK 56.
 
 ![Expo SDK 56 at App.js Conf 2026](/media/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-expo-sdk-56.jpeg "Expo SDK 56")
 
 ### Pixelicious
 
-Next, I finally had a chance to see William Candillon on stage for real. For me, he is like a legend. He is the developer I would like to be.
+Next, I finally had a chance to see [William Candillon](https://github.com/wcandillon) on stage for real. For me, he is like a legend. He is the developer I would like to be.
 
 ![William Candillon at App.js Conf 2026](/media/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-william-candillon-hello.jpeg "William Candillon at App.js Conf 2026")
 
 He started by showing how the React Native Skia ecosystem is growing fast and how some of the most famous open source contributors and dev content creators
-are already experimenting with React Native WebGPU, introduced here last year at App.js Conf.
+are already experimenting with [React Native WebGPU](https://github.com/wcandillon/react-native-webgpu), introduced here last year at App.js Conf.
 He also showed Redraw, a new library for 2D rendering that he has recently presented.
 
-He then started to show what he is working on for React Native WebGPU: aligning the API so that the code can be "copy-pasted" from the web to the native side.
+He then started to show what he is working on for [React Native WebGPU](https://github.com/wcandillon/react-native-webgpu): aligning the API so that the code can be "copy-pasted" from the web to the native side.
 For example, until now there were some differences in how you started the rendering loop in React Native WebGPU compared to what you had to do on the web, with an additional
 `context.present()` call to notify the native UI thread of the start of the loop. Now they are aligned.
 
@@ -147,21 +147,23 @@ video and camera streaming plug-and-play into React Native WebGPU.
 
 <SelfHostedVideo src="/media/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-william-2.mp4" />
 
-He then switched to React Native Skia, where he is developing a new backend called Skia Graphite, backed by Dawn WebGPU, the same implementation of WebGPU that powers React Native WebGPU.
-This means that you can have views that draw using both React Native WebGPU and React Native Skia, because their runtime engine is the same. The plan for Skia Graphite is to have it
-used by everyone by Q4 of 2026.
+He then switched to React Native Skia, where he is trying to add the support for a new backend called [Skia Graphite](https://blog.google/chromium/introducing-skia-graphite-chromes/) (backed by Dawn WebGPU, 
+the same implementation of WebGPU that powers React Native WebGPU released by Google and powering Google Chrome). This means that you can have views that draw using both React Native 
+WebGPU and React Native Skia, because their runtime engine is the same. The plan for Skia Graphite is to have it released to everyone by Q4 of 2026.
 
 <SelfHostedVideo src="/media/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-william-1.mp4" />
 
-He finally introduced Redraw, a new library that can work with Skia and WebGPU, that uses TypeGPU under the hood to enhance the drawing capabilities by passing geometry and
-fragment shaders as functions to the library components.
+He finally introduced [Redraw](https://wcandillon.github.io/redraw/), a new library that can work with Skia and WebGPU, that uses TypeGPU under the hood to enhance the drawing 
+capabilities by passing geometry and fragment shaders as functions to the library components.
 
 He closed the talk revealing that his two recent projects started from his tradition of creating April Fools' videos:
 
 - April Fools' 2024 -> React Native GPU
 - April Fools' 2025 -> Redraw
 
-He showed this to leave us with a quote I quite like: "unproductive times never fail to end up being the most productive ones".
+He showed this to leave us with a quote I liked: 
+
+> unproductive times never fail to end up being the most productive ones
 
 ### How to Build the Fastest Apps: Break the Rules
 
@@ -332,7 +334,7 @@ macular degeneration, a disease that affects central vision and makes you partia
 
 She then started with an overview of how we can make apps more accessible. The first one was reduce motion, something that could help people with ADHD, vestibular disorders, and
 photosensitive epilepsy. She then showed the API we can use to understand if this accessibility feature is on, and tweak the animation based on its value.
-Nice thing, this is an API where I made some small contribution on the React Native project.
+Nice thing, this is an API where [I made some small contribution on the React Native project](https://github.com/facebook/react-native/pulls?q=author%3Achicio).
 
 ![React native accessibility reduce motion API](/media/content/blog/post/2026/06/01/app-js-conf-2026/app-js-conf-2026-accessibility-reduce-motion.jpg)
 
@@ -375,19 +377,27 @@ Then he started to think he could build something that could help him speak. Som
 letters using the space bar from an always-scrolling list). In this way he unlocked his father's ability to speak again in his last days.
 Seth reflected on how it was possible for him to build such an app in a short amount of time: thanks to the hundreds of people in the open source community.
 
-"The industry feels weird right now": this was the statement he showed after thanking the open source community. It feels like we are constantly flooded with too much information.
-"The pace is absurd", and today we have reached a point where a person can prototype an app over a weekend that would have required months.
+> The industry feels weird right now.
 
-"The story is not that developers are disappearing", but the reality is that "the story is that developers are amplified". This was the statement from Seth's presentation.
-"The story is leverage", millions of developers are gaining momentum. We are not built for this as human beings, especially the flood of information, but we are going to adapt as
-we always have. AI shrinks the distance between "I want to make this" and "this exists". AI is making the mechanical parts cheaper.
+ this was the statement he showed after thanking the open source community. It feels like we are constantly flooded with too much information.
 
-"The human parts get more valuable": judgment, leadership, taste, product intuition, knowing what to build, communication.
+> The pace is absurd.
+
+Today we have reached a point where a person can prototype an app over a weekend that would have required months.
+
+> The story is not that developers are disappearing", but the reality is that "the story is that developers are amplified. 
+
+This was the statement from Seth's presentation. Millions of developers are gaining momentum. We are not built for this as human beings, especially the flood of information, 
+but we are going to adapt as we always have. AI shrinks the distance between "I want to make this" and "this exists". AI is making the mechanical parts cheaper.
+
+> The human parts get more valuable": judgment, leadership, taste, product intuition, knowing what to build, communication.
 
 The developers who will succeed in this era are the ones who can understand the systems, direct tools effectively, identify meaningful problems, make good decisions under ambiguity, and turn
 scattered possibilities into coherent products. The industry is becoming a more creative one, not less, because of AI.
 
-"I'm a builder": this was the final statement from Seth, engaging the audience to scream the phrase with him. "It's one hell of a time to be a builder".
+> I'm a builder. It's one hell of a time to be a builder.
+
+This was the final statement from Seth, engaging the audience to scream the phrase with him. .
 
 ### Other talks
 
