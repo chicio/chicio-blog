@@ -72,7 +72,7 @@
     "@types/react-dom": "19.2.3",
     "babel-plugin-react-compiler": "^1.0.0",
     "esbuild": "^0.28.0",
-    "eslint": "^9",
+    "eslint": "^10",
     "eslint-config-next": "16.2.6",
     "knip": "^6.16.0",
     "prettier": "^3.8.3",
