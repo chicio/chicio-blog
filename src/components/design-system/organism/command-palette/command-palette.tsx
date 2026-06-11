@@ -206,7 +206,7 @@ const CommandPalette = () => {
                     >
                       <TerminalLine>
                         <BiChat className="mr-2 mb-0.5 inline" />
-                        {">"} Open AI Chat
+                        {">"} Open chat
                       </TerminalLine>
                     </Command.Item>
                     <ToggleMotionItem />
