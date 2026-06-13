@@ -23,6 +23,7 @@ import {
 } from "react";
 import { BiChat } from "react-icons/bi";
 import { ToggleMotionItem } from "./toggle-motion-item";
+import { CustomizeMatrixRainItem } from "./customize-matrix-rain-item";
 
 const NeoRoomEasterEgg = dynamic(
   () =>
@@ -210,6 +211,7 @@ const CommandPalette = () => {
                       </TerminalLine>
                     </Command.Item>
                     <ToggleMotionItem />
+                    <CustomizeMatrixRainItem onClose={close} />
                   </Command.Group>
                 )}
               </Command.List>

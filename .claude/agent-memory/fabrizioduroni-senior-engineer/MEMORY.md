@@ -31,6 +31,7 @@
 
 ## Features (continued 3)
 - [Markdown Negotiation](feature_markdown_negotiation.md) — Accept: text/markdown support via proxy.ts + /markdown-content/* routes, Next.js 16 proxy convention
+- [Matrix Rain Control Panel](feature_matrix_rain_panel.md) — Command-palette drawer for live WebGPU rain tweaks; localStorage settings, webGpuFailed as local useState (no shared store), fontSize commits on release only
 
 ## Infrastructure
 - [CI Pipeline](project_ci_pipeline.md) — Three-job workflow (lint, knip, build); lint/knip gate build; ubuntu-latest; npm ci; concurrency cancel; 2026-06-05
