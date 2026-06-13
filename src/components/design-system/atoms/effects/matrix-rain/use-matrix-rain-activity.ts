@@ -1,7 +1,7 @@
 "use client";
 
 import { RefObject, useEffect, useState } from "react";
-import { useReducedMotions } from "../../utils/hooks/use-reduced-motions";
+import { useReducedMotions } from "../../../utils/hooks/use-reduced-motions";
 
 // Single source of "should the rain pause?" truth, shared by both the WebGPU
 // renderer and the 2D fallback so they behave identically. Paused when the
