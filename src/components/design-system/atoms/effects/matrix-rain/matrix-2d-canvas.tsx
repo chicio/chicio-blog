@@ -14,10 +14,6 @@ const colors = [
   { threshold: Number.MAX_SAFE_INTEGER, color: "#002200" },
 ];
 const backgroundColor = `#00110010`;
-
-// Fixed cadence (no consumer ever overrode the old `frameRate` prop). Also the
-// number of settle frames drawn synchronously to produce a populated static
-// frame when paused.
 const FRAME_RATE = 20;
 
 const setCanvasSize = (
@@ -66,10 +62,6 @@ interface Matrix2DCanvasProps {
   paused: boolean;
 }
 
-// The original 2D matrix-rain renderer, extracted as the fallback. Visibility
-// and reduced-motion are no longer owned here — the orchestrator computes a
-// single `paused` signal (via useMatrixRainActivity) and drives both this and
-// the WebGPU renderer, so the two pause identically.
 const Matrix2DCanvasRenderer: React.FC<Matrix2DCanvasProps> = ({
   fontSize,
   density,
@@ -78,8 +70,6 @@ const Matrix2DCanvasRenderer: React.FC<Matrix2DCanvasProps> = ({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const lastWidth = useRef(0);
   const rafRef = useRef(0);
-  // start/stop the rAF loop, set up by the main effect so the pause effect can
-  // toggle it without re-initialising the field.
   const startRef = useRef<() => void>(() => {});
   const stopRef = useRef<() => void>(() => {});
   const pausedRef = useRef(paused);
@@ -88,9 +78,6 @@ const Matrix2DCanvasRenderer: React.FC<Matrix2DCanvasProps> = ({
     lastWidth.current = window.innerWidth;
   }, []);
 
-  // Build the draw context + loop. Re-runs on fontSize/density change (not on
-  // paused). A settle burst paints a populated frame immediately; the loop is
-  // (re)started here when not paused, and toggled by the pause effect below.
   useEffect(() => {
     const canvas = canvasRef.current;
 
@@ -173,7 +160,6 @@ const Matrix2DCanvasRenderer: React.FC<Matrix2DCanvasProps> = ({
       }
     }, 300);
 
-    // Settle burst → an immediately-populated frame (also the paused look).
     for (let i = 0; i < FRAME_RATE; i++) {
       drawFrame();
     }
@@ -190,9 +176,6 @@ const Matrix2DCanvasRenderer: React.FC<Matrix2DCanvasProps> = ({
     };
   }, [fontSize, density]);
 
-  // Freeze (leave the last frame) when paused; resume the loop when not. Also
-  // keeps pausedRef in sync (the debounced resize handler reads it) — updated
-  // in an effect, not during render.
   useEffect(() => {
     pausedRef.current = paused;
     if (paused) {
