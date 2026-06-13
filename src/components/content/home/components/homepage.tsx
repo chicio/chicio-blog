@@ -11,7 +11,7 @@ export const Homepage: FC = () => {
     <>
       <Menu trackingCategory={tracking.category.home} />
       <div className="h-screen">
-        <MatrixBackground fontSize={16} density={0.95}>
+        <MatrixBackground>
           <ProfilePresentation author={siteMetadata.author} />
         </MatrixBackground>
       </div>

@@ -8,21 +8,10 @@ import { useWebGpuSupported } from "../../../utils/hooks/use-webgpu-supported";
 
 const backgroundColor = `#00110010`;
 
-interface MatrixRainProps {
-  fontSize?: number;
-  density?: number;
-}
-
-const MatrixRainRenderer: React.FC<MatrixRainProps> = ({
-  fontSize = 16,
-  density = 0.95,
-}) => {
+const MatrixRainRenderer: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const paused = useMatrixRainActivity(containerRef);
-  // null until the client resolves it (server/hydration) → neither renderer
-  // mounts yet, just the backdrop, so there's no 2D→WebGPU swap.
   const webGpuSupported = useWebGpuSupported();
-  // Runtime safety net for "WebGPU present but adapter/init fails".
   const [webGpuFailed, setWebGpuFailed] = useState(false);
 
   const showWebGpu = webGpuSupported === true && !webGpuFailed;
@@ -36,13 +25,12 @@ const MatrixRainRenderer: React.FC<MatrixRainProps> = ({
     >
       {showWebGpu && (
         <MatrixRainWebGPU
-          rain={{ fontSize, density }}
           paused={paused}
           onError={() => setWebGpuFailed(true)}
         />
       )}
       {showFallback && (
-        <Matrix2DCanvas fontSize={fontSize} density={density} paused={paused} />
+        <Matrix2DCanvas fontSize={16} density={0.95} paused={paused} />
       )}
     </div>
   );
