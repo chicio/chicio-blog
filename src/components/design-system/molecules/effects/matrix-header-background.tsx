@@ -11,7 +11,7 @@ export const MatrixHeaderBackground: FC<MatrixHeaderBackgroundProps> = ({ big })
   return (
     <div className={`absolute -z-10 ${height} top-0 left-0 right-0 overflow-hidden border-b-2 border-solid border-accent shadow-lg`}>
       <div className="absolute top-0 left-0 right-0 bottom-0 remove-scroll-width">
-        <MatrixRain fontSize={14} density={0.95} />
+        <MatrixRain />
       </div>
     </div>
   );
