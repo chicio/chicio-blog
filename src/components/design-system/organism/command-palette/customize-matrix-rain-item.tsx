@@ -3,7 +3,6 @@ import { tracking } from "@/types/configuration/tracking";
 import { Command } from "cmdk";
 import { TerminalLine } from "../../atoms/typography/terminal-blocks";
 import { useWebGpuSupported } from "../../utils/hooks/use-webgpu-supported";
-import { useWebGpuFailed } from "../../utils/hooks/use-webgpu-failed";
 import { useReducedMotions } from "../../utils/hooks/use-reduced-motions";
 import { openMatrixRainPanel } from "@/lib/command-palette/command-palette-events";
 import { MdTune } from "react-icons/md";
@@ -14,10 +13,9 @@ interface CustomizeMatrixRainItemProps {
 
 export const CustomizeMatrixRainItem = ({ onClose }: CustomizeMatrixRainItemProps) => {
     const webGpuSupported = useWebGpuSupported();
-    const webGpuFailed = useWebGpuFailed();
     const reducedMotion = useReducedMotions();
 
-    const visible = webGpuSupported === true && !webGpuFailed && !reducedMotion;
+    const visible = webGpuSupported === true && !reducedMotion;
 
     if (!visible) {
         return null;

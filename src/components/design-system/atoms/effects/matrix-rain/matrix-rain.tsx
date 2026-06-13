@@ -1,11 +1,10 @@
 "use client";
 
 import { MatrixRainWebGPU } from "matrix-rain-webgpu";
-import React, { memo, useRef } from "react";
+import React, { memo, useRef, useState } from "react";
 import { Matrix2DCanvas } from "./matrix-2d-canvas";
 import { useMatrixRainActivity } from "./use-matrix-rain-activity";
 import { useWebGpuSupported } from "../../../utils/hooks/use-webgpu-supported";
-import { useWebGpuFailed, setWebGpuFailed } from "../../../utils/hooks/use-webgpu-failed";
 import { useMatrixSettingsStore } from "../../../utils/hooks/use-matrix-settings-store";
 import { settingsToProps } from "@/lib/matrix-settings/matrix-settings";
 
@@ -15,7 +14,7 @@ const MatrixRainRenderer: React.FC = () => {
     const containerRef = useRef<HTMLDivElement>(null);
     const paused = useMatrixRainActivity(containerRef);
     const webGpuSupported = useWebGpuSupported();
-    const webGpuFailed = useWebGpuFailed();
+    const [webGpuFailed, setWebGpuFailed] = useState(false);
     const settings = useMatrixSettingsStore();
     const { rain, bloom, crt } = settingsToProps(settings);
 
@@ -34,7 +33,7 @@ const MatrixRainRenderer: React.FC = () => {
                     rain={rain}
                     bloom={bloom}
                     crt={crt}
-                    onError={setWebGpuFailed}
+                    onError={() => setWebGpuFailed(true)}
                 />
             )}
             {showFallback && (
