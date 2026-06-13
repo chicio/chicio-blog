@@ -85,17 +85,29 @@ export const MATRIX_RAIN_PRESETS: Record<string, MatrixRainSettings> = {
 
 export const matrixSettingsChangeEvent = "matrix-settings-change";
 
+let cachedRaw: string | null = null;
+let cachedSnapshot: MatrixRainSettings = MATRIX_RAIN_DEFAULTS;
+
 export const readMatrixSettings = (): MatrixRainSettings => {
+    let raw: string | null;
     try {
-        const raw = readLocalStorage(STORAGE_KEY);
-        if (raw === null) {
-            return MATRIX_RAIN_DEFAULTS;
-        }
+        raw = readLocalStorage(STORAGE_KEY);
+    } catch {
+        return MATRIX_RAIN_DEFAULTS;
+    }
+    if (raw === null) {
+        cachedRaw = null;
+        cachedSnapshot = MATRIX_RAIN_DEFAULTS;
+        return cachedSnapshot;
+    }
+    if (raw === cachedRaw) {
+        return cachedSnapshot;
+    }
+    try {
         const parsed = JSON.parse(raw) as MatrixRainSettings;
-        if (parsed.version !== SETTINGS_VERSION) {
-            return MATRIX_RAIN_DEFAULTS;
-        }
-        return parsed;
+        cachedRaw = raw;
+        cachedSnapshot = parsed.version === SETTINGS_VERSION ? parsed : MATRIX_RAIN_DEFAULTS;
+        return cachedSnapshot;
     } catch {
         return MATRIX_RAIN_DEFAULTS;
     }
