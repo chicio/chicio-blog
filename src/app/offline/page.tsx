@@ -16,7 +16,7 @@ const terminalLines = [
 export default function OfflinePage() {
     return (
         <div className="container-fullscreen text-accent-color relative min-h-screen overflow-hidden bg-black">
-            <MatrixRain fontSize={14} density={0.975} />
+            <MatrixRain />
             <div className="relative z-10 flex flex-col items-center justify-center gap-2 p-2">
                 <h1 className="heading animate-glitch text-accent text-[72px] font-bold sm:text-[100px]">
                     OFFLINE
