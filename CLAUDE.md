@@ -58,7 +58,7 @@ Next.js 16 (App Router), React 19, TailwindCSS v4, Framer Motion v12, TypeScript
 
 ## Environment Setup
 
-- **Node**: 22.x (specified in `package.json`)
+- **Node**: 24.x (specified in `package.json`)
 - **Env files**: `.env.development`, `.env.production`
 - **Required secrets**: `UPSTASH_VECTOR_REST_URL`, `UPSTASH_VECTOR_REST_TOKEN`
 
