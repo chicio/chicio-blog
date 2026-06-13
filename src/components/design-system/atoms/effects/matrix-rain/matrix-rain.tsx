@@ -1,11 +1,21 @@
 "use client";
 
 import { MatrixRainWebGPU, isWebGPUSupported } from "matrix-rain-webgpu";
-import React, { memo, useEffect, useRef, useState } from "react";
+import React, { memo, useRef, useState, useSyncExternalStore } from "react";
 import { Matrix2DCanvas } from "./matrix-2d-canvas";
 import { useMatrixRainActivity } from "./use-matrix-rain-activity";
 
 const backgroundColor = `#00110010`;
+
+type Mode = "pending" | "webgpu" | "fallback";
+
+// WebGPU support is a static client capability. useSyncExternalStore lets the
+// server + hydration render "pending" (the neutral backdrop) and the client
+// then resolve to webgpu/fallback in a single mismatch-free transition — no
+// setState-in-effect, no SSR access to `navigator`.
+const subscribe = () => () => {};
+const getMode = (): Mode => (isWebGPUSupported() ? "webgpu" : "fallback");
+const getServerMode = (): Mode => "pending";
 
 interface MatrixRainProps {
   fontSize?: number;
@@ -18,13 +28,11 @@ const MatrixRainRenderer: React.FC<MatrixRainProps> = ({
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const paused = useMatrixRainActivity(containerRef);
-  const [mode, setMode] = useState<"pending" | "webgpu" | "fallback">(
-    "pending",
-  );
-
-  useEffect(() => {
-    setMode(isWebGPUSupported() ? "webgpu" : "fallback");
-  }, []);
+  const detectedMode = useSyncExternalStore(subscribe, getMode, getServerMode);
+  // Runtime safety net for "WebGPU present but adapter/init fails" — setState in
+  // a callback, not an effect.
+  const [webgpuFailed, setWebgpuFailed] = useState(false);
+  const mode: Mode = webgpuFailed ? "fallback" : detectedMode;
 
   return (
     <div
@@ -36,7 +44,7 @@ const MatrixRainRenderer: React.FC<MatrixRainProps> = ({
         <MatrixRainWebGPU
           rain={{ fontSize, density }}
           paused={paused}
-          onError={() => setMode("fallback")}
+          onError={() => setWebgpuFailed(true)}
         />
       )}
       {mode === "fallback" && (
