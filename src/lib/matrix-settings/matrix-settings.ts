@@ -59,21 +59,13 @@ export const MATRIX_RAIN_DEFAULTS: MatrixRainSettings = {
     },
 };
 
-// TUNE TO TASTE: Preset values — chosen to be visually interesting but never broken.
-// Author should review and adjust these for the desired aesthetic.
 export const MATRIX_RAIN_PRESETS: Record<string, MatrixRainSettings> = {
     Classic: MATRIX_RAIN_DEFAULTS,
     Cyberpunk: {
         version: SETTINGS_VERSION,
         rain: { density: 0.90, stepRate: 14, fontSize: 16 },
         bloom: { enabled: true, intensity: 2.8, threshold: 0.5, emission: 2.0 },
-        crt: { enabled: true, scanlineStrength: 0.4, aberration: 2.5 },
-    },
-    Ghost: {
-        version: SETTINGS_VERSION,
-        rain: { density: 0.97, stepRate: 5, fontSize: 28 },
-        bloom: { enabled: true, intensity: 0.7, threshold: 1.0, emission: 1.1 },
-        crt: { enabled: false, scanlineStrength: 0.3, aberration: 1.0 },
+        crt: { enabled: true, scanlineStrength: 0.4, aberration: 2.8 },
     },
     Overload: {
         version: SETTINGS_VERSION,
