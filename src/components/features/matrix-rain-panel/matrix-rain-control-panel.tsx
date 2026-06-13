@@ -2,7 +2,9 @@
 
 import { FC, useCallback, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { TerminalLine } from "@/components/design-system/atoms/typography/terminal-blocks";
+import { PanelSectionHeading, TerminalLine } from "@/components/design-system/atoms/typography/terminal-blocks";
+import { ControlSlider } from "@/components/design-system/molecules/controls/control-slider";
+import { ControlToggle } from "@/components/design-system/molecules/controls/control-toggle";
 import { matrixRainPanelOpenEvent } from "@/lib/command-palette/command-palette-events";
 import {
     MATRIX_RAIN_DEFAULTS,
@@ -15,8 +17,6 @@ import { trackWith } from "@/lib/tracking/tracking";
 import { tracking } from "@/types/configuration/tracking";
 import { MdClose } from "react-icons/md";
 
-// TUNE TO TASTE: Clamp ranges — chosen to stay "fun but never broken".
-// Author should review and adjust these for the desired aesthetic.
 const RAIN_DENSITY_MIN = 0.80;
 const RAIN_DENSITY_MAX = 0.99;
 const RAIN_STEP_RATE_MIN = 4;
@@ -33,96 +33,6 @@ const CRT_SCANLINE_MAX = 0.8;
 const CRT_ABERRATION_MIN = 0.0;
 const CRT_ABERRATION_MAX = 3.0;
 
-interface SliderProps {
-    label: string;
-    value: number;
-    min: number;
-    max: number;
-    step: number;
-    onChange: (v: number) => void;
-    onCommit?: (v: number) => void;
-    commitOnly?: boolean;
-    displayValue?: string;
-}
-
-const ControlSlider: FC<SliderProps> = ({ label, value, min, max, step, onChange, onCommit, commitOnly, displayValue }) => {
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const v = parseFloat(e.target.value);
-        if (!commitOnly) {
-            onChange(v);
-        }
-    };
-
-    const handleCommitMouse = (e: React.MouseEvent<HTMLInputElement>) => {
-        const v = parseFloat((e.target as HTMLInputElement).value);
-        if (commitOnly) {
-            onChange(v);
-        }
-        onCommit?.(v);
-    };
-
-    const handleCommitTouch = (e: React.TouchEvent<HTMLInputElement>) => {
-        const v = parseFloat((e.target as HTMLInputElement).value);
-        if (commitOnly) {
-            onChange(v);
-        }
-        onCommit?.(v);
-    };
-
-    return (
-        <div className="flex flex-col gap-1">
-            <div className="flex justify-between items-center">
-                <span className="font-mono text-xs text-accent/70">{label}</span>
-                <span className="font-mono text-xs text-accent">{displayValue ?? value}</span>
-            </div>
-            <input
-                type="range"
-                min={min}
-                max={max}
-                step={step}
-                value={value}
-                onChange={handleChange}
-                onMouseUp={handleCommitMouse}
-                onTouchEnd={handleCommitTouch}
-                className="w-full accent-accent cursor-pointer h-1"
-            />
-        </div>
-    );
-};
-
-interface ToggleProps {
-    label: string;
-    value: boolean;
-    onChange: (v: boolean) => void;
-}
-
-const ControlToggle: FC<ToggleProps> = ({ label, value, onChange }) => (
-    <div className="flex justify-between items-center">
-        <span className="font-mono text-xs text-accent/70">{label}</span>
-        <button
-            type="button"
-            onClick={() => onChange(!value)}
-            className={`font-mono text-xs px-2 py-0.5 border transition-colors duration-100 cursor-pointer ${
-                value
-                    ? "border-accent text-accent bg-accent/10"
-                    : "border-accent/30 text-accent/40 bg-transparent"
-            }`}
-        >
-            {value ? "ON" : "OFF"}
-        </button>
-    </div>
-);
-
-interface SectionHeadingProps {
-    children: React.ReactNode;
-}
-
-const SectionHeading: FC<SectionHeadingProps> = ({ children }) => (
-    <div className="text-accent/50 font-mono text-xs tracking-wider uppercase mb-2 mt-3 first:mt-0">
-        {children}
-    </div>
-);
-
 const fontSizeToSliderIndex = (fs: number): number => {
     const idx = FONT_SIZE_STEPS.indexOf(fs as (typeof FONT_SIZE_STEPS)[number]);
     return idx >= 0 ? idx : 2;
@@ -131,6 +41,7 @@ const fontSizeToSliderIndex = (fs: number): number => {
 export const MatrixRainControlPanel: FC = () => {
     const [open, setOpen] = useState(false);
     const [settings, setSettings] = useState<MatrixRainSettings>(MATRIX_RAIN_DEFAULTS);
+    const [fontSizeDragIndex, setFontSizeDragIndex] = useState<number | null>(null);
 
     const close = useCallback(() => setOpen(false), []);
 
@@ -171,10 +82,13 @@ export const MatrixRainControlPanel: FC = () => {
             label: tracking.label.body,
             action: tracking.action.command_palette_matrix_rain_preset_selected,
         });
+        setFontSizeDragIndex(null);
         applySettings(preset);
     };
 
     const fontSizeSliderIndex = fontSizeToSliderIndex(settings.rain.fontSize);
+    const fontSizeThumbIndex = fontSizeDragIndex ?? fontSizeSliderIndex;
+    const fontSizeDisplayValue = String(FONT_SIZE_STEPS[fontSizeThumbIndex] ?? settings.rain.fontSize);
 
     return (
         <AnimatePresence>
@@ -208,7 +122,7 @@ export const MatrixRainControlPanel: FC = () => {
                                 </button>
                             </div>
 
-                            <SectionHeading>Presets</SectionHeading>
+                            <PanelSectionHeading>Presets</PanelSectionHeading>
                             <div className="flex flex-wrap gap-2">
                                 {Object.keys(MATRIX_RAIN_PRESETS).map((name) => (
                                     <button
@@ -227,7 +141,7 @@ export const MatrixRainControlPanel: FC = () => {
                                 ))}
                             </div>
 
-                            <SectionHeading>Rain</SectionHeading>
+                            <PanelSectionHeading>Rain</PanelSectionHeading>
                             <ControlSlider
                                 label="density"
                                 value={settings.rain.density}
@@ -248,20 +162,20 @@ export const MatrixRainControlPanel: FC = () => {
                             />
                             <ControlSlider
                                 label="font size (commit on release)"
-                                value={fontSizeSliderIndex}
+                                value={fontSizeThumbIndex}
                                 min={0}
                                 max={FONT_SIZE_STEPS.length - 1}
                                 step={1}
-                                commitOnly={true}
-                                onChange={() => {}}
+                                onChange={(v) => setFontSizeDragIndex(Math.round(v))}
                                 onCommit={(v) => {
-                                    const fs = FONT_SIZE_STEPS[v] ?? MATRIX_RAIN_DEFAULTS.rain.fontSize;
+                                    setFontSizeDragIndex(null);
+                                    const fs = FONT_SIZE_STEPS[Math.round(v)] ?? MATRIX_RAIN_DEFAULTS.rain.fontSize;
                                     applySettings({ ...settings, rain: { ...settings.rain, fontSize: fs } });
                                 }}
-                                displayValue={String(settings.rain.fontSize)}
+                                displayValue={fontSizeDisplayValue}
                             />
 
-                            <SectionHeading>Bloom</SectionHeading>
+                            <PanelSectionHeading>Bloom</PanelSectionHeading>
                             <ControlToggle
                                 label="enabled"
                                 value={settings.bloom.enabled}
@@ -275,7 +189,9 @@ export const MatrixRainControlPanel: FC = () => {
                                         min={BLOOM_INTENSITY_MIN}
                                         max={BLOOM_INTENSITY_MAX}
                                         step={0.05}
-                                        onChange={(v) => applySettings({ ...settings, bloom: { ...settings.bloom, intensity: v } })}
+                                        onChange={(v) =>
+                                            applySettings({ ...settings, bloom: { ...settings.bloom, intensity: v } })
+                                        }
                                         displayValue={settings.bloom.intensity.toFixed(2)}
                                     />
                                     <ControlSlider
@@ -284,7 +200,9 @@ export const MatrixRainControlPanel: FC = () => {
                                         min={BLOOM_THRESHOLD_MIN}
                                         max={BLOOM_THRESHOLD_MAX}
                                         step={0.05}
-                                        onChange={(v) => applySettings({ ...settings, bloom: { ...settings.bloom, threshold: v } })}
+                                        onChange={(v) =>
+                                            applySettings({ ...settings, bloom: { ...settings.bloom, threshold: v } })
+                                        }
                                         displayValue={settings.bloom.threshold.toFixed(2)}
                                     />
                                     <ControlSlider
@@ -293,13 +211,15 @@ export const MatrixRainControlPanel: FC = () => {
                                         min={BLOOM_EMISSION_MIN}
                                         max={BLOOM_EMISSION_MAX}
                                         step={0.05}
-                                        onChange={(v) => applySettings({ ...settings, bloom: { ...settings.bloom, emission: v } })}
+                                        onChange={(v) =>
+                                            applySettings({ ...settings, bloom: { ...settings.bloom, emission: v } })
+                                        }
                                         displayValue={settings.bloom.emission.toFixed(2)}
                                     />
                                 </>
                             )}
 
-                            <SectionHeading>CRT</SectionHeading>
+                            <PanelSectionHeading>CRT</PanelSectionHeading>
                             <ControlToggle
                                 label="enabled"
                                 value={settings.crt.enabled}
@@ -313,7 +233,9 @@ export const MatrixRainControlPanel: FC = () => {
                                         min={CRT_SCANLINE_MIN}
                                         max={CRT_SCANLINE_MAX}
                                         step={0.05}
-                                        onChange={(v) => applySettings({ ...settings, crt: { ...settings.crt, scanlineStrength: v } })}
+                                        onChange={(v) =>
+                                            applySettings({ ...settings, crt: { ...settings.crt, scanlineStrength: v } })
+                                        }
                                         displayValue={settings.crt.scanlineStrength.toFixed(2)}
                                     />
                                     <ControlSlider
@@ -322,7 +244,9 @@ export const MatrixRainControlPanel: FC = () => {
                                         min={CRT_ABERRATION_MIN}
                                         max={CRT_ABERRATION_MAX}
                                         step={0.1}
-                                        onChange={(v) => applySettings({ ...settings, crt: { ...settings.crt, aberration: v } })}
+                                        onChange={(v) =>
+                                            applySettings({ ...settings, crt: { ...settings.crt, aberration: v } })
+                                        }
                                         displayValue={settings.crt.aberration.toFixed(1)}
                                     />
                                 </>
