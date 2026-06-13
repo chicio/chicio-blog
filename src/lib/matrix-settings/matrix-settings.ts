@@ -4,20 +4,20 @@ import { BloomOptions, CrtOptions, RainOptions } from "matrix-rain-webgpu";
 const STORAGE_KEY = "matrix-rain-settings";
 const SETTINGS_VERSION = 1;
 
-export interface MatrixRainBloomSettings {
+interface MatrixRainBloomSettings {
     enabled: boolean;
     intensity: number;
     threshold: number;
     emission: number;
 }
 
-export interface MatrixRainCrtSettings {
+interface MatrixRainCrtSettings {
     enabled: boolean;
     scanlineStrength: number;
     aberration: number;
 }
 
-export interface MatrixRainRainSettings {
+interface MatrixRainRainSettings {
     density: number;
     stepRate: number;
     fontSize: number;
