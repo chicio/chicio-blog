@@ -27,12 +27,21 @@ const CommandPalette = dynamic(
     { ssr: false },
 );
 
+const MatrixRainControlPanel = dynamic(
+    () =>
+        import("@/components/features/matrix-rain-panel/matrix-rain-control-panel").then(
+            (m) => m.MatrixRainControlPanel,
+        ),
+    { ssr: false },
+);
+
 export const LayoutAdditionalContent: FC = () => {
     useOfflineContactQueue();
 
     return (
         <>
             <CommandPalette />
+            <MatrixRainControlPanel />
             <CookieConsentBanner />
             <TrackingOptIn />
             <InstallPromptBanner />

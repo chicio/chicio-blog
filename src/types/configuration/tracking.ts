@@ -63,6 +63,8 @@ export const tracking = {
     command_palette_toggle_motion: "command_palette_toggle_motion",
     command_palette_open_chat: "command_palette_open_chat",
     command_palette_search_result_selected: "command_palette_search_result_selected",
+    command_palette_open_matrix_rain_panel: "command_palette_open_matrix_rain_panel",
+    command_palette_matrix_rain_preset_selected: "command_palette_matrix_rain_preset_selected",
   },
   category: {
     home: "home",
