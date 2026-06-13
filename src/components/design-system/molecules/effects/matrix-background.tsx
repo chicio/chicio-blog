@@ -1,5 +1,5 @@
 import { FC, ReactNode } from "react";
-import { MatrixRain } from "../../atoms/effects/matrix-rain";
+import { MatrixRain } from "../../atoms/effects/matrix-rain/matrix-rain";
 
 interface ContainerFullscreenWithMatrixProps {
   children: ReactNode;
