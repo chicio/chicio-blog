@@ -1,8 +1,7 @@
 "use client";
 
 import { MatrixRainDrawContext } from "@/types/effects/matrix-rain";
-import React, { memo, useEffect, useRef, useState } from "react";
-import { useReducedMotions } from "../../utils/hooks/use-reduced-motions";
+import React, { memo, useEffect, useRef } from "react";
 import { debounce } from "@/lib/debounce/debounce";
 
 const matrix = "ﾊﾐﾋｰｳｼﾅﾓﾆｻﾜﾂｵﾘｱﾎﾃﾏｹﾒｴｶｷﾑﾕﾗｾﾈｽﾀﾇﾍ012345789Z:.=*+-<>".split("");
@@ -15,6 +14,7 @@ const colors = [
   { threshold: Number.MAX_SAFE_INTEGER, color: "#002200" },
 ];
 const backgroundColor = `#00110010`;
+const FRAME_RATE = 20;
 
 const setCanvasSize = (
   canvas: HTMLCanvasElement,
@@ -42,7 +42,6 @@ const initialize = (
   canvas: HTMLCanvasElement,
   context: CanvasRenderingContext2D,
   fontSize: number,
-  frameRate: number,
 ): MatrixRainDrawContext => {
   setCanvasSize(canvas, context);
 
@@ -51,71 +50,35 @@ const initialize = (
     height: canvas.height / window.devicePixelRatio,
     width: canvas.width / window.devicePixelRatio,
     lastFrameTimestamp: performance.now(),
-    timeDistanceBetweenFrames: 1000 / frameRate,
+    timeDistanceBetweenFrames: 1000 / FRAME_RATE,
     font: `${fontSize}px 'Courier Prime', monospace`,
     animationFrameId: 0,
   };
 };
 
-const observe = (
-  canvas: HTMLCanvasElement,
-  handleVisibilityChange: (isVisible: boolean) => void,
-) => {
-  const observer = new window.IntersectionObserver(
-    ([entry]) => {
-      return handleVisibilityChange(
-        entry.isIntersecting || entry.intersectionRect.height > 0,
-      );
-    },
-    {
-      root: null,
-      rootMargin: "-50px 0px -50px 0px",
-      threshold: 0,
-    },
-  );
-  observer.observe(canvas);
-  return observer;
-};
-
-interface MatrixRainProps {
+interface Matrix2DCanvasProps {
   fontSize: number;
-  frameRate?: number;
   density: number;
+  paused: boolean;
 }
 
-const MatrixRainRenderer: React.FC<MatrixRainProps> = ({
+const Matrix2DCanvasRenderer: React.FC<Matrix2DCanvasProps> = ({
   fontSize,
-  frameRate = 20,
   density,
+  paused,
 }) => {
-  const shouldReduceMotion = useReducedMotions();
-  const [isVisible, setIsVisible] = useState(true);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const lastWidth = useRef(0);
+  const rafRef = useRef(0);
+  const startRef = useRef<() => void>(() => {});
+  const stopRef = useRef<() => void>(() => {});
+  const pausedRef = useRef(paused);
 
   useEffect(() => {
     lastWidth.current = window.innerWidth;
   }, []);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-
-    if (!canvas || shouldReduceMotion) {
-      return;
-    }
-
-    const observer = observe(canvas, setIsVisible);
-
-    return () => {
-      observer.disconnect();
-    };
-  }, [shouldReduceMotion]);
-
-  useEffect(() => {
-    if (!isVisible) {
-      return;
-    }
-
     const canvas = canvasRef.current;
 
     if (!canvas) {
@@ -132,21 +95,7 @@ const MatrixRainRenderer: React.FC<MatrixRainProps> = ({
       canvas,
       context,
       fontSize,
-      frameRate,
     );
-
-    const resize = debounce(() => {
-      if (window.innerWidth !== lastWidth.current) {
-        lastWidth.current = window.innerWidth;
-        matrixRainDrawContext = initialize(
-          canvas,
-          context,
-          fontSize,
-          frameRate,
-        );
-        renderingLoop();
-      }
-    }, 300);
 
     const drawFrame = () => {
       context.font = matrixRainDrawContext.font;
@@ -178,36 +127,63 @@ const MatrixRainRenderer: React.FC<MatrixRainProps> = ({
       const elapsed = now - matrixRainDrawContext.lastFrameTimestamp;
 
       if (elapsed < matrixRainDrawContext.timeDistanceBetweenFrames) {
-        matrixRainDrawContext.animationFrameId = requestAnimationFrame(frame);
+        rafRef.current = requestAnimationFrame(frame);
         return;
       }
 
       drawFrame();
 
       matrixRainDrawContext.lastFrameTimestamp = now;
-      matrixRainDrawContext.animationFrameId = requestAnimationFrame(frame);
+      rafRef.current = requestAnimationFrame(frame);
     };
 
-    const renderingLoop = () => {
-      if (shouldReduceMotion) {
-        for (let i = 0; i < frameRate; i++) {
+    const start = () => {
+      cancelAnimationFrame(rafRef.current);
+      rafRef.current = requestAnimationFrame(frame);
+    };
+    const stop = () => {
+      cancelAnimationFrame(rafRef.current);
+    };
+    startRef.current = start;
+    stopRef.current = stop;
+
+    const resize = debounce(() => {
+      if (window.innerWidth !== lastWidth.current) {
+        lastWidth.current = window.innerWidth;
+        matrixRainDrawContext = initialize(canvas, context, fontSize);
+        for (let i = 0; i < FRAME_RATE; i++) {
           drawFrame();
         }
-      } else {
-        matrixRainDrawContext.animationFrameId = requestAnimationFrame(frame);
+        if (!pausedRef.current) {
+          start();
+        }
       }
-      window.addEventListener("resize", resize);
-    };
+    }, 300);
 
-    renderingLoop();
+    for (let i = 0; i < FRAME_RATE; i++) {
+      drawFrame();
+    }
+
+    if (!pausedRef.current) {
+      start();
+    }
+
+    window.addEventListener("resize", resize);
 
     return () => {
-      if (matrixRainDrawContext.animationFrameId) {
-        cancelAnimationFrame(matrixRainDrawContext.animationFrameId);
-      }
+      cancelAnimationFrame(rafRef.current);
       window.removeEventListener("resize", resize);
     };
-  }, [fontSize, frameRate, density, isVisible, shouldReduceMotion]);
+  }, [fontSize, density]);
+
+  useEffect(() => {
+    pausedRef.current = paused;
+    if (paused) {
+      stopRef.current();
+    } else {
+      startRef.current();
+    }
+  }, [paused]);
 
   return (
     <canvas
@@ -217,4 +193,4 @@ const MatrixRainRenderer: React.FC<MatrixRainProps> = ({
   );
 };
 
-export const MatrixRain = memo(MatrixRainRenderer);
+export const Matrix2DCanvas = memo(Matrix2DCanvasRenderer);

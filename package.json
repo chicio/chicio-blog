@@ -24,6 +24,8 @@
     "@next/third-parties": "16.2.7",
     "@react-email/components": "^1.0.12",
     "@tailwindcss/postcss": "^4.2.2",
+    "@typegpu/noise": "^0.11.0",
+    "@typegpu/react": "^0.11.1",
     "@types/mdx": "^2.0.13",
     "@upstash/redis": "^1.36.4",
     "@upstash/vector": "^1.2.3",
@@ -37,6 +39,7 @@
     "gray-matter": "^4.0.3",
     "katex": "^0.16.45",
     "marked": "^17.0.5",
+    "matrix-rain-webgpu": "^1.0.0-beta.1",
     "mermaid": "^11.15.0",
     "next": "16.2.6",
     "postcss": "^8.5.15",
@@ -59,6 +62,7 @@
     "serwist": "^9.5.11",
     "tailwindcss": "^4.2.1",
     "tsx": "^4.22.4",
+    "typegpu": "^0.11.8",
     "zod": "^4.4.3"
   },
   "devDependencies": {

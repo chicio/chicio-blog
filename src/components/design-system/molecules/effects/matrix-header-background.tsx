@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { MatrixRain } from "../../atoms/effects/matrix-rain";
+import { MatrixRain } from "../../atoms/effects/matrix-rain/matrix-rain";
 
 interface MatrixHeaderBackgroundProps {
   big: boolean;
