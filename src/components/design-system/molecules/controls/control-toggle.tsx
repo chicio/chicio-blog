@@ -1,6 +1,7 @@
 "use client";
 
 import { FC } from "react";
+import { Label } from "../../atoms/typography/label";
 
 interface ControlToggleProps {
     label: string;
@@ -9,8 +10,8 @@ interface ControlToggleProps {
 }
 
 export const ControlToggle: FC<ControlToggleProps> = ({ label, value, onChange }) => (
-    <div className="flex justify-between items-center">
-        <span className="font-mono text-xs text-accent/70">{label}</span>
+    <div className="flex justify-between items-center mb-3">
+        <Label value={label} />
         <button
             type="button"
             onClick={() => onChange(!value)}

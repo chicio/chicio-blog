@@ -2,9 +2,8 @@
 
 import { FC, useCallback, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { PanelSectionHeading, TerminalLine } from "@/components/design-system/atoms/typography/terminal-blocks";
 import { ControlSlider } from "@/components/design-system/molecules/controls/control-slider";
-import { ControlToggle } from "@/components/design-system/molecules/controls/control-toggle";
+import { Switch } from "@/components/design-system/atoms/buttons/switch";
 import { matrixRainPanelOpenEvent } from "@/lib/command-palette/command-palette-events";
 import {
     MATRIX_RAIN_DEFAULTS,
@@ -16,12 +15,14 @@ import {
 import { trackWith } from "@/lib/tracking/tracking";
 import { tracking } from "@/types/configuration/tracking";
 import { MdClose } from "react-icons/md";
+import { useGlassmorphism } from "@/components/design-system/utils/hooks/use-glassmorphism";
+import { Button } from "@/components/design-system/atoms/buttons/button";
 
 const RAIN_DENSITY_MIN = 0.80;
 const RAIN_DENSITY_MAX = 0.99;
 const RAIN_STEP_RATE_MIN = 4;
 const RAIN_STEP_RATE_MAX = 30;
-const FONT_SIZE_STEPS = [12, 16, 20, 28, 40] as const;
+const FONT_SIZE_STEPS = [12, 16, 20, 24, 28, 32, 36, 40] as const;
 const BLOOM_INTENSITY_MIN = 0.5;
 const BLOOM_INTENSITY_MAX = 3.0;
 const BLOOM_THRESHOLD_MIN = 0.3;
@@ -39,6 +40,7 @@ const fontSizeToSliderIndex = (fs: number): number => {
 };
 
 export const MatrixRainControlPanel: FC = () => {
+    const { glassmorphismClass } = useGlassmorphism({ noScale: true, increaseContrast: true });
     const [open, setOpen] = useState(false);
     const [settings, setSettings] = useState<MatrixRainSettings>(MATRIX_RAIN_DEFAULTS);
     const [fontSizeDragIndex, setFontSizeDragIndex] = useState<number | null>(null);
@@ -96,22 +98,17 @@ export const MatrixRainControlPanel: FC = () => {
                 <>
                     <motion.div
                         key="matrix-rain-panel"
-                        initial={{ x: "100%", opacity: 0 }}
-                        animate={{ x: 0, opacity: 1 }}
-                        exit={{ x: "100%", opacity: 0 }}
+                        initial={{ y: "100%", opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        exit={{ y: "100%", opacity: 0 }}
                         transition={{ duration: 0.25, ease: "easeOut" }}
-                        className={[
-                            "fixed z-40 overflow-y-auto",
-                            "bottom-0 left-0 right-0 max-h-[60vh]",
-                            "md:top-0 md:right-0 md:left-auto md:bottom-auto md:h-full md:max-h-full md:w-80",
-                            "bg-background/95 border-accent/20 backdrop-blur-sm",
-                            "border-t md:border-t-0 md:border-l",
-                        ].join(" ")}
+                        className={
+                            `${glassmorphismClass} overflow-x-hidden hide-scrollbar container-fixed fixed z-40 overflow-y-auto bottom-0 left-0 right-0 max-h-[60vh]`}
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <div className="p-4 flex flex-col gap-2">
+                        <div className="p-4 pb-24 flex flex-col gap-2">
                             <div className="flex justify-between items-center mb-2">
-                                <TerminalLine>{">"} Matrix Rain Settings</TerminalLine>
+                                <h4>{">"} Matrix Rain Settings</h4>
                                 <button
                                     type="button"
                                     onClick={close}
@@ -122,28 +119,27 @@ export const MatrixRainControlPanel: FC = () => {
                                 </button>
                             </div>
 
-                            <PanelSectionHeading>Presets</PanelSectionHeading>
+                            <h5>Presets</h5>
                             <div className="flex flex-wrap gap-2">
                                 {Object.keys(MATRIX_RAIN_PRESETS).map((name) => (
-                                    <button
+                                    <Button
                                         key={name}
                                         type="button"
                                         onClick={() => applyPreset(name)}
                                         className={[
-                                            "font-mono text-xs px-2 py-1 border transition-colors duration-100 cursor-pointer",
                                             JSON.stringify(settings) === JSON.stringify(MATRIX_RAIN_PRESETS[name])
-                                                ? "border-accent text-accent bg-accent/10"
-                                                : "border-accent/30 text-accent/60 hover:border-accent/60 hover:text-accent",
+                                                ? "border-accent text-accent!"
+                                                : "",
                                         ].join(" ")}
                                     >
                                         {name}
-                                    </button>
+                                    </Button>
                                 ))}
                             </div>
 
-                            <PanelSectionHeading>Rain</PanelSectionHeading>
+                            <h5>Rain</h5>
                             <ControlSlider
-                                label="density"
+                                label="Respawn probability threshold"
                                 value={settings.rain.density}
                                 min={RAIN_DENSITY_MIN}
                                 max={RAIN_DENSITY_MAX}
@@ -152,7 +148,7 @@ export const MatrixRainControlPanel: FC = () => {
                                 displayValue={settings.rain.density.toFixed(2)}
                             />
                             <ControlSlider
-                                label="speed (Hz)"
+                                label="Speed (Hz)"
                                 value={settings.rain.stepRate}
                                 min={RAIN_STEP_RATE_MIN}
                                 max={RAIN_STEP_RATE_MAX}
@@ -161,26 +157,31 @@ export const MatrixRainControlPanel: FC = () => {
                                 displayValue={String(settings.rain.stepRate)}
                             />
                             <ControlSlider
-                                label="font size (commit on release)"
+                                label="Font size"
                                 value={fontSizeThumbIndex}
                                 min={0}
                                 max={FONT_SIZE_STEPS.length - 1}
                                 step={1}
-                                onChange={(v) => setFontSizeDragIndex(Math.round(v))}
-                                onCommit={(v) => {
-                                    setFontSizeDragIndex(null);
-                                    const fs = FONT_SIZE_STEPS[Math.round(v)] ?? MATRIX_RAIN_DEFAULTS.rain.fontSize;
-                                    applySettings({ ...settings, rain: { ...settings.rain, fontSize: fs } });
+                                onChange={(v) => {
+                                    const newFontSize = FONT_SIZE_STEPS[Math.round(v)] ?? MATRIX_RAIN_DEFAULTS.rain.fontSize;
+
+                                    if (newFontSize !== settings.rain.fontSize) {
+                                        applySettings({ ...settings, rain: { ...settings.rain, fontSize: newFontSize } });
+                                    }
                                 }}
                                 displayValue={fontSizeDisplayValue}
                             />
 
-                            <PanelSectionHeading>Bloom</PanelSectionHeading>
-                            <ControlToggle
-                                label="enabled"
-                                value={settings.bloom.enabled}
-                                onChange={(v) => applySettings({ ...settings, bloom: { ...settings.bloom, enabled: v } })}
-                            />
+                            <div className="flex justify-between items-center mt-2">
+                                <h5 className="mb-0">Bloom</h5>
+                                <Switch
+                                    checked={settings.bloom.enabled}
+                                    onChange={(v) =>
+                                        applySettings({ ...settings, bloom: { ...settings.bloom, enabled: v } })
+                                    }
+                                    label="Toggle bloom"
+                                />
+                            </div>
                             {settings.bloom.enabled && (
                                 <>
                                     <ControlSlider
@@ -219,12 +220,16 @@ export const MatrixRainControlPanel: FC = () => {
                                 </>
                             )}
 
-                            <PanelSectionHeading>CRT</PanelSectionHeading>
-                            <ControlToggle
-                                label="enabled"
-                                value={settings.crt.enabled}
-                                onChange={(v) => applySettings({ ...settings, crt: { ...settings.crt, enabled: v } })}
-                            />
+                            <div className="flex justify-between items-center mt-2">
+                                <h5 className="mb-0">CRT</h5>
+                                <Switch
+                                    checked={settings.crt.enabled}
+                                    onChange={(v) =>
+                                        applySettings({ ...settings, crt: { ...settings.crt, enabled: v } })
+                                    }
+                                    label="Toggle CRT"
+                                />
+                            </div>
                             {settings.crt.enabled && (
                                 <>
                                     <ControlSlider
@@ -252,6 +257,10 @@ export const MatrixRainControlPanel: FC = () => {
                                 </>
                             )}
                         </div>
+                        <div
+                            aria-hidden
+                            className="pointer-events-none sticky bottom-0 left-0 right-0 -mt-24 h-24 bg-gradient-to-t from-general-background to-transparent"
+                        />
                     </motion.div>
                 </>
             )}

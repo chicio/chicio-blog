@@ -10,14 +10,14 @@ import { useGlassmorphism } from "../utils/hooks/use-glassmorphism";
 import { useHasConsentDecision } from "../utils/hooks/use-has-consent-decision";
 
 const CookieConsentBanner = () => {
-  const { glassmorphismClass } = useGlassmorphism();
+  const { glassmorphismClass } = useGlassmorphism({ increaseContrast: true });
   const decided = useHasConsentDecision();
 
   return (
     <AnimatePresence>
       {!decided && (
         <div
-          className={`${glassmorphismClass} backdrop-blur-2xl! fixed right-0 bottom-5 left-0 mx-auto my-0 p-4 flex max-w-[95%] flex-col items-center gap-4 lg:max-w-[60%] lg:flex-row z-50`}
+          className={`${glassmorphismClass} fixed right-0 bottom-5 left-0 mx-auto my-0 p-4 flex max-w-[95%] flex-col items-center gap-4 lg:max-w-[60%] lg:flex-row z-50`}
           role="dialog"
           aria-live="polite"
           aria-label="Cookie consent banner"
