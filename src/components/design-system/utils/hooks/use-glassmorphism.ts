@@ -1,4 +1,3 @@
-import { scale } from "framer-motion";
 import { useReducedMotions } from "./use-reduced-motions";
 
 interface UseGlassmorphismOptions {
