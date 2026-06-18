@@ -3,6 +3,7 @@ import fs from "fs";
 import { grayMatterContent } from "./gray-matter";
 import { Content } from "@/types/content/content";
 import calculateReadingTime from "reading-time";
+import { cached } from "@/lib/build/build-cache";
 
 const contentRootDirectory = path.join(process.cwd(), "src/content");
 const contentMdxFileName = "content.mdx";
@@ -116,29 +117,31 @@ export const getAllContentFor = <TMeta>(
   dynamicSlug: string,
   metadataAdapter?: (raw: unknown) => TMeta,
 ): Content<TMeta>[] => {
-  const contents: {
-    params: Record<string, string>;
-    fullPath: string;
-    relativePath: string;
-  }[] = findAllContent(dynamicSlug);
+  return cached("all:" + dynamicSlug, () => {
+    const contents: {
+      params: Record<string, string>;
+      fullPath: string;
+      relativePath: string;
+    }[] = findAllContent(dynamicSlug);
 
-  return contents.map((item) => {
-    const { frontmatter, content } = grayMatterContent<TMeta>(
-      item.fullPath,
-      metadataAdapter,
-    );
+    return contents.map((item) => {
+      const { frontmatter, content } = grayMatterContent<TMeta>(
+        item.fullPath,
+        metadataAdapter,
+      );
 
-    return {
-      frontmatter,
-      slug: {
-        params: item.params,
-        formatted: calculateSlugFrom(item.params, dynamicSlug),
-      },
-      readingTime: calculateReadingTime(content),
-      contentFileRelativePath: item.relativePath,
-      content,
-    };
-  });
+      return {
+        frontmatter,
+        slug: {
+          params: item.params,
+          formatted: calculateSlugFrom(item.params, dynamicSlug),
+        },
+        readingTime: calculateReadingTime(content),
+        contentFileRelativePath: item.relativePath,
+        content,
+      };
+    });
+  }) as Content<TMeta>[];
 };
 
 export const getSingleContentBy = <TMeta>(
@@ -147,29 +150,31 @@ export const getSingleContentBy = <TMeta>(
   metadataAdapter?: (raw: unknown) => TMeta,
 ): Content<TMeta> | undefined => {
   const sanitizedParams = params || {};
-  try {
-    const slug = calculateSlugFrom(sanitizedParams, dynamicSlug);
-    const filePath = path.join(contentRootDirectory, slug, contentMdxFileName);
-    const { frontmatter, content } = grayMatterContent<TMeta>(
-      filePath,
-      metadataAdapter,
-    );
-    const relativePath = path.relative(
-      contentRootDirectory,
-      path.dirname(filePath),
-    );
+  return cached("single:" + dynamicSlug + ":" + JSON.stringify(sanitizedParams), () => {
+    try {
+      const slug = calculateSlugFrom(sanitizedParams, dynamicSlug);
+      const filePath = path.join(contentRootDirectory, slug, contentMdxFileName);
+      const { frontmatter, content } = grayMatterContent<TMeta>(
+        filePath,
+        metadataAdapter,
+      );
+      const relativePath = path.relative(
+        contentRootDirectory,
+        path.dirname(filePath),
+      );
 
-    return {
-      frontmatter,
-      slug: {
-        params: sanitizedParams,
-        formatted: slug,
-      },
-      readingTime: calculateReadingTime(content),
-      contentFileRelativePath: relativePath,
-      content,
-    };
-  } catch {
-    return undefined;
-  }
+      return {
+        frontmatter,
+        slug: {
+          params: sanitizedParams,
+          formatted: slug,
+        },
+        readingTime: calculateReadingTime(content),
+        contentFileRelativePath: relativePath,
+        content,
+      } as Content<TMeta>;
+    } catch {
+      return undefined;
+    }
+  }) as Content<TMeta> | undefined;
 };
