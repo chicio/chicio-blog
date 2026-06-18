@@ -4,17 +4,17 @@
         "src/app/sw.ts",
         "src/content/**/content.mdx",
         "serwist.config.mjs",
-        "src/types/component-store.ts"
+        "src/types/component-store.ts",
+        "tools/eslint/index.js",
+        "tools/eslint/rules/*.js"
     ],
     "project": [
-        "src/**/*.{ts,tsx,mdx}"
+        "src/**/*.{ts,tsx,mdx}",
+        "tools/**/*.js"
     ],
     "mdx": {
         "entry": ["src/content/**/content.mdx"]
     },
-    "ignore": [
-        ".agents/**"
-    ],
     "ignoreDependencies": [
         "tailwindcss",
         "highlight.js"

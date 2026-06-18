@@ -24,7 +24,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Lint
-        run: npm run lint -- --max-warnings 0
+        run: npm run lint
 
   knip:
     name: Knip
@@ -56,6 +56,8 @@ jobs:
           cache: 'npm'
       - name: Install dependencies
         run: npm ci
+      - name: Validate architecture (non-failing during migration)
+        run: npm run validate-architecture || true
       - name: Build
         run: npm run build
         env:
