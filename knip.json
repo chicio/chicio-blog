@@ -3,7 +3,8 @@
     "entry": [
         "src/app/sw.ts",
         "src/content/**/content.mdx",
-        "serwist.config.mjs"
+        "serwist.config.mjs",
+        "src/types/component-store.ts"
     ],
     "project": [
         "src/**/*.{ts,tsx,mdx}"
@@ -17,5 +18,6 @@
     "ignoreDependencies": [
         "tailwindcss",
         "highlight.js"
-    ]
+    ],
+    "ignoreExportsUsedInFile": true
 }
