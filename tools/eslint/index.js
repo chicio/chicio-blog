@@ -6,7 +6,7 @@ const storeReturnShape = require("./rules/store-return-shape");
 const indexOnlyComponent = require("./rules/index-only-component");
 const folderComposition = require("./rules/folder-composition");
 
-/** @type {import("eslint").Linter.Plugin} */
+/** @type {import("eslint").ESLint.Plugin} */
 const plugin = {
     rules: {
         "prefer-component-store": preferComponentStore,

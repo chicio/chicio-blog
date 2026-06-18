@@ -39,7 +39,7 @@ const rule = {
                 for (const specifier of node.specifiers) {
                     const exported = specifier.exported;
                     const exportedName =
-                        exported.type === "Identifier" ? exported.name : exported.value;
+                        exported.type === "Identifier" ? exported.name : String(exported.value);
                     if (/^use[A-Z]/.test(exportedName)) {
                         context.report({
                             node: specifier,
