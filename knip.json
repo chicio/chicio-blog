@@ -11,6 +11,9 @@
     "mdx": {
         "entry": ["src/content/**/content.mdx"]
     },
+    "ignore": [
+        ".agents/**"
+    ],
     "ignoreDependencies": [
         "tailwindcss",
         "highlight.js"
