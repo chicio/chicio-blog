@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "chat-knowledge-upload": "tsx --env-file=.env.production src/lib/chat/chat-knowledge-upload.ts",
+    "validate-architecture": "tsx src/lib/build/architecture/validate-architecture.cli.ts",
     "predev": "NODE_ENV=development tsx src/lib/build/prebuild.ts",
     "dev": "next dev",
     "prebuild": "tsx src/lib/build/prebuild.ts",
