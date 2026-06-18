@@ -1,4 +1,4 @@
-import { basename, relative, sep } from "path";
+import { relative, sep } from "path";
 import { Node } from "ts-morph";
 import type { Rule, Violation } from "../validate-architecture";
 
