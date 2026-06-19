@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "chat-knowledge-upload": "tsx --env-file=.env.production src/lib/chat/chat-knowledge-upload.ts",
+    "validate-architecture": "depcruise src --config .dependency-cruiser.js",
     "predev": "NODE_ENV=development tsx src/lib/build/prebuild.ts",
     "dev": "next dev",
     "prebuild": "tsx src/lib/build/prebuild.ts",
@@ -75,6 +76,7 @@
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
     "babel-plugin-react-compiler": "^1.0.0",
+    "dependency-cruiser": "^17.4.3",
     "esbuild": "^0.28.0",
     "eslint": "^9",
     "eslint-config-next": "16.2.6",
