@@ -4,15 +4,8 @@ import { useEffect } from "react";
 import { contactQueue } from "@/lib/background-sync/contact-queue";
 import { trackWith } from "@/lib/tracking/tracking";
 import { tracking } from "@/types/configuration/tracking";
-import { ComponentStore } from "@/types/component-store";
 
-type LayoutAdditionalContentState = Record<string, never>;
-type LayoutAdditionalContentEffects = Record<string, never>;
-
-export const useLayoutAdditionalContentStore = (): ComponentStore<
-    LayoutAdditionalContentState,
-    LayoutAdditionalContentEffects
-> => {
+export const useLayoutAdditionalContentStore = (): void => {
     useEffect(() => {
         const replayQueue = async () => {
             while (!contactQueue.isEmpty()) {
@@ -50,9 +43,4 @@ export const useLayoutAdditionalContentStore = (): ComponentStore<
             window.removeEventListener("online", replayQueue);
         };
     }, []);
-
-    return {
-        state: {},
-        effects: {},
-    };
 };
