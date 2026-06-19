@@ -4,7 +4,12 @@
 const path = require("path");
 const fs = require("fs");
 
+// Design-system atomic tiers are PERMANENT grouping buckets: they hold component
+// folders (e.g. atoms/<name>/<name>.tsx), never components directly, so they are exempt.
+// Content/feature internal `components/` + `hooks/` buckets are intentionally NOT listed:
+// the migration flattens them, so the rule SHOULD flag files still sitting in them.
 const TIER_DIRS = new Set(["atoms", "molecules", "organism", "templates"]);
+// design-system/hooks and design-system/utils are the flat homes for shared hooks/helpers.
 const SKIP_DIRS = new Set(["hooks", "utils"]);
 
 /**
