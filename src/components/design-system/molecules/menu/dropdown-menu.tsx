@@ -2,7 +2,7 @@ import { TrackingData } from "@/types/configuration/tracking";
 import { AnimatePresence } from "framer-motion";
 import { FC, useEffect, useRef, useState } from "react";
 import { BiChevronDown } from "react-icons/bi";
-import { useReducedMotions } from "../../utils/hooks/use-reduced-motions";
+import { useReducedMotions } from "@/components/design-system/hooks/use-reduced-motions";
 import { MenuItemWithTracking } from "./menu-item-with-tracking";
 
 interface DropdownMenuItem {

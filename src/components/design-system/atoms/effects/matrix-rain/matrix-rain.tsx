@@ -4,8 +4,8 @@ import { MatrixRainWebGPU } from "matrix-rain-webgpu";
 import React, { memo, useRef, useState } from "react";
 import { Matrix2DCanvas } from "./matrix-2d-canvas";
 import { useMatrixRainActivity } from "./use-matrix-rain-activity";
-import { useWebGpuSupported } from "../../../utils/hooks/use-webgpu-supported";
-import { useMatrixSettingsStore } from "../../../utils/hooks/use-matrix-settings-store";
+import { useWebGpuSupported } from "@/components/design-system/hooks/use-webgpu-supported";
+import { useMatrixSettingsStore } from "@/components/design-system/hooks/use-matrix-settings-store";
 import { settingsToProps } from "@/lib/matrix-settings/matrix-settings";
 
 const backgroundColor = `#00110010`;

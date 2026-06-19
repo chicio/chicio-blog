@@ -2,8 +2,8 @@
 
 import { Overlay } from "@/components/design-system/atoms/effects/overlay";
 import { TerminalLine } from "@/components/design-system/atoms/typography/terminal-blocks";
-import { useGlassmorphism } from "@/components/design-system/utils/hooks/use-glassmorphism";
-import { useSearch } from "@/components/design-system/utils/hooks/use-search";
+import { useGlassmorphism } from "@/components/design-system/hooks/use-glassmorphism";
+import { useSearch } from "@/components/design-system/hooks/use-search";
 import { commandPaletteOpenEvent } from "@/lib/command-palette/command-palette-events";
 import { motion } from "framer-motion";
 import { trackWith } from "@/lib/tracking/tracking";

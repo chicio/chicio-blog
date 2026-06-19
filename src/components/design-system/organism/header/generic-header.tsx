@@ -1,7 +1,7 @@
 'use client';
 
 import { FC, useState } from "react";
-import { useGlassmorphism } from "../../utils/hooks/use-glassmorphism";
+import { useGlassmorphism } from "@/components/design-system/hooks/use-glassmorphism";
 
 export interface ChatHeaderProps {
   title: string;

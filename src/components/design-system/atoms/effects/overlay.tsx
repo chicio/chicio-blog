@@ -1,6 +1,6 @@
 'use client'
 
-import { useLockBodyScroll } from "@/components/design-system/utils/hooks/use-lock-body-scroll";
+import { useLockBodyScroll } from "@/components/design-system/hooks/use-lock-body-scroll";
 import { motion } from "framer-motion";
 import { FC, ReactNode } from "react";
 

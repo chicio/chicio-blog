@@ -4,7 +4,7 @@ import { Button } from "@/components/design-system/atoms/buttons/button";
 import { Overlay } from "@/components/design-system/atoms/effects/overlay";
 import { Loader } from "@/components/design-system/atoms/loader/loader";
 import { TerminalProgressBar } from "@/components/design-system/molecules/terminal-progress-bar/terminal-progress-bar";
-import { useReducedMotions } from "@/components/design-system/utils/hooks/use-reduced-motions";
+import { useReducedMotions } from "@/components/design-system/hooks/use-reduced-motions";
 import { MotionDiv } from "@/components/design-system/molecules/animation/motion-div";
 import { Variants } from "framer-motion";
 import { Markdown } from "@/components/design-system/atoms/typography/markdown";

@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/design-system/atoms/buttons/button";
 import { ProfilePhoto } from "@/components/design-system/organism/profile-photo";
-import { useGlassmorphism } from "@/components/design-system/utils/hooks/use-glassmorphism";
+import { useGlassmorphism } from "@/components/design-system/hooks/use-glassmorphism";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 
 const sections = [

@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState, useRef } from "react";
-import { useDeviceCapabilities } from "@/components/design-system/utils/hooks/use-device-capabilities";
+import { useDeviceCapabilities } from "@/components/design-system/hooks/use-device-capabilities";
 
 export type SummaryType = "tldr" | "key-points";
 export type SummaryStatus = "idle" | "downloading" | "loading" | "streaming" | "done" | "error";

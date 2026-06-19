@@ -1,6 +1,6 @@
 "use client";
 
-import { useShuffleArray } from "@/components/design-system/utils/hooks/use-shuffle-array";
+import { useShuffleArray } from "@/components/design-system/hooks/use-shuffle-array";
 
 export const ClownsVideos = () => {
   const videos = useShuffleArray(

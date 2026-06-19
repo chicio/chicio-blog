@@ -2,8 +2,8 @@ import { trackWith } from "@/lib/tracking/tracking";
 import { tracking } from "@/types/configuration/tracking";
 import { Command } from "cmdk";
 import { TerminalLine } from "../../atoms/typography/terminal-blocks";
-import { useWebGpuSupported } from "../../utils/hooks/use-webgpu-supported";
-import { useReducedMotions } from "../../utils/hooks/use-reduced-motions";
+import { useWebGpuSupported } from "@/components/design-system/hooks/use-webgpu-supported";
+import { useReducedMotions } from "@/components/design-system/hooks/use-reduced-motions";
 import { openMatrixRainPanel } from "@/lib/command-palette/command-palette-events";
 import { MdTune } from "react-icons/md";
 

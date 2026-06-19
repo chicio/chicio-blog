@@ -15,7 +15,7 @@ import {
 import { trackWith } from "@/lib/tracking/tracking";
 import { tracking } from "@/types/configuration/tracking";
 import { MdClose } from "react-icons/md";
-import { useGlassmorphism } from "@/components/design-system/utils/hooks/use-glassmorphism";
+import { useGlassmorphism } from "@/components/design-system/hooks/use-glassmorphism";
 import { Button } from "@/components/design-system/atoms/buttons/button";
 
 const RAIN_DENSITY_MIN = 0.80;

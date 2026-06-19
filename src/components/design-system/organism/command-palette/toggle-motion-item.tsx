@@ -1,5 +1,5 @@
 import { trackWith } from "@/lib/tracking/tracking";
-import { useMotionStore } from "../../utils/hooks/use-motion-store";
+import { useMotionStore } from "@/components/design-system/hooks/use-motion-store";
 import { writeMotion } from "@/lib/motion/motion";
 import { Command } from "cmdk";
 import { TerminalLine } from "../../atoms/typography/terminal-blocks";
