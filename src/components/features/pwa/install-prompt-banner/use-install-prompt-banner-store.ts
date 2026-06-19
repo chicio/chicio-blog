@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState, useSyncExternalStore } from "react";
-import { useGlassmorphism } from "@/components/design-system/utils/hooks/use-glassmorphism";
 import { useConsentStore } from "@/components/design-system/utils/hooks/use-consent-store";
 import { writePwaInstallDecision } from "@/lib/pwa/pwa-install-decision";
 import { trackWith } from "@/lib/tracking/tracking";
@@ -15,7 +14,6 @@ interface BeforeInstallPromptEvent extends Event {
 }
 
 interface InstallPromptBannerState {
-    glassmorphismClass: string;
     visible: boolean;
 }
 
@@ -42,7 +40,6 @@ export const useInstallPromptBannerStore = (): ComponentStore<
     InstallPromptBannerState,
     InstallPromptBannerEffects
 > => {
-    const { glassmorphismClass } = useGlassmorphism();
     const cookieAccepted = useConsentStore();
     const decision = usePwaInstallDecision();
     const isStandalone = useSyncExternalStore(
@@ -109,7 +106,7 @@ export const useInstallPromptBannerStore = (): ComponentStore<
     };
 
     return {
-        state: { glassmorphismClass, visible },
+        state: { visible },
         effects: { install, dismiss },
     };
 };

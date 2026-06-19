@@ -14,6 +14,11 @@ function toPascalCase(kebab) {
         .join("");
 }
 
+// TEMPORARY exemption (PR1 #371): these shared hooks may be called directly in component
+// files while we decide their permanent home. Remove this allowlist and re-strengthen the
+// rule to permit ONLY the component's own store hook before the final enforcement PR.
+const ALLOWED_COMPONENT_HOOKS = new Set(["useGlassmorphism"]);
+
 /** @type {import("eslint").Rule.RuleModule} */
 const rule = {
     meta: {
@@ -53,7 +58,7 @@ const rule = {
                 }
                 if (name === expectedStoreName) {
                     storeCalls.push(node);
-                } else {
+                } else if (!ALLOWED_COMPONENT_HOOKS.has(name)) {
                     violations.push({ node, name });
                 }
             },
