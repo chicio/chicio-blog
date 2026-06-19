@@ -1,52 +1,18 @@
 "use client";
 
-import { FC, useEffect } from "react";
+import { FC } from "react";
 import { AnimatePresence } from "framer-motion";
-import { useInstallPrompt } from "../hooks/use-install-prompt";
-import { trackWith } from "@/lib/tracking/tracking";
-import { tracking } from "@/types/configuration/tracking";
-import { useGlassmorphism } from "@/components/design-system/utils/hooks/use-glassmorphism";
-import { useConsentStore } from "@/components/design-system/utils/hooks/use-consent-store";
 import { BluePillButton, RedPillButton } from "@/components/design-system/molecules/buttons/pills-buttons";
+import { useGlassmorphism } from "@/components/design-system/utils/hooks/use-glassmorphism";
+import { useInstallPromptBannerStore } from "./use-install-prompt-banner-store";
 
 export const InstallPromptBanner: FC = () => {
+    const { state, effects } = useInstallPromptBannerStore();
     const { glassmorphismClass } = useGlassmorphism();
-    const { isInstallable, promptInstall, dismiss } = useInstallPrompt();
-    const cookieAccepted = useConsentStore();
-
-    const visible = isInstallable && cookieAccepted;
-
-    useEffect(() => {
-        if (visible) {
-            trackWith({
-                action: tracking.action.pwa_install_prompt_shown,
-                category: tracking.category.pwa,
-                label: tracking.label.body,
-            });
-        }
-    }, [visible]);
-
-    const handleInstall = async () => {
-        await promptInstall();
-        trackWith({
-            action: tracking.action.pwa_install_accepted,
-            category: tracking.category.pwa,
-            label: tracking.label.body,
-        });
-    };
-
-    const handleDismiss = () => {
-        dismiss();
-        trackWith({
-            action: tracking.action.pwa_install_dismissed,
-            category: tracking.category.pwa,
-            label: tracking.label.body,
-        });
-    };
 
     return (
         <AnimatePresence>
-            {visible && (
+            {state.visible && (
                 <div
                     className={`${glassmorphismClass} backdrop-blur-2xl! fixed right-0 bottom-5 left-0 mx-auto my-0 p-4 flex max-w-[95%] flex-col items-center gap-4 lg:max-w-[60%] lg:flex-row z-50`}
                     role="dialog"
@@ -60,13 +26,13 @@ export const InstallPromptBanner: FC = () => {
                     </p>
                     <div className="flex flex-row gap-4">
                         <BluePillButton
-                            onClick={handleDismiss}
+                            onClick={effects.dismiss}
                             aria-label="Dismiss install prompt"
                         >
                             Dismiss
                         </BluePillButton>
                         <RedPillButton
-                            onClick={handleInstall}
+                            onClick={effects.install}
                             aria-label="Install app"
                         >
                             Install
