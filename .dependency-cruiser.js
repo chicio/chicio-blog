@@ -5,6 +5,35 @@
 const config = {
     forbidden: [
         {
+            name: "pwa-import-only-via-index",
+            comment: [
+                "ERROR-level enforcement for pwa/: no direct .tsx imports from outside the folder.",
+                "All pwa component imports must go through the folder's index.ts barrel.",
+            ].join(" "),
+            severity: "error",
+            from: {
+                pathNot: "/index\\.ts$",
+            },
+            to: {
+                path: "^src/components/features/pwa/.+\\.tsx$",
+            },
+        },
+        {
+            name: "pwa-seal-private-nested-folders",
+            comment: [
+                "ERROR-level enforcement for pwa/: nested sub-folders are sealed.",
+                "Only the parent component folder may import from its nested sub-folder.",
+            ].join(" "),
+            severity: "error",
+            from: {
+                path: "^(src/components/features/pwa/[^/]+)/",
+            },
+            to: {
+                path: "^src/components/features/pwa/[^/]+/[^/]+/",
+                pathNot: "^$1/",
+            },
+        },
+        {
             name: "import-only-via-index",
             comment: [
                 "No module (except index barrels) may directly import a .tsx component file.",

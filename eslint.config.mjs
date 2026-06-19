@@ -46,6 +46,43 @@ const indexBarrelRules = {
     },
 };
 
-const eslintConfig = [ignores, ...coreWebVitals, ...typescript, componentStoreRules, storeHookRules, indexBarrelRules];
+const pwaComponentStoreErrorRules = {
+    files: ["src/components/features/pwa/**/*.tsx"],
+    ignores: ["src/components/features/pwa/**/use-*.tsx"],
+    plugins: { chicio },
+    rules: {
+        "react/jsx-no-bind": ["error", { allowArrowFunctions: false, allowFunctions: false, allowBind: false }],
+        "chicio/prefer-component-store": "error",
+        "chicio/folder-composition": "error",
+    },
+};
+
+const pwaStoreHookErrorRules = {
+    files: ["src/components/features/pwa/**/use-*-store.ts"],
+    plugins: { chicio },
+    rules: {
+        "chicio/store-return-shape": "error",
+    },
+};
+
+const pwaIndexBarrelErrorRules = {
+    files: ["src/components/features/pwa/**/index.ts"],
+    plugins: { chicio },
+    rules: {
+        "chicio/index-only-component": "error",
+    },
+};
+
+const eslintConfig = [
+    ignores,
+    ...coreWebVitals,
+    ...typescript,
+    componentStoreRules,
+    storeHookRules,
+    indexBarrelRules,
+    pwaComponentStoreErrorRules,
+    pwaStoreHookErrorRules,
+    pwaIndexBarrelErrorRules,
+];
 
 export default eslintConfig;
