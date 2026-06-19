@@ -2,7 +2,7 @@
 
 import { FC } from "react";
 import dynamic from "next/dynamic";
-import { useOfflineContactQueue } from "@/components/features/pwa/hooks/use-offline-contact-queue";
+import { useLayoutAdditionalContentStore } from "./use-layout-additional-content-store";
 
 const CookieConsentBanner = dynamic(
     () => import("@/components/design-system/organism/cookie-consent-banner"),
@@ -16,7 +16,7 @@ const TrackingOptIn = dynamic(
 
 const InstallPromptBanner = dynamic(
     () =>
-        import("@/components/features/pwa/components/install-prompt-banner").then(
+        import("@/components/features/pwa/install-prompt-banner").then(
             (m) => m.InstallPromptBanner,
         ),
     { ssr: false },
@@ -36,7 +36,7 @@ const MatrixRainControlPanel = dynamic(
 );
 
 export const LayoutAdditionalContent: FC = () => {
-    useOfflineContactQueue();
+    useLayoutAdditionalContentStore();
 
     return (
         <>
