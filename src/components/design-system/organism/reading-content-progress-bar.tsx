@@ -1,13 +1,13 @@
 "use client";
 
-import { useGlassmorphism } from "@/components/design-system/utils/hooks/use-glassmorphism";
+import { useGlassmorphism } from "@/components/design-system/hooks/use-glassmorphism";
 import {
     ScrollDirection,
     useScrollDirection,
-} from "@/components/design-system/utils/hooks/use-scroll-direction";
+} from "@/components/design-system/hooks/use-scroll-direction";
 import React from "react";
-import { useReadingProgress } from "../utils/hooks/use-reading-progress";
-import { useReducedMotions } from "@/components/design-system/utils/hooks/use-reduced-motions";
+import { useReadingProgress } from "@/components/design-system/hooks/use-reading-progress";
+import { useReducedMotions } from "@/components/design-system/hooks/use-reduced-motions";
 import { motion } from "framer-motion";
 import { TerminalProgressBar } from "../molecules/terminal-progress-bar/terminal-progress-bar";
 

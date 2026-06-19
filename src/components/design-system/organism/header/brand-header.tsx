@@ -6,7 +6,7 @@ import { FC } from "react";
 import logoImage from "../../../../../public/media/logo.png";
 import { ImageGlow } from "../../atoms/effects/image-glow";
 import { Cursor } from "../../atoms/typography/terminal-blocks";
-import { useGlassmorphism } from "../../utils/hooks/use-glassmorphism";
+import { useGlassmorphism } from "@/components/design-system/hooks/use-glassmorphism";
 
 interface BrandHeaderProps {
   big: boolean;

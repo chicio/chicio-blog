@@ -4,7 +4,7 @@ import Image from "next/image";
 import { StandardInternalLinkWithTracking } from "@/components/design-system/atoms/links/standard-internal-link-with-tracking";
 import { tracking } from "@/types/configuration/tracking";
 import { GlassmorphismBackground } from "@/components/design-system/atoms/effects/glassmorphism-background";
-import { useInViewList } from "@/components/design-system/utils/hooks/use-in-view-list";
+import { useInViewList } from "@/components/design-system/hooks/use-in-view-list";
 import { GameMetadata, VideogamesNavigationOrigin } from "@/types/content/videogames";
 import { Content } from "@/types/content/content";
 import { FC } from "react";

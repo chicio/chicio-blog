@@ -2,9 +2,9 @@
 
 import { Cursor, ErrorText, QuoteText, SuccessText, TerminalLine, TerminalQuoteLine } from '@/components/design-system/atoms/typography/terminal-blocks';
 import { FC, useEffect } from 'react';
-import { useTypewriter } from '../../utils/hooks/use-typewriter';
-import { useGlassmorphism } from '../../utils/hooks/use-glassmorphism';
-import { useInView } from '../../utils/hooks/use-in-view';
+import { useTypewriter } from '@/components/design-system/hooks/use-typewriter';
+import { useGlassmorphism } from '@/components/design-system/hooks/use-glassmorphism';
+import { useInView } from '@/components/design-system/hooks/use-in-view';
 import { MotionDiv } from '../animation/motion-div';
 
 interface TerminalLine {

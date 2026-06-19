@@ -1,7 +1,7 @@
 'use client';
 
 import { ImageGlow } from "@/components/design-system/atoms/effects/image-glow";
-import { useShuffleArray } from "@/components/design-system/utils/hooks/use-shuffle-array";
+import { useShuffleArray } from "@/components/design-system/hooks/use-shuffle-array";
 
 export const ClownsPhotosGrid = () => {
   const photos = useShuffleArray([

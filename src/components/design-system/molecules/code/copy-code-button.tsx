@@ -5,7 +5,7 @@ import { CopiedIcon, CopyErrorIcon, CopyIcon } from "../../atoms/icons/copy-icon
 import { trackWith } from "@/lib/tracking/tracking";
 import { tracking } from "@/types/configuration/tracking";
 import { Button } from "../../atoms/buttons/button";
-import { useClipboardAvailable } from "../../utils/hooks/use-clipboard-available";
+import { useClipboardAvailable } from "@/components/design-system/hooks/use-clipboard-available";
 
 interface CopyCodeButtonProps {
     getText: () => string;

@@ -3,7 +3,7 @@
 import { FC } from "react";
 import { AnimatePresence } from "framer-motion";
 import { BluePillButton, RedPillButton } from "@/components/design-system/molecules/buttons/pills-buttons";
-import { useGlassmorphism } from "@/components/design-system/utils/hooks/use-glassmorphism";
+import { useGlassmorphism } from "@/components/design-system/hooks/use-glassmorphism";
 import { useInstallPromptBannerStore } from "./use-install-prompt-banner-store";
 
 export const InstallPromptBanner: FC = () => {

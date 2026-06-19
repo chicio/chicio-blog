@@ -1,6 +1,6 @@
 "use client";
 
-import { useGlassmorphism } from "@/components/design-system/utils/hooks/use-glassmorphism";
+import { useGlassmorphism } from "@/components/design-system/hooks/use-glassmorphism";
 import { artDescriptions } from "@/content/art/art";
 import Image from "next/image";
 import { FC, useState } from "react";

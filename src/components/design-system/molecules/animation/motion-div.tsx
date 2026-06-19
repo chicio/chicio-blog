@@ -2,7 +2,7 @@
 
 import { motion, HTMLMotionProps } from "framer-motion";
 import { ComponentPropsWithoutRef, FC } from "react";
-import { useMotionStore } from "../../utils/hooks/use-motion-store";
+import { useMotionStore } from "@/components/design-system/hooks/use-motion-store";
 
 type MotionDivProps = HTMLMotionProps<"div">;
 

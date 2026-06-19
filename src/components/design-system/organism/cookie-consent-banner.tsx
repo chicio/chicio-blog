@@ -6,8 +6,8 @@ import {
   BluePillButton,
   RedPillButton,
 } from "../molecules/buttons/pills-buttons";
-import { useGlassmorphism } from "../utils/hooks/use-glassmorphism";
-import { useHasConsentDecision } from "../utils/hooks/use-has-consent-decision";
+import { useGlassmorphism } from "@/components/design-system/hooks/use-glassmorphism";
+import { useHasConsentDecision } from "@/components/design-system/hooks/use-has-consent-decision";
 
 const CookieConsentBanner = () => {
   const { glassmorphismClass } = useGlassmorphism({ increaseContrast: true });

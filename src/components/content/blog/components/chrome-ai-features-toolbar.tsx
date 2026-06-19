@@ -9,7 +9,7 @@ import { tracking } from "@/types/configuration/tracking";
 import { trackWith } from "@/lib/tracking/tracking";
 import { useChromeSummarize, SummaryType } from "../hooks/use-chrome-summarize";
 import { ChromeSummaryModal } from "./chrome-summary-modal";
-import { useGlassmorphism } from "@/components/design-system/utils/hooks/use-glassmorphism";
+import { useGlassmorphism } from "@/components/design-system/hooks/use-glassmorphism";
 import { SiProbot } from "react-icons/si";
 
 interface ChromeAiFeaturesToolbarProps {

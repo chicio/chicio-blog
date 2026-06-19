@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useSyncExternalStore } from "react";
-import { useConsentStore } from "@/components/design-system/utils/hooks/use-consent-store";
+import { useConsentStore } from "@/components/design-system/hooks/use-consent-store";
 import { writePwaInstallDecision } from "@/lib/pwa/pwa-install-decision";
 import { trackWith } from "@/lib/tracking/tracking";
 import { tracking } from "@/types/configuration/tracking";

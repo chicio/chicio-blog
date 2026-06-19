@@ -1,7 +1,7 @@
 "use client";
 
 import { FC, PropsWithChildren } from "react";
-import { useReducedMotions } from "../../utils/hooks/use-reduced-motions";
+import { useReducedMotions } from "@/components/design-system/hooks/use-reduced-motions";
 
 export const RedPillNoReflection: FC<
   PropsWithChildren<{ pillBodyClassName?: string; pillLabelClassName?: string }>

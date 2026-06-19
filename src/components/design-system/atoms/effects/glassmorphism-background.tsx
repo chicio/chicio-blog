@@ -2,7 +2,7 @@
 
 import { stagger, Variants } from "framer-motion";
 import { FC, PropsWithChildren } from "react";
-import { useGlassmorphism } from "../../utils/hooks/use-glassmorphism";
+import { useGlassmorphism } from "@/components/design-system/hooks/use-glassmorphism";
 import { MotionDiv } from "../../molecules/animation/motion-div";
 
 const containerVariants: Variants = {

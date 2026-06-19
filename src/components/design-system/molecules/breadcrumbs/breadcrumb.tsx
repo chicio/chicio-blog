@@ -6,12 +6,12 @@ import { IoMdArrowRoundBack } from "react-icons/io";
 
 import { TrackingData } from "@/types/configuration/tracking";
 import { StandardInternalLinkWithTracking } from "@/components/design-system/atoms/links/standard-internal-link-with-tracking";
-import { useInView } from "@/components/design-system/utils/hooks/use-in-view";
+import { useInView } from "@/components/design-system/hooks/use-in-view";
 import {
   ScrollDirection,
   useScrollDirection,
-} from "@/components/design-system/utils/hooks/use-scroll-direction";
-import { useGlassmorphism } from "@/components/design-system/utils/hooks/use-glassmorphism";
+} from "@/components/design-system/hooks/use-scroll-direction";
+import { useGlassmorphism } from "@/components/design-system/hooks/use-glassmorphism";
 
 export type BreadcrumbItem =
   | {

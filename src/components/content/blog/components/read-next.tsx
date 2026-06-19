@@ -1,4 +1,4 @@
-import { shuffleArray } from "@/components/design-system/utils/hooks/shuffle-array";
+import { shuffleArray } from "@/components/design-system/utils/shuffle-array";
 import { PostsRowContainer } from "@/components/content/blog/components/posts-row-container";
 import { getPosts } from "@/lib/content/posts/posts";
 import { FC } from "react";
