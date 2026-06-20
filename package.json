@@ -80,7 +80,7 @@
     "esbuild": "^0.28.1",
     "eslint": "^9",
     "eslint-config-next": "16.2.6",
-    "knip": "^6.16.0",
+    "knip": "^6.17.1",
     "prettier": "^3.8.4",
     "prettier-plugin-tailwindcss": "^0.8.0",
     "release-it": "^20.2.0",
