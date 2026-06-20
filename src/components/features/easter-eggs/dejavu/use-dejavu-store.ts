@@ -27,6 +27,7 @@ export const useDejavuStore = (): ComponentStore<DejavuState, DejavuEffects> => 
             return () => {
                 clearTimeout(glitchTimeout);
                 clearTimeout(resetTimeout);
+                document.body.classList.remove("glitch-active");
             };
         }
     }, [logoClicks]);
