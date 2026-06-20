@@ -4,7 +4,7 @@ import {getPostsForTag, getTags} from "@/lib/content/posts/posts";
 import { NextTagParameters } from "@/types/next/page-parameters";
 import {Metadata} from "next";
 import {createMetadata} from "@/lib/seo/seo";
-import { BlogGenericPostListPageTemplate } from "@/components/content/blog/components/blog-generic-post-list-page-template";
+import { BlogGenericPostListPageTemplate } from "@/components/content/blog/blog-generic-post-list-page-template";
 import { generateTagSlug } from "@/lib/tags/tags";
 
 export async function generateMetadata({ params }: NextTagParameters): Promise<Metadata> {
