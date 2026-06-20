@@ -2,7 +2,7 @@ import { PageTitle } from "@/components/design-system/molecules/typography/page-
 import { JsonLd } from "@/components/design-system/utils/components/jsond-ld";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { tracking } from "@/types/configuration/tracking";
-import { ContentPageTemplate } from "../../../design-system/templates/content-page-template";
+import { ContentPage } from "@/components/features/content-page";
 import { FC } from "react";
 import { Tag } from "@/types/content/tag";
 import { Tag as TagItem } from "@/components/design-system/molecules/buttons/tag";
@@ -15,7 +15,7 @@ interface BlogTagsProps {
 export const BlogTags: FC<BlogTagsProps> = ({ tags, author }) => {
   return (
     <>
-      <ContentPageTemplate
+      <ContentPage
         author={author}
         trackingCategory={tracking.category.blog_tags}
       >
@@ -32,7 +32,7 @@ export const BlogTags: FC<BlogTagsProps> = ({ tags, author }) => {
             />
           ))}
         </div>
-      </ContentPageTemplate>
+      </ContentPage>
       <JsonLd
         type="Blog"
         url={siteMetadata.siteUrl}

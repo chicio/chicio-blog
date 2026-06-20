@@ -1,4 +1,4 @@
-import { ReadingContentPageTemplate } from "@/components/design-system/templates/reading-content-page-template";
+import { ReadingContentPage } from "@/components/features/reading-content-page";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { tracking } from "@/types/configuration/tracking";
 import { FC, PropsWithChildren } from "react";
@@ -35,7 +35,7 @@ export const Game: FC<PropsWithChildren<GameProps>> = async ({
   );
 
   return (
-    <ReadingContentPageTemplate
+    <ReadingContentPage
       author={siteMetadata.author}
       trackingCategory={tracking.category.videogames}
       beforeContent={
@@ -108,6 +108,6 @@ export const Game: FC<PropsWithChildren<GameProps>> = async ({
         description={game.frontmatter.description}
         keywords={game.frontmatter.tags}
       />
-    </ReadingContentPageTemplate>
+    </ReadingContentPage>
   );
 };

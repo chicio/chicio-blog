@@ -1,4 +1,4 @@
-import { ReadingContentPageTemplate } from "@/components/design-system/templates/reading-content-page-template";
+import { ReadingContentPage } from "@/components/features/reading-content-page";
 import { BreadcrumbItem } from "@/components/design-system/molecules/breadcrumbs/breadcrumb";
 import { JsonLd } from "@/components/design-system/utils/components/jsond-ld";
 import { Content } from "@/types/content/content";
@@ -22,7 +22,7 @@ export const BlogPostContent: FC<PostProps> = async ({ post }) => {
 
   return (
     <>
-      <ReadingContentPageTemplate
+      <ReadingContentPage
         author={siteMetadata.author}
         trackingCategory={tracking.category.blog_post}
         breadcrumbs={[
@@ -57,7 +57,7 @@ export const BlogPostContent: FC<PostProps> = async ({ post }) => {
         }
       >
         <PostContent />
-      </ReadingContentPageTemplate>
+      </ReadingContentPage>
       <JsonLd
         type="BlogPosting"
         url={`${siteMetadata.siteUrl}${post.slug.formatted}`}

@@ -1,4 +1,4 @@
-import { ReadingContentPageTemplate } from "@/components/design-system/templates/reading-content-page-template";
+import { ReadingContentPage } from "@/components/features/reading-content-page";
 import { BreadcrumbItem } from "@/components/design-system/molecules/breadcrumbs/breadcrumb";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { tracking } from "@/types/configuration/tracking";
@@ -33,7 +33,7 @@ export const Console: FC<PropsWithChildren<ConsoleProps>> = async ({
   const nextConsole = allConsoles[currentConsoleIndex + 1];
 
   return (
-    <ReadingContentPageTemplate
+    <ReadingContentPage
       author={siteMetadata.author}
       trackingCategory={tracking.category.videogames}
       breadcrumbs={[
@@ -95,6 +95,6 @@ export const Console: FC<PropsWithChildren<ConsoleProps>> = async ({
         description={console.frontmatter.description}
         keywords={console.frontmatter.tags}
       />
-    </ReadingContentPageTemplate>
+    </ReadingContentPage>
   );
 };

@@ -8,7 +8,7 @@ import { siteMetadata } from "@/types/configuration/site-metadata";
 import { tracking } from "@/types/configuration/tracking";
 import { VideogameCollectionDataCard } from "./videogame-collection-data-card";
 import { JsonLd } from "@/components/design-system/utils/components/jsond-ld";
-import { ContentPageTemplate } from "@/components/design-system/templates/content-page-template";
+import { ContentPage } from "@/components/features/content-page";
 import { VideogamesViewSwitcher } from "@/components/content/videogames/components/videogames-view-switcher";
 import { StandardInternalLinkWithTracking } from "@/components/design-system/atoms/links/standard-internal-link-with-tracking";
 
@@ -22,7 +22,7 @@ export const VideogamesCollection: React.FC = () => {
   }));
 
   return (
-    <ContentPageTemplate
+    <ContentPage
       author={siteMetadata.author}
       trackingCategory={tracking.category.videogames}
     >
@@ -71,6 +71,6 @@ export const VideogamesCollection: React.FC = () => {
         imageUrl={siteMetadata.featuredImage}
         title={siteMetadata.title}
       />
-    </ContentPageTemplate>
+    </ContentPage>
   );
 };

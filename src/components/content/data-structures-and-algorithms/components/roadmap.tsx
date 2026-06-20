@@ -1,7 +1,7 @@
 import "highlight.js/styles/tokyo-night-dark.css";
 import "katex/dist/katex.min.css";
 
-import { ReadingContentPageTemplate } from "@/components/design-system/templates/reading-content-page-template";
+import { ReadingContentPage } from "@/components/features/reading-content-page";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { tracking } from "@/types/configuration/tracking";
 import { FC, PropsWithChildren } from "react";
@@ -15,7 +15,7 @@ interface DsaProps {
 export const Roadmap: FC<PropsWithChildren<DsaProps>> = async ({ roadmap }) => {
   const { default: RoadmapContent } = await import(`@/content/data-structures-and-algorithms/roadmap/content.mdx`)
 
-  return <ReadingContentPageTemplate
+  return <ReadingContentPage
     author={siteMetadata.author}
     trackingCategory={tracking.category.data_structures_and_algorithms}
   >
@@ -28,5 +28,5 @@ export const Roadmap: FC<PropsWithChildren<DsaProps>> = async ({ roadmap }) => {
       description={siteMetadata.description}
       keywords={roadmap.frontmatter.tags}
     />
-  </ReadingContentPageTemplate>
+  </ReadingContentPage>
 };

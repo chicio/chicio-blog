@@ -1,7 +1,7 @@
 import "highlight.js/styles/tokyo-night-dark.css";
 import "katex/dist/katex.min.css";
 
-import { ReadingContentPageTemplate } from "@/components/design-system/templates/reading-content-page-template";
+import { ReadingContentPage } from "@/components/features/reading-content-page";
 import { BreadcrumbItem } from "@/components/design-system/molecules/breadcrumbs/breadcrumb";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { slugs } from "@/types/configuration/slug";
@@ -25,7 +25,7 @@ export const Topic: FC<PropsWithChildren<DsaProps>> = async ({
   const { contentFileRelativePath } = topic;
   const { default: TopicContent } = await import(`@/content/${contentFileRelativePath}/content.mdx`)
   
-  return <ReadingContentPageTemplate
+  return <ReadingContentPage
     author={siteMetadata.author}
     trackingCategory={tracking.category.data_structures_and_algorithms}
     breadcrumbs={[
@@ -45,5 +45,5 @@ export const Topic: FC<PropsWithChildren<DsaProps>> = async ({
       description={siteMetadata.description}
       keywords={topic.frontmatter.tags}
     />
-  </ReadingContentPageTemplate>
+  </ReadingContentPage>
 };

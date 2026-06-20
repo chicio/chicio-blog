@@ -1,6 +1,6 @@
 import { StandardExternalLinkWithTracking } from "@/components/design-system/atoms/links/standard-external-link-with-tracking";
 import { PageTitle } from "@/components/design-system/molecules/typography/page-title";
-import { ContentPageTemplate } from "@/components/design-system/templates/content-page-template";
+import { ContentPage } from "@/components/features/content-page";
 import { createMetadata } from "@/lib/seo/seo";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { slugs } from "@/types/configuration/slug";
@@ -19,7 +19,7 @@ export default function CookiePolicy() {
   const author = siteMetadata.author;
 
   return (
-    <ContentPageTemplate
+    <ContentPage
       author={author}
       trackingCategory={tracking.category.cookie_policy}
     >
@@ -104,6 +104,6 @@ export default function CookiePolicy() {
           </li>
         </ul>
       </div>
-    </ContentPageTemplate>
+    </ContentPage>
   );
 }

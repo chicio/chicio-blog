@@ -1,5 +1,5 @@
 import { PaginationNavigation } from "@/components/design-system/molecules/buttons/pagination-navigation";
-import { ContentPageTemplate } from "@/components/design-system/templates/content-page-template";
+import { ContentPage } from "@/components/features/content-page";
 import { JsonLd } from "@/components/design-system/utils/components/jsond-ld";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { tracking } from "@/types/configuration/tracking";
@@ -18,7 +18,7 @@ export const BlogHomePageContent: FC<BlogHomeProps> = ({ pagination, author }) =
 
   return (
     <>
-      <ContentPageTemplate
+      <ContentPage
         author={author}
         trackingCategory={tracking.category.blog_home}
         big={true}
@@ -46,7 +46,7 @@ export const BlogHomePageContent: FC<BlogHomeProps> = ({ pagination, author }) =
           nextPageUrl={nextPageUrl}
           nextPageTrackingAction={tracking.action.open_blog_next_page}
         />
-      </ContentPageTemplate>
+      </ContentPage>
       <JsonLd
         type="Blog"
         url={siteMetadata.siteUrl}
