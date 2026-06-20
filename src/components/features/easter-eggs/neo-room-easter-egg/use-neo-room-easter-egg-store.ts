@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { ComponentStore } from "@/types/component-store";
 
 interface NeoRoomEasterEggState {
@@ -12,17 +12,21 @@ interface NeoRoomEasterEggEffects {
 
 export const useNeoRoomEasterEggStore = (): ComponentStore<NeoRoomEasterEggState, NeoRoomEasterEggEffects> => {
     const [isCompleted, setIsCompleted] = useState<boolean>(false);
+    const completionSoundFired = useRef(false);
 
-    const onComplete = () => {
+    const onComplete = useCallback(() => {
         setIsCompleted(true);
-        const audio = new Audio("/media/sounds/knock-knock.mp3");
-        audio.play();
-    };
+        if (!completionSoundFired.current) {
+            completionSoundFired.current = true;
+            const audio = new Audio("/media/sounds/knock-knock.mp3");
+            audio.play().catch(() => {});
+        }
+    }, []);
 
-    const onKnock = () => {
+    const onKnock = useCallback(() => {
         const audio = new Audio("/media/sounds/knock-knock.mp3");
-        audio.play();
-    };
+        audio.play().catch(() => {});
+    }, []);
 
     return {
         state: { isCompleted },
