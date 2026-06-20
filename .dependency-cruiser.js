@@ -48,6 +48,49 @@ const config = {
             },
         },
         {
+            name: "content-chat-import-only-via-index",
+            comment: [
+                "ERROR-level enforcement for content/chat/: no direct .tsx imports from outside the folder.",
+                "All content/chat component imports must go through the folder's index.ts barrel.",
+            ].join(" "),
+            severity: "error",
+            from: {
+                pathNot: "/index\\.ts$",
+            },
+            to: {
+                path: "^src/components/content/chat/.+\\.tsx$",
+            },
+        },
+        {
+            name: "content-chat-seal-private-nested-folders",
+            comment: [
+                "ERROR-level enforcement for content/chat/: nested sub-folders are sealed.",
+                "Only the parent component folder may import from its nested sub-folder.",
+            ].join(" "),
+            severity: "error",
+            from: {
+                path: "^(src/components/content/chat/[^/]+/[^/]+)/",
+            },
+            to: {
+                path: "^src/components/content/chat/[^/]+/[^/]+/[^/]+/",
+                pathNot: "^$1/",
+            },
+        },
+        {
+            name: "content-chat-page-isolation",
+            comment: [
+                "ERROR-level enforcement: content/chat/ must not import from other content pages.",
+            ].join(" "),
+            severity: "error",
+            from: {
+                path: "^src/components/content/chat/",
+            },
+            to: {
+                path: "^src/components/content/",
+                pathNot: "^src/components/content/chat/",
+            },
+        },
+        {
             name: "import-only-via-index",
             comment: [
                 "No module (except index barrels) may directly import a .tsx component file.",
