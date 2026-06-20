@@ -1,7 +1,7 @@
 import AboutMeContent from "../../../../content/about-me/content.mdx";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { tracking } from "@/types/configuration/tracking";
-import { ReadingContentPage } from "@/components/features/reading-content-page";
+import { ReadingContentPage } from "@/components/features/content/reading-content-page";
 import { JsonLd } from "@/components/design-system/utils/components/jsond-ld";
 import { AboutMeTableOfContents } from "./about-me-table-of-contents";
 

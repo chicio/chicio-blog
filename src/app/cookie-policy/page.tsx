@@ -1,6 +1,6 @@
 import { StandardExternalLinkWithTracking } from "@/components/design-system/atoms/links/standard-external-link-with-tracking";
 import { PageTitle } from "@/components/design-system/molecules/typography/page-title";
-import { ContentPage } from "@/components/features/content-page";
+import { ContentPage } from "@/components/features/content/content-page";
 import { createMetadata } from "@/lib/seo/seo";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { slugs } from "@/types/configuration/slug";

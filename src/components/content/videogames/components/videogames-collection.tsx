@@ -8,7 +8,7 @@ import { siteMetadata } from "@/types/configuration/site-metadata";
 import { tracking } from "@/types/configuration/tracking";
 import { VideogameCollectionDataCard } from "./videogame-collection-data-card";
 import { JsonLd } from "@/components/design-system/utils/components/jsond-ld";
-import { ContentPage } from "@/components/features/content-page";
+import { ContentPage } from "@/components/features/content/content-page";
 import { VideogamesViewSwitcher } from "@/components/content/videogames/components/videogames-view-switcher";
 import { StandardInternalLinkWithTracking } from "@/components/design-system/atoms/links/standard-internal-link-with-tracking";
 

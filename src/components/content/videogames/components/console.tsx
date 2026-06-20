@@ -1,4 +1,4 @@
-import { ReadingContentPage } from "@/components/features/reading-content-page";
+import { ReadingContentPage } from "@/components/features/content/reading-content-page";
 import { BreadcrumbItem } from "@/components/design-system/molecules/breadcrumbs/breadcrumb";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { tracking } from "@/types/configuration/tracking";

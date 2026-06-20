@@ -1,4 +1,4 @@
-import { ContentPage } from "@/components/features/content-page";
+import { ContentPage } from "@/components/features/content/content-page";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { tracking } from "@/types/configuration/tracking";
 import { ContactForm } from "./contact-form";
