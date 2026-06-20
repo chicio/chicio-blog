@@ -1,0 +1,1 @@
+export { DejavuEasterEgg } from "./dejavu";

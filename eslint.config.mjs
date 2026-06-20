@@ -46,9 +46,9 @@ const indexBarrelRules = {
     },
 };
 
-const pwaComponentStoreErrorRules = {
-    files: ["src/components/features/pwa/**/*.tsx"],
-    ignores: ["src/components/features/pwa/**/use-*.tsx"],
+const featuresComponentStoreErrorRules = {
+    files: ["src/components/features/**/*.tsx"],
+    ignores: ["src/components/features/**/use-*.tsx"],
     plugins: { chicio },
     rules: {
         "react/jsx-no-bind": ["error", { allowArrowFunctions: false, allowFunctions: false, allowBind: false }],
@@ -57,16 +57,16 @@ const pwaComponentStoreErrorRules = {
     },
 };
 
-const pwaStoreHookErrorRules = {
-    files: ["src/components/features/pwa/**/use-*-store.ts"],
+const featuresStoreHookErrorRules = {
+    files: ["src/components/features/**/use-*-store.ts"],
     plugins: { chicio },
     rules: {
         "chicio/store-return-shape": "error",
     },
 };
 
-const pwaIndexBarrelErrorRules = {
-    files: ["src/components/features/pwa/**/index.ts"],
+const featuresIndexBarrelErrorRules = {
+    files: ["src/components/features/**/index.ts"],
     plugins: { chicio },
     rules: {
         "chicio/index-only-component": "error",
@@ -80,9 +80,9 @@ const eslintConfig = [
     componentStoreRules,
     storeHookRules,
     indexBarrelRules,
-    pwaComponentStoreErrorRules,
-    pwaStoreHookErrorRules,
-    pwaIndexBarrelErrorRules,
+    featuresComponentStoreErrorRules,
+    featuresStoreHookErrorRules,
+    featuresIndexBarrelErrorRules,
 ];
 
 export default eslintConfig;
