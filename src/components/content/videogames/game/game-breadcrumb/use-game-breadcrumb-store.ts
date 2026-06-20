@@ -1,0 +1,78 @@
+"use client";
+
+import { ComponentStore } from "@/types/component-store";
+import { BreadcrumbItem } from "@/components/design-system/molecules/breadcrumbs/breadcrumb";
+import { tracking } from "@/types/configuration/tracking";
+import { slugs } from "@/types/configuration/slug";
+import { useVideogamesNavigationOriginStore } from "@/components/content/videogames/use-videogames-navigation-origin-store";
+import { VideogamesNavigationOrigin } from "@/types/content/videogames";
+
+interface GameBreadcrumbState {
+    items: BreadcrumbItem[];
+}
+
+const videogamesBreadcrumb: BreadcrumbItem = {
+    label: "Videogames",
+    href: slugs.videogames.home,
+    isCurrent: false,
+    trackingData: {
+        action: tracking.action.open_videogame_collection,
+        category: tracking.category.videogames,
+        label: tracking.label.body,
+    },
+};
+
+const buildBreadcrumbItems = (
+    origin: VideogamesNavigationOrigin | null,
+    gameTitle: string,
+    gameSlug: string,
+    consoleName: string,
+    consoleSlug: string,
+): BreadcrumbItem[] => {
+    const currentItem: BreadcrumbItem = {
+        label: gameTitle,
+        href: gameSlug,
+        isCurrent: true,
+    };
+
+    if (origin === "all-games") {
+        return [videogamesBreadcrumb, currentItem];
+    }
+
+    return [
+        videogamesBreadcrumb,
+        {
+            label: consoleName,
+            href: consoleSlug,
+            isCurrent: false,
+            trackingData: {
+                action: tracking.action.open_videogame_console,
+                category: tracking.category.videogames,
+                label: tracking.label.body,
+            },
+        },
+        currentItem,
+    ];
+};
+
+interface GameBreadcrumbStoreParams {
+    gameTitle: string;
+    gameSlug: string;
+    consoleName: string;
+    consoleSlug: string;
+}
+
+export const useGameBreadcrumbStore = ({
+    gameTitle,
+    gameSlug,
+    consoleName,
+    consoleSlug,
+}: GameBreadcrumbStoreParams): ComponentStore<GameBreadcrumbState, Record<string, never>> => {
+    const origin = useVideogamesNavigationOriginStore();
+    const items = buildBreadcrumbItems(origin, gameTitle, gameSlug, consoleName, consoleSlug);
+
+    return {
+        state: { items },
+        effects: {},
+    };
+};
