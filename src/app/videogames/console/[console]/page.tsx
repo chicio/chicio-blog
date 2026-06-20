@@ -4,7 +4,7 @@ import { siteMetadata } from "@/types/configuration/site-metadata";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getAllConsoles, getConsole } from "@/lib/content/videogames/videogames";
-import { Console } from "@/components/content/videogames/components/console";
+import { Console } from "@/components/content/videogames/console";
 
 export async function generateMetadata({
   params,

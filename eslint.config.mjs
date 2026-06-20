@@ -154,6 +154,33 @@ const contentBlogIndexBarrelErrorRules = {
     },
 };
 
+const contentVideogamesComponentStoreErrorRules = {
+    files: ["src/components/content/videogames/**/*.tsx"],
+    ignores: ["src/components/content/videogames/**/use-*.tsx"],
+    plugins: { chicio },
+    rules: {
+        "react/jsx-no-bind": ["error", { allowArrowFunctions: false, allowFunctions: false, allowBind: false }],
+        "chicio/prefer-component-store": "error",
+        "chicio/folder-composition": "error",
+    },
+};
+
+const contentVideogamesStoreHookErrorRules = {
+    files: ["src/components/content/videogames/**/use-*-store.ts"],
+    plugins: { chicio },
+    rules: {
+        "chicio/store-return-shape": "error",
+    },
+};
+
+const contentVideogamesIndexBarrelErrorRules = {
+    files: ["src/components/content/videogames/**/index.ts"],
+    plugins: { chicio },
+    rules: {
+        "chicio/index-only-component": "error",
+    },
+};
+
 const eslintConfig = [
     ignores,
     ...coreWebVitals,
@@ -173,6 +200,9 @@ const eslintConfig = [
     contentBlogComponentStoreErrorRules,
     contentBlogStoreHookErrorRules,
     contentBlogIndexBarrelErrorRules,
+    contentVideogamesComponentStoreErrorRules,
+    contentVideogamesStoreHookErrorRules,
+    contentVideogamesIndexBarrelErrorRules,
 ];
 
 export default eslintConfig;
