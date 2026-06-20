@@ -1,9 +1,9 @@
-import { FC, ReactNode } from "react";
+import { FC, PropsWithChildren, ReactNode } from "react";
 import { ContentProgressBar } from "../organism/reading-content-progress-bar";
 import { ContentPageTemplate } from "./content-page-template";
 import { Breadcrumb, BreadcrumbItem } from "../molecules/breadcrumbs/breadcrumb";
 
-export interface ContentPageProps {
+export interface ReadingContentPageProps {
     author: string;
     trackingCategory: string;
     big?: boolean;
@@ -11,11 +11,12 @@ export interface ContentPageProps {
     beforeContent?: ReactNode;
     children?: ReactNode;
     afterContent?: ReactNode;
+    headerWrapper?: FC<PropsWithChildren>;
 }
 
 const contentId = "reading-content-container";
 
-export const ReadingContentPageTemplate: FC<ContentPageProps> = ({
+export const ReadingContentPageTemplate: FC<ReadingContentPageProps> = ({
     beforeContent,
     children,
     afterContent,
@@ -23,6 +24,7 @@ export const ReadingContentPageTemplate: FC<ContentPageProps> = ({
     trackingCategory,
     breadcrumbs,
     big = false,
+    headerWrapper,
 }) => (
     <>
         <ContentProgressBar contentId={contentId} />
@@ -30,6 +32,7 @@ export const ReadingContentPageTemplate: FC<ContentPageProps> = ({
             author={author}
             trackingCategory={trackingCategory}
             big={big}
+            headerWrapper={headerWrapper}
         >
             {breadcrumbs && <Breadcrumb items={breadcrumbs} />}
             {beforeContent}

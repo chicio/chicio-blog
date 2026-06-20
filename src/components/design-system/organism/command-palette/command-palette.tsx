@@ -9,12 +9,12 @@ import { motion } from "framer-motion";
 import { trackWith } from "@/lib/tracking/tracking";
 import { tracking } from "@/types/configuration/tracking";
 import { slugs } from "@/types/configuration/slug";
-import { whiteRabbitEasterEgg } from "@/components/features/easter-eggs/white-rabbit";
+import { EasterEggTerminalLines, SearchResult } from "@/types/search/search";
 import { Command } from "cmdk";
-import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import {
   ChangeEvent,
+  ComponentType,
   FC,
   PropsWithChildren,
   useCallback,
@@ -25,12 +25,6 @@ import { BiChat } from "react-icons/bi";
 import { ToggleMotionItem } from "./toggle-motion-item";
 import { CustomizeMatrixRainItem } from "./customize-matrix-rain-item";
 
-const NeoRoomEasterEgg = dynamic(
-  () =>
-    import("@/components/features/easter-eggs/neo-room-easter-egg"),
-  { ssr: false },
-);
-
 const ITEM_CLASS =
   "px-4 py-2 cursor-pointer aria-selected:bg-accent-alpha-10 aria-selected:border-l-2 aria-selected:border-accent transition-colors duration-100";
 
@@ -40,13 +34,23 @@ const GroupLabel: FC<PropsWithChildren> = ({ children }) => (
   </div>
 );
 
-const CommandPalette = () => {
+interface CommandPaletteProps {
+  searchEasterEgg?: (query: string) => SearchResult | null;
+  SearchEasterEggComponent?: ComponentType<{ lines: EasterEggTerminalLines }>;
+}
+
+const noopEasterEgg = (_query: string): SearchResult | null => null;
+
+const CommandPalette: FC<CommandPaletteProps> = ({
+  searchEasterEgg = noopEasterEgg,
+  SearchEasterEggComponent,
+}) => {
   const [open, setOpen] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
   const [selectedValue, setSelectedValue] = useState("open ai chat");
   const { handleSearch, resetSearch, search } = useSearch(
     open,
-    whiteRabbitEasterEgg,
+    searchEasterEgg,
   );
   const [previousSearch, setPreviousSearch] = useState(search);
   const router = useRouter();
@@ -137,8 +141,8 @@ const CommandPalette = () => {
 
   return (
     <Overlay delay={0} onClick={close} className="z-50">
-      {search.type === "easterEgg" ? (
-        <NeoRoomEasterEgg lines={search.terminalLines} />
+      {search.type === "easterEgg" && SearchEasterEggComponent ? (
+        <SearchEasterEggComponent lines={search.terminalLines} />
       ) : (
         <div className="flex min-h-screen items-start justify-center px-4 pt-[15vh]">
           <motion.div

@@ -1,18 +1,20 @@
 "use client";
 
 import { MatrixHeaderBackground } from "@/components/design-system/molecules/effects/matrix-header-background";
-import { DejavuEasterEgg } from "@/components/features/easter-eggs/dejavu";
-import { FC } from "react";
+import { FC, PropsWithChildren } from "react";
 import logoImage from "../../../../../public/media/logo.png";
 import { ImageGlow } from "../../atoms/effects/image-glow";
 import { Cursor } from "../../atoms/typography/terminal-blocks";
 import { useGlassmorphism } from "@/components/design-system/hooks/use-glassmorphism";
 
+const Passthrough: FC<PropsWithChildren> = ({ children }) => <>{children}</>;
+
 interface BrandHeaderProps {
   big: boolean;
+  wrapper?: FC<PropsWithChildren>;
 }
 
-export const BrandHeader: FC<BrandHeaderProps> = ({ big }) => {
+export const BrandHeader: FC<BrandHeaderProps> = ({ big, wrapper: Wrapper = Passthrough }) => {
   const { glassmorphismClass } = useGlassmorphism({ noScale: true });
   const height = big ? "h-auto" : "h-[170px] md:h-[200px]";
   const margins = big ? "mt-14 mb-8" : "mt-12";
@@ -20,7 +22,7 @@ export const BrandHeader: FC<BrandHeaderProps> = ({ big }) => {
   return (
     <div className={`block ${height}`}>
       <MatrixHeaderBackground big={big} />
-      <DejavuEasterEgg>
+      <Wrapper>
         <div className={`flex items-center ${margins}`}>
           <div className={`${glassmorphismClass} w-full p-5 md:p-9 z-30`}>
             <div className="flex w-full items-center">
@@ -43,7 +45,7 @@ export const BrandHeader: FC<BrandHeaderProps> = ({ big }) => {
             </div>
           </div>
         </div>
-      </DejavuEasterEgg>
+      </Wrapper>
     </div>
   );
 };
