@@ -132,10 +132,56 @@ const config = {
             severity: "warn",
             from: {
                 path: "^(src/components/content/)([^/]+)/",
+                pathNot: "^src/components/content/art/",
             },
             to: {
                 path: "^$1[^/]+/",
                 pathNot: "^$1$2/",
+            },
+        },
+        {
+            name: "content-art-page-isolation",
+            comment: [
+                "ERROR-level enforcement for content/art: must not import from any other content page.",
+            ].join(" "),
+            severity: "error",
+            from: {
+                path: "^src/components/content/art/",
+            },
+            to: {
+                path: "^src/components/content/[^/]+/",
+                pathNot: "^src/components/content/art/",
+            },
+        },
+        {
+            name: "content-art-import-only-via-index",
+            comment: [
+                "ERROR-level enforcement for content/art: no direct .tsx imports from outside the folder.",
+                "All content/art component imports must go through the folder's index.ts barrel.",
+            ].join(" "),
+            severity: "error",
+            from: {
+                path: "^src/components/content/art/",
+                pathNot: "/index\\.ts$",
+            },
+            to: {
+                path: "^src/components/content/art/.+\\.tsx$",
+                pathNot: "^src/components/content/art/[^/]+/[^/]+\\.tsx$",
+            },
+        },
+        {
+            name: "content-art-seal-private-nested-folders",
+            comment: [
+                "ERROR-level enforcement for content/art: nested sub-folders are sealed.",
+                "Only the parent component folder may import from its nested sub-folder.",
+            ].join(" "),
+            severity: "error",
+            from: {
+                path: "^(src/components/content/art/[^/]+/[^/]+)/",
+            },
+            to: {
+                path: "^src/components/content/art/[^/]+/[^/]+/[^/]+/",
+                pathNot: "^$1/",
             },
         },
         {

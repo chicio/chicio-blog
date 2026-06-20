@@ -73,6 +73,33 @@ const featuresIndexBarrelErrorRules = {
     },
 };
 
+const artComponentStoreErrorRules = {
+    files: ["src/components/content/art/**/*.tsx"],
+    ignores: ["src/components/content/art/**/use-*.tsx"],
+    plugins: { chicio },
+    rules: {
+        "react/jsx-no-bind": ["error", { allowArrowFunctions: false, allowFunctions: false, allowBind: false }],
+        "chicio/prefer-component-store": "error",
+        "chicio/folder-composition": "error",
+    },
+};
+
+const artStoreHookErrorRules = {
+    files: ["src/components/content/art/**/use-*-store.ts"],
+    plugins: { chicio },
+    rules: {
+        "chicio/store-return-shape": "error",
+    },
+};
+
+const artIndexBarrelErrorRules = {
+    files: ["src/components/content/art/**/index.ts"],
+    plugins: { chicio },
+    rules: {
+        "chicio/index-only-component": "error",
+    },
+};
+
 const contentChatComponentStoreErrorRules = {
     files: ["src/components/content/chat/**/*.tsx"],
     ignores: ["src/components/content/chat/**/use-*.tsx"],
@@ -110,6 +137,9 @@ const eslintConfig = [
     featuresComponentStoreErrorRules,
     featuresStoreHookErrorRules,
     featuresIndexBarrelErrorRules,
+    artComponentStoreErrorRules,
+    artStoreHookErrorRules,
+    artIndexBarrelErrorRules,
     contentChatComponentStoreErrorRules,
     contentChatStoreHookErrorRules,
     contentChatIndexBarrelErrorRules,
