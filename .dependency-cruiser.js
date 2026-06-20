@@ -132,11 +132,59 @@ const config = {
             severity: "warn",
             from: {
                 path: "^(src/components/content/)([^/]+)/",
-                pathNot: "^src/components/content/art/",
+                pathNot: [
+                    "^src/components/content/art/",
+                    "^src/components/content/blog/",
+                ],
             },
             to: {
                 path: "^$1[^/]+/",
                 pathNot: "^$1$2/",
+            },
+        },
+        {
+            name: "content-blog-page-isolation",
+            comment: [
+                "ERROR-level enforcement: content/blog/ must not import from any other content page.",
+            ].join(" "),
+            severity: "error",
+            from: {
+                path: "^src/components/content/blog/",
+            },
+            to: {
+                path: "^src/components/content/[^/]+/",
+                pathNot: "^src/components/content/blog/",
+            },
+        },
+        {
+            name: "content-blog-import-only-via-index",
+            comment: [
+                "ERROR-level enforcement for content/blog: no direct .tsx imports from outside the folder.",
+                "All content/blog component imports must go through the folder's index.ts barrel.",
+            ].join(" "),
+            severity: "error",
+            from: {
+                path: "^src/components/content/blog/",
+                pathNot: "/index\\.ts$",
+            },
+            to: {
+                path: "^src/components/content/blog/.+\\.tsx$",
+                pathNot: "^src/components/content/blog/[^/]+/[^/]+\\.tsx$",
+            },
+        },
+        {
+            name: "content-blog-seal-private-nested-folders",
+            comment: [
+                "ERROR-level enforcement for content/blog: nested sub-folders are sealed.",
+                "Only the parent component folder may import from its nested sub-folder.",
+            ].join(" "),
+            severity: "error",
+            from: {
+                path: "^(src/components/content/blog/[^/]+/[^/]+)/",
+            },
+            to: {
+                path: "^src/components/content/blog/[^/]+/[^/]+/[^/]+/",
+                pathNot: "^$1/",
             },
         },
         {
