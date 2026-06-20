@@ -46,6 +46,33 @@ const indexBarrelRules = {
     },
 };
 
+const atomsComponentStoreErrorRules = {
+    files: ["src/components/design-system/atoms/**/*.tsx"],
+    ignores: ["src/components/design-system/atoms/**/use-*.tsx"],
+    plugins: { chicio },
+    rules: {
+        "react/jsx-no-bind": ["error", { allowArrowFunctions: false, allowFunctions: false, allowBind: false }],
+        "chicio/prefer-component-store": "error",
+        "chicio/folder-composition": "error",
+    },
+};
+
+const atomsStoreHookErrorRules = {
+    files: ["src/components/design-system/atoms/**/use-*-store.ts"],
+    plugins: { chicio },
+    rules: {
+        "chicio/store-return-shape": "error",
+    },
+};
+
+const atomsIndexBarrelErrorRules = {
+    files: ["src/components/design-system/atoms/**/index.ts"],
+    plugins: { chicio },
+    rules: {
+        "chicio/index-only-component": "error",
+    },
+};
+
 const featuresComponentStoreErrorRules = {
     files: ["src/components/features/**/*.tsx"],
     ignores: ["src/components/features/**/use-*.tsx"],
@@ -188,6 +215,9 @@ const eslintConfig = [
     componentStoreRules,
     storeHookRules,
     indexBarrelRules,
+    atomsComponentStoreErrorRules,
+    atomsStoreHookErrorRules,
+    atomsIndexBarrelErrorRules,
     featuresComponentStoreErrorRules,
     featuresStoreHookErrorRules,
     featuresIndexBarrelErrorRules,

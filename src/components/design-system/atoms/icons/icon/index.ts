@@ -1,0 +1,1 @@
+export { RoundedIcon } from "./icon";
