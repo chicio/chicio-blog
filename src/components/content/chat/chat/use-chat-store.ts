@@ -14,6 +14,7 @@ const exampleQuestions = [
 
 interface ChatState {
     messages: UIMessage[];
+    hasMessages: boolean;
     error: Error | undefined;
     input: string;
     exampleQuestions: string[];
@@ -70,7 +71,7 @@ export const useChatStore = (): ComponentStore<ChatState, ChatEffects> => {
     };
 
     return {
-        state: { messages, error, input, exampleQuestions },
+        state: { messages, hasMessages: messages.length > 0, error, input, exampleQuestions },
         effects: { handleSubmit, handleInputChange, handleExampleQuestionsSelection, setMessagesEndElement },
     };
 };

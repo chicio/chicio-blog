@@ -18,21 +18,19 @@ export const Chat: FC = () => {
     const { state, effects } = useChatStore();
     const { setMessagesEndElement } = effects;
 
-    const hasMessages = state.messages.length > 0;
-
     return (
         <>
             <Menu trackingCategory={tracking.category.chat} />
             <ContentContainer>
-                {!hasMessages && <MatrixHeaderBackground big={false} />}
+                {!state.hasMessages && <MatrixHeaderBackground big={false} />}
                 <GenericHeader
                     title="Chat with Fabrizio"
                     subtitle="Ask me anything about my work, projects, and software development expertise"
                     logo={<ChatIcon />}
-                    visible={!hasMessages}
+                    visible={!state.hasMessages}
                 />
                 <div className="hide-scrollbar pb-[calc(140px+env(safe-area-inset-bottom,0px))] flex flex-1 flex-col gap-3 overflow-visible pt-6 sm:pt-10 sm:pb-[140px]">
-                    {state.messages.length === 0 && (
+                    {!state.hasMessages && (
                         <ChatWelcome
                             exampleQuestions={state.exampleQuestions}
                             handleExampleQuestionsSelection={effects.handleExampleQuestionsSelection}
