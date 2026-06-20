@@ -59,7 +59,7 @@
     "remark-frontmatter": "^5.0.0",
     "remark-gfm": "^4.0.1",
     "remark-math": "^6.0.0",
-    "resend": "^6.12.3",
+    "resend": "^6.14.0",
     "serwist": "^9.5.11",
     "tailwindcss": "^4.2.1",
     "tsx": "^4.22.4",
