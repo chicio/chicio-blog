@@ -100,6 +100,33 @@ const artIndexBarrelErrorRules = {
     },
 };
 
+const contentChatComponentStoreErrorRules = {
+    files: ["src/components/content/chat/**/*.tsx"],
+    ignores: ["src/components/content/chat/**/use-*.tsx"],
+    plugins: { chicio },
+    rules: {
+        "react/jsx-no-bind": ["error", { allowArrowFunctions: false, allowFunctions: false, allowBind: false }],
+        "chicio/prefer-component-store": "error",
+        "chicio/folder-composition": "error",
+    },
+};
+
+const contentChatStoreHookErrorRules = {
+    files: ["src/components/content/chat/**/use-*-store.ts"],
+    plugins: { chicio },
+    rules: {
+        "chicio/store-return-shape": "error",
+    },
+};
+
+const contentChatIndexBarrelErrorRules = {
+    files: ["src/components/content/chat/**/index.ts"],
+    plugins: { chicio },
+    rules: {
+        "chicio/index-only-component": "error",
+    },
+};
+
 const eslintConfig = [
     ignores,
     ...coreWebVitals,
@@ -113,6 +140,9 @@ const eslintConfig = [
     artComponentStoreErrorRules,
     artStoreHookErrorRules,
     artIndexBarrelErrorRules,
+    contentChatComponentStoreErrorRules,
+    contentChatStoreHookErrorRules,
+    contentChatIndexBarrelErrorRules,
 ];
 
 export default eslintConfig;

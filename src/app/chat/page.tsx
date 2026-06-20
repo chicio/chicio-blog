@@ -1,4 +1,4 @@
-import { Chat } from "@/components/content/chat/components/chat";
+import { Chat } from "@/components/content/chat/chat";
 import { createMetadata } from "@/lib/seo/seo";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { slugs } from "@/types/configuration/slug";
