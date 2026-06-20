@@ -5,6 +5,20 @@
 const config = {
     forbidden: [
         {
+            name: "design-system-no-features",
+            comment: [
+                "ERROR-level enforcement: design-system components must not import from features/.",
+                "All feature wiring (easter eggs, pwa, matrix-rain) must be injected at the feature level.",
+            ].join(" "),
+            severity: "error",
+            from: {
+                path: "^src/components/design-system/",
+            },
+            to: {
+                path: "^src/components/features/",
+            },
+        },
+        {
             name: "features-import-only-via-index",
             comment: [
                 "ERROR-level enforcement for features/: no direct .tsx imports from outside the folder.",

@@ -2,6 +2,7 @@
 
 import { FC } from "react";
 import dynamic from "next/dynamic";
+import { whiteRabbitEasterEgg } from "@/components/features/easter-eggs/white-rabbit";
 import { useLayoutAdditionalContentStore } from "./use-layout-additional-content-store";
 
 const CookieConsentBanner = dynamic(
@@ -23,7 +24,15 @@ const InstallPromptBanner = dynamic(
 );
 
 const CommandPalette = dynamic(
-    () => import("@/components/design-system/organism/command-palette/command-palette"),
+    () =>
+        import("@/components/design-system/organism/command-palette").then(
+            (m) => m.CommandPalette,
+        ),
+    { ssr: false },
+);
+
+const NeoRoomEasterEgg = dynamic(
+    () => import("@/components/features/easter-eggs/neo-room-easter-egg"),
     { ssr: false },
 );
 
@@ -40,7 +49,10 @@ export const LayoutAdditionalContent: FC = () => {
 
     return (
         <>
-            <CommandPalette />
+            <CommandPalette
+                searchEasterEgg={whiteRabbitEasterEgg}
+                SearchEasterEggComponent={NeoRoomEasterEgg}
+            />
             <MatrixRainControlPanel />
             <CookieConsentBanner />
             <TrackingOptIn />

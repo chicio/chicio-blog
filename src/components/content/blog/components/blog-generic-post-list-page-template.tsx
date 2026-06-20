@@ -3,7 +3,7 @@ import { PageTitle } from "@/components/design-system/molecules/typography/page-
 import { Content } from "@/types/content/content";
 import { tracking } from "@/types/configuration/tracking";
 import { FC } from "react";
-import { ContentPageTemplate } from "../../../design-system/templates/content-page-template";
+import { ContentPage } from "@/components/features/content/content-page";
 import { JsonLd } from "@/components/design-system/utils/components/jsond-ld";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 
@@ -18,7 +18,7 @@ export interface BlogGenericPostListPageProps {
 export const BlogGenericPostListPageTemplate: FC<
   BlogGenericPostListPageProps
 > = ({ title, posts, author, trackingCategory, keywords }) => (
-  <ContentPageTemplate author={author} trackingCategory={trackingCategory}>
+  <ContentPage author={author} trackingCategory={trackingCategory}>
     <PageTitle>{title}</PageTitle>
     {posts.map((post) => (
       <div
@@ -50,5 +50,5 @@ export const BlogGenericPostListPageTemplate: FC<
       title={siteMetadata.title}
       keywords={keywords}
     />
-  </ContentPageTemplate>
+  </ContentPage>
 );

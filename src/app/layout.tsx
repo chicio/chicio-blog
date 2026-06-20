@@ -5,7 +5,7 @@ import { Viewport } from "next";
 import { ReactNode } from "react";
 import { Open_Sans, Courier_Prime } from "next/font/google";
 import { SerwistProvider } from "@/components/features/pwa/serwist-provider";
-import { LayoutAdditionalContent } from "@/components/design-system/templates/layout-additional-content";
+import { LayoutAdditionalContent } from "@/components/features/layout-additional-content";
 
 export const openSans = Open_Sans({
   subsets: ["latin"],
