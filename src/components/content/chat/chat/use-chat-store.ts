@@ -5,8 +5,6 @@ import { UIMessage } from "ai";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { ComponentStore } from "@/types/component-store";
 
-const CHAT_END_SENTINEL_SELECTOR = "[data-chat-end]";
-
 const exampleQuestions = [
     "Which programming languages does Fabrizio Duroni know?",
     "Tell me about Fabrizio's experience at lastminute.com.",
@@ -25,11 +23,13 @@ interface ChatEffects {
     handleSubmit: (e: FormEvent) => Promise<void>;
     handleInputChange: (e: ChangeEvent<HTMLInputElement>) => void;
     handleExampleQuestionsSelection: (question: string) => () => Promise<void>;
+    setMessagesEndElement: (el: HTMLDivElement | null) => void;
 }
 
 export const useChatStore = (): ComponentStore<ChatState, ChatEffects> => {
     const { messages, sendMessage, error } = useChat();
     const [input, setInput] = useState("");
+    const [messagesEndEl, setMessagesEndElement] = useState<HTMLDivElement | null>(null);
 
     useEffect(() => {
         if (messages.length === 0) {
@@ -43,11 +43,10 @@ export const useChatStore = (): ComponentStore<ChatState, ChatEffects> => {
 
         if (isLastMessageDone) {
             setTimeout(() => {
-                const sentinel = document.querySelector(CHAT_END_SENTINEL_SELECTOR);
-                sentinel?.scrollIntoView({ behavior: "smooth" });
+                messagesEndEl?.scrollIntoView({ behavior: "smooth" });
             }, 100);
         }
-    }, [messages]);
+    }, [messages, messagesEndEl]);
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
@@ -72,6 +71,6 @@ export const useChatStore = (): ComponentStore<ChatState, ChatEffects> => {
 
     return {
         state: { messages, error, input, exampleQuestions },
-        effects: { handleSubmit, handleInputChange, handleExampleQuestionsSelection },
+        effects: { handleSubmit, handleInputChange, handleExampleQuestionsSelection, setMessagesEndElement },
     };
 };

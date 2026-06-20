@@ -16,6 +16,7 @@ import { useChatStore } from "./use-chat-store";
 
 export const Chat: FC = () => {
     const { state, effects } = useChatStore();
+    const { setMessagesEndElement } = effects;
 
     const hasMessages = state.messages.length > 0;
 
@@ -67,7 +68,7 @@ export const Chat: FC = () => {
                                 "Sorry, I have encountered an error while trying to process your question. Please try again later."}
                         </ChatMessage>
                     )}
-                    <div data-chat-end="" />
+                    <div ref={setMessagesEndElement} />
                 </div>
                 <ChatInput
                     input={state.input}
