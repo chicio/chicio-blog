@@ -35,8 +35,9 @@ export const ChromeSummaryModal: FC<ChromeSummaryModalProps> = ({
     onClose,
     onRetry,
 }) => {
-    const { state } = useChromeSummaryModalStore();
+    const { state, effects } = useChromeSummaryModalStore();
     const { shouldReduceMotion } = state;
+    const { stopPropagation } = effects;
 
     return (
         <Overlay onClick={onClose} delay={0.15}>
@@ -46,7 +47,7 @@ export const ChromeSummaryModal: FC<ChromeSummaryModalProps> = ({
                 animate="visible"
                 exit="exit"
                 className="glow-border fixed top-1/2 left-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center rounded-xl bg-general-background p-8 w-[90%] sm:w-[70%] md:w-[60%] max-h-[80vh] overflow-auto"
-                onClick={(e: React.MouseEvent) => e.stopPropagation()}
+                onClick={stopPropagation}
             >
                 <h2 className="mb-4 text-xl font-bold text-accent">{title}</h2>
                 <hr />
