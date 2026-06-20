@@ -1,9 +1,10 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback } from "react";
 import { ComponentStore } from "@/types/component-store";
 import { VideogamesNavigationOrigin } from "@/types/content/videogames";
 import { writeVideogamesNavigationOrigin } from "@/lib/videogames/videogames-navigation-origin";
+import { useInViewList } from "@/components/design-system/hooks/use-in-view-list";
 
 interface GameCardState {
     isInView: boolean;
@@ -15,31 +16,7 @@ interface GameCardEffects {
 }
 
 export const useGameCardStore = (): ComponentStore<GameCardState, GameCardEffects> => {
-    const [el, setEl] = useState<HTMLDivElement | null>(null);
-    const [isInView, setIsInView] = useState(false);
-
-    useEffect(() => {
-        if (!el) {
-            return;
-        }
-
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        setIsInView(true);
-                    }
-                });
-            },
-            { rootMargin: "600px" },
-        );
-
-        observer.observe(el);
-
-        return () => {
-            observer.unobserve(el);
-        };
-    }, [el]);
+    const [setEl, isInView] = useInViewList<HTMLDivElement>({ rootMargin: "600px" });
 
     const handleClick = useCallback(
         (navigationOrigin: VideogamesNavigationOrigin) => () => {
