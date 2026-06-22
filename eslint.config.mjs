@@ -208,6 +208,33 @@ const contentVideogamesIndexBarrelErrorRules = {
     },
 };
 
+const moleculesComponentStoreErrorRules = {
+    files: ["src/components/design-system/molecules/**/*.tsx"],
+    ignores: ["src/components/design-system/molecules/**/use-*.tsx"],
+    plugins: { chicio },
+    rules: {
+        "react/jsx-no-bind": ["error", { allowArrowFunctions: false, allowFunctions: false, allowBind: false }],
+        "chicio/prefer-component-store": "error",
+        "chicio/folder-composition": "error",
+    },
+};
+
+const moleculesStoreHookErrorRules = {
+    files: ["src/components/design-system/molecules/**/use-*-store.ts"],
+    plugins: { chicio },
+    rules: {
+        "chicio/store-return-shape": "error",
+    },
+};
+
+const moleculesIndexBarrelErrorRules = {
+    files: ["src/components/design-system/molecules/**/index.ts"],
+    plugins: { chicio },
+    rules: {
+        "chicio/index-only-component": "error",
+    },
+};
+
 const eslintConfig = [
     ignores,
     ...coreWebVitals,
@@ -218,6 +245,9 @@ const eslintConfig = [
     atomsComponentStoreErrorRules,
     atomsStoreHookErrorRules,
     atomsIndexBarrelErrorRules,
+    moleculesComponentStoreErrorRules,
+    moleculesStoreHookErrorRules,
+    moleculesIndexBarrelErrorRules,
     featuresComponentStoreErrorRules,
     featuresStoreHookErrorRules,
     featuresIndexBarrelErrorRules,

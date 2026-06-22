@@ -9,7 +9,7 @@ import React from "react";
 import { useReadingProgress } from "@/components/design-system/hooks/use-reading-progress";
 import { useReducedMotions } from "@/components/design-system/hooks/use-reduced-motions";
 import { motion } from "framer-motion";
-import { TerminalProgressBar } from "../molecules/terminal-progress-bar/terminal-progress-bar";
+import { TerminalProgressBar } from "@/components/design-system/molecules/terminal-progress-bar";
 
 interface ContentProgressBarProps {
     contentId: string;
