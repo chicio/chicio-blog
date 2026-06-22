@@ -1,11 +1,12 @@
 import { useMemo } from "react";
 import { marked } from "marked";
+import { StateStore } from "@/types/component-store";
 
 type MarkdownState = {
     blocks: string[];
 };
 
-export const useMarkdownStore = (content: string): { state: MarkdownState; effects: Record<string, never> } => {
+export const useMarkdownStore = (content: string): StateStore<MarkdownState> => {
     const blocks = useMemo(() => {
         const tokens = marked.lexer(content);
         return tokens.map((token) => token.raw);
@@ -13,6 +14,5 @@ export const useMarkdownStore = (content: string): { state: MarkdownState; effec
 
     return {
         state: { blocks },
-        effects: {},
     };
 };

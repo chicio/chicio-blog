@@ -2,11 +2,6 @@
 
 import { useLockBodyScroll } from "@/components/design-system/hooks/use-lock-body-scroll";
 
-export const useOverlayStore = (): { state: Record<string, never>; effects: Record<string, never> } => {
+export const useOverlayStore = (): void => {
     useLockBodyScroll();
-
-    return {
-        state: {},
-        effects: {},
-    };
 };

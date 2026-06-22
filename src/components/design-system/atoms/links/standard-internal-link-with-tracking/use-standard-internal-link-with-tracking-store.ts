@@ -2,6 +2,7 @@
 
 import { trackWith } from "@/lib/tracking/tracking";
 import { TrackingData } from "@/types/configuration/tracking";
+import { EffectsStore } from "@/types/component-store";
 
 type StandardInternalLinkWithTrackingEffects = {
     onTrack: () => void;
@@ -9,9 +10,8 @@ type StandardInternalLinkWithTrackingEffects = {
 
 export const useStandardInternalLinkWithTrackingStore = (
     trackingData: TrackingData,
-): { state: Record<string, never>; effects: StandardInternalLinkWithTrackingEffects } => {
+): EffectsStore<StandardInternalLinkWithTrackingEffects> => {
     return {
-        state: {},
         effects: {
             onTrack: () => trackWith(trackingData),
         },

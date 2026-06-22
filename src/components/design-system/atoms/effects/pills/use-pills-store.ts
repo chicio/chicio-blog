@@ -1,16 +1,16 @@
 "use client";
 
 import { useReducedMotions } from "@/components/design-system/hooks/use-reduced-motions";
+import { StateStore } from "@/types/component-store";
 
 type PillsState = {
     shouldReduceMotion: boolean;
 };
 
-export const usePillsStore = (): { state: PillsState; effects: Record<string, never> } => {
+export const usePillsStore = (): StateStore<PillsState> => {
     const shouldReduceMotion = useReducedMotions();
 
     return {
         state: { shouldReduceMotion },
-        effects: {},
     };
 };

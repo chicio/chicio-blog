@@ -1,12 +1,13 @@
 "use client";
 
+import { EffectsStore } from "@/types/component-store";
+
 type SwitchEffects = {
     onToggle: () => void;
 };
 
-export const useSwitchStore = (checked: boolean, onChange: (v: boolean) => void): { state: Record<string, never>; effects: SwitchEffects } => {
+export const useSwitchStore = (checked: boolean, onChange: (v: boolean) => void): EffectsStore<SwitchEffects> => {
     return {
-        state: {},
         effects: {
             onToggle: () => onChange(!checked),
         },

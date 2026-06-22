@@ -3,6 +3,7 @@
 import { MatrixRainDrawContext } from "@/types/effects/matrix-rain";
 import { useEffect, useRef, useState } from "react";
 import { debounce } from "@/lib/debounce/debounce";
+import { EffectsStore } from "@/types/component-store";
 
 const matrix = "ﾊﾐﾋｰｳｼﾅﾓﾆｻﾜﾂｵﾘｱﾎﾃﾏｹﾒｴｶｷﾑﾕﾗｾﾈｽﾀﾇﾍ012345789Z:.=*+-<>".split("");
 const colors = [
@@ -59,7 +60,7 @@ export const useMatrix2dCanvasStore = (
     fontSize: number,
     density: number,
     paused: boolean,
-): { state: Record<string, never>; effects: Matrix2DCanvasEffects } => {
+): EffectsStore<Matrix2DCanvasEffects> => {
     const [canvasEl, setCanvasEl] = useState<HTMLCanvasElement | null>(null);
     const lastWidth = useRef(0);
     const rafRef = useRef(0);
@@ -168,7 +169,6 @@ export const useMatrix2dCanvasStore = (
     }, [paused]);
 
     return {
-        state: {},
         effects: { setCanvasEl },
     };
 };

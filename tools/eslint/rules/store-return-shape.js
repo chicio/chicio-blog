@@ -9,12 +9,12 @@ const rule = {
         type: "suggestion",
         docs: {
             description:
-                "Store hooks (use-*-store.ts) must return an object with exactly the keys 'state' and 'effects'.",
+                "Store hooks (use-*-store.ts) must return an object whose keys are a non-empty subset of 'state' and 'effects'.",
         },
         schema: [],
         messages: {
             wrongShape:
-                "Store hook must return exactly { state, effects }. Found keys: {{found}}.",
+                "Store hook must return a non-empty subset of { state, effects }. Found keys: {{found}}.",
         },
     },
     create(context) {
@@ -36,11 +36,11 @@ const rule = {
                 })
                 .filter(Boolean);
 
-            const hasState = keys.includes("state");
-            const hasEffects = keys.includes("effects");
-            const exactlyTwo = keys.length === 2;
+            const allowedKeys = new Set(["state", "effects"]);
+            const hasOnlyAllowedKeys = keys.every((k) => allowedKeys.has(k));
+            const hasAtLeastOneAllowedKey = keys.length > 0;
 
-            if (!hasState || !hasEffects || !exactlyTwo) {
+            if (!hasOnlyAllowedKeys || !hasAtLeastOneAllowedKey) {
                 context.report({
                     node: objExpr,
                     messageId: "wrongShape",

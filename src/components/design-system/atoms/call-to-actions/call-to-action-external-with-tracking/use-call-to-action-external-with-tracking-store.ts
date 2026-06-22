@@ -2,6 +2,7 @@
 
 import { trackWith } from "@/lib/tracking/tracking";
 import { TrackingData } from "@/types/configuration/tracking";
+import { EffectsStore } from "@/types/component-store";
 
 type CallToActionExternalWithTrackingEffects = {
     onTrack: () => void;
@@ -9,9 +10,8 @@ type CallToActionExternalWithTrackingEffects = {
 
 export const useCallToActionExternalWithTrackingStore = (
     trackingData: TrackingData,
-): { state: Record<string, never>; effects: CallToActionExternalWithTrackingEffects } => {
+): EffectsStore<CallToActionExternalWithTrackingEffects> => {
     return {
-        state: {},
         effects: {
             onTrack: () => trackWith(trackingData),
         },
