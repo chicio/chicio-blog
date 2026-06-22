@@ -28,7 +28,7 @@
     "@typegpu/noise": "^0.11.0",
     "@typegpu/react": "^0.11.1",
     "@types/mdx": "^2.0.13",
-    "@upstash/redis": "^1.36.4",
+    "@upstash/redis": "^1.38.0",
     "@upstash/vector": "^1.2.3",
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
