@@ -19,6 +19,35 @@ const config = {
             },
         },
         {
+            name: "atoms-import-only-via-index",
+            comment: [
+                "ERROR-level enforcement for design-system/atoms/: no direct .tsx imports from outside the folder.",
+                "All atoms component imports must go through the folder's index.ts barrel.",
+            ].join(" "),
+            severity: "error",
+            from: {
+                pathNot: "/index\\.ts$",
+            },
+            to: {
+                path: "^src/components/design-system/atoms/.+\\.tsx$",
+            },
+        },
+        {
+            name: "atoms-seal-private-nested-folders",
+            comment: [
+                "ERROR-level enforcement for design-system/atoms/: nested sub-folders are sealed.",
+                "Only the parent component folder may import from its nested sub-folder.",
+            ].join(" "),
+            severity: "error",
+            from: {
+                path: "^(src/components/design-system/atoms/[^/]+/[^/]+)/",
+            },
+            to: {
+                path: "^src/components/design-system/atoms/[^/]+/[^/]+/[^/]+/",
+                pathNot: "^$1/",
+            },
+        },
+        {
             name: "features-import-only-via-index",
             comment: [
                 "ERROR-level enforcement for features/: no direct .tsx imports from outside the folder.",
@@ -279,18 +308,31 @@ const config = {
             },
         },
         {
+            name: "design-system-layering-atoms",
+            comment: [
+                "ERROR-level enforcement: atoms must not import from molecules/organism/templates.",
+            ].join(" "),
+            severity: "error",
+            from: {
+                path: "^src/components/design-system/atoms/",
+            },
+            to: {
+                path: "^src/components/design-system/(molecules|organism|templates)/",
+            },
+        },
+        {
             name: "design-system-layering",
             comment: [
-                "Design-system layering: atoms must not import from molecules/organism/templates;",
-                "molecules must not import from organism/templates; organism must not import from templates.",
+                "Design-system layering: molecules must not import from organism/templates;",
+                "organism must not import from templates.",
                 "This is a basic upward dependency check.",
             ].join(" "),
             severity: "warn",
             from: {
-                path: "^src/components/design-system/(atoms)/",
+                path: "^src/components/design-system/(molecules)/",
             },
             to: {
-                path: "^src/components/design-system/(molecules|organism|templates)/",
+                path: "^src/components/design-system/(organism|templates)/",
             },
         },
         {
