@@ -1,7 +1,8 @@
 "use client";
 
-import { FC, ReactNode, useCallback, useRef } from "react";
-import { CopyCodeButton } from "./copy-code-button";
+import { FC, ReactNode } from "react";
+import { CopyCodeButton } from "@/components/design-system/molecules/code/copy-code-button";
+import { useCodeBlockStore } from "./use-code-block-store";
 
 interface CodeBlockProps {
     children?: ReactNode;
@@ -10,12 +11,13 @@ interface CodeBlockProps {
 }
 
 export const CodeBlock: FC<CodeBlockProps> = ({ children, className, ...rest }) => {
-    const preRef = useRef<HTMLPreElement>(null);
-    const getText = useCallback(() => preRef.current?.textContent ?? "", []);
+    const { state, effects } = useCodeBlockStore();
+    const { getText } = state;
+    const { setPreEl } = effects;
 
     return (
         <div id="code-block" className="relative group flex flex-col sm:block my-4">
-            <pre ref={preRef} className={className} {...rest}>
+            <pre ref={setPreEl} className={className} {...rest}>
                 {children}
             </pre>
             <div className="flex justify-end px-2 py-1.5 sm:contents">

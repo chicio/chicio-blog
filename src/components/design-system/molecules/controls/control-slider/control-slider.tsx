@@ -1,7 +1,8 @@
 "use client";
 
 import { FC } from "react";
-import { Label } from "../../atoms/typography/label";
+import { Label } from "@/components/design-system/atoms/typography/label";
+import { useControlSliderStore } from "./use-control-slider-store";
 
 interface ControlSliderProps {
     label: string;
@@ -22,9 +23,8 @@ export const ControlSlider: FC<ControlSliderProps> = ({
     onChange,
     displayValue,
 }) => {
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        onChange(parseFloat(e.target.value));
-    };
+    const { effects } = useControlSliderStore();
+    const { handleChange } = effects;
 
     return (
         <div className="flex flex-col gap-1">
@@ -38,7 +38,7 @@ export const ControlSlider: FC<ControlSliderProps> = ({
                 max={max}
                 step={step}
                 value={value}
-                onChange={handleChange}
+                onChange={handleChange(onChange)}
                 className="w-full accent-accent cursor-pointer"
             />
         </div>
