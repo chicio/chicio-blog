@@ -1,15 +1,13 @@
 "use client";
 
-import { RefObject, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useReducedMotions } from "@/components/design-system/hooks/use-reduced-motions";
 
-export function useMatrixRainActivity(ref: RefObject<HTMLElement | null>): boolean {
+export function useMatrixRainActivity(element: HTMLElement | null): boolean {
     const reducedMotion = useReducedMotions();
     const [onScreen, setOnScreen] = useState(true);
 
     useEffect(() => {
-        const element = ref.current;
-
         if (!element) {
             return;
         }
@@ -25,7 +23,7 @@ export function useMatrixRainActivity(ref: RefObject<HTMLElement | null>): boole
         return () => {
             observer.disconnect();
         };
-    }, [ref]);
+    }, [element]);
 
     return reducedMotion || !onScreen;
 }

@@ -1,10 +1,11 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useMatrixRainActivity } from "./use-matrix-rain-activity";
 import { useWebGpuSupported } from "@/components/design-system/hooks/use-webgpu-supported";
 import { useMatrixSettingsStore } from "@/components/design-system/hooks/use-matrix-settings-store";
 import { settingsToProps } from "@/lib/matrix-settings/matrix-settings";
+import { ComponentStore } from "@/types/component-store";
 
 type MatrixRainState = {
     paused: boolean;
@@ -21,20 +22,14 @@ type MatrixRainEffects = {
     onWebGpuError: () => void;
 };
 
-export const useMatrixRainStore = (): { state: MatrixRainState; effects: MatrixRainEffects } => {
-    const [, setContainerEl] = useState<HTMLDivElement | null>(null);
-    const containerRef = useRef<HTMLElement | null>(null);
+export const useMatrixRainStore = (): ComponentStore<MatrixRainState, MatrixRainEffects> => {
+    const [containerEl, setContainerEl] = useState<HTMLDivElement | null>(null);
     const [webGpuFailed, setWebGpuFailed] = useState(false);
     const webGpuSupported = useWebGpuSupported();
     const settings = useMatrixSettingsStore();
     const { rain, bloom, crt } = settingsToProps(settings);
 
-    const handleSetContainerEl = (el: HTMLDivElement | null) => {
-        containerRef.current = el;
-        setContainerEl(el);
-    };
-
-    const paused = useMatrixRainActivity(containerRef);
+    const paused = useMatrixRainActivity(containerEl);
 
     const onWebGpuError = () => setWebGpuFailed(true);
 
@@ -49,7 +44,7 @@ export const useMatrixRainStore = (): { state: MatrixRainState; effects: MatrixR
             crt,
         },
         effects: {
-            setContainerEl: handleSetContainerEl,
+            setContainerEl,
             onWebGpuError,
         },
     };
