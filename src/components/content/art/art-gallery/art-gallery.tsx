@@ -1,7 +1,7 @@
 "use client";
 
 import { useGlassmorphism } from "@/components/design-system/hooks/use-glassmorphism";
-import { MotionDiv } from "@/components/design-system/molecules/animation/motion-div";
+import { MotionDiv } from "@/components/design-system/atoms/animation/motion-div";
 import { artDescriptions } from "@/content/art/art";
 import Image from "next/image";
 import { FC } from "react";

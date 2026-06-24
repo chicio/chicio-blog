@@ -10,7 +10,7 @@ import {
 } from "@/components/design-system/atoms/typography/terminal-blocks";
 import { FC } from "react";
 import { useGlassmorphism } from "@/components/design-system/hooks/use-glassmorphism";
-import { MotionDiv } from "@/components/design-system/molecules/animation/motion-div";
+import { MotionDiv } from "@/components/design-system/atoms/animation/motion-div";
 import { useMatrixTerminalStore } from "./use-matrix-terminal-store";
 
 interface TerminalLineData {

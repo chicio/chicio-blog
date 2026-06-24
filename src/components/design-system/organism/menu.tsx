@@ -15,7 +15,7 @@ import { MenuItemWithTracking } from "../molecules/menu/menu-item-with-tracking"
 import { useGlassmorphism } from "@/components/design-system/hooks/use-glassmorphism";
 import { ScrollDirection, useScrollDirection } from "@/components/design-system/hooks/use-scroll-direction";
 import { useOsModifierKey } from "@/components/design-system/hooks/use-os-modifier-key";
-import { MotionDiv } from "../molecules/animation/motion-div";
+import { MotionDiv } from "@/components/design-system/atoms/animation/motion-div";
 import { LuCommand } from "react-icons/lu";
 import { ImCtrl } from "react-icons/im";
 

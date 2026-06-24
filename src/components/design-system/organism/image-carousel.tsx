@@ -5,7 +5,7 @@ import { PanInfo } from "framer-motion";
 import { BiChevronLeft, BiChevronRight, BiX } from "react-icons/bi";
 import { ImageGlow } from "../atoms/effects/image-glow";
 import { Button } from "../atoms/buttons/button";
-import { MotionDiv } from "../molecules/animation/motion-div";
+import { MotionDiv } from "@/components/design-system/atoms/animation/motion-div";
 import { useGlassmorphism } from "@/components/design-system/hooks/use-glassmorphism";
 import Image from "next/image";
 import { imageShimmerPlaceholder } from "../atoms/effects/image-shimmer-placeholder";

@@ -1,7 +1,7 @@
 "use client";
 
 import { FC, ReactNode } from "react";
-import { MotionDiv } from "@/components/design-system/molecules/animation/motion-div";
+import { MotionDiv } from "@/components/design-system/atoms/animation/motion-div";
 import { IoIosArrowDown } from "react-icons/io";
 import { useAccordionStore } from "./use-accordion-store";
 

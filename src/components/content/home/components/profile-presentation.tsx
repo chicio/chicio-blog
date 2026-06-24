@@ -6,7 +6,7 @@ import { tracking } from "@/types/configuration/tracking";
 import { Variants } from "framer-motion";
 import { FC } from "react";
 import { ProfilePhoto } from "../../../design-system/organism/profile-photo";
-import { MotionDiv } from "@/components/design-system/molecules/animation/motion-div";
+import { MotionDiv } from "@/components/design-system/atoms/animation/motion-div";
 
 const itemVariants: Variants = {
   hidden: { y: 50, opacity: 0 },
