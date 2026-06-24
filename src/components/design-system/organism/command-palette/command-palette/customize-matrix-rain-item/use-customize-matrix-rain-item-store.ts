@@ -1,25 +1,26 @@
+"use client";
+
 import { trackWith } from "@/lib/tracking/tracking";
 import { tracking } from "@/types/configuration/tracking";
-import { Command } from "cmdk";
-import { TerminalLine } from "../../atoms/typography/terminal-blocks";
 import { useWebGpuSupported } from "@/components/design-system/hooks/use-webgpu-supported";
 import { useReducedMotions } from "@/components/design-system/hooks/use-reduced-motions";
 import { openMatrixRainPanel } from "@/lib/command-palette/command-palette-events";
-import { MdTune } from "react-icons/md";
+import { ComponentStore } from "@/types/component-store";
 
-interface CustomizeMatrixRainItemProps {
-    onClose: () => void;
+interface CustomizeMatrixRainItemState {
+    visible: boolean;
 }
 
-export const CustomizeMatrixRainItem = ({ onClose }: CustomizeMatrixRainItemProps) => {
+interface CustomizeMatrixRainItemEffects {
+    handleSelect: () => void;
+}
+
+export const useCustomizeMatrixRainItemStore = (
+    onClose: () => void,
+): ComponentStore<CustomizeMatrixRainItemState, CustomizeMatrixRainItemEffects> => {
     const webGpuSupported = useWebGpuSupported();
     const reducedMotion = useReducedMotions();
-
     const visible = webGpuSupported === true && !reducedMotion;
-
-    if (!visible) {
-        return null;
-    }
 
     const handleSelect = () => {
         trackWith({
@@ -31,16 +32,8 @@ export const CustomizeMatrixRainItem = ({ onClose }: CustomizeMatrixRainItemProp
         openMatrixRainPanel();
     };
 
-    return (
-        <Command.Item
-            value="customize matrix rain"
-            className="px-4 py-2 cursor-pointer aria-selected:bg-accent-alpha-10 aria-selected:border-l-2 aria-selected:border-accent transition-colors duration-100"
-            onSelect={handleSelect}
-        >
-            <TerminalLine>
-                <MdTune className="inline mr-2 mb-0.5" />
-                {">"} Customize Matrix Rain
-            </TerminalLine>
-        </Command.Item>
-    );
+    return {
+        state: { visible },
+        effects: { handleSelect },
+    };
 };
