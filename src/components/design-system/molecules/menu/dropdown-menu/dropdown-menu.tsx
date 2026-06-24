@@ -13,6 +13,7 @@ interface DropdownMenuItem {
     trackingData: TrackingData;
     selected?: boolean;
     onClickCallback?: () => void;
+    external?: boolean;
 }
 
 interface DropdownMenuGroup {
@@ -86,6 +87,7 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
                                             selected={item.selected ?? false}
                                             className="xs:whitespace-nowrap m-2 text-center"
                                             onClickCallback={handleItemClick(item.onClickCallback)}
+                                            external={item.external}
                                         >
                                             {item.label}
                                         </MenuItemWithTracking>
@@ -99,6 +101,7 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
                                     selected={entry.selected ?? false}
                                     className="xs:whitespace-nowrap m-2"
                                     onClickCallback={handleItemClick(entry.onClickCallback)}
+                                    external={entry.external}
                                 >
                                     {entry.label}
                                 </MenuItemWithTracking>
