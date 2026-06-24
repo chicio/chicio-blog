@@ -11,6 +11,7 @@ type MenuItemWithTrackingProps = TrackingElementProps & {
     children?: ReactNode;
     className?: string;
     onClickCallback?: () => void;
+    external?: boolean;
 };
 
 export const MenuItemWithTracking: FC<MenuItemWithTrackingProps> = ({
@@ -20,6 +21,7 @@ export const MenuItemWithTracking: FC<MenuItemWithTrackingProps> = ({
     trackingData,
     selected,
     onClickCallback,
+    external,
 }) => {
     const { effects } = useMenuItemWithTrackingStore();
     const { handleClick } = effects;
@@ -32,12 +34,27 @@ export const MenuItemWithTracking: FC<MenuItemWithTrackingProps> = ({
     const flex = "flex items-center justify-center";
     const background = selected ? "bg-accent-alpha-15" : "transparent";
     const hover = `hover:bg-accent-alpha-10 hover:text-accent hover:border-accent hover:transition-all hover:duration-300 hover:translate-y-[-1px] hover:shadow-lg`;
+    const composedClassName = `relative ${transition} ${color} ${spacing} ${text} ${border} ${flex} ${background} ${hover}${className ? ` ${className}` : ""}`;
+
+    if (external) {
+        return (
+            <a
+                href={to}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={composedClassName}
+                onClick={handleClick(trackingData, onClickCallback)}
+            >
+                {children}
+            </a>
+        );
+    }
 
     return (
         <Link
             href={to}
             prefetch={false}
-            className={`relative ${transition} ${color} ${spacing} ${text} ${border} ${flex} ${background} ${hover}${className ? ` ${className}` : ""}`}
+            className={composedClassName}
             onClick={handleClick(trackingData, onClickCallback)}
         >
             {children}

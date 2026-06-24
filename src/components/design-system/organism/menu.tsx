@@ -90,7 +90,7 @@ const renderMenuItems = (
                         ],
                     },
                     {
-                        label: "AI",
+                        label: "Artificial Intelligence",
                         items: [
                             {
                                 label: "Chat",
@@ -112,6 +112,22 @@ const renderMenuItems = (
                                     label: tracking.label.header,
                                 },
                                 selected: pathname === slugs.mcp,
+                                onClickCallback: () => setShouldOpenMenu(false),
+                            },
+                        ],
+                    },
+                    {
+                        label: "Computer Graphics",
+                        items: [
+                            {
+                                label: "Matrix Rain",
+                                to: "https://chicio.github.io/matrix-rain-webgpu/",
+                                external: true,
+                                trackingData: {
+                                    action: tracking.action.open_matrix_rain_webgpu,
+                                    category: trackingCategory,
+                                    label: tracking.label.header,
+                                },
                                 onClickCallback: () => setShouldOpenMenu(false),
                             },
                         ],
