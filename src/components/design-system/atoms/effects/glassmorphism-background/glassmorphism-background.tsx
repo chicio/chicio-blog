@@ -1,16 +1,14 @@
 "use client";
 
-import { motion, stagger, Variants } from "framer-motion";
+import { Variants } from "framer-motion";
 import { FC, PropsWithChildren } from "react";
+import { MotionDiv } from "@/components/design-system/atoms/animation/motion-div";
 import { useGlassmorphismBackgroundStore } from "./use-glassmorphism-background-store";
 
 const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
         opacity: 1,
-        transition: {
-            delayChildren: stagger(0.3),
-        },
     },
 };
 
@@ -23,24 +21,16 @@ export const GlassmorphismBackground: FC<PropsWithChildren<GlassmorphismBackgrou
     children,
 }) => {
     const { state } = useGlassmorphismBackgroundStore();
-    const { glassmorphismClass, motionEnabled } = state;
-
-    if (!motionEnabled) {
-        return (
-            <div className={`${glassmorphismClass} relative p-5 md:p-9 ${className}`}>
-                {children}
-            </div>
-        );
-    }
+    const { glassmorphismClass } = state;
 
     return (
-        <motion.div
+        <MotionDiv
             className={`${glassmorphismClass} relative p-5 md:p-9 ${className}`}
             variants={containerVariants}
             initial="hidden"
             animate="visible"
         >
             {children}
-        </motion.div>
+        </MotionDiv>
     );
 };
