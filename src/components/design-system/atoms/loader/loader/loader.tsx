@@ -2,7 +2,6 @@
 
 import { FC } from "react";
 import { MotionDiv } from "@/components/design-system/atoms/animation/motion-div";
-import { useLoaderStore } from "./use-loader-store";
 
 const sizeClasses = {
     sm: "h-1.5 w-1.5",
@@ -25,8 +24,6 @@ interface LoaderProps {
 }
 
 export const Loader: FC<LoaderProps> = ({ size = "md", className, label = "Loading" }) => {
-    useLoaderStore();
-
     return (
         <div
             role="status"
