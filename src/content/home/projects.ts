@@ -18,6 +18,42 @@ export interface Project {
 }
 
 export const projects: Record<string, Project> = {
+  "matrix-rain-webgpu": {
+    name: "Matrix Rain WebGPU",
+    abstract:
+      "GPU-accelerated Matrix-style digital rain effect for React, built with WebGPU and TypeGPU." +
+      " It powers the animated background of this site.",
+    description:
+      "A GPU-accelerated Matrix-style digital rain effect built with WebGPU and TypeGPU, shipped as a" +
+      " customizable React component. It combines GPU-driven simulation, signed-distance-field glyphs," +
+      " depth parallax, bloom, and a CRT post-process. It powers the animated Matrix rain background of" +
+      " this site, with a 2D canvas fallback when WebGPU is unavailable.",
+    features: [
+      "Computer graphics",
+      "WebGPU",
+      "TypeGPU",
+      "GPU-driven simulation",
+      "SDF glyphs, bloom & CRT post-process",
+      "React, TypeScript",
+    ],
+    callToActions: [
+      {
+        label: "Demo",
+        trackingCategory: tracking.category.home,
+        trackingAction: tracking.action.open_matrix_rain_webgpu_demo,
+        trackingLabel: tracking.label.body,
+        link: "https://chicio.github.io/matrix-rain-webgpu/",
+      },
+      {
+        label: "Github",
+        trackingCategory: tracking.category.home,
+        trackingAction: tracking.action.open_matrix_rain_webgpu_github,
+        trackingLabel: tracking.label.body,
+        link: "https://github.com/chicio/matrix-rain-webgpu",
+      },
+    ],
+    image: '/media/content/about-me/projects/matrix-rain-webgpu.png',
+  },
   "spectral-clara-lux-tracer": {
     name: "Spectral Clara Lux Tracer",
     abstract:

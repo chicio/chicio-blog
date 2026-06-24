@@ -65,6 +65,9 @@ export const tracking = {
     command_palette_search_result_selected: "command_palette_search_result_selected",
     command_palette_open_matrix_rain_panel: "command_palette_open_matrix_rain_panel",
     command_palette_matrix_rain_preset_selected: "command_palette_matrix_rain_preset_selected",
+    open_matrix_rain_webgpu: "open_matrix_rain_webgpu",
+    open_matrix_rain_webgpu_demo: "open_matrix_rain_webgpu_demo",
+    open_matrix_rain_webgpu_github: "open_matrix_rain_webgpu_github",
   },
   category: {
     home: "home",
