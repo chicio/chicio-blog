@@ -90,7 +90,7 @@ const renderMenuItems = (
                         ],
                     },
                     {
-                        label: "AI",
+                        label: "Artificial Intelligence",
                         items: [
                             {
                                 label: "Chat",

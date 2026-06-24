@@ -18,6 +18,35 @@ export interface Project {
 }
 
 export const projects: Record<string, Project> = {
+  "react-native-skia-skeleton": {
+    name: "React Native Skia Skeleton",
+    abstract:
+      "A high-performance skeleton loader component for React Native, built with React Native Skia and" +
+      " React Native Reanimated.",
+    description:
+      "Yet another React Native skeleton component, built with React Native Skia and React Native" +
+      " Reanimated. It renders elegant loading placeholders with customizable shapes, shimmer" +
+      " animations, theme support, and right-to-left layouts, with zero dependencies beyond Skia and" +
+      " Reanimated. Works on Android, iOS, and Web.",
+    features: [
+      "Mobile / React Native",
+      "React Native Skia",
+      "React Native Reanimated",
+      "Shimmer skeleton placeholders",
+      "RTL & theme support",
+      "TypeScript",
+    ],
+    callToActions: [
+      {
+        label: "Github",
+        trackingCategory: tracking.category.home,
+        trackingAction: tracking.action.open_react_native_skia_skeleton_github,
+        trackingLabel: tracking.label.body,
+        link: "https://github.com/chicio/react-native-skia-skeleton",
+      },
+    ],
+    image: '/media/content/about-me/projects/react-native-skia-skeleton.png',
+  },
   "matrix-rain-webgpu": {
     name: "Matrix Rain WebGPU",
     abstract:

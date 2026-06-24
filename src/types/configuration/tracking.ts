@@ -68,6 +68,7 @@ export const tracking = {
     open_matrix_rain_webgpu: "open_matrix_rain_webgpu",
     open_matrix_rain_webgpu_demo: "open_matrix_rain_webgpu_demo",
     open_matrix_rain_webgpu_github: "open_matrix_rain_webgpu_github",
+    open_react_native_skia_skeleton_github: "open_react_native_skia_skeleton_github",
   },
   category: {
     home: "home",
