@@ -1,7 +1,7 @@
 import { Button } from "@/components/design-system/atoms/buttons/button";
 import { ImageGlow } from "@/components/design-system/atoms/effects/image-glow";
 import { Overlay } from "@/components/design-system/atoms/effects/overlay";
-import { MotionDiv } from "@/components/design-system/molecules/animation/motion-div";
+import { MotionDiv } from "@/components/design-system/atoms/animation/motion-div";
 import { Variants } from "framer-motion";
 import { FC } from "react";
 

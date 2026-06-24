@@ -1,8 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { FC } from "react";
-import { useLoaderStore } from "./use-loader-store";
+import { MotionDiv } from "@/components/design-system/atoms/animation/motion-div";
 
 const sizeClasses = {
     sm: "h-1.5 w-1.5",
@@ -25,32 +24,25 @@ interface LoaderProps {
 }
 
 export const Loader: FC<LoaderProps> = ({ size = "md", className, label = "Loading" }) => {
-    const { state } = useLoaderStore();
-    const { motionEnabled } = state;
-
     return (
         <div
             role="status"
             aria-label={label}
             className={`flex items-center ${gapClasses[size]}${className ? ` ${className}` : ""}`}
         >
-            {dots.map((i) =>
-                motionEnabled ? (
-                    <motion.div
-                        key={i}
-                        animate={{ y: [0, -8, 0] }}
-                        transition={{
-                            duration: 0.6,
-                            repeat: Infinity,
-                            delay: i * 0.15,
-                            ease: "easeInOut",
-                        }}
-                        className={`${sizeClasses[size]} rounded-full bg-accent`}
-                    />
-                ) : (
-                    <div key={i} className={`${sizeClasses[size]} rounded-full bg-accent`} />
-                ),
-            )}
+            {dots.map((i) => (
+                <MotionDiv
+                    key={i}
+                    animate={{ y: [0, -8, 0] }}
+                    transition={{
+                        duration: 0.6,
+                        repeat: Infinity,
+                        delay: i * 0.15,
+                        ease: "easeInOut",
+                    }}
+                    className={`${sizeClasses[size]} rounded-full bg-accent`}
+                />
+            ))}
         </div>
     );
 };

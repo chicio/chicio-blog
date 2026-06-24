@@ -4,7 +4,7 @@ import { Button } from "@/components/design-system/atoms/buttons/button";
 import { Overlay } from "@/components/design-system/atoms/effects/overlay";
 import { Loader } from "@/components/design-system/atoms/loader/loader";
 import { TerminalProgressBar } from "@/components/design-system/molecules/terminal-progress-bar/terminal-progress-bar";
-import { MotionDiv } from "@/components/design-system/molecules/animation/motion-div";
+import { MotionDiv } from "@/components/design-system/atoms/animation/motion-div";
 import { Variants } from "framer-motion";
 import { Markdown } from "@/components/design-system/atoms/typography/markdown";
 import { FC } from "react";
