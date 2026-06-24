@@ -337,6 +337,35 @@ const config = {
             },
         },
         {
+            name: "organism-import-only-via-index",
+            comment: [
+                "ERROR-level enforcement for design-system/organism/: no direct .tsx imports from outside the folder.",
+                "All organism component imports must go through the folder's index.ts barrel.",
+            ].join(" "),
+            severity: "error",
+            from: {
+                pathNot: "/index\\.ts$",
+            },
+            to: {
+                path: "^src/components/design-system/organism/.+\\.tsx$",
+            },
+        },
+        {
+            name: "organism-seal-private-nested-folders",
+            comment: [
+                "ERROR-level enforcement for design-system/organism/: nested sub-folders are sealed.",
+                "Only the parent component folder may import from its nested sub-folder.",
+            ].join(" "),
+            severity: "error",
+            from: {
+                path: "^(src/components/design-system/organism/[^/]+/[^/]+)/",
+            },
+            to: {
+                path: "^src/components/design-system/organism/[^/]+/[^/]+/[^/]+/",
+                pathNot: "^$1/",
+            },
+        },
+        {
             name: "design-system-layering-atoms",
             comment: [
                 "ERROR-level enforcement: atoms must not import from molecules/organism/templates.",
@@ -365,10 +394,10 @@ const config = {
         {
             name: "design-system-layering",
             comment: [
-                "Design-system layering: organism must not import from templates.",
-                "This is a basic upward dependency check.",
+                "ERROR-level enforcement: organism must not import from templates.",
+                "Design-system layering enforced at error level now that organism tier is migrated.",
             ].join(" "),
-            severity: "warn",
+            severity: "error",
             from: {
                 path: "^src/components/design-system/(organism)/",
             },

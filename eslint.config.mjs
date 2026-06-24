@@ -235,6 +235,33 @@ const moleculesIndexBarrelErrorRules = {
     },
 };
 
+const organismComponentStoreErrorRules = {
+    files: ["src/components/design-system/organism/**/*.tsx"],
+    ignores: ["src/components/design-system/organism/**/use-*.tsx"],
+    plugins: { chicio },
+    rules: {
+        "react/jsx-no-bind": ["error", { allowArrowFunctions: false, allowFunctions: false, allowBind: false }],
+        "chicio/prefer-component-store": "error",
+        "chicio/folder-composition": "error",
+    },
+};
+
+const organismStoreHookErrorRules = {
+    files: ["src/components/design-system/organism/**/use-*-store.ts"],
+    plugins: { chicio },
+    rules: {
+        "chicio/store-return-shape": "error",
+    },
+};
+
+const organismIndexBarrelErrorRules = {
+    files: ["src/components/design-system/organism/**/index.ts"],
+    plugins: { chicio },
+    rules: {
+        "chicio/index-only-component": "error",
+    },
+};
+
 const eslintConfig = [
     ignores,
     ...coreWebVitals,
@@ -248,6 +275,9 @@ const eslintConfig = [
     moleculesComponentStoreErrorRules,
     moleculesStoreHookErrorRules,
     moleculesIndexBarrelErrorRules,
+    organismComponentStoreErrorRules,
+    organismStoreHookErrorRules,
+    organismIndexBarrelErrorRules,
     featuresComponentStoreErrorRules,
     featuresStoreHookErrorRules,
     featuresIndexBarrelErrorRules,
