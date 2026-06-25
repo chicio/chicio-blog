@@ -1,7 +1,7 @@
 import { Resend } from "resend";
 import { NextRequest, NextResponse } from "next/server";
-import { ContactNotificationEmail } from "@/components/content/contact/components/contact-email-notification";
-import { ContactConfirmationEmail } from "@/components/content/contact/components/contact-email-confirmation";
+import { ContactNotificationEmail } from "@/components/content/contact/contact-email-notification";
+import { ContactConfirmationEmail } from "@/components/content/contact/contact-email-confirmation";
 import { checkRateLimitFor, incrementRateLimit } from "@/lib/rate-limit/rate-limit";
 import { getClientIp } from "@/lib/network/network";
 

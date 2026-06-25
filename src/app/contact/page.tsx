@@ -1,4 +1,4 @@
-import { Contact } from "@/components/content/contact/components/contact";
+import { Contact } from "@/components/content/contact/contact";
 import { createMetadata } from "@/lib/seo/seo";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { slugs } from "@/types/configuration/slug";
