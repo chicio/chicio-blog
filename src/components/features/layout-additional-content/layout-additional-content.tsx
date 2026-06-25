@@ -6,12 +6,18 @@ import { whiteRabbitEasterEgg } from "@/components/features/easter-eggs/white-ra
 import { useLayoutAdditionalContentStore } from "./use-layout-additional-content-store";
 
 const CookieConsentBanner = dynamic(
-    () => import("@/components/design-system/organism/cookie-consent-banner"),
+    () =>
+        import("@/components/design-system/organism/cookie-consent-banner").then(
+            (m) => m.CookieConsentBanner,
+        ),
     { ssr: false },
 );
 
 const TrackingOptIn = dynamic(
-    () => import("@/components/design-system/organism/tracking-optin"),
+    () =>
+        import("@/components/design-system/organism/tracking-optin").then(
+            (m) => m.TrackingOptIn,
+        ),
     { ssr: false },
 );
 

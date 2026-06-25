@@ -1,0 +1,52 @@
+"use client";
+
+import { MatrixHeaderBackground } from "@/components/design-system/molecules/effects/matrix-header-background";
+import { FC, PropsWithChildren } from "react";
+import logoImage from "../../../../../../public/media/logo.png";
+import { ImageGlow } from "@/components/design-system/atoms/effects/image-glow";
+import { Cursor } from "@/components/design-system/atoms/typography/terminal-blocks";
+import { useGlassmorphism } from "@/components/design-system/hooks/use-glassmorphism";
+
+const Passthrough: FC<PropsWithChildren> = ({ children }) => <>{children}</>;
+
+interface BrandHeaderProps {
+    big: boolean;
+    wrapper?: FC<PropsWithChildren>;
+}
+
+export const BrandHeader: FC<BrandHeaderProps> = ({ big, wrapper: Wrapper = Passthrough }) => {
+    const { glassmorphismClass } = useGlassmorphism({ noScale: true });
+    const height = big ? "h-auto" : "h-[170px] md:h-[200px]";
+    const margins = big ? "mt-14 mb-8" : "mt-12";
+
+    return (
+        <div className={`block ${height}`}>
+            <MatrixHeaderBackground big={big} />
+            <Wrapper>
+                <div className={`flex items-center ${margins}`}>
+                    <div className={`${glassmorphismClass} w-full p-5 md:p-9 z-30`}>
+                        <div className="flex w-full items-center">
+                            <ImageGlow
+                                src={logoImage}
+                                alt={"blog logo"}
+                                width={80}
+                                height={80}
+                                placeholder={"blur"}
+                                className="mr-3 h-[50px] w-[50px] object-cover sm:h-[80px] sm:w-[80px]"
+                            />
+                            <div className="flex flex-col justify-start">
+                                <span className="text-accent m-0 block font-mono text-2xl font-bold uppercase text-shadow-lg sm:text-4xl">
+                                    <span className="text-shadow-md">{">"} </span>CHICIO CODING
+                                    <Cursor />
+                                </span>
+                                <span className="text-primary-text font-mono text-xs font-normal text-shadow-md sm:text-lg">
+                                    Pixels. Code. Unplugged.
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </Wrapper>
+        </div>
+    );
+};

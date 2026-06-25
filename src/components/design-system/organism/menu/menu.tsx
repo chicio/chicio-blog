@@ -2,191 +2,18 @@
 
 import { slugs } from "@/types/configuration/slug";
 import { tracking } from "@/types/configuration/tracking";
-import { openCommandPalette } from "@/lib/command-palette/command-palette-events";
-import { trackWith } from "@/lib/tracking/tracking";
 import { AnimatePresence, Variants } from "framer-motion";
-import { usePathname } from "next/navigation";
-import { FC, useState } from "react";
+import { FC } from "react";
 import { BiSearchAlt } from "react-icons/bi";
-import { Close } from "../molecules/menu/close";
-import { DropdownMenu } from "../molecules/menu/dropdown-menu";
-import { HamburgerMenu } from "../molecules/menu/hamburger-menu";
-import { MenuItemWithTracking } from "../molecules/menu/menu-item-with-tracking";
+import { Close } from "@/components/design-system/molecules/menu/close";
+import { DropdownMenu } from "@/components/design-system/molecules/menu/dropdown-menu";
+import { HamburgerMenu } from "@/components/design-system/molecules/menu/hamburger-menu";
+import { MenuItemWithTracking } from "@/components/design-system/molecules/menu/menu-item-with-tracking";
 import { useGlassmorphism } from "@/components/design-system/hooks/use-glassmorphism";
-import { ScrollDirection, useScrollDirection } from "@/components/design-system/hooks/use-scroll-direction";
-import { useOsModifierKey } from "@/components/design-system/hooks/use-os-modifier-key";
 import { MotionDiv } from "@/components/design-system/atoms/animation/motion-div";
 import { LuCommand } from "react-icons/lu";
 import { ImCtrl } from "react-icons/im";
-
-const renderMenuItems = (
-    isMobile: boolean,
-    pathname: string,
-    trackingCategory: string,
-    setShouldOpenMenu: (open: boolean) => void,
-) => {
-    const baseClassName = isMobile ? "mb-2 w-80" : "hidden sm:flex xs:mb-0 xs:w-auto";
-    const dropdownClassName = isMobile ? "z-50 mb-2 w-80" : "hidden sm:flex xs:mb-0 xs:w-auto z-50";
-
-    return (
-        <>
-            <MenuItemWithTracking
-                className={baseClassName}
-                key={`home-${isMobile ? "mobile" : "desktop"}`}
-                to={"/"}
-                selected={pathname === "/"}
-                trackingData={{
-                    action: tracking.action.open_home,
-                    category: trackingCategory,
-                    label: tracking.label.header,
-                }}
-                onClickCallback={() => setShouldOpenMenu(false)}
-            >
-                Home
-            </MenuItemWithTracking>
-            <MenuItemWithTracking
-                key={`blog-${isMobile ? "mobile" : "desktop"}`}
-                className={baseClassName}
-                to={slugs.blog.home}
-                selected={pathname.includes(slugs.blog.home)}
-                trackingData={{
-                    action: tracking.action.open_home,
-                    category: trackingCategory,
-                    label: tracking.label.header,
-                }}
-                onClickCallback={() => setShouldOpenMenu(false)}
-            >
-                Blog
-            </MenuItemWithTracking>
-            <DropdownMenu
-                label="Explore"
-                className={dropdownClassName}
-                items={[
-                    {
-                        label: "DSA",
-                        items: [
-                            {
-                                label: "Roadmap",
-                                to: slugs.dataStructuresAndAlgorithms.roadmap,
-                                trackingData: {
-                                    action: tracking.action.open_dsa_roadmap,
-                                    category: trackingCategory,
-                                    label: tracking.label.header,
-                                },
-                                selected: pathname === slugs.dataStructuresAndAlgorithms.roadmap,
-                                onClickCallback: () => setShouldOpenMenu(false),
-                            },
-                            {
-                                label: "Exercises",
-                                to: slugs.dataStructuresAndAlgorithms.exercises,
-                                trackingData: {
-                                    action: tracking.action.open_dsa_exercises,
-                                    category: trackingCategory,
-                                    label: tracking.label.header,
-                                },
-                                selected: pathname === slugs.dataStructuresAndAlgorithms.exercises,
-                                onClickCallback: () => setShouldOpenMenu(false),
-                            },
-                        ],
-                    },
-                    {
-                        label: "Artificial Intelligence",
-                        items: [
-                            {
-                                label: "Chat",
-                                to: slugs.chat,
-                                trackingData: {
-                                    action: tracking.action.open_chat,
-                                    category: trackingCategory,
-                                    label: tracking.label.header,
-                                },
-                                selected: pathname === slugs.chat,
-                                onClickCallback: () => setShouldOpenMenu(false),
-                            },
-                            {
-                                label: "MCP",
-                                to: slugs.mcp,
-                                trackingData: {
-                                    action: tracking.action.open_mcp,
-                                    category: trackingCategory,
-                                    label: tracking.label.header,
-                                },
-                                selected: pathname === slugs.mcp,
-                                onClickCallback: () => setShouldOpenMenu(false),
-                            },
-                        ],
-                    },
-                    {
-                        label: "Computer Graphics",
-                        items: [
-                            {
-                                label: "Matrix Rain",
-                                to: "https://chicio.github.io/matrix-rain-webgpu/",
-                                external: true,
-                                trackingData: {
-                                    action: tracking.action.open_matrix_rain_webgpu,
-                                    category: trackingCategory,
-                                    label: tracking.label.header,
-                                },
-                                onClickCallback: () => setShouldOpenMenu(false),
-                            },
-                        ],
-                    },
-                ]}
-            />
-            <DropdownMenu
-                label="The Author"
-                className={dropdownClassName}
-                items={[
-                    {
-                        label: "About me",
-                        to: slugs.aboutMe,
-                        trackingData: {
-                            action: tracking.action.open_about_me,
-                            category: trackingCategory,
-                            label: tracking.label.header,
-                        },
-                        selected: pathname === slugs.aboutMe,
-                        onClickCallback: () => setShouldOpenMenu(false),
-                    },
-                    {
-                        label: "Art",
-                        to: slugs.art,
-                        trackingData: {
-                            action: tracking.action.open_art,
-                            category: trackingCategory,
-                            label: tracking.label.header,
-                        },
-                        selected: pathname === slugs.art,
-                        onClickCallback: () => setShouldOpenMenu(false),
-                    },
-                    {
-                        label: "Videogames",
-                        to: slugs.videogames.home,
-                        trackingData: {
-                            action: tracking.action.open_videogame_collection,
-                            category: trackingCategory,
-                            label: tracking.label.header,
-                        },
-                        selected: pathname === slugs.videogames.home,
-                        onClickCallback: () => setShouldOpenMenu(false),
-                    },
-                    {
-                        label: "Contact me",
-                        to: slugs.contact,
-                        trackingData: {
-                            action: tracking.action.open_contact,
-                            category: trackingCategory,
-                            label: tracking.label.header,
-                        },
-                        selected: pathname === slugs.contact,
-                        onClickCallback: () => setShouldOpenMenu(false),
-                    },
-                ]}
-            />
-        </>
-    );
-};
+import { useMenuStore } from "./use-menu-store";
 
 const menuVariants: Variants = {
     hidden: {
@@ -215,21 +42,174 @@ export interface MenuProps {
 }
 
 export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
-    const pathname = usePathname();
-    const direction = useScrollDirection();
-    const [shouldOpenMenu, setShouldOpenMenu] = useState(false);
     const { glassmorphismClass } = useGlassmorphism({ noScale: true });
-    const modifierKey = useOsModifierKey();
-    const shouldHideMenu = pathname === slugs.chat ? false : direction === ScrollDirection.down;
+    const { state, effects } = useMenuStore(trackingCategory);
+    const { pathname, shouldHideMenu, shouldOpenMenu, modifierKey } = state;
+    const { openMenu, closeMenu, handlePaletteTrigger } = effects;
 
-    const handlePaletteTrigger = () => {
-        trackWith({
-            category: trackingCategory,
-            label: tracking.label.header,
-            action: tracking.action.command_palette_open,
-        });
-        openCommandPalette();
-    };
+    const baseClassName = (isMobile: boolean) =>
+        isMobile ? "mb-2 w-80" : "hidden sm:flex xs:mb-0 xs:w-auto";
+    const dropdownClassName = (isMobile: boolean) =>
+        isMobile ? "z-50 mb-2 w-80" : "hidden sm:flex xs:mb-0 xs:w-auto z-50";
+
+    const renderMenuItems = (isMobile: boolean) => (
+        <>
+            <MenuItemWithTracking
+                className={baseClassName(isMobile)}
+                key={`home-${isMobile ? "mobile" : "desktop"}`}
+                to={"/"}
+                selected={pathname === "/"}
+                trackingData={{
+                    action: tracking.action.open_home,
+                    category: trackingCategory,
+                    label: tracking.label.header,
+                }}
+                onClickCallback={closeMenu}
+            >
+                Home
+            </MenuItemWithTracking>
+            <MenuItemWithTracking
+                key={`blog-${isMobile ? "mobile" : "desktop"}`}
+                className={baseClassName(isMobile)}
+                to={slugs.blog.home}
+                selected={pathname.includes(slugs.blog.home)}
+                trackingData={{
+                    action: tracking.action.open_home,
+                    category: trackingCategory,
+                    label: tracking.label.header,
+                }}
+                onClickCallback={closeMenu}
+            >
+                Blog
+            </MenuItemWithTracking>
+            <DropdownMenu
+                label="Explore"
+                className={dropdownClassName(isMobile)}
+                items={[
+                    {
+                        label: "DSA",
+                        items: [
+                            {
+                                label: "Roadmap",
+                                to: slugs.dataStructuresAndAlgorithms.roadmap,
+                                trackingData: {
+                                    action: tracking.action.open_dsa_roadmap,
+                                    category: trackingCategory,
+                                    label: tracking.label.header,
+                                },
+                                selected: pathname === slugs.dataStructuresAndAlgorithms.roadmap,
+                                onClickCallback: closeMenu,
+                            },
+                            {
+                                label: "Exercises",
+                                to: slugs.dataStructuresAndAlgorithms.exercises,
+                                trackingData: {
+                                    action: tracking.action.open_dsa_exercises,
+                                    category: trackingCategory,
+                                    label: tracking.label.header,
+                                },
+                                selected: pathname === slugs.dataStructuresAndAlgorithms.exercises,
+                                onClickCallback: closeMenu,
+                            },
+                        ],
+                    },
+                    {
+                        label: "Artificial Intelligence",
+                        items: [
+                            {
+                                label: "Chat",
+                                to: slugs.chat,
+                                trackingData: {
+                                    action: tracking.action.open_chat,
+                                    category: trackingCategory,
+                                    label: tracking.label.header,
+                                },
+                                selected: pathname === slugs.chat,
+                                onClickCallback: closeMenu,
+                            },
+                            {
+                                label: "MCP",
+                                to: slugs.mcp,
+                                trackingData: {
+                                    action: tracking.action.open_mcp,
+                                    category: trackingCategory,
+                                    label: tracking.label.header,
+                                },
+                                selected: pathname === slugs.mcp,
+                                onClickCallback: closeMenu,
+                            },
+                        ],
+                    },
+                    {
+                        label: "Computer Graphics",
+                        items: [
+                            {
+                                label: "Matrix Rain",
+                                to: "https://chicio.github.io/matrix-rain-webgpu/",
+                                external: true,
+                                trackingData: {
+                                    action: tracking.action.open_matrix_rain_webgpu,
+                                    category: trackingCategory,
+                                    label: tracking.label.header,
+                                },
+                                onClickCallback: closeMenu,
+                            },
+                        ],
+                    },
+                ]}
+            />
+            <DropdownMenu
+                label="The Author"
+                className={dropdownClassName(isMobile)}
+                items={[
+                    {
+                        label: "About me",
+                        to: slugs.aboutMe,
+                        trackingData: {
+                            action: tracking.action.open_about_me,
+                            category: trackingCategory,
+                            label: tracking.label.header,
+                        },
+                        selected: pathname === slugs.aboutMe,
+                        onClickCallback: closeMenu,
+                    },
+                    {
+                        label: "Art",
+                        to: slugs.art,
+                        trackingData: {
+                            action: tracking.action.open_art,
+                            category: trackingCategory,
+                            label: tracking.label.header,
+                        },
+                        selected: pathname === slugs.art,
+                        onClickCallback: closeMenu,
+                    },
+                    {
+                        label: "Videogames",
+                        to: slugs.videogames.home,
+                        trackingData: {
+                            action: tracking.action.open_videogame_collection,
+                            category: trackingCategory,
+                            label: tracking.label.header,
+                        },
+                        selected: pathname === slugs.videogames.home,
+                        onClickCallback: closeMenu,
+                    },
+                    {
+                        label: "Contact me",
+                        to: slugs.contact,
+                        trackingData: {
+                            action: tracking.action.open_contact,
+                            category: trackingCategory,
+                            label: tracking.label.header,
+                        },
+                        selected: pathname === slugs.contact,
+                        onClickCallback: closeMenu,
+                    },
+                ]}
+            />
+        </>
+    );
 
     return (
         <>
@@ -242,10 +222,10 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
                 <div
                     className={`${glassmorphismClass} sm:overflow-visible flex-row xs:py-0 xs:pt-0 m-0 my-0 flex min-h-16 items-center gap-1 overflow-hidden px-2`}
                 >
-                    {renderMenuItems(false, pathname, trackingCategory, setShouldOpenMenu)}
+                    {renderMenuItems(false)}
                     {!shouldOpenMenu && (
                         <div className="sm:hidden">
-                            <HamburgerMenu onClick={() => setShouldOpenMenu(true)} />
+                            <HamburgerMenu onClick={openMenu} />
                         </div>
                     )}
                     <button
@@ -289,9 +269,9 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
                     >
                         <div className="flex flex-col items-center gap-1 p-5 pt-[55px]">
                             <div className="absolute top-2.5 left-2.5">
-                                <Close onClick={() => setShouldOpenMenu(false)} />
+                                <Close onClick={closeMenu} />
                             </div>
-                            {renderMenuItems(true, pathname, trackingCategory, setShouldOpenMenu)}
+                            {renderMenuItems(true)}
                         </div>
                     </MotionDiv>
                 )}
