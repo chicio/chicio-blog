@@ -1,7 +1,7 @@
 import { FC, PropsWithChildren, ReactNode } from "react";
-import { ContentProgressBar } from "../organism/reading-content-progress-bar";
-import { ContentPageTemplate } from "./content-page-template";
-import { Breadcrumb, BreadcrumbItem } from "../molecules/breadcrumbs/breadcrumb";
+import { ContentProgressBar } from "@/components/design-system/organism/reading-content-progress-bar";
+import { ContentPageTemplate } from "@/components/design-system/templates/content-page-template";
+import { Breadcrumb, BreadcrumbItem } from "@/components/design-system/molecules/breadcrumbs/breadcrumb";
 
 export interface ReadingContentPageProps {
     author: string;

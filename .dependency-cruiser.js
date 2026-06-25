@@ -366,6 +366,35 @@ const config = {
             },
         },
         {
+            name: "templates-import-only-via-index",
+            comment: [
+                "ERROR-level enforcement for design-system/templates/: no direct .tsx imports from outside the folder.",
+                "All templates component imports must go through the folder's index.ts barrel.",
+            ].join(" "),
+            severity: "error",
+            from: {
+                pathNot: "/index\\.ts$",
+            },
+            to: {
+                path: "^src/components/design-system/templates/.+\\.tsx$",
+            },
+        },
+        {
+            name: "templates-seal-private-nested-folders",
+            comment: [
+                "ERROR-level enforcement for design-system/templates/: nested sub-folders are sealed.",
+                "Only the parent component folder may import from its nested sub-folder.",
+            ].join(" "),
+            severity: "error",
+            from: {
+                path: "^(src/components/design-system/templates/[^/]+/[^/]+)/",
+            },
+            to: {
+                path: "^src/components/design-system/templates/[^/]+/[^/]+/[^/]+/",
+                pathNot: "^$1/",
+            },
+        },
+        {
             name: "design-system-layering-atoms",
             comment: [
                 "ERROR-level enforcement: atoms must not import from molecules/organism/templates.",
