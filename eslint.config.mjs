@@ -289,6 +289,168 @@ const templatesIndexBarrelErrorRules = {
     },
 };
 
+const contentAboutMeComponentStoreErrorRules = {
+    files: ["src/components/content/about-me/**/*.tsx"],
+    ignores: ["src/components/content/about-me/**/use-*.tsx"],
+    plugins: { chicio },
+    rules: {
+        "react/jsx-no-bind": ["error", { allowArrowFunctions: false, allowFunctions: false, allowBind: false }],
+        "chicio/prefer-component-store": "error",
+        "chicio/folder-composition": "error",
+    },
+};
+
+const contentAboutMeStoreHookErrorRules = {
+    files: ["src/components/content/about-me/**/use-*-store.ts"],
+    plugins: { chicio },
+    rules: {
+        "chicio/store-return-shape": "error",
+    },
+};
+
+const contentAboutMeIndexBarrelErrorRules = {
+    files: ["src/components/content/about-me/**/index.ts"],
+    plugins: { chicio },
+    rules: {
+        "chicio/index-only-component": "error",
+    },
+};
+
+const contentMcpComponentStoreErrorRules = {
+    files: ["src/components/content/mcp/**/*.tsx"],
+    ignores: ["src/components/content/mcp/**/use-*.tsx"],
+    plugins: { chicio },
+    rules: {
+        "react/jsx-no-bind": ["error", { allowArrowFunctions: false, allowFunctions: false, allowBind: false }],
+        "chicio/prefer-component-store": "error",
+        "chicio/folder-composition": "error",
+    },
+};
+
+const contentMcpStoreHookErrorRules = {
+    files: ["src/components/content/mcp/**/use-*-store.ts"],
+    plugins: { chicio },
+    rules: {
+        "chicio/store-return-shape": "error",
+    },
+};
+
+const contentMcpIndexBarrelErrorRules = {
+    files: ["src/components/content/mcp/**/index.ts"],
+    plugins: { chicio },
+    rules: {
+        "chicio/index-only-component": "error",
+    },
+};
+
+const contentHomeComponentStoreErrorRules = {
+    files: ["src/components/content/home/**/*.tsx"],
+    ignores: ["src/components/content/home/**/use-*.tsx"],
+    plugins: { chicio },
+    rules: {
+        "react/jsx-no-bind": ["error", { allowArrowFunctions: false, allowFunctions: false, allowBind: false }],
+        "chicio/prefer-component-store": "error",
+        "chicio/folder-composition": "error",
+    },
+};
+
+const contentHomeStoreHookErrorRules = {
+    files: ["src/components/content/home/**/use-*-store.ts"],
+    plugins: { chicio },
+    rules: {
+        "chicio/store-return-shape": "error",
+    },
+};
+
+const contentHomeIndexBarrelErrorRules = {
+    files: ["src/components/content/home/**/index.ts"],
+    plugins: { chicio },
+    rules: {
+        "chicio/index-only-component": "error",
+    },
+};
+
+const contentClownsComponentStoreErrorRules = {
+    files: ["src/components/content/clowns/**/*.tsx"],
+    ignores: ["src/components/content/clowns/**/use-*.tsx"],
+    plugins: { chicio },
+    rules: {
+        "react/jsx-no-bind": ["error", { allowArrowFunctions: false, allowFunctions: false, allowBind: false }],
+        "chicio/prefer-component-store": "error",
+        "chicio/folder-composition": "error",
+    },
+};
+
+const contentClownsStoreHookErrorRules = {
+    files: ["src/components/content/clowns/**/use-*-store.ts"],
+    plugins: { chicio },
+    rules: {
+        "chicio/store-return-shape": "error",
+    },
+};
+
+const contentClownsIndexBarrelErrorRules = {
+    files: ["src/components/content/clowns/**/index.ts"],
+    plugins: { chicio },
+    rules: {
+        "chicio/index-only-component": "error",
+    },
+};
+
+const contentContactComponentStoreErrorRules = {
+    files: ["src/components/content/contact/**/*.tsx"],
+    ignores: ["src/components/content/contact/**/use-*.tsx"],
+    plugins: { chicio },
+    rules: {
+        "react/jsx-no-bind": ["error", { allowArrowFunctions: false, allowFunctions: false, allowBind: false }],
+        "chicio/prefer-component-store": "error",
+        "chicio/folder-composition": "error",
+    },
+};
+
+const contentContactStoreHookErrorRules = {
+    files: ["src/components/content/contact/**/use-*-store.ts"],
+    plugins: { chicio },
+    rules: {
+        "chicio/store-return-shape": "error",
+    },
+};
+
+const contentContactIndexBarrelErrorRules = {
+    files: ["src/components/content/contact/**/index.ts"],
+    plugins: { chicio },
+    rules: {
+        "chicio/index-only-component": "error",
+    },
+};
+
+const contentDsaComponentStoreErrorRules = {
+    files: ["src/components/content/data-structures-and-algorithms/**/*.tsx"],
+    ignores: ["src/components/content/data-structures-and-algorithms/**/use-*.tsx"],
+    plugins: { chicio },
+    rules: {
+        "react/jsx-no-bind": ["error", { allowArrowFunctions: false, allowFunctions: false, allowBind: false }],
+        "chicio/prefer-component-store": "error",
+        "chicio/folder-composition": "error",
+    },
+};
+
+const contentDsaStoreHookErrorRules = {
+    files: ["src/components/content/data-structures-and-algorithms/**/use-*-store.ts"],
+    plugins: { chicio },
+    rules: {
+        "chicio/store-return-shape": "error",
+    },
+};
+
+const contentDsaIndexBarrelErrorRules = {
+    files: ["src/components/content/data-structures-and-algorithms/**/index.ts"],
+    plugins: { chicio },
+    rules: {
+        "chicio/index-only-component": "error",
+    },
+};
+
 const eslintConfig = [
     ignores,
     ...coreWebVitals,
@@ -323,6 +485,24 @@ const eslintConfig = [
     contentVideogamesComponentStoreErrorRules,
     contentVideogamesStoreHookErrorRules,
     contentVideogamesIndexBarrelErrorRules,
+    contentAboutMeComponentStoreErrorRules,
+    contentAboutMeStoreHookErrorRules,
+    contentAboutMeIndexBarrelErrorRules,
+    contentMcpComponentStoreErrorRules,
+    contentMcpStoreHookErrorRules,
+    contentMcpIndexBarrelErrorRules,
+    contentHomeComponentStoreErrorRules,
+    contentHomeStoreHookErrorRules,
+    contentHomeIndexBarrelErrorRules,
+    contentClownsComponentStoreErrorRules,
+    contentClownsStoreHookErrorRules,
+    contentClownsIndexBarrelErrorRules,
+    contentContactComponentStoreErrorRules,
+    contentContactStoreHookErrorRules,
+    contentContactIndexBarrelErrorRules,
+    contentDsaComponentStoreErrorRules,
+    contentDsaStoreHookErrorRules,
+    contentDsaIndexBarrelErrorRules,
 ];
 
 export default eslintConfig;
