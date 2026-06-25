@@ -6,7 +6,6 @@ import {
     BiUser,
     BiMessageDetail,
 } from "react-icons/bi";
-import { tracking } from "@/types/configuration/tracking";
 import { PageTitle } from "@/components/design-system/molecules/typography/page-title";
 import { FormField } from "@/components/design-system/molecules/form/form-field";
 import { FormTextarea } from "@/components/design-system/molecules/form/form-textarea";
@@ -37,7 +36,7 @@ export const ContactForm: FC<ContactFormProps> = ({ trackingCategory }) => {
         isOffline,
         submitError,
     } = state;
-    const { setName, setEmail, setMessage, setHoneypot, handleSubmit, handleReset } = effects;
+    const { onNameChange, onEmailChange, onMessageChange, onHoneypotChange, handleSubmit, handleReset } = effects;
     const onReset = handleReset(trackingCategory);
 
     return (
@@ -60,7 +59,7 @@ export const ContactForm: FC<ContactFormProps> = ({ trackingCategory }) => {
                     type="text"
                     id="name"
                     value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    onChange={onNameChange}
                     placeholder="Your name"
                     disabled={isSubmitting}
                     hasError={!!errors.name}
@@ -71,7 +70,7 @@ export const ContactForm: FC<ContactFormProps> = ({ trackingCategory }) => {
                     type="email"
                     id="email"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={onEmailChange}
                     placeholder="your@email.com"
                     disabled={isSubmitting}
                     hasError={!!errors.email}
@@ -81,7 +80,7 @@ export const ContactForm: FC<ContactFormProps> = ({ trackingCategory }) => {
                     icon={<BiMessageDetail size={20} />}
                     id="message"
                     value={message}
-                    onChange={(e) => setMessage(e.target.value)}
+                    onChange={onMessageChange}
                     rows={8}
                     placeholder="Your message..."
                     disabled={isSubmitting}
@@ -94,7 +93,7 @@ export const ContactForm: FC<ContactFormProps> = ({ trackingCategory }) => {
                         type="text"
                         name="website"
                         value={honeypot}
-                        onChange={(e) => setHoneypot(e.target.value)}
+                        onChange={onHoneypotChange}
                         tabIndex={-1}
                         autoComplete="off"
                     />

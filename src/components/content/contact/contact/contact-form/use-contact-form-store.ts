@@ -1,16 +1,12 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { tracking } from "@/types/configuration/tracking";
 import { trackWith } from "@/lib/tracking/tracking";
 import { contactQueue } from "@/lib/background-sync/contact-queue";
 import { ComponentStore } from "@/types/component-store";
 
-interface ContactFormErrors {
-    name?: string;
-    email?: string;
-    message?: string;
-}
+type ContactFormErrors = Record<string, string>;
 
 interface ContactFormState {
     name: string;
@@ -26,10 +22,10 @@ interface ContactFormState {
 }
 
 interface ContactFormEffects {
-    setName: (value: string) => void;
-    setEmail: (value: string) => void;
-    setMessage: (value: string) => void;
-    setHoneypot: (value: string) => void;
+    onNameChange: React.ChangeEventHandler<HTMLInputElement>;
+    onEmailChange: React.ChangeEventHandler<HTMLInputElement>;
+    onMessageChange: React.ChangeEventHandler<HTMLTextAreaElement>;
+    onHoneypotChange: React.ChangeEventHandler<HTMLInputElement>;
     handleSubmit: () => Promise<void>;
     handleReset: (trackingCategory: string) => () => void;
 }
@@ -189,6 +185,11 @@ export const useContactFormStore = (trackingCategory: string): ComponentStore<Co
         [],
     );
 
+    const onNameChange: React.ChangeEventHandler<HTMLInputElement> = (e) => setName(e.target.value);
+    const onEmailChange: React.ChangeEventHandler<HTMLInputElement> = (e) => setEmail(e.target.value);
+    const onMessageChange: React.ChangeEventHandler<HTMLTextAreaElement> = (e) => setMessage(e.target.value);
+    const onHoneypotChange: React.ChangeEventHandler<HTMLInputElement> = (e) => setHoneypot(e.target.value);
+
     return {
         state: {
             name,
@@ -203,10 +204,10 @@ export const useContactFormStore = (trackingCategory: string): ComponentStore<Co
             submitError,
         },
         effects: {
-            setName,
-            setEmail,
-            setMessage,
-            setHoneypot,
+            onNameChange,
+            onEmailChange,
+            onMessageChange,
+            onHoneypotChange,
             handleSubmit,
             handleReset,
         },

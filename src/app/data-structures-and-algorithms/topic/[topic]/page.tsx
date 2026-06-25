@@ -11,7 +11,7 @@ import {
   getDataStructuresAndAlgorithmsTopic,
   getDataStructuresAndAlgorithmsTopicWithNavigation,
 } from "@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms";
-import { Topic } from "@/components/content/data-structures-and-algorithms/components/topic";
+import { Topic } from "@/components/content/data-structures-and-algorithms/topic";
 
 export async function generateMetadata({
   params,

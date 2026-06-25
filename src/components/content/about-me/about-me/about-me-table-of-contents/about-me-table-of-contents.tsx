@@ -15,7 +15,7 @@ const sections = [
 export const AboutMeTableOfContents = () => {
     const { glassmorphismClass } = useGlassmorphism();
 
-    const scrollToSection = (id: string) => {
+    const scrollToSection = (id: string) => () => {
         const element = document.getElementById(id);
         if (element) {
             element.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -37,7 +37,7 @@ export const AboutMeTableOfContents = () => {
                 {sections.map((section) => (
                     <Button
                         key={section.id}
-                        onClick={() => scrollToSection(section.id)}
+                        onClick={scrollToSection(section.id)}
                         aria-label={`Jump to ${section.label} section`}
                         className="text-primary-text w-full md:w-auto justify-center"
                     >
