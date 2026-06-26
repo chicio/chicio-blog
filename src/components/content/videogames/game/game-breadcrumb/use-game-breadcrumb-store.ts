@@ -1,6 +1,6 @@
 "use client";
 
-import { ComponentStore } from "@/types/component-store";
+import { StateStore } from "@/types/component-store";
 import { BreadcrumbItem } from "@/components/design-system/molecules/breadcrumbs/breadcrumb";
 import { tracking } from "@/types/configuration/tracking";
 import { slugs } from "@/types/configuration/slug";
@@ -67,12 +67,9 @@ export const useGameBreadcrumbStore = ({
     gameSlug,
     consoleName,
     consoleSlug,
-}: GameBreadcrumbStoreParams): ComponentStore<GameBreadcrumbState, Record<string, never>> => {
+}: GameBreadcrumbStoreParams): StateStore<GameBreadcrumbState> => {
     const origin = useVideogamesNavigationOriginStore();
     const items = buildBreadcrumbItems(origin, gameTitle, gameSlug, consoleName, consoleSlug);
 
-    return {
-        state: { items },
-        effects: {},
-    };
+    return { state: { items } };
 };
