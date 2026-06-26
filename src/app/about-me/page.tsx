@@ -1,4 +1,4 @@
-import { AboutMe } from "@/components/content/about-me/components/about-me";
+import { AboutMe } from "@/components/content/about-me/about-me";
 import { createMetadata } from "@/lib/seo/seo";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { slugs } from "@/types/configuration/slug";

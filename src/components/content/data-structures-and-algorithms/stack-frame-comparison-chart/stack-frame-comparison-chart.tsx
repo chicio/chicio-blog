@@ -1,0 +1,81 @@
+"use client";
+
+import { FC } from "react";
+import {
+    Legend,
+    Line,
+    LineChart,
+    ResponsiveContainer,
+    Tooltip,
+    XAxis,
+    YAxis,
+} from "recharts";
+import { ChartTooltip } from "@/components/content/data-structures-and-algorithms/chart-tooltip";
+
+type StackFrameData = {
+    step: number;
+    normal: number;
+    tail: number;
+};
+
+const generateData = (maxDepth = 10): StackFrameData[] => {
+    const data: StackFrameData[] = [];
+    for (let step = 1; step <= maxDepth; step++) {
+        data.push({
+            step,
+            normal: step,
+            tail: 1,
+        });
+    }
+    return data;
+};
+
+export const StackFrameComparisonChart: FC = () => {
+    const data = generateData(10);
+
+    return (
+        <div className="glow-container h-[400px] w-full p-5">
+            <ResponsiveContainer width={"100%"} height={"100%"} initialDimension={{ width: 320, height: 300 }}>
+                <LineChart data={data}>
+                    <XAxis
+                        dataKey="step"
+                        height={50}
+                        label={{
+                            value: "Recursion Depth (n)",
+                            position: "insideBottom",
+                            style: { textAnchor: "middle" },
+                        }}
+                    />
+                    <YAxis
+                        label={{
+                            value: "Stack Frames Used",
+                            angle: -90,
+                            offset: 10,
+                            position: "insideLeft",
+                            style: { textAnchor: "middle" },
+                        }}
+                        domain={[0, "dataMax + 1"]}
+                    />
+                    <Tooltip content={ChartTooltip} />
+                    <Legend verticalAlign="top" />
+                    <Line
+                        type="monotone"
+                        dataKey="normal"
+                        stroke="#ef4444"
+                        dot={false}
+                        strokeWidth={2}
+                        name="Normal Recursion"
+                    />
+                    <Line
+                        type="monotone"
+                        dataKey="tail"
+                        stroke="#4ade80"
+                        dot={false}
+                        strokeWidth={2}
+                        name="Tail Recursion"
+                    />
+                </LineChart>
+            </ResponsiveContainer>
+        </div>
+    );
+};

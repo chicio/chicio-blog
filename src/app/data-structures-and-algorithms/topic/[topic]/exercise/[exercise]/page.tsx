@@ -11,7 +11,7 @@ import {
     getExercise,
     getDataStructuresAndAlgorithmsTopic,
 } from "@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms";
-import { Exercise } from "@/components/content/data-structures-and-algorithms/components/exercise";
+import { Exercise } from "@/components/content/data-structures-and-algorithms/exercise";
 
 export async function generateMetadata({
     params,
