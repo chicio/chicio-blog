@@ -653,6 +653,23 @@ const config = {
             },
         },
         {
+            name: "design-system-types-type-only",
+            comment: [
+                "ERROR-level enforcement: all imports from src/types/ inside design-system must be type-only.",
+                "Runtime value imports of slugs, siteMetadata, or tracking from @/types/configuration/ are forbidden.",
+                "Those values must be injected as props from the app/features layer.",
+                "Only 'import type { ... }' is permitted; 'import { ... }' is an error.",
+            ].join(" "),
+            severity: "error",
+            from: {
+                path: "^src/components/design-system/",
+            },
+            to: {
+                path: "^src/types/",
+                dependencyTypesNot: ["type-only"],
+            },
+        },
+        {
             name: "design-system-no-lib",
             comment: [
                 "ERROR-level enforcement: design-system components must not import runtime values from src/lib/.",

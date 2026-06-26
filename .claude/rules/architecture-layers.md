@@ -22,17 +22,16 @@ src/types/        → TypeScript types and pure configuration constants
 `src/components/design-system/**` may ONLY import from:
 - npm packages
 - other files within `design-system/**`
-- `src/types/**` (both type-only imports AND pure configuration constants)
+- `src/types/**` — **type-only** (`import type { ... }`) exclusively
 
-**Forbidden** at error level (enforced by `design-system-no-features` and `design-system-no-lib` rules):
+**Forbidden** at error level (enforced by `design-system-no-features`, `design-system-no-lib`, and `design-system-types-type-only` rules):
 - Any runtime import from `src/lib/**`
 - Any import from `src/components/features/**`
 - Any import from `src/components/content/**`
 - Any import from `src/app/**`
+- Any value (non-type-only) import from `src/types/**` — including `slugs`, `siteMetadata`, and `tracking`
 
-**Rationale**: the design-system is a reusable UI library. It must not know about application concerns (tracking, consent, chat, PWA). Instead, features are injected via props — callbacks, render slots, or wrapper components — from the feature/content layer above.
-
-**Exception for `@/types/configuration/`**: `siteMetadata`, `tracking`, and `slugs` are pure, side-effect-free configuration constants living in `src/types/configuration/`. Design-system components may import them as runtime values. They are not `lib/` modules and carry no React or application dependencies.
+**Rationale**: the design-system is a reusable UI library. It must not know about application concerns (tracking, consent, chat, PWA, route slugs, or site metadata). Route hrefs, social contact links, and per-item tracking callbacks are injected as props from the feature/content layer above. The `design-system-types-type-only` rule enforces this: any `import { ... }` (not `import type`) from `src/types/` inside design-system is a CI error.
 
 ### lib is a leaf
 
