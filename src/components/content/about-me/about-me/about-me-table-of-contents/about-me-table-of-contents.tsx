@@ -4,6 +4,7 @@ import { Button } from "@/components/design-system/atoms/buttons/button";
 import { ProfilePhoto } from "@/components/design-system/organism/profile-photo";
 import { useGlassmorphism } from "@/components/design-system/hooks/use-glassmorphism";
 import { siteMetadata } from "@/types/configuration/site-metadata";
+import { useAboutMeTableOfContentsStore } from "./use-about-me-table-of-contents-store";
 
 const sections = [
     { id: "biography", label: "Biography" },
@@ -14,13 +15,7 @@ const sections = [
 
 export const AboutMeTableOfContents = () => {
     const { glassmorphismClass } = useGlassmorphism();
-
-    const scrollToSection = (id: string) => () => {
-        const element = document.getElementById(id);
-        if (element) {
-            element.scrollIntoView({ behavior: "smooth", block: "start" });
-        }
-    };
+    const { effects } = useAboutMeTableOfContentsStore();
 
     return (
         <div className={`my-7 p-4 ${glassmorphismClass}`}>
@@ -37,7 +32,7 @@ export const AboutMeTableOfContents = () => {
                 {sections.map((section) => (
                     <Button
                         key={section.id}
-                        onClick={scrollToSection(section.id)}
+                        onClick={effects.scrollToSection(section.id)}
                         aria-label={`Jump to ${section.label} section`}
                         className="text-primary-text w-full md:w-auto justify-center"
                     >
