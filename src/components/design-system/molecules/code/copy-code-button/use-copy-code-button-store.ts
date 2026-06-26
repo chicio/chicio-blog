@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from "react";
 import { useClipboardAvailable } from "@/components/design-system/hooks/use-clipboard-available";
-import { ComponentStore } from "@/types/component-store";
+import type { ComponentStore } from "@/types/component-store";
 
 interface CopyCodeButtonState {
     copied: boolean;

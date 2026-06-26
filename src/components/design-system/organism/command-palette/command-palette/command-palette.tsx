@@ -3,7 +3,7 @@
 import { Overlay } from "@/components/design-system/atoms/effects/overlay";
 import { TerminalLine } from "@/components/design-system/atoms/typography/terminal-blocks";
 import { useGlassmorphism } from "@/components/design-system/hooks/use-glassmorphism";
-import { EasterEggTerminalLines, SearchResult } from "@/types/search/search";
+import type { EasterEggTerminalLines, SearchResult } from "@/types/search/search";
 import { motion } from "framer-motion";
 import { ComponentType, FC } from "react";
 import { BiChat } from "react-icons/bi";
@@ -30,6 +30,7 @@ interface CommandPaletteTrackingProps {
 
 interface CommandPaletteProps {
     searchIndexFileName: string;
+    chatSlug: string;
     tracking?: CommandPaletteTrackingProps;
     searchEasterEgg?: (query: string) => SearchResult | null;
     SearchEasterEggComponent?: ComponentType<{ lines: EasterEggTerminalLines }>;
@@ -37,6 +38,7 @@ interface CommandPaletteProps {
 
 export const CommandPalette: FC<CommandPaletteProps> = ({
     searchIndexFileName,
+    chatSlug,
     tracking,
     searchEasterEgg,
     SearchEasterEggComponent,
@@ -44,6 +46,7 @@ export const CommandPalette: FC<CommandPaletteProps> = ({
     const { glassmorphismClass } = useGlassmorphism({ noScale: true });
     const { state, effects } = useCommandPaletteStore(
         searchIndexFileName,
+        chatSlug,
         tracking,
         searchEasterEgg,
         SearchEasterEggComponent,

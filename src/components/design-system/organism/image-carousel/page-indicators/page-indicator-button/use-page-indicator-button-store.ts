@@ -1,6 +1,6 @@
 "use client";
 
-import { EffectsStore } from "@/types/component-store";
+import type { EffectsStore } from "@/types/component-store";
 
 interface PageIndicatorButtonEffects {
     handleClick: (e: React.MouseEvent) => void;

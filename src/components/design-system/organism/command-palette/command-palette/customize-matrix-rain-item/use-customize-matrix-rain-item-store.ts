@@ -3,7 +3,7 @@
 import { useWebGpuSupported } from "@/components/design-system/hooks/use-webgpu-supported";
 import { useReducedMotions } from "@/components/design-system/hooks/use-reduced-motions";
 import { openMatrixRainPanel } from "@/components/design-system/state/command-palette/command-palette-events";
-import { ComponentStore } from "@/types/component-store";
+import type { ComponentStore } from "@/types/component-store";
 import { useCallback } from "react";
 
 interface CustomizeMatrixRainItemState {

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { PanInfo } from "framer-motion";
-import { ComponentStore } from "@/types/component-store";
+import type { ComponentStore } from "@/types/component-store";
 
 interface FullscreenModalState {
     currentIndex: number;

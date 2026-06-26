@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { loadMermaid, nextMermaidId } from "./mermaid-loader";
-import { ComponentStore } from "@/types/component-store";
+import type { ComponentStore } from "@/types/component-store";
 
 interface MermaidDiagramState {
     rendered: boolean;

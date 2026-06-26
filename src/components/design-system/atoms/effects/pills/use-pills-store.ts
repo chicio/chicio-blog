@@ -1,7 +1,7 @@
 "use client";
 
 import { useReducedMotions } from "@/components/design-system/hooks/use-reduced-motions";
-import { StateStore } from "@/types/component-store";
+import type { StateStore } from "@/types/component-store";
 
 type PillsState = {
     shouldReduceMotion: boolean;

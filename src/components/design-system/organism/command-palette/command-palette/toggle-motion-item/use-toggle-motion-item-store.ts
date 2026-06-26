@@ -2,7 +2,7 @@
 
 import { useMotionStore } from "@/components/design-system/hooks/use-motion-store";
 import { writeMotion } from "@/components/design-system/state/motion/motion";
-import { ComponentStore } from "@/types/component-store";
+import type { ComponentStore } from "@/types/component-store";
 import { useCallback } from "react";
 
 interface ToggleMotionItemState {

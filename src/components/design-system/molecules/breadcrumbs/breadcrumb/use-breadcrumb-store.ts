@@ -2,7 +2,7 @@
 
 import { useInView } from "@/components/design-system/hooks/use-in-view";
 import { ScrollDirection, useScrollDirection } from "@/components/design-system/hooks/use-scroll-direction";
-import { StateStore } from "@/types/component-store";
+import type { StateStore } from "@/types/component-store";
 import React from "react";
 
 interface BreadcrumbState {

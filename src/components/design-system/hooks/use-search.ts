@@ -1,6 +1,6 @@
 "use client";
 
-import { SearchablePostFields, SearchResult } from "@/types/search/search";
+import type { SearchablePostFields, SearchResult } from "@/types/search/search";
 import elasticlunr from "elasticlunr";
 import { ChangeEvent, useCallback, useEffect, useState, useMemo, useTransition } from "react";
 
