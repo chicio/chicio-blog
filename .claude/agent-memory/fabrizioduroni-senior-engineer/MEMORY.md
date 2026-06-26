@@ -36,5 +36,8 @@
 ## Infrastructure
 - [CI Pipeline](project_ci_pipeline.md) — Three-job workflow (lint, knip, build); lint/knip gate build; ubuntu-latest; npm ci; concurrency cancel; 2026-06-05
 
+## Architecture (continued)
+- [Design System Purity](arch_design_system_purity.md) — FULLY pure: type-only @/types, no config-const exception; slugs/siteMetadata/tracking injected as props; design-system-types-type-only rule at error
+
 ## Feedback
 - [PWA & State Patterns](feedback_pwa_patterns.md) — useSyncExternalStore for localStorage state, consent-gated UI, banner/error page alignment rules
