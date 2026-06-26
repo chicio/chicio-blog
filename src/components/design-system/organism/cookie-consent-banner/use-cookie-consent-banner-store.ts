@@ -1,7 +1,6 @@
 "use client";
 
 import { writeConsent } from "@/lib/consents/consents";
-import { useHasConsentDecision } from "@/components/design-system/hooks/use-has-consent-decision";
 import { ComponentStore } from "@/types/component-store";
 
 interface CookieConsentBannerState {
@@ -13,12 +12,9 @@ interface CookieConsentBannerEffects {
     rejectConsent: () => void;
 }
 
-export const useCookieConsentBannerStore = (): ComponentStore<
-    CookieConsentBannerState,
-    CookieConsentBannerEffects
-> => {
-    const decided = useHasConsentDecision();
-
+export const useCookieConsentBannerStore = (
+    decided: boolean,
+): ComponentStore<CookieConsentBannerState, CookieConsentBannerEffects> => {
     const acceptConsent = () => writeConsent("accepted");
     const rejectConsent = () => writeConsent("rejected");
 

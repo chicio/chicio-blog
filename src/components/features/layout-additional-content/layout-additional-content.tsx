@@ -52,7 +52,8 @@ const MatrixRainControlPanel = dynamic(
 );
 
 export const LayoutAdditionalContent: FC = () => {
-    useLayoutAdditionalContentStore();
+    const { state } = useLayoutAdditionalContentStore();
+    const { consented, decided } = state;
 
     return (
         <>
@@ -62,8 +63,8 @@ export const LayoutAdditionalContent: FC = () => {
                 SearchEasterEggComponent={NeoRoomEasterEgg}
             />
             <MatrixRainControlPanel />
-            <CookieConsentBanner />
-            <TrackingOptIn />
+            <CookieConsentBanner decided={decided} />
+            <TrackingOptIn enabled={consented} />
             <InstallPromptBanner />
         </>
     );

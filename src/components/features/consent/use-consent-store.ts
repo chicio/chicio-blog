@@ -15,17 +15,8 @@ const subscribe = (callback: () => void) => {
 
 const getSnapshot = () => hasConsented();
 
-const getServerSnapshot = () => false; // No consent on server
+const getServerSnapshot = () => false;
 
-/**
- * React hook to subscribe to cookie consent state using useSyncExternalStore.
- * Returns true if the user has accepted cookies, false otherwise.
- *
- * Behavior:
- * - Current tab: Changes sync immediately via consentChangeEvent
- * - New tabs: Automatically read from localStorage on mount
- * - SSR: Defaults to false to prevent hydration mismatches
- */
 export const useConsentStore = () => {
     return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 };

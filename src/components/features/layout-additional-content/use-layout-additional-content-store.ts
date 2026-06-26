@@ -4,8 +4,19 @@ import { useEffect } from "react";
 import { contactQueue } from "@/lib/background-sync/contact-queue";
 import { trackWith } from "@/lib/tracking/tracking";
 import { tracking } from "@/types/configuration/tracking";
+import { useConsentStore } from "@/components/features/consent/use-consent-store";
+import { useHasConsentDecision } from "@/components/features/consent/use-has-consent-decision";
+import { StateStore } from "@/types/component-store";
 
-export const useLayoutAdditionalContentStore = (): void => {
+interface LayoutAdditionalContentState {
+    consented: boolean;
+    decided: boolean;
+}
+
+export const useLayoutAdditionalContentStore = (): StateStore<LayoutAdditionalContentState> => {
+    const consented = useConsentStore();
+    const decided = useHasConsentDecision();
+
     useEffect(() => {
         const replayQueue = async () => {
             while (!contactQueue.isEmpty()) {
@@ -43,4 +54,8 @@ export const useLayoutAdditionalContentStore = (): void => {
             window.removeEventListener("online", replayQueue);
         };
     }, []);
+
+    return {
+        state: { consented, decided },
+    };
 };
