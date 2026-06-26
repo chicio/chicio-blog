@@ -10,7 +10,7 @@ import { ComponentType, ChangeEvent, useCallback, useEffect, useState } from "re
 import { useRouter } from "next/navigation";
 import { ComponentStore } from "@/types/component-store";
 
-const noopEasterEgg = (_query: string): SearchResult | null => null;
+const noopEasterEgg = (): SearchResult | null => null;
 
 interface CommandPaletteState {
     open: boolean;
