@@ -17,11 +17,4 @@ always: true
 
 ## Component-Store Model
 
-All UI components follow the component-store model. See `.claude/rules/component-architecture.md` for the full specification.
-
-Key rules that affect everyday coding:
-
-- **One hook per component file**: a `.tsx` component file may call exactly one hook — its own `use<Name>Store()`. Exception: `useGlassmorphism` is permanently allowed.
-- **No functions in JSX**: `react/jsx-no-bind` is enforced at error. Curry parameterized handlers in the store; destructure `effects` before the `return`.
-- **Store return typing**: use named types from `@/types/component-store` — `StateStore<S>`, `EffectsStore<E>`, or `ComponentStore<S,E>`. Never pad an empty half with `Record<string,never>` or `{}`.
-- **Store contract**: the component destructures only the half the store returns (`const { state } = useMyStore()` for a `StateStore`, `const { state, effects } = useMyStore()` for a `ComponentStore`).
+All UI components follow the component-store model — the full contract is in `.claude/rules/component-architecture.md` (loads automatically on component work). The two rules that bite most often in everyday coding: a component `.tsx` file calls exactly one hook (its own `use<Name>Store()`; `useGlassmorphism` is the permanent exception), and no functions in JSX (`react/jsx-no-bind` at error — curry parameterized handlers in the store).

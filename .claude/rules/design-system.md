@@ -20,11 +20,7 @@ Layering is enforced by dependency-cruiser at error: no upward imports between t
 
 ## Folder-Per-Component Model
 
-Every component in the design system follows the folder-per-component pattern. See `.claude/rules/component-architecture.md` for the full contract:
-- Each component lives in its own kebab-case folder matching the `.tsx` filename
-- An `index.ts` barrel re-exports only the component (and public prop types)
-- A `use-<name>-store.ts` store hook holds all state and effects
-- Component files call exactly one hook (`use<Name>Store()`); `useGlassmorphism` is permanently exempt
+Every design-system component follows the folder-per-component + store pattern (own kebab-case folder matching the `.tsx` name, a `use-<name>-store.ts` hook, an `index.ts` barrel, one hook per component file). The full contract lives in `.claude/rules/component-architecture.md` — it is not restated here.
 
 ## Matrix Theme
 
