@@ -713,9 +713,6 @@ const config = {
             path: "node_modules",
         },
         tsPreCompilationDeps: true,
-        tsConfig: {
-            fileName: "tsconfig.json",
-        },
         moduleSystems: ["es6", "cjs"],
         reporterOptions: {
             text: {

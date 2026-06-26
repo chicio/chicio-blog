@@ -57,6 +57,8 @@ jobs:
         run: npm ci
       - name: Validate architecture
         run: npm run validate-architecture
+      - name: Validate design-system purity
+        run: npm run validate-design-system-purity
 
   build:
     name: Build

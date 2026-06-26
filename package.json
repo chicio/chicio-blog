@@ -5,6 +5,7 @@
   "scripts": {
     "chat-knowledge-upload": "tsx --env-file=.env.production src/lib/chat/chat-knowledge-upload.ts",
     "validate-architecture": "depcruise src --config .dependency-cruiser.js",
+    "validate-design-system-purity": "depcruise src/components/design-system --config .dependency-cruiser-purity.js",
     "predev": "NODE_ENV=development tsx src/lib/build/prebuild.ts",
     "dev": "next dev",
     "prebuild": "tsx src/lib/build/prebuild.ts",
