@@ -12,7 +12,8 @@
     "start": "next start",
     "lint": "eslint .",
     "knip": "knip",
-    "release": "release-it"
+    "release": "release-it",
+    "prepare": "git config core.hooksPath .githooks || true"
   },
   "dependencies": {
     "@ai-sdk/groq": "^3.0.42",

@@ -1,0 +1,5 @@
+#!/bin/sh
+# Validate the component-store architecture (dependency-cruiser) before pushing.
+# Fails the push on any violation so it never reaches CI. Decoupled from the Next build
+# (no longer in prebuild). See .claude/rules/component-architecture.md.
+npm run validate-architecture
