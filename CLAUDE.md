@@ -20,7 +20,7 @@ npm run chat-knowledge-upload  # Upload blog content to Upstash Vector for RAG
 npm run release          # Release with conventional changelog
 ```
 
-**Important**: Search index and content image copy both run automatically before `dev` and `build` via `src/lib/build/prebuild.ts`. `validate-architecture` runs automatically in the build job and fails CI on violations.
+**Important**: Search index and content image copy both run automatically before `dev` and `build` via `src/lib/build/prebuild.ts`. `validate-architecture` is NOT part of prebuild — it runs as its own CI job (and should be run during development; see below) and fails CI on violations.
 
 ## Architecture
 
@@ -69,7 +69,7 @@ Next.js 16 (App Router), React 19, TailwindCSS v4, Framer Motion v12, TypeScript
 
 ## CI/CD
 
-GitHub Actions (`.github/workflows/ci.yml`): three jobs — lint (ESLint `--max-warnings 0`), knip, build (validate-architecture + Next.js build). lint and knip gate build. Upstash/Resend secrets injected for build.
+GitHub Actions (`.github/workflows/ci.yml`): four jobs — lint (ESLint `--max-warnings 0`), knip, validate-architecture (dependency-cruiser, all rules at error), and build (Next.js). lint, knip, and validate-architecture all gate build. Upstash/Resend secrets injected for build.
 
 ## Release
 
