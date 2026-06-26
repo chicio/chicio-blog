@@ -3,6 +3,7 @@
 import { FC } from "react";
 import dynamic from "next/dynamic";
 import { whiteRabbitEasterEgg } from "@/components/features/easter-eggs/white-rabbit";
+import { searchIndexFileName } from "@/lib/content/search-filename";
 import { useLayoutAdditionalContentStore } from "./use-layout-additional-content-store";
 
 const CookieConsentBanner = dynamic(
@@ -56,6 +57,7 @@ export const LayoutAdditionalContent: FC = () => {
     return (
         <>
             <CommandPalette
+                searchIndexFileName={searchIndexFileName}
                 searchEasterEgg={whiteRabbitEasterEgg}
                 SearchEasterEggComponent={NeoRoomEasterEgg}
             />

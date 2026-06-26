@@ -21,13 +21,18 @@ const GroupLabel: FC<{ children: React.ReactNode }> = ({ children }) => (
 );
 
 interface CommandPaletteProps {
+    searchIndexFileName: string;
     searchEasterEgg?: (query: string) => SearchResult | null;
     SearchEasterEggComponent?: ComponentType<{ lines: EasterEggTerminalLines }>;
 }
 
-export const CommandPalette: FC<CommandPaletteProps> = ({ searchEasterEgg, SearchEasterEggComponent }) => {
+export const CommandPalette: FC<CommandPaletteProps> = ({
+    searchIndexFileName,
+    searchEasterEgg,
+    SearchEasterEggComponent,
+}) => {
     const { glassmorphismClass } = useGlassmorphism({ noScale: true });
-    const { state, effects } = useCommandPaletteStore(searchEasterEgg, SearchEasterEggComponent);
+    const { state, effects } = useCommandPaletteStore(searchIndexFileName, searchEasterEgg, SearchEasterEggComponent);
     const { open, isSearching, selectedValue, search, easterEggLines } = state;
     const { close, stopPropagation, handleSearchInput, handleOpenChat, handleSearchResultSelect, setSelectedValue } =
         effects;

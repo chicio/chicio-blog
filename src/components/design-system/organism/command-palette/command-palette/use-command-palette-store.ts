@@ -30,13 +30,14 @@ interface CommandPaletteEffects {
 }
 
 export const useCommandPaletteStore = (
+    searchIndexFileName: string,
     searchEasterEgg: (query: string) => SearchResult | null = noopEasterEgg,
     SearchEasterEggComponent?: ComponentType<{ lines: EasterEggTerminalLines }>,
 ): ComponentStore<CommandPaletteState, CommandPaletteEffects> => {
     const [open, setOpen] = useState(false);
     const [isSearching, setIsSearching] = useState(false);
     const [selectedValue, setSelectedValue] = useState("open ai chat");
-    const { handleSearch, resetSearch, search } = useSearch(open, searchEasterEgg);
+    const { handleSearch, resetSearch, search } = useSearch(open, searchEasterEgg, searchIndexFileName);
     const [previousSearch, setPreviousSearch] = useState(search);
     const router = useRouter();
 
