@@ -1,6 +1,6 @@
 import { PaginationNavigation } from "@/components/design-system/molecules/buttons/pagination-navigation";
 import { ContentPage } from "@/components/features/content/content-page";
-import { JsonLd } from "@/components/design-system/utils/components/jsond-ld";
+import { JsonLd } from "@/components/features/seo/jsond-ld";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { tracking } from "@/types/configuration/tracking";
 import { FC } from "react";

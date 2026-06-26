@@ -7,7 +7,7 @@ import { siteMetadata } from "@/types/configuration/site-metadata";
 import { slugs } from "@/types/configuration/slug";
 import { tracking } from "@/types/configuration/tracking";
 import { FC, PropsWithChildren } from "react";
-import { JsonLd } from "@/components/design-system/utils/components/jsond-ld";
+import { JsonLd } from "@/components/features/seo/jsond-ld";
 import { Content } from "@/types/content/content";
 
 interface ExerciseProps {

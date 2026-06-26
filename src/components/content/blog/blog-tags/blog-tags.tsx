@@ -1,5 +1,5 @@
 import { PageTitle } from "@/components/design-system/molecules/typography/page-title";
-import { JsonLd } from "@/components/design-system/utils/components/jsond-ld";
+import { JsonLd } from "@/components/features/seo/jsond-ld";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { tracking } from "@/types/configuration/tracking";
 import { ContentPage } from "@/components/features/content/content-page";

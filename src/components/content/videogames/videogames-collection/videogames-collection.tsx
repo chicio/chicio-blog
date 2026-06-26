@@ -2,7 +2,7 @@ import { PageTitle } from "@/components/design-system/molecules/typography/page-
 import { getAllConsoles, getAllGames, getAllGamesForConsole } from "@/lib/content/videogames/videogames";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { tracking } from "@/types/configuration/tracking";
-import { JsonLd } from "@/components/design-system/utils/components/jsond-ld";
+import { JsonLd } from "@/components/features/seo/jsond-ld";
 import { ContentPage } from "@/components/features/content/content-page";
 import { StandardInternalLinkWithTracking } from "@/components/design-system/atoms/links/standard-internal-link-with-tracking";
 import { VideogameCollectionDataCard } from "./videogame-collection-data-card";
