@@ -1,14 +1,14 @@
 "use client";
 
 import { MouseEvent, useCallback, useEffect, useState } from "react";
-import { matrixRainPanelOpenEvent } from "@/lib/command-palette/command-palette-events";
+import { matrixRainPanelOpenEvent } from "@/components/design-system/state/command-palette/command-palette-events";
 import {
     MATRIX_RAIN_DEFAULTS,
     MATRIX_RAIN_PRESETS,
-    MatrixRainSettings,
     readMatrixSettings,
     writeMatrixSettings,
-} from "@/lib/matrix-settings/matrix-settings";
+} from "@/components/design-system/state/matrix-rain/matrix-settings";
+import type { MatrixRainSettings } from "@/components/design-system/state/matrix-rain/matrix-settings";
 import { trackWith } from "@/lib/tracking/tracking";
 import { tracking } from "@/types/configuration/tracking";
 import { ComponentStore } from "@/types/component-store";

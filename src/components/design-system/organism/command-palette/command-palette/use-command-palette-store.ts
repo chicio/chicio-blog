@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearch } from "@/components/design-system/hooks/use-search";
-import { commandPaletteOpenEvent } from "@/lib/command-palette/command-palette-events";
+import { commandPaletteOpenEvent } from "@/components/design-system/state/command-palette/command-palette-events";
 import { trackWith } from "@/lib/tracking/tracking";
 import { tracking } from "@/types/configuration/tracking";
 import { slugs } from "@/types/configuration/slug";

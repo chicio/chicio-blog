@@ -2,7 +2,7 @@
 
 import { MatrixRainDrawContext } from "@/types/effects/matrix-rain";
 import { useEffect, useRef, useState } from "react";
-import { debounce } from "@/lib/debounce/debounce";
+import { debounce } from "./debounce";
 import { EffectsStore } from "@/types/component-store";
 
 const matrix = "ﾊﾐﾋｰｳｼﾅﾓﾆｻﾜﾂｵﾘｱﾎﾃﾏｹﾒｴｶｷﾑﾕﾗｾﾈｽﾀﾇﾍ012345789Z:.=*+-<>".split("");

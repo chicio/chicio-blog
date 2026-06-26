@@ -3,7 +3,7 @@
 import { trackWith } from "@/lib/tracking/tracking";
 import { tracking } from "@/types/configuration/tracking";
 import { useMotionStore } from "@/components/design-system/hooks/use-motion-store";
-import { writeMotion } from "@/lib/motion/motion";
+import { writeMotion } from "@/components/design-system/state/motion/motion";
 import { ComponentStore } from "@/types/component-store";
 
 interface ToggleMotionItemState {

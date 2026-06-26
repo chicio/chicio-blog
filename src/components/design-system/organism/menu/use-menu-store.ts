@@ -1,6 +1,6 @@
 "use client";
 
-import { openCommandPalette } from "@/lib/command-palette/command-palette-events";
+import { openCommandPalette } from "@/components/design-system/state/command-palette/command-palette-events";
 import { trackWith } from "@/lib/tracking/tracking";
 import { tracking } from "@/types/configuration/tracking";
 import { usePathname } from "next/navigation";

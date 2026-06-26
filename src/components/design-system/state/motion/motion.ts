@@ -1,4 +1,9 @@
-import { readLocalStorage, writeLocalStorage } from "../local-storage/local-storage";
+const PREFIX = "fabrizioduroni_";
+
+const readLocalStorage = (key: string) => localStorage.getItem(`${PREFIX}${key}`);
+
+const writeLocalStorage = (key: string, value: string) =>
+    localStorage.setItem(`${PREFIX}${key}`, value);
 
 const key = "motion";
 

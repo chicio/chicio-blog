@@ -1,5 +1,17 @@
-import { readLocalStorage, writeLocalStorage } from "@/lib/local-storage/local-storage";
 import { BloomOptions, CrtOptions, RainOptions } from "matrix-rain-webgpu";
+
+const PREFIX = "fabrizioduroni_";
+
+const readLocalStorage = (key: string) => {
+    try {
+        return localStorage.getItem(`${PREFIX}${key}`);
+    } catch {
+        return null;
+    }
+};
+
+const writeLocalStorage = (key: string, value: string) =>
+    localStorage.setItem(`${PREFIX}${key}`, value);
 
 const STORAGE_KEY = "matrix-rain-settings";
 const SETTINGS_VERSION = 1;
@@ -36,9 +48,6 @@ export interface MatrixRainProps {
     crt: CrtOptions | false;
 }
 
-// TUNE TO TASTE: These defaults match the matrix-rain-webgpu package documented defaults.
-// density 0.95, stepRate 10, fontSize 20, bloom intensity 1.5/threshold 0.8/emission 1.1,
-// crt scanlineStrength 0.3/aberration 1.0 — all effects enabled.
 export const MATRIX_RAIN_DEFAULTS: MatrixRainSettings = {
     version: SETTINGS_VERSION,
     rain: {

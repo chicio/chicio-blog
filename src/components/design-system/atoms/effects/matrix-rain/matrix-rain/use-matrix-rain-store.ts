@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useMatrixRainActivity } from "./use-matrix-rain-activity";
 import { useWebGpuSupported } from "@/components/design-system/hooks/use-webgpu-supported";
 import { useMatrixSettingsStore } from "@/components/design-system/hooks/use-matrix-settings-store";
-import { settingsToProps } from "@/lib/matrix-settings/matrix-settings";
+import { settingsToProps } from "@/components/design-system/state/matrix-rain/matrix-settings";
 import { ComponentStore } from "@/types/component-store";
 
 type MatrixRainState = {

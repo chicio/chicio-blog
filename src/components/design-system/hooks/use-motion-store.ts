@@ -1,5 +1,5 @@
 import { useSyncExternalStore } from "react";
-import { hasMotion, motionChangeEvent } from "@/lib/motion/motion";
+import { hasMotion, motionChangeEvent } from "@/components/design-system/state/motion/motion";
 
 const subscribe = (callback: () => void) => {
     if (typeof window === "undefined") { 

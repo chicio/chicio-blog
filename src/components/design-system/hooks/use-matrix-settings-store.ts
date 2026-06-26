@@ -1,10 +1,10 @@
 import { useSyncExternalStore } from "react";
 import {
     MATRIX_RAIN_DEFAULTS,
-    MatrixRainSettings,
     matrixSettingsChangeEvent,
     readMatrixSettings,
-} from "@/lib/matrix-settings/matrix-settings";
+} from "@/components/design-system/state/matrix-rain/matrix-settings";
+import type { MatrixRainSettings } from "@/components/design-system/state/matrix-rain/matrix-settings";
 
 const subscribe = (callback: () => void): (() => void) => {
     if (typeof window === "undefined") {

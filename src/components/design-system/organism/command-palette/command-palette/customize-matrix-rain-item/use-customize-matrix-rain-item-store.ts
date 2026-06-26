@@ -4,7 +4,7 @@ import { trackWith } from "@/lib/tracking/tracking";
 import { tracking } from "@/types/configuration/tracking";
 import { useWebGpuSupported } from "@/components/design-system/hooks/use-webgpu-supported";
 import { useReducedMotions } from "@/components/design-system/hooks/use-reduced-motions";
-import { openMatrixRainPanel } from "@/lib/command-palette/command-palette-events";
+import { openMatrixRainPanel } from "@/components/design-system/state/command-palette/command-palette-events";
 import { ComponentStore } from "@/types/component-store";
 
 interface CustomizeMatrixRainItemState {
