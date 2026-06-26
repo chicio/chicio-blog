@@ -4,11 +4,12 @@ import { JsonLd } from "@/components/features/seo/jsond-ld";
 import { ProfilePresentation } from "./profile-presentation";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { FC } from "react";
+import { menuNavHrefs } from "@/components/features/content/nav-config";
 
 export const Homepage: FC = () => {
     return (
         <>
-            <Menu />
+            <Menu navHrefs={menuNavHrefs} />
             <div className="h-screen">
                 <MatrixBackground>
                     <ProfilePresentation author={siteMetadata.author} />

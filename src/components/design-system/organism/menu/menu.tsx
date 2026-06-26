@@ -1,6 +1,5 @@
 "use client";
 
-import { slugs } from "@/types/configuration/slug";
 import { AnimatePresence, Variants } from "framer-motion";
 import { FC } from "react";
 import { BiSearchAlt } from "react-icons/bi";
@@ -12,6 +11,7 @@ import { useGlassmorphism } from "@/components/design-system/hooks/use-glassmorp
 import { MotionDiv } from "@/components/design-system/atoms/animation/motion-div";
 import { LuCommand } from "react-icons/lu";
 import { ImCtrl } from "react-icons/im";
+import type { MenuTrackingCallbacks } from "./use-menu-store";
 import { useMenuStore } from "./use-menu-store";
 
 const menuVariants: Variants = {
@@ -36,14 +36,27 @@ const panelVariants: Variants = {
     },
 };
 
-export interface MenuProps {
-    onPaletteTrigger?: () => void;
-    onTrackNavigation?: (action: string) => void;
+export interface MenuNavHrefs {
+    blog: string;
+    dsaRoadmap: string;
+    dsaExercises: string;
+    chat: string;
+    mcp: string;
+    aboutMe: string;
+    art: string;
+    videogames: string;
+    contact: string;
 }
 
-export const Menu: FC<MenuProps> = ({ onPaletteTrigger, onTrackNavigation }) => {
+export interface MenuProps {
+    navHrefs: MenuNavHrefs;
+    onPaletteTrigger?: () => void;
+    tracking?: MenuTrackingCallbacks;
+}
+
+export const Menu: FC<MenuProps> = ({ navHrefs, onPaletteTrigger, tracking }) => {
     const { glassmorphismClass } = useGlassmorphism({ noScale: true });
-    const { state, effects } = useMenuStore(onPaletteTrigger, onTrackNavigation);
+    const { state, effects } = useMenuStore(navHrefs.chat, onPaletteTrigger, tracking);
     const { pathname, shouldHideMenu, shouldOpenMenu, modifierKey } = state;
     const {
         openMenu,
@@ -82,8 +95,8 @@ export const Menu: FC<MenuProps> = ({ onPaletteTrigger, onTrackNavigation }) => 
             <MenuItemWithTracking
                 key={`blog-${isMobile ? "mobile" : "desktop"}`}
                 className={baseClassName(isMobile)}
-                to={slugs.blog.home}
-                selected={pathname.includes(slugs.blog.home)}
+                to={navHrefs.blog}
+                selected={pathname.includes(navHrefs.blog)}
                 onClick={onTrackBlog}
                 onClickCallback={closeMenu}
             >
@@ -98,16 +111,16 @@ export const Menu: FC<MenuProps> = ({ onPaletteTrigger, onTrackNavigation }) => 
                         items: [
                             {
                                 label: "Roadmap",
-                                to: slugs.dataStructuresAndAlgorithms.roadmap,
+                                to: navHrefs.dsaRoadmap,
                                 onClick: onTrackDsaRoadmap,
-                                selected: pathname === slugs.dataStructuresAndAlgorithms.roadmap,
+                                selected: pathname === navHrefs.dsaRoadmap,
                                 onClickCallback: closeMenu,
                             },
                             {
                                 label: "Exercises",
-                                to: slugs.dataStructuresAndAlgorithms.exercises,
+                                to: navHrefs.dsaExercises,
                                 onClick: onTrackDsaExercises,
-                                selected: pathname === slugs.dataStructuresAndAlgorithms.exercises,
+                                selected: pathname === navHrefs.dsaExercises,
                                 onClickCallback: closeMenu,
                             },
                         ],
@@ -117,16 +130,16 @@ export const Menu: FC<MenuProps> = ({ onPaletteTrigger, onTrackNavigation }) => 
                         items: [
                             {
                                 label: "Chat",
-                                to: slugs.chat,
+                                to: navHrefs.chat,
                                 onClick: onTrackChat,
-                                selected: pathname === slugs.chat,
+                                selected: pathname === navHrefs.chat,
                                 onClickCallback: closeMenu,
                             },
                             {
                                 label: "MCP",
-                                to: slugs.mcp,
+                                to: navHrefs.mcp,
                                 onClick: onTrackMcp,
-                                selected: pathname === slugs.mcp,
+                                selected: pathname === navHrefs.mcp,
                                 onClickCallback: closeMenu,
                             },
                         ],
@@ -151,30 +164,30 @@ export const Menu: FC<MenuProps> = ({ onPaletteTrigger, onTrackNavigation }) => 
                 items={[
                     {
                         label: "About me",
-                        to: slugs.aboutMe,
+                        to: navHrefs.aboutMe,
                         onClick: onTrackAboutMe,
-                        selected: pathname === slugs.aboutMe,
+                        selected: pathname === navHrefs.aboutMe,
                         onClickCallback: closeMenu,
                     },
                     {
                         label: "Art",
-                        to: slugs.art,
+                        to: navHrefs.art,
                         onClick: onTrackArt,
-                        selected: pathname === slugs.art,
+                        selected: pathname === navHrefs.art,
                         onClickCallback: closeMenu,
                     },
                     {
                         label: "Videogames",
-                        to: slugs.videogames.home,
+                        to: navHrefs.videogames,
                         onClick: onTrackVideogames,
-                        selected: pathname === slugs.videogames.home,
+                        selected: pathname === navHrefs.videogames,
                         onClickCallback: closeMenu,
                     },
                     {
                         label: "Contact me",
-                        to: slugs.contact,
+                        to: navHrefs.contact,
                         onClick: onTrackContact,
-                        selected: pathname === slugs.contact,
+                        selected: pathname === navHrefs.contact,
                         onClickCallback: closeMenu,
                     },
                 ]}

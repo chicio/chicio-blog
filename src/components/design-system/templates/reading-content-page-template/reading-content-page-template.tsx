@@ -2,19 +2,14 @@ import { FC, PropsWithChildren, ReactNode } from "react";
 import { ContentProgressBar } from "@/components/design-system/organism/reading-content-progress-bar";
 import { ContentPageTemplate } from "@/components/design-system/templates/content-page-template";
 import { Breadcrumb, BreadcrumbItem } from "@/components/design-system/molecules/breadcrumbs/breadcrumb";
+import type { ContentPageProps } from "@/components/design-system/templates/content-page-template";
 
-export interface ReadingContentPageProps {
-    author: string;
-    big?: boolean;
+export type ReadingContentPageProps = ContentPageProps & {
     breadcrumbs?: BreadcrumbItem[];
     beforeContent?: ReactNode;
-    children?: ReactNode;
     afterContent?: ReactNode;
     headerWrapper?: FC<PropsWithChildren>;
-    onPaletteTrigger?: () => void;
-    onTrackNavigation?: (action: string) => void;
-    onTrackSocial?: (action: string) => void;
-}
+};
 
 const contentId = "reading-content-container";
 
@@ -26,9 +21,13 @@ export const ReadingContentPageTemplate: FC<ReadingContentPageProps> = ({
     breadcrumbs,
     big = false,
     headerWrapper,
+    navHrefs,
+    footerNavHrefs,
+    socialLinks,
     onPaletteTrigger,
-    onTrackNavigation,
-    onTrackSocial,
+    menuTracking,
+    footerNavTracking,
+    footerSocialTracking,
 }) => (
     <>
         <ContentProgressBar contentId={contentId} />
@@ -36,9 +35,13 @@ export const ReadingContentPageTemplate: FC<ReadingContentPageProps> = ({
             author={author}
             big={big}
             headerWrapper={headerWrapper}
+            navHrefs={navHrefs}
+            footerNavHrefs={footerNavHrefs}
+            socialLinks={socialLinks}
             onPaletteTrigger={onPaletteTrigger}
-            onTrackNavigation={onTrackNavigation}
-            onTrackSocial={onTrackSocial}
+            menuTracking={menuTracking}
+            footerNavTracking={footerNavTracking}
+            footerSocialTracking={footerSocialTracking}
         >
             {breadcrumbs && <Breadcrumb items={breadcrumbs} />}
             {beforeContent}

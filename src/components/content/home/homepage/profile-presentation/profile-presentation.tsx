@@ -7,6 +7,8 @@ import { FC } from "react";
 import { ProfilePhoto } from "@/components/design-system/organism/profile-photo";
 import { MotionDiv } from "@/components/design-system/atoms/animation/motion-div";
 import { useProfilePresentationStore } from "./use-profile-presentation-store";
+import { socialContactLinks } from "@/components/features/content/nav-config";
+import { slugs } from "@/types/configuration/slug";
 
 const itemVariants: Variants = {
     hidden: { y: 50, opacity: 0 },
@@ -58,6 +60,8 @@ export const ProfilePresentation: FC<ProfilePresentationProps> = ({ author }) =>
                 </MotionDiv>
                 <MotionDiv variants={itemVariants}>
                     <SocialContacts
+                        links={socialContactLinks}
+                        contactHref={slugs.contact}
                         onTrackGithub={onTrackGithub}
                         onTrackLinkedin={onTrackLinkedin}
                         onTrackContact={onTrackContact}

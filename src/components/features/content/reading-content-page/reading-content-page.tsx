@@ -5,25 +5,36 @@ import type { ReadingContentPageProps as DesignSystemReadingContentPageProps } f
 import { DejavuEasterEgg } from "@/components/features/easter-eggs/dejavu";
 import { FC } from "react";
 import { useReadingContentPageStore } from "./use-reading-content-page-store";
+import { menuNavHrefs, footerNavHrefs, socialContactLinks } from "../nav-config";
 
 export type ReadingContentPageProps = Omit<
     DesignSystemReadingContentPageProps,
-    "onPaletteTrigger" | "onTrackNavigation" | "onTrackSocial"
+    | "navHrefs"
+    | "footerNavHrefs"
+    | "socialLinks"
+    | "onPaletteTrigger"
+    | "menuTracking"
+    | "footerNavTracking"
+    | "footerSocialTracking"
 > & {
     trackingCategory?: string;
 };
 
 export const ReadingContentPage: FC<ReadingContentPageProps> = ({ trackingCategory, ...rest }) => {
     const { effects } = useReadingContentPageStore(trackingCategory);
-    const { onPaletteTrigger, onTrackNavigation, onTrackSocial } = effects;
+    const { onPaletteTrigger, menuTracking, footerNavTracking, footerSocialTracking } = effects;
 
     return (
         <ReadingContentPageTemplate
             {...rest}
             headerWrapper={DejavuEasterEgg}
+            navHrefs={menuNavHrefs}
+            footerNavHrefs={footerNavHrefs}
+            socialLinks={socialContactLinks}
             onPaletteTrigger={onPaletteTrigger}
-            onTrackNavigation={onTrackNavigation}
-            onTrackSocial={onTrackSocial}
+            menuTracking={menuTracking}
+            footerNavTracking={footerNavTracking}
+            footerSocialTracking={footerSocialTracking}
         />
     );
 };

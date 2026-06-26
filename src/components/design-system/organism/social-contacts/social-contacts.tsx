@@ -9,12 +9,22 @@ import {
 } from "react-icons/bi";
 import { FaXTwitter } from "react-icons/fa6";
 import { FC } from "react";
-import { siteMetadata } from "@/types/configuration/site-metadata";
-import { slugs } from "@/types/configuration/slug";
 import { SocialContact } from "@/components/design-system/molecules/buttons/social-contact";
 import { CallToActionInternalWithTracking } from "@/components/design-system/atoms/call-to-actions/call-to-action-internal-with-tracking";
 
+export interface SocialContactLinks {
+    github: string;
+    linkedin: string;
+    medium: string;
+    devto?: string;
+    twitter: string;
+    facebook: string;
+    instagram: string;
+}
+
 export interface SocialContactsProps {
+    links: SocialContactLinks;
+    contactHref: string;
     onTrackGithub?: () => void;
     onTrackLinkedin?: () => void;
     onTrackContact?: () => void;
@@ -26,6 +36,8 @@ export interface SocialContactsProps {
 }
 
 export const SocialContacts: FC<SocialContactsProps> = ({
+    links,
+    contactHref,
     onTrackGithub,
     onTrackLinkedin,
     onTrackContact,
@@ -35,8 +47,6 @@ export const SocialContacts: FC<SocialContactsProps> = ({
     onTrackFacebook,
     onTrackInstagram,
 }) => {
-    const links = siteMetadata.contacts.links;
-
     return (
         <div className="flex flex-wrap items-center justify-center p-0 text-center">
             <SocialContact
@@ -50,7 +60,7 @@ export const SocialContacts: FC<SocialContactsProps> = ({
                 icon={<BiLogoLinkedin size={30} title={"Linkedin"} />}
             />
             <CallToActionInternalWithTracking
-                to={slugs.contact}
+                to={contactHref}
                 onClick={onTrackContact}
                 className="min-w-auto!"
             >

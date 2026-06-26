@@ -4,6 +4,7 @@ import { FC } from "react";
 import dynamic from "next/dynamic";
 import { whiteRabbitEasterEgg } from "@/components/features/easter-eggs/white-rabbit";
 import { searchIndexFileName } from "@/lib/content/search-filename";
+import { slugs } from "@/types/configuration/slug";
 import { useLayoutAdditionalContentStore } from "./use-layout-additional-content-store";
 
 const CookieConsentBanner = dynamic(
@@ -68,6 +69,7 @@ export const LayoutAdditionalContent: FC = () => {
         <>
             <CommandPalette
                 searchIndexFileName={searchIndexFileName}
+                chatSlug={slugs.chat}
                 tracking={{
                     onOpen: trackCommandPaletteOpen,
                     onOpenChat: trackCommandPaletteOpenChat,

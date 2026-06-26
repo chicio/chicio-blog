@@ -1,7 +1,6 @@
 "use client";
 
-import { tracking } from "@/types/configuration/tracking";
-import { EffectsStore } from "@/types/component-store";
+import type { EffectsStore } from "@/types/component-store";
 import { useMemo } from "react";
 
 interface FooterEffects {
@@ -21,66 +20,44 @@ interface FooterEffects {
     onTrackInstagram: (() => void) | undefined;
 }
 
+export interface FooterNavTrackingCallbacks {
+    onTrackHome?: () => void;
+    onTrackBlog?: () => void;
+    onTrackArt?: () => void;
+    onTrackAboutMe?: () => void;
+    onTrackArchive?: () => void;
+    onTrackTags?: () => void;
+}
+
+export interface FooterSocialTrackingCallbacks {
+    onTrackGithub?: () => void;
+    onTrackLinkedin?: () => void;
+    onTrackContact?: () => void;
+    onTrackMedium?: () => void;
+    onTrackDevto?: () => void;
+    onTrackTwitter?: () => void;
+    onTrackFacebook?: () => void;
+    onTrackInstagram?: () => void;
+}
+
 export const useFooterStore = (
-    onTrackNavigation?: (action: string) => void,
-    onTrackSocial?: (action: string) => void,
+    navTracking?: FooterNavTrackingCallbacks,
+    socialTracking?: FooterSocialTrackingCallbacks,
 ): EffectsStore<FooterEffects> => {
-    const onTrackHome = useMemo(
-        () => (onTrackNavigation ? () => onTrackNavigation(tracking.action.open_home) : undefined),
-        [onTrackNavigation],
-    );
-    const onTrackBlog = useMemo(
-        () => (onTrackNavigation ? () => onTrackNavigation(tracking.action.open_blog) : undefined),
-        [onTrackNavigation],
-    );
-    const onTrackArt = useMemo(
-        () => (onTrackNavigation ? () => onTrackNavigation(tracking.action.open_art) : undefined),
-        [onTrackNavigation],
-    );
-    const onTrackAboutMe = useMemo(
-        () => (onTrackNavigation ? () => onTrackNavigation(tracking.action.open_about_me) : undefined),
-        [onTrackNavigation],
-    );
-    const onTrackArchive = useMemo(
-        () => (onTrackNavigation ? () => onTrackNavigation(tracking.action.open_blog_archive) : undefined),
-        [onTrackNavigation],
-    );
-    const onTrackTags = useMemo(
-        () => (onTrackNavigation ? () => onTrackNavigation(tracking.action.open_blog_tags) : undefined),
-        [onTrackNavigation],
-    );
-    const onTrackGithub = useMemo(
-        () => (onTrackSocial ? () => onTrackSocial(tracking.action.open_github) : undefined),
-        [onTrackSocial],
-    );
-    const onTrackLinkedin = useMemo(
-        () => (onTrackSocial ? () => onTrackSocial(tracking.action.open_linkedin) : undefined),
-        [onTrackSocial],
-    );
-    const onTrackContact = useMemo(
-        () => (onTrackSocial ? () => onTrackSocial(tracking.action.open_contact) : undefined),
-        [onTrackSocial],
-    );
-    const onTrackMedium = useMemo(
-        () => (onTrackSocial ? () => onTrackSocial(tracking.action.open_medium) : undefined),
-        [onTrackSocial],
-    );
-    const onTrackDevto = useMemo(
-        () => (onTrackSocial ? () => onTrackSocial(tracking.action.open_devto) : undefined),
-        [onTrackSocial],
-    );
-    const onTrackTwitter = useMemo(
-        () => (onTrackSocial ? () => onTrackSocial(tracking.action.open_twitter) : undefined),
-        [onTrackSocial],
-    );
-    const onTrackFacebook = useMemo(
-        () => (onTrackSocial ? () => onTrackSocial(tracking.action.open_facebook) : undefined),
-        [onTrackSocial],
-    );
-    const onTrackInstagram = useMemo(
-        () => (onTrackSocial ? () => onTrackSocial(tracking.action.open_instagram) : undefined),
-        [onTrackSocial],
-    );
+    const onTrackHome = useMemo(() => navTracking?.onTrackHome, [navTracking]);
+    const onTrackBlog = useMemo(() => navTracking?.onTrackBlog, [navTracking]);
+    const onTrackArt = useMemo(() => navTracking?.onTrackArt, [navTracking]);
+    const onTrackAboutMe = useMemo(() => navTracking?.onTrackAboutMe, [navTracking]);
+    const onTrackArchive = useMemo(() => navTracking?.onTrackArchive, [navTracking]);
+    const onTrackTags = useMemo(() => navTracking?.onTrackTags, [navTracking]);
+    const onTrackGithub = useMemo(() => socialTracking?.onTrackGithub, [socialTracking]);
+    const onTrackLinkedin = useMemo(() => socialTracking?.onTrackLinkedin, [socialTracking]);
+    const onTrackContact = useMemo(() => socialTracking?.onTrackContact, [socialTracking]);
+    const onTrackMedium = useMemo(() => socialTracking?.onTrackMedium, [socialTracking]);
+    const onTrackDevto = useMemo(() => socialTracking?.onTrackDevto, [socialTracking]);
+    const onTrackTwitter = useMemo(() => socialTracking?.onTrackTwitter, [socialTracking]);
+    const onTrackFacebook = useMemo(() => socialTracking?.onTrackFacebook, [socialTracking]);
+    const onTrackInstagram = useMemo(() => socialTracking?.onTrackInstagram, [socialTracking]);
 
     return {
         effects: {

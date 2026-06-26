@@ -1,20 +1,34 @@
 "use client";
 
-import { slugs } from "@/types/configuration/slug";
 import { FC } from "react";
 import { MenuItemWithTracking } from "@/components/design-system/molecules/menu/menu-item-with-tracking";
 import { SocialContacts } from "@/components/design-system/organism/social-contacts";
 import { Cursor, TerminalLine } from "@/components/design-system/atoms/typography/terminal-blocks";
+import type { FooterNavTrackingCallbacks, FooterSocialTrackingCallbacks } from "./use-footer-store";
 import { useFooterStore } from "./use-footer-store";
+import type { SocialContactLinks } from "@/components/design-system/organism/social-contacts";
+
+export type { SocialContactLinks };
+
+export interface FooterNavHrefs {
+    blog: string;
+    art: string;
+    aboutMe: string;
+    archive: string;
+    tags: string;
+    contact: string;
+}
 
 interface FooterProps {
     author: string;
-    onTrackNavigation?: (action: string) => void;
-    onTrackSocial?: (action: string) => void;
+    navHrefs: FooterNavHrefs;
+    socialLinks: SocialContactLinks;
+    navTracking?: FooterNavTrackingCallbacks;
+    socialTracking?: FooterSocialTrackingCallbacks;
 }
 
-export const Footer: FC<FooterProps> = ({ author, onTrackNavigation, onTrackSocial }) => {
-    const { effects } = useFooterStore(onTrackNavigation, onTrackSocial);
+export const Footer: FC<FooterProps> = ({ author, navHrefs, socialLinks, navTracking, socialTracking }) => {
+    const { effects } = useFooterStore(navTracking, socialTracking);
     const {
         onTrackHome,
         onTrackBlog,
@@ -39,25 +53,27 @@ export const Footer: FC<FooterProps> = ({ author, onTrackNavigation, onTrackSoci
                     <MenuItemWithTracking to="/" onClick={onTrackHome} selected={false}>
                         Home
                     </MenuItemWithTracking>
-                    <MenuItemWithTracking to={slugs.blog.home} onClick={onTrackBlog} selected={false}>
+                    <MenuItemWithTracking to={navHrefs.blog} onClick={onTrackBlog} selected={false}>
                         Blog
                     </MenuItemWithTracking>
-                    <MenuItemWithTracking to={slugs.art} onClick={onTrackArt} selected={false}>
+                    <MenuItemWithTracking to={navHrefs.art} onClick={onTrackArt} selected={false}>
                         Art
                     </MenuItemWithTracking>
-                    <MenuItemWithTracking to={slugs.aboutMe} onClick={onTrackAboutMe} selected={false}>
+                    <MenuItemWithTracking to={navHrefs.aboutMe} onClick={onTrackAboutMe} selected={false}>
                         About Me
                     </MenuItemWithTracking>
-                    <MenuItemWithTracking to={slugs.blog.blogArchive} onClick={onTrackArchive} selected={false}>
+                    <MenuItemWithTracking to={navHrefs.archive} onClick={onTrackArchive} selected={false}>
                         Archive
                     </MenuItemWithTracking>
-                    <MenuItemWithTracking to={slugs.blog.tags} onClick={onTrackTags} selected={false}>
+                    <MenuItemWithTracking to={navHrefs.tags} onClick={onTrackTags} selected={false}>
                         Tags
                     </MenuItemWithTracking>
                 </div>
                 <hr />
                 <div className="w-full flex flex-col items-center justify-center gap-3 py-6 px-4 bg-gradient-to-b from-general-background-light to-primary-color-dark">
                     <SocialContacts
+                        links={socialLinks}
+                        contactHref={navHrefs.contact}
                         onTrackGithub={onTrackGithub}
                         onTrackLinkedin={onTrackLinkedin}
                         onTrackContact={onTrackContact}

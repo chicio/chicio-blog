@@ -2,11 +2,10 @@
 
 import { useSearch } from "@/components/design-system/hooks/use-search";
 import { commandPaletteOpenEvent } from "@/components/design-system/state/command-palette/command-palette-events";
-import { slugs } from "@/types/configuration/slug";
-import { EasterEggTerminalLines, SearchResult } from "@/types/search/search";
+import type { EasterEggTerminalLines, SearchResult } from "@/types/search/search";
 import { ComponentType, ChangeEvent, useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { ComponentStore } from "@/types/component-store";
+import type { ComponentStore } from "@/types/component-store";
 
 const noopEasterEgg = (): SearchResult | null => null;
 
@@ -39,6 +38,7 @@ interface CommandPaletteTrackingCallbacks {
 
 export const useCommandPaletteStore = (
     searchIndexFileName: string,
+    chatSlug: string,
     tracking?: CommandPaletteTrackingCallbacks,
     searchEasterEgg: (query: string) => SearchResult | null = noopEasterEgg,
     SearchEasterEggComponent?: ComponentType<{ lines: EasterEggTerminalLines }>,
@@ -112,9 +112,9 @@ export const useCommandPaletteStore = (
 
     const handleOpenChat = useCallback(() => {
         tracking?.onOpenChat?.();
-        router.push(slugs.chat);
+        router.push(chatSlug);
         close();
-    }, [tracking, router, close]);
+    }, [tracking, router, chatSlug, close]);
 
     const handleSearchResultSelect = useCallback(
         (slug: string) => {
