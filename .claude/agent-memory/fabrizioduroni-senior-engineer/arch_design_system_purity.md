@@ -56,21 +56,36 @@ Nav hrefs and social links come from **`src/components/features/content/nav-conf
    Note: MUST use plain const objects (not `useMemo(() => ({ ... }))`) to avoid `chicio/store-return-shape` ESLint false positive
 
 ### Dependency-Cruiser Rule
+
+The rule lives in a **separate config file**: `.dependency-cruiser-purity.js` (not in the main `.dependency-cruiser.js`).
+
+**Why separate?** The rule needs `tsConfig: { fileName: "tsconfig.json" }` to resolve `@/` aliases so `dependencyTypes` correctly includes `"type-only"` for `import type` statements. Adding tsConfig globally to the main config surfaces ~146 pre-existing `seal-private-nested-folders` violations (from other ongoing migrations). The separate file scopes tsConfig to only the design-system purity check.
+
 ```js
+// .dependency-cruiser-purity.js
 {
   name: "design-system-types-type-only",
   severity: "error",
   from: { path: "^src/components/design-system/" },
   to: { path: "^src/types/", dependencyTypesNot: ["type-only"] }
 }
+// options: tsPreCompilationDeps: true, tsConfig: { fileName: "tsconfig.json" }
 ```
+
+**npm script**: `validate-design-system-purity` → `depcruise src/components/design-system --config .dependency-cruiser-purity.js`  
+**CI**: runs as second step inside the `validate-architecture` job  
+**Pre-push**: `.husky/pre-push` runs both `validate-architecture` AND `validate-design-system-purity`
+
 `dependencyTypesNot: ["type-only"]` = flag the dependency if it is NOT type-only.
 So `import type { X }` → passes; `import { X }` → error.
 
-**Why:** `tsPreCompilationDeps: true` in dependency-cruiser config means it tracks pre-compilation imports (TypeScript syntax), so `import type` is correctly identified as type-only.
-
-### Verification Command
+### Verification Commands
 ```bash
+# 1. Grep check (fast)
 grep -rn 'from "@/types' src/components/design-system | grep -v 'import type'
 # Must return empty
+
+# 2. Rule check (authoritative)
+npm run validate-design-system-purity
+# Must return 0 violations
 ```
