@@ -5,7 +5,6 @@ import { AnimatePresence } from "framer-motion";
 import { Accordion } from "@/components/design-system/molecules/accordion/accordion";
 import { Button } from "@/components/design-system/atoms/buttons/button";
 import { StandardExternalLinkWithTracking } from "@/components/design-system/atoms/links/standard-external-link-with-tracking";
-import { tracking } from "@/types/configuration/tracking";
 import { useGlassmorphism } from "@/components/design-system/hooks/use-glassmorphism";
 import { SiProbot } from "react-icons/si";
 import { useChromeAiFeaturesToolbarStore } from "./use-chrome-ai-features-toolbar-store";
@@ -40,11 +39,6 @@ export const ChromeAiFeaturesToolbar: FC<ChromeAiFeaturesToolbarProps> = ({
                         {"These features require "}
                         <StandardExternalLinkWithTracking
                             href="https://developer.chrome.com/docs/ai/built-in"
-                            trackingData={{
-                                action: tracking.action.open_chrome_ai_docs,
-                                category: tracking.category.blog_post,
-                                label: tracking.label.body,
-                            }}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-accent underline"

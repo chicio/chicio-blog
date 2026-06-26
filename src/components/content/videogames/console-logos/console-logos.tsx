@@ -1,5 +1,4 @@
 import { StandardInternalLinkWithTracking } from "@/components/design-system/atoms/links/standard-internal-link-with-tracking";
-import { tracking } from "@/types/configuration/tracking";
 import { FC } from "react";
 import { ManufacturerLogo } from "@/components/content/videogames/manufacturer-logo";
 import { ImageGlow } from "@/components/design-system/atoms/effects/image-glow";
@@ -14,14 +13,7 @@ interface ConsoleLogosProps {
 export const ConsoleLogos: FC<ConsoleLogosProps> = ({ manufacturer, manufacturerLogo, logo, url }) => (
     <>
         {url ? (
-            <StandardInternalLinkWithTracking
-                to={url}
-                trackingData={{
-                    category: tracking.category.videogames,
-                    label: tracking.label.body,
-                    action: tracking.action.open_videogame_console,
-                }}
-            >
+            <StandardInternalLinkWithTracking to={url}>
                 <div className="flex items-center gap-2">
                     <ManufacturerLogo logoUrl={manufacturerLogo} name={manufacturer} />
                     <ImageGlow

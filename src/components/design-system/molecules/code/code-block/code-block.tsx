@@ -7,10 +7,11 @@ import { useCodeBlockStore } from "./use-code-block-store";
 interface CodeBlockProps {
     children?: ReactNode;
     className?: string;
+    onCopy?: () => void;
     [key: string]: unknown;
 }
 
-export const CodeBlock: FC<CodeBlockProps> = ({ children, className, ...rest }) => {
+export const CodeBlock: FC<CodeBlockProps> = ({ children, className, onCopy, ...rest }) => {
     const { state, effects } = useCodeBlockStore();
     const { getText } = state;
     const { setPreEl } = effects;
@@ -21,7 +22,7 @@ export const CodeBlock: FC<CodeBlockProps> = ({ children, className, ...rest }) 
                 {children}
             </pre>
             <div className="flex justify-end px-2 py-1.5 sm:contents">
-                <CopyCodeButton getText={getText} />
+                <CopyCodeButton getText={getText} onCopy={onCopy} />
             </div>
         </div>
     );

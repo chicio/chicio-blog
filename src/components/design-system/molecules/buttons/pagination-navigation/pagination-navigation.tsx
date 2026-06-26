@@ -1,44 +1,27 @@
-import { tracking } from "@/types/configuration/tracking";
 import { FC } from "react";
 import { BluePillLink, RedPillLink } from "@/components/design-system/molecules/links/pills-links";
 
 export interface PageNavigationProps {
-    trackingCategory: string;
     previousPageUrl: string | undefined;
-    previousPageTrackingAction: string;
+    onTrackPrevious?: () => void;
     nextPageUrl: string | undefined;
-    nextPageTrackingAction: string;
+    onTrackNext?: () => void;
 }
 
 export const PaginationNavigation: FC<PageNavigationProps> = ({
-    trackingCategory,
     previousPageUrl,
-    previousPageTrackingAction,
+    onTrackPrevious,
     nextPageUrl,
-    nextPageTrackingAction,
+    onTrackNext,
 }) => (
     <div className="flex justify-center gap-5 p-5">
         {previousPageUrl && (
-            <BluePillLink
-                to={previousPageUrl}
-                trackingData={{
-                    category: trackingCategory,
-                    label: tracking.label.body,
-                    action: previousPageTrackingAction,
-                }}
-            >
+            <BluePillLink to={previousPageUrl} onClick={onTrackPrevious}>
                 Previous
             </BluePillLink>
         )}
         {nextPageUrl && (
-            <RedPillLink
-                to={nextPageUrl}
-                trackingData={{
-                    category: trackingCategory,
-                    label: tracking.label.body,
-                    action: nextPageTrackingAction,
-                }}
-            >
+            <RedPillLink to={nextPageUrl} onClick={onTrackNext}>
                 Next
             </RedPillLink>
         )}

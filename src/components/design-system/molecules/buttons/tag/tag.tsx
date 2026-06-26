@@ -1,5 +1,4 @@
 import { StandardInternalLinkWithTracking } from "@/components/design-system/atoms/links/standard-internal-link-with-tracking";
-import { tracking } from "@/types/configuration/tracking";
 import { FC } from "react";
 
 interface TagContentProps {
@@ -9,22 +8,17 @@ interface TagContentProps {
 export type TagProps = TagContentProps & {
     link: string;
     tag: string;
-    trackingCategory: string;
-    trackingLabel: string;
+    onClick?: () => void;
 };
 
-export const Tag: FC<TagProps> = ({ tag, link, big, trackingCategory, trackingLabel }) => {
+export const Tag: FC<TagProps> = ({ tag, link, big, onClick }) => {
     const textSize = big ? "text-2xl" : "text-sm";
     const margins = big ? "mr-4 mb-6" : "mr-1 mb-1";
 
     return (
         <StandardInternalLinkWithTracking
             className="inline-block no-underline"
-            trackingData={{
-                action: tracking.action.open_blog_tag,
-                category: trackingCategory,
-                label: trackingLabel,
-            }}
+            onClick={onClick}
             to={link}
         >
             <span

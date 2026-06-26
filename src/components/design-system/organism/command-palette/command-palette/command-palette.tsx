@@ -20,22 +20,45 @@ const GroupLabel: FC<{ children: React.ReactNode }> = ({ children }) => (
     <div className="text-accent/50 px-4 py-1 font-mono text-xs tracking-wider uppercase">{children}</div>
 );
 
+interface CommandPaletteTrackingProps {
+    onOpen?: () => void;
+    onOpenChat?: () => void;
+    onSearchResultSelect?: () => void;
+    onToggleMotion?: () => void;
+    onCustomizeMatrixRain?: () => void;
+}
+
 interface CommandPaletteProps {
     searchIndexFileName: string;
+    tracking?: CommandPaletteTrackingProps;
     searchEasterEgg?: (query: string) => SearchResult | null;
     SearchEasterEggComponent?: ComponentType<{ lines: EasterEggTerminalLines }>;
 }
 
 export const CommandPalette: FC<CommandPaletteProps> = ({
     searchIndexFileName,
+    tracking,
     searchEasterEgg,
     SearchEasterEggComponent,
 }) => {
     const { glassmorphismClass } = useGlassmorphism({ noScale: true });
-    const { state, effects } = useCommandPaletteStore(searchIndexFileName, searchEasterEgg, SearchEasterEggComponent);
+    const { state, effects } = useCommandPaletteStore(
+        searchIndexFileName,
+        tracking,
+        searchEasterEgg,
+        SearchEasterEggComponent,
+    );
     const { open, isSearching, selectedValue, search, easterEggLines } = state;
-    const { close, stopPropagation, handleSearchInput, handleOpenChat, handleSearchResultSelect, setSelectedValue } =
-        effects;
+    const {
+        close,
+        stopPropagation,
+        handleSearchInput,
+        handleOpenChat,
+        handleSearchResultSelect,
+        setSelectedValue,
+        onToggleMotion,
+        onCustomizeMatrixRain,
+    } = effects;
 
     const hasSearchResults = search.type === "search" && search.results.length > 0;
 
@@ -103,8 +126,8 @@ export const CommandPalette: FC<CommandPaletteProps> = ({
                                                 {">"} Open chat
                                             </TerminalLine>
                                         </Command.Item>
-                                        <ToggleMotionItem />
-                                        <CustomizeMatrixRainItem onClose={close} />
+                                        <ToggleMotionItem onTrack={onToggleMotion} />
+                                        <CustomizeMatrixRainItem onClose={close} onTrack={onCustomizeMatrixRain} />
                                     </Command.Group>
                                 )}
                             </Command.List>

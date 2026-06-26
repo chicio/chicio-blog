@@ -3,7 +3,6 @@ import { MatrixHeaderBackground } from "@/components/design-system/molecules/eff
 import { GenericHeader } from "@/components/design-system/organism/header/generic-header";
 import { PageTemplate } from "@/components/design-system/templates/page-template";
 import { siteMetadata } from "@/types/configuration/site-metadata";
-import { tracking } from "@/types/configuration/tracking";
 import { ClownSvgIcon } from "./clown-svg-icon";
 import { FC, PropsWithChildren } from "react";
 
@@ -21,7 +20,6 @@ export const ClownsPageTemplate: FC<PropsWithChildren> = ({ children }) => {
                 </>
             }
             author={siteMetadata.author}
-            trackingCategory={tracking.category.clowns}
         >
             <MediaGrid>
                 {children}

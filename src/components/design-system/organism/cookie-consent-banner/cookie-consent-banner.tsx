@@ -10,12 +10,13 @@ import { useCookieConsentBannerStore } from "./use-cookie-consent-banner-store";
 
 interface CookieConsentBannerProps {
     decided: boolean;
+    onAccept: () => void;
+    onReject: () => void;
 }
 
-export const CookieConsentBanner = ({ decided }: CookieConsentBannerProps) => {
+export const CookieConsentBanner = ({ decided, onAccept, onReject }: CookieConsentBannerProps) => {
     const { glassmorphismClass } = useGlassmorphism({ increaseContrast: true });
-    const { state, effects } = useCookieConsentBannerStore(decided);
-    const { decided } = state;
+    const { effects } = useCookieConsentBannerStore(onAccept, onReject);
     const { acceptConsent, rejectConsent } = effects;
 
     return (

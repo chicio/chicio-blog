@@ -653,6 +653,35 @@ const config = {
             },
         },
         {
+            name: "design-system-no-lib",
+            comment: [
+                "ERROR-level enforcement: design-system components must not import runtime values from src/lib/.",
+                "Business logic (tracking, search, chat, etc.) must be injected at the feature/content level via props.",
+                "State modules that were originally in lib/ and were moved to design-system/state/ are exempt.",
+            ].join(" "),
+            severity: "error",
+            from: {
+                path: "^src/components/design-system/",
+            },
+            to: {
+                path: "^src/lib/",
+            },
+        },
+        {
+            name: "lib-no-components",
+            comment: [
+                "ERROR-level enforcement: src/lib/ modules must not import from src/components/ or src/app/.",
+                "lib/ is a pure business-logic layer (no JSX, no React). Components are consumers of lib/, not vice versa.",
+            ].join(" "),
+            severity: "error",
+            from: {
+                path: "^src/lib/",
+            },
+            to: {
+                path: "^src/(components|app)/",
+            },
+        },
+        {
             name: "no-circular",
             comment: "Circular dependencies are forbidden across all modules.",
             severity: "error",

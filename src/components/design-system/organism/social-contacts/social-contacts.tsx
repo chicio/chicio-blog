@@ -10,79 +10,75 @@ import {
 import { FaXTwitter } from "react-icons/fa6";
 import { FC } from "react";
 import { siteMetadata } from "@/types/configuration/site-metadata";
-import { tracking } from "@/types/configuration/tracking";
 import { slugs } from "@/types/configuration/slug";
 import { SocialContact } from "@/components/design-system/molecules/buttons/social-contact";
 import { CallToActionInternalWithTracking } from "@/components/design-system/atoms/call-to-actions/call-to-action-internal-with-tracking";
 
 export interface SocialContactsProps {
-    trackingCategory: string;
-    trackingLabel: string;
+    onTrackGithub?: () => void;
+    onTrackLinkedin?: () => void;
+    onTrackContact?: () => void;
+    onTrackMedium?: () => void;
+    onTrackDevto?: () => void;
+    onTrackTwitter?: () => void;
+    onTrackFacebook?: () => void;
+    onTrackInstagram?: () => void;
 }
 
-export const SocialContacts: FC<SocialContactsProps> = ({ trackingCategory, trackingLabel }) => {
+export const SocialContacts: FC<SocialContactsProps> = ({
+    onTrackGithub,
+    onTrackLinkedin,
+    onTrackContact,
+    onTrackMedium,
+    onTrackDevto,
+    onTrackTwitter,
+    onTrackFacebook,
+    onTrackInstagram,
+}) => {
     const links = siteMetadata.contacts.links;
 
     return (
         <div className="flex flex-wrap items-center justify-center p-0 text-center">
             <SocialContact
                 link={links.github}
-                trackingAction={tracking.action.open_github}
-                trackingCategory={trackingCategory}
-                trackingLabel={trackingLabel}
+                onClick={onTrackGithub}
                 icon={<BiLogoGithub size={30} title={"Github"} />}
             />
             <SocialContact
                 link={links.linkedin}
-                trackingAction={tracking.action.open_linkedin}
-                trackingCategory={trackingCategory}
-                trackingLabel={trackingLabel}
+                onClick={onTrackLinkedin}
                 icon={<BiLogoLinkedin size={30} title={"Linkedin"} />}
             />
             <CallToActionInternalWithTracking
                 to={slugs.contact}
-                trackingData={{
-                    category: trackingCategory,
-                    label: trackingLabel,
-                    action: tracking.action.open_contact,
-                }}
+                onClick={onTrackContact}
                 className="min-w-auto!"
             >
                 <BiEnvelope size={30} />
             </CallToActionInternalWithTracking>
             <SocialContact
                 link={links.medium}
-                trackingAction={tracking.action.open_medium}
-                trackingCategory={trackingCategory}
-                trackingLabel={trackingLabel}
+                onClick={onTrackMedium}
                 icon={<BiLogoMedium size={30} title={"Medium"} />}
             />
             <SocialContact
                 link={links.devto!}
-                trackingAction={tracking.action.open_devto}
-                trackingCategory={trackingCategory}
-                trackingLabel={trackingLabel}
+                onClick={onTrackDevto}
                 icon={<BiLogoDevTo size={30} title={"Devto"} />}
             />
             <SocialContact
                 link={links.twitter}
-                trackingAction={tracking.action.open_twitter}
-                trackingCategory={trackingCategory}
-                trackingLabel={trackingLabel}
+                onClick={onTrackTwitter}
                 icon={<FaXTwitter size={30} title={"Twitter"} />}
             />
             <SocialContact
                 link={links.facebook}
-                trackingAction={tracking.action.open_facebook}
-                trackingCategory={trackingCategory}
-                trackingLabel={trackingLabel}
+                onClick={onTrackFacebook}
                 icon={<BiLogoFacebookSquare size={30} title={"Facebook"} />}
             />
             <SocialContact
                 link={links.instagram}
-                trackingAction={tracking.action.open_instagram}
-                trackingCategory={trackingCategory}
-                trackingLabel={trackingLabel}
+                onClick={onTrackInstagram}
                 icon={<BiLogoInstagram size={30} title={"Instagram"} />}
             />
         </div>

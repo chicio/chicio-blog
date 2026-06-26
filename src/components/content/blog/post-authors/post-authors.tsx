@@ -1,20 +1,15 @@
 import { ImageGlow } from "@/components/design-system/atoms/effects/image-glow";
 import { StandardExternalLinkWithTracking } from "@/components/design-system/atoms/links/standard-external-link-with-tracking";
 import { Author } from "@/types/content/author";
-import { tracking } from "@/types/configuration/tracking";
 import { FC } from "react";
 
 export interface PostAuthorsProps {
     postAuthors: Author[];
-    trackingCategory: string;
-    trackingLabel: string;
     enableUrl: boolean;
 }
 
 export const PostAuthors: FC<PostAuthorsProps> = ({
     postAuthors,
-    trackingCategory,
-    trackingLabel,
     enableUrl,
 }) => (
     <div className="mx-0 my-4 flex flex-col gap-2 p-0">
@@ -35,11 +30,6 @@ export const PostAuthors: FC<PostAuthorsProps> = ({
                     <p>
                         {enableUrl && (
                             <StandardExternalLinkWithTracking
-                                trackingData={{
-                                    action: tracking.action.open_blog_author,
-                                    category: trackingCategory,
-                                    label: trackingLabel,
-                                }}
                                 href={author.url}
                                 target={"_blank"}
                                 rel="noopener noreferrer"

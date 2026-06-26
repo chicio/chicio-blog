@@ -3,13 +3,12 @@ import { Menu } from "@/components/design-system/organism/menu";
 import { JsonLd } from "@/components/features/seo/jsond-ld";
 import { ProfilePresentation } from "./profile-presentation";
 import { siteMetadata } from "@/types/configuration/site-metadata";
-import { tracking } from "@/types/configuration/tracking";
 import { FC } from "react";
 
 export const Homepage: FC = () => {
     return (
         <>
-            <Menu trackingCategory={tracking.category.home} />
+            <Menu />
             <div className="h-screen">
                 <MatrixBackground>
                     <ProfilePresentation author={siteMetadata.author} />

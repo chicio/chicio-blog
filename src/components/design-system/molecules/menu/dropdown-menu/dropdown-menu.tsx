@@ -1,6 +1,5 @@
 "use client";
 
-import { TrackingData } from "@/types/configuration/tracking";
 import { AnimatePresence } from "framer-motion";
 import { FC } from "react";
 import { BiChevronDown } from "react-icons/bi";
@@ -10,7 +9,7 @@ import { useDropdownMenuStore } from "./use-dropdown-menu-store";
 interface DropdownMenuItem {
     label: string;
     to: string;
-    trackingData: TrackingData;
+    onClick?: () => void;
     selected?: boolean;
     onClickCallback?: () => void;
     external?: boolean;
@@ -83,7 +82,7 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
                                         <MenuItemWithTracking
                                             key={item.label + itemIdx}
                                             to={item.to}
-                                            trackingData={item.trackingData}
+                                            onClick={item.onClick}
                                             selected={item.selected ?? false}
                                             className="xs:whitespace-nowrap m-2 text-center"
                                             onClickCallback={handleItemClick(item.onClickCallback)}
@@ -97,7 +96,7 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
                                 <MenuItemWithTracking
                                     key={entry.label + idx}
                                     to={entry.to}
-                                    trackingData={entry.trackingData}
+                                    onClick={entry.onClick}
                                     selected={entry.selected ?? false}
                                     className="xs:whitespace-nowrap m-2"
                                     onClickCallback={handleItemClick(entry.onClickCallback)}

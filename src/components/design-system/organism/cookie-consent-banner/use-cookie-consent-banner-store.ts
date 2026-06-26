@@ -1,11 +1,6 @@
 "use client";
 
-import { writeConsent } from "@/lib/consents/consents";
-import { ComponentStore } from "@/types/component-store";
-
-interface CookieConsentBannerState {
-    decided: boolean;
-}
+import { EffectsStore } from "@/types/component-store";
 
 interface CookieConsentBannerEffects {
     acceptConsent: () => void;
@@ -13,13 +8,10 @@ interface CookieConsentBannerEffects {
 }
 
 export const useCookieConsentBannerStore = (
-    decided: boolean,
-): ComponentStore<CookieConsentBannerState, CookieConsentBannerEffects> => {
-    const acceptConsent = () => writeConsent("accepted");
-    const rejectConsent = () => writeConsent("rejected");
-
+    onAccept: () => void,
+    onReject: () => void,
+): EffectsStore<CookieConsentBannerEffects> => {
     return {
-        state: { decided },
-        effects: { acceptConsent, rejectConsent },
+        effects: { acceptConsent: onAccept, rejectConsent: onReject },
     };
 };

@@ -1,7 +1,5 @@
 "use client";
 
-import { trackWith } from "@/lib/tracking/tracking";
-import { TrackingData } from "@/types/configuration/tracking";
 import { EffectsStore } from "@/types/component-store";
 
 type StandardExternalLinkWithTrackingEffects = {
@@ -9,11 +7,11 @@ type StandardExternalLinkWithTrackingEffects = {
 };
 
 export const useStandardExternalLinkWithTrackingStore = (
-    trackingData: TrackingData,
+    onClick?: () => void,
 ): EffectsStore<StandardExternalLinkWithTrackingEffects> => {
     return {
         effects: {
-            onTrack: () => trackWith(trackingData),
+            onTrack: onClick ?? (() => {}),
         },
     };
 };

@@ -1,5 +1,4 @@
 import { FC } from "react";
-import { tracking } from "@/types/configuration/tracking";
 import { Content } from "@/types/content/content";
 import { PostsRowContainer } from "@/components/content/blog/posts-row-container";
 import { PostCard } from "@/components/content/blog/post-card";
@@ -20,7 +19,6 @@ export const PostsRow: FC<PostsRowProps> = ({ postsGroup }) => (
             date={postsGroup[0].frontmatter.date.formatted}
             readingTime={postsGroup[0].readingTime.text}
             description={postsGroup[0].frontmatter.description}
-            trackingCategory={tracking.category.blog_home}
             tags={postsGroup[0].frontmatter.tags!}
         />
         {postsGroup[1] && (
@@ -34,7 +32,6 @@ export const PostsRow: FC<PostsRowProps> = ({ postsGroup }) => (
                 date={postsGroup[1].frontmatter.date.formatted}
                 readingTime={postsGroup[1].readingTime.text}
                 description={postsGroup[1].frontmatter.description!}
-                trackingCategory={tracking.category.blog_home}
                 tags={postsGroup[1].frontmatter!.tags!}
             />
         )}

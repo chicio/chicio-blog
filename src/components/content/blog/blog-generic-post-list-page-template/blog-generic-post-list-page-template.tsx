@@ -1,7 +1,6 @@
 import { StandardInternalLinkWithTracking } from "@/components/design-system/atoms/links/standard-internal-link-with-tracking";
 import { PageTitle } from "@/components/design-system/molecules/typography/page-title";
 import { Content } from "@/types/content/content";
-import { tracking } from "@/types/configuration/tracking";
 import { FC } from "react";
 import { ContentPage } from "@/components/features/content/content-page";
 import { JsonLd } from "@/components/features/seo/jsond-ld";
@@ -36,11 +35,6 @@ export const BlogGenericPostListPageTemplate: FC<BlogGenericPostListPageProps> =
                     <StandardInternalLinkWithTracking
                         className="text-xl"
                         to={post.slug.formatted}
-                        trackingData={{
-                            action: tracking.action.open_blog_post,
-                            category: trackingCategory,
-                            label: tracking.label.body,
-                        }}
                     >
                         {post.frontmatter.title}
                     </StandardInternalLinkWithTracking>

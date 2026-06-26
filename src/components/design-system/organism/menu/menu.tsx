@@ -1,7 +1,6 @@
 "use client";
 
 import { slugs } from "@/types/configuration/slug";
-import { tracking } from "@/types/configuration/tracking";
 import { AnimatePresence, Variants } from "framer-motion";
 import { FC } from "react";
 import { BiSearchAlt } from "react-icons/bi";
@@ -38,14 +37,30 @@ const panelVariants: Variants = {
 };
 
 export interface MenuProps {
-    trackingCategory: string;
+    onPaletteTrigger?: () => void;
+    onTrackNavigation?: (action: string) => void;
 }
 
-export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
+export const Menu: FC<MenuProps> = ({ onPaletteTrigger, onTrackNavigation }) => {
     const { glassmorphismClass } = useGlassmorphism({ noScale: true });
-    const { state, effects } = useMenuStore(trackingCategory);
+    const { state, effects } = useMenuStore(onPaletteTrigger, onTrackNavigation);
     const { pathname, shouldHideMenu, shouldOpenMenu, modifierKey } = state;
-    const { openMenu, closeMenu, handlePaletteTrigger } = effects;
+    const {
+        openMenu,
+        closeMenu,
+        handlePaletteTrigger,
+        onTrackHome,
+        onTrackBlog,
+        onTrackDsaRoadmap,
+        onTrackDsaExercises,
+        onTrackChat,
+        onTrackMcp,
+        onTrackMatrixRain,
+        onTrackAboutMe,
+        onTrackArt,
+        onTrackVideogames,
+        onTrackContact,
+    } = effects;
 
     const baseClassName = (isMobile: boolean) =>
         isMobile ? "mb-2 w-80" : "hidden sm:flex xs:mb-0 xs:w-auto";
@@ -59,11 +74,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
                 key={`home-${isMobile ? "mobile" : "desktop"}`}
                 to={"/"}
                 selected={pathname === "/"}
-                trackingData={{
-                    action: tracking.action.open_home,
-                    category: trackingCategory,
-                    label: tracking.label.header,
-                }}
+                onClick={onTrackHome}
                 onClickCallback={closeMenu}
             >
                 Home
@@ -73,11 +84,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
                 className={baseClassName(isMobile)}
                 to={slugs.blog.home}
                 selected={pathname.includes(slugs.blog.home)}
-                trackingData={{
-                    action: tracking.action.open_home,
-                    category: trackingCategory,
-                    label: tracking.label.header,
-                }}
+                onClick={onTrackBlog}
                 onClickCallback={closeMenu}
             >
                 Blog
@@ -92,22 +99,14 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
                             {
                                 label: "Roadmap",
                                 to: slugs.dataStructuresAndAlgorithms.roadmap,
-                                trackingData: {
-                                    action: tracking.action.open_dsa_roadmap,
-                                    category: trackingCategory,
-                                    label: tracking.label.header,
-                                },
+                                onClick: onTrackDsaRoadmap,
                                 selected: pathname === slugs.dataStructuresAndAlgorithms.roadmap,
                                 onClickCallback: closeMenu,
                             },
                             {
                                 label: "Exercises",
                                 to: slugs.dataStructuresAndAlgorithms.exercises,
-                                trackingData: {
-                                    action: tracking.action.open_dsa_exercises,
-                                    category: trackingCategory,
-                                    label: tracking.label.header,
-                                },
+                                onClick: onTrackDsaExercises,
                                 selected: pathname === slugs.dataStructuresAndAlgorithms.exercises,
                                 onClickCallback: closeMenu,
                             },
@@ -119,22 +118,14 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
                             {
                                 label: "Chat",
                                 to: slugs.chat,
-                                trackingData: {
-                                    action: tracking.action.open_chat,
-                                    category: trackingCategory,
-                                    label: tracking.label.header,
-                                },
+                                onClick: onTrackChat,
                                 selected: pathname === slugs.chat,
                                 onClickCallback: closeMenu,
                             },
                             {
                                 label: "MCP",
                                 to: slugs.mcp,
-                                trackingData: {
-                                    action: tracking.action.open_mcp,
-                                    category: trackingCategory,
-                                    label: tracking.label.header,
-                                },
+                                onClick: onTrackMcp,
                                 selected: pathname === slugs.mcp,
                                 onClickCallback: closeMenu,
                             },
@@ -147,11 +138,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
                                 label: "Matrix Rain",
                                 to: "https://chicio.github.io/matrix-rain-webgpu/",
                                 external: true,
-                                trackingData: {
-                                    action: tracking.action.open_matrix_rain_webgpu,
-                                    category: trackingCategory,
-                                    label: tracking.label.header,
-                                },
+                                onClick: onTrackMatrixRain,
                                 onClickCallback: closeMenu,
                             },
                         ],
@@ -165,44 +152,28 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
                     {
                         label: "About me",
                         to: slugs.aboutMe,
-                        trackingData: {
-                            action: tracking.action.open_about_me,
-                            category: trackingCategory,
-                            label: tracking.label.header,
-                        },
+                        onClick: onTrackAboutMe,
                         selected: pathname === slugs.aboutMe,
                         onClickCallback: closeMenu,
                     },
                     {
                         label: "Art",
                         to: slugs.art,
-                        trackingData: {
-                            action: tracking.action.open_art,
-                            category: trackingCategory,
-                            label: tracking.label.header,
-                        },
+                        onClick: onTrackArt,
                         selected: pathname === slugs.art,
                         onClickCallback: closeMenu,
                     },
                     {
                         label: "Videogames",
                         to: slugs.videogames.home,
-                        trackingData: {
-                            action: tracking.action.open_videogame_collection,
-                            category: trackingCategory,
-                            label: tracking.label.header,
-                        },
+                        onClick: onTrackVideogames,
                         selected: pathname === slugs.videogames.home,
                         onClickCallback: closeMenu,
                     },
                     {
                         label: "Contact me",
                         to: slugs.contact,
-                        trackingData: {
-                            action: tracking.action.open_contact,
-                            category: trackingCategory,
-                            label: tracking.label.header,
-                        },
+                        onClick: onTrackContact,
                         selected: pathname === slugs.contact,
                         onClickCallback: closeMenu,
                     },

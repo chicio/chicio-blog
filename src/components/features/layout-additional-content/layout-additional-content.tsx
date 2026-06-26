@@ -52,18 +52,34 @@ const MatrixRainControlPanel = dynamic(
 );
 
 export const LayoutAdditionalContent: FC = () => {
-    const { state } = useLayoutAdditionalContentStore();
+    const { state, effects } = useLayoutAdditionalContentStore();
     const { consented, decided } = state;
+    const {
+        acceptConsent,
+        rejectConsent,
+        trackCommandPaletteOpen,
+        trackCommandPaletteOpenChat,
+        trackCommandPaletteSearchResultSelect,
+        trackCommandPaletteToggleMotion,
+        trackCommandPaletteCustomizeMatrixRain,
+    } = effects;
 
     return (
         <>
             <CommandPalette
                 searchIndexFileName={searchIndexFileName}
+                tracking={{
+                    onOpen: trackCommandPaletteOpen,
+                    onOpenChat: trackCommandPaletteOpenChat,
+                    onSearchResultSelect: trackCommandPaletteSearchResultSelect,
+                    onToggleMotion: trackCommandPaletteToggleMotion,
+                    onCustomizeMatrixRain: trackCommandPaletteCustomizeMatrixRain,
+                }}
                 searchEasterEgg={whiteRabbitEasterEgg}
                 SearchEasterEggComponent={NeoRoomEasterEgg}
             />
             <MatrixRainControlPanel />
-            <CookieConsentBanner decided={decided} />
+            <CookieConsentBanner decided={decided} onAccept={acceptConsent} onReject={rejectConsent} />
             <TrackingOptIn enabled={consented} />
             <InstallPromptBanner />
         </>

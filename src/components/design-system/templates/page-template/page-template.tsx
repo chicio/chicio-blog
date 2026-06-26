@@ -6,17 +6,26 @@ import { FC, ReactNode } from "react";
 export interface BlogPageProps {
     header: React.ReactElement;
     author: string;
-    trackingCategory: string;
+    onPaletteTrigger?: () => void;
+    onTrackNavigation?: (action: string) => void;
+    onTrackSocial?: (action: string) => void;
     children?: ReactNode;
 }
 
-export const PageTemplate: FC<BlogPageProps> = ({ header, children, author, trackingCategory }) => (
+export const PageTemplate: FC<BlogPageProps> = ({
+    header,
+    children,
+    author,
+    onPaletteTrigger,
+    onTrackNavigation,
+    onTrackSocial,
+}) => (
     <>
-        <Menu trackingCategory={trackingCategory} />
+        <Menu onPaletteTrigger={onPaletteTrigger} onTrackNavigation={onTrackNavigation} />
         <ContentContainer>
             {header}
             <div className="mt-4">{children}</div>
         </ContentContainer>
-        <Footer author={author} trackingCategory={trackingCategory} />
+        <Footer author={author} onTrackNavigation={onTrackNavigation} onTrackSocial={onTrackSocial} />
     </>
 );

@@ -30,11 +30,6 @@ export const BlogPostContent: FC<PostProps> = async ({ post }) => {
                         label: "Blog",
                         href: slugs.blog.home,
                         isCurrent: false,
-                        trackingData: {
-                            action: tracking.action.open_blog,
-                            category: tracking.category.blog_post,
-                            label: tracking.label.body,
-                        },
                     },
                     { label: frontmatter.title, href: post.slug.formatted, isCurrent: true },
                 ] satisfies BreadcrumbItem[]}
@@ -43,8 +38,6 @@ export const BlogPostContent: FC<PostProps> = async ({ post }) => {
                         <h1 className="leading-tight">{frontmatter.title}</h1>
                         <PostAuthors
                             postAuthors={frontmatter.authors}
-                            trackingCategory={tracking.category.blog_post}
-                            trackingLabel={tracking.label.body}
                             enableUrl={true}
                         />
                         <PostMeta
@@ -56,11 +49,7 @@ export const BlogPostContent: FC<PostProps> = async ({ post }) => {
                 }
                 afterContent={
                     <>
-                        <PostTags
-                            tags={frontmatter.tags}
-                            trackingCategory={tracking.category.blog_post}
-                            trackingLabel={tracking.label.body}
-                        />
+                        <PostTags tags={frontmatter.tags} />
                         <RecentPosts currentSlug={post.slug.formatted} />
                     </>
                 }

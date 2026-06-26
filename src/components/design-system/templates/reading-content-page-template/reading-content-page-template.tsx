@@ -5,13 +5,15 @@ import { Breadcrumb, BreadcrumbItem } from "@/components/design-system/molecules
 
 export interface ReadingContentPageProps {
     author: string;
-    trackingCategory: string;
     big?: boolean;
     breadcrumbs?: BreadcrumbItem[];
     beforeContent?: ReactNode;
     children?: ReactNode;
     afterContent?: ReactNode;
     headerWrapper?: FC<PropsWithChildren>;
+    onPaletteTrigger?: () => void;
+    onTrackNavigation?: (action: string) => void;
+    onTrackSocial?: (action: string) => void;
 }
 
 const contentId = "reading-content-container";
@@ -21,18 +23,22 @@ export const ReadingContentPageTemplate: FC<ReadingContentPageProps> = ({
     children,
     afterContent,
     author,
-    trackingCategory,
     breadcrumbs,
     big = false,
     headerWrapper,
+    onPaletteTrigger,
+    onTrackNavigation,
+    onTrackSocial,
 }) => (
     <>
         <ContentProgressBar contentId={contentId} />
         <ContentPageTemplate
             author={author}
-            trackingCategory={trackingCategory}
             big={big}
             headerWrapper={headerWrapper}
+            onPaletteTrigger={onPaletteTrigger}
+            onTrackNavigation={onTrackNavigation}
+            onTrackSocial={onTrackSocial}
         >
             {breadcrumbs && <Breadcrumb items={breadcrumbs} />}
             {beforeContent}

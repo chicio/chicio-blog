@@ -1,5 +1,4 @@
 import { StandardExternalLinkWithTracking } from "@/components/design-system/atoms/links/standard-external-link-with-tracking";
-import { tracking } from "@/types/configuration/tracking";
 import Image from "next/image";
 import { FC } from "react";
 import { BiBriefcase, BiSolidGraduation } from "react-icons/bi";
@@ -33,11 +32,6 @@ export const Timeline: FC = () => {
                             <div className="flex w-full flex-col gap-1">
                                 {item.link ? (
                                     <StandardExternalLinkWithTracking
-                                        trackingData={{
-                                            action: tracking.action.open_experience_and_education,
-                                            category: tracking.category.home,
-                                            label: tracking.label.body,
-                                        }}
                                         href={item.link}
                                         target="_blank"
                                         rel="noopener noreferrer"

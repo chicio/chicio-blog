@@ -1,7 +1,5 @@
 "use client";
 
-import { trackWith } from "@/lib/tracking/tracking";
-import { TrackingData } from "@/types/configuration/tracking";
 import { EffectsStore } from "@/types/component-store";
 
 type CallToActionInternalWithTrackingEffects = {
@@ -9,11 +7,11 @@ type CallToActionInternalWithTrackingEffects = {
 };
 
 export const useCallToActionInternalWithTrackingStore = (
-    trackingData: TrackingData,
+    onClick?: () => void,
 ): EffectsStore<CallToActionInternalWithTrackingEffects> => {
     return {
         effects: {
-            onTrack: () => trackWith(trackingData),
+            onTrack: onClick ?? (() => {}),
         },
     };
 };

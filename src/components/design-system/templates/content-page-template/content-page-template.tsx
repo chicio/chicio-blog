@@ -4,22 +4,28 @@ import { FC, PropsWithChildren, ReactNode } from "react";
 
 export interface ContentPageProps {
     author: string;
-    trackingCategory: string;
     big?: boolean;
     headerWrapper?: FC<PropsWithChildren>;
+    onPaletteTrigger?: () => void;
+    onTrackNavigation?: (action: string) => void;
+    onTrackSocial?: (action: string) => void;
     children?: ReactNode;
 }
 
 export const ContentPageTemplate: FC<ContentPageProps> = ({
     children,
     author,
-    trackingCategory,
     big = false,
     headerWrapper,
+    onPaletteTrigger,
+    onTrackNavigation,
+    onTrackSocial,
 }) => (
     <PageTemplate
         author={author}
-        trackingCategory={trackingCategory}
+        onPaletteTrigger={onPaletteTrigger}
+        onTrackNavigation={onTrackNavigation}
+        onTrackSocial={onTrackSocial}
         header={<BrandHeader big={big} wrapper={headerWrapper} />}
     >
         {children}

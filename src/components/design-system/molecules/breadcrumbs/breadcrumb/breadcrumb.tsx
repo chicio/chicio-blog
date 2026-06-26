@@ -4,7 +4,6 @@ import { FC } from "react";
 import { motion } from "framer-motion";
 import { IoMdArrowRoundBack } from "react-icons/io";
 
-import { TrackingData } from "@/types/configuration/tracking";
 import { StandardInternalLinkWithTracking } from "@/components/design-system/atoms/links/standard-internal-link-with-tracking";
 import { useGlassmorphism } from "@/components/design-system/hooks/use-glassmorphism";
 import { useBreadcrumbStore } from "./use-breadcrumb-store";
@@ -14,7 +13,7 @@ export type BreadcrumbItem =
           label: string;
           href: string;
           isCurrent: false;
-          trackingData: TrackingData;
+          onClick?: () => void;
       }
     | { label: string; href: string; isCurrent: true };
 
@@ -42,7 +41,7 @@ const BreadcrumbContent: FC<BreadcrumbContentProps> = ({ items, parentItem }) =>
                     </span>
                     <StandardInternalLinkWithTracking
                         to={parentItem.href}
-                        trackingData={parentItem.trackingData}
+                        onClick={parentItem.onClick}
                         className="min-w-0 truncate py-2 text-sm"
                     >
                         {parentItem.label}
@@ -74,7 +73,7 @@ const BreadcrumbContent: FC<BreadcrumbContentProps> = ({ items, parentItem }) =>
                     ) : (
                         <StandardInternalLinkWithTracking
                             to={item.href}
-                            trackingData={item.trackingData}
+                            onClick={item.onClick}
                             className="block truncate py-2 whitespace-nowrap text-sm"
                         >
                             {item.label}
