@@ -3,7 +3,7 @@ import { BreadcrumbItem } from "@/components/design-system/molecules/breadcrumbs
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { tracking } from "@/types/configuration/tracking";
 import { FC, PropsWithChildren } from "react";
-import { JsonLd } from "@/components/design-system/utils/components/jsond-ld";
+import { JsonLd } from "@/components/features/seo/jsond-ld";
 import { Content } from "@/types/content/content";
 import { getAllConsoles, getAllGamesForConsole } from "@/lib/content/videogames/videogames";
 import { ConsoleMetadata } from "@/types/content/videogames";

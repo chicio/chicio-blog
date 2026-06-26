@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { loadMermaid, nextMermaidId } from "@/components/design-system/utils/loader/mermaid-loader";
+import { loadMermaid, nextMermaidId } from "./mermaid-loader";
 import { ComponentStore } from "@/types/component-store";
 
 interface MermaidDiagramState {

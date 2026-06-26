@@ -12,14 +12,15 @@ This is a Next.js 16 blog (App Router) with a Matrix-inspired UI theme, built by
 npm install              # Install dependencies
 npm run dev              # Dev server (auto-generates search index + copies images)
 npm run build && npm start  # Production build
-npm run lint             # Linting
+npm run lint             # Linting (--max-warnings 0 in CI)
+npm run validate-architecture  # dependency-cruiser: import rules, layering, isolation (all at error)
 npm run search-index     # Search index generation (auto before dev/build)
 npm run copy-images      # Copy content images to public/images/content/ (auto before dev/build)
 npm run chat-knowledge-upload  # Upload blog content to Upstash Vector for RAG
 npm run release          # Release with conventional changelog
 ```
 
-**Important**: Search index and content image copy both run automatically before `dev` and `build` via `src/lib/build/prebuild.ts`.
+**Important**: Search index and content image copy both run automatically before `dev` and `build` via `src/lib/build/prebuild.ts`. `validate-architecture` is NOT part of prebuild — it runs as its own CI job (and should be run during development; see below) and fails CI on violations.
 
 ## Architecture
 
@@ -30,27 +31,31 @@ src/
 ├── app/                          # Next.js App Router pages and layouts
 ├── components/
 │   ├── design-system/           # Atomic design: atoms → molecules → organisms → templates
+│   │   └── hooks/               # Shared hooks (motion, glassmorphism, in-view, search, etc.)
 │   ├── content/                 # Page-content components, one folder per route (mirrors src/content/)
-│   └── features/                # Cross-cutting UI not tied to a route: pwa/, easter-eggs/
+│   └── features/                # Cross-cutting UI not tied to a route: pwa/, easter-eggs/, seo/
 ├── content/                      # All MDX content, filesystem-as-database
-├── lib/                         # Core business logic and utilities
+├── lib/                         # Core business logic and utilities (no JSX)
 └── types/                       # TypeScript type definitions
 ```
 
 ### Key Patterns
 
-- **Atomic Design System**: atoms → molecules → organisms → templates. See `.claude/rules/design-system.md`
-- **Page-Content Isolation**: Each route's components live in `src/components/content/<page>/` with own `components/` and `hooks/`; cross-cutting UI lives in `src/components/features/<feature>/`. See `.claude/rules/content.md`
-- **Business Logic in lib/**: Components are thin, delegate to `src/lib/`
+- **Folder-Per-Component + Store Model**: every component lives in its own kebab-case folder with a `<name>.tsx`, a `use-<name>-store.ts` hook, and an `index.ts` barrel. Components call exactly one hook (`use<Name>Store()`). `useGlassmorphism` is permanently exempt. See `.claude/rules/component-architecture.md` for the full specification.
+- **Atomic Design System**: atoms → molecules → organisms → templates. Layering enforced at error by dependency-cruiser. See `.claude/rules/design-system.md`
+- **Page-Content Isolation**: Each route's components live in `src/components/content/<page>/` (no separate `components/` or `hooks/` subdirs — folder-per-component directly). Cross-cutting UI lives in `src/components/features/<feature>/`. See `.claude/rules/content.md`
+- **Business Logic in lib/**: Components are thin. Non-hook pure logic lives in `src/lib/`, never in `design-system/utils/` (eliminated).
 - **Type Safety**: Shared types in `src/types/`, TypeScript strict mode
+- **Store Return Types**: `StateStore<S>`, `EffectsStore<E>`, `ComponentStore<S,E>` from `@/types/component-store`. Never pad with `Record<string,never>` or `{}`.
+- **No Functions in JSX**: `react/jsx-no-bind` enforced at error. Curry handlers in the store.
 - **Content as MDX**: Filesystem-as-database. See `.claude/rules/mdx-content.md`
-- **Co-located Images**: Blog post images live in `<post-dir>/images/`, other content images in `src/content/<section>/images/`. A build-time script (`src/lib/images/copy-content-images.ts`) mirrors them to `public/images/content/` with a specular mapping (strips the `images/` segment). The `public/images/content/` directory is gitignored and regenerated on every build.
+- **Co-located Images**: Blog post images live in `<post-dir>/images/`, other content images in `src/content/<section>/images/`. A build-time script (`src/lib/images/copy-content-images.ts`) mirrors them to `public/images/content/`. The `public/images/content/` directory is gitignored and regenerated on every build.
 - **API Routes**: Chat (Groq + Upstash Vector RAG) and Contact (Resend). See `.claude/rules/api-routes.md`
 - **Testing**: No automated test suite — lint + build + manual browser. See `.claude/rules/testing.md`
 
 ## Code Style
 
-See `.claude/rules/code-style.md`. Key points: 4 spaces, 120 char lines, always braces on `if`, `@/` import alias, conventional commits with Gitmoji.
+See `.claude/rules/code-style.md`. Key points: 4 spaces, 120 char lines, always braces on `if`, `@/` import alias, conventional commits with Gitmoji, one-hook-per-component, no functions in JSX.
 
 ## Technology Stack
 
@@ -64,7 +69,7 @@ Next.js 16 (App Router), React 19, TailwindCSS v4, Framer Motion v12, TypeScript
 
 ## CI/CD
 
-GitHub Actions (`.github/workflows/build.yml`): macOS, Node 22, npm cache, Upstash secrets, build + artifacts.
+GitHub Actions (`.github/workflows/ci.yml`): four jobs — lint (ESLint `--max-warnings 0`), knip, validate-architecture (dependency-cruiser, all rules at error), and build (Next.js). lint, knip, and validate-architecture all gate build. Upstash/Resend secrets injected for build.
 
 ## Release
 

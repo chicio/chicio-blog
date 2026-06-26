@@ -57,7 +57,7 @@ export const useContactFormStore = (trackingCategory: string): ComponentStore<Co
         };
     }, []);
 
-    const validateForm = (): boolean => {
+    const validateForm = useCallback((): boolean => {
         const newErrors: ContactFormErrors = {};
 
         if (!name.trim()) {
@@ -78,7 +78,7 @@ export const useContactFormStore = (trackingCategory: string): ComponentStore<Co
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
-    };
+    }, [name, email, message]);
 
     const handleSubmit = useCallback(async () => {
         setIsSuccess(false);
@@ -163,7 +163,7 @@ export const useContactFormStore = (trackingCategory: string): ComponentStore<Co
         } finally {
             setIsSubmitting(false);
         }
-    }, [name, email, message, honeypot, trackingCategory]);
+    }, [name, email, message, honeypot, trackingCategory, validateForm]);
 
     const handleReset = useCallback(
         (category: string) => () => {

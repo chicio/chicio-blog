@@ -12,7 +12,8 @@
     "start": "next start",
     "lint": "eslint .",
     "knip": "knip",
-    "release": "release-it"
+    "release": "release-it",
+    "prepare": "husky"
   },
   "dependencies": {
     "@ai-sdk/groq": "^3.0.42",
@@ -80,6 +81,7 @@
     "esbuild": "^0.28.1",
     "eslint": "^9",
     "eslint-config-next": "16.2.9",
+    "husky": "^9.1.7",
     "knip": "^6.17.1",
     "prettier": "^3.8.4",
     "prettier-plugin-tailwindcss": "^0.8.0",

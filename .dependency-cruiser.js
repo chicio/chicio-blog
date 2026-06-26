@@ -126,7 +126,7 @@ const config = {
                 "All component imports must go through the folder's index.ts barrel.",
                 "This ensures the component folder's encapsulation boundary is respected.",
             ].join(" "),
-            severity: "warn",
+            severity: "error",
             from: {
                 pathNot: "/index\\.ts$",
             },
@@ -142,7 +142,7 @@ const config = {
                 "Group $1 captures the parent component folder prefix from the FROM path.",
                 "TO must be inside a 5-segment-deep path but NOT inside the same parent ($1).",
             ].join(" "),
-            severity: "warn",
+            severity: "error",
             from: {
                 path: "^(src/components/[^/]+/[^/]+/[^/]+)/",
             },
@@ -157,22 +157,11 @@ const config = {
                 "src/components/content/<pageA>/ must not import from src/components/content/<pageB>/.",
                 "Group $1 = 'src/components/content/', $2 = the page folder name.",
                 "TO must be in a content page folder but NOT the same page as FROM.",
+                "Global error-level enforcement: applies to all current and future content pages.",
             ].join(" "),
-            severity: "warn",
+            severity: "error",
             from: {
                 path: "^(src/components/content/)([^/]+)/",
-                pathNot: [
-                    "^src/components/content/art/",
-                    "^src/components/content/blog/",
-                    "^src/components/content/videogames/",
-                    "^src/components/content/about-me/",
-                    "^src/components/content/mcp/",
-                    "^src/components/content/home/",
-                    "^src/components/content/clowns/",
-                    "^src/components/content/contact/",
-                    "^src/components/content/data-structures-and-algorithms/",
-                    "^src/components/content/chat/",
-                ],
             },
             to: {
                 path: "^$1[^/]+/",
@@ -666,7 +655,7 @@ const config = {
         {
             name: "no-circular",
             comment: "Circular dependencies are forbidden across all modules.",
-            severity: "warn",
+            severity: "error",
             from: {},
             to: {
                 circular: true,
