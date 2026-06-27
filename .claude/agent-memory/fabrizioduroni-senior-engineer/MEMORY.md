@@ -39,5 +39,8 @@
 ## Architecture (continued)
 - [Design System Purity](arch_design_system_purity.md) — FULLY pure: type-only @/types, no config-const exception; slugs/siteMetadata/tracking injected as props; design-system-types-type-only rule at error
 
+## Features (continued 4)
+- [Testing Pyramid](feature_testing_pyramid.md) — Vitest+RTL+Playwright introduced PR #395; vi.hoisted() gotcha, react-dom pin, reactCompilerPreset v6 API, node/jsdom split, mock-per-test discipline
+
 ## Feedback
 - [PWA & State Patterns](feedback_pwa_patterns.md) — useSyncExternalStore for localStorage state, consent-gated UI, banner/error page alignment rules

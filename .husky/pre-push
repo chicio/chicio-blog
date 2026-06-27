@@ -1,2 +1,3 @@
 npm run validate-architecture
+npm run typecheck
 npm run test:run

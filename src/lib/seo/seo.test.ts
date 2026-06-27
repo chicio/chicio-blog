@@ -106,7 +106,7 @@ describe("createStructuredData", () => {
             ...structuredDataArgs,
             type: "BlogPosting" as const,
             title: longTitle,
-            date: { year: 2024, month: 1, day: 15 },
+            date: { year: 2024, month: 1, day: 15, formatted: "2024-01-15" },
         }) as Record<string, unknown>;
         expect((data.headline as string).length).toBe(110);
     });
@@ -116,7 +116,7 @@ describe("createStructuredData", () => {
             ...structuredDataArgs,
             type: "BlogPosting" as const,
             title: "Test Post",
-            date: { year: 2024, month: 3, day: 5 },
+            date: { year: 2024, month: 3, day: 5, formatted: "2024-03-05" },
         }) as Record<string, unknown>;
         expect(data.datePublished).toBe("2024-03-05T00:00:00+00:00");
     });

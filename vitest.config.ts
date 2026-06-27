@@ -1,18 +1,12 @@
 import { defineConfig } from "vitest/config";
-import react, { reactCompilerPreset } from "@vitejs/plugin-react";
+import react from "@vitejs/plugin-react";
 import { resolve } from "path";
-
-const ReactCompilerConfig = {
-    target: "19",
-};
 
 const pathAlias = {
     "@": resolve(__dirname, "./src"),
 };
 
-const reactPlugin = react({
-    presets: [reactCompilerPreset(ReactCompilerConfig)],
-});
+const reactPlugin = react();
 
 export default defineConfig({
     plugins: [reactPlugin],

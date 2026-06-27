@@ -43,7 +43,7 @@ e2e/
 - **node** — `src/lib/**/*.test.ts` — environment: node
 - **jsdom** — `src/components/**/*.test.tsx` and `src/components/**/*.test.ts` — environment: jsdom, globals: true, setup: `vitest.setup.ts`
 
-The React Compiler babel plugin is applied globally so RTL renders match production behaviour. This is the critical gotcha: `@vitejs/plugin-react` must receive `babel.plugins: [["babel-plugin-react-compiler", { target: "19" }]]`.
+The `@vitejs/plugin-react` v6 plugin is used via `react()` with no extra options. Note: v6 removed the `babel` and `presets` options from its `Options` interface; the `reactCompilerPreset` export is for use with `@rolldown/plugin-babel`, not for vitest. The React Compiler is a production optimization applied by Next.js at build time — it is not replicated in the test transform. Components that use hooks compile and render correctly in tests without it.
 
 ## What to Test at Each Layer
 
@@ -88,16 +88,25 @@ npm run test:run         # vitest run once (CI-friendly)
 npm run test:coverage    # vitest run --coverage (v8, prints text summary)
 npm run test:e2e         # playwright test (builds prod first)
 npm run test:e2e:ui      # playwright test --ui (interactive mode)
+npm run typecheck        # tsc --noEmit via tsconfig.typecheck.json (covers src + tests + e2e + config)
 ```
+
+## Typecheck Coverage
+
+`tsconfig.typecheck.json` extends the main tsconfig and explicitly includes `**/*.test.*`, `e2e/**`, `vitest.config.ts`, `vitest.setup.ts`, and `playwright.config.ts`. It also adds `"vitest/globals"` to `types` so jest-dom matchers type-check correctly. The main `tsconfig.json` excludes these files to avoid confusing Next.js's Turbopack type-checker.
+
+`npm run typecheck` is the authoritative type gate for the full repo. Vitest uses esbuild (no type-check); ESLint ignores test files; `next build` only type-checks src files. None of those catch test type errors — `typecheck` does.
 
 ## CI Shape
 
 ```
 lint           -+
-knip           -+- test -> build -> e2e
-validate-arch  -+
+knip           -+
+validate-arch  -+- typecheck -+- test -> build -> e2e
+                              -+
 ```
 
+- **typecheck** job: `npm run typecheck` — covers `src/**`, `**/*.test.*`, `e2e/**`, and config files. Zero errors required.
 - **test** job: `npm run test:coverage` — prints coverage summary, no gate
 - **e2e** job: runs after build, Playwright browsers cached, report uploaded as artifact; no third-party secrets needed (externals are mocked)
 
@@ -105,6 +114,7 @@ validate-arch  -+
 
 ```
 npm run validate-architecture
+npm run typecheck
 npm run test:run
 ```
 
@@ -125,10 +135,11 @@ When completing any change, run:
 1. `npm run lint` — zero errors (CI enforces `--max-warnings 0`)
 2. `npm run validate-architecture` — zero dependency-cruiser violations. Run after any structural/component change.
 3. `npm run knip` — zero unused exports/dependencies
-4. `npm run test:run` — all Vitest tests green
-5. `npm run build` — success
-6. `npm run test:e2e` — all Playwright specs green (run when touching routing or API routes)
-7. Manual browser check for UI/content changes
+4. `npm run typecheck` — zero TypeScript errors across src, tests, e2e, and config files
+5. `npm run test:run` — all Vitest tests green
+6. `npm run build` — success
+7. `npm run test:e2e` — all Playwright specs green (run when touching routing or API routes)
+8. Manual browser check for UI/content changes
 
 ## Agent-Browser Live QA (local only)
 

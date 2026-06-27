@@ -2,8 +2,8 @@ import { describe, it, expect } from "vitest";
 import { createSearchIndex } from "./search-index-factory";
 import type { Content } from "@/types/content/content";
 
-const makeContent = (overrides: Partial<Parameters<typeof makeContent>[0]> = {}): Content => ({
-    slug: { formatted: "/blog/post/2024/01/01/test-post", raw: "2024/01/01/test-post" },
+const makeContent = (overrides: Partial<Content> = {}): Content => ({
+    slug: { formatted: "/blog/post/2024/01/01/test-post", params: {} },
     frontmatter: {
         title: "Test Post",
         description: "A test post about React",
@@ -56,7 +56,7 @@ describe("createSearchIndex", () => {
     it("indexes multiple documents and both are findable by their distinct tags", () => {
         const content1 = makeContent();
         const content2 = makeContent({
-            slug: { formatted: "/blog/post/2024/02/01/another-post", raw: "2024/02/01/another-post" },
+            slug: { formatted: "/blog/post/2024/02/01/another-post", params: {} },
             frontmatter: {
                 title: "Another Post",
                 description: "About Next.js routing",
