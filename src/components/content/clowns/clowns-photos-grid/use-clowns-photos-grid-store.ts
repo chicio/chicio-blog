@@ -1,6 +1,7 @@
 "use client";
 
-import { useShuffleArray } from "@/lib/shuffle-array/use-shuffle-array";
+import { useSyncExternalStore } from "react";
+import { shuffleArray } from "@/lib/shuffle-array/shuffle-array";
 import { StateStore } from "@/types/component-store";
 
 const photos = [
@@ -15,14 +16,27 @@ const photos = [
     "/media/clowns/clown-9.jpg",
 ];
 
+const DISPLAYED_PHOTOS = 4;
+
+let shuffledPhotos: string[] | null = null;
+
+const subscribe = () => () => {};
+const getServerSnapshot = () => photos.slice(0, DISPLAYED_PHOTOS);
+const getSnapshot = () => {
+    if (!shuffledPhotos) {
+        shuffledPhotos = shuffleArray(photos, DISPLAYED_PHOTOS);
+    }
+    return shuffledPhotos;
+};
+
 interface ClownsPhotosGridState {
     photos: string[];
 }
 
 export const useClownsPhotosGridStore = (): StateStore<ClownsPhotosGridState> => {
-    const shuffledPhotos = useShuffleArray(photos, 4);
+    const displayedPhotos = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
     return {
-        state: { photos: shuffledPhotos },
+        state: { photos: displayedPhotos },
     };
 };
