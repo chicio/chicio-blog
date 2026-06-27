@@ -19,7 +19,8 @@
     },
     "ignoreDependencies": [
         "tailwindcss",
-        "highlight.js"
+        "highlight.js",
+        "agent-browser"
     ],
     "ignoreExportsUsedInFile": true
 }
