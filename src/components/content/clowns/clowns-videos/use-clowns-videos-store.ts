@@ -1,6 +1,7 @@
 "use client";
 
-import { useShuffleArray } from "@/lib/shuffle-array/use-shuffle-array";
+import { useSyncExternalStore } from "react";
+import { shuffleArray } from "@/lib/shuffle-array/shuffle-array";
 import { StateStore } from "@/types/component-store";
 
 const videos = [
@@ -14,14 +15,27 @@ const videos = [
     "https://www.youtube.com/embed/8L2jFgx3Kb8",
 ];
 
+const DISPLAYED_VIDEOS = 4;
+
+let shuffledVideos: string[] | null = null;
+
+const subscribe = () => () => {};
+const getServerSnapshot = () => videos.slice(0, DISPLAYED_VIDEOS);
+const getSnapshot = () => {
+    if (!shuffledVideos) {
+        shuffledVideos = shuffleArray(videos, DISPLAYED_VIDEOS);
+    }
+    return shuffledVideos;
+};
+
 interface ClownsVideosState {
     videos: string[];
 }
 
 export const useClownsVideosStore = (): StateStore<ClownsVideosState> => {
-    const shuffledVideos = useShuffleArray(videos, 4);
+    const displayedVideos = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
     return {
-        state: { videos: shuffledVideos },
+        state: { videos: displayedVideos },
     };
 };
