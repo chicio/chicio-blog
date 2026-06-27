@@ -86,6 +86,9 @@ const config = {
     ],
     options: {
         doNotFollow: { path: "node_modules" },
+        exclude: {
+            path: "\\.(test|spec)\\.(ts|tsx)$",
+        },
         tsPreCompilationDeps: true,
         tsConfig: { fileName: "tsconfig.json" },
         moduleSystems: ["es6", "cjs"],

@@ -6,11 +6,13 @@
         "serwist.config.mjs",
         "src/types/component-store.ts",
         "tools/eslint/index.js",
-        "tools/eslint/rules/*.js"
+        "tools/eslint/rules/*.js",
+        "e2e/**/*.ts"
     ],
     "project": [
         "src/**/*.{ts,tsx,mdx}",
-        "tools/**/*.js"
+        "tools/**/*.js",
+        "e2e/**/*.ts"
     ],
     "mdx": {
         "entry": ["src/content/**/content.mdx"]
