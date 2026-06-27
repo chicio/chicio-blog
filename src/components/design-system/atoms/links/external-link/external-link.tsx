@@ -1,9 +1,9 @@
 "use client";
 
 import { FC, ReactNode } from "react";
-import { useStandardExternalLinkWithTrackingStore } from "./use-standard-external-link-with-tracking-store";
+import { useExternalLinkStore } from "./use-external-link-store";
 
-type StandardExternalLinkWithTrackingProps = {
+type ExternalLinkProps = {
     href: string;
     target?: string;
     rel?: string;
@@ -12,7 +12,7 @@ type StandardExternalLinkWithTrackingProps = {
     onClick?: () => void;
 };
 
-export const StandardExternalLinkWithTracking: FC<StandardExternalLinkWithTrackingProps> = ({
+export const ExternalLink: FC<ExternalLinkProps> = ({
     children,
     href,
     onClick,
@@ -20,7 +20,7 @@ export const StandardExternalLinkWithTracking: FC<StandardExternalLinkWithTracki
     rel,
     className,
 }) => {
-    const { effects } = useStandardExternalLinkWithTrackingStore(onClick);
+    const { effects } = useExternalLinkStore(onClick);
     const { onTrack } = effects;
 
     return (

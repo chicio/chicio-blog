@@ -1,4 +1,4 @@
-import { StandardInternalLinkWithTracking } from "@/components/design-system/atoms/links/standard-internal-link-with-tracking";
+import { InternalLink } from "@/components/design-system/atoms/links/internal-link";
 import { FC } from "react";
 
 interface TagContentProps {
@@ -16,7 +16,7 @@ export const Tag: FC<TagProps> = ({ tag, link, big, onClick }) => {
     const margins = big ? "mr-4 mb-6" : "mr-1 mb-1";
 
     return (
-        <StandardInternalLinkWithTracking
+        <InternalLink
             className="inline-block no-underline"
             onClick={onClick}
             to={link}
@@ -26,6 +26,6 @@ export const Tag: FC<TagProps> = ({ tag, link, big, onClick }) => {
             >
                 {tag}
             </span>
-        </StandardInternalLinkWithTracking>
+        </InternalLink>
     );
 };

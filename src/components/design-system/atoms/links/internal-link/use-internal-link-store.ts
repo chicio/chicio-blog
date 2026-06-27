@@ -2,13 +2,13 @@
 
 import type { EffectsStore } from "@/types/component-store";
 
-type StandardExternalLinkWithTrackingEffects = {
+type InternalLinkEffects = {
     onTrack: () => void;
 };
 
-export const useStandardExternalLinkWithTrackingStore = (
+export const useInternalLinkStore = (
     onClick?: () => void,
-): EffectsStore<StandardExternalLinkWithTrackingEffects> => {
+): EffectsStore<InternalLinkEffects> => {
     return {
         effects: {
             onTrack: onClick ?? (() => {}),

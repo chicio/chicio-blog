@@ -1,4 +1,4 @@
-import { StandardInternalLinkWithTracking } from "@/components/design-system/atoms/links/standard-internal-link-with-tracking";
+import { InternalLink } from "@/components/design-system/atoms/links/internal-link";
 import { PageTitle } from "@/components/design-system/molecules/typography/page-title";
 import { Content } from "@/types/content/content";
 import { FC } from "react";
@@ -32,12 +32,12 @@ export const BlogGenericPostListPageTemplate: FC<BlogGenericPostListPageProps> =
                     <time className="text-xl">{post.frontmatter.date.formatted}</time>
                 </div>
                 <div className="flex-5/6">
-                    <StandardInternalLinkWithTracking
+                    <InternalLink
                         className="text-xl"
                         to={post.slug.formatted}
                     >
                         {post.frontmatter.title}
-                    </StandardInternalLinkWithTracking>
+                    </InternalLink>
                 </div>
             </div>
         ))}

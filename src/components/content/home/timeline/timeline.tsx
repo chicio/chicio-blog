@@ -1,4 +1,4 @@
-import { StandardExternalLinkWithTracking } from "@/components/design-system/atoms/links/standard-external-link-with-tracking";
+import { ExternalLink } from "@/components/design-system/atoms/links/external-link";
 import Image from "next/image";
 import { FC } from "react";
 import { BiBriefcase, BiSolidGraduation } from "react-icons/bi";
@@ -31,13 +31,13 @@ export const Timeline: FC = () => {
                         <div className="glow-container p-4 md:p-8">
                             <div className="flex w-full flex-col gap-1">
                                 {item.link ? (
-                                    <StandardExternalLinkWithTracking
+                                    <ExternalLink
                                         href={item.link}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                     >
                                         <h3>{item.title}</h3>
-                                    </StandardExternalLinkWithTracking>
+                                    </ExternalLink>
                                 ) : (
                                     <h3>{item.title}</h3>
                                 )}

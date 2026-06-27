@@ -1,5 +1,5 @@
 import { ImageGlow } from "@/components/design-system/atoms/effects/image-glow";
-import { StandardExternalLinkWithTracking } from "@/components/design-system/atoms/links/standard-external-link-with-tracking";
+import { ExternalLink } from "@/components/design-system/atoms/links/external-link";
 import { Author } from "@/types/content/author";
 import { FC } from "react";
 
@@ -29,13 +29,13 @@ export const PostAuthors: FC<PostAuthorsProps> = ({
                     />
                     <p>
                         {enableUrl && (
-                            <StandardExternalLinkWithTracking
+                            <ExternalLink
                                 href={author.url}
                                 target={"_blank"}
                                 rel="noopener noreferrer"
                             >
                                 {author.name}
-                            </StandardExternalLinkWithTracking>
+                            </ExternalLink>
                         )}
                         {!enableUrl && author.name}
                     </p>

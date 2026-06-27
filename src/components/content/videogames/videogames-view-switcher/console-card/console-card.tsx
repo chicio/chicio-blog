@@ -1,6 +1,6 @@
 import { FC } from "react";
 import Image from "next/image";
-import { StandardInternalLinkWithTracking } from "@/components/design-system/atoms/links/standard-internal-link-with-tracking";
+import { InternalLink } from "@/components/design-system/atoms/links/internal-link";
 import { TerminalLink } from "@/components/design-system/molecules/links/terminal-link";
 import { ConsoleMetadata } from "@/types/content/videogames";
 import { Content } from "@/types/content/content";
@@ -25,7 +25,7 @@ export const ConsoleCard: FC<ConsoleCardProps> = ({ console, gamesCount }) => (
                 <div className="text-secondary text-xs sm:text-sm">Games owned</div>
             </div>
         </div>
-        <StandardInternalLinkWithTracking to={console.slug.formatted}>
+        <InternalLink to={console.slug.formatted}>
             <div className="border-accent-alpha-40 bg-black relative h-96 flex justify-center items-center overflow-hidden border-b">
                 <Image
                     src={console.frontmatter.metadata!.gallery[0]}
@@ -45,9 +45,9 @@ export const ConsoleCard: FC<ConsoleCardProps> = ({ console, gamesCount }) => (
                     <span className="text-primary font-mono text-xs text-shadow-sm">{console.frontmatter.metadata?.sku}</span>
                 </div>
             </div>
-        </StandardInternalLinkWithTracking>
+        </InternalLink>
         <div className="p-4 sm:p-6">
-            <StandardInternalLinkWithTracking
+            <InternalLink
                 className="no-underline hover:no-underline"
                 to={console.slug.formatted}
             >
@@ -65,7 +65,7 @@ export const ConsoleCard: FC<ConsoleCardProps> = ({ console, gamesCount }) => (
                     generation={console.frontmatter.metadata?.generation}
                 />
                 <p className="mb-4 pt-4">{console.frontmatter.description}</p>
-            </StandardInternalLinkWithTracking>
+            </InternalLink>
             <TerminalLink
                 to={console.slug.formatted}
                 label="See more"

@@ -4,7 +4,7 @@ import { FC } from "react";
 import { AnimatePresence } from "framer-motion";
 import { Accordion } from "@/components/design-system/molecules/accordion/accordion";
 import { Button } from "@/components/design-system/atoms/buttons/button";
-import { StandardExternalLinkWithTracking } from "@/components/design-system/atoms/links/standard-external-link-with-tracking";
+import { ExternalLink } from "@/components/design-system/atoms/links/external-link";
 import { useGlassmorphism } from "@/components/design-system/hooks/use-glassmorphism";
 import { SiProbot } from "react-icons/si";
 import { useChromeAiFeaturesToolbarStore } from "./use-chrome-ai-features-toolbar-store";
@@ -37,14 +37,14 @@ export const ChromeAiFeaturesToolbar: FC<ChromeAiFeaturesToolbarProps> = ({
                 >
                     <p>
                         {"These features require "}
-                        <StandardExternalLinkWithTracking
+                        <ExternalLink
                             href="https://developer.chrome.com/docs/ai/built-in"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-accent underline"
                         >
                             Chrome 138+
-                        </StandardExternalLinkWithTracking>
+                        </ExternalLink>
                         {" and capable hardware to run."}
                     </p>
                     <div className="mt-2 flex gap-3 overflow-visible">

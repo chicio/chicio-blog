@@ -4,7 +4,7 @@ import { siteMetadata } from "@/types/configuration/site-metadata";
 import { tracking } from "@/types/configuration/tracking";
 import { JsonLd } from "@/components/features/seo/jsond-ld";
 import { ContentPage } from "@/components/features/content/content-page";
-import { StandardInternalLinkWithTracking } from "@/components/design-system/atoms/links/standard-internal-link-with-tracking";
+import { InternalLink } from "@/components/design-system/atoms/links/internal-link";
 import { VideogameCollectionDataCard } from "./videogame-collection-data-card";
 import { VideogamesViewSwitcher } from "@/components/content/videogames/videogames-view-switcher";
 
@@ -22,9 +22,9 @@ export const VideogamesCollection: React.FC = () => {
             <p>
                 My journey through Videogames that I started in 1992. From 8-bit consoles to modern powerhouses, each
                 one tells a story of technological evolution and countless hours of gameplay. Videogames are{" "}
-                <StandardInternalLinkWithTracking to="/about-me">
+                <InternalLink to="/about-me">
                     one of the reason why I became a software engineer
-                </StandardInternalLinkWithTracking>
+                </InternalLink>
                 .
             </p>
             <div className="mt-10 mb-8 grid grid-cols-2 gap-4 md:grid-cols-4">
