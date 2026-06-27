@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { marked } from "marked";
-import { StateStore } from "@/types/component-store";
+import type { StateStore } from "@/types/component-store";
 
 type MarkdownState = {
     blocks: string[];

@@ -4,7 +4,6 @@ import { MatrixRain } from "@/components/design-system/atoms/effects/matrix-rain
 import { MatrixTerminal } from "@/components/design-system/molecules/effects/matrix-terminal";
 import { BluePillLink } from "@/components/design-system/molecules/links/pills-links";
 import { RedPillButton } from "@/components/design-system/molecules/buttons/pills-buttons";
-import { tracking } from "@/types/configuration/tracking";
 
 const terminalLines = [
     { text: "Connecting to Matrix...", delay: 600 },
@@ -23,14 +22,7 @@ export default function OfflinePage() {
                 </h1>
                 <MatrixTerminal lines={terminalLines} />
                 <div className="flex flex-row gap-4 mt-3">
-                    <BluePillLink
-                        to="/"
-                        trackingData={{
-                            category: tracking.category.pwa,
-                            label: tracking.label.body,
-                            action: tracking.action.blue_pill,
-                        }}
-                    >
+                    <BluePillLink to="/">
                         Stay cached
                     </BluePillLink>
                     <RedPillButton onClick={() => window.location.reload()}>

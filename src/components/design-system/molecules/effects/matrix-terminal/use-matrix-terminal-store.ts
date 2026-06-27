@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useInView } from "@/components/design-system/hooks/use-in-view";
 import { useTypewriter } from "@/components/design-system/hooks/use-typewriter";
-import { StateStore } from "@/types/component-store";
+import type { StateStore } from "@/types/component-store";
 import React from "react";
 
 interface TerminalLine {

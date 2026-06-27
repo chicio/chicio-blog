@@ -2,17 +2,14 @@ import { FC, PropsWithChildren, ReactNode } from "react";
 import { ContentProgressBar } from "@/components/design-system/organism/reading-content-progress-bar";
 import { ContentPageTemplate } from "@/components/design-system/templates/content-page-template";
 import { Breadcrumb, BreadcrumbItem } from "@/components/design-system/molecules/breadcrumbs/breadcrumb";
+import type { ContentPageProps } from "@/components/design-system/templates/content-page-template";
 
-export interface ReadingContentPageProps {
-    author: string;
-    trackingCategory: string;
-    big?: boolean;
+export type ReadingContentPageProps = ContentPageProps & {
     breadcrumbs?: BreadcrumbItem[];
     beforeContent?: ReactNode;
-    children?: ReactNode;
     afterContent?: ReactNode;
     headerWrapper?: FC<PropsWithChildren>;
-}
+};
 
 const contentId = "reading-content-container";
 
@@ -21,18 +18,30 @@ export const ReadingContentPageTemplate: FC<ReadingContentPageProps> = ({
     children,
     afterContent,
     author,
-    trackingCategory,
     breadcrumbs,
     big = false,
     headerWrapper,
+    navHrefs,
+    footerNavHrefs,
+    socialLinks,
+    onPaletteTrigger,
+    menuTracking,
+    footerNavTracking,
+    footerSocialTracking,
 }) => (
     <>
         <ContentProgressBar contentId={contentId} />
         <ContentPageTemplate
             author={author}
-            trackingCategory={trackingCategory}
             big={big}
             headerWrapper={headerWrapper}
+            navHrefs={navHrefs}
+            footerNavHrefs={footerNavHrefs}
+            socialLinks={socialLinks}
+            onPaletteTrigger={onPaletteTrigger}
+            menuTracking={menuTracking}
+            footerNavTracking={footerNavTracking}
+            footerSocialTracking={footerSocialTracking}
         >
             {breadcrumbs && <Breadcrumb items={breadcrumbs} />}
             {beforeContent}

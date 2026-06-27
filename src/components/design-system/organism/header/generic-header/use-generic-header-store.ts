@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ComponentStore } from "@/types/component-store";
+import type { ComponentStore } from "@/types/component-store";
 
 interface GenericHeaderState {
     isSubtitleExpanded: boolean;

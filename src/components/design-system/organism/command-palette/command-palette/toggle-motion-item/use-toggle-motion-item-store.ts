@@ -1,10 +1,9 @@
 "use client";
 
-import { trackWith } from "@/lib/tracking/tracking";
-import { tracking } from "@/types/configuration/tracking";
 import { useMotionStore } from "@/components/design-system/hooks/use-motion-store";
-import { writeMotion } from "@/lib/motion/motion";
-import { ComponentStore } from "@/types/component-store";
+import { writeMotion } from "@/components/design-system/state/motion/motion";
+import type { ComponentStore } from "@/types/component-store";
+import { useCallback } from "react";
 
 interface ToggleMotionItemState {
     motionEnabled: boolean;
@@ -14,17 +13,15 @@ interface ToggleMotionItemEffects {
     handleToggleMotion: () => void;
 }
 
-export const useToggleMotionItemStore = (): ComponentStore<ToggleMotionItemState, ToggleMotionItemEffects> => {
+export const useToggleMotionItemStore = (
+    onTrack?: () => void,
+): ComponentStore<ToggleMotionItemState, ToggleMotionItemEffects> => {
     const motionEnabled = useMotionStore();
 
-    const handleToggleMotion = () => {
-        trackWith({
-            category: tracking.category.command_palette,
-            label: tracking.label.body,
-            action: tracking.action.command_palette_toggle_motion,
-        });
+    const handleToggleMotion = useCallback(() => {
+        onTrack?.();
         writeMotion(motionEnabled ? "off" : "on");
-    };
+    }, [onTrack, motionEnabled]);
 
     return {
         state: { motionEnabled },

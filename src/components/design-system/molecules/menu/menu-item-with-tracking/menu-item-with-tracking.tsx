@@ -1,15 +1,15 @@
 "use client";
 
 import { FC, ReactNode } from "react";
-import { TrackingElementProps } from "@/types/configuration/tracking";
 import Link from "next/link";
 import { useMenuItemWithTrackingStore } from "./use-menu-item-with-tracking-store";
 
-type MenuItemWithTrackingProps = TrackingElementProps & {
+export type MenuItemWithTrackingProps = {
     to: string;
     selected: boolean;
     children?: ReactNode;
     className?: string;
+    onClick?: () => void;
     onClickCallback?: () => void;
     external?: boolean;
 };
@@ -18,8 +18,8 @@ export const MenuItemWithTracking: FC<MenuItemWithTrackingProps> = ({
     children,
     className,
     to,
-    trackingData,
     selected,
+    onClick,
     onClickCallback,
     external,
 }) => {
@@ -43,7 +43,7 @@ export const MenuItemWithTracking: FC<MenuItemWithTrackingProps> = ({
                 target="_blank"
                 rel="noopener noreferrer"
                 className={composedClassName}
-                onClick={handleClick(trackingData, onClickCallback)}
+                onClick={handleClick(onClick, onClickCallback)}
             >
                 {children}
             </a>
@@ -55,7 +55,7 @@ export const MenuItemWithTracking: FC<MenuItemWithTrackingProps> = ({
             href={to}
             prefetch={false}
             className={composedClassName}
-            onClick={handleClick(trackingData, onClickCallback)}
+            onClick={handleClick(onClick, onClickCallback)}
         >
             {children}
         </Link>

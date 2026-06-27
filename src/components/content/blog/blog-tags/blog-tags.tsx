@@ -27,8 +27,6 @@ export const BlogTags: FC<BlogTagsProps> = ({ tags, author }) => {
                             link={tag.slug}
                             tag={`${tag.tagValue} (${tag.count})`}
                             key={tag!.tagValue}
-                            trackingCategory={tracking.category.blog_tags}
-                            trackingLabel={tracking.label.body}
                         />
                     ))}
                 </div>

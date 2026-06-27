@@ -1,6 +1,5 @@
 import { FC } from "react";
 import Image from "next/image";
-import { tracking } from "@/types/configuration/tracking";
 import { StandardInternalLinkWithTracking } from "@/components/design-system/atoms/links/standard-internal-link-with-tracking";
 import { TerminalLink } from "@/components/design-system/molecules/links/terminal-link";
 import { ConsoleMetadata } from "@/types/content/videogames";
@@ -26,14 +25,7 @@ export const ConsoleCard: FC<ConsoleCardProps> = ({ console, gamesCount }) => (
                 <div className="text-secondary text-xs sm:text-sm">Games owned</div>
             </div>
         </div>
-        <StandardInternalLinkWithTracking
-            to={console.slug.formatted}
-            trackingData={{
-                category: tracking.category.videogames,
-                label: tracking.label.body,
-                action: tracking.action.open_videogame_console,
-            }}
-        >
+        <StandardInternalLinkWithTracking to={console.slug.formatted}>
             <div className="border-accent-alpha-40 bg-black relative h-96 flex justify-center items-center overflow-hidden border-b">
                 <Image
                     src={console.frontmatter.metadata!.gallery[0]}
@@ -58,11 +50,6 @@ export const ConsoleCard: FC<ConsoleCardProps> = ({ console, gamesCount }) => (
             <StandardInternalLinkWithTracking
                 className="no-underline hover:no-underline"
                 to={console.slug.formatted}
-                trackingData={{
-                    category: tracking.category.videogames,
-                    label: tracking.label.body,
-                    action: tracking.action.open_videogame_console,
-                }}
             >
                 <div className="mb-6">
                     <h2 className="text-primary font-bold text-shadow-sm">{console.frontmatter.metadata?.name}</h2>
@@ -81,11 +68,6 @@ export const ConsoleCard: FC<ConsoleCardProps> = ({ console, gamesCount }) => (
             </StandardInternalLinkWithTracking>
             <TerminalLink
                 to={console.slug.formatted}
-                trackingData={{
-                    category: tracking.category.videogames,
-                    label: tracking.label.body,
-                    action: tracking.action.open_videogame_console,
-                }}
                 label="See more"
             />
         </div>

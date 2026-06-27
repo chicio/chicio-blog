@@ -92,11 +92,6 @@ export default function CookiePolicy() {
             Cookies:
             <StandardExternalLinkWithTracking
               href="https://en.wikipedia.org/wiki/HTTP_cookie"
-              trackingData={{
-                category: tracking.category.cookie_policy,
-                action: tracking.action.open_http_cookie_policy,
-                label: tracking.label.body,
-              }}
               className="mx-2"
             >
               https://en.wikipedia.org/wiki/HTTP_cookie

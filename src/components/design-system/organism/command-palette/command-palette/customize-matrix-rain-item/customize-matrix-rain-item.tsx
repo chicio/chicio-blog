@@ -10,10 +10,11 @@ const ITEM_CLASS =
 
 interface CustomizeMatrixRainItemProps {
     onClose: () => void;
+    onTrack?: () => void;
 }
 
-export const CustomizeMatrixRainItem = ({ onClose }: CustomizeMatrixRainItemProps) => {
-    const { state, effects } = useCustomizeMatrixRainItemStore(onClose);
+export const CustomizeMatrixRainItem = ({ onClose, onTrack }: CustomizeMatrixRainItemProps) => {
+    const { state, effects } = useCustomizeMatrixRainItemStore(onClose, onTrack);
     const { visible } = state;
     const { handleSelect } = effects;
 

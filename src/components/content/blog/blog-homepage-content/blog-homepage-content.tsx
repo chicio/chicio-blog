@@ -33,18 +33,14 @@ export const BlogHomePageContent: FC<BlogHomeProps> = ({ pagination, author }) =
                     date={launchPost.frontmatter.date.formatted}
                     readingTime={launchPost.readingTime.text!}
                     description={launchPost.frontmatter.description}
-                    trackingCategory={tracking.category.blog_home}
                     tags={launchPost.frontmatter.tags}
                 />
                 {postsGrouped.map((postsGroup, index) => (
                     <PostsRow postsGroup={postsGroup} key={`PostCardsRow${index}`} />
                 ))}
                 <PaginationNavigation
-                    trackingCategory={tracking.category.blog_home}
                     previousPageUrl={previousPageUrl}
-                    previousPageTrackingAction={tracking.action.open_blog_previous_page}
                     nextPageUrl={nextPageUrl}
-                    nextPageTrackingAction={tracking.action.open_blog_next_page}
                 />
             </ContentPage>
             <JsonLd

@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, useState } from "react";
-import { ComponentStore } from "@/types/component-store";
+import type { ComponentStore } from "@/types/component-store";
 
 interface AccordionState {
     isOpen: boolean;

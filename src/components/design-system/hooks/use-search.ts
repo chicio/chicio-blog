@@ -1,7 +1,6 @@
 "use client";
 
-import { searchIndexFileName } from "@/lib/content/search-filename";
-import { SearchablePostFields, SearchResult } from "@/types/search/search";
+import type { SearchablePostFields, SearchResult } from "@/types/search/search";
 import elasticlunr from "elasticlunr";
 import { ChangeEvent, useCallback, useEffect, useState, useMemo, useTransition } from "react";
 
@@ -25,6 +24,7 @@ const searchFor = (
 export const useSearch = (
   startSearch: boolean,
   easterEgg: (query: string) => SearchResult | null,
+  searchIndexFileName: string,
 ) => {
   const [search, setSearch] = useState<SearchResult>({
     type: "search",
@@ -44,7 +44,7 @@ export const useSearch = (
           });
         });
     }
-  }, [startSearch, searchIndex]);
+  }, [startSearch, searchIndex, searchIndexFileName]);
 
   const searchUsing = useMemo(
       () => (value: string) => {

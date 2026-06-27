@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { StateStore } from "@/types/component-store";
+import type { StateStore } from "@/types/component-store";
 
 const getAnimatedBar = (position: number, length = 24) => {
     const bar = Array(length).fill("░");

@@ -1,25 +1,25 @@
 "use client";
 
-import { TrackingElementProps } from "@/types/configuration/tracking";
 import Link from "next/link";
 import { FC, ReactNode } from "react";
 import { useStandardInternalLinkWithTrackingStore } from "./use-standard-internal-link-with-tracking-store";
 
-type StandardInternalLinkWithTrackingProps = TrackingElementProps & {
+type StandardInternalLinkWithTrackingProps = {
     to: string;
     className?: string;
     children?: ReactNode;
     prefetch?: boolean;
+    onClick?: () => void;
 };
 
 export const StandardInternalLinkWithTracking: FC<StandardInternalLinkWithTrackingProps> = ({
     children,
     className,
     to,
-    trackingData,
+    onClick,
     prefetch = false,
 }) => {
-    const { effects } = useStandardInternalLinkWithTrackingStore(trackingData);
+    const { effects } = useStandardInternalLinkWithTrackingStore(onClick);
     const { onTrack } = effects;
 
     return (

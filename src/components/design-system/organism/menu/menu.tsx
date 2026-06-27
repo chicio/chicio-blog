@@ -1,7 +1,5 @@
 "use client";
 
-import { slugs } from "@/types/configuration/slug";
-import { tracking } from "@/types/configuration/tracking";
 import { AnimatePresence, Variants } from "framer-motion";
 import { FC } from "react";
 import { BiSearchAlt } from "react-icons/bi";
@@ -13,6 +11,7 @@ import { useGlassmorphism } from "@/components/design-system/hooks/use-glassmorp
 import { MotionDiv } from "@/components/design-system/atoms/animation/motion-div";
 import { LuCommand } from "react-icons/lu";
 import { ImCtrl } from "react-icons/im";
+import type { MenuTrackingCallbacks } from "./use-menu-store";
 import { useMenuStore } from "./use-menu-store";
 
 const menuVariants: Variants = {
@@ -37,15 +36,44 @@ const panelVariants: Variants = {
     },
 };
 
-export interface MenuProps {
-    trackingCategory: string;
+export interface MenuNavHrefs {
+    blog: string;
+    dsaRoadmap: string;
+    dsaExercises: string;
+    chat: string;
+    mcp: string;
+    aboutMe: string;
+    art: string;
+    videogames: string;
+    contact: string;
 }
 
-export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
+export interface MenuProps {
+    navHrefs: MenuNavHrefs;
+    onPaletteTrigger?: () => void;
+    tracking?: MenuTrackingCallbacks;
+}
+
+export const Menu: FC<MenuProps> = ({ navHrefs, onPaletteTrigger, tracking }) => {
     const { glassmorphismClass } = useGlassmorphism({ noScale: true });
-    const { state, effects } = useMenuStore(trackingCategory);
+    const { state, effects } = useMenuStore(navHrefs.chat, onPaletteTrigger, tracking);
     const { pathname, shouldHideMenu, shouldOpenMenu, modifierKey } = state;
-    const { openMenu, closeMenu, handlePaletteTrigger } = effects;
+    const {
+        openMenu,
+        closeMenu,
+        handlePaletteTrigger,
+        onTrackHome,
+        onTrackBlog,
+        onTrackDsaRoadmap,
+        onTrackDsaExercises,
+        onTrackChat,
+        onTrackMcp,
+        onTrackMatrixRain,
+        onTrackAboutMe,
+        onTrackArt,
+        onTrackVideogames,
+        onTrackContact,
+    } = effects;
 
     const baseClassName = (isMobile: boolean) =>
         isMobile ? "mb-2 w-80" : "hidden sm:flex xs:mb-0 xs:w-auto";
@@ -59,11 +87,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
                 key={`home-${isMobile ? "mobile" : "desktop"}`}
                 to={"/"}
                 selected={pathname === "/"}
-                trackingData={{
-                    action: tracking.action.open_home,
-                    category: trackingCategory,
-                    label: tracking.label.header,
-                }}
+                onClick={onTrackHome}
                 onClickCallback={closeMenu}
             >
                 Home
@@ -71,13 +95,9 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
             <MenuItemWithTracking
                 key={`blog-${isMobile ? "mobile" : "desktop"}`}
                 className={baseClassName(isMobile)}
-                to={slugs.blog.home}
-                selected={pathname.includes(slugs.blog.home)}
-                trackingData={{
-                    action: tracking.action.open_home,
-                    category: trackingCategory,
-                    label: tracking.label.header,
-                }}
+                to={navHrefs.blog}
+                selected={pathname.includes(navHrefs.blog)}
+                onClick={onTrackBlog}
                 onClickCallback={closeMenu}
             >
                 Blog
@@ -91,24 +111,16 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
                         items: [
                             {
                                 label: "Roadmap",
-                                to: slugs.dataStructuresAndAlgorithms.roadmap,
-                                trackingData: {
-                                    action: tracking.action.open_dsa_roadmap,
-                                    category: trackingCategory,
-                                    label: tracking.label.header,
-                                },
-                                selected: pathname === slugs.dataStructuresAndAlgorithms.roadmap,
+                                to: navHrefs.dsaRoadmap,
+                                onClick: onTrackDsaRoadmap,
+                                selected: pathname === navHrefs.dsaRoadmap,
                                 onClickCallback: closeMenu,
                             },
                             {
                                 label: "Exercises",
-                                to: slugs.dataStructuresAndAlgorithms.exercises,
-                                trackingData: {
-                                    action: tracking.action.open_dsa_exercises,
-                                    category: trackingCategory,
-                                    label: tracking.label.header,
-                                },
-                                selected: pathname === slugs.dataStructuresAndAlgorithms.exercises,
+                                to: navHrefs.dsaExercises,
+                                onClick: onTrackDsaExercises,
+                                selected: pathname === navHrefs.dsaExercises,
                                 onClickCallback: closeMenu,
                             },
                         ],
@@ -118,24 +130,16 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
                         items: [
                             {
                                 label: "Chat",
-                                to: slugs.chat,
-                                trackingData: {
-                                    action: tracking.action.open_chat,
-                                    category: trackingCategory,
-                                    label: tracking.label.header,
-                                },
-                                selected: pathname === slugs.chat,
+                                to: navHrefs.chat,
+                                onClick: onTrackChat,
+                                selected: pathname === navHrefs.chat,
                                 onClickCallback: closeMenu,
                             },
                             {
                                 label: "MCP",
-                                to: slugs.mcp,
-                                trackingData: {
-                                    action: tracking.action.open_mcp,
-                                    category: trackingCategory,
-                                    label: tracking.label.header,
-                                },
-                                selected: pathname === slugs.mcp,
+                                to: navHrefs.mcp,
+                                onClick: onTrackMcp,
+                                selected: pathname === navHrefs.mcp,
                                 onClickCallback: closeMenu,
                             },
                         ],
@@ -147,11 +151,7 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
                                 label: "Matrix Rain",
                                 to: "https://chicio.github.io/matrix-rain-webgpu/",
                                 external: true,
-                                trackingData: {
-                                    action: tracking.action.open_matrix_rain_webgpu,
-                                    category: trackingCategory,
-                                    label: tracking.label.header,
-                                },
+                                onClick: onTrackMatrixRain,
                                 onClickCallback: closeMenu,
                             },
                         ],
@@ -164,46 +164,30 @@ export const Menu: FC<MenuProps> = ({ trackingCategory }) => {
                 items={[
                     {
                         label: "About me",
-                        to: slugs.aboutMe,
-                        trackingData: {
-                            action: tracking.action.open_about_me,
-                            category: trackingCategory,
-                            label: tracking.label.header,
-                        },
-                        selected: pathname === slugs.aboutMe,
+                        to: navHrefs.aboutMe,
+                        onClick: onTrackAboutMe,
+                        selected: pathname === navHrefs.aboutMe,
                         onClickCallback: closeMenu,
                     },
                     {
                         label: "Art",
-                        to: slugs.art,
-                        trackingData: {
-                            action: tracking.action.open_art,
-                            category: trackingCategory,
-                            label: tracking.label.header,
-                        },
-                        selected: pathname === slugs.art,
+                        to: navHrefs.art,
+                        onClick: onTrackArt,
+                        selected: pathname === navHrefs.art,
                         onClickCallback: closeMenu,
                     },
                     {
                         label: "Videogames",
-                        to: slugs.videogames.home,
-                        trackingData: {
-                            action: tracking.action.open_videogame_collection,
-                            category: trackingCategory,
-                            label: tracking.label.header,
-                        },
-                        selected: pathname === slugs.videogames.home,
+                        to: navHrefs.videogames,
+                        onClick: onTrackVideogames,
+                        selected: pathname === navHrefs.videogames,
                         onClickCallback: closeMenu,
                     },
                     {
                         label: "Contact me",
-                        to: slugs.contact,
-                        trackingData: {
-                            action: tracking.action.open_contact,
-                            category: trackingCategory,
-                            label: tracking.label.header,
-                        },
-                        selected: pathname === slugs.contact,
+                        to: navHrefs.contact,
+                        onClick: onTrackContact,
+                        selected: pathname === navHrefs.contact,
                         onClickCallback: closeMenu,
                     },
                 ]}

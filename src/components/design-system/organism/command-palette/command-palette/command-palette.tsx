@@ -3,7 +3,7 @@
 import { Overlay } from "@/components/design-system/atoms/effects/overlay";
 import { TerminalLine } from "@/components/design-system/atoms/typography/terminal-blocks";
 import { useGlassmorphism } from "@/components/design-system/hooks/use-glassmorphism";
-import { EasterEggTerminalLines, SearchResult } from "@/types/search/search";
+import type { EasterEggTerminalLines, SearchResult } from "@/types/search/search";
 import { motion } from "framer-motion";
 import { ComponentType, FC } from "react";
 import { BiChat } from "react-icons/bi";
@@ -20,17 +20,48 @@ const GroupLabel: FC<{ children: React.ReactNode }> = ({ children }) => (
     <div className="text-accent/50 px-4 py-1 font-mono text-xs tracking-wider uppercase">{children}</div>
 );
 
+interface CommandPaletteTrackingProps {
+    onOpen?: () => void;
+    onOpenChat?: () => void;
+    onSearchResultSelect?: () => void;
+    onToggleMotion?: () => void;
+    onCustomizeMatrixRain?: () => void;
+}
+
 interface CommandPaletteProps {
+    searchIndexFileName: string;
+    chatSlug: string;
+    tracking?: CommandPaletteTrackingProps;
     searchEasterEgg?: (query: string) => SearchResult | null;
     SearchEasterEggComponent?: ComponentType<{ lines: EasterEggTerminalLines }>;
 }
 
-export const CommandPalette: FC<CommandPaletteProps> = ({ searchEasterEgg, SearchEasterEggComponent }) => {
+export const CommandPalette: FC<CommandPaletteProps> = ({
+    searchIndexFileName,
+    chatSlug,
+    tracking,
+    searchEasterEgg,
+    SearchEasterEggComponent,
+}) => {
     const { glassmorphismClass } = useGlassmorphism({ noScale: true });
-    const { state, effects } = useCommandPaletteStore(searchEasterEgg, SearchEasterEggComponent);
+    const { state, effects } = useCommandPaletteStore(
+        searchIndexFileName,
+        chatSlug,
+        tracking,
+        searchEasterEgg,
+        SearchEasterEggComponent,
+    );
     const { open, isSearching, selectedValue, search, easterEggLines } = state;
-    const { close, stopPropagation, handleSearchInput, handleOpenChat, handleSearchResultSelect, setSelectedValue } =
-        effects;
+    const {
+        close,
+        stopPropagation,
+        handleSearchInput,
+        handleOpenChat,
+        handleSearchResultSelect,
+        setSelectedValue,
+        onToggleMotion,
+        onCustomizeMatrixRain,
+    } = effects;
 
     const hasSearchResults = search.type === "search" && search.results.length > 0;
 
@@ -98,8 +129,8 @@ export const CommandPalette: FC<CommandPaletteProps> = ({ searchEasterEgg, Searc
                                                 {">"} Open chat
                                             </TerminalLine>
                                         </Command.Item>
-                                        <ToggleMotionItem />
-                                        <CustomizeMatrixRainItem onClose={close} />
+                                        <ToggleMotionItem onTrack={onToggleMotion} />
+                                        <CustomizeMatrixRainItem onClose={close} onTrack={onCustomizeMatrixRain} />
                                     </Command.Group>
                                 )}
                             </Command.List>

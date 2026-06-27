@@ -2,7 +2,6 @@
 
 import { StateStore } from "@/types/component-store";
 import { BreadcrumbItem } from "@/components/design-system/molecules/breadcrumbs/breadcrumb";
-import { tracking } from "@/types/configuration/tracking";
 import { slugs } from "@/types/configuration/slug";
 import { useVideogamesNavigationOriginStore } from "@/components/content/videogames/use-videogames-navigation-origin-store";
 import { VideogamesNavigationOrigin } from "@/types/content/videogames";
@@ -15,11 +14,6 @@ const videogamesBreadcrumb: BreadcrumbItem = {
     label: "Videogames",
     href: slugs.videogames.home,
     isCurrent: false,
-    trackingData: {
-        action: tracking.action.open_videogame_collection,
-        category: tracking.category.videogames,
-        label: tracking.label.body,
-    },
 };
 
 const buildBreadcrumbItems = (
@@ -45,11 +39,6 @@ const buildBreadcrumbItems = (
             label: consoleName,
             href: consoleSlug,
             isCurrent: false,
-            trackingData: {
-                action: tracking.action.open_videogame_console,
-                category: tracking.category.videogames,
-                label: tracking.label.body,
-            },
         },
         currentItem,
     ];

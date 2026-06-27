@@ -3,7 +3,7 @@
 import { useReadingProgress } from "@/components/design-system/hooks/use-reading-progress";
 import { useReducedMotions } from "@/components/design-system/hooks/use-reduced-motions";
 import { ScrollDirection, useScrollDirection } from "@/components/design-system/hooks/use-scroll-direction";
-import { StateStore } from "@/types/component-store";
+import type { StateStore } from "@/types/component-store";
 
 interface ReadingContentProgressBarState {
     progressPercentage: number;

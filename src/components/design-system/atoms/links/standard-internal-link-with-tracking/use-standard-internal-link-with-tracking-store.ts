@@ -1,19 +1,17 @@
 "use client";
 
-import { trackWith } from "@/lib/tracking/tracking";
-import { TrackingData } from "@/types/configuration/tracking";
-import { EffectsStore } from "@/types/component-store";
+import type { EffectsStore } from "@/types/component-store";
 
 type StandardInternalLinkWithTrackingEffects = {
     onTrack: () => void;
 };
 
 export const useStandardInternalLinkWithTrackingStore = (
-    trackingData: TrackingData,
+    onClick?: () => void,
 ): EffectsStore<StandardInternalLinkWithTrackingEffects> => {
     return {
         effects: {
-            onTrack: () => trackWith(trackingData),
+            onTrack: onClick ?? (() => {}),
         },
     };
 };

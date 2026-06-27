@@ -105,10 +105,6 @@ export interface TrackingData {
   action: string;
 }
 
-export interface TrackingElementProps {
-  trackingData: TrackingData;
-}
-
 export type TrackingPayload = { event_category: string, event_label: string | undefined };
 
 declare global {

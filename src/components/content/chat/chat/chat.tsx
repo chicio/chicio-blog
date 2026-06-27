@@ -7,12 +7,12 @@ import { ContentContainer } from "@/components/design-system/molecules/container
 import { MatrixHeaderBackground } from "@/components/design-system/molecules/effects/matrix-header-background";
 import { GenericHeader } from "@/components/design-system/organism/header/generic-header";
 import { Menu } from "@/components/design-system/organism/menu";
-import { tracking } from "@/types/configuration/tracking";
 import { FC } from "react";
 import { ChatInput } from "./chat-input";
 import { ChatMessage } from "./chat-message";
 import { ChatWelcome } from "./chat-welcome";
 import { useChatStore } from "./use-chat-store";
+import { menuNavHrefs } from "@/components/features/content/nav-config";
 
 export const Chat: FC = () => {
     const { state, effects } = useChatStore();
@@ -20,7 +20,7 @@ export const Chat: FC = () => {
 
     return (
         <>
-            <Menu trackingCategory={tracking.category.chat} />
+            <Menu navHrefs={menuNavHrefs} />
             <ContentContainer>
                 {!state.hasMessages && <MatrixHeaderBackground big={false} />}
                 <GenericHeader

@@ -1,7 +1,6 @@
 import { ReadingContentPage } from "@/components/features/content/reading-content-page";
 import { BreadcrumbItem } from "@/components/design-system/molecules/breadcrumbs/breadcrumb";
 import { siteMetadata } from "@/types/configuration/site-metadata";
-import { tracking } from "@/types/configuration/tracking";
 import { FC, PropsWithChildren } from "react";
 import { JsonLd } from "@/components/features/seo/jsond-ld";
 import { Content } from "@/types/content/content";
@@ -31,18 +30,12 @@ export const Console: FC<PropsWithChildren<ConsoleProps>> = async ({ console }) 
     return (
         <ReadingContentPage
             author={siteMetadata.author}
-            trackingCategory={tracking.category.videogames}
             breadcrumbs={
                 [
                     {
                         label: "Videogames",
                         href: slugs.videogames.home,
                         isCurrent: false,
-                        trackingData: {
-                            action: tracking.action.open_videogame_collection,
-                            category: tracking.category.videogames,
-                            label: tracking.label.body,
-                        },
                     },
                     { label: console.frontmatter.metadata!.name, href: console.slug.formatted, isCurrent: true },
                 ] satisfies BreadcrumbItem[]
@@ -77,7 +70,6 @@ export const Console: FC<PropsWithChildren<ConsoleProps>> = async ({ console }) 
                     previousConsole
                         ? {
                               url: previousConsole.slug.formatted,
-                              action: tracking.action.open_videogame_console,
                               title: previousConsole.frontmatter.metadata!.name,
                           }
                         : undefined
@@ -86,7 +78,6 @@ export const Console: FC<PropsWithChildren<ConsoleProps>> = async ({ console }) 
                     nextConsole
                         ? {
                               url: nextConsole.slug.formatted,
-                              action: tracking.action.open_videogame_console,
                               title: nextConsole.frontmatter.metadata!.name,
                           }
                         : undefined

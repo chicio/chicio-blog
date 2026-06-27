@@ -1,6 +1,6 @@
 "use client";
 
-import { useShuffleArray } from "@/components/design-system/hooks/use-shuffle-array";
+import { useShuffleArray } from "@/lib/shuffle-array/use-shuffle-array";
 import { StateStore } from "@/types/component-store";
 
 const photos = [

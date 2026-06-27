@@ -1,6 +1,6 @@
 import type { MDXComponents } from "mdx/types";
-import { CodeBlock } from "@/components/design-system/molecules/code/code-block";
-import { MermaidDiagram } from "@/components/design-system/molecules/diagram/mermaid-diagram";
+import { CodeBlock } from "@/components/features/mdx/code-block";
+import { MermaidDiagram } from "@/components/features/mdx/mermaid-diagram";
 import { extractMermaidDefinition } from "./lib/mermaid/mermaid";
 
 const components: MDXComponents = {

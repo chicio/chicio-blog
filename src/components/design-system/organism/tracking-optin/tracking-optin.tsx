@@ -3,12 +3,12 @@
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { useTrackingOptinStore } from "./use-tracking-optin-store";
 
-export const TrackingOptIn = () => {
-    const { state } = useTrackingOptinStore();
-    const { enabled } = state;
+interface TrackingOptInProps {
+    enabled: boolean;
+}
 
+export const TrackingOptIn = ({ enabled }: TrackingOptInProps) => {
     if (!enabled) {
         return null;
     }

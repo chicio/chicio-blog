@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { StandardInternalLinkWithTracking } from "@/components/design-system/atoms/links/standard-internal-link-with-tracking";
-import { tracking } from "@/types/configuration/tracking";
 import { GlassmorphismBackground } from "@/components/design-system/atoms/effects/glassmorphism-background";
 import { GameMetadata, VideogamesNavigationOrigin } from "@/types/content/videogames";
 import { Content } from "@/types/content/content";
@@ -32,11 +31,6 @@ export const GameCard: FC<GameCardProps> = ({ game, navigationOrigin = "console"
                 <StandardInternalLinkWithTracking
                     to={game.slug.formatted}
                     className="block h-full w-full"
-                    trackingData={{
-                        category: tracking.category.videogames,
-                        label: tracking.label.body,
-                        action: tracking.action.open_videogame_game,
-                    }}
                 >
                     <Image
                         src={game.frontmatter.image}

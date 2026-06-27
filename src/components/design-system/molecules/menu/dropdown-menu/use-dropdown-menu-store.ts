@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useReducedMotions } from "@/components/design-system/hooks/use-reduced-motions";
-import { ComponentStore } from "@/types/component-store";
+import type { ComponentStore } from "@/types/component-store";
 import React from "react";
 
 interface DropdownMenuState {

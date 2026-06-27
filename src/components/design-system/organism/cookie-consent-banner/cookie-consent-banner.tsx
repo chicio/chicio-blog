@@ -8,10 +8,15 @@ import {
 import { useGlassmorphism } from "@/components/design-system/hooks/use-glassmorphism";
 import { useCookieConsentBannerStore } from "./use-cookie-consent-banner-store";
 
-export const CookieConsentBanner = () => {
+interface CookieConsentBannerProps {
+    decided: boolean;
+    onAccept: () => void;
+    onReject: () => void;
+}
+
+export const CookieConsentBanner = ({ decided, onAccept, onReject }: CookieConsentBannerProps) => {
     const { glassmorphismClass } = useGlassmorphism({ increaseContrast: true });
-    const { state, effects } = useCookieConsentBannerStore();
-    const { decided } = state;
+    const { effects } = useCookieConsentBannerStore(onAccept, onReject);
     const { acceptConsent, rejectConsent } = effects;
 
     return (

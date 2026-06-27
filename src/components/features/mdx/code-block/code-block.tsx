@@ -1,7 +1,7 @@
 "use client";
 
 import { FC, ReactNode } from "react";
-import { CopyCodeButton } from "@/components/design-system/molecules/code/copy-code-button";
+import { CopyCodeButton } from "./copy-code-button";
 import { useCodeBlockStore } from "./use-code-block-store";
 
 interface CodeBlockProps {

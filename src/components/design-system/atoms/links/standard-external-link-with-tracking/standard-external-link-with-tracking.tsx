@@ -1,26 +1,26 @@
 "use client";
 
-import { TrackingElementProps } from "@/types/configuration/tracking";
 import { FC, ReactNode } from "react";
 import { useStandardExternalLinkWithTrackingStore } from "./use-standard-external-link-with-tracking-store";
 
-type StandardExternalLinkWithTrackingProps = TrackingElementProps & {
+type StandardExternalLinkWithTrackingProps = {
     href: string;
     target?: string;
     rel?: string;
     children?: ReactNode;
     className?: string;
+    onClick?: () => void;
 };
 
 export const StandardExternalLinkWithTracking: FC<StandardExternalLinkWithTrackingProps> = ({
     children,
     href,
-    trackingData,
+    onClick,
     target,
     rel,
     className,
 }) => {
-    const { effects } = useStandardExternalLinkWithTrackingStore(trackingData);
+    const { effects } = useStandardExternalLinkWithTrackingStore(onClick);
     const { onTrack } = effects;
 
     return (

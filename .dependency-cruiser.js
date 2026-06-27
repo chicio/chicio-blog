@@ -6,672 +6,91 @@ const config = {
     forbidden: [
         {
             name: "design-system-no-features",
-            comment: [
-                "ERROR-level enforcement: design-system components must not import from features/.",
-                "All feature wiring (easter eggs, pwa, matrix-rain) must be injected at the feature level.",
-            ].join(" "),
+            comment:
+                "Design-system must not import from features/. Feature behaviour (easter eggs, pwa, matrix-rain panel, tracking) is injected at the feature/app layer via props.",
             severity: "error",
-            from: {
-                path: "^src/components/design-system/",
-            },
-            to: {
-                path: "^src/components/features/",
-            },
+            from: { path: "^src/components/design-system/" },
+            to: { path: "^src/components/features/" },
         },
         {
-            name: "atoms-import-only-via-index",
-            comment: [
-                "ERROR-level enforcement for design-system/atoms/: no direct .tsx imports from outside the folder.",
-                "All atoms component imports must go through the folder's index.ts barrel.",
-            ].join(" "),
+            name: "design-system-no-lib",
+            comment:
+                "Design-system must not import runtime values from lib/. Business logic is injected from the feature/content/app layer; only type-only @/types is allowed (see design-system-types-type-only).",
             severity: "error",
-            from: {
-                pathNot: "/index\\.ts$",
-            },
-            to: {
-                path: "^src/components/design-system/atoms/.+\\.tsx$",
-            },
+            from: { path: "^src/components/design-system/" },
+            to: { path: "^src/lib/" },
         },
         {
-            name: "atoms-seal-private-nested-folders",
-            comment: [
-                "ERROR-level enforcement for design-system/atoms/: nested sub-folders are sealed.",
-                "Only the parent component folder may import from its nested sub-folder.",
-            ].join(" "),
+            name: "design-system-types-type-only",
+            comment:
+                "Inside design-system, imports from src/types/ must be type-only (import type {...}). Runtime value imports (slugs, siteMetadata, tracking, ...) are forbidden — inject them as props from the app/features layer.",
             severity: "error",
-            from: {
-                path: "^(src/components/design-system/atoms/[^/]+/[^/]+)/",
-            },
-            to: {
-                path: "^src/components/design-system/atoms/[^/]+/[^/]+/[^/]+/",
-                pathNot: "^$1/",
-            },
+            from: { path: "^src/components/design-system/" },
+            to: { path: "^src/types/", dependencyTypesNot: ["type-only"] },
         },
         {
-            name: "features-import-only-via-index",
-            comment: [
-                "ERROR-level enforcement for features/: no direct .tsx imports from outside the folder.",
-                "All features component imports must go through the folder's index.ts barrel.",
-            ].join(" "),
+            name: "lib-no-components",
+            comment:
+                "lib/ is a pure logic leaf — it must not import from components/ or app/. Components consume lib/, never the reverse.",
             severity: "error",
-            from: {
-                pathNot: "/index\\.ts$",
-            },
-            to: {
-                path: "^src/components/features/.+\\.tsx$",
-            },
-        },
-        {
-            name: "features-seal-private-nested-folders",
-            comment: [
-                "ERROR-level enforcement for features/: nested sub-folders are sealed.",
-                "Only the parent component folder may import from its nested sub-folder.",
-            ].join(" "),
-            severity: "error",
-            from: {
-                path: "^(src/components/features/[^/]+/[^/]+)/",
-            },
-            to: {
-                path: "^src/components/features/[^/]+/[^/]+/[^/]+/",
-                pathNot: "^$1/",
-            },
-        },
-        {
-            name: "content-chat-import-only-via-index",
-            comment: [
-                "ERROR-level enforcement for content/chat/: no direct .tsx imports from outside the folder.",
-                "All content/chat component imports must go through the folder's index.ts barrel.",
-            ].join(" "),
-            severity: "error",
-            from: {
-                pathNot: "/index\\.ts$",
-            },
-            to: {
-                path: "^src/components/content/chat/.+\\.tsx$",
-            },
-        },
-        {
-            name: "content-chat-seal-private-nested-folders",
-            comment: [
-                "ERROR-level enforcement for content/chat/: nested sub-folders are sealed.",
-                "Only the parent component folder may import from its nested sub-folder.",
-            ].join(" "),
-            severity: "error",
-            from: {
-                path: "^(src/components/content/chat/[^/]+/[^/]+)/",
-            },
-            to: {
-                path: "^src/components/content/chat/[^/]+/[^/]+/[^/]+/",
-                pathNot: "^$1/",
-            },
-        },
-        {
-            name: "content-chat-page-isolation",
-            comment: [
-                "ERROR-level enforcement: content/chat/ must not import from other content pages.",
-            ].join(" "),
-            severity: "error",
-            from: {
-                path: "^src/components/content/chat/",
-            },
-            to: {
-                path: "^src/components/content/",
-                pathNot: "^src/components/content/chat/",
-            },
+            from: { path: "^src/lib/" },
+            to: { path: "^src/(components|app)/" },
         },
         {
             name: "import-only-via-index",
-            comment: [
-                "No module (except index barrels) may directly import a .tsx component file.",
-                "All component imports must go through the folder's index.ts barrel.",
-                "This ensures the component folder's encapsulation boundary is respected.",
-            ].join(" "),
+            comment:
+                "A component's internal .tsx may only be imported through its folder's index.ts barrel. The flat shared-hooks home (design-system/hooks/) is exempt — its hooks are imported directly, without barrels.",
             severity: "error",
-            from: {
-                pathNot: "/index\\.ts$",
-            },
+            from: { pathNot: "/index\\.ts$" },
             to: {
                 path: "^src/components/.+\\.tsx$",
-            },
-        },
-        {
-            name: "seal-private-nested-folders",
-            comment: [
-                "Nested private sub-folders (tier/section/component/sub/) are sealed.",
-                "Only files inside the PARENT component folder may import from a nested sub-folder.",
-                "Group $1 captures the parent component folder prefix from the FROM path.",
-                "TO must be inside a 5-segment-deep path but NOT inside the same parent ($1).",
-            ].join(" "),
-            severity: "error",
-            from: {
-                path: "^(src/components/[^/]+/[^/]+/[^/]+)/",
-            },
-            to: {
-                path: "^src/components/[^/]+/[^/]+/[^/]+/[^/]+/",
-                pathNot: "^$1/",
+                pathNot: "^src/components/design-system/hooks/",
             },
         },
         {
             name: "content-page-isolation",
-            comment: [
-                "src/components/content/<pageA>/ must not import from src/components/content/<pageB>/.",
-                "Group $1 = 'src/components/content/', $2 = the page folder name.",
-                "TO must be in a content page folder but NOT the same page as FROM.",
-                "Global error-level enforcement: applies to all current and future content pages.",
-            ].join(" "),
+            comment:
+                "A content page (src/components/content/<page>/) must not import from another content page. Shared UI belongs in the design system or features/. Group $1 = 'src/components/content/', $2 = the page folder.",
             severity: "error",
-            from: {
-                path: "^(src/components/content/)([^/]+)/",
-            },
-            to: {
-                path: "^$1[^/]+/",
-                pathNot: "^$1$2/",
-            },
-        },
-        {
-            name: "content-blog-page-isolation",
-            comment: [
-                "ERROR-level enforcement: content/blog/ must not import from any other content page.",
-            ].join(" "),
-            severity: "error",
-            from: {
-                path: "^src/components/content/blog/",
-            },
-            to: {
-                path: "^src/components/content/[^/]+/",
-                pathNot: "^src/components/content/blog/",
-            },
-        },
-        {
-            name: "content-blog-import-only-via-index",
-            comment: [
-                "ERROR-level enforcement for content/blog: no direct .tsx imports from outside the folder.",
-                "All content/blog component imports must go through the folder's index.ts barrel.",
-            ].join(" "),
-            severity: "error",
-            from: {
-                path: "^src/components/content/blog/",
-                pathNot: "/index\\.ts$",
-            },
-            to: {
-                path: "^src/components/content/blog/.+\\.tsx$",
-                pathNot: "^src/components/content/blog/[^/]+/[^/]+\\.tsx$",
-            },
-        },
-        {
-            name: "content-blog-seal-private-nested-folders",
-            comment: [
-                "ERROR-level enforcement for content/blog: nested sub-folders are sealed.",
-                "Only the parent component folder may import from its nested sub-folder.",
-            ].join(" "),
-            severity: "error",
-            from: {
-                path: "^(src/components/content/blog/[^/]+/[^/]+)/",
-            },
-            to: {
-                path: "^src/components/content/blog/[^/]+/[^/]+/[^/]+/",
-                pathNot: "^$1/",
-            },
-        },
-        {
-            name: "content-art-page-isolation",
-            comment: [
-                "ERROR-level enforcement for content/art: must not import from any other content page.",
-            ].join(" "),
-            severity: "error",
-            from: {
-                path: "^src/components/content/art/",
-            },
-            to: {
-                path: "^src/components/content/[^/]+/",
-                pathNot: "^src/components/content/art/",
-            },
-        },
-        {
-            name: "content-art-import-only-via-index",
-            comment: [
-                "ERROR-level enforcement for content/art: no direct .tsx imports from outside the folder.",
-                "All content/art component imports must go through the folder's index.ts barrel.",
-            ].join(" "),
-            severity: "error",
-            from: {
-                path: "^src/components/content/art/",
-                pathNot: "/index\\.ts$",
-            },
-            to: {
-                path: "^src/components/content/art/.+\\.tsx$",
-                pathNot: "^src/components/content/art/[^/]+/[^/]+\\.tsx$",
-            },
-        },
-        {
-            name: "content-art-seal-private-nested-folders",
-            comment: [
-                "ERROR-level enforcement for content/art: nested sub-folders are sealed.",
-                "Only the parent component folder may import from its nested sub-folder.",
-            ].join(" "),
-            severity: "error",
-            from: {
-                path: "^(src/components/content/art/[^/]+/[^/]+)/",
-            },
-            to: {
-                path: "^src/components/content/art/[^/]+/[^/]+/[^/]+/",
-                pathNot: "^$1/",
-            },
-        },
-        {
-            name: "content-videogames-page-isolation",
-            comment: [
-                "ERROR-level enforcement: content/videogames/ must not import from any other content page.",
-            ].join(" "),
-            severity: "error",
-            from: {
-                path: "^src/components/content/videogames/",
-            },
-            to: {
-                path: "^src/components/content/[^/]+/",
-                pathNot: "^src/components/content/videogames/",
-            },
-        },
-        {
-            name: "content-videogames-import-only-via-index",
-            comment: [
-                "ERROR-level enforcement for content/videogames: no direct .tsx imports from outside the folder.",
-                "All content/videogames component imports must go through the folder's index.ts barrel.",
-            ].join(" "),
-            severity: "error",
-            from: {
-                path: "^src/components/content/videogames/",
-                pathNot: "/index\\.ts$",
-            },
-            to: {
-                path: "^src/components/content/videogames/.+\\.tsx$",
-                pathNot: "^src/components/content/videogames/[^/]+/[^/]+\\.tsx$",
-            },
-        },
-        {
-            name: "content-videogames-seal-private-nested-folders",
-            comment: [
-                "ERROR-level enforcement for content/videogames: nested sub-folders are sealed.",
-                "Only the parent component folder may import from its nested sub-folder.",
-            ].join(" "),
-            severity: "error",
-            from: {
-                path: "^(src/components/content/videogames/[^/]+/[^/]+)/",
-            },
-            to: {
-                path: "^src/components/content/videogames/[^/]+/[^/]+/[^/]+/",
-                pathNot: "^$1/",
-            },
-        },
-        {
-            name: "molecules-import-only-via-index",
-            comment: [
-                "ERROR-level enforcement for design-system/molecules/: no direct .tsx imports from outside the folder.",
-                "All molecules component imports must go through the folder's index.ts barrel.",
-            ].join(" "),
-            severity: "error",
-            from: {
-                pathNot: "/index\\.ts$",
-            },
-            to: {
-                path: "^src/components/design-system/molecules/.+\\.tsx$",
-            },
-        },
-        {
-            name: "molecules-seal-private-nested-folders",
-            comment: [
-                "ERROR-level enforcement for design-system/molecules/: nested sub-folders are sealed.",
-                "Only the parent component folder may import from its nested sub-folder.",
-            ].join(" "),
-            severity: "error",
-            from: {
-                path: "^(src/components/design-system/molecules/[^/]+/[^/]+)/",
-            },
-            to: {
-                path: "^src/components/design-system/molecules/[^/]+/[^/]+/[^/]+/",
-                pathNot: "^$1/",
-            },
-        },
-        {
-            name: "organism-import-only-via-index",
-            comment: [
-                "ERROR-level enforcement for design-system/organism/: no direct .tsx imports from outside the folder.",
-                "All organism component imports must go through the folder's index.ts barrel.",
-            ].join(" "),
-            severity: "error",
-            from: {
-                pathNot: "/index\\.ts$",
-            },
-            to: {
-                path: "^src/components/design-system/organism/.+\\.tsx$",
-            },
-        },
-        {
-            name: "organism-seal-private-nested-folders",
-            comment: [
-                "ERROR-level enforcement for design-system/organism/: nested sub-folders are sealed.",
-                "Only the parent component folder may import from its nested sub-folder.",
-            ].join(" "),
-            severity: "error",
-            from: {
-                path: "^(src/components/design-system/organism/[^/]+/[^/]+)/",
-            },
-            to: {
-                path: "^src/components/design-system/organism/[^/]+/[^/]+/[^/]+/",
-                pathNot: "^$1/",
-            },
-        },
-        {
-            name: "templates-import-only-via-index",
-            comment: [
-                "ERROR-level enforcement for design-system/templates/: no direct .tsx imports from outside the folder.",
-                "All templates component imports must go through the folder's index.ts barrel.",
-            ].join(" "),
-            severity: "error",
-            from: {
-                pathNot: "/index\\.ts$",
-            },
-            to: {
-                path: "^src/components/design-system/templates/.+\\.tsx$",
-            },
-        },
-        {
-            name: "templates-seal-private-nested-folders",
-            comment: [
-                "ERROR-level enforcement for design-system/templates/: nested sub-folders are sealed.",
-                "Only the parent component folder may import from its nested sub-folder.",
-            ].join(" "),
-            severity: "error",
-            from: {
-                path: "^(src/components/design-system/templates/[^/]+/[^/]+)/",
-            },
-            to: {
-                path: "^src/components/design-system/templates/[^/]+/[^/]+/[^/]+/",
-                pathNot: "^$1/",
-            },
+            from: { path: "^(src/components/content/)([^/]+)/" },
+            to: { path: "^$1[^/]+/", pathNot: "^$1$2/" },
         },
         {
             name: "design-system-layering-atoms",
-            comment: [
-                "ERROR-level enforcement: atoms must not import from molecules/organism/templates.",
-            ].join(" "),
+            comment: "Atoms must not import from molecules/organism/templates.",
             severity: "error",
-            from: {
-                path: "^src/components/design-system/atoms/",
-            },
-            to: {
-                path: "^src/components/design-system/(molecules|organism|templates)/",
-            },
+            from: { path: "^src/components/design-system/atoms/" },
+            to: { path: "^src/components/design-system/(molecules|organism|templates)/" },
         },
         {
             name: "design-system-layering-molecules",
-            comment: [
-                "ERROR-level enforcement: molecules must not import from organism/templates.",
-            ].join(" "),
+            comment: "Molecules must not import from organism/templates.",
             severity: "error",
-            from: {
-                path: "^src/components/design-system/molecules/",
-            },
-            to: {
-                path: "^src/components/design-system/(organism|templates)/",
-            },
+            from: { path: "^src/components/design-system/molecules/" },
+            to: { path: "^src/components/design-system/(organism|templates)/" },
         },
         {
-            name: "design-system-layering",
-            comment: [
-                "ERROR-level enforcement: organism must not import from templates.",
-                "Design-system layering enforced at error level now that organism tier is migrated.",
-            ].join(" "),
+            name: "design-system-layering-organism",
+            comment: "Organism must not import from templates.",
             severity: "error",
-            from: {
-                path: "^src/components/design-system/(organism)/",
-            },
-            to: {
-                path: "^src/components/design-system/(templates)/",
-            },
-        },
-        {
-            name: "content-about-me-import-only-via-index",
-            comment: "ERROR-level enforcement for content/about-me: all component imports must go through the folder's index.ts barrel.",
-            severity: "error",
-            from: {
-                path: "^src/components/content/about-me/",
-                pathNot: "/index\\.ts$",
-            },
-            to: {
-                path: "^src/components/content/about-me/.+\\.tsx$",
-                pathNot: "^src/components/content/about-me/[^/]+/[^/]+\\.tsx$",
-            },
-        },
-        {
-            name: "content-about-me-seal-private-nested-folders",
-            comment: "ERROR-level enforcement for content/about-me: nested sub-folders are sealed.",
-            severity: "error",
-            from: {
-                path: "^(src/components/content/about-me/[^/]+/[^/]+)/",
-            },
-            to: {
-                path: "^src/components/content/about-me/[^/]+/[^/]+/[^/]+/",
-                pathNot: "^$1/",
-            },
-        },
-        {
-            name: "content-about-me-page-isolation",
-            comment: "ERROR-level enforcement: content/about-me/ must not import from other content pages.",
-            severity: "error",
-            from: {
-                path: "^src/components/content/about-me/",
-            },
-            to: {
-                path: "^src/components/content/[^/]+/",
-                pathNot: "^src/components/content/about-me/",
-            },
-        },
-        {
-            name: "content-mcp-import-only-via-index",
-            comment: "ERROR-level enforcement for content/mcp: all component imports must go through the folder's index.ts barrel.",
-            severity: "error",
-            from: {
-                path: "^src/components/content/mcp/",
-                pathNot: "/index\\.ts$",
-            },
-            to: {
-                path: "^src/components/content/mcp/.+\\.tsx$",
-                pathNot: "^src/components/content/mcp/[^/]+/[^/]+\\.tsx$",
-            },
-        },
-        {
-            name: "content-mcp-seal-private-nested-folders",
-            comment: "ERROR-level enforcement for content/mcp: nested sub-folders are sealed.",
-            severity: "error",
-            from: {
-                path: "^(src/components/content/mcp/[^/]+/[^/]+)/",
-            },
-            to: {
-                path: "^src/components/content/mcp/[^/]+/[^/]+/[^/]+/",
-                pathNot: "^$1/",
-            },
-        },
-        {
-            name: "content-mcp-page-isolation",
-            comment: "ERROR-level enforcement: content/mcp/ must not import from other content pages.",
-            severity: "error",
-            from: {
-                path: "^src/components/content/mcp/",
-            },
-            to: {
-                path: "^src/components/content/[^/]+/",
-                pathNot: "^src/components/content/mcp/",
-            },
-        },
-        {
-            name: "content-home-import-only-via-index",
-            comment: "ERROR-level enforcement for content/home: all component imports must go through the folder's index.ts barrel.",
-            severity: "error",
-            from: {
-                path: "^src/components/content/home/",
-                pathNot: "/index\\.ts$",
-            },
-            to: {
-                path: "^src/components/content/home/.+\\.tsx$",
-                pathNot: "^src/components/content/home/[^/]+/[^/]+\\.tsx$",
-            },
-        },
-        {
-            name: "content-home-seal-private-nested-folders",
-            comment: "ERROR-level enforcement for content/home: nested sub-folders are sealed.",
-            severity: "error",
-            from: {
-                path: "^(src/components/content/home/[^/]+/[^/]+)/",
-            },
-            to: {
-                path: "^src/components/content/home/[^/]+/[^/]+/[^/]+/",
-                pathNot: "^$1/",
-            },
-        },
-        {
-            name: "content-home-page-isolation",
-            comment: "ERROR-level enforcement: content/home/ must not import from other content pages.",
-            severity: "error",
-            from: {
-                path: "^src/components/content/home/",
-            },
-            to: {
-                path: "^src/components/content/[^/]+/",
-                pathNot: "^src/components/content/home/",
-            },
-        },
-        {
-            name: "content-clowns-import-only-via-index",
-            comment: "ERROR-level enforcement for content/clowns: all component imports must go through the folder's index.ts barrel.",
-            severity: "error",
-            from: {
-                path: "^src/components/content/clowns/",
-                pathNot: "/index\\.ts$",
-            },
-            to: {
-                path: "^src/components/content/clowns/.+\\.tsx$",
-                pathNot: "^src/components/content/clowns/[^/]+/[^/]+\\.tsx$",
-            },
-        },
-        {
-            name: "content-clowns-seal-private-nested-folders",
-            comment: "ERROR-level enforcement for content/clowns: nested sub-folders are sealed.",
-            severity: "error",
-            from: {
-                path: "^(src/components/content/clowns/[^/]+/[^/]+)/",
-            },
-            to: {
-                path: "^src/components/content/clowns/[^/]+/[^/]+/[^/]+/",
-                pathNot: "^$1/",
-            },
-        },
-        {
-            name: "content-clowns-page-isolation",
-            comment: "ERROR-level enforcement: content/clowns/ must not import from other content pages.",
-            severity: "error",
-            from: {
-                path: "^src/components/content/clowns/",
-            },
-            to: {
-                path: "^src/components/content/[^/]+/",
-                pathNot: "^src/components/content/clowns/",
-            },
-        },
-        {
-            name: "content-contact-import-only-via-index",
-            comment: "ERROR-level enforcement for content/contact: all component imports must go through the folder's index.ts barrel.",
-            severity: "error",
-            from: {
-                path: "^src/components/content/contact/",
-                pathNot: "/index\\.ts$",
-            },
-            to: {
-                path: "^src/components/content/contact/.+\\.tsx$",
-                pathNot: "^src/components/content/contact/[^/]+/[^/]+\\.tsx$",
-            },
-        },
-        {
-            name: "content-contact-seal-private-nested-folders",
-            comment: "ERROR-level enforcement for content/contact: nested sub-folders are sealed.",
-            severity: "error",
-            from: {
-                path: "^(src/components/content/contact/[^/]+/[^/]+)/",
-            },
-            to: {
-                path: "^src/components/content/contact/[^/]+/[^/]+/[^/]+/",
-                pathNot: "^$1/",
-            },
-        },
-        {
-            name: "content-contact-page-isolation",
-            comment: "ERROR-level enforcement: content/contact/ must not import from other content pages.",
-            severity: "error",
-            from: {
-                path: "^src/components/content/contact/",
-            },
-            to: {
-                path: "^src/components/content/[^/]+/",
-                pathNot: "^src/components/content/contact/",
-            },
-        },
-        {
-            name: "content-dsa-import-only-via-index",
-            comment: "ERROR-level enforcement for content/data-structures-and-algorithms: all component imports must go through the folder's index.ts barrel.",
-            severity: "error",
-            from: {
-                path: "^src/components/content/data-structures-and-algorithms/",
-                pathNot: "/index\\.ts$",
-            },
-            to: {
-                path: "^src/components/content/data-structures-and-algorithms/.+\\.tsx$",
-                pathNot: "^src/components/content/data-structures-and-algorithms/[^/]+/[^/]+\\.tsx$",
-            },
-        },
-        {
-            name: "content-dsa-seal-private-nested-folders",
-            comment: "ERROR-level enforcement for content/data-structures-and-algorithms: nested sub-folders are sealed.",
-            severity: "error",
-            from: {
-                path: "^(src/components/content/data-structures-and-algorithms/[^/]+/[^/]+)/",
-            },
-            to: {
-                path: "^src/components/content/data-structures-and-algorithms/[^/]+/[^/]+/[^/]+/",
-                pathNot: "^$1/",
-            },
-        },
-        {
-            name: "content-dsa-page-isolation",
-            comment: "ERROR-level enforcement: content/data-structures-and-algorithms/ must not import from other content pages.",
-            severity: "error",
-            from: {
-                path: "^src/components/content/data-structures-and-algorithms/",
-            },
-            to: {
-                path: "^src/components/content/[^/]+/",
-                pathNot: "^src/components/content/data-structures-and-algorithms/",
-            },
+            from: { path: "^src/components/design-system/organism/" },
+            to: { path: "^src/components/design-system/templates/" },
         },
         {
             name: "no-circular",
             comment: "Circular dependencies are forbidden across all modules.",
             severity: "error",
             from: {},
-            to: {
-                circular: true,
-            },
+            to: { circular: true },
         },
     ],
     options: {
-        doNotFollow: {
-            path: "node_modules",
-        },
+        doNotFollow: { path: "node_modules" },
         tsPreCompilationDeps: true,
+        tsConfig: { fileName: "tsconfig.json" },
         moduleSystems: ["es6", "cjs"],
         reporterOptions: {
-            text: {
-                highlightFocused: true,
-            },
+            text: { highlightFocused: true },
         },
     },
 };

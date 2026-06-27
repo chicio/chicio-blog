@@ -1,6 +1,5 @@
 import { ReadingContentPage } from "@/components/features/content/reading-content-page";
 import { siteMetadata } from "@/types/configuration/site-metadata";
-import { tracking } from "@/types/configuration/tracking";
 import { FC, PropsWithChildren } from "react";
 import { JsonLd } from "@/components/features/seo/jsond-ld";
 import { Content } from "@/types/content/content";
@@ -30,7 +29,6 @@ export const Game: FC<PropsWithChildren<GameProps>> = async ({ game, console }) 
     return (
         <ReadingContentPage
             author={siteMetadata.author}
-            trackingCategory={tracking.category.videogames}
             beforeContent={
                 <GameBreadcrumb
                     gameTitle={game.frontmatter.title}
@@ -80,7 +78,6 @@ export const Game: FC<PropsWithChildren<GameProps>> = async ({ game, console }) 
                     previousGame
                         ? {
                               url: previousGame.slug.formatted,
-                              action: tracking.action.open_videogame_game,
                               title: previousGame.frontmatter.title,
                           }
                         : undefined
@@ -89,7 +86,6 @@ export const Game: FC<PropsWithChildren<GameProps>> = async ({ game, console }) 
                     nextGame
                         ? {
                               url: nextGame.slug.formatted,
-                              action: tracking.action.open_videogame_game,
                               title: nextGame.frontmatter.title,
                           }
                         : undefined

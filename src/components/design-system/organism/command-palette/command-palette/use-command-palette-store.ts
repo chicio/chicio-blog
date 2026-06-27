@@ -1,14 +1,11 @@
 "use client";
 
 import { useSearch } from "@/components/design-system/hooks/use-search";
-import { commandPaletteOpenEvent } from "@/lib/command-palette/command-palette-events";
-import { trackWith } from "@/lib/tracking/tracking";
-import { tracking } from "@/types/configuration/tracking";
-import { slugs } from "@/types/configuration/slug";
-import { EasterEggTerminalLines, SearchResult } from "@/types/search/search";
+import { commandPaletteOpenEvent } from "@/components/design-system/state/command-palette/command-palette-events";
+import type { EasterEggTerminalLines, SearchResult } from "@/types/search/search";
 import { ComponentType, ChangeEvent, useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { ComponentStore } from "@/types/component-store";
+import type { ComponentStore } from "@/types/component-store";
 
 const noopEasterEgg = (): SearchResult | null => null;
 
@@ -27,16 +24,29 @@ interface CommandPaletteEffects {
     handleOpenChat: () => void;
     handleSearchResultSelect: (slug: string) => void;
     setSelectedValue: (value: string) => void;
+    onToggleMotion?: () => void;
+    onCustomizeMatrixRain?: () => void;
+}
+
+interface CommandPaletteTrackingCallbacks {
+    onOpen?: () => void;
+    onOpenChat?: () => void;
+    onSearchResultSelect?: () => void;
+    onToggleMotion?: () => void;
+    onCustomizeMatrixRain?: () => void;
 }
 
 export const useCommandPaletteStore = (
+    searchIndexFileName: string,
+    chatSlug: string,
+    tracking?: CommandPaletteTrackingCallbacks,
     searchEasterEgg: (query: string) => SearchResult | null = noopEasterEgg,
     SearchEasterEggComponent?: ComponentType<{ lines: EasterEggTerminalLines }>,
 ): ComponentStore<CommandPaletteState, CommandPaletteEffects> => {
     const [open, setOpen] = useState(false);
     const [isSearching, setIsSearching] = useState(false);
     const [selectedValue, setSelectedValue] = useState("open ai chat");
-    const { handleSearch, resetSearch, search } = useSearch(open, searchEasterEgg);
+    const { handleSearch, resetSearch, search } = useSearch(open, searchEasterEgg, searchIndexFileName);
     const [previousSearch, setPreviousSearch] = useState(search);
     const router = useRouter();
 
@@ -62,11 +72,7 @@ export const useCommandPaletteStore = (
         };
         const handleOpenEvent = () => {
             setOpen(true);
-            trackWith({
-                category: tracking.category.command_palette,
-                label: tracking.label.header,
-                action: tracking.action.command_palette_open,
-            });
+            tracking?.onOpen?.();
         };
 
         window.addEventListener("keydown", handleKeyDown, true);
@@ -76,7 +82,7 @@ export const useCommandPaletteStore = (
             window.removeEventListener("keydown", handleKeyDown, true);
             window.removeEventListener(commandPaletteOpenEvent, handleOpenEvent);
         };
-    }, []);
+    }, [tracking]);
 
     useEffect(() => {
         if (!open) {
@@ -94,38 +100,45 @@ export const useCommandPaletteStore = (
         return () => window.removeEventListener("keydown", handleEsc, true);
     }, [open, close]);
 
-    const stopPropagation = (e: React.MouseEvent) => e.stopPropagation();
+    const stopPropagation = useCallback((e: React.MouseEvent) => e.stopPropagation(), []);
 
-    const handleSearchInput = (value: string) => {
-        setIsSearching(value.trim().length >= 3);
-        handleSearch({ target: { value } } as ChangeEvent<HTMLInputElement>);
-    };
+    const handleSearchInput = useCallback(
+        (value: string) => {
+            setIsSearching(value.trim().length >= 3);
+            handleSearch({ target: { value } } as ChangeEvent<HTMLInputElement>);
+        },
+        [handleSearch],
+    );
 
-    const handleOpenChat = () => {
-        trackWith({
-            category: tracking.category.command_palette,
-            label: tracking.label.body,
-            action: tracking.action.command_palette_open_chat,
-        });
-        router.push(slugs.chat);
+    const handleOpenChat = useCallback(() => {
+        tracking?.onOpenChat?.();
+        router.push(chatSlug);
         close();
-    };
+    }, [tracking, router, chatSlug, close]);
 
-    const handleSearchResultSelect = (slug: string) => {
-        trackWith({
-            category: tracking.category.command_palette,
-            label: tracking.label.body,
-            action: tracking.action.command_palette_search_result_selected,
-        });
-        router.push(slug);
-        close();
-    };
+    const handleSearchResultSelect = useCallback(
+        (slug: string) => {
+            tracking?.onSearchResultSelect?.();
+            router.push(slug);
+            close();
+        },
+        [tracking, router, close],
+    );
 
     const easterEggLines =
         search.type === "easterEgg" && SearchEasterEggComponent ? search.terminalLines : null;
 
     return {
         state: { open, isSearching, selectedValue, search, easterEggLines },
-        effects: { close, stopPropagation, handleSearchInput, handleOpenChat, handleSearchResultSelect, setSelectedValue },
+        effects: {
+            close,
+            stopPropagation,
+            handleSearchInput,
+            handleOpenChat,
+            handleSearchResultSelect,
+            setSelectedValue,
+            onToggleMotion: tracking?.onToggleMotion,
+            onCustomizeMatrixRain: tracking?.onCustomizeMatrixRain,
+        },
     };
 };

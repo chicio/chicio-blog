@@ -5,7 +5,6 @@ import { ReadingContentPage } from "@/components/features/content/reading-conten
 import { BreadcrumbItem } from "@/components/design-system/molecules/breadcrumbs/breadcrumb";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { slugs } from "@/types/configuration/slug";
-import { tracking } from "@/types/configuration/tracking";
 import { FC, PropsWithChildren } from "react";
 import { CourseNavigation } from "@/components/content/data-structures-and-algorithms/course-navigation";
 import { JsonLd } from "@/components/features/seo/jsond-ld";
@@ -24,17 +23,11 @@ export const Topic: FC<PropsWithChildren<DsaProps>> = async ({ topic, previousTo
     return (
         <ReadingContentPage
             author={siteMetadata.author}
-            trackingCategory={tracking.category.data_structures_and_algorithms}
             breadcrumbs={[
                 {
                     label: "DSA",
                     href: slugs.dataStructuresAndAlgorithms.roadmap,
                     isCurrent: false,
-                    trackingData: {
-                        action: tracking.action.open_dsa_roadmap,
-                        category: tracking.category.data_structures_and_algorithms,
-                        label: tracking.label.body,
-                    },
                 },
                 { label: topic.frontmatter.title, href: topic.slug.formatted, isCurrent: true },
             ] satisfies BreadcrumbItem[]}

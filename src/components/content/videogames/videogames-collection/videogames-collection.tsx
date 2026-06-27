@@ -22,14 +22,7 @@ export const VideogamesCollection: React.FC = () => {
             <p>
                 My journey through Videogames that I started in 1992. From 8-bit consoles to modern powerhouses, each
                 one tells a story of technological evolution and countless hours of gameplay. Videogames are{" "}
-                <StandardInternalLinkWithTracking
-                    to="/about-me"
-                    trackingData={{
-                        category: tracking.category.videogames,
-                        action: tracking.action.open_about_me,
-                        label: tracking.label.body,
-                    }}
-                >
+                <StandardInternalLinkWithTracking to="/about-me">
                     one of the reason why I became a software engineer
                 </StandardInternalLinkWithTracking>
                 .

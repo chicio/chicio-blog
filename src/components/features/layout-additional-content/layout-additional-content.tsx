@@ -3,6 +3,8 @@
 import { FC } from "react";
 import dynamic from "next/dynamic";
 import { whiteRabbitEasterEgg } from "@/components/features/easter-eggs/white-rabbit";
+import { searchIndexFileName } from "@/lib/content/search-filename";
+import { slugs } from "@/types/configuration/slug";
 import { useLayoutAdditionalContentStore } from "./use-layout-additional-content-store";
 
 const CookieConsentBanner = dynamic(
@@ -51,17 +53,36 @@ const MatrixRainControlPanel = dynamic(
 );
 
 export const LayoutAdditionalContent: FC = () => {
-    useLayoutAdditionalContentStore();
+    const { state, effects } = useLayoutAdditionalContentStore();
+    const { consented, decided } = state;
+    const {
+        acceptConsent,
+        rejectConsent,
+        trackCommandPaletteOpen,
+        trackCommandPaletteOpenChat,
+        trackCommandPaletteSearchResultSelect,
+        trackCommandPaletteToggleMotion,
+        trackCommandPaletteCustomizeMatrixRain,
+    } = effects;
 
     return (
         <>
             <CommandPalette
+                searchIndexFileName={searchIndexFileName}
+                chatSlug={slugs.chat}
+                tracking={{
+                    onOpen: trackCommandPaletteOpen,
+                    onOpenChat: trackCommandPaletteOpenChat,
+                    onSearchResultSelect: trackCommandPaletteSearchResultSelect,
+                    onToggleMotion: trackCommandPaletteToggleMotion,
+                    onCustomizeMatrixRain: trackCommandPaletteCustomizeMatrixRain,
+                }}
                 searchEasterEgg={whiteRabbitEasterEgg}
                 SearchEasterEggComponent={NeoRoomEasterEgg}
             />
             <MatrixRainControlPanel />
-            <CookieConsentBanner />
-            <TrackingOptIn />
+            <CookieConsentBanner decided={decided} onAccept={acceptConsent} onReject={rejectConsent} />
+            <TrackingOptIn enabled={consented} />
             <InstallPromptBanner />
         </>
     );

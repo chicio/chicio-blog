@@ -3,27 +3,15 @@ import { FC, ReactElement } from "react";
 
 export interface SocialContactProps {
     link: string;
-    trackingAction: string;
-    trackingCategory: string;
-    trackingLabel: string;
+    onClick?: () => void;
     icon: ReactElement;
 }
 
-export const SocialContact: FC<SocialContactProps> = ({
-    link,
-    trackingAction,
-    trackingCategory,
-    trackingLabel,
-    icon,
-}) => (
+export const SocialContact: FC<SocialContactProps> = ({ link, onClick, icon }) => (
     <CallToActionExternalWithTracking
         className="min-w-auto"
         href={link}
-        trackingData={{
-            action: trackingAction,
-            category: trackingCategory,
-            label: trackingLabel,
-        }}
+        onClick={onClick}
         target="_blank"
         rel="noopener noreferrer"
     >

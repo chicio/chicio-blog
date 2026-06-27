@@ -4,15 +4,9 @@ import { FC } from "react";
 
 export interface PostTagsProps {
     tags: ReadonlyArray<string | null>;
-    trackingCategory: string;
-    trackingLabel: string;
 }
 
-export const PostTags: FC<PostTagsProps> = ({
-    tags,
-    trackingCategory,
-    trackingLabel,
-}) => (
+export const PostTags: FC<PostTagsProps> = ({ tags }) => (
     <div className="mx-0 my-5">
         {tags!.map((tag) => (
             <Tag
@@ -20,8 +14,6 @@ export const PostTags: FC<PostTagsProps> = ({
                 link={generateTagSlug(tag!)}
                 big={false}
                 key={tag}
-                trackingCategory={trackingCategory}
-                trackingLabel={trackingLabel}
             />
         ))}
     </div>

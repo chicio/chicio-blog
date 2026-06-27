@@ -21,11 +21,6 @@ export const ProjectCard: FC<ProjectProps> = ({ project }) => (
                         <CallToActionExternalWithTracking
                             key={callToAction.label}
                             href={callToAction.link}
-                            trackingData={{
-                                action: callToAction.trackingAction,
-                                category: callToAction.trackingCategory,
-                                label: callToAction.trackingLabel,
-                            }}
                             target="_blank"
                             rel="noopener noreferrer"
                         >
