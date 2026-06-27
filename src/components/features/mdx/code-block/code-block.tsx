@@ -1,17 +1,16 @@
 "use client";
 
 import { FC, ReactNode } from "react";
-import { CopyCodeButton } from "@/components/design-system/molecules/code/copy-code-button";
+import { CopyCodeButton } from "./copy-code-button";
 import { useCodeBlockStore } from "./use-code-block-store";
 
 interface CodeBlockProps {
     children?: ReactNode;
     className?: string;
-    onCopy?: () => void;
     [key: string]: unknown;
 }
 
-export const CodeBlock: FC<CodeBlockProps> = ({ children, className, onCopy, ...rest }) => {
+export const CodeBlock: FC<CodeBlockProps> = ({ children, className, ...rest }) => {
     const { state, effects } = useCodeBlockStore();
     const { getText } = state;
     const { setPreEl } = effects;
@@ -22,7 +21,7 @@ export const CodeBlock: FC<CodeBlockProps> = ({ children, className, onCopy, ...
                 {children}
             </pre>
             <div className="flex justify-end px-2 py-1.5 sm:contents">
-                <CopyCodeButton getText={getText} onCopy={onCopy} />
+                <CopyCodeButton getText={getText} />
             </div>
         </div>
     );

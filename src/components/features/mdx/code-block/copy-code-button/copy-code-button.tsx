@@ -7,11 +7,10 @@ import { useCopyCodeButtonStore } from "./use-copy-code-button-store";
 
 interface CopyCodeButtonProps {
     getText: () => string;
-    onCopy?: () => void;
 }
 
-export const CopyCodeButton: FC<CopyCodeButtonProps> = ({ getText, onCopy }) => {
-    const { state, effects } = useCopyCodeButtonStore(onCopy);
+export const CopyCodeButton: FC<CopyCodeButtonProps> = ({ getText }) => {
+    const { state, effects } = useCopyCodeButtonStore();
     const { copied, copyError, clipboardAvailable } = state;
     const { handleCopy } = effects;
 

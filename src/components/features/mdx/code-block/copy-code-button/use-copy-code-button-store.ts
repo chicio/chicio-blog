@@ -2,6 +2,8 @@
 
 import { useState, useCallback } from "react";
 import { useClipboardAvailable } from "@/components/design-system/hooks/use-clipboard-available";
+import { trackWith } from "@/lib/tracking/tracking";
+import { tracking } from "@/types/configuration/tracking";
 import type { ComponentStore } from "@/types/component-store";
 
 interface CopyCodeButtonState {
@@ -14,9 +16,7 @@ interface CopyCodeButtonEffects {
     handleCopy: (getText: () => string) => () => Promise<void>;
 }
 
-export const useCopyCodeButtonStore = (
-    onCopy?: () => void,
-): ComponentStore<CopyCodeButtonState, CopyCodeButtonEffects> => {
+export const useCopyCodeButtonStore = (): ComponentStore<CopyCodeButtonState, CopyCodeButtonEffects> => {
     const [copied, setCopied] = useState(false);
     const [copyError, setCopyError] = useState(false);
     const clipboardAvailable = useClipboardAvailable();
@@ -28,7 +28,11 @@ export const useCopyCodeButtonStore = (
             try {
                 await navigator.clipboard.writeText(text);
                 setCopied(true);
-                onCopy?.();
+                trackWith({
+                    action: tracking.action.copy_code_block,
+                    category: tracking.category.blog_post,
+                    label: tracking.label.body,
+                });
                 setTimeout(() => {
                     setCopied(false);
                 }, 2000);
@@ -39,7 +43,7 @@ export const useCopyCodeButtonStore = (
                 }, 2000);
             }
         },
-        [onCopy],
+        [],
     );
 
     return {

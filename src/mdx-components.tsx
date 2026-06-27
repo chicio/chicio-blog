@@ -1,7 +1,7 @@
 import type { MDXComponents } from "mdx/types";
-import { MermaidDiagram } from "@/components/design-system/molecules/diagram/mermaid-diagram";
+import { CodeBlock } from "@/components/features/mdx/code-block";
+import { MermaidDiagram } from "@/components/features/mdx/mermaid-diagram";
 import { extractMermaidDefinition } from "./lib/mermaid/mermaid";
-import { TrackedCodeBlock } from "@/components/features/mdx/tracked-code-block";
 
 const components: MDXComponents = {
     table: (props) => (
@@ -16,7 +16,7 @@ const components: MDXComponents = {
             return <MermaidDiagram definition={mermaidDefinition} />;
         }
 
-        return <TrackedCodeBlock {...props} />;
+        return <CodeBlock {...props} />;
     },
     // eslint-disable-next-line @next/next/no-img-element
     img: ({ alt, ...props }) => <img loading="lazy" decoding="async" alt={alt ?? ""} {...props} />,
