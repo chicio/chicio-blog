@@ -91,6 +91,7 @@ This ensures no changes are made directly on `main`.
 - `mdx-content.md` — content file structure, frontmatter, writing style
 - `sections.md` — section isolation, new section checklist, tracking
 - `api-routes.md` — chat and contact API conventions
+- `testing.md` — test stack (Vitest/RTL/Playwright/agent-browser), what to test at each layer, loop discipline, local commands
 
 **Execution discipline**:
 - Implement in small, logical steps. After each step, verify it works before moving on.
@@ -114,17 +115,19 @@ This ensures no changes are made directly on `main`.
 
 ### Phase 4: Verify (Prove It Works)
 
-**Goal**: Provide evidence that the work is complete and correct. Never claim "done" without running verification.
+**Goal**: Provide evidence that the work is complete and correct. Never claim "done" without running verification. Tests are the deterministic grader for your loop — you iterate until they are green, you do not self-certify.
 
-**Required checks** — run ALL of these and report results:
+**Required checks** — run ALL of these and report results with real output:
 1. `npm run lint` — must pass with zero errors.
-2. `npm run build` — must succeed.
-3. TypeScript strict mode — no type errors.
-4. New components compose from existing design system atoms/molecules.
-5. Tracking events added for new UI interactions.
-6. Search index regeneration verified if content changed.
+2. `npm run validate-architecture` — zero dependency-cruiser violations.
+3. `npm run test:run` — Vitest unit + component tests green. **Every PR must add tests for the behavior it changes** (see Loop Discipline below).
+4. `npm run test:e2e` — Playwright e2e green (prod build, externals mocked) when the change affects a user-facing flow.
+5. `npm run typecheck` — `tsc --noEmit` clean, **including test and config files**. Vitest runs via esbuild and does NOT type-check; ESLint ignores spec files; `next build` only type-checks files reachable from the build graph (orphan test files are never checked) — so a green test run does NOT mean the tests are type-safe. Always run the explicit typecheck over the specs. **Verify it from a CLEAN state** — `rm -f next-env.d.ts && rm -rf .next` before running — because a stale `next-env.d.ts`/`.next` left by a prior build provides ambient types (image modules, typed routes) that DON'T exist in a fresh CI checkout. A typecheck that only passes with build artifacts present is not verified; it will fail in CI and on a fresh clone.
+6. `npm run build` — must succeed.
+7. **agent-browser live-QA** — MANDATORY whenever the diff touches rendered UI or user-facing behavior. Boot the dev server, drive the changed feature in a real browser via `npx agent-browser` (`open` → `snapshot -i` → `click`/`fill` → verify it actually works; it's a local devDependency, not global), and report what you observed. If agent-browser is unavailable in this environment, say so explicitly and fall back to Playwright headed mode (`npm run test:e2e:ui`) — NEVER silently skip. Pure lib/config/content-only diffs may skip this step.
+8. New components compose from existing design system atoms/molecules. Tracking events added for new UI interactions. Search index regeneration verified if content changed.
 
-**Gate**: All checks pass. If any check fails, fix the issue and re-run. Only after all checks pass, proceed to Phase 5.
+**Gate**: All applicable checks pass. If any check fails, fix the issue and re-run. Only after all checks pass, proceed to Phase 5.
 
 ### Phase 5: Create Pull Request
 
@@ -170,12 +173,24 @@ Do this automatically without asking the user. Return the PR URL when done.
 
 ### Debugging Tasks
 
-When the task is a bug fix rather than a feature, replace Brainstorm/Plan with a diagnostic phase:
+When the task is a bug fix rather than a feature, replace Brainstorm/Plan with a diagnostic phase. Bug fixes follow a **strict red-green loop** — the regression test comes first:
 
 1. **Reproduce**: Understand the symptoms. Read the relevant code. Identify the root cause.
 2. **Diagnose**: Form a hypothesis for why the bug occurs. Verify the hypothesis by reading code or running commands. Do NOT guess-and-check.
-3. **Fix**: Apply a targeted fix. Do not refactor surrounding code.
-4. **Verify**: Run Phase 4 checks. Confirm the bug is fixed.
+3. **Write a failing test (RED)**: Before touching the implementation, write a test that reproduces the bug and FAILS for the right reason. A fix without a failing-first test never proved it catches the bug. Run it and confirm it fails.
+4. **Fix (GREEN)**: Apply a targeted fix until the test passes. Do not refactor surrounding code.
+5. **Verify**: Run Phase 4 checks. Confirm the bug is fixed and the new test stays green.
+
+## Testing & Loop Discipline
+
+Tests are not paperwork — they are the deterministic grader that closes your work loop. You implement, the grader (Vitest, Playwright, type-check, lint) judges, you iterate on real failures instead of declaring success on plausible-looking code. The full stack and conventions live in `.claude/rules/testing.md`; the operating rules:
+
+- **Every PR adds tests for the behavior it changes.** No exceptions for "small" changes.
+- **Bug fixes are strict red-green**: failing regression test FIRST, then fix (see Debugging Tasks above).
+- **Features**: tests are a required Verify deliverable and your iteration grader. TDD is encouraged but not enforced line-by-line — visual/exploratory iteration via agent-browser is often the real feedback signal for UI work.
+- **What to test where**: pure logic in `src/lib/**` and store hooks (`use-*-store.ts`) are unit-tested directly; thin components are exercised through full RTL render (a render test naturally drives the component's store); reach for isolated `renderHook` only when the UI can't trigger the logic. Component (RTL) coverage starts in the self-contained `design-system/` and climbs outward.
+- **agent-browser is your eyes, Playwright is your safety net**: use agent-browser for live exploratory QA during the loop (never committed, never CI); Playwright specs are the committed, deterministic regression gate. Don't conflate them.
+- Run the fast grader (`npm run test:run`) constantly during iteration; run the full pyramid before opening the PR.
 
 ## Proactive Feature Suggestions
 

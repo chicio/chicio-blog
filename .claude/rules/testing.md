@@ -145,22 +145,16 @@ When completing any change, run:
 
 ## Agent-Browser Live QA (local only)
 
-`agent-browser` is a native Rust CDP CLI from vercel-labs. It is NOT a package.json dependency and NOT in CI. It is a local prerequisite for the agent performing live smoke walks.
+`agent-browser` is a native Rust CDP CLI from vercel-labs. It is a **local dev dependency** (`devDependencies`, and added to knip's `ignoreDependencies` since it is a CLI, never imported). It is NEVER invoked in CI — it exists only for the agent performing live smoke walks on a developer machine. Because it is local, invoke it with `npx agent-browser` (it is not installed globally).
 
 ### Install
 
 ```bash
-# npm global (recommended for agents)
-npm i -g agent-browser
+# It is already declared as a devDependency, so a normal install pulls it in:
+npm install
 
-# Homebrew
-brew install vercel-labs/tap/agent-browser
-
-# Cargo
-cargo install agent-browser
-
-# After install, install browser binaries:
-agent-browser install
+# One-time: download the Chrome-for-Testing browser binaries
+npx agent-browser install
 ```
 
 ### Canonical smoke walkthrough
@@ -168,20 +162,28 @@ agent-browser install
 The following is the enforced QA pattern for agent-driven live checks. Run with the dev server (`npm run dev`) or a production build (`npm run build && npm start`) already running:
 
 ```bash
-# 1. Open the homepage and snapshot the accessibility tree
-agent-browser open http://localhost:3000 --snapshot a11y
+# 1. Open the homepage, then snapshot the interactive accessibility tree
+npx agent-browser open http://localhost:3000
+npx agent-browser snapshot -i
 
 # 2. Navigate to the blog listing and verify it loads
-agent-browser navigate http://localhost:3000/blog --snapshot a11y
+npx agent-browser open http://localhost:3000/blog
+npx agent-browser snapshot -i
 
-# 3. Navigate to the chat page
-agent-browser navigate http://localhost:3000/chat --snapshot a11y
+# 3. Chat page
+npx agent-browser open http://localhost:3000/chat
+npx agent-browser snapshot -i
 
-# 4. Navigate to the contact page and verify form fields exist
-agent-browser navigate http://localhost:3000/contact --snapshot a11y
+# 4. Contact page — verify form fields exist
+npx agent-browser open http://localhost:3000/contact
+npx agent-browser snapshot -i
 
-# 5. Navigate to about-me
-agent-browser navigate http://localhost:3000/about-me --snapshot a11y
+# 5. About-me
+npx agent-browser open http://localhost:3000/about-me
+npx agent-browser snapshot -i
+
+# When done, close the browser
+npx agent-browser close
 ```
 
 For each step: verify the a11y tree contains the expected landmark roles (`navigation`, `main`, `form` on contact). Flag any missing landmarks or broken aria attributes before claiming the page passes visual QA.
