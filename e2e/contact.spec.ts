@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 
-test.describe("Contact form with mocked API", () => {
+test.describe("Contact form", () => {
     test.beforeEach(async ({ page }) => {
         await page.route("**/api/contact", async (route) => {
             await route.fulfill({

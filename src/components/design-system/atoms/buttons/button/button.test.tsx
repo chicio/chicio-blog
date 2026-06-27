@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Button } from "./button";
 
-describe("Button atom", () => {
+describe("Button", () => {
     it("renders children inside the button", () => {
         render(<Button>Click me</Button>);
         expect(screen.getByRole("button", { name: "Click me" })).toBeInTheDocument();

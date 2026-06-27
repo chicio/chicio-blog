@@ -28,7 +28,6 @@ src/components/design-system/molecules/accordion/accordion/
     accordion.tsx
     accordion.test.tsx        <- component (jsdom project)
     use-accordion-store.ts
-    (renderHook tests live in accordion.test.tsx)
 
 e2e/
     homepage.spec.ts
@@ -38,12 +37,17 @@ e2e/
 
 ## Vitest Projects
 
-`vitest.config.ts` defines two projects that share the same react-compiler babel transform:
+`vitest.config.ts` defines two projects:
 
 - **node** — `src/lib/**/*.test.ts` — environment: node
 - **jsdom** — `src/components/**/*.test.tsx` and `src/components/**/*.test.ts` — environment: jsdom, globals: true, setup: `vitest.setup.ts`
 
 The `@vitejs/plugin-react` v6 plugin is used via `react()` with no extra options. Note: v6 removed the `babel` and `presets` options from its `Options` interface; the `reactCompilerPreset` export is for use with `@rolldown/plugin-babel`, not for vitest. The React Compiler is a production optimization applied by Next.js at build time — it is not replicated in the test transform. Components that use hooks compile and render correctly in tests without it.
+
+## Test Structure Conventions
+
+- **One top-level `describe` per unit; nested `describe` per scenario.** Never leave multiple sibling top-level `describe` blocks in a file — wrap them in a single `describe` named for the unit under test (the module or primary function), with nested `describe` blocks per function or scenario. Name a `describe` for the thing it tests; no `atom`/`molecule`/`page` suffixes (e.g. `Button`, not `Button atom`).
+- **Do not test a hook separately when its component is tested without mocking it.** A render test that does not mock the component's hooks already runs the store for real, so the store is covered through the UI. Add a direct `renderHook` test ONLY for store logic that no component can trigger through its rendered UI.
 
 ## What to Test at Each Layer
 
@@ -56,13 +60,11 @@ Security-sensitive and correctness-sensitive pure functions have the highest ROI
 - `src/lib/seo/seo.ts` — metadata shape, structured data, date formatting, headline truncation
 - `src/lib/content/search-index-factory.ts` — index creation, search by field, ref correctness
 
-### Component (RTL + renderHook)
+### Component (RTL)
 
 **Start in the design system** — it is self-contained and has no network or route dependencies. Seed atoms then molecules, then organisms only when cheap.
 
-Thin components (no store, no side effects) get a render + interaction test. For molecules that have a `use-*-store.ts`, add one `renderHook` block in the same test file to cover store logic that the UI alone cannot trigger (complex state transitions, callbacks).
-
-The component-store nuance: components are thin — the interesting logic is in the store. RTL render covers the integration; `renderHook` covers edge cases in store state.
+Each component gets a render + interaction test that drives it through the rendered UI **without mocking its hooks**. Because the component is thin and its store runs for real during the render, the store is covered through the component — do NOT add a separate `renderHook`/store test for it (see Test Structure Conventions). Reach for a direct `renderHook` test only for store logic unreachable through any component's UI.
 
 Do NOT test `features/` or `content/` components without Next.js context — they require routing and server components. The design system is the correct starting point; climb outward only as context permits.
 

@@ -1,9 +1,7 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { renderHook, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Accordion } from "./accordion";
-import { useAccordionStore } from "./use-accordion-store";
 
 vi.mock("@/components/design-system/atoms/animation/motion-div", () => ({
     MotionDiv: ({ children, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
@@ -11,7 +9,7 @@ vi.mock("@/components/design-system/atoms/animation/motion-div", () => ({
     ),
 }));
 
-describe("Accordion molecule", () => {
+describe("Accordion", () => {
     describe("render", () => {
         it("renders the title", () => {
             render(<Accordion title="Section Title">Content here</Accordion>);
@@ -79,41 +77,5 @@ describe("Accordion molecule", () => {
             );
             expect(container.firstChild).toHaveClass("custom-class");
         });
-    });
-});
-
-describe("useAccordionStore (renderHook)", () => {
-    it("starts closed when defaultOpen is false", () => {
-        const { result } = renderHook(() => useAccordionStore(false));
-        expect(result.current.state.isOpen).toBe(false);
-    });
-
-    it("starts open when defaultOpen is true", () => {
-        const { result } = renderHook(() => useAccordionStore(true));
-        expect(result.current.state.isOpen).toBe(true);
-    });
-
-    it("toggle flips open state", () => {
-        const { result } = renderHook(() => useAccordionStore(false));
-        act(() => {
-            result.current.effects.toggle();
-        });
-        expect(result.current.state.isOpen).toBe(true);
-    });
-
-    it("toggle calls the optional onToggle callback", () => {
-        const onToggle = vi.fn();
-        const { result } = renderHook(() => useAccordionStore(false, onToggle));
-        act(() => {
-            result.current.effects.toggle();
-        });
-        expect(onToggle).toHaveBeenCalledOnce();
-    });
-
-    it("exposes stable panelId and triggerId", () => {
-        const { result } = renderHook(() => useAccordionStore(false));
-        const { panelId, triggerId } = result.current.state;
-        expect(panelId).toMatch(/accordion-panel-/);
-        expect(triggerId).toMatch(/accordion-trigger-/);
     });
 });

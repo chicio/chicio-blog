@@ -7,7 +7,7 @@ const MOCK_STREAM_RESPONSE = [
     "data: [DONE]",
 ].join("\n");
 
-test.describe("Chat page with mocked Groq stream", () => {
+test.describe("Chat page", () => {
     test.beforeEach(async ({ page }) => {
         await page.route("**/api/chat", async (route) => {
             await route.fulfill({
