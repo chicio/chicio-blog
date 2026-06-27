@@ -57,12 +57,12 @@ Nav hrefs and social links come from **`src/components/features/content/nav-conf
 
 ### Dependency-Cruiser Rule
 
-The rule lives in a **separate config file**: `.dependency-cruiser-purity.js` (not in the main `.dependency-cruiser.js`).
+The rule lives in the SINGLE main config `.dependency-cruiser.js` (the earlier separate `.dependency-cruiser-purity.js` + `validate-design-system-purity` command were CONSOLIDATED away — do NOT recreate them).
 
-**Why separate?** The rule needs `tsConfig: { fileName: "tsconfig.json" }` to resolve `@/` aliases so `dependencyTypes` correctly includes `"type-only"` for `import type` statements. Adding tsConfig globally to the main config surfaces ~146 pre-existing `seal-private-nested-folders` violations (from other ongoing migrations). The separate file scopes tsConfig to only the design-system purity check.
+The main config now has `tsConfig: { fileName: "tsconfig.json" }` in `options`, so `@/` aliases resolve and `dependencyTypes` correctly classifies `type-only`. (The old `seal-private-nested-folders` rules — which false-positived under alias resolution by conflating public deep folders with private nesting — were DROPPED; `import-only-via-index` is the folder boundary guard and excludes the flat `design-system/hooks/` home.)
 
 ```js
-// .dependency-cruiser-purity.js
+// in .dependency-cruiser.js forbidden[]
 {
   name: "design-system-types-type-only",
   severity: "error",
@@ -72,12 +72,12 @@ The rule lives in a **separate config file**: `.dependency-cruiser-purity.js` (n
 // options: tsPreCompilationDeps: true, tsConfig: { fileName: "tsconfig.json" }
 ```
 
-**npm script**: `validate-design-system-purity` → `depcruise src/components/design-system --config .dependency-cruiser-purity.js`  
-**CI**: runs as second step inside the `validate-architecture` job  
-**Pre-push**: `.husky/pre-push` runs both `validate-architecture` AND `validate-design-system-purity`
-
 `dependencyTypesNot: ["type-only"]` = flag the dependency if it is NOT type-only.
 So `import type { X }` → passes; `import { X }` → error.
+
+**npm script**: single `validate-architecture` → `depcruise src --config .dependency-cruiser.js` (runs ALL rules)
+**CI**: the `validate-architecture` job
+**Pre-push**: `.husky/pre-push` runs `validate-architecture`
 
 ### Verification Commands
 ```bash
@@ -85,7 +85,7 @@ So `import type { X }` → passes; `import { X }` → error.
 grep -rn 'from "@/types' src/components/design-system | grep -v 'import type'
 # Must return empty
 
-# 2. Rule check (authoritative)
-npm run validate-design-system-purity
+# 2. Rule check (authoritative) — single command, all rules
+npm run validate-architecture
 # Must return 0 violations
 ```
