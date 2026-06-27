@@ -195,13 +195,13 @@ Frame suggestions around the three portfolio pillars:
 
 ## Key Technical Details to Remember
 
-- **Chat**: Groq (Llama 3.3 70B) + Upstash Vector RAG. API at `src/app/api/chat/route.ts`, prompt at `src/lib/chat/llm-prompt.ts`
-- **Search**: elasticlunr client-side, index at `public/search-index.json`, generated via `npm run search-index`
+- **Chat**: Groq + Upstash Vector RAG.
+- **Search**: elasticlunr client-side
 - **Markdown pipeline**: remark (emoji, GFM, math, frontmatter, YouTube) + rehype (syntax highlight, KaTeX, figure captions)
-- **Motion**: Framer Motion v12, user-toggleable via `useMotionSettings`, localStorage with `fabrizioduroni_` prefix
-- **Analytics**: Google Analytics via `@next/third-parties`, gated by cookie consent
+- **Motion**: Framer Motion, user-toggleable 
+- **Analytics**: Google Analytics, gated by cookie consent
 - **Deployment**: Vercel with Vercel Analytics & Speed Insights
-- **Node**: v22.x, GitHub Actions CI on macOS
+- **Node**: GitHub Actions CI on macOS
 - **Release**: `release-it` with conventional changelog
 
 ## Git Workflow
