@@ -22,7 +22,7 @@ test.describe("Contact form with mocked API", () => {
         await page.goto("/contact");
         const submitButton = page.getByRole("button", { name: /send message/i });
         await submitButton.click();
-        await expect(page.getByText(/required|incomplete|error/i)).toBeVisible({ timeout: 5000 });
+        await expect(page.getByText("Form incomplete")).toBeVisible({ timeout: 5000 });
     });
 
     test("shows validation error for invalid email", async ({ page }) => {
@@ -30,7 +30,7 @@ test.describe("Contact form with mocked API", () => {
         await page.getByRole("textbox", { name: /name/i }).fill("Fabrizio");
         await page.getByRole("textbox", { name: /email/i }).fill("not-an-email");
         await page.getByRole("button", { name: /send message/i }).click();
-        await expect(page.getByText(/invalid|email|required|error/i)).toBeVisible({ timeout: 5000 });
+        await expect(page.getByText("Form incomplete")).toBeVisible({ timeout: 5000 });
     });
 
     test("successfully submits a valid form and shows confirmation", async ({ page }) => {

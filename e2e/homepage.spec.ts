@@ -7,10 +7,10 @@ test.describe("Homepage and primary navigation", () => {
         await expect(page.locator("body")).toBeVisible();
     });
 
-    test("homepage contains a navigation element", async ({ page }) => {
+    test("homepage contains a menu with navigation links", async ({ page }) => {
         await page.goto("/");
-        const nav = page.getByRole("navigation");
-        await expect(nav).toBeVisible();
+        await expect(page.getByRole("link", { name: /home/i }).first()).toBeVisible();
+        await expect(page.getByRole("link", { name: /blog/i }).first()).toBeVisible();
     });
 
     test("navigating to /blog loads the blog listing page", async ({ page }) => {
