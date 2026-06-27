@@ -1,1 +1,2 @@
 npm run validate-architecture
+npm run test:run

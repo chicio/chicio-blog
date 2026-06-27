@@ -16,6 +16,14 @@ const ignores = {
         ".agents/**",
         "public/**",
         "tools/**",
+        "**/*.test.ts",
+        "**/*.test.tsx",
+        "**/*.spec.ts",
+        "**/*.spec.tsx",
+        "e2e/**",
+        "vitest.config.ts",
+        "vitest.setup.ts",
+        "playwright.config.ts",
     ],
 };
 

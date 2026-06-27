@@ -42,6 +42,10 @@
   ],
   "exclude": [
     "node_modules",
-    "agent"
+    "agent",
+    "vitest.config.ts",
+    "vitest.setup.ts",
+    "playwright.config.ts",
+    "e2e"
   ]
 }
