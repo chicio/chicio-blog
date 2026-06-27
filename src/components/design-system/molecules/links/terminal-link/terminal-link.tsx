@@ -1,4 +1,4 @@
-import { StandardInternalLinkWithTracking } from "@/components/design-system/atoms/links/standard-internal-link-with-tracking";
+import { InternalLink } from "@/components/design-system/atoms/links/internal-link";
 import { Cursor } from "@/components/design-system/atoms/typography/terminal-blocks";
 import { Button } from "@/components/design-system/atoms/buttons/button";
 import React from "react";
@@ -10,7 +10,7 @@ export const TerminalLink: React.FC<{
     className?: string;
 }> = ({ to, onClick, label, className }) => (
     <Button className={`w-fit${className ? ` ${className}` : ""}`}>
-        <StandardInternalLinkWithTracking
+        <InternalLink
             to={to}
             onClick={onClick}
             className="font-mono text-lg no-underline hover:no-underline"
@@ -19,6 +19,6 @@ export const TerminalLink: React.FC<{
                 {">"} {label}
                 <Cursor />
             </span>
-        </StandardInternalLinkWithTracking>
+        </InternalLink>
     </Button>
 );

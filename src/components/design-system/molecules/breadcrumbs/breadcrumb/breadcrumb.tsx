@@ -4,7 +4,7 @@ import { FC } from "react";
 import { motion } from "framer-motion";
 import { IoMdArrowRoundBack } from "react-icons/io";
 
-import { StandardInternalLinkWithTracking } from "@/components/design-system/atoms/links/standard-internal-link-with-tracking";
+import { InternalLink } from "@/components/design-system/atoms/links/internal-link";
 import { useGlassmorphism } from "@/components/design-system/hooks/use-glassmorphism";
 import { useBreadcrumbStore } from "./use-breadcrumb-store";
 
@@ -39,13 +39,13 @@ const BreadcrumbContent: FC<BreadcrumbContentProps> = ({ items, parentItem }) =>
                     >
                         <IoMdArrowRoundBack />
                     </span>
-                    <StandardInternalLinkWithTracking
+                    <InternalLink
                         to={parentItem.href}
                         onClick={parentItem.onClick}
                         className="min-w-0 truncate py-2 text-sm"
                     >
                         {parentItem.label}
-                    </StandardInternalLinkWithTracking>
+                    </InternalLink>
                 </li>
             </ol>
         )}
@@ -71,13 +71,13 @@ const BreadcrumbContent: FC<BreadcrumbContentProps> = ({ items, parentItem }) =>
                             {item.label}
                         </span>
                     ) : (
-                        <StandardInternalLinkWithTracking
+                        <InternalLink
                             to={item.href}
                             onClick={item.onClick}
                             className="block truncate py-2 whitespace-nowrap text-sm"
                         >
                             {item.label}
-                        </StandardInternalLinkWithTracking>
+                        </InternalLink>
                     )}
                 </li>
             ))}

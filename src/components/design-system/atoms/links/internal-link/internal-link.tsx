@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import { FC, ReactNode } from "react";
-import { useStandardInternalLinkWithTrackingStore } from "./use-standard-internal-link-with-tracking-store";
+import { useInternalLinkStore } from "./use-internal-link-store";
 
-type StandardInternalLinkWithTrackingProps = {
+type InternalLinkProps = {
     to: string;
     className?: string;
     children?: ReactNode;
@@ -12,14 +12,14 @@ type StandardInternalLinkWithTrackingProps = {
     onClick?: () => void;
 };
 
-export const StandardInternalLinkWithTracking: FC<StandardInternalLinkWithTrackingProps> = ({
+export const InternalLink: FC<InternalLinkProps> = ({
     children,
     className,
     to,
     onClick,
     prefetch = false,
 }) => {
-    const { effects } = useStandardInternalLinkWithTrackingStore(onClick);
+    const { effects } = useInternalLinkStore(onClick);
     const { onTrack } = effects;
 
     return (

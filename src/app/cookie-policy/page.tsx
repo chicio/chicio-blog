@@ -1,4 +1,4 @@
-import { StandardExternalLinkWithTracking } from "@/components/design-system/atoms/links/standard-external-link-with-tracking";
+import { ExternalLink } from "@/components/design-system/atoms/links/external-link";
 import { PageTitle } from "@/components/design-system/molecules/typography/page-title";
 import { ContentPage } from "@/components/features/content/content-page";
 import { createMetadata } from "@/lib/seo/seo";
@@ -90,12 +90,12 @@ export default function CookiePolicy() {
         <ul>
           <li>
             Cookies:
-            <StandardExternalLinkWithTracking
+            <ExternalLink
               href="https://en.wikipedia.org/wiki/HTTP_cookie"
               className="mx-2"
             >
               https://en.wikipedia.org/wiki/HTTP_cookie
-            </StandardExternalLinkWithTracking>
+            </ExternalLink>
           </li>
         </ul>
       </div>

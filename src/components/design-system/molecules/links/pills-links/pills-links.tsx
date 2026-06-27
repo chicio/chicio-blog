@@ -2,7 +2,7 @@
 
 import { FC, PropsWithChildren } from "react";
 import { BluePill, RedPill } from "@/components/design-system/atoms/effects/pills";
-import { StandardInternalLinkWithTracking } from "@/components/design-system/atoms/links/standard-internal-link-with-tracking";
+import { InternalLink } from "@/components/design-system/atoms/links/internal-link";
 
 type PillProps = PropsWithChildren<{
     to: string;
@@ -10,13 +10,13 @@ type PillProps = PropsWithChildren<{
 }>;
 
 export const RedPillLink: FC<PillProps> = ({ children, to, onClick }) => (
-    <StandardInternalLinkWithTracking className="no-underline" to={to} onClick={onClick}>
+    <InternalLink className="no-underline" to={to} onClick={onClick}>
         <RedPill>{children}</RedPill>
-    </StandardInternalLinkWithTracking>
+    </InternalLink>
 );
 
 export const BluePillLink: FC<PillProps> = ({ children, to, onClick }) => (
-    <StandardInternalLinkWithTracking className="no-underline" to={to} onClick={onClick}>
+    <InternalLink className="no-underline" to={to} onClick={onClick}>
         <BluePill>{children}</BluePill>
-    </StandardInternalLinkWithTracking>
+    </InternalLink>
 );

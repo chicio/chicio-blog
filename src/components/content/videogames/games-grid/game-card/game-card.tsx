@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { StandardInternalLinkWithTracking } from "@/components/design-system/atoms/links/standard-internal-link-with-tracking";
+import { InternalLink } from "@/components/design-system/atoms/links/internal-link";
 import { GlassmorphismBackground } from "@/components/design-system/atoms/effects/glassmorphism-background";
 import { GameMetadata, VideogamesNavigationOrigin } from "@/types/content/videogames";
 import { Content } from "@/types/content/content";
@@ -28,7 +28,7 @@ export const GameCard: FC<GameCardProps> = ({ game, navigationOrigin = "console"
             onClick={onClick}
         >
             {isInView && (
-                <StandardInternalLinkWithTracking
+                <InternalLink
                     to={game.slug.formatted}
                     className="block h-full w-full"
                 >
@@ -63,7 +63,7 @@ export const GameCard: FC<GameCardProps> = ({ game, navigationOrigin = "console"
                             </span>
                         ))}
                     </div>
-                </StandardInternalLinkWithTracking>
+                </InternalLink>
             )}
         </div>
     );

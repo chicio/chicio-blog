@@ -1,5 +1,5 @@
 import { imageShimmerPlaceholder } from "@/components/design-system/atoms/effects/image-shimmer-placeholder";
-import { StandardInternalLinkWithTracking } from "@/components/design-system/atoms/links/standard-internal-link-with-tracking";
+import { InternalLink } from "@/components/design-system/atoms/links/internal-link";
 import { Author } from "@/types/content/author";
 import Image from "next/image";
 import { FC } from "react";
@@ -38,7 +38,7 @@ export const PostCard: FC<PostCardProps> = ({
         className={`glow-container bg-general-background-light flex flex-col relative mt-5 ${big ? "w-full" : "w-full md:w-[48%]"}`}
         key={slug}
     >
-        <StandardInternalLinkWithTracking to={slug}>
+        <InternalLink to={slug}>
             <Image
                 className="bg-general-background h-[200px] w-full rounded-xl object-cover sm:h-[300px]"
                 alt={title}
@@ -47,9 +47,9 @@ export const PostCard: FC<PostCardProps> = ({
                 height={500}
                 placeholder={imageShimmerPlaceholder}
             />
-        </StandardInternalLinkWithTracking>
+        </InternalLink>
         <div className="flex flex-1 flex-col p-5">
-            <StandardInternalLinkWithTracking
+            <InternalLink
                 className="no-underline hover:no-underline"
                 to={slug}
             >
@@ -60,7 +60,7 @@ export const PostCard: FC<PostCardProps> = ({
                 />
                 <PostMeta date={date} readingTime={readingTime} />
                 <p className="mx-0 text-shadow-md">{`${description} [...]`}</p>
-            </StandardInternalLinkWithTracking>
+            </InternalLink>
             {tags && (
                 <PostTags tags={tags} />
             )}

@@ -361,12 +361,12 @@ export const ChromeAiFeaturesToolbar: FC<ChromeAiFeaturesToolbarProps> = ({
                 >
                     <p>
                         {"These features require "}
-                        <StandardExternalLinkWithTracking
+                        <ExternalLink
                             href="https://developer.chrome.com/docs/ai/built-in"
                             trackingData={{ /* ... */ }}
                         >
                             Chrome 138+
-                        </StandardExternalLinkWithTracking>
+                        </ExternalLink>
                         {" and capable hardware to run."}
                     </p>
                     <div className="mt-2 flex gap-3 overflow-visible">
