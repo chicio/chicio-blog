@@ -1,7 +1,7 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "types": ["node", "mdx", "dom-chromium-ai", "vitest/globals"]
+    "types": ["node", "mdx", "dom-chromium-ai", "vitest/globals", "next/image-types/global"]
   },
   "include": [
     "src/**/*.test.ts",
