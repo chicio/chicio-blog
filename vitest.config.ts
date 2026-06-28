@@ -26,6 +26,7 @@ export default defineConfig({
                 "src/components/design-system/atoms/effects/matrix-rain/**",
                 "src/components/design-system/molecules/effects/matrix-background/**",
                 "src/components/design-system/molecules/effects/matrix-header-background/**",
+                "src/components/design-system/molecules/effects/matrix-terminal/**",
             ],
         },
         projects: [
