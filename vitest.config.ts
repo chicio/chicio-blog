@@ -20,6 +20,14 @@ export default defineConfig({
             // No threshold gate yet — codebase starts near-zero.
             // A ratchet can be added here once baseline coverage is established.
             include: ["src/lib/**", "src/components/design-system/**"],
+            // Matrix CG/canvas effects cannot run in jsdom, so they are excluded from
+            // coverage rather than carried by meaningless smoke tests.
+            exclude: [
+                "src/components/design-system/atoms/effects/matrix-rain/**",
+                "src/components/design-system/molecules/effects/matrix-background/**",
+                "src/components/design-system/molecules/effects/matrix-header-background/**",
+                "src/components/design-system/molecules/effects/matrix-terminal/**",
+            ],
         },
         projects: [
             {
@@ -27,7 +35,14 @@ export default defineConfig({
                 test: {
                     name: "node",
                     include: ["src/lib/**/*.test.ts"],
-                    exclude: ["src/lib/consents/**"],
+                    exclude: [
+                        "src/lib/consents/**",
+                        "src/lib/local-storage/**",
+                        "src/lib/session-storage/**",
+                        "src/lib/pwa/**",
+                        "src/lib/videogames/**",
+                        "src/lib/background-sync/**",
+                    ],
                     environment: "node",
                 },
             },
@@ -40,6 +55,11 @@ export default defineConfig({
                         "src/components/**/*.test.tsx",
                         "src/components/**/*.test.ts",
                         "src/lib/consents/**/*.test.ts",
+                        "src/lib/local-storage/**/*.test.ts",
+                        "src/lib/session-storage/**/*.test.ts",
+                        "src/lib/pwa/**/*.test.ts",
+                        "src/lib/videogames/**/*.test.ts",
+                        "src/lib/background-sync/**/*.test.ts",
                     ],
                     environment: "jsdom",
                     globals: true,
