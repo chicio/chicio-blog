@@ -17,8 +17,12 @@ export default defineConfig({
         coverage: {
             provider: "v8",
             reporter: ["text", "json-summary"],
-            // No threshold gate yet — codebase starts near-zero.
-            // A ratchet can be added here once baseline coverage is established.
+            thresholds: {
+                statements: 64,
+                branches: 59,
+                functions: 61,
+                lines: 65,
+            },
             include: ["src/lib/**", "src/components/design-system/**"],
             // Matrix CG/canvas effects cannot run in jsdom, so they are excluded from
             // coverage rather than carried by meaningless smoke tests.
