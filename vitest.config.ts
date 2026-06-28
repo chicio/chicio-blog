@@ -20,6 +20,9 @@ export default defineConfig({
             // No threshold gate yet — codebase starts near-zero.
             // A ratchet can be added here once baseline coverage is established.
             include: ["src/lib/**", "src/components/design-system/**"],
+            // matrix-rain is WebGPU/canvas — it cannot run in jsdom, so it is
+            // excluded from coverage rather than carried by a meaningless smoke test.
+            exclude: ["src/components/design-system/atoms/effects/matrix-rain/**"],
         },
         projects: [
             {
@@ -27,7 +30,14 @@ export default defineConfig({
                 test: {
                     name: "node",
                     include: ["src/lib/**/*.test.ts"],
-                    exclude: ["src/lib/consents/**"],
+                    exclude: [
+                        "src/lib/consents/**",
+                        "src/lib/local-storage/**",
+                        "src/lib/session-storage/**",
+                        "src/lib/pwa/**",
+                        "src/lib/videogames/**",
+                        "src/lib/background-sync/**",
+                    ],
                     environment: "node",
                 },
             },
@@ -40,6 +50,11 @@ export default defineConfig({
                         "src/components/**/*.test.tsx",
                         "src/components/**/*.test.ts",
                         "src/lib/consents/**/*.test.ts",
+                        "src/lib/local-storage/**/*.test.ts",
+                        "src/lib/session-storage/**/*.test.ts",
+                        "src/lib/pwa/**/*.test.ts",
+                        "src/lib/videogames/**/*.test.ts",
+                        "src/lib/background-sync/**/*.test.ts",
                     ],
                     environment: "jsdom",
                     globals: true,
