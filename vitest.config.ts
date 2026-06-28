@@ -20,9 +20,13 @@ export default defineConfig({
             // No threshold gate yet — codebase starts near-zero.
             // A ratchet can be added here once baseline coverage is established.
             include: ["src/lib/**", "src/components/design-system/**"],
-            // matrix-rain is WebGPU/canvas — it cannot run in jsdom, so it is
-            // excluded from coverage rather than carried by a meaningless smoke test.
-            exclude: ["src/components/design-system/atoms/effects/matrix-rain/**"],
+            // Matrix CG/canvas effects cannot run in jsdom, so they are excluded from
+            // coverage rather than carried by meaningless smoke tests.
+            exclude: [
+                "src/components/design-system/atoms/effects/matrix-rain/**",
+                "src/components/design-system/molecules/effects/matrix-background/**",
+                "src/components/design-system/molecules/effects/matrix-header-background/**",
+            ],
         },
         projects: [
             {
