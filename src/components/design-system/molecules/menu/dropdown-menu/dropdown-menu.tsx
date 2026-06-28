@@ -42,7 +42,7 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
         .some((item) => item.selected);
     const { state, effects } = useDropdownMenuStore(hasSelected);
     const { open, selected, shouldReduceMotions, buttonRef } = state;
-    const { toggleOpen, handleBlur, handleItemClick } = effects;
+    const { toggleOpen, handleBlur } = effects;
 
     return (
         <div className="relative z-50 mb-0" tabIndex={-1} onBlur={handleBlur}>
@@ -83,7 +83,7 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
                                             to={item.to}
                                             selected={item.selected ?? false}
                                             className="xs:whitespace-nowrap m-2 text-center"
-                                            onClick={handleItemClick(item.onClick)}
+                                            onClick={item.onClick}
                                             external={item.external}
                                         >
                                             {item.label}
@@ -96,7 +96,7 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
                                     to={entry.to}
                                     selected={entry.selected ?? false}
                                     className="xs:whitespace-nowrap m-2"
-                                    onClick={handleItemClick(entry.onClick)}
+                                    onClick={entry.onClick}
                                     external={entry.external}
                                 >
                                     {entry.label}
