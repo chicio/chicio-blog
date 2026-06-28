@@ -10,7 +10,6 @@ export type MenuItemProps = {
     children?: ReactNode;
     className?: string;
     onClick?: () => void;
-    onTrack?: () => void;
     external?: boolean;
 };
 
@@ -20,7 +19,6 @@ export const MenuItem: FC<MenuItemProps> = ({
     to,
     selected,
     onClick,
-    onTrack,
     external,
 }) => {
     const { effects } = useMenuItemStore();
@@ -43,7 +41,7 @@ export const MenuItem: FC<MenuItemProps> = ({
                 target="_blank"
                 rel="noopener noreferrer"
                 className={composedClassName}
-                onClick={handleClick(onClick, onTrack)}
+                onClick={handleClick(onClick)}
             >
                 {children}
             </a>
@@ -55,7 +53,7 @@ export const MenuItem: FC<MenuItemProps> = ({
             href={to}
             prefetch={false}
             className={composedClassName}
-            onClick={handleClick(onClick, onTrack)}
+            onClick={handleClick(onClick)}
         >
             {children}
         </Link>

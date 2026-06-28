@@ -82,10 +82,9 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
                                         <MenuItem
                                             key={item.label + itemIdx}
                                             to={item.to}
-                                            onTrack={item.onTrack}
                                             selected={item.selected ?? false}
                                             className="xs:whitespace-nowrap m-2 text-center"
-                                            onClick={handleItemClick(item.onClick)}
+                                            onClick={handleItemClick(item.onTrack, item.onClick)}
                                             external={item.external}
                                         >
                                             {item.label}
@@ -96,10 +95,9 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
                                 <MenuItem
                                     key={entry.label + idx}
                                     to={entry.to}
-                                    onTrack={entry.onTrack}
                                     selected={entry.selected ?? false}
                                     className="xs:whitespace-nowrap m-2"
-                                    onClick={handleItemClick(entry.onClick)}
+                                    onClick={handleItemClick(entry.onTrack, entry.onClick)}
                                     external={entry.external}
                                 >
                                     {entry.label}

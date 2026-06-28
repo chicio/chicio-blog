@@ -62,17 +62,17 @@ export const Menu: FC<MenuProps> = ({ navHrefs, onPaletteTrigger, tracking }) =>
         openMenu,
         closeMenu,
         handlePaletteTrigger,
-        onTrackHome,
-        onTrackBlog,
-        onTrackDsaRoadmap,
-        onTrackDsaExercises,
-        onTrackChat,
-        onTrackMcp,
-        onTrackMatrixRain,
-        onTrackAboutMe,
-        onTrackArt,
-        onTrackVideogames,
-        onTrackContact,
+        onClickHome,
+        onClickBlog,
+        onClickDsaRoadmap,
+        onClickDsaExercises,
+        onClickChat,
+        onClickMcp,
+        onClickMatrixRain,
+        onClickAboutMe,
+        onClickArt,
+        onClickVideogames,
+        onClickContact,
     } = effects;
 
     const baseClassName = (isMobile: boolean) =>
@@ -87,8 +87,7 @@ export const Menu: FC<MenuProps> = ({ navHrefs, onPaletteTrigger, tracking }) =>
                 key={`home-${isMobile ? "mobile" : "desktop"}`}
                 to={"/"}
                 selected={pathname === "/"}
-                onTrack={onTrackHome}
-                onClick={closeMenu}
+                onClick={onClickHome}
             >
                 Home
             </MenuItem>
@@ -97,8 +96,7 @@ export const Menu: FC<MenuProps> = ({ navHrefs, onPaletteTrigger, tracking }) =>
                 className={baseClassName(isMobile)}
                 to={navHrefs.blog}
                 selected={pathname.includes(navHrefs.blog)}
-                onTrack={onTrackBlog}
-                onClick={closeMenu}
+                onClick={onClickBlog}
             >
                 Blog
             </MenuItem>
@@ -112,16 +110,14 @@ export const Menu: FC<MenuProps> = ({ navHrefs, onPaletteTrigger, tracking }) =>
                             {
                                 label: "Roadmap",
                                 to: navHrefs.dsaRoadmap,
-                                onTrack: onTrackDsaRoadmap,
                                 selected: pathname === navHrefs.dsaRoadmap,
-                                onClick: closeMenu,
+                                onClick: onClickDsaRoadmap,
                             },
                             {
                                 label: "Exercises",
                                 to: navHrefs.dsaExercises,
-                                onTrack: onTrackDsaExercises,
                                 selected: pathname === navHrefs.dsaExercises,
-                                onClick: closeMenu,
+                                onClick: onClickDsaExercises,
                             },
                         ],
                     },
@@ -131,16 +127,14 @@ export const Menu: FC<MenuProps> = ({ navHrefs, onPaletteTrigger, tracking }) =>
                             {
                                 label: "Chat",
                                 to: navHrefs.chat,
-                                onTrack: onTrackChat,
                                 selected: pathname === navHrefs.chat,
-                                onClick: closeMenu,
+                                onClick: onClickChat,
                             },
                             {
                                 label: "MCP",
                                 to: navHrefs.mcp,
-                                onTrack: onTrackMcp,
                                 selected: pathname === navHrefs.mcp,
-                                onClick: closeMenu,
+                                onClick: onClickMcp,
                             },
                         ],
                     },
@@ -151,8 +145,7 @@ export const Menu: FC<MenuProps> = ({ navHrefs, onPaletteTrigger, tracking }) =>
                                 label: "Matrix Rain",
                                 to: "https://chicio.github.io/matrix-rain-webgpu/",
                                 external: true,
-                                onTrack: onTrackMatrixRain,
-                                onClick: closeMenu,
+                                onClick: onClickMatrixRain,
                             },
                         ],
                     },
@@ -165,30 +158,26 @@ export const Menu: FC<MenuProps> = ({ navHrefs, onPaletteTrigger, tracking }) =>
                     {
                         label: "About me",
                         to: navHrefs.aboutMe,
-                        onTrack: onTrackAboutMe,
                         selected: pathname === navHrefs.aboutMe,
-                        onClick: closeMenu,
+                        onClick: onClickAboutMe,
                     },
                     {
                         label: "Art",
                         to: navHrefs.art,
-                        onTrack: onTrackArt,
                         selected: pathname === navHrefs.art,
-                        onClick: closeMenu,
+                        onClick: onClickArt,
                     },
                     {
                         label: "Videogames",
                         to: navHrefs.videogames,
-                        onTrack: onTrackVideogames,
                         selected: pathname === navHrefs.videogames,
-                        onClick: closeMenu,
+                        onClick: onClickVideogames,
                     },
                     {
                         label: "Contact me",
                         to: navHrefs.contact,
-                        onTrack: onTrackContact,
                         selected: pathname === navHrefs.contact,
-                        onClick: closeMenu,
+                        onClick: onClickContact,
                     },
                 ]}
             />

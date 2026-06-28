@@ -50,22 +50,22 @@ export const Footer: FC<FooterProps> = ({ author, navHrefs, socialLinks, navTrac
         <footer className="bg-primary-dark border-t-accent relative w-full shrink-0 snap-start border-t-2 border-solid shadow-lg">
             <div className="flex flex-col w-full items-center">
                 <div className="grid grid-cols-2 gap-3 py-7 px-5 w-full sm:grid-cols-[repeat(6,auto)] sm:justify-center sm:max-w-4xl sm:mx-auto">
-                    <MenuItem to="/" onTrack={onTrackHome} selected={false}>
+                    <MenuItem to="/" onClick={onTrackHome} selected={false}>
                         Home
                     </MenuItem>
-                    <MenuItem to={navHrefs.blog} onTrack={onTrackBlog} selected={false}>
+                    <MenuItem to={navHrefs.blog} onClick={onTrackBlog} selected={false}>
                         Blog
                     </MenuItem>
-                    <MenuItem to={navHrefs.art} onTrack={onTrackArt} selected={false}>
+                    <MenuItem to={navHrefs.art} onClick={onTrackArt} selected={false}>
                         Art
                     </MenuItem>
-                    <MenuItem to={navHrefs.aboutMe} onTrack={onTrackAboutMe} selected={false}>
+                    <MenuItem to={navHrefs.aboutMe} onClick={onTrackAboutMe} selected={false}>
                         About Me
                     </MenuItem>
-                    <MenuItem to={navHrefs.archive} onTrack={onTrackArchive} selected={false}>
+                    <MenuItem to={navHrefs.archive} onClick={onTrackArchive} selected={false}>
                         Archive
                     </MenuItem>
-                    <MenuItem to={navHrefs.tags} onTrack={onTrackTags} selected={false}>
+                    <MenuItem to={navHrefs.tags} onClick={onTrackTags} selected={false}>
                         Tags
                     </MenuItem>
                 </div>

@@ -46,22 +46,15 @@ describe("MenuItem", () => {
     });
 
     describe("interaction", () => {
-        it("calls onClick and onTrack when clicked", async () => {
+        it("calls onClick when clicked", async () => {
             const onClick = vi.fn();
-            const onTrack = vi.fn();
             render(
-                <MenuItem
-                    to="/blog"
-                    selected={false}
-                    onClick={onClick}
-                    onTrack={onTrack}
-                >
+                <MenuItem to="/blog" selected={false} onClick={onClick}>
                     Blog
                 </MenuItem>,
             );
             await userEvent.click(screen.getByRole("link"));
             expect(onClick).toHaveBeenCalledOnce();
-            expect(onTrack).toHaveBeenCalledOnce();
         });
     });
 });

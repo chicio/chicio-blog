@@ -2,7 +2,7 @@
 
 import { openCommandPalette } from "@/components/design-system/state/command-palette/command-palette-events";
 import { usePathname } from "next/navigation";
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback } from "react";
 import { ScrollDirection, useScrollDirection } from "@/components/design-system/hooks/use-scroll-direction";
 import { useOsModifierKey, OsModifierKey } from "@/components/design-system/hooks/use-os-modifier-key";
 import type { ComponentStore } from "@/types/component-store";
@@ -18,17 +18,17 @@ interface MenuEffects {
     openMenu: () => void;
     closeMenu: () => void;
     handlePaletteTrigger: () => void;
-    onTrackHome: (() => void) | undefined;
-    onTrackBlog: (() => void) | undefined;
-    onTrackDsaRoadmap: (() => void) | undefined;
-    onTrackDsaExercises: (() => void) | undefined;
-    onTrackChat: (() => void) | undefined;
-    onTrackMcp: (() => void) | undefined;
-    onTrackMatrixRain: (() => void) | undefined;
-    onTrackAboutMe: (() => void) | undefined;
-    onTrackArt: (() => void) | undefined;
-    onTrackVideogames: (() => void) | undefined;
-    onTrackContact: (() => void) | undefined;
+    onClickHome: () => void;
+    onClickBlog: () => void;
+    onClickDsaRoadmap: () => void;
+    onClickDsaExercises: () => void;
+    onClickChat: () => void;
+    onClickMcp: () => void;
+    onClickMatrixRain: () => void;
+    onClickAboutMe: () => void;
+    onClickArt: () => void;
+    onClickVideogames: () => void;
+    onClickContact: () => void;
 }
 
 export interface MenuTrackingCallbacks {
@@ -64,17 +64,60 @@ export const useMenuStore = (
         openCommandPalette();
     }, [onPaletteTrigger]);
 
-    const onTrackHome = useMemo(() => tracking?.onTrackHome, [tracking]);
-    const onTrackBlog = useMemo(() => tracking?.onTrackBlog, [tracking]);
-    const onTrackDsaRoadmap = useMemo(() => tracking?.onTrackDsaRoadmap, [tracking]);
-    const onTrackDsaExercises = useMemo(() => tracking?.onTrackDsaExercises, [tracking]);
-    const onTrackChat = useMemo(() => tracking?.onTrackChat, [tracking]);
-    const onTrackMcp = useMemo(() => tracking?.onTrackMcp, [tracking]);
-    const onTrackMatrixRain = useMemo(() => tracking?.onTrackMatrixRain, [tracking]);
-    const onTrackAboutMe = useMemo(() => tracking?.onTrackAboutMe, [tracking]);
-    const onTrackArt = useMemo(() => tracking?.onTrackArt, [tracking]);
-    const onTrackVideogames = useMemo(() => tracking?.onTrackVideogames, [tracking]);
-    const onTrackContact = useMemo(() => tracking?.onTrackContact, [tracking]);
+    const onClickHome = useCallback(() => {
+        tracking?.onTrackHome?.();
+        closeMenu();
+    }, [tracking, closeMenu]);
+
+    const onClickBlog = useCallback(() => {
+        tracking?.onTrackBlog?.();
+        closeMenu();
+    }, [tracking, closeMenu]);
+
+    const onClickDsaRoadmap = useCallback(() => {
+        tracking?.onTrackDsaRoadmap?.();
+        closeMenu();
+    }, [tracking, closeMenu]);
+
+    const onClickDsaExercises = useCallback(() => {
+        tracking?.onTrackDsaExercises?.();
+        closeMenu();
+    }, [tracking, closeMenu]);
+
+    const onClickChat = useCallback(() => {
+        tracking?.onTrackChat?.();
+        closeMenu();
+    }, [tracking, closeMenu]);
+
+    const onClickMcp = useCallback(() => {
+        tracking?.onTrackMcp?.();
+        closeMenu();
+    }, [tracking, closeMenu]);
+
+    const onClickMatrixRain = useCallback(() => {
+        tracking?.onTrackMatrixRain?.();
+        closeMenu();
+    }, [tracking, closeMenu]);
+
+    const onClickAboutMe = useCallback(() => {
+        tracking?.onTrackAboutMe?.();
+        closeMenu();
+    }, [tracking, closeMenu]);
+
+    const onClickArt = useCallback(() => {
+        tracking?.onTrackArt?.();
+        closeMenu();
+    }, [tracking, closeMenu]);
+
+    const onClickVideogames = useCallback(() => {
+        tracking?.onTrackVideogames?.();
+        closeMenu();
+    }, [tracking, closeMenu]);
+
+    const onClickContact = useCallback(() => {
+        tracking?.onTrackContact?.();
+        closeMenu();
+    }, [tracking, closeMenu]);
 
     return {
         state: { pathname, shouldHideMenu, shouldOpenMenu, modifierKey },
@@ -82,17 +125,17 @@ export const useMenuStore = (
             openMenu,
             closeMenu,
             handlePaletteTrigger,
-            onTrackHome,
-            onTrackBlog,
-            onTrackDsaRoadmap,
-            onTrackDsaExercises,
-            onTrackChat,
-            onTrackMcp,
-            onTrackMatrixRain,
-            onTrackAboutMe,
-            onTrackArt,
-            onTrackVideogames,
-            onTrackContact,
+            onClickHome,
+            onClickBlog,
+            onClickDsaRoadmap,
+            onClickDsaExercises,
+            onClickChat,
+            onClickMcp,
+            onClickMatrixRain,
+            onClickAboutMe,
+            onClickArt,
+            onClickVideogames,
+            onClickContact,
         },
     };
 };
