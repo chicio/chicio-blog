@@ -38,6 +38,18 @@ test.describe("Blog section", () => {
             await page.goto("/blog/post/2026/06/01/app-js-conf-2026");
             await expect(page.getByRole("link", { name: "react native" }).first()).toBeVisible();
         });
+
+        test("read next section links navigate to another post", async ({ page }) => {
+            await page.goto("/blog/post/2026/06/01/app-js-conf-2026");
+            const readNext = page.getByRole("heading", { name: "Read next", level: 2 }).locator("..");
+            await expect(readNext).toBeVisible();
+            const firstReadNextPost = readNext.locator('a[href*="/blog/post/"]').first();
+            await expect(firstReadNextPost).toBeVisible();
+            const startUrl = page.url();
+            await firstReadNextPost.click();
+            await expect(page).not.toHaveURL(startUrl, { timeout: 10000 });
+            await expect(page).toHaveURL(/\/blog\/post\//);
+        });
     });
 
     test.describe("archive page", () => {
