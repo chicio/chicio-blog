@@ -1,5 +1,45 @@
 # Changelog
 
+## [3.20.0](https://github.com/chicio/chicio-blog/compare/v3.19.0...v3.20.0) (2026-06-28)
+
+### Features
+
+* :sparkles: WebGPU matrix rain with 2D fallback ([#365](https://github.com/chicio/chicio-blog/issues/365)) ([9817b6d](https://github.com/chicio/chicio-blog/commit/9817b6d683e0e12d0ce34edd2ffd3ad036d3ccd5))
+* **ai:** :alien: adding skills from skills installation + adding vercel react best practices ([2dd4d5f](https://github.com/chicio/chicio-blog/commit/2dd4d5f2275240b8caa88ad158876607254b53b3))
+* **capabilities:** :lock: finalize component-store architecture — global enforcement + canonical docs ([#391](https://github.com/chicio/chicio-blog/issues/391)) ([0114e24](https://github.com/chicio/chicio-blog/commit/0114e24577e6e2ffa10bc47f2181fcfa6907d2de))
+* **capabilities:** :sparkles: add GA4 tracking for markdown content negotiation pages ([90b7b0d](https://github.com/chicio/chicio-blog/commit/90b7b0da665fe79f4a48f2e0a2d198847d053589))
+* **capabilities:** :sparkles: add matrix-rain-webgpu to explore menu and projects ([#387](https://github.com/chicio/chicio-blog/issues/387)) ([e32207e](https://github.com/chicio/chicio-blog/commit/e32207ed6bcae1e833b66fff60029c837b36f439))
+* **capabilities:** :sparkles: component-store architecture tooling (PR0 - warn mode) ([#370](https://github.com/chicio/chicio-blog/issues/370)) ([1870b0d](https://github.com/chicio/chicio-blog/commit/1870b0d5a10ed663207876b87f0bf74fa44ca4e7))
+* **capabilities:** :sparkles: live matrix rain control panel ([#367](https://github.com/chicio/chicio-blog/issues/367)) ([6c63eba](https://github.com/chicio/chicio-blog/commit/6c63eba395d7e9aded83a8c4c0f20f01b7df8258))
+* **capabilities:** :sparkles: moved matrix rain effect in ad hoc folder ([503cae3](https://github.com/chicio/chicio-blog/commit/503cae3e6c27ea462b93a4c9a5db9bf95903f664))
+* **capabilities:** :sparkles: removed useless comments ([39b8518](https://github.com/chicio/chicio-blog/commit/39b8518fa466a010cd551ef84ed98ff38571f056))
+* **capabilities:** :sparkles: self-hosted video support in MDX ([#354](https://github.com/chicio/chicio-blog/issues/354)) ([41382fe](https://github.com/chicio/chicio-blog/commit/41382fe96b7b5a8ed451fc0abc4538a4c9e637ef))
+* **capabilities:** :sparkles: tweaking matrix rain setup ([170835b](https://github.com/chicio/chicio-blog/commit/170835b87aff7144dd738c2d31fe9467fefea834))
+* **capabilities:** :truck: consolidate static media under public/media ([#355](https://github.com/chicio/chicio-blog/issues/355)) ([466ff2f](https://github.com/chicio/chicio-blog/commit/466ff2ff8e99aa677de6ae26be94a552988d0cf8)), closes [#318](https://github.com/chicio/chicio-blog/issues/318) [#354](https://github.com/chicio/chicio-blog/issues/354)
+* **capabilities:** :white_check_mark: introduce full testing pyramid — Vitest + RTL + Playwright ([#395](https://github.com/chicio/chicio-blog/issues/395)) ([4a2717d](https://github.com/chicio/chicio-blog/commit/4a2717dc3181e2425318992095101dbb62ceef91))
+* **ci:** :fire: ignore .agents in knip ([e7a24ff](https://github.com/chicio/chicio-blog/commit/e7a24ff8a48a8a71ff557abb5dfd965262aa005b))
+* **content:** :sparkles: App.js Conf 2026 recap from Krakow ([#346](https://github.com/chicio/chicio-blog/issues/346)) ([73d6ebe](https://github.com/chicio/chicio-blog/commit/73d6ebefecbeca74ce817eede45ad14ddfd885c4))
+* **content:** :sparkles: DP Foundations & 1D DP ([#334](https://github.com/chicio/chicio-blog/issues/334)) ([e082846](https://github.com/chicio/chicio-blog/commit/e082846ce762e478d8e4feb4c5f40baa23960d81))
+* **content:** :sparkles: knapsack dp ([#335](https://github.com/chicio/chicio-blog/issues/335)) ([bd7568b](https://github.com/chicio/chicio-blog/commit/bd7568b1cc8bc77e137c9e22eafa85a26f0708b0))
+* **content:** :sparkles: longest increasing subsequence dp article ([#345](https://github.com/chicio/chicio-blog/issues/345)) ([b3c4754](https://github.com/chicio/chicio-blog/commit/b3c4754d0b44cb3a9949f8458350ae9195119026))
+* MatrixRain orchestrator — WebGPU with 2D fallback ([7c1a372](https://github.com/chicio/chicio-blog/commit/7c1a372e1d3d02c01735da15ed8a3c16c39c1d01))
+* useMatrixRainActivity (offscreen + reduced-motion pause source) ([0159ee1](https://github.com/chicio/chicio-blog/commit/0159ee166d7b0b368ef209a417b18d8797feb12c))
+* **ux:** :pencil2: rename command palette chat action to Open chat ([aea11c6](https://github.com/chicio/chicio-blog/commit/aea11c6db8bc963e742b8299c90f1a078522e0c9))
+* **ux:** :sparkles: add chat link in The Author menu ([56584bd](https://github.com/chicio/chicio-blog/commit/56584bd8537770af7641c052c505b0467e6e8d43))
+
+### Bug Fixes
+
+* **capabilities:** :bug: useless props removed from matrix rain usage ([33f6f26](https://github.com/chicio/chicio-blog/commit/33f6f2691d1a40156f15ac686d52731096a2acb0))
+* **capabilities:** :fire: removed other matrix rain props ([25f9287](https://github.com/chicio/chicio-blog/commit/25f9287ad2a33e63a27633ed326ad671175e26ec))
+* complete matrix-rain folder move (barrel + hook import path) ([edac768](https://github.com/chicio/chicio-blog/commit/edac768b03be636ec10f7cf8af11243d354535a2))
+* **content:** :bug: fix list format ([21762db](https://github.com/chicio/chicio-blog/commit/21762db8e9f7340cb30ceed61e013f990cf0a6bd))
+* **deps:** :arrow_down: downgrade eslint to ^9 and fix flat config wiring ([#356](https://github.com/chicio/chicio-blog/issues/356)) ([0de277d](https://github.com/chicio/chicio-blog/commit/0de277d0d7b1ffc0523d43fe359427805a056cf9))
+* **lint:** :rotating_light: clear lint errors  ([#357](https://github.com/chicio/chicio-blog/issues/357)) ([3b046f5](https://github.com/chicio/chicio-blog/commit/3b046f593b9e473e43f236df6652038e74fa61df))
+
+### Performance Improvements
+
+* **performance:** :zap: cache content reads at build time ([#369](https://github.com/chicio/chicio-blog/issues/369)) ([b36c0d9](https://github.com/chicio/chicio-blog/commit/b36c0d9ed006dcc5ad0e710fe26db60a6eadd1c6))
+
 ## [3.19.0](https://github.com/chicio/chicio-blog/compare/v3.18.0...v3.19.0) (2026-05-01)
 
 ### Features

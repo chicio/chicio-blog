@@ -1,6 +1,6 @@
 {
   "name": "chicio-blog",
-  "version": "3.19.0",
+  "version": "3.20.0",
   "private": true,
   "scripts": {
     "chat-knowledge-upload": "tsx --env-file=.env.production src/lib/chat/chat-knowledge-upload.ts",
