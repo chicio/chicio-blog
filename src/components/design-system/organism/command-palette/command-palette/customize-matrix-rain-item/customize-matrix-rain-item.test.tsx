@@ -1,65 +1,78 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { CustomizeMatrixRainItem } from "./customize-matrix-rain-item";
 
-vi.mock("cmdk", () => ({
-    Command: Object.assign(
-        ({ children }: React.PropsWithChildren) => <div>{children}</div>,
-        {
-            Item: ({
-                children,
-                onSelect,
-                value,
-            }: React.PropsWithChildren<{ onSelect?: () => void; value?: string }>) => (
-                <button onClick={onSelect} aria-label={value}>
-                    {children}
-                </button>
-            ),
-        },
-    ),
+const { mockUseWebGpuSupported, mockUseReducedMotions, mockOpenMatrixRainPanel } = vi.hoisted(() => ({
+    mockUseWebGpuSupported: vi.fn(),
+    mockUseReducedMotions: vi.fn(),
+    mockOpenMatrixRainPanel: vi.fn(),
 }));
 
-vi.mock("matrix-rain-webgpu", () => ({
-    isWebGPUSupported: () => true,
+vi.mock("cmdk", () => ({
+    Command: Object.assign(({ children }: React.PropsWithChildren) => <div>{children}</div>, {
+        Item: ({ children, onSelect, value }: React.PropsWithChildren<{ onSelect?: () => void; value?: string }>) => (
+            <button onClick={onSelect} aria-label={value}>
+                {children}
+            </button>
+        ),
+    }),
+}));
+
+vi.mock("@/components/design-system/hooks/use-webgpu-supported", () => ({
+    useWebGpuSupported: mockUseWebGpuSupported,
+}));
+
+vi.mock("@/components/design-system/hooks/use-reduced-motions", () => ({
+    useReducedMotions: mockUseReducedMotions,
 }));
 
 vi.mock("@/components/design-system/state/command-palette/command-palette-events", () => ({
-    openMatrixRainPanel: vi.fn(),
-    commandPaletteOpenEvent: "command-palette-open",
-    openCommandPalette: vi.fn(),
+    openMatrixRainPanel: mockOpenMatrixRainPanel,
 }));
 
+const customizeButton = () => screen.queryByRole("button", { name: "customize matrix rain" });
+
 describe("CustomizeMatrixRainItem", () => {
-    describe("render", () => {
-        it("renders the customize item when WebGPU is supported and motion is enabled", () => {
+    beforeEach(() => {
+        vi.clearAllMocks();
+        mockUseWebGpuSupported.mockReturnValue(true);
+        mockUseReducedMotions.mockReturnValue(false);
+    });
+
+    describe("visibility", () => {
+        it("renders the item when WebGPU is supported and motion is enabled", () => {
             render(<CustomizeMatrixRainItem onClose={vi.fn()} />);
-            const btn = screen.queryByRole("button", { name: "customize matrix rain" });
-            if (btn) {
-                expect(btn).toBeInTheDocument();
-            }
+            expect(customizeButton()).toBeInTheDocument();
+        });
+
+        it("does not render when WebGPU is unsupported", () => {
+            mockUseWebGpuSupported.mockReturnValue(false);
+            render(<CustomizeMatrixRainItem onClose={vi.fn()} />);
+            expect(customizeButton()).not.toBeInTheDocument();
+        });
+
+        it("does not render when the user prefers reduced motion", () => {
+            mockUseReducedMotions.mockReturnValue(true);
+            render(<CustomizeMatrixRainItem onClose={vi.fn()} />);
+            expect(customizeButton()).not.toBeInTheDocument();
         });
     });
 
     describe("interaction", () => {
-        it("calls onClose when item is selected", async () => {
+        it("calls onClose and opens the matrix rain panel when selected", async () => {
             const onClose = vi.fn();
             render(<CustomizeMatrixRainItem onClose={onClose} />);
-            const btn = screen.queryByRole("button", { name: "customize matrix rain" });
-            if (btn) {
-                await userEvent.click(btn);
-                expect(onClose).toHaveBeenCalledOnce();
-            }
+            await userEvent.click(customizeButton()!);
+            expect(onClose).toHaveBeenCalledOnce();
+            expect(mockOpenMatrixRainPanel).toHaveBeenCalledOnce();
         });
 
-        it("calls onTrack when item is selected", async () => {
+        it("calls onTrack when selected", async () => {
             const onTrack = vi.fn();
             render(<CustomizeMatrixRainItem onClose={vi.fn()} onTrack={onTrack} />);
-            const btn = screen.queryByRole("button", { name: "customize matrix rain" });
-            if (btn) {
-                await userEvent.click(btn);
-                expect(onTrack).toHaveBeenCalledOnce();
-            }
+            await userEvent.click(customizeButton()!);
+            expect(onTrack).toHaveBeenCalledOnce();
         });
     });
 });
