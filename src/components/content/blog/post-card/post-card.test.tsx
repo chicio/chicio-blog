@@ -1,29 +1,10 @@
 import { describe, it, expect, vi } from "vitest";
-import { render, screen } from "@/test-utils";
+import { render, screen, nextImageMock, nextLinkMock } from "@/test-utils";
 import { PostCard } from "./index";
 import type { Author } from "@/types/content/author";
 
-vi.mock("next/image", () => ({
-    default: ({
-        alt,
-        src,
-        ...rest
-    }: React.ImgHTMLAttributes<HTMLImageElement> & { src: string; alt: string }) => (
-        <img alt={alt} src={src} {...rest} />
-    ),
-}));
-
-vi.mock("next/link", () => ({
-    default: ({
-        href,
-        children,
-        ...rest
-    }: React.AnchorHTMLAttributes<HTMLAnchorElement> & { href: string }) => (
-        <a href={href} {...rest}>
-            {children}
-        </a>
-    ),
-}));
+vi.mock("next/image", () => nextImageMock());
+vi.mock("next/link", () => nextLinkMock());
 
 const author: Author = {
     name: "Fabrizio Duroni",
