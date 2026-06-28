@@ -90,14 +90,14 @@ npm run test:run         # vitest run once (CI-friendly)
 npm run test:coverage    # vitest run --coverage (v8, prints text summary)
 npm run test:e2e         # playwright test (builds prod first)
 npm run test:e2e:ui      # playwright test --ui (interactive mode)
-npm run typecheck        # tsc --noEmit via tsconfig.typecheck.json (covers src + tests + e2e + config)
+npm run typecheck        # tsc --noEmit over the single tsconfig.json (src + tests + e2e + config)
 ```
 
 ## Typecheck Coverage
 
-`tsconfig.typecheck.json` extends the main tsconfig and explicitly includes `**/*.test.*`, `e2e/**`, `vitest.config.ts`, `vitest.setup.ts`, and `playwright.config.ts`. It also adds `"vitest/globals"` to `types` so jest-dom matchers type-check correctly. The main `tsconfig.json` excludes these files to avoid confusing Next.js's Turbopack type-checker.
+There is a SINGLE `tsconfig.json`, used by the editor, `next build`, and `npm run typecheck` alike. Its `types` include `vitest/globals` (so `describe`/`it`/`expect`/`vi` and the `@testing-library/jest-dom/vitest` matcher augmentation resolve in test files) and `next/image-types/global` (so `.png`/`.jpg` imports resolve in a clean CI checkout without a generated `next-env.d.ts`). The matcher augmentation is loaded at type level via `vitest.setup.ts` (included in the program) and at runtime by the same file.
 
-`npm run typecheck` is the authoritative type gate for the full repo. Vitest uses esbuild (no type-check); ESLint ignores test files; `next build` only type-checks src files. None of those catch test type errors — `typecheck` does.
+`npm run typecheck` (`tsc --noEmit`) is the authoritative type gate for the full repo, covering src + tests + e2e + config files. It exists because `next build` only type-checks files reachable from the build graph — orphan test files are never checked by it. Because the editor and the typecheck gate use the same config, what's green in CI is green in VS Code (no separate test-only tsconfig, no editor/CLI drift).
 
 ## CI Shape
 

@@ -30,7 +30,9 @@
     "types": [
       "node",
       "mdx",
-      "dom-chromium-ai"
+      "dom-chromium-ai",
+      "vitest/globals",
+      "next/image-types/global"
     ]
   },
   "include": [
@@ -42,11 +44,6 @@
   ],
   "exclude": [
     "node_modules",
-    "agent",
-    "vitest.config.ts",
-    "vitest.setup.ts",
-    "playwright.config.ts",
-    "e2e",
-    "src/test-utils"
+    "agent"
   ]
 }

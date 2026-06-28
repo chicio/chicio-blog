@@ -21,8 +21,8 @@ Introduced the full three-layer testing pyramid in PR #395 (feat/capabilities-te
 - `playwright-report/` and `test-results/` added to `.gitignore`
 - `@testing-library/jest-dom` — use `/vitest` entrypoint in `vitest.setup.ts`: `import "@testing-library/jest-dom/vitest"`. The plain `/jest-dom` entrypoint does NOT augment Vitest's `Assertion<T>` type.
 
-**tsconfig.typecheck.json — scope to test surface only (CRITICAL):**
-Do NOT use blanket `**/*.ts` or `**/*.tsx` includes. Those pull in `src/content/home/technology.ts` and `timeline.ts` which import `.png`/`.jpg` files whose types come from `next-env.d.ts` — a file generated only by `next build`, absent in clean CI. The include must enumerate test files explicitly: `src/**/*.test.ts`, `src/**/*.test.tsx`, `src/**/*.spec.ts`, `src/**/*.spec.tsx`, `e2e/**/*.ts`, plus the three config files. Never add `next-env.d.ts` to the typecheck project's include.
+**SINGLE tsconfig.json (CONSOLIDATED 2026-06-28 — superseded the old two-config split):**
+There is now ONE `tsconfig.json` used by editor + `next build` + `npm run typecheck` (`tsc --noEmit`). `tsconfig.typecheck.json` was DELETED — do NOT recreate it. Key: `types` includes `vitest/globals` (test globals + jest-dom matcher augmentation via `vitest.setup.ts`, which is in the program) and `next/image-types/global` (so `.png`/`.jpg` imports resolve in clean CI without a generated `next-env.d.ts`). `exclude` is just `node_modules` + `agent` — test/e2e/config files are INCLUDED. The two-config split caused editor-vs-CI drift (357 false jest-dom matcher errors in VS Code); the single config keeps editor == CI green. Trade-off accepted: vitest globals are type-visible in app source.
 
 **Playwright locator rules:**
 - Strict mode: `getByText(regex)` fails if it resolves to 2+ elements. Use exact text strings (e.g., `getByText("Form incomplete")`) or add `.first()`.
