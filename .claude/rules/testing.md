@@ -13,7 +13,7 @@ always: true
 | E2E | Playwright | Full-page flows with real production build + mocked external APIs |
 | Live QA | agent-browser (local only) | Agent-driven a11y tree + click-through smoke walks |
 
-Coverage: v8 provider, text + json-summary reporters. No threshold gate yet — add a ratchet in `vitest.config.ts` once the baseline is established.
+Coverage: v8 provider, text + json-summary reporters. **Threshold ratchet is active** — thresholds are set in `vitest.config.ts` and the CI `test` job gates on them. The floor is the measured baseline over `src/lib/**` + `src/components/design-system/**` (Matrix CG effects excluded — they are canvas-only and cannot run in jsdom). Floor values (set 2026-06-28): statements 64%, branches 59%, functions 61%, lines 65%. Raise the floor whenever tests improve coverage; never lower it.
 
 ## File Layout
 
@@ -109,7 +109,7 @@ validate-arch  -+- typecheck -+- test -> build -> e2e
 ```
 
 - **typecheck** job: `npm run typecheck` — covers `src/**`, `**/*.test.*`, `e2e/**`, and config files. Zero errors required.
-- **test** job: `npm run test:coverage` — prints coverage summary, no gate
+- **test** job: `npm run test:coverage` — prints coverage summary and **gates on thresholds** (statements 64%, branches 59%, functions 61%, lines 65% over `src/lib/**` + `src/components/design-system/**`). Coverage below the floor fails CI.
 - **e2e** job: runs after build, Playwright browsers cached, report uploaded as artifact; no third-party secrets needed (externals are mocked)
 
 ## Pre-Push Hook (.husky/pre-push)
