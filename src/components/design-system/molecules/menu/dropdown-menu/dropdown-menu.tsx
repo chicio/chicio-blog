@@ -9,7 +9,6 @@ import { useDropdownMenuStore } from "./use-dropdown-menu-store";
 interface DropdownMenuItem {
     label: string;
     to: string;
-    onTrack?: () => void;
     selected?: boolean;
     onClick?: () => void;
     external?: boolean;
@@ -84,7 +83,7 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
                                             to={item.to}
                                             selected={item.selected ?? false}
                                             className="xs:whitespace-nowrap m-2 text-center"
-                                            onClick={handleItemClick(item.onTrack, item.onClick)}
+                                            onClick={handleItemClick(item.onClick)}
                                             external={item.external}
                                         >
                                             {item.label}
@@ -97,7 +96,7 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
                                     to={entry.to}
                                     selected={entry.selected ?? false}
                                     className="xs:whitespace-nowrap m-2"
-                                    onClick={handleItemClick(entry.onTrack, entry.onClick)}
+                                    onClick={handleItemClick(entry.onClick)}
                                     external={entry.external}
                                 >
                                     {entry.label}

@@ -15,7 +15,7 @@ interface DropdownMenuState {
 interface DropdownMenuEffects {
     toggleOpen: () => void;
     handleBlur: (e: React.FocusEvent<HTMLButtonElement | HTMLDivElement>) => void;
-    handleItemClick: (onTrack?: () => void, onClick?: () => void) => () => void;
+    handleItemClick: (onClick?: () => void) => () => void;
 }
 
 export const useDropdownMenuStore = (hasSelected: boolean): ComponentStore<DropdownMenuState, DropdownMenuEffects> => {
@@ -40,8 +40,7 @@ export const useDropdownMenuStore = (hasSelected: boolean): ComponentStore<Dropd
         }
     };
 
-    const handleItemClick = (onTrack?: () => void, onClick?: () => void) => () => {
-        onTrack?.();
+    const handleItemClick = (onClick?: () => void) => () => {
         onClick?.();
     };
 
