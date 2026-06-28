@@ -34,7 +34,7 @@ export default defineConfig({
                 resolve: { alias: pathAlias },
                 test: {
                     name: "node",
-                    include: ["src/lib/**/*.test.ts"],
+                    include: ["src/lib/**/*.test.ts", "src/app/**/*.test.ts", "src/*.test.ts"],
                     exclude: [
                         "src/lib/consents/**",
                         "src/lib/local-storage/**",
