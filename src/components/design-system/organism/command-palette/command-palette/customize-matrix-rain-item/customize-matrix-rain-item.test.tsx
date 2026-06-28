@@ -67,12 +67,5 @@ describe("CustomizeMatrixRainItem", () => {
             expect(onClose).toHaveBeenCalledOnce();
             expect(mockOpenMatrixRainPanel).toHaveBeenCalledOnce();
         });
-
-        it("calls onTrack when selected", async () => {
-            const onTrack = vi.fn();
-            render(<CustomizeMatrixRainItem onClose={vi.fn()} onTrack={onTrack} />);
-            await userEvent.click(customizeButton()!);
-            expect(onTrack).toHaveBeenCalledOnce();
-        });
     });
 });

@@ -3,25 +3,25 @@ import { BluePillLink, RedPillLink } from "@/components/design-system/molecules/
 
 export interface PageNavigationProps {
     previousPageUrl: string | undefined;
-    onTrackPrevious?: () => void;
+    onPreviousClick?: () => void;
     nextPageUrl: string | undefined;
-    onTrackNext?: () => void;
+    onNextClick?: () => void;
 }
 
 export const PaginationNavigation: FC<PageNavigationProps> = ({
     previousPageUrl,
-    onTrackPrevious,
+    onPreviousClick,
     nextPageUrl,
-    onTrackNext,
+    onNextClick,
 }) => (
     <div className="flex justify-center gap-5 p-5">
         {previousPageUrl && (
-            <BluePillLink to={previousPageUrl} onClick={onTrackPrevious}>
+            <BluePillLink to={previousPageUrl} onClick={onPreviousClick}>
                 Previous
             </BluePillLink>
         )}
         {nextPageUrl && (
-            <RedPillLink to={nextPageUrl} onClick={onTrackNext}>
+            <RedPillLink to={nextPageUrl} onClick={onNextClick}>
                 Next
             </RedPillLink>
         )}

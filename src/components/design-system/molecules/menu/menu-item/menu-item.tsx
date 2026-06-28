@@ -2,28 +2,26 @@
 
 import { FC, ReactNode } from "react";
 import Link from "next/link";
-import { useMenuItemWithTrackingStore } from "./use-menu-item-with-tracking-store";
+import { useMenuItemStore } from "./use-menu-item-store";
 
-export type MenuItemWithTrackingProps = {
+export type MenuItemProps = {
     to: string;
     selected: boolean;
     children?: ReactNode;
     className?: string;
     onClick?: () => void;
-    onClickCallback?: () => void;
     external?: boolean;
 };
 
-export const MenuItemWithTracking: FC<MenuItemWithTrackingProps> = ({
+export const MenuItem: FC<MenuItemProps> = ({
     children,
     className,
     to,
     selected,
     onClick,
-    onClickCallback,
     external,
 }) => {
-    const { effects } = useMenuItemWithTrackingStore();
+    const { effects } = useMenuItemStore();
     const { handleClick } = effects;
 
     const color = selected ? "text-accent" : "text-primary-text";
@@ -43,7 +41,7 @@ export const MenuItemWithTracking: FC<MenuItemWithTrackingProps> = ({
                 target="_blank"
                 rel="noopener noreferrer"
                 className={composedClassName}
-                onClick={handleClick(onClick, onClickCallback)}
+                onClick={handleClick(onClick)}
             >
                 {children}
             </a>
@@ -55,7 +53,7 @@ export const MenuItemWithTracking: FC<MenuItemWithTrackingProps> = ({
             href={to}
             prefetch={false}
             className={composedClassName}
-            onClick={handleClick(onClick, onClickCallback)}
+            onClick={handleClick(onClick)}
         >
             {children}
         </Link>
