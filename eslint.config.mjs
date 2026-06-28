@@ -24,6 +24,7 @@ const ignores = {
         "vitest.config.ts",
         "vitest.setup.ts",
         "playwright.config.ts",
+        "src/test-utils/**",
     ],
 };
 

@@ -4,6 +4,8 @@
     "types": ["node", "mdx", "dom-chromium-ai", "vitest/globals", "next/image-types/global"]
   },
   "include": [
+    "src/test-utils/**/*.ts",
+    "src/test-utils/**/*.tsx",
     "src/**/*.test.ts",
     "src/**/*.test.tsx",
     "src/**/*.spec.ts",

@@ -87,7 +87,7 @@ const config = {
     options: {
         doNotFollow: { path: "node_modules" },
         exclude: {
-            path: "\\.(test|spec)\\.(ts|tsx)$",
+            path: "(\\.(test|spec)\\.(ts|tsx)$|src/test-utils/)",
         },
         tsPreCompilationDeps: true,
         tsConfig: { fileName: "tsconfig.json" },

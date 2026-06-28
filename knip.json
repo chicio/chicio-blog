@@ -7,12 +7,14 @@
         "src/types/component-store.ts",
         "tools/eslint/index.js",
         "tools/eslint/rules/*.js",
-        "e2e/**/*.ts"
+        "e2e/**/*.ts",
+        "src/test-utils/index.ts"
     ],
     "project": [
         "src/**/*.{ts,tsx,mdx}",
         "tools/**/*.js",
-        "e2e/**/*.ts"
+        "e2e/**/*.ts",
+        "src/test-utils/**/*.{ts,tsx}"
     ],
     "mdx": {
         "entry": ["src/content/**/content.mdx"]
