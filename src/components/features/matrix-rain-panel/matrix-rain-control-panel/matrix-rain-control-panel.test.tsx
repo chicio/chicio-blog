@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@/test-utils";
-import { fireEvent } from "@testing-library/react";
+import { fireEvent, waitFor } from "@testing-library/react";
 import { MatrixRainControlPanel } from "./matrix-rain-control-panel";
 
 vi.mock("framer-motion", () => ({
@@ -103,7 +103,7 @@ describe("MatrixRainControlPanel", () => {
             openPanel();
             await screen.findByText(/Matrix Rain Settings/);
             fireEvent.keyDown(window, { key: "Escape" });
-            expect(screen.queryByText(/Matrix Rain Settings/)).toBeNull();
+            await waitFor(() => expect(screen.queryByText(/Matrix Rain Settings/)).toBeNull());
         });
     });
 });
