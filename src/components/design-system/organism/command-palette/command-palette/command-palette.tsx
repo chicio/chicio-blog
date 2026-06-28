@@ -60,7 +60,7 @@ export const CommandPalette: FC<CommandPaletteProps> = ({
         handleSearchResultSelect,
         setSelectedValue,
         onToggleMotion,
-        onCustomizeMatrixRain,
+        handleCustomizeMatrixRainClose,
     } = effects;
 
     const hasSearchResults = search.type === "search" && search.results.length > 0;
@@ -130,7 +130,7 @@ export const CommandPalette: FC<CommandPaletteProps> = ({
                                             </TerminalLine>
                                         </Command.Item>
                                         <ToggleMotionItem onTrack={onToggleMotion} />
-                                        <CustomizeMatrixRainItem onClose={close} onTrack={onCustomizeMatrixRain} />
+                                        <CustomizeMatrixRainItem onClose={handleCustomizeMatrixRainClose} />
                                     </Command.Group>
                                 )}
                             </Command.List>

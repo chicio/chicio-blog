@@ -16,17 +16,15 @@ interface CustomizeMatrixRainItemEffects {
 
 export const useCustomizeMatrixRainItemStore = (
     onClose: () => void,
-    onTrack?: () => void,
 ): ComponentStore<CustomizeMatrixRainItemState, CustomizeMatrixRainItemEffects> => {
     const webGpuSupported = useWebGpuSupported();
     const reducedMotion = useReducedMotions();
     const visible = webGpuSupported === true && !reducedMotion;
 
     const handleSelect = useCallback(() => {
-        onTrack?.();
         onClose();
         openMatrixRainPanel();
-    }, [onTrack, onClose]);
+    }, [onClose]);
 
     return {
         state: { visible },

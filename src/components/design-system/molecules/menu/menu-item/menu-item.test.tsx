@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { MenuItemWithTracking } from "./menu-item-with-tracking";
+import { MenuItem } from "./menu-item";
 
 vi.mock("next/link", () => ({
     default: ({ href, children, className, onClick }: React.AnchorHTMLAttributes<HTMLAnchorElement> & { href: string }) => (
@@ -9,23 +9,23 @@ vi.mock("next/link", () => ({
     ),
 }));
 
-describe("MenuItemWithTracking", () => {
+describe("MenuItem", () => {
     describe("render", () => {
         it("renders children text", () => {
-            render(<MenuItemWithTracking to="/blog" selected={false}>Blog</MenuItemWithTracking>);
+            render(<MenuItem to="/blog" selected={false}>Blog</MenuItem>);
             expect(screen.getByText("Blog")).toBeInTheDocument();
         });
 
         it("renders as an internal link when external is false", () => {
-            render(<MenuItemWithTracking to="/blog" selected={false}>Blog</MenuItemWithTracking>);
+            render(<MenuItem to="/blog" selected={false}>Blog</MenuItem>);
             expect(screen.getByRole("link")).toHaveAttribute("href", "/blog");
         });
 
         it("renders as an anchor tag when external is true", () => {
             render(
-                <MenuItemWithTracking to="https://example.com" selected={false} external={true}>
+                <MenuItem to="https://example.com" selected={false} external={true}>
                     External
-                </MenuItemWithTracking>,
+                </MenuItem>,
             );
             const link = screen.getByRole("link");
             expect(link).toHaveAttribute("href", "https://example.com");
@@ -35,33 +35,33 @@ describe("MenuItemWithTracking", () => {
 
     describe("props", () => {
         it("applies accent class when selected is true", () => {
-            render(<MenuItemWithTracking to="/blog" selected={true}>Blog</MenuItemWithTracking>);
+            render(<MenuItem to="/blog" selected={true}>Blog</MenuItem>);
             expect(screen.getByRole("link")).toHaveClass("text-accent");
         });
 
         it("applies primary-text class when selected is false", () => {
-            render(<MenuItemWithTracking to="/blog" selected={false}>Blog</MenuItemWithTracking>);
+            render(<MenuItem to="/blog" selected={false}>Blog</MenuItem>);
             expect(screen.getByRole("link")).toHaveClass("text-primary-text");
         });
     });
 
     describe("interaction", () => {
-        it("calls onClick and onClickCallback when clicked", async () => {
+        it("calls onClick and onTrack when clicked", async () => {
             const onClick = vi.fn();
-            const onClickCallback = vi.fn();
+            const onTrack = vi.fn();
             render(
-                <MenuItemWithTracking
+                <MenuItem
                     to="/blog"
                     selected={false}
                     onClick={onClick}
-                    onClickCallback={onClickCallback}
+                    onTrack={onTrack}
                 >
                     Blog
-                </MenuItemWithTracking>,
+                </MenuItem>,
             );
             await userEvent.click(screen.getByRole("link"));
             expect(onClick).toHaveBeenCalledOnce();
-            expect(onClickCallback).toHaveBeenCalledOnce();
+            expect(onTrack).toHaveBeenCalledOnce();
         });
     });
 });

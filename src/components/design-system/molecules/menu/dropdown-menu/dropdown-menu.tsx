@@ -3,15 +3,15 @@
 import { AnimatePresence } from "framer-motion";
 import { FC } from "react";
 import { BiChevronDown } from "react-icons/bi";
-import { MenuItemWithTracking } from "@/components/design-system/molecules/menu/menu-item-with-tracking";
+import { MenuItem } from "@/components/design-system/molecules/menu/menu-item";
 import { useDropdownMenuStore } from "./use-dropdown-menu-store";
 
 interface DropdownMenuItem {
     label: string;
     to: string;
-    onClick?: () => void;
+    onTrack?: () => void;
     selected?: boolean;
-    onClickCallback?: () => void;
+    onClick?: () => void;
     external?: boolean;
 }
 
@@ -79,31 +79,31 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
                                         {entry.label}
                                     </span>
                                     {entry.items.map((item, itemIdx) => (
-                                        <MenuItemWithTracking
+                                        <MenuItem
                                             key={item.label + itemIdx}
                                             to={item.to}
-                                            onClick={item.onClick}
+                                            onTrack={item.onTrack}
                                             selected={item.selected ?? false}
                                             className="xs:whitespace-nowrap m-2 text-center"
-                                            onClickCallback={handleItemClick(item.onClickCallback)}
+                                            onClick={handleItemClick(item.onClick)}
                                             external={item.external}
                                         >
                                             {item.label}
-                                        </MenuItemWithTracking>
+                                        </MenuItem>
                                     ))}
                                 </div>
                             ) : (
-                                <MenuItemWithTracking
+                                <MenuItem
                                     key={entry.label + idx}
                                     to={entry.to}
-                                    onClick={entry.onClick}
+                                    onTrack={entry.onTrack}
                                     selected={entry.selected ?? false}
                                     className="xs:whitespace-nowrap m-2"
-                                    onClickCallback={handleItemClick(entry.onClickCallback)}
+                                    onClick={handleItemClick(entry.onClick)}
                                     external={entry.external}
                                 >
                                     {entry.label}
-                                </MenuItemWithTracking>
+                                </MenuItem>
                             )
                         )}
                     </div>

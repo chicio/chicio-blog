@@ -17,7 +17,7 @@ const CookieConsentBanner = dynamic(
 
 const TrackingOptIn = dynamic(
     () =>
-        import("@/components/design-system/organism/tracking-optin").then(
+        import("@/components/features/tracking/tracking-optin").then(
             (m) => m.TrackingOptIn,
         ),
     { ssr: false },

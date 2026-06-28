@@ -56,30 +56,30 @@ describe("PaginationNavigation", () => {
     });
 
     describe("interaction", () => {
-        it("calls onTrackPrevious when Previous is clicked", async () => {
-            const onTrackPrevious = vi.fn();
+        it("calls onPreviousClick when Previous is clicked", async () => {
+            const onPreviousClick = vi.fn();
             render(
                 <PaginationNavigation
                     previousPageUrl="/blog/page/1"
-                    onTrackPrevious={onTrackPrevious}
+                    onPreviousClick={onPreviousClick}
                     nextPageUrl={undefined}
                 />,
             );
             await userEvent.click(screen.getByText("Previous"));
-            expect(onTrackPrevious).toHaveBeenCalledOnce();
+            expect(onPreviousClick).toHaveBeenCalledOnce();
         });
 
-        it("calls onTrackNext when Next is clicked", async () => {
-            const onTrackNext = vi.fn();
+        it("calls onNextClick when Next is clicked", async () => {
+            const onNextClick = vi.fn();
             render(
                 <PaginationNavigation
                     previousPageUrl={undefined}
                     nextPageUrl="/blog/page/3"
-                    onTrackNext={onTrackNext}
+                    onNextClick={onNextClick}
                 />,
             );
             await userEvent.click(screen.getByText("Next"));
-            expect(onTrackNext).toHaveBeenCalledOnce();
+            expect(onNextClick).toHaveBeenCalledOnce();
         });
     });
 });

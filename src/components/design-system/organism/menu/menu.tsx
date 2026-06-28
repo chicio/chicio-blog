@@ -6,7 +6,7 @@ import { BiSearchAlt } from "react-icons/bi";
 import { Close } from "@/components/design-system/molecules/menu/close";
 import { DropdownMenu } from "@/components/design-system/molecules/menu/dropdown-menu";
 import { HamburgerMenu } from "@/components/design-system/molecules/menu/hamburger-menu";
-import { MenuItemWithTracking } from "@/components/design-system/molecules/menu/menu-item-with-tracking";
+import { MenuItem } from "@/components/design-system/molecules/menu/menu-item";
 import { useGlassmorphism } from "@/components/design-system/hooks/use-glassmorphism";
 import { MotionDiv } from "@/components/design-system/atoms/animation/motion-div";
 import { LuCommand } from "react-icons/lu";
@@ -82,26 +82,26 @@ export const Menu: FC<MenuProps> = ({ navHrefs, onPaletteTrigger, tracking }) =>
 
     const renderMenuItems = (isMobile: boolean) => (
         <>
-            <MenuItemWithTracking
+            <MenuItem
                 className={baseClassName(isMobile)}
                 key={`home-${isMobile ? "mobile" : "desktop"}`}
                 to={"/"}
                 selected={pathname === "/"}
-                onClick={onTrackHome}
-                onClickCallback={closeMenu}
+                onTrack={onTrackHome}
+                onClick={closeMenu}
             >
                 Home
-            </MenuItemWithTracking>
-            <MenuItemWithTracking
+            </MenuItem>
+            <MenuItem
                 key={`blog-${isMobile ? "mobile" : "desktop"}`}
                 className={baseClassName(isMobile)}
                 to={navHrefs.blog}
                 selected={pathname.includes(navHrefs.blog)}
-                onClick={onTrackBlog}
-                onClickCallback={closeMenu}
+                onTrack={onTrackBlog}
+                onClick={closeMenu}
             >
                 Blog
-            </MenuItemWithTracking>
+            </MenuItem>
             <DropdownMenu
                 label="Explore"
                 className={dropdownClassName(isMobile)}
@@ -112,16 +112,16 @@ export const Menu: FC<MenuProps> = ({ navHrefs, onPaletteTrigger, tracking }) =>
                             {
                                 label: "Roadmap",
                                 to: navHrefs.dsaRoadmap,
-                                onClick: onTrackDsaRoadmap,
+                                onTrack: onTrackDsaRoadmap,
                                 selected: pathname === navHrefs.dsaRoadmap,
-                                onClickCallback: closeMenu,
+                                onClick: closeMenu,
                             },
                             {
                                 label: "Exercises",
                                 to: navHrefs.dsaExercises,
-                                onClick: onTrackDsaExercises,
+                                onTrack: onTrackDsaExercises,
                                 selected: pathname === navHrefs.dsaExercises,
-                                onClickCallback: closeMenu,
+                                onClick: closeMenu,
                             },
                         ],
                     },
@@ -131,16 +131,16 @@ export const Menu: FC<MenuProps> = ({ navHrefs, onPaletteTrigger, tracking }) =>
                             {
                                 label: "Chat",
                                 to: navHrefs.chat,
-                                onClick: onTrackChat,
+                                onTrack: onTrackChat,
                                 selected: pathname === navHrefs.chat,
-                                onClickCallback: closeMenu,
+                                onClick: closeMenu,
                             },
                             {
                                 label: "MCP",
                                 to: navHrefs.mcp,
-                                onClick: onTrackMcp,
+                                onTrack: onTrackMcp,
                                 selected: pathname === navHrefs.mcp,
-                                onClickCallback: closeMenu,
+                                onClick: closeMenu,
                             },
                         ],
                     },
@@ -151,8 +151,8 @@ export const Menu: FC<MenuProps> = ({ navHrefs, onPaletteTrigger, tracking }) =>
                                 label: "Matrix Rain",
                                 to: "https://chicio.github.io/matrix-rain-webgpu/",
                                 external: true,
-                                onClick: onTrackMatrixRain,
-                                onClickCallback: closeMenu,
+                                onTrack: onTrackMatrixRain,
+                                onClick: closeMenu,
                             },
                         ],
                     },
@@ -165,30 +165,30 @@ export const Menu: FC<MenuProps> = ({ navHrefs, onPaletteTrigger, tracking }) =>
                     {
                         label: "About me",
                         to: navHrefs.aboutMe,
-                        onClick: onTrackAboutMe,
+                        onTrack: onTrackAboutMe,
                         selected: pathname === navHrefs.aboutMe,
-                        onClickCallback: closeMenu,
+                        onClick: closeMenu,
                     },
                     {
                         label: "Art",
                         to: navHrefs.art,
-                        onClick: onTrackArt,
+                        onTrack: onTrackArt,
                         selected: pathname === navHrefs.art,
-                        onClickCallback: closeMenu,
+                        onClick: closeMenu,
                     },
                     {
                         label: "Videogames",
                         to: navHrefs.videogames,
-                        onClick: onTrackVideogames,
+                        onTrack: onTrackVideogames,
                         selected: pathname === navHrefs.videogames,
-                        onClickCallback: closeMenu,
+                        onClick: closeMenu,
                     },
                     {
                         label: "Contact me",
                         to: navHrefs.contact,
-                        onClick: onTrackContact,
+                        onTrack: onTrackContact,
                         selected: pathname === navHrefs.contact,
-                        onClickCallback: closeMenu,
+                        onClick: closeMenu,
                     },
                 ]}
             />

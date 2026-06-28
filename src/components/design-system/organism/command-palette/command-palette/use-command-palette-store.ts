@@ -25,7 +25,7 @@ interface CommandPaletteEffects {
     handleSearchResultSelect: (slug: string) => void;
     setSelectedValue: (value: string) => void;
     onToggleMotion?: () => void;
-    onCustomizeMatrixRain?: () => void;
+    handleCustomizeMatrixRainClose: () => void;
 }
 
 interface CommandPaletteTrackingCallbacks {
@@ -128,6 +128,11 @@ export const useCommandPaletteStore = (
     const easterEggLines =
         search.type === "easterEgg" && SearchEasterEggComponent ? search.terminalLines : null;
 
+    const handleCustomizeMatrixRainClose = useCallback(() => {
+        tracking?.onCustomizeMatrixRain?.();
+        close();
+    }, [tracking, close]);
+
     return {
         state: { open, isSearching, selectedValue, search, easterEggLines },
         effects: {
@@ -138,7 +143,7 @@ export const useCommandPaletteStore = (
             handleSearchResultSelect,
             setSelectedValue,
             onToggleMotion: tracking?.onToggleMotion,
-            onCustomizeMatrixRain: tracking?.onCustomizeMatrixRain,
+            handleCustomizeMatrixRainClose,
         },
     };
 };
