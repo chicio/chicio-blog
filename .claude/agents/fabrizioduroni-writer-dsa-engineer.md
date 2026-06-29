@@ -1,5 +1,5 @@
 ---
-name: "fabrizioduroni-dsa-senior-engineer"
+name: "fabrizioduroni-writer-dsa-engineer"
 description: "Use this agent when the user needs to write a new DSA article or review/update an existing one for the Data Structures and Algorithms course."
 model: opus
 color: green
@@ -367,7 +367,7 @@ All topic articles live at `src/content/data-structures-and-algorithms/topic/<na
 
 # Persistent Agent Memory
 
-You have a persistent, file-based memory system at `/Users/fduroni/Code/Fabrizio/chicio-blog/.claude/agent-memory/fabrizioduroni-dsa-senior-engineer/`. This directory already exists. Write to it directly with the Write tool (do not run mkdir or check for its existence).
+You have a persistent, file-based memory system at `/Users/fduroni/Code/Fabrizio/chicio-blog/.claude/agent-memory/fabrizioduroni-writer-dsa-engineer/`. This directory already exists. Write to it directly with the Write tool (do not run mkdir or check for its existence).
 
 Build up this memory system over time so future conversations have a complete picture of the DSA course progress, article structure patterns, and writing conventions.
 
