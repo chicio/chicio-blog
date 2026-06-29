@@ -17,12 +17,12 @@ Intake.
 ## Invocation
 
 ```
-/fabrizioduroni-blog-sdlc [description] [--fix] [--isolated]
+/fabrizioduroni-blog-sdlc [description] [--fix] [--in-place]
 ```
 
 - `[description]` — what to build or fix (free text).
 - `--fix` — select **fix mode**. Also implied if the user pastes a stack trace / error / failing-test output.
-- `--isolated` — run the whole pipeline in one shared git worktree (§ Isolation).
+- `--in-place` — run in the **current** working tree instead of an isolated worktree. The pipeline is **isolated by default** (§ Isolation); pass this only when you deliberately want the live-tree, micro-commit-visible flow.
 
 Create a todo list with one item per stage of the selected mode, and work them in order. Do not skip a gate.
 
@@ -40,9 +40,13 @@ separation is what makes Phase 2 a flag flip rather than a rewrite.
 2. **Content firewall.** If the task is purely content — adding/editing MDX blog posts, DSA articles, or prose — STOP
    and redirect: blog prose → `fabrizioduroni-writer-engineer`; DSA articles → `fabrizioduroni-writer-dsa-engineer`.
    This pipeline is for code. (A change that is *both* code and content stays here for the code part.)
-3. **Branch guard.** Run `git status`. If on `main`, do NOT proceed on it — create and switch to a feature branch
-   `feat/<slug>` (slug from the ticket-less description, or refine after brainstorm). Never commit to `main`.
-4. **Isolation.** If `--isolated`, `EnterWorktree` now so the whole pipeline runs in one shared worktree (§ Isolation).
+3. **Isolation (default ON).** Unless `--in-place` was passed, `EnterWorktree` now — the whole pipeline runs in its
+   own isolated worktree on its own `feat/<slug>` branch. This is the chicio default (diverging from mobile's in-place
+   default) because this is a solo, often multi-session setup: running in the live working tree can collide with
+   another session or sweep in stray uncommitted changes. Pipeline-level only — never per-agent (§ Isolation).
+4. **Branch guard.** In `--in-place` mode, run `git status`; if on `main`, create and switch to `feat/<slug>` (never
+   commit to `main`). In isolated mode the worktree already carries its own `feat/<slug>` branch. Slug from the
+   description, refined after brainstorm.
 
 ## Feature mode
 
@@ -63,11 +67,19 @@ Dispatch **`fabrizioduroni-implementer`** (sonnet) with the **approved plan** + 
 code + tests, **micro-commits per logical step**, and runs ALL mechanical gates (below) before handing off. It does
 not open the PR. Capture its handoff summary (what it built, gate results, tests added, uncertainties).
 
-### Stage 4 — Review
+### Stage 4 — Review (+ live-QA arm)
 Dispatch **`fabrizioduroni-code-reviewer`** (opus) with the diff (`git diff main...HEAD`) + the approved plan. It
 **re-runs the gates to verify** (never trusts), reviews against `CLAUDE.md` + `.claude/rules/*` + the plan, runs the
-E2E suite when UI/route/flow files changed, and returns a verdict: `PASS` or `CHANGES_REQUIRED` with
+Playwright E2E suite when UI/route/flow files changed, and returns a verdict: `PASS` or `CHANGES_REQUIRED` with
 severity-classified findings.
+
+**Live-QA arm (conditional).** When the diff touches rendered UI / routing / flows (`src/app/**` routes,
+`src/components/features/**`, `src/components/design-system/**` rendered output, navigation/forms/streaming), **also
+dispatch `fabrizioduroni-e2e-sentinel`** — the reviewer has no Agent tool and can't nest-dispatch, so the orchestrator
+runs it — passing the changed flow + the URL(s) to check. It drives agent-browser against the running app and returns
+a QA report. **Merge its findings into the review verdict:** a `blocking` sentinel finding (feature visibly
+broken/missing) forces the overall verdict to `CHANGES_REQUIRED`; non-blocking ones are reported. This keeps live QA
+inside the single Stage-5 loop — no separate loop path.
 
 ### Stage 5 — Loop 3⇄4 (the bounded self-correction loop)
 - If verdict is **PASS** (zero blocking findings) → go to Stage 6.
@@ -85,7 +97,7 @@ Show the human the final diff + a review summary (verdict, findings resolved, an
 1. Push the feature branch.
 2. Open the PR with `gh pr create` to `main`, conventional-commit + Gitmoji title, using the PR template below.
 3. Start a **non-blocking** CI watch (don't block the human on it).
-4. If `--isolated`: leave the branch for review / `ExitWorktree`.
+4. Unless `--in-place`: `ExitWorktree` (the pushed branch remains for review).
 Return the PR URL.
 
 ## Fix mode (delta)
@@ -125,9 +137,13 @@ Present the root-cause report. The human decides:
 
 Pipeline-level only — **never** per-agent. Per-agent worktrees would give the reviewer a different worktree and break
 the loop.
-- **Default:** run in the current worktree; the diff appears live via the implementer's micro-commits.
-- **`--isolated`:** `EnterWorktree` at Intake, run the whole pipeline there, `ExitWorktree` at the end. Parallel
-  stories = multiple isolated pipelines.
+- **Default (isolated):** `EnterWorktree` at Intake, run the whole pipeline (including the e2e-sentinel) in that one
+  shared worktree, `ExitWorktree` at the end. This is the chicio default — it prevents collisions with other sessions
+  and stray uncommitted changes in the live tree. The isolated worktree must have project dependencies available
+  (the `EnterWorktree` harness provides them); the sentinel reports a setup issue if `npm run dev` can't start.
+  Parallel stories = multiple isolated pipelines.
+- **`--in-place`:** run in the current working tree; the diff appears live via the implementer's micro-commits. Use
+  only when you're not running another session against the same clone.
 
 ## PR template (Gate 2)
 

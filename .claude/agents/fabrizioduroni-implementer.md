@@ -106,7 +106,7 @@ reviewer will RE-RUN to verify, so they must genuinely pass before you hand off:
 5. `npm run test:run` — Vitest unit + component tests green. **Every change adds tests for the behavior it changes** (see Loop Discipline below).
 6. `npm run test:e2e` — Playwright e2e green (prod build, externals mocked) when the change affects a user-facing flow.
 7. `npm run build` — must succeed.
-8. **agent-browser live-QA** — MANDATORY whenever the diff touches rendered UI or user-facing behavior. Boot the dev server, drive the changed feature in a real browser via `npx agent-browser` (`open` → `snapshot -i` → `click`/`fill` → verify it actually works; it's a local devDependency, not global), and report what you observed. If agent-browser is unavailable in this environment, say so explicitly and fall back to Playwright headed mode (`npm run test:e2e:ui`) — NEVER silently skip. Pure lib/config/content-only diffs may skip this step.
+8. **UI verification discipline.** UI/behavior changes are verified by check 6 (Playwright `npm run test:e2e`), which builds prod and runs its own server. **Do NOT background-spawn a server (`npm start &`, `next dev &`, etc.)** — the `&` operator trips a safety prompt and orphans processes; let the `test:e2e` harness own the server lifecycle. **Do NOT run agent-browser from inside the pipeline** — live agent-browser QA is `fabrizioduroni-e2e-sentinel`'s job (the orchestrator dispatches it as the review stage's QA arm). If a changed behavior has no Playwright coverage, **add or extend a spec** rather than reaching for a manual browser. Pure lib/config/content-only diffs may skip e2e. (agent-browser remains available for direct, human-present escape-hatch use — never with a backgrounded server.)
 9. New components compose from existing design system atoms/molecules. Tracking events added for new UI interactions. Search index regeneration verified if content changed.
 
 **Gate**: All applicable checks pass. If any check fails, fix the issue and re-run. Only after all checks pass, hand the diff to review (next section).
@@ -142,9 +142,9 @@ Tests are not paperwork — they are the deterministic grader that closes your w
 
 - **Every PR adds tests for the behavior it changes.** No exceptions for "small" changes.
 - **Bug fixes are strict red-green**: failing regression test FIRST, then fix (see Debugging Tasks above).
-- **Features**: tests are a required Verify deliverable and your iteration grader. TDD is encouraged but not enforced line-by-line — visual/exploratory iteration via agent-browser is often the real feedback signal for UI work.
+- **Features**: tests are a required Verify deliverable and your iteration grader. TDD is encouraged but not enforced line-by-line. Live visual QA is `fabrizioduroni-e2e-sentinel`'s job, not yours — you prove UI behavior with Playwright specs.
 - **What to test where**: pure logic in `src/lib/**` and store hooks (`use-*-store.ts`) are unit-tested directly; thin components are exercised through full RTL render (a render test naturally drives the component's store); reach for isolated `renderHook` only when the UI can't trigger the logic. Component (RTL) coverage starts in the self-contained `design-system/` and climbs outward.
-- **agent-browser is your eyes, Playwright is your safety net**: use agent-browser for live exploratory QA during the loop (never committed, never CI); Playwright specs are the committed, deterministic regression gate. Don't conflate them.
+- **Playwright is your UI gate in the pipeline**: as a dispatched agent you verify UI with `npm run test:e2e` (committed, deterministic) and never background-spawn a server. Live agent-browser exploratory QA belongs to `fabrizioduroni-e2e-sentinel` (dispatched by the orchestrator during review when UI changed).
 - Run the fast grader (`npm run test:run`) constantly during iteration; run the full pyramid before opening the PR.
 
 ## Proactive Feature Suggestions

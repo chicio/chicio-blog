@@ -47,11 +47,11 @@ fix mode:      investigate ──→ confirm-root-cause ──┘         (share
 ### 3.1 Invocation
 
 ```
-/fabrizioduroni-blog-sdlc [description] [--fix] [--isolated]
+/fabrizioduroni-blog-sdlc [description] [--fix] [--in-place]
 ```
 
 - `--fix` selects fix mode. May also be triggered by pasting a stack trace / error description.
-- `--isolated` runs the whole pipeline in one shared git worktree (see §7).
+- `--in-place` runs in the current working tree instead of an isolated worktree (isolated is the **default**; see §7).
 - **Dropped from the mobile spec:** `JIRA-KEY` and `figma-url` — this project has no Jira and no Figma.
 
 ### 3.2 Dependency constraint (hard rule)
@@ -70,13 +70,13 @@ setup self-contained and is the exercise's whole point.
 
 | # | Stage | Executor | Behavior |
 |---|-------|----------|----------|
-| 0 | **Intake** | orchestrator | Parse args. **Branch guard**: if on `main`, refuse and create `feat/<slug>` (slug from the description or brainstorm output). If `--isolated`, `EnterWorktree`. **Content firewall**: if the task is MDX/DSA/prose-only, refuse and point at the writer agents. |
+| 0 | **Intake** | orchestrator | Parse args. **Isolation (default)**: unless `--in-place`, `EnterWorktree` (own worktree + `feat/<slug>` branch). **Branch guard** (in-place mode): if on `main`, create `feat/<slug>`. **Content firewall**: if the task is MDX/DSA/prose-only, refuse and point at the writer agents. |
 | 1 | **Explore** | `fabrizioduroni-explorer` (haiku) | Read-only. Produces a structured exploration report (see §4.1). Reads `CLAUDE.md`, `.claude/rules/*` (7 files), `.dependency-cruiser.js`, and the target area. |
 | 2 | **Brainstorm** 🚪 | **grill-me** skill (main thread) | Fed by the explorer report. Interviews the user to nail the approach. Output: an approved plan. **HUMAN GATE 1.** |
 | 3 | **Implement** | `fabrizioduroni-implementer` (sonnet) | Writes code + tests. **Micro-commits per logical step** (reviewable PR trail). Matches existing patterns unless the plan says otherwise. Runs all mechanical gates (§5) **before** handing to review. |
-| 4 | **Review** | `fabrizioduroni-code-reviewer` (opus) | Re-runs the gates to **verify** (don't trust). Reviews diff against `CLAUDE.md` + `.claude/rules/*` + the approved plan. Severity-classified findings (§6). **Conditionally runs the E2E check** (Playwright `test:e2e`, optionally `agent-browser`) when UI / route / flow files changed. |
+| 4 | **Review** | `fabrizioduroni-code-reviewer` (opus) | Re-runs the gates to **verify** (don't trust). Reviews diff against `CLAUDE.md` + `.claude/rules/*` + the approved plan. Severity-classified findings (§6). Runs Playwright `test:e2e` when UI/flow changed. **The orchestrator also dispatches `fabrizioduroni-e2e-sentinel`** (the reviewer can't nest-dispatch) for live agent-browser QA when UI/route/flow changed; its blocking findings fold into the review verdict. |
 | 5 | **Loop 3⇄4** | orchestrator | **Max 3 rounds.** Only **blocking** findings force another round. Implementer either fixes or **rebuts once** with written justification; if the reviewer re-asserts, **escalate to human** (no further looping). After 3 rounds, stop and surface open findings. |
-| 6 | **PR** 🚪 | orchestrator | Show diff + review summary. **HUMAN GATE 2.** On approval: push; `gh pr create` to `main` using the existing PR template (conventional commit + Gitmoji). Start a **non-blocking** CI watch. If `--isolated`, leave the branch for review / `ExitWorktree`. |
+| 6 | **PR** 🚪 | orchestrator | Show diff + review summary. **HUMAN GATE 2.** On approval: push; `gh pr create` to `main` using the existing PR template (conventional commit + Gitmoji). Start a **non-blocking** CI watch. Unless `--in-place`, `ExitWorktree` (the pushed branch remains for review). |
 
 ### 4.1 Explorer report shape (remapped to this codebase)
 
@@ -128,9 +128,13 @@ test meaningfulness, and (for UI) rendered behavior.
 Pipeline-level, **never** per-agent frontmatter (per-agent worktrees would give the reviewer a *different* worktree
 and break the loop — this is why the implementer's current `isolation: worktree` must be removed; see §9).
 
-- **Main mode (default):** runs in the current worktree; the diff appears live via micro-commits.
-- **Worktree mode (`--isolated`):** orchestrator moves the whole pipeline into one shared worktree using the native
-  `EnterWorktree` / `ExitWorktree` harness tools. Parallel stories = multiple isolated pipelines.
+- **Isolated mode (DEFAULT):** orchestrator `EnterWorktree` at Intake and runs the whole pipeline (incl. the
+  e2e-sentinel) in that one shared worktree, `ExitWorktree` at the end. **This is the chicio default — diverging from
+  mobile's in-place default** — because chicio is a solo, often multi-session setup: an in-place run can collide with
+  another session or sweep in stray uncommitted changes (this actually happened during Phase-1 validation). The
+  isolated worktree must carry project dependencies (the `EnterWorktree` harness provides them) so the sentinel's
+  `npm run dev` works. Parallel stories = multiple isolated pipelines.
+- **In-place mode (`--in-place`):** runs in the current worktree; diff appears live via micro-commits. Opt-in only.
 
 ## 8. Agent roster
 
@@ -140,6 +144,7 @@ and break the loop — this is why the implementer's current `isolation: worktre
 | `fabrizioduroni-implementer` | **repurposed** from `fabrizioduroni-senior-engineer` | sonnet | pink | **project** (kept) | Read, Write, Edit, Grep, Glob, LSP, Bash(+git) · MCP: context7 |
 | `fabrizioduroni-code-reviewer` | **NEW** | opus | orange | **project** | Read, Grep, Glob, LSP, Bash(verify-only: `lint`/`validate-architecture`/`knip`/`typecheck`/`test:run`/`test:e2e`/`build`, `git diff`/`log`/`show`/`status`), **Write (memory dir ONLY)**; no Edit, no Agent |
 | `fabrizioduroni-bug-investigator` | **NEW** | opus | red | project | Read, Grep, Glob, LSP, Bash(`git log`/`git blame`); no Write/Edit |
+| `fabrizioduroni-e2e-sentinel` | **NEW** | sonnet | green | — | Read, Grep, Glob, Bash(`npm run dev` via background mode, `npx agent-browser`, `curl`, `kill`); no Write/Edit, no Agent |
 | `fabrizioduroni-writer-dsa-engineer` | **renamed** from `fabrizioduroni-dsa-senior-engineer` | unchanged | unchanged | unchanged (dir renamed) | unchanged |
 | `fabrizioduroni-writer-engineer` | untouched | unchanged | unchanged | unchanged | unchanged |
 
@@ -216,6 +221,13 @@ Miss any one and the agent silently starts with **empty memory**.
 11. Phase 2 runner → **GitHub Action** is the target; local `/loop` is the proof-of-concept first step.
 12. Loop is **PR-only, never auto-merge**; concurrency cap = 1; per-run budget cap.
 13. This spec is **temporary** — delete only after both phases ship.
+14. (Phase-1 tuning) Live agent-browser QA → **dedicated `fabrizioduroni-e2e-sentinel`** (sonnet), dispatched by the
+    orchestrator as the **review stage's QA arm** when UI/route/flow changed; findings fold into the review verdict
+    (one unified loop). The implementer no longer runs agent-browser or background servers — its UI gate is Playwright.
+15. (Phase-1 tuning) Isolation → **isolated worktree is the DEFAULT** for chicio (opt out with `--in-place`),
+    diverging from mobile's in-place default; prompted by a real same-clone multi-session collision during validation.
+16. (Phase-1 tuning) Servers are started via the **Bash `run_in_background` mode, never `&`**; readiness via
+    `curl --retry-connrefused`, never foreground `sleep`.
 
 ## 12. Build order — Phase 1 (interactive pipeline; each step independently revertible)
 
