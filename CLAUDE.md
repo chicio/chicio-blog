@@ -95,9 +95,10 @@ AI agents and tools that send `Accept: text/markdown` receive a Markdown represe
 Non-trivial **code** changes can be run through an orchestrated, multi-agent SDLC. It is **manual** and main-thread —
 invoke the orchestrator skill explicitly; it never auto-triggers.
 
-- **Orchestrator**: `/fabrizioduroni-blog-sdlc [description] [--fix] [--isolated]` — sequences the agents, hosts two
+- **Orchestrator**: `/fabrizioduroni-blog-sdlc [description] [--fix] [--in-place]` — sequences the agents, hosts two
   human gates (plan approval, PR approval), and runs a bounded implement⇄review loop (max 3 rounds). Code only — it
-  refuses content tasks and points at the writer agents.
+  refuses content tasks and points at the writer agents. **Runs in an isolated worktree by default** (pass `--in-place`
+  to run in the current tree); isolation is pipeline-level, never per-agent.
 - **Feature mode**: explore → brainstorm (grill-me) 🚪 → implement ⇄ review → PR 🚪.
 - **Fix mode** (`--fix` or a pasted stack trace): investigate → confirm-root-cause 🚪 → implement ⇄ review → PR 🚪.
 
@@ -109,6 +110,7 @@ Agent roster:
 | `fabrizioduroni-implementer` | sonnet | writes code + tests, micro-commits, runs the mechanical gates (repurposed from the former senior-engineer) |
 | `fabrizioduroni-code-reviewer` | opus | re-runs the gates to verify + reviews the diff against rules/plan; severity-classified findings |
 | `fabrizioduroni-bug-investigator` | opus | fix-mode root-cause report from the codebase + git history (no Sentry/Jira) |
+| `fabrizioduroni-e2e-sentinel` | sonnet | review-stage live-QA arm: drives agent-browser against the running app when UI/route/flow changed; findings fold into the review verdict |
 
 Content agents are **separate** and unchanged: `fabrizioduroni-writer-engineer` (blog prose),
 `fabrizioduroni-writer-dsa-engineer` (DSA articles).
