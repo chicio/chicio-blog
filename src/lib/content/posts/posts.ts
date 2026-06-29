@@ -120,3 +120,60 @@ export const getPostsForTag: (tag: string) => Content[] = (tag: string) => {
 
   return posts.filter((post) => post.frontmatter.tags.includes(tag));
 };
+
+/**
+ * READ NEXT
+ */
+
+export const rankReadNextPosts = (
+  currentTags: string[],
+  candidates: Content[],
+  limit: number,
+): Content[] => {
+  const scored = candidates.map((post) => {
+    const sharedTagCount = post.frontmatter.tags.filter((tag) =>
+      currentTags.includes(tag),
+    ).length;
+    return { post, sharedTagCount };
+  });
+
+  scored.sort((a, b) => b.sharedTagCount - a.sharedTagCount);
+
+  const related: Content[] = [];
+  const fallback: Content[] = [];
+
+  for (const { post, sharedTagCount } of scored) {
+    if (sharedTagCount > 0 && related.length < limit) {
+      related.push(post);
+    } else {
+      fallback.push(post);
+    }
+  }
+
+  const result = [...related];
+  for (const post of fallback) {
+    if (result.length >= limit) break;
+    result.push(post);
+  }
+
+  return result;
+};
+
+export const getReadNextPosts = (
+  currentSlug: string,
+  limit = 2,
+): Content[] => {
+  const allPosts = getPosts();
+  const currentPost = allPosts.find(
+    (post) => post.slug.formatted === currentSlug,
+  );
+  const candidates = allPosts.filter(
+    (post) => post.slug.formatted !== currentSlug,
+  );
+
+  if (!currentPost) {
+    return candidates.slice(0, limit);
+  }
+
+  return rankReadNextPosts(currentPost.frontmatter.tags, candidates, limit);
+};
