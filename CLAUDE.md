@@ -51,7 +51,7 @@ src/
 - **Content as MDX**: Filesystem-as-database. See `.claude/rules/mdx-content.md`
 - **Co-located Images**: Blog post images live in `<post-dir>/images/`, other content images in `src/content/<section>/images/`. A build-time script (`src/lib/images/copy-content-images.ts`) mirrors them to `public/images/content/`. The `public/images/content/` directory is gitignored and regenerated on every build.
 - **API Routes**: Chat (Groq + Upstash Vector RAG) and Contact (Resend). See `.claude/rules/api-routes.md`
-- **Testing**: No automated test suite — lint + build + manual browser. See `.claude/rules/testing.md`
+- **Testing**: Automated suite — Vitest (node project for `lib/**`, jsdom + RTL for `components/**`), Playwright e2e, plus lint + typecheck + build; CI gates on coverage thresholds. agent-browser for local live-QA. See `.claude/rules/testing.md`
 
 ## Code Style
 
@@ -89,6 +89,33 @@ AI agents and tools that send `Accept: text/markdown` receive a Markdown represe
 - `src/app/markdown/[[...path]]/route.ts` — single catch-all route handler; dispatches by path segments to per-section markdown generators; statically pre-rendered via `generateStaticParams`
 
 **Adding markdown for a new page**: Add a new path-matching `if` block in the `GET` handler in `src/app/markdown/[[...path]]/route.ts`, add the path to `generateStaticParams`, and write a generator function that uses existing `src/lib/content/` functions.
+
+## Agentic SDLC Pipeline (code work)
+
+Non-trivial **code** changes can be run through an orchestrated, multi-agent SDLC. It is **manual** and main-thread —
+invoke the orchestrator skill explicitly; it never auto-triggers.
+
+- **Orchestrator**: `/fabrizioduroni-blog-sdlc [description] [--fix] [--isolated]` — sequences the agents, hosts two
+  human gates (plan approval, PR approval), and runs a bounded implement⇄review loop (max 3 rounds). Code only — it
+  refuses content tasks and points at the writer agents.
+- **Feature mode**: explore → brainstorm (grill-me) 🚪 → implement ⇄ review → PR 🚪.
+- **Fix mode** (`--fix` or a pasted stack trace): investigate → confirm-root-cause 🚪 → implement ⇄ review → PR 🚪.
+
+Agent roster:
+
+| Agent | Model | Role |
+|-------|-------|------|
+| `fabrizioduroni-explorer` | haiku | read-only map of the change area (files, reusable design-system surface, registration points, test surface) |
+| `fabrizioduroni-implementer` | sonnet | writes code + tests, micro-commits, runs the mechanical gates (repurposed from the former senior-engineer) |
+| `fabrizioduroni-code-reviewer` | opus | re-runs the gates to verify + reviews the diff against rules/plan; severity-classified findings |
+| `fabrizioduroni-bug-investigator` | opus | fix-mode root-cause report from the codebase + git history (no Sentry/Jira) |
+
+Content agents are **separate** and unchanged: `fabrizioduroni-writer-engineer` (blog prose),
+`fabrizioduroni-writer-dsa-engineer` (DSA articles).
+
+**When to use what**: full pipeline for non-trivial code features/fixes; call `fabrizioduroni-implementer` **directly**
+as a quick-path escape hatch for trivial, well-specified code changes; use the writer agents for content. Design spec
+(temporary, while the pipeline is being built out): `docs/agentic-sdlc/`.
 
 ## Commit Convention
 

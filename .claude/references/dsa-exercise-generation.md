@@ -1,7 +1,7 @@
 # DSA Exercise Generation Pipeline
 
 This document contains the detailed steps for fetching exercises from GitHub and generating exercise MDX files.
-It is referenced by the `fabrizioduroni-dsa-senior-engineer` agent during Steps 7-8e.
+It is referenced by the `fabrizioduroni-writer-dsa-engineer` agent during Steps 7-8e.
 
 ## Step 7: Fetch Exercises from GitHub
 
