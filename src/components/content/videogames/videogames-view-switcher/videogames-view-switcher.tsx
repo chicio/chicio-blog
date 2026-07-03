@@ -4,12 +4,12 @@ import { memo } from "react";
 import { Content } from "@/types/content/content";
 import { GameMetadata } from "@/types/content/videogames";
 import { SegmentedControl, SegmentOption } from "@/components/design-system/molecules/buttons/segmented-control";
+import { FilterInput } from "@/components/design-system/molecules/form/filter-input";
 import { GamesGrid } from "@/components/content/videogames/games-grid";
 import { IoGameControllerOutline } from "react-icons/io5";
 import { GiGameConsole } from "react-icons/gi";
 import { VideogamesView } from "@/lib/videogames/videogames-view";
 import { ConsoleCard } from "./console-card";
-import { GamesFilter } from "./games-filter";
 import { ConsoleWithGameCount, useVideogamesViewSwitcherStore } from "./use-videogames-view-switcher-store";
 
 const FilteredGameGrid = memo(
@@ -75,8 +75,8 @@ export const VideogamesViewSwitcher: React.FC<VideogamesViewSwitcherProps> = ({ 
             <div className="flex justify-center">
                 <SegmentedControl options={viewOptions} value={activeView} onChange={handleViewChange} />
             </div>
-            <GamesFilter
-                query={query}
+            <FilterInput
+                value={query}
                 onChange={handleFilter}
                 placeholder={activeView === "consoles" ? "Search console..." : "Search game..."}
             />
