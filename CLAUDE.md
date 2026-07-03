@@ -92,8 +92,9 @@ AI agents and tools that send `Accept: text/markdown` receive a Markdown represe
 
 ## Agentic SDLC Pipeline (code work)
 
-Non-trivial **code** changes can be run through an orchestrated, multi-agent SDLC. It is **manual** and main-thread —
-invoke the orchestrator skill explicitly; it never auto-triggers.
+Non-trivial **code** changes can be run through an orchestrated, multi-agent SDLC. The **interactive** modes are
+manual and main-thread — invoke the orchestrator skill explicitly; it never auto-triggers. The **autonomous** mode
+runs the same pipeline unattended from a GitHub issue.
 
 - **Orchestrator**: `/fabrizioduroni-blog-sdlc [description] [--fix] [--in-place]` — sequences the agents, hosts two
   human gates (plan approval, PR approval), and runs a bounded implement⇄review loop (max 3 rounds). Code only — it
@@ -101,6 +102,10 @@ invoke the orchestrator skill explicitly; it never auto-triggers.
   to run in the current tree); isolation is pipeline-level, never per-agent.
 - **Feature mode**: explore → brainstorm (grill-me) 🚪 → implement ⇄ review → PR 🚪.
 - **Fix mode** (`--fix` or a pasted stack trace): investigate → confirm-root-cause 🚪 → implement ⇄ review → PR 🚪.
+- **Autonomous mode** (`--autonomous --from-issue <N>`, Phase 2): reads GitHub issue `#N` as the contract and runs
+  unattended — the `loop:ready` label + a pre-flight contract check replace the plan gate; it opens a PR and **never
+  merges** (the human merge click is the async gate). Terminal state is a PR (`loop:review`) or `loop:blocked` with a
+  reason. Task source for the session-bound `/loop` drainer (Phase 2 spec in `docs/agentic-sdlc/`).
 
 Agent roster:
 
