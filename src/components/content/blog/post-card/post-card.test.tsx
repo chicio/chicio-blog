@@ -7,6 +7,7 @@ vi.mock("next/image", () => nextImageMock());
 vi.mock("next/link", () => nextLinkMock());
 
 const author: Author = {
+    id: "fabrizio_duroni",
     name: "Fabrizio Duroni",
     url: "https://fabrizioduroni.it",
     image: "/media/authors/fabrizio.jpg",
@@ -34,6 +35,12 @@ describe("PostCard", () => {
         it("renders the author name", () => {
             render(<PostCard {...defaultProps} />);
             expect(screen.getByText("Fabrizio Duroni")).toBeInTheDocument();
+        });
+
+        it("links the author name to the author detail page instead of the post", () => {
+            render(<PostCard {...defaultProps} />);
+            const authorLink = screen.getByRole("link", { name: "Fabrizio Duroni" });
+            expect(authorLink).toHaveAttribute("href", "/blog/author/fabrizio-duroni");
         });
 
         it("renders links pointing to the post slug", () => {

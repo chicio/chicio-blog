@@ -36,10 +36,7 @@ export const BlogPostContent: FC<PostProps> = async ({ post }) => {
                 beforeContent={
                     <>
                         <h1 className="leading-tight">{frontmatter.title}</h1>
-                        <PostAuthors
-                            postAuthors={frontmatter.authors}
-                            enableUrl={true}
-                        />
+                        <PostAuthors postAuthors={frontmatter.authors} />
                         <PostMeta
                             date={frontmatter.date.formatted}
                             readingTime={readingTime.text}

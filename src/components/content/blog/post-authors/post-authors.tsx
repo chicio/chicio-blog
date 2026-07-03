@@ -1,23 +1,26 @@
+"use client";
+
 import { ImageGlow } from "@/components/design-system/atoms/effects/image-glow";
-import { ExternalLink } from "@/components/design-system/atoms/links/external-link";
+import { InternalLink } from "@/components/design-system/atoms/links/internal-link";
 import { Author } from "@/types/content/author";
+import { generateAuthorSlug } from "@/lib/content/posts/posts";
 import { FC } from "react";
+import { usePostAuthorsStore } from "./use-post-authors-store";
 
 export interface PostAuthorsProps {
     postAuthors: Author[];
-    enableUrl: boolean;
 }
 
-export const PostAuthors: FC<PostAuthorsProps> = ({
-    postAuthors,
-    enableUrl,
-}) => (
-    <div className="mx-0 my-4 flex flex-col gap-2 p-0">
-        {postAuthors.map((author) => {
-            return (
+export const PostAuthors: FC<PostAuthorsProps> = ({ postAuthors }) => {
+    const { effects } = usePostAuthorsStore();
+    const { onClickAuthor } = effects;
+
+    return (
+        <div className="mx-0 my-4 flex flex-col gap-2 p-0">
+            {postAuthors.map((author) => (
                 <div
                     className="mt-1 flex items-center gap-2 p-0"
-                    key={`${author.name}`}
+                    key={author.id}
                 >
                     <ImageGlow
                         className="rounded-full"
@@ -28,19 +31,15 @@ export const PostAuthors: FC<PostAuthorsProps> = ({
                         noPlaceholder={true}
                     />
                     <p>
-                        {enableUrl && (
-                            <ExternalLink
-                                href={author.url}
-                                target={"_blank"}
-                                rel="noopener noreferrer"
-                            >
-                                {author.name}
-                            </ExternalLink>
-                        )}
-                        {!enableUrl && author.name}
+                        <InternalLink
+                            to={generateAuthorSlug(author.id)}
+                            onClick={onClickAuthor}
+                        >
+                            {author.name}
+                        </InternalLink>
                     </p>
                 </div>
-            );
-        })}
-    </div>
-);
+            ))}
+        </div>
+    );
+};
