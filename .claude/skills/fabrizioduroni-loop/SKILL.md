@@ -57,15 +57,21 @@ gh issue list --label "loop:ready" --state open --json number,title,createdAt,la
 - Otherwise pick the issue with the **oldest `createdAt`** (FIFO). **One issue per tick — never more.**
 
 ### 4. Hand off to the orchestrator
-Invoke the orchestrator's autonomous mode on the selected issue:
+The orchestrator skill is `disable-model-invocation: true`, so you **cannot invoke it via the Skill tool** from here
+(you are running as the model). Instead, **read and follow** its autonomous procedure directly:
 
-```
-/fabrizioduroni-blog-sdlc --autonomous --from-issue <N>
-```
+1. `Read` `.claude/skills/fabrizioduroni-blog-sdlc/SKILL.md`.
+2. Execute its **§ Autonomous mode (Phase 2)** end-to-end for the selected issue `<N>` — that is, as if invoked with
+   `--autonomous --from-issue <N>`.
 
-It does everything from here: claims the issue (`loop:ready` → `loop:working`), runs the contract check, and either
-lands a PR (`loop:review`) or blocks the issue (`loop:blocked`) — see its **§ Autonomous mode**. Do **not** duplicate
-any of that logic here; just invoke it and wait for it to return.
+It does everything from there: claims the issue (`loop:ready` → `loop:working`), runs the contract check, and either
+lands a PR (`loop:review`) or blocks the issue (`loop:blocked`). Do **not** duplicate or paraphrase that logic here —
+follow the orchestrator's own steps as the single source of truth, then return to step 5.
+
+> Why read-and-follow instead of invoke: the orchestrator stays `disable-model-invocation: true` on purpose so it
+> never auto-fires on a casual request (its interactive Phase 1 modes are manual-only). Reading its file and following
+> § Autonomous mode is functionally identical to a skill invocation — it injects the same instructions — without
+> widening the orchestrator's auto-trigger surface.
 
 ### 5. Report the outcome
 Summarize the tick in one short block, then let `/loop` sleep:
