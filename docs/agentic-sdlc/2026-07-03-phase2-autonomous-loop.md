@@ -137,8 +137,11 @@ Guards:
 - **Concurrency mutex** — on claim, immediately flip `loop:ready` → `loop:working`; only pick issues that are ready
   **and not** working. The label is the lock; it prevents a second tick (or a forgotten second session) from grabbing
   the same issue and opening a duplicate PR.
-- **Per-session cap (~3)** — stop after N issues per session even if more are ready, so a mislabeled backlog cannot
-  burn API tokens unbounded.
+- **Backpressure cap (~3)** — before selecting work, the drainer counts issues already in `loop:review` (open PRs
+  awaiting your merge); if that is ≥ the cap, the tick does nothing. This throttles the loop to never run more than
+  the cap's worth of PRs ahead of your reviewing, auto-resumes as you merge, and — being a live `gh` query — needs no
+  persisted session counter. (Refines the original "per-session cap": backpressure is stateless and better matches
+  the real goal — don't pile up more than the human can review.)
 - **Failure → `loop:blocked`** — reuse Phase 1's 3-round review cap; on non-convergence or an unrecoverable red gate,
   set `loop:blocked` + comment and move on. Never leave a half-built branch.
 - **Content firewall at intake** — a content-typed issue (or one failing the code-only checkbox) → `loop:blocked`
@@ -147,8 +150,9 @@ Guards:
 ## 8. Scheduler — local `/loop`, no cloud
 
 The loop is **session-bound**: it runs while a Claude Code session is open on the developer's machine, driven by the
-`/loop` skill on an interval. Poll-driven (no webhooks): each tick queries `gh` for eligible issues and drains one.
-Idle ticks (no `loop:ready` issue) just sleep.
+`/loop` skill on an interval — `/loop 30m /fabrizioduroni-loop-drainer`. Poll-driven (no webhooks): each tick the
+`fabrizioduroni-loop-drainer` skill queries `gh` for eligible issues and drains one. Idle ticks (no `loop:ready`
+issue) just sleep.
 
 Accepted limitation: this is **not** 24/7 background execution. It is "runs while I have a session open." Legitimate
 for v1; the upgrade path is a clean seam (§11).
@@ -164,7 +168,7 @@ part only.
 | Component | Job | Build |
 |-----------|-----|-------|
 | **Autonomous mode** on `fabrizioduroni-blog-sdlc` — `--autonomous --from-issue N` | Reads the issue as the contract; `loop:ready` = Gate 1; runs the non-interactive Explore → Implement ⇄ Review stages; opens a PR; stops (never merges) | Extend existing skill |
-| **`loop-drainer`** (thin new skill, run by `/loop`) | Poll `gh` for the oldest ready-and-unclaimed issue → flip to `loop:working` → call the orchestrator in autonomous mode → enforce per-session cap → sleep | New skill |
+| **`fabrizioduroni-loop-drainer`** (thin new skill, run by `/loop`) | One tick: backpressure check → pick the oldest `loop:ready` issue → call the orchestrator in autonomous mode → report → sleep. Owns *selection + backpressure + reporting* only; the orchestrator owns the label lifecycle | New skill |
 
 Single-responsibility split pays off three ways: (1) the autonomous pipeline runs on **one issue on demand, no loop**
 — exactly how the authors page is de-risked; (2) the drainer is the **scheduler-shaped seam** — cloud migration
