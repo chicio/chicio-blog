@@ -31,7 +31,7 @@ Create a todo list with one item per stage of the selected mode, and work them i
 ## Phase boundary (read before you start)
 
 The stages below are **Phase 1 — the interactive pipeline.** Every human-interactive step is marked **[INTERACTIVE]**
-(grill-me at Gate 1, the confirm gate in fix mode, the PR gate). **Phase 2 — autonomous mode** (§ Autonomous mode)
+(grilling at Gate 1, the confirm gate in fix mode, the PR gate). **Phase 2 — autonomous mode** (§ Autonomous mode)
 reuses the non-interactive stages (Explore, Implement, Review, the 3⇄4 loop) **verbatim** and replaces only the
 **[INTERACTIVE]** steps with issue-as-contract inputs and async label gates. Because of that separation, autonomous
 mode is a flag flip, not a fork of the pipeline — so keep all interaction inside the **[INTERACTIVE]** steps and never
@@ -59,7 +59,7 @@ report (files by layer, reusable design-system surface, registration points, tes
 Keep the report; it feeds Stages 2 and 3.
 
 ### Stage 2 — Brainstorm 🚪 **[INTERACTIVE] — HUMAN GATE 1**
-Invoke the **`grill-me`** skill in the main thread, fed the exploration report + the description (+ any §9 "decisions
+Invoke the **`grilling`** skill in the main thread, fed the exploration report + the description (+ any §9 "decisions
 to resolve" the explorer surfaced). Interview the user until the approach is nailed and an **approved plan** exists.
 - Plan handoff: **inline** in the implementer's prompt for small feature-slices; **persisted to a scratchpad plan
   file** for full-feature work (and later fed to the reviewer alongside the diff).
@@ -127,7 +127,7 @@ gates, the severity model) and swaps only the two human gates:
 
 | Interactive gate | Autonomous replacement |
 |------------------|------------------------|
-| **Gate 1 — grill-me / confirm-root-cause** | The **`loop:ready` label is the approval** + a **pre-flight contract check** (A1). No interview. |
+| **Gate 1 — grilling / confirm-root-cause** | The **`loop:ready` label is the approval** + a **pre-flight contract check** (A1). No interview. |
 | **Gate 2 — PR approval** | **Open the PR and stop.** The loop **never merges** — the human merge click is the async gate. |
 
 **Two hard invariants:** the loop **never merges** and **never prompts a human** mid-run. Every run ends in exactly
@@ -151,7 +151,7 @@ Both checks read the issue body only; do them **before** `EnterWorktree` so a re
    `fabrizioduroni-writer-dsa-engineer`."
 2. **Completeness check.** The contract must be buildable unattended: **concrete, non-placeholder acceptance
    criteria** and an **explicit scope**. Empty checkboxes, "TBD", or a missing scope section → **BLOCK** with reason:
-   "insufficient contract — missing/placeholder <field>." **Do not guess.** This is grill-me's safety valve relocated:
+   "insufficient contract — missing/placeholder <field>." **Do not guess.** This is grilling's safety valve relocated:
    never spend a build on a vague issue.
 3. If both pass, the issue body (problem + acceptance criteria + scope + placement hints) **is the approved plan** —
    the acceptance criteria are what the reviewer verifies the diff against. Pick mode from the issue **Type**

@@ -100,7 +100,7 @@ runs the same pipeline unattended from a GitHub issue.
   human gates (plan approval, PR approval), and runs a bounded implement⇄review loop (max 3 rounds). Code only — it
   refuses content tasks and points at the writer agents. **Runs in an isolated worktree by default** (pass `--in-place`
   to run in the current tree); isolation is pipeline-level, never per-agent.
-- **Feature mode**: explore → brainstorm (grill-me) 🚪 → implement ⇄ review → PR 🚪.
+- **Feature mode**: explore → brainstorm (grilling) 🚪 → implement ⇄ review → PR 🚪.
 - **Fix mode** (`--fix` or a pasted stack trace): investigate → confirm-root-cause 🚪 → implement ⇄ review → PR 🚪.
 - **Autonomous mode** (`--autonomous --from-issue <N>`, Phase 2): reads GitHub issue `#N` as the contract and runs
   unattended — the `loop:ready` label + a pre-flight contract check replace the plan gate; it opens a PR and **never

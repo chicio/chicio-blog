@@ -22,7 +22,7 @@
 1. **Turn the manual Phase 1 pipeline into a self-feeding loop** — work arrives as GitHub issues, the pipeline runs
    unattended, and PRs land for review, without a human at the keyboard for the middle of the flow.
 2. **Preserve every safety property of Phase 1** while removing its two interactive gates — the `loop:ready` label
-   replaces plan-approval; the merge click replaces PR-approval; a pre-flight contract check replaces grill-me's
+   replaces plan-approval; the merge click replaces PR-approval; a pre-flight contract check replaces grilling's
    "catch a vague request before wasting a build" role.
 3. **Keep the loop cloud-portable without building cloud now** — the scheduler is the only local-specific seam, so a
    future migration to a hosted runner is a scheduler swap, not a pipeline rewrite.
@@ -74,10 +74,10 @@ Phase 1 has two hard human gates. The loop replaces both without a human in the 
 
 | Phase 1 gate | Phase 2 replacement |
 |--------------|---------------------|
-| **Gate 1 — plan approval** (grill-me) | The **`loop:ready` label is the approval.** You curate the queue by labeling; that *is* your go. No plan step. |
+| **Gate 1 — plan approval** (grilling) | The **`loop:ready` label is the approval.** You curate the queue by labeling; that *is* your go. No plan step. |
 | **Gate 2 — PR approval** | **The loop never merges.** It opens a PR linked to the issue and stops. You merge (or close). CI-green is a precondition; the merge click stays human. |
 
-grill-me did more than approve — it *caught vague requests before a build was wasted*. That role is preserved by the
+grilling did more than approve — it *caught vague requests before a build was wasted*. That role is preserved by the
 **pre-flight contract check** (§6): unattended, the loop refuses to guess.
 
 ### 5.1 Label lifecycle
@@ -95,7 +95,7 @@ loop:ready ──(loop claims)──► loop:working ──(PR opened)──► 
 
 ## 6. The issue contract — one schema, two front-ends
 
-Because `loop:ready` is the only approval, **the issue is the entire contract.** It must carry everything grill-me
+Because `loop:ready` is the only approval, **the issue is the entire contract.** It must carry everything grilling
 would otherwise have extracted, or the loop builds the wrong thing.
 
 ### 6.1 Field schema (consumed by the implementer/reviewer, author-agnostic)
@@ -119,11 +119,11 @@ would otherwise have extracted, or the loop builds the wrong thing.
    scanner goes green" (`validate-architecture` passes / `knip` reports zero for symbol X); scope = "the flagged
    symbol/file only." **Build in v2, reusing the identical schema — zero rework.**
 
-### 6.3 Pre-flight contract check (grill-me's safety valve, relocated)
+### 6.3 Pre-flight contract check (grilling's safety valve, relocated)
 
 At the front of the autonomous pipeline, a cheap completeness check runs **before any build**. If the contract lacks
 concrete acceptance criteria or scope, the loop **does not guess** — it sets `loop:blocked`, comments what's missing,
-and moves on. This is the single most important rail in the design: it stands exactly where grill-me stood.
+and moves on. This is the single most important rail in the design: it stands exactly where grilling stood.
 
 ## 7. Drain policy & guards
 
