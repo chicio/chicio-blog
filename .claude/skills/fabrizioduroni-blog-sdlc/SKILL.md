@@ -1,6 +1,6 @@
 ---
 name: fabrizioduroni-blog-sdlc
-description: Orchestrate the full code SDLC for chicio-blog — explore → brainstorm → implement ⇄ review → PR (feature mode), or investigate → confirm → implement ⇄ review → PR (fix mode). Manual, main-thread, with two human gates. Code work only.
+description: Orchestrate the full code SDLC for chicio-blog — explore → brainstorm → implement ⇄ review → PR (feature mode), or investigate → confirm → implement ⇄ review → PR (fix mode). Interactive (two human gates) or --autonomous (issue-as-contract, async label gates, PR-only, never merges). Code work only.
 disable-model-invocation: true
 ---
 
@@ -17,22 +17,25 @@ Intake.
 ## Invocation
 
 ```
-/fabrizioduroni-blog-sdlc [description] [--fix] [--in-place]
+/fabrizioduroni-blog-sdlc [description] [--fix] [--in-place]      # interactive (Phase 1)
+/fabrizioduroni-blog-sdlc --autonomous --from-issue <N>           # autonomous (Phase 2)
 ```
 
 - `[description]` — what to build or fix (free text).
 - `--fix` — select **fix mode**. Also implied if the user pastes a stack trace / error / failing-test output.
-- `--in-place` — run in the **current** working tree instead of an isolated worktree. The pipeline is **isolated by default** (§ Isolation); pass this only when you deliberately want the live-tree, micro-commit-visible flow.
+- `--in-place` — run in the **current** working tree instead of an isolated worktree. The pipeline is **isolated by default** (§ Isolation); pass this only when you deliberately want the live-tree, micro-commit-visible flow. Ignored in `--autonomous` mode (autonomous is always isolated).
+- `--autonomous --from-issue <N>` — select **autonomous mode**: read GitHub issue `#N` as the contract, replace both human gates with async label gates, and land a PR unattended (never merge). See **§ Autonomous mode (Phase 2)**. Mode within autonomous (feature vs fix) is taken from the issue's **Type** field, not `--fix`.
 
 Create a todo list with one item per stage of the selected mode, and work them in order. Do not skip a gate.
 
 ## Phase boundary (read before you start)
 
-This skill describes **Phase 1 — the interactive pipeline.** Every human-interactive step below (grill-me at Gate 1,
-the confirm gate in fix mode, the PR gate) is marked **[INTERACTIVE]**. A future Phase 2 `--autonomous` mode will
-replace those marked steps with issue-as-contract inputs and async label gates — so keep all interaction inside the
-**[INTERACTIVE]** steps and never bake prompts into the non-interactive stages (Explore, Implement, Review). That
-separation is what makes Phase 2 a flag flip rather than a rewrite.
+The stages below are **Phase 1 — the interactive pipeline.** Every human-interactive step is marked **[INTERACTIVE]**
+(grilling at Gate 1, the confirm gate in fix mode, the PR gate). **Phase 2 — autonomous mode** (§ Autonomous mode)
+reuses the non-interactive stages (Explore, Implement, Review, the 3⇄4 loop) **verbatim** and replaces only the
+**[INTERACTIVE]** steps with issue-as-contract inputs and async label gates. Because of that separation, autonomous
+mode is a flag flip, not a fork of the pipeline — so keep all interaction inside the **[INTERACTIVE]** steps and never
+bake prompts into the non-interactive stages.
 
 ## Stage 0 — Intake (always)
 
@@ -56,7 +59,7 @@ report (files by layer, reusable design-system surface, registration points, tes
 Keep the report; it feeds Stages 2 and 3.
 
 ### Stage 2 — Brainstorm 🚪 **[INTERACTIVE] — HUMAN GATE 1**
-Invoke the **`/grilling`** skill in the main thread, fed the exploration report + the description (+ any §9 "decisions
+Invoke the **`grilling`** skill in the main thread, fed the exploration report + the description (+ any §9 "decisions
 to resolve" the explorer surfaced). Interview the user until the approach is nailed and an **approved plan** exists.
 - Plan handoff: **inline** in the implementer's prompt for small feature-slices; **persisted to a scratchpad plan
   file** for full-feature work (and later fed to the reviewer alongside the diff).
@@ -115,6 +118,78 @@ Present the root-cause report. The human decides:
   then the fix — strict red-green).
 - **Decline** → investigate-only. Stop the pipeline cleanly. (The investigator already persisted its memory, so the
   diagnosis is not lost.)
+
+## Autonomous mode (Phase 2)
+
+`--autonomous --from-issue <N>` runs the pipeline **unattended** against GitHub issue `#N`. It reuses the
+non-interactive stages of feature/fix mode **verbatim** (Explore, Implement, Review, the 3⇄4 loop, the mechanical
+gates, the severity model) and swaps only the two human gates:
+
+| Interactive gate | Autonomous replacement |
+|------------------|------------------------|
+| **Gate 1 — grilling / confirm-root-cause** | The **`loop:ready` label is the approval** + a **pre-flight contract check** (A1). No interview. |
+| **Gate 2 — PR approval** | **Open the PR and stop.** The loop **never merges** — the human merge click is the async gate. |
+
+**Two hard invariants:** the loop **never merges** and **never prompts a human** mid-run. Every run ends in exactly
+one of two terminal states: a **PR opened** (`loop:review`) or **`loop:blocked`** (with an explanatory comment). It
+owns all label transitions for the issue it is given, so a manual `--from-issue N` run is fully self-contained (no
+drainer required).
+
+Work the stages below in order (make them your todo list).
+
+### A0 — Claim & read the contract
+1. Read the issue: `gh issue view <N> --json number,title,body,labels,state`.
+2. **Eligibility guard.** The issue must be **open**, carry **`loop:ready`**, and **not** carry `loop:working`. If
+   not, abort immediately without changing anything (the caller selected the wrong issue).
+3. **Claim (the mutex).** Before any other work: `gh issue edit <N> --add-label loop:working --remove-label loop:ready`.
+   This is what stops a second tick or a second session from grabbing the same issue.
+
+### A1 — Validate the contract 🚦 (replaces GATE 1 — no worktree yet)
+Both checks read the issue body only; do them **before** `EnterWorktree` so a rejection costs nothing.
+1. **Content firewall.** If the code-only checkbox is unchecked, or the task is purely content (MDX prose / DSA
+   article) → **BLOCK** with reason: "content task — route to `fabrizioduroni-writer-engineer` /
+   `fabrizioduroni-writer-dsa-engineer`."
+2. **Completeness check.** The contract must be buildable unattended: **concrete, non-placeholder acceptance
+   criteria** and an **explicit scope**. Empty checkboxes, "TBD", or a missing scope section → **BLOCK** with reason:
+   "insufficient contract — missing/placeholder <field>." **Do not guess.** This is grilling's safety valve relocated:
+   never spend a build on a vague issue.
+3. If both pass, the issue body (problem + acceptance criteria + scope + placement hints) **is the approved plan** —
+   the acceptance criteria are what the reviewer verifies the diff against. Pick mode from the issue **Type**
+   (`fix` → fix-mode red-green; `feature`/`hygiene` → feature-mode). Refine a `feat/issue-<N>-<slug>` slug.
+
+**BLOCK procedure (used by A1 and A5):** `gh issue edit <N> --add-label loop:blocked --remove-label loop:working`,
+then `gh issue comment <N>` with the reason, then STOP. A blocked issue needs a human to fix and re-apply `loop:ready`.
+
+### A2 — Isolate
+`EnterWorktree` on the `feat/issue-<N>-<slug>` branch. **Always isolated** in autonomous mode (`--in-place` is
+ignored) — each issue gets its own worktree so a drainer can run issues back-to-back without collisions.
+
+### A3 — Explore
+Identical to feature Stage 1: dispatch **`fabrizioduroni-explorer`** with the contract as the description. Keep the
+report for A4.
+
+### A4 — Implement
+Identical to feature Stage 3 (or fix Stage 3 for `Type: fix` — failing test first, strict red-green): dispatch
+**`fabrizioduroni-implementer`** with the **contract-as-plan** + the exploration report. It micro-commits and runs
+ALL mechanical gates before handoff.
+
+### A5 — Review ⇄ loop
+Identical to feature Stages 4–5: dispatch **`fabrizioduroni-code-reviewer`** (+ **`fabrizioduroni-e2e-sentinel`** when
+UI/route/flow changed), verify gates, review against `CLAUDE.md` + `.claude/rules/*` + **the acceptance criteria**,
+loop blocking findings back to the implementer, **max 3 rounds**.
+- **PASS** (zero blocking findings) → A6.
+- **No convergence after 3 rounds, or a reviewer/implementer standoff** (there is no human to escalate to
+  mid-run) → **push the branch** (so the work isn't lost), then **BLOCK** with the open findings listed in the comment,
+  linking the pushed branch. Do **not** open a PR from a non-converged state.
+
+### A6 — Open PR (replaces GATE 2 — never merges)
+1. Push the `feat/issue-<N>-<slug>` branch.
+2. `gh pr create` to `main` using the **PR template** below; title = conventional-commit + Gitmoji from the issue;
+   body includes `Closes #<N>`.
+3. Transition labels: `gh issue edit <N> --add-label loop:review --remove-label loop:working`.
+4. Start a **non-blocking** CI watch (do not wait on it, do not merge).
+5. `ExitWorktree` (**keep** — the pushed branch remains for the human to review and merge).
+6. Return the PR URL. **Never merge.**
 
 ## Mechanical gates (run by implementer pre-handoff; re-run by reviewer to verify)
 

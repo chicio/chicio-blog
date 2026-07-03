@@ -1,0 +1,73 @@
+name: "Loop task (agent contract)"
+description: "A code task the autonomous SDLC loop can pick up. Fill every required field — this issue IS the contract."
+title: "[loop]: "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This form is the **contract** the autonomous loop builds against. There is no plan-approval step:
+        applying the `loop:ready` label after filing **is** your approval. So the fields below must be complete
+        enough to build from unattended — if acceptance criteria or scope are vague, the loop will bounce the
+        issue to `loop:blocked` instead of guessing.
+
+        **Code only.** MDX blog prose and DSA articles are out of scope — those go to the writer agents.
+  - type: dropdown
+    id: type
+    attributes:
+      label: Type
+      description: "Drives the pipeline mode. `hygiene` is reserved for scanner-derived findings."
+      options:
+        - feature
+        - fix
+        - hygiene
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem / why
+      description: "What is missing or wrong, and why it matters."
+      placeholder: "The site has no page listing content authors, so contributors aren't discoverable."
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance criteria
+      description: "Concrete, verifiable conditions for 'done'. The reviewer checks the diff against exactly these. Use a checklist."
+      placeholder: |
+        - [ ] A page renders at `/authors`
+        - [ ] Each author shows name, avatar, and a link to their profile
+        - [ ] The page is linked from the main navigation
+        - [ ] Author data comes from <source>, not hardcoded
+      value: |
+        - [ ]
+        - [ ]
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope boundaries / out-of-scope
+      description: "What the loop must NOT touch. This is the blast-radius control for an unattended run."
+      placeholder: |
+        In scope: the new page + its content component + a nav link.
+        Out of scope: do not refactor the navigation system; do not touch unrelated routes.
+    validations:
+      required: true
+  - type: textarea
+    id: placement
+    attributes:
+      label: Placement / design hints
+      description: "Optional but encouraged — the route, existing design-system pieces to reuse, and the data source. Steers the implementer toward project conventions."
+      placeholder: "New route under src/app/authors/; reuse the existing Card + Avatar atoms; content component in src/components/content/authors/."
+    validations:
+      required: false
+  - type: checkboxes
+    id: code-only
+    attributes:
+      label: Content firewall
+      options:
+        - label: "This is a code task, not blog prose or a DSA article."
+          required: true
