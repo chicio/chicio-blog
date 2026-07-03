@@ -87,6 +87,9 @@ beforeAll(() => {
 
 const navHrefs: MenuNavHrefs = {
     blog: "/blog",
+    blogAuthors: "/blog/authors",
+    blogTags: "/blog/tags",
+    blogArchive: "/blog/archive",
     dsaRoadmap: "/dsa/roadmap",
     dsaExercises: "/dsa/exercises",
     chat: "/chat",

@@ -38,6 +38,9 @@ const panelVariants: Variants = {
 
 export interface MenuNavHrefs {
     blog: string;
+    blogAuthors: string;
+    blogTags: string;
+    blogArchive: string;
     dsaRoadmap: string;
     dsaExercises: string;
     chat: string;
@@ -64,6 +67,9 @@ export const Menu: FC<MenuProps> = ({ navHrefs, onPaletteTrigger, tracking }) =>
         handlePaletteTrigger,
         onClickHome,
         onClickBlog,
+        onClickBlogAuthors,
+        onClickBlogTags,
+        onClickBlogArchive,
         onClickDsaRoadmap,
         onClickDsaExercises,
         onClickChat,
@@ -91,15 +97,37 @@ export const Menu: FC<MenuProps> = ({ navHrefs, onPaletteTrigger, tracking }) =>
             >
                 Home
             </MenuItem>
-            <MenuItem
+            <DropdownMenu
                 key={`blog-${isMobile ? "mobile" : "desktop"}`}
-                className={baseClassName(isMobile)}
-                to={navHrefs.blog}
-                selected={pathname.includes(navHrefs.blog)}
-                onClick={onClickBlog}
-            >
-                Blog
-            </MenuItem>
+                label="Blog"
+                className={dropdownClassName(isMobile)}
+                items={[
+                    {
+                        label: "Latest posts",
+                        to: navHrefs.blog,
+                        selected: pathname === navHrefs.blog,
+                        onClick: onClickBlog,
+                    },
+                    {
+                        label: "Authors",
+                        to: navHrefs.blogAuthors,
+                        selected: pathname === navHrefs.blogAuthors,
+                        onClick: onClickBlogAuthors,
+                    },
+                    {
+                        label: "Tags",
+                        to: navHrefs.blogTags,
+                        selected: pathname === navHrefs.blogTags,
+                        onClick: onClickBlogTags,
+                    },
+                    {
+                        label: "Archive",
+                        to: navHrefs.blogArchive,
+                        selected: pathname === navHrefs.blogArchive,
+                        onClick: onClickBlogArchive,
+                    },
+                ]}
+            />
             <DropdownMenu
                 label="Explore"
                 className={dropdownClassName(isMobile)}

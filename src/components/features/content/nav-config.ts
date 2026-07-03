@@ -5,6 +5,9 @@ import type { FooterNavHrefs, SocialContactLinks } from "@/components/design-sys
 
 export const menuNavHrefs: MenuNavHrefs = {
     blog: slugs.blog.home,
+    blogAuthors: slugs.blog.authors,
+    blogTags: slugs.blog.tags,
+    blogArchive: slugs.blog.blogArchive,
     dsaRoadmap: slugs.dataStructuresAndAlgorithms.roadmap,
     dsaExercises: slugs.dataStructuresAndAlgorithms.exercises,
     chat: slugs.chat,

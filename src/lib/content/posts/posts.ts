@@ -158,9 +158,6 @@ export const getAuthorsWithPosts = (): AuthorSummary[] => aggregateAuthorsWithPo
 export const filterPostsForAuthor = (posts: Content[], authorId: string): Content[] =>
   posts.filter((post) => post.frontmatter.authors.some((author) => author.id === authorId));
 
-export const getPostsForAuthor: (authorId: string) => Content[] = (authorId: string) =>
-  filterPostsForAuthor(getPosts(), authorId);
-
 export const findAuthorWithPostsBySlug = (
   posts: Content[],
   authorSlug: string,

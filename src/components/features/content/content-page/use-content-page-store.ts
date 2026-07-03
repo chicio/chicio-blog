@@ -47,6 +47,15 @@ export const useContentPageStore = (trackingCategory: string): EffectsStore<Cont
 
     const onTrackHome = useCallback(() => onTrackNavigation(tracking.action.open_home), [onTrackNavigation]);
     const onTrackBlog = useCallback(() => onTrackNavigation(tracking.action.open_blog), [onTrackNavigation]);
+    const onTrackBlogAuthors = useCallback(
+        () => onTrackNavigation(tracking.action.open_blog_authors),
+        [onTrackNavigation],
+    );
+    const onTrackBlogTags = useCallback(() => onTrackNavigation(tracking.action.open_blog_tags), [onTrackNavigation]);
+    const onTrackBlogArchive = useCallback(
+        () => onTrackNavigation(tracking.action.open_blog_archive),
+        [onTrackNavigation],
+    );
     const onTrackDsaRoadmap = useCallback(() => onTrackNavigation(tracking.action.open_dsa_roadmap), [onTrackNavigation]);
     const onTrackDsaExercises = useCallback(
         () => onTrackNavigation(tracking.action.open_dsa_exercises),
@@ -80,6 +89,9 @@ export const useContentPageStore = (trackingCategory: string): EffectsStore<Cont
     const menuTracking: MenuTrackingCallbacks = {
         onTrackHome,
         onTrackBlog,
+        onTrackBlogAuthors,
+        onTrackBlogTags,
+        onTrackBlogArchive,
         onTrackDsaRoadmap,
         onTrackDsaExercises,
         onTrackChat,
