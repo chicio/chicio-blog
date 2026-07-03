@@ -56,7 +56,7 @@ report (files by layer, reusable design-system surface, registration points, tes
 Keep the report; it feeds Stages 2 and 3.
 
 ### Stage 2 — Brainstorm 🚪 **[INTERACTIVE] — HUMAN GATE 1**
-Invoke the **`grill-me`** skill in the main thread, fed the exploration report + the description (+ any §9 "decisions
+Invoke the **`/grilling`** skill in the main thread, fed the exploration report + the description (+ any §9 "decisions
 to resolve" the explorer surfaced). Interview the user until the approach is nailed and an **approved plan** exists.
 - Plan handoff: **inline** in the implementer's prompt for small feature-slices; **persisted to a scratchpad plan
   file** for full-feature work (and later fed to the reviewer alongside the diff).
