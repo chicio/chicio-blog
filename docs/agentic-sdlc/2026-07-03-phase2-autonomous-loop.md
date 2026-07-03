@@ -110,11 +110,16 @@ would otherwise have extracted, or the loop builds the wrong thing.
 | Type (`feature` / `fix` / `hygiene`) | ✅ | Drives pipeline mode; applied as a label |
 | Code-only confirmation | ✅ (checkbox) | Enforces the content firewall at intake |
 
-### 6.2 Two front-ends, same schema
+### 6.2 Three front-ends, same schema
 
-1. **YAML issue form** (`.github/ISSUE_TEMPLATE/loop-task.yml`) — for humans. GitHub enforces required fields, so an
-   incomplete contract cannot be submitted. Replaces the stock 2020 markdown templates. **Build now.**
-2. **String template** — for the v2 scout, which fills the same fields via `gh issue create --body`. It never uses
+1. **YAML issue form** (`.github/ISSUE_TEMPLATE/loop-task.yml`) — for humans filing directly in the browser. GitHub
+   enforces required fields, so an incomplete contract cannot be submitted. Replaces the stock 2020 markdown
+   templates. **Build now.**
+2. **Assisted authoring** (`fabrizioduroni-task` skill) — for humans authoring from Claude Code. The async front-half
+   of the pipeline: (adaptive explore) → **grilling** → synthesize the contract → verbatim confirm → `gh issue create`.
+   Front-loads the grilling the autonomous loop can't do at build time, so its contracts are high-confidence. Files
+   **without** `loop:ready` by default (filing ≠ approving; `--ready` opts in). **Build now (§10).**
+3. **String template** — for the v2 scout, which fills the same fields via `gh issue create --body`. It never uses
    the web form. For hygiene findings the load-bearing fields are **machine-generated**: acceptance criteria = "the
    scanner goes green" (`validate-architecture` passes / `knip` reports zero for symbol X); scope = "the flagged
    symbol/file only." **Build in v2, reusing the identical schema — zero rework.**
@@ -168,6 +173,7 @@ part only.
 | Component | Job | Build |
 |-----------|-----|-------|
 | **Autonomous mode** on `fabrizioduroni-blog-sdlc` — `--autonomous --from-issue N` | Reads the issue as the contract; `loop:ready` = Gate 1; runs the non-interactive Explore → Implement ⇄ Review stages; opens a PR; stops (never merges) | Extend existing skill |
+| **`fabrizioduroni-task`** (new skill, human-invoked) | Author a contract from Claude Code: (adaptive explore) → grilling → synthesize → verbatim confirm → `gh issue create` (no `loop:ready` unless `--ready`). The assisted front-end of the queue (§6.2) | New skill |
 | **`fabrizioduroni-loop`** (thin new skill, run by `/loop`) | One tick: backpressure check → pick the oldest `loop:ready` issue → call the orchestrator in autonomous mode → report → sleep. Owns *selection + backpressure + reporting* only; the orchestrator owns the label lifecycle | New skill |
 
 Single-responsibility split pays off three ways: (1) the autonomous pipeline runs on **one issue on demand, no loop**

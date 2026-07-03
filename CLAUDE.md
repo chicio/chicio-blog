@@ -105,7 +105,10 @@ runs the same pipeline unattended from a GitHub issue.
 - **Autonomous mode** (`--autonomous --from-issue <N>`, Phase 2): reads GitHub issue `#N` as the contract and runs
   unattended — the `loop:ready` label + a pre-flight contract check replace the plan gate; it opens a PR and **never
   merges** (the human merge click is the async gate). Terminal state is a PR (`loop:review`) or `loop:blocked` with a
-  reason. Task source for the session-bound `/loop` drainer (Phase 2 spec in `docs/agentic-sdlc/`).
+  reason. Driven by the session-bound `fabrizioduroni-loop` skill via `/loop 30m /fabrizioduroni-loop`.
+- **Author a loop task** (`/fabrizioduroni-task [idea]`): the async front-half of the pipeline — brainstorm an idea
+  (adaptive explore → grilling) into a loop-ready issue contract and file it via `gh`. Files **without** `loop:ready`
+  by default (approval stays a separate act; `--ready` opts in). Phase 2 spec in `docs/agentic-sdlc/`.
 
 Agent roster:
 
