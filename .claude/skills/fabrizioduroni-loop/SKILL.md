@@ -1,10 +1,10 @@
 ---
-name: fabrizioduroni-loop-drainer
+name: fabrizioduroni-loop
 description: One tick of the autonomous SDLC loop — pick the oldest loop:ready GitHub issue, hand it to the orchestrator's --autonomous mode, and report. Meant to be driven by /loop. Session-bound, code work only.
 disable-model-invocation: true
 ---
 
-# fabrizioduroni-loop-drainer — one loop tick
+# fabrizioduroni-loop — one loop tick
 
 This skill is the **scheduler-facing half** of the Phase 2 autonomous loop (design spec:
 `docs/agentic-sdlc/2026-07-03-phase2-autonomous-loop.md`). It does **one thing per invocation**: select at most one
@@ -20,7 +20,7 @@ runner later means replacing only this skill, not the pipeline.
 Run it on an interval with the `/loop` skill, e.g.:
 
 ```
-/loop 30m /fabrizioduroni-loop-drainer
+/loop 30m /fabrizioduroni-loop
 ```
 
 Each tick executes the steps below once, then the loop sleeps until the next interval. It is **session-bound**: it

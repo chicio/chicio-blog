@@ -150,8 +150,8 @@ Guards:
 ## 8. Scheduler — local `/loop`, no cloud
 
 The loop is **session-bound**: it runs while a Claude Code session is open on the developer's machine, driven by the
-`/loop` skill on an interval — `/loop 30m /fabrizioduroni-loop-drainer`. Poll-driven (no webhooks): each tick the
-`fabrizioduroni-loop-drainer` skill queries `gh` for eligible issues and drains one. Idle ticks (no `loop:ready`
+`/loop` skill on an interval — `/loop 30m /fabrizioduroni-loop`. Poll-driven (no webhooks): each tick the
+`fabrizioduroni-loop` skill queries `gh` for eligible issues and drains one. Idle ticks (no `loop:ready`
 issue) just sleep.
 
 Accepted limitation: this is **not** 24/7 background execution. It is "runs while I have a session open." Legitimate
@@ -168,7 +168,7 @@ part only.
 | Component | Job | Build |
 |-----------|-----|-------|
 | **Autonomous mode** on `fabrizioduroni-blog-sdlc` — `--autonomous --from-issue N` | Reads the issue as the contract; `loop:ready` = Gate 1; runs the non-interactive Explore → Implement ⇄ Review stages; opens a PR; stops (never merges) | Extend existing skill |
-| **`fabrizioduroni-loop-drainer`** (thin new skill, run by `/loop`) | One tick: backpressure check → pick the oldest `loop:ready` issue → call the orchestrator in autonomous mode → report → sleep. Owns *selection + backpressure + reporting* only; the orchestrator owns the label lifecycle | New skill |
+| **`fabrizioduroni-loop`** (thin new skill, run by `/loop`) | One tick: backpressure check → pick the oldest `loop:ready` issue → call the orchestrator in autonomous mode → report → sleep. Owns *selection + backpressure + reporting* only; the orchestrator owns the label lifecycle | New skill |
 
 Single-responsibility split pays off three ways: (1) the autonomous pipeline runs on **one issue on demand, no loop**
 — exactly how the authors page is de-risked; (2) the drainer is the **scheduler-shaped seam** — cloud migration
