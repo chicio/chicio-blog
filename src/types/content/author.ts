@@ -1,12 +1,23 @@
 export interface Author {
+    id: string;
     name: string;
     url: string;
     image: string;
+    role?: string;
+    bio?: string;
+}
+
+export type AuthorDefinition = Omit<Author, "id">;
+
+export interface AuthorSummary {
+    author: Author;
+    postCount: number;
+    slug: string;
 }
 
 const authorImagesFolder = '/media/authors/'
 
-export const authors: { [authorName: string]: Author } = {
+export const authors: { [authorId: string]: AuthorDefinition } = {
     fabrizio_duroni: {
         name: "Fabrizio Duroni",
         url: "https://www.linkedin.com/in/fabrizio-duroni/",

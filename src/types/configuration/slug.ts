@@ -11,6 +11,8 @@ export const slugs = {
     tags: `${blog}/tags`,
     tag: `${blog}/tag`,
     blogArchive: `${blog}/archive`,
+    authors: `${blog}/authors`,
+    author: `${blog}/author/[authorId]`,
   },
   art: "/art",
   chat: "/chat",

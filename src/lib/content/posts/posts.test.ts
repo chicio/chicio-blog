@@ -1,15 +1,24 @@
 import { describe, it, expect } from "vitest";
-import { rankReadNextPosts } from "./posts";
+import {
+    aggregateAuthorsWithPosts,
+    authorIdToSlug,
+    authorSlugToId,
+    filterPostsForAuthor,
+    findAuthorWithPostsBySlug,
+    generateAuthorSlug,
+    rankReadNextPosts,
+} from "./posts";
 import { Content } from "@/types/content/content";
+import { Author } from "@/types/content/author";
 
-const makePost = (slug: string, tags: string[], dateFormatted: string): Content =>
+const makePost = (slug: string, tags: string[], dateFormatted: string, authors: Author[] = []): Content =>
     ({
         slug: { formatted: slug, params: {} },
         frontmatter: {
             title: slug,
             description: "",
             tags,
-            authors: [],
+            authors,
             date: { formatted: dateFormatted, year: 2024, month: 1, day: 1 },
             image: "",
         },
@@ -17,6 +26,13 @@ const makePost = (slug: string, tags: string[], dateFormatted: string): Content 
         contentFileRelativePath: "",
         content: "",
     }) as Content;
+
+const makeAuthor = (id: string, name: string): Author => ({
+    id,
+    name,
+    url: `https://www.linkedin.com/in/${id}/`,
+    image: `/media/authors/${id}.jpg`,
+});
 
 describe("rankReadNextPosts", () => {
     describe("ranking by shared tag count", () => {
@@ -112,5 +128,144 @@ describe("rankReadNextPosts", () => {
             expect(result[0].slug.formatted).toBe("post-a");
             expect(result[1].slug.formatted).toBe("post-b");
         });
+    });
+});
+
+describe("authorIdToSlug", () => {
+    it("replaces underscores with hyphens", () => {
+        expect(authorIdToSlug("fabrizio_duroni")).toBe("fabrizio-duroni");
+    });
+
+    it("replaces every underscore for multi-word keys", () => {
+        expect(authorIdToSlug("marco_de_lucchi")).toBe("marco-de-lucchi");
+    });
+});
+
+describe("authorSlugToId", () => {
+    it("replaces hyphens with underscores", () => {
+        expect(authorSlugToId("fabrizio-duroni")).toBe("fabrizio_duroni");
+    });
+
+    it("round-trips with authorIdToSlug", () => {
+        const id = "marco_de_lucchi";
+        expect(authorSlugToId(authorIdToSlug(id))).toBe(id);
+    });
+});
+
+describe("generateAuthorSlug", () => {
+    it("builds the author detail href from the hyphenated slug", () => {
+        expect(generateAuthorSlug("fabrizio_duroni")).toBe("/blog/author/fabrizio-duroni");
+    });
+});
+
+describe("aggregateAuthorsWithPosts", () => {
+    describe("counting", () => {
+        it("counts one post per author", () => {
+            const fabrizio = makeAuthor("fabrizio_duroni", "Fabrizio Duroni");
+            const posts = [makePost("post-a", [], "2024-01-01", [fabrizio])];
+            const result = aggregateAuthorsWithPosts(posts);
+            expect(result).toHaveLength(1);
+            expect(result[0].postCount).toBe(1);
+        });
+
+        it("accumulates the count across multiple posts by the same author", () => {
+            const fabrizio = makeAuthor("fabrizio_duroni", "Fabrizio Duroni");
+            const posts = [
+                makePost("post-a", [], "2024-01-01", [fabrizio]),
+                makePost("post-b", [], "2024-02-01", [fabrizio]),
+            ];
+            const result = aggregateAuthorsWithPosts(posts);
+            expect(result).toHaveLength(1);
+            expect(result[0].postCount).toBe(2);
+        });
+
+        it("counts each co-author of a post separately", () => {
+            const fabrizio = makeAuthor("fabrizio_duroni", "Fabrizio Duroni");
+            const francesco = makeAuthor("francesco_bonfadelli", "Francesco Bonfadelli");
+            const posts = [makePost("post-a", [], "2024-01-01", [fabrizio, francesco])];
+            const result = aggregateAuthorsWithPosts(posts);
+            expect(result).toHaveLength(2);
+            expect(result.every((entry) => entry.postCount === 1)).toBe(true);
+        });
+    });
+
+    describe("sorting", () => {
+        it("sorts authors alphabetically by name", () => {
+            const francesco = makeAuthor("francesco_bonfadelli", "Francesco Bonfadelli");
+            const alessandro = makeAuthor("alessandro_romano", "Alessandro Romano");
+            const posts = [
+                makePost("post-a", [], "2024-01-01", [francesco]),
+                makePost("post-b", [], "2024-02-01", [alessandro]),
+            ];
+            const result = aggregateAuthorsWithPosts(posts);
+            expect(result.map((entry) => entry.author.name)).toEqual([
+                "Alessandro Romano",
+                "Francesco Bonfadelli",
+            ]);
+        });
+    });
+
+    describe("slug", () => {
+        it("attaches the hyphenated detail href to each summary", () => {
+            const fabrizio = makeAuthor("fabrizio_duroni", "Fabrizio Duroni");
+            const posts = [makePost("post-a", [], "2024-01-01", [fabrizio])];
+            const result = aggregateAuthorsWithPosts(posts);
+            expect(result[0].slug).toBe("/blog/author/fabrizio-duroni");
+        });
+    });
+
+    describe("edge cases", () => {
+        it("returns an empty array when there are no posts", () => {
+            expect(aggregateAuthorsWithPosts([])).toEqual([]);
+        });
+
+        it("excludes authors with zero posts (never encountered while walking posts)", () => {
+            const fabrizio = makeAuthor("fabrizio_duroni", "Fabrizio Duroni");
+            const posts = [makePost("post-a", [], "2024-01-01", [fabrizio])];
+            const result = aggregateAuthorsWithPosts(posts);
+            expect(result.some((entry) => entry.author.id === "antonino_gitto")).toBe(false);
+        });
+    });
+});
+
+describe("filterPostsForAuthor", () => {
+    it("returns only posts authored by the given author id", () => {
+        const fabrizio = makeAuthor("fabrizio_duroni", "Fabrizio Duroni");
+        const francesco = makeAuthor("francesco_bonfadelli", "Francesco Bonfadelli");
+        const posts = [
+            makePost("post-a", [], "2024-01-01", [fabrizio]),
+            makePost("post-b", [], "2024-02-01", [francesco]),
+        ];
+        const result = filterPostsForAuthor(posts, "fabrizio_duroni");
+        expect(result.map((post) => post.slug.formatted)).toEqual(["post-a"]);
+    });
+
+    it("returns an empty array when the author has no posts", () => {
+        const francesco = makeAuthor("francesco_bonfadelli", "Francesco Bonfadelli");
+        const posts = [makePost("post-a", [], "2024-01-01", [francesco])];
+        expect(filterPostsForAuthor(posts, "fabrizio_duroni")).toEqual([]);
+    });
+});
+
+describe("findAuthorWithPostsBySlug", () => {
+    it("resolves the author and their posts from the hyphenated slug", () => {
+        const fabrizio = makeAuthor("fabrizio_duroni", "Fabrizio Duroni");
+        const posts = [
+            makePost("post-a", [], "2024-01-01", [fabrizio]),
+            makePost("post-b", [], "2024-02-01", [fabrizio]),
+        ];
+        const result = findAuthorWithPostsBySlug(posts, "fabrizio-duroni");
+        expect(result?.author.id).toBe("fabrizio_duroni");
+        expect(result?.posts).toHaveLength(2);
+    });
+
+    it("returns undefined when no post matches the author slug", () => {
+        const francesco = makeAuthor("francesco_bonfadelli", "Francesco Bonfadelli");
+        const posts = [makePost("post-a", [], "2024-01-01", [francesco])];
+        expect(findAuthorWithPostsBySlug(posts, "fabrizio-duroni")).toBeUndefined();
+    });
+
+    it("returns undefined for an empty post list", () => {
+        expect(findAuthorWithPostsBySlug([], "fabrizio-duroni")).toBeUndefined();
     });
 });
