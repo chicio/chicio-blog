@@ -3,7 +3,7 @@
 import { ImageGlow } from "@/components/design-system/atoms/effects/image-glow";
 import { InternalLink } from "@/components/design-system/atoms/links/internal-link";
 import { Author } from "@/types/content/author";
-import { generateAuthorSlug } from "@/lib/content/posts/posts";
+import { generateAuthorSlug } from "@/lib/content/authors/author-slug";
 import { FC } from "react";
 import { usePostAuthorsStore } from "./use-post-authors-store";
 

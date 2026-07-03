@@ -5,6 +5,9 @@ import { slugs } from "@/types/configuration/slug";
 import { Pagination } from "@/types/content/pagination";
 import { generateTagSlug } from "../../tags/tags";
 import { getAllContentFor, getSingleContentBy } from "../content";
+import { authorSlugToId, generateAuthorSlug } from "../authors/author-slug";
+
+export { authorIdToSlug, authorSlugToId, generateAuthorSlug } from "../authors/author-slug";
 
 /**
  * POSTS
@@ -125,13 +128,6 @@ export const getPostsForTag: (tag: string) => Content[] = (tag: string) => {
 /**
  * AUTHORS
  */
-
-export const authorIdToSlug = (authorId: string): string => authorId.replaceAll("_", "-");
-
-export const authorSlugToId = (authorSlug: string): string => authorSlug.replaceAll("-", "_");
-
-export const generateAuthorSlug = (authorId: string): string =>
-  slugs.blog.author.replace("[authorId]", authorIdToSlug(authorId));
 
 export const aggregateAuthorsWithPosts = (posts: Content[]): AuthorSummary[] => {
   const summaries = new Map<string, AuthorSummary>();
