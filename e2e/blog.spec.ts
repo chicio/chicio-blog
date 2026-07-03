@@ -67,6 +67,50 @@ test.describe("Blog section", () => {
         });
     });
 
+    test.describe("authors index page", () => {
+        test("loads and lists authors with at least one post", async ({ page }) => {
+            await page.goto("/blog/authors");
+            await expect(page).toHaveURL(/\/blog\/authors/);
+            await expect(page.getByRole("heading", { name: "Authors", level: 1 })).toBeVisible();
+            await expect(page.getByRole("link", { name: /Fabrizio Duroni/ })).toBeVisible();
+        });
+
+        test("filtering by name narrows the visible author cards", async ({ page }) => {
+            await page.goto("/blog/authors");
+            await page.getByRole("textbox").fill("nonexistent-author-xyz");
+            await expect(page.getByText(/No authors found for/)).toBeVisible();
+        });
+
+        test("clicking an author card navigates to their detail page", async ({ page }) => {
+            await page.goto("/blog/authors");
+            await page.getByRole("link", { name: /Fabrizio Duroni/ }).first().click();
+            await expect(page).toHaveURL(/\/blog\/author\/fabrizio-duroni/);
+        });
+    });
+
+    test.describe("author detail page", () => {
+        test("loads and shows the author profile and their posts", async ({ page }) => {
+            await page.goto("/blog/author/fabrizio-duroni");
+            await expect(page).toHaveURL(/\/blog\/author\/fabrizio-duroni/);
+            await expect(page.getByRole("link", { name: "LinkedIn" })).toHaveAttribute(
+                "href",
+                "https://www.linkedin.com/in/fabrizio-duroni/",
+            );
+            await expect(page.getByRole("link", { name: "App.js Conf 2026" })).toBeVisible();
+        });
+
+        test("returns HTTP 200", async ({ page }) => {
+            const response = await page.goto("/blog/author/fabrizio-duroni");
+            expect(response?.status()).toBe(200);
+        });
+
+        test("the post byline links back to the author detail page", async ({ page }) => {
+            await page.goto("/blog/post/2026/06/01/app-js-conf-2026");
+            const authorLink = page.getByRole("link", { name: "Fabrizio Duroni" });
+            await expect(authorLink).toHaveAttribute("href", "/blog/author/fabrizio-duroni");
+        });
+    });
+
     test.describe("tag page", () => {
         test("loads and shows posts for the tag", async ({ page }) => {
             await page.goto("/blog/tag/react-native");
