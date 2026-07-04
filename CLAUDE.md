@@ -109,6 +109,10 @@ runs the same pipeline unattended from a GitHub issue.
 - **Author a loop task** (`/fabrizioduroni-task [idea]`): the async front-half of the pipeline — brainstorm an idea
   (adaptive explore → grilling) into a loop-ready issue contract and file it via `gh`. Files **without** `loop:ready`
   by default (approval stays a separate act; `--ready` opts in). Phase 2 spec in `docs/agentic-sdlc/`.
+- **Scout** (`/fabrizioduroni-scout`, run by `/loop`): the self-feeding producer — runs deterministic code-health
+  scanners and files `loop-task` issues with machine-generated acceptance criteria, labeled by dimension
+  (`loop:coverage` / `loop:hygiene` / `loop:a11y`), deduped against open issues and capped per run. Files **without**
+  `loop:ready` — you curate which findings to queue. This is what makes the loop self-feeding.
 
 Agent roster:
 
