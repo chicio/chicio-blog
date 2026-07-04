@@ -37,6 +37,7 @@ export default defineConfig({
                 "src/lib/chat/chat-knowledge-upload.ts",
                 "src/lib/images/copy-content-media.ts",
                 "src/lib/build/prebuild.ts",
+                "src/lib/a11y/**",
             ],
         },
         projects: [

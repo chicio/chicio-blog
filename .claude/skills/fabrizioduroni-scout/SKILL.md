@@ -66,16 +66,41 @@ step (§4). **Cap: at most 3 new issues per dimension per run** (top-ranked), so
    is exhausted under the cap.
 4. Emit up to the cap. For each, the finding = the file's relative path + its current pct + uncovered-line count.
 
-#### Scanner: hygiene  → `loop:hygiene`  (PLANNED — build next)
-Primary engine is **semantic duplicate detection** via the `finding-duplicate-functions` skill (functions that do the
-same thing under different names — common in LLM-written code). `validate-architecture` and `knip` are **guardrails**
-that CI already keeps at zero, so they only yield findings on genuine drift; include them but expect them usually
-empty. Rank by number of duplicate call sites / size of the duplicated logic.
+#### Scanner: hygiene  → `loop:hygiene`  (ACTIVE)
+Two sources, one label:
+1. **Semantic duplicates (primary engine).** Invoke the `finding-duplicate-functions` skill (Skill tool) — it scans
+   for functions that do the same thing under different names/implementations (common in LLM-written code). Take its
+   reported duplicate clusters; each cluster's finding = the shared behavior + the 2+ call sites/paths. Rank by
+   (number of duplicate implementations × size of the duplicated logic).
+2. **Guardrails.** Run `npm run validate-architecture` and `npm run knip`. CI already keeps these at zero, so expect
+   them empty; only if a real violation surfaces (genuine drift) emit it as a finding.
 
-#### Scanner: a11y  → `loop:a11y`  (PLANNED — needs the @axe-core/playwright harness)
-Run `@axe-core/playwright` `axe` against each rendered route (reuse the e2e/production-server setup) and collect
-violations. One finding per (rule, page) cluster; rank by impact (critical > serious > moderate > minor). This
-scanner requires adding the `@axe-core/playwright` dependency + a small harness — its own build step.
+Contract body (Type: hygiene) for a **duplicate** finding:
+- Problem/why: "N implementations of `<behavior>` exist (`<pathA>`, `<pathB>`, …) — duplicated logic drifts and bloats."
+- Acceptance criteria:
+  - [ ] Unify the N implementations into a single shared function in the correct layer (per `.claude/rules/architecture-layers.md`); update every call site; **behavior unchanged**.
+  - [ ] `validate-architecture`, `knip`, `lint`, `typecheck`, `test`, `build` all green; no new duplication introduced.
+- Scope: only the duplicated logic + its call sites; no unrelated refactors.
+
+For a **guardrail** finding, the acceptance criterion is "the failing scanner (`validate-architecture` / `knip`) goes
+green" plus the specific violation, scoped to the flagged module.
+
+#### Scanner: a11y  → `loop:a11y`  (ACTIVE)
+Runs the runtime axe harness (`npm run a11y-scan`, backed by `@axe-core/playwright`) against the key public routes.
+1. Boot a production server — Bash **background** mode: `npm run build` then `npm start`; never `&`; wait for
+   readiness with `curl --retry-connrefused`, never a foreground `sleep`.
+2. Run `npm run a11y-scan` (targets `http://localhost:3000`; override with `A11Y_BASE_URL`). It writes
+   `a11y-report.json` — an array of `{ route, violations[] }` — and prints a per-`(rule, route)` summary. **Tear the
+   server down when done.**
+3. Read `a11y-report.json`. Each finding = one **`(rule id, route)` cluster**. Rank by impact
+   (critical > serious > moderate > minor), then by node count.
+
+Contract body (Type: hygiene) for an a11y finding:
+- Problem/why: "axe rule `<id>` (`<impact>`) fails on `<route>` — `<N>` node(s). `<help>`. (`<helpUrl>`)"
+- Acceptance criteria:
+  - [ ] `npm run a11y-scan` reports **zero `<id>` violations on `<route>`** — fix the underlying markup/ARIA; do NOT suppress or disable the rule.
+  - [ ] No new a11y violations introduced on any scanned route; `lint`, `typecheck`, `test`, `build` green.
+- Scope: the component(s)/page rendering `<route>` for rule `<id>` only; no unrelated changes.
 
 ### 4. Dedup, cap, and file (shared by all scanners)
 For each candidate, in rank order until the per-dimension cap is hit:
@@ -95,7 +120,9 @@ For each candidate, in rank order until the per-dimension cap is hit:
      --body-file <tmp>
    ```
    Body = the `loop-task` contract (mirror `.github/ISSUE_TEMPLATE/loop-task.yml` so the pre-flight check reads it),
-   with **machine-generated** acceptance criteria. For coverage:
+   with **machine-generated** acceptance criteria. Hygiene and a11y use the acceptance criteria + scope defined in
+   their scanner sections above; the coverage body below is the template shape (adjust the footer's scanner name per
+   dimension). For coverage:
 
    ```markdown
    **Type:** hygiene
