@@ -9,7 +9,7 @@ vi.mock("next/link", () => nextLinkMock());
 const author: Author = {
     id: "fabrizio_duroni",
     name: "Fabrizio Duroni",
-    url: "https://fabrizioduroni.it",
+    linkedinUrl: "https://fabrizioduroni.it",
     image: "/media/authors/fabrizio.jpg",
 };
 
@@ -60,6 +60,13 @@ describe("PostCard", () => {
         it("renders the description", () => {
             render(<PostCard {...defaultProps} />);
             expect(screen.getByText(/A test post about testing/)).toBeInTheDocument();
+        });
+
+        it("does not nest the author link inside another link", () => {
+            const { container } = render(<PostCard {...defaultProps} />);
+            const links = Array.from(container.querySelectorAll("a"));
+            const nested = links.filter((link) => link.querySelector("a") !== null);
+            expect(nested).toHaveLength(0);
         });
     });
 
