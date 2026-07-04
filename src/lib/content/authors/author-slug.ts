@@ -6,3 +6,8 @@ export const authorSlugToId = (authorSlug: string): string => authorSlug.replace
 
 export const generateAuthorSlug = (authorId: string): string =>
     slugs.blog.author.replace("[authorId]", authorIdToSlug(authorId));
+
+export const ownerAuthorId = "fabrizio_duroni";
+
+export const authorHref = (authorId: string): string =>
+    authorId === ownerAuthorId ? slugs.aboutMe : generateAuthorSlug(authorId);

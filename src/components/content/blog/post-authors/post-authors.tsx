@@ -3,7 +3,7 @@
 import { ImageGlow } from "@/components/design-system/atoms/effects/image-glow";
 import { InternalLink } from "@/components/design-system/atoms/links/internal-link";
 import { Author } from "@/types/content/author";
-import { generateAuthorSlug } from "@/lib/content/authors/author-slug";
+import { authorHref } from "@/lib/content/authors/author-slug";
 import { FC } from "react";
 import { usePostAuthorsStore } from "./use-post-authors-store";
 
@@ -32,7 +32,7 @@ export const PostAuthors: FC<PostAuthorsProps> = ({ postAuthors }) => {
                     />
                     <p>
                         <InternalLink
-                            to={generateAuthorSlug(author.id)}
+                            to={authorHref(author.id)}
                             onClick={onClickAuthor}
                         >
                             {author.name}

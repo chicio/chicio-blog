@@ -1,5 +1,6 @@
 import { BlogAuthor } from "@/components/content/blog/blog-author";
 import { authorIdToSlug, getAuthorWithPostsBySlug, getAuthorsWithPosts } from "@/lib/content/posts/posts";
+import { ownerAuthorId } from "@/lib/content/authors/author-slug";
 import { createMetadata } from "@/lib/seo/seo";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { slugs } from "@/types/configuration/slug";
@@ -7,10 +8,14 @@ import { NextAuthorParameters } from "@/types/next/page-parameters";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+export const dynamicParams = false;
+
 export async function generateStaticParams() {
     const authors = getAuthorsWithPosts();
 
-    return authors.map((entry) => ({ authorId: authorIdToSlug(entry.author.id) }));
+    return authors
+        .filter((entry) => entry.author.id !== ownerAuthorId)
+        .map((entry) => ({ authorId: authorIdToSlug(entry.author.id) }));
 }
 
 export async function generateMetadata({ params }: NextAuthorParameters): Promise<Metadata> {

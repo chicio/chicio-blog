@@ -32,10 +32,16 @@ describe("PostAuthors", () => {
             expect(screen.getByText("Francesco Bonfadelli")).toBeInTheDocument();
         });
 
-        it("links each author name to their internal author detail page", () => {
+        it("links a non-owner author name to their internal author detail page", () => {
+            render(<PostAuthors postAuthors={[francesco]} />);
+            const link = screen.getByRole("link", { name: "Francesco Bonfadelli" });
+            expect(link).toHaveAttribute("href", "/blog/author/francesco-bonfadelli");
+        });
+
+        it("links the site owner to the about-me page", () => {
             render(<PostAuthors postAuthors={[fabrizio]} />);
             const link = screen.getByRole("link", { name: "Fabrizio Duroni" });
-            expect(link).toHaveAttribute("href", "/blog/author/fabrizio-duroni");
+            expect(link).toHaveAttribute("href", "/about-me");
         });
 
         it("renders the author avatar", () => {

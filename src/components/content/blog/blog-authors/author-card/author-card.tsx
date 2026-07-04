@@ -3,7 +3,7 @@
 import { ImageGlow } from "@/components/design-system/atoms/effects/image-glow";
 import { InternalLink } from "@/components/design-system/atoms/links/internal-link";
 import { Author } from "@/types/content/author";
-import { generateAuthorSlug } from "@/lib/content/authors/author-slug";
+import { authorHref } from "@/lib/content/authors/author-slug";
 import { FC } from "react";
 import { useAuthorCardStore } from "./use-author-card-store";
 
@@ -16,16 +16,16 @@ export const AuthorCard: FC<AuthorCardProps> = ({ author, postCount }) => {
     const { state, effects } = useAuthorCardStore();
     const { isInView } = state;
     const { setEl, onClickAuthor } = effects;
-    const href = generateAuthorSlug(author.id);
+    const href = authorHref(author.id);
 
     return (
         <div
             ref={setEl}
-            className="min-h-[220px]"
+            className="flex min-h-[220px]"
         >
             {isInView && (
                 <InternalLink
-                    className="glow-container flex flex-col items-center gap-2 p-6 text-center no-underline hover:no-underline"
+                    className="glow-container flex h-full w-full flex-col items-center gap-2 p-6 text-center no-underline hover:no-underline"
                     to={href}
                     onClick={onClickAuthor}
                 >

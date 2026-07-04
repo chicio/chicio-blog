@@ -37,10 +37,10 @@ describe("PostCard", () => {
             expect(screen.getByText("Fabrizio Duroni")).toBeInTheDocument();
         });
 
-        it("links the author name to the author detail page instead of the post", () => {
+        it("links the author name to their author page instead of the post", () => {
             render(<PostCard {...defaultProps} />);
             const authorLink = screen.getByRole("link", { name: "Fabrizio Duroni" });
-            expect(authorLink).toHaveAttribute("href", "/blog/author/fabrizio-duroni");
+            expect(authorLink).toHaveAttribute("href", "/about-me");
         });
 
         it("renders links pointing to the post slug", () => {

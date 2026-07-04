@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { authorIdToSlug, authorSlugToId, generateAuthorSlug } from "./author-slug";
+import { authorHref, authorIdToSlug, authorSlugToId, generateAuthorSlug, ownerAuthorId } from "./author-slug";
 
 describe("authorIdToSlug", () => {
     it("replaces underscores with hyphens", () => {
@@ -25,5 +25,15 @@ describe("authorSlugToId", () => {
 describe("generateAuthorSlug", () => {
     it("builds the author detail href from the hyphenated slug", () => {
         expect(generateAuthorSlug("fabrizio_duroni")).toBe("/blog/author/fabrizio-duroni");
+    });
+});
+
+describe("authorHref", () => {
+    it("points the owner to the about-me page", () => {
+        expect(authorHref(ownerAuthorId)).toBe("/about-me");
+    });
+
+    it("points other authors to their detail page", () => {
+        expect(authorHref("marco_de_lucchi")).toBe("/blog/author/marco-de-lucchi");
     });
 });
