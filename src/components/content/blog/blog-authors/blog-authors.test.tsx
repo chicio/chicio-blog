@@ -9,6 +9,10 @@ vi.mock("next/image", () => nextImageMock());
 vi.mock("next/link", () => nextLinkMock());
 vi.mock("@/lib/tracking/tracking", () => ({ trackWith: vi.fn() }));
 
+vi.mock("@/components/design-system/hooks/use-in-view-list", () => ({
+    useInViewList: () => [vi.fn(), true],
+}));
+
 vi.mock("@/components/features/content/content-page", () => ({
     ContentPage: ({ children }: { children?: ReactNode }) => <div>{children}</div>,
 }));
@@ -17,22 +21,20 @@ const fabrizio: AuthorSummary = {
     author: {
         id: "fabrizio_duroni",
         name: "Fabrizio Duroni",
-        url: "https://www.linkedin.com/in/fabrizio-duroni/",
+        linkedinUrl: "https://www.linkedin.com/in/fabrizio-duroni/",
         image: "/media/authors/fabrizio-duroni-small.jpg",
     },
     postCount: 5,
-    slug: "/blog/author/fabrizio-duroni",
 };
 
 const francesco: AuthorSummary = {
     author: {
         id: "francesco_bonfadelli",
         name: "Francesco Bonfadelli",
-        url: "https://www.linkedin.com/in/fbonfadelli/",
+        linkedinUrl: "https://www.linkedin.com/in/fbonfadelli/",
         image: "/media/authors/francesco-bonfadelli.jpg",
     },
     postCount: 2,
-    slug: "/blog/author/francesco-bonfadelli",
 };
 
 const authors = [fabrizio, francesco];

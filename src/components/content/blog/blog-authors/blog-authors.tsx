@@ -41,7 +41,6 @@ export const BlogAuthors: FC<BlogAuthorsProps> = ({ author, authors }) => {
                                     key={entry.author.id}
                                     author={entry.author}
                                     postCount={entry.postCount}
-                                    href={entry.slug}
                                 />
                             ))}
                         </div>
