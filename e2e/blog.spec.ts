@@ -92,7 +92,7 @@ test.describe("Blog section", () => {
         test("loads and shows the author profile and their posts", async ({ page }) => {
             await page.goto("/blog/author/fabrizio-duroni");
             await expect(page).toHaveURL(/\/blog\/author\/fabrizio-duroni/);
-            await expect(page.getByRole("link", { name: "LinkedIn" })).toHaveAttribute(
+            await expect(page.getByRole("link", { name: "LinkedIn", exact: true })).toHaveAttribute(
                 "href",
                 "https://www.linkedin.com/in/fabrizio-duroni/",
             );
@@ -106,7 +106,7 @@ test.describe("Blog section", () => {
 
         test("the post byline links back to the author detail page", async ({ page }) => {
             await page.goto("/blog/post/2026/06/01/app-js-conf-2026");
-            const authorLink = page.getByRole("link", { name: "Fabrizio Duroni" });
+            const authorLink = page.getByRole("link", { name: "Fabrizio Duroni" }).first();
             await expect(authorLink).toHaveAttribute("href", "/blog/author/fabrizio-duroni");
         });
     });
