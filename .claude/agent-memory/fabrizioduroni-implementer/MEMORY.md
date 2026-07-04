@@ -44,6 +44,3 @@
 
 ## Feedback
 - [PWA & State Patterns](feedback_pwa_patterns.md) — useSyncExternalStore for localStorage state, consent-gated UI, banner/error page alignment rules
-
-## Features (continued 5)
-- [A11y Scan Harness](feature_a11y_scan_harness.md) — axe-core/playwright dev script for scout skill; browser.newContext() gotcha; knip auto-detects npm-script entries
