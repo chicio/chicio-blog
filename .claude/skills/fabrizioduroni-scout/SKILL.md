@@ -6,8 +6,7 @@ disable-model-invocation: true
 
 # fabrizioduroni-scout — file code-health work for the loop
 
-This skill is the **producer half** of the Phase 2 loop (design spec:
-`docs/agentic-sdlc/2026-07-03-phase2-autonomous-loop.md`). Where `fabrizioduroni-task` turns *your* idea into a
+This skill is the **producer half** of the Phase 2 autonomous loop. Where `fabrizioduroni-task` turns *your* idea into a
 contract, the scout turns **deterministic scanner output** into contracts — it discovers code-health work, dedups it
 against what's already filed, and opens `loop-task` issues. The `fabrizioduroni-loop` drainer + `--autonomous`
 pipeline consume those exactly as they consume human-authored ones. This is what makes the loop *self-feeding*.
