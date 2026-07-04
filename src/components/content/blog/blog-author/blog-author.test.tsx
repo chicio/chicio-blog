@@ -1,19 +1,15 @@
 import { describe, it, expect, vi } from "vitest";
-import { render, screen, nextImageMock } from "@/test-utils";
+import { render, screen, nextImageMock, nextLinkMock } from "@/test-utils";
 import type { ReactNode } from "react";
 import { BlogAuthor } from "./index";
 import type { Author } from "@/types/content/author";
 import type { Content } from "@/types/content/content";
 
 vi.mock("next/image", () => nextImageMock());
+vi.mock("next/link", () => nextLinkMock());
 
-vi.mock("@/components/content/blog/blog-generic-post-list-page-template", () => ({
-    BlogGenericPostListPageTemplate: ({ title, beforeContent }: { title: string; beforeContent?: ReactNode }) => (
-        <div>
-            {beforeContent}
-            <h1>{title}</h1>
-        </div>
-    ),
+vi.mock("@/components/features/content/content-page", () => ({
+    ContentPage: ({ children }: { children?: ReactNode }) => <div>{children}</div>,
 }));
 
 const makePost = (slug: string): Content =>
@@ -21,13 +17,13 @@ const makePost = (slug: string): Content =>
         slug: { formatted: slug, params: {} },
         frontmatter: {
             title: slug,
-            description: "",
+            description: "A description",
             tags: [],
             authors: [],
             date: { formatted: "2024-01-01", year: 2024, month: 1, day: 1 },
             image: "",
         },
-        readingTime: { text: "", minutes: 0, time: 0, words: 0 },
+        readingTime: { text: "5 min read", minutes: 5, time: 300000, words: 1000 },
         contentFileRelativePath: "",
         content: "",
     }) as Content;
@@ -35,7 +31,7 @@ const makePost = (slug: string): Content =>
 const baseAuthor: Author = {
     id: "fabrizio_duroni",
     name: "Fabrizio Duroni",
-    url: "https://www.linkedin.com/in/fabrizio-duroni/",
+    linkedinUrl: "https://www.linkedin.com/in/fabrizio-duroni/",
     image: "/media/authors/fabrizio-duroni-small.jpg",
 };
 
@@ -73,17 +69,30 @@ describe("BlogAuthor", () => {
             expect(screen.queryByText("Builds things for the web.")).not.toBeInTheDocument();
         });
 
-        it("renders an external LinkedIn link to author.url", () => {
+        it("renders an external LinkedIn link to author.linkedinUrl", () => {
             render(<BlogAuthor author={baseAuthor} posts={[makePost("post-a")]} />);
             const link = screen.getByRole("link", { name: /LinkedIn/i });
-            expect(link).toHaveAttribute("href", baseAuthor.url);
+            expect(link).toHaveAttribute("href", baseAuthor.linkedinUrl);
             expect(link).toHaveAttribute("target", "_blank");
             expect(link).toHaveAttribute("rel", "noopener noreferrer");
         });
 
-        it("passes a posts-published-count heading to the reused post list template", () => {
+        it("renders a posts-published-count heading", () => {
             render(<BlogAuthor author={baseAuthor} posts={[makePost("post-a"), makePost("post-b")]} />);
             expect(screen.getByText("Posts published (2)")).toBeInTheDocument();
+        });
+
+        it("renders each of the author's posts as a PostCard", () => {
+            render(<BlogAuthor author={baseAuthor} posts={[makePost("post-a"), makePost("post-b")]} />);
+            expect(screen.getAllByText("post-a").length).toBeGreaterThan(0);
+            expect(screen.getAllByText("post-b").length).toBeGreaterThan(0);
+        });
+
+        it("links each post card to its own slug", () => {
+            render(<BlogAuthor author={baseAuthor} posts={[makePost("post-a")]} />);
+            const links = screen.getAllByRole("link");
+            const slugLinks = links.filter((l) => l.getAttribute("href") === "post-a");
+            expect(slugLinks.length).toBeGreaterThan(0);
         });
     });
 });

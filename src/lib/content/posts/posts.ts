@@ -36,7 +36,7 @@ export const getPostBy = (
 
 const postsPerPage = 7;
 
-const groupArrayBy: <T>(array: T[], numberPerGroup: number) => T[][] = (
+export const groupArrayBy: <T>(array: T[], numberPerGroup: number) => T[][] = (
   data,
   n,
 ) => {

@@ -1,7 +1,7 @@
 import { InternalLink } from "@/components/design-system/atoms/links/internal-link";
 import { PageTitle } from "@/components/design-system/molecules/typography/page-title";
 import { Content } from "@/types/content/content";
-import { FC, ReactNode } from "react";
+import { FC } from "react";
 import { ContentPage } from "@/components/features/content/content-page";
 import { JsonLd } from "@/components/features/seo/jsond-ld";
 import { siteMetadata } from "@/types/configuration/site-metadata";
@@ -12,7 +12,6 @@ export interface BlogGenericPostListPageProps {
     author: string;
     trackingCategory: string;
     keywords?: string[];
-    beforeContent?: ReactNode;
 }
 
 export const BlogGenericPostListPageTemplate: FC<BlogGenericPostListPageProps> = ({
@@ -21,10 +20,8 @@ export const BlogGenericPostListPageTemplate: FC<BlogGenericPostListPageProps> =
     author,
     trackingCategory,
     keywords,
-    beforeContent,
 }) => (
     <ContentPage author={author} trackingCategory={trackingCategory}>
-        {beforeContent}
         <PageTitle>{title}</PageTitle>
         {posts.map((post) => (
             <div

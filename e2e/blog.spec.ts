@@ -96,7 +96,7 @@ test.describe("Blog section", () => {
                 "href",
                 "https://www.linkedin.com/in/fabrizio-duroni/",
             );
-            await expect(page.getByRole("link", { name: "App.js Conf 2026" })).toBeVisible();
+            await expect(page.getByRole("link", { name: "App.js Conf 2026" }).first()).toBeVisible();
         });
 
         test("returns HTTP 200", async ({ page }) => {
