@@ -13,14 +13,14 @@ vi.mock("@/lib/tracking/tracking", () => ({ trackWith: (...args: unknown[]) => t
 const fabrizio: Author = {
     id: "fabrizio_duroni",
     name: "Fabrizio Duroni",
-    url: "https://www.linkedin.com/in/fabrizio-duroni/",
+    linkedinUrl: "https://www.linkedin.com/in/fabrizio-duroni/",
     image: "/media/authors/fabrizio-duroni-small.jpg",
 };
 
 const francesco: Author = {
     id: "francesco_bonfadelli",
     name: "Francesco Bonfadelli",
-    url: "https://www.linkedin.com/in/fbonfadelli/",
+    linkedinUrl: "https://www.linkedin.com/in/fbonfadelli/",
     image: "/media/authors/francesco-bonfadelli.jpg",
 };
 

@@ -27,7 +27,7 @@ const makePost = (slug: string, tags: string[], dateFormatted: string, authors: 
 const makeAuthor = (id: string, name: string): Author => ({
     id,
     name,
-    url: `https://www.linkedin.com/in/${id}/`,
+    linkedinUrl: `https://www.linkedin.com/in/${id}/`,
     image: `/media/authors/${id}.jpg`,
 });
 
@@ -172,15 +172,6 @@ describe("aggregateAuthorsWithPosts", () => {
                 "Alessandro Romano",
                 "Francesco Bonfadelli",
             ]);
-        });
-    });
-
-    describe("slug", () => {
-        it("attaches the hyphenated detail href to each summary", () => {
-            const fabrizio = makeAuthor("fabrizio_duroni", "Fabrizio Duroni");
-            const posts = [makePost("post-a", [], "2024-01-01", [fabrizio])];
-            const result = aggregateAuthorsWithPosts(posts);
-            expect(result[0].slug).toBe("/blog/author/fabrizio-duroni");
         });
     });
 

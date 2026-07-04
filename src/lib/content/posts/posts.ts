@@ -5,7 +5,7 @@ import { slugs } from "@/types/configuration/slug";
 import { Pagination } from "@/types/content/pagination";
 import { generateTagSlug } from "../../tags/tags";
 import { getAllContentFor, getSingleContentBy } from "../content";
-import { authorSlugToId, generateAuthorSlug } from "../authors/author-slug";
+import { authorSlugToId } from "../authors/author-slug";
 
 export { authorIdToSlug, authorSlugToId, generateAuthorSlug } from "../authors/author-slug";
 
@@ -139,7 +139,7 @@ export const aggregateAuthorsWithPosts = (posts: Content[]): AuthorSummary[] => 
       if (current) {
         summaries.set(author.id, { ...current, postCount: current.postCount + 1 });
       } else {
-        summaries.set(author.id, { author, postCount: 1, slug: generateAuthorSlug(author.id) });
+        summaries.set(author.id, { author, postCount: 1 });
       }
     }),
   );
