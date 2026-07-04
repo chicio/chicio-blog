@@ -120,7 +120,8 @@ export async function runScan(): Promise<AxeScanRouteResult[]> {
     const browser = await chromium.launch({ headless: true });
 
     try {
-        const page = await browser.newPage();
+        const context = await browser.newContext();
+        const page = await context.newPage();
         const results: AxeScanRouteResult[] = [];
 
         for (const route of ROUTES) {
