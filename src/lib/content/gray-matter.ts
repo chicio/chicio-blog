@@ -40,9 +40,15 @@ export const grayMatterContent = <TMeta = unknown>(
       description: fileParsed.data.description,
       date: generatePublishDate(fileParsed.data.date),
       tags: fileParsed.data.tags,
-      authors: fileParsed.data.authors.map(
-        (authorId: string): Author => ({ ...authors[authorId], id: authorId }),
-      ),
+      authors: fileParsed.data.authors.map((authorId: string): Author => {
+        const authorDefinition = authors[authorId];
+
+        if (!authorDefinition) {
+          throw new Error(`Unknown author id "${authorId}" referenced in ${filePath}`);
+        }
+
+        return { ...authorDefinition, id: authorId };
+      }),
       image: fileParsed.data.image,
       metadata,
     },
