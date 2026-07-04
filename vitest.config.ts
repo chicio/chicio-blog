@@ -26,11 +26,17 @@ export default defineConfig({
             include: ["src/lib/**", "src/components/design-system/**"],
             // Matrix CG/canvas effects cannot run in jsdom, so they are excluded from
             // coverage rather than carried by meaningless smoke tests.
+            // Build/ops entry-point scripts (tsx side-effect scripts run via npm scripts,
+            // touching fs/network) are excluded for the same reason — they have no
+            // meaningful unit-test surface and would only be covered by mock-heavy noise.
             exclude: [
                 "src/components/design-system/atoms/effects/matrix-rain/**",
                 "src/components/design-system/molecules/effects/matrix-background/**",
                 "src/components/design-system/molecules/effects/matrix-header-background/**",
                 "src/components/design-system/molecules/effects/matrix-terminal/**",
+                "src/lib/chat/chat-knowledge-upload.ts",
+                "src/lib/images/copy-content-media.ts",
+                "src/lib/build/prebuild.ts",
             ],
         },
         projects: [

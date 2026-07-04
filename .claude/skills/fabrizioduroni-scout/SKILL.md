@@ -55,8 +55,16 @@ step (§4). **Cap: at most 3 new issues per dimension per run** (top-ranked), so
    re-derive the scope).
 2. Read `coverage/coverage-summary.json`. Skip the `total` key. For every file entry, look at `lines.pct` and
    `functions.pct` and the count of uncovered lines (`lines.total - lines.covered`).
-3. **Rank candidates:** files with `lines.pct < 85` OR `functions.pct < 85`, ordered by **most uncovered lines first**
-   (biggest real gap = highest value). Ignore files already at/above target and trivially-tiny files (< 10 lines).
+3. **Rank candidates** — files with `lines.pct < 85` OR `functions.pct < 85`; ignore files already at/above target and
+   trivially-tiny files (< 10 lines). Then split into two tiers and prefer testable logic (build/ops entry-point
+   scripts are already excluded from coverage in `vitest.config.ts`, so the survivors here are library modules):
+   - **Tier 2 — deprioritize (IO modules):** files whose primary job is filesystem/MDX/network IO — they import `fs`
+     or `gray-matter`, match `*-markdown.ts`, or are thin content-loaders (e.g. `lib/content/content.ts`, the
+     `data-structures-and-algorithms` loaders). Testing these means heavy IO mocking for low value.
+   - **Tier 1 — prefer (pure logic):** everything else — aggregations, stores, SEO, guardrails, rate-limit,
+     formatting/parsing utilities. These have real branching worth asserting.
+   Fill the per-dimension cap **from Tier 1 first**, ordered by most uncovered lines; only dip into Tier 2 if Tier 1
+   is exhausted under the cap.
 4. Emit up to the cap. For each, the finding = the file's relative path + its current pct + uncovered-line count.
 
 #### Scanner: hygiene  → `loop:hygiene`  (PLANNED — build next)
