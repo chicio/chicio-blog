@@ -64,9 +64,12 @@ from anywhere:
 - **Issue with a linked PR** = done, awaiting the human merge gate.
 - **Closed** = vetoed / won't-do (the loop never re-files it).
 
-**One queue, two producers, one consumer.** Both human-authored feature issues and (v2) scout-authored hygiene issues
-land in the *same* queue with the *same* contract; the implementer consumes an identical issue body regardless of
-author. This is the "issue-as-contract" the Phase 1 doc named.
+**One queue, three producers, one consumer.** The browser issue form, `fabrizioduroni-task` (human, grilled), and
+`fabrizioduroni-scout` (deterministic scanners) all file the *same* contract into the *same* queue; the implementer
+consumes an identical issue body regardless of author. This is the "issue-as-contract" the Phase 1 doc named. The
+scout runs three scanners — coverage (`loop:coverage`), hygiene/dedup (`loop:hygiene`), runtime-a11y (`loop:a11y`) —
+files **without** `loop:ready` (you curate), deduped and capped. It is what makes the loop *self-feeding*; see its
+`SKILL.md` for the scanner + dedup + cap logic.
 
 ## 5. Gate model — interactive gates become async label gates
 
