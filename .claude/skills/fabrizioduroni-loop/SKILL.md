@@ -6,8 +6,7 @@ disable-model-invocation: true
 
 # fabrizioduroni-loop — one loop tick
 
-This skill is the **scheduler-facing half** of the Phase 2 autonomous loop (design spec:
-`docs/agentic-sdlc/2026-07-03-phase2-autonomous-loop.md`). It does **one thing per invocation**: select at most one
+This skill is the **scheduler-facing half** of the Phase 2 autonomous loop. It does **one thing per invocation**: select at most one
 eligible GitHub issue and hand it to `fabrizioduroni-blog-sdlc --autonomous`. It owns **selection, backpressure, and
 reporting** — nothing else. All the real work (claim, contract check, explore/implement/review, PR) lives in the
 orchestrator's autonomous mode, which owns the `loop:*` label lifecycle.
