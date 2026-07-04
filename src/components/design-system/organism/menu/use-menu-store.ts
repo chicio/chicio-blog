@@ -20,6 +20,9 @@ interface MenuEffects {
     handlePaletteTrigger: () => void;
     onClickHome: () => void;
     onClickBlog: () => void;
+    onClickBlogAuthors: () => void;
+    onClickBlogTags: () => void;
+    onClickBlogArchive: () => void;
     onClickDsaRoadmap: () => void;
     onClickDsaExercises: () => void;
     onClickChat: () => void;
@@ -34,6 +37,9 @@ interface MenuEffects {
 export interface MenuTrackingCallbacks {
     onTrackHome?: () => void;
     onTrackBlog?: () => void;
+    onTrackBlogAuthors?: () => void;
+    onTrackBlogTags?: () => void;
+    onTrackBlogArchive?: () => void;
     onTrackDsaRoadmap?: () => void;
     onTrackDsaExercises?: () => void;
     onTrackChat?: () => void;
@@ -71,6 +77,21 @@ export const useMenuStore = (
 
     const onClickBlog = useCallback(() => {
         tracking?.onTrackBlog?.();
+        closeMenu();
+    }, [tracking, closeMenu]);
+
+    const onClickBlogAuthors = useCallback(() => {
+        tracking?.onTrackBlogAuthors?.();
+        closeMenu();
+    }, [tracking, closeMenu]);
+
+    const onClickBlogTags = useCallback(() => {
+        tracking?.onTrackBlogTags?.();
+        closeMenu();
+    }, [tracking, closeMenu]);
+
+    const onClickBlogArchive = useCallback(() => {
+        tracking?.onTrackBlogArchive?.();
         closeMenu();
     }, [tracking, closeMenu]);
 
@@ -127,6 +148,9 @@ export const useMenuStore = (
             handlePaletteTrigger,
             onClickHome,
             onClickBlog,
+            onClickBlogAuthors,
+            onClickBlogTags,
+            onClickBlogArchive,
             onClickDsaRoadmap,
             onClickDsaExercises,
             onClickChat,

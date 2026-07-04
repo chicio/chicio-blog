@@ -67,6 +67,56 @@ test.describe("Blog section", () => {
         });
     });
 
+    test.describe("authors index page", () => {
+        test("loads and lists authors with at least one post", async ({ page }) => {
+            await page.goto("/blog/authors");
+            await expect(page).toHaveURL(/\/blog\/authors/);
+            await expect(page.getByRole("heading", { name: "Authors", level: 1 })).toBeVisible();
+            await expect(page.getByRole("link", { name: /Fabrizio Duroni/ })).toBeVisible();
+        });
+
+        test("filtering by name narrows the visible author cards", async ({ page }) => {
+            await page.goto("/blog/authors");
+            await page.getByRole("textbox").fill("nonexistent-author-xyz");
+            await expect(page.getByText(/No authors found for/)).toBeVisible();
+        });
+
+        test("clicking the site owner's author card navigates to the about-me page", async ({ page }) => {
+            await page.goto("/blog/authors");
+            await page.getByRole("link", { name: /Fabrizio Duroni/ }).first().click();
+            await expect(page).toHaveURL(/\/about-me/);
+        });
+    });
+
+    test.describe("author detail page", () => {
+        test("loads and shows a non-owner author profile and their posts", async ({ page }) => {
+            await page.goto("/blog/author/antonino-gitto");
+            await expect(page).toHaveURL(/\/blog\/author\/antonino-gitto/);
+            await expect(page.getByRole("link", { name: "LinkedIn", exact: true })).toHaveAttribute(
+                "href",
+                "https://www.linkedin.com/in/antonino-gitto/",
+            );
+            await expect(page.getByRole("heading", { name: /Posts published/ })).toBeVisible();
+            await expect(page.locator('a[href*="/blog/post/"]').first()).toBeVisible();
+        });
+
+        test("returns HTTP 200 for a non-owner author", async ({ page }) => {
+            const response = await page.goto("/blog/author/antonino-gitto");
+            expect(response?.status()).toBe(200);
+        });
+
+        test("the site owner's author detail page 404s (about-me replaces it)", async ({ page }) => {
+            const response = await page.goto("/blog/author/fabrizio-duroni");
+            expect(response?.status()).toBe(404);
+        });
+
+        test("the post byline links the site owner to the about-me page", async ({ page }) => {
+            await page.goto("/blog/post/2026/06/01/app-js-conf-2026");
+            const authorLink = page.getByRole("link", { name: "Fabrizio Duroni" }).first();
+            await expect(authorLink).toHaveAttribute("href", "/about-me");
+        });
+    });
+
     test.describe("tag page", () => {
         test("loads and shows posts for the tag", async ({ page }) => {
             await page.goto("/blog/tag/react-native");

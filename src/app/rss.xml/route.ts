@@ -16,7 +16,7 @@ export async function GET() {
     author: {
       name: authors.fabrizio_duroni.name,
       email: "fabrizio.duroni@gmail.com",
-      link: authors.fabrizio_duroni.url,
+      link: authors.fabrizio_duroni.linkedinUrl,
     },
     language: "en",
     copyright: `2025 ${siteMetadata.author}`,

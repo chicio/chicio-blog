@@ -54,13 +54,10 @@ export const PostCard: FC<PostCardProps> = ({
                 to={slug}
             >
                 <h3 className="mt-0!">{title}</h3>
-                <PostAuthors
-                    postAuthors={authors}
-                    enableUrl={false}
-                />
-                <PostMeta date={date} readingTime={readingTime} />
-                <p className="mx-0 text-shadow-md">{`${description} [...]`}</p>
             </InternalLink>
+            <PostAuthors postAuthors={authors} />
+            <PostMeta date={date} readingTime={readingTime} />
+            <p className="mx-0 text-shadow-md">{`${description} [...]`}</p>
             {tags && (
                 <PostTags tags={tags} />
             )}

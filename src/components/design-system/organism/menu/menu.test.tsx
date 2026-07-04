@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Menu } from "./menu";
 import type { MenuNavHrefs } from "./menu";
@@ -36,6 +36,9 @@ vi.mock("framer-motion", () => ({
 
 const navHrefs: MenuNavHrefs = {
     blog: "/blog",
+    blogAuthors: "/blog/authors",
+    blogTags: "/blog/tags",
+    blogArchive: "/blog/archive",
     dsaRoadmap: "/dsa/roadmap",
     dsaExercises: "/dsa/exercises",
     chat: "/chat",
@@ -55,11 +58,22 @@ describe("Menu", () => {
             expect(homeLinks[0]).toHaveAttribute("href", "/");
         });
 
-        it("renders the Blog nav link", () => {
+        it("renders a Blog dropdown trigger", () => {
             render(<Menu navHrefs={navHrefs} />);
-            const blogLinks = screen.getAllByRole("link", { name: "Blog" });
-            expect(blogLinks.length).toBeGreaterThan(0);
-            expect(blogLinks[0]).toHaveAttribute("href", "/blog");
+            const blogButtons = screen.getAllByRole("button", { name: "Blog" });
+            expect(blogButtons.length).toBeGreaterThan(0);
+        });
+
+        it("lists Latest posts, Authors, Tags and Archive in the Blog dropdown, in order", async () => {
+            render(<Menu navHrefs={navHrefs} />);
+            await userEvent.click(screen.getAllByRole("button", { name: "Blog" })[0]);
+            const menu = screen.getAllByRole("menu")[0];
+            const items = within(menu).getAllByRole("link");
+            expect(items.map((item) => item.textContent)).toEqual(["Latest posts", "Authors", "Tags", "Archive"]);
+            expect(within(menu).getByRole("link", { name: "Latest posts" })).toHaveAttribute("href", "/blog");
+            expect(within(menu).getByRole("link", { name: "Authors" })).toHaveAttribute("href", "/blog/authors");
+            expect(within(menu).getByRole("link", { name: "Tags" })).toHaveAttribute("href", "/blog/tags");
+            expect(within(menu).getByRole("link", { name: "Archive" })).toHaveAttribute("href", "/blog/archive");
         });
 
         it("renders the search button", () => {
@@ -76,12 +90,13 @@ describe("Menu", () => {
             expect(onPaletteTrigger).toHaveBeenCalledOnce();
         });
 
-        it("calls tracking callback when a nav link is clicked", async () => {
-            const onTrackBlog = vi.fn();
-            render(<Menu navHrefs={navHrefs} tracking={{ onTrackBlog }} />);
-            const blogLinks = screen.getAllByRole("link", { name: "Blog" });
-            await userEvent.click(blogLinks[0]);
-            expect(onTrackBlog).toHaveBeenCalledOnce();
+        it("calls tracking callback when a Blog dropdown item is clicked", async () => {
+            const onTrackBlogAuthors = vi.fn();
+            render(<Menu navHrefs={navHrefs} tracking={{ onTrackBlogAuthors }} />);
+            await userEvent.click(screen.getAllByRole("button", { name: "Blog" })[0]);
+            const menu = screen.getAllByRole("menu")[0];
+            await userEvent.click(within(menu).getByRole("link", { name: "Authors" }));
+            expect(onTrackBlogAuthors).toHaveBeenCalledOnce();
         });
     });
 });

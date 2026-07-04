@@ -1,9 +1,13 @@
 import { Content } from "@/types/content/content";
 import { Tag } from "@/types/content/tag";
+import { Author, AuthorSummary } from "@/types/content/author";
 import { slugs } from "@/types/configuration/slug";
 import { Pagination } from "@/types/content/pagination";
 import { generateTagSlug } from "../../tags/tags";
 import { getAllContentFor, getSingleContentBy } from "../content";
+import { authorSlugToId } from "../authors/author-slug";
+
+export { authorIdToSlug, authorSlugToId, generateAuthorSlug } from "../authors/author-slug";
 
 /**
  * POSTS
@@ -32,7 +36,7 @@ export const getPostBy = (
 
 const postsPerPage = 7;
 
-const groupArrayBy: <T>(array: T[], numberPerGroup: number) => T[][] = (
+export const groupArrayBy: <T>(array: T[], numberPerGroup: number) => T[][] = (
   data,
   n,
 ) => {
@@ -120,6 +124,59 @@ export const getPostsForTag: (tag: string) => Content[] = (tag: string) => {
 
   return posts.filter((post) => post.frontmatter.tags.includes(tag));
 };
+
+/**
+ * AUTHORS
+ */
+
+export const aggregateAuthorsWithPosts = (posts: Content[]): AuthorSummary[] => {
+  const summaries = new Map<string, AuthorSummary>();
+
+  posts.forEach((post) =>
+    post.frontmatter.authors.forEach((author) => {
+      const current = summaries.get(author.id);
+
+      if (current) {
+        summaries.set(author.id, { ...current, postCount: current.postCount + 1 });
+      } else {
+        summaries.set(author.id, { author, postCount: 1 });
+      }
+    }),
+  );
+
+  return [...summaries.values()].sort((a, b) =>
+    a.author.name.toLowerCase() < b.author.name.toLowerCase() ? -1 : 1,
+  );
+};
+
+export const getAuthorsWithPosts = (): AuthorSummary[] => aggregateAuthorsWithPosts(getPosts());
+
+export const filterPostsForAuthor = (posts: Content[], authorId: string): Content[] =>
+  posts.filter((post) => post.frontmatter.authors.some((author) => author.id === authorId));
+
+export const findAuthorWithPostsBySlug = (
+  posts: Content[],
+  authorSlug: string,
+): { author: Author; posts: Content[] } | undefined => {
+  const authorId = authorSlugToId(authorSlug);
+  const postsForAuthor = filterPostsForAuthor(posts, authorId);
+
+  if (postsForAuthor.length === 0) {
+    return undefined;
+  }
+
+  const author = postsForAuthor[0].frontmatter.authors.find((postAuthor) => postAuthor.id === authorId);
+
+  if (!author) {
+    return undefined;
+  }
+
+  return { author, posts: postsForAuthor };
+};
+
+export const getAuthorWithPostsBySlug = (
+  authorSlug: string,
+): { author: Author; posts: Content[] } | undefined => findAuthorWithPostsBySlug(getPosts(), authorSlug);
 
 /**
  * READ NEXT

@@ -1,0 +1,13 @@
+import { slugs } from "@/types/configuration/slug";
+
+export const authorIdToSlug = (authorId: string): string => authorId.replaceAll("_", "-");
+
+export const authorSlugToId = (authorSlug: string): string => authorSlug.replaceAll("-", "_");
+
+export const generateAuthorSlug = (authorId: string): string =>
+    slugs.blog.author.replace("[authorId]", authorIdToSlug(authorId));
+
+export const ownerAuthorId = "fabrizio_duroni";
+
+export const authorHref = (authorId: string): string =>
+    authorId === ownerAuthorId ? slugs.aboutMe : generateAuthorSlug(authorId);

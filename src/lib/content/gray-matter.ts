@@ -1,4 +1,4 @@
-import { authors } from "@/types/content/author";
+import { Author, authors } from "@/types/content/author";
 import matter from "gray-matter";
 import fs from "fs";
 import { Frontmatter } from "@/types/content/frontmatter";
@@ -40,7 +40,15 @@ export const grayMatterContent = <TMeta = unknown>(
       description: fileParsed.data.description,
       date: generatePublishDate(fileParsed.data.date),
       tags: fileParsed.data.tags,
-      authors: fileParsed.data.authors.map((author: string) => authors[author]),
+      authors: fileParsed.data.authors.map((authorId: string): Author => {
+        const authorDefinition = authors[authorId];
+
+        if (!authorDefinition) {
+          throw new Error(`Unknown author id "${authorId}" referenced in ${filePath}`);
+        }
+
+        return { ...authorDefinition, id: authorId };
+      }),
       image: fileParsed.data.image,
       metadata,
     },
