@@ -44,3 +44,6 @@
 
 ## Feedback
 - [PWA & State Patterns](feedback_pwa_patterns.md) — useSyncExternalStore for localStorage state, consent-gated UI, banner/error page alignment rules
+
+## Features (continued 5)
+- [Blog Authors](feature_blog_authors.md) — /blog/authors + /blog/author/[id] + Blog nav dropdown; fs-in-client-bundle gotcha; nested-anchor fix; worktree node_modules/knip/stale-server gotchas
