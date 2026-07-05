@@ -39,6 +39,7 @@ const panelVariants: Variants = {
 export interface MenuNavHrefs {
     blog: string;
     blogAuthors: string;
+    blogAuthor: string;
     blogTags: string;
     blogArchive: string;
     dsaRoadmap: string;
@@ -111,7 +112,9 @@ export const Menu: FC<MenuProps> = ({ navHrefs, onPaletteTrigger, tracking }) =>
                     {
                         label: "Authors",
                         to: navHrefs.blogAuthors,
-                        selected: pathname === navHrefs.blogAuthors,
+                        selected:
+                            pathname === navHrefs.blogAuthors ||
+                            pathname.startsWith(`${navHrefs.blogAuthor}/`),
                         onClick: onClickBlogAuthors,
                     },
                     {

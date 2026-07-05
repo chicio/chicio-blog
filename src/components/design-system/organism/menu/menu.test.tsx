@@ -1,11 +1,13 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, afterEach } from "vitest";
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Menu } from "./menu";
 import type { MenuNavHrefs } from "./menu";
 
+let mockPathname = "/";
+
 vi.mock("next/navigation", () => ({
-    usePathname: () => "/",
+    usePathname: () => mockPathname,
     useRouter: () => ({ push: vi.fn() }),
 }));
 
@@ -37,6 +39,7 @@ vi.mock("framer-motion", () => ({
 const navHrefs: MenuNavHrefs = {
     blog: "/blog",
     blogAuthors: "/blog/authors",
+    blogAuthor: "/blog/author",
     blogTags: "/blog/tags",
     blogArchive: "/blog/archive",
     dsaRoadmap: "/dsa/roadmap",
@@ -48,6 +51,10 @@ const navHrefs: MenuNavHrefs = {
     videogames: "/videogames",
     contact: "/contact",
 };
+
+afterEach(() => {
+    mockPathname = "/";
+});
 
 describe("Menu", () => {
     describe("render", () => {
@@ -74,6 +81,22 @@ describe("Menu", () => {
             expect(within(menu).getByRole("link", { name: "Authors" })).toHaveAttribute("href", "/blog/authors");
             expect(within(menu).getByRole("link", { name: "Tags" })).toHaveAttribute("href", "/blog/tags");
             expect(within(menu).getByRole("link", { name: "Archive" })).toHaveAttribute("href", "/blog/archive");
+        });
+
+        it("marks Authors as selected when on an author detail page", async () => {
+            mockPathname = "/blog/author/francesco-bonfadelli";
+            render(<Menu navHrefs={navHrefs} />);
+            await userEvent.click(screen.getAllByRole("button", { name: "Blog" })[0]);
+            const menu = screen.getAllByRole("menu")[0];
+            expect(within(menu).getByRole("link", { name: "Authors" })).toHaveClass("border-accent");
+        });
+
+        it("does not mark Authors as selected on an unrelated page", async () => {
+            mockPathname = "/contact";
+            render(<Menu navHrefs={navHrefs} />);
+            await userEvent.click(screen.getAllByRole("button", { name: "Blog" })[0]);
+            const menu = screen.getAllByRole("menu")[0];
+            expect(within(menu).getByRole("link", { name: "Authors" })).not.toHaveClass("border-accent");
         });
 
         it("renders the search button", () => {

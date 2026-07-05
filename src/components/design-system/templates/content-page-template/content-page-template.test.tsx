@@ -77,6 +77,7 @@ vi.mock("@/components/design-system/state/motion/motion", () => ({
 const navHrefs: MenuNavHrefs = {
     blog: "/blog",
     blogAuthors: "/blog/authors",
+    blogAuthor: "/blog/author",
     blogTags: "/blog/tags",
     blogArchive: "/blog/archive",
     dsaRoadmap: "/dsa/roadmap",
