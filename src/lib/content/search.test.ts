@@ -39,7 +39,7 @@ const makeContent = (overrides: Partial<Content> = {}): Content => ({
         title: "Test Post",
         description: "A test post about React",
         tags: ["react", "typescript"],
-        authors: [{ id: "fabrizio_duroni", name: "Fabrizio Duroni", linkedinUrl: "https://example.com", image: "/img.jpg" }],
+        authors: [{ id: "fabrizio_duroni", name: "Fabrizio Duroni", linkedinUrl: "https://example.com", image: "/img.jpg", imageLarge: "/img-large.jpg" }],
         date: { year: 2024, month: 1, day: 1, formatted: "2024-01-01" },
         image: "/post-image.jpg",
     },
