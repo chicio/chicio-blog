@@ -27,5 +27,18 @@ describe("ProfilePhoto", () => {
             const img = screen.getByAltText("Fabrizio");
             expect(img).toHaveAttribute("src", expect.stringContaining("fabrizio-duroni"));
         });
+
+        it("renders a provided src", () => {
+            render(
+                <ProfilePhoto
+                    author="Alessandro Romano"
+                    src="/media/authors/alessandro-romano-large.jpg"
+                />,
+            );
+            expect(screen.getByAltText("Alessandro Romano")).toHaveAttribute(
+                "src",
+                "/media/authors/alessandro-romano-large.jpg",
+            );
+        });
     });
 });
