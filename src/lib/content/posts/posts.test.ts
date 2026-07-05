@@ -50,6 +50,7 @@ const makeAuthor = (id: string, name: string): Author => ({
     name,
     linkedinUrl: `https://www.linkedin.com/in/${id}/`,
     image: `/media/authors/${id}.jpg`,
+    imageLarge: `/media/authors/${id}-large.jpg`,
 });
 
 beforeEach(() => {

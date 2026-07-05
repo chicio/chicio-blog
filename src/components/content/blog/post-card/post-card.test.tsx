@@ -11,6 +11,7 @@ const author: Author = {
     name: "Fabrizio Duroni",
     linkedinUrl: "https://fabrizioduroni.it",
     image: "/media/authors/fabrizio.jpg",
+    imageLarge: "/media/authors/fabrizio-large.jpg",
 };
 
 const defaultProps = {

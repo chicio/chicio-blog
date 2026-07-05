@@ -23,6 +23,7 @@ const fabrizio: AuthorSummary = {
         name: "Fabrizio Duroni",
         linkedinUrl: "https://www.linkedin.com/in/fabrizio-duroni/",
         image: "/media/authors/fabrizio-duroni-small.jpg",
+        imageLarge: "/media/authors/fabrizio-duroni.jpg",
     },
     postCount: 5,
 };
@@ -33,6 +34,7 @@ const francesco: AuthorSummary = {
         name: "Francesco Bonfadelli",
         linkedinUrl: "https://www.linkedin.com/in/fbonfadelli/",
         image: "/media/authors/francesco-bonfadelli.jpg",
+        imageLarge: "/media/authors/francesco-bonfadelli.jpeg",
     },
     postCount: 2,
 };

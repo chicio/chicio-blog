@@ -15,6 +15,7 @@ const fabrizio: Author = {
     name: "Fabrizio Duroni",
     linkedinUrl: "https://www.linkedin.com/in/fabrizio-duroni/",
     image: "/media/authors/fabrizio-duroni-small.jpg",
+    imageLarge: "/media/authors/fabrizio-duroni.jpg",
 };
 
 const francesco: Author = {
@@ -22,6 +23,7 @@ const francesco: Author = {
     name: "Francesco Bonfadelli",
     linkedinUrl: "https://www.linkedin.com/in/fbonfadelli/",
     image: "/media/authors/francesco-bonfadelli.jpg",
+    imageLarge: "/media/authors/francesco-bonfadelli.jpeg",
 };
 
 describe("PostAuthors", () => {
