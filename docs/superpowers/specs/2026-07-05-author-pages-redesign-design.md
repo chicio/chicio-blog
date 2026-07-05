@@ -21,9 +21,11 @@ Two UI improvements, plus a consistency refactor:
 - Author data reality: most authors have only `name`, `linkedinUrl`, and `image`. `role`, `bio`, `siteUrl`,
   `xUrl`, `githubUrl` are optional and empty for nearly everyone. The detail box must **render only the
   fields that exist** and degrade gracefully.
-- **`imageLarge` becomes required** on the `Author` type (owned by the site author, as a prerequisite/part of
-  this work): every author record gets an `imageLarge` value. The large photo everywhere (cards, detail hero,
-  About Me box) then uses `author.imageLarge` directly — the current `imageLarge ?? image` fallbacks are removed.
+- **`imageLarge` becomes required** on the `Author` type. **The site author owns this and is doing it now**
+  (making the field required + populating an `imageLarge` value for every author record) — it is a prerequisite,
+  **not part of this implementation**. The implementation assumes `imageLarge` is required and present, and uses
+  `author.imageLarge` directly for the large photo everywhere (cards, detail hero, About Me box); the current
+  `imageLarge ?? image` fallbacks are removed.
 - The owner (`fabrizio_duroni`) already redirects to `/about-me` via `authorHref` — the detail box serves the
   other authors; About Me is Fabrizio's equivalent.
 - `ProfilePhoto` (design-system organism) currently **hardcodes** Fabrizio's image src and takes `author` only
@@ -113,7 +115,6 @@ for the author socials. (If we later want click tracking, it plumbs through the 
 
 | Component | Change |
 |---|---|
-| `types/content/author.ts` | `imageLarge` becomes **required**; every author record gets an `imageLarge` value |
 | `design-system/atoms/chip` | **New** — pill span extracted from `Tag` |
 | `design-system/molecules/buttons/tag` | Refactor to compose `InternalLink` + `Chip` (no behavior change) |
 | `design-system/organism/profile-photo` | Add optional `src` prop (default = Fabrizio's image) |
@@ -144,6 +145,8 @@ for the author socials. (If we later want click tracking, it plumbs through the 
 
 ## Out of scope (YAGNI)
 
+- Making `Author.imageLarge` required and populating `imageLarge` for every author record — the site author is
+  handling this separately (in progress). This implementation depends on it but does not perform it.
 - Enriching author records with role/bio/extra socials (the UI supports them; filling data is a separate task).
 - Any change to the Blog nav dropdown, the posts grid, or `authorHref` routing.
 - Click tracking for author social links.
