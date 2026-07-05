@@ -1,4 +1,5 @@
 import { InternalLink } from "@/components/design-system/atoms/links/internal-link";
+import { Chip } from "@/components/design-system/atoms/chip";
 import { FC } from "react";
 
 interface TagContentProps {
@@ -12,7 +13,6 @@ export type TagProps = TagContentProps & {
 };
 
 export const Tag: FC<TagProps> = ({ tag, link, big, onClick }) => {
-    const textSize = big ? "text-2xl" : "text-sm";
     const margins = big ? "mr-4 mb-6" : "mr-1 mb-1";
 
     return (
@@ -21,11 +21,12 @@ export const Tag: FC<TagProps> = ({ tag, link, big, onClick }) => {
             onClick={onClick}
             to={link}
         >
-            <span
-                className={`glow-container text-shadow-sm p-2 ${margins} block text-primary-text ${textSize} leading-none`}
+            <Chip
+                big={big}
+                className={margins}
             >
                 {tag}
-            </span>
+            </Chip>
         </InternalLink>
     );
 };
