@@ -33,6 +33,7 @@ const baseAuthor: Author = {
     name: "Fabrizio Duroni",
     linkedinUrl: "https://www.linkedin.com/in/fabrizio-duroni/",
     image: "/media/authors/fabrizio-duroni-small.jpg",
+    imageLarge: "/media/authors/fabrizio-duroni.jpg",
 };
 
 describe("BlogAuthor", () => {
@@ -75,6 +76,17 @@ describe("BlogAuthor", () => {
             expect(link).toHaveAttribute("href", baseAuthor.linkedinUrl);
             expect(link).toHaveAttribute("target", "_blank");
             expect(link).toHaveAttribute("rel", "noopener noreferrer");
+        });
+
+        it("renders a post-count chip", () => {
+            render(<BlogAuthor author={baseAuthor} posts={[makePost("post-a"), makePost("post-b")]} />);
+            expect(screen.getByText("2 posts published")).toBeInTheDocument();
+        });
+
+        it("renders a GitHub link when githubUrl is present", () => {
+            const author: Author = { ...baseAuthor, githubUrl: "https://github.com/chicio" };
+            render(<BlogAuthor author={author} posts={[makePost("post-a")]} />);
+            expect(screen.getByRole("link", { name: /github/i })).toHaveAttribute("href", "https://github.com/chicio");
         });
 
         it("renders a posts-published-count heading", () => {
