@@ -19,6 +19,7 @@ const author: Author = {
     name: "Fabrizio Duroni",
     linkedinUrl: "https://www.linkedin.com/in/fabrizio-duroni/",
     image: "/media/authors/fabrizio-duroni-small.jpg",
+    imageLarge: "/media/authors/fabrizio-duroni.jpg",
 };
 
 describe("AuthorCard", () => {
@@ -41,6 +42,11 @@ describe("AuthorCard", () => {
         it("uses the singular form when there is exactly one post", () => {
             render(<AuthorCard author={author} postCount={1} />);
             expect(screen.getByText("1 post")).toBeInTheDocument();
+        });
+
+        it("applies the glassmorphism treatment to the card link", () => {
+            render(<AuthorCard author={author} postCount={1} />);
+            expect(screen.getByRole("link").className).toMatch(/glassmorphism/);
         });
 
         it("renders the role when present", () => {

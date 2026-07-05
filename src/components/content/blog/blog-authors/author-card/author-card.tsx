@@ -2,6 +2,8 @@
 
 import { ImageGlow } from "@/components/design-system/atoms/effects/image-glow";
 import { InternalLink } from "@/components/design-system/atoms/links/internal-link";
+import { Chip } from "@/components/design-system/atoms/chip";
+import { useGlassmorphism } from "@/components/design-system/hooks/use-glassmorphism";
 import { Author } from "@/types/content/author";
 import { authorHref } from "@/lib/content/authors/author-slug";
 import { FC } from "react";
@@ -13,6 +15,7 @@ export interface AuthorCardProps {
 }
 
 export const AuthorCard: FC<AuthorCardProps> = ({ author, postCount }) => {
+    const { glassmorphismClass } = useGlassmorphism();
     const { state, effects } = useAuthorCardStore();
     const { isInView } = state;
     const { setEl, onClickAuthor } = effects;
@@ -25,21 +28,21 @@ export const AuthorCard: FC<AuthorCardProps> = ({ author, postCount }) => {
         >
             {isInView && (
                 <InternalLink
-                    className="glow-container flex h-full w-full flex-col items-center gap-2 p-6 text-center no-underline hover:no-underline"
+                    className={`${glassmorphismClass} flex h-full w-full flex-col items-center gap-2 p-6 text-center no-underline hover:no-underline`}
                     to={href}
                     onClick={onClickAuthor}
                 >
                     <ImageGlow
                         className="rounded-full"
                         alt={author.name}
-                        src={author.imageLarge ?? author.image}
+                        src={author.imageLarge}
                         width={96}
                         height={96}
                         noPlaceholder={true}
                     />
                     <h3 className="mt-2! mb-0!">{author.name}</h3>
                     {author.role && <p className="text-secondary-text mt-0!">{author.role}</p>}
-                    <p className="text-accent mt-1">{postCount} {postCount === 1 ? "post" : "posts"}</p>
+                    <Chip className="mt-1">{`${postCount} ${postCount === 1 ? "post" : "posts"}`}</Chip>
                 </InternalLink>
             )}
         </div>
