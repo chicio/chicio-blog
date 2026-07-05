@@ -21,6 +21,9 @@ Two UI improvements, plus a consistency refactor:
 - Author data reality: most authors have only `name`, `linkedinUrl`, and `image`. `role`, `bio`, `siteUrl`,
   `xUrl`, `githubUrl` are optional and empty for nearly everyone. The detail box must **render only the
   fields that exist** and degrade gracefully.
+- **`imageLarge` becomes required** on the `Author` type (owned by the site author, as a prerequisite/part of
+  this work): every author record gets an `imageLarge` value. The large photo everywhere (cards, detail hero,
+  About Me box) then uses `author.imageLarge` directly — the current `imageLarge ?? image` fallbacks are removed.
 - The owner (`fabrizio_duroni`) already redirects to `/about-me` via `authorHref` — the detail box serves the
   other authors; About Me is Fabrizio's equivalent.
 - `ProfilePhoto` (design-system organism) currently **hardcodes** Fabrizio's image src and takes `author` only
@@ -37,7 +40,7 @@ File: `src/components/content/blog/blog-authors/author-card/author-card.tsx`
 - Wrap the card in the site glassmorphism styling (frosted card, `border-accent-alpha-40` brightening to
   `border-accent` on hover, `shadow-lg` glow, spring `hover:scale-102`), consistent with the rest of the blog.
   Reuse the existing `glassmorphism` / `glow-container` styling rather than inventing new CSS.
-- Content unchanged: circular glow photo (`ImageGlow`) · name · post count.
+- Content unchanged: circular glow photo (`ImageGlow`, using `author.imageLarge`) · name · post count.
 - **Name uses the site sans font (Open Sans)** — the default — not the mono face.
 - **Post count reuses the tag chip** (see §4): render it via the new shared `Chip` atom (non-link variant), so
   it matches the tag pills on the post cards.
@@ -81,7 +84,7 @@ New atom: `src/components/design-system/atoms/chip/` (`chip.tsx`, `index.ts`).
 Files: `src/components/content/about-me/about-me/about-me-table-of-contents/*`
 
 - Refactor `AboutMeTableOfContents` to render `ProfileHero` (name = `siteMetadata.author`,
-  role = "Software Engineer", imageSrc = Fabrizio's author image) with its existing **4 section-jump pills**
+  role = "Software Engineer", imageSrc = Fabrizio's `imageLarge`) with its existing **4 section-jump pills**
   (Biography / Technologies / Experience / Open Source) passed as `children`.
 - The scroll-to-section store logic stays exactly as-is.
 - No socials added here — the box keeps its navigation purpose; only the visual shell is unified.
@@ -91,7 +94,7 @@ Files: `src/components/content/about-me/about-me/about-me-table-of-contents/*`
 Files: `src/components/content/blog/blog-author/*`
 
 - Replace the current bare centered stack (photo · name · lone LinkedIn button) with `ProfileHero`
-  (name = `author.name`, role = `author.role` if present, imageSrc = `author.imageLarge ?? author.image`),
+  (name = `author.name`, role = `author.role` if present, imageSrc = `author.imageLarge`),
   with a `children` slot containing, in order:
   1. **Bio** — `author.bio`, rendered only when present.
   2. **Socials row** — a lightweight private sub-component `blog-author/author-socials/` using `ExternalLink`
@@ -110,6 +113,7 @@ for the author socials. (If we later want click tracking, it plumbs through the 
 
 | Component | Change |
 |---|---|
+| `types/content/author.ts` | `imageLarge` becomes **required**; every author record gets an `imageLarge` value |
 | `design-system/atoms/chip` | **New** — pill span extracted from `Tag` |
 | `design-system/molecules/buttons/tag` | Refactor to compose `InternalLink` + `Chip` (no behavior change) |
 | `design-system/organism/profile-photo` | Add optional `src` prop (default = Fabrizio's image) |
