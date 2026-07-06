@@ -20,6 +20,11 @@ describe("ContactForm", () => {
             expect(screen.getByLabelText(/message/i)).toBeInTheDocument();
         });
 
+        it("renders the honeypot field with a programmatic label", () => {
+            render(<ContactForm trackingCategory="test" />);
+            expect(screen.getByLabelText(/additional information/i)).toBeInTheDocument();
+        });
+
         it("renders the Send Message button", () => {
             render(<ContactForm trackingCategory="test" />);
             expect(screen.getByText("Send Message")).toBeInTheDocument();
