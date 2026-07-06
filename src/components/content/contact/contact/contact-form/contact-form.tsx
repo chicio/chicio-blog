@@ -86,7 +86,7 @@ export const ContactForm: FC<ContactFormProps> = ({ trackingCategory }) => {
                     disabled={isSubmitting}
                     hasError={!!errors.message}
                 />
-                <div className="absolute -left-2499.75 -top-2499.75 opacity-0">
+                <div aria-hidden="true" className="absolute -left-2499.75 -top-2499.75 opacity-0">
                     <FormField
                         label="Additional Information"
                         icon={<BiMessageDetail size={20} />}
