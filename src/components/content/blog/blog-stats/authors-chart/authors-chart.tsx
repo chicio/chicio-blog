@@ -9,15 +9,44 @@ interface AuthorsChartProps {
     data: AuthorCount[];
 }
 
-export const AuthorsChart: FC<AuthorsChartProps> = ({ data }) => (
-    <div className="glow-container h-100 w-full p-5 mb-6">
-        <ResponsiveContainer width={"100%"} height={"100%"} initialDimension={{ width: 320, height: 300 }}>
-            <BarChart data={data}>
-                <XAxis dataKey="author" />
-                <YAxis allowDecimals={false} />
-                <Tooltip content={ChartTooltip} />
-                <Bar dataKey="count" name="Posts" fill="#39FF14" />
-            </BarChart>
-        </ResponsiveContainer>
-    </div>
-);
+const MIN_CHART_HEIGHT = 300;
+const ROW_HEIGHT = 40;
+const CATEGORY_AXIS_WIDTH = 160;
+
+export const AuthorsChart: FC<AuthorsChartProps> = ({ data }) => {
+    const chartHeight = Math.max(MIN_CHART_HEIGHT, data.length * ROW_HEIGHT);
+
+    return (
+        <div
+            className="glow-container w-full p-5 mb-6"
+            style={{ height: chartHeight }}
+        >
+            <ResponsiveContainer
+                width={"100%"}
+                height={"100%"}
+                initialDimension={{ width: 320, height: chartHeight }}
+            >
+                <BarChart
+                    data={data}
+                    layout="vertical"
+                >
+                    <XAxis
+                        type="number"
+                        allowDecimals={false}
+                    />
+                    <YAxis
+                        dataKey="author"
+                        type="category"
+                        width={CATEGORY_AXIS_WIDTH}
+                    />
+                    <Tooltip content={<ChartTooltip labelPrefix="Author: " />} />
+                    <Bar
+                        dataKey="count"
+                        name="Posts"
+                        fill="#39FF14"
+                    />
+                </BarChart>
+            </ResponsiveContainer>
+        </div>
+    );
+};

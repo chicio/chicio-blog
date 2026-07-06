@@ -15,7 +15,7 @@ export const PostsPerYearChart: FC<PostsPerYearChartProps> = ({ data }) => (
             <BarChart data={data}>
                 <XAxis dataKey="year" />
                 <YAxis allowDecimals={false} />
-                <Tooltip content={ChartTooltip} />
+                <Tooltip content={<ChartTooltip labelPrefix="Year: " />} />
                 <Bar dataKey="count" name="Posts" fill="#00FF41" />
             </BarChart>
         </ResponsiveContainer>
