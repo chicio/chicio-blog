@@ -50,13 +50,13 @@ export const computePostsPerYear = (posts: Content[]): PostsPerYear[] => {
 
 export const computeTagDistribution = (tags: Tag[], limit: number): TagCount[] =>
     [...tags]
-        .sort((a, b) => b.count - a.count)
+        .sort((a, b) => b.count - a.count || a.tagValue.localeCompare(b.tagValue))
         .slice(0, limit)
         .map((tag) => ({ tag: tag.tagValue, count: tag.count }));
 
 export const computeAuthorDistribution = (authorsWithPosts: AuthorSummary[]): AuthorCount[] =>
     [...authorsWithPosts]
-        .sort((a, b) => b.postCount - a.postCount)
+        .sort((a, b) => b.postCount - a.postCount || a.author.name.localeCompare(b.author.name))
         .map((entry) => ({ author: entry.author.name, count: entry.postCount }));
 
 export const getBlogStats = (): BlogStats => {

@@ -141,6 +141,20 @@ describe("blog-stats", () => {
         it("returns every tag when the limit exceeds the tag count", () => {
             expect(computeTagDistribution(tags, 100)).toHaveLength(3);
         });
+
+        it("breaks ties on equal counts alphabetically by tag value", () => {
+            const tiedTags: Tag[] = [
+                { tagValue: "zeta", count: 4, tagSlugText: "zeta", slug: "/blog/tag/zeta" },
+                { tagValue: "alpha", count: 4, tagSlugText: "alpha", slug: "/blog/tag/alpha" },
+                { tagValue: "mu", count: 4, tagSlugText: "mu", slug: "/blog/tag/mu" },
+            ];
+
+            expect(computeTagDistribution(tiedTags, 10)).toEqual([
+                { tag: "alpha", count: 4 },
+                { tag: "mu", count: 4 },
+                { tag: "zeta", count: 4 },
+            ]);
+        });
     });
 
     describe("computeAuthorDistribution", () => {
@@ -157,6 +171,18 @@ describe("blog-stats", () => {
             expect(computeAuthorDistribution(authors)).toEqual([
                 { author: "Author Two", count: 5 },
                 { author: "Author One", count: 2 },
+            ]);
+        });
+
+        it("breaks ties on equal post counts alphabetically by author name", () => {
+            const authors: AuthorSummary[] = [
+                { author: makeAuthor("a1", "Zeta Author"), postCount: 3 },
+                { author: makeAuthor("a2", "Alpha Author"), postCount: 3 },
+            ];
+
+            expect(computeAuthorDistribution(authors)).toEqual([
+                { author: "Alpha Author", count: 3 },
+                { author: "Zeta Author", count: 3 },
             ]);
         });
     });
