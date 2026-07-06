@@ -1,6 +1,6 @@
 import { TooltipContentProps } from "recharts";
 
-export interface ChartTooltipProps extends TooltipContentProps {
+export interface ChartTooltipProps extends Partial<TooltipContentProps> {
     labelPrefix?: string;
 }
 
