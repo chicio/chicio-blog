@@ -1,6 +1,7 @@
 "use client";
 
 import type { EffectsStore } from "@/types/component-store";
+import { useTrackingCallback } from "@/components/design-system/hooks/use-tracking-callback";
 
 type InternalLinkEffects = {
     onTrack: () => void;
@@ -11,7 +12,7 @@ export const useInternalLinkStore = (
 ): EffectsStore<InternalLinkEffects> => {
     return {
         effects: {
-            onTrack: onClick ?? (() => {}),
+            onTrack: useTrackingCallback(onClick),
         },
     };
 };
