@@ -1,6 +1,10 @@
 import { TooltipContentProps } from "recharts";
 
-export const ChartTooltip = ({ active, payload, label }: TooltipContentProps) =>
+export interface ChartTooltipProps extends TooltipContentProps {
+    labelPrefix?: string;
+}
+
+export const ChartTooltip = ({ active, payload, label, labelPrefix = "n: " }: ChartTooltipProps) =>
     active && payload ? (
         <div
             style={{
@@ -11,7 +15,10 @@ export const ChartTooltip = ({ active, payload, label }: TooltipContentProps) =>
                 padding: "8px",
             }}
         >
-            <strong>n: {label}</strong>
+            <strong>
+                {labelPrefix}
+                {label}
+            </strong>
             {payload.map((entry, i) => (
                 <div key={i}>
                     {entry.name}: {entry.value}
