@@ -1,7 +1,6 @@
 "use client";
 
 import { FC, ReactNode } from "react";
-import { useCallToActionExternalWithTrackingStore } from "./use-call-to-action-external-with-tracking-store";
 
 type CallToActionExternalWithTrackingProps = {
     href: string;
@@ -20,14 +19,11 @@ export const CallToActionExternalWithTracking: FC<CallToActionExternalWithTracki
     target,
     rel,
 }) => {
-    const { effects } = useCallToActionExternalWithTrackingStore(onClick);
-    const { onTrack } = effects;
-
     return (
         <a
             className={`call-to-action${className ? ` ${className}` : ""}`}
             href={href}
-            onClick={onTrack}
+            onClick={onClick}
             target={target}
             rel={rel}
         >

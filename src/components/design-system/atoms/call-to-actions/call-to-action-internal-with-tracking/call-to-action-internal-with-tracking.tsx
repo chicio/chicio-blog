@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { FC, ReactNode } from "react";
-import { useCallToActionInternalWithTrackingStore } from "./use-call-to-action-internal-with-tracking-store";
 
 type CallToActionInternalWithTrackingProps = {
     to: string;
@@ -19,15 +18,12 @@ export const CallToActionInternalWithTracking: FC<CallToActionInternalWithTracki
     onClick,
     prefetch = false,
 }) => {
-    const { effects } = useCallToActionInternalWithTrackingStore(onClick);
-    const { onTrack } = effects;
-
     return (
         <Link
             className={`call-to-action${className ? ` ${className}` : ""}`}
             href={to}
             prefetch={prefetch}
-            onClick={onTrack}
+            onClick={onClick}
         >
             {children}
         </Link>

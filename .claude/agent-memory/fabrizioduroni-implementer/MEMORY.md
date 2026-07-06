@@ -44,6 +44,3 @@
 
 ## Feedback
 - [PWA & State Patterns](feedback_pwa_patterns.md) — useSyncExternalStore for localStorage state, consent-gated UI, banner/error page alignment rules
-
-## Architecture (continued 2)
-- [Delegating Store Pattern](arch_delegating_store_pattern.md) — dedup N identical use-*-store.ts via shared hooks/ helper; stores stay, delegate; components untouched (#433)
