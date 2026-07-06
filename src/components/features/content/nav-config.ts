@@ -9,6 +9,7 @@ export const menuNavHrefs: MenuNavHrefs = {
     blogAuthor: slugs.blog.author.replace("/[authorId]", ""),
     blogTags: slugs.blog.tags,
     blogArchive: slugs.blog.blogArchive,
+    blogStats: slugs.blog.stats,
     dsaRoadmap: slugs.dataStructuresAndAlgorithms.roadmap,
     dsaExercises: slugs.dataStructuresAndAlgorithms.exercises,
     chat: slugs.chat,

@@ -42,6 +42,7 @@ const navHrefs: MenuNavHrefs = {
     blogAuthor: "/blog/author",
     blogTags: "/blog/tags",
     blogArchive: "/blog/archive",
+    blogStats: "/blog/stats",
     dsaRoadmap: "/dsa/roadmap",
     dsaExercises: "/dsa/exercises",
     chat: "/chat",
@@ -71,16 +72,23 @@ describe("Menu", () => {
             expect(blogButtons.length).toBeGreaterThan(0);
         });
 
-        it("lists Latest posts, Authors, Tags and Archive in the Blog dropdown, in order", async () => {
+        it("lists Latest posts, Authors, Tags, Archive and Stats in the Blog dropdown, in order", async () => {
             render(<Menu navHrefs={navHrefs} />);
             await userEvent.click(screen.getAllByRole("button", { name: "Blog" })[0]);
             const menu = screen.getAllByRole("menu")[0];
             const items = within(menu).getAllByRole("link");
-            expect(items.map((item) => item.textContent)).toEqual(["Latest posts", "Authors", "Tags", "Archive"]);
+            expect(items.map((item) => item.textContent)).toEqual([
+                "Latest posts",
+                "Authors",
+                "Tags",
+                "Archive",
+                "Stats",
+            ]);
             expect(within(menu).getByRole("link", { name: "Latest posts" })).toHaveAttribute("href", "/blog");
             expect(within(menu).getByRole("link", { name: "Authors" })).toHaveAttribute("href", "/blog/authors");
             expect(within(menu).getByRole("link", { name: "Tags" })).toHaveAttribute("href", "/blog/tags");
             expect(within(menu).getByRole("link", { name: "Archive" })).toHaveAttribute("href", "/blog/archive");
+            expect(within(menu).getByRole("link", { name: "Stats" })).toHaveAttribute("href", "/blog/stats");
         });
 
         it("marks Authors as selected when on an author detail page", async () => {
@@ -120,6 +128,15 @@ describe("Menu", () => {
             const menu = screen.getAllByRole("menu")[0];
             await userEvent.click(within(menu).getByRole("link", { name: "Authors" }));
             expect(onTrackBlogAuthors).toHaveBeenCalledOnce();
+        });
+
+        it("calls tracking callback when the Stats dropdown item is clicked", async () => {
+            const onTrackBlogStats = vi.fn();
+            render(<Menu navHrefs={navHrefs} tracking={{ onTrackBlogStats }} />);
+            await userEvent.click(screen.getAllByRole("button", { name: "Blog" })[0]);
+            const menu = screen.getAllByRole("menu")[0];
+            await userEvent.click(within(menu).getByRole("link", { name: "Stats" }));
+            expect(onTrackBlogStats).toHaveBeenCalledOnce();
         });
     });
 });
