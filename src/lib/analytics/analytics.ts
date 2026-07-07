@@ -6,7 +6,7 @@ import { readAnalyticsConfig } from "./analytics-config";
 
 type AnalyticsRow = protos.google.analytics.data.v1beta.IRow;
 
-const LIFETIME_START_DATE = "2015-01-01";
+const LIFETIME_START_DATE = "2015-08-14";
 const TODAY = "today";
 const TOP_POSTS_LIMIT = 10;
 const BLOG_POST_PATH_PREFIX = "/blog/post/";

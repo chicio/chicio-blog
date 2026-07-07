@@ -57,7 +57,8 @@ Env vars (all absent today → stub mode):
     - Instantiate `BetaAnalyticsDataClient` with `{ credentials: { client_email, private_key } }`.
     - Run reports (wrapped in try/catch → `null` on any error):
       - **Lifetime totals** — metrics `screenPageViews`, `totalUsers`, `sessions`, date range
-        `startDate: "2015-01-01"` (GA clamps to property start) → `today`.
+        `startDate: "2015-08-14"` (the GA4 Data API's hard earliest date — it rejects, not clamps,
+        anything before it; GA returns data only from the property's actual start) → `today`.
       - **Views over time** — dimension `yearMonth`, metric `screenPageViews`, ordered ascending.
       - **Top posts by views** — dimension `pagePath`, metric `screenPageViews`, `limit: 10`, filtered
         to blog-post paths (`/blog/post/...`); map pagePath → title where feasible (best-effort; else
