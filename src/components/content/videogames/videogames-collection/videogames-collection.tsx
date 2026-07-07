@@ -5,7 +5,7 @@ import { tracking } from "@/types/configuration/tracking";
 import { JsonLd } from "@/components/features/seo/jsond-ld";
 import { ContentPage } from "@/components/features/content/content-page";
 import { InternalLink } from "@/components/design-system/atoms/links/internal-link";
-import { VideogameCollectionDataCard } from "./videogame-collection-data-card";
+import { StatCard } from "@/components/design-system/molecules/stat-card";
 import { VideogamesViewSwitcher } from "@/components/content/videogames/videogames-view-switcher";
 
 export const VideogamesCollection: React.FC = () => {
@@ -28,10 +28,10 @@ export const VideogamesCollection: React.FC = () => {
                 .
             </p>
             <div className="mt-10 mb-8 grid grid-cols-2 gap-4 md:grid-cols-4">
-                <VideogameCollectionDataCard quantity={consoles.length} label="Consoles" />
-                <VideogameCollectionDataCard quantity={gamesSortedByReleaseYear.length} label="Games" />
-                <VideogameCollectionDataCard quantity={7} label="Generations" />
-                <VideogameCollectionDataCard quantity={new Date().getFullYear() - 1992} label="Years" />
+                <StatCard value={consoles.length} label="Consoles" />
+                <StatCard value={gamesSortedByReleaseYear.length} label="Games" />
+                <StatCard value={7} label="Generations" />
+                <StatCard value={new Date().getFullYear() - 1992} label="Years" />
             </div>
             <VideogamesViewSwitcher consolesWithGameCount={consolesWithGameCount} games={gamesSortedByReleaseYear} />
             <JsonLd

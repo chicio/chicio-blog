@@ -80,6 +80,7 @@ const navHrefs: MenuNavHrefs = {
     blogAuthor: "/blog/author",
     blogTags: "/blog/tags",
     blogArchive: "/blog/archive",
+    blogStats: "/blog/stats",
     dsaRoadmap: "/dsa/roadmap",
     dsaExercises: "/dsa/exercises",
     chat: "/chat",

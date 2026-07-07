@@ -10,7 +10,7 @@ import {
     ResponsiveContainer,
     Legend,
 } from "recharts";
-import { ChartTooltip } from "@/components/content/data-structures-and-algorithms/chart-tooltip";
+import { ChartTooltip } from "@/components/design-system/molecules/chart/chart-tooltip";
 
 const data = [
     { n: 10, bubble: 0.01, merge: 0.002, quick: 0.0015 },

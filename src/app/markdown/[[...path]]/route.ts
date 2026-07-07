@@ -12,6 +12,7 @@ import {
 } from "@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms";
 import { blogListingMarkdown, blogPostMarkdown, homepageMarkdown } from "@/lib/content/posts/posts-markdown";
 import { getPosts } from "@/lib/content/posts/posts";
+import { blogStatsMarkdown } from "@/lib/stats/blog-stats-markdown";
 import { consoleMarkdown, gameMarkdown, videogamesMarkdown } from "@/lib/content/videogames/videogames-markdown";
 import { getAllConsoles, getAllGames } from "@/lib/content/videogames/videogames";
 import { slugs } from "@/types/configuration/slug";
@@ -49,6 +50,7 @@ export async function generateStaticParams() {
     return [
         { path: undefined },
         { path: slugs.blog.home.slice(1).split("/") },
+        { path: slugs.blog.stats.slice(1).split("/") },
         { path: slugs.aboutMe.slice(1).split("/") },
         { path: slugs.dataStructuresAndAlgorithms.home.slice(1).split("/") },
         { path: slugs.dataStructuresAndAlgorithms.roadmap.slice(1).split("/") },
@@ -80,6 +82,9 @@ export async function GET(_request: Request, { params }: RouteContext) {
             break;
         case slugs.blog.home:
             markdown = blogListingMarkdown();
+            break;
+        case slugs.blog.stats:
+            markdown = blogStatsMarkdown();
             break;
         case slugs.aboutMe:
             markdown = aboutMeMarkdown();

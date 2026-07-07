@@ -42,6 +42,7 @@ export interface MenuNavHrefs {
     blogAuthor: string;
     blogTags: string;
     blogArchive: string;
+    blogStats: string;
     dsaRoadmap: string;
     dsaExercises: string;
     chat: string;
@@ -71,6 +72,7 @@ export const Menu: FC<MenuProps> = ({ navHrefs, onPaletteTrigger, tracking }) =>
         onClickBlogAuthors,
         onClickBlogTags,
         onClickBlogArchive,
+        onClickBlogStats,
         onClickDsaRoadmap,
         onClickDsaExercises,
         onClickChat,
@@ -128,6 +130,12 @@ export const Menu: FC<MenuProps> = ({ navHrefs, onPaletteTrigger, tracking }) =>
                         to: navHrefs.blogArchive,
                         selected: pathname === navHrefs.blogArchive,
                         onClick: onClickBlogArchive,
+                    },
+                    {
+                        label: "Stats",
+                        to: navHrefs.blogStats,
+                        selected: pathname === navHrefs.blogStats,
+                        onClick: onClickBlogStats,
                     },
                 ]}
             />

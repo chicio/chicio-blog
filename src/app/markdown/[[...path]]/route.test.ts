@@ -13,6 +13,7 @@ const {
     mockVideogamesMarkdown,
     mockConsoleMarkdown,
     mockGameMarkdown,
+    mockBlogStatsMarkdown,
 } = vi.hoisted(() => ({
     mockHomepageMarkdown: vi.fn(),
     mockBlogListingMarkdown: vi.fn(),
@@ -26,6 +27,7 @@ const {
     mockVideogamesMarkdown: vi.fn(),
     mockConsoleMarkdown: vi.fn(),
     mockGameMarkdown: vi.fn(),
+    mockBlogStatsMarkdown: vi.fn(),
 }));
 
 vi.mock("@/lib/content/posts/posts-markdown", () => ({
@@ -50,6 +52,10 @@ vi.mock("@/lib/content/videogames/videogames-markdown", () => ({
     videogamesMarkdown: mockVideogamesMarkdown,
     consoleMarkdown: mockConsoleMarkdown,
     gameMarkdown: mockGameMarkdown,
+}));
+
+vi.mock("@/lib/stats/blog-stats-markdown", () => ({
+    blogStatsMarkdown: mockBlogStatsMarkdown,
 }));
 
 vi.mock("@/lib/content/posts/posts", () => ({
@@ -95,6 +101,18 @@ describe("GET /markdown/[[...path]]", () => {
             const response = await GET(new Request("https://x.com/markdown/blog"), makeContext(["blog"]));
             expect(response.status).toBe(200);
             expect(await response.text()).toBe("# Blog");
+        });
+    });
+
+    describe("blog stats (/blog/stats)", () => {
+        it("delegates to blogStatsMarkdown", async () => {
+            mockBlogStatsMarkdown.mockReturnValue("# Blog Stats");
+            const response = await GET(
+                new Request("https://x.com/markdown/blog/stats"),
+                makeContext(["blog", "stats"]),
+            );
+            expect(response.status).toBe(200);
+            expect(await response.text()).toBe("# Blog Stats");
         });
     });
 

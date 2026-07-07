@@ -23,6 +23,7 @@ interface MenuEffects {
     onClickBlogAuthors: () => void;
     onClickBlogTags: () => void;
     onClickBlogArchive: () => void;
+    onClickBlogStats: () => void;
     onClickDsaRoadmap: () => void;
     onClickDsaExercises: () => void;
     onClickChat: () => void;
@@ -40,6 +41,7 @@ export interface MenuTrackingCallbacks {
     onTrackBlogAuthors?: () => void;
     onTrackBlogTags?: () => void;
     onTrackBlogArchive?: () => void;
+    onTrackBlogStats?: () => void;
     onTrackDsaRoadmap?: () => void;
     onTrackDsaExercises?: () => void;
     onTrackChat?: () => void;
@@ -92,6 +94,11 @@ export const useMenuStore = (
 
     const onClickBlogArchive = useCallback(() => {
         tracking?.onTrackBlogArchive?.();
+        closeMenu();
+    }, [tracking, closeMenu]);
+
+    const onClickBlogStats = useCallback(() => {
+        tracking?.onTrackBlogStats?.();
         closeMenu();
     }, [tracking, closeMenu]);
 
@@ -151,6 +158,7 @@ export const useMenuStore = (
             onClickBlogAuthors,
             onClickBlogTags,
             onClickBlogArchive,
+            onClickBlogStats,
             onClickDsaRoadmap,
             onClickDsaExercises,
             onClickChat,
