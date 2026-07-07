@@ -47,6 +47,10 @@ GA-analytics spec: the history *is* now available (as an estimate).
 
 ## Data source (from the archived report, left panel: 2017-05 → 2021-05)
 
+Provenance: the original Google Data Studio "Audience Overview" screenshot is preserved at
+`docs/analytics/historical-2017-2022.jpeg` — the only surviving record of the pre-2022 UA data.
+
+
 - **Totals:** page views `148,579`, users `77,736`, sessions `97,173`.
 - **Users by continent:** Europe `27,036`, Americas `25,970`, Asia `21,208`, Oceania `1,628`,
   Africa `1,337`, `(not set)` `446`.
