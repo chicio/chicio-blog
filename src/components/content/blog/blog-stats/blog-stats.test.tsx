@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { render, screen } from "@/test-utils";
 import { BlogStats } from "./index";
 import type { BlogStats as BlogStatsData } from "@/types/content/blog-stats";
+import type { AnalyticsStats } from "@/types/content/analytics-stats";
 
 vi.mock("@/lib/tracking/tracking", () => ({ trackWith: vi.fn() }));
 
@@ -36,12 +37,12 @@ const stats: BlogStatsData = {
 describe("BlogStats", () => {
     describe("render", () => {
         it("renders the page title", () => {
-            render(<BlogStats author="Fabrizio Duroni" stats={stats} />);
+            render(<BlogStats author="Fabrizio Duroni" stats={stats} analytics={null} />);
             expect(screen.getByRole("heading", { level: 1, name: "Blog Stats" })).toBeInTheDocument();
         });
 
         it("renders every headline counter next to its label", () => {
-            render(<BlogStats author="Fabrizio Duroni" stats={stats} />);
+            render(<BlogStats author="Fabrizio Duroni" stats={stats} analytics={null} />);
 
             const expectations: [string, string][] = [
                 ["Posts", "42"],
@@ -58,10 +59,27 @@ describe("BlogStats", () => {
         });
 
         it("renders the section labels for each chart", () => {
-            render(<BlogStats author="Fabrizio Duroni" stats={stats} />);
+            render(<BlogStats author="Fabrizio Duroni" stats={stats} analytics={null} />);
             expect(screen.getByRole("heading", { level: 2, name: "Posts per year" })).toBeInTheDocument();
             expect(screen.getByRole("heading", { level: 2, name: "Top tags" })).toBeInTheDocument();
             expect(screen.getByRole("heading", { level: 2, name: "Posts per external authors" })).toBeInTheDocument();
+        });
+
+        it("renders no traffic section when analytics is null (stub mode)", () => {
+            render(<BlogStats author="Fabrizio Duroni" stats={stats} analytics={null} />);
+            expect(screen.queryByRole("heading", { level: 2, name: "Traffic" })).not.toBeInTheDocument();
+        });
+
+        it("renders the traffic section once analytics is available", () => {
+            const analytics: AnalyticsStats = {
+                totals: { pageViews: 1000, users: 500, sessions: 600 },
+                viewsPerMonth: [{ month: "202401", views: 1000 }],
+                topPosts: [{ path: "/blog/post/2024/01/01/my-post", title: "My Post", views: 500 }],
+                since: "202401",
+            };
+
+            render(<BlogStats author="Fabrizio Duroni" stats={stats} analytics={analytics} />);
+            expect(screen.getByRole("heading", { level: 2, name: "Traffic" })).toBeInTheDocument();
         });
     });
 });

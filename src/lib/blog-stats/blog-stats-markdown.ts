@@ -1,4 +1,4 @@
-import { getBlogStats } from "@/lib/stats/blog-stats";
+import { getBlogStats } from "@/lib/blog-stats/blog-stats";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { slugs } from "@/types/configuration/slug";
 
