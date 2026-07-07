@@ -66,10 +66,10 @@ export const mapReportsToAnalyticsStats = (
     };
 };
 
-const resolvePostTitle = (path: string): string => {
-    const post = getPosts().find((entry) => entry.slug.formatted === path);
+const buildPostTitleResolver = (): ((path: string) => string) => {
+    const titleByPath = new Map(getPosts().map((post) => [post.slug.formatted, post.frontmatter.title]));
 
-    return post?.frontmatter.title ?? path;
+    return (path: string): string => titleByPath.get(path) ?? path;
 };
 
 export const getAnalyticsStats = async (): Promise<AnalyticsStats | null> => {
@@ -122,7 +122,7 @@ export const getAnalyticsStats = async (): Promise<AnalyticsStats | null> => {
             totalsResponse.rows,
             viewsPerMonthResponse.rows,
             topPostsResponse.rows,
-            resolvePostTitle,
+            buildPostTitleResolver(),
         );
     } catch {
         return null;

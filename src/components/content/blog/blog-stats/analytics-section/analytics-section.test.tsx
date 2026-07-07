@@ -39,9 +39,15 @@ describe("AnalyticsSection", () => {
             expect(screen.getByRole("heading", { level: 2, name: "Top posts by views" })).toBeInTheDocument();
         });
 
-        it("renders the honest since-caption", () => {
+        it("renders the honest since-caption with a human-readable month", () => {
             render(<AnalyticsSection analytics={analytics} />);
-            expect(screen.getByText("Traffic since 202401.")).toBeInTheDocument();
+            expect(screen.getByText("Traffic since January 2024.")).toBeInTheDocument();
+        });
+
+        it("omits the since-caption when there is no month data", () => {
+            render(<AnalyticsSection analytics={{ ...analytics, since: "" }} />);
+            expect(screen.queryByText(/Traffic since/)).not.toBeInTheDocument();
+            expect(screen.getByRole("heading", { level: 2, name: "Traffic" })).toBeInTheDocument();
         });
     });
 });
