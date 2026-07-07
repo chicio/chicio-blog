@@ -32,7 +32,7 @@ export const BlogStats: FC<BlogStatsProps> = ({ author, stats }) => {
                         A look at the numbers behind this blog: how much has been written, how it has grown over the
                         years, and who has been writing.
                     </p>
-                    <div className="mt-10 mb-8 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
+                    <div className="mt-10 mb-8 grid grid-cols-2 gap-4 md:grid-cols-3">
                         <StatCard value={headline.totalPosts} label="Posts" />
                         <StatCard value={headline.totalWords.toLocaleString("en-US")} label="Words" />
                         <StatCard value={headline.totalReadingMinutes} label="Reading minutes" />

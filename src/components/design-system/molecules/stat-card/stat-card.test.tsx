@@ -30,5 +30,12 @@ describe("StatCard", () => {
             );
             expect(screen.getByTestId("stat-icon")).toBeInTheDocument();
         });
+
+        it("keeps large formatted numbers from overflowing the card", () => {
+            render(<StatCard value="144,446" label="Words" />);
+            const value = screen.getByText("144,446");
+            expect(value).toHaveClass("break-words", "tabular-nums", "w-full");
+            expect(value.parentElement).toHaveClass("min-w-0");
+        });
     });
 });
