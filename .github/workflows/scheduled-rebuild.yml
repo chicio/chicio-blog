@@ -1,0 +1,24 @@
+name: Scheduled Rebuild
+
+on:
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  trigger-deploy:
+    name: Trigger Vercel Deploy Hook
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger redeploy (skips if no deploy hook is configured)
+        env:
+          HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK_URL }}
+        run: |
+          if [ -n "$HOOK" ]; then
+            curl -fsS -X POST "$HOOK"
+          else
+            echo "No VERCEL_DEPLOY_HOOK_URL set — skipping."
+          fi
