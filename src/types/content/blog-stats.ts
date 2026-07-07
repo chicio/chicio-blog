@@ -26,5 +26,5 @@ export interface BlogStats {
     headline: HeadlineTotals;
     postsPerYear: PostsPerYear[];
     tagDistribution: TagCount[];
-    authorDistribution: AuthorCount[];
+    externalAuthorDistribution: AuthorCount[];
 }

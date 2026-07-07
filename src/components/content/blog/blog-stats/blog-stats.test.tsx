@@ -27,9 +27,9 @@ const stats: BlogStatsData = {
         { tag: "react", count: 8 },
         { tag: "node", count: 5 },
     ],
-    authorDistribution: [
-        { author: "Fabrizio Duroni", count: 30 },
+    externalAuthorDistribution: [
         { author: "Francesco Bonfadelli", count: 12 },
+        { author: "Alessandro Romano", count: 4 },
     ],
 };
 
@@ -61,7 +61,7 @@ describe("BlogStats", () => {
             render(<BlogStats author="Fabrizio Duroni" stats={stats} />);
             expect(screen.getByRole("heading", { level: 2, name: "Posts per year" })).toBeInTheDocument();
             expect(screen.getByRole("heading", { level: 2, name: "Top tags" })).toBeInTheDocument();
-            expect(screen.getByRole("heading", { level: 2, name: "Posts per author" })).toBeInTheDocument();
+            expect(screen.getByRole("heading", { level: 2, name: "Posts per external authors" })).toBeInTheDocument();
         });
     });
 });

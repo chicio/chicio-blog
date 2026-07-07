@@ -18,7 +18,7 @@ interface BlogStatsProps {
 }
 
 export const BlogStats: FC<BlogStatsProps> = ({ author, stats }) => {
-    const { headline, postsPerYear, tagDistribution, authorDistribution } = stats;
+    const { headline, postsPerYear, tagDistribution, externalAuthorDistribution } = stats;
 
     return (
         <>
@@ -44,8 +44,8 @@ export const BlogStats: FC<BlogStatsProps> = ({ author, stats }) => {
                     <PostsPerYearChart data={postsPerYear} />
                     <h2 className="mt-10 mb-4">Top tags</h2>
                     <TagDistributionChart data={tagDistribution} />
-                    <h2 className="mt-10 mb-4">Posts per author</h2>
-                    <AuthorsChart data={authorDistribution} />
+                    <h2 className="mt-10 mb-4">Posts per external authors</h2>
+                    <AuthorsChart data={externalAuthorDistribution} />
                 </div>
             </ContentPage>
             <JsonLd

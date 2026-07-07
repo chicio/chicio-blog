@@ -2,6 +2,7 @@ import { describe, it, expect, vi } from "vitest";
 import { Content } from "@/types/content/content";
 import { Author, AuthorSummary } from "@/types/content/author";
 import { Tag } from "@/types/content/tag";
+import { ownerAuthorId } from "@/lib/content/authors/author-slug";
 
 const { mockGetPosts, mockGetTags, mockGetAuthorsWithPosts } = vi.hoisted(() => ({
     mockGetPosts: vi.fn(),
@@ -185,10 +186,29 @@ describe("blog-stats", () => {
                 { author: "Zeta Author", count: 3 },
             ]);
         });
+
+        it("excludes the given author id, keeping the remaining ordering", () => {
+            const authors: AuthorSummary[] = [
+                { author: makeAuthor(ownerAuthorId, "Fabrizio Duroni"), postCount: 93 },
+                { author: makeAuthor("a2", "Author Two"), postCount: 5 },
+                { author: makeAuthor("a3", "Author Three"), postCount: 2 },
+            ];
+
+            expect(computeAuthorDistribution(authors, ownerAuthorId)).toEqual([
+                { author: "Author Two", count: 5 },
+                { author: "Author Three", count: 2 },
+            ]);
+        });
+
+        it("keeps every author when no exclude id is given", () => {
+            const authors: AuthorSummary[] = [{ author: makeAuthor(ownerAuthorId, "Fabrizio Duroni"), postCount: 93 }];
+
+            expect(computeAuthorDistribution(authors)).toEqual([{ author: "Fabrizio Duroni", count: 93 }]);
+        });
     });
 
     describe("getBlogStats", () => {
-        it("wires the headline, posts-per-year, tag, and author aggregates from the content getters", () => {
+        it("wires the headline, posts-per-year, tag, and external-author aggregates from the content getters", () => {
             const author = makeAuthor("a1", "Author One");
             const posts = [makePost(2023, 100, 1, ["react"], [author])];
             const tags: Tag[] = [{ tagValue: "react", count: 1, tagSlugText: "react", slug: "/blog/tag/react" }];
@@ -202,8 +222,25 @@ describe("blog-stats", () => {
                 headline: computeHeadlineTotals(posts),
                 postsPerYear: computePostsPerYear(posts),
                 tagDistribution: computeTagDistribution(tags, 10),
-                authorDistribution: computeAuthorDistribution(authorsWithPosts),
+                externalAuthorDistribution: computeAuthorDistribution(authorsWithPosts, ownerAuthorId),
             });
+        });
+
+        it("excludes the site owner from the external author distribution", () => {
+            const owner = makeAuthor(ownerAuthorId, "Fabrizio Duroni");
+            const external = makeAuthor("a2", "Author Two");
+            const posts = [makePost(2023, 100, 1, ["react"], [owner, external])];
+            const tags: Tag[] = [{ tagValue: "react", count: 1, tagSlugText: "react", slug: "/blog/tag/react" }];
+            const authorsWithPosts: AuthorSummary[] = [
+                { author: owner, postCount: 93 },
+                { author: external, postCount: 5 },
+            ];
+
+            mockGetPosts.mockReturnValue(posts);
+            mockGetTags.mockReturnValue(tags);
+            mockGetAuthorsWithPosts.mockReturnValue(authorsWithPosts);
+
+            expect(getBlogStats().externalAuthorDistribution).toEqual([{ author: "Author Two", count: 5 }]);
         });
     });
 });

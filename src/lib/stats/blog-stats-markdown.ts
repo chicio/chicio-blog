@@ -3,7 +3,7 @@ import { siteMetadata } from "@/types/configuration/site-metadata";
 import { slugs } from "@/types/configuration/slug";
 
 export const blogStatsMarkdown = (): string => {
-    const { headline, postsPerYear, tagDistribution, authorDistribution } = getBlogStats();
+    const { headline, postsPerYear, tagDistribution, externalAuthorDistribution } = getBlogStats();
 
     return `# Blog Stats — ${siteMetadata.title}
 
@@ -28,8 +28,8 @@ ${postsPerYear.map((entry) => `- ${entry.year}: ${entry.count} ${entry.count ===
 
 ${tagDistribution.map((entry) => `- ${entry.tag}: ${entry.count} ${entry.count === 1 ? "post" : "posts"}`).join("\n")}
 
-## Posts per author
+## Posts per external authors
 
-${authorDistribution.map((entry) => `- ${entry.author}: ${entry.count} ${entry.count === 1 ? "post" : "posts"}`).join("\n")}
+${externalAuthorDistribution.map((entry) => `- ${entry.author}: ${entry.count} ${entry.count === 1 ? "post" : "posts"}`).join("\n")}
 `;
 };

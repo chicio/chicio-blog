@@ -3,6 +3,7 @@ import { Tag } from "@/types/content/tag";
 import { AuthorSummary } from "@/types/content/author";
 import { AuthorCount, BlogStats, HeadlineTotals, PostsPerYear, TagCount } from "@/types/content/blog-stats";
 import { getAuthorsWithPosts, getPosts, getTags } from "@/lib/content/posts/posts";
+import { ownerAuthorId } from "@/lib/content/authors/author-slug";
 
 const TAG_DISTRIBUTION_LIMIT = 10;
 
@@ -54,8 +55,12 @@ export const computeTagDistribution = (tags: Tag[], limit: number): TagCount[] =
         .slice(0, limit)
         .map((tag) => ({ tag: tag.tagValue, count: tag.count }));
 
-export const computeAuthorDistribution = (authorsWithPosts: AuthorSummary[]): AuthorCount[] =>
-    [...authorsWithPosts]
+export const computeAuthorDistribution = (
+    authorsWithPosts: AuthorSummary[],
+    excludeAuthorId?: string,
+): AuthorCount[] =>
+    authorsWithPosts
+        .filter((entry) => entry.author.id !== excludeAuthorId)
         .sort((a, b) => b.postCount - a.postCount || a.author.name.localeCompare(b.author.name))
         .map((entry) => ({ author: entry.author.name, count: entry.postCount }));
 
@@ -68,6 +73,6 @@ export const getBlogStats = (): BlogStats => {
         headline: computeHeadlineTotals(posts),
         postsPerYear: computePostsPerYear(posts),
         tagDistribution: computeTagDistribution(tags, TAG_DISTRIBUTION_LIMIT),
-        authorDistribution: computeAuthorDistribution(authorsWithPosts),
+        externalAuthorDistribution: computeAuthorDistribution(authorsWithPosts, ownerAuthorId),
     };
 };
