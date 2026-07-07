@@ -20,7 +20,14 @@ vi.mock("./analytics-config", () => ({
     readAnalyticsConfig: mockReadAnalyticsConfig,
 }));
 
-import { getAnalyticsStats, mapReportsToAnalyticsStats, mapTopPosts, mapTotals, mapViewsPerMonth } from "./analytics";
+import {
+    getAnalyticsStats,
+    mapDimensionCounts,
+    mapReportsToAnalyticsStats,
+    mapTopPosts,
+    mapTotals,
+    mapViewsPerMonth,
+} from "./analytics";
 
 describe("analytics", () => {
     beforeEach(() => {
@@ -113,8 +120,26 @@ describe("analytics", () => {
         });
     });
 
+    describe("mapDimensionCounts", () => {
+        it("maps dimension rows to label/users pairs, dropping empty labels", () => {
+            const rows = [
+                { dimensionValues: [{ value: "Europe" }], metricValues: [{ value: "27036" }] },
+                { dimensionValues: [{ value: "" }], metricValues: [{ value: "5" }] },
+            ];
+
+            expect(mapDimensionCounts(rows)).toEqual([{ label: "Europe", users: 27036 }]);
+        });
+
+        it("applies the optional label normalizer", () => {
+            const rows = [{ dimensionValues: [{ value: "(not set)" }], metricValues: [{ value: "12" }] }];
+            const normalize = (label: string) => (label === "(not set)" ? "Unknown" : label);
+
+            expect(mapDimensionCounts(rows, normalize)).toEqual([{ label: "Unknown", users: 12 }]);
+        });
+    });
+
     describe("mapReportsToAnalyticsStats", () => {
-        it("wires totals, views-per-month, and top posts from raw GA rows", () => {
+        it("wires totals, views-per-month, top posts, and dimension breakdowns from raw GA rows", () => {
             const totalsRows = [{ metricValues: [{ value: "1000" }, { value: "800" }, { value: "900" }] }];
             const viewsPerMonthRows = [
                 { dimensionValues: [{ value: "202403" }], metricValues: [{ value: "50" }] },
@@ -123,24 +148,45 @@ describe("analytics", () => {
             const topPostsRows = [
                 { dimensionValues: [{ value: "/blog/post/2024/01/01/my-post" }], metricValues: [{ value: "42" }] },
             ];
+            const continentRows = [
+                { dimensionValues: [{ value: "Europe" }], metricValues: [{ value: "10" }] },
+                { dimensionValues: [{ value: "(not set)" }], metricValues: [{ value: "2" }] },
+            ];
+            const deviceRows = [{ dimensionValues: [{ value: "desktop" }], metricValues: [{ value: "7" }] }];
             const resolveTitle = (path: string) => (path.endsWith("my-post") ? "My Post" : path);
 
-            expect(mapReportsToAnalyticsStats(totalsRows, viewsPerMonthRows, topPostsRows, resolveTitle)).toEqual({
+            expect(
+                mapReportsToAnalyticsStats(
+                    totalsRows,
+                    viewsPerMonthRows,
+                    topPostsRows,
+                    continentRows,
+                    deviceRows,
+                    resolveTitle,
+                ),
+            ).toEqual({
                 totals: { pageViews: 1000, users: 800, sessions: 900 },
                 viewsPerMonth: [
                     { month: "202401", views: 100 },
                     { month: "202403", views: 50 },
                 ],
                 topPosts: [{ path: "/blog/post/2024/01/01/my-post", title: "My Post", views: 42 }],
+                byContinent: [
+                    { label: "Europe", users: 10 },
+                    { label: "Unknown", users: 2 },
+                ],
+                byDevice: [{ label: "desktop", users: 7 }],
                 since: "202401",
             });
         });
 
         it("returns zeroed totals, empty arrays, and an empty since when every report is empty", () => {
-            expect(mapReportsToAnalyticsStats(null, null, null, (path) => path)).toEqual({
+            expect(mapReportsToAnalyticsStats(null, null, null, null, null, (path) => path)).toEqual({
                 totals: { pageViews: 0, users: 0, sessions: 0 },
                 viewsPerMonth: [],
                 topPosts: [],
+                byContinent: [],
+                byDevice: [],
                 since: "",
             });
         });

@@ -75,6 +75,8 @@ describe("BlogStats", () => {
                 totals: { pageViews: 1000, users: 500, sessions: 600 },
                 viewsPerMonth: [{ month: "202401", views: 1000 }],
                 topPosts: [{ path: "/blog/post/2024/01/01/my-post", title: "My Post", views: 500 }],
+                byContinent: [],
+                byDevice: [],
                 since: "202401",
             };
 

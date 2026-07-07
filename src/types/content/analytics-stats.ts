@@ -15,16 +15,18 @@ export interface TopPost {
     views: number;
 }
 
+export interface DimensionCount {
+    label: string;
+    users: number;
+}
+
 export interface AnalyticsStats {
     totals: AnalyticsTotals;
     viewsPerMonth: ViewsPerMonth[];
     topPosts: TopPost[];
+    byContinent: DimensionCount[];
+    byDevice: DimensionCount[];
     since: string;
-}
-
-export interface DimensionCount {
-    label: string;
-    users: number;
 }
 
 export interface HistoricalAnalytics {
