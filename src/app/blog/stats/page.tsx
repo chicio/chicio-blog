@@ -1,6 +1,6 @@
 import { BlogStats } from "@/components/content/blog/blog-stats";
-import { getBlogStats } from "@/lib/stats/blog-stats";
-import { getAnalyticsStats } from "@/lib/analytics/analytics";
+import { getBlogStats } from "@/lib/blog-stats/blog-stats";
+import { getAnalyticsStats } from "@/lib/blog-stats/analytics";
 import { createMetadata } from "@/lib/seo/seo";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { slugs } from "@/types/configuration/slug";

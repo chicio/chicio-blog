@@ -11,7 +11,7 @@ Add a **traffic-analytics section** to the existing `/blog/stats` page, sourced 
 API**. Built now behind a **stub interface** so it ships dark and lights up the moment the credentials
 exist — no rework. Rendering model: **build-time static** (fetched during `next build`, baked into the
 static page) — the secret lives in the **build environment only** and never in the runtime server,
-which is the most secure footprint. Freshness comes from a **daily scheduled rebuild**.
+which is the most secure footprint. Freshness comes from a **weekly scheduled rebuild**.
 
 ## Decisions locked (brainstorm)
 
@@ -26,16 +26,16 @@ which is the most secure footprint. Freshness comes from a **daily scheduled reb
   content push. Ships dark: the workflow **no-ops** when the deploy-hook secret is absent.
 - **Fail-open**: any GA API/auth error → log + return `null` (section hidden). GA problems must NEVER
   break the build or the page — a failed GA call at build produces the same output as stub mode.
-- **Free**: GA4 Data API has no cost; one query per build (~daily) is trivially within quota.
+- **Free**: GA4 Data API has no cost; one query per build (~weekly) is trivially within quota.
 - **Honest scope**: traffic data only covers the **GA4 era** (not the blog's full 10-year lifespan —
   UA history is gone). The UI labels the traffic section accordingly (e.g. "Traffic since <first GA4 month>").
 
 ## Credentials (provisioned later by the owner)
 
 Env vars (all absent today → stub mode):
-- `GA_PROPERTY_ID` — numeric GA4 property id behind measurement id `G-B992TEM300`.
-- `GA_SA_CLIENT_EMAIL` — service-account email (added as Viewer on the property).
-- `GA_SA_PRIVATE_KEY` — service-account private key (PEM; handle `\n` un-escaping).
+- `GOOGLE_ANALYTICS_PROPERTY_ID` — numeric GA4 property id behind measurement id `G-B992TEM300`.
+- `GOOGLE_ANALYTICS_SA_CLIENT_EMAIL` — service-account email (added as Viewer on the property).
+- `GOOGLE_ANALYTICS_SA_PRIVATE_KEY` — service-account private key (PEM; handle `\n` un-escaping).
 
 `getAnalyticsStats()` is configured only when all three are present.
 
@@ -44,10 +44,10 @@ Env vars (all absent today → stub mode):
 ### Dependency
 
 - Add **`@google-analytics/data`** (official Node client, `BetaAnalyticsDataClient`) to
-  `dependencies`. It is imported by `src/lib/analytics/analytics.ts` (so knip sees it used). The client
+  `dependencies`. It is imported by `src/lib/blog-stats/analytics.ts` (so knip sees it used). The client
   is only instantiated when creds are present.
 
-### Data layer — `src/lib/analytics/` (lib leaf: npm + types only)
+### Data layer — `src/lib/blog-stats/` (lib leaf: npm + types only)
 
 - `analytics-config.ts` — `readAnalyticsConfig(): AnalyticsConfig | null` — reads + validates the three
   env vars; returns `null` if any missing. Pure, unit-testable (inject `process.env` or a getter).
@@ -102,7 +102,7 @@ Env vars (all absent today → stub mode):
 
 ### Scheduled rebuild — `.github/workflows/scheduled-rebuild.yml` (new)
 
-- `on: schedule: - cron: "0 6 * * *"` (daily) + `workflow_dispatch` for manual trigger.
+- `on: schedule: - cron: "0 6 * * 1"` (weekly, Mondays) + `workflow_dispatch` for manual trigger.
 - A single step that triggers a redeploy **only if** the deploy-hook secret is present:
   ```
   HOOK="${{ secrets.VERCEL_DEPLOY_HOOK_URL }}"
@@ -110,7 +110,7 @@ Env vars (all absent today → stub mode):
   ```
 - Ships dark: without the secret it logs-and-skips (never fails). Owner provisions later: create a
   Vercel Deploy Hook (Production) → add its URL as the `VERCEL_DEPLOY_HOOK_URL` GitHub Actions secret.
-- The GA build secrets (`GA_PROPERTY_ID`, `GA_SA_CLIENT_EMAIL`, `GA_SA_PRIVATE_KEY`) live in the
+- The GA build secrets (`GOOGLE_ANALYTICS_PROPERTY_ID`, `GOOGLE_ANALYTICS_SA_CLIENT_EMAIL`, `GOOGLE_ANALYTICS_SA_PRIVATE_KEY`) live in the
   **Vercel build environment** (not GitHub, not runtime) so `next build` on Vercel can fetch GA.
 
 ### Markdown

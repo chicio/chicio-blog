@@ -12,7 +12,7 @@ import {
 } from "@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms";
 import { blogListingMarkdown, blogPostMarkdown, homepageMarkdown } from "@/lib/content/posts/posts-markdown";
 import { getPosts } from "@/lib/content/posts/posts";
-import { blogStatsMarkdown } from "@/lib/stats/blog-stats-markdown";
+import { blogStatsMarkdown } from "@/lib/blog-stats/blog-stats-markdown";
 import { consoleMarkdown, gameMarkdown, videogamesMarkdown } from "@/lib/content/videogames/videogames-markdown";
 import { getAllConsoles, getAllGames } from "@/lib/content/videogames/videogames";
 import { slugs } from "@/types/configuration/slug";

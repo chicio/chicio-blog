@@ -2,7 +2,7 @@
 
 import { FC } from "react";
 import { StatCard } from "@/components/design-system/molecules/stat-card";
-import { formatAnalyticsMonth } from "@/lib/analytics/format-month";
+import { formatAnalyticsMonth } from "@/lib/blog-stats/format-month";
 import type { AnalyticsStats } from "@/types/content/analytics-stats";
 import { ViewsOverTimeChart } from "./views-over-time-chart";
 import { TopPostsChart } from "./top-posts-chart";
