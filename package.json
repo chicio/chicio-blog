@@ -25,6 +25,7 @@
   "dependencies": {
     "@ai-sdk/groq": "^3.0.42",
     "@ai-sdk/react": "^3.0.176",
+    "@google-analytics/data": "^6.1.0",
     "@mdx-js/loader": "^3.1.1",
     "@mdx-js/react": "^3.1.1",
     "@microflash/rehype-figure": "^2.1.4",
