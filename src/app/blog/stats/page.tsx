@@ -1,6 +1,8 @@
 import { BlogStats } from "@/components/content/blog/blog-stats";
 import { getBlogStats } from "@/lib/blog-stats/blog-stats";
 import { getAnalyticsStats } from "@/lib/blog-stats/analytics";
+import { mergeAllTime } from "@/lib/blog-stats/merge-analytics";
+import { HISTORICAL_ANALYTICS } from "@/lib/blog-stats/historical-analytics";
 import { createMetadata } from "@/lib/seo/seo";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { slugs } from "@/types/configuration/slug";
@@ -21,12 +23,14 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function Stats() {
     const stats = getBlogStats();
     const analytics = await getAnalyticsStats();
+    const allTime = mergeAllTime(HISTORICAL_ANALYTICS, analytics);
     const author = siteMetadata.author;
 
     return (
         <BlogStats
             author={author}
             stats={stats}
+            allTime={allTime}
             analytics={analytics}
         />
     );
