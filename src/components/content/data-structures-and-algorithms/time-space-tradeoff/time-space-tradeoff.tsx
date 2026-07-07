@@ -14,7 +14,7 @@ import {
     ZAxis,
     type LabelProps,
 } from "recharts";
-import { ChartTooltip } from "@/components/content/data-structures-and-algorithms/chart-tooltip";
+import { ChartTooltip } from "@/components/design-system/molecules/chart/chart-tooltip";
 
 const data = [
     { time: 1, space: 1, name: "O(1)" },

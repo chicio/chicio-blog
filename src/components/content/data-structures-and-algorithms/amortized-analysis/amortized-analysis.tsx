@@ -11,7 +11,7 @@ import {
     XAxis,
     YAxis,
 } from "recharts";
-import { ChartTooltip } from "@/components/content/data-structures-and-algorithms/chart-tooltip";
+import { ChartTooltip } from "@/components/design-system/molecules/chart/chart-tooltip";
 import { useAmortizedAnalysisStore } from "./use-amortized-analysis-store";
 
 export const AmortizedAnalysis: FC = () => {

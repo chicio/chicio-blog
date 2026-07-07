@@ -10,7 +10,7 @@ import {
     Legend,
     ResponsiveContainer,
 } from "recharts";
-import { ChartTooltip } from "@/components/content/data-structures-and-algorithms/chart-tooltip";
+import { ChartTooltip } from "@/components/design-system/molecules/chart/chart-tooltip";
 
 type ComplexityData = {
     n: number;

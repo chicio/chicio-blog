@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { FC, ReactNode } from "react";
-import { useInternalLinkStore } from "./use-internal-link-store";
 
 type InternalLinkProps = {
     to: string;
@@ -19,11 +18,8 @@ export const InternalLink: FC<InternalLinkProps> = ({
     onClick,
     prefetch = false,
 }) => {
-    const { effects } = useInternalLinkStore(onClick);
-    const { onTrack } = effects;
-
     return (
-        <Link className={className} href={to} prefetch={prefetch} onClick={onTrack}>
+        <Link className={className} href={to} prefetch={prefetch} onClick={onClick}>
             {children}
         </Link>
     );

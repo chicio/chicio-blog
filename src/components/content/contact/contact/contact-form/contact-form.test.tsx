@@ -20,6 +20,13 @@ describe("ContactForm", () => {
             expect(screen.getByLabelText(/message/i)).toBeInTheDocument();
         });
 
+        it("keeps the honeypot field in the DOM but out of the accessibility tree", () => {
+            const { container } = render(<ContactForm trackingCategory="test" />);
+            const honeypot = container.querySelector('input[name="website"]');
+            expect(honeypot).toBeInTheDocument();
+            expect(honeypot?.closest('[aria-hidden="true"]')).not.toBeNull();
+        });
+
         it("renders the Send Message button", () => {
             render(<ContactForm trackingCategory="test" />);
             expect(screen.getByText("Send Message")).toBeInTheDocument();
