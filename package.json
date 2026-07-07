@@ -51,7 +51,7 @@
     "mermaid": "^11.15.0",
     "next": "16.2.10",
     "postcss": "^8.5.15",
-    "react": "19.2.6",
+    "react": "19.2.7",
     "react-dom": "19.2.6",
     "react-icons": "^5.6.0",
     "react-is": "19.2.4",
@@ -85,7 +85,7 @@
     "@types/dom-chromium-ai": "^0.0.17",
     "@types/elasticlunr": "^0.9.9",
     "@types/node": "^25",
-    "@types/react": "19.2.14",
+    "@types/react": "19.2.17",
     "@types/react-dom": "19.2.3",
     "@vitejs/plugin-react": "^6.0.3",
     "@vitest/coverage-v8": "^4.1.9",
@@ -109,7 +109,7 @@
     "node": "24.x"
   },
   "overrides": {
-    "@types/react": "19.2.14",
+    "@types/react": "19.2.17",
     "@types/react-dom": "19.2.3"
   },
   "allowScripts": {
