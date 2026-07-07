@@ -8,16 +8,19 @@ import { JsonLd } from "@/components/features/seo/jsond-ld";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { tracking } from "@/types/configuration/tracking";
 import type { BlogStats as BlogStatsData } from "@/types/content/blog-stats";
+import type { AnalyticsStats } from "@/types/content/analytics-stats";
 import { PostsPerYearChart } from "./posts-per-year-chart";
 import { TagDistributionChart } from "./tag-distribution-chart";
 import { AuthorsChart } from "./authors-chart";
+import { AnalyticsSection } from "./analytics-section";
 
 interface BlogStatsProps {
     author: string;
     stats: BlogStatsData;
+    analytics: AnalyticsStats | null;
 }
 
-export const BlogStats: FC<BlogStatsProps> = ({ author, stats }) => {
+export const BlogStats: FC<BlogStatsProps> = ({ author, stats, analytics }) => {
     const { headline, postsPerYear, tagDistribution, externalAuthorDistribution } = stats;
 
     return (
@@ -46,6 +49,7 @@ export const BlogStats: FC<BlogStatsProps> = ({ author, stats }) => {
                     <TagDistributionChart data={tagDistribution} />
                     <h2 className="mt-10 mb-4">Posts per external authors</h2>
                     <AuthorsChart data={externalAuthorDistribution} />
+                    <AnalyticsSection analytics={analytics} />
                 </div>
             </ContentPage>
             <JsonLd

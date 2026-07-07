@@ -54,7 +54,7 @@ vi.mock("@/lib/content/videogames/videogames-markdown", () => ({
     gameMarkdown: mockGameMarkdown,
 }));
 
-vi.mock("@/lib/stats/blog-stats-markdown", () => ({
+vi.mock("@/lib/blog-stats/blog-stats-markdown", () => ({
     blogStatsMarkdown: mockBlogStatsMarkdown,
 }));
 

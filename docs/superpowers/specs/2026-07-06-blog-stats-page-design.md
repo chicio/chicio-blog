@@ -22,7 +22,7 @@ API service-account credential, which is out of scope for this feature.
 
 ## Architecture
 
-### Data layer — `src/lib/stats/` (pure, node-tested)
+### Data layer — `src/lib/blog-stats/` (pure, node-tested)
 
 - `blog-stats.ts`:
   - `getBlogStats(): BlogStats` — orchestrator, built from `getPosts()` / `getTags()` /
@@ -102,7 +102,7 @@ type-only if needed — design-system self-containment preserved.
 
 ## Testing
 
-- **Unit (Vitest node):** `src/lib/stats/blog-stats.test.ts` — every aggregation helper + edge cases.
+- **Unit (Vitest node):** `src/lib/blog-stats/blog-stats.test.ts` — every aggregation helper + edge cases.
 - **Component (Vitest jsdom + RTL):**
   - `stat-card.test.tsx` — renders value + label (+ icon slot).
   - `chart-tooltip.test.tsx` — renders payload rows / handles inactive state.
