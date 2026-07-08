@@ -42,9 +42,8 @@ export interface HistoricalAnalytics {
     pageViewsCumulativeAnchors: CumulativeAnchor[];
 }
 
-export interface CumulativePoint {
-    time: number;
-    label: string;
+export interface ViewsPoint {
+    month: string;
     estimated: number | null;
     live: number | null;
 }
@@ -55,7 +54,7 @@ export interface AllTimeAnalytics {
     byDevice: DimensionCount[];
     historicalWindow: { start: string; end: string };
     hasGa4: boolean;
-    cumulativePageViews: CumulativePoint[];
+    pageViewsTimeline: ViewsPoint[];
 }
 
 export interface AnalyticsData {

@@ -5,7 +5,7 @@ import type {
     DimensionCount,
     HistoricalAnalytics,
 } from "@/types/content/analytics-stats";
-import { buildCumulativePageViews } from "./cumulative-page-views";
+import { buildPageViewsTimeline } from "./page-views-timeline";
 
 const sumTotals = (a: AnalyticsTotals, b: AnalyticsTotals): AnalyticsTotals => ({
     pageViews: a.pageViews + b.pageViews,
@@ -38,5 +38,5 @@ export const mergeAllTime = (historical: HistoricalAnalytics, ga4: AnalyticsStat
     byDevice: mergeDimensions(historical.byDevice, ga4?.byDevice ?? []),
     historicalWindow: historical.window,
     hasGa4: ga4 !== null,
-    cumulativePageViews: buildCumulativePageViews(historical, ga4),
+    pageViewsTimeline: buildPageViewsTimeline(historical, ga4),
 });

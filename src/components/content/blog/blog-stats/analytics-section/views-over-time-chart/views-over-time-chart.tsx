@@ -1,12 +1,12 @@
 "use client";
 
 import { FC } from "react";
-import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { ChartTooltip } from "@/components/design-system/molecules/chart/chart-tooltip";
-import type { ViewsPerMonth } from "@/types/content/analytics-stats";
+import type { ViewsPoint } from "@/types/content/analytics-stats";
 
 interface ViewsOverTimeChartProps {
-    data: ViewsPerMonth[];
+    data: ViewsPoint[];
 }
 
 export const ViewsOverTimeChart: FC<ViewsOverTimeChartProps> = ({ data }) => (
@@ -20,13 +20,25 @@ export const ViewsOverTimeChart: FC<ViewsOverTimeChartProps> = ({ data }) => (
                 <XAxis dataKey="month" />
                 <YAxis allowDecimals={false} />
                 <Tooltip content={<ChartTooltip labelPrefix="Month: " />} />
+                <Legend />
                 <Line
                     type="monotone"
-                    dataKey="views"
-                    name="Page views"
+                    dataKey="estimated"
+                    name="Estimated (pre-2022)"
+                    stroke="#00CC33"
+                    strokeWidth={2}
+                    strokeDasharray="6 6"
+                    dot={false}
+                    connectNulls
+                />
+                <Line
+                    type="monotone"
+                    dataKey="live"
+                    name="Views (GA4)"
                     stroke="#00FF41"
                     strokeWidth={2}
                     dot={false}
+                    connectNulls
                 />
             </LineChart>
         </ResponsiveContainer>

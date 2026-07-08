@@ -15,9 +15,11 @@ const allTime: AllTimeAnalytics = {
     ],
     historicalWindow: { start: "May 2017", end: "May 2021" },
     hasGa4: true,
-    cumulativePageViews: [
-        { time: Date.UTC(2017, 4, 1), label: "May 2017", estimated: 0, live: null },
-        { time: Date.UTC(2021, 4, 1), label: "May 2021", estimated: 148579, live: 148579 },
+    pageViewsTimeline: [
+        { month: "201705", estimated: 100, live: null },
+        { month: "202105", estimated: 6000, live: 6000 },
+        { month: "202401", estimated: null, live: 500 },
+        { month: "202402", estimated: null, live: 700 },
     ],
 };
 
@@ -61,7 +63,7 @@ describe("AnalyticsSection", () => {
             expect(screen.getByRole("heading", { level: 2, name: "Users by device" })).toBeInTheDocument();
         });
 
-        it("hides the GA4-era detail charts when GA4 is absent", () => {
+        it("always renders Views over time but hides Top posts when GA4 is absent", () => {
             render(
                 <AnalyticsSection
                     allTime={{ ...allTime, hasGa4: false }}
@@ -69,11 +71,11 @@ describe("AnalyticsSection", () => {
                 />,
             );
 
-            expect(screen.queryByRole("heading", { level: 2, name: "Views over time" })).not.toBeInTheDocument();
+            expect(screen.getByRole("heading", { level: 2, name: "Views over time" })).toBeInTheDocument();
             expect(screen.queryByRole("heading", { level: 2, name: "Top posts by views" })).not.toBeInTheDocument();
         });
 
-        it("shows the GA4-era detail charts and since-caption when GA4 is present", () => {
+        it("shows Top posts and the live-since caption when GA4 is present", () => {
             render(
                 <AnalyticsSection
                     allTime={allTime}
@@ -83,7 +85,7 @@ describe("AnalyticsSection", () => {
 
             expect(screen.getByRole("heading", { level: 2, name: "Views over time" })).toBeInTheDocument();
             expect(screen.getByRole("heading", { level: 2, name: "Top posts by views" })).toBeInTheDocument();
-            expect(screen.getByText("Live traffic since January 2024.")).toBeInTheDocument();
+            expect(screen.getByText(/live GA4 data since January 2024/)).toBeInTheDocument();
         });
 
         it("notes the estimate is UA-only when GA4 is absent", () => {

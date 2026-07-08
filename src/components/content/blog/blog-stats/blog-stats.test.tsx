@@ -40,7 +40,7 @@ const allTime: AllTimeAnalytics = {
     byDevice: [{ label: "Desktop", users: 65270 }],
     historicalWindow: { start: "May 2017", end: "May 2021" },
     hasGa4: false,
-    cumulativePageViews: [],
+    pageViewsTimeline: [],
 };
 
 describe("BlogStats", () => {
@@ -105,7 +105,8 @@ describe("BlogStats", () => {
                 />,
             );
             expect(screen.getByRole("heading", { level: 2, name: "Traffic (all time)" })).toBeInTheDocument();
-            expect(screen.queryByRole("heading", { level: 2, name: "Views over time" })).not.toBeInTheDocument();
+            expect(screen.getByRole("heading", { level: 2, name: "Views over time" })).toBeInTheDocument();
+            expect(screen.queryByRole("heading", { level: 2, name: "Top posts by views" })).not.toBeInTheDocument();
         });
 
         it("renders the GA4-era traffic detail once analytics is available", () => {
