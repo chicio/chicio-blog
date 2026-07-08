@@ -2,6 +2,7 @@ import { BetaAnalyticsDataClient } from "@google-analytics/data";
 import type { protos } from "@google-analytics/data";
 import { getPosts } from "@/lib/content/posts/posts";
 import {
+    AnalyticsData,
     AnalyticsStats,
     AnalyticsTotals,
     DimensionCount,
@@ -9,6 +10,8 @@ import {
     ViewsPerMonth,
 } from "@/types/content/analytics-stats";
 import { readAnalyticsConfig } from "./analytics-config";
+import { mergeAllTime } from "./merge-analytics";
+import { HISTORICAL_ANALYTICS } from "./historical-analytics";
 
 type AnalyticsRow = protos.google.analytics.data.v1beta.IRow;
 
@@ -97,20 +100,15 @@ const buildPostTitleResolver = (): ((path: string) => string) => {
 };
 
 export const getAnalyticsStats = async (): Promise<AnalyticsStats | null> => {
-    const config = readAnalyticsConfig();
-
-    if (!config) {
-        return null;
-    }
-
     try {
+        const config = readAnalyticsConfig();
         const client = new BetaAnalyticsDataClient({
             credentials: {
-                client_email: config.clientEmail,
-                private_key: config.privateKey,
+                client_email: config?.clientEmail,
+                private_key: config?.privateKey,
             },
         });
-        const property = `properties/${config.propertyId}`;
+        const property = `properties/${config?.propertyId}`;
         const dateRanges = [{ startDate: LIFETIME_START_DATE, endDate: TODAY }];
 
         const [totalsResponse] = await client.runReport({
@@ -169,4 +167,13 @@ export const getAnalyticsStats = async (): Promise<AnalyticsStats | null> => {
     } catch {
         return null;
     }
+};
+
+export const getAnalyticsData = async (): Promise<AnalyticsData> => {
+    const ga4 = await getAnalyticsStats();
+
+    return {
+        allTime: mergeAllTime(HISTORICAL_ANALYTICS, ga4),
+        ga4,
+    };
 };

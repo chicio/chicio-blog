@@ -43,3 +43,8 @@ export interface AllTimeAnalytics {
     historicalWindow: { start: string; end: string };
     hasGa4: boolean;
 }
+
+export interface AnalyticsData {
+    allTime: AllTimeAnalytics;
+    ga4: AnalyticsStats | null;
+}

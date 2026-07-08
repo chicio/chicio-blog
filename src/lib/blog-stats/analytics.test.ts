@@ -21,6 +21,7 @@ vi.mock("./analytics-config", () => ({
 }));
 
 import {
+    getAnalyticsData,
     getAnalyticsStats,
     mapDimensionCounts,
     mapReportsToAnalyticsStats,
@@ -28,6 +29,7 @@ import {
     mapTotals,
     mapViewsPerMonth,
 } from "./analytics";
+import { HISTORICAL_ANALYTICS } from "./historical-analytics";
 
 describe("analytics", () => {
     beforeEach(() => {
@@ -36,11 +38,12 @@ describe("analytics", () => {
     });
 
     describe("getAnalyticsStats", () => {
-        it("returns null when no config is present (stub mode)", async () => {
+        it("attempts the fetch even without config and fails open to null (no stub guard)", async () => {
             mockReadAnalyticsConfig.mockReturnValue(null);
+            mockRunReport.mockRejectedValue(new Error("no credentials"));
 
             expect(await getAnalyticsStats()).toBeNull();
-            expect(mockRunReport).not.toHaveBeenCalled();
+            expect(mockRunReport).toHaveBeenCalled();
         });
 
         it("fails open (returns null) when the GA client throws", async () => {
@@ -65,6 +68,36 @@ describe("analytics", () => {
                 .mockRejectedValueOnce(new Error("second report failed"));
 
             expect(await getAnalyticsStats()).toBeNull();
+        });
+    });
+
+    describe("getAnalyticsData", () => {
+        it("returns the historical estimate alone when GA4 is unavailable", async () => {
+            mockReadAnalyticsConfig.mockReturnValue(null);
+            mockRunReport.mockRejectedValue(new Error("no credentials"));
+
+            const { allTime, ga4 } = await getAnalyticsData();
+
+            expect(ga4).toBeNull();
+            expect(allTime.hasGa4).toBe(false);
+            expect(allTime.totals).toEqual(HISTORICAL_ANALYTICS.totals);
+        });
+
+        it("merges GA4 into the all-time view when GA4 is available", async () => {
+            mockReadAnalyticsConfig.mockReturnValue({
+                propertyId: "123456",
+                clientEmail: "sa@example.com",
+                privateKey: "key",
+            });
+            mockRunReport.mockResolvedValue([
+                { rows: [{ metricValues: [{ value: "10" }, { value: "8" }, { value: "9" }] }] },
+            ]);
+
+            const { allTime, ga4 } = await getAnalyticsData();
+
+            expect(ga4).not.toBeNull();
+            expect(allTime.hasGa4).toBe(true);
+            expect(allTime.totals.pageViews).toBe(HISTORICAL_ANALYTICS.totals.pageViews + 10);
         });
     });
 
