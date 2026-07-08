@@ -40,6 +40,7 @@ const allTime: AllTimeAnalytics = {
     byDevice: [{ label: "Desktop", users: 65270 }],
     historicalWindow: { start: "May 2017", end: "May 2021" },
     hasGa4: false,
+    cumulativePageViews: [],
 };
 
 describe("BlogStats", () => {

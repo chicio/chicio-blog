@@ -13,6 +13,10 @@ const historical: HistoricalAnalytics = {
         { label: "Desktop", users: 60 },
         { label: "Mobile", users: 20 },
     ],
+    pageViewsCumulativeAnchors: [
+        { month: "201705", total: 0 },
+        { month: "202105", total: 100 },
+    ],
 };
 
 const ga4: AnalyticsStats = {

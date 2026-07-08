@@ -6,6 +6,7 @@ import { formatAnalyticsMonth } from "@/lib/blog-stats/format-month";
 import type { AllTimeAnalytics, AnalyticsStats } from "@/types/content/analytics-stats";
 import { ContinentChart } from "./continent-chart";
 import { DeviceChart } from "./device-chart";
+import { CumulativeChart } from "./cumulative-chart";
 import { ViewsOverTimeChart } from "./views-over-time-chart";
 import { TopPostsChart } from "./top-posts-chart";
 
@@ -15,7 +16,7 @@ interface AnalyticsSectionProps {
 }
 
 export const AnalyticsSection: FC<AnalyticsSectionProps> = ({ allTime, ga4 }) => {
-    const { totals, byContinent, byDevice, historicalWindow, hasGa4 } = allTime;
+    const { totals, byContinent, byDevice, historicalWindow, hasGa4, cumulativePageViews } = allTime;
     const estimateNote = hasGa4
         ? `Totals combine live GA4 data with estimated Universal Analytics traffic (${historicalWindow.start} – ${historicalWindow.end}). Users and sessions are approximate — Universal Analytics and GA4 count them differently.`
         : `Totals are estimated from Universal Analytics (${historicalWindow.start} – ${historicalWindow.end}); live analytics is not configured yet.`;
@@ -39,6 +40,12 @@ export const AnalyticsSection: FC<AnalyticsSectionProps> = ({ allTime, ga4 }) =>
                     label="Sessions"
                 />
             </div>
+            <h2 className="mt-10 mb-1">Total page views over time</h2>
+            <p className="text-secondary mb-4 text-sm">
+                Cumulative page views across the blog&apos;s life. The dashed segment before 2022 is estimated from
+                archived Universal Analytics totals; the solid line is live GA4 data.
+            </p>
+            <CumulativeChart data={cumulativePageViews} />
             <h2 className="mt-10 mb-4">Users by continent</h2>
             <ContinentChart data={byContinent} />
             <h2 className="mt-10 mb-4">Users by device</h2>

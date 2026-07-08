@@ -15,6 +15,10 @@ const allTime: AllTimeAnalytics = {
     ],
     historicalWindow: { start: "May 2017", end: "May 2021" },
     hasGa4: true,
+    cumulativePageViews: [
+        { time: Date.UTC(2017, 4, 1), label: "May 2017", estimated: 0, live: null },
+        { time: Date.UTC(2021, 4, 1), label: "May 2021", estimated: 148579, live: 148579 },
+    ],
 };
 
 const ga4: AnalyticsStats = {

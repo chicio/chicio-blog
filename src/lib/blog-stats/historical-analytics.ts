@@ -16,4 +16,9 @@ export const HISTORICAL_ANALYTICS: HistoricalAnalytics = {
         { label: "Mobile", users: 15169 },
         { label: "Tablet", users: 764 },
     ],
+    pageViewsCumulativeAnchors: [
+        { month: "201705", total: 0 },
+        { month: "202005", total: 84903 },
+        { month: "202105", total: 148579 },
+    ],
 };
