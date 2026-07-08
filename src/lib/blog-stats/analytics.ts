@@ -1,8 +1,17 @@
 import { BetaAnalyticsDataClient } from "@google-analytics/data";
 import type { protos } from "@google-analytics/data";
 import { getPosts } from "@/lib/content/posts/posts";
-import { AnalyticsStats, AnalyticsTotals, TopPost, ViewsPerMonth } from "@/types/content/analytics-stats";
+import {
+    AnalyticsData,
+    AnalyticsStats,
+    AnalyticsTotals,
+    DimensionCount,
+    TopPost,
+    ViewsPerMonth,
+} from "@/types/content/analytics-stats";
 import { readAnalyticsConfig } from "./analytics-config";
+import { mergeAllTime } from "./merge-analytics";
+import { HISTORICAL_ANALYTICS } from "./historical-analytics";
 
 type AnalyticsRow = protos.google.analytics.data.v1beta.IRow;
 
@@ -10,6 +19,7 @@ const LIFETIME_START_DATE = "2015-08-14";
 const TODAY = "today";
 const TOP_POSTS_LIMIT = 10;
 const BLOG_POST_PATH_PREFIX = "/blog/post/";
+const CONTINENT_UNKNOWN_RAW = "(not set)";
 
 const parseMetricValue = (row: AnalyticsRow | undefined, index: number): number => {
     const raw = row?.metricValues?.[index]?.value;
@@ -50,10 +60,23 @@ export const mapTopPosts = (
         };
     });
 
+export const mapDimensionCounts = (
+    rows: AnalyticsRow[] | null | undefined,
+    normalize: (label: string) => string = (label) => label,
+): DimensionCount[] =>
+    (rows ?? [])
+        .map((row) => ({
+            label: normalize(row.dimensionValues?.[0]?.value ?? ""),
+            users: parseMetricValue(row, 0),
+        }))
+        .filter((entry) => entry.label !== "");
+
 export const mapReportsToAnalyticsStats = (
     totalsRows: AnalyticsRow[] | null | undefined,
     viewsPerMonthRows: AnalyticsRow[] | null | undefined,
     topPostsRows: AnalyticsRow[] | null | undefined,
+    continentRows: AnalyticsRow[] | null | undefined,
+    deviceRows: AnalyticsRow[] | null | undefined,
     resolveTitle: (path: string) => string,
 ): AnalyticsStats => {
     const viewsPerMonth = mapViewsPerMonth(viewsPerMonthRows);
@@ -62,6 +85,10 @@ export const mapReportsToAnalyticsStats = (
         totals: mapTotals(totalsRows),
         viewsPerMonth,
         topPosts: mapTopPosts(topPostsRows, resolveTitle),
+        byContinent: mapDimensionCounts(continentRows, (label) =>
+            label === CONTINENT_UNKNOWN_RAW ? "Unknown" : label,
+        ),
+        byDevice: mapDimensionCounts(deviceRows),
         since: viewsPerMonth[0]?.month ?? "",
     };
 };
@@ -73,20 +100,15 @@ const buildPostTitleResolver = (): ((path: string) => string) => {
 };
 
 export const getAnalyticsStats = async (): Promise<AnalyticsStats | null> => {
-    const config = readAnalyticsConfig();
-
-    if (!config) {
-        return null;
-    }
-
     try {
+        const config = readAnalyticsConfig();
         const client = new BetaAnalyticsDataClient({
             credentials: {
-                client_email: config.clientEmail,
-                private_key: config.privateKey,
+                client_email: config?.clientEmail,
+                private_key: config?.privateKey,
             },
         });
-        const property = `properties/${config.propertyId}`;
+        const property = `properties/${config?.propertyId}`;
         const dateRanges = [{ startDate: LIFETIME_START_DATE, endDate: TODAY }];
 
         const [totalsResponse] = await client.runReport({
@@ -118,13 +140,42 @@ export const getAnalyticsStats = async (): Promise<AnalyticsStats | null> => {
             limit: TOP_POSTS_LIMIT,
         });
 
+        const [continentResponse] = await client.runReport({
+            property,
+            dateRanges,
+            dimensions: [{ name: "continent" }],
+            metrics: [{ name: "totalUsers" }],
+            orderBys: [{ metric: { metricName: "totalUsers" }, desc: true }],
+        });
+
+        const [deviceResponse] = await client.runReport({
+            property,
+            dateRanges,
+            dimensions: [{ name: "deviceCategory" }],
+            metrics: [{ name: "totalUsers" }],
+            orderBys: [{ metric: { metricName: "totalUsers" }, desc: true }],
+        });
+
         return mapReportsToAnalyticsStats(
             totalsResponse.rows,
             viewsPerMonthResponse.rows,
             topPostsResponse.rows,
+            continentResponse.rows,
+            deviceResponse.rows,
             buildPostTitleResolver(),
         );
-    } catch {
+    } catch (error) {
+        console.error("GA4 analytics fetch failed; falling back to historical-only:", error);
+
         return null;
     }
+};
+
+export const getAnalyticsData = async (): Promise<AnalyticsData> => {
+    const ga4 = await getAnalyticsStats();
+
+    return {
+        allTime: mergeAllTime(HISTORICAL_ANALYTICS, ga4),
+        ga4,
+    };
 };
