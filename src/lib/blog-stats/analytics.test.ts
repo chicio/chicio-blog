@@ -35,6 +35,7 @@ describe("analytics", () => {
     beforeEach(() => {
         vi.clearAllMocks();
         mockGetPosts.mockReturnValue([]);
+        vi.spyOn(console, "error").mockImplementation(() => {});
     });
 
     describe("getAnalyticsStats", () => {

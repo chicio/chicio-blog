@@ -164,7 +164,9 @@ export const getAnalyticsStats = async (): Promise<AnalyticsStats | null> => {
             deviceResponse.rows,
             buildPostTitleResolver(),
         );
-    } catch {
+    } catch (error) {
+        console.error("GA4 analytics fetch failed; falling back to historical-only:", error);
+
         return null;
     }
 };
