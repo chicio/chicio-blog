@@ -14,6 +14,9 @@ import {
 import { ChartTooltip } from "@/components/design-system/molecules/chart/chart-tooltip";
 import { useAmortizedAnalysisStore } from "./use-amortized-analysis-store";
 
+const AXIS_TICK_COLOR = "#9fbf9f";
+const AXIS_LINE_COLOR = "#1f5a2e";
+
 export const AmortizedAnalysis: FC = () => {
     const { state } = useAmortizedAnalysisStore();
     const { data } = state;
@@ -25,27 +28,36 @@ export const AmortizedAnalysis: FC = () => {
                     <XAxis
                         dataKey="operation"
                         height={50}
+                        tick={{ fill: AXIS_TICK_COLOR, fontSize: 12 }}
+                        tickLine={false}
+                        axisLine={{ stroke: AXIS_LINE_COLOR }}
                         label={{
                             value: "Insertion number",
                             position: "insideBottom",
-                            style: { textAnchor: "middle" },
+                            style: { textAnchor: "middle", fill: AXIS_TICK_COLOR },
                         }}
                     />
                     <YAxis
+                        tick={{ fill: AXIS_TICK_COLOR, fontSize: 12 }}
+                        tickLine={false}
+                        axisLine={{ stroke: AXIS_LINE_COLOR }}
                         label={{
                             value: "Operation cost",
                             angle: -90,
                             offset: 10,
                             position: "insideLeft",
-                            style: { textAnchor: "middle" },
+                            style: { textAnchor: "middle", fill: AXIS_TICK_COLOR },
                         }}
                     />
-                    <Tooltip content={ChartTooltip} />
-                    <ReferenceLine y={1} stroke="#4ade80" strokeDasharray="4 4" />
+                    <Tooltip
+                        content={<ChartTooltip labelPrefix="op: " />}
+                        cursor={{ stroke: "#39FF1466", strokeWidth: 1 }}
+                    />
+                    <ReferenceLine y={1} stroke="#39FF14" strokeDasharray="4 4" />
                     <Line
                         type="stepAfter"
                         dataKey="cost"
-                        stroke="#ef4444"
+                        stroke="#ff9f40"
                         strokeWidth={2.5}
                         dot={false}
                         name="Actual cost"
@@ -53,7 +65,7 @@ export const AmortizedAnalysis: FC = () => {
                     <Line
                         type="monotone"
                         dataKey="amortized"
-                        stroke="#3b82f6"
+                        stroke="#00FF41"
                         strokeWidth={2.5}
                         dot={false}
                         name="Amortized average"

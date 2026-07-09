@@ -21,7 +21,7 @@ export const DonutChart: FC<DonutChartProps> = ({ data, colors = DEFAULT_COLORS,
     const total = data.reduce((sum, entry) => sum + entry.value, 0);
 
     return (
-        <div className="flex flex-wrap items-center gap-7">
+        <div className="flex flex-wrap items-center justify-center gap-7 md:justify-start">
             <div className="relative h-[170px] w-[170px] flex-none">
                 <ResponsiveContainer
                     width={"100%"}

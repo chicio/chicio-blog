@@ -12,6 +12,9 @@ import {
 } from "recharts";
 import { ChartTooltip } from "@/components/design-system/molecules/chart/chart-tooltip";
 
+const AXIS_TICK_COLOR = "#9fbf9f";
+const AXIS_LINE_COLOR = "#1f5a2e";
+
 const data = () => {
     const points = [];
     for (let n = 1; n <= 100; n += 5) {
@@ -33,30 +36,36 @@ export const SpaceComplexityVisualizer: FC = () => (
                 <XAxis
                     dataKey="n"
                     height={50}
+                    tick={{ fill: AXIS_TICK_COLOR, fontSize: 12 }}
+                    tickLine={false}
+                    axisLine={{ stroke: AXIS_LINE_COLOR }}
                     label={{
                         value: "Input size (n)",
                         position: "insideBottom",
-                        style: { textAnchor: "middle" },
+                        style: { textAnchor: "middle", fill: AXIS_TICK_COLOR },
                     }}
                 />
                 <YAxis
+                    tick={{ fill: AXIS_TICK_COLOR, fontSize: 12 }}
+                    tickLine={false}
+                    axisLine={{ stroke: AXIS_LINE_COLOR }}
                     label={{
                         value: "Relative Memory Usage",
                         angle: -90,
                         offset: 10,
                         position: "insideLeft",
-                        style: { textAnchor: "middle" },
+                        style: { textAnchor: "middle", fill: AXIS_TICK_COLOR },
                     }}
                 />
-                <Tooltip content={ChartTooltip} />
+                <Tooltip content={<ChartTooltip labelPrefix="n: " />} cursor={{ stroke: "#39FF1466", strokeWidth: 1 }} />
                 <Legend verticalAlign="top" />
-                <Line type="monotone" dataKey="constant" stroke="#7c3aed" strokeWidth={2.5} dot={false} name="O(1)" />
-                <Line type="monotone" dataKey="logn" stroke="#0ea5e9" strokeWidth={2.5} dot={false} name="O(log n)" />
-                <Line type="monotone" dataKey="linear" stroke="#10b981" strokeWidth={2.5} dot={false} name="O(n)" />
+                <Line type="monotone" dataKey="constant" stroke="#00FF41" strokeWidth={2.5} dot={false} name="O(1)" />
+                <Line type="monotone" dataKey="logn" stroke="#ffd23f" strokeWidth={2.5} dot={false} name="O(log n)" />
+                <Line type="monotone" dataKey="linear" stroke="#ff9f40" strokeWidth={2.5} dot={false} name="O(n)" />
                 <Line
                     type="monotone"
                     dataKey="nlogn"
-                    stroke="#f97316"
+                    stroke="#ff6b57"
                     strokeWidth={2.5}
                     dot={false}
                     name="O(n log n)"

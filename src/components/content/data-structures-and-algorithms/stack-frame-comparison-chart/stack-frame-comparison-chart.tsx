@@ -12,6 +12,9 @@ import {
 } from "recharts";
 import { ChartTooltip } from "@/components/design-system/molecules/chart/chart-tooltip";
 
+const AXIS_TICK_COLOR = "#9fbf9f";
+const AXIS_LINE_COLOR = "#1f5a2e";
+
 type StackFrameData = {
     step: number;
     normal: number;
@@ -40,38 +43,47 @@ export const StackFrameComparisonChart: FC = () => {
                     <XAxis
                         dataKey="step"
                         height={50}
+                        tick={{ fill: AXIS_TICK_COLOR, fontSize: 12 }}
+                        tickLine={false}
+                        axisLine={{ stroke: AXIS_LINE_COLOR }}
                         label={{
                             value: "Recursion Depth (n)",
                             position: "insideBottom",
-                            style: { textAnchor: "middle" },
+                            style: { textAnchor: "middle", fill: AXIS_TICK_COLOR },
                         }}
                     />
                     <YAxis
+                        tick={{ fill: AXIS_TICK_COLOR, fontSize: 12 }}
+                        tickLine={false}
+                        axisLine={{ stroke: AXIS_LINE_COLOR }}
                         label={{
                             value: "Stack Frames Used",
                             angle: -90,
                             offset: 10,
                             position: "insideLeft",
-                            style: { textAnchor: "middle" },
+                            style: { textAnchor: "middle", fill: AXIS_TICK_COLOR },
                         }}
                         domain={[0, "dataMax + 1"]}
                     />
-                    <Tooltip content={ChartTooltip} />
+                    <Tooltip
+                        content={<ChartTooltip labelPrefix="depth: " />}
+                        cursor={{ stroke: "#39FF1466", strokeWidth: 1 }}
+                    />
                     <Legend verticalAlign="top" />
                     <Line
                         type="monotone"
                         dataKey="normal"
-                        stroke="#ef4444"
+                        stroke="#ff6b57"
                         dot={false}
-                        strokeWidth={2}
+                        strokeWidth={2.5}
                         name="Normal Recursion"
                     />
                     <Line
                         type="monotone"
                         dataKey="tail"
-                        stroke="#4ade80"
+                        stroke="#00FF41"
                         dot={false}
-                        strokeWidth={2}
+                        strokeWidth={2.5}
                         name="Tail Recursion"
                     />
                 </LineChart>

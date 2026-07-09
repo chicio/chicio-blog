@@ -5,9 +5,14 @@ import {
     ResponsiveContainer,
     LineChart,
     Line,
+    Tooltip,
     XAxis,
     YAxis,
 } from "recharts";
+import { ChartTooltip } from "@/components/design-system/molecules/chart/chart-tooltip";
+
+const AXIS_TICK_COLOR = "#9fbf9f";
+const AXIS_LINE_COLOR = "#1f5a2e";
 
 type Node = {
     level: number;
@@ -34,21 +39,35 @@ export const DivideAndConquerTreeVisualizer: FC = () => {
                 <LineChart data={data}>
                     <XAxis
                         dataKey="level"
+                        tick={{ fill: AXIS_TICK_COLOR, fontSize: 12 }}
+                        tickLine={false}
+                        axisLine={{ stroke: AXIS_LINE_COLOR }}
                         label={{
                             value: "Recursion depth",
                             position: "insideBottom",
+                            style: { textAnchor: "middle", fill: AXIS_TICK_COLOR },
                         }}
                     />
                     <YAxis
+                        tick={{ fill: AXIS_TICK_COLOR, fontSize: 12 }}
+                        tickLine={false}
+                        axisLine={{ stroke: AXIS_LINE_COLOR }}
                         label={{
                             value: "Number of subproblems",
                             angle: -90,
                             position: "insideLeft",
+                            style: { textAnchor: "middle", fill: AXIS_TICK_COLOR },
                         }}
+                    />
+                    <Tooltip
+                        content={<ChartTooltip labelPrefix="depth: " />}
+                        cursor={{ stroke: "#39FF1466", strokeWidth: 1 }}
                     />
                     <Line
                         type="monotone"
                         dataKey="nodes"
+                        stroke="#00FF41"
+                        strokeWidth={2.5}
                         dot={false}
                         name="Subproblems"
                     />

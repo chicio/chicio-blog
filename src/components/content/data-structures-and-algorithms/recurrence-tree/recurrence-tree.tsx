@@ -12,6 +12,9 @@ import {
 } from "recharts";
 import { ChartTooltip } from "@/components/design-system/molecules/chart/chart-tooltip";
 
+const AXIS_TICK_COLOR = "#9fbf9f";
+const AXIS_LINE_COLOR = "#1f5a2e";
+
 const levels = () => {
     const n = 64;
     const a = 2;
@@ -40,25 +43,34 @@ export const RecurrenceTree: FC = () => (
                 <XAxis
                     dataKey="level"
                     height={50}
+                    tick={{ fill: AXIS_TICK_COLOR, fontSize: 12 }}
+                    tickLine={false}
+                    axisLine={{ stroke: AXIS_LINE_COLOR }}
                     label={{
                         value: "Recursion Level",
                         position: "insideBottom",
-                        style: { textAnchor: "middle" },
+                        style: { textAnchor: "middle", fill: AXIS_TICK_COLOR },
                     }}
                 />
                 <YAxis
+                    tick={{ fill: AXIS_TICK_COLOR, fontSize: 12 }}
+                    tickLine={false}
+                    axisLine={{ stroke: AXIS_LINE_COLOR }}
                     label={{
                         value: "Work",
                         angle: -90,
                         offset: 10,
                         position: "insideLeft",
-                        style: { textAnchor: "middle" },
+                        style: { textAnchor: "middle", fill: AXIS_TICK_COLOR },
                     }}
                 />
-                <Tooltip content={ChartTooltip} />
+                <Tooltip
+                    content={<ChartTooltip labelPrefix="level: " />}
+                    cursor={{ stroke: "#39FF1466", strokeWidth: 1 }}
+                />
                 <Legend />
-                <Line type="monotone" dataKey="Work per Call" stroke="#8b5cf6" strokeWidth={2} dot={false} />
-                <Line type="monotone" dataKey="Total Work at Level" stroke="#06b6d4" strokeWidth={2} dot={false} />
+                <Line type="monotone" dataKey="Work per Call" stroke="#00FF41" strokeWidth={2.5} dot={false} />
+                <Line type="monotone" dataKey="Total Work at Level" stroke="#ffd23f" strokeWidth={2.5} dot={false} />
             </LineChart>
         </ResponsiveContainer>
     </div>

@@ -22,7 +22,7 @@ const TWO_COLUMN_GRID = "grid gap-5 [grid-template-columns:repeat(auto-fit,minma
 export const AnalyticsSection: FC<AnalyticsSectionProps> = ({ allTime, ga4 }) => {
     const { totals, byContinent, byDevice, historicalWindow, hasGa4, pageViewsTimeline } = allTime;
     const estimateNote = hasGa4
-        ? `Totals combine live GA4 data with estimated Universal Analytics traffic (${historicalWindow.start} – ${historicalWindow.end}). Users and sessions are approximate — Universal Analytics and GA4 count them differently.`
+        ? `Totals combine live GA4 data with estimated Universal Analytics traffic (${historicalWindow.start} – ${historicalWindow.end}). Users and sessions are approximate.`
         : `Totals are estimated from Universal Analytics (${historicalWindow.start} – ${historicalWindow.end}); live analytics is not configured yet.`;
     const sinceLabel = ga4 && ga4.since !== "" ? formatAnalyticsMonth(ga4.since) : "";
     const viewsNote = `Monthly page views. The dashed line before 2022 is an estimated distribution of the archived Universal Analytics total (${historicalWindow.start} – ${historicalWindow.end}); the solid line is live GA4 data${sinceLabel !== "" ? ` since ${sinceLabel}` : ""}.`;
