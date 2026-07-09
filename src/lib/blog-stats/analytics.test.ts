@@ -224,6 +224,8 @@ describe("analytics", () => {
                 { dimensionValues: [{ value: "(not set)" }], metricValues: [{ value: "2" }] },
             ];
             const deviceRows = [{ dimensionValues: [{ value: "desktop" }], metricValues: [{ value: "7" }] }];
+            const browserRows = [{ dimensionValues: [{ value: "Chrome" }], metricValues: [{ value: "6" }] }];
+            const osRows = [{ dimensionValues: [{ value: "Macintosh" }], metricValues: [{ value: "4" }] }];
             const resolvePost = (key: string) =>
                 key === "2024/01/01/my-post" ? { title: "My Post", url: "/blog/post/2024/01/01/my-post" } : null;
 
@@ -234,6 +236,8 @@ describe("analytics", () => {
                     topPostsRows,
                     continentRows,
                     deviceRows,
+                    browserRows,
+                    osRows,
                     resolvePost,
                 ),
             ).toEqual({
@@ -248,17 +252,21 @@ describe("analytics", () => {
                     { label: "Unknown", users: 2 },
                 ],
                 byDevice: [{ label: "desktop", users: 7 }],
+                byBrowser: [{ label: "Chrome", users: 6 }],
+                byOs: [{ label: "Macintosh", users: 4 }],
                 since: "202401",
             });
         });
 
         it("returns zeroed totals, empty arrays, and an empty since when every report is empty", () => {
-            expect(mapReportsToAnalyticsStats(null, null, null, null, null, () => null)).toEqual({
+            expect(mapReportsToAnalyticsStats(null, null, null, null, null, null, null, () => null)).toEqual({
                 totals: { pageViews: 0, users: 0, sessions: 0 },
                 viewsPerMonth: [],
                 topPosts: [],
                 byContinent: [],
                 byDevice: [],
+                byBrowser: [],
+                byOs: [],
                 since: "",
             });
         });

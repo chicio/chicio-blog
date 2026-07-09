@@ -41,6 +41,7 @@ export const ViewsOverTimeChart: FC<ViewsOverTimeChartProps> = ({ data }) => (
                 <Tooltip
                     content={<ChartTooltip labelPrefix="" />}
                     labelFormatter={formatTooltipMonth}
+                    cursor={{ stroke: "#39FF1466", strokeWidth: 1 }}
                 />
                 <Legend />
                 <Line

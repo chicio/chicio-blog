@@ -17,8 +17,9 @@ type AnalyticsRow = protos.google.analytics.data.v1beta.IRow;
 
 const LIFETIME_START_DATE = "2015-08-14";
 const TODAY = "today";
-const TOP_POSTS_LIMIT = 10;
+const TOP_POSTS_LIMIT = 20;
 const TOP_POSTS_FETCH_LIMIT = 250;
+const DIMENSION_BREAKDOWN_LIMIT = 6;
 const POST_PATH_REGEX = "^/(blog/post/)?[0-9]{4}/[0-9]{2}/[0-9]{2}/[^/]+/?$";
 const CONTINENT_UNKNOWN_RAW = "(not set)";
 
@@ -104,6 +105,8 @@ export const mapReportsToAnalyticsStats = (
     topPostsRows: AnalyticsRow[] | null | undefined,
     continentRows: AnalyticsRow[] | null | undefined,
     deviceRows: AnalyticsRow[] | null | undefined,
+    browserRows: AnalyticsRow[] | null | undefined,
+    osRows: AnalyticsRow[] | null | undefined,
     resolvePost: (key: string) => PostRef | null,
 ): AnalyticsStats => {
     const viewsPerMonth = mapViewsPerMonth(viewsPerMonthRows);
@@ -116,6 +119,8 @@ export const mapReportsToAnalyticsStats = (
             label === CONTINENT_UNKNOWN_RAW ? "Unknown" : label,
         ),
         byDevice: mapDimensionCounts(deviceRows),
+        byBrowser: mapDimensionCounts(browserRows),
+        byOs: mapDimensionCounts(osRows),
         since: viewsPerMonth[0]?.month ?? "",
     };
 };
@@ -188,12 +193,32 @@ export const getAnalyticsStats = async (): Promise<AnalyticsStats | null> => {
             orderBys: [{ metric: { metricName: "totalUsers" }, desc: true }],
         });
 
+        const [browserResponse] = await client.runReport({
+            property,
+            dateRanges,
+            dimensions: [{ name: "browser" }],
+            metrics: [{ name: "totalUsers" }],
+            orderBys: [{ metric: { metricName: "totalUsers" }, desc: true }],
+            limit: DIMENSION_BREAKDOWN_LIMIT,
+        });
+
+        const [osResponse] = await client.runReport({
+            property,
+            dateRanges,
+            dimensions: [{ name: "operatingSystem" }],
+            metrics: [{ name: "totalUsers" }],
+            orderBys: [{ metric: { metricName: "totalUsers" }, desc: true }],
+            limit: DIMENSION_BREAKDOWN_LIMIT,
+        });
+
         return mapReportsToAnalyticsStats(
             totalsResponse.rows,
             viewsPerMonthResponse.rows,
             topPostsResponse.rows,
             continentResponse.rows,
             deviceResponse.rows,
+            browserResponse.rows,
+            osResponse.rows,
             buildPostResolver(),
         );
     } catch (error) {

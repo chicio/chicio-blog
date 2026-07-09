@@ -116,6 +116,8 @@ describe("BlogStats", () => {
                 topPosts: [{ path: "/blog/post/2024/01/01/my-post", title: "My Post", views: 500 }],
                 byContinent: [],
                 byDevice: [],
+                byBrowser: [],
+                byOs: [],
                 since: "202401",
             };
 

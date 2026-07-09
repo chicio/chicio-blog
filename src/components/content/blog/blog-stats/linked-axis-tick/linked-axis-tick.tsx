@@ -18,8 +18,8 @@ export const LinkedAxisTick: FC<LinkedAxisTickProps> = ({ x = 0, y = 0, payload,
     const href = hrefByValue.get(value);
     const label = (
         <text
-            x={x}
-            y={y}
+            x={0}
+            y={0}
             dy={4}
             textAnchor="end"
             fontSize={12}
@@ -29,16 +29,18 @@ export const LinkedAxisTick: FC<LinkedAxisTickProps> = ({ x = 0, y = 0, payload,
         </text>
     );
 
-    if (!href) {
-        return label;
-    }
-
     return (
-        <a
-            href={href}
-            style={{ cursor: "pointer" }}
-        >
-            {label}
-        </a>
+        <g transform={`translate(${x},${y})`}>
+            {href ? (
+                <a
+                    href={href}
+                    style={{ cursor: "pointer" }}
+                >
+                    {label}
+                </a>
+            ) : (
+                label
+            )}
+        </g>
     );
 };

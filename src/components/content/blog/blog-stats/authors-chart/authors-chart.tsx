@@ -49,7 +49,10 @@ export const AuthorsChart: FC<AuthorsChartProps> = ({ data }) => {
                         axisLine={{ stroke: AXIS_LINE_COLOR }}
                         tick={<LinkedAxisTick hrefByValue={hrefByValue} />}
                     />
-                    <Tooltip content={<ChartTooltip labelPrefix="Author: " />} />
+                    <Tooltip
+                        content={<ChartTooltip labelPrefix="Author: " />}
+                        cursor={{ fill: "#39FF141a" }}
+                    />
                     <Bar
                         dataKey="count"
                         name="Posts"

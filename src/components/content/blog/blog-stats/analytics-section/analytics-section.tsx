@@ -8,6 +8,8 @@ import { formatAnalyticsMonth } from "@/lib/blog-stats/format-month";
 import type { AllTimeAnalytics, AnalyticsStats } from "@/types/content/analytics-stats";
 import { ContinentChart } from "./continent-chart";
 import { DeviceChart } from "./device-chart";
+import { BrowserChart } from "./browser-chart";
+import { OsChart } from "./os-chart";
 import { ViewsOverTimeChart } from "./views-over-time-chart";
 import { TopPostsList } from "./top-posts-list";
 
@@ -34,7 +36,7 @@ export const AnalyticsSection: FC<AnalyticsSectionProps> = ({ allTime, ga4 }) =>
                     title="Traffic"
                     description={estimateNote}
                 />
-                <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                     <StatCard
                         value={totals.pageViews.toLocaleString("en-US")}
                         label="Page views"
@@ -70,12 +72,28 @@ export const AnalyticsSection: FC<AnalyticsSectionProps> = ({ allTime, ga4 }) =>
                 <ViewsOverTimeChart data={pageViewsTimeline} />
             </ChartPanel>
             {ga4 && (
-                <ChartPanel
-                    title="Top posts by views"
-                    description={topPostsNote}
-                >
-                    <TopPostsList data={ga4.topPosts} />
-                </ChartPanel>
+                <>
+                    <div className={TWO_COLUMN_GRID}>
+                        <ChartPanel
+                            title="Users by browser"
+                            description="The browsers readers use (GA4)."
+                        >
+                            <BrowserChart data={ga4.byBrowser} />
+                        </ChartPanel>
+                        <ChartPanel
+                            title="Users by OS"
+                            description="The operating systems readers use (GA4)."
+                        >
+                            <OsChart data={ga4.byOs} />
+                        </ChartPanel>
+                    </div>
+                    <ChartPanel
+                        title="Top posts by views"
+                        description={topPostsNote}
+                    >
+                        <TopPostsList data={ga4.topPosts} />
+                    </ChartPanel>
+                </>
             )}
         </div>
     );
