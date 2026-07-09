@@ -28,6 +28,8 @@ const ga4: AnalyticsStats = {
         { label: "Asia", users: 7 },
     ],
     byDevice: [{ label: "desktop", users: 3 }],
+    byBrowser: [],
+    byOs: [],
     since: "202401",
 };
 

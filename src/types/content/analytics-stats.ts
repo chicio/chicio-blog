@@ -26,6 +26,8 @@ export interface AnalyticsStats {
     topPosts: TopPost[];
     byContinent: DimensionCount[];
     byDevice: DimensionCount[];
+    byBrowser: DimensionCount[];
+    byOs: DimensionCount[];
     since: string;
 }
 

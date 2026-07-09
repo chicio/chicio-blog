@@ -37,6 +37,8 @@ describe("buildPageViewsTimeline", () => {
             topPosts: [],
             byContinent: [],
             byDevice: [],
+            byBrowser: [],
+            byOs: [],
             since: "202201",
         };
 

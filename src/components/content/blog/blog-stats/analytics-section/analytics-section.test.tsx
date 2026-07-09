@@ -32,6 +32,8 @@ const ga4: AnalyticsStats = {
     topPosts: [{ path: "/blog/post/2024/01/01/my-post", title: "My Post", views: 300 }],
     byContinent: [{ label: "Europe", users: 100 }],
     byDevice: [{ label: "desktop", users: 80 }],
+    byBrowser: [{ label: "Chrome", users: 90 }],
+    byOs: [{ label: "Macintosh", users: 70 }],
     since: "202401",
 };
 
@@ -58,7 +60,7 @@ describe("AnalyticsSection", () => {
                 />,
             );
 
-            expect(screen.getByRole("heading", { level: 2, name: "Traffic (all time)" })).toBeInTheDocument();
+            expect(screen.getByRole("heading", { level: 2, name: "Traffic" })).toBeInTheDocument();
             expect(screen.getByRole("heading", { level: 2, name: "Users by continent" })).toBeInTheDocument();
             expect(screen.getByRole("heading", { level: 2, name: "Users by device" })).toBeInTheDocument();
         });

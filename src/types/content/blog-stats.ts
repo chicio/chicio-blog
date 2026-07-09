@@ -15,11 +15,13 @@ export interface PostsPerYear {
 export interface TagCount {
     tag: string;
     count: number;
+    href: string;
 }
 
 export interface AuthorCount {
     author: string;
     count: number;
+    href: string;
 }
 
 export interface BlogStats {
