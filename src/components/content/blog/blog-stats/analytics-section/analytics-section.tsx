@@ -2,7 +2,6 @@
 
 import { FC } from "react";
 import { StatCard } from "@/components/design-system/molecules/stat-card";
-import { SectionHeading } from "@/components/design-system/molecules/typography/section-heading";
 import { ChartPanel } from "@/components/design-system/molecules/chart/chart-panel";
 import { formatAnalyticsMonth } from "@/lib/blog-stats/format-month";
 import type { AllTimeAnalytics, AnalyticsStats } from "@/types/content/analytics-stats";
@@ -32,10 +31,8 @@ export const AnalyticsSection: FC<AnalyticsSectionProps> = ({ allTime, ga4 }) =>
     return (
         <div className="mt-12 flex flex-col gap-5">
             <div>
-                <SectionHeading
-                    title="Traffic"
-                    description={estimateNote}
-                />
+                <h2>Traffic</h2>
+                <p className="mb-4">{estimateNote}</p>
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                     <StatCard
                         value={totals.pageViews.toLocaleString("en-US")}
