@@ -10,7 +10,7 @@ interface PostsPerYearChartProps {
 }
 
 export const PostsPerYearChart: FC<PostsPerYearChartProps> = ({ data }) => (
-    <div className="glow-container h-100 w-full p-5 mb-6">
+    <div className="h-100 w-full">
         <ResponsiveContainer width={"100%"} height={"100%"} initialDimension={{ width: 320, height: 300 }}>
             <BarChart data={data}>
                 <XAxis dataKey="year" />

@@ -10,7 +10,7 @@ interface ViewsOverTimeChartProps {
 }
 
 export const ViewsOverTimeChart: FC<ViewsOverTimeChartProps> = ({ data }) => (
-    <div className="glow-container h-100 w-full p-5 mb-6">
+    <div className="h-100 w-full">
         <ResponsiveContainer
             width={"100%"}
             height={"100%"}

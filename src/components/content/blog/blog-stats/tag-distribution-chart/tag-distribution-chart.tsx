@@ -18,7 +18,7 @@ export const TagDistributionChart: FC<TagDistributionChartProps> = ({ data }) =>
 
     return (
         <div
-            className="glow-container w-full p-5 mb-6"
+            className="w-full"
             style={{ height: chartHeight }}
         >
             <ResponsiveContainer

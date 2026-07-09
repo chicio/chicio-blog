@@ -11,5 +11,11 @@ interface DeviceChartProps {
 export const DeviceChart: FC<DeviceChartProps> = ({ data }) => {
     const donutData = data.map((entry) => ({ label: entry.label, value: entry.users }));
 
-    return <DonutChart data={donutData} />;
+    return (
+        <DonutChart
+            data={donutData}
+            centerLabel={data.length.toString()}
+            centerSublabel="device types"
+        />
+    );
 };
