@@ -25,12 +25,13 @@ export const AnalyticsSection: FC<AnalyticsSectionProps> = ({ allTime, ga4 }) =>
         : `Totals are estimated from Universal Analytics (${historicalWindow.start} – ${historicalWindow.end}); live analytics is not configured yet.`;
     const sinceLabel = ga4 && ga4.since !== "" ? formatAnalyticsMonth(ga4.since) : "";
     const viewsNote = `Monthly page views. The dashed line before 2022 is an estimated distribution of the archived Universal Analytics total (${historicalWindow.start} – ${historicalWindow.end}); the solid line is live GA4 data${sinceLabel !== "" ? ` since ${sinceLabel}` : ""}.`;
+    const topPostsNote = `Most-read posts${sinceLabel !== "" ? ` since ${sinceLabel}` : ""} (live GA4). Pre-2022 Universal Analytics per-post data was not preserved, so older classics aren't counted.`;
 
     return (
         <div className="mt-12 flex flex-col gap-5">
             <div>
                 <SectionHeading
-                    title="Traffic (all time)"
+                    title="Traffic"
                     description={estimateNote}
                 />
                 <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
@@ -71,7 +72,7 @@ export const AnalyticsSection: FC<AnalyticsSectionProps> = ({ allTime, ga4 }) =>
             {ga4 && (
                 <ChartPanel
                     title="Top posts by views"
-                    description="The most read posts of all time."
+                    description={topPostsNote}
                 >
                     <TopPostsList data={ga4.topPosts} />
                 </ChartPanel>

@@ -15,7 +15,7 @@ interface DonutChartProps {
     centerSublabel?: string;
 }
 
-const DEFAULT_COLORS = ["#00FF41", "#00CC33", "#9dffb0", "#007A1F", "#d6ffe0"];
+const DEFAULT_COLORS = ["#00FF41", "#015c1a", "#7dffa0", "#00a329", "#003b0e", "#cdffdb"];
 
 export const DonutChart: FC<DonutChartProps> = ({ data, colors = DEFAULT_COLORS, centerLabel, centerSublabel }) => {
     const total = data.reduce((sum, entry) => sum + entry.value, 0);

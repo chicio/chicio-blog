@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from "vitest";
 import { Content } from "@/types/content/content";
 import { Author, AuthorSummary } from "@/types/content/author";
 import { Tag } from "@/types/content/tag";
-import { ownerAuthorId } from "@/lib/content/authors/author-slug";
+import { authorHref, ownerAuthorId } from "@/lib/content/authors/author-slug";
 
 const { mockGetPosts, mockGetTags, mockGetAuthorsWithPosts } = vi.hoisted(() => ({
     mockGetPosts: vi.fn(),
@@ -69,7 +69,7 @@ describe("blog-stats", () => {
                 makePost(2022, 200, 2, ["react", "node"], [author1, author2]),
             ];
 
-            expect(computeHeadlineTotals(posts)).toEqual({
+            expect(computeHeadlineTotals(posts, 2022)).toEqual({
                 totalPosts: 2,
                 totalWords: 300,
                 totalReadingMinutes: 3,
@@ -82,7 +82,13 @@ describe("blog-stats", () => {
         it("treats a single-year blog as one year active", () => {
             const posts = [makePost(2024, 100, 1)];
 
-            expect(computeHeadlineTotals(posts).yearsActive).toBe(1);
+            expect(computeHeadlineTotals(posts, 2024).yearsActive).toBe(1);
+        });
+
+        it("extends years-active to the current year even without a post this year", () => {
+            const posts = [makePost(2020, 100, 1)];
+
+            expect(computeHeadlineTotals(posts, 2026).yearsActive).toBe(7);
         });
 
         it("rounds the summed fractional reading minutes", () => {
@@ -126,16 +132,16 @@ describe("blog-stats", () => {
 
         it("sorts tags by post count descending", () => {
             expect(computeTagDistribution(tags, 10)).toEqual([
-                { tag: "node", count: 8 },
-                { tag: "react", count: 5 },
-                { tag: "css", count: 1 },
+                { tag: "node", count: 8, href: "/blog/tag/node" },
+                { tag: "react", count: 5, href: "/blog/tag/react" },
+                { tag: "css", count: 1, href: "/blog/tag/css" },
             ]);
         });
 
         it("caps the result exactly at the given limit", () => {
             expect(computeTagDistribution(tags, 2)).toEqual([
-                { tag: "node", count: 8 },
-                { tag: "react", count: 5 },
+                { tag: "node", count: 8, href: "/blog/tag/node" },
+                { tag: "react", count: 5, href: "/blog/tag/react" },
             ]);
         });
 
@@ -151,9 +157,9 @@ describe("blog-stats", () => {
             ];
 
             expect(computeTagDistribution(tiedTags, 10)).toEqual([
-                { tag: "alpha", count: 4 },
-                { tag: "mu", count: 4 },
-                { tag: "zeta", count: 4 },
+                { tag: "alpha", count: 4, href: "/blog/tag/alpha" },
+                { tag: "mu", count: 4, href: "/blog/tag/mu" },
+                { tag: "zeta", count: 4, href: "/blog/tag/zeta" },
             ]);
         });
     });
@@ -170,8 +176,8 @@ describe("blog-stats", () => {
             ];
 
             expect(computeAuthorDistribution(authors)).toEqual([
-                { author: "Author Two", count: 5 },
-                { author: "Author One", count: 2 },
+                { author: "Author Two", count: 5, href: authorHref("a2") },
+                { author: "Author One", count: 2, href: authorHref("a1") },
             ]);
         });
 
@@ -182,8 +188,8 @@ describe("blog-stats", () => {
             ];
 
             expect(computeAuthorDistribution(authors)).toEqual([
-                { author: "Alpha Author", count: 3 },
-                { author: "Zeta Author", count: 3 },
+                { author: "Alpha Author", count: 3, href: authorHref("a2") },
+                { author: "Zeta Author", count: 3, href: authorHref("a1") },
             ]);
         });
 
@@ -195,15 +201,17 @@ describe("blog-stats", () => {
             ];
 
             expect(computeAuthorDistribution(authors, ownerAuthorId)).toEqual([
-                { author: "Author Two", count: 5 },
-                { author: "Author Three", count: 2 },
+                { author: "Author Two", count: 5, href: authorHref("a2") },
+                { author: "Author Three", count: 2, href: authorHref("a3") },
             ]);
         });
 
         it("keeps every author when no exclude id is given", () => {
             const authors: AuthorSummary[] = [{ author: makeAuthor(ownerAuthorId, "Fabrizio Duroni"), postCount: 93 }];
 
-            expect(computeAuthorDistribution(authors)).toEqual([{ author: "Fabrizio Duroni", count: 93 }]);
+            expect(computeAuthorDistribution(authors)).toEqual([
+                { author: "Fabrizio Duroni", count: 93, href: authorHref(ownerAuthorId) },
+            ]);
         });
     });
 
@@ -240,7 +248,9 @@ describe("blog-stats", () => {
             mockGetTags.mockReturnValue(tags);
             mockGetAuthorsWithPosts.mockReturnValue(authorsWithPosts);
 
-            expect(getBlogStats().externalAuthorDistribution).toEqual([{ author: "Author Two", count: 5 }]);
+            expect(getBlogStats().externalAuthorDistribution).toEqual([
+                { author: "Author Two", count: 5, href: authorHref("a2") },
+            ]);
         });
     });
 });

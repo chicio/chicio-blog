@@ -21,11 +21,12 @@ vi.mock("./analytics-config", () => ({
 }));
 
 import {
+    aggregateTopPosts,
     getAnalyticsData,
     getAnalyticsStats,
     mapDimensionCounts,
     mapReportsToAnalyticsStats,
-    mapTopPosts,
+    normalizePostPathKey,
     mapTotals,
     mapViewsPerMonth,
 } from "./analytics";
@@ -140,17 +141,53 @@ describe("analytics", () => {
         });
     });
 
-    describe("mapTopPosts", () => {
-        it("resolves each post's title via the given resolver", () => {
-            const rows = [{ dimensionValues: [{ value: "/blog/post/2024/01/01/my-post" }], metricValues: [{ value: "42" }] }];
+    describe("normalizePostPathKey", () => {
+        it("reduces legacy and current URL schemes to the same canonical key", () => {
+            expect(normalizePostPathKey("/blog/post/2022/01/02/react-hook")).toBe("2022/01/02/react-hook");
+            expect(normalizePostPathKey("/2022/01/02/react-hook/")).toBe("2022/01/02/react-hook");
+        });
+    });
 
-            expect(mapTopPosts(rows, () => "My Post")).toEqual([
-                { path: "/blog/post/2024/01/01/my-post", title: "My Post", views: 42 },
+    describe("aggregateTopPosts", () => {
+        const resolve =
+            (map: Record<string, { title: string; url: string }>) =>
+            (key: string) =>
+                map[key] ?? null;
+
+        it("sums views for one post across legacy + current paths, mapped to the current URL", () => {
+            const rows = [
+                { dimensionValues: [{ value: "/2022/01/02/react-hook/" }], metricValues: [{ value: "22556" }] },
+                { dimensionValues: [{ value: "/blog/post/2022/01/02/react-hook" }], metricValues: [{ value: "521" }] },
+                { dimensionValues: [{ value: "/2020/12/23/spring" }], metricValues: [{ value: "15579" }] },
+            ];
+
+            expect(
+                aggregateTopPosts(
+                    rows,
+                    resolve({
+                        "2022/01/02/react-hook": { title: "React hook", url: "/blog/post/2022/01/02/react-hook" },
+                        "2020/12/23/spring": { title: "Spring", url: "/blog/post/2020/12/23/spring" },
+                    }),
+                ),
+            ).toEqual([
+                { path: "/blog/post/2022/01/02/react-hook", title: "React hook", views: 23077 },
+                { path: "/blog/post/2020/12/23/spring", title: "Spring", views: 15579 },
             ]);
         });
 
+        it("drops paths with no matching post and respects the limit", () => {
+            const rows = [
+                { dimensionValues: [{ value: "/2022/01/02/known" }], metricValues: [{ value: "10" }] },
+                { dimensionValues: [{ value: "/2099/01/01/unknown" }], metricValues: [{ value: "99" }] },
+            ];
+
+            expect(
+                aggregateTopPosts(rows, resolve({ "2022/01/02/known": { title: "Known", url: "/blog/post/2022/01/02/known" } }), 1),
+            ).toEqual([{ path: "/blog/post/2022/01/02/known", title: "Known", views: 10 }]);
+        });
+
         it("returns an empty array when rows are missing", () => {
-            expect(mapTopPosts(undefined, (path) => path)).toEqual([]);
+            expect(aggregateTopPosts(undefined, () => null)).toEqual([]);
         });
     });
 
@@ -187,7 +224,8 @@ describe("analytics", () => {
                 { dimensionValues: [{ value: "(not set)" }], metricValues: [{ value: "2" }] },
             ];
             const deviceRows = [{ dimensionValues: [{ value: "desktop" }], metricValues: [{ value: "7" }] }];
-            const resolveTitle = (path: string) => (path.endsWith("my-post") ? "My Post" : path);
+            const resolvePost = (key: string) =>
+                key === "2024/01/01/my-post" ? { title: "My Post", url: "/blog/post/2024/01/01/my-post" } : null;
 
             expect(
                 mapReportsToAnalyticsStats(
@@ -196,7 +234,7 @@ describe("analytics", () => {
                     topPostsRows,
                     continentRows,
                     deviceRows,
-                    resolveTitle,
+                    resolvePost,
                 ),
             ).toEqual({
                 totals: { pageViews: 1000, users: 800, sessions: 900 },
@@ -215,7 +253,7 @@ describe("analytics", () => {
         });
 
         it("returns zeroed totals, empty arrays, and an empty since when every report is empty", () => {
-            expect(mapReportsToAnalyticsStats(null, null, null, null, null, (path) => path)).toEqual({
+            expect(mapReportsToAnalyticsStats(null, null, null, null, null, () => null)).toEqual({
                 totals: { pageViews: 0, users: 0, sessions: 0 },
                 viewsPerMonth: [],
                 topPosts: [],

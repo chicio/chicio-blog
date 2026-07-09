@@ -25,12 +25,12 @@ const stats: BlogStatsData = {
         { year: 2021, count: 10 },
     ],
     tagDistribution: [
-        { tag: "react", count: 8 },
-        { tag: "node", count: 5 },
+        { tag: "react", count: 8, href: "/blog/tag/react" },
+        { tag: "node", count: 5, href: "/blog/tag/node" },
     ],
     externalAuthorDistribution: [
-        { author: "Francesco Bonfadelli", count: 12 },
-        { author: "Alessandro Romano", count: 4 },
+        { author: "Francesco Bonfadelli", count: 12, href: "/blog/author/francesco-bonfadelli" },
+        { author: "Alessandro Romano", count: 4, href: "/blog/author/alessandro-romano" },
     ],
 };
 
@@ -104,7 +104,7 @@ describe("BlogStats", () => {
                     analytics={null}
                 />,
             );
-            expect(screen.getByRole("heading", { level: 2, name: "Traffic (all time)" })).toBeInTheDocument();
+            expect(screen.getByRole("heading", { level: 2, name: "Traffic" })).toBeInTheDocument();
             expect(screen.getByRole("heading", { level: 2, name: "Views over time" })).toBeInTheDocument();
             expect(screen.queryByRole("heading", { level: 2, name: "Top posts by views" })).not.toBeInTheDocument();
         });
@@ -127,7 +127,7 @@ describe("BlogStats", () => {
                     analytics={analytics}
                 />,
             );
-            expect(screen.getByRole("heading", { level: 2, name: "Traffic (all time)" })).toBeInTheDocument();
+            expect(screen.getByRole("heading", { level: 2, name: "Traffic" })).toBeInTheDocument();
             expect(screen.getByRole("heading", { level: 2, name: "Views over time" })).toBeInTheDocument();
         });
     });

@@ -1,6 +1,7 @@
 "use client";
 
 import { FC } from "react";
+import { InternalLink } from "@/components/design-system/atoms/links/internal-link";
 import type { TopPost } from "@/types/content/analytics-stats";
 
 interface TopPostsListProps {
@@ -17,7 +18,12 @@ export const TopPostsList: FC<TopPostsListProps> = ({ data }) => (
                 <span className="text-accent-alpha-70 w-8 flex-none text-sm font-bold tabular-nums">
                     {String(index + 1).padStart(2, "0")}
                 </span>
-                <span className="text-text min-w-0 flex-1 truncate text-sm">{post.title}</span>
+                <InternalLink
+                    to={post.path}
+                    className="text-text hover:text-accent min-w-0 flex-1 truncate text-sm transition-colors"
+                >
+                    {post.title}
+                </InternalLink>
                 <span className="text-accent text-shadow-sm ml-auto min-w-[70px] text-right text-sm tabular-nums">
                     {post.views.toLocaleString("en-US")}
                 </span>

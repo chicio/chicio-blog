@@ -58,7 +58,7 @@ describe("AnalyticsSection", () => {
                 />,
             );
 
-            expect(screen.getByRole("heading", { level: 2, name: "Traffic (all time)" })).toBeInTheDocument();
+            expect(screen.getByRole("heading", { level: 2, name: "Traffic" })).toBeInTheDocument();
             expect(screen.getByRole("heading", { level: 2, name: "Users by continent" })).toBeInTheDocument();
             expect(screen.getByRole("heading", { level: 2, name: "Users by device" })).toBeInTheDocument();
         });
