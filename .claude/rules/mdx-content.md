@@ -22,7 +22,7 @@ All content is MDX (`.mdx`). Each content piece is a `content.mdx` file inside a
 title: "Title"
 description: "Description"
 date: YYYY-MM-DD
-image: /images/content/blog/post/YYYY/MM/DD/slug/image.jpg
+image: /media/content/blog/post/YYYY/MM/DD/slug/image.jpg
 tags: [tag1, tag2]
 authors: [fabrizio_duroni]
 ---
@@ -39,7 +39,7 @@ Additional metadata fields per content type:
 - Use conversational but technical tone
 - Reference other blog posts with relative links: `[text](/blog/post/YYYY/MM/DD/slug)`
 - Emoji shortcodes are supported (e.g., `:laughing:`, `:sweat_smile:`)
-- Images are co-located in the post directory: place image files in `<post-dir>/images/` and reference them as `![alt](/images/content/blog/post/YYYY/MM/DD/slug/filename.png)`
+- Images are co-located in the post directory: place image files in `<post-dir>/media/` (folder MUST be named `media`) and reference them as `![alt](/media/content/blog/post/YYYY/MM/DD/slug/filename.png)`
 
 ## Component Imports
 - Import components at the top of the MDX file, right after frontmatter
