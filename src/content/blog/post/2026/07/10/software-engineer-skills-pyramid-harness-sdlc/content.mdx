@@ -40,12 +40,25 @@ We will show you later how these human gates are embedded directly in the flow o
 The same applies to writing good skills (as you will see also today in this post): it has been (and still is) a try-and-learn journey.
 We learned from our mistakes and attempts, and we are still learning today.
 
-## Skills vs Agents: a quick comparison
+## Claude Code, skills, and agents: a quick introduction
 
-A brief comparison between what is an agent and what is an agent.
+Before jumping into the plugin, let's quickly align on the building blocks we will talk about in the rest of this article.
 
-- Agent: WHO does the work: an isolated worker with its own context window, own tool whitelist, own model, own persona. It decides how to reach the goal (it's not a fixed script). Caller only sees its final message.
-- Skill: HOW to do a task: on-demand procedural knowledge (a SKILL.md + optional scripts) that loads into whoever invokes it — same context, not a new one. No own model/tools.
+[Claude Code](https://www.claude.com/product/claude-code) is the agentic coding tool from Anthropic.
+It is a CLI where Claude can read your codebase, edit files, run commands, and drive an entire development workflow directly from the terminal.
+In other words, Claude Code is itself a harness: the software shell around the model that runs the agentic loop, feeding it the right context, executing its tool calls, and looping until the job is done.
+The model provides the intelligence, the harness turns it into a worker.
+Keep this definition in mind, because it is the core idea of this article: if Claude Code is a harness around the model, our plugin is a harness around Claude Code, one that encodes how *we* develop software.
+
+Claude Code offers some powerful extension points on top of this foundation. The two we used the most are agents and skills:
+
+- an [agent](https://code.claude.com/docs/en/sub-agents) is WHO does the work: an isolated worker with its own context window, its own list of allowed tools, its own model, and its own persona. It receives a task, decides autonomously how to reach the goal (it is not a fixed script), and the caller only sees its final message.
+- a [skill](https://code.claude.com/docs/en/skills) is HOW to do a task: on-demand procedural knowledge (a `SKILL.md` file, plus optional scripts and resources) that gets loaded into the context of whoever invokes it. It does not create a new context, and it does not have its own model or tools: it is knowledge, not a worker.
+
+If you want a simple mental model: skills are the standard operating procedures of a company, while agents are the specialized employees that execute them.
+A [plugin](https://code.claude.com/docs/en/plugins) is the way to package skills and agents together, so they can be versioned and distributed as a single unit (in our case, through an internal marketplace).
+
+This is all you need to know to follow the rest of the article. Let's now look at the workflow we wanted to encode.
 
 ## Our workflow
 
