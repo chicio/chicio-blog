@@ -11,4 +11,128 @@ authors: [fabrizio_duroni]
 
 ---
 
-<!-- Start writing here -->
+In the introduction we speak about the fact that lastminute chose Anthropic and the claude models as our standard AI. 
+I want to speak about why we are creating a claude code plugin:
+- Experiment with AI, the new technology that is disrupting our field
+- we want to automatize and encode in claude code skills and agent our "software factory": how we are used to develop software encoded in skills and agents
+-- we developed our harness as a plugin for claude code
+This project is an experiment. We are trying to understand how much we can push in automatize our workflows: the tradeoff between automatisation and benefit in doing it. This is because not everything is useful to be automatize: this is where real engineering and value for the company shows up.
+Also in terms of how to write good skill, it has been (and still it is) a try and learn journey: we learn from our mistakes and attempts.
+
+## Skills vs Agents: a quick comparison
+
+A brief comparison between what is an agent and what is an agent.
+
+- Agent: WHO does the work: an isolated worker with its own context window, own tool whitelist, own model, own persona. It decides how to reach the goal (it's not a fixed script). Caller only sees its final message.
+- Skill: HOW to do a task: on-demand procedural knowledge (a SKILL.md + optional scripts) that loads into whoever invokes it — same context, not a new one. No own model/tools.
+
+## Our workflow
+
+Before jumping in the plugin description, I woould like to talk about the state of the art of our ways of working. I will speak about how we leverage SCRUM as a workflow for our software development lifecycle:
+- request from stakeholders comes in
+- the product manager brings to the refinement the request, with or without the user story
+- the team with the product manager, analise during refinement the request and produce a user story
+- after the refinement, the team takes the story and develop it
+- the devepment produces a pull request to be shared with other developers for code review (and code validation)
+- after approval, the new feature gets deployed in QA for product validation, to e2e test that everything works correctly
+- after e2e approval, the feature goes to production
+
+CHECK: encode bullet points above in a mermaid graph/image
+
+## Our claude code plugin
+
+We tried to encode in skills and agents the ways of working described above.
+We encoded the full process.
+
+The first step is thw write of the jira story, in a skill called `write-jira-user-story`. We created a skill ad hoc to do this. It brings a specific layout to write them made as follow:
+
+- title
+- acceptance criteria
+- tech todo
+- validation
+
+Among this, propably the most relevant part is the tech todo section. here we try to be as precise as possible with respect to the actual code structure: in this way we try to guide the next phase to point the LLM already to the right direction in terms of design and implementation of the feature.
+The ticket wrote in this way is important not only for the our workflow integration but also to act as documentation of the feature (so we can consult it if we need to understand the reason why code contains some logics)
+The skill uses the [atlassian plugin](XXX link to plugin) to interact with our boards and create the story already in the backlog.
+
+The second step is the implementation of the story. For this we have 3 specific skills, one for each tech stack in our company Backend, frontend web and mobile, that uses specific agents:
+
+- `sdlc-mobile`
+- `sdlc-backend`
+- `sdlc-frontend`
+
+The skills have each one their own peculiarity in terms of tech stack. For example, the mobile one is focused on react native and related technology. The backend one is focused on spring boot + java/kotlin + our own internal abstraction over spring boot, [appfw](XXX link to the article about BE and Frontend technology).  
+Even if with differences related to the tech stack, the share a common workflow. The skill act as an orchestrator of the SDLC, software development lifecycle, delegating to subagents specific operations based on the phase where we are.
+
+All these skills accepts a set of shared parameters, each one triggering an ad hoc function:
+
+- `<jira ticket>`, the user story to develop
+- `<figma url>`, the url of the mockup. This is a parameter accepted only by the FE skills (`sdlc-frontend` and `sdlc-mobile`)
+- `--isolated`, to start a workflow in a `git worktree`, isolated from the main one. This let us trigger multiple workflow on the same codebase.
+
+Let's see the common workflow the skills share between each other.
+
+### The workflow of the skills
+
+First, an ad hoc `explorer` agent, that uses a cheap model, explore the codebase to udnerstand where and how to develop a feature. We put in place some indication based on [claude rules](XXX link a claude rules), CLAUDE.md and a custom file called ARCHITECTURE.md to optimize the exploration of the codebase. We have a variant of this agent for each of the three tech stack defined above.
+The agent reports back to the orchestrator LLM (where the skill was launched) the result of the exploration, in a specific format reported below.
+
+```
+ADD format of the report of the explorer subagents
+```
+We leverage for all the agents the usage of the [claude code specific frontmatter](XXX link) to list some other property. One that could come handy is the agent color, to spot its execution in the terminal orchestrator output.
+
+After the exploration, we start a brainstorming and planning phase leveraing a skill from the community: `grilling` from the almighty [Matt Pocock skills](XXX). The LLM orchestrator starts to interviews the user tirelessly to clarify any doubt about the development of the feature. The result is a plan to be approved  before starting the development. This phase is done by the orchestrator in the main conversation, so that all the information about the development to be done remain available for the next phases.
+
+When the plan gets approved, a new subagent is trigged. This agent is called `implementer`. Like for the explorer, also the this one has knowledge about the specific tech stack of the project we are working on.
+This agent does the "real" work: it implements the feature based on the plan defined before. Like for the other agent, also this one reports back to the main orchestrator the result of the implementation in a specific format
+
+```
+ADD format of the report of the implementer subagents
+```
+
+This agent works leveragin one of our ways of working: micro commit. In this way, even if the PR results in a big amount of changes (eg. > 50), we are still able to navigate commit by commit the implementation to check what the LLM produced and if it matches our expecation.
+This agent uses `sonnet` as model, defined in the frontmatter of the agent. Why? Because the plan was already writter by the main orchestrator, leveragin a much powerful model (eg. Opus). In this way the implementer saves token guided by the plan defined.
+
+After implementation, we trigger another agent from the orchestrator: the `code-reviewer`. The orchesrator starts a 3 rounds of code review. The new agent review the implementation done, and reports back to the orchestrator the result of the review, also in terms of `APPROVED/CHANGES_REQUESTED`, and in case of the latter one also the list of changes to be done.
+
+```
+ADD format of the report of the code reviewer subagents
+```
+
+If the first round of code review is already successful, we skip obviously the other 2 rounds. If all the three rounds of code review fail, the decision about what to do is delegate back to the orchestrator in the main conversion (and obviously to the software engineer).
+
+After this point, there is a branch between the skills related to frontend technologies, and the one for BE. The backend one, opens the PR, after the approval/local review of the software engineer. The frontend skills instead, use ad-hoc tools to do a local validation of the feature implemented. The web fe one uses [`agent-browser`](XXX link), while the mobile one uses [`agent-device`](XXX link). These are tools from the community that let the LLMs interact respectively with the iOS simulator/Android emulator and the browser. This step is optional, and can be skipped if we launch the skill with the `--no-qa`. (TODO: add for mobile version the generation of the screenshot with the report of the validation).
+In both FE workflow we defined a sub workflow to do this validation, based on a test book of test cases defined by the llm from the modification done in the current branch with respect to the main one. A series of screenshot is taken, and composed in a markdown report. Both the markdown and the screenshots are published in a comment on the final merge request when the software engineer tells to the orchestrator to publish it.
+
+At this point the workflow is completed and the PR is published on our gitlab leveraging the [`glab` gitlab cli](XXX link), using a specific format for the title and the description.
+
+### sdlc-e2e
+
+All these skills above are invocable manually on a specific project. Anyway we tried something more ambitious: we create a specific skill to orchestrate all of them, capable of accepting a generic user command like `write jira with this content <description of the task>`, or `implement this jira ticket: <ticket id>`. This skill will select, in case of implementation, the right skill for the tech stack of the project you are into. 
+It will also be able, for the backend tech stack, to deploy the result of the code to our microservice leveraging another skill called `be-deploy`, that uses under the hood the [argo mcp](XXX Link) (falling back to [`argocli`](XXX LINK) when not available) to monitor the progress of the deploy.
+
+## Plugin Architecture overview
+
+Below you can find a full overview of the architecture of the plugin, in terms of interaction between skills and agents. This is a recap of the full plugin architecture.
+As you can see, we came up with a solution that includes different layers of abstractions: at the upper levels there are skills that interact directly with a human input, and the only purpose is to translate what they receive in a more technical language (see the e2e skill). At the middle levels, skills are more specific and has a more techincal knowledge (see the sdlc-mobile, be and fe). At the lowest levels, there are agents that are the operative layer that interact with the specific technology (see the implementer that, guided by the plan done before by the explorer, writes the actual Kotlin/Typescript code, or the dev-ops that checks Gitlab CI status using Gitlab APIs). This is a design approach that mymics other engineering structures we find in software engineering (think about the test pyramid, or the divide et impera approach of the procedural programming and what we are used to see in the Object Oriented Programming).
+
+XXX Mermaid graph of the plugin architecture
+
+## Improvements
+
+The plugin is far from perfect. We already noted some possible improvements:
+
+- speed. The plugin takes more time in terms of execution, especially in the implementer vs code reviewer phase. We are thinking about possible solution like trying to parallelize tasks implementation.
+- micro commit approach. Sometimes the implementer agent tends to push to much the micro commit approach. We are still thinking about possible solutions to improve this.
+- validation. We would like to push more the validation phase, to generate also video of the QA phase that could be reviewed by us.
+
+## Conclusion and next step
+
+The plugin is still in an experimental phase. We are testing it in our daily job, tweaking it as soon as we find out problems and bugs.
+In our opinion, up to now the results were pretty good and quite impressive. We were able, giving a request from our product manager, to completely automatize the workflow for specific tasks while we were focusing on much more harder and "human related" work: system design, product discovery, code review of other features, manual deep validation of the product.  
+One think we would like to say, is that for sure, a tool like this, reduced our time to market for releasing new features, and we noticed it in our day by, but unfortunately, at the moment we don't have a specific metric to demonstrated the effectiveness of this plugin.  
+Also because, related for example to the metrics recently shared by Spotify, we don't belive that measuring the number of deploy if a relevant metric for assessing the goodness of the AI tools.  
+We will try to understand in a next phase how to understand the real impact. 
+Stay tuned for the next evolution we will share with you in other article.
+
