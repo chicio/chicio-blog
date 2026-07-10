@@ -3,7 +3,7 @@ title: "The software engineer skills pyramid: how we encoded our own harness"
 description: "In this post we will show how we encoded our software development lifecycle in a set of custom skills and subagents."
 date: 2026-07-10
 image: /media/content/blog/post/2026/07/10/software-engineer-skills-pyramid-harness-sdlc/placeholder-featured.jpg
-tags: [ai]
+tags: [ai, machine learning, llm]
 authors: [fabrizio_duroni, davide_botti, timothy_russo]
 ---
 
@@ -17,7 +17,7 @@ We let them check their bookings, do operations on them, and we generate new str
 Customer Value is made of multiple teams, spanning both web and mobile.
 
 Recently, together with two other colleagues from my area, we started to investigate how we could improve our Claude Code usage.
-These colleagues are [Timothy Russo](/blog/author/timothy-russo), an experienced mobile software engineer with more than 10 years of experience,
+These colleagues are [Timothy Russo](/blog/author/timothy-russo), a mobile software engineer with more than 10 years of experience,
 a broad knowledge of everything related to frontend (web and mobile), always up to date on the latest technologies and on the new tools coming out on the market,
 and [Davide Botti](/blog/author/davide-botti), a senior software engineer specialized in backend with more than 10 years of experience,
 focused on observability of applications, system design, and complex architectures.
@@ -25,10 +25,10 @@ Both of them are obsessed with product details and bringing value to the custome
 
 At lastminute.com we chose Anthropic and the Claude models as our standard AI platform, and Claude Code is the tool we use every day in our development workflow.
 So at some point we started to think: "How can we encode our software development lifecycle in a Claude Code plugin, to leverage the capabilities of Claude Code at their best?".
-The reasons behind this question are basically two:
+There are basically two reasons behind this question:
 
 - experiment with AI, the technology that is disrupting our field, going beyond the "chat with your codebase" usage and trying to understand what these tools can really do for us
-- starting to encode our own "software factory" in a set of custom skills and subagents: the way we are used to developing software, captured in a format that an AI agent can execute
+- start to encode our own "software factory" in a set of custom skills and subagents: the way we are used to developing software, captured in a format that an AI agent can execute
 
 In other words, we wanted to develop our own harness as a Claude Code plugin.
 
@@ -37,7 +37,7 @@ Not everything is worth automating: this is where real engineering (and real val
 Automation doesn't remove the need for software engineering: it moves it.
 Someone still has to decide what is worth automating, review what the AI produces, and act as the human gate that keeps the quality bar where it should be.
 We will show you later how these human gates are embedded directly in the flow of our plugin.
-The same applies to writing good skills (as you will see also today in this post): it has been (and still is) a try-and-learn journey.
+The same applies to writing good skills (as you will also see in this post): it has been (and still is) a try-and-learn journey.
 We learned from our mistakes and attempts, and we are still learning today.
 
 ## Claude Code, skills, and agents: a quick introduction
@@ -52,8 +52,10 @@ Keep this definition in mind, because it is the core idea of this article: if Cl
 
 Claude Code offers some powerful extension points on top of this foundation. The two we used the most are agents and skills:
 
-- an [agent](https://code.claude.com/docs/en/sub-agents) is WHO does the work: an isolated worker with its own context window, its own list of allowed tools, its own model, and its own persona. It receives a task, decides autonomously how to reach the goal (it is not a fixed script), and the caller only sees its final message.
-- a [skill](https://code.claude.com/docs/en/skills) is HOW to do a task: on-demand procedural knowledge (a `SKILL.md` file, plus optional scripts and resources) that gets loaded into the context of whoever invokes it. It does not create a new context, and it does not have its own model or tools: it is knowledge, not a worker.
+- an [agent](https://code.claude.com/docs/en/sub-agents) is WHO does the work: an isolated worker with its own context window, its own list of allowed tools, its own model, and its own persona.
+  It receives a task, decides autonomously how to reach the goal (it is not a fixed script), and the caller only sees its final message.
+- a [skill](https://code.claude.com/docs/en/skills) is HOW to do a task: on-demand procedural knowledge (a `SKILL.md` file, plus optional scripts and resources) that gets loaded into the context of whoever invokes it.
+  It does not create a new context, and it does not have its own model or tools: it is knowledge, not a worker.
 
 If you want a simple mental model: skills are the standard operating procedures of a company, while agents are the specialized employees that execute them.
 A [plugin](https://code.claude.com/docs/en/plugins) is the way to package skills and agents together, so they can be versioned and distributed as a single unit (in our case, through an internal marketplace).
@@ -62,7 +64,7 @@ This is all you need to know to follow the rest of the article. Let's now look a
 
 ## Our workflow
 
-Before describing the plugin, it is worth showing the state of the art of our way of working, because that is exactly what we tried to encode.
+Before describing the plugin, it is worth showing the current state of our way of working, because that is exactly what we tried to encode.
 Our teams follow SCRUM, and what matters for this article is the journey a feature makes from an idea to production.
 
 Everything starts with a request coming from our stakeholders.
@@ -70,7 +72,7 @@ The product manager brings the request to our refinement sessions, sometimes wit
 During the refinement, the team analyzes the request together with the product manager, and the output is a user story ready to be developed.
 After the refinement, the team takes the story and develops it.
 The development produces a merge request (MR, the GitLab equivalent of a GitHub pull request) that is shared with the other developers for code review and validation.
-After the approval, the new feature is deployed in our QA environment for the product validation: the team, together with the product manager, tests end to end that everything works correctly.
+After the approval, the new feature is deployed to our QA environment for product validation: the team, together with the product manager, tests end-to-end that everything works correctly.
 After this last approval, the feature finally goes to production.
 
 ```mermaid
@@ -93,8 +95,8 @@ We tried to encode in skills and agents the way of working described in the prev
 
 ### Writing the user story
 
-The first step is the writing of the Jira user story, encoded in a skill called `write-jira-user-story`.
-Every skill starts with a frontmatter that tells Claude Code when to trigger it. This is the (redacted) one of our skill:
+The first step is writing the Jira user story, encoded in a skill called `write-jira-user-story`.
+Every skill starts with a frontmatter block that tells Claude Code when to trigger it. This is the (redacted) one of our skill:
 
 ```markdown
 ---
@@ -133,7 +135,7 @@ Here we try to be as precise as possible with respect to the actual code structu
 In this way we guide the next phase, pointing the LLM already in the right direction in terms of design and implementation of the feature.
 A story written in this way is important not only for our workflow integration: it also acts as **documentation of the feature**, so we can consult it later if we need to understand why the code contains some specific logic.
 
-The skill also encodes the small pieces of discipline that make the difference in the day-by-day usage:
+The skill also encodes the small pieces of discipline that make the difference in day-to-day usage:
 
 - the **input** does not need to be a clean spec: the skill can mine a pasted **Slack conversation** or a **meeting transcript**, separating the actual ask from the side chatter
 - if the **TECH TODO** would come out empty or vague, the skill does not accept a "TBD" placeholder: it starts a `grilling` session with the user until the list is implementation-ready
@@ -183,7 +185,8 @@ allowed-tools:
 There are three interesting things in this frontmatter, beyond the trigger description we already saw:
 
 - the `argument-hint` declares the parameters the skill accepts
-- the `allowed-tools` section is a **whitelist**: the orchestrator can dispatch agents, invoke other skills, and run only the commands it needs (`git`, `glab`, `npm`). Everything else is off-limits. When you let an LLM drive your software development lifecycle, constraining what it can touch is not a detail
+- the `allowed-tools` section is a **whitelist**: the orchestrator can dispatch agents, invoke other skills, and run only the commands it needs (`git`, `glab`, `npm`). Everything else is off-limits.
+  When you let an LLM drive your software development lifecycle, constraining what it can touch is not a detail
 - `effort: high` raises the reasoning effort of the model while this skill runs: orchestration decisions are worth the extra thinking tokens
 
 Let's look closer at the shared parameters, each one changing the behavior of the pipeline:
@@ -196,7 +199,7 @@ Let's look closer at the shared parameters, each one changing the behavior of th
 Before starting the real work, every skill runs the same intake ritual.
 It refuses to work on the default branch, creating a feature branch named after the ticket.
 It builds a manifest of the project context files (`CLAUDE.md`, `ARCHITECTURE.md`, the [Claude Code rules](https://code.claude.com/docs/en/memory#organize-rules-with-claude%2Frules%2F) in `.claude/rules`) that will be passed to every dispatched agent.
-Only then the pipeline starts. Let's see the workflow the skills share, phase by phase.
+Only then does the pipeline start. Let's see the workflow the skills share, phase by phase.
 
 ### The workflow of the skills
 
@@ -207,7 +210,7 @@ Let's walk through them one by one.
 
 The first phase is the exploration of the codebase.
 An ad hoc `explorer` agent (one variant for each of the three tech stacks: `fe-explorer`, `be-explorer`, `mobile-explorer`) explores the project to understand where and how the feature should be developed.
-Like the skills, also the agents are defined by a markdown file with a [dedicated frontmatter](https://code.claude.com/docs/en/sub-agents). This is the one of `fe-explorer`:
+Like the skills, the agents are also defined by a markdown file with a [dedicated frontmatter](https://code.claude.com/docs/en/sub-agents). This is the one for `fe-explorer`:
 
 ```markdown
 ---
@@ -229,9 +232,10 @@ Three properties are worth a comment:
 
 - `model: haiku`: exploration is about coverage, not deep reasoning, so this agent runs on a cheap and fast model. The cheap agent maps the territory so that the expensive ones don't burn tokens rediscovering the structure of the codebase
 - `tools`: the whitelist strikes again, and this time it makes the agent **read-only**. With only `Read`, `Grep`, and `Glob` available, the explorer physically cannot write files or run commands
-- `color`: a cosmetic one, but handy in the day-by-day usage. Each agent gets its own color in the terminal output, so you can spot at a glance which agent is running while the orchestrator works
+- `color`: a cosmetic one, but handy in day-to-day usage. Each agent gets its own color in the terminal output, so you can spot at a glance which agent is running while the orchestrator works
 
-To optimize the exploration, we put in place some indications based on `CLAUDE.md`, the [Claude Code rules](https://code.claude.com/docs/en/memory#organize-rules-with-claude%2Frules%2F), and a custom `ARCHITECTURE.md` file: the explorer treats them as sources of truth, instead of re-deriving the structure of the project at every run.
+To optimize the exploration, we put some guidance in place based on `CLAUDE.md`, the [Claude Code rules](https://code.claude.com/docs/en/memory#organize-rules-with-claude%2Frules%2F), and a custom `ARCHITECTURE.md` file:
+the explorer treats them as sources of truth, instead of re-deriving the structure of the project at every run.
 When it finishes, the agent reports back to the orchestrator with a report in a precise format:
 
 ```markdown
@@ -266,7 +270,7 @@ Structured reports are what make the communication between agents reliable: the 
 #### Brainstorm and plan: the first human gate
 
 After the exploration, the planning phase starts, and here we meet the `grilling` skill again.
-The orchestrator seeds it with the exploration report, the **TECH TODO** section of the story and, if provided, the Figma design of the feature.
+The orchestrator seeds it with the exploration report, the **TECH TODO** section of the story, and, if provided, the Figma design of the feature.
 Then the interview starts: the orchestrator grills us until every doubt about the development is clarified.
 The result is a plan that must be explicitly approved before any code gets written: this is the **first human gate** of the pipeline.
 For UI work, the plan also captures the QA scenarios that will drive the runtime validation phase later.
@@ -347,7 +351,8 @@ As a nice side effect, the loop gets **model diversity**: the code written by on
 The implement ⇄ review loop is bounded to a **maximum of 3 rounds**:
 
 - if the verdict is `APPROVED`, the loop ends immediately (the other rounds are simply skipped)
-- if the verdict is `CHANGES_REQUESTED`, the blocking findings go back to the implementer, which either fixes them (with new micro commits) or rebuts once with a technical justification. On a rebuttal, the reviewer either withdraws the finding or re-asserts it: a re-asserted finding does not loop again, it escalates directly to the human
+- if the verdict is `CHANGES_REQUESTED`, the blocking findings go back to the implementer, which either fixes them (with new micro commits) or rebuts once with a technical justification.
+  On a rebuttal, the reviewer either withdraws the finding or re-asserts it: a re-asserted finding does not loop again, it escalates directly to the human
 - non-blocking findings never loop: they are just reported at the end
 - **after 3 rounds with unresolved blocking findings, the pipeline stops and surfaces them to the software engineer**
 
@@ -366,9 +371,9 @@ The idea behind it: for UI work, reviewing the diff is not enough. Someone has t
 These are community tools that let an LLM interact with a running app: open screens, click and tap, fill forms, inspect the UI tree, and take screenshots.
 
 The validation follows a dedicated sub-workflow.
-The QA agent derives a **test book** of test cases, starting from the QA scenarios captured in the plan and the modifications of the current branch with respect to the main one.
+The QA agent derives a **test book** of test cases, starting from the QA scenarios captured in the plan and the changes of the current branch compared to main.
 Then it launches the app, exercises the test cases one by one, and captures a screenshot for each of them, together with logs and console evidence.
-Everything is composed in a Markdown QA report with a final verdict: `PASS`, `FAIL`, or `NOT PERFORMED`.
+Everything is compiled into a Markdown QA report with a final verdict: `PASS`, `FAIL`, or `NOT PERFORMED`.
 
 The verdict drives what happens next:
 
@@ -376,7 +381,7 @@ The verdict drives what happens next:
 - `FAIL`: the findings go back to the implementer for a fix, followed by a quick re-review and a single re-run of the QA. If it still fails, the pipeline stops and surfaces the evidence to the human
 - `NOT PERFORMED` (no simulator available, build failed, no dev server): recorded as a non-blocking note, without blocking the pipeline
 
-This phase is conditional: it runs when a user-visible surface changed, it can be forced with `--qa`, and it can be skipped with `--no-qa` (or automatically, when the change has no rendered surface).
+This phase is conditional: it runs when a user-visible surface changes; it can be forced with `--qa`, and it can be skipped with `--no-qa` (or automatically, when the change has no rendered surface).
 When the merge request is opened, the QA report and its screenshots are published as a comment on it, so the human reviewers see the evidence next to the diff.
 To be honest with you, at the moment this last part is fully implemented only in the mobile pipeline: `sdlc-frontend` carries the QA evidence to the merge request gate, but it does not post the comment yet (it is on our todo list :sweat_smile:).
 
@@ -391,7 +396,7 @@ The description contains the summary of the change, the reference to the Jira st
 As a final touch, the skill proposes to transition the Jira story to "In Review" with a comment containing the MR URL, and it kicks off a non-blocking watch of the CI pipeline.
 
 The pipeline ends here, with the merge request open. **Merging remains a human act**: the last word on what lands on the main branch is still ours.
-From this point, the standard flow we described at the beginning of the article takes over: our teammates review the merge request like any other one, and their review could end up requiring changes to the code.
+From this point, the standard flow we described at the beginning of the article takes over: our teammates review the merge request like any other, and their review could end up requiring changes to the code.
 After all the automation needed to make a story ready for production, the human touch comes back exactly where it matters the most: deciding, together, that the code is good enough to reach our users.
 
 ### sdlc-e2e: one skill to rule them all
@@ -400,7 +405,7 @@ All the skills above are invocable manually on a specific project.
 But we tried something more ambitious: a single skill, `sdlc-e2e`, that orchestrates all of them.
 It accepts generic requests in natural language, like `write a jira with this content: <description of the task>` or `implement this jira ticket: <ticket-id>`, and it routes them to the right skill.
 
-The persona this skill impersonates is a **senior end-to-end engineer** wearing three hats at once:
+This skill impersonates a **senior end-to-end engineer** wearing three hats at once:
 
 - a product owner, who cares that a work item captures real user and business value
 - a scrum master, who keeps the work well-formed, correctly scoped, and unblocked
@@ -477,7 +482,7 @@ flowchart TD
 As you can see, the solution we came up with is organized in **layers of abstraction**.
 At the top, there are the skills that interact directly with the human: their only purpose is to translate a request expressed in natural language into a more technical one (`sdlc-e2e` is the perfect example).
 This boundary is not rigid, though: the process skills can also be invoked directly.
-It happens all the time in our day-by-day work, because the story is often written in a different moment than its execution: in that case we skip the top of the pyramid and trigger the right SDLC skill for the operation we need.
+It happens all the time in our day-to-day work, because the story is often written in a different moment than its execution: in that case we skip the top of the pyramid and trigger the right SDLC skill for the operation we need.
 In the middle, the skills become more specific and technically aware: the SDLC pipelines know our development process, the deploy skills know our release flow.
 At the bottom, there are the agents: the operative layer that touches the actual technology.
 
@@ -514,10 +519,10 @@ These are the improvements already on our list:
 
 The plugin is still in an experimental phase. We are testing it in our daily job, tweaking it as soon as we find problems and bugs :sweat_smile:.
 Up to now, the results have been pretty good and quite impressive :rocket:.
-Given a request from our product manager, we were able to completely automate the workflow for specific tasks, while we were focusing on the harder, more "human" work: system design, product discovery, code review of other features, deep manual validation of the product.
+Given a request from our product manager, we were able to completely automate the workflow for specific tasks, while we focused on the harder, more "human" work: system design, product discovery, code review of other features, deep manual validation of the product.
 
 One honest note to close.
-A tool like this reduced our time to market for new features, and we noticed it in our day-by-day work. But at the moment we don't have a specific metric to demonstrate the effectiveness of the plugin.
+A tool like this reduced our time to market for new features, and we noticed it in our day-to-day work. But at the moment we don't have a specific metric to demonstrate the effectiveness of the plugin.
 We also don't believe that measuring the number of deploys is a relevant metric to assess the goodness of an AI tool (see, for example, [the metrics recently shared by Spotify](https://www.youtube.com/watch?v=9DHZLw5653E)).
 Understanding the real impact of this harness is one of the next steps of the experiment.
 
