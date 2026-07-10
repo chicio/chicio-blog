@@ -11,13 +11,34 @@ authors: [fabrizio_duroni, davide_botti, timothy_russo]
 
 ---
 
-In the introduction we speak about the fact that lastminute chose Anthropic and the claude models as our standard AI. 
-I want to speak about why we are creating a claude code plugin:
-- Experiment with AI, the new technology that is disrupting our field
-- we want to automatize and encode in claude code skills and agent our "software factory": how we are used to develop software encoded in skills and agents
--- we developed our harness as a plugin for claude code
-This project is an experiment. We are trying to understand how much we can push in automatize our workflows: the tradeoff between automatisation and benefit in doing it. This is because not everything is useful to be automatize: this is where real engineering and value for the company shows up.
-Also in terms of how to write good skill, it has been (and still it is) a try and learn journey: we learn from our mistakes and attempts.
+Customer Value is a new area of lastminute.com, the company I work for (as you probably already know, if you have been following this blog for a while).
+This area takes care of everything that happens after a user completes a booking: we own the personal area of our customers.
+We let them check their bookings, do operations on them, and we generate new streams of value by offering ancillaries in the post-sale phase (baggage, automatic web check-in, seats, experiences, and more).
+Customer Value is made of multiple teams, spanning both web and mobile.
+
+Recently, together with two other colleagues from my area, we started to investigate how we could improve our Claude Code usage.
+These colleagues are [Timothy Russo](/blog/author/timothy-russo), an experienced mobile software engineer with more than 10 years of experience,
+a broad knowledge of everything related to frontend (web and mobile), always up to date on the latest technologies and on the new tools coming out on the market,
+and [Davide Botti](/blog/author/davide-botti), a senior software engineer specialized in backend with more than 10 years of experience,
+focused on observability of applications, system design, and complex architectures.
+Both of them are obsessed with product details and bringing value to the customers.
+
+At lastminute.com we chose Anthropic and the Claude models as our standard AI platform, and Claude Code is the tool we use every day in our development workflow.
+So at some point we started to think: "How can we encode our software development lifecycle in a Claude Code plugin, to leverage the capabilities of Claude Code at their best?".
+The reasons behind this question are basically two:
+
+- experiment with AI, the technology that is disrupting our field, going beyond the "chat with your codebase" usage and trying to understand what these tools can really do for us
+- starting to encode our own "software factory" in a set of custom skills and subagents: the way we are used to developing software, captured in a format that an AI agent can execute
+
+In other words, we wanted to develop our own harness as a Claude Code plugin.
+
+This project is an experiment. We are trying to understand how much we can push the automation of our workflows, and the tradeoff between automating something and the real benefit we get from it.
+Not everything is worth automating: this is where real engineering (and real value for the company) shows up.
+Automation doesn't remove the need for software engineering: it moves it.
+Someone still has to decide what is worth automating, review what the AI produces, and act as the human gate that keeps the quality bar where it should be.
+We will show you later how these human gates are embedded directly in the flow of our plugin.
+The same applies to writing good skills (as you will see also today in this post): it has been (and still is) a try-and-learn journey.
+We learned from our mistakes and attempts, and we are still learning today.
 
 ## Skills vs Agents: a quick comparison
 
