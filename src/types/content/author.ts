@@ -126,5 +126,22 @@ export const authors: { [authorId: string]: AuthorDefinition } = {
         image: `${authorImagesFolder}antonino-gitto.jpg`,
         imageLarge: `${authorImagesFolder}antonino-gitto.jpg`,
         role: "Senior Mobile Software Engineer",
+    },
+    timothy_russo: {
+        name: "Timothy Russo",
+        linkedinUrl: "https://www.linkedin.com/in/russotimothysoftwareengineer/",
+        githubUrl: "https://github.com/timothyrusso",
+        siteUrl: "https://www.timothyrusso.dev",
+        image: `${authorImagesFolder}timothy-russo-small.jpg`,
+        imageLarge: `${authorImagesFolder}timothy-russo.jpg`,
+        role: "Senior Mobile Software Engineer",
+    },
+    davide_botti: {
+        name: "Davide Botti",
+        linkedinUrl: "https://www.linkedin.com/in/davide-botti-879b65b3/",
+        githubUrl: "https://github.com/dade92",
+        image: `${authorImagesFolder}davide-botti-small.jpg`,
+        imageLarge: `${authorImagesFolder}davide-botti.jpg`,
+        role: "Senior Software Engineer",
     }
 };
