@@ -140,7 +140,7 @@ The skill also encodes the small pieces of discipline that make the difference i
 - before creating anything, it **checks whether the story already exists**, to avoid duplicates in the backlog
 
 The `grilling` skill mentioned above deserves a proper introduction, because we will meet it again later.
-It is a community skill coming from the [Matt Pocock skills repository](https://github.com/mattpocock/skills), and it does exactly what the name suggests: it grills you.
+It is a community skill coming from the [Matt Pocock skills repository](https://github.com/mattpocock/skills), and it does exactly what the name suggests: it grills you :fire:.
 The LLM interviews you relentlessly about a plan or a design, asking one question after another, challenging your assumptions, until every open decision is resolved.
 The output is a plan with no ambiguity left: exactly what you want before handing the work over to an AI agent.
 
@@ -378,7 +378,7 @@ The verdict drives what happens next:
 
 This phase is conditional: it runs when a user-visible surface changed, it can be forced with `--qa`, and it can be skipped with `--no-qa` (or automatically, when the change has no rendered surface).
 When the merge request is opened, the QA report and its screenshots are published as a comment on it, so the human reviewers see the evidence next to the diff.
-To be honest with you, at the moment this last part is fully implemented only in the mobile pipeline: `sdlc-frontend` carries the QA evidence to the merge request gate, but it does not post the comment yet (it is on our todo list).
+To be honest with you, at the moment this last part is fully implemented only in the mobile pipeline: `sdlc-frontend` carries the QA evidence to the merge request gate, but it does not post the comment yet (it is on our todo list :sweat_smile:).
 
 #### The merge request: the second human gate
 
@@ -502,19 +502,24 @@ And this is exactly where the title of this post comes from: we ended up with a 
 
 ## Improvements
 
-The plugin is far from perfect. We already noted some possible improvements:
+The plugin is far from perfect, and in a way we like it like that: every rough edge we hit in our daily usage becomes the next thing to encode.
+These are the improvements already on our list:
 
-- speed. The plugin takes more time in terms of execution, especially in the implementer vs code reviewer phase. We are thinking about possible solution like trying to parallelize tasks implementation.
-- micro commit approach. Sometimes the implementer agent tends to push to much the micro commit approach. We are still thinking about possible solutions to improve this.
-- validation. We would like to push more the validation phase, to generate also video of the QA phase that could be reviewed by us.
-- REMINDER (added during review): mention that sdlc-frontend must catch up with sdlc-mobile on posting the QA report + screenshots as an MR comment.
+- **speed**: the pipeline takes time, especially in the implement ⇄ review loop. We are evaluating possible solutions, like parallelizing independent tasks of the implementation
+- **micro commits**: sometimes the implementer pushes the micro-commit approach too far, producing commits smaller than a meaningful logical step. We are still thinking about how to tune it
+- **validation**: we would like to push the runtime validation phase further, generating also a video of the QA session that we could review, instead of screenshots only
+- **QA evidence parity**: as we anticipated, `sdlc-frontend` must catch up with `sdlc-mobile` on publishing the QA report and its screenshots as a comment on the merge request
 
-## Conclusion and next step
+## Conclusion and next steps
 
-The plugin is still in an experimental phase. We are testing it in our daily job, tweaking it as soon as we find out problems and bugs.
-In our opinion, up to now the results were pretty good and quite impressive. We were able, giving a request from our product manager, to completely automatize the workflow for specific tasks while we were focusing on much more harder and "human related" work: system design, product discovery, code review of other features, manual deep validation of the product.  
-One think we would like to say, is that for sure, a tool like this, reduced our time to market for releasing new features, and we noticed it in our day by, but unfortunately, at the moment we don't have a specific metric to demonstrated the effectiveness of this plugin.  
-Also because, related for example to the metrics recently shared by Spotify, we don't belive that measuring the number of deploy if a relevant metric for assessing the goodness of the AI tools.  
-We will try to understand in a next phase how to understand the real impact. 
-Stay tuned for the next evolution we will share with you in other article.
+The plugin is still in an experimental phase. We are testing it in our daily job, tweaking it as soon as we find problems and bugs :sweat_smile:.
+Up to now, the results have been pretty good and quite impressive :rocket:.
+Given a request from our product manager, we were able to completely automate the workflow for specific tasks, while we were focusing on the harder, more "human" work: system design, product discovery, code review of other features, deep manual validation of the product.
+
+One honest note to close.
+A tool like this reduced our time to market for new features, and we noticed it in our day-by-day work. But at the moment we don't have a specific metric to demonstrate the effectiveness of the plugin.
+We also don't believe that measuring the number of deploys is a relevant metric to assess the goodness of an AI tool (see, for example, [the metrics recently shared by Spotify](https://www.youtube.com/watch?v=9DHZLw5653E)).
+Understanding the real impact of this harness is one of the next steps of the experiment.
+
+Stay tuned: we will share the next evolutions of our pyramid in a future article :wave:.
 
