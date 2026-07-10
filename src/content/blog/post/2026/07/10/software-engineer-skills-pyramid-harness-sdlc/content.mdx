@@ -146,28 +146,57 @@ The output is a plan with no ambiguity left: exactly what you want before handin
 
 The skill uses the [Atlassian plugin](https://claude.com/plugins/atlassian) to interact with our boards, and it creates the story directly in the backlog, under the epic chosen by the user.
 
+### Implementing the user story: the SDLC skills
+
+The second step is the implementation of the story. For this we have three skills, one for each tech stack we work with in our area:
+
+- `sdlc-backend`, for our Spring Boot microservices (Kotlin-first), built on top of [AppFw](https://technology.lastminute.com/frontend-backend-languages-frameworks/), our internal abstraction over Spring Boot
+- `sdlc-frontend`, for our React + TypeScript web frontends
+- `sdlc-mobile`, for our React Native mobile app
+
+Each skill has its own peculiarities related to the tech stack.
+For example, `sdlc-backend` knows how to navigate a Maven reactor and how to deal with our internal framework, while `sdlc-mobile` is focused on React Native and its ecosystem.
+But even with these differences, they all share the same structure: the skill acts as an **orchestrator** of the software development lifecycle.
+It runs in the main conversation, keeps the overall state of the process, and delegates the operations of each phase to specialized subagents.
+
+This is the (slightly trimmed) frontmatter of `sdlc-frontend`; the other two share the same shape:
+
+```markdown
 ---
-
-**🚧🚧🚧 REVIEWED/REWRITTEN ABOVE — RAW DRAFT BELOW 🚧🚧🚧**
-
+name: sdlc-frontend
+description: "Orchestrates a self-correcting software-development-lifecycle pipeline for a frontend
+project (React + TypeScript). Feature development only: explore → brainstorm → implement ⇄ review → MR.
+Architecture-agnostic — discovers each project's layout from CLAUDE.md, .claude/rules, and package.json
+rather than assuming one. Dispatches the specialized fe-* agents from the main thread with human gates
+at plan approval and MR."
+argument-hint: "<JIRA-KEY> [figma-url] [extra context] [--isolated] [--qa|--no-qa]"
+effort: high
+allowed-tools:
+  - Agent
+  - Skill
+  - <file reading and search tools>
+  - <the shell commands the pipeline needs (git, glab, npm, ...)>
+  - <the MCP tools of the required plugins (atlassian, figma)>
 ---
+```
 
-The second step is the implementation of the story. For this we have 3 specific skills, one for each tech stack in our company Backend, frontend web and mobile, that uses specific agents:
+There are three interesting things in this frontmatter, beyond the trigger description we already saw:
 
-- `sdlc-mobile`
-- `sdlc-backend`
-- `sdlc-frontend`
+- the `argument-hint` declares the parameters the skill accepts
+- the `allowed-tools` section is a **whitelist**: the orchestrator can dispatch agents, invoke other skills, and run only the commands it needs (`git`, `glab`, `npm`). Everything else is off-limits. When you let an LLM drive your software development lifecycle, constraining what it can touch is not a detail
+- `effort: high` raises the reasoning effort of the model while this skill runs: orchestration decisions are worth the extra thinking tokens
 
-The skills have each one their own peculiarity in terms of tech stack. For example, the mobile one is focused on react native and related technology. The backend one is focused on spring boot + java/kotlin + our own internal abstraction over spring boot, [appfw](XXX link to the article about BE and Frontend technology).  
-Even if with differences related to the tech stack, the share a common workflow. The skill act as an orchestrator of the SDLC, software development lifecycle, delegating to subagents specific operations based on the phase where we are.
+Let's look closer at the shared parameters, each one changing the behavior of the pipeline:
 
-All these skills accepts a set of shared parameters, each one triggering an ad hoc function:
+- `<jira-ticket>`: the user story to develop. The skill fetches it from Jira and moves it automatically to "In Progress". Remember the effort we put in the **TECH TODO** section? This is where it pays off: the skill extracts it from the story and uses it as the primary seed of the planning phase
+- `<figma-url>`: the URL of the mockup to implement. This parameter is accepted only by the skills with a UI to build (`sdlc-frontend` and `sdlc-mobile`), and it drives the UI fidelity across planning, implementation, and review
+- `--isolated`: runs the whole pipeline in an isolated [git worktree](https://git-scm.com/docs/git-worktree). This lets us trigger multiple workflows in parallel on the same codebase
+- `--qa` / `--no-qa`: forces or skips the runtime validation phase (more on this later)
 
-- `<jira ticket>`, the user story to develop
-- `<figma url>`, the url of the mockup. This is a parameter accepted only by the FE skills (`sdlc-frontend` and `sdlc-mobile`)
-- `--isolated`, to start a workflow in a `git worktree`, isolated from the main one. This let us trigger multiple workflow on the same codebase.
-
-Let's see the common workflow the skills share between each other.
+Before starting the real work, every skill runs the same intake ritual.
+It refuses to work on the default branch, creating a feature branch named after the ticket.
+It builds a manifest of the project context files (`CLAUDE.md`, `ARCHITECTURE.md`, the [Claude Code rules](https://code.claude.com/docs/en/memory) in `.claude/rules`) that will be passed to every dispatched agent.
+Only then the pipeline starts. Let's see the workflow the skills share, phase by phase.
 
 ### The workflow of the skills
 
