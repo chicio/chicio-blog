@@ -418,12 +418,87 @@ For a backend service, once we approve the merge (another human gate), the skill
 Under the hood, `be-deploy` uses the [MCP server for ArgoCD](https://github.com/argoproj-labs/mcp-for-argocd), falling back to the [`argocd` CLI](https://argo-cd.readthedocs.io/en/stable/cli_installation/) when the MCP tools are not available.
 Frontend services have their own deployment flow, encoded in a separate `fe-deploy` skill that watches the pipeline and drives a human-gated production release.
 
-## Plugin Architecture overview
+## The plugin architecture: a pyramid of skills
 
-Below you can find a full overview of the architecture of the plugin, in terms of interaction between skills and agents. This is a recap of the full plugin architecture.
-As you can see, we came up with a solution that includes different layers of abstractions: at the upper levels there are skills that interact directly with a human input, and the only purpose is to translate what they receive in a more technical language (see the e2e skill). At the middle levels, skills are more specific and has a more techincal knowledge (see the sdlc-mobile, be and fe). At the lowest levels, there are agents that are the operative layer that interact with the specific technology (see the implementer that, guided by the plan done before by the explorer, writes the actual Kotlin/Typescript code, or the dev-ops that checks Gitlab CI status using Gitlab APIs). This is a design approach that mymics other engineering structures we find in software engineering (think about the test pyramid, or the divide et impera approach of the procedural programming and what we are used to see in the Object Oriented Programming).
+It is time to put all the pieces together. Below you can find the full overview of the plugin architecture, in terms of interactions between skills and agents.
 
-XXX Mermaid graph of the plugin architecture
+```mermaid
+flowchart TD
+    HUMAN["👤 Software engineer"]
+
+    subgraph TOP[" "]
+        TOPL["HUMAN INTERFACE<br/>LAYER"]:::layerLabel
+        E2E["sdlc-e2e"]
+    end
+
+    subgraph MID[" "]
+        MIDL["PROCESS<br/>LAYER"]:::layerLabel
+        STORY["write-jira-user-story"]
+        SDLC["sdlc-backend / sdlc-frontend / sdlc-mobile"]
+        DEP["be-deploy / fe-deploy"]
+    end
+
+    subgraph BOT[" "]
+        BOTL["OPERATIVE<br/>LAYER"]:::layerLabel
+        EXP["explorer"]
+        IMP["implementer"]
+        REV["code-reviewer"]
+        QA["qa"]
+        OPS["dev-ops"]
+    end
+
+    subgraph EXT[" "]
+        EXTL["DATA SOURCE<br/>LAYER"]:::layerLabel
+        JIRA[("Jira")]
+        GITLAB[("GitLab")]
+        ARGO[("ArgoCD")]
+        FIGMA[("Figma")]
+        APP[("🌐 Browser / 📱 Simulator")]
+    end
+
+    HUMAN --> E2E
+    E2E --> STORY
+    E2E --> SDLC
+    E2E --> DEP
+    STORY --> JIRA
+    SDLC --> EXP
+    SDLC --> IMP
+    SDLC --> REV
+    SDLC --> QA
+    DEP --> OPS
+    IMP --> FIGMA
+    QA --> APP
+    OPS --> GITLAB
+    DEP --> ARGO
+
+    classDef layerLabel fill:none,stroke:none,color:#00FF41,font-weight:bold;
+```
+
+As you can see, the solution we came up with is organized in **layers of abstraction**.
+At the top, there are the skills that interact directly with the human: their only purpose is to translate a request expressed in natural language into a more technical one (`sdlc-e2e` is the perfect example).
+This boundary is not rigid, though: the process skills can also be invoked directly.
+It happens all the time in our day-by-day work, because the story is often written in a different moment than its execution: in that case we skip the top of the pyramid and trigger the right SDLC skill for the operation we need.
+In the middle, the skills become more specific and technically aware: the SDLC pipelines know our development process, the deploy skills know our release flow.
+At the bottom, there are the agents: the operative layer that touches the actual technology.
+
+- the implementer that, guided by the approved plan, writes the actual Kotlin or TypeScript code
+- the dev-ops agent that checks the GitLab CI status
+- the QA agents that drive a real browser or a real simulator
+
+Below everything, the data source layer: the external systems that feed our processes with their raw material (stories from Jira, designs from Figma, pipelines from GitLab, rollout states from ArgoCD, running apps to validate).
+They are the sources our agents read from, and at the same time the targets they act on.
+
+Notice also the shape: one skill at the top, a handful of skills in the middle, fifteen agents at the bottom.
+The higher the layer, the closer to the human language; the lower the layer, the closer to the machine.
+This design mimics engineering structures we already know well:
+
+- the test pyramid, with few expensive tests at the top and many cheap ones at the bottom
+- the OSI network stack, where each layer talks only to its adjacent layers, speaking a well-defined protocol
+- a compiler pipeline, where a high-level language is progressively lowered until it becomes machine code
+- the divide et impera of procedural programming, and the way dynamic programming decomposes a big problem into smaller subproblems
+- the layered architectures of Object Oriented Programming
+
+And this is exactly where the title of this post comes from: we ended up with a **pyramid of skills**, where every layer translates the language of the layer above into the language of the layer below, from human intent at the top, down to the code that reaches our users.
 
 ## Improvements
 
