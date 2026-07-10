@@ -47,7 +47,7 @@ export const authors: { [authorId: string]: AuthorDefinition } = {
         image: `${authorImagesFolder}alessandro-romano-small.jpeg`,
         imageLarge: `${authorImagesFolder}alessandro-romano.jpeg`,
         role: "Senior Engineering Manager",
-        bio: "I love to help people collaborate better. I'm addicted to details and obsessed with how things work: from Cloud services to human relationships. Since my first Hello World in RPG Maker, I have come to believe that empathy and emotional intelligence are far more important in the IT field. I strongly believe people come before processes and tools and I think great Team Work wins over individual contribution.",
+        bio: "He loves to help people collaborate better. He is addicted to details and obsessed with how things work: from Cloud services to human relationships. Since his first Hello World in RPG Maker, he has come to believe that empathy and emotional intelligence are far more important in the IT field. He strongly believe people come before processes and tools and He think great Team Work wins over individual contribution.",
     },
     emanuele_ianni: {
         name: "Emanuele Ianni",
@@ -135,6 +135,7 @@ export const authors: { [authorId: string]: AuthorDefinition } = {
         image: `${authorImagesFolder}timothy-russo-small.jpg`,
         imageLarge: `${authorImagesFolder}timothy-russo.jpg`,
         role: "Senior Mobile Software Engineer",
+        bio: "Mobile Product Engineer specialising in cross-platform mobile development. With a background in eCommerce, quality assurance, and project management, he is passionate about clean architecture, developer tooling, and building performant, scalable mobile experiences for iOS and Android."
     },
     davide_botti: {
         name: "Davide Botti",
@@ -143,5 +144,6 @@ export const authors: { [authorId: string]: AuthorDefinition } = {
         image: `${authorImagesFolder}davide-botti-small.jpg`,
         imageLarge: `${authorImagesFolder}davide-botti.jpg`,
         role: "Senior Software Engineer",
+        bio: "Senior software engineer specialized in backend with more than 10 years of experience, focused on observability of applications, system design, and complex architectures. Obsessed with product details and bringing value to the customers."
     }
 };
