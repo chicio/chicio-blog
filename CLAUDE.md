@@ -14,8 +14,9 @@ npm run dev              # Dev server (auto-generates search index + copies imag
 npm run build && npm start  # Production build
 npm run lint             # Linting (--max-warnings 0 in CI)
 npm run validate-architecture  # dependency-cruiser: import rules, layering, isolation (all at error)
-npm run search-index     # Search index generation (auto before dev/build)
-npm run copy-images      # Copy content images to public/images/content/ (auto before dev/build)
+# Search index generation and content-media copy have no standalone npm script:
+# both run automatically via src/lib/build/prebuild.ts before dev/build (see note below).
+# The copy step mirrors <post-dir>/media/ into public/media/content/.
 npm run chat-knowledge-upload  # Upload blog content to Upstash Vector for RAG
 npm run release          # Release with conventional changelog
 ```
@@ -49,7 +50,7 @@ src/
 - **Store Return Types**: `StateStore<S>`, `EffectsStore<E>`, `ComponentStore<S,E>` from `@/types/component-store`. Never pad with `Record<string,never>` or `{}`.
 - **No Functions in JSX**: `react/jsx-no-bind` enforced at error. Curry handlers in the store.
 - **Content as MDX**: Filesystem-as-database. See `.claude/rules/mdx-content.md`
-- **Co-located Images**: Blog post images live in `<post-dir>/images/`, other content images in `src/content/<section>/images/`. A build-time script (`src/lib/images/copy-content-images.ts`) mirrors them to `public/images/content/`. The `public/images/content/` directory is gitignored and regenerated on every build.
+- **Co-located Images**: Blog post images live in `<post-dir>/media/`, other content images in `src/content/<section>/media/` (the folder MUST be named `media` — the copy script keys off that path segment). A build-time script (`src/lib/images/copy-content-media.ts`) mirrors them to `public/media/content/`. The `public/media/content/` directory is gitignored and regenerated on every build.
 - **API Routes**: Chat (Groq + Upstash Vector RAG) and Contact (Resend). See `.claude/rules/api-routes.md`
 - **Testing**: Automated suite — Vitest (node project for `lib/**`, jsdom + RTL for `components/**`), Playwright e2e, plus lint + typecheck + build; CI gates on coverage thresholds. agent-browser for local live-QA. See `.claude/rules/testing.md`
 

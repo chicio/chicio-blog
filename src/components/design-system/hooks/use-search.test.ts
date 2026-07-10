@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { renderHook, act } from "@testing-library/react";
+import { renderHook, act, RenderHookResult } from "@testing-library/react";
 import { ChangeEvent } from "react";
 import type { SearchResult, EasterEggSearchResult } from "@/types/search/search";
 
@@ -33,6 +33,19 @@ function getResultsFromSearchResult(result: SearchResult) {
     }
     return [];
 }
+
+type UseSearchReturn = ReturnType<typeof useSearch>;
+
+const renderLoadedSearch = async (
+    easterEgg: (query: string) => SearchResult | null = noEasterEgg,
+    searchIndexFileName = "search-index.json",
+): Promise<RenderHookResult<UseSearchReturn, unknown>> => {
+    let rendered!: RenderHookResult<UseSearchReturn, unknown>;
+    await act(async () => {
+        rendered = renderHook(() => useSearch(true, easterEgg, searchIndexFileName));
+    });
+    return rendered;
+};
 
 describe("useSearch", () => {
     beforeEach(() => {
@@ -84,23 +97,56 @@ describe("useSearch", () => {
             expect(getResultsFromSearchResult(result.current.search)).toHaveLength(0);
         });
 
-        it("returns easter egg result when easterEgg returns non-null", async () => {
+        it("returns easter egg result and short-circuits the index search when easterEgg returns non-null", async () => {
             const easterEggResult: EasterEggSearchResult = {
                 type: "easterEgg",
                 terminalLines: [{ text: "Wake up, Neo..." }],
             };
             const easterEgg = vi.fn((): SearchResult | null => easterEggResult);
 
-            const { result } = renderHook(() =>
-                useSearch(true, easterEgg, "search-index.json"),
-            );
+            const { result } = await renderLoadedSearch(easterEgg);
 
             const event = { target: { value: "matrix" } } as ChangeEvent<HTMLInputElement>;
             await act(async () => {
                 result.current.handleSearch(event);
             });
 
-            expect(result.current.search.type).toBe("easterEgg");
+            expect(result.current.search).toEqual(easterEggResult);
+            expect(mockSearch).not.toHaveBeenCalled();
+        });
+
+        it("returns empty results when the query is below the 3-char minimum", async () => {
+            const { result } = await renderLoadedSearch();
+
+            const event = { target: { value: "ab" } } as ChangeEvent<HTMLInputElement>;
+            await act(async () => {
+                result.current.handleSearch(event);
+            });
+
+            expect(mockSearch).not.toHaveBeenCalled();
+            expect(result.current.search.type).toBe("search");
+            expect(getResultsFromSearchResult(result.current.search)).toHaveLength(0);
+        });
+
+        it("returns docs mapped from the search index when the query meets the minimum length", async () => {
+            const { result } = await renderLoadedSearch();
+
+            const event = { target: { value: "matrix" } } as ChangeEvent<HTMLInputElement>;
+            await act(async () => {
+                result.current.handleSearch(event);
+            });
+
+            expect(mockSearch).toHaveBeenCalledWith("matrix", { expand: true });
+            expect(mockGetDoc).toHaveBeenCalledWith("post-1");
+            expect(getResultsFromSearchResult(result.current.search)).toEqual([
+                {
+                    title: "Test Post",
+                    slug: "post-1",
+                    description: "desc",
+                    tags: [],
+                    authors: [],
+                },
+            ]);
         });
     });
 
@@ -112,6 +158,23 @@ describe("useSearch", () => {
             await act(async () => {
                 result.current.resetSearch();
             });
+            expect(result.current.search.type).toBe("search");
+            expect(getResultsFromSearchResult(result.current.search)).toHaveLength(0);
+        });
+
+        it("clears previously found results", async () => {
+            const { result } = await renderLoadedSearch();
+
+            const event = { target: { value: "matrix" } } as ChangeEvent<HTMLInputElement>;
+            await act(async () => {
+                result.current.handleSearch(event);
+            });
+            expect(getResultsFromSearchResult(result.current.search)).toHaveLength(1);
+
+            await act(async () => {
+                result.current.resetSearch();
+            });
+
             expect(result.current.search.type).toBe("search");
             expect(getResultsFromSearchResult(result.current.search)).toHaveLength(0);
         });
