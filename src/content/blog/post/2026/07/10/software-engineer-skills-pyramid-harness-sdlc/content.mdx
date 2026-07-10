@@ -87,21 +87,70 @@ flowchart TD
 If you look carefully at this flow, you will notice that it is full of human checkpoints: the refinement discussion, the code review on the merge request, and the final product validation in QA.
 Keep them in mind: when we encoded this workflow in our plugin, these checkpoints became the human gates we mentioned in the introduction.
 
-## Our claude code plugin
+## Our Claude Code plugin
 
-We tried to encode in skills and agents the ways of working described above.
-We encoded the full process.
+We tried to encode in skills and agents the way of working described in the previous section: not a generic coding assistant, but our own process, phase by phase.
 
-The first step is thw write of the jira story, in a skill called `write-jira-user-story`. We created a skill ad hoc to do this. It brings a specific layout to write them made as follow:
+### Writing the user story
 
-- title
-- acceptance criteria
-- tech todo
-- validation
+The first step is the writing of the Jira user story, encoded in a skill called `write-jira-user-story`.
+Every skill starts with a frontmatter that tells Claude Code when to trigger it. This is the (redacted) one of our skill:
 
-Among this, propably the most relevant part is the tech todo section. here we try to be as precise as possible with respect to the actual code structure: in this way we try to guide the next phase to point the LLM already to the right direction in terms of design and implementation of the feature.
-The ticket wrote in this way is important not only for the our workflow integration but also to act as documentation of the feature (so we can consult it if we need to understand the reason why code contains some logics)
-The skill uses the [atlassian plugin](XXX link to plugin) to interact with our boards and create the story already in the backlog.
+```markdown
+---
+name: write-jira-user-story
+description: Use when the user asks to write, create, or open a Jira work item (or several) — user story,
+technical task, or bug — for our project in the company Jira. Triggers include "create a story",
+"open a ticket", "add a tech task", "log a bug", "write me a Jira for X".
+---
+```
+
+The skill enforces the layout our team uses for every work item. The description of a story is made of three mandatory sections:
+
+```markdown
+## Acceptance criteria
+
+**AC1 — <short title>**
+
+**Given** <precondition>
+**When** <action / trigger>
+**Then** <expected outcome>
+
+## TECH TODO
+
+**in <service / repo>**
+
+* <task>
+    * <sub-task or detail>
+
+## VALIDATION
+
+<concrete steps to verify the change in the real system>
+```
+
+Among these, probably the most relevant section is the **TECH TODO**.
+Here we try to be as precise as possible with respect to the actual code structure: we list the **services, repositories, or UI components to touch**, and what changes in each of them.
+In this way we guide the next phase, pointing the LLM already in the right direction in terms of design and implementation of the feature.
+A story written in this way is important not only for our workflow integration: it also acts as **documentation of the feature**, so we can consult it later if we need to understand why the code contains some specific logic.
+
+The skill also encodes the small pieces of discipline that make the difference in the day-by-day usage:
+
+- the **input** does not need to be a clean spec: the skill can mine a pasted **Slack conversation** or a **meeting transcript**, separating the actual ask from the side chatter
+- if the **TECH TODO** would come out empty or vague, the skill does not accept a "TBD" placeholder: it starts a `grilling` session with the user until the list is implementation-ready
+- before creating anything, it **checks whether the story already exists**, to avoid duplicates in the backlog
+
+The `grilling` skill mentioned above deserves a proper introduction, because we will meet it again later.
+It is a community skill coming from the [Matt Pocock skills repository](https://github.com/mattpocock/skills), and it does exactly what the name suggests: it grills you.
+The LLM interviews you relentlessly about a plan or a design, asking one question after another, challenging your assumptions, until every open decision is resolved.
+The output is a plan with no ambiguity left: exactly what you want before handing the work over to an AI agent.
+
+The skill uses the [Atlassian plugin](https://claude.com/plugins/atlassian) to interact with our boards, and it creates the story directly in the backlog, under the epic chosen by the user.
+
+---
+
+**🚧🚧🚧 REVIEWED/REWRITTEN ABOVE — RAW DRAFT BELOW 🚧🚧🚧**
+
+---
 
 The second step is the implementation of the story. For this we have 3 specific skills, one for each tech stack in our company Backend, frontend web and mobile, that uses specific agents:
 
