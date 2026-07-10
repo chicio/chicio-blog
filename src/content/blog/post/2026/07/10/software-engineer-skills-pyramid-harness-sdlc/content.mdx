@@ -394,10 +394,29 @@ The pipeline ends here, with the merge request open. **Merging remains a human a
 From this point, the standard flow we described at the beginning of the article takes over: our teammates review the merge request like any other one, and their review could end up requiring changes to the code.
 After all the automation needed to make a story ready for production, the human touch comes back exactly where it matters the most: deciding, together, that the code is good enough to reach our users.
 
-### sdlc-e2e
+### sdlc-e2e: one skill to rule them all
 
-All these skills above are invocable manually on a specific project. Anyway we tried something more ambitious: we create a specific skill to orchestrate all of them, capable of accepting a generic user command like `write jira with this content <description of the task>`, or `implement this jira ticket: <ticket id>`. This skill will select, in case of implementation, the right skill for the tech stack of the project you are into. 
-It will also be able, for the backend tech stack, to deploy the result of the code to our microservice leveraging another skill called `be-deploy`, that uses under the hood the [argo mcp](XXX Link) (falling back to [`argocli`](XXX LINK) when not available) to monitor the progress of the deploy.
+All the skills above are invocable manually on a specific project.
+But we tried something more ambitious: a single skill, `sdlc-e2e`, that orchestrates all of them.
+It accepts generic requests in natural language, like `write a jira with this content: <description of the task>` or `implement this jira ticket: <ticket-id>`, and it routes them to the right skill.
+
+The persona this skill impersonates is a **senior end-to-end engineer** wearing three hats at once:
+
+- a product owner, who cares that a work item captures real user and business value
+- a scrum master, who keeps the work well-formed, correctly scoped, and unblocked
+- a senior engineer, who can take a story all the way to working, tested, and verified code
+
+The most interesting part is the **routing**. When we ask it to implement a story, `sdlc-e2e` has to decide which pipeline to use, and it does it by reading the project names listed in the **TECH TODO** section of the story (that section keeps paying off).
+Each project is classified by naming convention: the mobile app repository routes to `sdlc-mobile`, a project with the UI suffix we use for web frontends routes to `sdlc-frontend`, and everything else routes to `sdlc-backend`.
+If the TECH TODO names no projects, the skill does not guess the stack: it asks.
+And if a story spans more than one stack (a backend service plus its frontend, for example), the pipelines run sequentially, backend first: the frontend usually depends on the backend contract.
+
+The skill also connects the phases of our workflow into a single conversation.
+After creating a story, it always offers to implement it right away.
+And after an implementation ends with an approved merge request, it can carry on with the **deployment**.
+For a backend service, once we approve the merge (another human gate), the skill dispatches a `be-dev-ops` agent that watches the GitLab CI pipeline, and then hands off to a dedicated `be-deploy` skill that monitors the rollout on ArgoCD, QA environment first, then production.
+Under the hood, `be-deploy` uses the [MCP server for ArgoCD](https://github.com/argoproj-labs/mcp-for-argocd), falling back to the [`argocd` CLI](https://argo-cd.readthedocs.io/en/stable/cli_installation/) when the MCP tools are not available.
+Frontend services have their own deployment flow, encoded in a separate `fe-deploy` skill that watches the pipeline and drives a human-gated production release.
 
 ## Plugin Architecture overview
 
