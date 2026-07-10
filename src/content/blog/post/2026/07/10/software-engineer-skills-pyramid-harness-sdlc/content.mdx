@@ -274,23 +274,84 @@ For UI work, the plan also captures the QA scenarios that will drive the runtime
 One important design decision: this phase is not delegated to a subagent. It runs in the main conversation, driven by the orchestrator itself.
 In this way, all the information that emerges during the brainstorming stays in the context window, available to guide the next phases.
 
-When the plan gets approved, a new subagent is trigged. This agent is called `implementer`. Like for the explorer, also the this one has knowledge about the specific tech stack of the project we are working on.
-This agent does the "real" work: it implements the feature based on the plan defined before. Like for the other agent, also this one reports back to the main orchestrator the result of the implementation in a specific format
+#### Implement
 
+When the plan gets approved, the orchestrator dispatches a new subagent: the `implementer`.
+Like the explorer, it comes in three tech-stack variants, each one knowing how to write code in its own ecosystem.
+This agent does the "real" work: it implements the feature following the approved plan, writing both the production code and its tests.
+
+The implementer works leveraging one of our team's ways of working: **micro commits**.
+Every logical step of the implementation becomes a small, self-contained commit.
+In this way, even if the final merge request results in a big amount of changes, we are still able to navigate the implementation commit by commit, checking what the LLM produced and whether it matches our expectations.
+
+The implementer runs on `sonnet`, a mid-tier model, and this is a **deliberate choice**.
+Why not the most powerful model available? Because **the hard thinking already happened**: the plan was written in the main conversation by the more powerful model driving the orchestrator (Opus, in our case).
+The implementer does not have to design anything: it executes a well-defined plan. **A cheaper model guided by a good plan is more than enough**, and it is faster too.
+
+Before declaring its work done, the implementer must run the **mechanical gates** of the project: the full test suite and the production build must pass.
+Then it reports back to the orchestrator with a structured completion report:
+
+```markdown
+## Completion Report
+
+### What was implemented
+- <behavior delivered>
+
+### Files touched
+- <grouped created / modified / deleted>
+
+### Commits
+- <the micro-commit sequence (hashes + subjects)>
+
+### Verification results
+- <pass/fail per check (test, build)>
+
+### Architecture decisions
+- <judgment calls where the plan or the rules were silent, which neighbor patterns were matched>
+
+### Skipped or unverified
+- <anything intentionally not done>
 ```
-ADD format of the report of the implementer subagents
+
+#### Review
+
+After the implementation, the orchestrator dispatches the `code-reviewer` agent, and the **implement ⇄ review loop** starts.
+The reviewer is the critic of the pipeline: it does not write code. It reviews the diff against the approved plan and the project conventions, and it classifies every finding by severity: **blocking** or **non-blocking**.
+
+Its first rule is the one we like the most: **do not trust, re-run**.
+The implementer claims the tests and the build are green? The reviewer re-runs them itself before looking at a single line of the diff.
+Then it returns its verdict to the orchestrator, again in a precise format:
+
+```markdown
+## Review Verdict: APPROVED | CHANGES_REQUESTED
+
+### Gates (re-run)
+- test / build: <pass|fail each>
+
+### Blocking findings
+- [<category>] <file:line> — <what's wrong, why it blocks, how to fix>
+
+### Non-blocking findings
+- <file:line> — <suggestion>
+
+### UI fidelity (if applicable)
+- <match | mismatch: details>
+
+### Summary
+- <one line>
 ```
 
-This agent works leveragin one of our ways of working: micro commit. In this way, even if the PR results in a big amount of changes (eg. > 50), we are still able to navigate commit by commit the implementation to check what the LLM produced and if it matches our expecation.
-This agent uses `sonnet` as model, defined in the frontmatter of the agent. Why? Because the plan was already writter by the main orchestrator, leveragin a much powerful model (eg. Opus). In this way the implementer saves token guided by the plan defined.
+The reviewer runs on the most powerful model available (Opus, in our case): judging code requires more depth than executing a plan.
+As a nice side effect, the loop gets **model diversity**: the code written by one model is judged by a different one, **reducing the risk of an agent rubber-stamping** its own blind spots.
 
-After implementation, we trigger another agent from the orchestrator: the `code-reviewer`. The orchesrator starts a 3 rounds of code review. The new agent review the implementation done, and reports back to the orchestrator the result of the review, also in terms of `APPROVED/CHANGES_REQUESTED`, and in case of the latter one also the list of changes to be done.
+The implement ⇄ review loop is bounded to a **maximum of 3 rounds**:
 
-```
-ADD format of the report of the code reviewer subagents
-```
+- if the verdict is `APPROVED`, the loop ends immediately (the other rounds are simply skipped)
+- if the verdict is `CHANGES_REQUESTED`, the blocking findings go back to the implementer, which either fixes them (with new micro commits) or rebuts once with a technical justification. On a rebuttal, the reviewer either withdraws the finding or re-asserts it: a re-asserted finding does not loop again, it escalates directly to the human
+- non-blocking findings never loop: they are just reported at the end
+- **after 3 rounds with unresolved blocking findings, the pipeline stops and surfaces them to the software engineer**
 
-If the first round of code review is already successful, we skip obviously the other 2 rounds. If all the three rounds of code review fail, the decision about what to do is delegate back to the orchestrator in the main conversion (and obviously to the software engineer).
+The bounded loop is another place where the "automation moves the engineering" idea shows up: the agents correct each other, but the disagreements always land on a human desk, never in an infinite loop.
 
 After this point, there is a branch between the skills related to frontend technologies, and the one for BE. The backend one, opens the PR, after the approval/local review of the software engineer. The frontend skills instead, use ad-hoc tools to do a local validation of the feature implemented. The web fe one uses [`agent-browser`](XXX link), while the mobile one uses [`agent-device`](XXX link). These are tools from the community that let the LLMs interact respectively with the iOS simulator/Android emulator and the browser. This step is optional, and can be skipped if we launch the skill with the `--no-qa`. (TODO: add for mobile version the generation of the screenshot with the report of the validation).
 In both FE workflow we defined a sub workflow to do this validation, based on a test book of test cases defined by the llm from the modification done in the current branch with respect to the main one. A series of screenshot is taken, and composed in a markdown report. Both the markdown and the screenshots are published in a comment on the final merge request when the software engineer tells to the orchestrator to publish it.
