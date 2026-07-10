@@ -353,10 +353,46 @@ The implement ⇄ review loop is bounded to a **maximum of 3 rounds**:
 
 The bounded loop is another place where the "automation moves the engineering" idea shows up: the agents correct each other, but the disagreements always land on a human desk, never in an infinite loop.
 
-After this point, there is a branch between the skills related to frontend technologies, and the one for BE. The backend one, opens the PR, after the approval/local review of the software engineer. The frontend skills instead, use ad-hoc tools to do a local validation of the feature implemented. The web fe one uses [`agent-browser`](XXX link), while the mobile one uses [`agent-device`](XXX link). These are tools from the community that let the LLMs interact respectively with the iOS simulator/Android emulator and the browser. This step is optional, and can be skipped if we launch the skill with the `--no-qa`. (TODO: add for mobile version the generation of the screenshot with the report of the validation).
-In both FE workflow we defined a sub workflow to do this validation, based on a test book of test cases defined by the llm from the modification done in the current branch with respect to the main one. A series of screenshot is taken, and composed in a markdown report. Both the markdown and the screenshots are published in a comment on the final merge request when the software engineer tells to the orchestrator to publish it.
+#### Runtime validation: the QA agents
 
-At this point the workflow is completed and the PR is published on our gitlab leveraging the [`glab` gitlab cli](XXX link), using a specific format for the title and the description.
+After the review loop converges, the pipelines branch.
+For `sdlc-backend`, the workflow moves directly to the merge request phase.
+The two skills with a UI to validate (`sdlc-frontend` and `sdlc-mobile`) add a **runtime validation** phase instead.
+The idea behind it: for UI work, reviewing the diff is not enough. Someone has to actually run the app and use the feature, like a QA engineer would do. So we encoded that too:
+
+- `fe-qa` drives a real Chromium browser through the [`agent-browser` CLI (by Vercel Labs)](https://agent-browser.dev)
+- `mobile-qa` drives the iOS simulator or the Android emulator through the [`agent-device` CLI (by Callstack)](https://github.com/callstackincubator/agent-device)
+
+These are community tools that let an LLM interact with a running app: open screens, click and tap, fill forms, inspect the UI tree, and take screenshots.
+
+The validation follows a dedicated sub-workflow.
+The QA agent derives a **test book** of test cases, starting from the QA scenarios captured in the plan and the modifications of the current branch with respect to the main one.
+Then it launches the app, exercises the test cases one by one, and captures a screenshot for each of them, together with logs and console evidence.
+Everything is composed in a Markdown QA report with a final verdict: `PASS`, `FAIL`, or `NOT PERFORMED`.
+
+The verdict drives what happens next:
+
+- `PASS`: the evidence is carried forward to the merge request gate
+- `FAIL`: the findings go back to the implementer for a fix, followed by a quick re-review and a single re-run of the QA. If it still fails, the pipeline stops and surfaces the evidence to the human
+- `NOT PERFORMED` (no simulator available, build failed, no dev server): recorded as a non-blocking note, without blocking the pipeline
+
+This phase is conditional: it runs when a user-visible surface changed, it can be forced with `--qa`, and it can be skipped with `--no-qa` (or automatically, when the change has no rendered surface).
+When the merge request is opened, the QA report and its screenshots are published as a comment on it, so the human reviewers see the evidence next to the diff.
+To be honest with you, at the moment this last part is fully implemented only in the mobile pipeline: `sdlc-frontend` carries the QA evidence to the merge request gate, but it does not post the comment yet (it is on our todo list).
+
+#### The merge request: the second human gate
+
+At this point the development is done. But the orchestrator does not open the merge request on its own: it shows us the full diff summary, the final review verdict, the non-blocking findings, and the QA evidence, and then it waits.
+Opening the MR requires explicit approval: this is the **second human gate** of the pipeline.
+
+On approval, the orchestrator pushes the branch and opens the merge request on our GitLab using the [`glab` CLI](https://gitlab.com/gitlab-org/cli), with a specific format for the title and the description.
+The title follows the conventional commit format `<type>(<KEY>): <ticket summary>`, where the type is mapped from the Jira issue type (a story becomes `feat`, a bug becomes `fix`, and so on).
+The description contains the summary of the change, the reference to the Jira story, and the notes coming from the review.
+As a final touch, the skill proposes to transition the Jira story to "In Review" with a comment containing the MR URL, and it kicks off a non-blocking watch of the CI pipeline.
+
+The pipeline ends here, with the merge request open. **Merging remains a human act**: the last word on what lands on the main branch is still ours.
+From this point, the standard flow we described at the beginning of the article takes over: our teammates review the merge request like any other one, and their review could end up requiring changes to the code.
+After all the automation needed to make a story ready for production, the human touch comes back exactly where it matters the most: deciding, together, that the code is good enough to reach our users.
 
 ### sdlc-e2e
 
@@ -377,6 +413,7 @@ The plugin is far from perfect. We already noted some possible improvements:
 - speed. The plugin takes more time in terms of execution, especially in the implementer vs code reviewer phase. We are thinking about possible solution like trying to parallelize tasks implementation.
 - micro commit approach. Sometimes the implementer agent tends to push to much the micro commit approach. We are still thinking about possible solutions to improve this.
 - validation. We would like to push more the validation phase, to generate also video of the QA phase that could be reviewed by us.
+- REMINDER (added during review): mention that sdlc-frontend must catch up with sdlc-mobile on posting the QA report + screenshots as an MR comment.
 
 ## Conclusion and next step
 
