@@ -62,16 +62,30 @@ This is all you need to know to follow the rest of the article. Let's now look a
 
 ## Our workflow
 
-Before jumping in the plugin description, I woould like to talk about the state of the art of our ways of working. I will speak about how we leverage SCRUM as a workflow for our software development lifecycle:
-- request from stakeholders comes in
-- the product manager brings to the refinement the request, with or without the user story
-- the team with the product manager, analise during refinement the request and produce a user story
-- after the refinement, the team takes the story and develop it
-- the devepment produces a pull request to be shared with other developers for code review (and code validation)
-- after approval, the new feature gets deployed in QA for product validation, to e2e test that everything works correctly
-- after e2e approval, the feature goes to production
+Before describing the plugin, it is worth showing the state of the art of our way of working, because that is exactly what we tried to encode.
+Our teams follow SCRUM, and what matters for this article is the journey a feature makes from an idea to production.
 
-CHECK: encode bullet points above in a mermaid graph/image
+Everything starts with a request coming from our stakeholders.
+The product manager brings the request to our refinement sessions, sometimes with a user story already sketched, sometimes not.
+During the refinement, the team analyzes the request together with the product manager, and the output is a user story ready to be developed.
+After the refinement, the team takes the story and develops it.
+The development produces a merge request (MR, the GitLab equivalent of a GitHub pull request) that is shared with the other developers for code review and validation.
+After the approval, the new feature is deployed in our QA environment for the product validation: the team, together with the product manager, tests end to end that everything works correctly.
+After this last approval, the feature finally goes to production.
+
+```mermaid
+flowchart TD
+    A["Stakeholder request"] --> B["Refinement (team + product manager)"]
+    B --> C["User story"]
+    C --> D["Development"]
+    D --> E["Merge request (code review)"]
+    E -- changes requested --> D
+    E -- approved --> F["Deploy to QA (product validation + e2e tests by team and PM)"]
+    F -- approved --> G["Production"]
+```
+
+If you look carefully at this flow, you will notice that it is full of human checkpoints: the refinement discussion, the code review on the merge request, and the final product validation in QA.
+Keep them in mind: when we encoded this workflow in our plugin, these checkpoints became the human gates we mentioned in the introduction.
 
 ## Our claude code plugin
 
