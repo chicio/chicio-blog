@@ -195,20 +195,84 @@ Let's look closer at the shared parameters, each one changing the behavior of th
 
 Before starting the real work, every skill runs the same intake ritual.
 It refuses to work on the default branch, creating a feature branch named after the ticket.
-It builds a manifest of the project context files (`CLAUDE.md`, `ARCHITECTURE.md`, the [Claude Code rules](https://code.claude.com/docs/en/memory) in `.claude/rules`) that will be passed to every dispatched agent.
+It builds a manifest of the project context files (`CLAUDE.md`, `ARCHITECTURE.md`, the [Claude Code rules](https://code.claude.com/docs/en/memory#organize-rules-with-claude%2Frules%2F) in `.claude/rules`) that will be passed to every dispatched agent.
 Only then the pipeline starts. Let's see the workflow the skills share, phase by phase.
 
 ### The workflow of the skills
 
-First, an ad hoc `explorer` agent, that uses a cheap model, explore the codebase to udnerstand where and how to develop a feature. We put in place some indication based on [claude rules](XXX link a claude rules), CLAUDE.md and a custom file called ARCHITECTURE.md to optimize the exploration of the codebase. We have a variant of this agent for each of the three tech stack defined above.
-The agent reports back to the orchestrator LLM (where the skill was launched) the result of the exploration, in a specific format reported below.
+Every pipeline goes through the same phases: explore, plan (with a human gate), implement and review (in a loop), runtime validation, and merge request (with the second human gate).
+Let's walk through them one by one.
+
+#### Explore
+
+The first phase is the exploration of the codebase.
+An ad hoc `explorer` agent (one variant for each of the three tech stacks: `fe-explorer`, `be-explorer`, `mobile-explorer`) explores the project to understand where and how the feature should be developed.
+Like the skills, also the agents are defined by a markdown file with a [dedicated frontmatter](https://code.claude.com/docs/en/sub-agents). This is the one of `fe-explorer`:
+
+```markdown
+---
+name: fe-explorer
+description: Read-only explorer for a frontend project (React + TypeScript). Discovers the project's
+ACTUAL architecture (it does not assume one) from CLAUDE.md, .claude/rules, and package.json, then
+produces a structured report. Use as the first stage of a feature investigation, before brainstorming
+or implementation. Does NOT write code, run builds, or make changes.
+model: haiku
+color: cyan
+tools:
+  - Read
+  - Grep
+  - Glob
+---
+```
+
+Three properties are worth a comment:
+
+- `model: haiku`: exploration is about coverage, not deep reasoning, so this agent runs on a cheap and fast model. The cheap agent maps the territory so that the expensive ones don't burn tokens rediscovering the structure of the codebase
+- `tools`: the whitelist strikes again, and this time it makes the agent **read-only**. With only `Read`, `Grep`, and `Glob` available, the explorer physically cannot write files or run commands
+- `color`: a cosmetic one, but handy in the day-by-day usage. Each agent gets its own color in the terminal output, so you can spot at a glance which agent is running while the orchestrator works
+
+To optimize the exploration, we put in place some indications based on `CLAUDE.md`, the [Claude Code rules](https://code.claude.com/docs/en/memory#organize-rules-with-claude%2Frules%2F), and a custom `ARCHITECTURE.md` file: the explorer treats them as sources of truth, instead of re-deriving the structure of the project at every run.
+When it finishes, the agent reports back to the orchestrator with a report in a precise format:
+
+```markdown
+## Exploration Report
+
+### Scope
+- Ticket and area(s) touched
+
+### Discovered architecture
+- Structural units and their roles, layering and import conventions
+
+### Relevant files
+- <file — role>
+
+### Patterns to follow
+- <pattern> — see <file:line> (concrete example)
+
+### Build & test commands
+- Build, tests (full and scoped), test stack
+
+### Integration points
+- APIs, state stores, routing, feature toggles
+
+### Risks & unknowns
+- Ambiguities and open decisions
 
 ```
-ADD format of the report of the explorer subagents
-```
-We leverage for all the agents the usage of the [claude code specific frontmatter](XXX link) to list some other property. One that could come handy is the agent color, to spot its execution in the terminal orchestrator output.
 
-After the exploration, we start a brainstorming and planning phase leveraing a skill from the community: `grilling` from the almighty [Matt Pocock skills](XXX). The LLM orchestrator starts to interviews the user tirelessly to clarify any doubt about the development of the feature. The result is a plan to be approved  before starting the development. This phase is done by the orchestrator in the main conversation, so that all the information about the development to be done remain available for the next phases.
+This format is not a stylistic choice: it is the **contract** between the agent and the orchestrator.
+Structured reports are what make the communication between agents reliable: the orchestrator knows exactly what to expect, and each downstream phase knows where to find what it needs.
+
+#### Brainstorm and plan: the first human gate
+
+After the exploration, the planning phase starts, and here we meet the `grilling` skill again.
+The orchestrator seeds it with the exploration report, the **TECH TODO** section of the story and, if provided, the Figma design of the feature.
+Then the interview starts: the orchestrator grills us until every doubt about the development is clarified.
+The result is a plan that must be explicitly approved before any code gets written: this is the **first human gate** of the pipeline.
+For UI work, the plan also captures the QA scenarios that will drive the runtime validation phase later.
+
+One important design decision: this phase is not delegated to a subagent. It runs in the main conversation, driven by the orchestrator itself.
+In this way, all the information that emerges during the brainstorming stays in the context window, available to guide the next phases.
 
 When the plan gets approved, a new subagent is trigged. This agent is called `implementer`. Like for the explorer, also the this one has knowledge about the specific tech stack of the project we are working on.
 This agent does the "real" work: it implements the feature based on the plan defined before. Like for the other agent, also this one reports back to the main orchestrator the result of the implementation in a specific format
