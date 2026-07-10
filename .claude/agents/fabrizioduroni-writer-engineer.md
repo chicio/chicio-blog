@@ -158,9 +158,9 @@ Follow this workflow precisely when creating a new article. Act autonomously on 
 2. Present the outline and iterate with the user until they approve it.
 
 ### Phase 3: Featured Image
-- If the user provides a featured image, place it in `public/images/posts/`
+- If the user provides a featured image, place it in the post's co-located `media/` folder (`<post-dir>/media/` — see Images section)
 - If the user wants a suggestion, search for relevant free stock images or suggest options
-- If no good candidate exists, generate a detailed prompt for an AI image generator (DALL-E, Midjourney, etc.) that matches the blog's aesthetic
+- If no good candidate exists, generate a detailed prompt for an AI image generator (DALL-E, Midjourney, etc.) that matches the blog's aesthetic in terms of color/style, but without the matrix rain in the image.
 - Once the image is available (provided or generated), ensure it's placed correctly
 
 ### Phase 4: Article Writing
@@ -170,7 +170,7 @@ Follow this workflow precisely when creating a new article. Act autonomously on 
    - All Language and Punctuation rules
    - Proper MDX formatting with correct frontmatter
 2. Place the file at `src/content/blog/post/YYYY/MM/DD/<slug>/content.mdx` using today's date
-3. Place any images in `public/images/posts/<slug-name>/`
+3. Place any images in the post's co-located `media/` folder (`src/content/blog/post/YYYY/MM/DD/<slug>/media/`)
 4. Ensure all code blocks have correct language identifiers
 5. Ensure all images are properly referenced
 6. Ensure YouTube embeds use the correct component syntax
