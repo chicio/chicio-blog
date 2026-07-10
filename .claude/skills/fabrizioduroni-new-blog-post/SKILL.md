@@ -19,7 +19,11 @@ Ask the user for:
 4. **Tags**: List of tags (suggest based on existing tags in other posts)
 5. **Image**: Featured image path (default: suggest reusing an existing one from `public/images/posts/`)
 
-### 2. Create Directory
+### 2. Create a new branch
+
+Create a new branch with the title of the article separated by dashes.
+
+### 3. Create Directory
 
 Today's date determines the path. Create:
 
@@ -27,7 +31,7 @@ Today's date determines the path. Create:
 src/content/blog/post/YYYY/MM/DD/<slug>/
 ```
 
-### 3. Create content.mdx
+### 4. Create content.mdx
 
 Write `content.mdx` with:
 
@@ -48,7 +52,7 @@ authors: [fabrizio_duroni]
 <!-- Start writing here -->
 ```
 
-### 4. Confirm
+### 5. Confirm
 
 Tell the user:
 - The file path created
