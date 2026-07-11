@@ -402,7 +402,7 @@ After all the automation needed to make a story ready for production, the human 
 
 All the skills above are invocable manually on a specific project.
 But we tried something more ambitious: a single skill, `sdlc-e2e`, that orchestrates all of them.
-It accepts generic requests in natural language, like `write a jira with this content: <description of the task>` or `implement this jira ticket: <ticket-id>`, and it routes them to the right skill.
+It accepts generic requests in natural language, like `write a jira with this content: <description of the task>` or `implement this jira ticket: <ticket-id>`, and it routes them to the right skill. This choice makes the entire approach modular, allowing us to change specific part of the process addressing only the interested sub skill (write jira skill or sdlc-fe).
 
 This skill impersonates a **senior end-to-end engineer** wearing three hats at once:
 
