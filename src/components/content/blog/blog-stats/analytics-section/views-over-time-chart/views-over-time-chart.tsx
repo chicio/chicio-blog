@@ -4,14 +4,12 @@ import { FC, ReactNode } from "react";
 import { Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { ChartTooltip } from "@/components/design-system/molecules/chart/chart-tooltip";
 import { formatShortAnalyticsMonth } from "@/lib/blog-stats/format-month";
+import { chartTheme } from "@/types/configuration/chart-theme";
 import type { ViewsPoint } from "@/types/content/analytics-stats";
 
 interface ViewsOverTimeChartProps {
     data: ViewsPoint[];
 }
-
-const AXIS_TICK_COLOR = "#9fbf9f";
-const AXIS_LINE_COLOR = "#1f5a2e";
 
 const formatTooltipMonth = (label: ReactNode): string =>
     typeof label === "string" ? formatShortAnalyticsMonth(label) : String(label ?? "");
@@ -28,20 +26,20 @@ export const ViewsOverTimeChart: FC<ViewsOverTimeChartProps> = ({ data }) => (
                     dataKey="month"
                     tickFormatter={formatShortAnalyticsMonth}
                     minTickGap={28}
-                    tick={{ fill: AXIS_TICK_COLOR, fontSize: 12 }}
+                    tick={{ fill: chartTheme.axis.tickColor, fontSize: chartTheme.axis.tickFontSize }}
                     tickLine={false}
-                    axisLine={{ stroke: AXIS_LINE_COLOR }}
+                    axisLine={{ stroke: chartTheme.axis.lineColor }}
                 />
                 <YAxis
                     allowDecimals={false}
-                    tick={{ fill: AXIS_TICK_COLOR, fontSize: 12 }}
+                    tick={{ fill: chartTheme.axis.tickColor, fontSize: chartTheme.axis.tickFontSize }}
                     tickLine={false}
-                    axisLine={{ stroke: AXIS_LINE_COLOR }}
+                    axisLine={{ stroke: chartTheme.axis.lineColor }}
                 />
                 <Tooltip
                     content={<ChartTooltip labelPrefix="" />}
                     labelFormatter={formatTooltipMonth}
-                    cursor={{ stroke: "#39FF1466", strokeWidth: 1 }}
+                    cursor={{ stroke: chartTheme.cursorStroke, strokeWidth: 1 }}
                 />
                 <Legend />
                 <Line
