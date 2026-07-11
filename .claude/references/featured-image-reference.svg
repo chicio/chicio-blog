@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="820" viewBox="0 0 1200 820" font-family="'Courier Prime', 'Courier New', monospace">
+    <title>Featured image composition reference — chicio-blog post cards</title>
+    <desc>
+        Composition and color reference for AI-generated featured images.
+        The post card renders the image with object-cover at fixed heights, so the visible
+        window changes with card size: the big (launch) card shows a ~3.1:1 horizontal band,
+        the small (2-in-a-row) card and phones show a ~1.45:1 vertical window.
+        The subject must sit fully inside the intersection of both windows (the safe zone).
+    </desc>
+
+    <rect width="1200" height="820" fill="#000a00"/>
+
+    <!-- The 2:1 generation canvas -->
+    <g>
+        <rect x="0" y="0" width="1200" height="600" fill="#001100" stroke="#00CC33" stroke-width="2"/>
+
+        <!-- Areas cut by the big-card crop (top and bottom bands) -->
+        <rect x="0" y="0" width="1200" height="106" fill="#ff2a2a" opacity="0.10"/>
+        <rect x="0" y="494" width="1200" height="106" fill="#ff2a2a" opacity="0.10"/>
+        <line x1="0" y1="106" x2="1200" y2="106" stroke="#00FF41" stroke-width="1.5" stroke-dasharray="10 6"/>
+        <line x1="0" y1="494" x2="1200" y2="494" stroke="#00FF41" stroke-width="1.5" stroke-dasharray="10 6"/>
+        <text x="16" y="30" fill="#E8FFE8" font-size="18">CUT on big card (desktop crop is ~3.1:1 — only the middle 65% of height survives)</text>
+        <text x="16" y="586" fill="#E8FFE8" font-size="18">CUT on big card — ambient background only, nothing important here</text>
+
+        <!-- Areas cut by the small-card / phone crop (left and right bands) -->
+        <rect x="0" y="106" width="168" height="388" fill="#ff2a2a" opacity="0.10"/>
+        <rect x="1032" y="106" width="168" height="388" fill="#ff2a2a" opacity="0.10"/>
+        <line x1="168" y1="0" x2="168" y2="600" stroke="#00FF41" stroke-width="1.5" stroke-dasharray="10 6"/>
+        <line x1="1032" y1="0" x2="1032" y2="600" stroke="#00FF41" stroke-width="1.5" stroke-dasharray="10 6"/>
+        <text x="152" y="330" fill="#E8FFE8" font-size="16" transform="rotate(-90 152 330)" text-anchor="middle">CUT on small card (~1.45:1)</text>
+        <text x="1052" y="330" fill="#E8FFE8" font-size="16" transform="rotate(90 1052 330)" text-anchor="middle">CUT on small card (~1.45:1)</text>
+
+        <!-- Safe zone: intersection of both crops -->
+        <rect x="168" y="106" width="864" height="388" fill="#39FF14" opacity="0.06" stroke="#39FF14" stroke-width="2"/>
+        <text x="600" y="132" fill="#39FF14" font-size="18" text-anchor="middle">SAFE ZONE — everything meaningful must fit inside (central 72% x 65%)</text>
+
+        <!-- Ideal subject bounding box -->
+        <rect x="270" y="150" width="660" height="300" fill="none" stroke="#00FF41" stroke-width="3"/>
+        <text x="600" y="290" fill="#00FF41" font-size="26" text-anchor="middle" font-weight="bold">SINGLE CENTERED SUBJECT</text>
+        <text x="600" y="322" fill="#E8FFE8" font-size="18" text-anchor="middle">one clear focal element, fully inside this box (~55% x 50% of frame)</text>
+        <text x="600" y="348" fill="#E8FFE8" font-size="18" text-anchor="middle">no readable words, no logos — matrix glyph rain OK as background</text>
+        <text x="600" y="430" fill="#00CC33" font-size="16" text-anchor="middle">generate at 2:1 — e.g. 1200x600 or 2000x1000</text>
+    </g>
+
+    <!-- Color map -->
+    <g>
+        <text x="16" y="646" fill="#E8FFE8" font-size="20">COLOR MAP — quote these hex values verbatim in the generation prompt</text>
+
+        <rect x="16" y="666" width="120" height="64" fill="#001100" stroke="#00CC33"/>
+        <text x="16" y="754" fill="#E8FFE8" font-size="15">#001100</text>
+        <text x="16" y="774" fill="#00CC33" font-size="13">background</text>
+
+        <rect x="156" y="666" width="120" height="64" fill="#002200" stroke="#00CC33"/>
+        <text x="156" y="754" fill="#E8FFE8" font-size="15">#002200</text>
+        <text x="156" y="774" fill="#00CC33" font-size="13">background light</text>
+
+        <rect x="296" y="666" width="120" height="64" fill="#003D10" stroke="#00CC33"/>
+        <text x="296" y="754" fill="#E8FFE8" font-size="15">#003D10</text>
+        <text x="296" y="774" fill="#00CC33" font-size="13">primary dark</text>
+
+        <rect x="436" y="666" width="120" height="64" fill="#00CC33"/>
+        <text x="436" y="754" fill="#E8FFE8" font-size="15">#00CC33</text>
+        <text x="436" y="774" fill="#00CC33" font-size="13">secondary</text>
+
+        <rect x="576" y="666" width="120" height="64" fill="#00FF41"/>
+        <text x="576" y="754" fill="#E8FFE8" font-size="15">#00FF41</text>
+        <text x="576" y="774" fill="#00CC33" font-size="13">primary</text>
+
+        <rect x="716" y="666" width="120" height="64" fill="#39FF14"/>
+        <text x="716" y="754" fill="#E8FFE8" font-size="15">#39FF14</text>
+        <text x="716" y="774" fill="#00CC33" font-size="13">accent</text>
+
+        <rect x="856" y="666" width="120" height="64" fill="#E8FFE8"/>
+        <text x="856" y="754" fill="#E8FFE8" font-size="15">#E8FFE8</text>
+        <text x="856" y="774" fill="#00CC33" font-size="13">highlight text-green</text>
+
+        <text x="990" y="700" fill="#E8FFE8" font-size="13">dominant: #001100/#002200</text>
+        <text x="990" y="722" fill="#E8FFE8" font-size="13">accents: greens, sparingly</text>
+        <text x="990" y="744" fill="#E8FFE8" font-size="13">no hues outside this map</text>
+    </g>
+</svg>
