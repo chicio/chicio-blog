@@ -285,7 +285,7 @@ This agent does the "real" work: it implements the feature following the approve
 
 The implementer works leveraging one of our team's ways of working, **micro commits**:
 every logical step of the implementation becomes a small, self-contained commit.
-In this way, even if the final merge request results in a big amount of changes, we are still able to navigate the implementation commit by commit, checking what the LLM produced and whether it matches our expectations.
+In this way, even if the final merge request results in a big amount of changes, we are still able to navigate the implementation commit by commit, checking what the LLM produced and whether it matches our expectations. Note that this is one of many points in the workflow where our experience as engineers is paramaount: best practices now matter more than ever if we want to produce a well engineered (and so, maintainable) code.
 
 The implementer runs on `sonnet`, a mid-tier model, and this is a **deliberate choice**.
 Why not the most powerful model available? Because **the hard thinking already happened**: the plan was written in the main conversation by the more powerful model driving the orchestrator (Opus, in our case).
