@@ -14,7 +14,9 @@ import {
     ZAxis,
     type LabelProps,
 } from "recharts";
+import { ChartPanel } from "@/components/design-system/molecules/chart/chart-panel";
 import { ChartTooltip } from "@/components/design-system/molecules/chart/chart-tooltip";
+import { chartTheme } from "@/types/configuration/chart-theme";
 
 const data = [
     { time: 1, space: 1, name: "O(1)" },
@@ -32,7 +34,7 @@ const renderLabel = ({ x, y, value }: LabelProps) => {
             x={x}
             y={y - 10}
             textAnchor="middle"
-            fill="#fff"
+            fill={chartTheme.axis.tickColor}
             fontSize={14}
             style={{ whiteSpace: "pre" }}
             dominantBaseline="central"
@@ -43,39 +45,58 @@ const renderLabel = ({ x, y, value }: LabelProps) => {
 };
 
 export const TimeVsSpaceTradeoffVisualizer: FC = () => (
-    <div className="bg-general-background glow-container my-4 h-80 w-full shadow-sm">
-        <ResponsiveContainer width={"100%"} height={"100%"} initialDimension={{ width: 320, height: 300 }}>
-            <ScatterChart margin={{ top: 40, right: 40, bottom: 40, left: 40 }}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis
-                    type="number"
-                    dataKey="time"
-                    name="Time Complexity"
-                    label={{
-                        value: "Time",
-                        position: "insideBottomRight",
-                    }}
-                    domain={[0, 11]}
-                />
-                <YAxis
-                    type="number"
-                    dataKey="space"
-                    name="Space Complexity"
-                    label={{
-                        value: "Space",
-                        position: "insideLeft",
-                        angle: -90,
-                        style: { textAnchor: "middle" },
-                    }}
-                    domain={[0, 11]}
-                />
-                <ZAxis range={[80, 120]} />
-                <Tooltip cursor={{ strokeDasharray: "3 3" }} content={ChartTooltip} />
-                <Legend wrapperStyle={{ color: "var(--color-accent)" }} />
-                <Scatter data={data} fill="#00FF41" name="Complexity Class">
-                    <LabelList dataKey="name" content={renderLabel} />
-                </Scatter>
-            </ScatterChart>
-        </ResponsiveContainer>
-    </div>
+    <ChartPanel>
+        <div className="h-80 w-full">
+            <ResponsiveContainer width={"100%"} height={"100%"} initialDimension={{ width: 320, height: 300 }}>
+                <ScatterChart margin={{ top: 40, right: 40, bottom: 40, left: 40 }}>
+                    <CartesianGrid
+                        strokeDasharray="3 3"
+                        stroke={chartTheme.gridStroke}
+                    />
+                    <XAxis
+                        type="number"
+                        dataKey="time"
+                        name="Time Complexity"
+                        tick={{ fill: chartTheme.axis.tickColor, fontSize: chartTheme.axis.tickFontSize }}
+                        tickLine={false}
+                        axisLine={{ stroke: chartTheme.axis.lineColor }}
+                        label={{
+                            value: "Time",
+                            position: "insideBottomRight",
+                            style: { fill: chartTheme.axis.tickColor },
+                        }}
+                        domain={[0, 11]}
+                    />
+                    <YAxis
+                        type="number"
+                        dataKey="space"
+                        name="Space Complexity"
+                        tick={{ fill: chartTheme.axis.tickColor, fontSize: chartTheme.axis.tickFontSize }}
+                        tickLine={false}
+                        axisLine={{ stroke: chartTheme.axis.lineColor }}
+                        label={{
+                            value: "Space",
+                            position: "insideLeft",
+                            angle: -90,
+                            style: { textAnchor: "middle", fill: chartTheme.axis.tickColor },
+                        }}
+                        domain={[0, 11]}
+                    />
+                    <ZAxis range={[80, 120]} />
+                    <Tooltip
+                        cursor={{ stroke: chartTheme.cursorStroke, strokeWidth: 1 }}
+                        content={<ChartTooltip />}
+                    />
+                    <Legend labelStyle={{ color: chartTheme.legendTextColor }} />
+                    <Scatter
+                        data={data}
+                        fill={chartTheme.series[0]}
+                        name="Complexity Class"
+                    >
+                        <LabelList dataKey="name" content={renderLabel} />
+                    </Scatter>
+                </ScatterChart>
+            </ResponsiveContainer>
+        </div>
+    </ChartPanel>
 );

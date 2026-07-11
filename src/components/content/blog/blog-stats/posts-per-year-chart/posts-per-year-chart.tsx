@@ -3,14 +3,12 @@
 import { FC } from "react";
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { ChartTooltip } from "@/components/design-system/molecules/chart/chart-tooltip";
+import { chartTheme } from "@/types/configuration/chart-theme";
 import type { PostsPerYear } from "@/types/content/blog-stats";
 
 interface PostsPerYearChartProps {
     data: PostsPerYear[];
 }
-
-const AXIS_TICK_COLOR = "#9fbf9f";
-const AXIS_LINE_COLOR = "#1f5a2e";
 
 export const PostsPerYearChart: FC<PostsPerYearChartProps> = ({ data }) => (
     <div className="h-100 w-full">
@@ -18,19 +16,19 @@ export const PostsPerYearChart: FC<PostsPerYearChartProps> = ({ data }) => (
             <BarChart data={data}>
                 <XAxis
                     dataKey="year"
-                    tick={{ fill: AXIS_TICK_COLOR, fontSize: 12 }}
+                    tick={{ fill: chartTheme.axis.tickColor, fontSize: chartTheme.axis.tickFontSize }}
                     tickLine={false}
-                    axisLine={{ stroke: AXIS_LINE_COLOR }}
+                    axisLine={{ stroke: chartTheme.axis.lineColor }}
                 />
                 <YAxis
                     allowDecimals={false}
-                    tick={{ fill: AXIS_TICK_COLOR, fontSize: 12 }}
+                    tick={{ fill: chartTheme.axis.tickColor, fontSize: chartTheme.axis.tickFontSize }}
                     tickLine={false}
-                    axisLine={{ stroke: AXIS_LINE_COLOR }}
+                    axisLine={{ stroke: chartTheme.axis.lineColor }}
                 />
                 <Tooltip
                     content={<ChartTooltip labelPrefix="Year: " />}
-                    cursor={{ fill: "#39FF141a" }}
+                    cursor={{ fill: chartTheme.cursorFill }}
                 />
                 <Bar dataKey="count" name="Posts" fill="#00FF41" radius={[6, 6, 0, 0]} />
             </BarChart>

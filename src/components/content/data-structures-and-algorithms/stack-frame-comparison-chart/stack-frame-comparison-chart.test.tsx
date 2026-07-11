@@ -13,5 +13,10 @@ describe("StackFrameComparisonChart", () => {
             const { container } = render(<StackFrameComparisonChart />);
             expect(container.querySelector(".recharts-responsive-container")).toBeInTheDocument();
         });
+
+        it("wraps the chart in a ChartPanel", () => {
+            const { container } = render(<StackFrameComparisonChart />);
+            expect(container.querySelector("section.glow-container")).toBeInTheDocument();
+        });
     });
 });

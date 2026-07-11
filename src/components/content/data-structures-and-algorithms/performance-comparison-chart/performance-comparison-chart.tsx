@@ -10,7 +10,9 @@ import {
     ResponsiveContainer,
     Legend,
 } from "recharts";
+import { ChartPanel } from "@/components/design-system/molecules/chart/chart-panel";
 import { ChartTooltip } from "@/components/design-system/molecules/chart/chart-tooltip";
+import { chartTheme } from "@/types/configuration/chart-theme";
 
 const data = [
     { n: 10, bubble: 0.01, merge: 0.002, quick: 0.0015 },
@@ -20,31 +22,66 @@ const data = [
 ];
 
 export const PerformanceComparisonChart: FC = () => (
-    <div className="glow-container h-100 w-full p-5 mb-6">
-        <ResponsiveContainer width={"100%"} height={"100%"} initialDimension={{ width: 320, height: 300 }}>
-            <LineChart data={data}>
-                <XAxis
-                    dataKey="n"
-                    label={{
-                        value: "Input size (n)",
-                        position: "insideBottom",
-                    }}
-                />
-                <YAxis
-                    label={{
-                        value: "Execution time (ms)",
-                        angle: -90,
-                        offset: 0,
-                        position: "insideLeft",
-                        style: { textAnchor: "middle" },
-                    }}
-                />
-                <Tooltip content={ChartTooltip} />
-                <Line type="monotone" dataKey="bubble" strokeWidth={3} stroke="#ef4444" name="Bubble Sort" />
-                <Line type="monotone" dataKey="merge" strokeWidth={7} stroke="#3b82f6" name="Merge Sort" />
-                <Line type="monotone" dataKey="quick" strokeWidth={3} stroke="#22c55e" name="Quick Sort" />
-                <Legend verticalAlign="top" height={40} style={{ marginTop: 40 }} />
-            </LineChart>
-        </ResponsiveContainer>
-    </div>
+    <ChartPanel>
+        <div className="h-100 w-full">
+            <ResponsiveContainer width={"100%"} height={"100%"} initialDimension={{ width: 320, height: 300 }}>
+                <LineChart data={data}>
+                    <XAxis
+                        dataKey="n"
+                        tick={{ fill: chartTheme.axis.tickColor, fontSize: chartTheme.axis.tickFontSize }}
+                        tickLine={false}
+                        axisLine={{ stroke: chartTheme.axis.lineColor }}
+                        label={{
+                            value: "Input size (n)",
+                            position: "insideBottom",
+                            style: { fill: chartTheme.axis.tickColor },
+                        }}
+                    />
+                    <YAxis
+                        tick={{ fill: chartTheme.axis.tickColor, fontSize: chartTheme.axis.tickFontSize }}
+                        tickLine={false}
+                        axisLine={{ stroke: chartTheme.axis.lineColor }}
+                        label={{
+                            value: "Execution time (ms)",
+                            angle: -90,
+                            offset: 0,
+                            position: "insideLeft",
+                            style: { textAnchor: "middle", fill: chartTheme.axis.tickColor },
+                        }}
+                    />
+                    <Tooltip
+                        content={<ChartTooltip />}
+                        cursor={{ stroke: chartTheme.cursorStroke, strokeWidth: 1 }}
+                    />
+                    <Line
+                        type="monotone"
+                        dataKey="bubble"
+                        strokeWidth={3}
+                        stroke={chartTheme.series[0]}
+                        name="Bubble Sort"
+                    />
+                    <Line
+                        type="monotone"
+                        dataKey="merge"
+                        strokeWidth={3}
+                        stroke={chartTheme.series[1]}
+                        name="Merge Sort"
+                    />
+                    <Line
+                        type="monotone"
+                        dataKey="quick"
+                        strokeWidth={3}
+                        stroke={chartTheme.series[2]}
+                        name="Quick Sort"
+                    />
+                    <Legend
+                        verticalAlign="top"
+                        height={40}
+                        style={{ marginTop: 40 }}
+                        labelStyle={{ color: chartTheme.legendTextColor }}
+                    />
+                </LineChart>
+            </ResponsiveContainer>
+        </div>
+    </ChartPanel>
 );

@@ -13,5 +13,10 @@ describe("RecurrenceTree", () => {
             const { container } = render(<RecurrenceTree />);
             expect(container.querySelector(".recharts-responsive-container")).toBeInTheDocument();
         });
+
+        it("wraps the chart in a ChartPanel", () => {
+            const { container } = render(<RecurrenceTree />);
+            expect(container.querySelector("section.glow-container")).toBeInTheDocument();
+        });
     });
 });

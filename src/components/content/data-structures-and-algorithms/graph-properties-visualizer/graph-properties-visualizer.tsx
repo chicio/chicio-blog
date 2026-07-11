@@ -5,6 +5,7 @@ import {
     RedPillButton,
     BluePillButton,
 } from "@/components/design-system/molecules/buttons/pills-buttons";
+import { ChartPanel } from "@/components/design-system/molecules/chart/chart-panel";
 import { useGraphPropertiesVisualizerStore } from "./use-graph-properties-visualizer-store";
 
 interface GraphNode {
@@ -231,55 +232,57 @@ export const GraphPropertiesVisualizer: FC = () => {
     const example = graphExamples[selectedIndex];
 
     return (
-        <div className="w-full">
-            <div className="mb-4 flex flex-wrap items-center justify-center gap-2">
-                {graphExamples.map((ex, i) => (
-                    <button
-                        key={ex.label}
-                        onClick={selectIndex(i)}
-                        className={`rounded-lg border px-3 py-1 text-sm font-mono transition-colors ${
-                            i === selectedIndex
-                                ? "border-accent bg-primary-dark text-accent"
-                                : "border-gray-600 bg-transparent text-gray-400 hover:border-accent hover:text-accent"
-                        }`}
+        <ChartPanel>
+            <div className="w-full">
+                <div className="mb-4 flex flex-wrap items-center justify-center gap-2">
+                    {graphExamples.map((ex, i) => (
+                        <button
+                            key={ex.label}
+                            onClick={selectIndex(i)}
+                            className={`rounded-lg border px-3 py-1 text-sm font-mono transition-colors ${
+                                i === selectedIndex
+                                    ? "border-accent bg-primary-dark text-accent"
+                                    : "border-gray-600 bg-transparent text-gray-400 hover:border-accent hover:text-accent"
+                            }`}
+                        >
+                            {ex.label}
+                        </button>
+                    ))}
+                </div>
+
+                <div className="flex justify-center">
+                    <svg
+                        viewBox="0 0 360 180"
+                        className="w-full max-w-md"
+                        aria-label={`Graph example: ${example.label}`}
                     >
-                        {ex.label}
-                    </button>
-                ))}
-            </div>
+                        {example.edges.map((edge, i) => (
+                            <EdgeLine
+                                key={`${edge.from}-${edge.to}`}
+                                edge={edge}
+                                nodes={example.nodes}
+                                directed={example.directed}
+                                weighted={example.weighted}
+                                index={i}
+                            />
+                        ))}
+                        {example.nodes.map((node) => (
+                            <NodeCircle key={node.id} node={node} />
+                        ))}
+                    </svg>
+                </div>
 
-            <div className="flex justify-center">
-                <svg
-                    viewBox="0 0 360 180"
-                    className="w-full max-w-md"
-                    aria-label={`Graph example: ${example.label}`}
-                >
-                    {example.edges.map((edge, i) => (
-                        <EdgeLine
-                            key={`${edge.from}-${edge.to}`}
-                            edge={edge}
-                            nodes={example.nodes}
-                            directed={example.directed}
-                            weighted={example.weighted}
-                            index={i}
-                        />
-                    ))}
-                    {example.nodes.map((node) => (
-                        <NodeCircle key={node.id} node={node} />
-                    ))}
-                </svg>
-            </div>
+                <p className="mt-3 text-center text-sm text-gray-300">
+                    <span className="font-bold text-accent">{example.label}</span>
+                    {" — "}
+                    {example.description}
+                </p>
 
-            <p className="mt-3 text-center text-sm text-gray-300">
-                <span className="font-bold text-accent">{example.label}</span>
-                {" — "}
-                {example.description}
-            </p>
-
-            <div className="mt-4 flex justify-center gap-3">
-                <BluePillButton onClick={goToPrevious}>Previous</BluePillButton>
-                <RedPillButton onClick={goToNext}>Next</RedPillButton>
+                <div className="mt-4 flex justify-center gap-3">
+                    <BluePillButton onClick={goToPrevious}>Previous</BluePillButton>
+                    <RedPillButton onClick={goToNext}>Next</RedPillButton>
+                </div>
             </div>
-        </div>
+        </ChartPanel>
     );
 };
