@@ -283,8 +283,8 @@ When the plan gets approved, the orchestrator dispatches a new subagent: the `im
 Like the explorer, it comes in three tech-stack variants, each one knowing how to write code in its own ecosystem.
 This agent does the "real" work: it implements the feature following the approved plan, writing both the production code and its tests.
 
-The implementer works leveraging one of our team's ways of working: **micro commits**.
-Every logical step of the implementation becomes a small, self-contained commit.
+The implementer works leveraging one of our team's ways of working, **micro commits**:
+every logical step of the implementation becomes a small, self-contained commit.
 In this way, even if the final merge request results in a big amount of changes, we are still able to navigate the implementation commit by commit, checking what the LLM produced and whether it matches our expectations.
 
 The implementer runs on `sonnet`, a mid-tier model, and this is a **deliberate choice**.
