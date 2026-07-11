@@ -165,7 +165,7 @@ Follow this workflow precisely when creating a new article. Act autonomously on 
 
 #### Featured Image Prompt Contract
 
-The visual reference for everything below is `.claude/references/featured-image-reference.svg` — read it before writing the prompt. It exists because the post card renders the image with `object-cover` at fixed heights: the big (launch) card crops it to a ~3.1:1 horizontal band on desktop, while the small (2-in-a-row) card and phones crop it to a ~1.45:1 window. Any detail near the edges of the image gets cut in one of the two layouts.
+The visual reference for everything below is `.claude/references/featured-image-reference.svg` — read it before writing the prompt. A PNG export lives beside it (`.claude/references/featured-image-reference.png`) so the spec can be ATTACHED to image generators that reject SVG. It exists because the post card renders the image with `object-cover` at fixed heights: the big (launch) card crops it to a ~3.1:1 horizontal band on desktop, while the small (2-in-a-row) card and phones crop it to a ~1.45:1 window. Any detail near the edges of the image gets cut in one of the two layouts.
 
 Every generated prompt MUST specify:
 
@@ -180,10 +180,11 @@ Every generated prompt MUST specify:
   - `#E8FFE8` highlight text-green (brightest points only)
   - No hues outside this map: the image must stay dark green-on-black; never introduce blues, purples, oranges, or warm palettes.
 - **Style**: dark, moody, subtle green glow — consistent with the site's Matrix-inspired glassmorphism aesthetic.
+- **Reference attachment**: the user attaches `.claude/references/featured-image-reference.png` to the generation request alongside the prompt. Therefore every generated prompt MUST end with this clause (adapt wording, keep the meaning): "The attached image is a composition and color SPECIFICATION, not a style or content reference: keep the subject inside its marked safe zone (central ~72% x 65%) and use only the hex colors from its color map — do NOT reproduce its boxes, dashed lines, swatches, labels, or any of its text in the artwork." Also remind the user, after the prompt, to attach the PNG. The hex color map stays quoted in the prompt body as fallback for tools without image input.
 
 Prompt skeleton to adapt per topic:
 
-> A [subject relevant to the article topic], centered composition occupying the middle half of the frame, wide 2:1 landscape format, dark background #001100 fading to #002200, subject rendered in greens #00CC33 and #00FF41 with #39FF14 glow accents and #E8FFE8 highlights, deep shadows in #003D10, faint matrix-style rain of abstract falling glyphs in the background and along the edges, edges otherwise pure ambient dark gradient with no important detail, no readable words, no logos, digital illustration, subtle glow, high contrast, moody.
+> A [subject relevant to the article topic], centered composition occupying the middle half of the frame, wide 2:1 landscape format, dark background #001100 fading to #002200, subject rendered in greens #00CC33 and #00FF41 with #39FF14 glow accents and #E8FFE8 highlights, deep shadows in #003D10, faint matrix-style rain of abstract falling glyphs in the background and along the edges, edges otherwise pure ambient dark gradient with no important detail, no readable words, no logos, digital illustration, subtle glow, high contrast, moody. The attached image is a composition and color specification, not a style or content reference: keep the subject inside its marked safe zone and use only the hex colors from its color map — do not reproduce its boxes, dashed lines, swatches, labels, or any of its text in the artwork.
 
 ### Phase 4: Article Writing
 1. Write the complete MDX article following:
