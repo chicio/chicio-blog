@@ -145,7 +145,7 @@ It is a community skill coming from the [Matt Pocock skills repository](https://
 The LLM interviews you relentlessly about a plan or a design, asking one question after another, challenging your assumptions, until every open decision is resolved.
 The output is a plan with no ambiguity left: exactly what you want before handing the work over to an AI agent.
 
-The skill uses the [Atlassian plugin](https://claude.com/plugins/atlassian) to interact with our boards, and it creates the story directly in the backlog, under the epic chosen by the user.
+The skill uses the [Atlassian plugin](https://claude.com/plugins/atlassian) to interact with our boards, and it creates the story directly in the backlog, under the epic chosen by the user, with him as reporter, in a proper status, ready to be moved automatically by the next skills.
 
 ### Implementing the user story: the SDLC skills
 
@@ -283,9 +283,9 @@ When the plan gets approved, the orchestrator dispatches a new subagent: the `im
 Like the explorer, it comes in three tech-stack variants, each one knowing how to write code in its own ecosystem.
 This agent does the "real" work: it implements the feature following the approved plan, writing both the production code and its tests.
 
-The implementer works leveraging one of our team's ways of working: **micro commits**.
-Every logical step of the implementation becomes a small, self-contained commit.
-In this way, even if the final merge request results in a big amount of changes, we are still able to navigate the implementation commit by commit, checking what the LLM produced and whether it matches our expectations.
+The implementer works leveraging one of our team's ways of working, **micro commits**:
+every logical step of the implementation becomes a small, self-contained commit.
+In this way, even if the final merge request results in a big amount of changes, we are still able to navigate the implementation commit by commit, checking what the LLM produced and whether it matches our expectations. Note that this is one of many points in the workflow where our experience as engineers is paramaount: best practices now matter more than ever if we want to produce a well engineered (and so, maintainable) code.
 
 The implementer runs on `sonnet`, a mid-tier model, and this is a **deliberate choice**.
 Why not the most powerful model available? Because **the hard thinking already happened**: the plan was written in the main conversation by the more powerful model driving the orchestrator (Opus, in our case).
@@ -402,7 +402,7 @@ After all the automation needed to make a story ready for production, the human 
 
 All the skills above are invocable manually on a specific project.
 But we tried something more ambitious: a single skill, `sdlc-e2e`, that orchestrates all of them.
-It accepts generic requests in natural language, like `write a jira with this content: <description of the task>` or `implement this jira ticket: <ticket-id>`, and it routes them to the right skill.
+It accepts generic requests in natural language, like `write a jira with this content: <description of the task>` or `implement this jira ticket: <ticket-id>`, and it routes them to the right skill. This choice makes the entire approach modular, allowing us to change specific part of the process addressing only the interested sub skill (write jira skill or sdlc-fe).
 
 This skill impersonates a **senior end-to-end engineer** wearing three hats at once:
 
@@ -418,13 +418,13 @@ And if a story spans more than one stack (a backend service plus its frontend, f
 The skill also connects the phases of our workflow into a single conversation.
 After creating a story, it always offers to implement it right away.
 And after an implementation ends with an approved merge request, it can carry on with the **deployment**.
-For a backend service, once we approve the merge (another human gate), the skill dispatches a `be-dev-ops` agent that watches the GitLab CI pipeline, and then hands off to a dedicated `be-deploy` skill that monitors the rollout on ArgoCD, QA environment first, then production.
+For a backend service, once we approve the merge (another human gate), the skill dispatches a `be-dev-ops` agent that watches the GitLab CI pipeline, and then hands off to a dedicated `be-deploy` skill that monitors the rollout on ArgoCD (in the end, just an abstraction over our K8s cluster), QA environment first, then production.
 Under the hood, `be-deploy` uses the [MCP server for ArgoCD](https://github.com/argoproj-labs/mcp-for-argocd), falling back to the [`argocd` CLI](https://argo-cd.readthedocs.io/en/stable/cli_installation/) when the MCP tools are not available.
 Frontend services have their own deployment flow, encoded in a separate `fe-deploy` skill that watches the pipeline and drives a human-gated production release.
 
 ## The plugin architecture: a pyramid of skills
 
-It is time to put all the pieces together. Below you can find the full overview of the plugin architecture, in terms of interactions between skills and agents.
+After this long and, we hope, interesting journey, it's time to put all the pieces together. Below you can find the full overview of the plugin architecture, in terms of interactions between skills and agents.
 
 ```mermaid
 flowchart TD
@@ -483,7 +483,7 @@ At the top, there are the skills that interact directly with the human: their on
 This boundary is not rigid, though: the process skills can also be invoked directly.
 It happens all the time in our day-to-day work, because the story is often written in a different moment than its execution: in that case we skip the top of the pyramid and trigger the right SDLC skill for the operation we need.
 In the middle, the skills become more specific and technically aware: the SDLC pipelines know our development process, the deploy skills know our release flow.
-At the bottom, there are the agents: the operative layer that touches the actual technology.
+At the bottom, there are the agents: the operative layer aware of the actual technology, like Kotlin, and that interact with MCP servers or make direct API calls
 
 - the implementer that, guided by the approved plan, writes the actual Kotlin or TypeScript code
 - the dev-ops agent that checks the GitLab CI status
