@@ -13,5 +13,10 @@ describe("AmortizedAnalysis", () => {
             const { container } = render(<AmortizedAnalysis />);
             expect(container.querySelector(".recharts-responsive-container")).toBeInTheDocument();
         });
+
+        it("wraps the chart in a ChartPanel", () => {
+            const { container } = render(<AmortizedAnalysis />);
+            expect(container.querySelector("section.glow-container")).toBeInTheDocument();
+        });
     });
 });

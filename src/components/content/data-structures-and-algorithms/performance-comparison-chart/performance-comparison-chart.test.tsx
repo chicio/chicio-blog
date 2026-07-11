@@ -13,5 +13,10 @@ describe("PerformanceComparisonChart", () => {
             const { container } = render(<PerformanceComparisonChart />);
             expect(container.querySelector(".recharts-responsive-container")).toBeInTheDocument();
         });
+
+        it("wraps the chart in a ChartPanel", () => {
+            const { container } = render(<PerformanceComparisonChart />);
+            expect(container.querySelector("section.glow-container")).toBeInTheDocument();
+        });
     });
 });
