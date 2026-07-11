@@ -139,7 +139,8 @@ The skill also encodes the small pieces of discipline that make the difference i
 
 - the **input** does not need to be a clean spec: the skill can mine a pasted **Slack conversation** or a **meeting transcript**, separating the actual ask from the side chatter
 - if the **TECH TODO** would come out empty or vague, the skill does not accept a "TBD" placeholder: it starts a `grilling` session with the user until the list is implementation-ready
-- before creating anything, it **checks whether the story already exists**, to avoid duplicates in the backlog
+- before creating anything, it **checks whether the story already exists**, to avoid duplicates in the backlog. This is a consequence of the fact that sometimes our product manager comes with a story that is a sort of placeholder
+ for later discussions and technical implementations. In these cases, the skill pick the already existing story and enriches with the tech details.
 
 The `grilling` skill mentioned above deserves a proper introduction, because we will meet it again later.
 It is a community skill coming from the [Matt Pocock skills repository](https://github.com/mattpocock/skills), and it does exactly what the name suggests: it grills you :fire:.
