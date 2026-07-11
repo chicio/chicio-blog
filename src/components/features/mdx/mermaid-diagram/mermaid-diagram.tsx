@@ -26,7 +26,7 @@ export const MermaidDiagram: FC<MermaidDiagramProps> = ({ definition }) => {
             )}
             <div
                 ref={setContainerEl}
-                className="flex justify-center [&_svg]:max-w-full [&_svg]:h-auto"
+                className="flex justify-center [&_svg]:max-w-full [&_svg]:h-auto [&_.nodeLabel]:text-center [&_.nodeLabel_p]:text-center"
                 aria-label="Mermaid diagram"
             />
         </div>
