@@ -42,6 +42,9 @@
 ## Features (continued 4)
 - [Testing Pyramid](feature_testing_pyramid.md) — Vitest+RTL+Playwright introduced PR #395; vi.hoisted() gotcha, react-dom pin, reactCompilerPreset v6 API, node/jsdom split, mock-per-test discipline
 
+## Features (continued 5)
+- [Chart Theme](feature_chart_theme.md) — shared chartTheme module in types/configuration; fixed-slot palette; recharts Legend labelStyle vs wrapperStyle gotcha
+
 ## Feedback
 - [PWA & State Patterns](feedback_pwa_patterns.md) — useSyncExternalStore for localStorage state, consent-gated UI, banner/error page alignment rules
 - [Worktree git stash hazard](feedback_worktree_git_stash_hazard.md) — never `git stash` inside a pipeline worktree, refs/stash is shared across all worktrees
