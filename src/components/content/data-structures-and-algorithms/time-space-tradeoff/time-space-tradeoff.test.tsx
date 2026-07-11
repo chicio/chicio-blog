@@ -13,5 +13,10 @@ describe("TimeVsSpaceTradeoffVisualizer", () => {
             const { container } = render(<TimeVsSpaceTradeoffVisualizer />);
             expect(container.querySelector(".recharts-responsive-container")).toBeInTheDocument();
         });
+
+        it("wraps the chart in a ChartPanel", () => {
+            const { container } = render(<TimeVsSpaceTradeoffVisualizer />);
+            expect(container.querySelector("section.glow-container")).toBeInTheDocument();
+        });
     });
 });

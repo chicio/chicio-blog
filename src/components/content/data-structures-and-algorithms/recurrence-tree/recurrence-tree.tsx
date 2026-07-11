@@ -10,7 +10,9 @@ import {
     XAxis,
     YAxis,
 } from "recharts";
+import { ChartPanel } from "@/components/design-system/molecules/chart/chart-panel";
 import { ChartTooltip } from "@/components/design-system/molecules/chart/chart-tooltip";
+import { chartTheme } from "@/types/configuration/chart-theme";
 
 const levels = () => {
     const n = 64;
@@ -34,32 +36,55 @@ const levels = () => {
 };
 
 export const RecurrenceTree: FC = () => (
-    <div className="glow-container h-[400px] w-full p-5">
-        <ResponsiveContainer width={"100%"} height={"100%"} initialDimension={{ width: 320, height: 300 }}>
-            <LineChart data={levels()}>
-                <XAxis
-                    dataKey="level"
-                    height={50}
-                    label={{
-                        value: "Recursion Level",
-                        position: "insideBottom",
-                        style: { textAnchor: "middle" },
-                    }}
-                />
-                <YAxis
-                    label={{
-                        value: "Work",
-                        angle: -90,
-                        offset: 10,
-                        position: "insideLeft",
-                        style: { textAnchor: "middle" },
-                    }}
-                />
-                <Tooltip content={ChartTooltip} />
-                <Legend />
-                <Line type="monotone" dataKey="Work per Call" stroke="#8b5cf6" strokeWidth={2} dot={false} />
-                <Line type="monotone" dataKey="Total Work at Level" stroke="#06b6d4" strokeWidth={2} dot={false} />
-            </LineChart>
-        </ResponsiveContainer>
-    </div>
+    <ChartPanel>
+        <div className="h-[400px] w-full">
+            <ResponsiveContainer width={"100%"} height={"100%"} initialDimension={{ width: 320, height: 300 }}>
+                <LineChart data={levels()}>
+                    <XAxis
+                        dataKey="level"
+                        height={50}
+                        tick={{ fill: chartTheme.axis.tickColor, fontSize: chartTheme.axis.tickFontSize }}
+                        tickLine={false}
+                        axisLine={{ stroke: chartTheme.axis.lineColor }}
+                        label={{
+                            value: "Recursion Level",
+                            position: "insideBottom",
+                            style: { textAnchor: "middle", fill: chartTheme.axis.tickColor },
+                        }}
+                    />
+                    <YAxis
+                        tick={{ fill: chartTheme.axis.tickColor, fontSize: chartTheme.axis.tickFontSize }}
+                        tickLine={false}
+                        axisLine={{ stroke: chartTheme.axis.lineColor }}
+                        label={{
+                            value: "Work",
+                            angle: -90,
+                            offset: 10,
+                            position: "insideLeft",
+                            style: { textAnchor: "middle", fill: chartTheme.axis.tickColor },
+                        }}
+                    />
+                    <Tooltip
+                        content={<ChartTooltip />}
+                        cursor={{ stroke: chartTheme.cursorStroke, strokeWidth: 1 }}
+                    />
+                    <Legend labelStyle={{ color: chartTheme.legendTextColor }} />
+                    <Line
+                        type="monotone"
+                        dataKey="Work per Call"
+                        stroke={chartTheme.series[0]}
+                        strokeWidth={2}
+                        dot={false}
+                    />
+                    <Line
+                        type="monotone"
+                        dataKey="Total Work at Level"
+                        stroke={chartTheme.series[1]}
+                        strokeWidth={2}
+                        dot={false}
+                    />
+                </LineChart>
+            </ResponsiveContainer>
+        </div>
+    </ChartPanel>
 );

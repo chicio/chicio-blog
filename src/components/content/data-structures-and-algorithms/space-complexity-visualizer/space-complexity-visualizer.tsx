@@ -10,7 +10,9 @@ import {
     XAxis,
     YAxis,
 } from "recharts";
+import { ChartPanel } from "@/components/design-system/molecules/chart/chart-panel";
 import { ChartTooltip } from "@/components/design-system/molecules/chart/chart-tooltip";
+import { chartTheme } from "@/types/configuration/chart-theme";
 
 const data = () => {
     const points = [];
@@ -27,41 +29,76 @@ const data = () => {
 };
 
 export const SpaceComplexityVisualizer: FC = () => (
-    <div className="glow-container h-[400px] w-full p-5">
-        <ResponsiveContainer width={"100%"} height={"100%"} initialDimension={{ width: 320, height: 300 }}>
-            <LineChart data={data()}>
-                <XAxis
-                    dataKey="n"
-                    height={50}
-                    label={{
-                        value: "Input size (n)",
-                        position: "insideBottom",
-                        style: { textAnchor: "middle" },
-                    }}
-                />
-                <YAxis
-                    label={{
-                        value: "Relative Memory Usage",
-                        angle: -90,
-                        offset: 10,
-                        position: "insideLeft",
-                        style: { textAnchor: "middle" },
-                    }}
-                />
-                <Tooltip content={ChartTooltip} />
-                <Legend verticalAlign="top" />
-                <Line type="monotone" dataKey="constant" stroke="#7c3aed" strokeWidth={2.5} dot={false} name="O(1)" />
-                <Line type="monotone" dataKey="logn" stroke="#0ea5e9" strokeWidth={2.5} dot={false} name="O(log n)" />
-                <Line type="monotone" dataKey="linear" stroke="#10b981" strokeWidth={2.5} dot={false} name="O(n)" />
-                <Line
-                    type="monotone"
-                    dataKey="nlogn"
-                    stroke="#f97316"
-                    strokeWidth={2.5}
-                    dot={false}
-                    name="O(n log n)"
-                />
-            </LineChart>
-        </ResponsiveContainer>
-    </div>
+    <ChartPanel>
+        <div className="h-[400px] w-full">
+            <ResponsiveContainer width={"100%"} height={"100%"} initialDimension={{ width: 320, height: 300 }}>
+                <LineChart data={data()}>
+                    <XAxis
+                        dataKey="n"
+                        height={50}
+                        tick={{ fill: chartTheme.axis.tickColor, fontSize: chartTheme.axis.tickFontSize }}
+                        tickLine={false}
+                        axisLine={{ stroke: chartTheme.axis.lineColor }}
+                        label={{
+                            value: "Input size (n)",
+                            position: "insideBottom",
+                            style: { textAnchor: "middle", fill: chartTheme.axis.tickColor },
+                        }}
+                    />
+                    <YAxis
+                        tick={{ fill: chartTheme.axis.tickColor, fontSize: chartTheme.axis.tickFontSize }}
+                        tickLine={false}
+                        axisLine={{ stroke: chartTheme.axis.lineColor }}
+                        label={{
+                            value: "Relative Memory Usage",
+                            angle: -90,
+                            offset: 10,
+                            position: "insideLeft",
+                            style: { textAnchor: "middle", fill: chartTheme.axis.tickColor },
+                        }}
+                    />
+                    <Tooltip
+                        content={<ChartTooltip />}
+                        cursor={{ stroke: chartTheme.cursorStroke, strokeWidth: 1 }}
+                    />
+                    <Legend
+                        verticalAlign="top"
+                        labelStyle={{ color: chartTheme.legendTextColor }}
+                    />
+                    <Line
+                        type="monotone"
+                        dataKey="constant"
+                        stroke={chartTheme.series[0]}
+                        strokeWidth={2.5}
+                        dot={false}
+                        name="O(1)"
+                    />
+                    <Line
+                        type="monotone"
+                        dataKey="logn"
+                        stroke={chartTheme.series[1]}
+                        strokeWidth={2.5}
+                        dot={false}
+                        name="O(log n)"
+                    />
+                    <Line
+                        type="monotone"
+                        dataKey="linear"
+                        stroke={chartTheme.series[2]}
+                        strokeWidth={2.5}
+                        dot={false}
+                        name="O(n)"
+                    />
+                    <Line
+                        type="monotone"
+                        dataKey="nlogn"
+                        stroke={chartTheme.series[3]}
+                        strokeWidth={2.5}
+                        dot={false}
+                        name="O(n log n)"
+                    />
+                </LineChart>
+            </ResponsiveContainer>
+        </div>
+    </ChartPanel>
 );

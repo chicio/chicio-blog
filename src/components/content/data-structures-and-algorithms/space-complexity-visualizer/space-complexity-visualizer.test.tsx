@@ -13,5 +13,10 @@ describe("SpaceComplexityVisualizer", () => {
             const { container } = render(<SpaceComplexityVisualizer />);
             expect(container.querySelector(".recharts-responsive-container")).toBeInTheDocument();
         });
+
+        it("wraps the chart in a ChartPanel", () => {
+            const { container } = render(<SpaceComplexityVisualizer />);
+            expect(container.querySelector("section.glow-container")).toBeInTheDocument();
+        });
     });
 });
