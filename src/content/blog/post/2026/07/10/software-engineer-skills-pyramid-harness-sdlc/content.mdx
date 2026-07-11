@@ -289,7 +289,7 @@ In this way, even if the final merge request results in a big amount of changes,
 
 The implementer runs on `sonnet`, a mid-tier model, and this is a **deliberate choice**.
 Why not the most powerful model available? Because **the hard thinking already happened**: the plan was written in the main conversation by the more powerful model driving the orchestrator (Opus, in our case).
-The implementer does not have to design anything: it executes a well-defined plan. **A cheaper model guided by a good plan is more than enough**, and it is faster too.
+The implementer does not have to design anything: it executes a well-defined plan. **A cheaper model guided by a good plan is more efficient**, and it is faster too.
 
 Before declaring its work done, the implementer must run the **mechanical gates** of the project: the full test suite and the production build must pass.
 Then it reports back to the orchestrator with a structured completion report:
@@ -525,6 +525,11 @@ One honest note to close.
 A tool like this reduced our time to market for new features, and we noticed it in our day-to-day work. But at the moment we don't have a specific metric to demonstrate the effectiveness of the plugin.
 We also don't believe that measuring the number of deploys is a relevant metric to assess the goodness of an AI tool (see, for example, [the metrics recently shared by Spotify](https://www.youtube.com/watch?v=9DHZLw5653E)).
 Understanding the real impact of this harness is one of the next steps of the experiment.
+
+On the tooling side, we already have two new experiments on our radar.
+The first one is [dynamic workflows](https://code.claude.com/docs/en/workflows), the Claude Code feature that orchestrates subagents at scale through scripts.
+We want to understand where this kind of orchestration fits next to the deterministic pipelines of our skills, starting from the parallelizable phases of the workflow.
+The second one is the integration of [Claude Design](https://claude.ai/design) into `sdlc-frontend`: we are defining our design system and our user flows there, so connecting it to the pipeline that builds our frontend feels like a natural evolution.
 
 Stay tuned: we will share the next evolutions of our pyramid in a future article :wave:.
 
