@@ -160,8 +160,30 @@ Follow this workflow precisely when creating a new article. Act autonomously on 
 ### Phase 3: Featured Image
 - If the user provides a featured image, place it in the post's co-located `media/` folder (`<post-dir>/media/` — see Images section)
 - If the user wants a suggestion, search for relevant free stock images or suggest options
-- If no good candidate exists, generate a detailed prompt for an AI image generator (DALL-E, Midjourney, etc.) that matches the blog's aesthetic in terms of color/style, but without the matrix rain in the image.
+- If no good candidate exists, generate a detailed prompt for an AI image generator (DALL-E, Midjourney, etc.) following the Featured Image Prompt Contract below.
 - Once the image is available (provided or generated), ensure it's placed correctly
+
+#### Featured Image Prompt Contract
+
+The visual reference for everything below is `.claude/references/featured-image-reference.svg` — read it before writing the prompt. It exists because the post card renders the image with `object-cover` at fixed heights: the big (launch) card crops it to a ~3.1:1 horizontal band on desktop, while the small (2-in-a-row) card and phones crop it to a ~1.45:1 window. Any detail near the edges of the image gets cut in one of the two layouts.
+
+Every generated prompt MUST specify:
+
+- **Canvas**: 2:1 landscape (e.g. 1200x600 or 2000x1000).
+- **Composition**: ONE clear focal subject, centered, fully contained in the central ~55% of width and ~50% of height. The outer edges (roughly 15% on each side, 17% top and bottom) must be ambient background only — gradients, glow, texture, out-of-focus environment. Nothing that hurts when cropped away.
+- **No text**: no readable words, titles, logos, or UI chrome baked into the image (the card overlays its own title). Matrix-style falling glyph rain IS allowed — it is a great fit for the ambient edge zones and background — as long as the glyphs read as abstract texture (no real words) and the rain stays behind/around the subject, never competing with it.
+- **Color map** — quote these hex values verbatim in the prompt so the generator matches the design system:
+  - `#001100` background (dominant) and `#002200` background light
+  - `#003D10` primary dark (shadows, depth)
+  - `#00CC33` secondary and `#00FF41` primary (main greens of the subject)
+  - `#39FF14` accent (sparingly — glows, highlights, rim light)
+  - `#E8FFE8` highlight text-green (brightest points only)
+  - No hues outside this map: the image must stay dark green-on-black; never introduce blues, purples, oranges, or warm palettes.
+- **Style**: dark, moody, subtle green glow — consistent with the site's Matrix-inspired glassmorphism aesthetic.
+
+Prompt skeleton to adapt per topic:
+
+> A [subject relevant to the article topic], centered composition occupying the middle half of the frame, wide 2:1 landscape format, dark background #001100 fading to #002200, subject rendered in greens #00CC33 and #00FF41 with #39FF14 glow accents and #E8FFE8 highlights, deep shadows in #003D10, faint matrix-style rain of abstract falling glyphs in the background and along the edges, edges otherwise pure ambient dark gradient with no important detail, no readable words, no logos, digital illustration, subtle glow, high contrast, moody.
 
 ### Phase 4: Article Writing
 1. Write the complete MDX article following:
