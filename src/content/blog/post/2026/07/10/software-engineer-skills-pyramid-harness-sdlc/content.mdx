@@ -513,7 +513,9 @@ These are the improvements already on our list:
 - **micro commits**: sometimes the implementer pushes the micro-commit approach too far, producing commits smaller than a meaningful logical step. We are still thinking about how to tune it
 - **validation**: we would like to push the runtime validation phase further, generating also a video of the QA session that we could review, instead of screenshots only
 - **QA evidence parity**: as we anticipated, `sdlc-frontend` must catch up with `sdlc-mobile` on publishing the QA report and its screenshots as a comment on the merge request
-- **Token consumption**: even if the pipelines doesn't consume a lot of token, we want to optimize more each step, not only just by choosing the right model for every subagent. 
+- **Token consumption**: even if the pipelines doesn't consume a lot of token, we want to optimize more each step, not only just by choosing the right model for every subagent.
+- **dynamic workflows**: we want to test [dynamic workflows](https://code.claude.com/docs/en/workflows), the Claude Code feature that orchestrates subagents at scale through scripts, and understand where this kind of orchestration fits next to our deterministic pipelines, starting from their parallelizable phases
+- **Claude Design integration**: we are defining our design system and our user flows in [Claude Design](https://claude.ai/design), so connecting it to `sdlc-frontend`, the pipeline that builds our frontend, feels like a natural evolution
 
 ## Conclusion and next steps
 
@@ -525,11 +527,6 @@ One honest note to close.
 A tool like this reduced our time to market for new features, and we noticed it in our day-to-day work. But at the moment we don't have a specific metric to demonstrate the effectiveness of the plugin.
 We also don't believe that measuring the number of deploys is a relevant metric to assess the goodness of an AI tool (see, for example, [the metrics recently shared by Spotify](https://www.youtube.com/watch?v=9DHZLw5653E)).
 Understanding the real impact of this harness is one of the next steps of the experiment.
-
-On the tooling side, we already have two new experiments on our radar.
-The first one is [dynamic workflows](https://code.claude.com/docs/en/workflows), the Claude Code feature that orchestrates subagents at scale through scripts.
-We want to understand where this kind of orchestration fits next to the deterministic pipelines of our skills, starting from the parallelizable phases of the workflow.
-The second one is the integration of [Claude Design](https://claude.ai/design) into `sdlc-frontend`: we are defining our design system and our user flows there, so connecting it to the pipeline that builds our frontend feels like a natural evolution.
 
 Stay tuned: we will share the next evolutions of our pyramid in a future article :wave:.
 
