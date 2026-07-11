@@ -98,6 +98,10 @@ function buildFrequencyMap(s: string): Record<string, number> {
 }
 ```
 
+Running `buildFrequencyMap` on a small string produces a count per character, as shown below.
+
+<FrequencyMapChart />
+
 This algorithm runs in $O(n)$ time and uses $O(1)$ auxiliary space, assuming a fixed-size alphabet (e.g., ASCII).
 For Unicode strings, space complexity becomes $O(k)$, where $k$ is the number of unique characters.
 
