@@ -418,7 +418,7 @@ And if a story spans more than one stack (a backend service plus its frontend, f
 The skill also connects the phases of our workflow into a single conversation.
 After creating a story, it always offers to implement it right away.
 And after an implementation ends with an approved merge request, it can carry on with the **deployment**.
-For a backend service, once we approve the merge (another human gate), the skill dispatches a `be-dev-ops` agent that watches the GitLab CI pipeline, and then hands off to a dedicated `be-deploy` skill that monitors the rollout on ArgoCD, QA environment first, then production.
+For a backend service, once we approve the merge (another human gate), the skill dispatches a `be-dev-ops` agent that watches the GitLab CI pipeline, and then hands off to a dedicated `be-deploy` skill that monitors the rollout on ArgoCD (in the end, just an abstraction over our K8s cluster), QA environment first, then production.
 Under the hood, `be-deploy` uses the [MCP server for ArgoCD](https://github.com/argoproj-labs/mcp-for-argocd), falling back to the [`argocd` CLI](https://argo-cd.readthedocs.io/en/stable/cli_installation/) when the MCP tools are not available.
 Frontend services have their own deployment flow, encoded in a separate `fe-deploy` skill that watches the pipeline and drives a human-gated production release.
 
