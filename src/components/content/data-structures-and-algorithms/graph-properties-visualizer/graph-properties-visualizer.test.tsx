@@ -30,6 +30,11 @@ describe("GraphPropertiesVisualizer", () => {
             const descriptionEl = document.querySelector("p.text-center");
             expect(descriptionEl?.textContent).toMatch(/Undirected/);
         });
+
+        it("wraps the visualizer in a ChartPanel", () => {
+            const { container } = render(<GraphPropertiesVisualizer />);
+            expect(container.querySelector("section.glow-container")).toBeInTheDocument();
+        });
     });
 
     describe("navigation", () => {

@@ -29,6 +29,11 @@ describe("TreeTypesVisualizer", () => {
             const descriptionEl = document.querySelector("p.text-center");
             expect(descriptionEl?.textContent).toMatch(/Full Binary Tree/);
         });
+
+        it("wraps the visualizer in a ChartPanel", () => {
+            const { container } = render(<TreeTypesVisualizer />);
+            expect(container.querySelector("section.glow-container")).toBeInTheDocument();
+        });
     });
 
     describe("navigation", () => {
