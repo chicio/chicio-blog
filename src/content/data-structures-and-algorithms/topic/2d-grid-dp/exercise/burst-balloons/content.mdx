@@ -1,0 +1,45 @@
+---
+title: "Burst Balloons"
+description: "Burst all balloons to collect the maximum coins, where bursting a balloon yields the product of its value and the values of its current neighbours."
+date: 2026-07-12
+image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [dynamic programming, 2d grid dp, matrix, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Interval DP choosing the last balloon burst in each range"
+  leetcodeUrl: "https://leetcode.com/problems/burst-balloons/"
+  difficulty: "Hard"
+---
+# Burst Balloons
+
+Leetcode Problem 312: [Burst Balloons](https://leetcode.com/problems/burst-balloons/description/)
+
+## Problem Summary
+You are given **n** balloons, each painted with a number stored in the array **nums**. Bursting balloon **i** yields **nums[i - 1] * nums[i] * nums[i + 1]** coins, where an out-of-bounds neighbour is treated as a balloon painted with **1**. After a balloon bursts, its neighbours become adjacent. Return the maximum coins collectable by bursting all balloons in the best order. There are between **1** and **300** balloons, each value between **0** and **100**.
+
+This is an interval DP problem, where the two-dimensional table is indexed by the endpoints of a sub-array rather than by grid coordinates. The decisive trick is to reason about the **last** balloon burst in an interval: that balloon still has both boundary balloons intact, which cleanly splits the range into two independent sub-intervals. Intervals are filled in order of increasing length so that both sub-intervals are already solved.
+
+## Techniques
+- Array
+- Dynamic Programming
+
+## Solution
+```ts
+function maxCoins(nums: number[]): number {
+    const n = nums.length;
+    const arr = [1, ...nums, 1];
+    const dp = Array.from({ length: n + 2 }, () => new Array(n + 2).fill(0));
+
+    for (let len = 2; len < n + 2; len++) {
+        for (let left = 0; left + len < n + 2; left++) {
+            const right = left + len;
+            for (let k = left + 1; k < right; k++) {
+                const coins = dp[left][k] + dp[k][right] + arr[left] * arr[k] * arr[right];
+                dp[left][right] = Math.max(dp[left][right], coins);
+            }
+        }
+    }
+
+    return dp[0][n + 1];
+}
+```

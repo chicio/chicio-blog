@@ -1,0 +1,58 @@
+---
+title: "Maximum Number of Points with Cost"
+description: "Pick one cell in each row of a matrix to maximize the total value, paying a penalty equal to the horizontal distance between cells chosen in consecutive rows."
+date: 2026-07-12
+image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [dynamic programming, 2d grid dp, matrix, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Row-by-row grid DP with prefix and suffix running maxima to linearize the transition"
+  leetcodeUrl: "https://leetcode.com/problems/maximum-number-of-points-with-cost/"
+  difficulty: "Medium"
+---
+# Maximum Number of Points with Cost
+
+Leetcode Problem 1937: [Maximum Number of Points with Cost](https://leetcode.com/problems/maximum-number-of-points-with-cost/description/)
+
+## Problem Summary
+Given an **m x n** matrix **points**, you must pick exactly one cell in each row. Picking the cell at **(r, c)** adds **points[r][c]** to your score. Between two adjacent rows, if you pick column **c1** in one row and column **c2** in the next, you subtract **abs(c1 - c2)** from your score. Return the maximum achievable score. The product **m x n** is at most **10^5**, and each value is between **0** and **10^5**.
+
+A naive transition scans every column of the previous row for every current column, costing **O(m x n^2)**. Splitting the absolute-value penalty into its left and right regimes lets each row be updated with a single left-to-right prefix maximum and a single right-to-left suffix maximum, reducing the per-cell work to **O(1)** and the whole algorithm to **O(m x n)**.
+
+## Techniques
+- Array
+- Dynamic Programming
+- Matrix
+
+## Solution
+```ts
+function maxPoints(points: number[][]): number {
+    const rows = points.length;
+    const columns = points[0].length;
+    let row = [...points[0]];
+
+    for (let r = 1; r < rows; r++) {
+        const left = new Array(columns).fill(0);
+        const right = new Array(columns).fill(0);
+
+        left[0] = row[0];
+        for (let c = 1; c < columns; c++) {
+            left[c] = Math.max(row[c], left[c - 1] - 1);
+        }
+
+        right[columns - 1] = row[columns - 1];
+        for (let c = columns - 2; c >= 0; c--) {
+            right[c] = Math.max(row[c], right[c + 1] - 1);
+        }
+
+        const nextRow = new Array(columns).fill(0);
+        for (let c = 0; c < columns; c++) {
+            nextRow[c] = points[r][c] + Math.max(left[c], right[c]);
+        }
+
+        row = nextRow;
+    }
+
+    return Math.max(...row);
+}
+```

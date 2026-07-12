@@ -1,0 +1,52 @@
+---
+title: "Unique Paths II"
+description: "Count the number of distinct paths a robot can take from the top-left to the bottom-right corner of a grid, moving only down or right, while avoiding obstacles."
+date: 2026-07-12
+image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [dynamic programming, 2d grid dp, matrix, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Grid path counting with obstacles"
+  leetcodeUrl: "https://leetcode.com/problems/unique-paths-ii/"
+  difficulty: "Medium"
+---
+# Unique Paths II
+
+Leetcode Problem 63: [Unique Paths II](https://leetcode.com/problems/unique-paths-ii/description/)
+
+## Problem Summary
+A robot starts at the top-left corner of an **m x n** grid and wants to reach the bottom-right corner, moving only **down** or **right**. Cells are marked **0** for free space and **1** for an obstacle, and a path may not pass through any obstacle. Return the number of distinct paths the robot can take. Both dimensions are between **1** and **100**, and the answer is guaranteed to fit within **2 x 10^9**.
+
+## Techniques
+- Array
+- Dynamic Programming
+- Matrix
+
+## Solution
+```ts
+function uniquePathsWithObstacles(obstacleGrid: number[][]): number {
+    const m = obstacleGrid.length;
+    const n = obstacleGrid[0].length;
+    const dp: number[][] = Array.from({ length: m }, () => Array(n).fill(0));
+
+    if (obstacleGrid[0][0] === 1) {
+        return 0;
+    }
+
+    dp[0][0] = 1;
+
+    for (let i = 0; i < m; i++) {
+        for (let j = 0; j < n; j++) {
+            if (obstacleGrid[i][j] === 1) {
+                dp[i][j] = 0;
+            } else if (i > 0 || j > 0) {
+                const fromTop = i > 0 ? dp[i - 1][j] : 0;
+                const fromLeft = j > 0 ? dp[i][j - 1] : 0;
+                dp[i][j] = fromTop + fromLeft;
+            }
+        }
+    }
+
+    return dp[m - 1][n - 1];
+}
+```

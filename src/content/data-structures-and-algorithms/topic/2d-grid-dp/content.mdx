@@ -1,0 +1,558 @@
+---
+title: "2D Grid DP"
+description: "A comprehensive guide to dynamic programming on two-dimensional grids: path counting, minimum and maximum path sums, obstacle variants, matrix-local recurrences, transition optimization, multi-dimensional grid states, and rolling-array space reduction."
+date: 2026-07-12
+image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [dynamic programming, 2d grid dp, matrix, data structures, algorithms]
+authors: [fabrizio_duroni]
+---
+
+import { TopicExercises } from "@/components/content/data-structures-and-algorithms/topic-exercises";
+
+# 2D Grid DP
+
+Grid dynamic programming is the natural next step after one-dimensional DP.
+Instead of indexing the state by a single position along a sequence, we index it by a pair of coordinates,
+a **row** and a **column**, and the recurrence relates each cell to a small set of neighbouring cells.
+The archetypal question is disarmingly simple: starting from one corner of a matrix and moving only in a few
+allowed directions, what is the best or the number of ways to reach another corner?
+From this seed grow a surprising variety of problems, from counting lattice paths to computing image-processing
+quantities like the largest all-ones square, and even to controlling two agents that walk the grid simultaneously.
+
+Before continuing, make sure you are comfortable with the
+[DP problem-solving framework](/data-structures-and-algorithms/topic/dp-foundations-1d-dp),
+in particular state definition, recurrence relations, base cases, the choice between memoization and tabulation,
+and the reasoning that lets us shrink the memory footprint of a table.
+Everything in this article is that same framework applied to a two-dimensional state space.
+Familiarity with the [matrix](/data-structures-and-algorithms/topic/matrix) data structure and with
+[binary search](/data-structures-and-algorithms/topic/binary-search) will also help,
+the latter because one of the problems we will meet lives on a sorted timeline rather than on a spatial grid.
+
+## The Grid as a DP Table
+
+The defining move of grid DP is to let the DP table share the shape of the input.
+For an $m \times n$ grid we allocate a table $dp$ of the same dimensions and define $dp[i][j]$ as the answer
+to the sub-problem that ends, or begins, at cell $(i, j)$.
+Whether the state describes a sub-problem ending at $(i, j)$ or starting at $(i, j)$ is a matter of convenience,
+and the two formulations are mirror images of each other.
+What matters is that the value at a cell depends only on a small, fixed set of already-computed neighbours,
+which is exactly the [optimal substructure](https://en.wikipedia.org/wiki/Optimal_substructure) property
+that makes DP applicable.
+
+Consider the most basic movement rule, where from a cell we may step only **down** or **right**.
+Under this rule a cell $(i, j)$ can be reached only from the cell above it, $(i-1, j)$, or the cell to its left, $(i, j-1)$.
+Symmetrically, if we define the state as "starting at $(i, j)$ and walking to the bottom-right corner",
+then $(i, j)$ depends on the cell below, $(i+1, j)$, and the cell to the right, $(i, j+1)$.
+This locality of dependency is what dictates the **fill order**.
+We must visit the cells in an order that guarantees every dependency is already resolved when we compute a cell.
+For the down-or-right rule, iterating rows top-to-bottom and columns left-to-right resolves the "ending at" formulation,
+while iterating bottom-to-top and right-to-left resolves the "starting at" formulation.
+
+Two boundary conditions recur constantly and deserve to be internalised.
+The first is the treatment of the grid edges: cells in the first row have no cell above them,
+and cells in the first column have no cell to their left.
+Depending on the problem these missing neighbours contribute a neutral value,
+zero for counting, $+\infty$ for a minimization, or $-\infty$ for a maximization.
+The second is the base case at the origin or the destination corner,
+which seeds the recurrence with the value of that single cell.
+Getting these two right is almost the entire difficulty of a grid DP,
+because the interior recurrence is usually a one-line combination of neighbours.
+
+It helps to think of the grid as a [directed acyclic graph](https://en.wikipedia.org/wiki/Directed_acyclic_graph)
+whose nodes are cells and whose edges are the allowed moves.
+The movement rule forbids cycles, which is precisely why a linear pass over the cells in dependency order
+computes every value exactly once.
+Grid DP is, in this light, nothing more than a topological evaluation of that DAG,
+and the absence of cycles is what separates a clean tabulation from a problem that would need a shortest-path
+algorithm with negative-aware relaxation.
+
+## Counting Paths on a Grid
+
+The purest grid DP asks how many distinct paths connect two corners under a movement rule.
+With only down and right moves, the number of ways to reach $(i, j)$ is the sum of the ways to reach the two cells
+that can flow into it.
+This gives the recurrence
+
+$$dp[i][j] = dp[i-1][j] + dp[i][j-1]$$
+
+with the base case $dp[0][0] = 1$, since there is exactly one way to stand at the start, doing nothing.
+The first row and first column collapse to a single path each, because reaching them requires an unbroken run of
+right or down moves respectively, and the recurrence naturally produces those ones when the missing neighbours
+are treated as contributing zero.
+
+Obstacles turn this counting problem into a slightly richer one without changing its essence.
+When a cell is blocked, no path may pass through it, so its count is forced to zero regardless of its neighbours.
+This is the substance of [Unique Paths II](https://leetcode.com/problems/unique-paths-ii/),
+where the grid contains ones marking obstacles.
+The recurrence is unchanged for free cells, but a blocked cell short-circuits to zero,
+and that zero then propagates correctly through the sum, because a path that cannot reach a cell contributes
+nothing to the cells downstream of it.
+
+```ts
+function uniquePathsWithObstacles(obstacleGrid: number[][]): number {
+    const m = obstacleGrid.length;
+    const n = obstacleGrid[0].length;
+    const dp: number[][] = Array.from({ length: m }, () => Array(n).fill(0));
+
+    if (obstacleGrid[0][0] === 1) {
+        return 0;
+    }
+
+    dp[0][0] = 1;
+
+    for (let i = 0; i < m; i++) {
+        for (let j = 0; j < n; j++) {
+            if (obstacleGrid[i][j] === 1) {
+                dp[i][j] = 0;
+            } else if (i > 0 || j > 0) {
+                const fromTop = i > 0 ? dp[i - 1][j] : 0;
+                const fromLeft = j > 0 ? dp[i][j - 1] : 0;
+                dp[i][j] = fromTop + fromLeft;
+            }
+        }
+    }
+
+    return dp[m - 1][n - 1];
+}
+```
+
+Notice how the two edge checks, `i > 0` and `j > 0`, replace the out-of-bounds neighbours with the neutral value
+for counting, which is zero.
+This is the concrete manifestation of the boundary reasoning from the previous section.
+The whole computation is a single sweep of the grid, so it runs in $O(mn)$ time and, as written, $O(mn)$ space,
+a figure we will improve later.
+
+## Minimum and Maximum Path Cost
+
+The second great family of grid DP replaces counting with optimization.
+Each cell carries a cost, and we seek the path from corner to corner whose total cost is smallest or largest.
+The recurrence keeps the same neighbour set but swaps addition-of-counts for a minimum or maximum over the incoming cells,
+adding the current cell's own cost.
+For [Minimum Path Sum](https://leetcode.com/problems/minimum-path-sum/) with down-and-right moves, defining the state
+as the cheapest cost to travel from $(i, j)$ to the bottom-right corner gives
+
+$$dp[i][j] = grid[i][j] + \min(dp[i+1][j],\ dp[i][j+1])$$
+
+seeded at the destination with $dp[m-1][n-1] = grid[m-1][n-1]$, and treating moves that fall off the grid as $+\infty$
+so they are never chosen.
+
+```ts
+function minPathSum(grid: number[][]): number {
+    const m = grid.length;
+    const n = grid[0].length;
+    const dp: number[][] = Array.from({ length: m }, () => Array(n).fill(0));
+
+    dp[m - 1][n - 1] = grid[m - 1][n - 1];
+
+    for (let i = m - 1; i >= 0; i--) {
+        for (let j = n - 1; j >= 0; j--) {
+            if (i === m - 1 && j === n - 1) {
+                continue;
+            }
+            const down = i + 1 < m ? dp[i + 1][j] : Infinity;
+            const right = j + 1 < n ? dp[i][j + 1] : Infinity;
+            dp[i][j] = grid[i][j] + Math.min(down, right);
+        }
+    }
+
+    return dp[0][0];
+}
+```
+
+The same shape solves problems on grids that are not rectangular.
+[Triangle](https://leetcode.com/problems/triangle/) arranges numbers in a triangular array where row $i$ has $i + 1$
+entries, and from position $j$ in a row we may descend to position $j$ or position $j + 1$ in the row below.
+The state is the minimum cost to reach the bottom starting from a given entry, and the recurrence
+
+$$dp[i][j] = triangle[i][j] + \min(dp[i+1][j],\ dp[i+1][j+1])$$
+
+processes rows from the bottom upward.
+The elegance of the bottom-up direction is that every entry always has both of its two children already computed,
+so no boundary special-casing is needed for the descent, only the initialisation of the last row with its own values.
+
+```ts
+function minimumTotal(triangle: number[][]): number {
+    const m = triangle.length;
+    const dp = triangle.map((row) => [...row]);
+
+    for (let i = m - 2; i >= 0; i--) {
+        for (let j = 0; j <= i; j++) {
+            dp[i][j] = triangle[i][j] + Math.min(dp[i + 1][j], dp[i + 1][j + 1]);
+        }
+    }
+
+    return dp[0][0];
+}
+```
+
+The lesson that unifies counting and optimization is that the movement rule fixes the dependency structure,
+and only the **combining operator** changes.
+Summation counts paths, minimum finds the cheapest, maximum finds the most valuable.
+Recognising this lets you port a solution across an entire class of problems by editing a single operator,
+which is the kind of structural understanding that turns a wall of similar-looking problems into a single idea.
+
+## Matrix-Local Recurrences
+
+Not every grid DP is about walking from one corner to another.
+A large and important class computes, for every cell, a quantity that depends on a small neighbourhood,
+and then aggregates those per-cell quantities into a global answer.
+The canonical example is
+[Count Square Submatrices with All Ones](https://leetcode.com/problems/count-square-submatrices-with-all-ones/).
+Here $dp[i][j]$ is defined as the side length of the largest all-ones square whose **bottom-right corner** sits at $(i, j)$.
+A one-cell at $(i, j)$ can only extend into a larger square if the three squares anchored just above, just to the left,
+and up-and-to-the-left are all large enough, so the recurrence takes their minimum and adds one.
+
+$$dp[i][j] = \min(dp[i-1][j],\ dp[i][j-1],\ dp[i-1][j-1]) + 1 \quad \text{when } matrix[i][j] = 1$$
+
+The geometric intuition is worth pausing on, because the appearance of a minimum over three neighbours is not obvious.
+A square of side $k$ ending at $(i, j)$ exists only if a square of side $k-1$ ends at each of the three diagonal-adjacent
+predecessors.
+If any of them supports only a smaller square, that shortfall caps the square at $(i, j)$,
+and the minimum is exactly the operator that propagates the tightest constraint.
+The beautiful side effect is that $dp[i][j]$ counts not just the largest square but **every** square ending at $(i, j)$,
+because a cell that anchors a square of side $k$ also anchors squares of sides $k-1, k-2, \ldots, 1$.
+Summing $dp[i][j]$ over all cells therefore counts all all-ones squares in the matrix.
+
+```ts
+function countSquares(matrix: number[][]): number {
+    const m = matrix.length;
+    const n = matrix[0].length;
+    const dp = Array.from({ length: m }, () => Array(n).fill(0));
+    let total = 0;
+
+    for (let i = 0; i < m; i++) {
+        for (let j = 0; j < n; j++) {
+            if (matrix[i][j] === 1) {
+                if (i === 0 || j === 0) {
+                    dp[i][j] = 1;
+                } else {
+                    dp[i][j] = Math.min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]) + 1;
+                }
+                total += dp[i][j];
+            }
+        }
+    }
+
+    return total;
+}
+```
+
+This matrix-local pattern is the backbone of many other problems, from the maximal all-ones square and rectangle to
+various image-processing filters.
+The recurring theme is that the answer at a cell is a small function of a handful of already-computed neighbours,
+and that a global answer emerges from aggregating the per-cell values.
+Whenever a problem asks about shapes or regions inside a matrix, it is worth asking whether a per-cell state anchored
+at a corner admits a local recurrence of this kind.
+
+## Optimizing the Transition
+
+So far every recurrence has combined a constant number of neighbours, which keeps the per-cell work $O(1)$
+and the total work proportional to the grid size.
+Some problems, however, define a transition that ranges over an entire row or column,
+and a literal implementation pays a factor of $n$ per cell, degrading to $O(mn^2)$.
+[Maximum Number of Points with Cost](https://leetcode.com/problems/maximum-number-of-points-with-cost/) is the
+instructive case.
+We must pick exactly one cell in each row, we add its value, and we pay a penalty equal to the horizontal distance
+between the columns chosen in consecutive rows.
+The state $dp[r][c]$ is the best score achievable having picked column $c$ in row $r$, and the transition is
+
+$$dp[r][c] = points[r][c] + \max_{c'}\big(dp[r-1][c'] - |c - c'|\big)$$
+
+which as written scans every previous column $c'$ for every current column $c$.
+
+The key to accelerating this is to split the absolute value into its two linear regimes.
+For choices to the left, $c' \le c$, the penalty is $c - c'$, so the quantity to maximise is $dp[r-1][c'] + c'$
+shifted by $-c$.
+For choices to the right, $c' \ge c$, the penalty is $c' - c$, so the quantity to maximise is $dp[r-1][c'] - c'$
+shifted by $+c$.
+Each of these is a running maximum that can be computed with a single left-to-right pass and a single right-to-left pass,
+collapsing the per-cell transition from $O(n)$ to $O(1)$.
+The whole row update becomes a prefix maximum from the left and a suffix maximum from the right,
+combined at each column.
+
+```ts
+function maxPoints(points: number[][]): number {
+    const rows = points.length;
+    const columns = points[0].length;
+    let row = [...points[0]];
+
+    for (let r = 1; r < rows; r++) {
+        const left = new Array(columns).fill(0);
+        const right = new Array(columns).fill(0);
+
+        left[0] = row[0];
+        for (let c = 1; c < columns; c++) {
+            left[c] = Math.max(row[c], left[c - 1] - 1);
+        }
+
+        right[columns - 1] = row[columns - 1];
+        for (let c = columns - 2; c >= 0; c--) {
+            right[c] = Math.max(row[c], right[c + 1] - 1);
+        }
+
+        const nextRow = new Array(columns).fill(0);
+        for (let c = 0; c < columns; c++) {
+            nextRow[c] = points[r][c] + Math.max(left[c], right[c]);
+        }
+
+        row = nextRow;
+    }
+
+    return Math.max(...row);
+}
+```
+
+The `- 1` inside each running maximum encodes the unit penalty per column of horizontal movement,
+so `left[c]` already carries the best value from any column at or to the left of $c$ after subtracting the distance,
+and `right[c]` does the same from the right.
+This decomposition of a distance-penalised transition into prefix and suffix running maxima is a transferable trick.
+Whenever a transition scans a range and the cost is a monotone function of distance,
+there is a good chance the scan can be replaced by precomputed running aggregates,
+turning a quadratic transition into a linear one.
+
+## Multi-Dimensional Grid State
+
+The dimensionality of a grid DP is not fixed by the dimensionality of the input.
+When several entities move through the same grid, or when we traverse the grid more than once,
+the state must record the position of each entity, and the DP table gains extra axes.
+[Cherry Pickup](https://leetcode.com/problems/cherry-pickup/) is the classic example.
+A single walker must go from the top-left corner to the bottom-right and back, collecting cherries,
+with thorns blocking some cells.
+The crucial modelling insight is that a round trip that goes out and comes back is equivalent to
+**two walkers** that both travel from the top-left to the bottom-right simultaneously,
+because a return path traversed backwards is itself a valid forward path.
+
+If both walkers take one step per unit of time, after $t$ steps each has moved a total of $t$ cells,
+so for a walker at row $r$ the column is forced to $t - r$.
+This means the position of each walker is fully described by its row alone once the shared time step is known,
+which reduces a seemingly four-dimensional state, two rows and two columns, to three dimensions: $r_1$, $c_1$, and $r_2$,
+with $c_2 = r_1 + c_1 - r_2$ recovered by arithmetic.
+At each step the two walkers independently choose to move down or right, giving four combined transitions,
+and we take the best.
+Cherries on a shared cell are counted once, which is the small correction that prevents double counting when both
+walkers stand on the same cell.
+
+```ts
+function cherryPickup(grid: number[][]): number {
+    const n = grid.length;
+    const memo = new Map<string, number>();
+
+    function dfs(r1: number, c1: number, r2: number): number {
+        const c2 = r1 + c1 - r2;
+
+        if (r1 >= n || c1 >= n || r2 >= n || c2 >= n) {
+            return -Infinity;
+        }
+        if (grid[r1][c1] === -1 || grid[r2][c2] === -1) {
+            return -Infinity;
+        }
+        if (r1 === n - 1 && c1 === n - 1) {
+            return grid[r1][c1];
+        }
+
+        const key = `${r1},${c1},${r2}`;
+        if (memo.has(key)) {
+            return memo.get(key)!;
+        }
+
+        let cherries = grid[r1][c1];
+        if (r1 !== r2 || c1 !== c2) {
+            cherries += grid[r2][c2];
+        }
+
+        const best = Math.max(
+            dfs(r1 + 1, c1, r2 + 1),
+            dfs(r1 + 1, c1, r2),
+            dfs(r1, c1 + 1, r2 + 1),
+            dfs(r1, c1 + 1, r2),
+        );
+
+        cherries += best;
+        memo.set(key, cherries);
+        return cherries;
+    }
+
+    return Math.max(0, dfs(0, 0, 0));
+}
+```
+
+The reason the greedy alternative of picking the single best path, clearing the cherries, then picking the best
+remaining path fails is that the two trips are coupled: an early greedy choice can strand cherries in a way that no
+second path can recover, whereas jointly optimising both walkers explores the interaction between the trips.
+The state grows from two dimensions to three, and the memoization keys on all three coordinates,
+which is why the running time carries a factor of $n^3$.
+The general principle is that each independent moving part adds an axis to the state,
+and the collinearity constraint, here $c_2 = r_1 + c_1 - r_2$, is what keeps the growth in check by eliminating a
+redundant coordinate.
+
+## Space Optimization with Rolling Rows
+
+Every grid DP written above allocates a full $m \times n$ table, but many of them never need it.
+When the recurrence for row $i$ depends only on row $i$ and the immediately adjacent row,
+we can keep just one or two rows in memory and overwrite them as we advance,
+reducing the space from $O(mn)$ to $O(n)$.
+This is the two-dimensional analogue of the rolling-variable trick from
+[one-dimensional DP](/data-structures-and-algorithms/topic/dp-foundations-1d-dp).
+
+The transformation is mechanical once the dependency direction is clear.
+Minimum path sum and unique paths depend on the row above and the current row,
+so a single array updated in place suffices: when we compute the new value at column $j$,
+the entry still holding the old row's value is the "cell above", and the entry we just wrote at $j-1$ is the
+"cell to the left".
+Triangle already exhibits this, since it can be solved with a single array of length equal to the last row,
+updated bottom to top.
+The maximum-points solution shown earlier is a fully rolled implementation from the start,
+carrying only the previous row in the variable `row`.
+
+```ts
+function minPathSumRolling(grid: number[][]): number {
+    const m = grid.length;
+    const n = grid[0].length;
+    const dp = new Array(n).fill(0);
+
+    dp[n - 1] = grid[m - 1][n - 1];
+    for (let j = n - 2; j >= 0; j--) {
+        dp[j] = grid[m - 1][j] + dp[j + 1];
+    }
+
+    for (let i = m - 2; i >= 0; i--) {
+        dp[n - 1] = grid[i][n - 1] + dp[n - 1];
+        for (let j = n - 2; j >= 0; j--) {
+            dp[j] = grid[i][j] + Math.min(dp[j], dp[j + 1]);
+        }
+    }
+
+    return dp[0];
+}
+```
+
+Here the single array plays a double role: before we write `dp[j]`, its current content is the value from the row below,
+and `dp[j + 1]` has already been updated to the current row.
+The rolling optimization does not change the time complexity, which remains $O(mn)$,
+but it can be the difference between fitting and overflowing memory on large grids,
+and it demonstrates that the full table was only ever a convenience.
+The caveat is that rolling discards the information needed to reconstruct the actual path,
+so when a problem asks for the path itself and not merely its cost,
+the full table, or an auxiliary parent structure, must be retained.
+
+## When the Grid Is the Table, Not the Terrain
+
+The name "2D grid DP" is sometimes attached to problems whose input is not a spatial grid at all,
+but whose DP table happens to be a two-dimensional matrix of states.
+It is worth separating the two meanings so the classification does not mislead.
+Two problems in the exercise set below belong to this second category,
+and recognising why keeps the mental model clean.
+
+[Maximum Profit in Job Scheduling](https://leetcode.com/problems/maximum-profit-in-job-scheduling/) is a
+one-dimensional DP over a sorted timeline rather than a grid.
+After sorting jobs by start time, the state is the best profit obtainable considering jobs from index $i$ onward,
+and at each job we choose to skip it or take it.
+Taking a job forbids every job that overlaps it, so we jump to the first job whose start time is at least the current
+job's end time, a position found with [binary search](/data-structures-and-algorithms/topic/binary-search)
+over the sorted starts.
+This is the weighted interval scheduling pattern, a linear DP accelerated by a logarithmic lookup,
+and it shares with grid DP only the shape of its recurrence, not a spatial grid.
+
+```ts
+function jobScheduling(startTime: number[], endTime: number[], profit: number[]): number {
+    const n = startTime.length;
+    const jobs = startTime.map((s, i) => ({ start: s, end: endTime[i], profit: profit[i] }));
+    jobs.sort((a, b) => a.start - b.start);
+    const memo = new Array(n).fill(-1);
+
+    function nextCompatible(target: number, from: number): number {
+        let left = from;
+        let right = n;
+        while (left < right) {
+            const mid = (left + right) >> 1;
+            if (jobs[mid].start < target) {
+                left = mid + 1;
+            } else {
+                right = mid;
+            }
+        }
+        return left;
+    }
+
+    function dfs(i: number): number {
+        if (i >= n) {
+            return 0;
+        }
+        if (memo[i] !== -1) {
+            return memo[i];
+        }
+        const skip = dfs(i + 1);
+        const take = jobs[i].profit + dfs(nextCompatible(jobs[i].end, i + 1));
+        memo[i] = Math.max(skip, take);
+        return memo[i];
+    }
+
+    return dfs(0);
+}
+```
+
+[Burst Balloons](https://leetcode.com/problems/burst-balloons/) is genuinely a different paradigm, interval DP,
+where the two-dimensional table is indexed by the two endpoints of a sub-array rather than by grid coordinates.
+The decisive trick is to reason about the **last** balloon burst in an interval rather than the first,
+because the last one to pop in a range $(left, right)$ has both boundaries intact,
+which decouples the range into two independent sub-intervals.
+This "choose the last operation" reframing, and the diagonal fill order over intervals of increasing length,
+are the hallmarks of interval DP, a paradigm treated on its own terms in a dedicated article.
+It is included here because the exercise set that follows the AlgoMaster grouping lists it,
+and the intuition of picking the final action to split a range is worth meeting once,
+but it does not belong to grid DP proper and should be filed under interval DP in your mental map.
+
+```ts
+function maxCoins(nums: number[]): number {
+    const n = nums.length;
+    const arr = [1, ...nums, 1];
+    const dp = Array.from({ length: n + 2 }, () => new Array(n + 2).fill(0));
+
+    for (let len = 2; len < n + 2; len++) {
+        for (let left = 0; left + len < n + 2; left++) {
+            const right = left + len;
+            for (let k = left + 1; k < right; k++) {
+                const coins = dp[left][k] + dp[k][right] + arr[left] * arr[k] * arr[right];
+                dp[left][right] = Math.max(dp[left][right], coins);
+            }
+        }
+    }
+
+    return dp[0][n + 1];
+}
+```
+
+## Time and Space Complexity
+
+The complexity of a grid DP follows a single formula: the total work is the number of states multiplied by the work
+done per state.
+For a plain $m \times n$ grid with a constant-size neighbour set, there are $mn$ states and each is resolved in $O(1)$,
+so counting paths, minimum and maximum path sums, triangle, and the largest-square count all run in $O(mn)$ time.
+Their natural space is also $O(mn)$ for the full table, but every one of them depends only on the current and adjacent
+rows, so the rolling-array technique brings the space down to $O(n)$, the length of a single row,
+at the cost of losing the ability to reconstruct the path.
+
+When the transition itself scans a range, the per-state work rises and the product grows accordingly.
+The direct formulation of the maximum-points problem does $O(n)$ work per cell for $O(mn)$ cells, giving $O(mn^2)$,
+but decomposing the distance penalty into prefix and suffix running maxima restores $O(1)$ amortised work per cell
+and therefore $O(mn)$ time overall, with $O(n)$ space for the rolling row.
+This is the recurring payoff of transition optimization: the state count is unchanged,
+and all the savings come from making each state cheaper.
+
+Adding entities or traversals multiplies the state space by the size of each new coordinate.
+Cherry Pickup tracks three independent coordinates after the collinearity reduction, so it has $O(n^3)$ states,
+each resolved in $O(1)$ over four transitions, for $O(n^3)$ time and $O(n^3)$ space,
+the latter reducible with careful layering but rarely worth the added complexity for the input sizes involved.
+The lesson is that dimensionality, not grid size alone, governs the cost of these problems,
+and that the modelling step which eliminates a redundant coordinate is often the difference between a feasible and an
+infeasible algorithm.
+
+The two non-grid members of the exercise set follow their own accounting.
+Weighted interval scheduling sorts the jobs in $O(n \log n)$, then performs $n$ states each with an $O(\log n)$
+binary search, for $O(n \log n)$ overall and $O(n)$ space.
+Interval DP over sub-arrays has $O(n^2)$ intervals and spends $O(n)$ at each choosing the last operation,
+giving $O(n^3)$ time and $O(n^2)$ space, which is characteristic of the interval paradigm rather than of grid DP.
+
+## Exercises
+
+<TopicExercises topic="2d-grid-dp" />

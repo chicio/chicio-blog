@@ -1,0 +1,50 @@
+---
+title: "Count Square Submatrices with All Ones"
+description: "Given a matrix of zeros and ones, count how many square submatrices are composed entirely of ones, including all sizes."
+date: 2026-07-12
+image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [dynamic programming, 2d grid dp, matrix, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Matrix-local DP anchoring the largest square at each bottom-right cell"
+  leetcodeUrl: "https://leetcode.com/problems/count-square-submatrices-with-all-ones/"
+  difficulty: "Medium"
+---
+# Count Square Submatrices with All Ones
+
+Leetcode Problem 1277: [Count Square Submatrices with All Ones](https://leetcode.com/problems/count-square-submatrices-with-all-ones/description/)
+
+## Problem Summary
+Given an **m x n** matrix of zeros and ones, return how many **square** submatrices have all ones. Squares of every size count, so a larger all-ones square also contributes the smaller squares nested inside it. Both dimensions are between **1** and **300**, and each entry is either **0** or **1**.
+
+The key idea is to define **dp[i][j]** as the side length of the largest all-ones square whose bottom-right corner is at **(i, j)**. A one-cell can extend into a larger square only if the cells above, to the left, and up-and-to-the-left all support squares at least as large, so the recurrence takes their minimum plus one. Because a cell anchoring a square of side **k** also anchors squares of every smaller side, summing **dp[i][j]** over all cells counts every all-ones square.
+
+## Techniques
+- Array
+- Dynamic Programming
+- Matrix
+
+## Solution
+```ts
+function countSquares(matrix: number[][]): number {
+    const m = matrix.length;
+    const n = matrix[0].length;
+    const dp = Array.from({ length: m }, () => Array(n).fill(0));
+    let total = 0;
+
+    for (let i = 0; i < m; i++) {
+        for (let j = 0; j < n; j++) {
+            if (matrix[i][j] === 1) {
+                if (i === 0 || j === 0) {
+                    dp[i][j] = 1;
+                } else {
+                    dp[i][j] = Math.min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]) + 1;
+                }
+                total += dp[i][j];
+            }
+        }
+    }
+
+    return total;
+}
+```

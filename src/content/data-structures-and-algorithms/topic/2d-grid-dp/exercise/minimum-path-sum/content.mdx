@@ -1,0 +1,47 @@
+---
+title: "Minimum Path Sum"
+description: "Given an m x n grid of non-negative numbers, find a path from top-left to bottom-right, moving only down or right, that minimizes the sum of numbers along the path."
+date: 2026-07-12
+image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [dynamic programming, 2d grid dp, matrix, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Grid DP minimizing path cost with down and right moves"
+  leetcodeUrl: "https://leetcode.com/problems/minimum-path-sum/"
+  difficulty: "Medium"
+---
+# Minimum Path Sum
+
+Leetcode Problem 64: [Minimum Path Sum](https://leetcode.com/problems/minimum-path-sum/description/)
+
+## Problem Summary
+Given an **m x n** grid filled with non-negative numbers, find a path from the top-left corner to the bottom-right corner that minimizes the sum of all numbers along the path. At any point you may move only either **down** or **right**. Both dimensions are between **1** and **200**, and each cell value is between **0** and **200**. Return the minimum possible path sum.
+
+## Techniques
+- Array
+- Dynamic Programming
+- Matrix
+
+## Solution
+```ts
+function minPathSum(grid: number[][]): number {
+    const m = grid.length;
+    const n = grid[0].length;
+    const dp: number[][] = Array.from({ length: m }, () => Array(n).fill(0));
+
+    dp[m - 1][n - 1] = grid[m - 1][n - 1];
+
+    for (let i = m - 1; i >= 0; i--) {
+        for (let j = n - 1; j >= 0; j--) {
+            if (i === m - 1 && j === n - 1) {
+                continue;
+            }
+            const down = i + 1 < m ? dp[i + 1][j] : Infinity;
+            const right = j + 1 < n ? dp[i][j + 1] : Infinity;
+            dp[i][j] = grid[i][j] + Math.min(down, right);
+        }
+    }
+
+    return dp[0][0];
+}
+```
