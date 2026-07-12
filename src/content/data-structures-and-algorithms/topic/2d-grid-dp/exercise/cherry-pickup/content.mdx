@@ -1,0 +1,70 @@
+---
+title: "Cherry Pickup"
+description: "Collect the maximum number of cherries on an n x n grid by travelling from the top-left corner to the bottom-right and back, avoiding thorns."
+date: 2026-07-12
+image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [dynamic programming, 2d grid dp, matrix, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Multi-dimensional grid DP modelling the round trip as two simultaneous walkers"
+  leetcodeUrl: "https://leetcode.com/problems/cherry-pickup/"
+  difficulty: "Hard"
+---
+# Cherry Pickup
+
+Leetcode Problem 741: [Cherry Pickup](https://leetcode.com/problems/cherry-pickup/description/)
+
+## Problem Summary
+You are given an **n x n** grid where each cell is **0** (empty), **1** (a cherry you can pick up), or **-1** (a thorn that blocks the path). Starting at **(0, 0)**, travel to **(n - 1, n - 1)** by moving right or down through valid cells, then return to **(0, 0)** by moving left or up through valid cells. Picking up a cherry empties its cell. Return the maximum number of cherries you can collect, or **0** if no valid round trip exists. The dimension **n** is between **1** and **50**, and both corners are guaranteed not to be thorns.
+
+The essential insight is that a round trip out and back is equivalent to **two walkers** moving simultaneously from **(0, 0)** to **(n - 1, n - 1)**. Since both take the same number of steps, once the shared step count is fixed a walker's column is determined by its row, so the state reduces from four coordinates to three: **r1**, **c1**, and **r2**, with **c2 = r1 + c1 - r2**. Cherries on a shared cell are counted once.
+
+## Techniques
+- Array
+- Dynamic Programming
+- Matrix
+
+## Solution
+```ts
+function cherryPickup(grid: number[][]): number {
+    const n = grid.length;
+    const memo = new Map<string, number>();
+
+    function dfs(r1: number, c1: number, r2: number): number {
+        const c2 = r1 + c1 - r2;
+
+        if (r1 >= n || c1 >= n || r2 >= n || c2 >= n) {
+            return -Infinity;
+        }
+        if (grid[r1][c1] === -1 || grid[r2][c2] === -1) {
+            return -Infinity;
+        }
+        if (r1 === n - 1 && c1 === n - 1) {
+            return grid[r1][c1];
+        }
+
+        const key = `${r1},${c1},${r2}`;
+        if (memo.has(key)) {
+            return memo.get(key)!;
+        }
+
+        let cherries = grid[r1][c1];
+        if (r1 !== r2 || c1 !== c2) {
+            cherries += grid[r2][c2];
+        }
+
+        const best = Math.max(
+            dfs(r1 + 1, c1, r2 + 1),
+            dfs(r1 + 1, c1, r2),
+            dfs(r1, c1 + 1, r2 + 1),
+            dfs(r1, c1 + 1, r2),
+        );
+
+        cherries += best;
+        memo.set(key, cherries);
+        return cherries;
+    }
+
+    return Math.max(0, dfs(0, 0, 0));
+}
+```

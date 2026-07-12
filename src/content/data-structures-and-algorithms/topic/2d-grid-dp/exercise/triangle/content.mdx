@@ -1,0 +1,38 @@
+---
+title: "Triangle"
+description: "Given a triangular array of numbers, return the minimum path sum from the top to the bottom, moving to an adjacent number on the row below at each step."
+date: 2026-07-12
+image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [dynamic programming, 2d grid dp, matrix, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Grid DP minimizing path sum on a triangular grid"
+  leetcodeUrl: "https://leetcode.com/problems/triangle/"
+  difficulty: "Medium"
+---
+# Triangle
+
+Leetcode Problem 120: [Triangle](https://leetcode.com/problems/triangle/description/)
+
+## Problem Summary
+Given a **triangle** array, where row **i** contains **i + 1** entries, return the minimum path sum from the top to the bottom. At each step, from index **j** on the current row you may move to index **j** or index **j + 1** on the row below. The triangle has between **1** and **200** rows, and each value is between **-10^4** and **10^4**. A well-known follow-up asks to solve it using only **O(n)** extra space, where **n** is the number of rows.
+
+## Techniques
+- Array
+- Dynamic Programming
+
+## Solution
+```ts
+function minimumTotal(triangle: number[][]): number {
+    const m = triangle.length;
+    const dp = triangle.map((row) => [...row]);
+
+    for (let i = m - 2; i >= 0; i--) {
+        for (let j = 0; j <= i; j++) {
+            dp[i][j] = triangle[i][j] + Math.min(dp[i + 1][j], dp[i + 1][j + 1]);
+        }
+    }
+
+    return dp[0][0];
+}
+```
