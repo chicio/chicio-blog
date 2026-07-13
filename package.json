@@ -92,7 +92,7 @@
     "agent-browser": "^0.31.1",
     "axe-core": "^4.12.1",
     "babel-plugin-react-compiler": "^1.0.0",
-    "dependency-cruiser": "^18.0.0",
+    "dependency-cruiser": "^18.1.0",
     "esbuild": "^0.28.1",
     "eslint": "^9",
     "eslint-config-next": "16.2.9",
