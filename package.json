@@ -43,7 +43,7 @@
     "cmdk": "^1.1.1",
     "elasticlunr": "^0.9.5",
     "feed": "^5.2.1",
-    "framer-motion": "^12.34.3",
+    "framer-motion": "^12.42.2",
     "gray-matter": "^4.0.3",
     "katex": "^0.16.45",
     "marked": "^18.0.6",
