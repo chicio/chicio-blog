@@ -17,11 +17,11 @@ test.describe("Easter Egg Hunt page", () => {
         await expect(page.getByRole("heading", { name: "Easter Egg Hunt" })).toBeVisible();
     });
 
-    test("reveals the solution steps for an egg after clicking [reveal]", async ({ page }) => {
+    test("reveals the solution steps for an egg after clicking reveal", async ({ page }) => {
         await page.goto("/easter-egg-hunt");
         await expect(page.getByText(/The White Rabbit/)).toBeVisible();
         await expect(page.getByText(/Press ⌘K/)).not.toBeVisible();
-        await page.getByRole("button", { name: "[reveal]" }).first().click();
+        await page.getByRole("button", { name: /reveal/ }).first().click();
         await expect(page.getByText(/Press ⌘K/)).toBeVisible();
     });
 });

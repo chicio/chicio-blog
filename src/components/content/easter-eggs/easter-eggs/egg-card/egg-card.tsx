@@ -2,7 +2,7 @@
 
 import { FC } from "react";
 import { Button } from "@/components/design-system/atoms/buttons/button";
-import { QuoteText, TerminalLine } from "@/components/design-system/atoms/typography/terminal-blocks";
+import { Cursor, QuoteText, TerminalLine } from "@/components/design-system/atoms/typography/terminal-blocks";
 import { useGlassmorphism } from "@/components/design-system/hooks/use-glassmorphism";
 import type { EasterEggHint } from "@/lib/content/easter-eggs/easter-eggs-content";
 
@@ -21,8 +21,11 @@ export const EggCard: FC<EggCardProps> = ({ hint, revealed, onToggle }) => {
                 {">"} {hint.title}
             </TerminalLine>
             <QuoteText>{hint.crypticHint}</QuoteText>
-            <Button onClick={onToggle} aria-expanded={revealed} className="mt-3">
-                {revealed ? "[hide]" : "[reveal]"}
+            <Button onClick={onToggle} aria-expanded={revealed} className="w-fit mt-3">
+                <span className="font-mono text-lg text-shadow-sm">
+                    {">"} {revealed ? "hide" : "reveal"}
+                    <Cursor />
+                </span>
             </Button>
             {revealed && (
                 <ol className="mt-3 list-decimal pl-6">

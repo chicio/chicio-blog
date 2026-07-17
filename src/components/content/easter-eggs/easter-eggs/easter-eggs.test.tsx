@@ -131,10 +131,10 @@ describe("EasterEggs", () => {
             });
         });
 
-        it("reveals the solution steps for a card when [reveal] is clicked", () => {
+        it("reveals the solution steps for a card when the reveal toggle is clicked", () => {
             render(<EasterEggs />);
             const [firstHint] = easterEggHints;
-            const revealButtons = screen.getAllByText("[reveal]");
+            const revealButtons = screen.getAllByRole("button", { name: /reveal/ });
             fireEvent.click(revealButtons[0]);
             firstHint.solutionSteps.forEach((step) => {
                 expect(screen.getByText(step)).toBeInTheDocument();
@@ -144,9 +144,9 @@ describe("EasterEggs", () => {
         it("hides the solution steps again when toggled a second time", () => {
             render(<EasterEggs />);
             const [firstHint] = easterEggHints;
-            const revealButtons = screen.getAllByText("[reveal]");
+            const revealButtons = screen.getAllByRole("button", { name: /reveal/ });
             fireEvent.click(revealButtons[0]);
-            fireEvent.click(screen.getAllByText("[hide]")[0]);
+            fireEvent.click(screen.getAllByRole("button", { name: /hide/ })[0]);
             firstHint.solutionSteps.forEach((step) => {
                 expect(screen.queryByText(step)).not.toBeInTheDocument();
             });
@@ -155,7 +155,7 @@ describe("EasterEggs", () => {
         it("only reveals the toggled card, leaving the other collapsed", () => {
             render(<EasterEggs />);
             const [, secondHint] = easterEggHints;
-            const revealButtons = screen.getAllByText("[reveal]");
+            const revealButtons = screen.getAllByRole("button", { name: /reveal/ });
             fireEvent.click(revealButtons[0]);
             secondHint.solutionSteps.forEach((step) => {
                 expect(screen.queryByText(step)).not.toBeInTheDocument();
