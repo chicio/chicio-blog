@@ -50,6 +50,25 @@ test.describe("Blog section", () => {
             await expect(page).not.toHaveURL(startUrl, { timeout: 10000 });
             await expect(page).toHaveURL(/\/blog\/post\//);
         });
+
+        test("renders the giscus live comments widget", async ({ page }) => {
+            await page.goto("/blog/post/2026/06/01/app-js-conf-2026");
+            await expect(page.locator("giscus-widget")).toBeAttached();
+        });
+    });
+
+    test.describe("comments", () => {
+        test("a legacy post shows the archived comments section above the giscus widget", async ({ page }) => {
+            await page.goto("/blog/post/2020/06/02/dynamic-imports-webpack-chunks");
+            await expect(page.getByRole("heading", { name: "Archived comments", level: 2 })).toBeVisible();
+            await expect(page.getByText("Iftikhar Ali", { exact: true })).toBeVisible();
+            await expect(page.locator("giscus-widget")).toBeAttached();
+        });
+
+        test("a non-legacy post shows no archived comments section", async ({ page }) => {
+            await page.goto("/blog/post/2026/06/01/app-js-conf-2026");
+            await expect(page.getByRole("heading", { name: "Archived comments", level: 2 })).toHaveCount(0);
+        });
     });
 
     test.describe("archive page", () => {

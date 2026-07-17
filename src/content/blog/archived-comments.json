@@ -1,0 +1,316 @@
+{
+  "first-threejs-scene": [
+    {
+      "author": "Fabrizio",
+      "date": "2017-08-27T15:53:46Z",
+      "message": "<p>Thank you @user!! I hope you will enjoy also the other articles :)</p>",
+      "replies": []
+    }
+  ],
+  "model-view-presenter-architecture-ios-swift-unit-test": [
+    {
+      "author": "Abuzeid Ibrahim",
+      "date": "2018-05-13T22:53:34Z",
+      "message": "<p>Great tutorial, but Could you explain to me how you mocked the ProductDetailView,Where are you came from with ProductDetailViewSpy??</p>",
+      "replies": [
+        {
+          "author": "Fabrizio",
+          "date": "2018-05-14T11:14:06Z",
+          "message": "<p>Hi Abuzeid Ibrahim, thank you for reading my post!! 😊I added the implementation of the ProductDetailViewSpy class in the article. You can find also its implementation on the repository with the code contained in this article (if you want to try it out on your mac):</p><p><a href=\"https://github.com/chicio/Model-View-Presenter/blob/master/iOS/Swift/ProductsMVPTests/ProductDetailViewSpy.swift\" rel=\"nofollow noopener\">https://github.com/chicio/M...</a></p><p>Basically it is a class that implements the View interface (like the UIViewController of the app), and uses some property to keep track of the fact that a method has been called. So for the showTitleHasBeenCalled will be true when the show(title aTitle: String) function has been called. In this way you can test the interaction between the view and the presenter.<br />I had to do this because (maybe as you know) Swift doesn&#x27;t have a real mocking framework (due to the fact that reflection has limited support and subclassing of NSProxy classes isn&#x27;t allow (so no proxy class like other framework OCMock, Mockito...) ). So in Swift generally you write your own Mock/Spy in the way I shown you in this article. In the last time some alternatives has been created, like some mock-alike framework like this one</p><p><a href=\"https://github.com/Brightify/Cuckoo\" rel=\"nofollow noopener\">https://github.com/Brightif...</a></p><p>but honestly I didn&#x27;t try it yet. <br />I hope you find the post helpful and continue to read my blog!! 😊</p>"
+        }
+      ]
+    },
+    {
+      "author": "ingconti",
+      "date": "2018-07-08T12:38:28Z",
+      "message": "<p>nice post.<br />I do start in console and write Unit Test. and after start UI and controllers. (If can develop seriously, if I a have a dumb PM I cannot use Unit test.. &quot;i test dopo che rallentano&quot; they say.</p>",
+      "replies": [
+        {
+          "author": "Fabrizio",
+          "date": "2018-07-08T15:44:10Z",
+          "message": "<p>I know ing. :) It&#x27;s a hard world :( But anyway you can always push PM to &quot;non rompere le palle&quot; :D</p>"
+        }
+      ]
+    },
+    {
+      "author": "Usman",
+      "date": "2018-12-04T09:38:05Z",
+      "message": "<p>Could you please pass through dependencies rather that creating those inside the classes?</p>",
+      "replies": [
+        {
+          "author": "Fabrizio",
+          "date": "2018-12-04T17:53:13Z",
+          "message": "<p>Hi @Usman, first of all thank you for reading my post!! 🙂 The main objective of the post is to show the “model view presenter” architecture to the readers. This is why I kept everything as simple as possible. So I instantiated all the dependencies in the view controllers. Anyway it is possible to use a dependencies injection framework to get all you repositories, presenters and so on (and you must do it 😌). You can check the following dependency injection library available for swift:</p><p><a href=\"https://github.com/Swinject/Swinject\" rel=\"nofollow noopener\">https://github.com/Swinject...</a><br /><a href=\"https://github.com/square/Cleanse/\" rel=\"nofollow noopener\">https://github.com/square/C...</a></p><p>Let me know if you need more help 🙂.</p>"
+        }
+      ]
+    },
+    {
+      "author": "Varun Mehta",
+      "date": "2018-12-19T17:53:07Z",
+      "message": "<p>Great Post!! Well articulated. <br />Just wanted to make one improvement. I see a retain cycle between ProductsPresenter and ProductsViewController. So either of productsView property in ProductsPresenter OR productsPresenter in ProductsViewController should be taken as weak.</p>",
+      "replies": [
+        {
+          "author": "Fabrizio",
+          "date": "2018-12-19T21:06:42Z",
+          "message": "<p>Hi @Varun Mehta, thank you for reading my post!!😊<br />You&#x27;re right: in the previous implementation there was a retain cycle between the controllers and the presenters. I created the post and the example during a night of coding/studying so I missed that bug 😁. When I create a presenter in my daily job I usually set the view on the presenter as unowned. In this way I don&#x27;t need to unwrap it each time I access to it (and I also know for sure that the UIViewController that acts as the presenter view will be the final object to be deallocated). <br />So a big thank you for you bug report!!! Now you can see the github repo code and the article above fixed 😎.</p>"
+        }
+      ]
+    }
+  ],
+  "react-native-multiple-instance-rctrootview": [
+    {
+      "author": "Diego R Galindo",
+      "date": "2018-08-27T08:04:41Z",
+      "message": "<p>amazing! i was super frustrated using the xcode logger. thanks for this tip</p>",
+      "replies": [
+        {
+          "author": "Fabrizio",
+          "date": "2018-08-28T06:16:50Z",
+          "message": "<p>Thank you @Diego R Galindo!! 😊Continue to read my blog for other interesting tips!!! 🙃</p>"
+        }
+      ]
+    },
+    {
+      "author": "Max Pevsner",
+      "date": "2018-10-16T12:26:20Z",
+      "message": "<p>Thank you very much! It&#x27;s the only explanation of the problem I could find. The solution is simple an elegant!</p>",
+      "replies": [
+        {
+          "author": "Fabrizio",
+          "date": "2018-10-16T12:42:07Z",
+          "message": "<p>Thank you @Max Pevsner !! 😊Continue to read my blog for other interesting tips!!! 🙃</p>"
+        }
+      ]
+    }
+  ],
+  "react-native-typescript-existing-app": [
+    {
+      "author": "Priyank Acharya",
+      "date": "2019-01-05T12:08:02Z",
+      "message": "<p>Hey, very nice site. I came across this on Google, and I am stoked that I did. I will definitely be coming back here more often. Wish I could add to the conversation and bring a bit more to the table, but am just taking in as much info as I can at the moment. Thanks for sharing.</p><p><a href=\"http://www.daisoftware.com/Services/Mobile-Application-Development\" rel=\"nofollow noopener\">Mobile Application Development</a></p>",
+      "replies": []
+    }
+  ],
+  "custom-tabbar-swiftui": [
+    {
+      "author": "Ann",
+      "date": "2020-04-20T00:12:26Z",
+      "message": "<p>Great post!!! How can I add more tabs instead of just 2 to this?</p>",
+      "replies": [
+        {
+          "author": "Fabrizio",
+          "date": "2020-04-20T18:36:14Z",
+          "message": "<p>Hi Ann, to add more tabs you just have to add more TabBarItem items into the TabBar class (TabBar.swift).</p>"
+        },
+        {
+          "author": "Ann",
+          "date": "2020-04-21T03:27:17Z",
+          "message": "<p>I tried this but the other two just overlaps the current icons. How do I handle the spacing between them? I&#x27;m trying to have 4 tabs.</p>"
+        },
+        {
+          "author": "Ann",
+          "date": "2020-04-21T04:12:52Z",
+          "message": "<p>I think it is a problem for me in ShowModalTabBar Item. When I delete that line off of TabBar.swift, i have all 4 tabs come up but when I add that line, 2 appears again. Do you know how i can fix this?</p>"
+        }
+      ]
+    }
+  ],
+  "dark-mode-css-sass-scss": [
+    {
+      "author": "Danny",
+      "date": "2020-09-08T06:40:04Z",
+      "message": "<p>This is a great solution! Especially the `$additionalPropertiesPositionIsFront` optional boolean for properties like `box-shadow` where the color can&#x27;t be separated into a different property. Thanks for sharing.</p>",
+      "replies": []
+    }
+  ],
+  "how-to-calculate-reflection-vector": [
+    {
+      "author": "Fabrizio",
+      "date": "2020-11-05T16:45:22Z",
+      "message": "<p>Yes you&#x27;re right @Darken Dark , this was a typo error. &quot;From the law of reflection...&quot; is the correct sentence. Thank you for your feedback.</p>",
+      "replies": []
+    }
+  ],
+  "kotlin-junit5-mockk": [
+    {
+      "author": "Paolo Sciarra",
+      "date": "2021-02-20T13:10:11Z",
+      "message": "<p>Hi Fabrizio,<br />great article. I have just somes ideas I want to share with you: Mockk requires you to instruct your mocks otherwise it will fail because it received an unknown call and it doesn&#x27;t know what to do with that.</p><p>I tend to do this way: when I am mocking a query a method that returns some value, I will do as you did also being specific about the parameters used to get the result for the query, when I am mocking a command, some action I have to do and I need to verify it was executed, I am less specific in the `every` block and I am very specific in the `verify` block.</p><p>Also I drop entirely the verify block for the mocked query because I am more interested in the value I receive then the fact I actually called that collaborator.</p><p>In this way I find the test failures are easier to understand.</p><p>What do you think?</p>",
+      "replies": [
+        {
+          "author": "Fabrizio",
+          "date": "2021-02-21T10:09:23Z",
+          "message": "<p>Hi @Paolo Sciarra ,</p><p>thank you fo your feedback!! ♥️ For the first part:</p><p></p><blockquote>when I am mocking a command, some action I have to do and I need to verify it was executed, I am less specific in the `every` block and I am very specific in the `verify` block.</blockquote><p></p><p>Very interesting, I will try this approach as it seems a good strategy to have a real feedback about what call you&#x27;re expecting and, as you already said, it would make the test failure error more readable (because you will not see the one throw when a mock is missing).</p><p>For the second part:</p><p></p><blockquote>Also I drop entirely the verify block for the mocked query because I am more interested in the value I receive then the fact I actually called that collaborator.</blockquote><p></p><p>Based on what I know and I remember about MockK, this library doesn&#x27;t throw an error if you have the mock instructed in the test but you then you call it with other parameters (this is different with respect to other library like Mockito). This is why I always add a verify block (and again, e.g. in Mockito I was used to setup just the mocked query). But maybe this is something that was happening only in the first versions of the library, so I will check again soon 😎</p>"
+        }
+      ]
+    }
+  ],
+  "dynamic-imports-webpack-chunks": [
+    {
+      "author": "Iftikhar Ali",
+      "date": "2021-11-29T17:52:56Z",
+      "message": "<p>ES6 provides &lt;script type=&quot;module&quot; ..=&quot;&quot;&gt;&lt;/script&gt; which can download other modules on the fly.  Will webpack dynamic import still be relevant with that in place?</p>",
+      "replies": [
+        {
+          "author": "Fabrizio",
+          "date": "2021-11-30T08:52:13Z",
+          "message": "<p>Hi @Iftikhar Ali , thank you for your question. I think web pack dynamic imports are still relevant, because they let you code split your code base in an automatic way without worrying about optimising the modules imports and compilation. Basically it is a &quot;configuration&quot; approach that frees you from the burden of tuning code splitting.</p>"
+        }
+      ]
+    }
+  ],
+  "id3tageditor-swift-read-write-id3-tag-mp3": [
+    {
+      "author": "SouthernYankee",
+      "date": "2022-05-07T02:21:57Z",
+      "message": "<p>Thanks for this framework.  I recently discovered that one cannot use the Swift API&#x27;s to modify and save .mp3 metadata.  Frustrating!  But, your framework has helped me.  Thank you!</p>",
+      "replies": [
+        {
+          "author": "Fabrizio",
+          "date": "2022-05-09T07:35:21Z",
+          "message": "<p>Thank you for your support @SouthernYankee. Remember to ⭐️ star ⭐️ my repo in order to support my open source work</p>"
+        }
+      ]
+    },
+    {
+      "author": "SouthernYankee",
+      "date": "2022-05-07T03:04:59Z",
+      "message": "<p>I have mp3 files that have an attached picture, but iTunes/Music does not read the artwork.  Is this because the picture type is incorrect in the tag?  If so, how would I use your framework to change the picture type to be front cover?</p>",
+      "replies": [
+        {
+          "author": "Fabrizio",
+          "date": "2022-05-09T07:38:18Z",
+          "message": "<p>The general thing I suggest is to update/set the id3 tag of your mp3 to version 3 and play a little bit with the Attached picture frame contained in my framework. At the time I wrote this article iTunes supported only attached picture frame with &quot;other&quot; set as type. You can try to set it with my framework to different types and see how iTunes behave. I hope this can help you!!</p>"
+        }
+      ]
+    }
+  ],
+  "scene-kit-physically-based-rendering": [
+    {
+      "author": "Joice George",
+      "date": "2022-05-09T07:05:34Z",
+      "message": "<p>can we set the position of a node related to another node other than parent? Thank you</p>",
+      "replies": [
+        {
+          "author": "Fabrizio",
+          "date": "2022-05-09T11:50:37Z",
+          "message": "<p>Hi@Joice George, the position represented in this article for the Object class is a SCNVector3. So as long as you pass a vector (that could be also the position of another object that is not strictly the parent) you can set the position as you want.</p>"
+        }
+      ]
+    }
+  ],
+  "react-detect-scroll-direction": [
+    {
+      "author": "Jander Silva",
+      "date": "2022-06-03T15:58:33Z",
+      "message": "<p>Thank you.</p>",
+      "replies": [
+        {
+          "author": "Fabrizio",
+          "date": "2022-06-03T19:31:16Z",
+          "message": "<p>you’re welcome @Jander Silva 😊</p>"
+        }
+      ]
+    },
+    {
+      "author": "DjibDjib",
+      "date": "2022-08-24T09:27:16Z",
+      "message": "<p>Very nice ! Thx !</p>",
+      "replies": [
+        {
+          "author": "Fabrizio",
+          "date": "2022-08-24T17:52:59Z",
+          "message": "<p>Thank you 🙏</p>"
+        }
+      ]
+    },
+    {
+      "author": "Marco Agostinelli",
+      "date": "2022-11-14T14:08:57Z",
+      "message": "<p>Nice! Thank you!</p>",
+      "replies": [
+        {
+          "author": "Fabrizio",
+          "date": "2022-11-14T18:54:56Z",
+          "message": "<p>Thank you @Marco Agostinelli! 🙏</p>"
+        }
+      ]
+    }
+  ],
+  "webpack-workbox-service-worker-typescript": [
+    {
+      "author": "Pablo Alejos",
+      "date": "2022-10-24T22:23:17Z",
+      "message": "<p>How do you build the SV with webpack to have the file available on runtime to register it from the root of the scope?</p>",
+      "replies": [
+        {
+          "author": "Fabrizio",
+          "date": "2022-10-25T18:44:25Z",
+          "message": "<p>Hi Pablo, you can have a look at how I was doing this here <a href=\"https://github.com/chicio/old.chicio.github.io\" rel=\"nofollow noopener\">https://github.com/chicio/o...</a> (this website now has been migrated to GatsbyJS).</p>"
+        }
+      ]
+    }
+  ],
+  "rest-template-webclient-spring-boot": [
+    {
+      "author": "Moe Birchwood",
+      "date": "2023-04-25T05:36:37Z",
+      "message": "<p>Thanks for the cheat sheet, helped me well!</p><p>Just one comment: i guess you did an copy/paste error:</p><p><code>fun deleteSynchronous(): String {<br />    webClient<br />            .put()<br />...</code></p><p>should be</p><p><code>fun deleteSynchronous(): String {<br />    webClient<br />            .delete()<br />...</code></p>",
+      "replies": [
+        {
+          "author": "Fabrizio",
+          "date": "2023-04-25T19:59:44Z",
+          "message": "<p>Hi @@Moe Birchwood, thanks for the feedback 🙏 I updated the article and the example (will be live in a few minutes) 🚀🚀🚀.</p>"
+        }
+      ]
+    }
+  ],
+  "microfrontend-module-federation-dynamic-configuration": [
+    {
+      "author": "Aravinda Kumar",
+      "date": "2023-05-11T22:30:26Z",
+      "message": "<p>Excellent blog. Is there any performance issues in this approach, if yes how much of an hit can it be, from the native bundling approach. And how can these two apps be served, can they be served statically after build.</p>",
+      "replies": []
+    }
+  ],
+  "ios-notification-content-extensions": [
+    {
+      "author": "Roberto Sonzogni",
+      "date": "2023-09-22T10:07:55Z",
+      "message": "<p>Ciao Fabrizio, ma per vedere l&#x27;interfaccia personalizzata, è necessario premere sulla notifica con interfaccia standard?<br />Non si può visualizzare la notifica subito con l&#x27;interfaccia personalizzata?<br />Vorrei visualizzare notifiche in stile Whatsapp/Telegram, non so se questo è il modo giusto per farlo.<br />Grazie</p>",
+      "replies": [
+        {
+          "author": "Fabrizio",
+          "date": "2024-06-19T06:48:19Z",
+          "message": "<p>Ciao  @Roberto Sonzogni , scusa per la risposta tardiva. Non saprei, perchè l&#x27;articolo è un po&#x27; datato e alla fine (ai tempi) non sono riuscito a portare in produzione tale feature (business non era interessato). Probabilmente ora le api dell&#x27;iOS sdk danno piu possibilità su quelle parti.</p>"
+        }
+      ]
+    }
+  ],
+  "widget-ios-swiftui-image-problem": [
+    {
+      "author": "eric",
+      "date": "2024-06-24T03:06:16Z",
+      "message": "<p>this article do me a great favor, thanks a lot.</p>",
+      "replies": [
+        {
+          "author": "Fabrizio",
+          "date": "2024-06-24T10:18:21Z",
+          "message": "<p>@eric thanks for the feedback. Glad my knowledge sharing helped saved you having the same headache I had during widgets development.</p>"
+        }
+      ]
+    },
+    {
+      "author": "Mykyta Khlamov",
+      "date": "2024-09-20T15:45:23Z",
+      "message": "<p>Thanks for this topic!<br />I was facing the same problem and didn&#x27;t know what to do before reading this. Also I got new knowledge about Xcode console (never used it before).<br />Wish you all the best!🔥</p>",
+      "replies": [
+        {
+          "author": "Fabrizio",
+          "date": "2024-09-21T10:04:07Z",
+          "message": "<p>@Mykyta Khlamov thanks for the feedback. It is really satisfying to see that our article is helping people with this kind of problem. Thanks a lot 🙏</p>"
+        }
+      ]
+    }
+  ]
+}
