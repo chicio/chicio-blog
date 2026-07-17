@@ -1,13 +1,12 @@
 "use client";
 
 import { FC } from "react";
-import { GiRabbit } from "react-icons/gi";
 import { MatrixTerminal } from "@/components/design-system/molecules/effects/matrix-terminal";
-import { GenericHeader } from "@/components/design-system/organism/header/generic-header";
-import { PageTemplate } from "@/components/design-system/templates/page-template";
-import { footerNavHrefs, menuNavHrefs, socialContactLinks } from "@/components/features/content/nav-config";
+import { PageTitle } from "@/components/design-system/molecules/typography/page-title";
+import { ContentPage } from "@/components/features/content/content-page";
 import { easterEggHuntPageDescription, easterEggHuntPageTitle } from "@/lib/content/easter-eggs/easter-eggs-content";
 import { siteMetadata } from "@/types/configuration/site-metadata";
+import { tracking } from "@/types/configuration/tracking";
 import { EggCard } from "./egg-card";
 import { useEasterEggsStore } from "./use-easter-eggs-store";
 
@@ -18,19 +17,9 @@ export const EasterEggs: FC = () => {
     const terminalLines = introLines.map((text) => ({ text }));
 
     return (
-        <PageTemplate
-            header={
-                <GenericHeader
-                    title={easterEggHuntPageTitle}
-                    subtitle={easterEggHuntPageDescription}
-                    logo={<GiRabbit className="text-3xl text-accent" />}
-                />
-            }
-            author={siteMetadata.author}
-            navHrefs={menuNavHrefs}
-            footerNavHrefs={footerNavHrefs}
-            socialLinks={socialContactLinks}
-        >
+        <ContentPage author={siteMetadata.author} trackingCategory={tracking.category.easter_egg_hunt}>
+            <PageTitle>{`🐇 ${easterEggHuntPageTitle}`}</PageTitle>
+            <p>{easterEggHuntPageDescription}</p>
             <MatrixTerminal lines={terminalLines} />
             <div className="mt-8 flex flex-col gap-4">
                 {hints.map((hint) => (
@@ -42,6 +31,6 @@ export const EasterEggs: FC = () => {
                     />
                 ))}
             </div>
-        </PageTemplate>
+        </ContentPage>
     );
 };

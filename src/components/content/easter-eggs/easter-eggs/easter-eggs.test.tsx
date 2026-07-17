@@ -1,85 +1,16 @@
-import { describe, it, expect, vi, beforeAll } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { describe, it, expect, vi } from "vitest";
+import type { ReactNode } from "react";
+import { render, screen, fireEvent } from "@/test-utils";
 import { EasterEggs } from "./easter-eggs";
-import { easterEggHints, easterEggHuntIntroLines } from "@/lib/content/easter-eggs/easter-eggs-content";
+import {
+    easterEggHints,
+    easterEggHuntIntroLines,
+    easterEggHuntPageDescription,
+    easterEggHuntPageTitle,
+} from "@/lib/content/easter-eggs/easter-eggs-content";
 
-vi.mock("next/navigation", () => ({
-    usePathname: () => "/easter-egg-hunt",
-    useRouter: () => ({ push: vi.fn() }),
-}));
-
-vi.mock("next/link", () => ({
-    default: ({
-        href,
-        children,
-        ...rest
-    }: React.AnchorHTMLAttributes<HTMLAnchorElement> & { href: string }) => (
-        <a href={href} {...rest}>
-            {children}
-        </a>
-    ),
-}));
-
-vi.mock("next/image", () => ({
-    default: ({
-        alt,
-        src,
-        ...rest
-    }: React.ImgHTMLAttributes<HTMLImageElement> & { src: string }) => <img alt={alt} src={src} {...rest} />,
-}));
-
-vi.mock("@/components/design-system/atoms/animation/motion-div", () => ({
-    MotionDiv: ({ children, ...props }: React.HTMLAttributes<HTMLDivElement>) => <div {...props}>{children}</div>,
-}));
-
-vi.mock("framer-motion", () => ({
-    AnimatePresence: ({ children }: React.PropsWithChildren) => <>{children}</>,
-    motion: {
-        div: ({
-            children,
-            initial: _i,
-            animate: _a,
-            exit: _e,
-            transition: _t,
-            style: _s,
-            ...props
-        }: React.HTMLAttributes<HTMLDivElement> & {
-            initial?: unknown;
-            animate?: unknown;
-            exit?: unknown;
-            transition?: unknown;
-        }) => <div {...props}>{children}</div>,
-        nav: ({
-            children,
-            initial: _i,
-            animate: _a,
-            exit: _e,
-            transition: _t,
-            style: _s,
-            ...props
-        }: React.HTMLAttributes<HTMLElement> & {
-            initial?: unknown;
-            animate?: unknown;
-            exit?: unknown;
-            transition?: unknown;
-        }) => <nav {...props}>{children}</nav>,
-    },
-}));
-
-vi.mock("matrix-rain-webgpu", () => ({
-    isWebGPUSupported: () => false,
-}));
-
-vi.mock("@/components/design-system/state/command-palette/command-palette-events", () => ({
-    commandPaletteOpenEvent: "command-palette-open",
-    openCommandPalette: vi.fn(),
-    openMatrixRainPanel: vi.fn(),
-}));
-
-vi.mock("@/components/design-system/state/motion/motion", () => ({
-    writeMotion: vi.fn(),
-    hasMotion: () => true,
-    motionChangeEvent: "motion-change",
+vi.mock("@/components/features/content/content-page", () => ({
+    ContentPage: ({ children }: { children?: ReactNode }) => <div>{children}</div>,
 }));
 
 vi.mock("@/components/design-system/molecules/effects/matrix-terminal", () => ({
@@ -92,19 +23,16 @@ vi.mock("@/components/design-system/molecules/effects/matrix-terminal", () => ({
     ),
 }));
 
-beforeAll(() => {
-    vi.stubGlobal(
-        "IntersectionObserver",
-        class {
-            observe = vi.fn();
-            unobserve = vi.fn();
-            disconnect = vi.fn();
-        },
-    );
-});
-
 describe("EasterEggs", () => {
     describe("intro", () => {
+        it("renders the page title and subtitle", () => {
+            render(<EasterEggs />);
+            expect(
+                screen.getByRole("heading", { level: 1, name: new RegExp(easterEggHuntPageTitle) }),
+            ).toBeInTheDocument();
+            expect(screen.getByText(easterEggHuntPageDescription)).toBeInTheDocument();
+        });
+
         it("renders every intro line", () => {
             render(<EasterEggs />);
             easterEggHuntIntroLines.forEach((line) => {
