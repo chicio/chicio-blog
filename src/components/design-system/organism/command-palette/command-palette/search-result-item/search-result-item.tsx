@@ -2,7 +2,7 @@
 
 import { FC } from "react";
 import { Command } from "cmdk";
-import { TerminalLine } from "@/components/design-system/atoms/typography/terminal-blocks";
+import { TerminalListItem } from "@/components/design-system/molecules/terminal-list-item";
 import { useSearchResultItemStore } from "./use-search-result-item-store";
 
 const ITEM_CLASS =
@@ -21,10 +21,7 @@ export const SearchResultItem: FC<SearchResultItemProps> = ({ title, description
 
     return (
         <Command.Item value={title} className={ITEM_CLASS} onSelect={handleSelect}>
-            <TerminalLine>
-                {">"} {title}
-            </TerminalLine>
-            <p className="text-primary-text/60 ml-4 line-clamp-1 font-mono text-xs leading-tight">{description}</p>
+            <TerminalListItem title={title} description={description} />
         </Command.Item>
     );
 };
