@@ -10,6 +10,7 @@ import { getAllConsoles, getAllGames } from "./videogames/videogames";
 import { easterEggHuntPageDescription, easterEggHuntPageTitle } from "./easter-eggs/easter-eggs-content";
 import { Content } from "@/types/content/content";
 import { slugs } from "@/types/configuration/slug";
+import { siteMetadata } from "@/types/configuration/site-metadata";
 
 const easterEggHuntSearchEntry: Content = {
   frontmatter: {
@@ -17,8 +18,8 @@ const easterEggHuntSearchEntry: Content = {
     description: easterEggHuntPageDescription,
     tags: ["easter egg", "matrix"],
     authors: [],
-    date: { year: 0, month: 0, day: 0, formatted: "" },
-    image: "",
+    date: { year: 2026, month: 7, day: 17, formatted: "2026-07-17" },
+    image: siteMetadata.featuredImage,
   },
   slug: { params: {}, formatted: slugs.easterEggHunt },
   readingTime: { text: "", minutes: 0, time: 0, words: 0 },
