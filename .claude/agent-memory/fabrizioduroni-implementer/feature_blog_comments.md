@@ -4,6 +4,23 @@ description: Blog comment system — giscus live widget + static legacy Disqus a
 type: project
 ---
 
+**2026-07-17 update**: `BlogComments` is no longer a pure pass-through wrapper — it now legitimately owns
+`use-blog-comments-store.ts` (a `StateStore`, no effects). Rationale: it drives a simulated
+`TerminalProgressBar` ("loading comments" → "comments loaded", lowercase terminal voice) while giscus's
+iframe loads, since giscus reports no load progress of its own. Percentage ticks asymptotically toward
+90% (`setInterval` 350ms, `increment = max((90 - current) * 0.15, 0.5)`), then jumps to 100% and — after
+a ~400ms beat (skipped under `useReducedMotions()`) — flips `isLoaded`. Completion is triggered by
+`window.addEventListener("message", ...)` filtered to `event.origin === "https://giscus.app"` (the giscus
+iframe posts a message once alive), with a 12s fallback timeout so an offline/errored giscus never leaves
+a stuck bar. Giscus itself stays mounted the whole time (only the progress bar is conditionally rendered)
+because unmounting would stop the iframe from ever loading and firing that message. Chose **mount-start**
+over gating the simulation on `useInView` (component nearing viewport): jsdom has no global
+`IntersectionObserver` polyfill in this repo's `vitest.setup.ts`, so an in-view gate would force every
+consuming test to stub `IntersectionObserver` just to unblock rendering — not worth it since the
+component is not lazy-mounted at the React level anyway (giscus's own `loading="lazy"` already defers the
+network fetch). See [[feature_terminal_list_item]] for the presentational half reused inside search
+results — NOT used here, this is a distinct progress-bar UI.
+
 Implemented 2026-07-17 (PR pending, branch `feat/blog-comments`). Two independent halves, both scoped
 ONLY to `/blog/post/[year]/[month]/[day]/[slug]`:
 

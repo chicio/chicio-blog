@@ -48,6 +48,10 @@
 ## Features (continued 6)
 - [Blog Comments](feature_blog_comments.md) — giscus live widget (custom-element, lazy, full-replacement theme CSS) + static legacy Disqus archive; worktree .env gotcha
 
+## Features (continued 7)
+- [Terminal List Item](feature_terminal_list_item.md) — shared molecule (terminal "> title" + dim description), used by SearchResultItem and Read next
+- [Blog Comments update](feature_blog_comments.md) — BlogComments now legitimately owns a store (simulated TerminalProgressBar until giscus postMessage), mount-start chosen over useInView
+
 ## Feedback
 - [PWA & State Patterns](feedback_pwa_patterns.md) — useSyncExternalStore for localStorage state, consent-gated UI, banner/error page alignment rules
 - [Worktree git stash hazard](feedback_worktree_git_stash_hazard.md) — never `git stash` inside a pipeline worktree, refs/stash is shared across all worktrees
