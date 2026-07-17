@@ -14,6 +14,11 @@ controlled.
 **Scope: CODE work only.** Content (MDX blog prose, DSA articles) is out of scope — see the Content firewall in
 Intake.
 
+**CodeGraph.** The repo is indexed by CodeGraph, and every code agent in the roster (explorer, implementer, reviewer,
+bug-investigator) carries its own `codegraph_explore` access and codegraph-first instructions — do not re-explain the
+tool in stage prompts. When **you** (the orchestrator) need a quick code fact between stages — scoping a slug,
+sanity-checking a finding, sizing a change — use `codegraph_explore` yourself instead of a grep/read loop.
+
 ## Invocation
 
 ```

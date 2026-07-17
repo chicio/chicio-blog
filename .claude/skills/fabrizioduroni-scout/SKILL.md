@@ -71,7 +71,9 @@ Two sources, one label:
 1. **Semantic duplicates (primary engine).** Invoke the `finding-duplicate-functions` skill (Skill tool) — it scans
    for functions that do the same thing under different names/implementations (common in LLM-written code). Take its
    reported duplicate clusters; each cluster's finding = the shared behavior + the 2+ call sites/paths. Rank by
-   (number of duplicate implementations × size of the duplicated logic).
+   (number of duplicate implementations × size of the duplicated logic). **Verify each cluster with
+   `codegraph_explore`** (the repo is CodeGraph-indexed) before filing: one call returns the candidates' verbatim
+   source and callers, confirming they really duplicate behavior and giving the issue body accurate call sites.
 2. **Guardrails.** Run `npm run validate-architecture` and `npm run knip`. CI already keeps these at zero, so expect
    them empty; only if a real violation surfaces (genuine drift) emit it as a finding.
 
