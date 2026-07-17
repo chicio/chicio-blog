@@ -14,6 +14,7 @@ const {
     mockConsoleMarkdown,
     mockGameMarkdown,
     mockBlogStatsMarkdown,
+    mockEasterEggHuntMarkdown,
 } = vi.hoisted(() => ({
     mockHomepageMarkdown: vi.fn(),
     mockBlogListingMarkdown: vi.fn(),
@@ -28,6 +29,7 @@ const {
     mockConsoleMarkdown: vi.fn(),
     mockGameMarkdown: vi.fn(),
     mockBlogStatsMarkdown: vi.fn(),
+    mockEasterEggHuntMarkdown: vi.fn(),
 }));
 
 vi.mock("@/lib/content/posts/posts-markdown", () => ({
@@ -38,6 +40,10 @@ vi.mock("@/lib/content/posts/posts-markdown", () => ({
 
 vi.mock("@/lib/content/about-me/about-me-markdown", () => ({
     aboutMeMarkdown: mockAboutMeMarkdown,
+}));
+
+vi.mock("@/lib/content/easter-eggs/easter-egg-hunt-markdown", () => ({
+    easterEggHuntMarkdown: mockEasterEggHuntMarkdown,
 }));
 
 vi.mock("@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms-markdown", () => ({
@@ -125,6 +131,18 @@ describe("GET /markdown/[[...path]]", () => {
             );
             expect(response.status).toBe(200);
             expect(await response.text()).toBe("# About Me");
+        });
+    });
+
+    describe("easter egg hunt (/easter-egg-hunt)", () => {
+        it("delegates to easterEggHuntMarkdown", async () => {
+            mockEasterEggHuntMarkdown.mockReturnValue("# Easter Egg Hunt");
+            const response = await GET(
+                new Request("https://x.com/markdown/easter-egg-hunt"),
+                makeContext(["easter-egg-hunt"]),
+            );
+            expect(response.status).toBe(200);
+            expect(await response.text()).toBe("# Easter Egg Hunt");
         });
     });
 

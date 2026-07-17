@@ -1,4 +1,5 @@
 import { aboutMeMarkdown } from "@/lib/content/about-me/about-me-markdown";
+import { easterEggHuntMarkdown } from "@/lib/content/easter-eggs/easter-egg-hunt-markdown";
 import {
     dsaExerciseMarkdown,
     dsaExercisesListMarkdown,
@@ -52,6 +53,7 @@ export async function generateStaticParams() {
         { path: slugs.blog.home.slice(1).split("/") },
         { path: slugs.blog.stats.slice(1).split("/") },
         { path: slugs.aboutMe.slice(1).split("/") },
+        { path: slugs.easterEggHunt.slice(1).split("/") },
         { path: slugs.dataStructuresAndAlgorithms.home.slice(1).split("/") },
         { path: slugs.dataStructuresAndAlgorithms.roadmap.slice(1).split("/") },
         { path: slugs.dataStructuresAndAlgorithms.exercises.slice(1).split("/") },
@@ -88,6 +90,9 @@ export async function GET(_request: Request, { params }: RouteContext) {
             break;
         case slugs.aboutMe:
             markdown = aboutMeMarkdown();
+            break;
+        case slugs.easterEggHunt:
+            markdown = easterEggHuntMarkdown();
             break;
         case slugs.dataStructuresAndAlgorithms.home:
             markdown = dsaMarkdown();
