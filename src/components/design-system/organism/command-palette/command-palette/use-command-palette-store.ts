@@ -22,6 +22,7 @@ interface CommandPaletteEffects {
     stopPropagation: (e: React.MouseEvent) => void;
     handleSearchInput: (value: string) => void;
     handleOpenChat: () => void;
+    handleOpenEasterEggHunt: () => void;
     handleSearchResultSelect: (slug: string) => void;
     setSelectedValue: (value: string) => void;
     onToggleMotion?: () => void;
@@ -34,11 +35,13 @@ interface CommandPaletteTrackingCallbacks {
     onSearchResultSelect?: () => void;
     onToggleMotion?: () => void;
     onCustomizeMatrixRain?: () => void;
+    onOpenEasterEggHunt?: () => void;
 }
 
 export const useCommandPaletteStore = (
     searchIndexFileName: string,
     chatSlug: string,
+    easterEggHuntSlug: string,
     tracking?: CommandPaletteTrackingCallbacks,
     searchEasterEgg: (query: string) => SearchResult | null = noopEasterEgg,
     SearchEasterEggComponent?: ComponentType<{ lines: EasterEggTerminalLines }>,
@@ -116,6 +119,12 @@ export const useCommandPaletteStore = (
         close();
     }, [tracking, router, chatSlug, close]);
 
+    const handleOpenEasterEggHunt = useCallback(() => {
+        tracking?.onOpenEasterEggHunt?.();
+        router.push(easterEggHuntSlug);
+        close();
+    }, [tracking, router, easterEggHuntSlug, close]);
+
     const handleSearchResultSelect = useCallback(
         (slug: string) => {
             tracking?.onSearchResultSelect?.();
@@ -140,6 +149,7 @@ export const useCommandPaletteStore = (
             stopPropagation,
             handleSearchInput,
             handleOpenChat,
+            handleOpenEasterEggHunt,
             handleSearchResultSelect,
             setSelectedValue,
             onToggleMotion: tracking?.onToggleMotion,

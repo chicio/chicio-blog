@@ -63,6 +63,7 @@ export const LayoutAdditionalContent: FC = () => {
         trackCommandPaletteSearchResultSelect,
         trackCommandPaletteToggleMotion,
         trackCommandPaletteCustomizeMatrixRain,
+        trackCommandPaletteOpenEasterEggHunt,
     } = effects;
 
     return (
@@ -70,12 +71,14 @@ export const LayoutAdditionalContent: FC = () => {
             <CommandPalette
                 searchIndexFileName={searchIndexFileName}
                 chatSlug={slugs.chat}
+                easterEggHuntSlug={slugs.easterEggHunt}
                 tracking={{
                     onOpen: trackCommandPaletteOpen,
                     onOpenChat: trackCommandPaletteOpenChat,
                     onSearchResultSelect: trackCommandPaletteSearchResultSelect,
                     onToggleMotion: trackCommandPaletteToggleMotion,
                     onCustomizeMatrixRain: trackCommandPaletteCustomizeMatrixRain,
+                    onOpenEasterEggHunt: trackCommandPaletteOpenEasterEggHunt,
                 }}
                 searchEasterEgg={whiteRabbitEasterEgg}
                 SearchEasterEggComponent={NeoRoomEasterEgg}
