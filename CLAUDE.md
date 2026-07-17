@@ -78,7 +78,11 @@ GitHub Actions (`.github/workflows/ci.yml`): four jobs — lint (ESLint `--max-w
 
 ## Code Navigation
 
-Use the LSP tool as the primary code navigation method for all symbol-level work — understanding code, tracing dependencies, and refactoring. It provides semantically accurate, type-aware results that Grep/Glob cannot match. Fall back to Grep/Glob only for text-pattern searches (string literals, comments, file-name patterns).
+The workspace is indexed by CodeGraph (`.codegraph/`, MCP server in `.mcp.json`). Navigation order:
+
+1. **CodeGraph first** — `codegraph_explore` (MCP tool) or `codegraph explore "<question or symbols>"` (CLI). One call returns the verbatim line-numbered source of the relevant symbols grouped by file, the call paths between them (including dynamic-dispatch hops grep can't follow), and a blast-radius summary of what depends on them. Use it for every "where is X / how does X work / what depends on X" question, before Read/Grep/LSP.
+2. **LSP for precise symbol-level follow-ups** — hover types, exact references, call hierarchy during refactoring. Semantically accurate, type-aware results that Grep/Glob cannot match.
+3. **Grep/Glob only for text patterns** — string literals, comments, file-name patterns.
 
 ## Markdown Content Negotiation
 

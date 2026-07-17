@@ -41,7 +41,8 @@ contracts only. (A task that is *both* code and content is filed for the code pa
 ## Step 2 — Explore (adaptive)
 Decide whether a full codebase map is worth it:
 - **Skip** (rely on grilling's own inline codebase lookup) when the idea is small and well-understood — a copy tweak,
-  a link, a one-file change. This is the common case.
+  a link, a one-file change. This is the common case. For any inline lookup, use `codegraph_explore` (the repo is
+  CodeGraph-indexed) — one call answers "where is X / what depends on X" instead of a grep/read loop.
 - **Dispatch `fabrizioduroni-explorer`** (read-only) when the idea touches **non-trivial or unfamiliar surface** (a new
   section/route, a data-source change, cross-cutting UI) or when a design fork will hinge on codebase facts.
 - `--explore` forces the dispatch; `--no-explore` suppresses it.
