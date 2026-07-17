@@ -47,6 +47,7 @@ export interface MenuNavHrefs {
     dsaExercises: string;
     chat: string;
     mcp: string;
+    easterEggHunt: string;
     aboutMe: string;
     art: string;
     videogames: string;
@@ -78,6 +79,7 @@ export const Menu: FC<MenuProps> = ({ navHrefs, onPaletteTrigger, tracking }) =>
         onClickChat,
         onClickMcp,
         onClickMatrixRain,
+        onClickEasterEggHunt,
         onClickAboutMe,
         onClickArt,
         onClickVideogames,
@@ -136,6 +138,12 @@ export const Menu: FC<MenuProps> = ({ navHrefs, onPaletteTrigger, tracking }) =>
                         to: navHrefs.blogStats,
                         selected: pathname === navHrefs.blogStats,
                         onClick: onClickBlogStats,
+                    },
+                    {
+                        label: "Easter Eggs",
+                        to: navHrefs.easterEggHunt,
+                        selected: pathname === navHrefs.easterEggHunt,
+                        onClick: onClickEasterEggHunt,
                     },
                 ]}
             />
