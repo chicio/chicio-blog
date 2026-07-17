@@ -9,6 +9,8 @@ import { FC } from "react";
 import { PostAuthors } from "@/components/content/blog/post-authors";
 import { PostMeta } from "@/components/content/blog/post-meta";
 import { PostTags } from "@/components/content/blog/post-tags";
+import { ArchivedComments } from "@/components/content/blog/archived-comments";
+import { BlogComments } from "@/components/content/blog/blog-comments";
 import { RecentPosts } from "./read-next";
 import { ChromeAiFeaturesToolbar } from "./chrome-ai-features-toolbar";
 
@@ -48,6 +50,8 @@ export const BlogPostContent: FC<PostProps> = async ({ post }) => {
                     <>
                         <PostTags tags={frontmatter.tags} />
                         <RecentPosts currentSlug={post.slug.formatted} />
+                        <ArchivedComments slug={post.slug.params.slug} />
+                        <BlogComments />
                     </>
                 }
             >
