@@ -2,7 +2,7 @@
 
 import { FC } from "react";
 import { TerminalButton } from "@/components/design-system/molecules/buttons/terminal-button";
-import { QuoteText, TerminalLine } from "@/components/design-system/atoms/typography/terminal-blocks";
+import { TerminalLine } from "@/components/design-system/atoms/typography/terminal-blocks";
 import { useGlassmorphism } from "@/components/design-system/hooks/use-glassmorphism";
 import type { EasterEggHint } from "@/lib/content/easter-eggs/easter-eggs-content";
 
@@ -20,7 +20,7 @@ export const EggCard: FC<EggCardProps> = ({ hint, revealed, onToggle }) => {
             <TerminalLine>
                 {">"} {hint.title}
             </TerminalLine>
-            <QuoteText>{hint.crypticHint}</QuoteText>
+            <p className="my-4 font-mono italic text-primary-text text-shadow-md">{hint.crypticHint}</p>
             <TerminalButton
                 onClick={onToggle}
                 ariaExpanded={revealed}
