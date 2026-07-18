@@ -51,6 +51,7 @@
 ## Features (continued 7)
 - [Terminal List Item](feature_terminal_list_item.md) — shared molecule (terminal "> title" + dim description), used by SearchResultItem and Read next
 - [Blog Comments update](feature_blog_comments.md) — BlogComments now legitimately owns a store (simulated TerminalProgressBar until giscus postMessage), mount-start chosen over useInView
+- [Terminal Button](design-system_terminal_button.md) — polymorphic link/action molecule replacing TerminalLink (2026-07-18); post-card/console-card/egg-card callers
 - [Read Next Terminal Window](feature_read_next_terminal_window.md) — private client shell wraps read-next in command-palette-style terminal chrome; h2 base-layer override gotcha; e2e locator `../..`
 
 ## Feedback

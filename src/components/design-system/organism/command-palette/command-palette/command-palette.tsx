@@ -11,6 +11,7 @@ import { Command } from "cmdk";
 import { ToggleMotionItem } from "@/components/design-system/organism/command-palette/command-palette/toggle-motion-item";
 import { CustomizeMatrixRainItem } from "@/components/design-system/organism/command-palette/command-palette/customize-matrix-rain-item";
 import { SearchResultItem } from "@/components/design-system/organism/command-palette/command-palette/search-result-item";
+import { EasterEggHuntItem } from "@/components/design-system/organism/command-palette/command-palette/easter-egg-hunt-item";
 import { useCommandPaletteStore } from "./use-command-palette-store";
 
 const ITEM_CLASS =
@@ -26,11 +27,13 @@ interface CommandPaletteTrackingProps {
     onSearchResultSelect?: () => void;
     onToggleMotion?: () => void;
     onCustomizeMatrixRain?: () => void;
+    onOpenEasterEggHunt?: () => void;
 }
 
 interface CommandPaletteProps {
     searchIndexFileName: string;
     chatSlug: string;
+    easterEggHuntSlug: string;
     tracking?: CommandPaletteTrackingProps;
     searchEasterEgg?: (query: string) => SearchResult | null;
     SearchEasterEggComponent?: ComponentType<{ lines: EasterEggTerminalLines }>;
@@ -39,6 +42,7 @@ interface CommandPaletteProps {
 export const CommandPalette: FC<CommandPaletteProps> = ({
     searchIndexFileName,
     chatSlug,
+    easterEggHuntSlug,
     tracking,
     searchEasterEgg,
     SearchEasterEggComponent,
@@ -47,6 +51,7 @@ export const CommandPalette: FC<CommandPaletteProps> = ({
     const { state, effects } = useCommandPaletteStore(
         searchIndexFileName,
         chatSlug,
+        easterEggHuntSlug,
         tracking,
         searchEasterEgg,
         SearchEasterEggComponent,
@@ -57,6 +62,7 @@ export const CommandPalette: FC<CommandPaletteProps> = ({
         stopPropagation,
         handleSearchInput,
         handleOpenChat,
+        handleOpenEasterEggHunt,
         handleSearchResultSelect,
         setSelectedValue,
         onToggleMotion,
@@ -129,6 +135,7 @@ export const CommandPalette: FC<CommandPaletteProps> = ({
                                                 {">"} Open chat
                                             </TerminalLine>
                                         </Command.Item>
+                                        <EasterEggHuntItem onSelect={handleOpenEasterEggHunt} />
                                         <ToggleMotionItem onTrack={onToggleMotion} />
                                         <CustomizeMatrixRainItem onClose={handleCustomizeMatrixRainClose} />
                                     </Command.Group>

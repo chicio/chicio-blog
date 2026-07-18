@@ -72,6 +72,7 @@ const navHrefs: MenuNavHrefs = {
     dsaExercises: "/dsa/exercises",
     chat: "/chat",
     mcp: "/mcp",
+    easterEggHunt: "/easter-egg-hunt",
     aboutMe: "/about-me",
     art: "/art",
     videogames: "/videogames",

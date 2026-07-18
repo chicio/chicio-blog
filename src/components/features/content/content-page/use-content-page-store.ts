@@ -68,6 +68,10 @@ export const useContentPageStore = (trackingCategory: string): EffectsStore<Cont
         () => onTrackNavigation(tracking.action.open_matrix_rain_webgpu),
         [onTrackNavigation],
     );
+    const onTrackEasterEggHunt = useCallback(
+        () => onTrackNavigation(tracking.action.open_easter_egg_hunt),
+        [onTrackNavigation],
+    );
     const onTrackAboutMe = useCallback(() => onTrackNavigation(tracking.action.open_about_me), [onTrackNavigation]);
     const onTrackArt = useCallback(() => onTrackNavigation(tracking.action.open_art), [onTrackNavigation]);
     const onTrackVideogames = useCallback(
@@ -99,6 +103,7 @@ export const useContentPageStore = (trackingCategory: string): EffectsStore<Cont
         onTrackChat,
         onTrackMcp,
         onTrackMatrixRain,
+        onTrackEasterEggHunt,
         onTrackAboutMe,
         onTrackArt,
         onTrackVideogames,

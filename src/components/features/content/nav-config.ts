@@ -14,6 +14,7 @@ export const menuNavHrefs: MenuNavHrefs = {
     dsaExercises: slugs.dataStructuresAndAlgorithms.exercises,
     chat: slugs.chat,
     mcp: slugs.mcp,
+    easterEggHunt: slugs.easterEggHunt,
     aboutMe: slugs.aboutMe,
     art: slugs.art,
     videogames: slugs.videogames.home,

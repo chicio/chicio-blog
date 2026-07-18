@@ -70,6 +70,7 @@ const navHrefs: MenuNavHrefs = {
     dsaExercises: "/dsa/exercises",
     chat: "/chat",
     mcp: "/mcp",
+    easterEggHunt: "/easter-egg-hunt",
     aboutMe: "/about-me",
     art: "/art",
     videogames: "/videogames",
@@ -103,6 +104,7 @@ const navCases: NavCase[] = [
     { label: "Latest posts", trackingKey: "onTrackBlog", dropdown: "Blog" },
     { label: "Tags", trackingKey: "onTrackBlogTags", dropdown: "Blog" },
     { label: "Archive", trackingKey: "onTrackBlogArchive", dropdown: "Blog" },
+    { label: "Easter Eggs", trackingKey: "onTrackEasterEggHunt", dropdown: "Blog" },
     { label: "Roadmap", trackingKey: "onTrackDsaRoadmap", dropdown: "Explore" },
     { label: "Exercises", trackingKey: "onTrackDsaExercises", dropdown: "Explore" },
     { label: "Chat", trackingKey: "onTrackChat", dropdown: "Explore" },
@@ -140,12 +142,17 @@ describe("Menu", () => {
                 "Tags",
                 "Archive",
                 "Stats",
+                "Easter Eggs",
             ]);
             expect(within(menu).getByRole("link", { name: "Latest posts" })).toHaveAttribute("href", "/blog");
             expect(within(menu).getByRole("link", { name: "Authors" })).toHaveAttribute("href", "/blog/authors");
             expect(within(menu).getByRole("link", { name: "Tags" })).toHaveAttribute("href", "/blog/tags");
             expect(within(menu).getByRole("link", { name: "Archive" })).toHaveAttribute("href", "/blog/archive");
             expect(within(menu).getByRole("link", { name: "Stats" })).toHaveAttribute("href", "/blog/stats");
+            expect(within(menu).getByRole("link", { name: "Easter Eggs" })).toHaveAttribute(
+                "href",
+                "/easter-egg-hunt",
+            );
         });
 
         it("marks Authors as selected when on an author detail page", async () => {

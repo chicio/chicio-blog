@@ -18,6 +18,7 @@ export const slugs = {
   art: "/art",
   chat: "/chat",
   mcp: "/mcp",
+  easterEggHunt: "/easter-egg-hunt",
   contact: "/contact",
   cookiePolicy: "/cookie-policy",
   dataStructuresAndAlgorithms: {

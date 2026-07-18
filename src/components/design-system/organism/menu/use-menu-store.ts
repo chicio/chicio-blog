@@ -29,6 +29,7 @@ interface MenuEffects {
     onClickChat: () => void;
     onClickMcp: () => void;
     onClickMatrixRain: () => void;
+    onClickEasterEggHunt: () => void;
     onClickAboutMe: () => void;
     onClickArt: () => void;
     onClickVideogames: () => void;
@@ -47,6 +48,7 @@ export interface MenuTrackingCallbacks {
     onTrackChat?: () => void;
     onTrackMcp?: () => void;
     onTrackMatrixRain?: () => void;
+    onTrackEasterEggHunt?: () => void;
     onTrackAboutMe?: () => void;
     onTrackArt?: () => void;
     onTrackVideogames?: () => void;
@@ -127,6 +129,11 @@ export const useMenuStore = (
         closeMenu();
     }, [tracking, closeMenu]);
 
+    const onClickEasterEggHunt = useCallback(() => {
+        tracking?.onTrackEasterEggHunt?.();
+        closeMenu();
+    }, [tracking, closeMenu]);
+
     const onClickAboutMe = useCallback(() => {
         tracking?.onTrackAboutMe?.();
         closeMenu();
@@ -164,6 +171,7 @@ export const useMenuStore = (
             onClickChat,
             onClickMcp,
             onClickMatrixRain,
+            onClickEasterEggHunt,
             onClickAboutMe,
             onClickArt,
             onClickVideogames,

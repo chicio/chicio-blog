@@ -1,13 +1,28 @@
 ---
 name: Easter Eggs System
-description: Hidden Matrix-themed features triggered via search and special interactions
+description: Hidden Matrix-themed features (neo room, white rabbit, dejavu) plus the public /easter-egg-hunt page
 type: project
 ---
 
-Easter eggs in `src/components/sections/easter-eggs/`:
+Easter egg features live in `src/components/features/easter-eggs/` (NOT `sections/` — that path is stale):
 
-- **Neo Room** (`neo-room-easter-egg.tsx`): Matrix-themed terminal with "Knock, knock" button and sound effects. Uses MatrixTerminal animation component with typed text/quote sequences and configurable delays.
-- **White Rabbit** (`white-rabbit.tsx`): Hidden feature
-- **Dejavu** (`dejavu.tsx`): Hidden feature
+- **Neo Room** (`neo-room-easter-egg/`): Matrix-themed terminal with a knock button and sound effects, triggered by the command palette (search "101").
+- **White Rabbit**: triggered from the same command-palette flow.
+- **Dejavu** (`dejavu/`): `DejavuEasterEgg` is the `headerWrapper` injected into every standard content page's `BrandHeader` (wired inside `ContentPage`/`ReadingContentPage`, not per-page).
 
-Easter eggs can be triggered via search results — the search system has `EasterEggTerminalLines` type in `src/types/search/search.ts` that supports terminal animation sequences with text/quote types and delays.
+`MatrixTerminal` (`design-system/molecules/effects/matrix-terminal`) is the shared typed-terminal-line animation atom reused both by Neo Room and by the public `/easter-egg-hunt` page's intro sequence.
+
+## /easter-egg-hunt page (public hunt page, not a hidden easter egg itself)
+
+`src/components/content/easter-eggs/easter-eggs/` — lists cryptic hints for the hidden eggs with a per-card reveal toggle. As of 2026-07-17 it was refactored (PR #470 follow-up) from a bespoke `PageTemplate` + `GenericHeader` composition to the **standard `ContentPage`** feature wrapper (same family as `/art`, `/videogames`, `/cookie-policy`). Pattern reference for any future "use the standard template" migration:
+
+- `ContentPage` (`@/components/features/content/content-page`) requires `author` + `trackingCategory: string`; it wires nav/footer/palette tracking + `DejavuEasterEgg` headerWrapper internally — a page's own store must NOT also pass `navHrefs`/`footerNavHrefs`/`socialLinks`/`menuTracking` once it adopts `ContentPage`.
+- The page's own title/intro moves into the top of the `ContentPage` children as `<PageTitle>` (design-system molecule, renders an `h1`) + a plain `<p>` intro — this is the established pattern in `art-header.tsx`, `blog-tags.tsx`, `videogames-collection.tsx`. `ContentPage`'s `ContentContainer` centers everything automatically; do not add a competing width/alignment wrapper around the body.
+- `GenericHeader` (design-system organism) is still legitimately used elsewhere (`chat`, `clowns`) — do not delete it just because one page stops using it; check `grep -rl GenericHeader src/` first.
+- For a toggle-style CTA that visually matches the terminal "> label" nav-CTA look (used e.g. as the blog post-card "Read more" button) but must NOT navigate: use `TerminalButton` (`design-system/molecules/buttons/terminal-button`) in action mode (`onClick` + optional `ariaExpanded`, no `to`) — see [[design-system_terminal_button]]. `TerminalLink` was deleted 2026-07-18 in favor of this polymorphic component; do not recreate it.
+- Page title icons: `PageTitle` accepts `PropsWithChildren` (ReactNode, not just a string) — an `<Icon className="inline-block mr-3 align-middle" />` before the title text renders inline and inherits the heading's `currentColor`. This pattern was tried for the Easter Egg Hunt title (`SiCoderabbit`, react-icons/si) but **removed 2026-07-18** as a visual-polish tweak (PR #470 follow-up) — a plain-text H1 was preferred for the page title. `SiCoderabbit` is still kept in the command-palette entry (`easter-egg-hunt-item.tsx`); only the page-title usage was reverted. Don't re-add a title icon here without checking first.
+- `MatrixTerminal` (design-system/molecules/effects/matrix-terminal) gained an optional `widthClassName` prop (2026-07-18, default `"w-[95%] sm:w-[600px]"`) so a caller can override the terminal's width (e.g. `widthClassName="w-full"` on `/easter-egg-hunt` to match the egg cards below it) without touching the 404/neo-room/dejavu callers that rely on the default.
+- Test-file consequence: once a content component's own store no longer owns nav/footer/palette tracking, its RTL test can drop all the next/navigation, next/link, next/image, framer-motion, MotionDiv, matrix-rain-webgpu, command-palette-events, and motion-state `vi.mock`s that were only needed because `PageTemplate` rendered `Menu`/`Footer` directly — mock only `@/components/features/content/content-page` (`ContentPage: ({children}) => <div>{children}</div>`), matching the pattern already used in `blog-stats.test.tsx`/`blog-author.test.tsx`. Prefer `@/test-utils`'s `render`/`screen` re-export over importing RTL directly once the test no longer needs manual next.js mocks.
+- `easterEggHuntPageDescription` (`src/lib/content/easter-eggs/easter-eggs-content.ts`) is the single source feeding the on-page intro `<p>`, the page's `generateMetadata` SEO description (`src/app/easter-egg-hunt/page.tsx`), AND the synthetic search-index entry (`src/lib/content/indexable-content.ts`) — editing the constant and re-running the prebuild step (`npx tsx src/lib/build/prebuild.ts`, or `npm run dev`/`npm run build` which run it automatically) regenerates `public/search-index.json` in one shot; no other file needs a manual edit. As of 2026-07-18 it dropped "Matrix-themed" ("this Matrix-themed site" → "this site").
+- 2026-07-18 visual polish batch on `EggCard` (`src/components/content/easter-eggs/easter-eggs/egg-card/egg-card.tsx`): solution steps switched from `<ol className="list-decimal">` to `<ul className="list-disc">` (non-sequential steps read better unordered); the cryptic hint moved off the shared `QuoteText` atom (which is green/`text-accent`, shared with `MatrixTerminal` quote lines — do not restyle it) to a local `<p className="... text-primary-text ...">` so the hint reads white/neutral against the green terminal chrome.
+- `TerminalButton` (`design-system/molecules/buttons/terminal-button`) had a real bug: the `Button` atom applies `text-primary-text` (white) and neither the link-mode nor action-mode label `<span>` overrode it, so the "reveal/hide" CTA (and the shared post-card "Read more" / console-card "See more" that reuse this component) rendered white instead of Matrix green. Fixed 2026-07-18 by adding `text-accent` to both label spans — check this first if a future TerminalButton consumer looks off-color.

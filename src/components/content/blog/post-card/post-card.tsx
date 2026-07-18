@@ -6,7 +6,7 @@ import { FC } from "react";
 import { PostAuthors } from "@/components/content/blog/post-authors";
 import { PostMeta } from "@/components/content/blog/post-meta";
 import { PostTags } from "@/components/content/blog/post-tags";
-import { TerminalLink } from "@/components/design-system/molecules/links/terminal-link";
+import { TerminalButton } from "@/components/design-system/molecules/buttons/terminal-button";
 
 interface BigCardProps {
     big: boolean;
@@ -62,7 +62,7 @@ export const PostCard: FC<PostCardProps> = ({
                 <PostTags tags={tags} />
             )}
         </div>
-        <TerminalLink
+        <TerminalButton
             className="mt-auto mb-4 mx-5 align-self-start justify-self-start"
             to={slug}
             label="Read more"

@@ -1,7 +1,7 @@
 import { FC } from "react";
 import Image from "next/image";
 import { InternalLink } from "@/components/design-system/atoms/links/internal-link";
-import { TerminalLink } from "@/components/design-system/molecules/links/terminal-link";
+import { TerminalButton } from "@/components/design-system/molecules/buttons/terminal-button";
 import { ConsoleMetadata } from "@/types/content/videogames";
 import { Content } from "@/types/content/content";
 import { ConsoleTimeInformation } from "@/components/content/videogames/console-time-information";
@@ -66,7 +66,7 @@ export const ConsoleCard: FC<ConsoleCardProps> = ({ console, gamesCount }) => (
                 />
                 <p className="mb-4 pt-4">{console.frontmatter.description}</p>
             </InternalLink>
-            <TerminalLink
+            <TerminalButton
                 to={console.slug.formatted}
                 label="See more"
             />
