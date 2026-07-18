@@ -28,13 +28,13 @@ export const EggCard: FC<EggCardProps> = ({ hint, revealed, onToggle }) => {
                 className="mt-3"
             />
             {revealed && (
-                <ol className="mt-3 list-decimal pl-6">
+                <ul className="mt-3 list-disc pl-6">
                     {hint.solutionSteps.map((step) => (
                         <li key={step} className="mb-2">
                             <TerminalLine>{step}</TerminalLine>
                         </li>
                     ))}
-                </ol>
+                </ul>
             )}
         </div>
     );
