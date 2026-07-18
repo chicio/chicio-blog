@@ -51,6 +51,7 @@
 ## Features (continued 7)
 - [Terminal List Item](feature_terminal_list_item.md) — shared molecule (terminal "> title" + dim description), used by SearchResultItem and Read next
 - [Blog Comments update](feature_blog_comments.md) — BlogComments now legitimately owns a store (simulated TerminalProgressBar until giscus postMessage), mount-start chosen over useInView
+- [Terminal Button](design-system_terminal_button.md) — polymorphic link/action molecule replacing TerminalLink (2026-07-18); post-card/console-card/egg-card callers
 
 ## Feedback
 - [PWA & State Patterns](feedback_pwa_patterns.md) — useSyncExternalStore for localStorage state, consent-gated UI, banner/error page alignment rules
