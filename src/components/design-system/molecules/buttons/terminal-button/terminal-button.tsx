@@ -25,7 +25,7 @@ export const TerminalButton: FC<TerminalButtonProps> = ({ label, to, onClick, cl
         return (
             <Button className={buttonClassName}>
                 <InternalLink to={to} onClick={onClick} className="font-mono text-lg no-underline hover:no-underline">
-                    <span className="text-shadow-sm">
+                    <span className="text-shadow-sm text-accent">
                         <TerminalContent label={label} />
                     </span>
                 </InternalLink>
@@ -35,7 +35,7 @@ export const TerminalButton: FC<TerminalButtonProps> = ({ label, to, onClick, cl
 
     return (
         <Button onClick={onClick} aria-expanded={ariaExpanded} className={buttonClassName}>
-            <span className="font-mono text-lg text-shadow-sm">
+            <span className="font-mono text-lg text-shadow-sm text-accent">
                 <TerminalContent label={label} />
             </span>
         </Button>
