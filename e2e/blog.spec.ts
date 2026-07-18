@@ -41,7 +41,7 @@ test.describe("Blog section", () => {
 
         test("read next section links navigate to another post", async ({ page }) => {
             await page.goto("/blog/post/2026/06/01/app-js-conf-2026");
-            const readNext = page.getByRole("heading", { name: "Read next", level: 2 }).locator("..");
+            const readNext = page.getByRole("heading", { name: "read next", level: 2 }).locator("../..");
             await expect(readNext).toBeVisible();
             const firstReadNextPost = readNext.locator('a[href*="/blog/post/"]').first();
             await expect(firstReadNextPost).toBeVisible();

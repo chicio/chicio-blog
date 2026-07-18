@@ -24,10 +24,10 @@ const makePost = (slug: string, title: string, description: string): Content =>
 
 describe("RecentPosts", () => {
     describe("render", () => {
-        it("renders the Read next heading", () => {
+        it("renders the read next heading", () => {
             getReadNextPostsMock.mockReturnValue([makePost("post-one", "Post One", "Description one")]);
             render(<RecentPosts currentSlug="/blog/post/current" />);
-            expect(screen.getByRole("heading", { name: "Read next", level: 2 })).toBeInTheDocument();
+            expect(screen.getByRole("heading", { name: "read next", level: 2 })).toBeInTheDocument();
         });
 
         it("renders a terminal list item with title and description for each post", () => {
