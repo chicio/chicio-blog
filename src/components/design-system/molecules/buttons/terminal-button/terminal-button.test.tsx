@@ -27,6 +27,11 @@ describe("TerminalButton", () => {
             await userEvent.click(screen.getByRole("link"));
             expect(onClick).toHaveBeenCalledOnce();
         });
+
+        it("renders the label in the Matrix green accent color", () => {
+            render(<TerminalButton to="/about" label="About Me" />);
+            expect(screen.getByText(/About Me/)).toHaveClass("text-accent");
+        });
     });
 
     describe("action mode", () => {
@@ -45,6 +50,11 @@ describe("TerminalButton", () => {
         it("maps ariaExpanded to the aria-expanded attribute", () => {
             render(<TerminalButton label="hide" onClick={vi.fn()} ariaExpanded={true} />);
             expect(screen.getByRole("button", { name: /hide/ })).toHaveAttribute("aria-expanded", "true");
+        });
+
+        it("renders the label in the Matrix green accent color", () => {
+            render(<TerminalButton label="reveal" onClick={vi.fn()} />);
+            expect(screen.getByText(/reveal/)).toHaveClass("text-accent");
         });
     });
 });

@@ -39,6 +39,12 @@ describe("EasterEggs", () => {
                 expect(screen.getByText(line)).toBeInTheDocument();
             });
         });
+
+        it("does not render an icon in the page title", () => {
+            render(<EasterEggs />);
+            const heading = screen.getByRole("heading", { level: 1, name: new RegExp(easterEggHuntPageTitle) });
+            expect(heading.querySelector("svg")).not.toBeInTheDocument();
+        });
     });
 
     describe("egg cards", () => {
@@ -48,6 +54,14 @@ describe("EasterEggs", () => {
                 expect(screen.getByText(new RegExp(hint.title))).toBeInTheDocument();
                 expect(screen.getByText(hint.crypticHint)).toBeInTheDocument();
             });
+        });
+
+        it("renders the cryptic hint in white, not the green accent color", () => {
+            render(<EasterEggs />);
+            const [firstHint] = easterEggHints;
+            const hintElement = screen.getByText(firstHint.crypticHint);
+            expect(hintElement).toHaveClass("text-primary-text");
+            expect(hintElement).not.toHaveClass("text-accent");
         });
 
         it("does not show any solution steps before revealing", () => {
@@ -67,6 +81,17 @@ describe("EasterEggs", () => {
             firstHint.solutionSteps.forEach((step) => {
                 expect(screen.getByText(step)).toBeInTheDocument();
             });
+        });
+
+        it("renders the revealed solution steps as a bullet list, not a numbered list", () => {
+            render(<EasterEggs />);
+            const revealButtons = screen.getAllByRole("button", { name: /reveal/ });
+            fireEvent.click(revealButtons[0]);
+            const [firstHint] = easterEggHints;
+            const list = screen.getByText(firstHint.solutionSteps[0]).closest("ul");
+            expect(list).toBeInTheDocument();
+            expect(list?.tagName).toBe("UL");
+            expect(list).toHaveClass("list-disc");
         });
 
         it("hides the solution steps again when toggled a second time", () => {
