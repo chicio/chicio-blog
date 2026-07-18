@@ -30,3 +30,10 @@ interface TerminalButtonProps {
 
 If a future presentational terminal-styled CTA needs the same look, reach for `TerminalButton` first — do not
 hand-roll `Button` + `<span className="font-mono text-lg text-shadow-sm">{">"} {label}<Cursor/></span>` again.
+
+**Color bug fixed 2026-07-18**: the `Button` atom applies `text-primary-text` (white), and neither label span
+overrode it — so both modes rendered white instead of Matrix green. Both spans now also carry `text-accent`
+(link mode: `"text-shadow-sm text-accent"`; action mode: `"font-mono text-lg text-shadow-sm text-accent"`). This
+fixed the reveal/hide CTA and, since they share this component, `post-card`'s "Read more" and `console-card`'s
+"See more" too. If a future consumer needs a different color, override via the label span, not `className` (which
+targets the outer `Button`/`w-fit` wrapper, not the text span).
