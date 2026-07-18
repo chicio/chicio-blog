@@ -1,6 +1,7 @@
 "use client";
 
 import { FC } from "react";
+import { SiCoderabbit } from "react-icons/si";
 import { MatrixTerminal } from "@/components/design-system/molecules/effects/matrix-terminal";
 import { PageTitle } from "@/components/design-system/molecules/typography/page-title";
 import { ContentPage } from "@/components/features/content/content-page";
@@ -18,7 +19,10 @@ export const EasterEggs: FC = () => {
 
     return (
         <ContentPage author={siteMetadata.author} trackingCategory={tracking.category.easter_egg_hunt}>
-            <PageTitle>{`🐇 ${easterEggHuntPageTitle}`}</PageTitle>
+            <PageTitle>
+                <SiCoderabbit className="inline-block mr-3 align-middle" />
+                {easterEggHuntPageTitle}
+            </PageTitle>
             <p>{easterEggHuntPageDescription}</p>
             <MatrixTerminal lines={terminalLines} />
             <div className="mt-8 flex flex-col gap-4">
