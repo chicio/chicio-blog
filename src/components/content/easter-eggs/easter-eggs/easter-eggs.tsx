@@ -24,7 +24,9 @@ export const EasterEggs: FC = () => {
                 {easterEggHuntPageTitle}
             </PageTitle>
             <p>{easterEggHuntPageDescription}</p>
-            <MatrixTerminal lines={terminalLines} />
+            <div className="mt-8">
+                <MatrixTerminal lines={terminalLines} widthClassName="w-full" />
+            </div>
             <div className="mt-8 flex flex-col gap-4">
                 {hints.map((hint) => (
                     <EggCard

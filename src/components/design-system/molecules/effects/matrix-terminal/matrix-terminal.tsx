@@ -22,6 +22,7 @@ interface TerminalLineData {
 interface MatrixTerminalProps {
     lines: TerminalLineData[];
     onComplete?: () => void;
+    widthClassName?: string;
 }
 
 const renderLineContent = (text: string, type?: "normal" | "error" | "success" | "quote") => {
@@ -60,7 +61,11 @@ const renderLine = (
     );
 };
 
-export const MatrixTerminal: FC<MatrixTerminalProps> = ({ lines, onComplete }) => {
+export const MatrixTerminal: FC<MatrixTerminalProps> = ({
+    lines,
+    onComplete,
+    widthClassName = "w-[95%] sm:w-[600px]",
+}) => {
     const { state } = useMatrixTerminalStore(lines, onComplete);
     const { containerRef, completedLines, currentLine, currentText } = state;
     const { glassmorphismClass } = useGlassmorphism();
@@ -68,7 +73,7 @@ export const MatrixTerminal: FC<MatrixTerminalProps> = ({ lines, onComplete }) =
     return (
         <div ref={containerRef}>
             <MotionDiv
-                className={`${glassmorphismClass} w-[95%] sm:w-[600px] p-4 min-h-[150px] sm:min-h-[200px]`}
+                className={`${glassmorphismClass} ${widthClassName} p-4 min-h-[150px] sm:min-h-[200px]`}
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.2, ease: "easeOut" }}
