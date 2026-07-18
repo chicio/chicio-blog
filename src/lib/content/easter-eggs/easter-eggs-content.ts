@@ -8,7 +8,7 @@ export interface EasterEggHint {
 export const easterEggHuntPageTitle = "Easter Egg Hunt";
 
 export const easterEggHuntPageDescription =
-    "Hidden secrets are scattered across this Matrix-themed site. Follow the clues and trigger the easter eggs yourself.";
+    "Hidden secrets are scattered across this site. Follow the clues and trigger the easter eggs yourself.";
 
 export const easterEggHuntIntroLines: string[] = [
     "Wake up...",
