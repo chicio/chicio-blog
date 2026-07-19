@@ -1,5 +1,44 @@
 # Changelog
 
+## [3.21.0](https://github.com/chicio/chicio-blog/compare/v3.20.0...v3.21.0) (2026-07-19)
+
+### Features
+
+* **capabilities:** :robot: add agentic SDLC pipeline (Phase 1) ([#414](https://github.com/chicio/chicio-blog/issues/414)) ([a35db74](https://github.com/chicio/chicio-blog/commit/a35db747feae64329a0a79639ad3386f51d33d11))
+* **capabilities:** :sparkles: add blog stats page with charts ([#448](https://github.com/chicio/chicio-blog/issues/448)) ([43fa60e](https://github.com/chicio/chicio-blog/commit/43fa60efd3120fbbc220056566f09e39e3be7494))
+* **capabilities:** :sparkles: add Easter Egg Hunt page ([#470](https://github.com/chicio/chicio-blog/issues/470)) ([b7cba76](https://github.com/chicio/chicio-blog/commit/b7cba7630a02963e802e093ee299de9511e6ee3b))
+* **capabilities:** :sparkles: add fabrizioduroni-autopilot — the self-feeding loop ([#435](https://github.com/chicio/chicio-blog/issues/435)) ([1ce1e9b](https://github.com/chicio/chicio-blog/commit/1ce1e9bcafcea5e6ac535c31fbdacea06b716c08))
+* **capabilities:** :sparkles: add Italian draft translation workflow to writer agent ([cdc17dc](https://github.com/chicio/chicio-blog/commit/cdc17dce532e1f9a69a6c8d59defa8b3ebb823ad))
+* **capabilities:** :sparkles: fabrizioduroni-scout — self-feeding loop producer (coverage scanner) ([#425](https://github.com/chicio/chicio-blog/issues/425)) ([2b31db3](https://github.com/chicio/chicio-blog/commit/2b31db390103e2913265ce82031aae4a5b3c11cd))
+* **capabilities:** :sparkles: live GA analytics section on blog stats (stubbed) ([#451](https://github.com/chicio/chicio-blog/issues/451)) ([7c700df](https://github.com/chicio/chicio-blog/commit/7c700df9cb41af6d975d6b3ab8aec59e84f4716f)), closes [#449](https://github.com/chicio/chicio-blog/issues/449)
+* **capabilities:** :sparkles: merge pre-2022 Universal Analytics history into /blog/stats ([#452](https://github.com/chicio/chicio-blog/issues/452)) ([3a5d7f1](https://github.com/chicio/chicio-blog/commit/3a5d7f12220f4c381a7c4b79256e245e2c4a6440))
+* **capabilities:** :sparkles: Phase 2 — autonomous SDLC loop (issue-as-contract) ([#418](https://github.com/chicio/chicio-blog/issues/418)) ([afa8606](https://github.com/chicio/chicio-blog/commit/afa8606276e7a387e751a9ea18c2ec652e62332f))
+* **capabilities:** :sparkles: scout hygiene + a11y scanners (+ axe runtime harness) ([#426](https://github.com/chicio/chicio-blog/issues/426)) ([e5adefe](https://github.com/chicio/chicio-blog/commit/e5adefea0e72e8f14c386ae7109c108ce9b7fec3))
+* **capabilities:** :sparkles: wire CodeGraph into SDLC agents and skills ([#466](https://github.com/chicio/chicio-blog/issues/466)) ([743130d](https://github.com/chicio/chicio-blog/commit/743130dba235eca758d702cef1d63c1e040bdc35))
+* **content:** :rocket: changed author role ([b14ae4b](https://github.com/chicio/chicio-blog/commit/b14ae4b35a008bbbbded041c7e8a2a9414ba96e0))
+* **content:** :sparkles: 2D Grid DP ([#460](https://github.com/chicio/chicio-blog/issues/460)) ([58faabd](https://github.com/chicio/chicio-blog/commit/58faabdc0c395402962f252db59e6327def9f93e))
+* **ux:** :lipstick: redesign the blog stats page (card panels + terminal section headers) ([#453](https://github.com/chicio/chicio-blog/issues/453)) ([7334069](https://github.com/chicio/chicio-blog/commit/7334069cab65f85b25139eb25c08fd1fb86c2024))
+* **ux:** :sparkles: add comment system to blog posts (giscus + archived Disqus comments) ([#467](https://github.com/chicio/chicio-blog/issues/467)) ([0a8aacb](https://github.com/chicio/chicio-blog/commit/0a8aacb4e3ef854fbe3874c099c26a278f2fb642))
+* **ux:** :sparkles: add ProfileHero shell organism ([f346c5c](https://github.com/chicio/chicio-blog/commit/f346c5cf37266b5c129387cf3d2ea103ef3a2707))
+* **ux:** :sparkles: align DSA chart visualizers with blog-stats chart style ([#459](https://github.com/chicio/chicio-blog/issues/459)) ([3ef7f08](https://github.com/chicio/chicio-blog/commit/3ef7f083d8e5cda0179f6b9886341fd7bf4e0e78))
+* **ux:** :sparkles: author detail page uses ProfileHero box ([da9a91a](https://github.com/chicio/chicio-blog/commit/da9a91a53e6e15482c14c6cda9da0c8a0cc46882))
+* **ux:** :sparkles: authors index + per-author pages + Blog nav dropdown ([#421](https://github.com/chicio/chicio-blog/issues/421)) ([2a6a077](https://github.com/chicio/chicio-blog/commit/2a6a0775a75adabb887d96a85d8b05ee558a3cd7))
+* **ux:** :sparkles: catchier glass author cards with Chip post count ([597fb08](https://github.com/chicio/chicio-blog/commit/597fb08740ba74d4f03f0c98fc9d70a50f32fcb3))
+* **ux:** :sparkles: extract Chip atom from Tag pill ([4dbdc5e](https://github.com/chicio/chicio-blog/commit/4dbdc5e287337355ba314a1a35343bad5e2493b2))
+* **ux:** :sparkles: highlight Authors menu entry on author detail pages ([e104f73](https://github.com/chicio/chicio-blog/commit/e104f73308d60a68e5da425e7c216aaf83d2c401))
+* **ux:** :sparkles: per-author socials row (present fields only) ([c7e12bf](https://github.com/chicio/chicio-blog/commit/c7e12bfaaca77990638bc4dfb1fd122f3c6175fe))
+* **ux:** :sparkles: ProfilePhoto accepts an optional image src ([69deb4d](https://github.com/chicio/chicio-blog/commit/69deb4d7af5d6c4c3a99bf06aaf888e201de6564))
+* **ux:** :sparkles: show tag-related posts in Read next ([#415](https://github.com/chicio/chicio-blog/issues/415)) ([454674d](https://github.com/chicio/chicio-blog/commit/454674d0dca384990ea1b9f11eaf47408a0ae08f))
+* **ux:** ✨ add simulated loading progress bar to blog comments ([28c1769](https://github.com/chicio/chicio-blog/commit/28c176966765f1e9d99a571c83ddff5f37366d79))
+* **ux:** ✨ extract TerminalListItem design-system molecule ([029f242](https://github.com/chicio/chicio-blog/commit/029f2428986368985518f6393fdbafc117bcc6c3))
+* **ux:** 🎨 wrap read next in terminal-window chrome ([af6088f](https://github.com/chicio/chicio-blog/commit/af6088f6e894d7fe10e6a2e3b34e95f9f1cf7052))
+
+### Bug Fixes
+
+* **capabilities:** :bug: drainer reads-and-follows the orchestrator instead of invoking it ([#420](https://github.com/chicio/chicio-blog/issues/420)) ([6fe459e](https://github.com/chicio/chicio-blog/commit/6fe459e186cf23ae641f919eb1e1705636dc0cd6))
+* **capabilities:** :robot: pipeline tuning from Phase-1 validation ([#416](https://github.com/chicio/chicio-blog/issues/416)) ([c9beaf9](https://github.com/chicio/chicio-blog/commit/c9beaf91b026f6edc9cf3d81432b986d0bce48fa))
+* **ux:** :wheelchair: exclude the contact honeypot from the accessibility tree ([#439](https://github.com/chicio/chicio-blog/issues/439)) ([9eaca2f](https://github.com/chicio/chicio-blog/commit/9eaca2f8a205706b58ad2bd936e65f3b66e87e6a)), closes [#431](https://github.com/chicio/chicio-blog/issues/431)
+
 ## [3.20.0](https://github.com/chicio/chicio-blog/compare/v3.19.0...v3.20.0) (2026-06-28)
 
 ### Features
