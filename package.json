@@ -99,7 +99,7 @@
     "eslint-config-next": "16.2.9",
     "husky": "^9.1.7",
     "jsdom": "^29.1.1",
-    "knip": "^6.26.0",
+    "knip": "^6.27.0",
     "prettier": "^3.9.4",
     "prettier-plugin-tailwindcss": "^0.8.0",
     "release-it": "^20.2.0",
