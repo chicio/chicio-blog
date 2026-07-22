@@ -127,6 +127,18 @@ describe("Terminal", () => {
             expect(screen.getByText(/list directory contents/)).toBeInTheDocument();
         });
 
+        it("runs filesystem-independent commands immediately, before the manifest fetch resolves", async () => {
+            const user = userEvent.setup();
+            render(<Terminal />);
+            // Deliberately skip flushMicrotasks: the filesystem.json fetch is still pending here.
+
+            const input = screen.getByPlaceholderText("type a command_");
+            await user.type(input, "help{Enter}");
+
+            expect(screen.getByText(/list directory contents/)).toBeInTheDocument();
+            expect(screen.queryByText(/filesystem is still loading/)).not.toBeInTheDocument();
+        });
+
         it("clears the input after submitting", async () => {
             const user = userEvent.setup();
             render(<Terminal />);

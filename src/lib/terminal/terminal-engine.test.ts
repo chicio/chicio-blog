@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { execute, formatSearchResults, parse } from "./terminal-engine";
+import { execute, formatSearchResults, needsFilesystem, parse } from "./terminal-engine";
 import type { TerminalDirNode } from "@/types/terminal/terminal";
 import type { SearchablePostFields } from "@/types/search/search";
 
@@ -306,6 +306,26 @@ describe("terminal-engine", () => {
             const { lines, announcement } = formatSearchResults("nope", []);
             expect(lines[0].kind).toBe("error");
             expect(announcement).toBe("no results for nope");
+        });
+    });
+
+    describe("needsFilesystem", () => {
+        it.each(["", "help", "man", "pwd", "clear", "search"])(
+            "returns false for the filesystem-independent command %s",
+            (commandName) => {
+                expect(needsFilesystem(commandName)).toBe(false);
+            },
+        );
+
+        it.each(["ls", "cd", "tree", "cat", "open"])(
+            "returns true for the filesystem-dependent command %s",
+            (commandName) => {
+                expect(needsFilesystem(commandName)).toBe(true);
+            },
+        );
+
+        it("returns true for an unknown command, since it may still need the tree to report not-found", () => {
+            expect(needsFilesystem("sudo")).toBe(true);
         });
     });
 });

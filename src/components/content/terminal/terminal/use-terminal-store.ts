@@ -4,7 +4,7 @@ import { useSearch } from "@/components/design-system/hooks/use-search";
 import { searchIndexFileName } from "@/lib/content/search-filename";
 import { filesystemManifestFileName } from "@/lib/terminal/filesystem-filename";
 import { applyCompletion, completeInput } from "@/lib/terminal/terminal-completion";
-import { execute, formatSearchResults, parse } from "@/lib/terminal/terminal-engine";
+import { execute, formatSearchResults, needsFilesystem, parse } from "@/lib/terminal/terminal-engine";
 import { ROOT_PATH } from "@/lib/terminal/terminal-path";
 import { toScreenLines } from "@/lib/terminal/terminal-screen-lines";
 import type { TerminalScreenLine } from "@/lib/terminal/terminal-screen-lines";
@@ -33,6 +33,8 @@ interface TerminalEffects {
 }
 
 const noopEasterEgg = (): SearchResult | null => null;
+
+const EMPTY_ROOT: TerminalDirNode = { type: "dir", children: {} };
 
 const BOOT_LINES: TerminalScreenLine[] = [
     { id: "boot-0", text: "chicio://terminal v1.0 - Matrix shell interface", kind: "success" },
@@ -105,8 +107,9 @@ export const useTerminalStore = (): ComponentStore<TerminalState, TerminalEffect
             setHistoryIndex(null);
 
             const promptText = `${cwd} $ ${trimmed}`;
+            const command = parse(trimmed);
 
-            if (!root) {
+            if (!root && needsFilesystem(command.name)) {
                 setLines((prev) => [
                     ...prev,
                     { id: `line-${prev.length}`, text: promptText, kind: "prompt" },
@@ -120,8 +123,7 @@ export const useTerminalStore = (): ComponentStore<TerminalState, TerminalEffect
                 return;
             }
 
-            const command = parse(trimmed);
-            const result = execute(command, cwd, root);
+            const result = execute(command, cwd, root ?? EMPTY_ROOT);
 
             setLines((prev) => {
                 if (result.clearScreen) {

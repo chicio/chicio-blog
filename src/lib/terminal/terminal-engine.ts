@@ -9,6 +9,10 @@ export const parse = (input: string): TerminalCommand => {
     return { name, args };
 };
 
+const FS_INDEPENDENT_COMMANDS = new Set(["", "help", "man", "pwd", "clear", "search"]);
+
+export const needsFilesystem = (commandName: string): boolean => !FS_INDEPENDENT_COMMANDS.has(commandName);
+
 const listChildrenNames = (dirNode: TerminalDirNode): string[] =>
     Object.keys(dirNode.children)
         .sort()
