@@ -54,6 +54,9 @@
 - [Terminal Button](design-system_terminal_button.md) — polymorphic link/action molecule replacing TerminalLink (2026-07-18); post-card/console-card/egg-card callers
 - [Read Next Terminal Window](feature_read_next_terminal_window.md) — private client shell wraps read-next in command-palette-style terminal chrome; h2 base-layer override gotcha; e2e locator `../..`
 
+## Features (continued 8)
+- [Konami/Spoon Easter Eggs](arch_easter_eggs_konami_spoon.md) — global-listener eggs (Kung Fu, Spoon), pure lib matchers, vi.hoisted gotcha, framer-motion mock gotcha, nested-worktree knip false positives, build needs dummy secrets
+
 ## Feedback
 - [PWA & State Patterns](feedback_pwa_patterns.md) — useSyncExternalStore for localStorage state, consent-gated UI, banner/error page alignment rules
 - [Worktree git stash hazard](feedback_worktree_git_stash_hazard.md) — never `git stash` inside a pipeline worktree, refs/stash is shared across all worktrees

@@ -9,6 +9,7 @@ Easter egg features live in `src/components/features/easter-eggs/` (NOT `section
 - **Neo Room** (`neo-room-easter-egg/`): Matrix-themed terminal with a knock button and sound effects, triggered by the command palette (search "101").
 - **White Rabbit**: triggered from the same command-palette flow.
 - **Dejavu** (`dejavu/`): `DejavuEasterEgg` is the `headerWrapper` injected into every standard content page's `BrandHeader` (wired inside `ContentPage`/`ReadingContentPage`, not per-page).
+- **Kung Fu** (`kung-fu-easter-egg/`) and **Spoon** (`spoon-easter-egg/`), added 2026-07-22 (PR pending): two GLOBAL keydown-listener eggs, mounted directly in `LayoutAdditionalContent` (not per-page, not command-palette-triggered) alongside `CommandPalette`/`NeoRoomEasterEgg`/`MatrixRainControlPanel`, each via `dynamic(() => import(...).then((m) => m.X), { ssr: false })`. See `arch_easter_eggs_konami_spoon` for the full architecture (pure matcher modules, store phase machines, reduced-motion handling, test mocking gotchas).
 
 `MatrixTerminal` (`design-system/molecules/effects/matrix-terminal`) is the shared typed-terminal-line animation atom reused both by Neo Room and by the public `/easter-egg-hunt` page's intro sequence.
 
