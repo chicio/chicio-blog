@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { completeInput, COMMAND_NAMES } from "./terminal-completion";
+import { applyCompletion, completeInput, COMMAND_NAMES } from "./terminal-completion";
 import type { TerminalDirNode } from "@/types/terminal/terminal";
 
 const fixtureRoot: TerminalDirNode = {
@@ -53,6 +53,32 @@ describe("terminal-completion", () => {
 
         it("returns an empty array when completing a path under a non-existent directory", () => {
             expect(completeInput("cd nope/", "/", fixtureRoot)).toEqual([]);
+        });
+
+        it("returns no completions for a search query, since it is free text rather than a path", () => {
+            expect(completeInput("search rea", "/", fixtureRoot)).toEqual([]);
+        });
+
+        it("completes man's argument against command names, not paths", () => {
+            expect(completeInput("man c", "/", fixtureRoot)).toEqual(["cat", "cd", "clear"]);
+        });
+    });
+
+    describe("applyCompletion", () => {
+        it("appends a trailing space after completing the first (command) token", () => {
+            expect(applyCompletion("cl", "clear")).toBe("clear ");
+        });
+
+        it("keeps a directory completion without a trailing space so typing can continue inside it", () => {
+            expect(applyCompletion("cd bl", "blog/")).toBe("cd blog/");
+        });
+
+        it("adds a trailing space after completing a file (no further nesting possible)", () => {
+            expect(applyCompletion("cat bl/2024/hello", "bl/2024/hello-world")).toBe("cat bl/2024/hello-world ");
+        });
+
+        it("completes an empty trailing-space argument by appending after the existing tokens", () => {
+            expect(applyCompletion("ls ", "about-me")).toBe("ls about-me ");
         });
     });
 });

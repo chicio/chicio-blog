@@ -32,7 +32,27 @@ export const completeInput = (input: string, cwd: string, root: TerminalDirNode)
         return COMMAND_NAMES.filter((command) => command.startsWith(tokens[0]));
     }
 
+    const commandName = tokens[0];
     const partial = hasTrailingSpace ? "" : tokens[tokens.length - 1];
 
+    if (commandName === "search") {
+        return [];
+    }
+
+    if (commandName === "man") {
+        return COMMAND_NAMES.filter((command) => command.startsWith(partial)).sort();
+    }
+
     return completePathToken(partial, cwd, root);
+};
+
+export const applyCompletion = (input: string, completion: string): string => {
+    const hasTrailingSpace = /\s$/.test(input);
+    const tokens = input.trimStart().split(/\s+/).filter((token) => token.length > 0);
+    const isFirstToken = tokens.length === 0 || (tokens.length === 1 && !hasTrailingSpace);
+    const prefixTokens = hasTrailingSpace ? tokens : tokens.slice(0, -1);
+    const prefix = prefixTokens.length > 0 ? `${prefixTokens.join(" ")} ` : "";
+    const suffix = isFirstToken || !completion.endsWith("/") ? " " : "";
+
+    return `${prefix}${completion}${suffix}`;
 };
