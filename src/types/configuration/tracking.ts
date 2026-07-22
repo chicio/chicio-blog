@@ -70,6 +70,8 @@ export const tracking = {
     command_palette_matrix_rain_preset_selected: "command_palette_matrix_rain_preset_selected",
     command_palette_open_easter_egg_hunt: "command_palette_open_easter_egg_hunt",
     easter_egg_hunt_reveal_hint: "easter_egg_hunt_reveal_hint",
+    easter_egg_konami: "easter_egg_konami",
+    easter_egg_spoon: "easter_egg_spoon",
     open_matrix_rain_webgpu: "open_matrix_rain_webgpu",
     open_matrix_rain_webgpu_demo: "open_matrix_rain_webgpu_demo",
     open_matrix_rain_webgpu_github: "open_matrix_rain_webgpu_github",
