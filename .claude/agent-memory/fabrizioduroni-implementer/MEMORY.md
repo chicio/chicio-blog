@@ -54,6 +54,9 @@
 - [Terminal Button](design-system_terminal_button.md) — polymorphic link/action molecule replacing TerminalLink (2026-07-18); post-card/console-card/egg-card callers
 - [Read Next Terminal Window](feature_read_next_terminal_window.md) — private client shell wraps read-next in command-palette-style terminal chrome; h2 base-layer override gotcha; e2e locator `../..`
 
+## Features (continued 8)
+- [Terminal Navigation](feature_terminal_navigation.md) — /terminal Unix-shell route (2026-07-23); store-return-shape/refs-in-render/set-state-in-effect ESLint gotchas; needsFilesystem race fix; worktree node_modules→knip false positives
+
 ## Feedback
 - [PWA & State Patterns](feedback_pwa_patterns.md) — useSyncExternalStore for localStorage state, consent-gated UI, banner/error page alignment rules
 - [Worktree git stash hazard](feedback_worktree_git_stash_hazard.md) — never `git stash` inside a pipeline worktree, refs/stash is shared across all worktrees
