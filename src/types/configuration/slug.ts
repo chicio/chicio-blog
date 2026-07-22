@@ -17,6 +17,7 @@ export const slugs = {
   },
   art: "/art",
   chat: "/chat",
+  terminal: "/terminal",
   mcp: "/mcp",
   easterEggHunt: "/easter-egg-hunt",
   contact: "/contact",
