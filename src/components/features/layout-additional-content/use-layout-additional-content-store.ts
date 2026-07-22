@@ -23,6 +23,7 @@ interface LayoutAdditionalContentEffects {
     trackCommandPaletteToggleMotion: () => void;
     trackCommandPaletteCustomizeMatrixRain: () => void;
     trackCommandPaletteOpenEasterEggHunt: () => void;
+    trackCommandPaletteOpenTerminal: () => void;
 }
 
 export const useLayoutAdditionalContentStore = (): ComponentStore<
@@ -83,6 +84,14 @@ export const useLayoutAdditionalContentStore = (): ComponentStore<
         });
     }, []);
 
+    const trackCommandPaletteOpenTerminal = useCallback(() => {
+        trackWith({
+            category: tracking.category.command_palette,
+            label: tracking.label.body,
+            action: tracking.action.command_palette_open_terminal,
+        });
+    }, []);
+
     useEffect(() => {
         const replayQueue = async () => {
             while (!contactQueue.isEmpty()) {
@@ -132,6 +141,7 @@ export const useLayoutAdditionalContentStore = (): ComponentStore<
             trackCommandPaletteToggleMotion,
             trackCommandPaletteCustomizeMatrixRain,
             trackCommandPaletteOpenEasterEggHunt,
+            trackCommandPaletteOpenTerminal,
         },
     };
 };

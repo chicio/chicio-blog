@@ -12,6 +12,7 @@ import { ToggleMotionItem } from "@/components/design-system/organism/command-pa
 import { CustomizeMatrixRainItem } from "@/components/design-system/organism/command-palette/command-palette/customize-matrix-rain-item";
 import { SearchResultItem } from "@/components/design-system/organism/command-palette/command-palette/search-result-item";
 import { EasterEggHuntItem } from "@/components/design-system/organism/command-palette/command-palette/easter-egg-hunt-item";
+import { TerminalItem } from "@/components/design-system/organism/command-palette/command-palette/terminal-item";
 import { useCommandPaletteStore } from "./use-command-palette-store";
 
 const ITEM_CLASS =
@@ -28,12 +29,14 @@ interface CommandPaletteTrackingProps {
     onToggleMotion?: () => void;
     onCustomizeMatrixRain?: () => void;
     onOpenEasterEggHunt?: () => void;
+    onOpenTerminal?: () => void;
 }
 
 interface CommandPaletteProps {
     searchIndexFileName: string;
     chatSlug: string;
     easterEggHuntSlug: string;
+    terminalSlug: string;
     tracking?: CommandPaletteTrackingProps;
     searchEasterEgg?: (query: string) => SearchResult | null;
     SearchEasterEggComponent?: ComponentType<{ lines: EasterEggTerminalLines }>;
@@ -43,6 +46,7 @@ export const CommandPalette: FC<CommandPaletteProps> = ({
     searchIndexFileName,
     chatSlug,
     easterEggHuntSlug,
+    terminalSlug,
     tracking,
     searchEasterEgg,
     SearchEasterEggComponent,
@@ -52,6 +56,7 @@ export const CommandPalette: FC<CommandPaletteProps> = ({
         searchIndexFileName,
         chatSlug,
         easterEggHuntSlug,
+        terminalSlug,
         tracking,
         searchEasterEgg,
         SearchEasterEggComponent,
@@ -63,6 +68,7 @@ export const CommandPalette: FC<CommandPaletteProps> = ({
         handleSearchInput,
         handleOpenChat,
         handleOpenEasterEggHunt,
+        handleOpenTerminal,
         handleSearchResultSelect,
         setSelectedValue,
         onToggleMotion,
@@ -136,6 +142,7 @@ export const CommandPalette: FC<CommandPaletteProps> = ({
                                             </TerminalLine>
                                         </Command.Item>
                                         <EasterEggHuntItem onSelect={handleOpenEasterEggHunt} />
+                                        <TerminalItem onSelect={handleOpenTerminal} />
                                         <ToggleMotionItem onTrack={onToggleMotion} />
                                         <CustomizeMatrixRainItem onClose={handleCustomizeMatrixRainClose} />
                                     </Command.Group>

@@ -23,6 +23,7 @@ interface CommandPaletteEffects {
     handleSearchInput: (value: string) => void;
     handleOpenChat: () => void;
     handleOpenEasterEggHunt: () => void;
+    handleOpenTerminal: () => void;
     handleSearchResultSelect: (slug: string) => void;
     setSelectedValue: (value: string) => void;
     onToggleMotion?: () => void;
@@ -36,12 +37,14 @@ interface CommandPaletteTrackingCallbacks {
     onToggleMotion?: () => void;
     onCustomizeMatrixRain?: () => void;
     onOpenEasterEggHunt?: () => void;
+    onOpenTerminal?: () => void;
 }
 
 export const useCommandPaletteStore = (
     searchIndexFileName: string,
     chatSlug: string,
     easterEggHuntSlug: string,
+    terminalSlug: string,
     tracking?: CommandPaletteTrackingCallbacks,
     searchEasterEgg: (query: string) => SearchResult | null = noopEasterEgg,
     SearchEasterEggComponent?: ComponentType<{ lines: EasterEggTerminalLines }>,
@@ -125,6 +128,12 @@ export const useCommandPaletteStore = (
         close();
     }, [tracking, router, easterEggHuntSlug, close]);
 
+    const handleOpenTerminal = useCallback(() => {
+        tracking?.onOpenTerminal?.();
+        router.push(terminalSlug);
+        close();
+    }, [tracking, router, terminalSlug, close]);
+
     const handleSearchResultSelect = useCallback(
         (slug: string) => {
             tracking?.onSearchResultSelect?.();
@@ -150,6 +159,7 @@ export const useCommandPaletteStore = (
             handleSearchInput,
             handleOpenChat,
             handleOpenEasterEggHunt,
+            handleOpenTerminal,
             handleSearchResultSelect,
             setSelectedValue,
             onToggleMotion: tracking?.onToggleMotion,
