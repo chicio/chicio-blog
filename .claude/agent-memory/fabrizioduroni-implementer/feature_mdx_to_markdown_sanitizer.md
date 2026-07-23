@@ -75,6 +75,34 @@ route is `force-static`, never in the client bundle). `@types/mdast`, `@types/es
 -only imports). `remark-math` was ALREADY a direct dependency (used by the real MDX pipeline) — just imported into
 the sanitizer too, no package.json change needed for it.
 
+## Generic fallback replaced the hardcoded placeholder list (2026-07-23 polish, PR #480)
+
+`PLACEHOLDER_COMPONENT_NAMES` (a 19-name hardcoded `Set`) and its dedicated branch in `transformJsxElement`
+were DELETED. All 19 names were always used self-closing in real content, so the pre-existing generic
+fallback (unknown component → transform children → if children non-empty, unwrap; else, self-closing →
+`placeholderPhrase(name)`) already produced byte-identical output for them — the dedicated branch was
+fully redundant. Net rule is now just: 3 bespoke transforms (ImageCarousel, ParagraphTitleWithIcon,
+Youtube) → real markdown; anything else with non-empty transformed children → unwrap; anything else
+(self-closing/empty) → `_[interactive: <Name> — open the page]_`. New visualizer/interactive components
+added later need ZERO sanitizer code changes to degrade safely in `/markdown` and the terminal overlay.
+
+**Zero-regression proof pattern**: built the project twice (before/after the deletion), captured
+`.next/server/app/markdown/**/*.body` for 5 representative pages spanning every transform path (Batman
+game page → ImageCarousel, DSA `array`/`graph` topics → visualizer placeholders + InteractiveBlock
+unwrap, `about-me` → structural components like `Timeline`/`TechnologiesSkillsGrid`, a blog post with
+`<Youtube videoId=...>`), and diffed them — byte-identical in all five. This is the authoritative way to
+prove a sanitizer refactor is regression-free; unit tests alone wouldn't have caught a subtle real-content
+divergence since the test suite's MDX fixtures are hand-written, not extracted from actual content files.
+
+Test suite change: the `it.each` over all 19 names (asserting each one placeholders) was replaced with 3
+targeted tests under a renamed `"interactive component placeholder (generic fallback, no hardcoded name
+list)"` describe: a brand-new never-seen name (`SomeFutureVisualizer`) placeholders correctly (proves the
+fallback is truly generic, not a disguised allowlist), a real representative name (`TopicExercises`)
+still placeholders, and prop values stay out of the placeholder text. The existing "unknown component
+fallback" (`TotallyUnknownWidget`) and "structural wrapper unwrap" (`InteractiveBlock`,
+`SomeUnknownWrapper`) describe blocks already covered the has-children/no-children split and needed no
+changes.
+
 ## Verification pattern used
 
 Wrote small throwaway `.ts`/`.mjs` scripts run via `npx tsx` directly in the repo root (deleted immediately after)

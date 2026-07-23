@@ -126,6 +126,48 @@ router") per an approved grilling redesign. Branch `worktree-feat+terminal-navig
    worktree's own near-empty `node_modules/.bin` makes `knip` false-positive a pile of "unused
    dependency"/"unlisted binary" findings until `npm ci` is run inside the worktree.
 
+## Green phosphor image treatment (2026-07-23 polish, PR #480; corrected same day after live QA)
+
+**v1 (superseded, do not reintroduce)**: a `grayscale sepia hue-rotate-90 saturate-[4] brightness-90` CSS
+filter chain. Live QA (`fabrizioduroni-e2e-sentinel`) caught that this reads **olive/khaki, not green**, on
+warm-toned source images (e.g. Game Boy screenshots) — grayscale→sepia→hue-rotate tints *relative to each
+pixel's original hue*, so a warm source hue doesn't land on the same rotated hue as a neutral one. A
+plain filter chain is fundamentally hue-relative, not hue-independent; no amount of retuning the rotation
+angle fixes that for all source colors.
+
+**v2 (current)**: a true luminance→green **duotone** via an inline SVG `<filter id="terminal-phosphor">`:
+1. `feColorMatrix type="matrix"` collapses RGB to Rec.709 luminance in all three channels (rows
+   `0.2126 0.7152 0.0722 0 0` repeated for R/G/B, identity for alpha) — i.e. a real grayscale, not the CSS
+   `grayscale()` function.
+2. `feComponentTransfer` with `feFuncR/G/B type="table"` remaps that luminance ramp: shadow ≈ near-black
+   (`0.02 0.05 0.02`) at luminance 0, highlight = the site's actual `--color-accent` `#39FF14` normalized to
+   `0.224 1 0.078` at luminance 1. Every pixel, regardless of source hue, lands somewhere on that fixed
+   black→green ramp — this is what makes it hue-independent (fixes the v1 olive/khaki bug).
+
+Applied via Tailwind arbitrary property `[&_img]:[filter:url(#terminal-phosphor)]` (confirmed compiles to
+`.\[\&_img\]\:\[filter\:url\(\#terminal-phosphor\)\] img{filter:url(#terminal-phosphor)}` in the real
+build). The `<filter>` def itself is NOT inline in `TerminalContentBlock` (multiple content blocks can be
+on screen at once in scrollback, and duplicate SVG element `id`s are invalid) — it's mounted ONCE in
+`Terminal` (`terminal.tsx`), inside the dialog panel, as a `aria-hidden absolute h-0 w-0 overflow-hidden`
+`<svg>`, present whenever the overlay is open (before any content block can render). `alt` text and the
+border/glow treatment (`border-accent/40 border rounded shadow-[0_0_8px_var(--color-accent-alpha-25)]`)
+are unchanged from v1. Scoping via `[&_img]` (not a global rule) still means it can never leak onto
+real-page images.
+
+Test coverage: `terminal-content-block.test.tsx` asserts via `data-testid="terminal-content-phosphor-
+images"` on the wrapper (not `.closest("div")` — code review flagged that as fragile DOM-nesting coupling)
+that the filter class and border-accent are present and the image keeps its accessible name/alt.
+`terminal.test.tsx` asserts `container.querySelector("filter#terminal-phosphor")` exists once the overlay
+is open.
+
+**Tailwind v4 gotcha confirmed**: an isolated `@tailwindcss/cli` throwaway test harness (import the site's
+real `globals.css` + a scratch `--content` html file) produced a false negative for these exact classes —
+content auto-detection inside a project directory seems to override/ignore an explicit `--content` flag
+in a way that doesn't scan a newly added scratch file. Don't trust that pattern for verifying whether a
+class compiles; instead build the real project (`npm run build`) and grep the compiled
+`.next/static/chunks/*.css` for the literal escaped selector (e.g. `\.\[\&_img\]\:hue-rotate-90`). That
+DID confirm all rules generated correctly in the real build.
+
 ## Design decisions confirmed (from #480, still true)
 
 - `open`/`cat` support directories with a `route` too (not just leaf files).
