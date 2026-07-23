@@ -9,7 +9,7 @@ import type { StateStore } from "@/types/component-store";
 type SpoonEasterEggPhase = "idle" | "glitching" | "warping";
 
 const GLITCH_DURATION_MS = 400;
-const WARP_DURATION_MS = 1600;
+const WARP_DURATION_MS = 5600;
 
 interface SpoonEasterEggState {
     warping: boolean;

@@ -88,7 +88,7 @@ describe("SpoonEasterEgg", () => {
             expect(screen.getByTestId("spoon-matrix-rain")).toBeInTheDocument();
 
             await act(async () => {
-                vi.advanceTimersByTime(1600);
+                vi.advanceTimersByTime(5600);
             });
             expect(screen.queryByTestId("spoon-matrix-rain")).not.toBeInTheDocument();
             vi.useRealTimers();
