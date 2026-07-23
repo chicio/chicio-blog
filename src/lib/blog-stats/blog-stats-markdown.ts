@@ -1,17 +1,12 @@
 import { getBlogStats } from "@/lib/blog-stats/blog-stats";
-import { siteMetadata } from "@/types/configuration/site-metadata";
+import { markdownDocument } from "@/lib/mdx/markdown-document";
 import { slugs } from "@/types/configuration/slug";
+import { siteMetadata } from "@/types/configuration/site-metadata";
 
 export const blogStatsMarkdown = (): string => {
     const { headline, postsPerYear, tagDistribution, externalAuthorDistribution } = getBlogStats();
 
-    return `# Blog Stats — ${siteMetadata.title}
-
-A look at the numbers behind this blog: how much has been written, how it has grown over the years, and who has been writing.
-
-**URL:** ${siteMetadata.siteUrl}${slugs.blog.stats}
-
-## Headline numbers
+    const body = `## Headline numbers
 
 - Posts: ${headline.totalPosts}
 - Words: ${headline.totalWords}
@@ -32,4 +27,12 @@ ${tagDistribution.map((entry) => `- ${entry.tag}: ${entry.count} ${entry.count =
 
 ${externalAuthorDistribution.map((entry) => `- ${entry.author}: ${entry.count} ${entry.count === 1 ? "post" : "posts"}`).join("\n")}
 `;
+
+    return markdownDocument({
+        title: `Blog Stats — ${siteMetadata.title}`,
+        description:
+            "A look at the numbers behind this blog: how much has been written, how it has grown over the years, and who has been writing.",
+        slug: slugs.blog.stats,
+        body,
+    });
 };
