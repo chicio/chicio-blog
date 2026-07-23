@@ -1,6 +1,6 @@
 ---
 name: Konami/Spoon global-listener easter eggs architecture
-description: Pure-logic + store-phase-machine pattern for global keydown easter eggs, plus test mocking gotchas
+description: Pure-logic + store-phase-machine pattern for global keydown easter eggs, the unified tap-hotspot trigger added to kung-fu, and test mocking/lint gotchas
 type: project
 ---
 
@@ -47,8 +47,10 @@ bringing the hunt page to 4 eggs. See [[feature_easter_eggs]] for where these mo
   `delay`s hand-tuned (200ms first + 600ms each of 8 + 800ms last = 5800ms delay budget) plus the typewriter's
   fixed 50ms/char typing speed (184 total chars = 9200ms) to land at ~15000ms total, matching the extracted
   audio's actual 15.21s duration (verified via `ffprobe` before tuning).
-- Two new `tracking.action.*` keys: `easter_egg_konami`, `easter_egg_spoon`. Labels use the hint ids
-  (`i_know_kung_fu`, `there_is_no_spoon`) under the existing `tracking.category.easter_egg_hunt`.
+- Two new `tracking.action.*` keys: `easter_egg_kung_fu` (renamed from `easter_egg_konami` 2026-07-23 once a
+  second, non-keyboard trigger was added — the action represents the egg, not one input method), and
+  `easter_egg_spoon`. Labels use the hint ids (`i_know_kung_fu`, `there_is_no_spoon`) under the existing
+  `tracking.category.easter_egg_hunt`.
 - The hunt page's existing tests (`easter-eggs.test.tsx`, `easter-egg-hunt-markdown.test.ts`,
   `indexable-content.test.ts`) are all fully data-driven (`.forEach` over `easterEggHints`/
   `easterEggHuntIntroLines`) — adding 2 hints and changing the intro count text needed ZERO test edits, they
@@ -87,6 +89,41 @@ A from-scratch worktree has NO `.env*` files. `npm run build` fails collecting `
 Upstash/Groq keys) set. Inject dummy values as inline env vars for a local build-gate check
 (`RESEND_API_KEY=... UPSTASH_VECTOR_REST_URL=... UPSTASH_VECTOR_REST_TOKEN=... UPSTASH_REDIS_REST_URL=...
 UPSTASH_REDIS_REST_TOKEN=... GROQ_API_KEY=... npm run build`) — CI injects the real secrets per CLAUDE.md.
+
+## Round 2 (2026-07-23): unified mobile trigger, same egg/component/store
+
+Added a SECOND trigger to the SAME `kung-fu-easter-egg/` component + store (no new egg folder, per explicit
+instruction: one egg = one component/store even when it gains a trigger). Key decisions:
+
+- The component now ALWAYS renders an invisible `aria-hidden` `h-11 w-11` (44px, exact Tailwind spacing-scale
+  match, no arbitrary value needed) `fixed bottom-0 right-0` hotspot `<div onClick={registerTap}>`, alongside
+  the conditionally-rendered `Overlay`. Previously the component returned `null` when inactive — that had to
+  change since the hotspot must be mounted on every route regardless of activation state. Gave it
+  `data-testid="kung-fu-tap-hotspot"` purely for test querying (aria-hidden elements aren't reachable via
+  `getByRole`, so tests must use `getByTestId`).
+- Single-fire guard across BOTH triggers: extracted a shared `activate()` callback (guarded by `if (active)
+  return` read from the closure, matching the existing dismiss/handleKeyDown convention rather than a
+  functional `setState` updater) that both the Konami `matchesKonamiSequence` branch and the tap-threshold
+  branch call. This guarantees `trackWith` + `new Audio(...).play()` + `setActive(true)` fire exactly once
+  regardless of which trigger completes first, and a second trigger while active is a no-op.
+- **Do NOT put the "reached N taps" check in a `useEffect` keyed on a tap-count `useState`.** The React
+  Compiler ESLint rule `react-hooks/set-state-in-effect` fires on any synchronous `setState` call in an
+  effect body (it does NOT fire on `setState` calls inside a `setTimeout` callback, nor inside a DOM event
+  handler like the Konami `handleKeyDown` — only on synchronous-in-effect-body calls). First attempt used
+  `const [tapCount, setTapCount] = useState(0)` + a `useEffect` that synchronously called `setTapCount(0)`
+  when the threshold was reached — this failed lint. Fixed by moving the ENTIRE counting/threshold/reset-timer
+  logic into `registerTap` itself (the click-handler callback), using `useRef` for both the counter
+  (`tapCountRef`) and the pending reset timeout handle (`tapResetTimeoutRef`) — no `useEffect` needed for tap
+  counting at all, since nothing about tap count needs to be rendered. A separate cleanup-only `useEffect`
+  (empty deps) just clears any pending reset timeout on unmount. This is the general fix for
+  `set-state-in-effect`: when a piece of derived state is used only to gate a side effect and never rendered,
+  do the whole computation in the ref-backed event handler instead of routing it through a `useState`+effect
+  round trip.
+- Discoverability hint copy for `i_know_kung_fu` extended (dash-free) to describe the corner-tap alternative
+  for mobile without removing the Konami description — both live in the same `crypticHint`/`solutionSteps`.
+- Existing kung-fu tests: renamed the tracking-action assertion to `easter_egg_kung_fu`, and the "renders
+  nothing before Konami" test had to change to "renders the hidden hotspot but no overlay" since the component
+  no longer returns `null` when inactive.
 
 ## Pre-existing unrelated drift noticed (not fixed)
 
