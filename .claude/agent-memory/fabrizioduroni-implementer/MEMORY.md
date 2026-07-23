@@ -56,6 +56,7 @@
 
 ## Features (continued 8)
 - [Terminal Navigation](feature_terminal_navigation.md) — global full-screen overlay (evolved from windowed /terminal, 2026-07-23); open/cat in-shell render+popstate mirroring; AppRootBoundary inert; set-state-in-effect/KeyboardEvent-collision gotchas
+- [mdxToMarkdown Sanitizer](feature_mdx_to_markdown_sanitizer.md) — pure lib/ MDX→markdown AST sanitizer wired into 7 /markdown generators; remark-math-before-remark-mdx ordering gotcha; flow-vs-text JSX classification rules
 
 ## Feedback
 - [PWA & State Patterns](feedback_pwa_patterns.md) — useSyncExternalStore for localStorage state, consent-gated UI, banner/error page alignment rules
