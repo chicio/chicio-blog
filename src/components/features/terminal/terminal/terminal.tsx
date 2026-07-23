@@ -36,6 +36,24 @@ export const Terminal: FC = () => {
                 className="fixed inset-0 flex flex-col sm:inset-4"
             >
                 <div className={`${glassmorphismClass} flex h-full flex-1 flex-col overflow-hidden`}>
+                    <svg aria-hidden="true" focusable="false" className="absolute h-0 w-0 overflow-hidden">
+                        <defs>
+                            <filter id="terminal-phosphor" colorInterpolationFilters="sRGB">
+                                <feColorMatrix
+                                    type="matrix"
+                                    values="0.2126 0.7152 0.0722 0 0
+                                            0.2126 0.7152 0.0722 0 0
+                                            0.2126 0.7152 0.0722 0 0
+                                            0      0      0      1 0"
+                                />
+                                <feComponentTransfer>
+                                    <feFuncR type="table" tableValues="0.02 0.224" />
+                                    <feFuncG type="table" tableValues="0.05 1" />
+                                    <feFuncB type="table" tableValues="0.02 0.078" />
+                                </feComponentTransfer>
+                            </filter>
+                        </defs>
+                    </svg>
                     <TerminalScrollback lines={lines} setScrollAnchorElement={setScrollAnchorElement} />
                     <TerminalPrompt
                         cwd={cwd}

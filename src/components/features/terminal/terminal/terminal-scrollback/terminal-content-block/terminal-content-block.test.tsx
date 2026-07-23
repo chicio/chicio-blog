@@ -33,7 +33,7 @@ describe("TerminalContentBlock", () => {
             expect(screen.getByRole("heading", { level: 1, name: "Hello" })).toBeInTheDocument();
         });
 
-        it("applies the green phosphor treatment to images without dropping their alt text", () => {
+        it("applies the green phosphor duotone filter to images without dropping their alt text", () => {
             render(
                 <TerminalContentBlock
                     id="1"
@@ -48,12 +48,11 @@ describe("TerminalContentBlock", () => {
 
             expect(image).toBeInTheDocument();
 
-            const phosphorContainer = image.closest("div");
+            const phosphorContainer = screen.getByTestId("terminal-content-phosphor-images");
 
-            expect(phosphorContainer?.className).toContain("[&_img]:grayscale");
-            expect(phosphorContainer?.className).toContain("[&_img]:sepia");
-            expect(phosphorContainer?.className).toContain("[&_img]:hue-rotate-90");
-            expect(phosphorContainer?.className).toContain("[&_img]:border-accent/40");
+            expect(phosphorContainer).toContainElement(image);
+            expect(phosphorContainer.className).toContain("[&_img]:[filter:url(#terminal-phosphor)]");
+            expect(phosphorContainer.className).toContain("[&_img]:border-accent/40");
         });
     });
 });

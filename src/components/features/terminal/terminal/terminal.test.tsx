@@ -142,6 +142,13 @@ describe("Terminal", () => {
             expect(dialog).toHaveAttribute("aria-modal", "true");
         });
 
+        it("mounts the green phosphor duotone SVG filter used by in-shell images", async () => {
+            const { container } = render(<Terminal />);
+            await openOverlay();
+
+            expect(container.querySelector("filter#terminal-phosphor")).toBeInTheDocument();
+        });
+
         it("restores focus to the element that triggered the open event on close", async () => {
             render(
                 <>
