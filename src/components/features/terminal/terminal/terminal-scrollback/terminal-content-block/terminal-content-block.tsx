@@ -32,7 +32,7 @@ export const TerminalContentBlock: FC<TerminalContentBlockProps> = ({ route, tit
         )}
 
         {status === "success" && markdown && (
-            <div className="text-primary-text/90 [&_h1]:text-lg [&_h2]:text-base [&_h3]:text-sm [&_p]:my-2 [&_p]:text-xs [&_p]:sm:text-sm [&_ul]:my-2 text-xs leading-relaxed sm:text-sm">
+            <div className="text-primary-text/90 [&_h1]:text-lg [&_h2]:text-base [&_h3]:text-sm [&_p]:my-2 [&_p]:text-xs [&_p]:sm:text-sm [&_ul]:my-2 [&_img]:border-accent/40 [&_img]:grayscale [&_img]:sepia [&_img]:hue-rotate-90 [&_img]:saturate-[4] [&_img]:brightness-90 [&_img]:rounded [&_img]:border [&_img]:shadow-[0_0_8px_var(--color-accent-alpha-25)] text-xs leading-relaxed sm:text-sm">
                 <Markdown content={markdown} id={`terminal-content-${route}`} />
             </div>
         )}
