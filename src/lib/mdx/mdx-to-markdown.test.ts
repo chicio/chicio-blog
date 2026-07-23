@@ -144,33 +144,21 @@ Some prose after the heading.
         });
     });
 
-    describe("interactive component placeholder", () => {
-        it.each([
-            "DynamicArrayVisualizer",
-            "BacktrackingVisualizer",
-            "KadaneVisualizer",
-            "GraphPropertiesVisualizer",
-            "StringVisualization",
-            "StackVisualizer",
-            "BitwiseVisualizer",
-            "RecursiveCallStackVisualizer",
-            "TreeTypesVisualizer",
-            "MatrixTerminal",
-            "FrequencyMapChart",
-            "TechnologiesSkillsGrid",
-            "Projects",
-            "Timeline",
-            "Topics",
-            "TopicExercises",
-            "ExercisesList",
-            "CourseNavigation",
-            "McpEndpoint",
-        ])("replaces <%s /> with an 'open the page' placeholder", (componentName) => {
-            const mdx = `<${componentName} />`;
+    describe("interactive component placeholder (generic fallback, no hardcoded name list)", () => {
+        it("replaces a brand-new, never-seen-before self-closing component with an 'open the page' placeholder", () => {
+            const mdx = `<SomeFutureVisualizer />`;
             const result = mdxToMarkdown(mdx);
 
-            expect(result).toContain(`[interactive: ${componentName} — open the page]`);
-            expect(result).not.toContain(`<${componentName}`);
+            expect(result).toContain("[interactive: SomeFutureVisualizer — open the page]");
+            expect(result).not.toContain("<SomeFutureVisualizer");
+        });
+
+        it("replaces a representative real self-closing component (TopicExercises) the same way", () => {
+            const mdx = `<TopicExercises />`;
+            const result = mdxToMarkdown(mdx);
+
+            expect(result).toContain("[interactive: TopicExercises — open the page]");
+            expect(result).not.toContain("<TopicExercises");
         });
 
         it("keeps prop values out of the placeholder (real DSA topic shape)", () => {

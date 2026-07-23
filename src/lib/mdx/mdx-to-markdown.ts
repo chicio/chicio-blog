@@ -11,28 +11,6 @@ import type { Expression } from "estree-jsx";
 type MdxJsxElement = MdxJsxFlowElement | MdxJsxTextElement;
 type AnyContent = RootContent | PhrasingContent;
 
-const PLACEHOLDER_COMPONENT_NAMES = new Set([
-    "DynamicArrayVisualizer",
-    "BacktrackingVisualizer",
-    "KadaneVisualizer",
-    "GraphPropertiesVisualizer",
-    "StringVisualization",
-    "StackVisualizer",
-    "BitwiseVisualizer",
-    "RecursiveCallStackVisualizer",
-    "TreeTypesVisualizer",
-    "MatrixTerminal",
-    "FrequencyMapChart",
-    "TechnologiesSkillsGrid",
-    "Projects",
-    "Timeline",
-    "Topics",
-    "TopicExercises",
-    "ExercisesList",
-    "CourseNavigation",
-    "McpEndpoint",
-]);
-
 const textNode = (value: string): Text => ({ type: "text", value });
 
 const emphasisNode = (value: string): Emphasis => ({ type: "emphasis", children: [textNode(value)] });
@@ -161,9 +139,6 @@ const transformJsxElement = (node: MdxJsxElement): AnyContent[] => {
     }
     if (name === "Youtube") {
         return transformYoutube(node);
-    }
-    if (name !== null && PLACEHOLDER_COMPONENT_NAMES.has(name)) {
-        return wrapForContext(node, [placeholderPhrase(name)]);
     }
 
     const transformedChildren = transformList(node.children as AnyContent[]);
