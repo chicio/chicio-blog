@@ -139,6 +139,21 @@ test.describe("Terminal overlay", () => {
         await expect(terminalInput(page)).toBeFocused();
     });
 
+    test("closing the boot link overlay without navigating reveals the real homepage, not the boot stub", async ({
+        page,
+    }) => {
+        await page.goto("/terminal");
+        await expect(page).toHaveURL("/");
+        await expect(page.getByRole("dialog", { name: "Terminal" })).toBeVisible();
+
+        await page.keyboard.press("Escape");
+
+        await expect(page.getByRole("dialog", { name: "Terminal" })).toBeHidden();
+        await expect(page).toHaveURL("/");
+        await expect(page.getByText(/Booting the terminal/i)).toHaveCount(0);
+        await expect(page.getByRole("heading", { name: "Fabrizio Duroni", level: 1 })).toBeVisible();
+    });
+
     test("exposes the expected accessibility landmarks", async ({ page }) => {
         await page.goto("/");
         await acceptConsent(page);
@@ -146,7 +161,7 @@ test.describe("Terminal overlay", () => {
 
         const dialog = page.getByRole("dialog", { name: "Terminal" });
         await expect(dialog).toHaveAttribute("aria-modal", "true");
-        await expect(page.getByLabel(/\$/)).toBeVisible();
+        await expect(page.getByLabel("Terminal input")).toBeVisible();
         await expect(dialog.locator('[aria-live="polite"]')).toHaveCount(1);
     });
 });

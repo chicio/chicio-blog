@@ -46,6 +46,7 @@ export const TerminalPrompt: FC<TerminalPromptProps> = ({
                 value={input}
                 onChange={handleInputChange}
                 onKeyDown={handleKeyDown}
+                aria-label="Terminal input"
                 className="text-accent placeholder:text-accent/40 caret-accent flex-1 bg-transparent font-mono text-sm outline-none"
                 placeholder="type a command_"
                 autoComplete="off"

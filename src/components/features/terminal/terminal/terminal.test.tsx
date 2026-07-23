@@ -6,9 +6,12 @@ import { terminalOverlayOpenEvent } from "@/components/design-system/state/termi
 import { registerAppRootElement } from "@/lib/terminal/terminal-overlay-dom";
 import { Terminal } from "./terminal";
 
-const { mockRouterPush } = vi.hoisted(() => ({ mockRouterPush: vi.fn() }));
+const { mockRouterPush, mockRouterReplace } = vi.hoisted(() => ({
+    mockRouterPush: vi.fn(),
+    mockRouterReplace: vi.fn(),
+}));
 
-vi.mock("next/navigation", () => makeNextNavigationMock({ push: mockRouterPush })());
+vi.mock("next/navigation", () => makeNextNavigationMock({ push: mockRouterPush, replace: mockRouterReplace })());
 vi.mock("next/link", () => nextLinkMock());
 vi.mock("next/image", () => nextImageMock());
 vi.mock("@/components/design-system/atoms/animation/motion-div", () => motionDivMock());
@@ -83,6 +86,7 @@ describe("Terminal", () => {
     beforeEach(() => {
         Element.prototype.scrollIntoView = vi.fn();
         mockRouterPush.mockClear();
+        mockRouterReplace.mockClear();
         searchResultsMock.mockClear();
         searchGetDocMock.mockClear();
         registerAppRootElement(null);
@@ -207,13 +211,13 @@ describe("Terminal", () => {
     });
 
     describe("the boot link (fresh load of /terminal)", () => {
-        it("replaces the URL with / and opens itself", async () => {
+        it("replaces the route with / (via router.replace, so the homepage actually mounts) and opens itself", async () => {
             window.history.pushState(null, "", "/terminal");
 
             render(<Terminal />);
             await flushMicrotasks();
 
-            expect(window.location.pathname).toBe("/");
+            expect(mockRouterReplace).toHaveBeenCalledWith("/");
             expect(screen.getByPlaceholderText("type a command_")).toBeInTheDocument();
         });
     });

@@ -107,9 +107,12 @@ export const useTerminalStore = (): ComponentStore<TerminalState, TerminalEffect
 
     useEffect(() => {
         if (isBootLink) {
-            window.history.replaceState(null, "", "/");
+            // router.replace (not raw window.history.replaceState) so the App Router actually
+            // mounts the homepage route tree underneath the overlay — a history/location-only
+            // update would leave /terminal's own "booting" page stranded once the overlay closes.
+            router.replace("/");
         }
-    }, [isBootLink]);
+    }, [isBootLink, router]);
 
     useEffect(() => {
         const handleOpenEvent = () => {
