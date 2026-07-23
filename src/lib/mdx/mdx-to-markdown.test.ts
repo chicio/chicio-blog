@@ -291,5 +291,24 @@ Prose after.
             expect(result).not.toContain("someExpression");
             expect(result).toContain("Prose after.");
         });
+
+        it("does not choke on LaTeX braces inside a math block (real reflection-vector post shape)", () => {
+            const mdx = `Some prose before.
+
+$$
+{\\hat {R}} \\cdot {\\hat {N}} = {\\hat {L}} \\cdot {\\hat {N}}
+$$
+
+Some prose after.
+`;
+
+            expect(() => mdxToMarkdown(mdx)).not.toThrow();
+
+            const result = mdxToMarkdown(mdx);
+
+            expect(result).toContain("Some prose before.");
+            expect(result).toContain("Some prose after.");
+            expect(result).toContain("{\\hat {R}} \\cdot {\\hat {N}} = {\\hat {L}} \\cdot {\\hat {N}}");
+        });
     });
 });

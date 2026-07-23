@@ -1,5 +1,6 @@
 import { unified } from "unified";
 import remarkParse from "remark-parse";
+import remarkMath from "remark-math";
 import remarkMdx from "remark-mdx";
 import remarkStringify from "remark-stringify";
 import { toString as mdastToString } from "mdast-util-to-string";
@@ -202,7 +203,14 @@ function transformList(nodes: AnyContent[]): AnyContent[] {
     return nodes.flatMap(transformOne);
 }
 
-const processor = unified().use(remarkParse).use(remarkMdx).use(remarkStringify, { bullet: "-", fences: true });
+// remark-math must be registered before remark-mdx: it needs to claim `$...$`/`$$...$$` (and any
+// LaTeX braces inside them) as math syntax before MDX's expression tokenizer gets a chance to try
+// (and fail) to parse those braces as JavaScript.
+const processor = unified()
+    .use(remarkParse)
+    .use(remarkMath)
+    .use(remarkMdx)
+    .use(remarkStringify, { bullet: "-", fences: true });
 
 export const mdxToMarkdown = (mdx: string): string => {
     const tree = processor.parse(mdx) as Root;
