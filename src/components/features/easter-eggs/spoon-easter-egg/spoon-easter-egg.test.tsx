@@ -35,8 +35,8 @@ vi.mock("framer-motion", () => ({
 
 vi.mock("@/lib/tracking/tracking", () => ({ trackWith: vi.fn() }));
 
-vi.mock("@/components/design-system/atoms/effects/matrix-rain/matrix-rain", () => ({
-    MatrixRain: () => <div data-testid="matrix-rain" />,
+vi.mock("./spoon-matrix-rain", () => ({
+    SpoonMatrixRain: () => <div data-testid="spoon-matrix-rain" />,
 }));
 
 const typeSpoonPhrase = (target: Document | HTMLElement = document) => {
@@ -55,7 +55,7 @@ describe("SpoonEasterEgg", () => {
     describe("before the phrase is typed", () => {
         it("renders nothing", () => {
             render(<SpoonEasterEgg />);
-            expect(screen.queryByTestId("matrix-rain")).not.toBeInTheDocument();
+            expect(screen.queryByTestId("spoon-matrix-rain")).not.toBeInTheDocument();
         });
     });
 
@@ -66,14 +66,14 @@ describe("SpoonEasterEgg", () => {
 
             typeSpoonPhrase();
             expect(document.body.classList.contains("glitch-active")).toBe(true);
-            expect(screen.queryByTestId("matrix-rain")).not.toBeInTheDocument();
+            expect(screen.queryByTestId("spoon-matrix-rain")).not.toBeInTheDocument();
 
             await act(async () => {
                 vi.advanceTimersByTime(400);
             });
 
             expect(document.body.classList.contains("glitch-active")).toBe(false);
-            expect(screen.getByTestId("matrix-rain")).toBeInTheDocument();
+            expect(screen.getByTestId("spoon-matrix-rain")).toBeInTheDocument();
             vi.useRealTimers();
         });
 
@@ -85,12 +85,12 @@ describe("SpoonEasterEgg", () => {
             await act(async () => {
                 vi.advanceTimersByTime(400);
             });
-            expect(screen.getByTestId("matrix-rain")).toBeInTheDocument();
+            expect(screen.getByTestId("spoon-matrix-rain")).toBeInTheDocument();
 
             await act(async () => {
                 vi.advanceTimersByTime(1600);
             });
-            expect(screen.queryByTestId("matrix-rain")).not.toBeInTheDocument();
+            expect(screen.queryByTestId("spoon-matrix-rain")).not.toBeInTheDocument();
             vi.useRealTimers();
         });
 
@@ -138,7 +138,7 @@ describe("SpoonEasterEgg", () => {
 
             typeSpoonPhrase();
             expect(document.body.classList.contains("glitch-active")).toBe(false);
-            expect(screen.getByTestId("matrix-rain")).toBeInTheDocument();
+            expect(screen.getByTestId("spoon-matrix-rain")).toBeInTheDocument();
             vi.useRealTimers();
         });
 
@@ -147,7 +147,7 @@ describe("SpoonEasterEgg", () => {
             render(<SpoonEasterEgg />);
             typeSpoonPhrase();
             expect(trackWith).toHaveBeenCalledTimes(1);
-            expect(screen.getByTestId("matrix-rain")).toBeInTheDocument();
+            expect(screen.getByTestId("spoon-matrix-rain")).toBeInTheDocument();
         });
     });
 });
