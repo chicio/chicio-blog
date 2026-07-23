@@ -184,3 +184,53 @@ test.describe("Terminal overlay", () => {
         await expect(dialog.locator('[aria-live="polite"]')).toHaveCount(1);
     });
 });
+
+test.describe("Terminal overlay content coverage", () => {
+    const openAndAssertHeading = async (page: Page, command: string, urlPattern: RegExp, headingName: string) => {
+        await page.goto("/");
+        await acceptConsent(page);
+        await openTerminalOverlay(page);
+
+        await expect(async () => {
+            await terminalInput(page).fill(command);
+            await page.keyboard.press("Enter");
+            await expect(page).toHaveURL(urlPattern, { timeout: 2000 });
+        }).toPass({ timeout: 15000 });
+
+        const dialog = page.getByRole("dialog", { name: "Terminal" });
+        await expect(dialog.getByRole("heading", { name: headingName, level: 1 })).toBeVisible();
+    };
+
+    test("open art renders the art gallery in-shell", async ({ page }) => {
+        await openAndAssertHeading(page, "open art", /\/art/, "Art");
+    });
+
+    test("open contact renders the contact page in-shell", async ({ page }) => {
+        // The in-shell heading comes from contactMarkdown()'s own title ("Contact"), not the real
+        // page's "Contact Me" H1 (which lives on the real route mounted underneath the overlay).
+        await openAndAssertHeading(page, "open contact", /\/contact/, "Contact");
+    });
+
+    test("open mcp renders the mcp page in-shell", async ({ page }) => {
+        await openAndAssertHeading(page, "open mcp", /\/mcp/, "MCP fabrizioduroni.it");
+    });
+
+    test("open cookie-policy renders the cookie policy page in-shell", async ({ page }) => {
+        await openAndAssertHeading(page, "open cookie-policy", /\/cookie-policy/, "Cookies Policy");
+    });
+
+    test("open chat still shows the unavailable stub (no static content to render)", async ({ page }) => {
+        await page.goto("/");
+        await acceptConsent(page);
+        await openTerminalOverlay(page);
+
+        await expect(async () => {
+            await terminalInput(page).fill("open chat");
+            await page.keyboard.press("Enter");
+            await expect(page).toHaveURL(/\/chat/, { timeout: 2000 });
+        }).toPass({ timeout: 15000 });
+
+        const dialog = page.getByRole("dialog", { name: "Terminal" });
+        await expect(dialog.getByText(/no terminal view available/)).toBeVisible();
+    });
+});
