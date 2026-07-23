@@ -28,11 +28,21 @@ vi.mock("@/components/design-system/atoms/effects/overlay", () => ({
 }));
 
 vi.mock("@/components/design-system/molecules/effects/matrix-terminal", () => ({
-    MatrixTerminal: ({ lines }: { lines: { text: string }[] }) => (
+    MatrixTerminal: ({ lines, onComplete }: { lines: { text: string }[]; onComplete?: () => void }) => (
         <div data-testid="matrix-terminal">
             {lines.map((line) => (
                 <p key={line.text}>{line.text}</p>
             ))}
+            <button
+                type="button"
+                data-testid="complete-terminal"
+                onClick={(event) => {
+                    event.stopPropagation();
+                    onComplete?.();
+                }}
+            >
+                complete
+            </button>
         </div>
     ),
 }));
@@ -171,6 +181,37 @@ describe("KungFuEasterEgg", () => {
             typeKonamiSequence();
             fireEvent.keyDown(document, { key: "Escape" });
             expect(screen.queryByTestId("overlay")).not.toBeInTheDocument();
+        });
+    });
+
+    describe("the replay pill", () => {
+        it("stays hidden until the terminal finishes streaming", () => {
+            render(<KungFuEasterEgg />);
+            typeKonamiSequence();
+
+            const wrapper = screen.getByText("I Know Kung Fu").closest("button")?.parentElement;
+            expect(wrapper).toHaveStyle({ visibility: "hidden" });
+        });
+
+        it("becomes visible once the terminal completes", () => {
+            render(<KungFuEasterEgg />);
+            typeKonamiSequence();
+            fireEvent.click(screen.getByTestId("complete-terminal"));
+
+            const pill = screen.getByRole("button", { name: "I Know Kung Fu" });
+            expect(pill.parentElement).toHaveStyle({ visibility: "visible" });
+        });
+
+        it("replays the audio again when clicked, without dismissing the overlay", () => {
+            render(<KungFuEasterEgg />);
+            typeKonamiSequence();
+            fireEvent.click(screen.getByTestId("complete-terminal"));
+            expect(playMock).toHaveBeenCalledTimes(1);
+
+            fireEvent.click(screen.getByRole("button", { name: "I Know Kung Fu" }));
+
+            expect(playMock).toHaveBeenCalledTimes(2);
+            expect(screen.getByTestId("overlay")).toBeInTheDocument();
         });
     });
 });

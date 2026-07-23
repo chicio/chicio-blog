@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type MouseEvent } from "react";
 import { appendKonamiKey, matchesKonamiSequence } from "@/lib/easter-eggs/konami-sequence";
 import { trackWith } from "@/lib/tracking/tracking";
 import { tracking } from "@/types/configuration/tracking";
@@ -9,21 +9,40 @@ const TAP_RESET_WINDOW_MS = 1500;
 
 interface KungFuEasterEggState {
     active: boolean;
+    isCompleted: boolean;
 }
 
 interface KungFuEasterEggEffects {
     dismiss: () => void;
     registerTap: () => void;
+    onComplete: () => void;
+    replay: () => void;
+    stopClick: (event: MouseEvent<HTMLDivElement>) => void;
 }
 
 export const useKungFuEasterEggStore = (): ComponentStore<KungFuEasterEggState, KungFuEasterEggEffects> => {
     const [active, setActive] = useState(false);
+    const [isCompleted, setIsCompleted] = useState(false);
     const bufferRef = useRef<string[]>([]);
     const tapCountRef = useRef(0);
     const tapResetTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+    const playClip = useCallback(() => {
+        const audio = new Audio("/media/sounds/i-know-kung-fu.mp3");
+        audio.play().catch(() => {});
+    }, []);
+
     const dismiss = useCallback(() => {
         setActive(false);
+        setIsCompleted(false);
+    }, []);
+
+    const onComplete = useCallback(() => {
+        setIsCompleted(true);
+    }, []);
+
+    const stopClick = useCallback((event: MouseEvent<HTMLDivElement>) => {
+        event.stopPropagation();
     }, []);
 
     const activate = useCallback(() => {
@@ -32,14 +51,14 @@ export const useKungFuEasterEggStore = (): ComponentStore<KungFuEasterEggState, 
         }
 
         setActive(true);
+        setIsCompleted(false);
         trackWith({
             category: tracking.category.easter_egg_hunt,
             label: "i_know_kung_fu",
             action: tracking.action.easter_egg_kung_fu,
         });
-        const audio = new Audio("/media/sounds/i-know-kung-fu.mp3");
-        audio.play().catch(() => {});
-    }, [active]);
+        playClip();
+    }, [active, playClip]);
 
     const registerTap = useCallback(() => {
         if (active) {
@@ -97,7 +116,7 @@ export const useKungFuEasterEggStore = (): ComponentStore<KungFuEasterEggState, 
     }, []);
 
     return {
-        state: { active },
-        effects: { dismiss, registerTap },
+        state: { active, isCompleted },
+        effects: { dismiss, registerTap, onComplete, replay: playClip, stopClick },
     };
 };
