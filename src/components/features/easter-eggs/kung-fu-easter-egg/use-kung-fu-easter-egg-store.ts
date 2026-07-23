@@ -18,8 +18,9 @@ interface KungFuEasterEggEffects {
 
 export const useKungFuEasterEggStore = (): ComponentStore<KungFuEasterEggState, KungFuEasterEggEffects> => {
     const [active, setActive] = useState(false);
-    const [tapCount, setTapCount] = useState(0);
     const bufferRef = useRef<string[]>([]);
+    const tapCountRef = useRef(0);
+    const tapResetTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     const dismiss = useCallback(() => {
         setActive(false);
@@ -45,8 +46,24 @@ export const useKungFuEasterEggStore = (): ComponentStore<KungFuEasterEggState, 
             return;
         }
 
-        setTapCount((current) => current + 1);
-    }, [active]);
+        if (tapResetTimeoutRef.current) {
+            clearTimeout(tapResetTimeoutRef.current);
+            tapResetTimeoutRef.current = null;
+        }
+
+        tapCountRef.current += 1;
+
+        if (tapCountRef.current >= TAP_TRIGGER_COUNT) {
+            tapCountRef.current = 0;
+            activate();
+            return;
+        }
+
+        tapResetTimeoutRef.current = setTimeout(() => {
+            tapCountRef.current = 0;
+            tapResetTimeoutRef.current = null;
+        }, TAP_RESET_WINDOW_MS);
+    }, [active, activate]);
 
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
@@ -72,24 +89,12 @@ export const useKungFuEasterEggStore = (): ComponentStore<KungFuEasterEggState, 
     }, [active, dismiss, activate]);
 
     useEffect(() => {
-        if (tapCount === 0) {
-            return;
-        }
-
-        if (tapCount >= TAP_TRIGGER_COUNT) {
-            setTapCount(0);
-            activate();
-            return;
-        }
-
-        const resetTimeout = setTimeout(() => {
-            setTapCount(0);
-        }, TAP_RESET_WINDOW_MS);
-
         return () => {
-            clearTimeout(resetTimeout);
+            if (tapResetTimeoutRef.current) {
+                clearTimeout(tapResetTimeoutRef.current);
+            }
         };
-    }, [tapCount, activate]);
+    }, []);
 
     return {
         state: { active },
