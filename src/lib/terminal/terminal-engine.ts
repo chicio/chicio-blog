@@ -9,7 +9,7 @@ export const parse = (input: string): TerminalCommand => {
     return { name, args };
 };
 
-const FS_INDEPENDENT_COMMANDS = new Set(["", "help", "man", "pwd", "clear", "search"]);
+const FS_INDEPENDENT_COMMANDS = new Set(["", "help", "man", "pwd", "clear", "search", "close", "exit"]);
 
 export const needsFilesystem = (commandName: string): boolean => !FS_INDEPENDENT_COMMANDS.has(commandName);
 
@@ -127,6 +127,15 @@ const executeCat = (args: string[], cwd: string, root: TerminalDirNode): Termina
         };
     }
 
+    if (node.route) {
+        return {
+            lines: [{ text: `peeking ${node.title}...`, kind: "success" }],
+            newCwd: cwd,
+            announcement: `showing ${node.title}`,
+            renderContent: { route: node.route, title: node.title, historyInert: true },
+        };
+    }
+
     const lines: TerminalOutputLine[] = [
         { text: node.title, kind: "success" },
         { text: node.description ?? "" },
@@ -157,11 +166,14 @@ const executeOpen = (args: string[], cwd: string, root: TerminalDirNode): Termin
         };
     }
 
+    const title = node.title ?? args[0];
+
     return {
-        lines: [{ text: `opening ${node.title ?? args[0]}...`, kind: "success" }],
+        lines: [{ text: `opening ${title}...`, kind: "success" }],
         newCwd: cwd,
         navigateTo: node.route,
-        announcement: `navigating to ${node.title ?? args[0]}`,
+        announcement: `navigating to ${title}`,
+        renderContent: { route: node.route, title, historyInert: false },
     };
 };
 
@@ -176,6 +188,7 @@ const COMMAND_HELP: Record<string, string> = {
     man: "man <command>     show help for a single command",
     clear: "clear             clear the screen",
     search: "search <query>    search the site content",
+    close: "close             close the terminal overlay (alias: exit)",
 };
 
 const executeHelp = (args: string[], cwd: string): TerminalExecutionResult => {
@@ -235,6 +248,9 @@ export const execute = (command: TerminalCommand, cwd: string, root: TerminalDir
             return executeOpen(args, cwd, root);
         case "search":
             return executeSearch(args, cwd);
+        case "close":
+        case "exit":
+            return { lines: [], newCwd: cwd, close: true, announcement: "closing terminal" };
         default:
             return {
                 lines: [

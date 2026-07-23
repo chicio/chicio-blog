@@ -31,6 +31,12 @@ export interface TerminalCommand {
     args: string[];
 }
 
+export interface TerminalRenderContentIntent {
+    route: string;
+    title: string;
+    historyInert: boolean;
+}
+
 export interface TerminalExecutionResult {
     lines: TerminalOutputLine[];
     newCwd: string;
@@ -38,4 +44,17 @@ export interface TerminalExecutionResult {
     clearScreen?: boolean;
     announcement?: string;
     searchQuery?: string;
+    renderContent?: TerminalRenderContentIntent;
+    close?: boolean;
+}
+
+export type TerminalContentBlockStatus = "loading" | "success" | "unavailable" | "error";
+
+export interface TerminalContentBlockData {
+    id: string;
+    kind: "content";
+    route: string;
+    title: string;
+    status: TerminalContentBlockStatus;
+    markdown?: string;
 }

@@ -2,6 +2,7 @@
 
 import { useSearch } from "@/components/design-system/hooks/use-search";
 import { commandPaletteOpenEvent } from "@/components/design-system/state/command-palette/command-palette-events";
+import { openTerminalOverlay } from "@/components/design-system/state/terminal/terminal-events";
 import type { EasterEggTerminalLines, SearchResult } from "@/types/search/search";
 import { ComponentType, ChangeEvent, useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -44,7 +45,6 @@ export const useCommandPaletteStore = (
     searchIndexFileName: string,
     chatSlug: string,
     easterEggHuntSlug: string,
-    terminalSlug: string,
     tracking?: CommandPaletteTrackingCallbacks,
     searchEasterEgg: (query: string) => SearchResult | null = noopEasterEgg,
     SearchEasterEggComponent?: ComponentType<{ lines: EasterEggTerminalLines }>,
@@ -130,9 +130,9 @@ export const useCommandPaletteStore = (
 
     const handleOpenTerminal = useCallback(() => {
         tracking?.onOpenTerminal?.();
-        router.push(terminalSlug);
+        openTerminalOverlay();
         close();
-    }, [tracking, router, terminalSlug, close]);
+    }, [tracking, close]);
 
     const handleSearchResultSelect = useCallback(
         (slug: string) => {

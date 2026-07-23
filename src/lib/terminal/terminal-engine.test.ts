@@ -172,22 +172,29 @@ describe("terminal-engine", () => {
         });
 
         describe("cat", () => {
-            it("prints the title, description and extra metadata of a file", () => {
+            it("returns a historyInert renderContent intent for a routed file, plus a peek line", () => {
                 const result = execute({ name: "cat", args: ["blog/2024/hello-world"] }, "/", fixtureRoot);
-                expect(result.lines).toEqual([
-                    { text: "Hello World", kind: "success" },
-                    { text: "First post" },
-                    { text: "date: 2024-01-01" },
-                    { text: "tags: react" },
-                ]);
+                expect(result.lines).toEqual([{ text: "peeking Hello World...", kind: "success" }]);
+                expect(result.renderContent).toEqual({
+                    route: "/blog/post/2024/01/01/hello-world",
+                    title: "Hello World",
+                    historyInert: true,
+                });
+                expect(result.announcement).toBe("showing Hello World");
             });
 
-            it("prints the title and description of a directory that carries content metadata", () => {
+            it("returns a historyInert renderContent intent for a routed directory", () => {
                 const result = execute({ name: "cat", args: ["blog"] }, "/", fixtureRoot);
+                expect(result.renderContent).toEqual({ route: "/blog", title: "blog", historyInert: true });
+            });
+
+            it("falls back to printing the title and description for a dir with metadata but no route", () => {
+                const result = execute({ name: "cat", args: ["blog/2024"] }, "/", fixtureRoot);
                 expect(result.lines).toEqual([
-                    { text: "blog", kind: "success" },
-                    { text: "Blog posts" },
+                    { text: "2024", kind: "success" },
+                    { text: "Posts in 2024" },
                 ]);
+                expect(result.renderContent).toBeUndefined();
             });
 
             it("errors for a pure grouping directory with no title/description", () => {
@@ -208,15 +215,21 @@ describe("terminal-engine", () => {
         });
 
         describe("open", () => {
-            it("returns a navigateTo intent for a file with a route", () => {
+            it("returns a navigateTo intent and a non-historyInert renderContent intent for a file with a route", () => {
                 const result = execute({ name: "open", args: ["about-me"] }, "/", fixtureRoot);
                 expect(result.navigateTo).toBe("/about-me");
                 expect(result.announcement).toBe("navigating to About Me");
+                expect(result.renderContent).toEqual({
+                    route: "/about-me",
+                    title: "About Me",
+                    historyInert: false,
+                });
             });
 
             it("returns a navigateTo intent for a directory with a route", () => {
                 const result = execute({ name: "open", args: ["blog"] }, "/", fixtureRoot);
                 expect(result.navigateTo).toBe("/blog");
+                expect(result.renderContent).toEqual({ route: "/blog", title: "blog", historyInert: false });
             });
 
             it("errors when no path is given", () => {
@@ -270,6 +283,15 @@ describe("terminal-engine", () => {
             });
         });
 
+        describe("close / exit", () => {
+            it.each(["close", "exit"])("signals the store to close the overlay for %s", (commandName) => {
+                const result = execute({ name: commandName, args: [] }, "/blog", fixtureRoot);
+                expect(result.close).toBe(true);
+                expect(result.lines).toEqual([]);
+                expect(result.newCwd).toBe("/blog");
+            });
+        });
+
         describe("unknown command", () => {
             it("returns an error line and a concise announcement", () => {
                 const result = execute({ name: "sudo", args: [] }, "/", fixtureRoot);
@@ -310,7 +332,7 @@ describe("terminal-engine", () => {
     });
 
     describe("needsFilesystem", () => {
-        it.each(["", "help", "man", "pwd", "clear", "search"])(
+        it.each(["", "help", "man", "pwd", "clear", "search", "close", "exit"])(
             "returns false for the filesystem-independent command %s",
             (commandName) => {
                 expect(needsFilesystem(commandName)).toBe(false);

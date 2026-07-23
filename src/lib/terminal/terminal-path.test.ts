@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { findDir, findNode, resolvePath, splitPath } from "./terminal-path";
+import { findDir, findNode, findNodeByRoute, resolvePath, resolveRouteForPopstate, splitPath } from "./terminal-path";
 import type { TerminalDirNode } from "@/types/terminal/terminal";
 
 const fixtureRoot: TerminalDirNode = {
@@ -121,6 +121,53 @@ describe("terminal-path", () => {
 
         it("returns null when the path does not exist", () => {
             expect(findDir(fixtureRoot, "/nope")).toBeNull();
+        });
+    });
+
+    describe("findNodeByRoute", () => {
+        it("returns the root path when the route matches the root node itself", () => {
+            const rootWithRoute: TerminalDirNode = { ...fixtureRoot, route: "/" };
+            const found = findNodeByRoute(rootWithRoute, "/");
+            expect(found?.path).toBe("/");
+            expect(found?.node).toBe(rootWithRoute);
+        });
+
+        it("finds a top-level directory by its route", () => {
+            const found = findNodeByRoute(fixtureRoot, "/blog");
+            expect(found?.path).toBe("/blog");
+            expect(found?.node.title).toBe("blog");
+        });
+
+        it("finds a deeply nested file by its route", () => {
+            const found = findNodeByRoute(fixtureRoot, "/blog/post/2024/01/01/hello-world");
+            expect(found?.path).toBe("/blog/2024/hello-world");
+            expect(found?.node.title).toBe("Hello World");
+        });
+
+        it("returns null when no node carries the given route", () => {
+            expect(findNodeByRoute(fixtureRoot, "/chat")).toBeNull();
+        });
+    });
+
+    describe("resolveRouteForPopstate", () => {
+        it("special-cases the homepage since it is never itself a manifest node", () => {
+            expect(resolveRouteForPopstate(fixtureRoot, "/")).toEqual({ path: "/", title: "home", route: "/" });
+        });
+
+        it("resolves cwd and title for a matched route", () => {
+            expect(resolveRouteForPopstate(fixtureRoot, "/blog/post/2024/01/01/hello-world")).toEqual({
+                path: "/blog/2024/hello-world",
+                title: "Hello World",
+                route: "/blog/post/2024/01/01/hello-world",
+            });
+        });
+
+        it("falls back to a null path (no cwd change) for a route outside the manifest", () => {
+            expect(resolveRouteForPopstate(fixtureRoot, "/chat")).toEqual({
+                path: null,
+                title: "/chat",
+                route: "/chat",
+            });
         });
     });
 });

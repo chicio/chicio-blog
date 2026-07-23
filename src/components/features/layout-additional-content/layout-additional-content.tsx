@@ -52,6 +52,11 @@ const MatrixRainControlPanel = dynamic(
     { ssr: false },
 );
 
+const Terminal = dynamic(
+    () => import("@/components/features/terminal/terminal").then((m) => m.Terminal),
+    { ssr: false },
+);
+
 export const LayoutAdditionalContent: FC = () => {
     const { state, effects } = useLayoutAdditionalContentStore();
     const { consented, decided } = state;
@@ -73,7 +78,6 @@ export const LayoutAdditionalContent: FC = () => {
                 searchIndexFileName={searchIndexFileName}
                 chatSlug={slugs.chat}
                 easterEggHuntSlug={slugs.easterEggHunt}
-                terminalSlug={slugs.terminal}
                 tracking={{
                     onOpen: trackCommandPaletteOpen,
                     onOpenChat: trackCommandPaletteOpenChat,
@@ -87,6 +91,7 @@ export const LayoutAdditionalContent: FC = () => {
                 SearchEasterEggComponent={NeoRoomEasterEgg}
             />
             <MatrixRainControlPanel />
+            <Terminal />
             <CookieConsentBanner decided={decided} onAccept={acceptConsent} onReject={rejectConsent} />
             <TrackingOptIn enabled={consented} />
             <InstallPromptBanner />

@@ -1,7 +1,7 @@
 import { TerminalDirNode } from "@/types/terminal/terminal";
 import { findDir, resolvePath } from "./terminal-path";
 
-export const COMMAND_NAMES = ["ls", "cd", "pwd", "tree", "cat", "open", "help", "man", "clear", "search"];
+export const COMMAND_NAMES = ["ls", "cd", "pwd", "tree", "cat", "open", "help", "man", "clear", "search", "close", "exit"];
 
 const completePathToken = (partial: string, cwd: string, root: TerminalDirNode): string[] => {
     const lastSlashIndex = partial.lastIndexOf("/");

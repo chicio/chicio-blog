@@ -36,7 +36,6 @@ interface CommandPaletteProps {
     searchIndexFileName: string;
     chatSlug: string;
     easterEggHuntSlug: string;
-    terminalSlug: string;
     tracking?: CommandPaletteTrackingProps;
     searchEasterEgg?: (query: string) => SearchResult | null;
     SearchEasterEggComponent?: ComponentType<{ lines: EasterEggTerminalLines }>;
@@ -46,7 +45,6 @@ export const CommandPalette: FC<CommandPaletteProps> = ({
     searchIndexFileName,
     chatSlug,
     easterEggHuntSlug,
-    terminalSlug,
     tracking,
     searchEasterEgg,
     SearchEasterEggComponent,
@@ -56,7 +54,6 @@ export const CommandPalette: FC<CommandPaletteProps> = ({
         searchIndexFileName,
         chatSlug,
         easterEggHuntSlug,
-        terminalSlug,
         tracking,
         searchEasterEgg,
         SearchEasterEggComponent,

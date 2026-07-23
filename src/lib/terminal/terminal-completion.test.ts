@@ -26,7 +26,7 @@ describe("terminal-completion", () => {
         });
 
         it("completes a partial command name", () => {
-            expect(completeInput("cl", "/", fixtureRoot)).toEqual(["clear"]);
+            expect(completeInput("cl", "/", fixtureRoot)).toEqual(["clear", "close"]);
         });
 
         it("returns no command completions once a full command plus space is typed with no matching path", () => {
@@ -60,7 +60,7 @@ describe("terminal-completion", () => {
         });
 
         it("completes man's argument against command names, not paths", () => {
-            expect(completeInput("man c", "/", fixtureRoot)).toEqual(["cat", "cd", "clear"]);
+            expect(completeInput("man c", "/", fixtureRoot)).toEqual(["cat", "cd", "clear", "close"]);
         });
     });
 
