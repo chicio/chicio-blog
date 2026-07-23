@@ -154,6 +154,10 @@ describe("terminal-path", () => {
             expect(resolveRouteForPopstate(fixtureRoot, "/")).toEqual({ path: "/", title: "home", route: "/" });
         });
 
+        it("special-cases the /terminal boot link the same way as the homepage", () => {
+            expect(resolveRouteForPopstate(fixtureRoot, "/terminal")).toEqual({ path: "/", title: "home", route: "/" });
+        });
+
         it("resolves cwd and title for a matched route", () => {
             expect(resolveRouteForPopstate(fixtureRoot, "/blog/post/2024/01/01/hello-world")).toEqual({
                 path: "/blog/2024/hello-world",

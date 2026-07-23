@@ -16,9 +16,12 @@ export const metadata = {
 /**
  * This route is a shareable "boot link", not a real page: the globally
  * mounted terminal overlay (src/components/features/terminal/terminal)
- * detects a fresh load of /terminal on mount, replaces the URL with "/" and
- * opens itself over the homepage. This fallback only renders for the brief
- * moment before that effect runs (or with JS disabled).
+ * detects a fresh load of /terminal on mount and opens itself over the
+ * homepage, keeping the URL at /terminal (sticky, shareable entry point) while
+ * this stub stays fully covered by the overlay's inert/aria-hidden background.
+ * This fallback only renders for the brief moment before that effect runs (or
+ * with JS disabled). Closing the overlay from this boot state replaces the
+ * URL with "/" so the real homepage is revealed instead of this stub.
  */
 export default function TerminalPage() {
     return <p>Booting the terminal...</p>;

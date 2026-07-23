@@ -131,10 +131,10 @@ test.describe("Terminal overlay", () => {
         await expect(page).toHaveURL("/");
     });
 
-    test("the /terminal boot link replaces the URL with / and opens the overlay", async ({ page }) => {
+    test("the /terminal boot link opens the overlay and keeps the URL sticky at /terminal", async ({ page }) => {
         await page.goto("/terminal");
 
-        await expect(page).toHaveURL("/");
+        await expect(page).toHaveURL("/terminal");
         await expect(page.getByRole("dialog", { name: "Terminal" })).toBeVisible();
         await expect(terminalInput(page)).toBeFocused();
     });
@@ -143,7 +143,7 @@ test.describe("Terminal overlay", () => {
         page,
     }) => {
         await page.goto("/terminal");
-        await expect(page).toHaveURL("/");
+        await expect(page).toHaveURL("/terminal");
         await expect(page.getByRole("dialog", { name: "Terminal" })).toBeVisible();
 
         await page.keyboard.press("Escape");
@@ -152,6 +152,25 @@ test.describe("Terminal overlay", () => {
         await expect(page).toHaveURL("/");
         await expect(page.getByText(/Booting the terminal/i)).toHaveCount(0);
         await expect(page.getByRole("heading", { name: "Fabrizio Duroni", level: 1 })).toBeVisible();
+    });
+
+    test("opening the site then navigating with open from the boot state does not rewrite the URL on close", async ({
+        page,
+    }) => {
+        await page.goto("/terminal");
+        await expect(page).toHaveURL("/terminal");
+        await acceptConsent(page);
+
+        await expect(async () => {
+            await terminalInput(page).fill("open about-me");
+            await page.keyboard.press("Enter");
+            await expect(page).toHaveURL(/\/about-me/, { timeout: 2000 });
+        }).toPass({ timeout: 15000 });
+
+        await page.keyboard.press("Escape");
+
+        await expect(page.getByRole("dialog", { name: "Terminal" })).toBeHidden();
+        await expect(page).toHaveURL(/\/about-me/);
     });
 
     test("exposes the expected accessibility landmarks", async ({ page }) => {

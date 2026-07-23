@@ -106,15 +106,6 @@ export const useTerminalStore = (): ComponentStore<TerminalState, TerminalEffect
     }, []);
 
     useEffect(() => {
-        if (isBootLink) {
-            // router.replace (not raw window.history.replaceState) so the App Router actually
-            // mounts the homepage route tree underneath the overlay — a history/location-only
-            // update would leave /terminal's own "booting" page stranded once the overlay closes.
-            router.replace("/");
-        }
-    }, [isBootLink, router]);
-
-    useEffect(() => {
         const handleOpenEvent = () => {
             setTriggerEl(document.activeElement instanceof HTMLElement ? document.activeElement : null);
             setOpen(true);
@@ -158,7 +149,14 @@ export const useTerminalStore = (): ComponentStore<TerminalState, TerminalEffect
         setOpen(false);
         setAnnouncement("terminal closed");
         triggerEl?.focus();
-    }, [triggerEl]);
+
+        if (window.location.pathname === slugs.terminal) {
+            // The user booted straight into /terminal and never ran `open`, so only the inert
+            // stub page sits beneath the overlay. Reveal the real homepage on close instead of
+            // that stub. `replace` (not `push`) so Back doesn't return to the stub.
+            router.replace("/");
+        }
+    }, [triggerEl, router]);
 
     useEffect(() => {
         if (!open) {
