@@ -4,7 +4,8 @@ const {
     mockHomepageMarkdown,
     mockBlogListingMarkdown,
     mockBlogPostMarkdown,
-    mockAboutMeMarkdown,
+    mockMdxPageMarkdown,
+    mockContactMarkdown,
     mockDsaMarkdown,
     mockDsaRoadmapMarkdown,
     mockDsaExercisesListMarkdown,
@@ -19,7 +20,8 @@ const {
     mockHomepageMarkdown: vi.fn(),
     mockBlogListingMarkdown: vi.fn(),
     mockBlogPostMarkdown: vi.fn(),
-    mockAboutMeMarkdown: vi.fn(),
+    mockMdxPageMarkdown: vi.fn(),
+    mockContactMarkdown: vi.fn(),
     mockDsaMarkdown: vi.fn(),
     mockDsaRoadmapMarkdown: vi.fn(),
     mockDsaExercisesListMarkdown: vi.fn(),
@@ -38,8 +40,12 @@ vi.mock("@/lib/content/posts/posts-markdown", () => ({
     blogPostMarkdown: mockBlogPostMarkdown,
 }));
 
-vi.mock("@/lib/content/about-me/about-me-markdown", () => ({
-    aboutMeMarkdown: mockAboutMeMarkdown,
+vi.mock("@/lib/mdx/mdx-page-markdown", () => ({
+    mdxPageMarkdown: mockMdxPageMarkdown,
+}));
+
+vi.mock("@/lib/content/contact/contact-markdown", () => ({
+    contactMarkdown: mockContactMarkdown,
 }));
 
 vi.mock("@/lib/content/easter-eggs/easter-egg-hunt-markdown", () => ({
@@ -85,6 +91,7 @@ vi.mock("next/navigation", () => ({
 }));
 
 import { GET } from "./route";
+import { slugs } from "@/types/configuration/slug";
 
 function makeContext(path: string[] | undefined): { params: Promise<{ path?: string[] }> } {
     return { params: Promise.resolve({ path }) };
@@ -123,14 +130,64 @@ describe("GET /markdown/[[...path]]", () => {
     });
 
     describe("about-me (/about-me)", () => {
-        it("delegates to aboutMeMarkdown", async () => {
-            mockAboutMeMarkdown.mockReturnValue("# About Me");
+        it("delegates to mdxPageMarkdown with the about-me slug", async () => {
+            mockMdxPageMarkdown.mockReturnValue("# About Me");
             const response = await GET(
                 new Request("https://x.com/markdown/about-me"),
                 makeContext(["about-me"]),
             );
             expect(response.status).toBe(200);
+            expect(mockMdxPageMarkdown).toHaveBeenCalledWith(slugs.aboutMe);
             expect(await response.text()).toBe("# About Me");
+        });
+    });
+
+    describe("mcp (/mcp)", () => {
+        it("delegates to mdxPageMarkdown with the mcp slug", async () => {
+            mockMdxPageMarkdown.mockReturnValue("# MCP");
+            const response = await GET(new Request("https://x.com/markdown/mcp"), makeContext(["mcp"]));
+            expect(response.status).toBe(200);
+            expect(mockMdxPageMarkdown).toHaveBeenCalledWith(slugs.mcp);
+            expect(await response.text()).toBe("# MCP");
+        });
+    });
+
+    describe("cookie policy (/cookie-policy)", () => {
+        it("delegates to mdxPageMarkdown with the cookie-policy slug", async () => {
+            mockMdxPageMarkdown.mockReturnValue("# Cookies Policy");
+            const response = await GET(
+                new Request("https://x.com/markdown/cookie-policy"),
+                makeContext(["cookie-policy"]),
+            );
+            expect(response.status).toBe(200);
+            expect(mockMdxPageMarkdown).toHaveBeenCalledWith(slugs.cookiePolicy);
+            expect(await response.text()).toBe("# Cookies Policy");
+        });
+    });
+
+    describe("art (/art)", () => {
+        it("delegates to mdxPageMarkdown with the art slug", async () => {
+            mockMdxPageMarkdown.mockReturnValue("# Art");
+            const response = await GET(new Request("https://x.com/markdown/art"), makeContext(["art"]));
+            expect(response.status).toBe(200);
+            expect(mockMdxPageMarkdown).toHaveBeenCalledWith(slugs.art);
+            expect(await response.text()).toBe("# Art");
+        });
+
+        it("calls notFound when mdxPageMarkdown returns null", async () => {
+            mockMdxPageMarkdown.mockReturnValue(null);
+            await expect(
+                GET(new Request("https://x.com/markdown/art"), makeContext(["art"])),
+            ).rejects.toThrow("NEXT_NOT_FOUND");
+        });
+    });
+
+    describe("contact (/contact)", () => {
+        it("delegates to contactMarkdown", async () => {
+            mockContactMarkdown.mockReturnValue("# Contact");
+            const response = await GET(new Request("https://x.com/markdown/contact"), makeContext(["contact"]));
+            expect(response.status).toBe(200);
+            expect(await response.text()).toBe("# Contact");
         });
     });
 

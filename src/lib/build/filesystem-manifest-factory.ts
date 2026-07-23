@@ -148,6 +148,8 @@ export const generateFilesystemManifest = (): TerminalFileSystemManifest => {
             art: file("Art", "3D and generative art gallery", slugs.art),
             chat: file("Chat", "Chat with Fabrizio's AI assistant", slugs.chat),
             contact: file("Contact", "Send Fabrizio a message", slugs.contact),
+            mcp: file("MCP", "MCP server for AI assistants", slugs.mcp),
+            "cookie-policy": file("Cookie Policy", "How this site uses cookies", slugs.cookiePolicy),
         },
     });
 

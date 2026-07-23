@@ -10,7 +10,7 @@ describe("generateFilesystemManifest", () => {
         const { root } = generateFilesystemManifest();
 
         expect(Object.keys(root.children).sort()).toEqual(
-            ["about-me", "art", "blog", "chat", "contact", "dsa", "videogames"].sort(),
+            ["about-me", "art", "blog", "chat", "contact", "cookie-policy", "dsa", "mcp", "videogames"].sort(),
         );
     });
 
@@ -86,12 +86,14 @@ describe("generateFilesystemManifest", () => {
             });
         });
 
-        it("gives chat, art and contact their real routes so open can navigate to them", () => {
+        it("gives chat, art, contact, mcp and cookie-policy their real routes so open can navigate to them", () => {
             const { root } = generateFilesystemManifest();
 
             expect(root.children.chat).toMatchObject({ type: "file", route: slugs.chat });
             expect(root.children.art).toMatchObject({ type: "file", route: slugs.art });
             expect(root.children.contact).toMatchObject({ type: "file", route: slugs.contact });
+            expect(root.children.mcp).toMatchObject({ type: "file", route: slugs.mcp });
+            expect(root.children["cookie-policy"]).toMatchObject({ type: "file", route: slugs.cookiePolicy });
         });
     });
 });
