@@ -168,6 +168,29 @@ class compiles; instead build the real project (`npm run build`) and grep the co
 `.next/static/chunks/*.css` for the literal escaped selector (e.g. `\.\[\&_img\]\:hue-rotate-90`). That
 DID confirm all rules generated correctly in the real build.
 
+## Part 2 (2026-07-23, same day): sticky `/terminal` URL + full markdown content coverage
+
+- **Boot URL is now sticky/shareable**: removed the boot-effect `router.replace("/")` in
+  `use-terminal-store.ts` — `/terminal` stays in the URL bar while the overlay opens over the homepage (the
+  `/terminal` stub page beneath is still fully covered by `inert`/`aria-hidden`). `closeOverlay` now does the
+  `router.replace("/")` instead, but ONLY when `window.location.pathname === slugs.terminal` at close time (i.e.
+  the user booted straight in and never ran `open`) — closing after `open <page>` still just reveals the real
+  route beneath, unchanged. `resolveRouteForPopstate` (`terminal-path.ts`) special-cases `pathname ===
+  slugs.terminal` identically to the existing `pathname === ROOT_PATH` case (mirrors it exactly, including still
+  triggering the same content-fetch-for-`/` behavior on Back-navigation — a literal "mirror the ROOT_PATH branch"
+  instruction, not "render no content block" despite an earlier draft of the design doc saying otherwise).
+- **Full markdown coverage** (`art`, `contact`, `mcp`, `cookie-policy` now render in-shell instead of the
+  "unavailable" stub; `chat` deliberately stays a stub, no static content to show) — see
+  [[feature_markdown_generalization]] for the generator-side work (markdownDocument/mdxPageMarkdown/
+  contactMarkdown, the rehype-figure gotcha from the art migration, the leading-H1 dedup fix that was needed for
+  `mcp`/`cookie-policy` specifically once they got e2e coverage in the terminal).
+- e2e ambiguity gotcha #10 (below) recurred in a NEW shape here: asserting on the terminal's in-shell heading for
+  a page must match whatever `markdownDocument`'s `title` param actually is for THAT generator, not necessarily
+  the real page's own rendered H1 text — `contactMarkdown()`'s title is `"Contact"`, while the real `/contact`
+  page's own H1 (from `ContactForm`'s `<PageTitle>`) is `"Contact Me"`; these are different strings and only the
+  former appears inside the terminal dialog (the in-shell content block renders ONLY the fetched markdown body,
+  never the real page's own JSX heading — the real page mounts as a separate, non-dialog-descendant tree).
+
 ## Design decisions confirmed (from #480, still true)
 
 - `open`/`cat` support directories with a `route` too (not just leaf files).
