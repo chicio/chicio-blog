@@ -42,10 +42,11 @@ export const easterEggHints: EasterEggHint[] = [
         id: "i_know_kung_fu",
         title: "I Know Kung Fu",
         crypticHint:
-            "Some codes from an older console never truly die. On any page, without clicking anything, walk up, up, then crouch down, down, dodge left, right, left, right, then punch, then jump. Something new gets downloaded straight into your head.",
+            "Some codes from an older console never truly die. On any page, without clicking anything, walk up, up, then crouch down, down, dodge left, right, left, right, then punch, then jump. Something new gets downloaded straight into your head. Carrying a phone instead of a keyboard? There is also a tiny hidden spot tucked into the bottom right corner of every page, and it wakes up after five quick taps.",
         solutionSteps: [
             "On any page, press ArrowUp, ArrowUp, ArrowDown, ArrowDown, ArrowLeft, ArrowRight, ArrowLeft, ArrowRight, b, a.",
-            "No click needed, it works anywhere on the site.",
+            "On a phone or tablet, tap the very bottom right corner of the screen five times quickly instead.",
+            "Either trigger works anywhere on the site, no click needed for the keyboard version.",
             "Watch the construct load, then know kung fu.",
         ],
     },
