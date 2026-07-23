@@ -1,4 +1,5 @@
 import { getPostBy, getPosts, getTags } from "@/lib/content/posts/posts";
+import { mdxToMarkdown } from "@/lib/mdx/mdx-to-markdown";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { slugs } from "@/types/configuration/slug";
 
@@ -70,6 +71,6 @@ export const blogPostMarkdown = (params: Record<string, string>): string | null 
 
 ---
 
-${content}
+${mdxToMarkdown(content)}
 `;
 };

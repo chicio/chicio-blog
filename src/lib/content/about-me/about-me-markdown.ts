@@ -1,4 +1,5 @@
 import { getAboutMe } from "@/lib/content/about-me/about-me";
+import { mdxToMarkdown } from "@/lib/mdx/mdx-to-markdown";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { slugs } from "@/types/configuration/slug";
 
@@ -14,6 +15,6 @@ export const aboutMeMarkdown = (): string => {
 
 ---
 
-${content}
+${mdxToMarkdown(content)}
 `;
 };

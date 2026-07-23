@@ -7,6 +7,7 @@ import {
     getExercise,
     getExercisesContent,
 } from "@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms";
+import { mdxToMarkdown } from "@/lib/mdx/mdx-to-markdown";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { slugs } from "@/types/configuration/slug";
 
@@ -36,7 +37,7 @@ export const dsaRoadmapMarkdown = (): string => {
 
 ---
 
-${roadmap.content}
+${mdxToMarkdown(roadmap.content)}
 `;
 };
 
@@ -74,7 +75,7 @@ export const dsaTopicMarkdown = (params: Record<string, string>): string | null 
 
 ---
 
-${topic.content}
+${mdxToMarkdown(topic.content)}
 ${exercises.length > 0 ? `
 ## Exercises
 
@@ -103,6 +104,6 @@ ${frontmatter.metadata?.leetcodeUrl ? `**LeetCode:** ${frontmatter.metadata.leet
 
 ---
 
-${content}
+${mdxToMarkdown(content)}
 `;
 };

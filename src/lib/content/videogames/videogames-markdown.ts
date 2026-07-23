@@ -5,6 +5,7 @@ import {
     getConsole,
     getGame,
 } from "@/lib/content/videogames/videogames";
+import { mdxToMarkdown } from "@/lib/mdx/mdx-to-markdown";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { slugs } from "@/types/configuration/slug";
 
@@ -49,7 +50,7 @@ export const consoleMarkdown = (params: Record<string, string>): string | null =
 
 ---
 
-${content}
+${mdxToMarkdown(content)}
 ${games.length > 0 ? `
 ## Games (${games.length})
 
@@ -80,6 +81,6 @@ export const gameMarkdown = (params: Record<string, string>): string | null => {
 
 ---
 
-${content}
+${mdxToMarkdown(content)}
 `;
 };
