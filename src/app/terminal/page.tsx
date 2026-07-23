@@ -1,4 +1,3 @@
-import { Terminal } from "@/components/content/terminal";
 import { createMetadata } from "@/lib/seo/seo";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { slugs } from "@/types/configuration/slug";
@@ -14,6 +13,13 @@ export const metadata = {
     }),
 };
 
+/**
+ * This route is a shareable "boot link", not a real page: the globally
+ * mounted terminal overlay (src/components/features/terminal/terminal)
+ * detects a fresh load of /terminal on mount, replaces the URL with "/" and
+ * opens itself over the homepage. This fallback only renders for the brief
+ * moment before that effect runs (or with JS disabled).
+ */
 export default function TerminalPage() {
-    return <Terminal />;
+    return <p>Booting the terminal...</p>;
 }

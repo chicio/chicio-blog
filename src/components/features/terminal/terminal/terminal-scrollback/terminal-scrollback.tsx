@@ -1,29 +1,34 @@
 import { ErrorText, SuccessText, TerminalLine } from "@/components/design-system/atoms/typography/terminal-blocks";
-import type { TerminalScreenLine } from "@/lib/terminal/terminal-screen-lines";
+import type { TerminalScrollbackEntry } from "@/lib/terminal/terminal-screen-lines";
+import { TerminalContentBlock } from "./terminal-content-block";
 import { FC } from "react";
 
 export interface TerminalScrollbackProps {
-    lines: TerminalScreenLine[];
+    lines: TerminalScrollbackEntry[];
     setScrollAnchorElement: (el: HTMLDivElement | null) => void;
 }
 
-const renderLine = (line: TerminalScreenLine) => {
-    if (line.kind === "prompt") {
-        return <TerminalLine key={line.id}>{line.text}</TerminalLine>;
+const renderLine = (entry: TerminalScrollbackEntry) => {
+    if (entry.kind === "content") {
+        return <TerminalContentBlock key={entry.id} {...entry} />;
+    }
+
+    if (entry.kind === "prompt") {
+        return <TerminalLine key={entry.id}>{entry.text}</TerminalLine>;
     }
 
     const content =
-        line.kind === "error" ? (
-            <ErrorText>{line.text}</ErrorText>
-        ) : line.kind === "success" ? (
-            <SuccessText>{line.text}</SuccessText>
+        entry.kind === "error" ? (
+            <ErrorText>{entry.text}</ErrorText>
+        ) : entry.kind === "success" ? (
+            <SuccessText>{entry.text}</SuccessText>
         ) : (
-            line.text
+            entry.text
         );
 
     return (
         <div
-            key={line.id}
+            key={entry.id}
             className="text-primary-text/80 mb-1 font-mono text-xs leading-tight break-words whitespace-pre-wrap sm:text-sm"
         >
             {content}

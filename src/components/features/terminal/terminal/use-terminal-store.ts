@@ -1,26 +1,32 @@
 "use client";
 
 import { useSearch } from "@/components/design-system/hooks/use-search";
+import { terminalOverlayOpenEvent } from "@/components/design-system/state/terminal/terminal-events";
 import { searchIndexFileName } from "@/lib/content/search-filename";
 import { filesystemManifestFileName } from "@/lib/terminal/filesystem-filename";
+import { toMarkdownFetchUrl } from "@/lib/terminal/terminal-markdown-route";
+import { getAppRootElement } from "@/lib/terminal/terminal-overlay-dom";
 import { applyCompletion, completeInput } from "@/lib/terminal/terminal-completion";
 import { execute, formatSearchResults, needsFilesystem, parse } from "@/lib/terminal/terminal-engine";
-import { ROOT_PATH } from "@/lib/terminal/terminal-path";
+import { ROOT_PATH, resolveRouteForPopstate } from "@/lib/terminal/terminal-path";
 import { toScreenLines } from "@/lib/terminal/terminal-screen-lines";
-import type { TerminalScreenLine } from "@/lib/terminal/terminal-screen-lines";
+import type { TerminalScrollbackEntry } from "@/lib/terminal/terminal-screen-lines";
+import { trackWith } from "@/lib/tracking/tracking";
+import { tracking } from "@/types/configuration/tracking";
+import { slugs } from "@/types/configuration/slug";
 import type { ComponentStore } from "@/types/component-store";
 import type { SearchResult } from "@/types/search/search";
-import type { TerminalDirNode } from "@/types/terminal/terminal";
+import type { TerminalContentBlockData, TerminalDirNode, TerminalRenderContentIntent } from "@/types/terminal/terminal";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, FormEvent, KeyboardEvent, useCallback, useEffect, useState } from "react";
 
 interface TerminalState {
-    lines: TerminalScreenLine[];
+    open: boolean;
+    lines: TerminalScrollbackEntry[];
     cwd: string;
     input: string;
     completions: string[];
     announcement: string;
-    hasRunCommands: boolean;
 }
 
 interface TerminalEffects {
@@ -30,29 +36,41 @@ interface TerminalEffects {
     handleKeyDown: (e: KeyboardEvent<HTMLInputElement>) => void;
     handleSubmit: (e: FormEvent<HTMLFormElement>) => void;
     handleCompletionSelect: (completion: string) => () => void;
+    closeOverlay: () => void;
+    stopPropagation: (e: React.MouseEvent) => void;
 }
 
 const noopEasterEgg = (): SearchResult | null => null;
 
 const EMPTY_ROOT: TerminalDirNode = { type: "dir", children: {} };
 
-const BOOT_LINES: TerminalScreenLine[] = [
+const FETCH_TIMEOUT_MS = 8000;
+
+const BOOT_LINES: TerminalScrollbackEntry[] = [
     { id: "boot-0", text: "chicio://terminal v1.0 - Matrix shell interface", kind: "success" },
     { id: "boot-1", text: "establishing connection to fabrizioduroni.it... done.", kind: "normal" },
     { id: "boot-2", text: 'type "help" for a list of commands, "ls" to look around.', kind: "normal" },
 ];
 
+const createBlockId = (): string =>
+    typeof crypto !== "undefined" && typeof crypto.randomUUID === "function"
+        ? crypto.randomUUID()
+        : `content-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+
 export const useTerminalStore = (): ComponentStore<TerminalState, TerminalEffects> => {
     const router = useRouter();
 
+    const isBootLink = window.location.pathname === slugs.terminal;
+    const [open, setOpen] = useState(() => isBootLink);
+    const [triggerEl, setTriggerEl] = useState<HTMLElement | null>(null);
     const [root, setRoot] = useState<TerminalDirNode | null>(null);
     const [cwd, setCwd] = useState(ROOT_PATH);
-    const [lines, setLines] = useState<TerminalScreenLine[]>(BOOT_LINES);
+    const [lines, setLines] = useState<TerminalScrollbackEntry[]>(BOOT_LINES);
     const [input, setInput] = useState("");
     const [completions, setCompletions] = useState<string[]>([]);
     const [history, setHistory] = useState<string[]>([]);
     const [historyIndex, setHistoryIndex] = useState<number | null>(null);
-    const [announcement, setAnnouncement] = useState("");
+    const [announcement, setAnnouncement] = useState(() => (isBootLink ? "terminal opened" : ""));
     const [pendingSearchQuery, setPendingSearchQuery] = useState<string | null>(null);
     const [inputEl, setInputEl] = useState<HTMLInputElement | null>(null);
     const [scrollAnchorEl, setScrollAnchorEl] = useState<HTMLDivElement | null>(null);
@@ -88,12 +106,140 @@ export const useTerminalStore = (): ComponentStore<TerminalState, TerminalEffect
     }, []);
 
     useEffect(() => {
+        if (isBootLink) {
+            window.history.replaceState(null, "", "/");
+        }
+    }, [isBootLink]);
+
+    useEffect(() => {
+        const handleOpenEvent = () => {
+            setTriggerEl(document.activeElement instanceof HTMLElement ? document.activeElement : null);
+            setOpen(true);
+            setAnnouncement("terminal opened");
+        };
+
+        window.addEventListener(terminalOverlayOpenEvent, handleOpenEvent);
+        return () => window.removeEventListener(terminalOverlayOpenEvent, handleOpenEvent);
+    }, []);
+
+    useEffect(() => {
+        const appRoot = getAppRootElement();
+
+        if (!appRoot) {
+            return;
+        }
+
+        if (open) {
+            appRoot.setAttribute("inert", "");
+            appRoot.setAttribute("aria-hidden", "true");
+        } else {
+            appRoot.removeAttribute("inert");
+            appRoot.removeAttribute("aria-hidden");
+        }
+
+        return () => {
+            appRoot.removeAttribute("inert");
+            appRoot.removeAttribute("aria-hidden");
+        };
+    }, [open]);
+
+    useEffect(() => {
         inputEl?.focus();
     }, [inputEl]);
 
     useEffect(() => {
         scrollAnchorEl?.scrollIntoView({ block: "end" });
     }, [lines, scrollAnchorEl]);
+
+    const closeOverlay = useCallback(() => {
+        setOpen(false);
+        setAnnouncement("terminal closed");
+        triggerEl?.focus();
+    }, [triggerEl]);
+
+    useEffect(() => {
+        if (!open) {
+            return;
+        }
+
+        const handleEsc = (e: globalThis.KeyboardEvent) => {
+            if (e.key === "Escape") {
+                closeOverlay();
+            }
+        };
+
+        window.addEventListener("keydown", handleEsc, true);
+        return () => window.removeEventListener("keydown", handleEsc, true);
+    }, [open, closeOverlay]);
+
+    const updateContentBlock = useCallback((id: string, patch: Partial<TerminalContentBlockData>) => {
+        setLines((prev) =>
+            prev.map((item) => (item.kind === "content" && item.id === id ? { ...item, ...patch } : item)),
+        );
+    }, []);
+
+    const fetchContentBlockMarkdown = useCallback(
+        async (blockId: string, route: string) => {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+
+            try {
+                const response = await fetch(toMarkdownFetchUrl(route), { signal: controller.signal });
+                clearTimeout(timeoutId);
+
+                if (response.ok) {
+                    const markdown = await response.text();
+                    updateContentBlock(blockId, { status: "success", markdown });
+                    return;
+                }
+
+                updateContentBlock(blockId, { status: response.status === 404 ? "unavailable" : "error" });
+            } catch {
+                clearTimeout(timeoutId);
+                updateContentBlock(blockId, { status: "error" });
+            }
+        },
+        [updateContentBlock],
+    );
+
+    const renderContentFor = useCallback(
+        (intent: TerminalRenderContentIntent) => {
+            const block: TerminalContentBlockData = {
+                id: createBlockId(),
+                kind: "content",
+                route: intent.route,
+                title: intent.title,
+                status: "loading",
+            };
+
+            setLines((prev) => [...prev, block]);
+            void fetchContentBlockMarkdown(block.id, intent.route);
+        },
+        [fetchContentBlockMarkdown],
+    );
+
+    useEffect(() => {
+        if (!open) {
+            return;
+        }
+
+        const handlePopState = () => {
+            const pathname = window.location.pathname;
+            const target = root
+                ? resolveRouteForPopstate(root, pathname)
+                : { path: null, title: pathname, route: pathname };
+
+            if (target.path) {
+                setCwd(target.path);
+            }
+
+            setAnnouncement(`now viewing ${target.title}`);
+            renderContentFor({ route: target.route, title: target.title, historyInert: true });
+        };
+
+        window.addEventListener("popstate", handlePopState);
+        return () => window.removeEventListener("popstate", handlePopState);
+    }, [open, root, renderContentFor]);
 
     const runCommand = useCallback(
         (rawInput: string) => {
@@ -130,7 +276,7 @@ export const useTerminalStore = (): ComponentStore<TerminalState, TerminalEffect
                     return [];
                 }
 
-                const promptLine: TerminalScreenLine = { id: `line-${prev.length}`, text: promptText, kind: "prompt" };
+                const promptLine: TerminalScrollbackEntry = { id: `line-${prev.length}`, text: promptText, kind: "prompt" };
                 const resultScreenLines = toScreenLines(result.lines, prev.length + 1);
 
                 return [...prev, promptLine, ...resultScreenLines];
@@ -140,15 +286,28 @@ export const useTerminalStore = (): ComponentStore<TerminalState, TerminalEffect
             setAnnouncement(result.announcement ?? "");
 
             if (result.navigateTo) {
+                trackWith({
+                    category: tracking.category.terminal,
+                    label: result.navigateTo,
+                    action: tracking.action.terminal_open,
+                });
                 router.push(result.navigateTo);
+            }
+
+            if (result.renderContent) {
+                renderContentFor(result.renderContent);
             }
 
             if (result.searchQuery) {
                 setPendingSearchQuery(result.searchQuery);
                 handleSearch({ target: { value: result.searchQuery } } as ChangeEvent<HTMLInputElement>);
             }
+
+            if (result.close) {
+                closeOverlay();
+            }
         },
-        [cwd, root, router, handleSearch],
+        [cwd, root, router, handleSearch, renderContentFor, closeOverlay],
     );
 
     const handleSubmit = useCallback(
@@ -229,8 +388,10 @@ export const useTerminalStore = (): ComponentStore<TerminalState, TerminalEffect
         [input, cwd, root, inputEl],
     );
 
+    const stopPropagation = useCallback((e: React.MouseEvent) => e.stopPropagation(), []);
+
     return {
-        state: { lines, cwd, input, completions, announcement, hasRunCommands: history.length > 0 },
+        state: { open, lines, cwd, input, completions, announcement },
         effects: {
             setInputElement: setInputEl,
             setScrollAnchorElement: setScrollAnchorEl,
@@ -238,6 +399,8 @@ export const useTerminalStore = (): ComponentStore<TerminalState, TerminalEffect
             handleKeyDown,
             handleSubmit,
             handleCompletionSelect,
+            closeOverlay,
+            stopPropagation,
         },
     };
 };
