@@ -1,4 +1,3 @@
-import { slugs } from "@/types/configuration/slug";
 import { TerminalDirNode, TerminalNode } from "@/types/terminal/terminal";
 
 export const ROOT_PATH = "/";
@@ -111,16 +110,13 @@ export interface PopstateTarget {
  * Resolves the browser's current pathname (on a popstate event) to the
  * terminal's virtual cwd + a display title, for mirroring Back/Forward into
  * the shell. The homepage is special-cased since it is never itself a
- * manifest node (only its children carry explicit routes); the `/terminal`
- * boot link resolves the same way, since landing back on it (e.g. Back from
- * a page opened straight after boot) is equivalent to being at the terminal's
- * own home. A pathname with no matching node (e.g. a page outside the virtual
- * filesystem) still resolves to a title/route pair so the content can be
- * rendered — only the cwd is left unset (`path: null`) since there is nowhere
- * sensible to cd to.
+ * manifest node (only its children carry explicit routes). A pathname with
+ * no matching node (e.g. a page outside the virtual filesystem) still
+ * resolves to a title/route pair so the content can be rendered — only the
+ * cwd is left unset (`path: null`) since there is nowhere sensible to cd to.
  */
 export const resolveRouteForPopstate = (root: TerminalDirNode, pathname: string): PopstateTarget => {
-    if (pathname === ROOT_PATH || pathname === slugs.terminal) {
+    if (pathname === ROOT_PATH) {
         return { path: ROOT_PATH, title: "home", route: ROOT_PATH };
     }
 

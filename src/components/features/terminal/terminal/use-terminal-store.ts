@@ -13,7 +13,6 @@ import { toScreenLines } from "@/lib/terminal/terminal-screen-lines";
 import type { TerminalScrollbackEntry } from "@/lib/terminal/terminal-screen-lines";
 import { trackWith } from "@/lib/tracking/tracking";
 import { tracking } from "@/types/configuration/tracking";
-import { slugs } from "@/types/configuration/slug";
 import type { ComponentStore } from "@/types/component-store";
 import type { SearchResult } from "@/types/search/search";
 import type { TerminalContentBlockData, TerminalDirNode, TerminalRenderContentIntent } from "@/types/terminal/terminal";
@@ -60,8 +59,7 @@ const createBlockId = (): string =>
 export const useTerminalStore = (): ComponentStore<TerminalState, TerminalEffects> => {
     const router = useRouter();
 
-    const isBootLink = window.location.pathname === slugs.terminal;
-    const [open, setOpen] = useState(() => isBootLink);
+    const [open, setOpen] = useState(false);
     const [triggerEl, setTriggerEl] = useState<HTMLElement | null>(null);
     const [root, setRoot] = useState<TerminalDirNode | null>(null);
     const [cwd, setCwd] = useState(ROOT_PATH);
@@ -70,7 +68,7 @@ export const useTerminalStore = (): ComponentStore<TerminalState, TerminalEffect
     const [completions, setCompletions] = useState<string[]>([]);
     const [history, setHistory] = useState<string[]>([]);
     const [historyIndex, setHistoryIndex] = useState<number | null>(null);
-    const [announcement, setAnnouncement] = useState(() => (isBootLink ? "terminal opened" : ""));
+    const [announcement, setAnnouncement] = useState("");
     const [pendingSearchQuery, setPendingSearchQuery] = useState<string | null>(null);
     const [inputEl, setInputEl] = useState<HTMLInputElement | null>(null);
     const [scrollAnchorEl, setScrollAnchorEl] = useState<HTMLDivElement | null>(null);
@@ -149,14 +147,7 @@ export const useTerminalStore = (): ComponentStore<TerminalState, TerminalEffect
         setOpen(false);
         setAnnouncement("terminal closed");
         triggerEl?.focus();
-
-        if (window.location.pathname === slugs.terminal) {
-            // The user booted straight into /terminal and never ran `open`, so only the inert
-            // stub page sits beneath the overlay. Reveal the real homepage on close instead of
-            // that stub. `replace` (not `push`) so Back doesn't return to the stub.
-            router.replace("/");
-        }
-    }, [triggerEl, router]);
+    }, [triggerEl]);
 
     useEffect(() => {
         if (!open) {
