@@ -52,6 +52,11 @@ const MatrixRainControlPanel = dynamic(
     { ssr: false },
 );
 
+const Terminal = dynamic(
+    () => import("@/components/features/terminal/terminal").then((m) => m.Terminal),
+    { ssr: false },
+);
+
 const KungFuEasterEgg = dynamic(
     () =>
         import("@/components/features/easter-eggs/kung-fu-easter-egg").then(
@@ -68,6 +73,11 @@ const SpoonEasterEgg = dynamic(
     { ssr: false },
 );
 
+const Lightbox = dynamic(
+    () => import("@/components/design-system/organism/lightbox").then((m) => m.Lightbox),
+    { ssr: false },
+);
+
 export const LayoutAdditionalContent: FC = () => {
     const { state, effects } = useLayoutAdditionalContentStore();
     const { consented, decided } = state;
@@ -80,6 +90,7 @@ export const LayoutAdditionalContent: FC = () => {
         trackCommandPaletteToggleMotion,
         trackCommandPaletteCustomizeMatrixRain,
         trackCommandPaletteOpenEasterEggHunt,
+        trackCommandPaletteOpenTerminal,
     } = effects;
 
     return (
@@ -95,13 +106,16 @@ export const LayoutAdditionalContent: FC = () => {
                     onToggleMotion: trackCommandPaletteToggleMotion,
                     onCustomizeMatrixRain: trackCommandPaletteCustomizeMatrixRain,
                     onOpenEasterEggHunt: trackCommandPaletteOpenEasterEggHunt,
+                    onOpenTerminal: trackCommandPaletteOpenTerminal,
                 }}
                 searchEasterEgg={whiteRabbitEasterEgg}
                 SearchEasterEggComponent={NeoRoomEasterEgg}
             />
             <MatrixRainControlPanel />
+            <Terminal />
             <KungFuEasterEgg />
             <SpoonEasterEgg />
+            <Lightbox />
             <CookieConsentBanner decided={decided} onAccept={acceptConsent} onReject={rejectConsent} />
             <TrackingOptIn enabled={consented} />
             <InstallPromptBanner />

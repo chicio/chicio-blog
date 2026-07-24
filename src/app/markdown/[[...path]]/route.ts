@@ -1,4 +1,4 @@
-import { aboutMeMarkdown } from "@/lib/content/about-me/about-me-markdown";
+import { contactMarkdown } from "@/lib/content/contact/contact-markdown";
 import { easterEggHuntMarkdown } from "@/lib/content/easter-eggs/easter-egg-hunt-markdown";
 import {
     dsaExerciseMarkdown,
@@ -14,6 +14,7 @@ import {
 import { blogListingMarkdown, blogPostMarkdown, homepageMarkdown } from "@/lib/content/posts/posts-markdown";
 import { getPosts } from "@/lib/content/posts/posts";
 import { blogStatsMarkdown } from "@/lib/blog-stats/blog-stats-markdown";
+import { mdxPageMarkdown } from "@/lib/mdx/mdx-page-markdown";
 import { consoleMarkdown, gameMarkdown, videogamesMarkdown } from "@/lib/content/videogames/videogames-markdown";
 import { getAllConsoles, getAllGames } from "@/lib/content/videogames/videogames";
 import { slugs } from "@/types/configuration/slug";
@@ -26,6 +27,11 @@ const dsaTopicPrefix = slugs.dataStructuresAndAlgorithms.topic.split("/").slice(
 const dsaExercisePrefix = slugs.dataStructuresAndAlgorithms.exercise.split("/").slice(1, 3);
 const videogameConsolePrefix = slugs.videogames.console.split("/").slice(1, 3);
 const videogameGamePrefix = slugs.videogames.game.split("/").slice(1, 3);
+
+// Pages backed by a standard src/content/<slug>/content.mdx file — mdxPageMarkdown is fully
+// generic over the slug, so this registry replaces what would otherwise be one switch arm (and
+// one bespoke generator function) per page.
+const MDX_PAGE_SLUGS = new Set<string>([slugs.aboutMe, slugs.mcp, slugs.cookiePolicy, slugs.art]);
 
 export async function generateStaticParams() {
     const postParams = getPosts().map((post) => ({
@@ -53,6 +59,10 @@ export async function generateStaticParams() {
         { path: slugs.blog.home.slice(1).split("/") },
         { path: slugs.blog.stats.slice(1).split("/") },
         { path: slugs.aboutMe.slice(1).split("/") },
+        { path: slugs.mcp.slice(1).split("/") },
+        { path: slugs.cookiePolicy.slice(1).split("/") },
+        { path: slugs.art.slice(1).split("/") },
+        { path: slugs.contact.slice(1).split("/") },
         { path: slugs.easterEggHunt.slice(1).split("/") },
         { path: slugs.dataStructuresAndAlgorithms.home.slice(1).split("/") },
         { path: slugs.dataStructuresAndAlgorithms.roadmap.slice(1).split("/") },
@@ -78,46 +88,58 @@ export async function GET(_request: Request, { params }: RouteContext) {
 
     let markdown: string | null = null;
 
-    switch (joinedPath) {
-        case "/":
-            markdown = homepageMarkdown();
-            break;
-        case slugs.blog.home:
-            markdown = blogListingMarkdown();
-            break;
-        case slugs.blog.stats:
-            markdown = blogStatsMarkdown();
-            break;
-        case slugs.aboutMe:
-            markdown = aboutMeMarkdown();
-            break;
-        case slugs.easterEggHunt:
-            markdown = easterEggHuntMarkdown();
-            break;
-        case slugs.dataStructuresAndAlgorithms.home:
-            markdown = dsaMarkdown();
-            break;
-        case slugs.dataStructuresAndAlgorithms.roadmap:
-            markdown = dsaRoadmapMarkdown();
-            break;
-        case slugs.dataStructuresAndAlgorithms.exercises:
-            markdown = dsaExercisesListMarkdown();
-            break;
-        case slugs.videogames.home:
-            markdown = videogamesMarkdown();
-            break;
-        default: {
-            if (path.length === 6 && path[0] === blogPostPrefix[0] && path[1] === blogPostPrefix[1]) {
-                const [, , year, month, day, slug] = path;
-                markdown = blogPostMarkdown({ year, month, day, slug });
-            } else if (path.length === 3 && path[0] === dsaTopicPrefix[0] && path[1] === dsaTopicPrefix[1]) {
-                markdown = dsaTopicMarkdown({ topic: path[2] });
-            } else if (path.length === 5 && path[0] === dsaExercisePrefix[0] && path[1] === dsaExercisePrefix[1]) {
-                markdown = dsaExerciseMarkdown({ topic: path[2], exercise: path[4] });
-            } else if (path.length === 3 && path[0] === videogameConsolePrefix[0] && path[1] === videogameConsolePrefix[1]) {
-                markdown = consoleMarkdown({ console: path[2] });
-            } else if (path.length === 5 && path[0] === videogameGamePrefix[0] && path[1] === videogameGamePrefix[1]) {
-                markdown = gameMarkdown({ console: path[2], game: path[4] });
+    if (MDX_PAGE_SLUGS.has(joinedPath)) {
+        markdown = mdxPageMarkdown(joinedPath);
+    } else {
+        switch (joinedPath) {
+            case "/":
+                markdown = homepageMarkdown();
+                break;
+            case slugs.blog.home:
+                markdown = blogListingMarkdown();
+                break;
+            case slugs.blog.stats:
+                markdown = blogStatsMarkdown();
+                break;
+            case slugs.contact:
+                markdown = contactMarkdown();
+                break;
+            case slugs.easterEggHunt:
+                markdown = easterEggHuntMarkdown();
+                break;
+            case slugs.dataStructuresAndAlgorithms.home:
+                markdown = dsaMarkdown();
+                break;
+            case slugs.dataStructuresAndAlgorithms.roadmap:
+                markdown = dsaRoadmapMarkdown();
+                break;
+            case slugs.dataStructuresAndAlgorithms.exercises:
+                markdown = dsaExercisesListMarkdown();
+                break;
+            case slugs.videogames.home:
+                markdown = videogamesMarkdown();
+                break;
+            default: {
+                if (path.length === 6 && path[0] === blogPostPrefix[0] && path[1] === blogPostPrefix[1]) {
+                    const [, , year, month, day, slug] = path;
+                    markdown = blogPostMarkdown({ year, month, day, slug });
+                } else if (path.length === 3 && path[0] === dsaTopicPrefix[0] && path[1] === dsaTopicPrefix[1]) {
+                    markdown = dsaTopicMarkdown({ topic: path[2] });
+                } else if (path.length === 5 && path[0] === dsaExercisePrefix[0] && path[1] === dsaExercisePrefix[1]) {
+                    markdown = dsaExerciseMarkdown({ topic: path[2], exercise: path[4] });
+                } else if (
+                    path.length === 3 &&
+                    path[0] === videogameConsolePrefix[0] &&
+                    path[1] === videogameConsolePrefix[1]
+                ) {
+                    markdown = consoleMarkdown({ console: path[2] });
+                } else if (
+                    path.length === 5 &&
+                    path[0] === videogameGamePrefix[0] &&
+                    path[1] === videogameGamePrefix[1]
+                ) {
+                    markdown = gameMarkdown({ console: path[2], game: path[4] });
+                }
             }
         }
     }

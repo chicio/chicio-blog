@@ -1,7 +1,7 @@
 import { ContentPage } from "@/components/features/content/content-page";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { tracking } from "@/types/configuration/tracking";
-import { ArtGallery } from "../art-gallery";
+import ArtContent from "@/content/art/content.mdx";
 import { ArtHeader } from "../art-header";
 
 export const Art = () => {
@@ -11,7 +11,9 @@ export const Art = () => {
             trackingCategory={tracking.category.art}
         >
             <ArtHeader />
-            <ArtGallery />
+            <div className="art-gallery-grid">
+                <ArtContent />
+            </div>
         </ContentPage>
     );
 };

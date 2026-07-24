@@ -6,6 +6,7 @@ import { ReactNode } from "react";
 import { Open_Sans, Courier_Prime } from "next/font/google";
 import { SerwistProvider } from "@/components/features/pwa/serwist-provider";
 import { LayoutAdditionalContent } from "@/components/features/layout-additional-content";
+import { AppRootBoundary } from "@/components/features/terminal/app-root-boundary";
 
 export const openSans = Open_Sans({
   subsets: ["latin"],
@@ -38,7 +39,7 @@ export default function RootLayout({
       </Head>
       <body>
         <SerwistProvider>
-          {children}
+          <AppRootBoundary>{children}</AppRootBoundary>
           <LayoutAdditionalContent />
         </SerwistProvider>
       </body>

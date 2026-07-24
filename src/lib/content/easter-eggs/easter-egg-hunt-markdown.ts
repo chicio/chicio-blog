@@ -4,7 +4,7 @@ import {
     easterEggHuntPageDescription,
     easterEggHuntPageTitle,
 } from "@/lib/content/easter-eggs/easter-eggs-content";
-import { siteMetadata } from "@/types/configuration/site-metadata";
+import { markdownDocument } from "@/lib/mdx/markdown-document";
 import { slugs } from "@/types/configuration/slug";
 
 export const easterEggHuntMarkdown = (): string => {
@@ -21,13 +21,14 @@ ${hint.solutionSteps.map((step, index) => `${index + 1}. ${step}`).join("\n")}
         )
         .join("\n");
 
-    return `# ${easterEggHuntPageTitle}
-
-> ${easterEggHuntPageDescription}
-
-**URL:** ${siteMetadata.siteUrl}${slugs.easterEggHunt}
-
-${easterEggHuntIntroLines.join("\n\n")}
+    const body = `${easterEggHuntIntroLines.join("\n\n")}
 
 ${hintsMarkdown}`;
+
+    return markdownDocument({
+        title: easterEggHuntPageTitle,
+        description: easterEggHuntPageDescription,
+        slug: slugs.easterEggHunt,
+        body,
+    });
 };

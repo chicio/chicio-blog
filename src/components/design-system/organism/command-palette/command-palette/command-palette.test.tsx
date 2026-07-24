@@ -8,10 +8,11 @@ const { mockRouterPush } = vi.hoisted(() => ({
     mockRouterPush: vi.fn(),
 }));
 
-const { stableHandleSearch, stableResetSearch, openMatrixRainPanel } = vi.hoisted(() => ({
+const { stableHandleSearch, stableResetSearch, openMatrixRainPanel, openTerminalOverlay } = vi.hoisted(() => ({
     stableHandleSearch: vi.fn(),
     stableResetSearch: vi.fn(),
     openMatrixRainPanel: vi.fn(),
+    openTerminalOverlay: vi.fn(),
 }));
 
 const searchMockState = vi.hoisted(() => ({
@@ -95,6 +96,11 @@ vi.mock("@/components/design-system/state/command-palette/command-palette-events
     openMatrixRainPanel,
 }));
 
+vi.mock("@/components/design-system/state/terminal/terminal-events", () => ({
+    terminalOverlayOpenEvent: "terminal-overlay-open",
+    openTerminalOverlay,
+}));
+
 vi.mock("@/components/design-system/state/motion/motion", () => ({
     writeMotion: vi.fn(),
     hasMotion: () => true,
@@ -109,6 +115,7 @@ describe("CommandPalette", () => {
         stableHandleSearch.mockClear();
         stableResetSearch.mockClear();
         openMatrixRainPanel.mockClear();
+        openTerminalOverlay.mockClear();
         mockUseWebGpuSupported.mockReturnValue(true);
         mockUseReducedMotions.mockReturnValue(false);
         searchMockState.current = { type: "search", results: [] };
@@ -258,6 +265,25 @@ describe("CommandPalette", () => {
             await user.click(screen.getByRole("option", { name: "easter egg hunt" }));
             expect(mockRouterPush).toHaveBeenCalledWith("/easter-egg-hunt");
             expect(onOpenEasterEggHunt).toHaveBeenCalledOnce();
+            expect(screen.queryByPlaceholderText("type to search_")).toBeNull();
+        });
+
+        it("opens the terminal overlay in place, fires tracking and closes when 'Open terminal' is selected", async () => {
+            const onOpenTerminal = vi.fn();
+            const user = userEvent.setup();
+            render(
+                <CommandPalette
+                    searchIndexFileName="search.json"
+                    chatSlug="/chat"
+                    easterEggHuntSlug="/easter-egg-hunt"
+                    tracking={{ onOpenTerminal }}
+                />,
+            );
+            openViaShortcut();
+            await user.click(screen.getByRole("option", { name: "open terminal" }));
+            expect(openTerminalOverlay).toHaveBeenCalledOnce();
+            expect(mockRouterPush).not.toHaveBeenCalled();
+            expect(onOpenTerminal).toHaveBeenCalledOnce();
             expect(screen.queryByPlaceholderText("type to search_")).toBeNull();
         });
 

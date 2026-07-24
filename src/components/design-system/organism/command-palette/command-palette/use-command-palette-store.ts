@@ -2,6 +2,7 @@
 
 import { useSearch } from "@/components/design-system/hooks/use-search";
 import { commandPaletteOpenEvent } from "@/components/design-system/state/command-palette/command-palette-events";
+import { openTerminalOverlay } from "@/components/design-system/state/terminal/terminal-events";
 import type { EasterEggTerminalLines, SearchResult } from "@/types/search/search";
 import { ComponentType, ChangeEvent, useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -23,6 +24,7 @@ interface CommandPaletteEffects {
     handleSearchInput: (value: string) => void;
     handleOpenChat: () => void;
     handleOpenEasterEggHunt: () => void;
+    handleOpenTerminal: () => void;
     handleSearchResultSelect: (slug: string) => void;
     setSelectedValue: (value: string) => void;
     onToggleMotion?: () => void;
@@ -36,6 +38,7 @@ interface CommandPaletteTrackingCallbacks {
     onToggleMotion?: () => void;
     onCustomizeMatrixRain?: () => void;
     onOpenEasterEggHunt?: () => void;
+    onOpenTerminal?: () => void;
 }
 
 export const useCommandPaletteStore = (
@@ -125,6 +128,12 @@ export const useCommandPaletteStore = (
         close();
     }, [tracking, router, easterEggHuntSlug, close]);
 
+    const handleOpenTerminal = useCallback(() => {
+        tracking?.onOpenTerminal?.();
+        openTerminalOverlay();
+        close();
+    }, [tracking, close]);
+
     const handleSearchResultSelect = useCallback(
         (slug: string) => {
             tracking?.onSearchResultSelect?.();
@@ -150,6 +159,7 @@ export const useCommandPaletteStore = (
             handleSearchInput,
             handleOpenChat,
             handleOpenEasterEggHunt,
+            handleOpenTerminal,
             handleSearchResultSelect,
             setSelectedValue,
             onToggleMotion: tracking?.onToggleMotion,

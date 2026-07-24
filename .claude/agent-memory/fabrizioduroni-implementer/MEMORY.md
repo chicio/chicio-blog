@@ -55,8 +55,18 @@
 - [Read Next Terminal Window](feature_read_next_terminal_window.md) — private client shell wraps read-next in command-palette-style terminal chrome; h2 base-layer override gotcha; e2e locator `../..`
 
 ## Features (continued 8)
+- [Terminal Navigation](feature_terminal_navigation.md) — global full-screen overlay (evolved from windowed /terminal, 2026-07-23); open/cat in-shell render+popstate mirroring; AppRootBoundary inert; set-state-in-effect/KeyboardEvent-collision gotchas
+- [mdxToMarkdown Sanitizer](feature_mdx_to_markdown_sanitizer.md) — pure lib/ MDX→markdown AST sanitizer wired into 7 /markdown generators; remark-math-before-remark-mdx ordering gotcha; flow-vs-text JSX classification rules
+
+## Features (continued 9)
+- [Markdown Generalization](feature_markdown_generalization.md) — markdownDocument/mdxPageMarkdown/contactMarkdown (2026-07-23); rehype-figure wraps images in figure not p; leading-H1 dedup for mcp/cookie-policy; art/cookie-policy MDX migrations
+- [Terminal Navigation Part 2](feature_terminal_navigation.md) — sticky/shareable /terminal boot URL (router.replace moved from boot to close); full markdown content coverage wiring
 - [Konami/Spoon Easter Eggs](arch_easter_eggs_konami_spoon.md) — global-listener eggs (Kung Fu, Spoon) + unified tap hotspot; kung-fu now a self-hosted autoplay video (not MatrixTerminal+mp3); react-hooks/immutability needs useRef not useState for mutated DOM node props; set-state-in-effect fix; vi.hoisted/framer-motion mock gotchas; nested-worktree knip false positives
+
+## Features (continued 10)
+- [Terminal Navigation Part 3](feature_terminal_navigation.md) — REVERSED Part 2: /terminal boot link/sticky URL removed entirely, palette-only in-place open, no URL change ever (2026-07-24)
 
 ## Feedback
 - [PWA & State Patterns](feedback_pwa_patterns.md) — useSyncExternalStore for localStorage state, consent-gated UI, banner/error page alignment rules
 - [Worktree git stash hazard](feedback_worktree_git_stash_hazard.md) — never `git stash` inside a pipeline worktree, refs/stash is shared across all worktrees
+- [Prettier CLI 2-space regression](feature_markdown_generalization.md) — never run raw `npx prettier --write`, it reformats to 2-space against this repo's 4-space convention (no format script/tabWidth config; 4-space comes from VS Code's editor.tabSize fallback)
