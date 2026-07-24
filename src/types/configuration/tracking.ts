@@ -72,6 +72,8 @@ export const tracking = {
     command_palette_open_terminal: "command_palette_open_terminal",
     terminal_open: "terminal_open",
     easter_egg_hunt_reveal_hint: "easter_egg_hunt_reveal_hint",
+    easter_egg_kung_fu: "easter_egg_kung_fu",
+    easter_egg_spoon: "easter_egg_spoon",
     open_matrix_rain_webgpu: "open_matrix_rain_webgpu",
     open_matrix_rain_webgpu_demo: "open_matrix_rain_webgpu_demo",
     open_matrix_rain_webgpu_github: "open_matrix_rain_webgpu_github",

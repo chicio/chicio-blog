@@ -61,6 +61,7 @@
 ## Features (continued 9)
 - [Markdown Generalization](feature_markdown_generalization.md) — markdownDocument/mdxPageMarkdown/contactMarkdown (2026-07-23); rehype-figure wraps images in figure not p; leading-H1 dedup for mcp/cookie-policy; art/cookie-policy MDX migrations
 - [Terminal Navigation Part 2](feature_terminal_navigation.md) — sticky/shareable /terminal boot URL (router.replace moved from boot to close); full markdown content coverage wiring
+- [Konami/Spoon Easter Eggs](arch_easter_eggs_konami_spoon.md) — global-listener eggs (Kung Fu, Spoon) + unified tap hotspot on kung-fu, set-state-in-effect fix (ref-in-handler not effect+state), vi.hoisted/framer-motion mock gotchas, nested-worktree knip false positives
 
 ## Feedback
 - [PWA & State Patterns](feedback_pwa_patterns.md) — useSyncExternalStore for localStorage state, consent-gated UI, banner/error page alignment rules

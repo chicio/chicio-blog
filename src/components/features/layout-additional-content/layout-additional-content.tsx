@@ -57,6 +57,22 @@ const Terminal = dynamic(
     { ssr: false },
 );
 
+const KungFuEasterEgg = dynamic(
+    () =>
+        import("@/components/features/easter-eggs/kung-fu-easter-egg").then(
+            (m) => m.KungFuEasterEgg,
+        ),
+    { ssr: false },
+);
+
+const SpoonEasterEgg = dynamic(
+    () =>
+        import("@/components/features/easter-eggs/spoon-easter-egg").then(
+            (m) => m.SpoonEasterEgg,
+        ),
+    { ssr: false },
+);
+
 export const LayoutAdditionalContent: FC = () => {
     const { state, effects } = useLayoutAdditionalContentStore();
     const { consented, decided } = state;
@@ -92,6 +108,8 @@ export const LayoutAdditionalContent: FC = () => {
             />
             <MatrixRainControlPanel />
             <Terminal />
+            <KungFuEasterEgg />
+            <SpoonEasterEgg />
             <CookieConsentBanner decided={decided} onAccept={acceptConsent} onReject={rejectConsent} />
             <TrackingOptIn enabled={consented} />
             <InstallPromptBanner />
