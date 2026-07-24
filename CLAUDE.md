@@ -25,21 +25,6 @@ npm run release          # Release with conventional changelog
 
 ## Architecture
 
-### Directory Structure
-
-```
-src/
-├── app/                          # Next.js App Router pages and layouts
-├── components/
-│   ├── design-system/           # Atomic design: atoms → molecules → organisms → templates
-│   │   └── hooks/               # Shared hooks (motion, glassmorphism, in-view, search, etc.)
-│   ├── content/                 # Page-content components, one folder per route (mirrors src/content/)
-│   └── features/                # Cross-cutting UI not tied to a route: pwa/, easter-eggs/, seo/
-├── content/                      # All MDX content, filesystem-as-database
-├── lib/                         # Core business logic and utilities (no JSX)
-└── types/                       # TypeScript type definitions
-```
-
 ### Key Patterns
 
 - **Folder-Per-Component + Store Model**: every component lives in its own kebab-case folder with a `<name>.tsx`, a `use-<name>-store.ts` hook, and an `index.ts` barrel. Components call exactly one hook (`use<Name>Store()`). `useGlassmorphism` is permanently exempt. See `.claude/rules/component-architecture.md` for the full specification.
@@ -58,13 +43,8 @@ src/
 
 See `.claude/rules/code-style.md`. Key points: 4 spaces, 120 char lines, always braces on `if`, `@/` import alias, conventional commits with Gitmoji, one-hook-per-component, no functions in JSX.
 
-## Technology Stack
-
-Next.js 16 (App Router), React 19, TailwindCSS v4, Framer Motion v12, TypeScript 5 (strict), MDX (@next/mdx), Groq AI (Llama 3.3 70B), Upstash Vector (RAG), elasticlunr (search), Vercel Analytics & Speed Insights, Google Analytics (@next/third-parties).
-
 ## Environment Setup
 
-- **Node**: 24.x (specified in `package.json`)
 - **Env files**: `.env.development`, `.env.production`
 - **Required secrets**: `UPSTASH_VECTOR_REST_URL`, `UPSTASH_VECTOR_REST_TOKEN`
 
@@ -97,48 +77,18 @@ AI agents and tools that send `Accept: text/markdown` receive a Markdown represe
 
 ## Agentic SDLC Pipeline (code work)
 
-Non-trivial **code** changes can be run through an orchestrated, multi-agent SDLC. The **interactive** modes are
-manual and main-thread — invoke the orchestrator skill explicitly; it never auto-triggers. The **autonomous** mode
-runs the same pipeline unattended from a GitHub issue.
+Non-trivial **code** changes can be run through an orchestrated, multi-agent SDLC via the
+`fabrizioduroni-blog-sdlc` skill — interactive (two human gates, main-thread, never auto-triggers) or
+`--autonomous --from-issue <N>` (issue-as-contract, PR-only, never merges). The skill documents every stage,
+both modes, the agent roster with models, the mechanical gates, and worktree isolation; it loads on
+invocation, so that detail is not repeated here. Related skills: `/fabrizioduroni-task` (author a loop-ready
+issue), `/fabrizioduroni-scout` (file code-health tasks), `/fabrizioduroni-autopilot` and
+`fabrizioduroni-loop` (drive `/loop`). Full design spec: `docs/agentic-sdlc/`.
 
-- **Orchestrator**: `/fabrizioduroni-blog-sdlc [description] [--fix] [--in-place]` — sequences the agents, hosts two
-  human gates (plan approval, PR approval), and runs a bounded implement⇄review loop (max 3 rounds). Code only — it
-  refuses content tasks and points at the writer agents. **Runs in an isolated worktree by default** (pass `--in-place`
-  to run in the current tree); isolation is pipeline-level, never per-agent.
-- **Feature mode**: explore → brainstorm (grilling) 🚪 → implement ⇄ review → PR 🚪.
-- **Fix mode** (`--fix` or a pasted stack trace): investigate → confirm-root-cause 🚪 → implement ⇄ review → PR 🚪.
-- **Autonomous mode** (`--autonomous --from-issue <N>`, Phase 2): reads GitHub issue `#N` as the contract and runs
-  unattended — the `loop:ready` label + a pre-flight contract check replace the plan gate; it opens a PR and **never
-  merges** (the human merge click is the async gate). Terminal state is a PR (`loop:review`) or `loop:blocked` with a
-  reason. Driven by the session-bound `fabrizioduroni-loop` skill via `/loop 30m /fabrizioduroni-loop`.
-- **Author a loop task** (`/fabrizioduroni-task [idea]`): the async front-half of the pipeline — brainstorm an idea
-  (adaptive explore → grilling) into a loop-ready issue contract and file it via `gh`. Files **without** `loop:ready`
-  by default (approval stays a separate act; `--ready` opts in). Phase 2 spec in `docs/agentic-sdlc/`.
-- **Scout** (`/fabrizioduroni-scout`, run by `/loop`): the producer — runs deterministic code-health
-  scanners and files `loop-task` issues with machine-generated acceptance criteria, labeled by dimension
-  (`loop:coverage` / `loop:hygiene` / `loop:a11y`), deduped against open issues and capped per run. Files **without**
-  `loop:ready` — you curate which findings to queue.
-- **Autopilot** (`/fabrizioduroni-autopilot`, run by `/loop`): the **self-feeding** loop — one sequential tick either
-  drains a `loop:ready` issue to a PR or, when the queue is empty, refills via the scout **auto-approved** (files
-  `loop:ready` itself). Removes the human curation valve (only the merge gate remains); still never merges, never
-  prompts. Use `fabrizioduroni-loop` instead if you want to curate what gets built.
-
-Agent roster:
-
-| Agent | Model | Role |
-|-------|-------|------|
-| `fabrizioduroni-explorer` | haiku | read-only map of the change area (files, reusable design-system surface, registration points, test surface) |
-| `fabrizioduroni-implementer` | sonnet | writes code + tests, micro-commits, runs the mechanical gates (repurposed from the former senior-engineer) |
-| `fabrizioduroni-code-reviewer` | opus | re-runs the gates to verify + reviews the diff against rules/plan; severity-classified findings |
-| `fabrizioduroni-bug-investigator` | opus | fix-mode root-cause report from the codebase + git history (no Sentry/Jira) |
-| `fabrizioduroni-e2e-sentinel` | sonnet | review-stage live-QA arm: drives agent-browser against the running app when UI/route/flow changed; findings fold into the review verdict |
-
-Content agents are **separate** and unchanged: `fabrizioduroni-writer-engineer` (blog prose),
-`fabrizioduroni-writer-dsa-engineer` (DSA articles).
-
-**When to use what**: full pipeline for non-trivial code features/fixes; call `fabrizioduroni-implementer` **directly**
-as a quick-path escape hatch for trivial, well-specified code changes; use the writer agents for content. Design spec
-(temporary, while the pipeline is being built out): `docs/agentic-sdlc/`.
+**When to use what**: full pipeline (`/fabrizioduroni-blog-sdlc`) for non-trivial code features/fixes; call
+`fabrizioduroni-implementer` **directly** as a quick-path escape hatch for trivial, well-specified code
+changes; use the writer agents (`fabrizioduroni-writer-engineer`, `fabrizioduroni-writer-dsa-engineer`) for
+content — the pipeline refuses content tasks.
 
 ## Commit Convention
 
