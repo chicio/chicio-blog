@@ -509,6 +509,26 @@
     .glassmorphism-no-scale {
         @apply border border-solid border-accent-alpha-40 rounded-xl hover:border-accent active:border-accent focus:border-accent shadow-lg transition-colors duration-300 backdrop-blur-sm bg-general-background-alpha-60;
     }
+
+    .art-gallery-grid {
+        @apply container-fluid mx-0 my-8 grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-4 p-0;
+
+        & figure {
+            @apply m-0 flex h-full flex-col items-center justify-between;
+        }
+
+        & figure button {
+            @apply block w-full;
+        }
+
+        & figure img {
+            @apply h-48 w-full rounded-xl border border-solid border-accent-alpha-40 object-cover shadow-lg transition-all duration-500 hover:scale-102;
+        }
+
+        & figure figcaption {
+            @apply mt-2 mb-0 text-sm;
+        }
+    }
 }
 
 /** custom rules **/
