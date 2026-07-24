@@ -130,8 +130,8 @@ describe("Terminal", () => {
             render(<Terminal />);
             await openOverlay();
 
-            expect(screen.getByText(/type "help" for a list of commands/i)).toBeInTheDocument();
-            expect(screen.getByPlaceholderText("type a command_")).toHaveFocus();
+            expect(screen.getByText(/follow the white rabbit/i)).toBeInTheDocument();
+            expect(screen.getByPlaceholderText("follow the white rabbit_")).toHaveFocus();
         });
 
         it("exposes dialog semantics", async () => {
@@ -161,10 +161,10 @@ describe("Terminal", () => {
             expect(trigger).toHaveFocus();
 
             await openOverlay();
-            expect(screen.getByPlaceholderText("type a command_")).toHaveFocus();
+            expect(screen.getByPlaceholderText("follow the white rabbit_")).toHaveFocus();
 
             const user = userEvent.setup();
-            await user.type(screen.getByPlaceholderText("type a command_"), "close{Enter}");
+            await user.type(screen.getByPlaceholderText("follow the white rabbit_"), "close{Enter}");
 
             expect(trigger).toHaveFocus();
         });
@@ -172,12 +172,12 @@ describe("Terminal", () => {
         it("closes on Escape and reveals the page underneath", async () => {
             render(<Terminal />);
             await openOverlay();
-            expect(screen.getByPlaceholderText("type a command_")).toBeInTheDocument();
+            expect(screen.getByPlaceholderText("follow the white rabbit_")).toBeInTheDocument();
 
             const user = userEvent.setup();
             await user.keyboard("{Escape}");
 
-            expect(screen.queryByPlaceholderText("type a command_")).not.toBeInTheDocument();
+            expect(screen.queryByPlaceholderText("follow the white rabbit_")).not.toBeInTheDocument();
         });
 
         it("closes when the backdrop is clicked", async () => {
@@ -187,7 +187,7 @@ describe("Terminal", () => {
             const user = userEvent.setup();
             await user.click(container.firstChild as Element);
 
-            expect(screen.queryByPlaceholderText("type a command_")).not.toBeInTheDocument();
+            expect(screen.queryByPlaceholderText("follow the white rabbit_")).not.toBeInTheDocument();
         });
 
         it("does not close when clicking inside the dialog panel", async () => {
@@ -197,7 +197,7 @@ describe("Terminal", () => {
             const user = userEvent.setup();
             await user.click(screen.getByRole("dialog"));
 
-            expect(screen.getByPlaceholderText("type a command_")).toBeInTheDocument();
+            expect(screen.getByPlaceholderText("follow the white rabbit_")).toBeInTheDocument();
         });
 
         it("marks the registered app-root element inert while open and clears it on close", async () => {
@@ -224,7 +224,7 @@ describe("Terminal", () => {
             await openOverlay();
             await flushMicrotasks();
 
-            await user.type(screen.getByPlaceholderText("type a command_"), "open about-me{Enter}");
+            await user.type(screen.getByPlaceholderText("follow the white rabbit_"), "open about-me{Enter}");
 
             expect(mockRouterPush).toHaveBeenCalledWith("/about-me");
             expect(screen.getByText("─── /about-me ───")).toBeInTheDocument();
@@ -238,7 +238,7 @@ describe("Terminal", () => {
             await openOverlay();
             await flushMicrotasks();
 
-            await user.type(screen.getByPlaceholderText("type a command_"), "cat about-me{Enter}");
+            await user.type(screen.getByPlaceholderText("follow the white rabbit_"), "cat about-me{Enter}");
 
             expect(mockRouterPush).not.toHaveBeenCalled();
             await waitFor(() => expect(screen.getByRole("heading", { name: "About Me" })).toBeInTheDocument());
@@ -250,7 +250,7 @@ describe("Terminal", () => {
             await openOverlay();
             await flushMicrotasks();
 
-            await user.type(screen.getByPlaceholderText("type a command_"), "open chat{Enter}");
+            await user.type(screen.getByPlaceholderText("follow the white rabbit_"), "open chat{Enter}");
 
             expect(mockRouterPush).toHaveBeenCalledWith("/chat");
             await waitFor(() =>
@@ -273,7 +273,7 @@ describe("Terminal", () => {
             await waitFor(() => expect(screen.getByRole("heading", { name: "About Me" })).toBeInTheDocument());
 
             const user = userEvent.setup();
-            await user.type(screen.getByPlaceholderText("type a command_"), "pwd{Enter}");
+            await user.type(screen.getByPlaceholderText("follow the white rabbit_"), "pwd{Enter}");
             expect(screen.getByText(/\/about-me \$ pwd/)).toBeInTheDocument();
         });
     });
@@ -285,7 +285,7 @@ describe("Terminal", () => {
             await openOverlay();
             await flushMicrotasks();
 
-            await user.type(screen.getByPlaceholderText("type a command_"), "help{Enter}");
+            await user.type(screen.getByPlaceholderText("follow the white rabbit_"), "help{Enter}");
 
             expect(screen.getByText(/\/ \$ help/)).toBeInTheDocument();
             expect(screen.getByText(/list directory contents/)).toBeInTheDocument();
@@ -297,7 +297,7 @@ describe("Terminal", () => {
             await openOverlay();
             await flushMicrotasks();
 
-            await user.type(screen.getByPlaceholderText("type a command_"), "search react{Enter}");
+            await user.type(screen.getByPlaceholderText("follow the white rabbit_"), "search react{Enter}");
 
             await waitFor(() => expect(screen.getByText("> Hello World")).toBeInTheDocument());
         });
@@ -310,7 +310,7 @@ describe("Terminal", () => {
             await openOverlay();
             await flushMicrotasks();
 
-            await user.type(screen.getByPlaceholderText("type a command_"), "ls{Enter}");
+            await user.type(screen.getByPlaceholderText("follow the white rabbit_"), "ls{Enter}");
 
             const liveRegion = document.querySelector('[aria-live="polite"]');
             expect(liveRegion).toHaveTextContent(/items/);

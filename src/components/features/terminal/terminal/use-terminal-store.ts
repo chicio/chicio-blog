@@ -46,9 +46,9 @@ const EMPTY_ROOT: TerminalDirNode = { type: "dir", children: {} };
 const FETCH_TIMEOUT_MS = 8000;
 
 const BOOT_LINES: TerminalScrollbackEntry[] = [
-    { id: "boot-0", text: "chicio://terminal v1.0 - Matrix shell interface", kind: "success" },
-    { id: "boot-1", text: "establishing connection to fabrizioduroni.it... done.", kind: "normal" },
-    { id: "boot-2", text: 'type "help" for a list of commands, "ls" to look around.', kind: "normal" },
+    { id: "boot-0", text: "chicio://terminal v1.0 :: Matrix shell interface", kind: "success" },
+    { id: "boot-1", text: "Wake up, Neo... the Matrix has you.", kind: "success" },
+    { id: "boot-2", text: "Follow the white rabbit: type `ls` to look around, `help` for the manual.", kind: "normal" },
 ];
 
 const createBlockId = (): string =>
@@ -244,7 +244,7 @@ export const useTerminalStore = (): ComponentStore<TerminalState, TerminalEffect
             setHistory((prev) => [...prev, trimmed]);
             setHistoryIndex(null);
 
-            const promptText = `${cwd} $ ${trimmed}`;
+            const promptText = `neo@fabrizioduroni:${cwd} $ ${trimmed}`;
             const command = parse(trimmed);
 
             if (!root && needsFilesystem(command.name)) {

@@ -38,7 +38,7 @@ export const TerminalPrompt: FC<TerminalPromptProps> = ({
         )}
         <form onSubmit={handleSubmit} className="flex items-center gap-2">
             <label htmlFor="terminal-input" className="text-accent shrink-0 font-mono text-sm font-bold text-shadow-md">
-                {cwd} $
+                {`neo@fabrizioduroni:${cwd} $`}
             </label>
             <input
                 id="terminal-input"
@@ -48,7 +48,7 @@ export const TerminalPrompt: FC<TerminalPromptProps> = ({
                 onKeyDown={handleKeyDown}
                 aria-label="Terminal input"
                 className="text-accent placeholder:text-accent/40 caret-accent flex-1 bg-transparent font-mono text-sm outline-none"
-                placeholder="type a command_"
+                placeholder="follow the white rabbit_"
                 autoComplete="off"
                 autoCapitalize="off"
                 autoCorrect="off"

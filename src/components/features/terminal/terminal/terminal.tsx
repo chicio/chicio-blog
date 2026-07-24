@@ -64,7 +64,7 @@ export const Terminal: FC = () => {
                         handleCompletionSelect={handleCompletionSelect}
                     />
                     <div className="border-accent/20 text-accent/40 border-t px-4 py-2 font-mono text-xs">
-                        <span>type `close` or press esc to exit</span>
+                        <span>take the blue pill (`close` or esc) to wake up</span>
                     </div>
                 </div>
                 <span aria-live="polite" className="sr-only">

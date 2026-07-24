@@ -27,7 +27,7 @@ const openTerminalOverlay = async (page: Page) => {
     await expect(page.getByRole("dialog", { name: "Terminal" })).toBeVisible();
 };
 
-const terminalInput = (page: Page) => page.getByPlaceholder("type a command_");
+const terminalInput = (page: Page) => page.getByPlaceholder("follow the white rabbit_");
 
 test.describe("Terminal overlay", () => {
     test("opens in place over the current page, without changing the URL", async ({ page }) => {
@@ -45,7 +45,7 @@ test.describe("Terminal overlay", () => {
         await acceptConsent(page);
         await openTerminalOverlay(page);
 
-        await expect(page.getByText(/type "help" for a list of commands/i)).toBeVisible();
+        await expect(page.getByText(/follow the white rabbit/i)).toBeVisible();
     });
 
     test("open pushes the real URL and renders the page in-shell", async ({ page }) => {
