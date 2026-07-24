@@ -49,4 +49,41 @@ describe("grayMatterContent", () => {
             expect(result.frontmatter.authors[0].name).toBe("Fabrizio Duroni");
         });
     });
+
+    describe("metadata resolution", () => {
+        it("passes the raw frontmatter metadata through untouched when no adapter is given", () => {
+            mockMatter.mockReturnValue({
+                data: { ...baseFrontmatter, authors: [], metadata: { releaseYear: "1989" } },
+                content: "content",
+            });
+
+            const result = grayMatterContent("/fake/path/content.mdx");
+
+            expect(result.frontmatter.metadata).toEqual({ releaseYear: "1989" });
+        });
+
+        it("is undefined when the frontmatter has no metadata and no adapter is given", () => {
+            mockMatter.mockReturnValue({
+                data: { ...baseFrontmatter, authors: [] },
+                content: "content",
+            });
+
+            const result = grayMatterContent("/fake/path/content.mdx");
+
+            expect(result.frontmatter.metadata).toBeUndefined();
+        });
+
+        it("uses the adapter's return value when an adapter is given", () => {
+            mockMatter.mockReturnValue({
+                data: { ...baseFrontmatter, authors: [], metadata: { releaseYear: "1989" } },
+                content: "content",
+            });
+            const adapter = vi.fn(() => ({ transformed: true }));
+
+            const result = grayMatterContent("/fake/path/content.mdx", adapter);
+
+            expect(adapter).toHaveBeenCalledWith({ releaseYear: "1989" });
+            expect(result.frontmatter.metadata).toEqual({ transformed: true });
+        });
+    });
 });
