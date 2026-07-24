@@ -47,6 +47,20 @@ describe("createSection", () => {
             expect(section.list().map((c) => c.slug.formatted)).toEqual(["/c", "/a", "/b"]);
         });
 
+        it("never hands back the cached array itself, so callers cannot corrupt the build cache", () => {
+            const cached = [makeContent("/c", 3), makeContent("/a", 1), makeContent("/b", 2)];
+            mockGetAllContentFor.mockReturnValue(cached);
+
+            const section = createSection<FakeMeta>({ slug: "/slug" });
+            const listed = section.list();
+
+            expect(listed).not.toBe(cached);
+
+            listed.sort((a, b) => a.frontmatter.metadata!.order - b.frontmatter.metadata!.order);
+
+            expect(cached.map((c) => c.slug.formatted)).toEqual(["/c", "/a", "/b"]);
+        });
+
         it("sorts using the configured comparator", () => {
             const cached = [makeContent("/c", 3), makeContent("/a", 1), makeContent("/b", 2)];
             mockGetAllContentFor.mockReturnValue(cached);

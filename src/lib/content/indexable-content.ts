@@ -1,4 +1,4 @@
-import { getAboutMe } from "./about-me/about-me";
+import { aboutMe } from "./about-me/about-me";
 import {
   topics,
   exercises,
@@ -35,6 +35,6 @@ export const getIndexableContent = () => [
   ...games.list(),
   dsaRoadmap.single()!,
   dsaExercisesList.single()!,
-  getAboutMe(),
+  aboutMe.single()!,
   easterEggHuntSearchEntry,
 ];

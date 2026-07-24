@@ -1,4 +1,4 @@
-import { getAboutMe } from "@/lib/content/about-me/about-me";
+import { aboutMe } from "@/lib/content/about-me/about-me";
 import {
     topics,
     exercises,
@@ -137,14 +137,14 @@ const buildVideogamesTree = (
 };
 
 export const generateFilesystemManifest = (): TerminalFileSystemManifest => {
-    const aboutMe = getAboutMe();
+    const aboutMeContent = aboutMe.single()!;
 
     const root = dir({
         children: {
             blog: buildBlogTree(posts.list()),
             dsa: buildDsaTree(topics.list(), exercises.list()),
             videogames: buildVideogamesTree(consoles.list(), games.list()),
-            "about-me": file(aboutMe.frontmatter.title, aboutMe.frontmatter.description, slugs.aboutMe),
+            "about-me": file(aboutMeContent.frontmatter.title, aboutMeContent.frontmatter.description, slugs.aboutMe),
             art: file("Art", "3D and generative art gallery", slugs.art),
             chat: file("Chat", "Chat with Fabrizio's AI assistant", slugs.chat),
             contact: file("Contact", "Send Fabrizio a message", slugs.contact),

@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { generateFilesystemManifest } from "./filesystem-manifest-factory";
-import { getAboutMe } from "@/lib/content/about-me/about-me";
+import { aboutMe } from "@/lib/content/about-me/about-me";
 import { posts } from "@/lib/content/posts/posts";
 import { slugs } from "@/types/configuration/slug";
 import type { TerminalDirNode } from "@/types/terminal/terminal";
@@ -76,12 +76,12 @@ describe("generateFilesystemManifest", () => {
     describe("standalone leaf pages", () => {
         it("uses the real about-me content for the about-me leaf", () => {
             const { root } = generateFilesystemManifest();
-            const aboutMe = getAboutMe();
+            const aboutMeContent = aboutMe.single()!;
 
             expect(root.children["about-me"]).toMatchObject({
                 type: "file",
-                title: aboutMe.frontmatter.title,
-                description: aboutMe.frontmatter.description,
+                title: aboutMeContent.frontmatter.title,
+                description: aboutMeContent.frontmatter.description,
                 route: slugs.aboutMe,
             });
         });
