@@ -24,7 +24,7 @@ export const Lightbox: FC = () => {
     }
 
     return (
-        <Overlay onClick={close} delay={0}>
+        <Overlay onClick={close} delay={0} className="z-[60]!">
             <Button onClick={close} className="fixed top-4 right-4 z-50 p-2!" aria-label="Close lightbox">
                 <BiX className="size-8 md:size-10" />
             </Button>
