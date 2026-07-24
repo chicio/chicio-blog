@@ -10,10 +10,6 @@ describe("contactMarkdown", () => {
         expect(result).toContain(`**URL:** ${siteMetadata.siteUrl}/contact`);
     });
 
-    it("includes the email address", () => {
-        expect(contactMarkdown()).toContain(siteMetadata.contacts.email);
-    });
-
     it("includes every social link", () => {
         const result = contactMarkdown();
         const { links } = siteMetadata.contacts;

@@ -5,17 +5,13 @@ import { slugs } from "@/types/configuration/slug";
 /**
  * Contact has no `content.mdx` (config exception): its content is entirely driven by
  * `siteMetadata.contacts`, the same config the contact form/footer/SEO already use, so a
- * dedicated MDX file would just duplicate it. This builds the email + every social link
- * straight from that config through the shared `markdownDocument` header.
+ * dedicated MDX file would just duplicate it. This builds every social link straight from
+ * that config through the shared `markdownDocument` header.
  */
 export const contactMarkdown = (): string => {
-    const { email, links } = siteMetadata.contacts;
+    const { links } = siteMetadata.contacts;
 
-    const body = `Get in touch directly by email, or find me on any of these platforms.
-
-## Email
-
-${email}
+    const body = `Find me on any of these platforms.
 
 ## Social
 
