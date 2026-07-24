@@ -15,7 +15,6 @@ export async function GET() {
     link: `${siteMetadata.siteUrl}`,
     author: {
       name: authors.fabrizio_duroni.name,
-      email: "fabrizio.duroni@gmail.com",
       link: authors.fabrizio_duroni.linkedinUrl,
     },
     language: "en",

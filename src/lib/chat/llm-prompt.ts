@@ -3,9 +3,8 @@ PROFESSIONAL PROFILE - FABRIZIO DURONI
 
 === BASIC INFORMATION ===
 Name: Fabrizio Duroni
-Location: Via Leonardo da Vinci 4, Montorfano (CO), Italia
-Phone: +39 3285926828
-Email: fabrizio.duroni@gmail.com
+Location: Italia
+Contact: use the contact form at https://www.fabrizioduroni.it/contact
 Website: https://www.fabrizioduroni.it
 GitHub: @chicio
 LinkedIn: fabrizio-duroni
