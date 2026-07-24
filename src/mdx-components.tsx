@@ -1,6 +1,7 @@
 import type { MDXComponents } from "mdx/types";
 import { CodeBlock } from "@/components/features/mdx/code-block";
 import { MermaidDiagram } from "@/components/features/mdx/mermaid-diagram";
+import { LightboxImage } from "@/components/design-system/molecules/lightbox-image";
 import { extractMermaidDefinition } from "./lib/mermaid/mermaid";
 
 const components: MDXComponents = {
@@ -18,8 +19,7 @@ const components: MDXComponents = {
 
         return <CodeBlock {...props} />;
     },
-    // eslint-disable-next-line @next/next/no-img-element
-    img: ({ alt, ...props }) => <img loading="lazy" decoding="async" alt={alt ?? ""} {...props} />,
+    img: LightboxImage,
 };
 
 export function useMDXComponents(): MDXComponents {

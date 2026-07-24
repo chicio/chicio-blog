@@ -73,6 +73,11 @@ const SpoonEasterEgg = dynamic(
     { ssr: false },
 );
 
+const Lightbox = dynamic(
+    () => import("@/components/design-system/organism/lightbox").then((m) => m.Lightbox),
+    { ssr: false },
+);
+
 export const LayoutAdditionalContent: FC = () => {
     const { state, effects } = useLayoutAdditionalContentStore();
     const { consented, decided } = state;
@@ -110,6 +115,7 @@ export const LayoutAdditionalContent: FC = () => {
             <Terminal />
             <KungFuEasterEgg />
             <SpoonEasterEgg />
+            <Lightbox />
             <CookieConsentBanner decided={decided} onAccept={acceptConsent} onReject={rejectConsent} />
             <TrackingOptIn enabled={consented} />
             <InstallPromptBanner />
