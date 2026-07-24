@@ -78,4 +78,20 @@ describe("SelfHostedVideo", () => {
             expect(container.querySelector("video")).toHaveAttribute("aria-label", "A descriptive label");
         });
     });
+
+    describe("className", () => {
+        it("applies the default video classes when no className is provided", () => {
+            const { container } = render(<SelfHostedVideo src="/video/demo.mp4" />);
+            expect(container.querySelector("video")).toHaveClass("aspect-video", "w-full", "rounded-xl");
+        });
+
+        it("uses the provided className verbatim, overriding the default sizing", () => {
+            const { container } = render(
+                <SelfHostedVideo src="/video/demo.mp4" className="aspect-[4/3] h-[70vh] overflow-hidden" />,
+            );
+            const video = container.querySelector("video");
+            expect(video).toHaveClass("aspect-[4/3]", "h-[70vh]", "overflow-hidden");
+            expect(video).not.toHaveClass("aspect-video", "w-full");
+        });
+    });
 });

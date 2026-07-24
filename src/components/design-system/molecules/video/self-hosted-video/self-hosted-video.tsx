@@ -1,5 +1,8 @@
 import { FC } from "react";
 
+const DEFAULT_VIDEO_CLASS_NAME =
+    "aspect-video w-full rounded-xl border border-solid border-accent-alpha-40 shadow-lg";
+
 interface Props {
     src: string;
     poster?: string;
@@ -8,9 +11,19 @@ interface Props {
     onEnded?: () => void;
     videoRef?: (el: HTMLVideoElement | null) => void;
     ariaLabel?: string;
+    className?: string;
 }
 
-export const SelfHostedVideo: FC<Props> = ({ src, poster, caption, autoPlay, onEnded, videoRef, ariaLabel }) => {
+export const SelfHostedVideo: FC<Props> = ({
+    src,
+    poster,
+    caption,
+    autoPlay,
+    onEnded,
+    videoRef,
+    ariaLabel,
+    className,
+}) => {
     const sourceSrc = poster || src.includes("#") ? src : `${src}#t=0.1`;
     return (
         <figure className="my-4">
@@ -23,7 +36,7 @@ export const SelfHostedVideo: FC<Props> = ({ src, poster, caption, autoPlay, onE
                 onEnded={onEnded}
                 poster={poster}
                 aria-label={ariaLabel}
-                className="aspect-video w-full rounded-xl border border-solid border-accent-alpha-40 shadow-lg"
+                className={className ?? DEFAULT_VIDEO_CLASS_NAME}
             >
                 <source src={sourceSrc} />
                 Your browser does not support the video tag.{" "}

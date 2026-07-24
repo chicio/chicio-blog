@@ -30,6 +30,7 @@ export const KungFuEasterEgg: FC = () => {
                             onEnded={onComplete}
                             videoRef={setVideoEl}
                             ariaLabel="I know kung fu — Matrix construct loading"
+                            className="aspect-[4/3] h-[70vh] w-auto max-w-full rounded-xl border border-solid border-accent-alpha-40 shadow-lg overflow-hidden"
                         />
                         <div onClick={stopClick} style={{ visibility: isCompleted ? "visible" : "hidden" }}>
                             <RedPillButton onClick={replay}>I Know Kung Fu</RedPillButton>
