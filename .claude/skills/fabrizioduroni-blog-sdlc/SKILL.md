@@ -1,7 +1,6 @@
 ---
 name: fabrizioduroni-blog-sdlc
 description: Orchestrate the full code SDLC for chicio-blog — explore → brainstorm → implement ⇄ review → PR (feature mode), or investigate → confirm → implement ⇄ review → PR (fix mode). Interactive (two human gates) or --autonomous (issue-as-contract, async label gates, PR-only, never merges). Code work only.
-disable-model-invocation: true
 ---
 
 # fabrizioduroni-blog-sdlc — orchestrator

@@ -56,11 +56,11 @@ From the collected inputs, derive:
 | `slug` | Title in kebab-case |
 | `description` | `"{title} is a/an {genre-lowercase} game developed by {developer} for the {consoleName}"` — use "an" before vowel sounds (e.g., "an action RPG"), "a" otherwise (e.g., "a platformer"). Genre in lowercase. |
 | `date` | Today's date (YYYY-MM-DD) |
-| `image` | `/images/content/videogames/console/{console}/game/{slug}/cover.jpg` |
+| `image` | `/media/content/videogames/console/{console}/game/{slug}/cover.jpg` |
 | `tags` | `[{console-slug}, game, {genre-lowercase}]` |
 | `authors` | `[fabrizio_duroni]` |
 | `metadata.console` | Console display name from mapping (e.g., "PlayStation 5") |
-| `metadata.gallery` | 3 placeholder paths: `/images/content/videogames/console/{console}/game/{slug}/media/N.jpeg` for N=1,2,3 |
+| `metadata.gallery` | 3 placeholder paths: `/media/content/videogames/console/{console}/game/{slug}/media/N.jpeg` for N=1,2,3 |
 
 **Console slug to display name mapping:**
 
@@ -82,11 +82,11 @@ From the collected inputs, derive:
 
 ```
 src/content/videogames/console/<console>/game/<slug>/
-    images/
+    media/
         media/
 ```
 
-Create the directories. The `images/gameplay/` folder will be created by the screenshot script.
+Create the directories (the co-located source folder MUST be named `media` — the build-time copy script keys off that path segment to mirror it into `public/media/content/`). The `media/gameplay/` folder will be created by the screenshot script.
 
 ### 6. Create content.mdx
 
@@ -97,7 +97,7 @@ Write `content.mdx` with **only the frontmatter** — no MDX body yet. The Gamep
 title: "<title>"
 description: "<description>"
 date: YYYY-MM-DD
-image: /images/content/videogames/console/<console>/game/<slug>/cover.jpg
+image: /media/content/videogames/console/<console>/game/<slug>/cover.jpg
 tags: [<console-slug>, game, <genre-lowercase>]
 authors: [fabrizio_duroni]
 metadata:
@@ -111,9 +111,9 @@ metadata:
     pegiRating: "<pegiRating>"
     region: "<region>"
     gallery:
-        - /images/content/videogames/console/<console>/game/<slug>/media/1.jpeg
-        - /images/content/videogames/console/<console>/game/<slug>/media/2.jpeg
-        - /images/content/videogames/console/<console>/game/<slug>/media/3.jpeg
+        - /media/content/videogames/console/<console>/game/<slug>/media/1.jpeg
+        - /media/content/videogames/console/<console>/game/<slug>/media/2.jpeg
+        - /media/content/videogames/console/<console>/game/<slug>/media/3.jpeg
 ---
 ```
 
@@ -135,7 +135,7 @@ uv run --script .claude/skills/fabrizioduroni-new-videogame/add-game-screenshots
 
 The script:
 - Downloads gameplay screenshots from Wikimedia Commons and/or IGDB
-- Saves them to `<game>/images/gameplay/` as numbered JPEGs
+- Saves them to `<game>/media/gameplay/` as numbered JPEGs
 - Adds the `## Gameplay` section with `ImageCarousel` component and imports to `content.mdx`
 
 **If the script fails** (no screenshots found, network error): the entry is still valid. Inform the user the Gameplay section was not added and they can re-run the script later.
@@ -146,11 +146,11 @@ Print what was created and what the user needs to do manually:
 
 **Created:**
 - `src/content/videogames/console/<console>/game/<slug>/content.mdx`
-- `src/content/videogames/console/<console>/game/<slug>/images/gameplay/` (with screenshots, if script succeeded)
-- `src/content/videogames/console/<console>/game/<slug>/images/media/` (empty)
+- `src/content/videogames/console/<console>/game/<slug>/media/gameplay/` (with screenshots, if script succeeded)
+- `src/content/videogames/console/<console>/game/<slug>/media/media/` (empty)
 
 **Manual TODOs:**
-- Add `cover.jpg` to `<slug>/images/` (game box art / cover image)
-- Add 3 photos to `<slug>/images/media/` named `1.jpeg`, `2.jpeg`, `3.jpeg` (photos of the physical game)
+- Add `cover.jpg` to `<slug>/media/` (game box art / cover image)
+- Add 3 photos to `<slug>/media/media/` named `1.jpeg`, `2.jpeg`, `3.jpeg` (photos of the physical game)
 - If more or fewer than 3 media photos: update the `metadata.gallery` array in `content.mdx`
 - Run `npm run dev` to verify the page renders at `/videogames/console/<console>/game/<slug>`
