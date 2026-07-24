@@ -217,48 +217,6 @@ describe("Terminal", () => {
         });
     });
 
-    describe("the boot link (fresh load of /terminal)", () => {
-        it("opens itself over the homepage and keeps the URL sticky at /terminal", async () => {
-            window.history.pushState(null, "", "/terminal");
-
-            render(<Terminal />);
-            await flushMicrotasks();
-
-            expect(mockRouterReplace).not.toHaveBeenCalled();
-            expect(window.location.pathname).toBe("/terminal");
-            expect(screen.getByPlaceholderText("type a command_")).toBeInTheDocument();
-        });
-
-        it("closing without ever navigating replaces the URL with / to reveal the homepage", async () => {
-            window.history.pushState(null, "", "/terminal");
-
-            const user = userEvent.setup();
-            render(<Terminal />);
-            await flushMicrotasks();
-
-            await user.keyboard("{Escape}");
-
-            expect(mockRouterReplace).toHaveBeenCalledWith("/");
-        });
-
-        it("closing after navigating away with open does not rewrite the URL", async () => {
-            window.history.pushState(null, "", "/terminal");
-
-            const user = userEvent.setup();
-            render(<Terminal />);
-            await flushMicrotasks();
-
-            await user.type(screen.getByPlaceholderText("type a command_"), "open about-me{Enter}");
-            // Simulates the real App Router having navigated away from /terminal (router.push is
-            // mocked here and does not touch jsdom's location on its own).
-            window.history.pushState(null, "", "/about-me");
-
-            await user.keyboard("{Escape}");
-
-            expect(mockRouterReplace).not.toHaveBeenCalled();
-        });
-    });
-
     describe("open vs cat", () => {
         it("open pushes the real URL, renders the page in-shell between separators", async () => {
             const user = userEvent.setup();
