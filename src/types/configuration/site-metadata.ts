@@ -7,7 +7,6 @@ export const siteMetadata = {
     featuredArtImage: "/chicio-art-featured.png",
     author: "Fabrizio Duroni",
     contacts: {
-        email: "fabrizio.duroni@gmail.com",
         links: {
             twitter: "https://twitter.com/chicio86",
             facebook: "https://www.facebook.com/fabrizio.duroni",
