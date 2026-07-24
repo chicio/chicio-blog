@@ -63,6 +63,9 @@
 - [Terminal Navigation Part 2](feature_terminal_navigation.md) — sticky/shareable /terminal boot URL (router.replace moved from boot to close); full markdown content coverage wiring
 - [Konami/Spoon Easter Eggs](arch_easter_eggs_konami_spoon.md) — global-listener eggs (Kung Fu, Spoon) + unified tap hotspot on kung-fu, set-state-in-effect fix (ref-in-handler not effect+state), vi.hoisted/framer-motion mock gotchas, nested-worktree knip false positives
 
+## Features (continued 10)
+- [Terminal Navigation Part 3](feature_terminal_navigation.md) — REVERSED Part 2: /terminal boot link/sticky URL removed entirely, palette-only in-place open, no URL change ever (2026-07-24)
+
 ## Feedback
 - [PWA & State Patterns](feedback_pwa_patterns.md) — useSyncExternalStore for localStorage state, consent-gated UI, banner/error page alignment rules
 - [Worktree git stash hazard](feedback_worktree_git_stash_hazard.md) — never `git stash` inside a pipeline worktree, refs/stash is shared across all worktrees

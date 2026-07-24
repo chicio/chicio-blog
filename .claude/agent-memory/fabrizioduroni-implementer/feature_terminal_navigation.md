@@ -191,6 +191,33 @@ DID confirm all rules generated correctly in the real build.
   former appears inside the terminal dialog (the in-shell content block renders ONLY the fetched markdown body,
   never the real page's own JSX heading — the real page mounts as a separate, non-dialog-descendant tree).
 
+## Part 3 (2026-07-24): boot-link/sticky-URL concept REVERSED — palette-only, no URL change ever
+
+The Part 2 sticky `/terminal` URL design (above) was fully reverted the next day. Current final state:
+
+- `src/app/terminal/page.tsx` deleted; `/terminal` is a plain 404 again. `slugs.terminal` removed from
+  `src/types/configuration/slug.ts`.
+- `use-terminal-store.ts`: `open` and `announcement` are now plain `useState(false)`/`useState("")` — no
+  `isBootLink` check, no lazy initializer computing it. `closeOverlay` is back to just closing + restoring
+  focus, no `router.replace` branch at all (the whole "reveal homepage instead of the boot stub" case no
+  longer exists because there is no boot stub).
+- `resolveRouteForPopstate` (`terminal-path.ts`) reverted to `pathname === ROOT_PATH` only (dropped the
+  `slugs.terminal` OR-branch and its import).
+- Net effect: the terminal ONLY opens via the command-palette event
+  (`terminalOverlayOpenEvent`/`openTerminalOverlay`), always in-place over whatever route is currently
+  mounted, and the URL never changes on open or close — only `open <path>` (the in-shell command) still
+  does a real `router.push`, unchanged.
+- e2e/unit/component tests: deleted the three Playwright "boot link" specs, the three `terminal.test.tsx`
+  "boot link" describe-block tests, and the one `terminal-path.test.ts` popstate special-case test. The
+  existing "opens in place over the current page, without changing the URL" Playwright spec already covered
+  the palette-only requirement and needed no changes.
+- Confirmed the removal is clean: `npm run lint`/`validate-architecture`/`knip`/`typecheck`(clean-state)/
+  `test:run`/`build`/`test:e2e` all green after the change. One `test:e2e` run flaked with 22 unrelated
+  timeouts (homepage/easter-egg-hunt/videogames specs too, nothing terminal-specific) on first-request
+  server warm-up; an immediate rerun was 77/77 green — treat an e2e run where failures cluster across
+  unrelated specs as an infra flake, rerun once before treating it as a regression (same spirit as
+  [[build-mkdir-enoent-flake]] for `next build`).
+
 ## Design decisions confirmed (from #480, still true)
 
 - `open`/`cat` support directories with a `route` too (not just leaf files).
