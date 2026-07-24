@@ -1,14 +1,12 @@
 "use client";
 
 import { Overlay } from "@/components/design-system/atoms/effects/overlay";
-import { useGlassmorphism } from "@/components/design-system/hooks/use-glassmorphism";
 import { FC } from "react";
 import { TerminalPrompt } from "./terminal-prompt";
 import { TerminalScrollback } from "./terminal-scrollback";
 import { useTerminalStore } from "./use-terminal-store";
 
 export const Terminal: FC = () => {
-    const { glassmorphismClass } = useGlassmorphism({ noScale: true });
     const { state, effects } = useTerminalStore();
     const { open, lines, cwd, input, completions, announcement } = state;
     const {
@@ -27,7 +25,7 @@ export const Terminal: FC = () => {
     }
 
     return (
-        <Overlay delay={0} onClick={closeOverlay} className="z-50">
+        <Overlay delay={0} onClick={closeOverlay} className="z-50 bg-black!">
             <div
                 role="dialog"
                 aria-modal="true"
@@ -35,7 +33,7 @@ export const Terminal: FC = () => {
                 onClick={stopPropagation}
                 className="fixed inset-0 flex flex-col sm:inset-4"
             >
-                <div className={`${glassmorphismClass} flex h-full flex-1 flex-col overflow-hidden`}>
+                <div className="border-accent-alpha-40 bg-general-background flex h-full flex-1 flex-col overflow-hidden rounded-xl border border-solid shadow-lg">
                     <svg aria-hidden="true" focusable="false" className="absolute h-0 w-0 overflow-hidden">
                         <defs>
                             <filter id="terminal-phosphor" colorInterpolationFilters="sRGB">
