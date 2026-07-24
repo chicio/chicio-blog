@@ -1,18 +1,18 @@
 import { describe, it, expect, vi } from "vitest";
 
-const { mockGetPosts, mockGetTags, mockGetAllDsaTopics } = vi.hoisted(() => ({
-    mockGetPosts: vi.fn(),
+const { mockListPosts, mockGetTags, mockListDsaTopics } = vi.hoisted(() => ({
+    mockListPosts: vi.fn(),
     mockGetTags: vi.fn(),
-    mockGetAllDsaTopics: vi.fn(),
+    mockListDsaTopics: vi.fn(),
 }));
 
 vi.mock("@/lib/content/posts/posts", () => ({
-    getPosts: mockGetPosts,
+    posts: { list: mockListPosts },
     getTags: mockGetTags,
 }));
 
 vi.mock("@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms", () => ({
-    getAllDataStructuresAndAlgorithmsTopics: mockGetAllDsaTopics,
+    topics: { list: mockListDsaTopics },
 }));
 
 import { GET } from "./route";
@@ -43,9 +43,9 @@ const makeFakeDsaTopic = (topic: string) => ({
 describe("GET /llms.txt", () => {
     describe("response shape", () => {
         it("returns 200 with text/plain content-type", async () => {
-            mockGetPosts.mockReturnValue([]);
+            mockListPosts.mockReturnValue([]);
             mockGetTags.mockReturnValue([]);
-            mockGetAllDsaTopics.mockReturnValue([]);
+            mockListDsaTopics.mockReturnValue([]);
 
             const response = await GET();
             expect(response.status).toBe(200);
@@ -53,9 +53,9 @@ describe("GET /llms.txt", () => {
         });
 
         it("includes cache-control header", async () => {
-            mockGetPosts.mockReturnValue([]);
+            mockListPosts.mockReturnValue([]);
             mockGetTags.mockReturnValue([]);
-            mockGetAllDsaTopics.mockReturnValue([]);
+            mockListDsaTopics.mockReturnValue([]);
 
             const response = await GET();
             expect(response.headers.get("Cache-Control")).toContain("max-age=3600");
@@ -64,9 +64,9 @@ describe("GET /llms.txt", () => {
 
     describe("content", () => {
         it("includes site title and description", async () => {
-            mockGetPosts.mockReturnValue([]);
+            mockListPosts.mockReturnValue([]);
             mockGetTags.mockReturnValue([]);
-            mockGetAllDsaTopics.mockReturnValue([]);
+            mockListDsaTopics.mockReturnValue([]);
 
             const response = await GET();
             const text = await response.text();
@@ -75,9 +75,9 @@ describe("GET /llms.txt", () => {
         });
 
         it("lists blog posts with links", async () => {
-            mockGetPosts.mockReturnValue([makeFakePost("my-post", "Awesome React Article")]);
+            mockListPosts.mockReturnValue([makeFakePost("my-post", "Awesome React Article")]);
             mockGetTags.mockReturnValue([]);
-            mockGetAllDsaTopics.mockReturnValue([]);
+            mockListDsaTopics.mockReturnValue([]);
 
             const response = await GET();
             const text = await response.text();
@@ -86,9 +86,9 @@ describe("GET /llms.txt", () => {
         });
 
         it("lists tags with post counts", async () => {
-            mockGetPosts.mockReturnValue([]);
+            mockListPosts.mockReturnValue([]);
             mockGetTags.mockReturnValue([makeFakeTag("typescript", 7)]);
-            mockGetAllDsaTopics.mockReturnValue([]);
+            mockListDsaTopics.mockReturnValue([]);
 
             const response = await GET();
             const text = await response.text();
@@ -97,9 +97,9 @@ describe("GET /llms.txt", () => {
         });
 
         it("lists DSA topics with links", async () => {
-            mockGetPosts.mockReturnValue([]);
+            mockListPosts.mockReturnValue([]);
             mockGetTags.mockReturnValue([]);
-            mockGetAllDsaTopics.mockReturnValue([makeFakeDsaTopic("binary-search")]);
+            mockListDsaTopics.mockReturnValue([makeFakeDsaTopic("binary-search")]);
 
             const response = await GET();
             const text = await response.text();

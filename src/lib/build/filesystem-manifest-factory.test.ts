@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { generateFilesystemManifest } from "./filesystem-manifest-factory";
-import { getAboutMe } from "@/lib/content/about-me/about-me";
-import { getPosts } from "@/lib/content/posts/posts";
+import { aboutMe } from "@/lib/content/about-me/about-me";
+import { posts } from "@/lib/content/posts/posts";
 import { slugs } from "@/types/configuration/slug";
 import type { TerminalDirNode } from "@/types/terminal/terminal";
 
@@ -18,8 +18,8 @@ describe("generateFilesystemManifest", () => {
         it("groups every post under its publish year, keyed by its slug", () => {
             const { root } = generateFilesystemManifest();
             const blog = root.children.blog as TerminalDirNode;
-            const posts = getPosts();
-            const firstPost = posts[0];
+            const allPosts = posts.list();
+            const firstPost = allPosts[0];
             const year = firstPost.slug.params.year;
             const yearDir = blog.children[year] as TerminalDirNode;
 
@@ -76,12 +76,12 @@ describe("generateFilesystemManifest", () => {
     describe("standalone leaf pages", () => {
         it("uses the real about-me content for the about-me leaf", () => {
             const { root } = generateFilesystemManifest();
-            const aboutMe = getAboutMe();
+            const aboutMeContent = aboutMe.single()!;
 
             expect(root.children["about-me"]).toMatchObject({
                 type: "file",
-                title: aboutMe.frontmatter.title,
-                description: aboutMe.frontmatter.description,
+                title: aboutMeContent.frontmatter.title,
+                description: aboutMeContent.frontmatter.description,
                 route: slugs.aboutMe,
             });
         });

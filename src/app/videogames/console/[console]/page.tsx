@@ -3,14 +3,14 @@ import { NextVideogamesConsoleParameters } from "@/types/next/page-parameters";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getAllConsoles, getConsole } from "@/lib/content/videogames/videogames";
+import { consoles } from "@/lib/content/videogames/videogames";
 import { Console } from "@/components/content/videogames/console";
 
 export async function generateMetadata({
   params,
 }: NextVideogamesConsoleParameters): Promise<Metadata> {
   const receivedParameters = await params;
-  const console = getConsole(receivedParameters)!;
+  const console = consoles.single(receivedParameters)!;
 
   if (!console) {
     return {};
@@ -30,7 +30,7 @@ export async function generateMetadata({
 }
 
 export async function generateStaticParams() {
-  return getAllConsoles().map(
+  return consoles.list().map(
     (console) => console.slug.params,
   );
 }
@@ -40,7 +40,7 @@ export default async function VideogamesGamesForConsolePage({
 }: NextVideogamesConsoleParameters) {
   const receivedParameters = await params;
   const console =
-    getConsole(receivedParameters);
+    consoles.single(receivedParameters);
 
   if (!console) {
     notFound();

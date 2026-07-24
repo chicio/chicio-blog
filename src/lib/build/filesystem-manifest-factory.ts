@@ -1,10 +1,10 @@
-import { getAboutMe } from "@/lib/content/about-me/about-me";
+import { aboutMe } from "@/lib/content/about-me/about-me";
 import {
-    getAllDataStructuresAndAlgorithmsTopics,
-    getAllExercises,
+    topics,
+    exercises,
 } from "@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms";
-import { getPosts } from "@/lib/content/posts/posts";
-import { getAllConsoles, getAllGames } from "@/lib/content/videogames/videogames";
+import { posts } from "@/lib/content/posts/posts";
+import { consoles, games } from "@/lib/content/videogames/videogames";
 import { slugs } from "@/types/configuration/slug";
 import { Content } from "@/types/content/content";
 import { ExerciseMetadata } from "@/types/content/data-structures-and-algorithms";
@@ -137,14 +137,14 @@ const buildVideogamesTree = (
 };
 
 export const generateFilesystemManifest = (): TerminalFileSystemManifest => {
-    const aboutMe = getAboutMe();
+    const aboutMeContent = aboutMe.single()!;
 
     const root = dir({
         children: {
-            blog: buildBlogTree(getPosts()),
-            dsa: buildDsaTree(getAllDataStructuresAndAlgorithmsTopics(), getAllExercises()),
-            videogames: buildVideogamesTree(getAllConsoles(), getAllGames()),
-            "about-me": file(aboutMe.frontmatter.title, aboutMe.frontmatter.description, slugs.aboutMe),
+            blog: buildBlogTree(posts.list()),
+            dsa: buildDsaTree(topics.list(), exercises.list()),
+            videogames: buildVideogamesTree(consoles.list(), games.list()),
+            "about-me": file(aboutMeContent.frontmatter.title, aboutMeContent.frontmatter.description, slugs.aboutMe),
             art: file("Art", "3D and generative art gallery", slugs.art),
             chat: file("Chat", "Chat with Fabrizio's AI assistant", slugs.chat),
             contact: file("Contact", "Send Fabrizio a message", slugs.contact),

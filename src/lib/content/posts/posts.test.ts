@@ -15,8 +15,7 @@ import {
     filterPostsForAuthor,
     findAuthorWithPostsBySlug,
     rankReadNextPosts,
-    getPosts,
-    getPostBy,
+    posts,
     groupArrayBy,
     getPostsTotalPages,
     getPostsPaginationFor,
@@ -257,40 +256,40 @@ describe("findAuthorWithPostsBySlug", () => {
     });
 });
 
-describe("getPosts", () => {
-    it("sorts posts by date descending (most recent first)", () => {
-        mockGetAllContentFor.mockReturnValue([
-            makePost("post-jan", [], "2024-01-01"),
-            makePost("post-mar", [], "2024-03-01"),
-            makePost("post-feb", [], "2024-02-01"),
-        ]);
+describe("posts", () => {
+    describe("list", () => {
+        it("sorts posts by date descending (most recent first)", () => {
+            mockGetAllContentFor.mockReturnValue([
+                makePost("post-jan", [], "2024-01-01"),
+                makePost("post-mar", [], "2024-03-01"),
+                makePost("post-feb", [], "2024-02-01"),
+            ]);
 
-        const result = getPosts();
+            const result = posts.list();
 
-        expect(result.map((post) => post.slug.formatted)).toEqual(["post-mar", "post-feb", "post-jan"]);
-    });
-
-    it("returns an empty array when there is no content", () => {
-        mockGetAllContentFor.mockReturnValue([]);
-
-        expect(getPosts()).toEqual([]);
-    });
-});
-
-describe("getPostBy", () => {
-    it("returns the content found by getSingleContentBy", () => {
-        const post = makePost("post-a", [], "2024-01-01");
-        mockGetSingleContentBy.mockReturnValue(post);
-
-        expect(getPostBy({ slug: "post-a" })).toBe(post);
-    });
-
-    it("returns undefined when getSingleContentBy throws", () => {
-        mockGetSingleContentBy.mockImplementation(() => {
-            throw new Error("content not found");
+            expect(result.map((post: Content) => post.slug.formatted)).toEqual(["post-mar", "post-feb", "post-jan"]);
         });
 
-        expect(getPostBy({ slug: "missing" })).toBeUndefined();
+        it("returns an empty array when there is no content", () => {
+            mockGetAllContentFor.mockReturnValue([]);
+
+            expect(posts.list()).toEqual([]);
+        });
+    });
+
+    describe("single", () => {
+        it("returns the content found by getSingleContentBy", () => {
+            const post = makePost("post-a", [], "2024-01-01");
+            mockGetSingleContentBy.mockReturnValue(post);
+
+            expect(posts.single({ slug: "post-a" })).toBe(post);
+        });
+
+        it("returns undefined when getSingleContentBy finds nothing", () => {
+            mockGetSingleContentBy.mockReturnValue(undefined);
+
+            expect(posts.single({ slug: "missing" })).toBeUndefined();
+        });
     });
 });
 

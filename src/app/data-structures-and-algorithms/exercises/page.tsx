@@ -1,5 +1,5 @@
 import { Exercises } from "@/components/content/data-structures-and-algorithms/exercises";
-import { getExercisesContent } from "@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms";
+import { dsaExercisesList } from "@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms";
 import { createMetadata } from "@/lib/seo/seo";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { slugs } from "@/types/configuration/slug";
@@ -14,7 +14,7 @@ export const metadata = createMetadata({
 });
 
 export default async function ExercisesPage() {
-  const exercises = getExercisesContent();
+  const exercises = dsaExercisesList.single()!;
 
   return <Exercises exercises={exercises} />;
 }

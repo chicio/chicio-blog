@@ -32,7 +32,7 @@ export const grayMatterContent = <TMeta = unknown>(
   const fileParsed = parseWithGrayMatter(filePath);
   const metadata = metadataAdapter
     ? metadataAdapter(fileParsed.data?.metadata)
-    : undefined;
+    : (fileParsed.data?.metadata as TMeta | undefined);
 
   return {
     frontmatter: {

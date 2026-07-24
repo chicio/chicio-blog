@@ -1,11 +1,11 @@
-import { getPostBy, getPosts, getTags } from "@/lib/content/posts/posts";
+import { posts, getTags } from "@/lib/content/posts/posts";
 import { markdownDocument } from "@/lib/mdx/markdown-document";
 import { mdxToMarkdown } from "@/lib/mdx/mdx-to-markdown";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { slugs } from "@/types/configuration/slug";
 
 export const homepageMarkdown = (): string => {
-    const posts = getPosts().slice(0, 10);
+    const latestPosts = posts.list().slice(0, 10);
 
     const body = `Personal blog and portfolio by Fabrizio Duroni, a Software Engineer passionate about computer graphics, mobile development, and software engineering best practices.
 
@@ -20,7 +20,7 @@ export const homepageMarkdown = (): string => {
 
 ## Latest Posts
 
-${posts.map((post) => `- [${post.frontmatter.title}](${siteMetadata.siteUrl}${post.slug.formatted}) — ${post.frontmatter.description}`).join("\n")}
+${latestPosts.map((post) => `- [${post.frontmatter.title}](${siteMetadata.siteUrl}${post.slug.formatted}) — ${post.frontmatter.description}`).join("\n")}
 
 ## About
 
@@ -31,14 +31,14 @@ Fabrizio Duroni is a Software Engineer at lastminute.com. He writes about mobile
 };
 
 export const blogListingMarkdown = (): string => {
-    const posts = getPosts();
+    const allPosts = posts.list();
     const tags = getTags();
 
     const body = `Technical blog by Fabrizio Duroni covering mobile development, web development, computer graphics, and software engineering.
 
 ## All Posts
 
-${posts.map((post) => `- [${post.frontmatter.title}](${siteMetadata.siteUrl}${post.slug.formatted}) (${post.frontmatter.date.formatted}) — ${post.frontmatter.description}`).join("\n")}
+${allPosts.map((post) => `- [${post.frontmatter.title}](${siteMetadata.siteUrl}${post.slug.formatted}) (${post.frontmatter.date.formatted}) — ${post.frontmatter.description}`).join("\n")}
 
 ## Tags
 
@@ -54,7 +54,7 @@ ${tags.map((tag) => `- [${tag.tagValue}](${siteMetadata.siteUrl}${slugs.blog.tag
 };
 
 export const blogPostMarkdown = (params: Record<string, string>): string | null => {
-    const post = getPostBy(params);
+    const post = posts.single(params);
 
     if (!post) {
         return null;

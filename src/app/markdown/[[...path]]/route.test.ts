@@ -71,17 +71,17 @@ vi.mock("@/lib/blog-stats/blog-stats-markdown", () => ({
 }));
 
 vi.mock("@/lib/content/posts/posts", () => ({
-    getPosts: vi.fn().mockReturnValue([]),
+    posts: { list: vi.fn().mockReturnValue([]) },
 }));
 
 vi.mock("@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms", () => ({
-    getAllDataStructuresAndAlgorithmsTopics: vi.fn().mockReturnValue([]),
-    getAllExercises: vi.fn().mockReturnValue([]),
+    topics: { list: vi.fn().mockReturnValue([]) },
+    exercises: { list: vi.fn().mockReturnValue([]) },
 }));
 
 vi.mock("@/lib/content/videogames/videogames", () => ({
-    getAllConsoles: vi.fn().mockReturnValue([]),
-    getAllGames: vi.fn().mockReturnValue([]),
+    consoles: { list: vi.fn().mockReturnValue([]) },
+    games: { list: vi.fn().mockReturnValue([]) },
 }));
 
 vi.mock("next/navigation", () => ({

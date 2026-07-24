@@ -1,5 +1,5 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { getAllConsoles } from "@/lib/content/videogames/videogames";
+import { consoles } from "@/lib/content/videogames/videogames";
 import { MCP_SITE_URL } from "@/lib/mcp/config";
 
 export const registerGetVideogameConsoles = (server: McpServer): void => {
@@ -12,9 +12,9 @@ export const registerGetVideogameConsoles = (server: McpServer): void => {
                 "Use the console name field as the filter value in get_videogame_games.",
         },
         async () => {
-            const consoles = getAllConsoles();
+            const allConsoles = consoles.list();
 
-            const result = consoles.map((c) => ({
+            const result = allConsoles.map((c) => ({
                 name: c.frontmatter.metadata!.name,
                 manufacturer: c.frontmatter.metadata!.manufacturer,
                 releaseYear: c.frontmatter.metadata!.releaseYear,

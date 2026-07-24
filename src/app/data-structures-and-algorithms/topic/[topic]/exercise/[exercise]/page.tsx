@@ -7,9 +7,8 @@ import { siteMetadata } from "@/types/configuration/site-metadata";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import {
-    getAllExercises,
-    getExercise,
-    getDataStructuresAndAlgorithmsTopic,
+    exercises,
+    topics,
 } from "@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms";
 import { Exercise } from "@/components/content/data-structures-and-algorithms/exercise";
 
@@ -17,7 +16,7 @@ export async function generateMetadata({
     params,
 }: NextDataStructuresAndAlgorithmsExerciseParameters): Promise<Metadata> {
     const receivedParameters = await params;
-    const exercise = getExercise(receivedParameters);
+    const exercise = exercises.single(receivedParameters);
 
     if (!exercise) {
         return {};
@@ -37,20 +36,20 @@ export async function generateMetadata({
 }
 
 export async function generateStaticParams() {
-    return getAllExercises().map((exercise) => exercise.slug.params);
+    return exercises.list().map((exercise) => exercise.slug.params);
 }
 
 export default async function DataStructureAndAlgorithmExercisePage({
     params,
 }: NextDataStructuresAndAlgorithmsExerciseParameters) {
     const receivedParameters = await params;
-    const exercise = getExercise(receivedParameters);
+    const exercise = exercises.single(receivedParameters);
 
     if (!exercise) {
         notFound();
     }
 
-    const topic = getDataStructuresAndAlgorithmsTopic({ topic: receivedParameters.topic });
+    const topic = topics.single({ topic: receivedParameters.topic });
 
     if (!topic) {
         notFound();
