@@ -2,16 +2,15 @@
 
 import { FC } from "react";
 import { Overlay } from "@/components/design-system/atoms/effects/overlay";
-import { MatrixTerminal } from "@/components/design-system/molecules/effects/matrix-terminal";
+import { SelfHostedVideo } from "@/components/design-system/molecules/video/self-hosted-video";
 import { RedPillButton } from "@/components/design-system/molecules/buttons/pills-buttons";
 import { CenterContainer } from "@/components/features/easter-eggs/center-container";
-import { kungFuTerminalLines } from "@/lib/content/easter-eggs/easter-eggs-content";
 import { useKungFuEasterEggStore } from "./use-kung-fu-easter-egg-store";
 
 export const KungFuEasterEgg: FC = () => {
     const { state, effects } = useKungFuEasterEggStore();
     const { active, isCompleted } = state;
-    const { dismiss, registerTap, onComplete, replay, stopClick } = effects;
+    const { dismiss, registerTap, onComplete, replay, stopClick, setVideoEl } = effects;
 
     return (
         <>
@@ -24,7 +23,15 @@ export const KungFuEasterEgg: FC = () => {
             {active && (
                 <Overlay delay={0} onClick={dismiss}>
                     <CenterContainer>
-                        <MatrixTerminal lines={kungFuTerminalLines} onComplete={onComplete} />
+                        <SelfHostedVideo
+                            src="/media/video/i-know-kung-fu.mp4"
+                            poster="/media/video/i-know-kung-fu-poster.jpg"
+                            autoPlay
+                            onEnded={onComplete}
+                            videoRef={setVideoEl}
+                            ariaLabel="I know kung fu — Matrix construct loading"
+                            className="aspect-[4/3] h-[70vh] w-auto max-w-full rounded-xl border border-solid border-accent-alpha-40 shadow-lg overflow-hidden"
+                        />
                         <div onClick={stopClick} style={{ visibility: isCompleted ? "visible" : "hidden" }}>
                             <RedPillButton onClick={replay}>I Know Kung Fu</RedPillButton>
                         </div>

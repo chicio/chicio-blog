@@ -131,4 +131,43 @@ instruction: one egg = one component/store even when it gains a trigger). Key de
 title lost a trailing period in the index vs. what's currently committed there (frontmatter drift from an
 earlier, separate change, unrelated to easter eggs). Reverted it with `git checkout -- public/search-index.json`
 before committing rather than smuggling an unrelated content fix into this diff — flag it to review/writer
-agents separately if it recurs.
+agents separately if it recurs. This keeps recurring across unrelated worktree sessions — always
+`git status`/`git diff` the search index after any local `build` and revert if the only change is unrelated
+content drift.
+
+## Round 3 (2026-07-24): MatrixTerminal + mp3 replaced by a self-hosted autoplay-with-sound video
+
+Kept the SAME `kung-fu-easter-egg/` component/store (still one egg = one folder). Swapped the typed
+`MatrixTerminal` + `new Audio("/media/sounds/i-know-kung-fu.mp3")` combo for an extended `SelfHostedVideo`
+molecule (`/media/video/i-know-kung-fu.mp4` + poster) that autoplays WITH sound (`autoPlay`, no `muted`) and
+keeps native `controls` on as the fallback if a browser blocks unmuted autoplay. `onEnded` now drives
+`onComplete`/`isCompleted` (replacing the terminal's `onComplete` callback), and the replay pill resets+replays
+the `<video>` via a ref instead of re-playing an `Audio()` object.
+
+- **`SelfHostedVideo` (`src/components/design-system/molecules/video/self-hosted-video/`) gained 4 optional
+  props**: `autoPlay?`, `onEnded?`, `videoRef?: (el: HTMLVideoElement | null) => void`, and `ariaLabel?`
+  (needed for `aria-label` on the `<video>` — the plan only named 3 props but an accessible name is required
+  and there's no other way to set it from outside the molecule; added as a small justified 4th prop, all still
+  optional/undefined-default so existing blog MDX `<SelfHostedVideo>` usages are unaffected).
+- **`react-hooks/immutability` (React Compiler ESLint rule) fires on mutating a property of a value read from
+  `useState`**, even inside a `useCallback` and even when the "value" is a DOM node (mutating `.currentTime`
+  on a `[videoEl, setVideoEl] = useState<HTMLVideoElement|null>(null)` triggers
+  `Modifying a value returned from 'useState()' ... cannot be modified`). The
+  `component-architecture.md` "DOM Refs" convention explicitly allows an alternative to the `useState`
+  pattern for element refs: "an internal `useRef` that is never returned." Used that alternative here —
+  `const videoElRef = useRef<HTMLVideoElement|null>(null)` plus a `setVideoEl = useCallback((el) => {
+  videoElRef.current = el; }, [])` callback ref exposed via effects — because mutating `.current` on a
+  `useRef` object is NOT flagged (refs are the compiler's designated escape hatch for mutable non-rendered
+  data), whereas the same mutation via `useState`'s value IS flagged. Rule of thumb: if you need to *mutate a
+  property* on the held DOM node from an effect/handler (not just read it), reach for `useRef`, not
+  `useState`, even though both are listed as acceptable in the convention doc — they are only interchangeable
+  for the "hold + attach as `ref=`" use case, not for "later mutate a property of it."
+- jsdom's `HTMLMediaElement.prototype.play`/`.load()` throw "Not implemented" by default; stub them with
+  `vi.spyOn(window.HTMLMediaElement.prototype, "play").mockImplementation(...)` (returning a resolved
+  Promise) and `.mockImplementation()` for `load` in `beforeAll`, plus `Object.defineProperty(...,
+  "currentTime", { get, set })` since jsdom does not implement the property setter either.
+- Removed `kungFuTerminalLines` (the `EasterEggTerminalLines`-typed content export) from
+  `easter-eggs-content.ts` entirely once the terminal was gone — knip fails otherwise. The `EasterEggTerminalLines`
+  type import in that file became unused too and was removed; the type itself is still alive via
+  `neo-room-easter-egg` and `command-palette`, so only the LOCAL import in `easter-eggs-content.ts` went away,
+  not the type definition in `src/types/search/search.ts`.
