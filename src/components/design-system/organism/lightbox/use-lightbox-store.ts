@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import type { KeyboardEvent, MouseEvent } from "react";
+import type { MouseEvent } from "react";
 import {
     lightboxOpenEvent,
     type LightboxOpenDetail,
@@ -18,7 +18,6 @@ interface LightboxEffects {
     setDialogEl: (el: HTMLDivElement | null) => void;
     close: () => void;
     stopPropagation: (e: MouseEvent) => void;
-    handleKeyDown: (e: KeyboardEvent) => void;
 }
 
 export const useLightboxStore = (): ComponentStore<LightboxState, LightboxEffects> => {
@@ -52,17 +51,23 @@ export const useLightboxStore = (): ComponentStore<LightboxState, LightboxEffect
 
     const stopPropagation = useCallback((e: MouseEvent) => e.stopPropagation(), []);
 
-    const handleKeyDown = useCallback(
-        (e: KeyboardEvent) => {
+    useEffect(() => {
+        if (!open) {
+            return;
+        }
+
+        const handleEsc = (e: globalThis.KeyboardEvent) => {
             if (e.key === "Escape") {
                 close();
             }
-        },
-        [close],
-    );
+        };
+
+        window.addEventListener("keydown", handleEsc, true);
+        return () => window.removeEventListener("keydown", handleEsc, true);
+    }, [open, close]);
 
     return {
         state: { open, src, alt },
-        effects: { setDialogEl, close, stopPropagation, handleKeyDown },
+        effects: { setDialogEl, close, stopPropagation },
     };
 };

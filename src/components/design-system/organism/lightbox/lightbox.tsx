@@ -17,7 +17,7 @@ const lightboxVariants: Variants = {
 export const Lightbox: FC = () => {
     const { state, effects } = useLightboxStore();
     const { open, src, alt } = state;
-    const { setDialogEl, close, stopPropagation, handleKeyDown } = effects;
+    const { setDialogEl, close, stopPropagation } = effects;
 
     if (!open) {
         return null;
@@ -35,7 +35,6 @@ export const Lightbox: FC = () => {
                 aria-label={alt || "Enlarged image"}
                 tabIndex={-1}
                 onClick={stopPropagation}
-                onKeyDown={handleKeyDown}
                 className="fixed top-1/2 left-1/2 z-50 max-h-[90vh] max-w-[90vw] -translate-x-1/2 -translate-y-1/2 p-4"
             >
                 <MotionDiv
