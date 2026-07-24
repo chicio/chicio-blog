@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
 
     const { error: notificationError } = await resend.emails.send({
       from: "fabrizioduroni.it Contact Form <contact@fabrizioduroni.it>",
-      to: ["fabrizio.duroni@gmail.com"],
+      to: [process.env.CONTACT_EMAIL!],
       replyTo: email,
       subject: `Chicio Coding - Contact from ${name}`,
       react: ContactNotificationEmail({ name, email, message }),

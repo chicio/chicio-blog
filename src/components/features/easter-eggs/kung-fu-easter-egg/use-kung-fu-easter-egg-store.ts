@@ -18,18 +18,19 @@ interface KungFuEasterEggEffects {
     onComplete: () => void;
     replay: () => void;
     stopClick: (event: MouseEvent<HTMLDivElement>) => void;
+    setVideoEl: (el: HTMLVideoElement | null) => void;
 }
 
 export const useKungFuEasterEggStore = (): ComponentStore<KungFuEasterEggState, KungFuEasterEggEffects> => {
     const [active, setActive] = useState(false);
     const [isCompleted, setIsCompleted] = useState(false);
+    const videoElRef = useRef<HTMLVideoElement | null>(null);
     const bufferRef = useRef<string[]>([]);
     const tapCountRef = useRef(0);
     const tapResetTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-    const playClip = useCallback(() => {
-        const audio = new Audio("/media/sounds/i-know-kung-fu.mp3");
-        audio.play().catch(() => {});
+    const setVideoEl = useCallback((el: HTMLVideoElement | null) => {
+        videoElRef.current = el;
     }, []);
 
     const dismiss = useCallback(() => {
@@ -39,6 +40,14 @@ export const useKungFuEasterEggStore = (): ComponentStore<KungFuEasterEggState, 
 
     const onComplete = useCallback(() => {
         setIsCompleted(true);
+    }, []);
+
+    const replay = useCallback(() => {
+        const videoEl = videoElRef.current;
+        if (videoEl) {
+            videoEl.currentTime = 0;
+            videoEl.play().catch(() => {});
+        }
     }, []);
 
     const stopClick = useCallback((event: MouseEvent<HTMLDivElement>) => {
@@ -57,8 +66,7 @@ export const useKungFuEasterEggStore = (): ComponentStore<KungFuEasterEggState, 
             label: "i_know_kung_fu",
             action: tracking.action.easter_egg_kung_fu,
         });
-        playClip();
-    }, [active, playClip]);
+    }, [active]);
 
     const registerTap = useCallback(() => {
         if (active) {
@@ -117,6 +125,6 @@ export const useKungFuEasterEggStore = (): ComponentStore<KungFuEasterEggState, 
 
     return {
         state: { active, isCompleted },
-        effects: { dismiss, registerTap, onComplete, replay: playClip, stopClick },
+        effects: { dismiss, registerTap, onComplete, replay, stopClick, setVideoEl },
     };
 };

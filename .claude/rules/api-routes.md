@@ -24,3 +24,4 @@ paths:
 - `UPSTASH_VECTOR_REST_URL`, `UPSTASH_VECTOR_REST_TOKEN` (chat RAG)
 - `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` (rate limiting)
 - `RESEND_API_KEY` (email)
+- `CONTACT_EMAIL` (contact-form notification recipient; must be set in Vercel Production/Preview or the form send fails at runtime)

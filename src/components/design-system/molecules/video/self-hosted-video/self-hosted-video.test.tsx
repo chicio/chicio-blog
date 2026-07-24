@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { describe, it, expect, vi } from "vitest";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { SelfHostedVideo } from "./self-hosted-video";
 
 describe("SelfHostedVideo", () => {
@@ -37,6 +37,61 @@ describe("SelfHostedVideo", () => {
         it("does not render figcaption when caption is not provided", () => {
             const { container } = render(<SelfHostedVideo src="/video/demo.mp4" />);
             expect(container.querySelector("figcaption")).toBeNull();
+        });
+    });
+
+    describe("autoPlay", () => {
+        it("sets the autoPlay attribute when autoPlay is true", () => {
+            const { container } = render(<SelfHostedVideo src="/video/demo.mp4" autoPlay />);
+            expect(container.querySelector("video")).toHaveAttribute("autoplay");
+        });
+
+        it("does not set the autoPlay attribute when autoPlay is not provided", () => {
+            const { container } = render(<SelfHostedVideo src="/video/demo.mp4" />);
+            expect(container.querySelector("video")).not.toHaveAttribute("autoplay");
+        });
+    });
+
+    describe("onEnded", () => {
+        it("calls onEnded when the video ends event fires", () => {
+            const onEnded = vi.fn();
+            const { container } = render(<SelfHostedVideo src="/video/demo.mp4" onEnded={onEnded} />);
+            const video = container.querySelector("video");
+            if (video) {
+                fireEvent.ended(video);
+            }
+            expect(onEnded).toHaveBeenCalledTimes(1);
+        });
+    });
+
+    describe("videoRef", () => {
+        it("calls videoRef with the video element on mount", () => {
+            const videoRef = vi.fn();
+            const { container } = render(<SelfHostedVideo src="/video/demo.mp4" videoRef={videoRef} />);
+            expect(videoRef).toHaveBeenCalledWith(container.querySelector("video"));
+        });
+    });
+
+    describe("ariaLabel", () => {
+        it("sets aria-label on the video element when provided", () => {
+            const { container } = render(<SelfHostedVideo src="/video/demo.mp4" ariaLabel="A descriptive label" />);
+            expect(container.querySelector("video")).toHaveAttribute("aria-label", "A descriptive label");
+        });
+    });
+
+    describe("className", () => {
+        it("applies the default video classes when no className is provided", () => {
+            const { container } = render(<SelfHostedVideo src="/video/demo.mp4" />);
+            expect(container.querySelector("video")).toHaveClass("aspect-video", "w-full", "rounded-xl");
+        });
+
+        it("uses the provided className verbatim, overriding the default sizing", () => {
+            const { container } = render(
+                <SelfHostedVideo src="/video/demo.mp4" className="aspect-[4/3] h-[70vh] overflow-hidden" />,
+            );
+            const video = container.querySelector("video");
+            expect(video).toHaveClass("aspect-[4/3]", "h-[70vh]", "overflow-hidden");
+            expect(video).not.toHaveClass("aspect-video", "w-full");
         });
     });
 });

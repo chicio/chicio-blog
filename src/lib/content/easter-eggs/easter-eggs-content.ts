@@ -1,5 +1,3 @@
-import type { EasterEggTerminalLines } from "@/types/search/search";
-
 export interface EasterEggHint {
     id: string;
     title: string;
@@ -61,17 +59,4 @@ export const easterEggHints: EasterEggHint[] = [
             "Just do not type it inside an input, a textarea or a search box.",
         ],
     },
-];
-
-export const kungFuTerminalLines: EasterEggTerminalLines = [
-    { text: "loading construct...", delay: 200 },
-    { text: "Jujitsu... loaded", delay: 600 },
-    { text: "Kempo... loaded", delay: 600 },
-    { text: "Tae Kwon Do... loaded", delay: 600 },
-    { text: "Drunken Boxing... loaded", delay: 600 },
-    { text: "Aikido... loaded", delay: 600 },
-    { text: "Judo... loaded", delay: 600 },
-    { text: "Wu shu... loaded", delay: 600 },
-    { text: "Kung fu... loaded", delay: 600 },
-    { text: "I know kung fu.", type: "quote", delay: 800 },
 ];
