@@ -8,15 +8,15 @@ import {
     dsaTopicMarkdown,
 } from "@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms-markdown";
 import {
-    getAllDataStructuresAndAlgorithmsTopics,
-    getAllExercises,
+    topics,
+    exercises,
 } from "@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms";
 import { blogListingMarkdown, blogPostMarkdown, homepageMarkdown } from "@/lib/content/posts/posts-markdown";
-import { getPosts } from "@/lib/content/posts/posts";
+import { posts } from "@/lib/content/posts/posts";
 import { blogStatsMarkdown } from "@/lib/blog-stats/blog-stats-markdown";
 import { mdxPageMarkdown } from "@/lib/mdx/mdx-page-markdown";
 import { consoleMarkdown, gameMarkdown, videogamesMarkdown } from "@/lib/content/videogames/videogames-markdown";
-import { getAllConsoles, getAllGames } from "@/lib/content/videogames/videogames";
+import { consoles, games } from "@/lib/content/videogames/videogames";
 import { slugs } from "@/types/configuration/slug";
 import { notFound } from "next/navigation";
 
@@ -34,23 +34,23 @@ const videogameGamePrefix = slugs.videogames.game.split("/").slice(1, 3);
 const MDX_PAGE_SLUGS = new Set<string>([slugs.aboutMe, slugs.mcp, slugs.cookiePolicy, slugs.art]);
 
 export async function generateStaticParams() {
-    const postParams = getPosts().map((post) => ({
+    const postParams = posts.list().map((post) => ({
         path: [...blogPostPrefix, post.slug.params.year, post.slug.params.month, post.slug.params.day, post.slug.params.slug],
     }));
 
-    const dsaTopicParams = getAllDataStructuresAndAlgorithmsTopics().map((topic) => ({
+    const dsaTopicParams = topics.list().map((topic) => ({
         path: [...dsaTopicPrefix, topic.slug.params.topic],
     }));
 
-    const dsaExerciseParams = getAllExercises().map((exercise) => ({
+    const dsaExerciseParams = exercises.list().map((exercise) => ({
         path: [...dsaExercisePrefix, exercise.slug.params.topic, "exercise", exercise.slug.params.exercise],
     }));
 
-    const consoleParams = getAllConsoles().map((c) => ({
+    const consoleParams = consoles.list().map((c) => ({
         path: [...videogameConsolePrefix, c.slug.params.console],
     }));
 
-    const gameParams = getAllGames().map((g) => ({
+    const gameParams = games.list().map((g) => ({
         path: [...videogameGamePrefix, g.slug.params.console, "game", g.slug.params.game],
     }));
 

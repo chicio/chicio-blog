@@ -4,7 +4,7 @@ import { siteMetadata } from "@/types/configuration/site-metadata";
 import { FC, PropsWithChildren } from "react";
 import { JsonLd } from "@/components/features/seo/jsond-ld";
 import { Content } from "@/types/content/content";
-import { getAllConsoles, getAllGamesForConsole } from "@/lib/content/videogames/videogames";
+import { consoles, getAllGamesForConsole } from "@/lib/content/videogames/videogames";
 import { ConsoleMetadata } from "@/types/content/videogames";
 import { ConsoleTimeInformation } from "@/components/content/videogames/console-time-information";
 import { IoGameControllerOutline } from "react-icons/io5";
@@ -22,7 +22,7 @@ export const Console: FC<PropsWithChildren<ConsoleProps>> = async ({ console }) 
     const { contentFileRelativePath: contentPath } = console;
     const { default: ConsoleContent } = await import(`@/content/${contentPath}/content.mdx`);
     const games = getAllGamesForConsole(console.frontmatter.metadata!.name);
-    const allConsoles = getAllConsoles();
+    const allConsoles = consoles.list();
     const currentConsoleIndex = allConsoles.findIndex((c) => c.slug.formatted === console.slug.formatted);
     const previousConsole = allConsoles[currentConsoleIndex - 1];
     const nextConsole = allConsoles[currentConsoleIndex + 1];

@@ -7,8 +7,7 @@ import { siteMetadata } from "@/types/configuration/site-metadata";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import {
-  getAllDataStructuresAndAlgorithmsTopics,
-  getDataStructuresAndAlgorithmsTopic,
+  topics,
   getDataStructuresAndAlgorithmsTopicWithNavigation,
 } from "@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms";
 import { Topic } from "@/components/content/data-structures-and-algorithms/topic";
@@ -17,7 +16,7 @@ export async function generateMetadata({
   params,
 }: NextDataStructuresAndAlgorithmsParameters): Promise<Metadata> {
   const receivedParameters = await params;
-  const topic = getDataStructuresAndAlgorithmsTopic(receivedParameters)!;
+  const topic = topics.single(receivedParameters)!;
 
   if (!topic) {
     return {};
@@ -37,7 +36,7 @@ export async function generateMetadata({
 }
 
 export async function generateStaticParams() {
-  return getAllDataStructuresAndAlgorithmsTopics().map(
+  return topics.list().map(
     (topic) => topic.slug.params,
   );
 }
@@ -46,14 +45,14 @@ export default async function DataStructureAndAlgorithmTopicPage({
   params,
 }: NextDataStructuresAndAlgorithmsParameters) {
   const receivedParameters = await params;
-  const topics =
+  const topicNavigation =
     getDataStructuresAndAlgorithmsTopicWithNavigation(receivedParameters);
 
-  if (!topics) {
+  if (!topicNavigation) {
     notFound();
   }
 
-  const { topic, previousTopic, nextTopic } = topics;
+  const { topic, previousTopic, nextTopic } = topicNavigation;
 
   return (
     <Topic topic={topic} previousTopic={previousTopic} nextTopic={nextTopic} />

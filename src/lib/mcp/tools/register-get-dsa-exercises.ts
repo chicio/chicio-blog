@@ -1,6 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import z from "zod";
-import { getAllExercises, getAllExercisesForTopic } from "@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms";
+import { exercises, getAllExercisesForTopic } from "@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms";
 import { MCP_SITE_URL } from "@/lib/mcp/config";
 
 export const registerGetDsaExercises = (server: McpServer): void => {
@@ -20,10 +20,10 @@ export const registerGetDsaExercises = (server: McpServer): void => {
             },
         },
         async ({ topic, difficulty }) => {
-            const exercises = topic ? getAllExercisesForTopic(topic) : getAllExercises();
+            const matchedExercises = topic ? getAllExercisesForTopic(topic) : exercises.list();
             const filtered = difficulty
-                ? exercises.filter((e) => e.frontmatter.metadata?.difficulty === difficulty)
-                : exercises;
+                ? matchedExercises.filter((e) => e.frontmatter.metadata?.difficulty === difficulty)
+                : matchedExercises;
 
             const result = filtered.map((exercise) => ({
                 title: exercise.frontmatter.title,

@@ -4,7 +4,7 @@ import { Author, AuthorSummary } from "@/types/content/author";
 import { slugs } from "@/types/configuration/slug";
 import { Pagination } from "@/types/content/pagination";
 import { generateTagSlug } from "../../tags/tags";
-import { getAllContentFor, getSingleContentBy } from "../content";
+import { createSection } from "../section";
 import { authorSlugToId } from "../authors/author-slug";
 
 export { authorIdToSlug, authorSlugToId, generateAuthorSlug } from "../authors/author-slug";
@@ -13,22 +13,12 @@ export { authorIdToSlug, authorSlugToId, generateAuthorSlug } from "../authors/a
  * POSTS
  */
 
-export const getPosts = (): Content[] =>
-  getAllContentFor(slugs.blog.blogPost).sort(
-    (post, anotherPost) =>
-      new Date(anotherPost.frontmatter.date.formatted).getTime() -
-      new Date(post.frontmatter.date.formatted).getTime(),
-  );
-
-export const getPostBy = (
-  params: Record<string, string>,
-): Content | undefined => {
-  try {
-    return getSingleContentBy(slugs.blog.blogPost, params);
-  } catch {
-    return undefined;
-  }
-};
+export const posts = createSection({
+  slug: slugs.blog.blogPost,
+  sort: (post, anotherPost) =>
+    new Date(anotherPost.frontmatter.date.formatted).getTime() -
+    new Date(post.frontmatter.date.formatted).getTime(),
+});
 
 /**
  * PAGINATION
@@ -49,7 +39,7 @@ export const groupArrayBy: <T>(array: T[], numberPerGroup: number) => T[][] = (
   return group;
 };
 
-export const getPostsTotalPages = () => Math.ceil(getPosts().length / postsPerPage)
+export const getPostsTotalPages = () => Math.ceil(posts.list().length / postsPerPage)
 
 export const getPostsPaginationFor: (page: number) => Pagination | undefined = (
   page: number,
@@ -60,9 +50,9 @@ export const getPostsPaginationFor: (page: number) => Pagination | undefined = (
     if (totalPages < page) {
       throw new Error("Page does not exists");
     }
-    const posts = getPosts();
+    const allPosts = posts.list();
     const start = (page - 1) * postsPerPage;
-    const paginatedPosts = posts.slice(start, start + postsPerPage);
+    const paginatedPosts = allPosts.slice(start, start + postsPerPage);
     const previousPageUrlSlug =
       page === 2
         ? `${slugs.blog.home}`
@@ -93,9 +83,9 @@ export const getPostsPaginationFor: (page: number) => Pagination | undefined = (
  */
 export const getTags = () => {
   const tags = new Map<string, Tag>();
-  const posts = getPosts();
+  const allPosts = posts.list();
 
-  posts.map((post) =>
+  allPosts.map((post) =>
     post.frontmatter.tags.forEach((tag) => {
       if (tags.has(tag)) {
         const currentTag = tags.get(tag)!;
@@ -120,9 +110,9 @@ export const getTags = () => {
 };
 
 export const getPostsForTag: (tag: string) => Content[] = (tag: string) => {
-  const posts = getPosts();
+  const allPosts = posts.list();
 
-  return posts.filter((post) => post.frontmatter.tags.includes(tag));
+  return allPosts.filter((post) => post.frontmatter.tags.includes(tag));
 };
 
 /**
@@ -149,7 +139,7 @@ export const aggregateAuthorsWithPosts = (posts: Content[]): AuthorSummary[] => 
   );
 };
 
-export const getAuthorsWithPosts = (): AuthorSummary[] => aggregateAuthorsWithPosts(getPosts());
+export const getAuthorsWithPosts = (): AuthorSummary[] => aggregateAuthorsWithPosts(posts.list());
 
 export const filterPostsForAuthor = (posts: Content[], authorId: string): Content[] =>
   posts.filter((post) => post.frontmatter.authors.some((author) => author.id === authorId));
@@ -176,7 +166,7 @@ export const findAuthorWithPostsBySlug = (
 
 export const getAuthorWithPostsBySlug = (
   authorSlug: string,
-): { author: Author; posts: Content[] } | undefined => findAuthorWithPostsBySlug(getPosts(), authorSlug);
+): { author: Author; posts: Content[] } | undefined => findAuthorWithPostsBySlug(posts.list(), authorSlug);
 
 /**
  * READ NEXT
@@ -220,7 +210,7 @@ export const getReadNextPosts = (
   currentSlug: string,
   limit = 2,
 ): Content[] => {
-  const allPosts = getPosts();
+  const allPosts = posts.list();
   const currentPost = allPosts.find(
     (post) => post.slug.formatted === currentSlug,
   );

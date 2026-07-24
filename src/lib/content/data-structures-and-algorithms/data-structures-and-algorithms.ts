@@ -1,59 +1,45 @@
 import { Content } from "@/types/content/content";
-import { getAllContentFor, getSingleContentBy } from "../content";
+import { createSection } from "../section";
 import { slugs } from "@/types/configuration/slug";
 import { ExerciseMetadata } from "@/types/content/data-structures-and-algorithms";
 
-const exerciseMetadataAdapter = (raw: unknown): ExerciseMetadata => {
-  const { technique, leetcodeUrl, difficulty } = raw as Record<string, string>;
-  return { technique, leetcodeUrl, difficulty: difficulty as ExerciseMetadata["difficulty"] };
-};
+const byDateAsc = <TMeta>(a: Content<TMeta>, b: Content<TMeta>): number =>
+  new Date(a.frontmatter.date.formatted).getTime() - new Date(b.frontmatter.date.formatted).getTime();
 
-export const getAllDataStructuresAndAlgorithmsTopics = (): Content[] =>
-  getAllContentFor(slugs.dataStructuresAndAlgorithms.topic).sort(
-    (topic, anotherTopic) =>
-      new Date(topic.frontmatter.date.formatted).getTime() -
-      new Date(anotherTopic.frontmatter.date.formatted).getTime(),
-  );
+export const topics = createSection({
+  slug: slugs.dataStructuresAndAlgorithms.topic,
+  sort: byDateAsc,
+});
 
-export const getDataStructuresAndAlgorithmsTopic = (params: Record<string, string>): Content | undefined =>
-  getSingleContentBy(slugs.dataStructuresAndAlgorithms.topic, params);
+export const exercises = createSection<ExerciseMetadata>({
+  slug: slugs.dataStructuresAndAlgorithms.exercise,
+  sort: byDateAsc,
+});
+
+export const dsaRoadmap = createSection({ slug: slugs.dataStructuresAndAlgorithms.roadmap });
+
+export const dsaExercisesList = createSection({ slug: slugs.dataStructuresAndAlgorithms.exercises });
 
 export const getDataStructuresAndAlgorithmsTopicWithNavigation =
  (params: Record<string, string>): { topic: Content; previousTopic?: Content; nextTopic?: Content } | undefined => {
-  const topics = getAllDataStructuresAndAlgorithmsTopics()
+  const allTopics = topics.list()
   const slugToFind = slugs.dataStructuresAndAlgorithms.topic.replace('[topic]', params.topic);
-  const topicIndex = topics.findIndex(t => t.slug.formatted === slugToFind);
+  const topicIndex = allTopics.findIndex(t => t.slug.formatted === slugToFind);
 
   if (topicIndex === -1) {
     return undefined;
   }
 
-  const topic = topics[topicIndex];
-  const previousTopic = topicIndex > 0 ? topics[topicIndex - 1] : undefined;
-  const nextTopic = topicIndex < topics.length - 1 ? topics[topicIndex + 1] : undefined;
+  const topic = allTopics[topicIndex];
+  const previousTopic = topicIndex > 0 ? allTopics[topicIndex - 1] : undefined;
+  const nextTopic = topicIndex < allTopics.length - 1 ? allTopics[topicIndex + 1] : undefined;
 
   return {
-    topic, 
+    topic,
     previousTopic,
     nextTopic
   }
 };
 
-export const getDataStructuresAndAlgorithmsRoadmap = (): Content =>
-    getSingleContentBy(slugs.dataStructuresAndAlgorithms.roadmap)!;
-
-export const getExercisesContent = (): Content =>
-    getSingleContentBy(slugs.dataStructuresAndAlgorithms.exercises)!;
-
-export const getAllExercises = (): Content<ExerciseMetadata>[] =>
-  getAllContentFor<ExerciseMetadata>(slugs.dataStructuresAndAlgorithms.exercise, exerciseMetadataAdapter).sort(
-    (a, b) =>
-      new Date(a.frontmatter.date.formatted).getTime() -
-      new Date(b.frontmatter.date.formatted).getTime(),
-  );
-
-export const getExercise = (params: Record<string, string>): Content<ExerciseMetadata> | undefined =>
-  getSingleContentBy<ExerciseMetadata>(slugs.dataStructuresAndAlgorithms.exercise, params, exerciseMetadataAdapter);
-
 export const getAllExercisesForTopic = (topic: string): Content<ExerciseMetadata>[] =>
-  getAllExercises().filter((e) => e.slug.params.topic === topic);;
+  exercises.list().filter((e) => e.slug.params.topic === topic);

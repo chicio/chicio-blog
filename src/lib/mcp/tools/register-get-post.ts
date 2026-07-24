@@ -1,6 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import z from "zod";
-import { getPostBy } from "@/lib/content/posts/posts";
+import { posts } from "@/lib/content/posts/posts";
 import { MCP_SITE_URL } from "@/lib/mcp/config";
 
 export const registerGetPost = (server: McpServer): void => {
@@ -19,7 +19,7 @@ export const registerGetPost = (server: McpServer): void => {
             },
         },
         async ({ year, month, day, slug }) => {
-            const post = getPostBy({ year, month, day, slug });
+            const post = posts.single({ year, month, day, slug });
 
             if (!post) {
                 return {

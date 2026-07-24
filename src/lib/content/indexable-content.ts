@@ -1,12 +1,12 @@
 import { getAboutMe } from "./about-me/about-me";
 import {
-  getAllDataStructuresAndAlgorithmsTopics,
-  getAllExercises,
-  getDataStructuresAndAlgorithmsRoadmap,
-  getExercisesContent,
+  topics,
+  exercises,
+  dsaRoadmap,
+  dsaExercisesList,
 } from "./data-structures-and-algorithms/data-structures-and-algorithms";
-import { getPosts } from "./posts/posts";
-import { getAllConsoles, getAllGames } from "./videogames/videogames";
+import { posts } from "./posts/posts";
+import { consoles, games } from "./videogames/videogames";
 import { easterEggHuntPageDescription, easterEggHuntPageTitle } from "./easter-eggs/easter-eggs-content";
 import { Content } from "@/types/content/content";
 import { slugs } from "@/types/configuration/slug";
@@ -28,13 +28,13 @@ const easterEggHuntSearchEntry: Content = {
 };
 
 export const getIndexableContent = () => [
-  ...getPosts(),
-  ...getAllDataStructuresAndAlgorithmsTopics(),
-  ...getAllExercises(),
-  ...getAllConsoles(),
-  ...getAllGames(),
-  getDataStructuresAndAlgorithmsRoadmap(),
-  getExercisesContent(),
+  ...posts.list(),
+  ...topics.list(),
+  ...exercises.list(),
+  ...consoles.list(),
+  ...games.list(),
+  dsaRoadmap.single()!,
+  dsaExercisesList.single()!,
   getAboutMe(),
   easterEggHuntSearchEntry,
 ];

@@ -2,7 +2,7 @@ import { Content } from "@/types/content/content";
 import { Tag } from "@/types/content/tag";
 import { AuthorSummary } from "@/types/content/author";
 import { AuthorCount, BlogStats, HeadlineTotals, PostsPerYear, TagCount } from "@/types/content/blog-stats";
-import { getAuthorsWithPosts, getPosts, getTags } from "@/lib/content/posts/posts";
+import { getAuthorsWithPosts, posts, getTags } from "@/lib/content/posts/posts";
 import { authorHref, ownerAuthorId } from "@/lib/content/authors/author-slug";
 import { slugs } from "@/types/configuration/slug";
 
@@ -69,13 +69,13 @@ export const computeAuthorDistribution = (
         .map((entry) => ({ author: entry.author.name, count: entry.postCount, href: authorHref(entry.author.id) }));
 
 export const getBlogStats = (): BlogStats => {
-    const posts = getPosts();
+    const allPosts = posts.list();
     const tags = getTags();
     const authorsWithPosts = getAuthorsWithPosts();
 
     return {
-        headline: computeHeadlineTotals(posts),
-        postsPerYear: computePostsPerYear(posts),
+        headline: computeHeadlineTotals(allPosts),
+        postsPerYear: computePostsPerYear(allPosts),
         tagDistribution: computeTagDistribution(tags, TAG_DISTRIBUTION_LIMIT),
         externalAuthorDistribution: computeAuthorDistribution(authorsWithPosts, ownerAuthorId),
     };

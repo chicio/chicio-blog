@@ -6,7 +6,7 @@ import { Content } from "@/types/content/content";
 import { ConsoleMetadata, GameMetadata } from "@/types/content/videogames";
 import { ImageCarousel } from "@/components/design-system/organism/image-carousel";
 import { PageTitle } from "@/components/design-system/molecules/typography/page-title";
-import { getAllGames } from "@/lib/content/videogames/videogames";
+import { games } from "@/lib/content/videogames/videogames";
 import { ConsoleLogos } from "@/components/content/videogames/console-logos";
 import { GameFormatIcon } from "@/components/content/videogames/game-format-icon";
 import { VideogameNavigation } from "@/components/content/videogames/videogame-navigation";
@@ -20,10 +20,10 @@ interface GameProps {
 
 export const Game: FC<PropsWithChildren<GameProps>> = async ({ game, console }) => {
     const { contentFileRelativePath: contentPath } = game;
-    const games = getAllGames();
-    const currentIndex = games.findIndex((g) => g.slug.formatted === game.slug.formatted);
-    const previousGame = games[currentIndex - 1];
-    const nextGame = games[currentIndex + 1];
+    const allGames = games.list();
+    const currentIndex = allGames.findIndex((g) => g.slug.formatted === game.slug.formatted);
+    const previousGame = allGames[currentIndex - 1];
+    const nextGame = allGames[currentIndex + 1];
     const { default: GameContent } = await import(`@/content/${contentPath}/content.mdx`);
 
     return (

@@ -1,5 +1,5 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { getAllDataStructuresAndAlgorithmsTopics } from "@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms";
+import { topics } from "@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms";
 import { MCP_SITE_URL } from "@/lib/mcp/config";
 
 export const registerGetDsaTopics = (server: McpServer): void => {
@@ -12,9 +12,9 @@ export const registerGetDsaTopics = (server: McpServer): void => {
                 "Each topic has exercises — use get_dsa_exercises with the topic slug to retrieve them.",
         },
         async () => {
-            const topics = getAllDataStructuresAndAlgorithmsTopics();
+            const allTopics = topics.list();
 
-            const result = topics.map((topic) => ({
+            const result = allTopics.map((topic) => ({
                 title: topic.frontmatter.title,
                 description: topic.frontmatter.description,
                 slug: topic.slug.params.topic,
