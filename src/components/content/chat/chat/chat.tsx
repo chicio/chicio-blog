@@ -24,10 +24,14 @@ export const Chat: FC = () => {
             <Menu navHrefs={menuNavHrefs} />
             <ContentContainer>
                 <BrandHeader big={false} />
-                <PageTitle>
-                    <ParagraphTitleWithIcon icon={<ChatIcon />}>Chat with Fabrizio</ParagraphTitleWithIcon>
-                </PageTitle>
-                <p>Ask me anything about my work, projects, and software development expertise</p>
+                {!state.hasMessages && (
+                    <>
+                        <PageTitle>
+                            <ParagraphTitleWithIcon icon={<ChatIcon />}>Chat with Fabrizio</ParagraphTitleWithIcon>
+                        </PageTitle>
+                        <p>Ask me anything about my work, projects, and software development expertise</p>
+                    </>
+                )}
                 <div className="hide-scrollbar pb-[calc(140px+env(safe-area-inset-bottom,0px))] flex flex-1 flex-col gap-3 overflow-visible pt-6 sm:pt-10 sm:pb-[140px]">
                     {!state.hasMessages && (
                         <ChatWelcome

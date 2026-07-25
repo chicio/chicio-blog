@@ -13,7 +13,6 @@ export const ClownsPageTemplate: FC<PropsWithChildren> = ({ children }) => {
             <PageTitle>
                 <ParagraphTitleWithIcon icon={<ClownSvgIcon />}>Clownified!!!</ParagraphTitleWithIcon>
             </PageTitle>
-            <p>Bravo! Keep up the effort and you&apos;ll clown-it!</p>
             <MediaGrid>
                 {children}
             </MediaGrid>
