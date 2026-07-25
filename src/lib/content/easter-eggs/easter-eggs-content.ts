@@ -52,11 +52,11 @@ export const easterEggHints: EasterEggHint[] = [
         id: "there_is_no_spoon",
         title: "There Is No Spoon",
         crypticHint:
-            "A boy once warned Neo never to try bending it. Instead, only try to realize a simple truth about it, then say that truth out loud (well, type it) anywhere on a page, as long as you are not inside a form or search box.",
+            "A boy once warned Neo never to try bending it. Instead, only try to realize a simple truth about it. Then find the one thing on this site that answers when you talk to it, and tell it that truth.",
         solutionSteps: [
-            "Type there is no spoon anywhere on a page.",
-            "Case and spacing do not matter.",
-            "Just do not type it inside an input, a textarea or a search box.",
+            "Open the chat, from the menu or the command palette.",
+            "Type there is no spoon and send it.",
+            "Case and spacing do not matter, and the phrase can end a longer sentence.",
         ],
     },
 ];
