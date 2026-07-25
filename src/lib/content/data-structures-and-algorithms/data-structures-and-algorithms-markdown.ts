@@ -5,6 +5,7 @@ import {
     dsaRoadmap,
     dsaExercisesList,
 } from "@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms";
+import { contentItemMarkdown } from "@/lib/mdx/content-item-markdown";
 import { markdownDocument } from "@/lib/mdx/markdown-document";
 import { mdxToMarkdown } from "@/lib/mdx/mdx-to-markdown";
 import { siteMetadata } from "@/types/configuration/site-metadata";
@@ -54,16 +55,10 @@ ${allExercises.map((e) => `- [${e.frontmatter.title}](${siteMetadata.siteUrl}${e
     });
 };
 
-export const dsaTopicMarkdown = (params: Record<string, string>): string | null => {
-    const topic = topics.single(params);
+export const dsaTopicMarkdown = contentItemMarkdown(topics, (topic) => {
+    const topicExercises = getAllExercisesForTopic(topic.slug.params.topic);
 
-    if (!topic) {
-        return null;
-    }
-
-    const topicExercises = getAllExercisesForTopic(params.topic);
-
-    const body = `**Tags:** ${topic.frontmatter.tags.join(", ")}
+    return `**Tags:** ${topic.frontmatter.tags.join(", ")}
 
 ${mdxToMarkdown(topic.content)}
 ${topicExercises.length > 0 ? `
@@ -71,36 +66,15 @@ ${topicExercises.length > 0 ? `
 
 ${topicExercises.map((e) => `- [${e.frontmatter.title}](${siteMetadata.siteUrl}${e.slug.formatted}) — ${e.frontmatter.metadata?.difficulty ?? "unknown"}, ${e.frontmatter.metadata?.technique ?? "unknown"}`).join("\n")}
 ` : ""}`;
+});
 
-    return markdownDocument({
-        title: topic.frontmatter.title,
-        description: topic.frontmatter.description,
-        slug: topic.slug.formatted,
-        body,
-    });
-};
-
-export const dsaExerciseMarkdown = (params: Record<string, string>): string | null => {
-    const exercise = exercises.single(params);
-
-    if (!exercise) {
-        return null;
-    }
-
-    const { frontmatter, content, slug } = exercise;
-
-    const body = `**Difficulty:** ${frontmatter.metadata?.difficulty ?? "unknown"}
+export const dsaExerciseMarkdown = contentItemMarkdown(
+    exercises,
+    ({ frontmatter, content }) => `**Difficulty:** ${frontmatter.metadata?.difficulty ?? "unknown"}
 **Technique:** ${frontmatter.metadata?.technique ?? "unknown"}
 **Tags:** ${frontmatter.tags.join(", ")}
 ${frontmatter.metadata?.leetcodeUrl ? `**LeetCode:** ${frontmatter.metadata.leetcodeUrl}` : ""}
 
 ${mdxToMarkdown(content)}
-`;
-
-    return markdownDocument({
-        title: frontmatter.title,
-        description: frontmatter.description,
-        slug: slug.formatted,
-        body,
-    });
-};
+`,
+);

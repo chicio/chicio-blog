@@ -38,7 +38,7 @@ import { slugs } from "@/types/configuration/slug";
 
 const topic = {
     frontmatter: { title: "Graph", description: "Graph algorithms", tags: ["dsa", "graph"] },
-    slug: { formatted: `${slugs.dataStructuresAndAlgorithms.home}/topic/graph` },
+    slug: { formatted: `${slugs.dataStructuresAndAlgorithms.home}/topic/graph`, params: { topic: "graph" } },
     content: "Graph body.",
 };
 
@@ -49,7 +49,10 @@ const exercise = {
         tags: ["dsa", "graph"],
         metadata: { difficulty: "Hard", technique: "BFS", leetcodeUrl: "https://leetcode.com/word-ladder" },
     },
-    slug: { formatted: `${slugs.dataStructuresAndAlgorithms.home}/topic/graph/exercise/word-ladder` },
+    slug: {
+        formatted: `${slugs.dataStructuresAndAlgorithms.home}/topic/graph/exercise/word-ladder`,
+        params: { topic: "graph", exercise: "word-ladder" },
+    },
     content: "Exercise body.",
 };
 

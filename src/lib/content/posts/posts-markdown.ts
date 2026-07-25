@@ -1,4 +1,5 @@
 import { posts, getTags } from "@/lib/content/posts/posts";
+import { contentItemMarkdown } from "@/lib/mdx/content-item-markdown";
 import { markdownDocument } from "@/lib/mdx/markdown-document";
 import { mdxToMarkdown } from "@/lib/mdx/mdx-to-markdown";
 import { siteMetadata } from "@/types/configuration/site-metadata";
@@ -53,26 +54,12 @@ ${tags.map((tag) => `- [${tag.tagValue}](${siteMetadata.siteUrl}${slugs.blog.tag
     });
 };
 
-export const blogPostMarkdown = (params: Record<string, string>): string | null => {
-    const post = posts.single(params);
-
-    if (!post) {
-        return null;
-    }
-
-    const { frontmatter, content, slug } = post;
-
-    const body = `**Author:** ${frontmatter.authors.map((a) => a.name).join(", ")}
+export const blogPostMarkdown = contentItemMarkdown(
+    posts,
+    ({ frontmatter, content }) => `**Author:** ${frontmatter.authors.map((a) => a.name).join(", ")}
 **Date:** ${frontmatter.date.formatted}
 **Tags:** ${frontmatter.tags.join(", ")}
 
 ${mdxToMarkdown(content)}
-`;
-
-    return markdownDocument({
-        title: frontmatter.title,
-        description: frontmatter.description,
-        slug: slug.formatted,
-        body,
-    });
-};
+`,
+);
