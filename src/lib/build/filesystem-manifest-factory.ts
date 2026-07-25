@@ -1,4 +1,5 @@
 import { aboutMe } from "@/lib/content/about-me/about-me";
+import { easterEggHunt } from "@/lib/content/easter-eggs/easter-eggs";
 import {
     topics,
     exercises,
@@ -138,6 +139,7 @@ const buildVideogamesTree = (
 
 export const generateFilesystemManifest = (): TerminalFileSystemManifest => {
     const aboutMeContent = aboutMe.single()!;
+    const easterEggHuntContent = easterEggHunt.single()!;
 
     const root = dir({
         children: {
@@ -150,6 +152,11 @@ export const generateFilesystemManifest = (): TerminalFileSystemManifest => {
             contact: file("Contact", "Send Fabrizio a message", slugs.contact),
             mcp: file("MCP", "MCP server for AI assistants", slugs.mcp),
             "cookie-policy": file("Cookie Policy", "How this site uses cookies", slugs.cookiePolicy),
+            "easter-egg-hunt": file(
+                easterEggHuntContent.frontmatter.title,
+                easterEggHuntContent.frontmatter.description,
+                slugs.easterEggHunt,
+            ),
         },
     });
 

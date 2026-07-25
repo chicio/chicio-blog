@@ -1,5 +1,4 @@
 import { contactMarkdown } from "@/lib/content/contact/contact-markdown";
-import { easterEggHuntMarkdown } from "@/lib/content/easter-eggs/easter-egg-hunt-markdown";
 import {
     dsaExerciseMarkdown,
     dsaExercisesListMarkdown,
@@ -31,7 +30,13 @@ const videogameGamePrefix = slugs.videogames.game.split("/").slice(1, 3);
 // Pages backed by a standard src/content/<slug>/content.mdx file — mdxPageMarkdown is fully
 // generic over the slug, so this registry replaces what would otherwise be one switch arm (and
 // one bespoke generator function) per page.
-const MDX_PAGE_SLUGS = new Set<string>([slugs.aboutMe, slugs.mcp, slugs.cookiePolicy, slugs.art]);
+const MDX_PAGE_SLUGS = new Set<string>([
+    slugs.aboutMe,
+    slugs.mcp,
+    slugs.cookiePolicy,
+    slugs.art,
+    slugs.easterEggHunt,
+]);
 
 export async function generateStaticParams() {
     const postParams = posts.list().map((post) => ({
@@ -103,9 +108,6 @@ export async function GET(_request: Request, { params }: RouteContext) {
                 break;
             case slugs.contact:
                 markdown = contactMarkdown();
-                break;
-            case slugs.easterEggHunt:
-                markdown = easterEggHuntMarkdown();
                 break;
             case slugs.dataStructuresAndAlgorithms.home:
                 markdown = dsaMarkdown();

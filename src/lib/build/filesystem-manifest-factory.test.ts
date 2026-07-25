@@ -10,7 +10,18 @@ describe("generateFilesystemManifest", () => {
         const { root } = generateFilesystemManifest();
 
         expect(Object.keys(root.children).sort()).toEqual(
-            ["about-me", "art", "blog", "chat", "contact", "cookie-policy", "dsa", "mcp", "videogames"].sort(),
+            [
+                "about-me",
+                "art",
+                "blog",
+                "chat",
+                "contact",
+                "cookie-policy",
+                "dsa",
+                "easter-egg-hunt",
+                "mcp",
+                "videogames",
+            ].sort(),
         );
     });
 
