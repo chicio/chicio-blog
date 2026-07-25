@@ -6,18 +6,15 @@ import { NextDataStructuresAndAlgorithmsParameters } from "@/types/next/page-par
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import {
-  getAllDataStructuresAndAlgorithmsTopics,
-  getDataStructuresAndAlgorithmsTopic,
-  getDataStructuresAndAlgorithmsTopicWithNavigation,
-} from "@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms";
+import { topics } from "@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms";
+import { siblingsOf } from "@/lib/content/siblings";
 import { Topic } from "@/components/content/data-structures-and-algorithms/topic";
 
 export async function generateMetadata({
   params,
 }: NextDataStructuresAndAlgorithmsParameters): Promise<Metadata> {
   const receivedParameters = await params;
-  const topic = getDataStructuresAndAlgorithmsTopic(receivedParameters)!;
+  const topic = topics.single(receivedParameters)!;
 
   if (!topic) {
     return {};
@@ -37,7 +34,7 @@ export async function generateMetadata({
 }
 
 export async function generateStaticParams() {
-  return getAllDataStructuresAndAlgorithmsTopics().map(
+  return topics.list().map(
     (topic) => topic.slug.params,
   );
 }
@@ -46,16 +43,15 @@ export default async function DataStructureAndAlgorithmTopicPage({
   params,
 }: NextDataStructuresAndAlgorithmsParameters) {
   const receivedParameters = await params;
-  const topics =
-    getDataStructuresAndAlgorithmsTopicWithNavigation(receivedParameters);
+  const topic = topics.single(receivedParameters);
 
-  if (!topics) {
+  if (!topic) {
     notFound();
   }
 
-  const { topic, previousTopic, nextTopic } = topics;
+  const siblings = siblingsOf(topics.list(), topic.slug.formatted);
 
   return (
-    <Topic topic={topic} previousTopic={previousTopic} nextTopic={nextTopic} />
+    <Topic topic={topic} previous={siblings?.previous} next={siblings?.next} />
   );
 }

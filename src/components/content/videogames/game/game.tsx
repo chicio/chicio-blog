@@ -6,7 +6,6 @@ import { Content } from "@/types/content/content";
 import { ConsoleMetadata, GameMetadata } from "@/types/content/videogames";
 import { ImageCarousel } from "@/components/design-system/organism/image-carousel";
 import { PageTitle } from "@/components/design-system/molecules/typography/page-title";
-import { getAllGames } from "@/lib/content/videogames/videogames";
 import { ConsoleLogos } from "@/components/content/videogames/console-logos";
 import { GameFormatIcon } from "@/components/content/videogames/game-format-icon";
 import { VideogameNavigation } from "@/components/content/videogames/videogame-navigation";
@@ -16,14 +15,12 @@ import { GameInformation } from "./game-information";
 interface GameProps {
     game: Content<GameMetadata>;
     console: Content<ConsoleMetadata>;
+    previous?: Content<GameMetadata>;
+    next?: Content<GameMetadata>;
 }
 
-export const Game: FC<PropsWithChildren<GameProps>> = async ({ game, console }) => {
+export const Game: FC<PropsWithChildren<GameProps>> = async ({ game, console, previous, next }) => {
     const { contentFileRelativePath: contentPath } = game;
-    const games = getAllGames();
-    const currentIndex = games.findIndex((g) => g.slug.formatted === game.slug.formatted);
-    const previousGame = games[currentIndex - 1];
-    const nextGame = games[currentIndex + 1];
     const { default: GameContent } = await import(`@/content/${contentPath}/content.mdx`);
 
     return (
@@ -74,22 +71,8 @@ export const Game: FC<PropsWithChildren<GameProps>> = async ({ game, console }) 
             />
             <GameContent />
             <VideogameNavigation
-                previous={
-                    previousGame
-                        ? {
-                              url: previousGame.slug.formatted,
-                              title: previousGame.frontmatter.title,
-                          }
-                        : undefined
-                }
-                next={
-                    nextGame
-                        ? {
-                              url: nextGame.slug.formatted,
-                              title: nextGame.frontmatter.title,
-                          }
-                        : undefined
-                }
+                previous={previous ? { url: previous.slug.formatted, title: previous.frontmatter.title } : undefined}
+                next={next ? { url: next.slug.formatted, title: next.frontmatter.title } : undefined}
             />
             <JsonLd
                 type="Website"

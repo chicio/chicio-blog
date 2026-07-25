@@ -144,6 +144,44 @@ Some prose after the heading.
         });
     });
 
+    describe("EggCard transform", () => {
+        it("promotes the title attribute to a level-2 heading, since attributes are not children", () => {
+            const mdx = `<EggCard title="The White Rabbit">\n\nfollow it\n\n</EggCard>`;
+            const result = mdxToMarkdown(mdx);
+
+            expect(result).toContain("## The White Rabbit");
+            expect(result).toContain("follow it");
+        });
+
+        it("keeps the children when no title is given", () => {
+            const mdx = `<EggCard>\n\nfollow it\n\n</EggCard>`;
+            const result = mdxToMarkdown(mdx);
+
+            expect(result).toContain("follow it");
+            expect(result).not.toContain("##");
+        });
+    });
+
+    describe("EggSolution transform", () => {
+        it("re-emits the Solution label that the component renders in the UI", () => {
+            const mdx = `<EggSolution eggId="the_white_rabbit">\n\n- press cmd-K\n\n</EggSolution>`;
+            const result = mdxToMarkdown(mdx);
+
+            expect(result).toContain("**Solution:**");
+            expect(result).toContain("- press cmd-K");
+        });
+    });
+
+    describe("EasterEggIntroTerminal transform", () => {
+        it("emits the terminal intro lines, which live in TypeScript rather than in the MDX body", () => {
+            const result = mdxToMarkdown(`<EasterEggIntroTerminal />`);
+
+            expect(result).toContain("Wake up...");
+            expect(result).toContain("Follow the clues. Trigger them yourself.");
+            expect(result).not.toContain("[interactive:");
+        });
+    });
+
     describe("interactive component placeholder (generic fallback, no hardcoded name list)", () => {
         it("replaces a brand-new, never-seen-before self-closing component with an 'open the page' placeholder", () => {
             const mdx = `<SomeFutureVisualizer />`;

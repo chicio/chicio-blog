@@ -12,11 +12,11 @@ import { Content } from "@/types/content/content";
 
 interface DsaProps {
     topic: Content;
-    previousTopic?: Content;
-    nextTopic?: Content;
+    previous?: Content;
+    next?: Content;
 }
 
-export const Topic: FC<PropsWithChildren<DsaProps>> = async ({ topic, previousTopic, nextTopic }) => {
+export const Topic: FC<PropsWithChildren<DsaProps>> = async ({ topic, previous, next }) => {
     const { contentFileRelativePath } = topic;
     const { default: TopicContent } = await import(`@/content/${contentFileRelativePath}/content.mdx`);
 
@@ -33,9 +33,7 @@ export const Topic: FC<PropsWithChildren<DsaProps>> = async ({ topic, previousTo
             ] satisfies BreadcrumbItem[]}
         >
             <TopicContent />
-            {(previousTopic || nextTopic) && (
-                <CourseNavigation previousTopic={previousTopic} nextTopic={nextTopic} />
-            )}
+            {(previous || next) && <CourseNavigation previousTopic={previous} nextTopic={next} />}
             <JsonLd
                 type="BlogPosting"
                 url={`${siteMetadata.siteUrl}${topic.slug.formatted}`}

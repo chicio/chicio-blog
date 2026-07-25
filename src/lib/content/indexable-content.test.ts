@@ -1,10 +1,9 @@
 import { describe, it, expect } from "vitest";
 import { getIndexableContent } from "./indexable-content";
-import { easterEggHuntPageDescription, easterEggHuntPageTitle } from "./easter-eggs/easter-eggs-content";
 import { slugs } from "@/types/configuration/slug";
 
 describe("getIndexableContent", () => {
-    describe("easter egg hunt synthetic entry", () => {
+    describe("easter egg hunt entry", () => {
         const findEasterEggHuntEntry = () =>
             getIndexableContent().find((content) => content.slug.formatted === slugs.easterEggHunt);
 
@@ -12,13 +11,21 @@ describe("getIndexableContent", () => {
             expect(findEasterEggHuntEntry()).toBeDefined();
         });
 
-        it("carries the shared title, description and tags used for search/markdown", () => {
+        it("reads its title, description and tags from the MDX frontmatter", () => {
             const entry = findEasterEggHuntEntry();
 
-            expect(entry?.frontmatter.title).toBe(easterEggHuntPageTitle);
-            expect(entry?.frontmatter.description).toBe(easterEggHuntPageDescription);
+            expect(entry?.frontmatter.title).toBe("Easter Egg Hunt");
+            expect(entry?.frontmatter.description).toBe(
+                "Hidden secrets are scattered across this site. Follow the clues and trigger the easter eggs yourself.",
+            );
             expect(entry?.frontmatter.tags).toEqual(["easter egg", "matrix"]);
-            expect(entry?.frontmatter.authors).toEqual([]);
+        });
+
+        it("indexes the hint text from the MDX body, which the old synthetic entry left empty", () => {
+            const entry = findEasterEggHuntEntry();
+
+            expect(entry?.content).toContain("The White Rabbit");
+            expect(entry?.content).toContain("no spoon");
         });
 
         it("has a date that parses to a valid Date (regression: sitemap.xml calls new Date(...).toISOString())", () => {

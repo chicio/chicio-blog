@@ -5,7 +5,7 @@ const { mockGetPosts } = vi.hoisted(() => ({
 }));
 
 vi.mock("@/lib/content/posts/posts", () => ({
-    getPosts: mockGetPosts,
+    posts: { list: mockGetPosts },
 }));
 
 import { GET } from "./route";

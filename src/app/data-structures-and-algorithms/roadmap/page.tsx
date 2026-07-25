@@ -1,5 +1,5 @@
 import { Roadmap } from "@/components/content/data-structures-and-algorithms/roadmap";
-import { getDataStructuresAndAlgorithmsRoadmap } from "@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms";
+import { dsaRoadmap } from "@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms";
 import { createMetadata } from "@/lib/seo/seo";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { slugs } from "@/types/configuration/slug";
@@ -14,7 +14,7 @@ export const metadata = createMetadata({
 });
 
 export default async function RoadmapPage() {
-  const roadmap = getDataStructuresAndAlgorithmsRoadmap();
+  const roadmap = dsaRoadmap.single()!;
 
   return <Roadmap roadmap={roadmap} />;
 }

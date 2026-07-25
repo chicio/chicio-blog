@@ -1,12 +1,12 @@
-import { getAllDataStructuresAndAlgorithmsTopics } from "@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms";
-import { getPosts, getTags } from "@/lib/content/posts/posts";
+import { topics } from "@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms";
+import { posts, getTags } from "@/lib/content/posts/posts";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { slugs } from "@/types/configuration/slug";
 
 export const dynamic = 'force-static';
 
 export async function GET() {
-    const posts = getPosts();
+    const allPosts = posts.list();
     const tags = getTags();
     const content = `# ${siteMetadata.title}
 
@@ -31,7 +31,7 @@ This website contains technical blog posts about software engineering, computer 
 
 Articles with descriptions:
 
-${posts
+${allPosts
     .map(
         (post) =>
             `- [${post.frontmatter.title}](${siteMetadata.siteUrl}${post.slug.formatted}): ${post.frontmatter.description}`
@@ -50,9 +50,9 @@ ${tags
 
 Interactive tutorials and educational content on fundamental computer science concepts:
 
-${getAllDataStructuresAndAlgorithmsTopics()
+${topics.list()
     .map((topic) => `- [${topic.frontmatter.title}](${siteMetadata.siteUrl}${topic.slug.formatted}): ${topic.frontmatter.description}`)
-    .join("\n")}    
+    .join("\n")}
 
 ## Additional Information:
 

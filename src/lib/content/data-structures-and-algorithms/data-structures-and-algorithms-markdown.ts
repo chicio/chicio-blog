@@ -1,23 +1,21 @@
 import {
-    getAllDataStructuresAndAlgorithmsTopics,
-    getAllExercises,
+    topics,
+    exercises,
     getAllExercisesForTopic,
-    getDataStructuresAndAlgorithmsRoadmap,
-    getDataStructuresAndAlgorithmsTopic,
-    getExercise,
-    getExercisesContent,
+    dsaExercisesList,
 } from "@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms";
+import { contentBodyMarkdown } from "@/lib/mdx/content-body-markdown";
+import { contentItemMarkdown } from "@/lib/mdx/content-item-markdown";
 import { markdownDocument } from "@/lib/mdx/markdown-document";
-import { mdxToMarkdown } from "@/lib/mdx/mdx-to-markdown";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { slugs } from "@/types/configuration/slug";
 
 export const dsaMarkdown = (): string => {
-    const topics = getAllDataStructuresAndAlgorithmsTopics();
+    const allTopics = topics.list();
 
     const body = `## Topics
 
-${topics.map((topic) => `- [${topic.frontmatter.title}](${siteMetadata.siteUrl}${topic.slug.formatted}) — ${topic.frontmatter.description}`).join("\n")}
+${allTopics.map((topic) => `- [${topic.frontmatter.title}](${siteMetadata.siteUrl}${topic.slug.formatted}) — ${topic.frontmatter.description}`).join("\n")}
 `;
 
     return markdownDocument({
@@ -28,81 +26,35 @@ ${topics.map((topic) => `- [${topic.frontmatter.title}](${siteMetadata.siteUrl}$
     });
 };
 
-export const dsaRoadmapMarkdown = (): string => {
-    const roadmap = getDataStructuresAndAlgorithmsRoadmap();
+export const dsaExercisesListMarkdown = contentItemMarkdown(dsaExercisesList, () => {
+    const allExercises = exercises.list();
 
-    return markdownDocument({
-        title: roadmap.frontmatter.title,
-        description: roadmap.frontmatter.description,
-        slug: slugs.dataStructuresAndAlgorithms.roadmap,
-        body: mdxToMarkdown(roadmap.content),
-    });
-};
+    return `## All Exercises (${allExercises.length})
 
-export const dsaExercisesListMarkdown = (): string => {
-    const exercisesContent = getExercisesContent();
-    const exercises = getAllExercises();
-
-    const body = `## All Exercises (${exercises.length})
-
-${exercises.map((e) => `- [${e.frontmatter.title}](${siteMetadata.siteUrl}${e.slug.formatted}) — ${e.frontmatter.metadata?.difficulty ?? "unknown"}, ${e.frontmatter.metadata?.technique ?? "unknown"}`).join("\n")}
+${allExercises.map((e) => `- [${e.frontmatter.title}](${siteMetadata.siteUrl}${e.slug.formatted}) — ${e.frontmatter.metadata?.difficulty ?? "unknown"}, ${e.frontmatter.metadata?.technique ?? "unknown"}`).join("\n")}
 `;
+});
 
-    return markdownDocument({
-        title: exercisesContent.frontmatter.title,
-        description: exercisesContent.frontmatter.description,
-        slug: slugs.dataStructuresAndAlgorithms.exercises,
-        body,
-    });
-};
+export const dsaTopicMarkdown = contentItemMarkdown(topics, (topic) => {
+    const topicExercises = getAllExercisesForTopic(topic.slug.params.topic);
 
-export const dsaTopicMarkdown = (params: Record<string, string>): string | null => {
-    const topic = getDataStructuresAndAlgorithmsTopic(params);
+    return `**Tags:** ${topic.frontmatter.tags.join(", ")}
 
-    if (!topic) {
-        return null;
-    }
-
-    const exercises = getAllExercisesForTopic(params.topic);
-
-    const body = `**Tags:** ${topic.frontmatter.tags.join(", ")}
-
-${mdxToMarkdown(topic.content)}
-${exercises.length > 0 ? `
+${contentBodyMarkdown(topic)}
+${topicExercises.length > 0 ? `
 ## Exercises
 
-${exercises.map((e) => `- [${e.frontmatter.title}](${siteMetadata.siteUrl}${e.slug.formatted}) — ${e.frontmatter.metadata?.difficulty ?? "unknown"}, ${e.frontmatter.metadata?.technique ?? "unknown"}`).join("\n")}
+${topicExercises.map((e) => `- [${e.frontmatter.title}](${siteMetadata.siteUrl}${e.slug.formatted}) — ${e.frontmatter.metadata?.difficulty ?? "unknown"}, ${e.frontmatter.metadata?.technique ?? "unknown"}`).join("\n")}
 ` : ""}`;
+});
 
-    return markdownDocument({
-        title: topic.frontmatter.title,
-        description: topic.frontmatter.description,
-        slug: topic.slug.formatted,
-        body,
-    });
-};
+export const dsaExerciseMarkdown = contentItemMarkdown(
+    exercises,
+    (exercise) => `**Difficulty:** ${exercise.frontmatter.metadata?.difficulty ?? "unknown"}
+**Technique:** ${exercise.frontmatter.metadata?.technique ?? "unknown"}
+**Tags:** ${exercise.frontmatter.tags.join(", ")}
+${exercise.frontmatter.metadata?.leetcodeUrl ? `**LeetCode:** ${exercise.frontmatter.metadata.leetcodeUrl}` : ""}
 
-export const dsaExerciseMarkdown = (params: Record<string, string>): string | null => {
-    const exercise = getExercise(params);
-
-    if (!exercise) {
-        return null;
-    }
-
-    const { frontmatter, content, slug } = exercise;
-
-    const body = `**Difficulty:** ${frontmatter.metadata?.difficulty ?? "unknown"}
-**Technique:** ${frontmatter.metadata?.technique ?? "unknown"}
-**Tags:** ${frontmatter.tags.join(", ")}
-${frontmatter.metadata?.leetcodeUrl ? `**LeetCode:** ${frontmatter.metadata.leetcodeUrl}` : ""}
-
-${mdxToMarkdown(content)}
-`;
-
-    return markdownDocument({
-        title: frontmatter.title,
-        description: frontmatter.description,
-        slug: slug.formatted,
-        body,
-    });
-};
+${contentBodyMarkdown(exercise)}
+`,
+);

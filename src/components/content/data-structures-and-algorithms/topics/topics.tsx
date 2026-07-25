@@ -1,8 +1,8 @@
-import { getAllDataStructuresAndAlgorithmsTopics } from "@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms";
+import { topics } from "@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms";
 import { FC } from "react";
 
 export const Topics: FC = () => {
-    const topics = getAllDataStructuresAndAlgorithmsTopics();
+    const allTopics = topics.list();
 
     return (
         <div id="test" className="table-wrapper">
@@ -14,7 +14,7 @@ export const Topics: FC = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {topics.map((topic) => (
+                    {allTopics.map((topic) => (
                         <tr key={topic.slug.formatted}>
                             <td className="w-2/5">
                                 <a href={topic.slug.formatted}><strong>{topic.frontmatter.title}</strong></a>

@@ -1,5 +1,5 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { getAboutMe } from "@/lib/content/about-me/about-me";
+import { aboutMe } from "@/lib/content/about-me/about-me";
 import { MCP_SITE_URL } from "@/lib/mcp/config";
 
 export const registerGetAboutMe = (server: McpServer): void => {
@@ -11,12 +11,12 @@ export const registerGetAboutMe = (server: McpServer): void => {
                 "Returns Fabrizio Duroni's full about me page content, including professional background, skills, and interests.",
         },
         async () => {
-            const aboutMe = getAboutMe();
+            const aboutMeContent = aboutMe.single()!;
 
             const result = {
-                title: aboutMe.frontmatter.title,
-                description: aboutMe.frontmatter.description,
-                content: aboutMe.content,
+                title: aboutMeContent.frontmatter.title,
+                description: aboutMeContent.frontmatter.description,
+                content: aboutMeContent.content,
                 url: `${MCP_SITE_URL}/about-me`,
             };
 
