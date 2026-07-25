@@ -1,7 +1,8 @@
 import { contentRegistry } from "./registry";
 
 /**
- * Everything the site search indexes, derived from the content registry: an entry appears here exactly
- * when it declares how it is `indexed`.
+ * Everything the site search indexes: the content of every registry entry that declares itself
+ * searchable.
  */
-export const getIndexableContent = () => contentRegistry.flatMap((entry) => entry.indexed?.() ?? []);
+export const getIndexableContent = () =>
+    contentRegistry.filter((entry) => entry.searchable).flatMap((entry) => entry.content?.() ?? []);

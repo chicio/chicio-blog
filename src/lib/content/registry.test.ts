@@ -92,8 +92,8 @@ describe("contentRegistry", () => {
     });
 
     describe("search index", () => {
-        it("indexes exactly the entries that carry real content", () => {
-            const indexed = contentRegistry.filter((entry) => entry.indexed).map((entry) => entry.slug);
+        it("indexes exactly the entries that carry searchable content", () => {
+            const indexed = contentRegistry.filter((entry) => entry.searchable).map((entry) => entry.slug);
 
             expect(indexed.sort()).toEqual(
                 [
@@ -113,9 +113,16 @@ describe("contentRegistry", () => {
         it("does not index the aggregate listing pages, whose content lives on the pages they link to", () => {
             [slugs.blog.home, slugs.blog.stats, slugs.videogames.home, slugs.dataStructuresAndAlgorithms.home, "/"].forEach(
                 (slug) => {
-                    expect(entryFor(slug)?.indexed).toBeUndefined();
+                    expect(entryFor(slug)?.searchable).toBeUndefined();
                 },
             );
+        });
+
+        it("keeps mcp, cookie-policy and art out of search while still knowing their content", () => {
+            [slugs.mcp, slugs.cookiePolicy, slugs.art].forEach((slug) => {
+                expect(entryFor(slug)?.searchable).toBeUndefined();
+                expect(entryFor(slug)?.content?.()).toHaveLength(1);
+            });
         });
     });
 });

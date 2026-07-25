@@ -1,9 +1,7 @@
 import { Content } from "@/types/content/content";
 import { slugs } from "@/types/configuration/slug";
-import { aboutMe } from "./about-me/about-me";
 import {
     dsaExercisesList,
-    dsaRoadmap,
     exercises,
     topics,
 } from "./data-structures-and-algorithms/data-structures-and-algorithms";
@@ -13,7 +11,6 @@ import {
     dsaMarkdown,
     dsaTopicMarkdown,
 } from "./data-structures-and-algorithms/data-structures-and-algorithms-markdown";
-import { easterEggHunt } from "./easter-eggs/easter-eggs";
 import { posts } from "./posts/posts";
 import { blogListingMarkdown, blogPostMarkdown, homepageMarkdown } from "./posts/posts-markdown";
 import { consoles, games } from "./videogames/videogames";
@@ -21,6 +18,7 @@ import { consoleMarkdown, gameMarkdown, videogamesMarkdown } from "./videogames/
 import { contactMarkdown } from "./contact/contact-markdown";
 import { blogStatsMarkdown } from "@/lib/blog-stats/blog-stats-markdown";
 import { mdxPageMarkdown } from "@/lib/mdx/mdx-page-markdown";
+import { createSection } from "./section";
 
 /**
  * One description of a routable piece of content, from which the subsystems that need to enumerate the
@@ -29,7 +27,7 @@ import { mdxPageMarkdown } from "@/lib/mdx/mdx-page-markdown";
  *
  * A single page and a collection share this one shape. A collection supplies `params` (every concrete
  * param set its `slug` template expands to); a page omits it, meaning the template expands to exactly
- * one path. `indexed` is omitted by anything that should not appear in site search.
+ * one path. `content` is what a page actually is; `searchable` says whether it reaches site search.
  */
 export interface ContentRegistryEntry {
     /** Route shape, with dynamic segments in brackets — see `slug-template.ts`. */
@@ -38,8 +36,14 @@ export interface ContentRegistryEntry {
     params?: () => Record<string, string>[];
     /** Markdown for one concrete path; returns null when that path has no content. */
     markdown: (params: Record<string, string>) => string | null;
-    /** What this entry contributes to the search index. Omitted when it is not indexed. */
-    indexed?: () => Content[];
+    /**
+     * The content behind this entry, for the entries that have some. It is what supplies each page its
+     * real title, date and image, so anything derived from content reads it here rather than being told
+     * the same values a second time. Omitted by aggregate pages, which have no content of their own.
+     */
+    content?: () => Content[];
+    /** Whether this entry's content belongs in site search. */
+    searchable?: boolean;
 }
 
 const paramsOf = (section: { list: () => Content[] }) => () => section.list().map((item) => item.slug.params);
@@ -51,6 +55,20 @@ const singleItem = (section: { single: () => Content | undefined }) => () => {
 };
 
 /**
+ * A page backed by a standard `src/content/<slug>/content.mdx`: its markdown comes from the generic
+ * generator and its content from the file, so registering one is a single call.
+ */
+const mdxPage = (slug: string): ContentRegistryEntry => {
+    const section = createSection({ slug });
+
+    return {
+        slug,
+        markdown: () => mdxPageMarkdown(slug),
+        content: singleItem(section),
+    };
+};
+
+/**
  * Single pages come first so that an exact literal slug always wins over a collection template of the
  * same length (`/videogames/console/games` must not be read as a console named "games").
  */
@@ -59,55 +77,53 @@ export const contentRegistry: ContentRegistryEntry[] = [
     { slug: slugs.blog.home, markdown: blogListingMarkdown },
     { slug: slugs.blog.stats, markdown: blogStatsMarkdown },
     { slug: slugs.contact, markdown: contactMarkdown },
-    { slug: slugs.aboutMe, markdown: () => mdxPageMarkdown(slugs.aboutMe), indexed: singleItem(aboutMe) },
-    { slug: slugs.mcp, markdown: () => mdxPageMarkdown(slugs.mcp) },
-    { slug: slugs.cookiePolicy, markdown: () => mdxPageMarkdown(slugs.cookiePolicy) },
-    { slug: slugs.art, markdown: () => mdxPageMarkdown(slugs.art) },
-    {
-        slug: slugs.easterEggHunt,
-        markdown: () => mdxPageMarkdown(slugs.easterEggHunt),
-        indexed: singleItem(easterEggHunt),
-    },
+    { ...mdxPage(slugs.aboutMe), searchable: true },
+    mdxPage(slugs.mcp),
+    mdxPage(slugs.cookiePolicy),
+    mdxPage(slugs.art),
+    { ...mdxPage(slugs.easterEggHunt), searchable: true },
     { slug: slugs.dataStructuresAndAlgorithms.home, markdown: dsaMarkdown },
-    {
-        slug: slugs.dataStructuresAndAlgorithms.roadmap,
-        markdown: () => mdxPageMarkdown(slugs.dataStructuresAndAlgorithms.roadmap),
-        indexed: singleItem(dsaRoadmap),
-    },
+    { ...mdxPage(slugs.dataStructuresAndAlgorithms.roadmap), searchable: true },
     {
         slug: slugs.dataStructuresAndAlgorithms.exercises,
         markdown: dsaExercisesListMarkdown,
-        indexed: singleItem(dsaExercisesList),
+        content: singleItem(dsaExercisesList),
+        searchable: true,
     },
     { slug: slugs.videogames.home, markdown: videogamesMarkdown },
     {
         slug: slugs.blog.blogPost,
         params: paramsOf(posts),
         markdown: blogPostMarkdown,
-        indexed: posts.list,
+        content: posts.list,
+        searchable: true,
     },
     {
         slug: slugs.dataStructuresAndAlgorithms.topic,
         params: paramsOf(topics),
         markdown: dsaTopicMarkdown,
-        indexed: topics.list,
+        content: topics.list,
+        searchable: true,
     },
     {
         slug: slugs.dataStructuresAndAlgorithms.exercise,
         params: paramsOf(exercises),
         markdown: dsaExerciseMarkdown,
-        indexed: exercises.list,
+        content: exercises.list,
+        searchable: true,
     },
     {
         slug: slugs.videogames.console,
         params: paramsOf(consoles),
         markdown: consoleMarkdown,
-        indexed: consoles.list,
+        content: consoles.list,
+        searchable: true,
     },
     {
         slug: slugs.videogames.game,
         params: paramsOf(games),
         markdown: gameMarkdown,
-        indexed: games.list,
+        content: games.list,
+        searchable: true,
     },
 ];
