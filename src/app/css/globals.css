@@ -530,21 +530,6 @@
         }
     }
 
-    .egg-card-content {
-        & > p {
-            @apply my-4 font-mono italic text-primary-text text-shadow-md;
-        }
-    }
-
-    .egg-solution {
-        & ul {
-            @apply list-disc pl-6;
-        }
-
-        & li {
-            @apply text-shadow-md mb-2 font-mono font-bold leading-tight text-accent break-words text-xs sm:text-sm;
-        }
-    }
 }
 
 /** custom rules **/

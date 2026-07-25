@@ -8,6 +8,16 @@ export type EggSolutionProps = PropsWithChildren<{
     eggId: string;
 }>;
 
+/**
+ * The steps arrive as an MDX list rather than as a prop, so the terminal styling `TerminalLine` would
+ * otherwise apply is expressed here, on the child list, instead of in a global content stylesheet.
+ */
+const stepListClass = [
+    "[&_ul]:list-disc [&_ul]:pl-6",
+    "[&_li]:mb-2 [&_li]:font-mono [&_li]:font-bold [&_li]:leading-tight",
+    "[&_li]:text-accent [&_li]:text-shadow-md [&_li]:break-words [&_li]:text-xs sm:[&_li]:text-sm",
+].join(" ");
+
 export const EggSolution: FC<EggSolutionProps> = ({ eggId, children }) => {
     const { state, effects } = useEggSolutionStore(eggId);
     const { revealed } = state;
@@ -21,7 +31,7 @@ export const EggSolution: FC<EggSolutionProps> = ({ eggId, children }) => {
                 label={revealed ? "hide" : "reveal"}
                 className="mt-3"
             />
-            {revealed && <div className="egg-solution mt-3">{children}</div>}
+            {revealed && <div className={`mt-3 ${stepListClass}`}>{children}</div>}
         </>
     );
 };
