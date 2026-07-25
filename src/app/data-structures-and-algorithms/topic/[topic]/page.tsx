@@ -6,10 +6,8 @@ import { NextDataStructuresAndAlgorithmsParameters } from "@/types/next/page-par
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import {
-  topics,
-  getTopicWithSiblings,
-} from "@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms";
+import { topics } from "@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms";
+import { siblingsOf } from "@/lib/content/siblings";
 import { Topic } from "@/components/content/data-structures-and-algorithms/topic";
 
 export async function generateMetadata({
@@ -45,13 +43,15 @@ export default async function DataStructureAndAlgorithmTopicPage({
   params,
 }: NextDataStructuresAndAlgorithmsParameters) {
   const receivedParameters = await params;
-  const siblings = getTopicWithSiblings(receivedParameters);
+  const topic = topics.single(receivedParameters);
 
-  if (!siblings) {
+  if (!topic) {
     notFound();
   }
 
-  const { current, previous, next } = siblings;
+  const siblings = siblingsOf(topics.list(), topic.slug.formatted);
 
-  return <Topic topic={current} previous={previous} next={next} />;
+  return (
+    <Topic topic={topic} previous={siblings?.previous} next={siblings?.next} />
+  );
 }
