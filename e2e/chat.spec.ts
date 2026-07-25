@@ -1,11 +1,12 @@
 import { test, expect } from "@playwright/test";
 
-const MOCK_STREAM_RESPONSE = [
-    'data: {"type":"text-start","id":"msg-1"}',
-    'data: {"type":"text-delta","id":"msg-1","delta":"Hello! I am Fabrizio\'s assistant."}',
-    'data: {"type":"text-end","id":"msg-1"}',
-    "data: [DONE]",
-].join("\n");
+const MOCK_STREAM_RESPONSE =
+    [
+        'data: {"type":"text-start","id":"msg-1"}',
+        'data: {"type":"text-delta","id":"msg-1","delta":"Hello! I am Fabrizio\'s assistant."}',
+        'data: {"type":"text-end","id":"msg-1"}',
+        "data: [DONE]",
+    ].join("\n\n") + "\n\n";
 
 test.describe("Chat page", () => {
     test.beforeEach(async ({ page }) => {
@@ -39,7 +40,7 @@ test.describe("Chat page", () => {
         const input = page.getByRole("textbox");
         await input.fill("Tell me about Fabrizio");
         await page.keyboard.press("Enter");
-        await expect(page.getByText("Fabrizio")).toBeVisible({ timeout: 10000 });
+        await expect(page.getByText("Hello! I am Fabrizio's assistant.")).toBeVisible({ timeout: 10000 });
     });
 
     test("submitting the spoon phrase triggers the warp and calls no API", async ({ page }) => {

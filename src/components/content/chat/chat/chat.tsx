@@ -4,8 +4,9 @@ import { RedPillNoReflection } from "@/components/design-system/atoms/effects/pi
 import { ChatIcon } from "@/components/design-system/atoms/icons/chat-icon";
 import { Markdown } from "@/components/design-system/atoms/typography/markdown";
 import { ContentContainer } from "@/components/design-system/molecules/containers/content-container";
-import { MatrixHeaderBackground } from "@/components/design-system/molecules/effects/matrix-header-background";
-import { GenericHeader } from "@/components/design-system/organism/header/generic-header";
+import { PageTitle } from "@/components/design-system/molecules/typography/page-title";
+import { ParagraphTitleWithIcon } from "@/components/design-system/molecules/typography/paragraph-title-with-icon";
+import { BrandHeader } from "@/components/design-system/organism/header/brand-header";
 import { Menu } from "@/components/design-system/organism/menu";
 import { FC } from "react";
 import { ChatInput } from "./chat-input";
@@ -22,13 +23,11 @@ export const Chat: FC = () => {
         <>
             <Menu navHrefs={menuNavHrefs} />
             <ContentContainer>
-                {!state.hasMessages && <MatrixHeaderBackground big={false} />}
-                <GenericHeader
-                    title="Chat with Fabrizio"
-                    subtitle="Ask me anything about my work, projects, and software development expertise"
-                    logo={<ChatIcon />}
-                    visible={!state.hasMessages}
-                />
+                <BrandHeader big={false} />
+                <PageTitle>
+                    <ParagraphTitleWithIcon icon={<ChatIcon />}>Chat with Fabrizio</ParagraphTitleWithIcon>
+                </PageTitle>
+                <p>Ask me anything about my work, projects, and software development expertise</p>
                 <div className="hide-scrollbar pb-[calc(140px+env(safe-area-inset-bottom,0px))] flex flex-1 flex-col gap-3 overflow-visible pt-6 sm:pt-10 sm:pb-[140px]">
                     {!state.hasMessages && (
                         <ChatWelcome

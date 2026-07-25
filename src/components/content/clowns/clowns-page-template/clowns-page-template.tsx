@@ -1,33 +1,22 @@
 import { MediaGrid } from "./media-grid";
-import { MatrixHeaderBackground } from "@/components/design-system/molecules/effects/matrix-header-background";
-import { GenericHeader } from "@/components/design-system/organism/header/generic-header";
-import { PageTemplate } from "@/components/design-system/templates/page-template";
+import { ContentPage } from "@/components/features/content/content-page";
+import { PageTitle } from "@/components/design-system/molecules/typography/page-title";
+import { ParagraphTitleWithIcon } from "@/components/design-system/molecules/typography/paragraph-title-with-icon";
 import { siteMetadata } from "@/types/configuration/site-metadata";
+import { tracking } from "@/types/configuration/tracking";
 import { ClownSvgIcon } from "./clown-svg-icon";
 import { FC, PropsWithChildren } from "react";
-import { menuNavHrefs, footerNavHrefs, socialContactLinks } from "@/components/features/content/nav-config";
 
 export const ClownsPageTemplate: FC<PropsWithChildren> = ({ children }) => {
     return (
-        <PageTemplate
-            header={
-                <>
-                    <MatrixHeaderBackground big={false} />
-                    <GenericHeader
-                        title="Clownified!!!"
-                        subtitle="Bravo! Keep up the effort and you'll clown-it!"
-                        logo={<ClownSvgIcon />}
-                    />
-                </>
-            }
-            author={siteMetadata.author}
-            navHrefs={menuNavHrefs}
-            footerNavHrefs={footerNavHrefs}
-            socialLinks={socialContactLinks}
-        >
+        <ContentPage author={siteMetadata.author} trackingCategory={tracking.category.clowns}>
+            <PageTitle>
+                <ParagraphTitleWithIcon icon={<ClownSvgIcon />}>Clownified!!!</ParagraphTitleWithIcon>
+            </PageTitle>
+            <p>Bravo! Keep up the effort and you&apos;ll clown-it!</p>
             <MediaGrid>
                 {children}
             </MediaGrid>
-        </PageTemplate>
+        </ContentPage>
     );
 };
