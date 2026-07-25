@@ -2,7 +2,11 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@/test-utils";
 import { act } from "@testing-library/react";
 import { SpoonEasterEgg } from "./spoon-easter-egg";
-import { spoonActivationEvent } from "@/lib/easter-eggs/spoon-activation";
+import {
+    activateSpoonEasterEgg,
+    consumePendingSpoonActivation,
+    spoonActivationEvent,
+} from "@/lib/easter-eggs/spoon-activation";
 import { trackWith } from "@/lib/tracking/tracking";
 import { tracking } from "@/types/configuration/tracking";
 
@@ -48,6 +52,7 @@ describe("SpoonEasterEgg", () => {
         mockUseReducedMotions.mockReturnValue(false);
         vi.mocked(trackWith).mockClear();
         document.body.classList.remove("glitch-active");
+        consumePendingSpoonActivation();
     });
 
     describe("before the activation event fires", () => {
@@ -118,6 +123,54 @@ describe("SpoonEasterEgg", () => {
                 dispatchActivation();
             });
             expect(trackWith).toHaveBeenCalledTimes(1);
+        });
+    });
+
+    describe("when the phrase is submitted before the egg has mounted", () => {
+        it("drains the pending activation and fires the warp on mount", async () => {
+            vi.useFakeTimers();
+            activateSpoonEasterEgg();
+
+            render(<SpoonEasterEgg />);
+
+            expect(document.body.classList.contains("glitch-active")).toBe(true);
+            expect(trackWith).toHaveBeenCalledTimes(1);
+
+            await act(async () => {
+                vi.advanceTimersByTime(400);
+            });
+
+            expect(screen.getByTestId("spoon-matrix-rain")).toBeInTheDocument();
+            vi.useRealTimers();
+        });
+
+        it("clears the pending flag so a later remount does not replay it", () => {
+            activateSpoonEasterEgg();
+
+            const { unmount } = render(<SpoonEasterEgg />);
+            expect(trackWith).toHaveBeenCalledTimes(1);
+            unmount();
+
+            vi.mocked(trackWith).mockClear();
+            document.body.classList.remove("glitch-active");
+
+            render(<SpoonEasterEgg />);
+
+            expect(trackWith).not.toHaveBeenCalled();
+            expect(document.body.classList.contains("glitch-active")).toBe(false);
+        });
+    });
+
+    describe("when the phrase is submitted while the egg is already mounted", () => {
+        it("fires exactly once via activateSpoonEasterEgg", () => {
+            render(<SpoonEasterEgg />);
+
+            act(() => {
+                activateSpoonEasterEgg();
+            });
+
+            expect(trackWith).toHaveBeenCalledTimes(1);
+            expect(consumePendingSpoonActivation()).toBe(false);
         });
     });
 

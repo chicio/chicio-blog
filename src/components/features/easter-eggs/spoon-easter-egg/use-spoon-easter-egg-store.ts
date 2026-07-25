@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useReducedMotions } from "@/components/design-system/hooks/use-reduced-motions";
-import { spoonActivationEvent } from "@/lib/easter-eggs/spoon-activation";
+import { consumePendingSpoonActivation, spoonActivationEvent } from "@/lib/easter-eggs/spoon-activation";
 import { trackWith } from "@/lib/tracking/tracking";
 import { tracking } from "@/types/configuration/tracking";
 import type { StateStore } from "@/types/component-store";
@@ -18,9 +18,10 @@ interface SpoonEasterEggState {
 export const useSpoonEasterEggStore = (): StateStore<SpoonEasterEggState> => {
     const reducedMotion = useReducedMotions();
     const [phase, setPhase] = useState<SpoonEasterEggPhase>("idle");
+    const hasDrainedPendingActivation = useRef(false);
 
     useEffect(() => {
-        const handleActivation = () => {
+        const activate = () => {
             if (phase !== "idle") {
                 return;
             }
@@ -33,7 +34,21 @@ export const useSpoonEasterEggStore = (): StateStore<SpoonEasterEggState> => {
             setPhase(reducedMotion ? "warping" : "glitching");
         };
 
+        const handleActivation = () => {
+            consumePendingSpoonActivation();
+            activate();
+        };
+
         window.addEventListener(spoonActivationEvent, handleActivation);
+
+        if (!hasDrainedPendingActivation.current) {
+            hasDrainedPendingActivation.current = true;
+
+            if (consumePendingSpoonActivation()) {
+                activate();
+            }
+        }
+
         return () => {
             window.removeEventListener(spoonActivationEvent, handleActivation);
         };

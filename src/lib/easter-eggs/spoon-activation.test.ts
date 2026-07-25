@@ -1,9 +1,15 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { spoonActivationEvent, activateSpoonEasterEgg, trySpoonPhrase } from "./spoon-activation";
+import {
+    spoonActivationEvent,
+    activateSpoonEasterEgg,
+    consumePendingSpoonActivation,
+    trySpoonPhrase,
+} from "./spoon-activation";
 
 describe("spoon-activation", () => {
     beforeEach(() => {
         vi.restoreAllMocks();
+        consumePendingSpoonActivation();
     });
 
     describe("activateSpoonEasterEgg", () => {
@@ -15,6 +21,25 @@ describe("spoon-activation", () => {
 
             expect(listener).toHaveBeenCalledTimes(1);
             window.removeEventListener(spoonActivationEvent, listener);
+        });
+
+        it("records a pending activation that survives when nothing is listening yet", () => {
+            activateSpoonEasterEgg();
+
+            expect(consumePendingSpoonActivation()).toBe(true);
+        });
+    });
+
+    describe("consumePendingSpoonActivation", () => {
+        it("returns false when no activation is pending", () => {
+            expect(consumePendingSpoonActivation()).toBe(false);
+        });
+
+        it("returns true exactly once, clearing the flag on consumption", () => {
+            activateSpoonEasterEgg();
+
+            expect(consumePendingSpoonActivation()).toBe(true);
+            expect(consumePendingSpoonActivation()).toBe(false);
         });
     });
 
@@ -57,6 +82,18 @@ describe("spoon-activation", () => {
             expect(listener).not.toHaveBeenCalled();
 
             window.removeEventListener(spoonActivationEvent, listener);
+        });
+
+        it("leaves a pending activation for an egg that has not mounted yet", () => {
+            expect(trySpoonPhrase("there is no spoon")).toBe(true);
+
+            expect(consumePendingSpoonActivation()).toBe(true);
+        });
+
+        it("does not record a pending activation on a non-match", () => {
+            expect(trySpoonPhrase("there is no fork")).toBe(false);
+
+            expect(consumePendingSpoonActivation()).toBe(false);
         });
     });
 });
