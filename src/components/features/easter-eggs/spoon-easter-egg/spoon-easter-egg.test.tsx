@@ -1,8 +1,12 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@/test-utils";
-import { fireEvent, act } from "@testing-library/react";
+import { act } from "@testing-library/react";
 import { SpoonEasterEgg } from "./spoon-easter-egg";
-import { SPOON_PHRASE } from "@/lib/easter-eggs/spoon-phrase-buffer";
+import {
+    activateSpoonEasterEgg,
+    consumePendingSpoonActivation,
+    spoonActivationEvent,
+} from "@/lib/easter-eggs/spoon-activation";
 import { trackWith } from "@/lib/tracking/tracking";
 import { tracking } from "@/types/configuration/tracking";
 
@@ -39,10 +43,8 @@ vi.mock("./spoon-matrix-rain", () => ({
     SpoonMatrixRain: () => <div data-testid="spoon-matrix-rain" />,
 }));
 
-const typeSpoonPhrase = (target: Document | HTMLElement = document) => {
-    SPOON_PHRASE.split("").forEach((char) => {
-        fireEvent.keyDown(target, { key: char });
-    });
+const dispatchActivation = () => {
+    window.dispatchEvent(new Event(spoonActivationEvent));
 };
 
 describe("SpoonEasterEgg", () => {
@@ -50,21 +52,24 @@ describe("SpoonEasterEgg", () => {
         mockUseReducedMotions.mockReturnValue(false);
         vi.mocked(trackWith).mockClear();
         document.body.classList.remove("glitch-active");
+        consumePendingSpoonActivation();
     });
 
-    describe("before the phrase is typed", () => {
+    describe("before the activation event fires", () => {
         it("renders nothing", () => {
             render(<SpoonEasterEgg />);
             expect(screen.queryByTestId("spoon-matrix-rain")).not.toBeInTheDocument();
         });
     });
 
-    describe("when the phrase is typed on the page body", () => {
+    describe("when the activation event fires", () => {
         it("adds the glitch-active class then shows the rain overlay", async () => {
             vi.useFakeTimers();
             render(<SpoonEasterEgg />);
 
-            typeSpoonPhrase();
+            act(() => {
+                dispatchActivation();
+            });
             expect(document.body.classList.contains("glitch-active")).toBe(true);
             expect(screen.queryByTestId("spoon-matrix-rain")).not.toBeInTheDocument();
 
@@ -81,7 +86,9 @@ describe("SpoonEasterEgg", () => {
             vi.useFakeTimers();
             render(<SpoonEasterEgg />);
 
-            typeSpoonPhrase();
+            act(() => {
+                dispatchActivation();
+            });
             await act(async () => {
                 vi.advanceTimersByTime(400);
             });
@@ -96,7 +103,9 @@ describe("SpoonEasterEgg", () => {
 
         it("tracks the activation exactly once under the easter_egg_hunt category", () => {
             render(<SpoonEasterEgg />);
-            typeSpoonPhrase();
+            act(() => {
+                dispatchActivation();
+            });
             expect(trackWith).toHaveBeenCalledTimes(1);
             expect(trackWith).toHaveBeenCalledWith({
                 category: tracking.category.easter_egg_hunt,
@@ -105,28 +114,63 @@ describe("SpoonEasterEgg", () => {
             });
         });
 
-        it("is case and whitespace insensitive", () => {
+        it("ignores a second activation event that arrives during a warp", () => {
             render(<SpoonEasterEgg />);
-            "THERE   IS NO   SPOON".split("").forEach((char) => {
-                fireEvent.keyDown(document, { key: char });
+            act(() => {
+                dispatchActivation();
+            });
+            act(() => {
+                dispatchActivation();
             });
             expect(trackWith).toHaveBeenCalledTimes(1);
         });
     });
 
-    describe("when the active element is an input", () => {
-        it("does not activate the egg", () => {
-            render(<SpoonEasterEgg />);
-            const input = document.createElement("input");
-            document.body.appendChild(input);
-            input.focus();
+    describe("when the phrase is submitted before the egg has mounted", () => {
+        it("drains the pending activation and fires the warp on mount", async () => {
+            vi.useFakeTimers();
+            activateSpoonEasterEgg();
 
-            typeSpoonPhrase();
+            render(<SpoonEasterEgg />);
+
+            expect(document.body.classList.contains("glitch-active")).toBe(true);
+            expect(trackWith).toHaveBeenCalledTimes(1);
+
+            await act(async () => {
+                vi.advanceTimersByTime(400);
+            });
+
+            expect(screen.getByTestId("spoon-matrix-rain")).toBeInTheDocument();
+            vi.useRealTimers();
+        });
+
+        it("clears the pending flag so a later remount does not replay it", () => {
+            activateSpoonEasterEgg();
+
+            const { unmount } = render(<SpoonEasterEgg />);
+            expect(trackWith).toHaveBeenCalledTimes(1);
+            unmount();
+
+            vi.mocked(trackWith).mockClear();
+            document.body.classList.remove("glitch-active");
+
+            render(<SpoonEasterEgg />);
 
             expect(trackWith).not.toHaveBeenCalled();
             expect(document.body.classList.contains("glitch-active")).toBe(false);
+        });
+    });
 
-            document.body.removeChild(input);
+    describe("when the phrase is submitted while the egg is already mounted", () => {
+        it("fires exactly once via activateSpoonEasterEgg", () => {
+            render(<SpoonEasterEgg />);
+
+            act(() => {
+                activateSpoonEasterEgg();
+            });
+
+            expect(trackWith).toHaveBeenCalledTimes(1);
+            expect(consumePendingSpoonActivation()).toBe(false);
         });
     });
 
@@ -136,7 +180,9 @@ describe("SpoonEasterEgg", () => {
             vi.useFakeTimers();
             render(<SpoonEasterEgg />);
 
-            typeSpoonPhrase();
+            act(() => {
+                dispatchActivation();
+            });
             expect(document.body.classList.contains("glitch-active")).toBe(false);
             expect(screen.getByTestId("spoon-matrix-rain")).toBeInTheDocument();
             vi.useRealTimers();
@@ -145,7 +191,9 @@ describe("SpoonEasterEgg", () => {
         it("still fires the egg (tracking + rain) even when reduced", () => {
             mockUseReducedMotions.mockReturnValue(true);
             render(<SpoonEasterEgg />);
-            typeSpoonPhrase();
+            act(() => {
+                dispatchActivation();
+            });
             expect(trackWith).toHaveBeenCalledTimes(1);
             expect(screen.getByTestId("spoon-matrix-rain")).toBeInTheDocument();
         });

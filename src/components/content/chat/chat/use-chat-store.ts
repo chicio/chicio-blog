@@ -3,6 +3,7 @@
 import { useChat } from "@ai-sdk/react";
 import { UIMessage } from "ai";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { trySpoonPhrase } from "@/lib/easter-eggs/spoon-activation";
 import { ComponentStore } from "@/types/component-store";
 
 const exampleQuestions = [
@@ -58,6 +59,10 @@ export const useChatStore = (): ComponentStore<ChatState, ChatEffects> => {
 
         const messageText = input;
         setInput("");
+
+        if (trySpoonPhrase(messageText)) {
+            return;
+        }
 
         await sendMessage({ text: messageText });
     };

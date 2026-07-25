@@ -41,4 +41,29 @@ test.describe("Chat page", () => {
         await page.keyboard.press("Enter");
         await expect(page.getByText("Fabrizio")).toBeVisible({ timeout: 10000 });
     });
+
+    test("submitting the spoon phrase triggers the warp and calls no API", async ({ page }) => {
+        let apiCalled = false;
+        await page.route("**/api/chat", async (route) => {
+            apiCalled = true;
+            await route.fulfill({
+                status: 200,
+                headers: {
+                    "Content-Type": "text/event-stream",
+                    "Cache-Control": "no-cache",
+                    Connection: "keep-alive",
+                },
+                body: MOCK_STREAM_RESPONSE,
+            });
+        });
+
+        await page.goto("/chat");
+        const input = page.getByRole("textbox");
+        await input.fill("there is no spoon");
+        await page.keyboard.press("Enter");
+
+        await expect(page.locator('[style*="matrix-spoon-clip"]')).toBeVisible({ timeout: 10000 });
+        await expect(input).toHaveValue("");
+        expect(apiCalled).toBe(false);
+    });
 });
