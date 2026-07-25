@@ -1,77 +1,73 @@
 import type { MetadataRoute } from "next";
-import { getPostsTotalPages, getTags } from "@/lib/content/posts/posts";
+import { getAuthorsWithPosts, getPostsTotalPages, getTags } from "@/lib/content/posts/posts";
+import { authorIdToSlug, ownerAuthorId } from "@/lib/content/authors/author-slug";
+import { contentRegistry } from "@/lib/content/registry";
+import { slugFor } from "@/lib/content/slug-template";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { slugs } from "@/types/configuration/slug";
-import { getIndexableContent } from "@/lib/content/indexable-content";
 
-const getPostListPages = (defaultImage: string[]) => {
-  const totalPages = getPostsTotalPages();
-  const blogPaginationPages: MetadataRoute.Sitemap = [];
+const absoluteUrl = (path: string) => `${siteMetadata.siteUrl}${path === "/" ? "" : path}`;
 
-  for (let i = 1; i <= totalPages; i++) {
-    blogPaginationPages.push({
-      url: `${siteMetadata.siteUrl}${slugs.blog.blogPostsPage}/${i}`,
-      lastModified: new Date(),
-      changeFrequency: "yearly",
-      priority: 1,
-      images: defaultImage,
+const defaultImage = [absoluteUrl(siteMetadata.featuredImage)];
+
+/**
+ * Everything the content registry knows about: every single page, and every item of every collection.
+ * The registry is the record of what real content exists, so registering a section is all it takes for
+ * its pages to be announced here.
+ *
+ * An indexed entry carries real content, so its own frontmatter supplies the date and image. The rest
+ * are aggregate or config-driven pages with no date of their own, and report the build time.
+ */
+const contentUrls = (): MetadataRoute.Sitemap =>
+    contentRegistry.flatMap((entry) => {
+        const indexed = entry.indexed?.();
+
+        if (indexed) {
+            return indexed.map((content) => ({
+                url: absoluteUrl(content.slug.formatted),
+                lastModified: new Date(content.frontmatter.date.formatted),
+                priority: 1,
+                images: [absoluteUrl(content.frontmatter.image)],
+            }));
+        }
+
+        return (entry.params?.() ?? [{}]).map((params) => ({
+            url: absoluteUrl(slugFor(entry.slug, params)),
+            lastModified: new Date(),
+            changeFrequency: "yearly" as const,
+            priority: 1,
+            images: entry.sitemapImage ? [absoluteUrl(entry.sitemapImage)] : defaultImage,
+        }));
     });
-  }
 
-  return blogPaginationPages;
+/**
+ * Routes that index the posts rather than being content themselves: pagination, the archive, and the
+ * tag and author listings. They have no registry entry because they have no content of their own —
+ * they are views over the posts, derived from post frontmatter.
+ */
+const navigationUrls = (): MetadataRoute.Sitemap => {
+    const listings = [slugs.blog.blogArchive, slugs.blog.tags, slugs.blog.authors];
+
+    const paginationPages = Array.from(
+        { length: getPostsTotalPages() },
+        (_, index) => `${slugs.blog.blogPostsPage}/${index + 1}`,
+    );
+
+    const tagPages = getTags().map((tag) => tag.slug);
+
+    const authorPages = getAuthorsWithPosts()
+        .filter((entry) => entry.author.id !== ownerAuthorId)
+        .map((entry) => slugs.blog.author.replace("[authorId]", authorIdToSlug(entry.author.id)));
+
+    return [...listings, ...paginationPages, ...tagPages, ...authorPages].map((path) => ({
+        url: absoluteUrl(path),
+        lastModified: new Date(),
+        changeFrequency: "yearly" as const,
+        priority: 1,
+        images: defaultImage,
+    }));
 };
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const defaultImage = [`${siteMetadata.siteUrl}${siteMetadata.featuredImage}`];
-
-  return [
-    {
-      url: siteMetadata.siteUrl,
-      lastModified: new Date(),
-      changeFrequency: "yearly",
-      priority: 1,
-      images: defaultImage,
-    },
-    {
-      url: `${siteMetadata.siteUrl}${slugs.blog.home}`,
-      lastModified: new Date(),
-      changeFrequency: "yearly",
-      priority: 1,
-      images: defaultImage,
-    },
-    ...getPostListPages(defaultImage),
-    {
-      url: `${siteMetadata.siteUrl}${slugs.blog.blogArchive}`,
-      lastModified: new Date(),
-      changeFrequency: "yearly",
-      priority: 1,
-      images: [`${siteMetadata.siteUrl}${siteMetadata.featuredImage}`],
-    },
-    {
-      url: `${siteMetadata.siteUrl}${slugs.blog.tags}`,
-      lastModified: new Date(),
-      changeFrequency: "yearly",
-      priority: 1,
-      images: defaultImage,
-    },
-    ...getTags().map((tag) => ({
-      url: `${siteMetadata.siteUrl}${tag.slug}`,
-      lastModified: new Date(),
-      priority: 1,
-      images: defaultImage,
-    })),
-    {
-      url: `${siteMetadata.siteUrl}${slugs.art}`,
-      lastModified: new Date(),
-      changeFrequency: "yearly",
-      priority: 1,
-      images: [`${siteMetadata.siteUrl}${siteMetadata.featuredArtImage}`],
-    },
-    ...getIndexableContent().map((content) => ({
-      url: `${siteMetadata.siteUrl}${content.slug.formatted}`,
-      lastModified: new Date(content.frontmatter.date.formatted),
-      priority: 1,
-      images: [`${siteMetadata.siteUrl}${content.frontmatter.image}`],
-    })),
-  ];
+    return [...contentUrls(), ...navigationUrls()];
 }

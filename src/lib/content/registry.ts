@@ -1,4 +1,5 @@
 import { Content } from "@/types/content/content";
+import { siteMetadata } from "@/types/configuration/site-metadata";
 import { slugs } from "@/types/configuration/slug";
 import { aboutMe } from "./about-me/about-me";
 import {
@@ -40,6 +41,12 @@ export interface ContentRegistryEntry {
     markdown: (params: Record<string, string>) => string | null;
     /** What this entry contributes to the search index. Omitted when it is not indexed. */
     indexed?: () => Content[];
+    /**
+     * Image for this entry in the sitemap. Only needed by entries that are not `indexed`, since an
+     * indexed entry takes its image from the content's own frontmatter; the rest fall back to the
+     * site's featured image.
+     */
+    sitemapImage?: string;
 }
 
 const paramsOf = (section: { list: () => Content[] }) => () => section.list().map((item) => item.slug.params);
@@ -62,7 +69,7 @@ export const contentRegistry: ContentRegistryEntry[] = [
     { slug: slugs.aboutMe, markdown: () => mdxPageMarkdown(slugs.aboutMe), indexed: singleItem(aboutMe) },
     { slug: slugs.mcp, markdown: () => mdxPageMarkdown(slugs.mcp) },
     { slug: slugs.cookiePolicy, markdown: () => mdxPageMarkdown(slugs.cookiePolicy) },
-    { slug: slugs.art, markdown: () => mdxPageMarkdown(slugs.art) },
+    { slug: slugs.art, markdown: () => mdxPageMarkdown(slugs.art), sitemapImage: siteMetadata.featuredArtImage },
     {
         slug: slugs.easterEggHunt,
         markdown: () => mdxPageMarkdown(slugs.easterEggHunt),
