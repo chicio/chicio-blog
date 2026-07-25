@@ -1,9 +1,10 @@
 import { describe, it, expect, vi } from "vitest";
 
-const { mockListPosts, mockGetTags, mockListDsaTopics } = vi.hoisted(() => ({
+const { mockListPosts, mockGetTags, mockListDsaTopics, mockPageContent } = vi.hoisted(() => ({
     mockListPosts: vi.fn(),
     mockGetTags: vi.fn(),
     mockListDsaTopics: vi.fn(),
+    mockPageContent: vi.fn(),
 }));
 
 vi.mock("@/lib/content/posts/posts", () => ({
@@ -15,7 +16,21 @@ vi.mock("@/lib/content/data-structures-and-algorithms/data-structures-and-algori
     topics: { list: mockListDsaTopics },
 }));
 
+/**
+ * The page list comes from the registry, so a fake one proves the derivation without depending on how
+ * many pages the site currently has. The real registry's contents are asserted in registry.test.ts.
+ */
+vi.mock("@/lib/content/registry", () => ({
+    contentRegistry: [
+        { slug: "/", markdown: vi.fn() },
+        { slug: "/videogames", markdown: vi.fn() },
+        { slug: "/an-mdx-page", markdown: vi.fn(), content: mockPageContent },
+        { slug: "/blog/post/[year]/[month]/[day]/[slug]", markdown: vi.fn(), params: vi.fn(() => []) },
+    ],
+}));
+
 import { GET } from "./route";
+import { siteMetadata } from "@/types/configuration/site-metadata";
 
 const makeFakePost = (slug: string, title: string) => ({
     slug: { formatted: `/blog/post/2024/01/01/${slug}` },
@@ -94,6 +109,55 @@ describe("GET /llms.txt", () => {
             const text = await response.text();
             expect(text).toContain("typescript");
             expect(text).toContain("7 posts");
+        });
+
+        it("links every single page the registry knows about, so a registered section is advertised", async () => {
+            mockListPosts.mockReturnValue([]);
+            mockGetTags.mockReturnValue([]);
+            mockListDsaTopics.mockReturnValue([]);
+            mockPageContent.mockReturnValue([]);
+
+            const text = await (await GET()).text();
+
+            expect(text).toContain(`(${siteMetadata.siteUrl}/videogames)`);
+            expect(text).toContain(`(${siteMetadata.siteUrl}/an-mdx-page)`);
+        });
+
+        it("describes an MDX page with its own frontmatter title and description", async () => {
+            mockListPosts.mockReturnValue([]);
+            mockGetTags.mockReturnValue([]);
+            mockListDsaTopics.mockReturnValue([]);
+            mockPageContent.mockReturnValue([
+                { slug: { formatted: "/an-mdx-page", params: {} }, frontmatter: { title: "Real Title", description: "Real description" } },
+            ]);
+
+            const text = await (await GET()).text();
+
+            expect(text).toContain("[Real Title]");
+            expect(text).toContain("Real description");
+        });
+
+        it("links the homepage without a trailing slash, and never stringifies a slug object", async () => {
+            mockListPosts.mockReturnValue([]);
+            mockGetTags.mockReturnValue([]);
+            mockListDsaTopics.mockReturnValue([]);
+            mockPageContent.mockReturnValue([]);
+
+            const text = await (await GET()).text();
+
+            expect(text).toContain(`[Home](${siteMetadata.siteUrl})`);
+            expect(text).not.toContain("[object Object]");
+        });
+
+        it("does not expand a collection template into a page link", async () => {
+            mockListPosts.mockReturnValue([]);
+            mockGetTags.mockReturnValue([]);
+            mockListDsaTopics.mockReturnValue([]);
+            mockPageContent.mockReturnValue([]);
+
+            const text = await (await GET()).text();
+
+            expect(text).not.toContain("[year]");
         });
 
         it("lists DSA topics with links", async () => {
