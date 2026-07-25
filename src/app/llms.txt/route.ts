@@ -20,10 +20,6 @@ const aggregatePageLabels: Record<string, { title: string; description: string }
         title: "Data Structures & Algorithms",
         description: "A structured course covering data structures, algorithms and problem-solving techniques",
     },
-    [slugs.videogames.home]: {
-        title: "Videogames",
-        description: "Personal videogame console and game collection",
-    },
 };
 
 const mainPages = (): string =>
