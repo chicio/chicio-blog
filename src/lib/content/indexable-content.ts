@@ -1,22 +1,7 @@
-import { aboutMe } from "./about-me/about-me";
-import {
-  topics,
-  exercises,
-  dsaRoadmap,
-  dsaExercisesList,
-} from "./data-structures-and-algorithms/data-structures-and-algorithms";
-import { posts } from "./posts/posts";
-import { consoles, games } from "./videogames/videogames";
-import { easterEggHunt } from "./easter-eggs/easter-eggs";
+import { contentRegistry } from "./registry";
 
-export const getIndexableContent = () => [
-  ...posts.list(),
-  ...topics.list(),
-  ...exercises.list(),
-  ...consoles.list(),
-  ...games.list(),
-  dsaRoadmap.single()!,
-  dsaExercisesList.single()!,
-  aboutMe.single()!,
-  easterEggHunt.single()!,
-];
+/**
+ * Everything the site search indexes, derived from the content registry: an entry appears here exactly
+ * when it declares how it is `indexed`.
+ */
+export const getIndexableContent = () => contentRegistry.flatMap((entry) => entry.indexed?.() ?? []);
