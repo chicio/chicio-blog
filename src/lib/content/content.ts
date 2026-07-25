@@ -1,18 +1,13 @@
 import path from "path";
 import fs from "fs";
 import { grayMatterContent } from "./gray-matter";
+import { paramNameOfSegment, segmentsOfSlugTemplate, slugFor } from "./slug-template";
 import { Content } from "@/types/content/content";
 import calculateReadingTime from "reading-time";
 import { cached } from "@/lib/build/build-cache";
 
 const contentRootDirectory = path.join(process.cwd(), "src/content");
 const contentMdxFileName = "content.mdx";
-
-const getSegmentsFromDynamicSlug = (slug: string): string[] =>
-  slug.split('/').filter((segment) => segment.length > 0);
-
-const dynamicRouteParamFrom = (segment: string) =>
-  segment.match(/^\[([^\]]+)\]$/)?.[1];
 
 const extractParametersValueFrom = (
   filePath: string,
@@ -48,7 +43,7 @@ const getAllFoldersContainedIn = (directory: string) => {
 };
 
 const findAllContent = (dynamicSlug: string) => {
-  const segments = getSegmentsFromDynamicSlug(dynamicSlug);
+  const segments = segmentsOfSlugTemplate(dynamicSlug);
   const directoriesQueue: string[] = [segments[0]];
   const detectedDynamicRouteParams: { name: string; positionInSlug: number }[] =
     [];
@@ -57,7 +52,7 @@ const findAllContent = (dynamicSlug: string) => {
   while (currentSegmentPosition < segments.length) {
     let currentLevelDimension = directoriesQueue.length;
     const currentSegment = segments[currentSegmentPosition];
-    const dynamicRouteParam = dynamicRouteParamFrom(currentSegment);
+    const dynamicRouteParam = paramNameOfSegment(currentSegment);
 
     if (dynamicRouteParam) {
       while (currentLevelDimension > 0) {
@@ -94,25 +89,6 @@ const findAllContent = (dynamicSlug: string) => {
   return results;
 };
 
-const calculateSlugFrom = (
-  params: Record<string, string>,
-  dynamicSlug: string,
-): string => {
-  const slug = getSegmentsFromDynamicSlug(dynamicSlug)
-    .map((segment) => {
-      const dynamicRouteParam = dynamicRouteParamFrom(segment);
-
-      if (dynamicRouteParam) {
-        return params[dynamicRouteParam];
-      } else {
-        return segment;
-      }
-    })
-    .join("/");
-
-  return `/${slug}`;
-};
-
 export const getAllContentFor = <TMeta>(
   dynamicSlug: string,
   metadataAdapter?: (raw: unknown) => TMeta,
@@ -134,7 +110,7 @@ export const getAllContentFor = <TMeta>(
         frontmatter,
         slug: {
           params: item.params,
-          formatted: calculateSlugFrom(item.params, dynamicSlug),
+          formatted: slugFor(dynamicSlug, item.params),
         },
         readingTime: calculateReadingTime(content),
         contentFileRelativePath: item.relativePath,
@@ -152,7 +128,7 @@ export const getSingleContentBy = <TMeta>(
   const sanitizedParams = params || {};
   return cached("single:" + dynamicSlug + ":" + JSON.stringify(sanitizedParams), () => {
     try {
-      const slug = calculateSlugFrom(sanitizedParams, dynamicSlug);
+      const slug = slugFor(dynamicSlug, sanitizedParams);
       const filePath = path.join(contentRootDirectory, slug, contentMdxFileName);
       const { frontmatter, content } = grayMatterContent<TMeta>(
         filePath,

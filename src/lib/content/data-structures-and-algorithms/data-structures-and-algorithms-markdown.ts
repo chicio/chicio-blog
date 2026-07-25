@@ -2,11 +2,11 @@ import {
     topics,
     exercises,
     getAllExercisesForTopic,
-    dsaRoadmap,
     dsaExercisesList,
 } from "@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms";
+import { contentBodyMarkdown } from "@/lib/mdx/content-body-markdown";
+import { contentItemMarkdown } from "@/lib/mdx/content-item-markdown";
 import { markdownDocument } from "@/lib/mdx/markdown-document";
-import { mdxToMarkdown } from "@/lib/mdx/mdx-to-markdown";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { slugs } from "@/types/configuration/slug";
 
@@ -26,81 +26,35 @@ ${allTopics.map((topic) => `- [${topic.frontmatter.title}](${siteMetadata.siteUr
     });
 };
 
-export const dsaRoadmapMarkdown = (): string => {
-    const roadmap = dsaRoadmap.single()!;
-
-    return markdownDocument({
-        title: roadmap.frontmatter.title,
-        description: roadmap.frontmatter.description,
-        slug: slugs.dataStructuresAndAlgorithms.roadmap,
-        body: mdxToMarkdown(roadmap.content),
-    });
-};
-
-export const dsaExercisesListMarkdown = (): string => {
-    const exercisesContent = dsaExercisesList.single()!;
+export const dsaExercisesListMarkdown = contentItemMarkdown(dsaExercisesList, () => {
     const allExercises = exercises.list();
 
-    const body = `## All Exercises (${allExercises.length})
+    return `## All Exercises (${allExercises.length})
 
 ${allExercises.map((e) => `- [${e.frontmatter.title}](${siteMetadata.siteUrl}${e.slug.formatted}) — ${e.frontmatter.metadata?.difficulty ?? "unknown"}, ${e.frontmatter.metadata?.technique ?? "unknown"}`).join("\n")}
 `;
+});
 
-    return markdownDocument({
-        title: exercisesContent.frontmatter.title,
-        description: exercisesContent.frontmatter.description,
-        slug: slugs.dataStructuresAndAlgorithms.exercises,
-        body,
-    });
-};
+export const dsaTopicMarkdown = contentItemMarkdown(topics, (topic) => {
+    const topicExercises = getAllExercisesForTopic(topic.slug.params.topic);
 
-export const dsaTopicMarkdown = (params: Record<string, string>): string | null => {
-    const topic = topics.single(params);
+    return `**Tags:** ${topic.frontmatter.tags.join(", ")}
 
-    if (!topic) {
-        return null;
-    }
-
-    const topicExercises = getAllExercisesForTopic(params.topic);
-
-    const body = `**Tags:** ${topic.frontmatter.tags.join(", ")}
-
-${mdxToMarkdown(topic.content)}
+${contentBodyMarkdown(topic)}
 ${topicExercises.length > 0 ? `
 ## Exercises
 
 ${topicExercises.map((e) => `- [${e.frontmatter.title}](${siteMetadata.siteUrl}${e.slug.formatted}) — ${e.frontmatter.metadata?.difficulty ?? "unknown"}, ${e.frontmatter.metadata?.technique ?? "unknown"}`).join("\n")}
 ` : ""}`;
+});
 
-    return markdownDocument({
-        title: topic.frontmatter.title,
-        description: topic.frontmatter.description,
-        slug: topic.slug.formatted,
-        body,
-    });
-};
+export const dsaExerciseMarkdown = contentItemMarkdown(
+    exercises,
+    (exercise) => `**Difficulty:** ${exercise.frontmatter.metadata?.difficulty ?? "unknown"}
+**Technique:** ${exercise.frontmatter.metadata?.technique ?? "unknown"}
+**Tags:** ${exercise.frontmatter.tags.join(", ")}
+${exercise.frontmatter.metadata?.leetcodeUrl ? `**LeetCode:** ${exercise.frontmatter.metadata.leetcodeUrl}` : ""}
 
-export const dsaExerciseMarkdown = (params: Record<string, string>): string | null => {
-    const exercise = exercises.single(params);
-
-    if (!exercise) {
-        return null;
-    }
-
-    const { frontmatter, content, slug } = exercise;
-
-    const body = `**Difficulty:** ${frontmatter.metadata?.difficulty ?? "unknown"}
-**Technique:** ${frontmatter.metadata?.technique ?? "unknown"}
-**Tags:** ${frontmatter.tags.join(", ")}
-${frontmatter.metadata?.leetcodeUrl ? `**LeetCode:** ${frontmatter.metadata.leetcodeUrl}` : ""}
-
-${mdxToMarkdown(content)}
-`;
-
-    return markdownDocument({
-        title: frontmatter.title,
-        description: frontmatter.description,
-        slug: slug.formatted,
-        body,
-    });
-};
+${contentBodyMarkdown(exercise)}
+`,
+);

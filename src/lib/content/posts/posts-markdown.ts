@@ -1,6 +1,7 @@
 import { posts, getTags } from "@/lib/content/posts/posts";
+import { contentBodyMarkdown } from "@/lib/mdx/content-body-markdown";
+import { contentItemMarkdown } from "@/lib/mdx/content-item-markdown";
 import { markdownDocument } from "@/lib/mdx/markdown-document";
-import { mdxToMarkdown } from "@/lib/mdx/mdx-to-markdown";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { slugs } from "@/types/configuration/slug";
 
@@ -53,26 +54,12 @@ ${tags.map((tag) => `- [${tag.tagValue}](${siteMetadata.siteUrl}${slugs.blog.tag
     });
 };
 
-export const blogPostMarkdown = (params: Record<string, string>): string | null => {
-    const post = posts.single(params);
+export const blogPostMarkdown = contentItemMarkdown(
+    posts,
+    (post) => `**Author:** ${post.frontmatter.authors.map((a) => a.name).join(", ")}
+**Date:** ${post.frontmatter.date.formatted}
+**Tags:** ${post.frontmatter.tags.join(", ")}
 
-    if (!post) {
-        return null;
-    }
-
-    const { frontmatter, content, slug } = post;
-
-    const body = `**Author:** ${frontmatter.authors.map((a) => a.name).join(", ")}
-**Date:** ${frontmatter.date.formatted}
-**Tags:** ${frontmatter.tags.join(", ")}
-
-${mdxToMarkdown(content)}
-`;
-
-    return markdownDocument({
-        title: frontmatter.title,
-        description: frontmatter.description,
-        slug: slug.formatted,
-        body,
-    });
-};
+${contentBodyMarkdown(post)}
+`,
+);

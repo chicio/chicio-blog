@@ -1,81 +1,31 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 
-const {
-    mockHomepageMarkdown,
-    mockBlogListingMarkdown,
-    mockBlogPostMarkdown,
-    mockMdxPageMarkdown,
-    mockContactMarkdown,
-    mockDsaMarkdown,
-    mockDsaRoadmapMarkdown,
-    mockDsaExercisesListMarkdown,
-    mockDsaTopicMarkdown,
-    mockDsaExerciseMarkdown,
-    mockVideogamesMarkdown,
-    mockConsoleMarkdown,
-    mockGameMarkdown,
-    mockBlogStatsMarkdown,
-} = vi.hoisted(() => ({
-    mockHomepageMarkdown: vi.fn(),
-    mockBlogListingMarkdown: vi.fn(),
-    mockBlogPostMarkdown: vi.fn(),
-    mockMdxPageMarkdown: vi.fn(),
-    mockContactMarkdown: vi.fn(),
-    mockDsaMarkdown: vi.fn(),
-    mockDsaRoadmapMarkdown: vi.fn(),
-    mockDsaExercisesListMarkdown: vi.fn(),
-    mockDsaTopicMarkdown: vi.fn(),
-    mockDsaExerciseMarkdown: vi.fn(),
-    mockVideogamesMarkdown: vi.fn(),
-    mockConsoleMarkdown: vi.fn(),
-    mockGameMarkdown: vi.fn(),
-    mockBlogStatsMarkdown: vi.fn(),
+const { mockPageMarkdown, mockCollectionMarkdown, mockEmptyMarkdown } = vi.hoisted(() => ({
+    mockPageMarkdown: vi.fn(),
+    mockCollectionMarkdown: vi.fn(),
+    mockEmptyMarkdown: vi.fn(),
 }));
 
-vi.mock("@/lib/content/posts/posts-markdown", () => ({
-    homepageMarkdown: mockHomepageMarkdown,
-    blogListingMarkdown: mockBlogListingMarkdown,
-    blogPostMarkdown: mockBlogPostMarkdown,
-}));
-
-vi.mock("@/lib/mdx/mdx-page-markdown", () => ({
-    mdxPageMarkdown: mockMdxPageMarkdown,
-}));
-
-vi.mock("@/lib/content/contact/contact-markdown", () => ({
-    contactMarkdown: mockContactMarkdown,
-}));
-
-vi.mock("@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms-markdown", () => ({
-    dsaMarkdown: mockDsaMarkdown,
-    dsaRoadmapMarkdown: mockDsaRoadmapMarkdown,
-    dsaExercisesListMarkdown: mockDsaExercisesListMarkdown,
-    dsaTopicMarkdown: mockDsaTopicMarkdown,
-    dsaExerciseMarkdown: mockDsaExerciseMarkdown,
-}));
-
-vi.mock("@/lib/content/videogames/videogames-markdown", () => ({
-    videogamesMarkdown: mockVideogamesMarkdown,
-    consoleMarkdown: mockConsoleMarkdown,
-    gameMarkdown: mockGameMarkdown,
-}));
-
-vi.mock("@/lib/blog-stats/blog-stats-markdown", () => ({
-    blogStatsMarkdown: mockBlogStatsMarkdown,
-}));
-
-vi.mock("@/lib/content/posts/posts", () => ({
-    posts: { list: vi.fn().mockReturnValue([]) },
-}));
-
-vi.mock("@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms", () => ({
-    topics: { list: vi.fn().mockReturnValue([]) },
-    exercises: { list: vi.fn().mockReturnValue([]) },
-}));
-
-vi.mock("@/lib/content/videogames/videogames", () => ({
-    consoles: { list: vi.fn().mockReturnValue([]) },
-    games: { list: vi.fn().mockReturnValue([]) },
+/**
+ * The route's own job is matching a path to a registry entry and turning its markdown into a response,
+ * so it is tested against a small fake registry. That the real registry names the right generator for
+ * each page is asserted in `registry.test.ts`, and the matching rules in `slug-template.test.ts`.
+ */
+vi.mock("@/lib/content/registry", () => ({
+    contentRegistry: [
+        { slug: "/", markdown: mockPageMarkdown },
+        { slug: "/a-page", markdown: mockPageMarkdown },
+        { slug: "/no-content", markdown: mockEmptyMarkdown },
+        { slug: "/things/known", markdown: mockPageMarkdown },
+        {
+            slug: "/things/[thing]/part/[part]",
+            params: () => [
+                { thing: "first", part: "one" },
+                { thing: "second", part: "two" },
+            ],
+            markdown: mockCollectionMarkdown,
+        },
+    ],
 }));
 
 vi.mock("next/navigation", () => ({
@@ -84,274 +34,108 @@ vi.mock("next/navigation", () => ({
     }),
 }));
 
-import { GET } from "./route";
-import { slugs } from "@/types/configuration/slug";
+import { GET, generateStaticParams } from "./route";
 
-function makeContext(path: string[] | undefined): { params: Promise<{ path?: string[] }> } {
-    return { params: Promise.resolve({ path }) };
-}
+const makeContext = (path: string[] | undefined): { params: Promise<{ path?: string[] }> } => ({
+    params: Promise.resolve({ path }),
+});
 
-describe("GET /markdown/[[...path]]", () => {
-    describe("homepage (/)", () => {
-        it("delegates to homepageMarkdown and returns text/markdown", async () => {
-            mockHomepageMarkdown.mockReturnValue("# Home");
-            const response = await GET(new Request("https://x.com/markdown"), makeContext(undefined));
+const get = (path: string[] | undefined) => GET(new Request("https://x.com/markdown"), makeContext(path));
+
+beforeEach(() => {
+    vi.clearAllMocks();
+    mockPageMarkdown.mockReturnValue("# Page");
+    mockCollectionMarkdown.mockReturnValue("# Item");
+    mockEmptyMarkdown.mockReturnValue(null);
+});
+
+describe("markdown route", () => {
+    describe("dispatch", () => {
+        it("serves a single page entry", async () => {
+            const response = await get(["a-page"]);
+
             expect(response.status).toBe(200);
-            expect(response.headers.get("Content-Type")).toContain("text/markdown");
-            expect(await response.text()).toBe("# Home");
+            expect(await response.text()).toBe("# Page");
         });
-    });
 
-    describe("blog listing (/blog)", () => {
-        it("delegates to blogListingMarkdown", async () => {
-            mockBlogListingMarkdown.mockReturnValue("# Blog");
-            const response = await GET(new Request("https://x.com/markdown/blog"), makeContext(["blog"]));
+        it("treats an absent path as the root entry", async () => {
+            await get(undefined);
+
+            expect(mockPageMarkdown).toHaveBeenCalledWith({});
+        });
+
+        it("passes the captured params to a collection entry", async () => {
+            const response = await get(["things", "gameboy", "part", "tetris"]);
+
             expect(response.status).toBe(200);
-            expect(await response.text()).toBe("# Blog");
+            expect(mockCollectionMarkdown).toHaveBeenCalledWith({ thing: "gameboy", part: "tetris" });
+        });
+
+        it("prefers an exact page slug over a collection template of the same length", async () => {
+            await get(["things", "known"]);
+
+            expect(mockPageMarkdown).toHaveBeenCalled();
+            expect(mockCollectionMarkdown).not.toHaveBeenCalled();
         });
     });
 
-    describe("blog stats (/blog/stats)", () => {
-        it("delegates to blogStatsMarkdown", async () => {
-            mockBlogStatsMarkdown.mockReturnValue("# Blog Stats");
-            const response = await GET(
-                new Request("https://x.com/markdown/blog/stats"),
-                makeContext(["blog", "stats"]),
-            );
-            expect(response.status).toBe(200);
-            expect(await response.text()).toBe("# Blog Stats");
+    describe("not found", () => {
+        it("404s a path no entry matches", async () => {
+            await expect(get(["nope", "nothing", "here"])).rejects.toThrow("NEXT_NOT_FOUND");
+        });
+
+        it("404s when the matched entry has no content for that path", async () => {
+            await expect(get(["no-content"])).rejects.toThrow("NEXT_NOT_FOUND");
         });
     });
 
-    describe("about-me (/about-me)", () => {
-        it("delegates to mdxPageMarkdown with the about-me slug", async () => {
-            mockMdxPageMarkdown.mockReturnValue("# About Me");
-            const response = await GET(
-                new Request("https://x.com/markdown/about-me"),
-                makeContext(["about-me"]),
-            );
-            expect(response.status).toBe(200);
-            expect(mockMdxPageMarkdown).toHaveBeenCalledWith(slugs.aboutMe);
-            expect(await response.text()).toBe("# About Me");
-        });
-    });
+    describe("response", () => {
+        it("is served as markdown", async () => {
+            const response = await get(["a-page"]);
 
-    describe("mcp (/mcp)", () => {
-        it("delegates to mdxPageMarkdown with the mcp slug", async () => {
-            mockMdxPageMarkdown.mockReturnValue("# MCP");
-            const response = await GET(new Request("https://x.com/markdown/mcp"), makeContext(["mcp"]));
-            expect(response.status).toBe(200);
-            expect(mockMdxPageMarkdown).toHaveBeenCalledWith(slugs.mcp);
-            expect(await response.text()).toBe("# MCP");
-        });
-    });
-
-    describe("cookie policy (/cookie-policy)", () => {
-        it("delegates to mdxPageMarkdown with the cookie-policy slug", async () => {
-            mockMdxPageMarkdown.mockReturnValue("# Cookies Policy");
-            const response = await GET(
-                new Request("https://x.com/markdown/cookie-policy"),
-                makeContext(["cookie-policy"]),
-            );
-            expect(response.status).toBe(200);
-            expect(mockMdxPageMarkdown).toHaveBeenCalledWith(slugs.cookiePolicy);
-            expect(await response.text()).toBe("# Cookies Policy");
-        });
-    });
-
-    describe("art (/art)", () => {
-        it("delegates to mdxPageMarkdown with the art slug", async () => {
-            mockMdxPageMarkdown.mockReturnValue("# Art");
-            const response = await GET(new Request("https://x.com/markdown/art"), makeContext(["art"]));
-            expect(response.status).toBe(200);
-            expect(mockMdxPageMarkdown).toHaveBeenCalledWith(slugs.art);
-            expect(await response.text()).toBe("# Art");
+            expect(response.headers.get("Content-Type")).toBe("text/markdown; charset=utf-8");
         });
 
-        it("calls notFound when mdxPageMarkdown returns null", async () => {
-            mockMdxPageMarkdown.mockReturnValue(null);
-            await expect(
-                GET(new Request("https://x.com/markdown/art"), makeContext(["art"])),
-            ).rejects.toThrow("NEXT_NOT_FOUND");
-        });
-    });
+        it("estimates the token count for agents", async () => {
+            mockPageMarkdown.mockReturnValue("12345678");
 
-    describe("contact (/contact)", () => {
-        it("delegates to contactMarkdown", async () => {
-            mockContactMarkdown.mockReturnValue("# Contact");
-            const response = await GET(new Request("https://x.com/markdown/contact"), makeContext(["contact"]));
-            expect(response.status).toBe(200);
-            expect(await response.text()).toBe("# Contact");
-        });
-    });
+            const response = await get(["a-page"]);
 
-    describe("easter egg hunt (/easter-egg-hunt)", () => {
-        it("delegates to mdxPageMarkdown with the easter egg hunt slug", async () => {
-            mockMdxPageMarkdown.mockReturnValue("# Easter Egg Hunt");
-            const response = await GET(
-                new Request("https://x.com/markdown/easter-egg-hunt"),
-                makeContext(["easter-egg-hunt"]),
-            );
-            expect(response.status).toBe(200);
-            expect(mockMdxPageMarkdown).toHaveBeenCalledWith(slugs.easterEggHunt);
-            expect(await response.text()).toBe("# Easter Egg Hunt");
-        });
-    });
-
-    describe("DSA home (/data-structures-and-algorithms)", () => {
-        it("delegates to dsaMarkdown", async () => {
-            mockDsaMarkdown.mockReturnValue("# DSA");
-            const response = await GET(
-                new Request("https://x.com/markdown/dsa"),
-                makeContext(["data-structures-and-algorithms"]),
-            );
-            expect(response.status).toBe(200);
-            expect(await response.text()).toBe("# DSA");
-        });
-    });
-
-    describe("DSA roadmap", () => {
-        it("delegates to dsaRoadmapMarkdown", async () => {
-            mockDsaRoadmapMarkdown.mockReturnValue("# Roadmap");
-            const response = await GET(
-                new Request("https://x.com/markdown/dsa/roadmap"),
-                makeContext(["data-structures-and-algorithms", "roadmap"]),
-            );
-            expect(response.status).toBe(200);
-            expect(await response.text()).toBe("# Roadmap");
-        });
-    });
-
-    describe("DSA exercises list", () => {
-        it("delegates to dsaExercisesListMarkdown", async () => {
-            mockDsaExercisesListMarkdown.mockReturnValue("# Exercises");
-            const response = await GET(
-                new Request("https://x.com/markdown/dsa/exercises"),
-                makeContext(["data-structures-and-algorithms", "exercises"]),
-            );
-            expect(response.status).toBe(200);
-            expect(await response.text()).toBe("# Exercises");
-        });
-    });
-
-    describe("videogames home (/videogames)", () => {
-        it("delegates to videogamesMarkdown", async () => {
-            mockVideogamesMarkdown.mockReturnValue("# Videogames");
-            const response = await GET(
-                new Request("https://x.com/markdown/videogames"),
-                makeContext(["videogames"]),
-            );
-            expect(response.status).toBe(200);
-            expect(await response.text()).toBe("# Videogames");
-        });
-    });
-
-    describe("blog post (/blog/post/YYYY/MM/DD/slug)", () => {
-        it("delegates to blogPostMarkdown with correct params", async () => {
-            mockBlogPostMarkdown.mockReturnValue("# My Post");
-            const response = await GET(
-                new Request("https://x.com/markdown/blog/post/2024/01/01/my-post"),
-                makeContext(["blog", "post", "2024", "01", "01", "my-post"]),
-            );
-            expect(response.status).toBe(200);
-            expect(mockBlogPostMarkdown).toHaveBeenCalledWith({
-                year: "2024",
-                month: "01",
-                day: "01",
-                slug: "my-post",
-            });
+            expect(response.headers.get("x-markdown-tokens")).toBe("2");
         });
 
-        it("calls notFound when blogPostMarkdown returns null", async () => {
-            mockBlogPostMarkdown.mockReturnValue(null);
-            await expect(
-                GET(
-                    new Request("https://x.com/markdown/blog/post/2024/01/01/missing"),
-                    makeContext(["blog", "post", "2024", "01", "01", "missing"]),
-                ),
-            ).rejects.toThrow("NEXT_NOT_FOUND");
-        });
-    });
+        it("is cacheable", async () => {
+            const response = await get(["a-page"]);
 
-    describe("DSA topic (/data-structures-and-algorithms/topic/[topic])", () => {
-        it("delegates to dsaTopicMarkdown", async () => {
-            mockDsaTopicMarkdown.mockReturnValue("# Binary Search");
-            const response = await GET(
-                new Request("https://x.com/markdown/dsa/topic/binary-search"),
-                makeContext(["data-structures-and-algorithms", "topic", "binary-search"]),
-            );
-            expect(response.status).toBe(200);
-            expect(mockDsaTopicMarkdown).toHaveBeenCalledWith({ topic: "binary-search" });
-        });
-    });
-
-    describe("DSA exercise", () => {
-        it("delegates to dsaExerciseMarkdown with topic and exercise", async () => {
-            mockDsaExerciseMarkdown.mockReturnValue("# Exercise 1");
-            const response = await GET(
-                new Request("https://x.com/markdown/dsa/topic/sorting/exercise/quick-sort"),
-                makeContext([
-                    "data-structures-and-algorithms",
-                    "topic",
-                    "sorting",
-                    "exercise",
-                    "quick-sort",
-                ]),
-            );
-            expect(response.status).toBe(200);
-            expect(mockDsaExerciseMarkdown).toHaveBeenCalledWith({
-                topic: "sorting",
-                exercise: "quick-sort",
-            });
-        });
-    });
-
-    describe("videogame console", () => {
-        it("delegates to consoleMarkdown", async () => {
-            mockConsoleMarkdown.mockReturnValue("# SNES");
-            const response = await GET(
-                new Request("https://x.com/markdown/videogames/console/snes"),
-                makeContext(["videogames", "console", "snes"]),
-            );
-            expect(response.status).toBe(200);
-            expect(mockConsoleMarkdown).toHaveBeenCalledWith({ console: "snes" });
-        });
-    });
-
-    describe("videogame game", () => {
-        it("delegates to gameMarkdown", async () => {
-            mockGameMarkdown.mockReturnValue("# Zelda");
-            const response = await GET(
-                new Request("https://x.com/markdown/videogames/console/snes/game/zelda"),
-                makeContext(["videogames", "console", "snes", "game", "zelda"]),
-            );
-            expect(response.status).toBe(200);
-            expect(mockGameMarkdown).toHaveBeenCalledWith({ console: "snes", game: "zelda" });
-        });
-    });
-
-    describe("unknown path", () => {
-        it("calls notFound for an unrecognized path", async () => {
-            await expect(
-                GET(
-                    new Request("https://x.com/markdown/unknown/path"),
-                    makeContext(["unknown", "path"]),
-                ),
-            ).rejects.toThrow("NEXT_NOT_FOUND");
-        });
-    });
-
-    describe("response headers", () => {
-        it("includes x-markdown-tokens header", async () => {
-            mockHomepageMarkdown.mockReturnValue("# Home page content");
-            const response = await GET(new Request("https://x.com/markdown"), makeContext(undefined));
-            expect(response.headers.get("x-markdown-tokens")).toBeDefined();
-        });
-
-        it("includes Cache-Control header", async () => {
-            mockHomepageMarkdown.mockReturnValue("# Home");
-            const response = await GET(new Request("https://x.com/markdown"), makeContext(undefined));
             expect(response.headers.get("Cache-Control")).toContain("max-age=3600");
+        });
+    });
+
+    describe("generateStaticParams", () => {
+        it("emits undefined rather than an empty array for the root, as Next requires", async () => {
+            const params = await generateStaticParams();
+
+            expect(params).toContainEqual({ path: undefined });
+        });
+
+        it("emits one entry per single page", async () => {
+            const params = await generateStaticParams();
+
+            expect(params).toContainEqual({ path: ["a-page"] });
+            expect(params).toContainEqual({ path: ["things", "known"] });
+        });
+
+        it("expands a collection template once per param set", async () => {
+            const params = await generateStaticParams();
+
+            expect(params).toContainEqual({ path: ["things", "first", "part", "one"] });
+            expect(params).toContainEqual({ path: ["things", "second", "part", "two"] });
+        });
+
+        it("emits nothing beyond the registry's entries", async () => {
+            const params = await generateStaticParams();
+
+            expect(params).toHaveLength(6);
         });
     });
 });

@@ -1,11 +1,13 @@
 import { describe, it, expect, vi } from "vitest";
 
-const { mockGetSingleContentBy } = vi.hoisted(() => ({
+const { mockGetSingleContentBy, mockGetAllContentFor } = vi.hoisted(() => ({
     mockGetSingleContentBy: vi.fn(),
+    mockGetAllContentFor: vi.fn(() => []),
 }));
 
 vi.mock("@/lib/content/content", () => ({
     getSingleContentBy: mockGetSingleContentBy,
+    getAllContentFor: mockGetAllContentFor,
 }));
 
 import { mdxPageMarkdown } from "./mdx-page-markdown";
@@ -21,6 +23,7 @@ describe("mdxPageMarkdown", () => {
     it("renders the canonical markdown document from frontmatter + content", () => {
         mockGetSingleContentBy.mockReturnValue({
             frontmatter: { title: "MCP fabrizioduroni.it", description: "Connect your AI assistant." },
+            slug: { formatted: "/mcp", params: {} },
             content: "Some **MDX** body.",
         });
 
@@ -41,6 +44,7 @@ Some **MDX** body.
     it("strips a leading body heading that duplicates the frontmatter title", () => {
         mockGetSingleContentBy.mockReturnValue({
             frontmatter: { title: "Cookies Policy", description: "How this site uses cookies." },
+            slug: { formatted: "/cookie-policy", params: {} },
             content: "# Cookies Policy\n\nLast updated: ...",
         });
 
@@ -62,6 +66,7 @@ Last updated: ...
     it("leaves a body untouched when it does not open with a duplicate title heading", () => {
         mockGetSingleContentBy.mockReturnValue({
             frontmatter: { title: "About Me", description: "Bio." },
+            slug: { formatted: "/about-me", params: {} },
             content: "## Biography\n\nHello there.",
         });
 
@@ -71,14 +76,15 @@ Last updated: ...
         expect(result?.match(/# About Me/g)).toHaveLength(1);
     });
 
-    it("passes the slug through to getSingleContentBy", () => {
+    it("resolves the page by its slug, with no params, like a collection item with none", () => {
         mockGetSingleContentBy.mockReturnValue({
             frontmatter: { title: "T", description: "D" },
+            slug: { formatted: "/art", params: {} },
             content: "Body",
         });
 
         mdxPageMarkdown("/art");
 
-        expect(mockGetSingleContentBy).toHaveBeenCalledWith("/art");
+        expect(mockGetSingleContentBy).toHaveBeenCalledWith("/art", {});
     });
 });
