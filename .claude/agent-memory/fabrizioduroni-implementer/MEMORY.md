@@ -4,7 +4,8 @@
 - [Site Info](project_site_info.md) — Production domain is fabrizioduroni.it (not chicio.dev)
 
 ## Architecture
-- [Content System](arch_content_system.md) — Filesystem-as-database with slug patterns, metadata adapters, search indexing
+- [Content System](arch_content_system.md) — Filesystem-as-database with slug patterns, createSection ingestion, search indexing
+- [Content Section Factory](arch_content_section_factory.md) — createSection() generic ingestion factory; gray-matter metadataAdapter passthrough gotcha (2026-07-24)
 - [Design System & Matrix Theme](arch_design_system.md) — Atomic design, Matrix palette, glassmorphism/motion hooks
 - [Routes & Sections](arch_routes_sections.md) — Complete route map, section components, legacy URL redirects
 - [Next.js Config](arch_next_config.md) — MDX plugins, React Compiler, image optimization, release pipeline
