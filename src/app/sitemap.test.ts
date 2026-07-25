@@ -1,100 +1,150 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 
-const { mockGetPosts, mockGetTags, mockGetPostsTotalPages, mockGetIndexableContent } = vi.hoisted(() => ({
-    mockGetPosts: vi.fn(),
-    mockGetTags: vi.fn(),
-    mockGetPostsTotalPages: vi.fn(),
-    mockGetIndexableContent: vi.fn(),
-}));
+const { mockGetTags, mockGetPostsTotalPages, mockGetAuthorsWithPosts, mockContent, mockGalleryContent, mockCollectionParams } = vi.hoisted(
+    () => ({
+        mockGetTags: vi.fn(),
+        mockGetPostsTotalPages: vi.fn(),
+        mockGetAuthorsWithPosts: vi.fn(),
+        mockContent: vi.fn(),
+        mockGalleryContent: vi.fn(),
+        mockCollectionParams: vi.fn(),
+    }),
+);
 
 vi.mock("@/lib/content/posts/posts", () => ({
-    posts: { list: mockGetPosts },
     getTags: mockGetTags,
     getPostsTotalPages: mockGetPostsTotalPages,
+    getAuthorsWithPosts: mockGetAuthorsWithPosts,
 }));
 
-vi.mock("@/lib/content/indexable-content", () => ({
-    getIndexableContent: mockGetIndexableContent,
+/**
+ * The sitemap's own job is composing registry entries and the post-derived listings into URLs, so it is
+ * tested against a small fake registry. What the real registry contains is asserted in registry.test.ts.
+ */
+vi.mock("@/lib/content/registry", () => ({
+    contentRegistry: [
+        { slug: "/", markdown: vi.fn() },
+        { slug: "/plain-page", markdown: vi.fn() },
+        { slug: "/gallery", markdown: vi.fn(), content: mockGalleryContent },
+        { slug: "/things/[thing]", markdown: vi.fn(), params: mockCollectionParams, content: mockContent },
+    ],
 }));
 
 import sitemap from "./sitemap";
+import { siteMetadata } from "@/types/configuration/site-metadata";
 
-const makeFakePost = (slug: string) => ({
-    slug: { formatted: `/blog/post/2024/01/01/${slug}` },
-    frontmatter: {
-        date: { formatted: "2024-01-01" },
-        image: "/test-image.jpg",
-        title: "Test Post",
-    },
-});
+const url = (path: string) => `${siteMetadata.siteUrl}${path}`;
 
-const makeFakeTag = (tagValue: string) => ({
-    tagValue,
-    slug: `/blog/tag/${tagValue}`,
-    count: 3,
-    tagSlugText: tagValue,
+const findEntry = (path: string) => sitemap().find((entry) => entry.url === url(path));
+
+beforeEach(() => {
+    vi.clearAllMocks();
+    mockGetTags.mockReturnValue([]);
+    mockGetPostsTotalPages.mockReturnValue(0);
+    mockGetAuthorsWithPosts.mockReturnValue([]);
+    mockCollectionParams.mockReturnValue([{ thing: "one" }]);
+    mockGalleryContent.mockReturnValue([
+        {
+            slug: { formatted: "/gallery", params: {} },
+            frontmatter: { date: { formatted: "2018-11-15" }, image: "/media/content/art/featured.png", title: "Art" },
+        },
+    ]);
+    mockContent.mockReturnValue([
+        {
+            slug: { formatted: "/things/one", params: { thing: "one" } },
+            frontmatter: { date: { formatted: "2024-03-04" }, image: "/one.jpg", title: "One" },
+        },
+    ]);
 });
 
 describe("sitemap", () => {
-    describe("output shape", () => {
-        it("includes the homepage entry", () => {
-            mockGetPostsTotalPages.mockReturnValue(1);
-            mockGetPosts.mockReturnValue([makeFakePost("my-post")]);
-            mockGetTags.mockReturnValue([makeFakeTag("typescript")]);
-            mockGetIndexableContent.mockReturnValue([makeFakePost("my-post")]);
-
-            const entries = sitemap();
-            const urls = entries.map((e) => e.url);
-            expect(urls).toContain("https://www.fabrizioduroni.it");
+    describe("registry content", () => {
+        it("announces the homepage without a trailing slash", () => {
+            expect(findEntry("")).toBeDefined();
         });
 
-        it("includes the blog home entry", () => {
-            mockGetPostsTotalPages.mockReturnValue(1);
-            mockGetPosts.mockReturnValue([]);
-            mockGetTags.mockReturnValue([]);
-            mockGetIndexableContent.mockReturnValue([]);
-
-            const entries = sitemap();
-            const urls = entries.map((e) => e.url);
-            expect(urls).toContain("https://www.fabrizioduroni.it/blog");
+        it("announces a single page from the registry", () => {
+            expect(findEntry("/plain-page")).toBeDefined();
         });
 
-        it("generates pagination pages based on total pages", () => {
+        it("takes the date and image of a content item from its own frontmatter", () => {
+            const entry = findEntry("/things/one");
+
+            expect(entry?.lastModified).toEqual(new Date("2024-03-04"));
+            expect(entry?.images).toEqual([url("/one.jpg")]);
+        });
+
+        it("falls back to the site featured image for a page that carries no content", () => {
+            expect(findEntry("/plain-page")?.images).toEqual([url(siteMetadata.featuredImage)]);
+        });
+
+        it("takes a page's image from its frontmatter rather than from a second declaration", () => {
+            expect(findEntry("/gallery")?.images).toEqual([url("/media/content/art/featured.png")]);
+        });
+
+        it("takes a page's date from its frontmatter, not the build time", () => {
+            expect(findEntry("/gallery")?.lastModified).toEqual(new Date("2018-11-15"));
+        });
+
+        it("expands a collection from its content rather than from its params", () => {
+            sitemap();
+
+            expect(mockContent).toHaveBeenCalled();
+            expect(mockCollectionParams).not.toHaveBeenCalled();
+        });
+    });
+
+    describe("post-derived listings", () => {
+        it("announces the archive, tags and authors listings", () => {
+            expect(findEntry("/blog/archive")).toBeDefined();
+            expect(findEntry("/blog/tags")).toBeDefined();
+            expect(findEntry("/blog/authors")).toBeDefined();
+        });
+
+        it("announces one entry per pagination page, starting at one", () => {
             mockGetPostsTotalPages.mockReturnValue(3);
-            mockGetPosts.mockReturnValue([]);
-            mockGetTags.mockReturnValue([]);
-            mockGetIndexableContent.mockReturnValue([]);
 
-            const entries = sitemap();
-            const paginationUrls = entries
-                .map((e) => e.url)
-                .filter((u) => u.includes("/blog/posts/"));
-            expect(paginationUrls).toHaveLength(3);
-            expect(paginationUrls).toContain("https://www.fabrizioduroni.it/blog/posts/1");
-            expect(paginationUrls).toContain("https://www.fabrizioduroni.it/blog/posts/3");
+            expect(findEntry("/blog/posts/1")).toBeDefined();
+            expect(findEntry("/blog/posts/3")).toBeDefined();
+            expect(findEntry("/blog/posts/4")).toBeUndefined();
         });
 
-        it("includes tag entries for each tag", () => {
-            mockGetPostsTotalPages.mockReturnValue(1);
-            mockGetPosts.mockReturnValue([]);
-            mockGetTags.mockReturnValue([makeFakeTag("react"), makeFakeTag("typescript")]);
-            mockGetIndexableContent.mockReturnValue([]);
+        it("announces every tag", () => {
+            mockGetTags.mockReturnValue([
+                { tagValue: "swift", slug: "/blog/tag/swift", count: 2, tagSlugText: "swift" },
+            ]);
 
-            const entries = sitemap();
-            const urls = entries.map((e) => e.url);
-            expect(urls).toContain("https://www.fabrizioduroni.it/blog/tag/react");
-            expect(urls).toContain("https://www.fabrizioduroni.it/blog/tag/typescript");
+            expect(findEntry("/blog/tag/swift")).toBeDefined();
         });
 
-        it("includes indexable content entries", () => {
-            mockGetPostsTotalPages.mockReturnValue(1);
-            mockGetPosts.mockReturnValue([]);
-            mockGetTags.mockReturnValue([]);
-            mockGetIndexableContent.mockReturnValue([makeFakePost("hello-world")]);
+        it("announces every author who has posts", () => {
+            mockGetAuthorsWithPosts.mockReturnValue([{ author: { id: "ada_lovelace" }, postCount: 2 }]);
 
-            const entries = sitemap();
-            const urls = entries.map((e) => e.url);
-            expect(urls).toContain("https://www.fabrizioduroni.it/blog/post/2024/01/01/hello-world");
+            expect(findEntry("/blog/author/ada-lovelace")).toBeDefined();
+        });
+
+        it("leaves out the site owner, whose author page is about-me instead", () => {
+            mockGetAuthorsWithPosts.mockReturnValue([{ author: { id: "fabrizio_duroni" }, postCount: 9 }]);
+
+            expect(findEntry("/blog/author/fabrizio-duroni")).toBeUndefined();
+        });
+    });
+
+    describe("output", () => {
+        it("gives every entry an absolute url and a priority", () => {
+            mockGetPostsTotalPages.mockReturnValue(1);
+
+            sitemap().forEach((entry) => {
+                expect(entry.url.startsWith(siteMetadata.siteUrl)).toBe(true);
+                expect(entry.priority).toBe(1);
+            });
+        });
+
+        it("announces no url twice", () => {
+            mockGetPostsTotalPages.mockReturnValue(2);
+            const urls = sitemap().map((entry) => entry.url);
+
+            expect(new Set(urls).size).toBe(urls.length);
         });
     });
 });

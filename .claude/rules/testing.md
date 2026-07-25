@@ -124,10 +124,10 @@ E2E is NOT in pre-push — the production build takes too long. Run `npm run tes
 
 ## Tooling Exemptions
 
-All static analysis tools ignore test files:
+ESLint and dependency-cruiser ignore test files entirely. knip does not — read its bullet carefully:
 
 - **ESLint** (`eslint.config.mjs`) — `**/*.test.ts`, `**/*.test.tsx`, `**/*.spec.ts`, `**/*.spec.tsx`, `e2e/**`, `vitest.config.ts`, `vitest.setup.ts`, `playwright.config.ts` in `ignores`
-- **knip** (`knip.json`) — `**/*.test.*` and `**/*.spec.*` in `ignore`; `e2e/**/*.ts`, `vitest.config.ts`, `vitest.setup.ts`, `playwright.config.ts` in `entry`
+- **knip** (`knip.json`) — there is **no `ignore` key**. Test files fall under `project` (`src/**/*.{ts,tsx,mdx}`); `e2e/**/*.ts` is both `entry` and `project`; `src/test-utils/index.ts` is an `entry`. `ignoreExportsUsedInFile: true` is set. **Consequence**: because test files count as usage, a green `npm run knip` does NOT prove a deletion is complete when a leftover test still imports the deleted symbol, that import keeps the export looking "used". Grep for the deleted symbol separately before trusting a green knip run.
 - **dependency-cruiser** (`.dependency-cruiser.js`) — `\.(test|spec)\.(ts|tsx)$` in `options.exclude.path`
 
 ## Verification Checklist

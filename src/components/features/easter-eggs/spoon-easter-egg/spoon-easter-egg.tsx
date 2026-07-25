@@ -16,7 +16,7 @@ export const SpoonEasterEgg: FC = () => {
             {warping && (
                 <motion.div
                     key="spoon-warp"
-                    className="fixed inset-0 z-40 flex items-center justify-center pointer-events-none bg-black-alpha-75"
+                    className="fixed inset-0 z-60 flex items-center justify-center pointer-events-none bg-black-alpha-75"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
