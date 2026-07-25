@@ -11,7 +11,7 @@ const { mockGetPosts, mockGetTags, mockGetAuthorsWithPosts } = vi.hoisted(() => 
 }));
 
 vi.mock("@/lib/content/posts/posts", () => ({
-    getPosts: mockGetPosts,
+    posts: { list: mockGetPosts },
     getTags: mockGetTags,
     getAuthorsWithPosts: mockGetAuthorsWithPosts,
 }));

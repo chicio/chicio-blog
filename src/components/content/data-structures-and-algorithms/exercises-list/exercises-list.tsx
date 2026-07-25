@@ -1,6 +1,6 @@
 import {
-    getAllDataStructuresAndAlgorithmsTopics,
-    getAllExercises,
+    topics,
+    exercises,
 } from "@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms";
 import { Content } from "@/types/content/content";
 import { ExerciseMetadata } from "@/types/content/data-structures-and-algorithms";
@@ -8,10 +8,10 @@ import { FC } from "react";
 import { ExerciseTable } from "@/components/content/data-structures-and-algorithms/exercise-table";
 
 export const ExercisesList: FC = () => {
-    const exercises = getAllExercises();
-    const topics = getAllDataStructuresAndAlgorithmsTopics();
+    const allExercises = exercises.list();
+    const allTopics = topics.list();
 
-    const exercisesByTopic = exercises.reduce(
+    const exercisesByTopic = allExercises.reduce(
         (acc, exercise) => {
             const topicKey = exercise.slug.params.topic;
             if (!acc[topicKey]) {
@@ -25,7 +25,7 @@ export const ExercisesList: FC = () => {
 
     return (
         <>
-            {topics
+            {allTopics
                 .filter((topic) => exercisesByTopic[topic.slug.params.topic])
                 .map((topic) => {
                     const topicKey = topic.slug.params.topic;

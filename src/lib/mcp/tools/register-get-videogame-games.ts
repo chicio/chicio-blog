@@ -1,6 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import z from "zod";
-import { getAllGames, getAllGamesForConsole } from "@/lib/content/videogames/videogames";
+import { games, getAllGamesForConsole } from "@/lib/content/videogames/videogames";
 import { MCP_SITE_URL } from "@/lib/mcp/config";
 
 export const registerGetVideogameGames = (server: McpServer): void => {
@@ -20,10 +20,10 @@ export const registerGetVideogameGames = (server: McpServer): void => {
             },
         },
         async ({ console: consoleName, genre }) => {
-            const games = consoleName ? getAllGamesForConsole(consoleName) : getAllGames();
+            const matchedGames = consoleName ? getAllGamesForConsole(consoleName) : games.list();
             const filtered = genre
-                ? games.filter((g) => g.frontmatter.metadata?.genre?.toLowerCase() === genre.toLowerCase())
-                : games;
+                ? matchedGames.filter((g) => g.frontmatter.metadata?.genre?.toLowerCase() === genre.toLowerCase())
+                : matchedGames;
 
             const result = filtered.map((g) => ({
                 title: g.frontmatter.title,

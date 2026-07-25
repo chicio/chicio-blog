@@ -8,7 +8,7 @@ const { mockGetPosts, mockGetTags, mockGetPostsTotalPages, mockGetIndexableConte
 }));
 
 vi.mock("@/lib/content/posts/posts", () => ({
-    getPosts: mockGetPosts,
+    posts: { list: mockGetPosts },
     getTags: mockGetTags,
     getPostsTotalPages: mockGetPostsTotalPages,
 }));

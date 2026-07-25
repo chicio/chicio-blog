@@ -2,7 +2,7 @@ import "highlight.js/styles/tokyo-night-dark.css";
 import "katex/dist/katex.min.css";
 
 import { BlogPostContent } from "@/components/content/blog/blog-post-content";
-import { getPostBy, getPosts } from "@/lib/content/posts/posts";
+import { posts } from "@/lib/content/posts/posts";
 import { createMetadata } from "@/lib/seo/seo";
 import { NextPostParameters } from "@/types/next/page-parameters";
 import { siteMetadata } from "@/types/configuration/site-metadata";
@@ -13,7 +13,7 @@ export async function generateMetadata({
   params,
 }: NextPostParameters): Promise<Metadata> {
   const receivedParameters = await params;
-  const post = getPostBy(receivedParameters)!;
+  const post = posts.single(receivedParameters)!;
   
   if (!post) {
     return {};
@@ -33,12 +33,12 @@ export async function generateMetadata({
 }
 
 export async function generateStaticParams() {
-  return getPosts().map((post) => post.slug.params);
+  return posts.list().map((post) => post.slug.params);
 }
 
 export default async function BlogPostPage({ params }: NextPostParameters) {
   const receivedParameters = await params;
-  const post = getPostBy(receivedParameters);
+  const post = posts.single(receivedParameters);
 
   if (!post) {
     notFound();

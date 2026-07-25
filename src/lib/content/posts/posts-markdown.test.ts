@@ -1,14 +1,13 @@
 import { describe, it, expect, vi } from "vitest";
 
-const { mockGetPosts, mockGetPostBy, mockGetTags } = vi.hoisted(() => ({
-    mockGetPosts: vi.fn(),
-    mockGetPostBy: vi.fn(),
+const { mockListPosts, mockSinglePost, mockGetTags } = vi.hoisted(() => ({
+    mockListPosts: vi.fn(),
+    mockSinglePost: vi.fn(),
     mockGetTags: vi.fn(),
 }));
 
 vi.mock("@/lib/content/posts/posts", () => ({
-    getPosts: mockGetPosts,
-    getPostBy: mockGetPostBy,
+    posts: { list: mockListPosts, single: mockSinglePost },
     getTags: mockGetTags,
 }));
 
@@ -30,7 +29,7 @@ const post = {
 describe("posts-markdown", () => {
     describe("homepageMarkdown", () => {
         it("renders the canonical header for the homepage", () => {
-            mockGetPosts.mockReturnValue([post]);
+            mockListPosts.mockReturnValue([post]);
 
             const result = homepageMarkdown();
 
@@ -44,7 +43,7 @@ describe("posts-markdown", () => {
 
     describe("blogListingMarkdown", () => {
         it("renders the canonical header for the blog listing", () => {
-            mockGetPosts.mockReturnValue([post]);
+            mockListPosts.mockReturnValue([post]);
             mockGetTags.mockReturnValue([{ tagValue: "react", tagSlugText: "react", count: 1 }]);
 
             const result = blogListingMarkdown();
@@ -58,13 +57,13 @@ describe("posts-markdown", () => {
 
     describe("blogPostMarkdown", () => {
         it("returns null when the post does not exist", () => {
-            mockGetPostBy.mockReturnValue(undefined);
+            mockSinglePost.mockReturnValue(undefined);
 
             expect(blogPostMarkdown({ slug: "missing" })).toBeNull();
         });
 
         it("folds author/date/tags into the body, after the canonical header", () => {
-            mockGetPostBy.mockReturnValue(post);
+            mockSinglePost.mockReturnValue(post);
 
             const result = blogPostMarkdown({ slug: "hello-world" });
 

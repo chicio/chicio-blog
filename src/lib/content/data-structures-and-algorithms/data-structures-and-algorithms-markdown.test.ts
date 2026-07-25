@@ -1,31 +1,29 @@
 import { describe, it, expect, vi } from "vitest";
 
 const {
-    mockGetAllTopics,
-    mockGetAllExercises,
-    mockGetRoadmap,
-    mockGetTopic,
+    mockListTopics,
+    mockListExercises,
+    mockSingleRoadmap,
+    mockSingleTopic,
     mockGetAllExercisesForTopic,
-    mockGetExercise,
-    mockGetExercisesContent,
+    mockSingleExercise,
+    mockSingleExercisesList,
 } = vi.hoisted(() => ({
-    mockGetAllTopics: vi.fn(),
-    mockGetAllExercises: vi.fn(),
-    mockGetRoadmap: vi.fn(),
-    mockGetTopic: vi.fn(),
+    mockListTopics: vi.fn(),
+    mockListExercises: vi.fn(),
+    mockSingleRoadmap: vi.fn(),
+    mockSingleTopic: vi.fn(),
     mockGetAllExercisesForTopic: vi.fn(),
-    mockGetExercise: vi.fn(),
-    mockGetExercisesContent: vi.fn(),
+    mockSingleExercise: vi.fn(),
+    mockSingleExercisesList: vi.fn(),
 }));
 
 vi.mock("@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms", () => ({
-    getAllDataStructuresAndAlgorithmsTopics: mockGetAllTopics,
-    getAllExercises: mockGetAllExercises,
-    getDataStructuresAndAlgorithmsRoadmap: mockGetRoadmap,
-    getDataStructuresAndAlgorithmsTopic: mockGetTopic,
+    topics: { list: mockListTopics, single: mockSingleTopic },
+    exercises: { list: mockListExercises, single: mockSingleExercise },
+    dsaRoadmap: { single: mockSingleRoadmap },
+    dsaExercisesList: { single: mockSingleExercisesList },
     getAllExercisesForTopic: mockGetAllExercisesForTopic,
-    getExercise: mockGetExercise,
-    getExercisesContent: mockGetExercisesContent,
 }));
 
 import {
@@ -58,7 +56,7 @@ const exercise = {
 describe("data-structures-and-algorithms-markdown", () => {
     describe("dsaMarkdown", () => {
         it("renders the canonical header with a Topics section", () => {
-            mockGetAllTopics.mockReturnValue([topic]);
+            mockListTopics.mockReturnValue([topic]);
 
             const result = dsaMarkdown();
 
@@ -71,7 +69,7 @@ describe("data-structures-and-algorithms-markdown", () => {
 
     describe("dsaRoadmapMarkdown", () => {
         it("renders the canonical header from the roadmap frontmatter", () => {
-            mockGetRoadmap.mockReturnValue({
+            mockSingleRoadmap.mockReturnValue({
                 frontmatter: { title: "Roadmap", description: "Course roadmap" },
                 content: "Roadmap body.",
             });
@@ -86,10 +84,10 @@ describe("data-structures-and-algorithms-markdown", () => {
 
     describe("dsaExercisesListMarkdown", () => {
         it("renders the canonical header with an exercises section", () => {
-            mockGetExercisesContent.mockReturnValue({
+            mockSingleExercisesList.mockReturnValue({
                 frontmatter: { title: "Exercises", description: "All exercises" },
             });
-            mockGetAllExercises.mockReturnValue([exercise]);
+            mockListExercises.mockReturnValue([exercise]);
 
             const result = dsaExercisesListMarkdown();
 
@@ -101,13 +99,13 @@ describe("data-structures-and-algorithms-markdown", () => {
 
     describe("dsaTopicMarkdown", () => {
         it("returns null for an unknown topic", () => {
-            mockGetTopic.mockReturnValue(undefined);
+            mockSingleTopic.mockReturnValue(undefined);
 
             expect(dsaTopicMarkdown({ topic: "unknown" })).toBeNull();
         });
 
         it("folds tags into the body and lists exercises for the topic", () => {
-            mockGetTopic.mockReturnValue(topic);
+            mockSingleTopic.mockReturnValue(topic);
             mockGetAllExercisesForTopic.mockReturnValue([exercise]);
 
             const result = dsaTopicMarkdown({ topic: "graph" });
@@ -122,13 +120,13 @@ describe("data-structures-and-algorithms-markdown", () => {
 
     describe("dsaExerciseMarkdown", () => {
         it("returns null for an unknown exercise", () => {
-            mockGetExercise.mockReturnValue(undefined);
+            mockSingleExercise.mockReturnValue(undefined);
 
             expect(dsaExerciseMarkdown({ topic: "graph", exercise: "unknown" })).toBeNull();
         });
 
         it("folds difficulty/technique/tags/leetcode into the body", () => {
-            mockGetExercise.mockReturnValue(exercise);
+            mockSingleExercise.mockReturnValue(exercise);
 
             const result = dsaExerciseMarkdown({ topic: "graph", exercise: "word-ladder" });
 

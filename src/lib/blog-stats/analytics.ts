@@ -1,6 +1,6 @@
 import { BetaAnalyticsDataClient } from "@google-analytics/data";
 import type { protos } from "@google-analytics/data";
-import { getPosts } from "@/lib/content/posts/posts";
+import { posts } from "@/lib/content/posts/posts";
 import {
     AnalyticsData,
     AnalyticsStats,
@@ -127,7 +127,7 @@ export const mapReportsToAnalyticsStats = (
 
 const buildPostResolver = (): ((key: string) => PostRef | null) => {
     const byKey = new Map(
-        getPosts().map((post) => [
+        posts.list().map((post) => [
             normalizePostPathKey(post.slug.formatted),
             { title: post.frontmatter.title, url: post.slug.formatted },
         ]),

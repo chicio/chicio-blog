@@ -15,7 +15,6 @@ const {
     mockConsoleMarkdown,
     mockGameMarkdown,
     mockBlogStatsMarkdown,
-    mockEasterEggHuntMarkdown,
 } = vi.hoisted(() => ({
     mockHomepageMarkdown: vi.fn(),
     mockBlogListingMarkdown: vi.fn(),
@@ -31,7 +30,6 @@ const {
     mockConsoleMarkdown: vi.fn(),
     mockGameMarkdown: vi.fn(),
     mockBlogStatsMarkdown: vi.fn(),
-    mockEasterEggHuntMarkdown: vi.fn(),
 }));
 
 vi.mock("@/lib/content/posts/posts-markdown", () => ({
@@ -46,10 +44,6 @@ vi.mock("@/lib/mdx/mdx-page-markdown", () => ({
 
 vi.mock("@/lib/content/contact/contact-markdown", () => ({
     contactMarkdown: mockContactMarkdown,
-}));
-
-vi.mock("@/lib/content/easter-eggs/easter-egg-hunt-markdown", () => ({
-    easterEggHuntMarkdown: mockEasterEggHuntMarkdown,
 }));
 
 vi.mock("@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms-markdown", () => ({
@@ -71,17 +65,17 @@ vi.mock("@/lib/blog-stats/blog-stats-markdown", () => ({
 }));
 
 vi.mock("@/lib/content/posts/posts", () => ({
-    getPosts: vi.fn().mockReturnValue([]),
+    posts: { list: vi.fn().mockReturnValue([]) },
 }));
 
 vi.mock("@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms", () => ({
-    getAllDataStructuresAndAlgorithmsTopics: vi.fn().mockReturnValue([]),
-    getAllExercises: vi.fn().mockReturnValue([]),
+    topics: { list: vi.fn().mockReturnValue([]) },
+    exercises: { list: vi.fn().mockReturnValue([]) },
 }));
 
 vi.mock("@/lib/content/videogames/videogames", () => ({
-    getAllConsoles: vi.fn().mockReturnValue([]),
-    getAllGames: vi.fn().mockReturnValue([]),
+    consoles: { list: vi.fn().mockReturnValue([]) },
+    games: { list: vi.fn().mockReturnValue([]) },
 }));
 
 vi.mock("next/navigation", () => ({
@@ -192,13 +186,14 @@ describe("GET /markdown/[[...path]]", () => {
     });
 
     describe("easter egg hunt (/easter-egg-hunt)", () => {
-        it("delegates to easterEggHuntMarkdown", async () => {
-            mockEasterEggHuntMarkdown.mockReturnValue("# Easter Egg Hunt");
+        it("delegates to mdxPageMarkdown with the easter egg hunt slug", async () => {
+            mockMdxPageMarkdown.mockReturnValue("# Easter Egg Hunt");
             const response = await GET(
                 new Request("https://x.com/markdown/easter-egg-hunt"),
                 makeContext(["easter-egg-hunt"]),
             );
             expect(response.status).toBe(200);
+            expect(mockMdxPageMarkdown).toHaveBeenCalledWith(slugs.easterEggHunt);
             expect(await response.text()).toBe("# Easter Egg Hunt");
         });
     });

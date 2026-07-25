@@ -1,7 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { getPosts, getTags } from "@/lib/content/posts/posts";
-import { getAllDataStructuresAndAlgorithmsTopics, getAllExercises } from "@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms";
-import { getAllConsoles, getAllGames } from "@/lib/content/videogames/videogames";
+import { posts, getTags } from "@/lib/content/posts/posts";
+import { topics, exercises } from "@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms";
+import { consoles, games } from "@/lib/content/videogames/videogames";
 import { MCP_SITE_URL } from "@/lib/mcp/config";
 
 export const registerGetSiteStats = (server: McpServer): void => {
@@ -14,28 +14,28 @@ export const registerGetSiteStats = (server: McpServer): void => {
                 "exercise count, videogame console count, game count, and the most recent post.",
         },
         async () => {
-            const posts = getPosts();
+            const allPosts = posts.list();
             const tags = getTags();
-            const topics = getAllDataStructuresAndAlgorithmsTopics();
-            const exercises = getAllExercises();
-            const consoles = getAllConsoles();
-            const games = getAllGames();
+            const allTopics = topics.list();
+            const allExercises = exercises.list();
+            const allConsoles = consoles.list();
+            const allGames = games.list();
 
-            const latestPost = posts[0]
+            const latestPost = allPosts[0]
                 ? {
-                      title: posts[0].frontmatter.title,
-                      date: posts[0].frontmatter.date.formatted,
-                      url: `${MCP_SITE_URL}${posts[0].slug.formatted}`,
+                      title: allPosts[0].frontmatter.title,
+                      date: allPosts[0].frontmatter.date.formatted,
+                      url: `${MCP_SITE_URL}${allPosts[0].slug.formatted}`,
                   }
                 : null;
 
             const result = {
-                postsCount: posts.length,
+                postsCount: allPosts.length,
                 tagsCount: tags.length,
-                dsaTopicsCount: topics.length,
-                dsaExercisesCount: exercises.length,
-                videogameConsolesCount: consoles.length,
-                videogameGamesCount: games.length,
+                dsaTopicsCount: allTopics.length,
+                dsaExercisesCount: allExercises.length,
+                videogameConsolesCount: allConsoles.length,
+                videogameGamesCount: allGames.length,
                 latestPost,
             };
 

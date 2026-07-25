@@ -1,20 +1,18 @@
 import { describe, it, expect, vi } from "vitest";
 
-const { mockGetAllConsoles, mockGetAllGames, mockGetConsole, mockGetGame, mockGetAllGamesForConsole } = vi.hoisted(
+const { mockListConsoles, mockListGames, mockSingleConsole, mockSingleGame, mockGetAllGamesForConsole } = vi.hoisted(
     () => ({
-        mockGetAllConsoles: vi.fn(),
-        mockGetAllGames: vi.fn(),
-        mockGetConsole: vi.fn(),
-        mockGetGame: vi.fn(),
+        mockListConsoles: vi.fn(),
+        mockListGames: vi.fn(),
+        mockSingleConsole: vi.fn(),
+        mockSingleGame: vi.fn(),
         mockGetAllGamesForConsole: vi.fn(),
     }),
 );
 
 vi.mock("@/lib/content/videogames/videogames", () => ({
-    getAllConsoles: mockGetAllConsoles,
-    getAllGames: mockGetAllGames,
-    getConsole: mockGetConsole,
-    getGame: mockGetGame,
+    consoles: { list: mockListConsoles, single: mockSingleConsole },
+    games: { list: mockListGames, single: mockSingleGame },
     getAllGamesForConsole: mockGetAllGamesForConsole,
 }));
 
@@ -52,8 +50,8 @@ const gameContent = {
 describe("videogames-markdown", () => {
     describe("videogamesMarkdown", () => {
         it("renders the canonical header with consoles and games sections", () => {
-            mockGetAllConsoles.mockReturnValue([consoleContent]);
-            mockGetAllGames.mockReturnValue([gameContent]);
+            mockListConsoles.mockReturnValue([consoleContent]);
+            mockListGames.mockReturnValue([gameContent]);
 
             const result = videogamesMarkdown();
 
@@ -68,13 +66,13 @@ describe("videogames-markdown", () => {
 
     describe("consoleMarkdown", () => {
         it("returns null for an unknown console", () => {
-            mockGetConsole.mockReturnValue(undefined);
+            mockSingleConsole.mockReturnValue(undefined);
 
             expect(consoleMarkdown({ console: "unknown" })).toBeNull();
         });
 
         it("folds manufacturer/release year/generation into the body", () => {
-            mockGetConsole.mockReturnValue(consoleContent);
+            mockSingleConsole.mockReturnValue(consoleContent);
             mockGetAllGamesForConsole.mockReturnValue([gameContent]);
 
             const result = consoleMarkdown({ console: "gameboy" });
@@ -91,13 +89,13 @@ describe("videogames-markdown", () => {
 
     describe("gameMarkdown", () => {
         it("returns null for an unknown game", () => {
-            mockGetGame.mockReturnValue(undefined);
+            mockSingleGame.mockReturnValue(undefined);
 
             expect(gameMarkdown({ console: "gameboy", game: "unknown" })).toBeNull();
         });
 
         it("folds console/developer/publisher/genre/release year/region into the body", () => {
-            mockGetGame.mockReturnValue(gameContent);
+            mockSingleGame.mockReturnValue(gameContent);
 
             const result = gameMarkdown({ console: "gameboy", game: "tetris" });
 

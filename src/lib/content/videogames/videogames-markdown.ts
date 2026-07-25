@@ -1,9 +1,7 @@
 import {
-    getAllConsoles,
-    getAllGames,
+    consoles,
+    games,
     getAllGamesForConsole,
-    getConsole,
-    getGame,
 } from "@/lib/content/videogames/videogames";
 import { markdownDocument } from "@/lib/mdx/markdown-document";
 import { mdxToMarkdown } from "@/lib/mdx/mdx-to-markdown";
@@ -11,16 +9,16 @@ import { siteMetadata } from "@/types/configuration/site-metadata";
 import { slugs } from "@/types/configuration/slug";
 
 export const videogamesMarkdown = (): string => {
-    const consoles = getAllConsoles();
-    const games = getAllGames();
+    const allConsoles = consoles.list();
+    const allGames = games.list();
 
-    const body = `## Consoles (${consoles.length})
+    const body = `## Consoles (${allConsoles.length})
 
-${consoles.map((c) => `- [${c.frontmatter.title}](${siteMetadata.siteUrl}${c.slug.formatted}) (${c.frontmatter.metadata?.releaseYear ?? "unknown"}) — ${c.frontmatter.description}`).join("\n")}
+${allConsoles.map((c) => `- [${c.frontmatter.title}](${siteMetadata.siteUrl}${c.slug.formatted}) (${c.frontmatter.metadata?.releaseYear ?? "unknown"}) — ${c.frontmatter.description}`).join("\n")}
 
-## Games (${games.length})
+## Games (${allGames.length})
 
-${games.map((g) => `- [${g.frontmatter.title}](${siteMetadata.siteUrl}${g.slug.formatted}) (${g.frontmatter.metadata?.console ?? "unknown"}, ${g.frontmatter.metadata?.releaseYear ?? "unknown"}) — ${g.frontmatter.description}`).join("\n")}
+${allGames.map((g) => `- [${g.frontmatter.title}](${siteMetadata.siteUrl}${g.slug.formatted}) (${g.frontmatter.metadata?.console ?? "unknown"}, ${g.frontmatter.metadata?.releaseYear ?? "unknown"}) — ${g.frontmatter.description}`).join("\n")}
 `;
 
     return markdownDocument({
@@ -32,24 +30,24 @@ ${games.map((g) => `- [${g.frontmatter.title}](${siteMetadata.siteUrl}${g.slug.f
 };
 
 export const consoleMarkdown = (params: Record<string, string>): string | null => {
-    const consoleData = getConsole(params);
+    const consoleData = consoles.single(params);
 
     if (!consoleData) {
         return null;
     }
 
     const { frontmatter, content, slug } = consoleData;
-    const games = getAllGamesForConsole(frontmatter.metadata!.name);
+    const consoleGames = getAllGamesForConsole(frontmatter.metadata!.name);
 
     const body = `**Manufacturer:** ${frontmatter.metadata?.manufacturer ?? "unknown"}
 **Release Year:** ${frontmatter.metadata?.releaseYear ?? "unknown"}
 **Generation:** ${frontmatter.metadata?.generation ?? "unknown"}
 
 ${mdxToMarkdown(content)}
-${games.length > 0 ? `
-## Games (${games.length})
+${consoleGames.length > 0 ? `
+## Games (${consoleGames.length})
 
-${games.map((g) => `- [${g.frontmatter.title}](${siteMetadata.siteUrl}${g.slug.formatted}) (${g.frontmatter.metadata?.releaseYear ?? "unknown"}) — ${g.frontmatter.description}`).join("\n")}
+${consoleGames.map((g) => `- [${g.frontmatter.title}](${siteMetadata.siteUrl}${g.slug.formatted}) (${g.frontmatter.metadata?.releaseYear ?? "unknown"}) — ${g.frontmatter.description}`).join("\n")}
 ` : ""}`;
 
     return markdownDocument({
@@ -61,7 +59,7 @@ ${games.map((g) => `- [${g.frontmatter.title}](${siteMetadata.siteUrl}${g.slug.f
 };
 
 export const gameMarkdown = (params: Record<string, string>): string | null => {
-    const game = getGame(params);
+    const game = games.single(params);
 
     if (!game) {
         return null;

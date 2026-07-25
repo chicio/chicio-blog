@@ -1,6 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import z from "zod";
-import { getPosts, getPostsForTag } from "@/lib/content/posts/posts";
+import { posts, getPostsForTag } from "@/lib/content/posts/posts";
 import { MCP_SITE_URL } from "@/lib/mcp/config";
 
 export const registerListPosts = (server: McpServer): void => {
@@ -18,9 +18,9 @@ export const registerListPosts = (server: McpServer): void => {
         },
         async ({ tag, limit }) => {
             const safeLimit = Math.min(limit ?? 20, 50);
-            const posts = tag ? getPostsForTag(tag) : getPosts();
+            const matchedPosts = tag ? getPostsForTag(tag) : posts.list();
 
-            const results = posts.slice(0, safeLimit).map((post) => ({
+            const results = matchedPosts.slice(0, safeLimit).map((post) => ({
                 title: post.frontmatter.title,
                 description: post.frontmatter.description,
                 tags: post.frontmatter.tags,

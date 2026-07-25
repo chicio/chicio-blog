@@ -1,11 +1,9 @@
 import {
-    getAllDataStructuresAndAlgorithmsTopics,
-    getAllExercises,
+    topics,
+    exercises,
     getAllExercisesForTopic,
-    getDataStructuresAndAlgorithmsRoadmap,
-    getDataStructuresAndAlgorithmsTopic,
-    getExercise,
-    getExercisesContent,
+    dsaRoadmap,
+    dsaExercisesList,
 } from "@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms";
 import { markdownDocument } from "@/lib/mdx/markdown-document";
 import { mdxToMarkdown } from "@/lib/mdx/mdx-to-markdown";
@@ -13,11 +11,11 @@ import { siteMetadata } from "@/types/configuration/site-metadata";
 import { slugs } from "@/types/configuration/slug";
 
 export const dsaMarkdown = (): string => {
-    const topics = getAllDataStructuresAndAlgorithmsTopics();
+    const allTopics = topics.list();
 
     const body = `## Topics
 
-${topics.map((topic) => `- [${topic.frontmatter.title}](${siteMetadata.siteUrl}${topic.slug.formatted}) — ${topic.frontmatter.description}`).join("\n")}
+${allTopics.map((topic) => `- [${topic.frontmatter.title}](${siteMetadata.siteUrl}${topic.slug.formatted}) — ${topic.frontmatter.description}`).join("\n")}
 `;
 
     return markdownDocument({
@@ -29,7 +27,7 @@ ${topics.map((topic) => `- [${topic.frontmatter.title}](${siteMetadata.siteUrl}$
 };
 
 export const dsaRoadmapMarkdown = (): string => {
-    const roadmap = getDataStructuresAndAlgorithmsRoadmap();
+    const roadmap = dsaRoadmap.single()!;
 
     return markdownDocument({
         title: roadmap.frontmatter.title,
@@ -40,12 +38,12 @@ export const dsaRoadmapMarkdown = (): string => {
 };
 
 export const dsaExercisesListMarkdown = (): string => {
-    const exercisesContent = getExercisesContent();
-    const exercises = getAllExercises();
+    const exercisesContent = dsaExercisesList.single()!;
+    const allExercises = exercises.list();
 
-    const body = `## All Exercises (${exercises.length})
+    const body = `## All Exercises (${allExercises.length})
 
-${exercises.map((e) => `- [${e.frontmatter.title}](${siteMetadata.siteUrl}${e.slug.formatted}) — ${e.frontmatter.metadata?.difficulty ?? "unknown"}, ${e.frontmatter.metadata?.technique ?? "unknown"}`).join("\n")}
+${allExercises.map((e) => `- [${e.frontmatter.title}](${siteMetadata.siteUrl}${e.slug.formatted}) — ${e.frontmatter.metadata?.difficulty ?? "unknown"}, ${e.frontmatter.metadata?.technique ?? "unknown"}`).join("\n")}
 `;
 
     return markdownDocument({
@@ -57,21 +55,21 @@ ${exercises.map((e) => `- [${e.frontmatter.title}](${siteMetadata.siteUrl}${e.sl
 };
 
 export const dsaTopicMarkdown = (params: Record<string, string>): string | null => {
-    const topic = getDataStructuresAndAlgorithmsTopic(params);
+    const topic = topics.single(params);
 
     if (!topic) {
         return null;
     }
 
-    const exercises = getAllExercisesForTopic(params.topic);
+    const topicExercises = getAllExercisesForTopic(params.topic);
 
     const body = `**Tags:** ${topic.frontmatter.tags.join(", ")}
 
 ${mdxToMarkdown(topic.content)}
-${exercises.length > 0 ? `
+${topicExercises.length > 0 ? `
 ## Exercises
 
-${exercises.map((e) => `- [${e.frontmatter.title}](${siteMetadata.siteUrl}${e.slug.formatted}) — ${e.frontmatter.metadata?.difficulty ?? "unknown"}, ${e.frontmatter.metadata?.technique ?? "unknown"}`).join("\n")}
+${topicExercises.map((e) => `- [${e.frontmatter.title}](${siteMetadata.siteUrl}${e.slug.formatted}) — ${e.frontmatter.metadata?.difficulty ?? "unknown"}, ${e.frontmatter.metadata?.technique ?? "unknown"}`).join("\n")}
 ` : ""}`;
 
     return markdownDocument({
@@ -83,7 +81,7 @@ ${exercises.map((e) => `- [${e.frontmatter.title}](${siteMetadata.siteUrl}${e.sl
 };
 
 export const dsaExerciseMarkdown = (params: Record<string, string>): string | null => {
-    const exercise = getExercise(params);
+    const exercise = exercises.single(params);
 
     if (!exercise) {
         return null;

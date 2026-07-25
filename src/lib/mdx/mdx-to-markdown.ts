@@ -4,7 +4,8 @@ import remarkMath from "remark-math";
 import remarkMdx from "remark-mdx";
 import remarkStringify from "remark-stringify";
 import { toString as mdastToString } from "mdast-util-to-string";
-import type { Emphasis, Heading, Image, Link, Paragraph, PhrasingContent, Root, RootContent, Text } from "mdast";
+import type { Emphasis, Heading, Image, Link, Paragraph, PhrasingContent, Root, RootContent, Strong, Text } from "mdast";
+import { easterEggHuntIntroLines } from "@/lib/content/easter-eggs/easter-eggs-content";
 import type { MdxJsxAttribute, MdxJsxAttributeValueExpression, MdxJsxFlowElement, MdxJsxTextElement } from "mdast-util-mdx-jsx";
 import type { Expression } from "estree-jsx";
 
@@ -14,6 +15,8 @@ type AnyContent = RootContent | PhrasingContent;
 const textNode = (value: string): Text => ({ type: "text", value });
 
 const emphasisNode = (value: string): Emphasis => ({ type: "emphasis", children: [textNode(value)] });
+
+const strongNode = (value: string): Strong => ({ type: "strong", children: [textNode(value)] });
 
 const imageNode = (url: string, alt: string): Image => ({ type: "image", url, alt });
 
@@ -128,11 +131,47 @@ const transformYoutube = (node: MdxJsxElement): AnyContent[] => {
     return wrapForContext(node, [linkNode(url, "Watch on YouTube")]);
 };
 
+/**
+ * `EggCard` carries its heading in a `title` ATTRIBUTE, and attributes are not children — without
+ * this the four easter-egg titles would vanish from the generated markdown.
+ */
+const transformEggCard = (node: MdxJsxElement): AnyContent[] => {
+    const title = getStringAttribute(node, "title");
+    const children = transformList(node.children as AnyContent[]);
+
+    return title ? [headingNode(2, title), ...children] : children;
+};
+
+/**
+ * `EggSolution` renders its "Solution" label in the UI rather than in the MDX body, so the label is
+ * re-emitted here to keep the markdown self-describing.
+ */
+const transformEggSolution = (node: MdxJsxElement): AnyContent[] => [
+    paragraphNode([strongNode("Solution:")]),
+    ...transformList(node.children as AnyContent[]),
+];
+
+/**
+ * The intro terminal takes its lines from TypeScript (they are typed-out animation input, not page
+ * prose), so it has no MDX children to inline — emit those same lines as paragraphs.
+ */
+const transformEasterEggIntroTerminal = (): AnyContent[] =>
+    easterEggHuntIntroLines.map((line) => paragraphNode([textNode(line)]));
+
 const transformJsxElement = (node: MdxJsxElement): AnyContent[] => {
     const { name } = node;
 
     if (name === "ImageCarousel") {
         return transformImageCarousel(node);
+    }
+    if (name === "EggCard") {
+        return transformEggCard(node);
+    }
+    if (name === "EggSolution") {
+        return transformEggSolution(node);
+    }
+    if (name === "EasterEggIntroTerminal") {
+        return transformEasterEggIntroTerminal();
     }
     if (name === "ParagraphTitleWithIcon") {
         return transformParagraphTitleWithIcon(node);

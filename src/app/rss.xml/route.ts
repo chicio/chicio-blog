@@ -1,4 +1,4 @@
-import { getPosts } from "@/lib/content/posts/posts";
+import { posts } from "@/lib/content/posts/posts";
 import { authors } from "@/types/content/author";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { Feed } from "feed";
@@ -6,7 +6,7 @@ import { Feed } from "feed";
 export const dynamic = 'force-static';
 
 export async function GET() {
-  const posts = getPosts();
+  const allPosts = posts.list();
 
   const feed = new Feed({
     title: siteMetadata.title,
@@ -21,7 +21,7 @@ export async function GET() {
     copyright: `2025 ${siteMetadata.author}`,
   });
 
-  posts.forEach((post) => {
+  allPosts.forEach((post) => {
     feed.addItem({
       title: post.frontmatter.title,
       id: `${siteMetadata.siteUrl}${post.slug.formatted}`,

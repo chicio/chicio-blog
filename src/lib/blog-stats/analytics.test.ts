@@ -13,7 +13,7 @@ vi.mock("@google-analytics/data", () => ({
 }));
 
 vi.mock("@/lib/content/posts/posts", () => ({
-    getPosts: mockGetPosts,
+    posts: { list: mockGetPosts },
 }));
 
 vi.mock("./analytics-config", () => ({

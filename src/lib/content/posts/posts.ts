@@ -4,7 +4,8 @@ import { Author, AuthorSummary } from "@/types/content/author";
 import { slugs } from "@/types/configuration/slug";
 import { Pagination } from "@/types/content/pagination";
 import { generateTagSlug } from "../../tags/tags";
-import { getAllContentFor, getSingleContentBy } from "../content";
+import { createSection } from "../section";
+import { paginate } from "@/lib/pagination/paginate";
 import { authorSlugToId } from "../authors/author-slug";
 
 export { authorIdToSlug, authorSlugToId, generateAuthorSlug } from "../authors/author-slug";
@@ -13,22 +14,12 @@ export { authorIdToSlug, authorSlugToId, generateAuthorSlug } from "../authors/a
  * POSTS
  */
 
-export const getPosts = (): Content[] =>
-  getAllContentFor(slugs.blog.blogPost).sort(
-    (post, anotherPost) =>
-      new Date(anotherPost.frontmatter.date.formatted).getTime() -
-      new Date(post.frontmatter.date.formatted).getTime(),
-  );
-
-export const getPostBy = (
-  params: Record<string, string>,
-): Content | undefined => {
-  try {
-    return getSingleContentBy(slugs.blog.blogPost, params);
-  } catch {
-    return undefined;
-  }
-};
+export const posts = createSection({
+  slug: slugs.blog.blogPost,
+  sort: (post, anotherPost) =>
+    new Date(anotherPost.frontmatter.date.formatted).getTime() -
+    new Date(post.frontmatter.date.formatted).getTime(),
+});
 
 /**
  * PAGINATION
@@ -49,43 +40,32 @@ export const groupArrayBy: <T>(array: T[], numberPerGroup: number) => T[][] = (
   return group;
 };
 
-export const getPostsTotalPages = () => Math.ceil(getPosts().length / postsPerPage)
+export const getPostsTotalPages = () => Math.ceil(posts.list().length / postsPerPage)
 
-export const getPostsPaginationFor: (page: number) => Pagination | undefined = (
-  page: number,
-) => {
-  try {
-    const totalPages = getPostsTotalPages();
+/**
+ * The blog's own presentation policy on top of the generic `paginate`: the page's first post
+ * becomes the hero, the rest are paired for the two-column layout, and the prev/next hrefs follow
+ * the blog URL scheme (page 2 links back to the listing root, not to `/blog/posts/1`).
+ */
+export const getPostsPaginationFor = (page: number): Pagination | undefined => {
+  const postsPage = paginate(posts.list(), page, postsPerPage);
 
-    if (totalPages < page) {
-      throw new Error("Page does not exists");
-    }
-    const posts = getPosts();
-    const start = (page - 1) * postsPerPage;
-    const paginatedPosts = posts.slice(start, start + postsPerPage);
-    const previousPageUrlSlug =
-      page === 2
-        ? `${slugs.blog.home}`
-        : `${slugs.blog.blogPostsPage}/${page - 1}`;
-    const previousPageUrl = page > 1 ? previousPageUrlSlug : undefined;
-    const nextPageUrl =
-      page < totalPages ? `${slugs.blog.blogPostsPage}/${page + 1}` : undefined;
-
-    const postsGrouped = groupArrayBy(
-      paginatedPosts.slice(1, paginatedPosts.length),
-      2,
-    );
-
-    return {
-      launchPost: paginatedPosts[0],
-      postsGrouped,
-      previousPageUrl,
-      nextPageUrl,
-      totalPages,
-    };
-  } catch {
+  if (!postsPage) {
     return undefined;
   }
+
+  const previousPageUrl =
+    page === 2 ? slugs.blog.home : `${slugs.blog.blogPostsPage}/${page - 1}`;
+
+  return {
+    launchPost: postsPage.items[0],
+    postsGrouped: groupArrayBy(postsPage.items.slice(1), 2),
+    previousPageUrl: postsPage.hasPrevious ? previousPageUrl : undefined,
+    nextPageUrl: postsPage.hasNext
+      ? `${slugs.blog.blogPostsPage}/${page + 1}`
+      : undefined,
+    totalPages: postsPage.totalPages,
+  };
 };
 
 /**
@@ -93,9 +73,9 @@ export const getPostsPaginationFor: (page: number) => Pagination | undefined = (
  */
 export const getTags = () => {
   const tags = new Map<string, Tag>();
-  const posts = getPosts();
+  const allPosts = posts.list();
 
-  posts.map((post) =>
+  allPosts.map((post) =>
     post.frontmatter.tags.forEach((tag) => {
       if (tags.has(tag)) {
         const currentTag = tags.get(tag)!;
@@ -120,9 +100,9 @@ export const getTags = () => {
 };
 
 export const getPostsForTag: (tag: string) => Content[] = (tag: string) => {
-  const posts = getPosts();
+  const allPosts = posts.list();
 
-  return posts.filter((post) => post.frontmatter.tags.includes(tag));
+  return allPosts.filter((post) => post.frontmatter.tags.includes(tag));
 };
 
 /**
@@ -149,7 +129,7 @@ export const aggregateAuthorsWithPosts = (posts: Content[]): AuthorSummary[] => 
   );
 };
 
-export const getAuthorsWithPosts = (): AuthorSummary[] => aggregateAuthorsWithPosts(getPosts());
+export const getAuthorsWithPosts = (): AuthorSummary[] => aggregateAuthorsWithPosts(posts.list());
 
 export const filterPostsForAuthor = (posts: Content[], authorId: string): Content[] =>
   posts.filter((post) => post.frontmatter.authors.some((author) => author.id === authorId));
@@ -176,7 +156,7 @@ export const findAuthorWithPostsBySlug = (
 
 export const getAuthorWithPostsBySlug = (
   authorSlug: string,
-): { author: Author; posts: Content[] } | undefined => findAuthorWithPostsBySlug(getPosts(), authorSlug);
+): { author: Author; posts: Content[] } | undefined => findAuthorWithPostsBySlug(posts.list(), authorSlug);
 
 /**
  * READ NEXT
@@ -220,7 +200,7 @@ export const getReadNextPosts = (
   currentSlug: string,
   limit = 2,
 ): Content[] => {
-  const allPosts = getPosts();
+  const allPosts = posts.list();
   const currentPost = allPosts.find(
     (post) => post.slug.formatted === currentSlug,
   );

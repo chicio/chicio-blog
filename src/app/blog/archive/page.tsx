@@ -1,6 +1,6 @@
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { tracking } from "@/types/configuration/tracking";
-import { getPosts } from "@/lib/content/posts/posts";
+import { posts } from "@/lib/content/posts/posts";
 import { BlogGenericPostListPageTemplate } from "@/components/content/blog/blog-generic-post-list-page-template";
 import { slugs } from "@/types/configuration/slug";
 import { Metadata } from "next";
@@ -19,12 +19,12 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function BlogArchivePage() {
   const author = siteMetadata.author;
-  const posts = getPosts();
+  const allPosts = posts.list();
 
   return (
     <BlogGenericPostListPageTemplate
       title={"Archive"}
-      posts={posts}
+      posts={allPosts}
       author={author}
       trackingCategory={tracking.category.blog_archive}
     />
