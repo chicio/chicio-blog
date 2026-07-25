@@ -171,3 +171,46 @@ the `<video>` via a ref instead of re-playing an `Audio()` object.
   type import in that file became unused too and was removed; the type itself is still alive via
   `neo-room-easter-egg` and `command-palette`, so only the LOCAL import in `easter-eggs-content.ts` went away,
   not the type definition in `src/types/search/search.ts`.
+
+## Round 4 (2026-07-25): spoon trigger moved from global keydown buffer to the chat input
+
+Retired the global `keydown` buffer entirely for the spoon egg (kung-fu's Konami listener is unaffected, still
+keydown-based). `spoon-phrase-buffer.ts` was replaced by a pure `spoon-phrase.ts` (`matchesSpoonPhrase` only,
+no buffer/accumulation logic — matching is now against one already-complete chat message string, not a rolling
+keystroke buffer) and a new `src/lib/easter-eggs/spoon-activation.ts` owns the cross-module signal:
+`spoonActivationEvent` (a `window` custom event name), `activateSpoonEasterEgg()` (dispatches it),
+`trySpoonPhrase(text)` (matches + activates, called from `useChatStore.handleSubmit` before `sendMessage` —
+if it matches, the message is swallowed and never sent to the LLM). `SpoonEasterEgg` still owns its own
+`use-spoon-easter-egg-store.ts` state machine, listening for the same `spoonActivationEvent` via
+`window.addEventListener`, decoupling the trigger surface (now chat, was keydown-anywhere) from the payoff.
+
+**The swallowed-message race (fixed same round, PR round 2)**: `SpoonEasterEgg` mounts through a client-only
+`dynamic(..., { ssr: false })` import inside `LayoutAdditionalContent`. On a cold first visit to `/chat`,
+`trySpoonPhrase` can match and dispatch `spoonActivationEvent` before that chunk has hydrated and attached its
+listener — `dispatchEvent` with no listener is a silent no-op, so the user's message vanishes with no warp.
+Fixed by adding a **pending-activation flag in `spoon-activation.ts`** (module-level `let pendingActivation`,
+`activateSpoonEasterEgg` sets it true before dispatching, `consumePendingSpoonActivation(): boolean` clears +
+returns it) and having the egg's mount effect **drain** it. Key design points, useful if this pattern recurs
+elsewhere:
+- The realtime event listener (`handleActivation`) ALSO calls `consumePendingSpoonActivation()` before
+  activating — not just the mount-drain path — because `window.dispatchEvent` is synchronous: if a listener IS
+  attached when `activateSpoonEasterEgg` fires, the flag must be cleared in that same synchronous call, or it
+  would incorrectly survive to be replayed on a future remount (e.g. navigate away from `/chat` and back).
+  Whichever path actually handles the activation (realtime listener or mount-time drain) is responsible for
+  clearing the flag; the flag is not cleared unconditionally at dispatch time.
+- The listener effect's deps are `[phase, reducedMotion]` (re-runs on every phase transition during a warp), so
+  a naive drain-check placed directly in that effect body would re-fire the drain logic on every phase change.
+  Guarded it with `const hasDrainedPendingActivation = useRef(false)` set inside the SAME effect (not a second
+  `useEffect` with different deps) — cheaper than splitting effects and avoids a second closure capturing a
+  possibly-stale `reducedMotion`/`phase` for a mount-once concern.
+- Tests must reset the module-level pending flag between cases (`consumePendingSpoonActivation()` in
+  `beforeEach`) since Vitest's default per-file (not per-test) module isolation means the flag persists across
+  test cases within the same file otherwise.
+- e2e (`e2e/chat.spec.ts`) had been asserting the warp via `.bg-black-alpha-75`, a shared Tailwind utility also
+  used by `design-system/atoms/effects/overlay`, `organism/menu`, and the videogames `game-card` — only worked
+  because Playwright strict-mode would otherwise error on ambiguous matches. Retargeted to the spoon-specific
+  `[style*="matrix-spoon-clip"]` (the `clipPath: url(#matrix-spoon-clip)` inline style on the warp's inner div,
+  keyed off the existing `SPOON_CLIP_ID` constant in `spoon-easter-egg.tsx` — no production change needed). Also
+  dropped a `page.waitForLoadState("networkidle")` that had been compensating for the same mount race the fix
+  above eliminates; verified by running the full e2e suite twice that submitting the phrase before the dynamic
+  chunk mounts still produces the warp without the wait.
