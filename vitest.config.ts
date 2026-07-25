@@ -18,10 +18,10 @@ export default defineConfig({
             provider: "v8",
             reporter: ["text", "json-summary"],
             thresholds: {
-                statements: 64,
-                branches: 59,
-                functions: 61,
-                lines: 65,
+                statements: 91,
+                branches: 84,
+                functions: 88,
+                lines: 92,
             },
             include: ["src/lib/**", "src/components/design-system/**"],
             // Matrix CG/canvas effects cannot run in jsdom, so they are excluded from
