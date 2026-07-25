@@ -145,23 +145,30 @@ relax the gate.
 
 ### Copy
 
-`src/content/easter-egg-hunt/content.mdx` currently tells readers to type the phrase "anywhere on a page" and
-twice warns them to stay out of inputs and search boxes. After this change both statements are false, and the
-second is the exact opposite of the truth. The riddle keeps its shape (a clue, not an instruction) and the
-`EggSolution` block carries the specifics, matching how the other three eggs are documented.
+The copy lives in the `there_is_no_spoon` entry of `easterEggHints` in
+`src/lib/content/easter-eggs/easter-eggs-content.ts`. It currently tells readers to type the phrase "anywhere on
+a page" and twice warns them to stay out of inputs and search boxes. After this change both statements are
+false, and the second is the exact opposite of the truth. The `crypticHint` keeps its shape (a clue, not an
+instruction) and `solutionSteps` carries the specifics, matching how the other three eggs are documented.
 
-Riddle:
+`crypticHint`:
 
 > A boy once warned Neo never to try bending it. Instead, only try to realize a simple truth about it. Then find
 > the one thing on this site that answers when you talk to it, and tell it that truth.
 
-Solution:
+`solutionSteps`:
 
 - Open the chat, from the menu or the command palette.
 - Type there is no spoon and send it.
 - Case and spacing do not matter, and the phrase can end a longer sentence.
 
-No change to `easterEggHuntIntroLines` or to the egg count.
+No change to `easterEggHuntIntroLines`, to the other three entries, or to the egg count.
+
+**Base-branch note.** This branch is cut from `origin/main`. On the unmerged `feat/content-section-factory`
+branch this same copy has already moved into `src/content/easter-egg-hunt/content.mdx` as `<EggCard>` and
+`<EggSolution>` MDX. That branch and this one will therefore conflict on the spoon copy: the resolution is to
+carry the two blocks above into the MDX and drop the TypeScript entry. Nothing else in this change is affected,
+since every other file it touches is identical on both branches.
 
 ## Files touched
 
@@ -173,7 +180,8 @@ No change to `easterEggHuntIntroLines` or to the egg count.
   `StateStore<SpoonEasterEggState>` with the same two fields.
 - `src/components/features/easter-eggs/spoon-easter-egg/spoon-easter-egg.tsx`: `z-40` becomes `z-60`.
 - `src/components/content/chat/chat/use-chat-store.ts`: one guard in `handleSubmit`.
-- `src/content/easter-egg-hunt/content.mdx`: riddle and solution rewritten.
+- `src/lib/content/easter-eggs/easter-eggs-content.ts`: the `there_is_no_spoon` entry's `crypticHint` and
+  `solutionSteps` rewritten.
 - `vitest.config.ts`: route the new activation test to the jsdom project (see Test plan).
 - Tests listed below.
 
