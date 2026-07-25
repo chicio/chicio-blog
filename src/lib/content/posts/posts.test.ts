@@ -406,22 +406,16 @@ describe("getPostsPaginationFor", () => {
         expect(result?.nextPageUrl).toBeUndefined();
     });
 
-    it("exposes the actual totalPages runtime field alongside the typed Pagination shape", () => {
-        const result = getPostsPaginationFor(1) as unknown as { totalPages: number };
-
-        expect(result.totalPages).toBe(3);
+    it("reports the total number of pages", () => {
+        expect(getPostsPaginationFor(1)?.totalPages).toBe(3);
     });
 
     it("returns undefined when the requested page is out of range", () => {
         expect(getPostsPaginationFor(4)).toBeUndefined();
     });
 
-    it("returns undefined when computing the pagination throws", () => {
-        mockGetAllContentFor.mockImplementation(() => {
-            throw new Error("content not found");
-        });
-
-        expect(getPostsPaginationFor(1)).toBeUndefined();
+    it("returns undefined for a page below the first one", () => {
+        expect(getPostsPaginationFor(0)).toBeUndefined();
     });
 });
 

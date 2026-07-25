@@ -5,6 +5,7 @@ import { slugs } from "@/types/configuration/slug";
 import { Pagination } from "@/types/content/pagination";
 import { generateTagSlug } from "../../tags/tags";
 import { createSection } from "../section";
+import { paginate } from "@/lib/pagination/paginate";
 import { authorSlugToId } from "../authors/author-slug";
 
 export { authorIdToSlug, authorSlugToId, generateAuthorSlug } from "../authors/author-slug";
@@ -41,41 +42,30 @@ export const groupArrayBy: <T>(array: T[], numberPerGroup: number) => T[][] = (
 
 export const getPostsTotalPages = () => Math.ceil(posts.list().length / postsPerPage)
 
-export const getPostsPaginationFor: (page: number) => Pagination | undefined = (
-  page: number,
-) => {
-  try {
-    const totalPages = getPostsTotalPages();
+/**
+ * The blog's own presentation policy on top of the generic `paginate`: the page's first post
+ * becomes the hero, the rest are paired for the two-column layout, and the prev/next hrefs follow
+ * the blog URL scheme (page 2 links back to the listing root, not to `/blog/posts/1`).
+ */
+export const getPostsPaginationFor = (page: number): Pagination | undefined => {
+  const postsPage = paginate(posts.list(), page, postsPerPage);
 
-    if (totalPages < page) {
-      throw new Error("Page does not exists");
-    }
-    const allPosts = posts.list();
-    const start = (page - 1) * postsPerPage;
-    const paginatedPosts = allPosts.slice(start, start + postsPerPage);
-    const previousPageUrlSlug =
-      page === 2
-        ? `${slugs.blog.home}`
-        : `${slugs.blog.blogPostsPage}/${page - 1}`;
-    const previousPageUrl = page > 1 ? previousPageUrlSlug : undefined;
-    const nextPageUrl =
-      page < totalPages ? `${slugs.blog.blogPostsPage}/${page + 1}` : undefined;
-
-    const postsGrouped = groupArrayBy(
-      paginatedPosts.slice(1, paginatedPosts.length),
-      2,
-    );
-
-    return {
-      launchPost: paginatedPosts[0],
-      postsGrouped,
-      previousPageUrl,
-      nextPageUrl,
-      totalPages,
-    };
-  } catch {
+  if (!postsPage) {
     return undefined;
   }
+
+  const previousPageUrl =
+    page === 2 ? slugs.blog.home : `${slugs.blog.blogPostsPage}/${page - 1}`;
+
+  return {
+    launchPost: postsPage.items[0],
+    postsGrouped: groupArrayBy(postsPage.items.slice(1), 2),
+    previousPageUrl: postsPage.hasPrevious ? previousPageUrl : undefined,
+    nextPageUrl: postsPage.hasNext
+      ? `${slugs.blog.blogPostsPage}/${page + 1}`
+      : undefined,
+    totalPages: postsPage.totalPages,
+  };
 };
 
 /**
