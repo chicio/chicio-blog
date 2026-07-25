@@ -4,6 +4,7 @@ import { siteMetadata } from "@/types/configuration/site-metadata";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { consoles } from "@/lib/content/videogames/videogames";
+import { siblingsOf } from "@/lib/content/siblings";
 import { Console } from "@/components/content/videogames/console";
 
 export async function generateMetadata({
@@ -46,7 +47,9 @@ export default async function VideogamesGamesForConsolePage({
     notFound();
   }
 
+  const siblings = siblingsOf(consoles.list(), console.slug.formatted);
+
   return (
-    <Console console={console} />
+    <Console console={console} previous={siblings?.previous} next={siblings?.next} />
   );
 }

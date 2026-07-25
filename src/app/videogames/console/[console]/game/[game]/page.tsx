@@ -3,7 +3,8 @@ import { NextVideogamesGameParameters } from "@/types/next/page-parameters";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { consoles, games } from "@/lib/content/videogames/videogames";
+import { consoles, games, getAllGamesForConsole } from "@/lib/content/videogames/videogames";
+import { siblingsOf } from "@/lib/content/siblings";
 import { Game } from "@/components/content/videogames/game";
 
 export async function generateMetadata({
@@ -44,5 +45,17 @@ export default async function VideogamesGamePage({
     notFound();
   }
 
-  return <Game game={game!} console={console} />;
+  const siblings = siblingsOf(
+    getAllGamesForConsole(console.frontmatter.metadata!.name),
+    game.slug.formatted,
+  );
+
+  return (
+    <Game
+      game={game}
+      console={console}
+      previous={siblings?.previous}
+      next={siblings?.next}
+    />
+  );
 }

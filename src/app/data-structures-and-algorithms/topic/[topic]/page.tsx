@@ -8,7 +8,7 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import {
   topics,
-  getDataStructuresAndAlgorithmsTopicWithNavigation,
+  getTopicWithSiblings,
 } from "@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms";
 import { Topic } from "@/components/content/data-structures-and-algorithms/topic";
 
@@ -45,16 +45,13 @@ export default async function DataStructureAndAlgorithmTopicPage({
   params,
 }: NextDataStructuresAndAlgorithmsParameters) {
   const receivedParameters = await params;
-  const topicNavigation =
-    getDataStructuresAndAlgorithmsTopicWithNavigation(receivedParameters);
+  const siblings = getTopicWithSiblings(receivedParameters);
 
-  if (!topicNavigation) {
+  if (!siblings) {
     notFound();
   }
 
-  const { topic, previousTopic, nextTopic } = topicNavigation;
+  const { current, previous, next } = siblings;
 
-  return (
-    <Topic topic={topic} previousTopic={previousTopic} nextTopic={nextTopic} />
-  );
+  return <Topic topic={current} previous={previous} next={next} />;
 }

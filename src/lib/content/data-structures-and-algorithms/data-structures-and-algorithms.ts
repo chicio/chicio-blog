@@ -1,5 +1,7 @@
 import { Content } from "@/types/content/content";
+import { Siblings } from "@/types/content/siblings";
 import { createSection } from "../section";
+import { siblingsOf } from "../siblings";
 import { slugs } from "@/types/configuration/slug";
 import { ExerciseMetadata } from "@/types/content/data-structures-and-algorithms";
 
@@ -20,26 +22,9 @@ export const dsaRoadmap = createSection({ slug: slugs.dataStructuresAndAlgorithm
 
 export const dsaExercisesList = createSection({ slug: slugs.dataStructuresAndAlgorithms.exercises });
 
-export const getDataStructuresAndAlgorithmsTopicWithNavigation =
- (params: Record<string, string>): { topic: Content; previousTopic?: Content; nextTopic?: Content } | undefined => {
-  const allTopics = topics.list()
-  const slugToFind = slugs.dataStructuresAndAlgorithms.topic.replace('[topic]', params.topic);
-  const topicIndex = allTopics.findIndex(t => t.slug.formatted === slugToFind);
-
-  if (topicIndex === -1) {
-    return undefined;
-  }
-
-  const topic = allTopics[topicIndex];
-  const previousTopic = topicIndex > 0 ? allTopics[topicIndex - 1] : undefined;
-  const nextTopic = topicIndex < allTopics.length - 1 ? allTopics[topicIndex + 1] : undefined;
-
-  return {
-    topic,
-    previousTopic,
-    nextTopic
-  }
-};
+/** A topic's siblings are all the other topics: topics sit at the top level of the course. */
+export const getTopicWithSiblings = (params: Record<string, string>): Siblings | undefined =>
+  siblingsOf(topics.list(), slugs.dataStructuresAndAlgorithms.topic.replace("[topic]", params.topic));
 
 export const getAllExercisesForTopic = (topic: string): Content<ExerciseMetadata>[] =>
   exercises.list().filter((e) => e.slug.params.topic === topic);

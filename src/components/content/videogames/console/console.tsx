@@ -4,7 +4,7 @@ import { siteMetadata } from "@/types/configuration/site-metadata";
 import { FC, PropsWithChildren } from "react";
 import { JsonLd } from "@/components/features/seo/jsond-ld";
 import { Content } from "@/types/content/content";
-import { consoles, getAllGamesForConsole } from "@/lib/content/videogames/videogames";
+import { getAllGamesForConsole } from "@/lib/content/videogames/videogames";
 import { ConsoleMetadata } from "@/types/content/videogames";
 import { ConsoleTimeInformation } from "@/components/content/videogames/console-time-information";
 import { IoGameControllerOutline } from "react-icons/io5";
@@ -16,16 +16,14 @@ import { ConsoleHeader } from "./console-header";
 
 interface ConsoleProps {
     console: Content<ConsoleMetadata>;
+    previous?: Content<ConsoleMetadata>;
+    next?: Content<ConsoleMetadata>;
 }
 
-export const Console: FC<PropsWithChildren<ConsoleProps>> = async ({ console }) => {
+export const Console: FC<PropsWithChildren<ConsoleProps>> = async ({ console, previous, next }) => {
     const { contentFileRelativePath: contentPath } = console;
     const { default: ConsoleContent } = await import(`@/content/${contentPath}/content.mdx`);
     const games = getAllGamesForConsole(console.frontmatter.metadata!.name);
-    const allConsoles = consoles.list();
-    const currentConsoleIndex = allConsoles.findIndex((c) => c.slug.formatted === console.slug.formatted);
-    const previousConsole = allConsoles[currentConsoleIndex - 1];
-    const nextConsole = allConsoles[currentConsoleIndex + 1];
 
     return (
         <ReadingContentPage
@@ -67,21 +65,9 @@ export const Console: FC<PropsWithChildren<ConsoleProps>> = async ({ console }) 
             <GamesGrid games={games} />
             <VideogameNavigation
                 previous={
-                    previousConsole
-                        ? {
-                              url: previousConsole.slug.formatted,
-                              title: previousConsole.frontmatter.metadata!.name,
-                          }
-                        : undefined
+                    previous ? { url: previous.slug.formatted, title: previous.frontmatter.metadata!.name } : undefined
                 }
-                next={
-                    nextConsole
-                        ? {
-                              url: nextConsole.slug.formatted,
-                              title: nextConsole.frontmatter.metadata!.name,
-                          }
-                        : undefined
-                }
+                next={next ? { url: next.slug.formatted, title: next.frontmatter.metadata!.name } : undefined}
             />
             <JsonLd
                 type="BlogPosting"
