@@ -15,19 +15,19 @@ const defaultImage = [absoluteUrl(siteMetadata.featuredImage)];
  * The registry is the record of what real content exists, so registering a section is all it takes for
  * its pages to be announced here.
  *
- * An indexed entry carries real content, so its own frontmatter supplies the date and image. The rest
- * are aggregate or config-driven pages with no date of their own, and report the build time.
+ * An entry that has content takes its date and image from that content's own frontmatter. The rest are
+ * aggregate pages with no date or image of their own, and report the build time.
  */
 const contentUrls = (): MetadataRoute.Sitemap =>
     contentRegistry.flatMap((entry) => {
-        const indexed = entry.indexed?.();
+        const content = entry.content?.();
 
-        if (indexed) {
-            return indexed.map((content) => ({
-                url: absoluteUrl(content.slug.formatted),
-                lastModified: new Date(content.frontmatter.date.formatted),
+        if (content) {
+            return content.map((item) => ({
+                url: absoluteUrl(item.slug.formatted),
+                lastModified: new Date(item.frontmatter.date.formatted),
                 priority: 1,
-                images: [absoluteUrl(content.frontmatter.image)],
+                images: [absoluteUrl(item.frontmatter.image)],
             }));
         }
 
@@ -36,7 +36,7 @@ const contentUrls = (): MetadataRoute.Sitemap =>
             lastModified: new Date(),
             changeFrequency: "yearly" as const,
             priority: 1,
-            images: entry.sitemapImage ? [absoluteUrl(entry.sitemapImage)] : defaultImage,
+            images: defaultImage,
         }));
     });
 

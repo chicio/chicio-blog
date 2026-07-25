@@ -1,11 +1,12 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
-const { mockGetTags, mockGetPostsTotalPages, mockGetAuthorsWithPosts, mockIndexed, mockCollectionParams } = vi.hoisted(
+const { mockGetTags, mockGetPostsTotalPages, mockGetAuthorsWithPosts, mockContent, mockGalleryContent, mockCollectionParams } = vi.hoisted(
     () => ({
         mockGetTags: vi.fn(),
         mockGetPostsTotalPages: vi.fn(),
         mockGetAuthorsWithPosts: vi.fn(),
-        mockIndexed: vi.fn(),
+        mockContent: vi.fn(),
+        mockGalleryContent: vi.fn(),
         mockCollectionParams: vi.fn(),
     }),
 );
@@ -24,8 +25,8 @@ vi.mock("@/lib/content/registry", () => ({
     contentRegistry: [
         { slug: "/", markdown: vi.fn() },
         { slug: "/plain-page", markdown: vi.fn() },
-        { slug: "/gallery", markdown: vi.fn(), sitemapImage: "/art-featured.jpg" },
-        { slug: "/things/[thing]", markdown: vi.fn(), params: mockCollectionParams, indexed: mockIndexed },
+        { slug: "/gallery", markdown: vi.fn(), content: mockGalleryContent },
+        { slug: "/things/[thing]", markdown: vi.fn(), params: mockCollectionParams, content: mockContent },
     ],
 }));
 
@@ -42,7 +43,13 @@ beforeEach(() => {
     mockGetPostsTotalPages.mockReturnValue(0);
     mockGetAuthorsWithPosts.mockReturnValue([]);
     mockCollectionParams.mockReturnValue([{ thing: "one" }]);
-    mockIndexed.mockReturnValue([
+    mockGalleryContent.mockReturnValue([
+        {
+            slug: { formatted: "/gallery", params: {} },
+            frontmatter: { date: { formatted: "2018-11-15" }, image: "/media/content/art/featured.png", title: "Art" },
+        },
+    ]);
+    mockContent.mockReturnValue([
         {
             slug: { formatted: "/things/one", params: { thing: "one" } },
             frontmatter: { date: { formatted: "2024-03-04" }, image: "/one.jpg", title: "One" },
@@ -60,7 +67,7 @@ describe("sitemap", () => {
             expect(findEntry("/plain-page")).toBeDefined();
         });
 
-        it("takes the date and image of an indexed item from its own frontmatter", () => {
+        it("takes the date and image of a content item from its own frontmatter", () => {
             const entry = findEntry("/things/one");
 
             expect(entry?.lastModified).toEqual(new Date("2024-03-04"));
@@ -71,14 +78,18 @@ describe("sitemap", () => {
             expect(findEntry("/plain-page")?.images).toEqual([url(siteMetadata.featuredImage)]);
         });
 
-        it("honours an entry's own sitemap image", () => {
-            expect(findEntry("/gallery")?.images).toEqual([url("/art-featured.jpg")]);
+        it("takes a page's image from its frontmatter rather than from a second declaration", () => {
+            expect(findEntry("/gallery")?.images).toEqual([url("/media/content/art/featured.png")]);
         });
 
-        it("expands an indexed collection from its content rather than from its params", () => {
+        it("takes a page's date from its frontmatter, not the build time", () => {
+            expect(findEntry("/gallery")?.lastModified).toEqual(new Date("2018-11-15"));
+        });
+
+        it("expands a collection from its content rather than from its params", () => {
             sitemap();
 
-            expect(mockIndexed).toHaveBeenCalled();
+            expect(mockContent).toHaveBeenCalled();
             expect(mockCollectionParams).not.toHaveBeenCalled();
         });
     });

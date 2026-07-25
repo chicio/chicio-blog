@@ -4,7 +4,6 @@ export const siteMetadata = {
     description: "Official blog chicio coding. Property of Fabrizio Duroni. Main skills: mobile application development, computer graphics, web development.",
     siteUrl: "https://www.fabrizioduroni.it",
     featuredImage: "/chicio-coding-feature-graphic.jpg",
-    featuredArtImage: "/chicio-art-featured.png",
     author: "Fabrizio Duroni",
     contacts: {
         links: {
