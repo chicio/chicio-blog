@@ -13,7 +13,7 @@ import {
 } from "./data-structures-and-algorithms/data-structures-and-algorithms-markdown";
 import { posts } from "./posts/posts";
 import { blogListingMarkdown, blogPostMarkdown, homepageMarkdown } from "./posts/posts-markdown";
-import { consoles, games } from "./videogames/videogames";
+import { consoles, games, videogamesHome } from "./videogames/videogames";
 import { consoleMarkdown, gameMarkdown, videogamesMarkdown } from "./videogames/videogames-markdown";
 import { contactMarkdown } from "./contact/contact-markdown";
 import { blogStatsMarkdown } from "@/lib/blog-stats/blog-stats-markdown";
@@ -90,7 +90,7 @@ export const contentRegistry: ContentRegistryEntry[] = [
         content: singleItem(dsaExercisesList),
         searchable: true,
     },
-    { slug: slugs.videogames.home, markdown: videogamesMarkdown },
+    { slug: slugs.videogames.home, markdown: videogamesMarkdown, content: singleItem(videogamesHome), searchable: true },
     {
         slug: slugs.blog.blogPost,
         params: paramsOf(posts),

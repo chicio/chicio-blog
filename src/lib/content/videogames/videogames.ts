@@ -3,6 +3,9 @@ import { slugs } from "@/types/configuration/slug";
 import { ConsoleMetadata, GameMetadata } from "@/types/content/videogames";
 import { createSection } from "../section";
 
+/** The videogames landing page itself: its own MDX carries the section intro and its metadata. */
+export const videogamesHome = createSection({ slug: slugs.videogames.home });
+
 export const consoles = createSection<ConsoleMetadata>({
   slug: slugs.videogames.console,
   sort: (console, anotherConsole) =>
