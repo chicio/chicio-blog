@@ -99,6 +99,7 @@ describe("contentRegistry", () => {
                 [
                     slugs.aboutMe,
                     slugs.easterEggHunt,
+                    slugs.videogames.home,
                     slugs.dataStructuresAndAlgorithms.roadmap,
                     slugs.dataStructuresAndAlgorithms.exercises,
                     slugs.blog.blogPost,
@@ -111,11 +112,9 @@ describe("contentRegistry", () => {
         });
 
         it("does not index the aggregate listing pages, whose content lives on the pages they link to", () => {
-            [slugs.blog.home, slugs.blog.stats, slugs.videogames.home, slugs.dataStructuresAndAlgorithms.home, "/"].forEach(
-                (slug) => {
-                    expect(entryFor(slug)?.searchable).toBeUndefined();
-                },
-            );
+            [slugs.blog.home, slugs.blog.stats, slugs.dataStructuresAndAlgorithms.home, "/"].forEach((slug) => {
+                expect(entryFor(slug)?.searchable).toBeUndefined();
+            });
         });
 
         it("keeps mcp, cookie-policy and art out of search while still knowing their content", () => {
