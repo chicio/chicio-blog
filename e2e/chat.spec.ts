@@ -58,12 +58,11 @@ test.describe("Chat page", () => {
         });
 
         await page.goto("/chat");
-        await page.waitForLoadState("networkidle");
         const input = page.getByRole("textbox");
         await input.fill("there is no spoon");
         await page.keyboard.press("Enter");
 
-        await expect(page.locator(".bg-black-alpha-75")).toBeVisible({ timeout: 10000 });
+        await expect(page.locator('[style*="matrix-spoon-clip"]')).toBeVisible({ timeout: 10000 });
         await expect(input).toHaveValue("");
         expect(apiCalled).toBe(false);
     });
