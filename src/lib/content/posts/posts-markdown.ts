@@ -1,7 +1,7 @@
 import { posts, getTags } from "@/lib/content/posts/posts";
+import { contentBodyMarkdown } from "@/lib/mdx/content-body-markdown";
 import { contentItemMarkdown } from "@/lib/mdx/content-item-markdown";
 import { markdownDocument } from "@/lib/mdx/markdown-document";
-import { mdxToMarkdown } from "@/lib/mdx/mdx-to-markdown";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { slugs } from "@/types/configuration/slug";
 
@@ -56,10 +56,10 @@ ${tags.map((tag) => `- [${tag.tagValue}](${siteMetadata.siteUrl}${slugs.blog.tag
 
 export const blogPostMarkdown = contentItemMarkdown(
     posts,
-    ({ frontmatter, content }) => `**Author:** ${frontmatter.authors.map((a) => a.name).join(", ")}
-**Date:** ${frontmatter.date.formatted}
-**Tags:** ${frontmatter.tags.join(", ")}
+    (post) => `**Author:** ${post.frontmatter.authors.map((a) => a.name).join(", ")}
+**Date:** ${post.frontmatter.date.formatted}
+**Tags:** ${post.frontmatter.tags.join(", ")}
 
-${mdxToMarkdown(content)}
+${contentBodyMarkdown(post)}
 `,
 );

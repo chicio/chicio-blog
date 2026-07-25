@@ -11,7 +11,6 @@ import {
     dsaExerciseMarkdown,
     dsaExercisesListMarkdown,
     dsaMarkdown,
-    dsaRoadmapMarkdown,
     dsaTopicMarkdown,
 } from "./data-structures-and-algorithms/data-structures-and-algorithms-markdown";
 import { easterEggHunt } from "./easter-eggs/easter-eggs";
@@ -72,7 +71,7 @@ export const contentRegistry: ContentRegistryEntry[] = [
     { slug: slugs.dataStructuresAndAlgorithms.home, markdown: dsaMarkdown },
     {
         slug: slugs.dataStructuresAndAlgorithms.roadmap,
-        markdown: dsaRoadmapMarkdown,
+        markdown: () => mdxPageMarkdown(slugs.dataStructuresAndAlgorithms.roadmap),
         indexed: singleItem(dsaRoadmap),
     },
     {

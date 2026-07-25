@@ -30,7 +30,6 @@ import {
     dsaExerciseMarkdown,
     dsaExercisesListMarkdown,
     dsaMarkdown,
-    dsaRoadmapMarkdown,
     dsaTopicMarkdown,
 } from "./data-structures-and-algorithms-markdown";
 import { siteMetadata } from "@/types/configuration/site-metadata";
@@ -70,29 +69,16 @@ describe("data-structures-and-algorithms-markdown", () => {
         });
     });
 
-    describe("dsaRoadmapMarkdown", () => {
-        it("renders the canonical header from the roadmap frontmatter", () => {
-            mockSingleRoadmap.mockReturnValue({
-                frontmatter: { title: "Roadmap", description: "Course roadmap" },
-                content: "Roadmap body.",
-            });
-
-            const result = dsaRoadmapMarkdown();
-
-            expect(result).toContain("# Roadmap");
-            expect(result).toContain("> Course roadmap");
-            expect(result).toContain("Roadmap body.");
-        });
-    });
-
     describe("dsaExercisesListMarkdown", () => {
         it("renders the canonical header with an exercises section", () => {
             mockSingleExercisesList.mockReturnValue({
                 frontmatter: { title: "Exercises", description: "All exercises" },
+                slug: { formatted: slugs.dataStructuresAndAlgorithms.exercises, params: {} },
+                content: "",
             });
             mockListExercises.mockReturnValue([exercise]);
 
-            const result = dsaExercisesListMarkdown();
+            const result = dsaExercisesListMarkdown({});
 
             expect(result).toContain("# Exercises");
             expect(result).toContain("## All Exercises (1)");
@@ -118,6 +104,16 @@ describe("data-structures-and-algorithms-markdown", () => {
             expect(result).toContain("Graph body.");
             expect(result).toContain("## Exercises");
             expect(result).toContain("[Word Ladder]");
+        });
+
+        it("renders the title once when the MDX body opens with its own matching heading", () => {
+            mockSingleTopic.mockReturnValue({ ...topic, content: "# Graph\n\nGraph body." });
+            mockGetAllExercisesForTopic.mockReturnValue([]);
+
+            const result = dsaTopicMarkdown({ topic: "graph" });
+
+            expect(result?.match(/^# Graph$/gm)).toHaveLength(1);
+            expect(result).toContain("Graph body.");
         });
     });
 
