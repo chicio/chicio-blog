@@ -68,6 +68,7 @@
 - [Terminal Navigation Part 3](feature_terminal_navigation.md) — REVERSED Part 2: /terminal boot link/sticky URL removed entirely, palette-only in-place open, no URL change ever (2026-07-24)
 
 ## Feedback
+- [Review-fix workflow](feedback_review_fix_disk_and_reset_soft.md) — git reset --soft path-restaging to reshape commits; disk-full is often transient (retry, don't clean system caches); e2e hangs on a long-lived ad hoc port are stale-server artifacts, not regressions — verify with a fresh port + origin/main control
 - [PWA & State Patterns](feedback_pwa_patterns.md) — useSyncExternalStore for localStorage state, consent-gated UI, banner/error page alignment rules
 - [Worktree git stash hazard](feedback_worktree_git_stash_hazard.md) — never `git stash` inside a pipeline worktree, refs/stash is shared across all worktrees
 - [Prettier CLI 2-space regression](feature_markdown_generalization.md) — never run raw `npx prettier --write`, it reformats to 2-space against this repo's 4-space convention (no format script/tabWidth config; 4-space comes from VS Code's editor.tabSize fallback)
