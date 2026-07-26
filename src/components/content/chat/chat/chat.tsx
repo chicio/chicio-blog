@@ -27,9 +27,9 @@ export const Chat: FC = () => {
                     <>
                         <BrandHeader big={false} />
                         <PageTitle>
-                            <ParagraphTitleWithIcon icon={<ChatIcon />}>Chat with Fabrizio</ParagraphTitleWithIcon>
+                            <ParagraphTitleWithIcon icon={<ChatIcon />}>Ask the Oracle</ParagraphTitleWithIcon>
                         </PageTitle>
-                        <p>Ask me anything about my work, projects, and software development expertise</p>
+                        <p>Ask anything about my work, projects and code.</p>
                     </>
                 )}
                 <div className="hide-scrollbar pb-[calc(140px+env(safe-area-inset-bottom,0px))] flex flex-1 flex-col gap-3 overflow-visible pt-6 sm:pt-10 sm:pb-[140px]">
