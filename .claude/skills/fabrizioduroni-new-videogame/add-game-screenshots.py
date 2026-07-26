@@ -514,7 +514,7 @@ def persist_screenshots(
             print(f"  [{idx}/{len(selected)}] Would download from {candidate.source_name}")
 
         image_web_path = (
-            f"/images/content/videogames/console/{console_slug}/game/{game_slug}/gameplay/{next_index}.jpg"
+            f"/media/content/videogames/console/{console_slug}/game/{game_slug}/gameplay/{next_index}.jpg"
         )
         # Determine attribution based on provider
         if candidate.provider == "igdb":
@@ -816,7 +816,7 @@ def process_game_folder(
     game_title = game_metadata.title
     print(f"📄 Title: {game_title}")
 
-    public_game_folder = game_folder / "images"
+    public_game_folder = game_folder / "media"
     gameplay_folder = public_game_folder / "gameplay"
     key = f"{console_slug}/{game_slug}"
 
