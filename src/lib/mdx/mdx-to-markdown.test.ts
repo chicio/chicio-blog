@@ -182,6 +182,15 @@ Some prose after the heading.
         });
     });
 
+    describe("components whose generator renders their data", () => {
+        it("emits nothing for them, rather than a placeholder pointing at the page", () => {
+            const result = mdxToMarkdown(`intro\n\n<VideogamesStats />\n\n<VideogamesCatalog />`);
+
+            expect(result).toContain("intro");
+            expect(result).not.toContain("[interactive:");
+        });
+    });
+
     describe("interactive component placeholder (generic fallback, no hardcoded name list)", () => {
         it("replaces a brand-new, never-seen-before self-closing component with an 'open the page' placeholder", () => {
             const mdx = `<SomeFutureVisualizer />`;

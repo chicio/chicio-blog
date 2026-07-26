@@ -2,18 +2,19 @@ import {
     consoles,
     games,
     getAllGamesForConsole,
+    videogamesHome,
 } from "@/lib/content/videogames/videogames";
 import { contentBodyMarkdown } from "@/lib/mdx/content-body-markdown";
 import { contentItemMarkdown } from "@/lib/mdx/content-item-markdown";
-import { markdownDocument } from "@/lib/mdx/markdown-document";
 import { siteMetadata } from "@/types/configuration/site-metadata";
-import { slugs } from "@/types/configuration/slug";
 
-export const videogamesMarkdown = (): string => {
+export const videogamesMarkdown = contentItemMarkdown(videogamesHome, (home) => {
     const allConsoles = consoles.list();
     const allGames = games.list();
 
-    const body = `## Consoles (${allConsoles.length})
+    return `${contentBodyMarkdown(home)}
+
+## Consoles (${allConsoles.length})
 
 ${allConsoles.map((c) => `- [${c.frontmatter.title}](${siteMetadata.siteUrl}${c.slug.formatted}) (${c.frontmatter.metadata?.releaseYear ?? "unknown"}) — ${c.frontmatter.description}`).join("\n")}
 
@@ -21,14 +22,7 @@ ${allConsoles.map((c) => `- [${c.frontmatter.title}](${siteMetadata.siteUrl}${c.
 
 ${allGames.map((g) => `- [${g.frontmatter.title}](${siteMetadata.siteUrl}${g.slug.formatted}) (${g.frontmatter.metadata?.console ?? "unknown"}, ${g.frontmatter.metadata?.releaseYear ?? "unknown"}) — ${g.frontmatter.description}`).join("\n")}
 `;
-
-    return markdownDocument({
-        title: `Videogame Collection — ${siteMetadata.title}`,
-        description: "Personal videogame collection by Fabrizio Duroni.",
-        slug: slugs.videogames.home,
-        body,
-    });
-};
+});
 
 export const consoleMarkdown = contentItemMarkdown(consoles, (consoleItem) => {
     const { frontmatter } = consoleItem;

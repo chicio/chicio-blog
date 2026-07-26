@@ -1,18 +1,25 @@
 import { describe, it, expect, vi } from "vitest";
 
-const { mockListConsoles, mockListGames, mockSingleConsole, mockSingleGame, mockGetAllGamesForConsole } = vi.hoisted(
-    () => ({
-        mockListConsoles: vi.fn(),
-        mockListGames: vi.fn(),
-        mockSingleConsole: vi.fn(),
-        mockSingleGame: vi.fn(),
-        mockGetAllGamesForConsole: vi.fn(),
-    }),
-);
+const {
+    mockListConsoles,
+    mockListGames,
+    mockSingleConsole,
+    mockSingleGame,
+    mockSingleVideogamesHome,
+    mockGetAllGamesForConsole,
+} = vi.hoisted(() => ({
+    mockListConsoles: vi.fn(),
+    mockListGames: vi.fn(),
+    mockSingleConsole: vi.fn(),
+    mockSingleGame: vi.fn(),
+    mockSingleVideogamesHome: vi.fn(),
+    mockGetAllGamesForConsole: vi.fn(),
+}));
 
 vi.mock("@/lib/content/videogames/videogames", () => ({
     consoles: { list: mockListConsoles, single: mockSingleConsole },
     games: { list: mockListGames, single: mockSingleGame },
+    videogamesHome: { single: mockSingleVideogamesHome },
     getAllGamesForConsole: mockGetAllGamesForConsole,
 }));
 
@@ -52,10 +59,16 @@ describe("videogames-markdown", () => {
         it("renders the canonical header with consoles and games sections", () => {
             mockListConsoles.mockReturnValue([consoleContent]);
             mockListGames.mockReturnValue([gameContent]);
+            mockSingleVideogamesHome.mockReturnValue({
+                frontmatter: { title: "My Videogames Collection", description: "The collection" },
+                slug: { formatted: slugs.videogames.home, params: {} },
+                content: "Collection intro.",
+            });
 
-            const result = videogamesMarkdown();
+            const result = videogamesMarkdown({});
 
-            expect(result).toContain(`# Videogame Collection — ${siteMetadata.title}`);
+            expect(result).toContain("# My Videogames Collection");
+            expect(result).toContain("Collection intro.");
             expect(result).toContain(`**URL:** ${siteMetadata.siteUrl}${slugs.videogames.home}`);
             expect(result).toContain("## Consoles (1)");
             expect(result).toContain("## Games (1)");
