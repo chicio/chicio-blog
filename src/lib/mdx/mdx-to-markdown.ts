@@ -158,8 +158,19 @@ const transformEggSolution = (node: MdxJsxElement): AnyContent[] => [
 const transformEasterEggIntroTerminal = (): AnyContent[] =>
     easterEggHuntIntroLines.map((line) => paragraphNode([textNode(line)]));
 
+/**
+ * Components whose information the surrounding generator already renders as markdown. The videogames
+ * page lists its consoles and games straight after placing the browser, so an "open the page"
+ * placeholder there would be noise rather than a hint.
+ */
+const componentsRenderedByTheirGenerator = new Set(["VideogamesStats", "VideogamesCatalog"]);
+
 const transformJsxElement = (node: MdxJsxElement): AnyContent[] => {
     const { name } = node;
+
+    if (name && componentsRenderedByTheirGenerator.has(name)) {
+        return [];
+    }
 
     if (name === "ImageCarousel") {
         return transformImageCarousel(node);
