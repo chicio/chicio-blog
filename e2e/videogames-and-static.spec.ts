@@ -77,6 +77,8 @@ test.describe("Static pages smoke checks", () => {
         const response = await page.goto("/clowns/photos");
         expect(response?.status()).toBe(200);
         await expect(page.locator("body")).toBeVisible();
+        await expect(page.getByText("CHICIO CODING")).toBeVisible();
+        await expect(page.getByRole("contentinfo")).toBeVisible();
     });
 
     test("/cookie-policy loads and shows the policy heading", async ({ page }) => {
