@@ -23,9 +23,9 @@ export const Chat: FC = () => {
         <>
             <Menu navHrefs={menuNavHrefs} />
             <ContentContainer>
-                <BrandHeader big={false} />
                 {!state.hasMessages && (
                     <>
+                        <BrandHeader big={false} />
                         <PageTitle>
                             <ParagraphTitleWithIcon icon={<ChatIcon />}>Chat with Fabrizio</ParagraphTitleWithIcon>
                         </PageTitle>
