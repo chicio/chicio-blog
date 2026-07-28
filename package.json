@@ -112,7 +112,7 @@
     "prettier-plugin-tailwindcss": "^0.8.1",
     "release-it": "^20.2.0",
     "typescript": "^5",
-    "vitest": "^4.1.9"
+    "vitest": "^4.1.10"
   },
   "engines": {
     "node": "24.x"
