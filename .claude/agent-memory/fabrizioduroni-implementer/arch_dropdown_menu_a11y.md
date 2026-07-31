@@ -61,3 +61,18 @@ Menu/DropdownMenu again:
   e2e spec passes with zero cookie-banner handling, verified across 4 repeated runs. If you ever see
   a "banner intercepts pointer events" e2e failure again in this menu, suspect panel height/margin
   regression before reaching for a test-side dismiss-the-banner workaround.
+- **Post-review follow-up (2026-07-31, same PR): panel width unified to `xs:w-60` (240px).** Content-sized
+  `xs:w-auto` produced three different panel widths (Blog 158px, Explore 228px driven by "Artificial
+  Intelligence", The Author 159px). Fixed to `xs:w-60` (drops the now-redundant base `w-auto`, keeps
+  `min-w-max` as a safety floor so a future longer label grows past 240px instead of wrapping/clipping).
+  240px was chosen to clear the 228px measured content by 12px and to match the `md:w-60` command-palette
+  search button in the same menu bar. `xs` is a **custom 576px breakpoint** (`--breakpoint-xs` in
+  `globals.css`, not a Tailwind default) — at `xs`+ the panel is `absolute left-0 right-0`, so an explicit
+  width over-constrains it and `right-0` is dropped (LTR anchors left at 240px; intentional). Below `xs`
+  the panel is in-flow inside the `w-80` (320px) mobile trigger column, unaffected by this change.
+  `toHaveClass` in jsdom cannot prove this (no CSS engine) — added real Playwright bounding-box assertions
+  in `e2e/homepage.spec.ts` that open each of the three dropdowns and assert `boundingBox().width === 240`,
+  assert Explore's "DSA" and "Artificial Intelligence" group-header spans render the same height (proof
+  of no line-wrap at 240px), and assert the mobile panel (opened via the hamburger, located as
+  `svg.size-9` since `HamburgerMenu` has no role/aria-label — a pre-existing a11y gap, left alone as
+  out of scope) stays 320px.

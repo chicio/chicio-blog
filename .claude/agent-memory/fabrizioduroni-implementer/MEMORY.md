@@ -68,7 +68,7 @@
 - [Terminal Navigation Part 3](feature_terminal_navigation.md) — REVERSED Part 2: /terminal boot link/sticky URL removed entirely, palette-only in-place open, no URL change ever (2026-07-24)
 
 ## Features (continued 11)
-- [DropdownMenu A11y & Grouping](arch_dropdown_menu_a11y.md) — groups-only nested-list, role=menu/aria-haspopup removed, Escape-to-refocus in store; globals.css re-adds bulleted ul/li styling AFTER preflight (always check it), needs explicit list-none/role=list resets; panel height regressions masquerade as e2e cookie-banner flakiness (2026-07-31)
+- [DropdownMenu A11y & Grouping](arch_dropdown_menu_a11y.md) — groups-only nested-list, role=menu/aria-haspopup removed, Escape-to-refocus in store; globals.css re-adds bulleted ul/li styling AFTER preflight (always check it), needs explicit list-none/role=list resets; panel height regressions masquerade as e2e cookie-banner flakiness; panel width unified to fixed xs:w-60/240px, real Playwright boundingBox assertions added (2026-07-31)
 
 ## Feedback
 - [Review-fix workflow](feedback_review_fix_disk_and_reset_soft.md) — git reset --soft path-restaging to reshape commits; disk-full is often transient (retry, don't clean system caches); e2e hangs on a long-lived ad hoc port are stale-server artifacts, not regressions — verify with a fresh port + origin/main control
