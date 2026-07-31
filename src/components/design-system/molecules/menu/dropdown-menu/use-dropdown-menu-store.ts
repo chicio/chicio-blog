@@ -10,13 +10,14 @@ interface DropdownMenuState {
     selected: boolean;
     shouldReduceMotions: boolean;
     buttonRef: React.RefObject<HTMLButtonElement | null>;
-    id: string;
+    panelId: string;
 }
 
 interface DropdownMenuEffects {
     toggleOpen: () => void;
     handleBlur: (e: React.FocusEvent<HTMLButtonElement | HTMLDivElement>) => void;
     handleKeyDown: (e: React.KeyboardEvent<HTMLDivElement>) => void;
+    getGroupId: (index: number) => string;
 }
 
 export const useDropdownMenuStore = (hasSelected: boolean): ComponentStore<DropdownMenuState, DropdownMenuEffects> => {
@@ -24,6 +25,7 @@ export const useDropdownMenuStore = (hasSelected: boolean): ComponentStore<Dropd
     const [open, setOpen] = useState(false);
     const buttonRef = useRef<HTMLButtonElement>(null);
     const id = useId();
+    const panelId = `${id}-panel`;
 
     useEffect(() => {
         if (!open) {
@@ -43,14 +45,19 @@ export const useDropdownMenuStore = (hasSelected: boolean): ComponentStore<Dropd
     };
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+        if (!open) {
+            return;
+        }
         if (e.key === "Escape") {
             setOpen(false);
             buttonRef.current?.focus();
         }
     };
 
+    const getGroupId = (index: number) => `${id}-group-${index}`;
+
     return {
-        state: { open, selected: hasSelected, shouldReduceMotions, buttonRef, id },
-        effects: { toggleOpen, handleBlur, handleKeyDown },
+        state: { open, selected: hasSelected, shouldReduceMotions, buttonRef, panelId },
+        effects: { toggleOpen, handleBlur, handleKeyDown, getGroupId },
     };
 };

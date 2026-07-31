@@ -34,9 +34,8 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
 }) => {
     const hasSelected = items.flatMap((group) => group.items).some((item) => item.selected);
     const { state, effects } = useDropdownMenuStore(hasSelected);
-    const { open, selected, shouldReduceMotions, buttonRef, id } = state;
-    const { toggleOpen, handleBlur, handleKeyDown } = effects;
-    const panelId = `${id}-panel`;
+    const { open, selected, shouldReduceMotions, buttonRef, panelId } = state;
+    const { toggleOpen, handleBlur, handleKeyDown, getGroupId } = effects;
 
     return (
         <div
@@ -65,13 +64,14 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
                         key="dropdown-menu"
                         id={panelId}
                         aria-label={label}
-                        className={`glow-container ${shouldReduceMotions ? "xs:bg-general-background" : "xs:bg-general-background/90"} relative mt-2 w-auto min-w-max rounded-xl py-2 xs:absolute xs:right-0 xs:left-0 xs:w-auto`}
+                        role="list"
+                        className={`glow-container ${shouldReduceMotions ? "xs:bg-general-background" : "xs:bg-general-background/90"} relative mt-2 w-auto min-w-max list-none m-0 p-0 rounded-xl py-2 xs:absolute xs:right-0 xs:left-0 xs:w-auto`}
                         tabIndex={-1}
                     >
                         {items.map((group, idx) => {
-                            const groupId = `${id}-group-${idx}`;
+                            const groupId = getGroupId(idx);
                             return (
-                                <li key={group.label + idx}>
+                                <li key={group.label + idx} className="mb-0 pl-0 before:content-none">
                                     {idx > 0 && (
                                         <div aria-hidden="true" className="border-secondary-text/30 mx-3 border-t" />
                                     )}
@@ -81,9 +81,12 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
                                     >
                                         {group.label}
                                     </span>
-                                    <ul aria-labelledby={groupId}>
+                                    <ul aria-labelledby={groupId} role="list" className="list-none m-0 p-0">
                                         {group.items.map((item, itemIdx) => (
-                                            <li key={item.label + itemIdx}>
+                                            <li
+                                                key={item.label + itemIdx}
+                                                className="mb-0 pl-0 before:content-none"
+                                            >
                                                 <MenuItem
                                                     to={item.to}
                                                     selected={item.selected ?? false}

@@ -119,5 +119,34 @@ describe("DropdownMenu", () => {
             expect(screen.queryByRole("list", { name: "Nav" })).not.toBeInTheDocument();
             expect(button).toHaveFocus();
         });
+
+        it("does not close or steal focus when Escape is pressed while already closed", async () => {
+            render(<DropdownMenu label="Nav" items={items} />);
+            const button = screen.getByRole("button", { name: /Nav/ });
+            button.focus();
+            await userEvent.keyboard("{Escape}");
+            expect(button).toHaveFocus();
+            expect(screen.queryByRole("list", { name: "Nav" })).not.toBeInTheDocument();
+        });
+
+        it("hides the between-group divider from assistive tech", async () => {
+            const { container } = render(<DropdownMenu label="Nav" items={items} />);
+            await userEvent.click(screen.getByRole("button", { name: /Nav/ }));
+            const divider = container.querySelector(".border-secondary-text\\/30");
+            expect(divider).toHaveAttribute("aria-hidden", "true");
+        });
+
+        it("resets list styling on every ul/li level so no browser bullet or indent leaks through", async () => {
+            render(<DropdownMenu label="Nav" items={items} />);
+            await userEvent.click(screen.getByRole("button", { name: /Nav/ }));
+            const panel = screen.getByRole("list", { name: "Nav" });
+            expect(panel).toHaveClass("list-none");
+            const sectionOneList = screen.getByRole("list", { name: "Section one" });
+            expect(sectionOneList).toHaveClass("list-none");
+            const groupItem = screen.getByText("Section one").closest("li");
+            expect(groupItem).toHaveClass("pl-0", "mb-0", "before:content-none");
+            const linkItem = screen.getByRole("link", { name: "About Me" }).closest("li");
+            expect(linkItem).toHaveClass("pl-0", "mb-0", "before:content-none");
+        });
     });
 });
