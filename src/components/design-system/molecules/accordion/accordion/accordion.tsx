@@ -33,7 +33,7 @@ export const Accordion: FC<AccordionProps> = ({
                 aria-expanded={isOpen}
                 aria-controls={panelId}
                 onClick={toggle}
-                className="text-primary-text flex w-full cursor-pointer items-center justify-between bg-transparent px-2 text-left"
+                className="text-primary-text flex w-full cursor-pointer items-center justify-between bg-transparent px-2 py-1.5 text-left"
             >
                 <div className="flex-1">{title}</div>
                 <MotionDiv

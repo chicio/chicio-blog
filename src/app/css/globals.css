@@ -395,6 +395,17 @@
         @apply scroll-mt-20;
     }
 
+    /*
+        Applied to <html> (the document's own scrolling box) by the TableOfContents organism, gated on the
+        app's own motion setting (never a permanent site-wide rule, and never the OS
+        prefers-reduced-motion query, which this codebase intentionally doesn't read). Native fragment
+        navigation (a plain `<a href="#id">`, no JS-driven scrollIntoView/history.pushState) then performs
+        the actual jump, animated by this property alone.
+    */
+    html.reading-companion-smooth-scroll {
+        scroll-behavior: smooth;
+    }
+
     /* Make anchor tags inherit heading styles */
     #reading-content-container h1 a,
     #reading-content-container h2 a,
