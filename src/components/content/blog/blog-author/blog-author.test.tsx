@@ -26,6 +26,7 @@ const makePost = (slug: string): Content =>
         readingTime: { text: "5 min read", minutes: 5, time: 300000, words: 1000 },
         contentFileRelativePath: "",
         content: "",
+        headings: [],
     }) as Content;
 
 const baseAuthor: Author = {

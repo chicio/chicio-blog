@@ -16,6 +16,7 @@ const makeItem = (slugFormatted: string): Content =>
         readingTime: { text: "", minutes: 0, time: 0, words: 0 },
         contentFileRelativePath: "",
         content: "",
+        headings: [],
     }) as Content;
 
 const items = [makeItem("/a"), makeItem("/b"), makeItem("/c")];

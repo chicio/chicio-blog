@@ -5,6 +5,7 @@ import { paramNameOfSegment, segmentsOfSlugTemplate, slugFor } from "./slug-temp
 import { Content } from "@/types/content/content";
 import calculateReadingTime from "reading-time";
 import { cached } from "@/lib/build/build-cache";
+import { extractHeadings } from "./headings";
 
 const contentRootDirectory = path.join(process.cwd(), "src/content");
 const contentMdxFileName = "content.mdx";
@@ -115,6 +116,7 @@ export const getAllContentFor = <TMeta>(
         readingTime: calculateReadingTime(content),
         contentFileRelativePath: item.relativePath,
         content,
+        headings: extractHeadings(content),
       };
     });
   }) as Content<TMeta>[];
@@ -148,6 +150,7 @@ export const getSingleContentBy = <TMeta>(
         readingTime: calculateReadingTime(content),
         contentFileRelativePath: relativePath,
         content,
+        headings: extractHeadings(content),
       } as Content<TMeta>;
     } catch {
       return undefined;

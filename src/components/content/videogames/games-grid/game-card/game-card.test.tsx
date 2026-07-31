@@ -36,6 +36,7 @@ const game: Content<GameMetadata> = {
     readingTime: { text: "", minutes: 0, time: 0, words: 0 },
     contentFileRelativePath: "",
     content: "",
+    headings: [],
 };
 
 describe("GameCard", () => {
