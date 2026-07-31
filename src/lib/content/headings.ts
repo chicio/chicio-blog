@@ -44,6 +44,15 @@ const isTableOfContentsLevel = (depth: number): depth is HeadingLevel => depth =
 const processor = unified().use(remarkParse).use(remarkMath).use(remarkMdx);
 
 /**
+ * `getAllContentFor`/`getSingleContentBy` call `extractHeadings` on every ingestion, and the build-time
+ * `cached()` helper they wrap themselves with is a deliberate no-op outside `NODE_ENV === "production"`
+ * (see `build-cache.ts`) so every content-walking test re-parses every `content.mdx` file it touches. A
+ * module-level memo keyed on the exact markdown string removes that repeat AST-parse cost across the many
+ * `it()` blocks that each re-walk the whole content tree, without touching `cached()`'s env gating.
+ */
+const headingsByContent = new Map<string, ContentHeading[]>();
+
+/**
  * Every h2/h3 heading in a piece of MDX content, extracted from the AST rather than from raw lines —
  * a heading-like line inside a fenced code block is a `code` node, not a `heading` node, and this walk
  * never mistakes one for the other.
@@ -75,6 +84,11 @@ const processor = unified().use(remarkParse).use(remarkMath).use(remarkMdx);
  * a slot here that the real page never spent.
  */
 export const extractHeadings = (markdown: string): ContentHeading[] => {
+    const memoized = headingsByContent.get(markdown);
+    if (memoized) {
+        return memoized;
+    }
+
     const tree = processor.parse(markdown) as Root;
     const allHeadings: Heading[] = [];
     collectHeadings(tree, allHeadings);
@@ -102,5 +116,6 @@ export const extractHeadings = (markdown: string): ContentHeading[] => {
         });
     });
 
+    headingsByContent.set(markdown, entries);
     return entries;
 };

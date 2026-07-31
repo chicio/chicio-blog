@@ -13,7 +13,7 @@ always: true
 | E2E | Playwright | Full-page flows with real production build + mocked external APIs |
 | Live QA | agent-browser (local only) | Agent-driven a11y tree + click-through smoke walks |
 
-Coverage: v8 provider, text + json-summary reporters. **Threshold ratchet is active** — thresholds are set in `vitest.config.ts` and the CI `test` job gates on them. The floor is the measured baseline over `src/lib/**` + `src/components/design-system/**` (Matrix CG effects excluded — they are canvas-only and cannot run in jsdom). Floor values (set 2026-06-28): statements 64%, branches 59%, functions 61%, lines 65%. Raise the floor whenever tests improve coverage; never lower it.
+Coverage: v8 provider, text + json-summary reporters. **Threshold ratchet is active** — thresholds are set in `vitest.config.ts` and the CI `test` job (which runs `npm run test:coverage`, not `test:run`) gates on them. The floor is the measured baseline over `src/lib/**` + `src/components/design-system/**` (Matrix CG effects excluded — they are canvas-only and cannot run in jsdom). Floor values (raised 2026-07-25): statements 91%, branches 84%, functions 88%, lines 92%. Raise the floor whenever tests improve coverage; never lower it.
 
 ## File Layout
 
@@ -109,7 +109,7 @@ validate-arch  -+- typecheck -+- test -> build -> e2e
 ```
 
 - **typecheck** job: `npm run typecheck` — covers `src/**`, `**/*.test.*`, `e2e/**`, and config files. Zero errors required.
-- **test** job: `npm run test:coverage` — prints coverage summary and **gates on thresholds** (statements 64%, branches 59%, functions 61%, lines 65% over `src/lib/**` + `src/components/design-system/**`). Coverage below the floor fails CI.
+- **test** job: `npm run test:coverage` — prints coverage summary and **gates on thresholds** (statements 91%, branches 84%, functions 88%, lines 92% over `src/lib/**` + `src/components/design-system/**`). Coverage below the floor fails CI. This is the job that actually runs in CI — `test:run` (no coverage) is the fast local loop, but is not what CI gates on.
 - **e2e** job: runs after build, Playwright browsers cached, report uploaded as artifact; no third-party secrets needed (externals are mocked)
 
 ## Pre-Push Hook (.husky/pre-push)

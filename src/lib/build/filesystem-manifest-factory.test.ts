@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, beforeAll } from "vitest";
 import { generateFilesystemManifest } from "./filesystem-manifest-factory";
 import { aboutMe } from "@/lib/content/about-me/about-me";
 import { posts } from "@/lib/content/posts/posts";
@@ -6,6 +6,17 @@ import { slugs } from "@/types/configuration/slug";
 import type { TerminalDirNode } from "@/types/terminal/terminal";
 
 describe("generateFilesystemManifest", () => {
+    // Warms `extractHeadings`'s module-level memo (see `headings.ts`) for the whole ~550-file content tree
+    // before any assertion runs. `generateFilesystemManifest()` walks every content item, and outside
+    // `NODE_ENV === "production"` the `cached()` build helper it goes through is a deliberate no-op, so the
+    // FIRST call in this file always pays the full, unmemoized AST-parse cost once. Paying that cost here,
+    // with its own generous hook timeout, means no individual `it()` below — including the very first —
+    // ever risks the default 5s test timeout under coverage instrumentation on a loaded runner; every one of
+    // them calls `generateFilesystemManifest()` again themselves, now served entirely from the warm cache.
+    beforeAll(() => {
+        generateFilesystemManifest();
+    }, 15000);
+
     it("groups the top level of the tree into blog, dsa, videogames and the standalone leaf pages", () => {
         const { root } = generateFilesystemManifest();
 
