@@ -65,6 +65,64 @@ fenced code examples that the AST correctly excludes) — no bug found in extrac
 new content added since the plan's exploration pass, or the explorer measured differently (e.g. a
 different regex). Reported honestly in the implementer handoff rather than silently reconciled.
 
+## Review round 1 fixes (2026-07-31)
+
+The initial delivery above shipped with several real bugs the reviewer + e2e-sentinel caught. Fixed in
+commits `d0e92061`, `f2b7b9ac`, `47821547`, `249795b5`:
+
+- **Slug id divergence**: `extractHeadings` was trimming heading text before feeding the slugger, but
+  `rehype-slug` slugs `hast-util-to-string`'s output with no trim. A JSX-wrapped heading with a leading
+  space (`## <Icon/> Hardware specs`, 11 videogame console pages) got a different id than the rendered
+  anchor. Fixed by slugging the un-trimmed flattened text and trimming only the display `text`. Added a
+  real `remark-rehype` + `rehype-slug` pipeline cross-check test (not just a hand-typed synthetic one) —
+  `remark-rehype` and `hast` promoted to direct devDependencies for this purpose.
+- **`groupHeadings` hierarchy bug**: nested an h3 into whatever the *previous group* was, even when that
+  group's own heading was itself an h3 — an h3-only document (30% of TOC-eligible blog posts) collapsed
+  into one bogus group. Fixed to only nest when the previous group's heading is level 2.
+- **Structural/semantic rewrite of the organism** (`table-of-contents.tsx` + store): entries are now real
+  `<a href="#id">` links (not buttons + scrollIntoView) so crawlers/keyboard/pre-hydration all work, and
+  clicking pushes the hash via `history.pushState` (preventDefault suppresses the browser's own jump). A
+  group heading with children now gets its own anchor **plus** a separate small toggle button (a11y name
+  `Toggle <heading> section`) instead of being unreachable — this required abandoning `Accordion`'s
+  title-in-button structure for groups (an `<a>` can't nest inside a `<button>`) and building the header
+  row directly in the organism, while still using `Accordion` for the collapsible panel via an sr-only
+  title. Fixed the `<li><li>` double-nesting bug (`renderGroup` no longer wraps a childless entry's own
+  `<li>` in a second one). Rail breakpoint changed `2xl:` → `xl:` (this codebase overrides Tailwind's
+  scale in `globals.css` to `xl: 1600px` / `2xl: 2000px`, so `2xl:` never activated on any real laptop).
+  Two nav landmarks (inline `<details>` + rail) now have distinct accessible names ("Table of contents"
+  vs "Table of contents (sidebar)") — real MDX headings ALSO get their own `.heading-anchor` `<a>` from
+  `rehype-autolink-headings`, sharing an overlapping accessible name with the TOC's own link, so any
+  e2e/production query for a TOC entry must be scoped through the nav landmark, not page-wide.
+- **Scroll-spy IntersectionObserver bug**: the callback reset `activeId` to `undefined` whenever nothing
+  was inside the (thin) `rootMargin` band, blanking the highlight for the reader's entire dwell time
+  inside a heading's own prose before its first child. Simplified to only ever advance `activeId` forward
+  on `isIntersecting`, never clear it — removed the `visibleIdsRef` Set bookkeeping entirely as a result.
+- **Manual-intent-wins accordion bug**: clicking to close a scroll-spy-forced-open group silently
+  reopened once scroll moved away. Root cause was two-layered: `Accordion`'s own `toggle()` flipped its
+  last-remembered `manuallyOpen` value instead of the *currently visible* `isOpen` (so a click while
+  force-open recorded a no-op "open" intent instead of "closed"), AND the TOC's own bookkeeping was a
+  `Set<string>` (open/unset) with no way to represent "explicitly closed". Fixed both: `Accordion.toggle`
+  now flips relative to `isOpen`; the TOC store now tracks `Map<string, boolean>` overrides that always
+  win over the scroll-spy default (`groupOverrides.get(id) ?? activeGroupId === id`).
+- **`Content.headings` required-field migration gap**: `content-item-markdown.ts`'s dead `?? []` guard
+  existed only because 4 OTHER markdown-generator test suites (`posts-markdown`, `data-structures-and-
+  algorithms-markdown`, `videogames-markdown`, `mdx-page-markdown`) had hand-typed `Content` mocks
+  missing `headings` — a gap in the original "update every literal Content construction" migration.
+  Removing the guard required adding `headings: []` to every one of those mocks.
+
+**e2e gotcha worth remembering**: an inline `smooth` `scrollIntoView` can race against scroll-spy
+reactively expanding a sibling accordion group as the scroll animation passes over it — the expansion
+shifts layout underneath the in-flight scroll, landing short of the target. Reproduced deterministically
+in Playwright; NOT fixed (pre-existing interaction, not introduced by this round, no reviewer/sentinel
+finding named it) — worked around in e2e by forcing the app's own motion toggle off via
+`localStorage.setItem("fabrizioduroni_motion", "off")` in `page.addInitScript` (NOT the OS
+`prefers-reduced-motion` media query — `useReducedMotions` doesn't read that directly, only
+`useMotionStore` + `useDeviceCapabilities().isLowEnd`), which exercises the deterministic instant-scroll
+path. Also: Playwright's `toBeHidden()`/`isVisible()` does NOT recognize an ancestor's `overflow-hidden`
++ animated `height:0` (a Framer Motion `MotionDiv` collapsed accordion panel) as hiding a descendant —
+it only inspects the element's own box. Assert via the toggle's `aria-expanded` attribute instead for
+that case; native `<details>` closed state IS correctly recognized as hidden by Playwright.
+
 ## Test-infra note
 
 `e2e/terminal.spec.ts` is flaky under back-to-back `npm run test:e2e` invocations (each spins its own
