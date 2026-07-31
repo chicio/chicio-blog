@@ -108,42 +108,51 @@ export const Menu: FC<MenuProps> = ({ navHrefs, onPaletteTrigger, tracking }) =>
                 className={dropdownClassName(isMobile)}
                 items={[
                     {
-                        label: "Latest posts",
-                        to: navHrefs.blog,
-                        selected: pathname === navHrefs.blog,
-                        onClick: onClickBlog,
+                        label: "Posts",
+                        items: [
+                            {
+                                label: "Latest posts",
+                                to: navHrefs.blog,
+                                selected: pathname === navHrefs.blog,
+                                onClick: onClickBlog,
+                            },
+                            {
+                                label: "Archive",
+                                to: navHrefs.blogArchive,
+                                selected: pathname === navHrefs.blogArchive,
+                                onClick: onClickBlogArchive,
+                            },
+                        ],
                     },
                     {
-                        label: "Authors",
-                        to: navHrefs.blogAuthors,
-                        selected:
-                            pathname === navHrefs.blogAuthors ||
-                            pathname.startsWith(`${navHrefs.blogAuthor}/`),
-                        onClick: onClickBlogAuthors,
+                        label: "Discovery",
+                        items: [
+                            {
+                                label: "Authors",
+                                to: navHrefs.blogAuthors,
+                                selected:
+                                    pathname === navHrefs.blogAuthors ||
+                                    pathname.startsWith(`${navHrefs.blogAuthor}/`),
+                                onClick: onClickBlogAuthors,
+                            },
+                            {
+                                label: "Tags",
+                                to: navHrefs.blogTags,
+                                selected: pathname === navHrefs.blogTags,
+                                onClick: onClickBlogTags,
+                            },
+                        ],
                     },
                     {
-                        label: "Tags",
-                        to: navHrefs.blogTags,
-                        selected: pathname === navHrefs.blogTags,
-                        onClick: onClickBlogTags,
-                    },
-                    {
-                        label: "Archive",
-                        to: navHrefs.blogArchive,
-                        selected: pathname === navHrefs.blogArchive,
-                        onClick: onClickBlogArchive,
-                    },
-                    {
-                        label: "Stats",
-                        to: navHrefs.blogStats,
-                        selected: pathname === navHrefs.blogStats,
-                        onClick: onClickBlogStats,
-                    },
-                    {
-                        label: "Easter Eggs",
-                        to: navHrefs.easterEggHunt,
-                        selected: pathname === navHrefs.easterEggHunt,
-                        onClick: onClickEasterEggHunt,
+                        label: "Insights",
+                        items: [
+                            {
+                                label: "Stats",
+                                to: navHrefs.blogStats,
+                                selected: pathname === navHrefs.blogStats,
+                                onClick: onClickBlogStats,
+                            },
+                        ],
                     },
                 ]}
             />
@@ -196,6 +205,17 @@ export const Menu: FC<MenuProps> = ({ navHrefs, onPaletteTrigger, tracking }) =>
                             },
                         ],
                     },
+                    {
+                        label: "Secrets",
+                        items: [
+                            {
+                                label: "Easter eggs",
+                                to: navHrefs.easterEggHunt,
+                                selected: pathname === navHrefs.easterEggHunt,
+                                onClick: onClickEasterEggHunt,
+                            },
+                        ],
+                    },
                 ]}
             />
             <DropdownMenu
@@ -203,28 +223,38 @@ export const Menu: FC<MenuProps> = ({ navHrefs, onPaletteTrigger, tracking }) =>
                 className={dropdownClassName(isMobile)}
                 items={[
                     {
-                        label: "About me",
-                        to: navHrefs.aboutMe,
-                        selected: pathname === navHrefs.aboutMe,
-                        onClick: onClickAboutMe,
+                        label: "Profile",
+                        items: [
+                            {
+                                label: "About me",
+                                to: navHrefs.aboutMe,
+                                selected: pathname === navHrefs.aboutMe,
+                                onClick: onClickAboutMe,
+                            },
+                            {
+                                label: "Contact me",
+                                to: navHrefs.contact,
+                                selected: pathname === navHrefs.contact,
+                                onClick: onClickContact,
+                            },
+                        ],
                     },
                     {
-                        label: "Art",
-                        to: navHrefs.art,
-                        selected: pathname === navHrefs.art,
-                        onClick: onClickArt,
-                    },
-                    {
-                        label: "Videogames",
-                        to: navHrefs.videogames,
-                        selected: pathname === navHrefs.videogames,
-                        onClick: onClickVideogames,
-                    },
-                    {
-                        label: "Contact me",
-                        to: navHrefs.contact,
-                        selected: pathname === navHrefs.contact,
-                        onClick: onClickContact,
+                        label: "Hobbies",
+                        items: [
+                            {
+                                label: "Art",
+                                to: navHrefs.art,
+                                selected: pathname === navHrefs.art,
+                                onClick: onClickArt,
+                            },
+                            {
+                                label: "Videogames",
+                                to: navHrefs.videogames,
+                                selected: pathname === navHrefs.videogames,
+                                onClick: onClickVideogames,
+                            },
+                        ],
                     },
                 ]}
             />
