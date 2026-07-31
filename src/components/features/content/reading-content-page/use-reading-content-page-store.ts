@@ -5,6 +5,7 @@ import { tracking } from "@/types/configuration/tracking";
 import type { EffectsStore } from "@/types/component-store";
 import type { MenuTrackingCallbacks } from "@/components/design-system/organism/menu";
 import type { FooterNavTrackingCallbacks, FooterSocialTrackingCallbacks } from "@/components/design-system/organism/footer";
+import type { TableOfContentsTrackingCallbacks } from "@/components/design-system/organism/table-of-contents";
 import { useCallback } from "react";
 
 interface ReadingContentPageEffects {
@@ -12,6 +13,7 @@ interface ReadingContentPageEffects {
     menuTracking: MenuTrackingCallbacks;
     footerNavTracking: FooterNavTrackingCallbacks;
     footerSocialTracking: FooterSocialTrackingCallbacks;
+    tableOfContentsTracking: TableOfContentsTrackingCallbacks;
 }
 
 export const useReadingContentPageStore = (trackingCategory: string = ""): EffectsStore<ReadingContentPageEffects> => {
@@ -72,6 +74,25 @@ export const useReadingContentPageStore = (trackingCategory: string = ""): Effec
     const onTrackArchive = useCallback(() => onTrackNavigation(tracking.action.open_blog_archive), [onTrackNavigation]);
     const onTrackTags = useCallback(() => onTrackNavigation(tracking.action.open_blog_tags), [onTrackNavigation]);
 
+    const onToggleTableOfContents = useCallback(() => {
+        trackWith({
+            category: trackingCategory,
+            label: tracking.label.body,
+            action: tracking.action.toggle_table_of_contents,
+        });
+    }, [trackingCategory]);
+
+    const onNavigateTableOfContents = useCallback(
+        (label: string) => {
+            trackWith({
+                category: trackingCategory,
+                label,
+                action: tracking.action.navigate_table_of_contents,
+            });
+        },
+        [trackingCategory],
+    );
+
     const onTrackGithub = useCallback(() => onTrackSocial(tracking.action.open_github), [onTrackSocial]);
     const onTrackLinkedin = useCallback(() => onTrackSocial(tracking.action.open_linkedin), [onTrackSocial]);
     const onTrackContactSocial = useCallback(() => onTrackSocial(tracking.action.open_contact), [onTrackSocial]);
@@ -116,7 +137,18 @@ export const useReadingContentPageStore = (trackingCategory: string = ""): Effec
         onTrackInstagram,
     };
 
+    const tableOfContentsTracking: TableOfContentsTrackingCallbacks = {
+        onToggle: onToggleTableOfContents,
+        onNavigate: onNavigateTableOfContents,
+    };
+
     return {
-        effects: { onPaletteTrigger, menuTracking, footerNavTracking, footerSocialTracking },
+        effects: {
+            onPaletteTrigger,
+            menuTracking,
+            footerNavTracking,
+            footerSocialTracking,
+            tableOfContentsTracking,
+        },
     };
 };

@@ -57,6 +57,8 @@ export const tracking = {
     chrome_ai_key_points: "chrome_ai_key_points",
     open_chrome_ai_docs: "open_chrome_ai_docs",
     copy_code_block: "copy_code_block",
+    toggle_table_of_contents: "toggle_table_of_contents",
+    navigate_table_of_contents: "navigate_table_of_contents",
     pwa_install_prompt_shown: "pwa_install_prompt_shown",
     pwa_install_accepted: "pwa_install_accepted",
     pwa_install_dismissed: "pwa_install_dismissed",

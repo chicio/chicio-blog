@@ -5,6 +5,7 @@ import { Content } from "@/types/content/content";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { slugs } from "@/types/configuration/slug";
 import { tracking } from "@/types/configuration/tracking";
+import { isTableOfContentsViable } from "@/lib/content/heading-viability";
 import { FC } from "react";
 import { PostAuthors } from "@/components/content/blog/post-authors";
 import { PostMeta } from "@/components/content/blog/post-meta";
@@ -27,6 +28,7 @@ export const BlogPostContent: FC<PostProps> = async ({ post }) => {
             <ReadingContentPage
                 author={siteMetadata.author}
                 trackingCategory={tracking.category.blog_post}
+                headings={isTableOfContentsViable(post.headings) ? post.headings : undefined}
                 breadcrumbs={[
                     {
                         label: "Blog",

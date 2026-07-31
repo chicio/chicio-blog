@@ -181,5 +181,34 @@ describe("ReadingContentPageTemplate", () => {
             expect(screen.getByText("Before content")).toBeInTheDocument();
             expect(screen.getByText("After content")).toBeInTheDocument();
         });
+
+        it("renders no table of contents when headings is omitted", () => {
+            render(
+                <ReadingContentPageTemplate
+                    author="Fabrizio"
+                    navHrefs={navHrefs}
+                    footerNavHrefs={footerNavHrefs}
+                    socialLinks={socialLinks}
+                />,
+            );
+            expect(screen.queryByText("Contents")).not.toBeInTheDocument();
+        });
+
+        it("renders the table of contents when 3 or more headings are given", () => {
+            render(
+                <ReadingContentPageTemplate
+                    author="Fabrizio"
+                    navHrefs={navHrefs}
+                    footerNavHrefs={footerNavHrefs}
+                    socialLinks={socialLinks}
+                    headings={[
+                        { level: 2, id: "a", text: "A", readingTime: { text: "1 min read", minutes: 1, time: 60000, words: 200 } },
+                        { level: 2, id: "b", text: "B", readingTime: { text: "1 min read", minutes: 1, time: 60000, words: 200 } },
+                        { level: 2, id: "c", text: "C", readingTime: { text: "1 min read", minutes: 1, time: 60000, words: 200 } },
+                    ]}
+                />,
+            );
+            expect(screen.getByText("Contents")).toBeInTheDocument();
+        });
     });
 });

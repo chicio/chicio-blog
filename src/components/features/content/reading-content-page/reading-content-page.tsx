@@ -16,13 +16,15 @@ export type ReadingContentPageProps = Omit<
     | "menuTracking"
     | "footerNavTracking"
     | "footerSocialTracking"
+    | "tableOfContentsTracking"
 > & {
     trackingCategory?: string;
 };
 
 export const ReadingContentPage: FC<ReadingContentPageProps> = ({ trackingCategory, ...rest }) => {
     const { effects } = useReadingContentPageStore(trackingCategory);
-    const { onPaletteTrigger, menuTracking, footerNavTracking, footerSocialTracking } = effects;
+    const { onPaletteTrigger, menuTracking, footerNavTracking, footerSocialTracking, tableOfContentsTracking } =
+        effects;
 
     return (
         <ReadingContentPageTemplate
@@ -35,6 +37,7 @@ export const ReadingContentPage: FC<ReadingContentPageProps> = ({ trackingCatego
             menuTracking={menuTracking}
             footerNavTracking={footerNavTracking}
             footerSocialTracking={footerSocialTracking}
+            tableOfContentsTracking={tableOfContentsTracking}
         />
     );
 };

@@ -9,6 +9,7 @@ import { FC, PropsWithChildren } from "react";
 import { CourseNavigation } from "@/components/content/data-structures-and-algorithms/course-navigation";
 import { JsonLd } from "@/components/features/seo/jsond-ld";
 import { Content } from "@/types/content/content";
+import { isTableOfContentsViable } from "@/lib/content/heading-viability";
 
 interface DsaProps {
     topic: Content;
@@ -23,6 +24,7 @@ export const Topic: FC<PropsWithChildren<DsaProps>> = async ({ topic, previous, 
     return (
         <ReadingContentPage
             author={siteMetadata.author}
+            headings={isTableOfContentsViable(topic.headings) ? topic.headings : undefined}
             breadcrumbs={[
                 {
                     label: "DSA",

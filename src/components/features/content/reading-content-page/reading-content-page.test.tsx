@@ -9,9 +9,17 @@ vi.mock("@/components/design-system/templates/reading-content-page-template", ()
         footerNavHrefs,
         socialLinks,
         headerWrapper: _hw,
+        headings,
+        tableOfContentsTracking,
         ...rest
     }: Record<string, unknown> & { children?: React.ReactNode }) => (
-        <div data-testid="reading-content-page-template" data-has-nav-hrefs={!!navHrefs} {...(rest as object)}>
+        <div
+            data-testid="reading-content-page-template"
+            data-has-nav-hrefs={!!navHrefs}
+            data-headings-count={Array.isArray(headings) ? headings.length : 0}
+            data-has-table-of-contents-tracking={!!tableOfContentsTracking}
+            {...(rest as object)}
+        >
             {children}
         </div>
     ),
@@ -45,6 +53,20 @@ describe("ReadingContentPage", () => {
                 </ReadingContentPage>,
             );
             expect(screen.getByText("article body")).toBeInTheDocument();
+        });
+
+        it("forwards the headings prop through to the template", () => {
+            const headings = [{ level: 2 as const, id: "a", text: "A", readingTime: { text: "", minutes: 0, time: 0, words: 0 } }];
+            render(<ReadingContentPage author="Fabrizio" headings={headings} />);
+            expect(screen.getByTestId("reading-content-page-template")).toHaveAttribute("data-headings-count", "1");
+        });
+
+        it("injects the table of contents tracking callbacks built from trackingCategory", () => {
+            render(<ReadingContentPage author="Fabrizio" trackingCategory="blog_post" />);
+            expect(screen.getByTestId("reading-content-page-template")).toHaveAttribute(
+                "data-has-table-of-contents-tracking",
+                "true",
+            );
         });
     });
 });
