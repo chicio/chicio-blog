@@ -1,18 +1,18 @@
 import { test, expect } from "@playwright/test";
 
 test.describe("Easter Egg Hunt page", () => {
-    test("the Blog nav dropdown links to /easter-egg-hunt", async ({ page }) => {
+    test("the Explore nav dropdown links to /easter-egg-hunt", async ({ page }) => {
         await page.goto("/");
-        await page.getByRole("button", { name: "Blog" }).first().click();
-        const menu = page.getByRole("menu").first();
-        await expect(menu.getByRole("link", { name: "Easter Eggs" })).toHaveAttribute("href", "/easter-egg-hunt");
+        await page.getByRole("button", { name: "Explore" }).first().click();
+        const menu = page.getByRole("list", { name: "Explore" }).first();
+        await expect(menu.getByRole("link", { name: "Easter eggs" })).toHaveAttribute("href", "/easter-egg-hunt");
     });
 
-    test("clicking Easter Eggs in the Blog dropdown navigates to the page", async ({ page }) => {
+    test("clicking Easter eggs in the Explore dropdown navigates to the page", async ({ page }) => {
         await page.goto("/");
-        await page.getByRole("button", { name: "Blog" }).first().click();
-        const menu = page.getByRole("menu").first();
-        await menu.getByRole("link", { name: "Easter Eggs" }).click();
+        await page.getByRole("button", { name: "Explore" }).first().click();
+        const menu = page.getByRole("list", { name: "Explore" }).first();
+        await menu.getByRole("link", { name: "Easter eggs" }).click();
         await expect(page).toHaveURL(/\/easter-egg-hunt/);
         await expect(page.getByRole("heading", { name: "Easter Egg Hunt" })).toBeVisible();
     });

@@ -104,7 +104,7 @@ const navCases: NavCase[] = [
     { label: "Latest posts", trackingKey: "onTrackBlog", dropdown: "Blog" },
     { label: "Tags", trackingKey: "onTrackBlogTags", dropdown: "Blog" },
     { label: "Archive", trackingKey: "onTrackBlogArchive", dropdown: "Blog" },
-    { label: "Easter Eggs", trackingKey: "onTrackEasterEggHunt", dropdown: "Blog" },
+    { label: "Easter eggs", trackingKey: "onTrackEasterEggHunt", dropdown: "Explore" },
     { label: "Roadmap", trackingKey: "onTrackDsaRoadmap", dropdown: "Explore" },
     { label: "Exercises", trackingKey: "onTrackDsaExercises", dropdown: "Explore" },
     { label: "Chat", trackingKey: "onTrackChat", dropdown: "Explore" },
@@ -131,35 +131,33 @@ describe("Menu", () => {
             expect(blogButtons.length).toBeGreaterThan(0);
         });
 
-        it("lists Latest posts, Authors, Tags, Archive and Stats in the Blog dropdown, in order", async () => {
+        it("lists Latest posts, Archive, Authors, Tags and Stats in the Blog dropdown, grouped in order", async () => {
             render(<Menu navHrefs={navHrefs} />);
             await userEvent.click(screen.getAllByRole("button", { name: "Blog" })[0]);
-            const menu = screen.getAllByRole("menu")[0];
+            const menu = screen.getAllByRole("list", { name: "Blog" })[0];
+            expect(within(menu).getByText("Posts")).toBeInTheDocument();
+            expect(within(menu).getByText("Discovery")).toBeInTheDocument();
+            expect(within(menu).getByText("Insights")).toBeInTheDocument();
             const items = within(menu).getAllByRole("link");
             expect(items.map((item) => item.textContent)).toEqual([
                 "Latest posts",
+                "Archive",
                 "Authors",
                 "Tags",
-                "Archive",
                 "Stats",
-                "Easter Eggs",
             ]);
             expect(within(menu).getByRole("link", { name: "Latest posts" })).toHaveAttribute("href", "/blog");
             expect(within(menu).getByRole("link", { name: "Authors" })).toHaveAttribute("href", "/blog/authors");
             expect(within(menu).getByRole("link", { name: "Tags" })).toHaveAttribute("href", "/blog/tags");
             expect(within(menu).getByRole("link", { name: "Archive" })).toHaveAttribute("href", "/blog/archive");
             expect(within(menu).getByRole("link", { name: "Stats" })).toHaveAttribute("href", "/blog/stats");
-            expect(within(menu).getByRole("link", { name: "Easter Eggs" })).toHaveAttribute(
-                "href",
-                "/easter-egg-hunt",
-            );
         });
 
         it("marks Authors as selected when on an author detail page", async () => {
             mockPathname = "/blog/author/francesco-bonfadelli";
             render(<Menu navHrefs={navHrefs} />);
             await userEvent.click(screen.getAllByRole("button", { name: "Blog" })[0]);
-            const menu = screen.getAllByRole("menu")[0];
+            const menu = screen.getAllByRole("list", { name: "Blog" })[0];
             expect(within(menu).getByRole("link", { name: "Authors" })).toHaveClass("border-accent");
         });
 
@@ -167,8 +165,19 @@ describe("Menu", () => {
             mockPathname = "/contact";
             render(<Menu navHrefs={navHrefs} />);
             await userEvent.click(screen.getAllByRole("button", { name: "Blog" })[0]);
-            const menu = screen.getAllByRole("menu")[0];
+            const menu = screen.getAllByRole("list", { name: "Blog" })[0];
             expect(within(menu).getByRole("link", { name: "Authors" })).not.toHaveClass("border-accent");
+        });
+
+        it("moves Easter eggs into the Explore dropdown under a Secrets section", async () => {
+            render(<Menu navHrefs={navHrefs} />);
+            await userEvent.click(screen.getAllByRole("button", { name: "Explore" })[0]);
+            const menu = screen.getAllByRole("list", { name: "Explore" })[0];
+            expect(within(menu).getByText("Secrets")).toBeInTheDocument();
+            expect(within(menu).getByRole("link", { name: "Easter eggs" })).toHaveAttribute(
+                "href",
+                "/easter-egg-hunt",
+            );
         });
 
         it("renders the search button", () => {
@@ -196,7 +205,7 @@ describe("Menu", () => {
             const onTrackBlogAuthors = vi.fn();
             render(<Menu navHrefs={navHrefs} tracking={{ onTrackBlogAuthors }} />);
             await userEvent.click(screen.getAllByRole("button", { name: "Blog" })[0]);
-            const menu = screen.getAllByRole("menu")[0];
+            const menu = screen.getAllByRole("list", { name: "Blog" })[0];
             await userEvent.click(within(menu).getByRole("link", { name: "Authors" }));
             expect(onTrackBlogAuthors).toHaveBeenCalledOnce();
         });
@@ -205,7 +214,7 @@ describe("Menu", () => {
             const onTrackBlogStats = vi.fn();
             render(<Menu navHrefs={navHrefs} tracking={{ onTrackBlogStats }} />);
             await userEvent.click(screen.getAllByRole("button", { name: "Blog" })[0]);
-            const menu = screen.getAllByRole("menu")[0];
+            const menu = screen.getAllByRole("list", { name: "Blog" })[0];
             await userEvent.click(within(menu).getByRole("link", { name: "Stats" }));
             expect(onTrackBlogStats).toHaveBeenCalledOnce();
         });
