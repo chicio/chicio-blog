@@ -65,7 +65,7 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
                         id={panelId}
                         aria-label={label}
                         role="list"
-                        className={`glow-container ${shouldReduceMotions ? "xs:bg-general-background" : "xs:bg-general-background/90"} relative mt-2 w-auto min-w-max list-none m-0 p-0 rounded-xl py-2 xs:absolute xs:right-0 xs:left-0 xs:w-auto`}
+                        className={`glow-container ${shouldReduceMotions ? "xs:bg-general-background" : "xs:bg-general-background/90"} relative mt-2 min-w-max list-none m-0 p-0 rounded-xl py-2 xs:absolute xs:right-0 xs:left-0 xs:w-60`}
                         tabIndex={-1}
                     >
                         {items.map((group, idx) => {

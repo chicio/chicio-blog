@@ -23,6 +23,46 @@ test.describe("Homepage and primary navigation", () => {
         await expect(menu.getByRole("link", { name: "Archive" })).toHaveAttribute("href", "/blog/archive");
     });
 
+    test("all three header dropdown panels share the same fixed 240px width", async ({ page }) => {
+        await page.goto("/");
+
+        await page.getByRole("button", { name: "Blog" }).first().click();
+        const blogBox = await page.getByRole("list", { name: "Blog" }).first().boundingBox();
+        await page.getByRole("button", { name: "Blog" }).first().click();
+
+        await page.getByRole("button", { name: "Explore" }).first().click();
+        const exploreBox = await page.getByRole("list", { name: "Explore" }).first().boundingBox();
+        await page.getByRole("button", { name: "Explore" }).first().click();
+
+        await page.getByRole("button", { name: "The Author" }).first().click();
+        const authorBox = await page.getByRole("list", { name: "The Author" }).first().boundingBox();
+        await page.getByRole("button", { name: "The Author" }).first().click();
+
+        expect(blogBox?.width).toBe(240);
+        expect(exploreBox?.width).toBe(240);
+        expect(authorBox?.width).toBe(240);
+    });
+
+    test("no group header wraps onto a second line inside the 240px Explore panel", async ({ page }) => {
+        await page.goto("/");
+        await page.getByRole("button", { name: "Explore" }).first().click();
+        const panel = page.getByRole("list", { name: "Explore" }).first();
+        const dsaHeaderBox = await panel.getByText("DSA", { exact: true }).boundingBox();
+        const aiHeaderBox = await panel.getByText("Artificial Intelligence", { exact: true }).boundingBox();
+        expect(dsaHeaderBox).not.toBeNull();
+        expect(aiHeaderBox).not.toBeNull();
+        expect(Math.abs((aiHeaderBox?.height ?? 0) - (dsaHeaderBox?.height ?? 0))).toBeLessThan(2);
+    });
+
+    test("the mobile dropdown panel stays 320px wide, unaffected by the desktop fixed width", async ({ page }) => {
+        await page.setViewportSize({ width: 390, height: 844 });
+        await page.goto("/");
+        await page.locator("svg.size-9").click();
+        await page.getByRole("button", { name: "Blog" }).first().click();
+        const mobilePanelBox = await page.getByRole("list", { name: "Blog" }).first().boundingBox();
+        expect(mobilePanelBox?.width).toBe(320);
+    });
+
     test("navigating to /blog loads the blog listing page", async ({ page }) => {
         await page.goto("/");
         await page.goto("/blog");
