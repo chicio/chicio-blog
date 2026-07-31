@@ -1,18 +1,8 @@
-import { test, expect, type Page } from "@playwright/test";
-
-const acceptConsent = async (page: Page) => {
-    // The cookie-consent banner is client-rendered, so waiting for it confirms the page
-    // has hydrated and clears its overlay before we interact with the nav dropdowns.
-    const wakeUp = page.getByRole("button", { name: /wake up/i });
-    await expect(wakeUp).toBeVisible({ timeout: 15000 });
-    await wakeUp.click();
-    await expect(wakeUp).toBeHidden();
-};
+import { test, expect } from "@playwright/test";
 
 test.describe("Easter Egg Hunt page", () => {
     test("the Explore nav dropdown links to /easter-egg-hunt", async ({ page }) => {
         await page.goto("/");
-        await acceptConsent(page);
         await page.getByRole("button", { name: "Explore" }).first().click();
         const menu = page.getByRole("list", { name: "Explore" }).first();
         await expect(menu.getByRole("link", { name: "Easter eggs" })).toHaveAttribute("href", "/easter-egg-hunt");
@@ -20,7 +10,6 @@ test.describe("Easter Egg Hunt page", () => {
 
     test("clicking Easter eggs in the Explore dropdown navigates to the page", async ({ page }) => {
         await page.goto("/");
-        await acceptConsent(page);
         await page.getByRole("button", { name: "Explore" }).first().click();
         const menu = page.getByRole("list", { name: "Explore" }).first();
         await menu.getByRole("link", { name: "Easter eggs" }).click();
