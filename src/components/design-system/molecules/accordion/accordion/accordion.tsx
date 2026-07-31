@@ -11,6 +11,7 @@ interface AccordionProps {
     defaultOpen?: boolean;
     className?: string;
     onToggle?: () => void;
+    forceOpen?: boolean;
 }
 
 export const Accordion: FC<AccordionProps> = ({
@@ -19,8 +20,9 @@ export const Accordion: FC<AccordionProps> = ({
     defaultOpen = false,
     className,
     onToggle,
+    forceOpen,
 }) => {
-    const { state, effects } = useAccordionStore(defaultOpen, onToggle);
+    const { state, effects } = useAccordionStore(defaultOpen, onToggle, forceOpen);
     const { isOpen, panelId, triggerId } = state;
     const { toggle } = effects;
 

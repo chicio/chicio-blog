@@ -77,5 +77,25 @@ describe("Accordion", () => {
             );
             expect(container.firstChild).toHaveClass("custom-class");
         });
+
+        it("stays open while forceOpen is true, even though the user never clicked the trigger", () => {
+            render(
+                <Accordion title="Section" forceOpen={true}>
+                    Content
+                </Accordion>,
+            );
+            expect(screen.getByRole("button")).toHaveAttribute("aria-expanded", "true");
+        });
+
+        it("has no visible effect when the user toggles closed while forceOpen is true", async () => {
+            render(
+                <Accordion title="Section" forceOpen={true}>
+                    Content
+                </Accordion>,
+            );
+            const trigger = screen.getByRole("button");
+            await userEvent.click(trigger);
+            expect(trigger).toHaveAttribute("aria-expanded", "true");
+        });
     });
 });

@@ -13,17 +13,25 @@ interface AccordionEffects {
     toggle: () => void;
 }
 
+/**
+ * `forceOpen` keeps the panel open regardless of `manuallyOpen`, without taking over the toggle button
+ * itself — a caller that knows a panel should currently be visible (e.g. the reading companion's
+ * scroll-spy keeping the active section's group expanded) can drive that from outside, while the user
+ * can still freely toggle; their manual state simply has no visible effect until `forceOpen` clears.
+ */
 export const useAccordionStore = (
     defaultOpen: boolean,
-    onToggle?: () => void
+    onToggle?: () => void,
+    forceOpen?: boolean,
 ): ComponentStore<AccordionState, AccordionEffects> => {
-    const [isOpen, setIsOpen] = useState(defaultOpen);
+    const [manuallyOpen, setManuallyOpen] = useState(defaultOpen);
     const id = useId();
     const panelId = `accordion-panel-${id}`;
     const triggerId = `accordion-trigger-${id}`;
+    const isOpen = forceOpen || manuallyOpen;
 
     const toggle = () => {
-        setIsOpen((prev) => !prev);
+        setManuallyOpen((prev) => !prev);
         onToggle?.();
     };
 
