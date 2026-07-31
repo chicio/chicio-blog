@@ -63,12 +63,9 @@ test.describe("Data Structures and Algorithms section", () => {
         test("clicking a table of contents entry scrolls to its heading and updates the URL hash", async ({
             page,
         }) => {
-            // Forces the app's own motion toggle off (not the OS media query the TOC doesn't read), so the
-            // scroll is an instant, single-frame jump instead of an animated one — otherwise, scroll-spy
-            // reactively expanding a sibling group mid-animation (as the scroll passes over it) can shift the
-            // page under an in-flight smooth scroll, an unrelated pre-existing interaction this test must not
-            // be sensitive to.
-            await page.addInitScript(() => localStorage.setItem("fabrizioduroni_motion", "off"));
+            // Default motion path on purpose: the click is a real `<a href="#id">`, no JS-driven
+            // scrollIntoView/history.pushState, so there is nothing here to race the App Router's own
+            // scroll restoration the way a manual pushState call used to.
             await page.goto("/data-structures-and-algorithms/topic/array");
             await page.getByText("Contents", { exact: true }).click();
             const toc = page.getByRole("navigation", { name: "Table of contents" });
@@ -78,7 +75,6 @@ test.describe("Data Structures and Algorithms section", () => {
         });
 
         test("a group heading with children is itself navigable via its own anchor", async ({ page }) => {
-            await page.addInitScript(() => localStorage.setItem("fabrizioduroni_motion", "off"));
             await page.goto("/data-structures-and-algorithms/topic/array");
             await page.getByText("Contents", { exact: true }).click();
             const toc = page.getByRole("navigation", { name: "Table of contents" });
@@ -90,6 +86,28 @@ test.describe("Data Structures and Algorithms section", () => {
             // is matched without anchoring the regex to the start of its accessible name.
             await expect(page.getByRole("heading", { name: /What is an Array\?/i })).toBeInViewport();
             await expect(page).toHaveURL(/#what-is-an-array/);
+        });
+
+        test("scrolls a genuinely long distance to reach a heading near the bottom of the page, on the default (animated) motion path", async ({
+            page,
+        }) => {
+            // Regression coverage for the scroll-abort bug: a manual `window.history.pushState` call inside
+            // the click handler used to be read by the App Router as a soft navigation, which replayed the
+            // router's own scroll restoration against a stale cached position ~100-300ms into the smooth
+            // scroll and aborted it a few hundred pixels in. Asserting only `toBeInViewport()` on a heading
+            // close to the top of the page would not have caught that, so this heading ("Cache Locality and
+            // Performance") sits near the very end of the article, and the scroll distance is asserted
+            // directly rather than inferred from visibility alone.
+            await page.goto("/data-structures-and-algorithms/topic/array");
+            const startingScrollY = await page.evaluate(() => window.scrollY);
+            await page.getByText("Contents", { exact: true }).click();
+            const toc = page.getByRole("navigation", { name: "Table of contents" });
+            await toc.getByRole("link", { name: /Cache Locality and Performance/i }).click();
+
+            await expect(page.getByRole("heading", { name: /Cache Locality and Performance/i })).toBeInViewport();
+            await expect(page).toHaveURL(/#cache-locality-and-performance$/);
+            const finalScrollY = await page.evaluate(() => window.scrollY);
+            expect(finalScrollY - startingScrollY).toBeGreaterThan(2000);
         });
 
         test("a group heading's own toggle reveals its child entries independently of scroll-spy", async ({
