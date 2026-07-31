@@ -44,6 +44,25 @@ test.describe("Data Structures and Algorithms section", () => {
             await expect(page.getByRole("link", { name: "DSA" })).toBeVisible();
         });
 
+        test("renders a collapsed reading companion table of contents", async ({ page }) => {
+            await page.goto("/data-structures-and-algorithms/topic/array");
+            await expect(page.getByText("Contents", { exact: true })).toBeVisible();
+            await expect(page.getByRole("button", { name: /Operations and Time Complexity/i }).first()).toBeHidden();
+        });
+
+        test("expanding the table of contents reveals a navigable entry", async ({ page }) => {
+            await page.goto("/data-structures-and-algorithms/topic/array");
+            await page.getByText("Contents", { exact: true }).click();
+            await expect(page.getByRole("button", { name: /Operations and Time Complexity/i }).first()).toBeVisible();
+        });
+
+        test("clicking a table of contents entry scrolls to its heading", async ({ page }) => {
+            await page.goto("/data-structures-and-algorithms/topic/array");
+            await page.getByText("Contents", { exact: true }).click();
+            await page.getByRole("button", { name: /Operations and Time Complexity/i }).first().click();
+            await expect(page.getByRole("heading", { name: /Operations and Time Complexity/i })).toBeInViewport();
+        });
+
         test("clicking an exercise link navigates to the exercise page", async ({ page }) => {
             await page.goto("/data-structures-and-algorithms/topic/array");
             await page.getByRole("link", { name: "Move Zeroes" }).click();
@@ -70,6 +89,13 @@ test.describe("Data Structures and Algorithms section", () => {
         test("returns HTTP 200", async ({ page }) => {
             const response = await page.goto("/data-structures-and-algorithms/topic/array/exercise/move-zeros");
             expect(response?.status()).toBe(200);
+        });
+
+        test("never renders a reading companion table of contents, even though the page has 3 headings", async ({
+            page,
+        }) => {
+            await page.goto("/data-structures-and-algorithms/topic/array/exercise/move-zeros");
+            await expect(page.getByRole("navigation", { name: "Table of contents" })).toHaveCount(0);
         });
     });
 });
