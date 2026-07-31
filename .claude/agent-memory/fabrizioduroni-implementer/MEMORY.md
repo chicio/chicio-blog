@@ -67,6 +67,9 @@
 ## Features (continued 10)
 - [Terminal Navigation Part 3](feature_terminal_navigation.md) — REVERSED Part 2: /terminal boot link/sticky URL removed entirely, palette-only in-place open, no URL change ever (2026-07-24)
 
+## Features (continued 11)
+- [Reading Companion TOC](feature_reading_companion_toc.md) — headings.ts AST extraction + slugger-fed-all-levels dedupe gotcha (2026-07-31); heading-viability predicates; markdown sections outline; TableOfContents organism + Accordion forceOpen; blog-viable-count baseline mismatch; terminal.spec.ts e2e flakiness note
+
 ## Feedback
 - [Review-fix workflow](feedback_review_fix_disk_and_reset_soft.md) — git reset --soft path-restaging to reshape commits; disk-full is often transient (retry, don't clean system caches); e2e hangs on a long-lived ad hoc port are stale-server artifacts, not regressions — verify with a fresh port + origin/main control
 - [PWA & State Patterns](feedback_pwa_patterns.md) — useSyncExternalStore for localStorage state, consent-gated UI, banner/error page alignment rules
