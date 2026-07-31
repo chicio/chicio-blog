@@ -88,6 +88,29 @@ Even more text.
         expect(headings.map((heading) => heading.id)).toEqual(["setup", "setup-1", "setup-2"]);
     });
 
+    it("consumes a dedupe slot for a same-text h4 (out of scope) before an in-scope h3, matching rehype-slug's real anchor on the rendered page", () => {
+        // rehype-slug slugs every heading it renders, regardless of level, in document order — an
+        // h4 "Static Arrays" (out of scope here) consumes "static-arrays" first, so the h3 later
+        // in the document with the exact same text gets "static-arrays-1" on the real page. This
+        // mirrors the real content at
+        // src/content/data-structures-and-algorithms/topic/array/content.mdx, verified against the
+        // live extraction output during implementation.
+        const markdown = `## Classification
+
+#### Static Arrays
+
+Out of scope text.
+
+### Static Arrays
+
+In scope text.
+`;
+
+        const headings = extractHeadings(markdown);
+
+        expect(headings.map((heading) => heading.id)).toEqual(["classification", "static-arrays-1"]);
+    });
+
     it("consumes a duplicate-with-the-h1 dedupe slot even though h1 itself is never returned", () => {
         const markdown = `# Intro
 
