@@ -85,6 +85,15 @@ export const TableOfContents: FC<TableOfContentsProps> = ({ headings, tracking }
                     <ul className="space-y-2">{groups.map(renderGroup)}</ul>
                 </nav>
             </details>
+            {/*
+                `xl` is 1600px in this codebase's overridden Tailwind scale (globals.css), not the
+                Tailwind-default 1536px `2xl` — the rail must activate on the breakpoint that is actually
+                wider than `.container-fixed`'s hard 960px cap plus this rail's own 240px (w-60) width.
+                The 504px offset is half of that 960px cap (480px) plus a 24px gap; it is independent of
+                which breakpoint triggers it, since `.container-fixed` stays centered and capped at 960px
+                at every width from `md` upward. At the minimum activation width (1600px) the gutter per
+                side is (1600 - 960) / 2 = 320px, comfortably more than the 264px the rail + gap need.
+            */}
             <nav
                 aria-label={railNavLabel}
                 className={`${glassmorphismClass} hidden xl:fixed xl:top-32 xl:block xl:max-h-[70vh] xl:w-60 xl:overflow-y-auto xl:rounded-xl xl:p-3 xl:left-[calc(50%+504px)]`}
