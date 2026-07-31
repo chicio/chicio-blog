@@ -30,8 +30,16 @@ export const useAccordionStore = (
     const triggerId = `accordion-trigger-${id}`;
     const isOpen = forceOpen || manuallyOpen;
 
+    /**
+     * Flips relative to the currently *visible* `isOpen`, not to the last remembered `manuallyOpen` value.
+     * A panel can be visibly open purely because `forceOpen` is true while `manuallyOpen` is still false
+     * (never clicked) — flipping `manuallyOpen`'s own stale value would toggle it to `true`, which changes
+     * nothing visible now (forceOpen still wins) but wrongly "records" an open intent that keeps the panel
+     * open even after `forceOpen` later clears. Flipping the visible state instead means a click while
+     * forced open records "closed", so the panel correctly stays closed once forceOpen clears.
+     */
     const toggle = () => {
-        setManuallyOpen((prev) => !prev);
+        setManuallyOpen(!isOpen);
         onToggle?.();
     };
 

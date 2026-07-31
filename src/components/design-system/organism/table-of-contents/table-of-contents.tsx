@@ -10,79 +10,84 @@ import {
     type TableOfContentsTrackingCallbacks,
 } from "./use-table-of-contents-store";
 
-export type { TableOfContentsTrackingCallbacks };
-
 export interface TableOfContentsProps {
     headings: ContentHeading[];
     tracking?: TableOfContentsTrackingCallbacks;
 }
 
-const navLabel = "Table of contents";
+const inlineNavLabel = "Table of contents";
+const railNavLabel = "Table of contents (sidebar)";
 
 export const TableOfContents: FC<TableOfContentsProps> = ({ headings, tracking }) => {
     const { glassmorphismClass } = useGlassmorphism();
     const { state, effects } = useTableOfContentsStore(headings, tracking);
-    const { groups, activeId, activeGroupId, manuallyOpenGroupIds } = state;
-    const { handleDetailsToggle, toggleGroup, handleNavigate } = effects;
+    const { groups, activeId, activeGroupId } = state;
+    const { handleDetailsToggle, isGroupOpen, toggleGroup, handleNavigate } = effects;
 
-    const isGroupOpen = (id: string) => manuallyOpenGroupIds.has(id) || activeGroupId === id;
-
-    const entryClassName = (id: string) =>
-        `w-full cursor-pointer bg-transparent text-left text-sm ${
-            activeId === id ? "text-accent font-bold" : "text-secondary hover:text-accent"
+    const headingLinkClassName = (isCurrent: boolean, muted: boolean) =>
+        `block w-full ${
+            isCurrent
+                ? "text-accent font-bold"
+                : muted
+                  ? "text-secondary hover:text-accent text-sm"
+                  : "text-primary-text hover:text-accent"
         }`;
 
-    const renderEntry = (heading: ContentHeading): ReactNode => (
-        <li key={heading.id}>
-            <button
-                type="button"
-                onClick={handleNavigate(heading)}
-                aria-current={activeId === heading.id ? "location" : undefined}
-                className={entryClassName(heading.id)}
-            >
-                {heading.text}
-                <span className="text-secondary ml-1 text-xs">· {heading.readingTime.text}</span>
-            </button>
-        </li>
+    const renderHeadingLink = (heading: ContentHeading, muted: boolean, isCurrent: boolean): ReactNode => (
+        <a
+            href={`#${heading.id}`}
+            onClick={handleNavigate(heading)}
+            aria-current={activeId === heading.id ? "location" : undefined}
+            className={headingLinkClassName(isCurrent, muted)}
+        >
+            {heading.text}
+            <span className="text-secondary ml-1 text-xs">· {heading.readingTime.text}</span>
+        </a>
     );
 
-    const renderGroup = (group: TableOfContentsGroup): ReactNode => (
-        <li key={group.heading.id}>
-            {group.children.length > 0 ? (
+    const renderChildEntry = (heading: ContentHeading): ReactNode => (
+        <li key={heading.id}>{renderHeadingLink(heading, true, activeId === heading.id)}</li>
+    );
+
+    const renderTopLevelEntry = (heading: ContentHeading): ReactNode => (
+        <li key={heading.id}>{renderHeadingLink(heading, false, activeGroupId === heading.id)}</li>
+    );
+
+    const renderGroup = (group: TableOfContentsGroup): ReactNode => {
+        if (group.children.length === 0) {
+            return renderTopLevelEntry(group.heading);
+        }
+
+        return (
+            <li key={group.heading.id}>
+                {renderHeadingLink(group.heading, false, activeGroupId === group.heading.id)}
                 <Accordion
-                    title={
-                        <span className={activeGroupId === group.heading.id ? "text-accent font-bold" : ""}>
-                            {group.heading.text}
-                            <span className="text-secondary ml-1 text-xs">· {group.heading.readingTime.text}</span>
-                        </span>
-                    }
+                    title={<span className="sr-only">{`Toggle ${group.heading.text} section`}</span>}
                     forceOpen={isGroupOpen(group.heading.id)}
                     onToggle={toggleGroup(group.heading.id)}
                 >
                     <ul className="border-accent-alpha-40 ml-3 space-y-1 border-l pl-3">
-                        {group.children.map(renderEntry)}
+                        {group.children.map(renderChildEntry)}
                     </ul>
                 </Accordion>
-            ) : (
-                renderEntry(group.heading)
-            )}
-        </li>
-    );
+            </li>
+        );
+    };
 
     return (
         <Fragment>
             <details
                 onToggle={handleDetailsToggle}
-                className={`${glassmorphismClass} container-fixed my-6 rounded-xl px-4 py-3 2xl:hidden`}
+                className={`${glassmorphismClass} my-6 rounded-xl px-4 py-3 xl:hidden`}
             >
                 <summary className="text-accent cursor-pointer font-bold">Contents</summary>
-                <nav aria-label={navLabel} className="mt-3">
+                <nav aria-label={inlineNavLabel} className="mt-3">
                     <ul className="space-y-2">{groups.map(renderGroup)}</ul>
                 </nav>
             </details>
             <nav
-                aria-label={navLabel}
-                className={`${glassmorphismClass} hidden 2xl:fixed 2xl:top-32 2xl:block 2xl:max-h-[70vh] 2xl:w-60 2xl:overflow-y-auto 2xl:rounded-xl 2xl:p-3 2xl:left-[calc(50%+504px)]`}
+                aria-label={railNavLabel}
+                className={`${glassmorphismClass} hidden xl:fixed xl:top-32 xl:block xl:max-h-[70vh] xl:w-60 xl:overflow-y-auto xl:rounded-xl xl:p-3 xl:left-[calc(50%+504px)]`}
             >
                 <ul className="space-y-2">{groups.map(renderGroup)}</ul>
             </nav>
