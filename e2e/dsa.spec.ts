@@ -47,20 +47,69 @@ test.describe("Data Structures and Algorithms section", () => {
         test("renders a collapsed reading companion table of contents", async ({ page }) => {
             await page.goto("/data-structures-and-algorithms/topic/array");
             await expect(page.getByText("Contents", { exact: true })).toBeVisible();
-            await expect(page.getByRole("button", { name: /Operations and Time Complexity/i }).first()).toBeHidden();
+            // Scoped to the TOC's own landmark: the page's real "Operations and Time Complexity" heading
+            // is wrapped in its own `.heading-anchor` permalink, an unrelated link with an overlapping name.
+            const toc = page.getByRole("navigation", { name: "Table of contents" });
+            await expect(toc.getByRole("link", { name: /Operations and Time Complexity/i })).toBeHidden();
         });
 
         test("expanding the table of contents reveals a navigable entry", async ({ page }) => {
             await page.goto("/data-structures-and-algorithms/topic/array");
             await page.getByText("Contents", { exact: true }).click();
-            await expect(page.getByRole("button", { name: /Operations and Time Complexity/i }).first()).toBeVisible();
+            const toc = page.getByRole("navigation", { name: "Table of contents" });
+            await expect(toc.getByRole("link", { name: /Operations and Time Complexity/i })).toBeVisible();
         });
 
-        test("clicking a table of contents entry scrolls to its heading", async ({ page }) => {
+        test("clicking a table of contents entry scrolls to its heading and updates the URL hash", async ({
+            page,
+        }) => {
+            // Forces the app's own motion toggle off (not the OS media query the TOC doesn't read), so the
+            // scroll is an instant, single-frame jump instead of an animated one — otherwise, scroll-spy
+            // reactively expanding a sibling group mid-animation (as the scroll passes over it) can shift the
+            // page under an in-flight smooth scroll, an unrelated pre-existing interaction this test must not
+            // be sensitive to.
+            await page.addInitScript(() => localStorage.setItem("fabrizioduroni_motion", "off"));
             await page.goto("/data-structures-and-algorithms/topic/array");
             await page.getByText("Contents", { exact: true }).click();
-            await page.getByRole("button", { name: /Operations and Time Complexity/i }).first().click();
+            const toc = page.getByRole("navigation", { name: "Table of contents" });
+            await toc.getByRole("link", { name: /Operations and Time Complexity/i }).click();
             await expect(page.getByRole("heading", { name: /Operations and Time Complexity/i })).toBeInViewport();
+            await expect(page).toHaveURL(/#operations-and-time-complexity$/);
+        });
+
+        test("a group heading with children is itself navigable via its own anchor", async ({ page }) => {
+            await page.addInitScript(() => localStorage.setItem("fabrizioduroni_motion", "off"));
+            await page.goto("/data-structures-and-algorithms/topic/array");
+            await page.getByText("Contents", { exact: true }).click();
+            const toc = page.getByRole("navigation", { name: "Table of contents" });
+
+            const groupLink = toc.getByRole("link", { name: /What is an Array\?/i });
+            await expect(groupLink).toBeVisible();
+            await groupLink.click();
+            // The rendered heading itself carries a "# " permalink prefix (rehype-autolink-headings), so it
+            // is matched without anchoring the regex to the start of its accessible name.
+            await expect(page.getByRole("heading", { name: /What is an Array\?/i })).toBeInViewport();
+            await expect(page).toHaveURL(/#what-is-an-array/);
+        });
+
+        test("a group heading's own toggle reveals its child entries independently of scroll-spy", async ({
+            page,
+        }) => {
+            await page.goto("/data-structures-and-algorithms/topic/array");
+            await page.getByText("Contents", { exact: true }).click();
+            const toc = page.getByRole("navigation", { name: "Table of contents" });
+
+            // Asserted via aria-expanded rather than the child link's visibility: the collapsed panel is
+            // clipped by its ancestor's `overflow-hidden` + animated `height: 0`, which Playwright's
+            // visibility check does not treat as hidden (it only inspects the element's own box, not an
+            // ancestor's overflow clipping) even though no real user would see the content.
+            // Uses a group scroll-spy hasn't touched (the page never scrolled), isolating the toggle's own
+            // expand/collapse behavior from scroll-spy's separate "force open the active group" behavior.
+            const toggle = toc.getByRole("button", { name: /Toggle Classification of Arrays section/i });
+            await expect(toggle).toHaveAttribute("aria-expanded", "false");
+            await toggle.click();
+            await expect(toggle).toHaveAttribute("aria-expanded", "true");
+            await expect(toc.getByRole("link", { name: /Static vs Dynamic Arrays/i })).toBeVisible();
         });
 
         test("clicking an exercise link navigates to the exercise page", async ({ page }) => {
