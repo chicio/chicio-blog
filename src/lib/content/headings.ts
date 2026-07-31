@@ -33,10 +33,14 @@ const collectHeadings = (node: AnyNode, headings: Heading[]): void => {
 
 const isTableOfContentsLevel = (depth: number): depth is HeadingLevel => depth === 2 || depth === 3;
 
-// remark-math must be registered before remark-mdx — see mdx-to-markdown.ts for why. This processor
-// mirrors that one on purpose: parsing the same MDX body into the same tree shape is what lets the
-// headings found here, and the order they are fed to the slugger below, match what rehype-slug slugs
-// on the actually rendered page.
+// remark-math must be registered before remark-mdx — see mdx-to-markdown.ts for why. This processor is
+// close to, but not identical to, that one and to the real MDX pipeline in next.config.ts, which also
+// registers remark-gfm and remark-emoji. Those two are omitted here on purpose: neither changes heading
+// text or heading structure (GFM autolinks/tables/strikethrough and emoji shortcodes only rewrite inline
+// content within a node, they don't add or remove `heading` nodes), so they cannot change which lines
+// become headings, their order, or the text handed to the slugger — verified against the current content
+// set, where no heading contains a `:emoji:` shortcode or GFM-only syntax. If that ever stops being true,
+// this processor needs the same two plugins added.
 const processor = unified().use(remarkParse).use(remarkMath).use(remarkMdx);
 
 /**
@@ -50,8 +54,25 @@ const processor = unified().use(remarkParse).use(remarkMath).use(remarkMdx);
  * with one stateful slugger, so a duplicate heading's `-1`/`-2` suffix lands on the same entry here as
  * it does there.
  *
+ * The slugger is fed the **un-trimmed** flattened text, on purpose: `rehype-slug` slugs
+ * `hast-util-to-string(node)` verbatim, with no trimming. A heading written as
+ * `## <SomeComponent> Hardware specs</SomeComponent>` flattens to a leading-space string, and
+ * `rehype-slug` slugs that leading space right into the id (`-hardware-specs`). Trimming before slugging
+ * would silently diverge from the id the rendered page actually gets — verified against real content at
+ * `src/content/videogames/console/nintendo-switch/content.mdx`. Trimming is applied only to the
+ * `text` field used for display, never to what feeds the slugger.
+ *
  * `readingTime` for an entry covers only the words between that heading and the next one in the
  * document (any level), so it reflects the reading time of that one section rather than the whole page.
+ *
+ * Two further, currently-harmless divergences between this extraction and the real rendered pipeline,
+ * documented rather than mirrored because no heading in the current content set triggers either one:
+ * `mdast-util-to-string` includes an image's `alt` text in its flattened output, while `hast-util-to-string`
+ * (what `rehype-slug` uses) yields nothing for an `<img>` — a heading containing only/mostly an image would
+ * get a non-empty id here but an empty one on the rendered page. And `rehype-slug` skips slugging (and does
+ * NOT consume a dedupe slot for) a heading that already carries an explicit `id` attribute; this extraction
+ * has no such concept and always slugs every heading, so a heading with a hand-authored `id` would consume
+ * a slot here that the real page never spent.
  */
 export const extractHeadings = (markdown: string): ContentHeading[] => {
     const tree = processor.parse(markdown) as Root;
@@ -62,8 +83,8 @@ export const extractHeadings = (markdown: string): ContentHeading[] => {
     const entries: ContentHeading[] = [];
 
     allHeadings.forEach((heading, index) => {
-        const text = mdastToString(heading).trim();
-        const id = slugger.slug(text);
+        const rawText = mdastToString(heading);
+        const id = slugger.slug(rawText);
 
         if (!isTableOfContentsLevel(heading.depth)) {
             return;
@@ -76,7 +97,7 @@ export const extractHeadings = (markdown: string): ContentHeading[] => {
         entries.push({
             level: heading.depth,
             id,
-            text,
+            text: rawText.trim(),
             readingTime: calculateReadingTime(sectionText),
         });
     });

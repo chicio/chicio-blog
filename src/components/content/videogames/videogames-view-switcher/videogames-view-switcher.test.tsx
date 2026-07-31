@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from "vitest";
 import { render, screen, nextImageMock, nextLinkMock } from "@/test-utils";
 import { VideogamesViewSwitcher } from "./index";
 import type { Content } from "@/types/content/content";
-import { GameFormat, type GameMetadata, type ConsoleMetadata } from "@/types/content/videogames";
+import { GameFormat, type GameMetadata } from "@/types/content/videogames";
 import type { ConsoleWithGameCount } from "./use-videogames-view-switcher-store";
 
 vi.mock("next/image", () => nextImageMock());

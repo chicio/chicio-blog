@@ -5,11 +5,11 @@ import { siteMetadata } from "@/types/configuration/site-metadata";
 
 /**
  * The document's outline as citable deep links, or `undefined` when there are not enough headings to
- * be worth rendering. `content.headings` defaults to an empty array: mocked test content built by hand
- * (every markdown generator's test suite) has no `headings` field at all, and this must not throw.
+ * be worth rendering. `content.headings` is a required field on `Content`, so every real caller always
+ * has it populated.
  */
 const sectionsFor = (content: Content<unknown>): MarkdownSection[] | undefined => {
-    const headings = content.headings ?? [];
+    const { headings } = content;
 
     if (!isMarkdownOutlineViable(headings)) {
         return undefined;

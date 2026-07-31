@@ -25,6 +25,7 @@ describe("mdxPageMarkdown", () => {
             frontmatter: { title: "MCP fabrizioduroni.it", description: "Connect your AI assistant." },
             slug: { formatted: "/mcp", params: {} },
             content: "Some **MDX** body.",
+            headings: [],
         });
 
         const result = mdxPageMarkdown("/mcp");
@@ -46,6 +47,7 @@ Some **MDX** body.
             frontmatter: { title: "Cookies Policy", description: "How this site uses cookies." },
             slug: { formatted: "/cookie-policy", params: {} },
             content: "# Cookies Policy\n\nLast updated: ...",
+            headings: [],
         });
 
         const result = mdxPageMarkdown("/cookie-policy");
@@ -68,6 +70,7 @@ Last updated: ...
             frontmatter: { title: "About Me", description: "Bio." },
             slug: { formatted: "/about-me", params: {} },
             content: "## Biography\n\nHello there.",
+            headings: [],
         });
 
         const result = mdxPageMarkdown("/about-me");
@@ -81,6 +84,7 @@ Last updated: ...
             frontmatter: { title: "T", description: "D" },
             slug: { formatted: "/art", params: {} },
             content: "Body",
+            headings: [],
         });
 
         mdxPageMarkdown("/art");

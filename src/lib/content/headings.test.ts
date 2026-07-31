@@ -1,5 +1,61 @@
 import { describe, it, expect } from "vitest";
+import { unified } from "unified";
+import remarkParse from "remark-parse";
+import remarkMath from "remark-math";
+import remarkMdx from "remark-mdx";
+import remarkRehype from "remark-rehype";
+import rehypeSlug from "rehype-slug";
+import type { Element, Root as HastRoot, RootContent as HastRootContent } from "hast";
 import { extractHeadings } from "./headings";
+
+type AnyHastNode = HastRoot | HastRootContent;
+
+interface RenderedHeading {
+    tag: string;
+    id: string;
+}
+
+const isHeadingElement = (node: AnyHastNode): node is Element =>
+    node.type === "element" && /^h[1-6]$/.test(node.tagName);
+
+const collectHastHeadings = (node: AnyHastNode, headings: RenderedHeading[]): void => {
+    if (isHeadingElement(node)) {
+        headings.push({ tag: node.tagName, id: String(node.properties.id ?? "") });
+    }
+    if ("children" in node) {
+        for (const child of node.children as AnyHastNode[]) {
+            collectHastHeadings(child, headings);
+        }
+    }
+};
+
+/**
+ * Runs `markdown` through the actual `remark-rehype` + `rehype-slug` pipeline (the real packages the
+ * rendered page uses, not a re-implementation of them) and returns the tag + `id` rehype-slug assigns to
+ * every heading, in document order, at every level (h1-h6) — the same population `extractHeadings`'
+ * internal slugger is fed, so filtering this down to h2/h3 gives the exact ids the rendered page puts on
+ * the anchors `extractHeadings` is supposed to match.
+ */
+const renderedHeadings = (markdown: string): RenderedHeading[] => {
+    const processor = unified()
+        .use(remarkParse)
+        .use(remarkMath)
+        .use(remarkMdx)
+        .use(remarkRehype, {
+            passThrough: ["mdxJsxFlowElement", "mdxJsxTextElement", "mdxFlowExpression", "mdxTextExpression"],
+        });
+    const tree = processor.runSync(processor.parse(markdown)) as HastRoot;
+    rehypeSlug()(tree);
+
+    const headings: RenderedHeading[] = [];
+    collectHastHeadings(tree, headings);
+    return headings;
+};
+
+const renderedInScopeIds = (markdown: string): string[] =>
+    renderedHeadings(markdown)
+        .filter((heading) => heading.tag === "h2" || heading.tag === "h3")
+        .map((heading) => heading.id);
 
 describe("extractHeadings", () => {
     it("extracts h2 and h3 headings with their slug ids", () => {
@@ -141,5 +197,39 @@ ${"word ".repeat(400).trim()}
 
     it("returns an empty list for content with no headings", () => {
         expect(extractHeadings("Just a paragraph, no headings at all.")).toEqual([]);
+    });
+
+    describe("id agreement with the leading/trailing whitespace rehype-slug never trims", () => {
+        it("slugs a JSX-wrapped heading with a leading space exactly as rehype-slug does, not the trimmed text", () => {
+            // Real content shape from src/content/videogames/console/nintendo-switch/content.mdx:
+            // `## <ParagraphTitleWithIcon icon={...}> Hardware specs</ParagraphTitleWithIcon>` — the space
+            // before "Hardware" sits inside the JSX element's own children, so it survives to the flattened
+            // heading text. rehype-slug slugs that flattened text with no trim, so the real rendered id is
+            // "-hardware-specs", not "hardware-specs".
+            const markdown =
+                "## <ParagraphTitleWithIcon icon={<FiCpu />}> Hardware specs</ParagraphTitleWithIcon>\n";
+
+            const headings = extractHeadings(markdown);
+
+            expect(headings[0].id).toBe("-hardware-specs");
+            expect(headings[0].text).toBe("Hardware specs");
+        });
+    });
+
+    describe("cross-checked against the real rehype-slug pipeline", () => {
+        it.each([
+            ["plain headings, no dedupe", "## First\n\n### Sub\n\n## Second\n"],
+            [
+                "a JSX-wrapped heading with a leading space before an in-scope sibling",
+                "## <ParagraphTitleWithIcon icon={<FiCpu />}> Hardware specs</ParagraphTitleWithIcon>\n\n## Trivia\n",
+            ],
+            ["repeated heading text needing -1/-2 dedupe suffixes", "## Setup\n\n## Setup\n\n## Setup\n"],
+            [
+                "an out-of-scope h4 consuming a dedupe slot before an in-scope h3 of the same text",
+                "## Classification\n\n#### Static Arrays\n\nText.\n\n### Static Arrays\n\nText.\n",
+            ],
+        ])("%s", (_description, markdown) => {
+            expect(extractHeadings(markdown).map((heading) => heading.id)).toEqual(renderedInScopeIds(markdown));
+        });
     });
 });

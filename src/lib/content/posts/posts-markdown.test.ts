@@ -24,6 +24,7 @@ const post = {
     },
     slug: { formatted: "/blog/post/2024/01/01/hello-world" },
     content: "Some **body** content.",
+    headings: [],
 };
 
 describe("posts-markdown", () => {

@@ -112,6 +112,7 @@
     "prettier": "^3.9.4",
     "prettier-plugin-tailwindcss": "^0.8.1",
     "release-it": "^20.2.0",
+    "remark-rehype": "^11.1.2",
     "typescript": "^5",
     "vitest": "^4.1.10"
   },

@@ -39,6 +39,7 @@ const topic = {
     frontmatter: { title: "Graph", description: "Graph algorithms", tags: ["dsa", "graph"] },
     slug: { formatted: `${slugs.dataStructuresAndAlgorithms.home}/topic/graph`, params: { topic: "graph" } },
     content: "Graph body.",
+    headings: [],
 };
 
 const exercise = {
@@ -53,6 +54,7 @@ const exercise = {
         params: { topic: "graph", exercise: "word-ladder" },
     },
     content: "Exercise body.",
+    headings: [],
 };
 
 describe("data-structures-and-algorithms-markdown", () => {
@@ -75,6 +77,7 @@ describe("data-structures-and-algorithms-markdown", () => {
                 frontmatter: { title: "Exercises", description: "All exercises" },
                 slug: { formatted: slugs.dataStructuresAndAlgorithms.exercises, params: {} },
                 content: "",
+                headings: [],
             });
             mockListExercises.mockReturnValue([exercise]);
 

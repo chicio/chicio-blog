@@ -66,11 +66,10 @@ describe("contentItemMarkdown", () => {
         expect(result).toContain(`[Solution](${siteMetadata.siteUrl}/dsa/topic/graph/exercise/word-ladder#solution)`);
     });
 
-    it("does not crash and renders no outline when headings is missing entirely (hand-built mock content)", () => {
-        const content = { ...makeContent(), headings: undefined } as unknown as Content;
+    it("renders no outline when there are no headings at all", () => {
+        const content = makeContent({ headings: [] });
         const generator = contentItemMarkdown({ single: () => content }, () => "Body.");
 
-        expect(() => generator({})).not.toThrow();
         expect(generator({})).not.toContain("## Table of Contents");
     });
 });
