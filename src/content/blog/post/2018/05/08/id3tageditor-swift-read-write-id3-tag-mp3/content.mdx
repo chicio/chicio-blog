@@ -20,6 +20,8 @@ how I developed it. Below you can find the library logo.
 
 ![The ID3TagEditor logo](/media/content/blog/post/2018/05/08/id3tageditor-swift-read-write-id3-tag-mp3/id3tageditor-logo.jpg)
 
+## The ID3 tag standard
+
 But before going deeper in the details of ID3TagEditor it useful to know how the ID3 tag standard works (you can find
 the full reference on the [official site](http://id3.org/ "id3 standard")). The definition reported on it for the ID3
 standard is:
@@ -56,6 +58,8 @@ specific frame flags/options and the frame content. Below you can find an exampl
 
 ![An ID3 frame example](/media/content/blog/post/2018/05/08/id3tageditor-swift-read-write-id3-tag-mp3/id3-frame-example.jpg)
 
+## The framework API
+
 Last but not least at the end of the ID3 tag there are also 2 KB of offset (you can see it in the previous images, that
 series of endless `0x00` at the end of the tag :relieved:). How does ID3TagEditor read and write all this information?
 The main api of the framework are two simple methods:
@@ -86,6 +90,8 @@ public func read(from path: String) throws -> ID3Tag?
 public func write(tag: ID3Tag, to path: String, andSaveTo newPath: String? = nil) throws
 
 ```
+
+## Parsing an mp3 file
 
 So the ID3TagEditor framework has two main parts: one for read/parse an mp3 file and one for write an ID3 tag to the mp3
 file.  
@@ -245,6 +251,8 @@ class ID3FrameContentParsingOperationFactory {
 }
 ```
 
+## Writing a new tag
+
 Let's see instead how ID3TagEditor write a new tag to an mp3 file. The creation of the tag is done by
 the `ID3TagCreator` class used inside the `Mp3WithID3TagBuilder` class, the one that execute the real write on the mp3
 file with the new tag on disk. The main function of the `ID3TagCreator` class is `create(id3Tag: ID3Tag) throws -> Data`
@@ -360,6 +368,8 @@ class ID3FrameCreatorsChainFactory {
     }
 }
 ```
+
+## Conclusion
 
 That's it!!! This is the general structure of the ID3TagEditor framework. If you want to discover more about this
 framework you can have a look at [my github repo](https://github.com/chicio/ID3TagEditor "ID3TagEditor repo") and start

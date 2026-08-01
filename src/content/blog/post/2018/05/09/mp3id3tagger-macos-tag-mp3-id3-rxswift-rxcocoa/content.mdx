@@ -19,6 +19,8 @@ of [ID3TagEditor](/2018/05/08/id3tageditor-swift-read-write-id3-tag-mp3/). Below
 
 ![The MP3ID3Tagger logo](/media/content/blog/post/2018/05/09/mp3id3tagger-macos-tag-mp3-id3-rxswift-rxcocoa/mp3id3tagger-logo.jpg)
 
+## Model View ViewModel
+
 So how did I develop MP3ID3Tagger? I was about to start the development following the classic approach to develop an app
 on every Apple
 OS: [Model View Controller](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller "Model View Controller")
@@ -40,6 +42,8 @@ are:
 * the *View model*, that usually represents an abstraction of the view exposing public properties and commands.
 * the *Binder* interprets bindings defined in the View, observes the View Model for changes in state and updates the
   View and finally observes the View for changes in state and updates the View Model.
+
+## RxSwift, RxCocoa, and Reactive Extensions
 
 From the definition above we see that the MVVM needs something to bind the view to the view model in a platform
 independent way. This is why we need [RxSwift](https://github.com/ReactiveX/RxSwift "RxSWift")
@@ -66,6 +70,8 @@ components and let us work with generic observable UI component. This basically 
 * the ID3TagEditor will be the Model of the MVVM
 * the ViewModel will connect the View and the ID3TagEditor Model in a platform UI independent way
 
+## Implementation
+
 With this architecture we can also think about using the same Model and ViewModel on different platform. So if in the
 future I will develop an iOS version of Mp3ID3Tagger, I will only have to develop the View part. So let's start to see
 how I implemented Mp3ID3Tagger, the app subject of this post. Let's start from the UI to see how MP3ID3Tagger does look
@@ -74,6 +80,8 @@ button on the left to select the cover and all the textual/numeric values on the
 a list are implemented as `NSPopUpButton` components.
 
 ![The MP3ID3Tagger interface](/media/content/blog/post/2018/05/09/mp3id3tagger-macos-tag-mp3-id3-rxswift-rxcocoa/mp3id3tagger-interface.jpg)
+
+### The view model
 
 The first building block is the `ViewModel` base class. This class is useful to centralize the setup of a `disposeBag`.
 The `DisposeBag` it’s an RxSwift component that keeps a reference to all the `Disposable` you add to it.
@@ -118,6 +126,8 @@ class Mp3ID3TaggerViewModel: ViewModel {
     }
 }
 ```
+
+### The view model collaborators
 
 Now we can see the details of all these collaborators of our view model. Let's start from the `ID3TagReader`. This class
 keeps a reference to an instance of the `ID3TagEditor`. Its main function is `read(_ finish: @escaping (ID3Tag?) -> ()`.
@@ -430,6 +440,8 @@ class AttachedPictureField {
 
 ```
 
+### The view
+
 Now it's time to see the view controller of the app that basically corresponds to the View of the MVVM. Its name
 is `Mp3ID3TaggerViewController`. This controller will implement a protocol I defined: the `BindableView` protocol. This
 protocol represents the View part in the MVVM architecture. This protocol must be implemented only by subclasses of
@@ -575,6 +587,8 @@ class Mp3ID3TaggerViewController: NSViewController, BindableView {
     }
 }
 ```
+
+## Conclusion
 
 We're done with Mp3ID3Tagger. I hope you liked my architectural choices and how I developed it by leveraging the power
 of RxSwift and RxCocoa :sunglasses::relieved:. Obviously don't forget to see

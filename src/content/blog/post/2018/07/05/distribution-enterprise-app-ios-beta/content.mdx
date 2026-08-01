@@ -48,6 +48,8 @@ operation to put in place our beta program:
   store development snapshots of the ipa).
 * Put in place a mini website, configured specifically for the distribution of the beta app.
 
+## The bundle identifier and the provisioning profile
+
 To show you the details and some screenshots of the operation we made I will use a sample project `SampleBetaApp` with
 bundle identifier `it.chicio.SampleBetaApp`.  
 Let's start from the first step: configuration on the Apple developer account for our new enterprise program. As already
@@ -58,6 +60,8 @@ Identities & Profiles" (and maybe there's a high chance that, if you're reading 
 one app on the Apple app store so you already know the stuff to do :smirk:).
 
 ![Certificates, Identities & Profiles section on the developer Apple website](/media/content/blog/post/2018/07/05/distribution-enterprise-app-ios-beta/enterprise-profiles.jpg)
+
+## The beta build configuration
 
 After that we created in our iOS project a new Beta configuration by duplicating the release one. In this way we were
 able to generate an ipa similar to the release one and were also able to customize some settings of our app.
@@ -83,6 +87,8 @@ The Build Setting that we customized are:
   to customize the "Other Swift Flags" field.
 
 ![Set a new beta preprocessor macro](/media/content/blog/post/2018/07/05/distribution-enterprise-app-ios-beta/beta-preprocessor-macro.jpg)
+
+## The build and upload scripts
 
 Then we created the scripts needed to automatize the build on Jenkins and the upload of our artifacts repository to
 Nexus. As I said before we were already using Fastlane to automatize the releases of our app to the store. For the beta
@@ -155,6 +161,8 @@ mvn deploy:deploy-file -DgroupId="<group id project identifier>"
     </dict>
 </plist>
 ```
+
+## The Jenkins job and the beta website
 
 At this moment we were ready to create the new Jenkins job to build our beta. We decided to trigger it using Jenkins
 webhook triggers. In this way we were able to trigger the build and release of a new beta by just calling an url. This
@@ -242,6 +250,8 @@ profile from *Settings -> Profiles & Device Management*. If they don't do it the
 screenshot below.
 
 ![You need to accept the developer certificate before using the app](/media/content/blog/post/2018/07/05/distribution-enterprise-app-ios-beta/enterprise-untrusted-developer.jpg)
+
+## Conclusion
 
 That's it!!! Go to your boss and tell her/him you're ready to create you custom iOS beta internal program!!! :
 sunglasses::apple:

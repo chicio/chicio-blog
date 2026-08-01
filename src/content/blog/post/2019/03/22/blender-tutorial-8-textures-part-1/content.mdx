@@ -20,11 +20,15 @@ changes the options displayed: there will be a specific section of properties fo
 
 ![Create a texture](/media/content/blog/post/2019/03/22/blender-tutorial-8-textures-part-1/blender-create-texture.jpg)
 
+## The influence section
+
 In the various section of the texture panel we have the "influence section". This section is very important because it
 let us customize how the texture will affect the final material. This means that we can use textures to change not only
 the final color of the material but also the shading components, geometry, specular highlight and so on.
 
 ![The influence section](/media/content/blog/post/2019/03/22/blender-tutorial-8-textures-part-1/blender-texture-influence.jpg)
+
+## Images and texture mapping
 
 To add the image to be used as texture we have to select the type "Image or movie". After that we can scroll in the
 option of the texture to the Image section and we can choose between create a new image or open an existing one.
@@ -37,6 +41,8 @@ coordinates on the image. By default is set to generated, that means that the co
 the defaults primitives. Then there's the UV option, that maps to coordinates baked into the object.
 
 ![Choose texture mapping](/media/content/blog/post/2019/03/22/blender-tutorial-8-textures-part-1/blender-texture-choose-mapping.jpg)
+
+## The UV editor
 
 Remember that after an images has been selected as texture, it will not be shown in the 3D window if we choose the
 texture visualization unless we load it in the UV editor. To do it choose UV editing layout and load the texture using
@@ -59,10 +65,14 @@ the unwrapped mesh to fit into the texture. After that we will finally see the t
 
 ![Blender texture unwrap b](/media/content/blog/post/2019/03/22/blender-tutorial-8-textures-part-1/blender-texture-unwrap-2.jpg)
 
+## UV projection
+
 We can also create projection mapping using the UV projection. This basically means projecting a sphere, cylinder or a
 cube onto our project to get some rough mapping that we can tweak later. We can find UV projection under Mesh -> UV
 Unwrap -> "Sphere/Cylinder/Cube" projection.
 
 ![Blender uv projection](/media/content/blog/post/2019/03/22/blender-tutorial-8-textures-part-1/blender-uv-projection.jpg)
+
+## Conclusion
 
 In the next post we will talk about other textures technique available in Blender.

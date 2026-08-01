@@ -31,6 +31,8 @@ First of all, if you are starting with a new library project, you will use the f
 swift package init --type library
 ```
 
+## The Package.swift file
+
 This command will create all the files and folders you need to develop your library. But in my case, I was working on an
 existing project. This is why I created all the needed files manually and I will describe them in details so you can
 understand better the meaning of each one of them.  
@@ -102,6 +104,8 @@ Let's see in details the meaning of each option:
       of this writing the SPM doesn't support resource bundles**.
 * `swiftLanguageVersions`, that contains the set of supported Swift language versions.
 
+## The test manifests
+
 Next I had to create a `XCTestManifests.swift` file inside the `Tests` folder. This file contains an extension for
 each `XCTestCase` subclass I included in my test target. This extension contains an array `__allTest` that exposes a
 list of all my test methods inside my `XCTestCase` subclasses. At the end of this file you can find a `__allTests()`
@@ -162,6 +166,8 @@ tests += ID3TagEditorTests.__allTests()
 XCTMain(tests)
 ```
 
+## Installing Swift on Linux
+
 Now I was ready to test `ID3TagEditor` using the SPM on macOS and Linux. To do this I used Ubuntu as distro. The distro
 version used at the moment of this writing is the 18.04 LTS.  
 First of all, how do I install Swift on linux? I downloaded the Swift release for Linux from
@@ -183,6 +189,8 @@ tar xzf swift-<VERSION>-<PLATFORM>.tar.gz
 export PATH=/<path to the Swift release folder>/usr/bin:"${PATH}"
 ```
 
+## The demo executable
+
 The setup was done. Now I was able to test  `ID3TagEditor` as a SPM library on Linux. To do this I created a new project
 inside the demo folder of the ID3TagEditor project called `Demo Ubuntu`. This is an executable SPM project that
 has `ID3TagEditor` as package dependencies. The executable is a command line application that opens a mp3 file, parses
@@ -201,6 +209,8 @@ after you execute the `swift run` command.
 ![ID3TagEditor now works as expected on Ubuntu](/media/content/blog/post/2019/01/03/swift-package-manager-linux-macos-create-library-executable/spm-id3tageditor-demo-linux.jpg)
 
 ![ID3TagEditor works as expected also on macOS](/media/content/blog/post/2019/01/03/swift-package-manager-linux-macos-create-library-executable/spm-id3tageditor-demo-macos.jpg)
+
+## Conclusion
 
 Cool! Now the ID3TagEditor is fully compatible with the SPM and could be used in Swift applications for both macOS and
 Linux. You can see the entire codebase of the `ID3TagEditor`
