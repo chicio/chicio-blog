@@ -14,6 +14,15 @@ const ignores = {
         "next-env.d.ts",
         ".claude/**",
         ".agents/**",
+        // design-sync scaffolding for claude.ai/design: framework shims and preview cards, not app
+        // code. The shims deliberately render <img> and destructure Next-only props to drop them,
+        // and previews import the compiled bundle by package name — all of which trip app rules.
+        ".design-sync/**",
+        // generated .d.ts tree the design-sync converter reads (cfg.buildCmd emits it; gitignored)
+        "dist/**",
+        // design-sync build output: the compiled bundle and generated preview cards (gitignored)
+        "ds-bundle/**",
+        ".ds-sync/**",
         "public/**",
         "tools/**",
         "**/*.test.ts",
