@@ -27,10 +27,16 @@ Delivery 1 of 3 for the "reading companion" (table of contents) feature, branch
   (>=3, HTML) and `isMarkdownOutlineViable` (>=2, markdown). Neither knows about DSA/exercises by
   design — exercise exclusion from the HTML TOC happens ONLY because `exercise.tsx` never passes
   `headings` to `ReadingContentPage`, not via any predicate logic.
-- `Content.headings: ContentHeading[]` is a **required** field (not optional) — the blast radius across
-  literal `Content` constructions was small: 10 test-fixture files total (grep for
-  `contentFileRelativePath:` to find all construction sites; reading properties doesn't require the
-  field, only literal-construction call sites do).
+- ~~`Content.headings: ContentHeading[]` is a **required** field~~ — **SUPERSEDED in the review-round-2
+  extra fix (2026-08-01, commit `1132013d`)**: `Content` has NO `headings` field at all anymore. Eagerly
+  populating it in `getAllContentFor`/`getSingleContentBy` paid `extractHeadings`'s full remark AST-parse
+  cost on every ingested item, and `cached()` is a no-op outside `NODE_ENV=production` — every
+  content-walking test (`indexable-content.test.ts`, `filesystem-manifest-factory.test.ts`, etc.) re-paid
+  that cost on its first walk of the ~550-file tree, inside the default 5s `testTimeout`. See
+  `feedback_lazy_derive_dont_precompute_per_item.md`. The 4 real consumers now call
+  `extractHeadings(content.content)` on demand: `blog-post-content.tsx`, `topic.tsx`,
+  `content-item-markdown.ts`'s `sectionsFor`, `table-of-contents-report.ts`. `extractHeadings` itself is
+  still memoized by markdown string, so repeated calls for the same content stay free.
 - `src/lib/build/table-of-contents-report.ts` — prebuild report of pages failing the HTML gate,
   restricted to ONLY `slugs.blog.blogPost` + `slugs.dataStructuresAndAlgorithms.topic` entries in
   `contentRegistry`. Do NOT run `isTableOfContentsViable` over the whole registry — DSA exercises all
