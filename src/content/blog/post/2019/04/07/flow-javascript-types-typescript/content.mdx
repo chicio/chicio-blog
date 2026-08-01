@@ -37,7 +37,7 @@ It seems really cool!!! :sunglasses:. In this post I will described my experienc
 integrated it in my website JavaScript build process and how I used it to do static type checking for my JavaScript
 source code. So let's start from the installation process.
 
-#### Installation and setup
+## Installation and setup
 
 First of all, I added Flow to my dev dependencies. I decided to use Flow in combination
 with [flow-remove-types](https://github.com/flowtype/flow-remove-types "flow remove types"), a small CLI tool for
@@ -86,7 +86,7 @@ development environment on a new computer):
 npm install --global flow-typed
 ```
 
-#### Adding types
+## Adding types
 
 Let's start to add some types. To show you how to add types with Flow I will start with the piece of code you can find
 below. This piece of code contains the animation used to show an image after it had been downloaded from the network.
@@ -223,7 +223,7 @@ const loadFont = (finish: ?(() => void)): void => {
 export { loadFont }
 ```
 
-#### Flow vs TypeScript
+## Flow vs TypeScript
 
 So how does Flow compare to TypeScript? The main reasons to choose Flow instead of TypeScript are:
 
@@ -240,7 +240,7 @@ The cons of Flow with respect to TypeScript are:
   tutorials, online resources and library definitions.
 * **better IDE integrations**. TypeScript is much better supported in terms of automated refactoring tools
 
-#### Conclusion
+## Conclusion
 
 This is my experience with Flow. In the end I think it's a good alternative to TypeScript, especially for the "true pure
 javascript lovers". Let me know in the comments if you like it :cupid: or if you prefer TypeScript :smiling_imp:.

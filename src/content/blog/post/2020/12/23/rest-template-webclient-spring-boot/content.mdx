@@ -36,7 +36,7 @@ do that in a Spring Boot application? There are two main component that we can u
 see how they works by developing a small Spring Boot application that call an external service and will return the
 result of this call through an endpoint.
 
-#### The application
+## The application
 
 The application I create is very simple. It (obviously) use Spring Boot as application framework, Gradle as build system
 and Kotlin as main language (I'm using also Kotlin DSL instead of Groovy for the gradle file depedencies definition).
@@ -209,7 +209,7 @@ data class TattooPostResult (
 The external fake API are served using the standalone version of [WireMock](http://wiremock.org "wiremock"), a Java mock
 server.
 
-#### RestTemplate
+## RestTemplate
 
 `RestTemplate` is the standard way to consume APIs in a synchronous way. Even if it has been deprecated starting from
 Spring 5.0 in favour of `WebClient`, it is still widely used. The standard way to create a `RestTemplate` instance is by
@@ -361,7 +361,7 @@ fun exchange(): ResponseEntity<TattooPostResult> = try {
 }
 ```
 
-#### WebClient
+## WebClient
 
 `WebClient` is the new REST client starting from Spring 5.0 Reactive. In the long term it will substitute `RestTemplate`
 . The key feature of these new client is that it can do asynchronous non blocking calls that published reactive `Mono`
@@ -489,7 +489,7 @@ fun deleteSynchronous(): String {
 }
 ```
 
-#### Conclusion
+## Conclusion
 
 You can find the complete source code of the application described above in
 this [github repository](https://github.com/chicio/SpringBoot-RestClients-Cheatsheets "spring boot resttemplate webclient cheatsheet")

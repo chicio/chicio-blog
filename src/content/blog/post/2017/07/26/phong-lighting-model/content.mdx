@@ -42,7 +42,7 @@ So each component of the following equations will be described by a triplet of n
 The light that you see on a surface could be decomposed into four main components. Let's see them in detail and how they
 are composed together to calculate the illumination of a surface point: Phong model.
 
-#### **Emissive component**
+## **Emissive component**
 
 This is the light component emitted by the surface material. It is a purely additive component. As you can image, few
 surface material in nature are emissive (e.g.: light  :laughing:). So the emissive illumination $I_{\text{emissive}}$ of
@@ -56,7 +56,7 @@ $$
 I_{\text{emissive}}=k_{\text{e}}I_{\text{LE}}
 $$
 
-#### **Ambient component**
+## **Ambient component**
 
 This is light component used to model empirically the contribution of indirect illumination of bouncing lights in the
 scene on a surface. It depends entirely on the surface material (no geometry influences). So the ambient illumination
@@ -69,7 +69,7 @@ $$
 I_{\text{ambient}}=k_{\text{a}}I_{\text{LA}}
 $$
 
-#### **Diffusive component**
+## **Diffusive component**
 
 This light component represents the amount of reflected light given an incident light. Lambertian surfaces are
 considered: the incident light is equally reflected (with a given amount) in all directions. The amount of reflected
@@ -83,7 +83,7 @@ $$
 I_{\text{diffuse}}=k_{\text{d}}I_{\text{LD}}({\hat {L}}\cdot{\hat {N}})
 $$
 
-#### **Specular component**
+## **Specular component**
 
 This light component represents the amount of reflected light in a specific direction (mirror alike reflection). Light
 is reflected in a different way depending on the incident light direction. Shiny materials are the one with a high

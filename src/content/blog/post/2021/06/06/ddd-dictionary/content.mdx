@@ -24,7 +24,7 @@ by [Vaughn Vernon](https://twitter.com/vaughnvernon?lang=en), one of the top exp
 to share with you what I learnt about DDD and I will try to give you the best (opinionated) definition of DDD and of all
 its parts.
 
-#### DDD
+## DDD
 
 So let’s start from the basis. What is DDD? DDD is a set of tools that help an organization to model software around its
 business model. Generally speaking a company CAN’T be the best at everything. The DDD tools help organizations to better
@@ -46,7 +46,7 @@ The DDD tools that will let you implement effective design are divided in two ma
 
 Let’s see each one of them in details.
 
-#### Strategic design
+## Strategic design
 
 Strategic design is the first phase of DDD. With a set of specific tool strategic design will let you highlight what is
 better important for your business. In this phase your domain models will be divided into smaller units, and they 
@@ -58,7 +58,7 @@ two tools:
 
 Let’s see them in details.
 
-#### Bounded Context and Ubiquitous language
+## Bounded Context and Ubiquitous language
 
 Let’s start from the definition of Bounded Context from the Vaughn Vernon course:
 
@@ -83,7 +83,7 @@ definition of what an Ubiquitous languages is.
 How many bounded context will your project have? How do they map to your business domain parts. Let’s answer to these
 question with Subdomain
 
-#### Subdomains
+## Subdomains
 
 Let’s start as always from the Vernon definition of what a subdomain is.
 
@@ -116,7 +116,7 @@ the team in charge of the related bounded context. There are 3 types of subdomai
 From the definition above it should be clear that every software project will have multiple subdomains and bounded
 context. How do you integrate them together?
 
-#### Context mapping
+## Context mapping
 
 Context mapping lets you integrate different bounded contexts. It is the translation between them. It is important to
 evaluate the “translation” trade off when a context mapping is required. This is usually related to the type of relation
@@ -143,7 +143,7 @@ relationship two bounded contexts. There are various types of context mapping:
   own specialized solution (eg. a new solution in your own bounded context is much more simple to create than the
   integration with another bounded context).
 
-#### Tactical design
+## Tactical design
 
 In the previous paragraph we explored all the details of Strategic Design. At this point I think it’s clear that
 Strategic Design is an high level design phase, because it lets you define the subdivision of your domain and of your
@@ -153,7 +153,7 @@ Design phase.
 What are the details we want to define during the Tactical Design? We would like to define the concepts contained in a
 bounded context. This are usually represented as Aggregates.
 
-#### Aggregates
+## Aggregates
 
 An aggregate is a set of domain objects, usually called Entities and Value Objects, that are considered as a single item
 inside our bounded context. One of the entities that make up the Aggregate is called the Aggregate Root or Root Entity.
@@ -186,7 +186,7 @@ How do we signal that another aggregate should be updated when another one finis
 messaging mechanism in order to guarantee that after the transaction on one aggregates, others should be updated too.
 For this scope Domain Events come to rescue us.
 
-#### Domain Events
+## Domain Events
 
 Let’ quote (again :laughing:) the Vernon definition of Domain Events.
 
@@ -207,7 +207,7 @@ with too much data
 As we said above domain events should be saved while updating aggregates. This is useful in order to have a clear
 understand of what happened to an aggregates. We can also use them to implement event sourcing.
 
-#### Event sourcing
+## Event sourcing
 
 Event sourcing is a technique where an aggregate current state is reconstructed by applying in temporal order all the
 domain events related to an aggregate. Let’s take a look at the explanation from Vernon:
@@ -220,7 +220,7 @@ greatest advantages of using it from the business point of view is that you have
 many reasons, ones that you can imagine today, such as compliance and analytics, and ones that you won’t realize until
 later. For developers it can enable them to use event streams to examine usage trends and to debug their source code.
 
-#### Conclusion
+## Conclusion
 
 If you came until here I hope you enjoyed the read, but more important that you found the answers you were searching
 for. If this post didn’t clarify your doubts, let me know in the comments, so that I can try to add what is missing and

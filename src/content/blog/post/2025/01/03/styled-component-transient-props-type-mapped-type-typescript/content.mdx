@@ -98,7 +98,7 @@ In particular, we want to avoid coding two different interfaces,
 but just creating a new one starting from the `OverlayProps`
 that adds the `$` sign to the ones that should be transient props, and skips the other ones that are DOM attributes.
 
-#### Implementation
+## Implementation
 
 Based on the description above, we want to define a `TransientProps` type that is able to:
 
@@ -204,7 +204,7 @@ export const Overlay: FC<OverlayProps> = ({ zIndex, onClick, delay }) => {
 };
 ```
 
-#### Conclusion
+## Conclusion
 
 I love the TypeScript type system.
 Its flexibility and rich feature set are so vast and intricate that you could spend years

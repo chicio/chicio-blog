@@ -41,14 +41,14 @@ To create a basic PWA I need 3 things:
 
 Let's see in details what I did to get this basic PWA checklist completed :bowtie:.
 
-#### HTTPS
+## HTTPS
 
 To have https on my github pages site I had to do...nothing!!!:tada::tada::tada: I already configured the site to be
 HTTPS only using [cloudflare](https://www.cloudflare.com). This is the service I chose during the development of the
 first version of my site to be used for HTTPS and also as [CDN](https://en.wikipedia.org/wiki/Content_delivery_network).
 This was too much easy :grin:, let's move on quickly to the next step: the web app manifest.
 
-#### Web App Manifest
+## Web App Manifest
 
 The [web app manifest](https://developers.google.com/web/fundamentals/web-app-manifest/ "web app manifest") is a JSON
 file that must be deployed in the root of you web application. This JSON is used by user browser about to get some
@@ -143,7 +143,7 @@ a `browserconfig.xml` that contains, guess what... a list of icons :laughing:
 </browserconfig>
 ```
 
-#### Service Worker
+## Service Worker
 
 A service worker is the heart of a Progressive Web App. Let's see the definition of what is a service worker taken from
 the [Google Web Fundamentals - Service worker](https://developers.google.com/web/fundamentals/primers/service-workers/ "Service Worker")
@@ -270,7 +270,7 @@ self.addEventListener('fetch', (event) => {
 });
 ```
 
-#### Conclusion
+## Conclusion
 
 By adding all the above implementation my blog is now a Progressive Web App (that's right, the article you're reading
 part of a PWA :smirk:). If you want to see the entire source code of my website/blog discussed here you can have a look

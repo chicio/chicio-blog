@@ -25,7 +25,7 @@ classes) the previous frameworks gives you just a big overhead and complexity on
 project I tried to write my own very simple dependencies injector container by leveraging the power of Swift Metatype
 and the Hashable protocol. Let's go and see the how I created it :smirk:.
 
-#### Implementation
+## Implementation
 
 The main class of dependencies injector container is composed by 2 classes: `DependeciesContainer` and `DependencyKey`.  
 The main one stores in the field `dependecies` a dictionary of all the dependencies registered using an instance of the
@@ -184,7 +184,7 @@ print(tiger.isAlive())
 print((tiger as! Tiger).roar()) // "roar\n"
 ```
 
-#### Conclusion
+## Conclusion
 
 You can find all the code shown in this
 post [in this Github repo](https://github.com/chicio/dependencies-injection-swift-example "custom tab bar swiftui").

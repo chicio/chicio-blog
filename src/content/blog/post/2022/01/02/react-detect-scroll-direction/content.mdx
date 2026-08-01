@@ -13,7 +13,7 @@ authors: [fabrizio_duroni]
 
 In the last year I migrated this blog on [GatsbyJS](https://www.gatsbyjs.com). This basically means that now this blog is powered by [React, a framework I love](https://www.fabrizioduroni.it/2018/07/04/react-native-typescript-existing-app/). In particular, I used only [hooks](https://reactjs.org/docs/hooks-intro.html "react hooks") and functional components. One of the thing I had to do was to detect the scroll direction in order to implement the sticky header with hide on scroll feature that you can find at the top of this page (and everywhere on this website). How can we do this? Searching on the web I found this [well written post on stackoverflow](https://stackoverflow.com/questions/62497110/detect-scroll-direction-in-react-js "react scroll detection") that contains a raw implementation of what I needed. In this blog post I will show you how I evolved that react hook into into a production ready one that you can use to detect the scroll direction in a page.
 
-#### Implementation
+## Implementation
 
 Let’s start from defining an enum that will represent the scroll direction. Let’s define it as string, because you know that [enums in typescript are dangerous if you don’t define explicit values](https://www.aaron-powell.com/posts/2020-05-27-the-dangers-of-typescript-enums/ "enum typescript danger") :bomb:. 
 
@@ -111,6 +111,6 @@ export const useScrollDirection = () => {
 };
 ```
 
-#### Conclusion
+## Conclusion
 
 Did you enjoy reading my post? If so, support my work by 💞 [starring/funding some of my open source projects](https://github.com/chicio) 💞.
