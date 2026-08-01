@@ -23,14 +23,14 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@ai-sdk/groq": "^3.0.42",
-    "@ai-sdk/react": "^3.0.176",
+    "@ai-sdk/groq": "^4.0.17",
+    "@ai-sdk/react": "^4.0.40",
     "@giscus/react": "^3.1.0",
     "@google-analytics/data": "^6.1.0",
     "@mdx-js/loader": "^3.1.1",
     "@mdx-js/react": "^3.1.1",
     "@microflash/rehype-figure": "^2.1.4",
-    "@modelcontextprotocol/sdk": "^1.29.0",
+    "@modelcontextprotocol/sdk": "^1.30.0",
     "@next/mdx": "16.2.4",
     "@next/third-parties": "16.2.10",
     "@react-email/components": "^1.0.12",
@@ -40,7 +40,7 @@
     "@upstash/vector": "^1.2.3",
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
-    "ai": "^6.0.175",
+    "ai": "^7.0.44",
     "cmdk": "^1.1.1",
     "elasticlunr": "^0.9.5",
     "feed": "^5.2.1",
@@ -54,7 +54,7 @@
     "mdast-util-to-string": "^4.0.0",
     "mermaid": "^11.16.0",
     "next": "16.2.11",
-    "postcss": "^8.5.18",
+    "postcss": "^8.5.19",
     "react": "19.2.6",
     "react-dom": "19.2.6",
     "react-icons": "^5.6.0",
@@ -108,11 +108,11 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.9",
     "husky": "^9.1.7",
-    "jsdom": "^29.1.1",
+    "jsdom": "^30.0.0",
     "knip": "^6.27.0",
     "prettier": "^3.9.4",
     "prettier-plugin-tailwindcss": "^0.8.1",
-    "release-it": "^20.2.0",
+    "release-it": "^20.2.1",
     "remark-rehype": "^11.1.2",
     "typescript": "^5",
     "vitest": "^4.1.10"
@@ -122,7 +122,8 @@
   },
   "overrides": {
     "@types/react": "19.2.14",
-    "@types/react-dom": "19.2.3"
+    "@types/react-dom": "19.2.3",
+    "ai": "$ai"
   },
   "allowScripts": {
     "agent-browser@0.31.1": true,

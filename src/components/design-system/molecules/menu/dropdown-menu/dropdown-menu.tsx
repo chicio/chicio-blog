@@ -19,14 +19,9 @@ interface DropdownMenuGroup {
     items: DropdownMenuItem[];
 }
 
-type DropdownMenuEntry = DropdownMenuItem | DropdownMenuGroup;
-
-const isDropdownMenuGroup = (entry: DropdownMenuEntry): entry is DropdownMenuGroup =>
-    "items" in entry;
-
 interface DropdownMenuProps {
     label: string;
-    items: DropdownMenuEntry[];
+    items: DropdownMenuGroup[];
     className?: string;
     chevronClassName?: string;
 }
@@ -37,20 +32,23 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
     className = "",
     chevronClassName = "",
 }) => {
-    const hasSelected = items
-        .flatMap((entry) => (isDropdownMenuGroup(entry) ? entry.items : [entry]))
-        .some((item) => item.selected);
+    const hasSelected = items.flatMap((group) => group.items).some((item) => item.selected);
     const { state, effects } = useDropdownMenuStore(hasSelected);
-    const { open, selected, shouldReduceMotions, buttonRef } = state;
-    const { toggleOpen, handleBlur } = effects;
+    const { open, selected, shouldReduceMotions, buttonRef, panelId } = state;
+    const { toggleOpen, handleBlur, handleKeyDown, getGroupId } = effects;
 
     return (
-        <div className="relative z-50 mb-0" tabIndex={-1} onBlur={handleBlur}>
+        <div
+            className="relative z-50 mb-0"
+            tabIndex={-1}
+            onBlur={handleBlur}
+            onKeyDown={handleKeyDown}
+        >
             <button
                 ref={buttonRef}
                 className={`${className} xs:pl-4 xs:pr-1 xs:py-1 hover:bg-accent-alpha-10 hover:text-accent hover:border-accent relative flex flex-nowrap items-center justify-center gap-2 rounded-xl border border-solid px-1 py-2 text-center text-sm leading-normal text-shadow-md md:text-base ${open || selected ? "border-accent bg-accent-alpha-15 text-accent" : "border-transparent"}`}
-                aria-haspopup="menu"
                 aria-expanded={open}
+                aria-controls={open ? panelId : undefined}
                 onClick={toggleOpen}
                 type="button"
             >
@@ -62,48 +60,49 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
             </button>
             <AnimatePresence>
                 {open && (
-                    <div
+                    <ul
                         key="dropdown-menu"
-                        className={`glow-container ${shouldReduceMotions ? "xs:bg-general-background" : "xs:bg-general-background/90"} relative mt-2 w-auto min-w-max rounded-xl py-2 xs:absolute xs:right-0 xs:left-0 xs:w-auto`}
+                        id={panelId}
+                        aria-label={label}
+                        role="list"
+                        className={`glow-container ${shouldReduceMotions ? "xs:bg-general-background" : "xs:bg-general-background/90"} relative mt-2 min-w-max list-none m-0 p-0 rounded-xl py-2 xs:absolute xs:right-0 xs:left-0 xs:w-60`}
                         tabIndex={-1}
-                        role="menu"
                     >
-                        {items.map((entry, idx) =>
-                            isDropdownMenuGroup(entry) ? (
-                                <div key={entry.label + idx}>
+                        {items.map((group, idx) => {
+                            const groupId = getGroupId(idx);
+                            return (
+                                <li key={group.label + idx} className="mb-0 pl-0 before:content-none">
                                     {idx > 0 && (
-                                        <div className="border-secondary-text/30 mx-3 border-t" />
+                                        <div aria-hidden="true" className="border-secondary-text/30 mx-3 border-t" />
                                     )}
-                                    <span className="text-secondary-text block px-4 pt-3 pb-1 text-sm font-bold uppercase tracking-wider cursor-default select-none">
-                                        {entry.label}
+                                    <span
+                                        id={groupId}
+                                        className="text-secondary-text block px-4 pt-3 pb-1 text-sm font-bold uppercase tracking-wider cursor-default select-none"
+                                    >
+                                        {group.label}
                                     </span>
-                                    {entry.items.map((item, itemIdx) => (
-                                        <MenuItem
-                                            key={item.label + itemIdx}
-                                            to={item.to}
-                                            selected={item.selected ?? false}
-                                            className="xs:whitespace-nowrap m-2 text-center"
-                                            onClick={item.onClick}
-                                            external={item.external}
-                                        >
-                                            {item.label}
-                                        </MenuItem>
-                                    ))}
-                                </div>
-                            ) : (
-                                <MenuItem
-                                    key={entry.label + idx}
-                                    to={entry.to}
-                                    selected={entry.selected ?? false}
-                                    className="xs:whitespace-nowrap m-2"
-                                    onClick={entry.onClick}
-                                    external={entry.external}
-                                >
-                                    {entry.label}
-                                </MenuItem>
-                            )
-                        )}
-                    </div>
+                                    <ul aria-labelledby={groupId} role="list" className="list-none m-0 p-0">
+                                        {group.items.map((item, itemIdx) => (
+                                            <li
+                                                key={item.label + itemIdx}
+                                                className="mb-0 pl-0 before:content-none"
+                                            >
+                                                <MenuItem
+                                                    to={item.to}
+                                                    selected={item.selected ?? false}
+                                                    className="xs:whitespace-nowrap m-2 text-center"
+                                                    onClick={item.onClick}
+                                                    external={item.external}
+                                                >
+                                                    {item.label}
+                                                </MenuItem>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </li>
+                            );
+                        })}
+                    </ul>
                 )}
             </AnimatePresence>
         </div>

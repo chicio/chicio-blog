@@ -69,6 +69,7 @@
 
 ## Features (continued 11)
 - [Reading Companion TOC](feature_reading_companion_toc.md) — headings.ts AST extraction + slugger-fed-all-levels dedupe gotcha (2026-07-31); heading-viability predicates; markdown sections outline; TableOfContents organism + Accordion forceOpen; blog-viable-count baseline mismatch; terminal.spec.ts e2e flakiness note; Content.headings field REMOVED in review-round-2 (2026-08-01), see feedback below
+- [DropdownMenu A11y & Grouping](arch_dropdown_menu_a11y.md) — groups-only nested-list, role=menu/aria-haspopup removed, Escape-to-refocus in store; globals.css re-adds bulleted ul/li styling AFTER preflight (always check it), needs explicit list-none/role=list resets; panel height regressions masquerade as e2e cookie-banner flakiness; panel width unified to fixed xs:w-60/240px, real Playwright boundingBox assertions added (2026-07-31)
 
 ## Feedback
 - [Review-fix workflow](feedback_review_fix_disk_and_reset_soft.md) — git reset --soft path-restaging to reshape commits; disk-full is often transient (retry, don't clean system caches); e2e hangs on a long-lived ad hoc port are stale-server artifacts, not regressions — verify with a fresh port + origin/main control
