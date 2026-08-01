@@ -35,7 +35,6 @@ const consoleContent = {
     },
     slug: { formatted: `${slugs.videogames.home}/console/gameboy` },
     content: "Console body.",
-    headings: [],
 };
 
 const gameContent = {
@@ -53,7 +52,6 @@ const gameContent = {
     },
     slug: { formatted: `${slugs.videogames.home}/console/gameboy/game/tetris` },
     content: "Game body.",
-    headings: [],
 };
 
 describe("videogames-markdown", () => {
@@ -65,7 +63,6 @@ describe("videogames-markdown", () => {
                 frontmatter: { title: "My Videogames Collection", description: "The collection" },
                 slug: { formatted: slugs.videogames.home, params: {} },
                 content: "Collection intro.",
-                headings: [],
             });
 
             const result = videogamesMarkdown({});

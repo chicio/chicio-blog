@@ -1,5 +1,4 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import type { ContentHeading } from "@/types/content/heading";
 import { slugs } from "@/types/configuration/slug";
 
 const { mockContentRegistry } = vi.hoisted(() => ({
@@ -14,16 +13,15 @@ vi.mock("@/lib/content/registry", () => ({
 
 import { reportTableOfContentsGaps } from "./table-of-contents-report";
 
-const heading = (): ContentHeading => ({
-    level: 2,
-    id: "id",
-    text: "text",
-    readingTime: { text: "", minutes: 0, time: 0, words: 0 },
-});
-
+/**
+ * Headings are no longer a precomputed field on `Content` — `reportTableOfContentsGaps` derives them
+ * from `content.content` via `extractHeadings` (see the doc comment on `Content` in
+ * `types/content/content.ts`). Each generated h2 needs distinct text so `extractHeadings`'s github-slugger
+ * doesn't need dedupe suffixes to reach the requested count.
+ */
 const contentWith = (slug: string, headingsCount: number) => ({
     slug: { formatted: slug, params: {} },
-    headings: Array.from({ length: headingsCount }, heading),
+    content: Array.from({ length: headingsCount }, (_, index) => `## Heading ${index}`).join("\n\n"),
 });
 
 beforeEach(() => {

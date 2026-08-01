@@ -46,7 +46,6 @@ const makePost = (year: number, words: number, minutes: number, tags: string[] =
         readingTime: { text: "", minutes, time: minutes * 60000, words },
         contentFileRelativePath: "",
         content: "",
-        headings: [],
     }) as Content;
 
 describe("blog-stats", () => {

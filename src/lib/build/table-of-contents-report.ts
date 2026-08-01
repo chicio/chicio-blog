@@ -1,5 +1,6 @@
 import { contentRegistry } from "@/lib/content/registry";
 import { isTableOfContentsViable } from "@/lib/content/heading-viability";
+import { extractHeadings } from "@/lib/content/headings";
 import { slugs } from "@/types/configuration/slug";
 
 /**
@@ -23,7 +24,7 @@ export const reportTableOfContentsGaps = (): void => {
         const gaps = contentRegistry
             .filter((entry) => entry.content && tableOfContentsConsumerSlugs.has(entry.slug))
             .flatMap((entry) => entry.content!())
-            .filter((content) => !isTableOfContentsViable(content.headings))
+            .filter((content) => !isTableOfContentsViable(extractHeadings(content.content)))
             .map((content) => content.slug.formatted);
 
         if (gaps.length === 0) {

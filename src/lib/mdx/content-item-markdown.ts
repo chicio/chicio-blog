@@ -1,15 +1,16 @@
 import { Content } from "@/types/content/content";
 import { markdownDocument, MarkdownSection } from "./markdown-document";
 import { isMarkdownOutlineViable } from "@/lib/content/heading-viability";
+import { extractHeadings } from "@/lib/content/headings";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 
 /**
  * The document's outline as citable deep links, or `undefined` when there are not enough headings to
- * be worth rendering. `content.headings` is a required field on `Content`, so every real caller always
- * has it populated.
+ * be worth rendering. Headings are derived on demand from `content.content` rather than read off a
+ * precomputed field on `Content` — see the doc comment on `Content` in `types/content/content.ts` for why.
  */
 const sectionsFor = (content: Content<unknown>): MarkdownSection[] | undefined => {
-    const { headings } = content;
+    const headings = extractHeadings(content.content);
 
     if (!isMarkdownOutlineViable(headings)) {
         return undefined;

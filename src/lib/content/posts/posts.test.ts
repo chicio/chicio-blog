@@ -42,7 +42,6 @@ const makePost = (slug: string, tags: string[], dateFormatted: string, authors: 
         readingTime: { text: "", minutes: 0, time: 0, words: 0 },
         contentFileRelativePath: "",
         content: "",
-        headings: [],
     }) as Content;
 
 const makeAuthor = (id: string, name: string): Author => ({

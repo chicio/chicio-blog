@@ -30,7 +30,6 @@ const makeContent = (slugFormatted: string, order: number): Content<FakeMeta> =>
         readingTime: { text: "", minutes: 0, time: 0, words: 0 },
         contentFileRelativePath: "",
         content: "",
-        headings: [],
     }) as Content<FakeMeta>;
 
 beforeEach(() => {

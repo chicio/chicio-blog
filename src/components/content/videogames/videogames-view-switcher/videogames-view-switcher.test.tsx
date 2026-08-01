@@ -33,7 +33,6 @@ const makeGame = (title: string): Content<GameMetadata> => ({
     readingTime: { text: "", minutes: 0, time: 0, words: 0 },
     contentFileRelativePath: "",
     content: "",
-    headings: [],
 });
 
 const makeConsoleWithGameCount = (name: string, count: number): ConsoleWithGameCount => ({
@@ -63,7 +62,6 @@ const makeConsoleWithGameCount = (name: string, count: number): ConsoleWithGameC
         readingTime: { text: "", minutes: 0, time: 0, words: 0 },
         contentFileRelativePath: "",
         content: "",
-        headings: [],
     },
 });
 

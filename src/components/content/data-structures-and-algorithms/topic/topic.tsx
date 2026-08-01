@@ -10,6 +10,7 @@ import { CourseNavigation } from "@/components/content/data-structures-and-algor
 import { JsonLd } from "@/components/features/seo/jsond-ld";
 import { Content } from "@/types/content/content";
 import { isTableOfContentsViable } from "@/lib/content/heading-viability";
+import { extractHeadings } from "@/lib/content/headings";
 
 interface DsaProps {
     topic: Content;
@@ -20,11 +21,12 @@ interface DsaProps {
 export const Topic: FC<PropsWithChildren<DsaProps>> = async ({ topic, previous, next }) => {
     const { contentFileRelativePath } = topic;
     const { default: TopicContent } = await import(`@/content/${contentFileRelativePath}/content.mdx`);
+    const headings = extractHeadings(topic.content);
 
     return (
         <ReadingContentPage
             author={siteMetadata.author}
-            headings={isTableOfContentsViable(topic.headings) ? topic.headings : undefined}
+            headings={isTableOfContentsViable(headings) ? headings : undefined}
             breadcrumbs={[
                 {
                     label: "DSA",

@@ -6,6 +6,7 @@ import { siteMetadata } from "@/types/configuration/site-metadata";
 import { slugs } from "@/types/configuration/slug";
 import { tracking } from "@/types/configuration/tracking";
 import { isTableOfContentsViable } from "@/lib/content/heading-viability";
+import { extractHeadings } from "@/lib/content/headings";
 import { FC } from "react";
 import { PostAuthors } from "@/components/content/blog/post-authors";
 import { PostMeta } from "@/components/content/blog/post-meta";
@@ -22,13 +23,14 @@ interface PostProps {
 export const BlogPostContent: FC<PostProps> = async ({ post }) => {
     const { frontmatter, readingTime, contentFileRelativePath } = post;
     const { default: PostContent } = await import(`@/content/${contentFileRelativePath}/content.mdx`);
+    const headings = extractHeadings(post.content);
 
     return (
         <>
             <ReadingContentPage
                 author={siteMetadata.author}
                 trackingCategory={tracking.category.blog_post}
-                headings={isTableOfContentsViable(post.headings) ? post.headings : undefined}
+                headings={isTableOfContentsViable(headings) ? headings : undefined}
                 breadcrumbs={[
                     {
                         label: "Blog",
