@@ -1,0 +1,63 @@
+/*
+ * design-sync Tailwind entry.
+ *
+ * Next compiles the app's CSS through @tailwindcss/postcss, so there is no standalone stylesheet on
+ * disk for the converter to ship. This entry reproduces that compile outside Next: it pulls in the
+ * repo's real globals.css (theme tokens, @layer components, the overridden breakpoint scale, and its
+ * own @import of pills.css) and scopes utility generation to the design system.
+ *
+ * Nothing here redefines any style — globals.css remains the single source of truth. The compiled
+ * output is what cfg.cssEntry points at.
+ */
+@import "../src/app/css/globals.css";
+
+@source "../src/components/design-system/**/*.tsx";
+
+/*
+ * Authored preview cards are scanned too. Without this, any utility a preview uses that no
+ * design-system component happens to use (h-40, space-y-2, transform-gpu, translate-y-*) is simply
+ * absent from the compiled CSS — the card then renders unstyled with no error anywhere, because
+ * preview-rebuild.mjs does not recompile CSS.
+ */
+@source "./previews/**/*.tsx";
+
+/*
+ * Re-assert the page surface the design system already declares for itself.
+ *
+ * globals.css sets `body { @apply bg-general-background text-primary-text … }` (#001100 on #E8FFE8),
+ * but every generated preview card emits its own `<style>body{…;background:#fff}</style>` AFTER the
+ * stylesheet link. Equal specificity, later in source order — so the card's white wins and a
+ * green-on-black system renders on white, where most of its components are close to invisible.
+ *
+ * `html body` (0,0,2) outranks that bare `body` (0,0,1) regardless of order. This adds no new design
+ * decision: it restates the values globals.css already owns, so the tokens remain the single source of
+ * truth. It is deliberately in the styles.css closure rather than the card scaffolding, because
+ * designs built with this DS should get the dark surface too — that is what the real site does.
+ */
+html body {
+    background-color: var(--color-general-background);
+    color: var(--color-primary-text);
+}
+
+/*
+ * Make the unauthored-component "floor card" legible on that dark surface.
+ *
+ * The floor card is scaffolding from the converter's emit step, styled inline for a light theme
+ * (#111827 title, #9ca3af eyebrow, #e5e7eb border). Against #001100 it is near-invisible, which would
+ * make every not-yet-authored component look broken rather than simply unauthored.
+ *
+ * Inline styles can only be beaten with !important, and the selector is scoped to [data-ds-fallback]
+ * so nothing here can touch a real component's rendering — the floor card is the only thing affected.
+ */
+[data-ds-fallback] {
+    background-color: var(--color-general-background-light) !important;
+    border-color: var(--color-accent) !important;
+}
+
+[data-ds-fallback] * {
+    color: var(--color-primary-text) !important;
+}
+
+[data-ds-fallback] [data-ds-eyebrow] {
+    color: var(--color-accent) !important;
+}

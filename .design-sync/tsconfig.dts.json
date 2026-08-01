@@ -1,0 +1,15 @@
+{
+    "extends": "../tsconfig.json",
+    "compilerOptions": {
+        "noEmit": false,
+        "declaration": true,
+        "emitDeclarationOnly": true,
+        "declarationMap": false,
+        "outDir": "../dist/types",
+        "rootDir": "../src",
+        "skipLibCheck": true,
+        "jsx": "react-jsx"
+    },
+    "include": ["../src/components/design-system/**/*.ts", "../src/components/design-system/**/*.tsx", "../src/types/**/*.ts"],
+    "exclude": ["../**/*.test.ts", "../**/*.test.tsx"]
+}
