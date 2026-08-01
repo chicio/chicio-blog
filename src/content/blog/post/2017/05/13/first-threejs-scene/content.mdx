@@ -30,6 +30,8 @@ the end of this post you will have a scene like the one in the following image:
 
 ![The 3D scene that you will get at the end of the following tutorial on threejs](/media/content/blog/post/2017/05/13/first-threejs-scene/threejs-scene.jpg)
 
+## The setup
+
 The mesh We will use are a simplified version of the ones available from
 the [Stanford scan repository](https://graphics.stanford.edu/data/3Dscanrep/
 "Stanford scan repository") in PLY format.  
@@ -61,6 +63,8 @@ below). We will put our assets (mesh, textures etc.) in the folder `/assets/mode
 </body>
 </html>
 ```
+
+## The scene, the camera, and the renderer
 
 The first thing we will need to create is a `Scene`. We will also need to create a `Camera`, a `TextureLoader` for
 texture loading, a `PLYLoader` to load our PLY meshes and a `WebGLRenderer`. Finally we will need an instance
@@ -142,6 +146,8 @@ function createOrbitsControls(camera, renderer) {
 }
 ```
 
+## The lights
+
 Now we can add the renderer to the DOM (we attach it to the body) of the page. We can now start to customize the scene
 by setting the background color to indaco (0x303F9F) (remember: the recommended way to set color in three.js is by HEX
 value). We can then add the main light and the hemisphere light.
@@ -208,6 +214,8 @@ function createHemisphereLight() {
   return new THREE.HemisphereLight(0x303F9F, 0x000000, 1);
 }
 ```
+
+## The models
 
 Now we can start to add the stars, the PLY mesh models and the floor mesh model. Each mesh model is added to the scene
 at the end of its load method.
@@ -373,6 +381,8 @@ function loadFloor(textureLoader, completionFunction) {
 }
 ```
 
+## The rendering loop
+
 We are ready to render our scene. We just need to create
 the [rendering loop](https://gameprogrammingpatterns.com/game-loop.html "rendering loop") with the following code:
 
@@ -384,6 +394,8 @@ var render = function() {
   renderer.render(scene, camera);
 };
 ```
+
+## Conclusion
 
 You can find the entire scene code is [this github gist](https://gist.github.com/chicio/af13397f22c21a05b6ac007c83f84403).  
 Yeah!!! You made it!! You create a 3D computer graphics web application using three.js :blush:!! And it is also a scene

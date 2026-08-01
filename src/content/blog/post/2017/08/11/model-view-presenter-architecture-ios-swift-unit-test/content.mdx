@@ -39,6 +39,8 @@ use it in all my code. Below you can find a mockup of what we want to achieve.
 
 ![A mockup of the final app we will obtain at the end of this post](/media/content/blog/post/2017/08/11/model-view-presenter-architecture-ios-swift-unit-test/mockup-model-view-presenter.jpg)
 
+## The model and the repository
+
 Let's start by creating a `Product` struct that we will use to describe our products. Each product will be composed of a
 name, a description and an image (identified by its name):
 
@@ -130,6 +132,8 @@ class ProductsRepositoryTests: XCTestCase {
     }
 }
 ```
+
+## The presenter
 
 Now it's time to develop our `ProductsPresenter` presenter. It will need a view to which it will delegate the real user
 interface operation and the Repository to retrieve the products data. It will be responsible to manage:
@@ -313,6 +317,8 @@ class ProductsPresenterTests: XCTestCase {
 }
 ```
 
+## The view controller
+
 It easy to see that the unit tests for our presenter describe the entire presentation flow. This basically means that
 our unit tests are the documentation of our presentation logic. Cool!!!! :sunglasses:
 Now the next big question is: who is going to implement our `ProductsView` protocol? As we said in the introduction, our
@@ -406,6 +412,8 @@ class ProductsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 }
 ```
+
+## The product detail
 
 You don't need unit tests for the controller: the presenter unit tests assure that our presentation logic is the one
 expected. The view controller is only updating iOS specific User Interface components (something we hope Apple tested
@@ -556,6 +564,8 @@ class ProductDetailViewController: UIViewController, ProductDetailView {
     }
 }
 ```
+
+## Conclusion
 
 Yeah you made it!! You're at the end of this never ending post :satisfied:!!  
 Now you can start to create your high quality unit tested apps :relieved:. One final note about the implementation

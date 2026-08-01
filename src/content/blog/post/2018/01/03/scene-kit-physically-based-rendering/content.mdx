@@ -34,6 +34,8 @@ end of this post you will be able to render the scene contained in the image bel
 
 ![A physically based scene created using SceneKit](/media/content/blog/post/2018/01/03/scene-kit-physically-based-rendering/physically-based-rendering-scene-right.jpg)
 
+## The lights and the lighting environment
+
 The general approach used in the construction of the scene will be the following: for each main scene category component
 we will create a class that encapsulate the creation of the corresponding `SCNNode`, the base SceneKit unit element, and
 its setup to obtain the feature we want.  
@@ -157,6 +159,8 @@ class PhysicallyBasedLightingEnviroment {
 }
 ```
 
+## The camera
+
 Next step: the camera. We create a `Camera` class, that will contain a reference, again, to a `SCNNode` on which
 an `SCNCamera` has been defined. For the camera we need to set first of all some geometric properties like the position,
 rotation and the pivot point that we will use as reference for the animation of the camera. Last but not least we set
@@ -195,6 +199,8 @@ class Camera {
     }
 }
 ```
+
+## The objects and the materials
 
 Now it's time to think about the objects we want to display in the scene. For that reason we create a `Object` class
 that will represent each kind of object we want to show in the scene. Obviously as for the previous classes, also
@@ -294,6 +300,8 @@ class PhysicallyBasedMaterial {
     }
 }
 ```
+
+## The scene
 
 Now it's time to construct our scene :relieved:!! We start by creating a new class `PhysicallyBasedScene`, subclass
 of `SCNScene`. In this way we can customize the default initializer with the step needed to add all the element of our
@@ -482,6 +490,8 @@ We are ready to render our scene. Assign an instance of our `PhysicallyBasedScen
 results of our work. Below you can find a video of the scene we created.
 
 <Youtube videoId="yDMdAtv-3Bg" />
+
+## Conclusion
 
 That's it!! You've made it!! Now you can show to your friends your physically based scene and be proud of it :
 sunglasses:. You can find this example with other scenes

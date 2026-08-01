@@ -34,11 +34,15 @@ character.
 
 ![Add bones](/media/content/blog/post/2019/03/28/blender-tutorial-14-armatures-character-rigging/blender-bones.jpg)
 
+## Creating a complete armature
+
 To create a complete armature we have some tools similar to the one we previously seen for modeling. After selecting
 edit mode, in the left panel of the 3D window we have the options extrude and subdivide that let us create a complete
 skeleton for a character. In the scene we will find our armature object with all the bones connected.
 
 ![Add armature](/media/content/blog/post/2019/03/28/blender-tutorial-14-armatures-character-rigging/blender-armature.jpg)
+
+## Adding the armature to an object
 
 We can now start to add the armature to an object. To do that we just have to place/create the bones inside our object.
 After that we select the object and the bones (in this specific order), and we choose from the menu at the bottom of the
@@ -50,6 +54,8 @@ contains that bone will move accordingly.
 
 <Youtube videoId="GpkMgUqWZJo" />
 
+## Inverse kinematics
+
 Sometimes we will also need to constraint a bone to the move of other bones. Instead of doing it manually, we can use
 Inverse kinematics. To be more clear this is an extract of the blender doc:
 
@@ -60,9 +66,13 @@ properties panel. This tab will appear only when we are in pose mode.
 
 ![Inverse kinematics](/media/content/blog/post/2019/03/28/blender-tutorial-14-armatures-character-rigging/blender-inverse-kinematics.jpg)
 
+## Animating the character
+
 After setting bones, armature and inverse kinematics we are ready to animate our character. To do that, we just need to
 be in Pose mode and set the keyframes as we did for standard animation.
 
 <Youtube videoId="Q5m1rnjT6Rw" />
+
+## Conclusion
 
 That's all for character rigging. In the next post we will talk about the rendering engine Cycles.

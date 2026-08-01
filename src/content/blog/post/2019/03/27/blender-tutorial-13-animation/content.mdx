@@ -21,6 +21,8 @@ There is also the possibility to set a start and end frame of the animation.
 
 ![The animation timeline](/media/content/blog/post/2019/03/27/blender-tutorial-13-animation/blender-animation-timeline.jpg)
 
+## Setting keyframes
+
 To create an animation we need first of all to set keyframes. To do this we have to select the frame that we want as
 keyframe in the timeline, and the go in the space properties panel, change one of the spatial properties we want to
 animate (location, rotation or scale) and right click on them to show a menu where we can select "Insert keyframes".
@@ -41,6 +43,8 @@ After settings the second keyframe we finally have our first animation. In the v
 
 <Youtube videoId="qTLJL-HF9vY" />
 
+## Animating any property
+
 In our previous first animation we animated the movement of the object. In Blender we are not limited to location or
 rotation for animation: we can basically animate any property we want. We can animate color, scale, light camera and so
 on. Let's see for example how we can animate the energy property of a light. To do this we basically have to follow the
@@ -50,6 +54,8 @@ can be played (remember to switch the 3D window to texture mode if you want to s
 render).
 
 <Youtube videoId="Ledh539mZKo" />
+
+## The graph editor
 
 Sometimes we will need to do to a more precise setup of our animation: change the values between keyframes, change the
 interpolation method and so on. To do these operation we can use the graph editor. This is a a separate editor that we
@@ -63,6 +69,8 @@ choosing Key -> Interpolation mode from the menu.
 
 ![Interpolation mode](/media/content/blog/post/2019/03/27/blender-tutorial-13-animation/blender-animation-interpolation-mode.jpg)
 
+## The dope sheet and animation paths
+
 The graph editor in not the only animation editor. We can use also the dope sheet. It could be more faster to edit an
 animation in it instead of the animation editor. In it we don't have the curve of interpolation of the animation. We
 just have a representation of the keyframes and we can edit them by dragging after selection with a right click of the
@@ -73,5 +81,7 @@ After that we can set the keyframes using the same approach showed before.
 ![Add curve path](/media/content/blog/post/2019/03/27/blender-tutorial-13-animation/blender-path-add-curve.jpg)
 
 ![Set path constraint](/media/content/blog/post/2019/03/27/blender-tutorial-13-animation/blender-path-set-constraint.jpg)
+
+## Conclusion
 
 That's all for animation. In the next post we will talk about character rigging.

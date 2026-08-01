@@ -37,6 +37,8 @@ with another [definition](http://codingdojo.org/WhatIsCodingDojo/ "coding dojo")
 
 > A Coding Dojo is a meeting where a bunch of coders get together to work on a programming challenge. They have fun and they engage in order to improve their skills.
 
+## The Minesweeper problem
+
 During the dojo that I attended with Angelo we tried to resolve
 the [Minesweeper problem](http://codingdojo.org/kata/Minesweeper/ "Minesweeper"). Basically we had to write an automatic
 Minesweeper resolver (do you remember the Windows game? :heart_eyes:). At the end of the dojo we didn't complete the
@@ -57,6 +59,8 @@ This one describes Angelo's implementation.
 
 ![Class diagram of Angelo Sciarra implementation of minesweeper](/media/content/blog/post/2018/03/02/code-review-whats-it-is-and-why-it-is-important/minesweeper-angelo.jpg)
 
+## Technology suggestions
+
 So let's start to see which kind of observation I received from Angelo, that basically include most of the observation
 you could receive during a code review. The first observation I received from Angelo is about the java JDK version I
 used for my project. I did the setup of the project using JDK 1.5 instead of JDK 1.8 (as you may know, this is a more
@@ -72,6 +76,8 @@ knowledge you can absorb from the experience of your code reviewer.
 ![Functional improvements to the original class](/media/content/blog/post/2018/03/02/code-review-whats-it-is-and-why-it-is-important/03-functional-field.jpg)
 
 ![A new field class has been introduced to describe a list of fields](/media/content/blog/post/2018/03/02/code-review-whats-it-is-and-why-it-is-important/04-new-fields-class.jpg)
+
+## Software design
 
 Another important aspect that is one of the main subject of the code review is software design. In fact Angelo
 discovered a series of improvement and refactoring opportunities in my code:
@@ -91,6 +97,8 @@ discovered a series of improvement and refactoring opportunities in my code:
 
 ![A new ParsingContext class keeps the current status of the parsing](/media/content/blog/post/2018/03/02/code-review-whats-it-is-and-why-it-is-important/07-parsing-status-become-parsing-content-lightweight.jpg)
 
+## Code conventions
+
 As you can see from these kind of comments the code review could really improve the general architectural design of your
 application :heart_eyes::relieved:. Code convention are another important thing to check during code review. For example
 Angelo told me to move all the constants at the beginning of some of the classes. Usually tools like Github or Gitlab
@@ -100,11 +108,15 @@ let you discuss your code review by adding comments directly to the code.
 
 ![A comment related to a team guideline](/media/content/blog/post/2018/03/02/code-review-whats-it-is-and-why-it-is-important/06-guidelines.jpg)
 
+## Meaningful names
+
 Last but not least, if you are a real fan of clean code, you know
 that [meaningful names are important](/2017/09/11/clean-code-meaningful-names/ "clean code meaningful names"). So
 you can suggest some more meaningful name for a class, variable or method.
 
 ![An example of using meaningful names](/media/content/blog/post/2018/03/02/code-review-whats-it-is-and-why-it-is-important/10-rename-masker.jpg)
+
+## Conclusion
 
 That's all for code review. I hope you understood how much important it is to do it and how much your codebase can
 improve if you use code review as a validation tool and as a tool to find new refactoring opportunities (anyway, I hope
