@@ -14,6 +14,7 @@ describe("useLockBodyScroll", () => {
     afterEach(() => {
         document.documentElement.style.overflow = "";
         document.documentElement.style.paddingRight = "";
+        document.documentElement.style.scrollBehavior = "";
         document.body.style.position = "";
         document.body.style.top = "";
         document.body.classList.remove("scroll-locked");
@@ -48,6 +49,24 @@ describe("useLockBodyScroll", () => {
             const { unmount } = renderHook(() => useLockBodyScroll());
             unmount();
             expect(document.body.style.position).toBe("static");
+        });
+
+        it("forces scroll-behavior to auto for the scroll restoration, even when smooth scrolling is active, then restores the original value (regression: reading companion TOC's smooth-scroll class turned this jump into a visible animation)", () => {
+            mockUseIsIOS.mockReturnValue(true);
+            document.documentElement.style.scrollBehavior = "smooth";
+            let scrollBehaviorDuringScroll: string | undefined;
+            const scrollToSpy = vi.spyOn(window, "scrollTo").mockImplementation(() => {
+                scrollBehaviorDuringScroll = document.documentElement.style.scrollBehavior;
+            });
+
+            const { unmount } = renderHook(() => useLockBodyScroll());
+            unmount();
+
+            expect(scrollToSpy).toHaveBeenCalled();
+            expect(scrollBehaviorDuringScroll).toBe("auto");
+            expect(document.documentElement.style.scrollBehavior).toBe("smooth");
+
+            scrollToSpy.mockRestore();
         });
     });
 });
