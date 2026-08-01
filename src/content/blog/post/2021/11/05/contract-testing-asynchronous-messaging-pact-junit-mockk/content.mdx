@@ -54,7 +54,7 @@ The same flow is applied in case of a message/event driven architecture: start w
 publish the contract and then write the message producer test. Now that everything is clear we can start to write our
 first Pact test for message exchange between two microservices. Let’s go!!! 🚀
 
-#### Setup
+## Setup
 
 Our example application is composed by two microservices:
 
@@ -372,7 +372,7 @@ After running the commands above we will have a pact broker local instance. We c
 
 ![pact broker](/media/content/blog/post/2021/11/05/contract-testing-asynchronous-messaging-pact-junit-mockk/pact-broker-homepage.jpg "Pact broker homepage")
 
-#### Implementation
+## Implementation
 
 As we said in the introduction, we are using the consumer driven contract test approch. This means that for our 
 example we will start from `AccountService`, the message consumer. In this microservice we have a 
@@ -648,7 +648,7 @@ class RefundReadyMessageProducerTest {
 At this point we should have a green test also on the provider, and our contract between our producer and consumer 
 is verified!!! :rocket:
 
-#### Conclusion
+## Conclusion
 
 You can find the example described in this post in this 
 [Github repository](https://github.com/chicio/Contract-Testing-Asynchronous-Messaging-Pact). As we saw from the 

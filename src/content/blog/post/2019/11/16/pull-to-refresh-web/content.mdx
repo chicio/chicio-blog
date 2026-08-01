@@ -30,7 +30,7 @@ the service worker *message* capabilities in combination with the `MessageChanne
 in this article is available on this site in all the blog pages (including this one, try it now!!! :smirk:). Let's start
 from the implementation of the UI (HTML and CSS)
 
-#### UI: HTML and CSS
+## UI: HTML and CSS
 
 You already know what we would like to achieve. The pull to refresh UI component should be something that appears at the
 top of the page when the user scroll beyond the page borders. At some point during the drag gesture the pull to refresh
@@ -142,7 +142,7 @@ html {
 }
 ```
 
-#### JavaScript
+## JavaScript
 
 On the JavaScript side, I wrote the the pull to refresh widget as a standalone widget that export one single
 function `pullToRefresh()`. The first thing that this widget does is to check the browser support for service worker.
@@ -368,7 +368,7 @@ window.addEventListener('load', () => {
 })
 ```
 
-#### Service Worker
+## Service Worker
 
 One thing I didn't show in detail is how we can achieve the communication between the JavaScript code that runs on the
 web page and the service worker. In the code above I shown you the function `sendMessageToServiceWorker()`. What does
@@ -446,7 +446,7 @@ self.addEventListener('message', (event) => {
 //...other service worker code...
 ```
 
-#### Conclusion
+## Conclusion
 
 All the code above is everything needed to implement your own pull to refresh widget. As you can see, it is not too
 difficult to create a pull to refresh UX that almost matches the experience given by a mobile native app. Service

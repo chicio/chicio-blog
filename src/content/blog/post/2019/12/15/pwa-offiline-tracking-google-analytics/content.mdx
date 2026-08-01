@@ -33,7 +33,7 @@ standard [Google Analytics Web SDK](https://developers.google.com/analytics/devg
 doesn't support offline tracking out of the box. So is it possible to avoid to loose important tracking events when your
 user is using the PWA offline? Yes it is. Let's find out how we can do it :relaxed:.
 
-#### Implementation
+## Implementation
 
 Make Google Analytics works offline is as simple as importing a script and call a function! This is possible thanks
 to [Workbox](https://developers.google.com/web/tools/workbox). What is it? Let's the definition reported on its official
@@ -62,7 +62,7 @@ workbox.googleAnalytics.initialize();
 
 ```
 
-#### How it works
+## How it works
 
 How does workbox make your GA tracking working when your PWA is offline? The `workbox.googleAnalytics` plugin setup a
 new fetch handler that intercepts all the requests made with Google Analytics. These requests are basically network
@@ -82,7 +82,7 @@ on my website I use the `prefetch` tag to cache the homepage of the blog on ever
 watching my tracking in google analytics, I saw that the majority of the visitors of my website goes to the homepage of
 the blog as second page in the step of their navigation).
 
-#### Conclusion
+## Conclusion
 
 Google Analytics offline tracking is another feature that makes PWAs more similar to native mobile apps. As I already
 said in [other posts](/2019/03/03/github-pages-progressive-web-app/ "progressive web app"), the gap between web and

@@ -45,7 +45,7 @@ different PWA feature.
 So let's see how I used it and how I took advantage of some of its major features, including the full integration with
 Webpack.
 
-#### Implementation
+## Implementation
 
 As I already said, Workbox is written in TypeScript. So let's start by creating a new file called `sw.ts`. The first
 thing we need to do is call some service worker lifecycle method, `skipWaiting` and `clientsClaim`. When you install an
@@ -355,7 +355,7 @@ const sendMessageToServiceWorker = (message: ServiceWorkerMessage): Promise<unkn
 export { sendMessageToServiceWorker, registerToServicerWorker, isServiceWorkerSupported }
 ```
 
-#### Conclusion
+## Conclusion
 
 As you can see, writing a service worker with Typescript and Workbox is really easy. During the last time during my
 daily job I'm basically doing more and more web development instead of mobile apps. I feel like I'm almost reaching the
