@@ -23,8 +23,8 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@ai-sdk/groq": "^3.0.42",
-    "@ai-sdk/react": "^3.0.176",
+    "@ai-sdk/groq": "^4.0.17",
+    "@ai-sdk/react": "^4.0.40",
     "@giscus/react": "^3.1.0",
     "@google-analytics/data": "^6.1.0",
     "@mdx-js/loader": "^3.1.1",
@@ -40,7 +40,7 @@
     "@upstash/vector": "^1.2.3",
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
-    "ai": "^6.0.175",
+    "ai": "^7.0.44",
     "cmdk": "^1.1.1",
     "elasticlunr": "^0.9.5",
     "feed": "^5.2.1",
@@ -119,7 +119,8 @@
   },
   "overrides": {
     "@types/react": "19.2.14",
-    "@types/react-dom": "19.2.3"
+    "@types/react-dom": "19.2.3",
+    "ai": "$ai"
   },
   "allowScripts": {
     "agent-browser@0.31.1": true,
