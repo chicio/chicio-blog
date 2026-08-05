@@ -15,6 +15,7 @@ export interface EasterEggCatalogEntry {
     poster: string;
     captions: string;
     trackingAction: string;
+    trackingLabel: string;
 }
 
 export const EASTER_EGG_SLUGS: readonly EasterEggSlug[] = [
@@ -30,22 +31,43 @@ const videoPath = (slug: EasterEggSlug) => `/media/video/${slug}.mp4`;
 const posterPath = (slug: EasterEggSlug) => `/media/video/${slug}-poster.jpg`;
 const captionsPath = (slug: EasterEggSlug) => `/media/video/${slug}.vtt`;
 
-const catalogEntry = (slug: EasterEggSlug, title: string, trackingAction: string): EasterEggCatalogEntry => ({
+const catalogEntry = (
+    slug: EasterEggSlug,
+    title: string,
+    trackingAction: string,
+    trackingLabel: string,
+): EasterEggCatalogEntry => ({
     slug,
     title,
     videoSrc: videoPath(slug),
     poster: posterPath(slug),
     captions: captionsPath(slug),
     trackingAction,
+    trackingLabel,
 });
 
 export const EASTER_EGG_CATALOG: Record<EasterEggSlug, EasterEggCatalogEntry> = {
-    "the-white-rabbit": catalogEntry("the-white-rabbit", "The White Rabbit", tracking.action.easter_egg_white_rabbit),
-    "deja-vu": catalogEntry("deja-vu", "Déjà Vu", tracking.action.easter_egg_deja_vu),
-    "i-know-kung-fu": catalogEntry("i-know-kung-fu", "I Know Kung Fu", tracking.action.easter_egg_kung_fu),
-    "there-is-no-spoon": catalogEntry("there-is-no-spoon", "There Is No Spoon", tracking.action.easter_egg_spoon),
-    "the-one": catalogEntry("the-one", "The One", tracking.action.easter_egg_the_one),
-    "dodge-this": catalogEntry("dodge-this", "Dodge This", tracking.action.easter_egg_dodge_this),
+    "the-white-rabbit": catalogEntry(
+        "the-white-rabbit",
+        "The White Rabbit",
+        tracking.action.easter_egg_white_rabbit,
+        "the_white_rabbit",
+    ),
+    "deja-vu": catalogEntry("deja-vu", "Déjà Vu", tracking.action.easter_egg_deja_vu, "deja_vu"),
+    "i-know-kung-fu": catalogEntry(
+        "i-know-kung-fu",
+        "I Know Kung Fu",
+        tracking.action.easter_egg_kung_fu,
+        "i_know_kung_fu",
+    ),
+    "there-is-no-spoon": catalogEntry(
+        "there-is-no-spoon",
+        "There Is No Spoon",
+        tracking.action.easter_egg_spoon,
+        "there_is_no_spoon",
+    ),
+    "the-one": catalogEntry("the-one", "The One", tracking.action.easter_egg_the_one, "the_one"),
+    "dodge-this": catalogEntry("dodge-this", "Dodge This", tracking.action.easter_egg_dodge_this, "dodge_this"),
 };
 
 export const isEasterEggSlug = (value: unknown): value is EasterEggSlug =>
