@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect } from "react";
 import { contactQueue } from "@/lib/background-sync/contact-queue";
+import { matchesNeoApartmentQuery } from "@/lib/easter-eggs/neo-apartment-query";
+import { triggerEasterEgg } from "@/lib/easter-eggs/trigger-easter-egg";
 import { trackWith } from "@/lib/tracking/tracking";
 import { tracking } from "@/types/configuration/tracking";
 import { useConsentStore } from "@/components/features/consent/use-consent-store";
@@ -24,6 +26,8 @@ interface LayoutAdditionalContentEffects {
     trackCommandPaletteCustomizeMatrixRain: () => void;
     trackCommandPaletteOpenEasterEggHunt: () => void;
     trackCommandPaletteOpenTerminal: () => void;
+    matchesEasterEggQuery: (query: string) => boolean;
+    handleEasterEggQueryMatch: () => void;
 }
 
 export const useLayoutAdditionalContentStore = (): ComponentStore<
@@ -92,6 +96,10 @@ export const useLayoutAdditionalContentStore = (): ComponentStore<
         });
     }, []);
 
+    const handleEasterEggQueryMatch = useCallback(() => {
+        triggerEasterEgg("the-white-rabbit");
+    }, []);
+
     useEffect(() => {
         const replayQueue = async () => {
             while (!contactQueue.isEmpty()) {
@@ -142,6 +150,8 @@ export const useLayoutAdditionalContentStore = (): ComponentStore<
             trackCommandPaletteCustomizeMatrixRain,
             trackCommandPaletteOpenEasterEggHunt,
             trackCommandPaletteOpenTerminal,
+            matchesEasterEggQuery: matchesNeoApartmentQuery,
+            handleEasterEggQueryMatch,
         },
     };
 };
