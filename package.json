@@ -4,7 +4,6 @@
   "private": true,
   "scripts": {
     "chat-knowledge-upload": "tsx --env-file=.env.production src/lib/chat/chat-knowledge-upload.ts",
-    "a11y-scan": "tsx src/lib/a11y/axe-scan.ts",
     "validate-architecture": "depcruise src --config .dependency-cruiser.js",
     "predev": "NODE_ENV=development tsx src/lib/build/prebuild.ts",
     "dev": "next dev",
@@ -80,7 +79,6 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@axe-core/playwright": "^4.12.1",
     "@playwright/test": "^1.61.1",
     "@release-it/conventional-changelog": "^12.0.0",
     "@serwist/cli": "^9.5.11",
@@ -99,7 +97,6 @@
     "@vitejs/plugin-react": "^6.0.3",
     "@vitest/coverage-v8": "^4.1.9",
     "agent-browser": "^0.31.1",
-    "axe-core": "^4.12.1",
     "babel-plugin-react-compiler": "^1.0.0",
     "dependency-cruiser": "^18.1.0",
     "esbuild": "^0.28.1",
