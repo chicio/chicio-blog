@@ -1,5 +1,6 @@
 import { SearchablePostFields } from "@/types/search/search";
 import { TerminalCommand, TerminalDirNode, TerminalExecutionResult, TerminalOutputLine } from "@/types/terminal/terminal";
+import { matchesWhoamiCommand } from "@/lib/easter-eggs/whoami-command";
 import { findDir, findNode, resolvePath, ROOT_PATH } from "./terminal-path";
 
 export const parse = (input: string): TerminalCommand => {
@@ -9,7 +10,7 @@ export const parse = (input: string): TerminalCommand => {
     return { name, args };
 };
 
-const FS_INDEPENDENT_COMMANDS = new Set(["", "help", "man", "pwd", "clear", "search", "close", "exit"]);
+const FS_INDEPENDENT_COMMANDS = new Set(["", "help", "man", "pwd", "clear", "search", "close", "exit", "whoami"]);
 
 export const needsFilesystem = (commandName: string): boolean => !FS_INDEPENDENT_COMMANDS.has(commandName);
 
@@ -213,6 +214,16 @@ const executeHelp = (args: string[], cwd: string): TerminalExecutionResult => {
     };
 };
 
+const executeWhoami = (cwd: string): TerminalExecutionResult => ({
+    lines: [
+        { text: "neo", kind: "success" },
+        { text: "you have been down here before. you already know the answer." },
+    ],
+    newCwd: cwd,
+    announcement: "whoami: neo",
+    triggerEasterEgg: true,
+});
+
 const executeSearch = (args: string[], cwd: string): TerminalExecutionResult => {
     const query = args.join(" ").trim();
 
@@ -225,6 +236,10 @@ const executeSearch = (args: string[], cwd: string): TerminalExecutionResult => 
 
 export const execute = (command: TerminalCommand, cwd: string, root: TerminalDirNode): TerminalExecutionResult => {
     const { name, args } = command;
+
+    if (matchesWhoamiCommand(name)) {
+        return executeWhoami(cwd);
+    }
 
     switch (name) {
         case "":

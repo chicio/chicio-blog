@@ -23,7 +23,6 @@ const searchFor = (
 
 export const useSearch = (
   startSearch: boolean,
-  easterEgg: (query: string) => SearchResult | null,
   searchIndexFileName: string,
 ) => {
   const [search, setSearch] = useState<SearchResult>({
@@ -63,12 +62,6 @@ export const useSearch = (
       }
 
     const value = e.target.value.trim();
-    const easterEggResult = easterEgg(value);
-
-    if (easterEggResult) {
-      setSearch(easterEggResult);
-      return;
-    }
 
     searchUsing(value);
   };

@@ -3,19 +3,16 @@
 import { useSearch } from "@/components/design-system/hooks/use-search";
 import { commandPaletteOpenEvent } from "@/components/design-system/state/command-palette/command-palette-events";
 import { openTerminalOverlay } from "@/components/design-system/state/terminal/terminal-events";
-import type { EasterEggTerminalLines, SearchResult } from "@/types/search/search";
-import { ComponentType, ChangeEvent, useCallback, useEffect, useState } from "react";
+import type { SearchResult } from "@/types/search/search";
+import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { ComponentStore } from "@/types/component-store";
-
-const noopEasterEgg = (): SearchResult | null => null;
 
 interface CommandPaletteState {
     open: boolean;
     isSearching: boolean;
     selectedValue: string;
     search: SearchResult;
-    easterEggLines: EasterEggTerminalLines | null;
 }
 
 interface CommandPaletteEffects {
@@ -46,13 +43,13 @@ export const useCommandPaletteStore = (
     chatSlug: string,
     easterEggHuntSlug: string,
     tracking?: CommandPaletteTrackingCallbacks,
-    searchEasterEgg: (query: string) => SearchResult | null = noopEasterEgg,
-    SearchEasterEggComponent?: ComponentType<{ lines: EasterEggTerminalLines }>,
+    matchesEasterEggQuery?: (query: string) => boolean,
+    onEasterEggMatch?: () => void,
 ): ComponentStore<CommandPaletteState, CommandPaletteEffects> => {
     const [open, setOpen] = useState(false);
     const [isSearching, setIsSearching] = useState(false);
     const [selectedValue, setSelectedValue] = useState("open ai chat");
-    const { handleSearch, resetSearch, search } = useSearch(open, searchEasterEgg, searchIndexFileName);
+    const { handleSearch, resetSearch, search } = useSearch(open, searchIndexFileName);
     const [previousSearch, setPreviousSearch] = useState(search);
     const router = useRouter();
 
@@ -110,10 +107,18 @@ export const useCommandPaletteStore = (
 
     const handleSearchInput = useCallback(
         (value: string) => {
-            setIsSearching(value.trim().length >= 3);
+            const trimmed = value.trim();
+
+            if (matchesEasterEggQuery?.(trimmed)) {
+                onEasterEggMatch?.();
+                close();
+                return;
+            }
+
+            setIsSearching(trimmed.length >= 3);
             handleSearch({ target: { value } } as ChangeEvent<HTMLInputElement>);
         },
-        [handleSearch],
+        [handleSearch, matchesEasterEggQuery, onEasterEggMatch, close],
     );
 
     const handleOpenChat = useCallback(() => {
@@ -143,16 +148,13 @@ export const useCommandPaletteStore = (
         [tracking, router, close],
     );
 
-    const easterEggLines =
-        search.type === "easterEgg" && SearchEasterEggComponent ? search.terminalLines : null;
-
     const handleCustomizeMatrixRainClose = useCallback(() => {
         tracking?.onCustomizeMatrixRain?.();
         close();
     }, [tracking, close]);
 
     return {
-        state: { open, isSearching, selectedValue, search, easterEggLines },
+        state: { open, isSearching, selectedValue, search },
         effects: {
             close,
             stopPropagation,

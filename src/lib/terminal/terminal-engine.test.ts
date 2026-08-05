@@ -292,6 +292,20 @@ describe("terminal-engine", () => {
             });
         });
 
+        describe("whoami", () => {
+            it("prints neo and signals the store to trigger the the-one easter egg", () => {
+                const result = execute({ name: "whoami", args: [] }, "/blog", fixtureRoot);
+                expect(result.lines[0]).toEqual({ text: "neo", kind: "success" });
+                expect(result.triggerEasterEgg).toBe(true);
+                expect(result.newCwd).toBe("/blog");
+            });
+
+            it("does not advertise itself in the help output", () => {
+                const result = execute({ name: "help", args: [] }, "/", fixtureRoot);
+                expect(result.lines.some((line) => line.text.includes("whoami"))).toBe(false);
+            });
+        });
+
         describe("unknown command", () => {
             it("returns an error line and a concise announcement", () => {
                 const result = execute({ name: "sudo", args: [] }, "/", fixtureRoot);
@@ -332,7 +346,7 @@ describe("terminal-engine", () => {
     });
 
     describe("needsFilesystem", () => {
-        it.each(["", "help", "man", "pwd", "clear", "search", "close", "exit"])(
+        it.each(["", "help", "man", "pwd", "clear", "search", "close", "exit", "whoami"])(
             "returns false for the filesystem-independent command %s",
             (commandName) => {
                 expect(needsFilesystem(commandName)).toBe(false);
