@@ -60,7 +60,13 @@ export const EasterEggOverlay: FC = () => {
                         )}
                     </div>
 
-                    <div className={bootComplete ? popClassName : "pointer-events-none absolute -z-10 opacity-0"}>
+                    <div
+                        className={
+                            bootComplete
+                                ? `${popClassName} [animation-duration:0.3s]`
+                                : "pointer-events-none absolute -z-10 opacity-0"
+                        }
+                    >
                         <SelfHostedVideo
                             src={entry.videoSrc}
                             poster={entry.poster}
