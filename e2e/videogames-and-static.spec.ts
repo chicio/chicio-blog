@@ -39,7 +39,7 @@ test.describe("Videogames section", () => {
         test("shows the Startup section with its video embed", async ({ page }) => {
             await page.goto("/videogames/console/nintendo-switch");
             await expect(page.getByRole("heading", { name: /startup/i })).toBeVisible();
-            await expect(page.locator("iframe[src*='youtube.com/embed']")).toBeVisible();
+            await expect(page.locator("iframe[src*='youtube.com/embed/EwTCvHQZVNE']")).toBeVisible();
         });
     });
 
