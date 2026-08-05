@@ -30,8 +30,9 @@ metadata:
 ---
 
 import { ParagraphTitleWithIcon } from "@/components/design-system/molecules/typography/paragraph-title-with-icon";
-import { FiCpu } from "react-icons/fi";
+import { FiCpu, FiPower } from "react-icons/fi";
 import { FaLightbulb } from "react-icons/fa";
+import { Youtube } from "@/components/design-system/molecules/video/youtube";
 
 ## <ParagraphTitleWithIcon icon={<FiCpu className="text-shadow-lg" />}> Hardware specs</ParagraphTitleWithIcon>
 
@@ -48,12 +49,26 @@ import { FaLightbulb } from "react-icons/fa";
 | Audio Output | Stereo |
 | Architecture | 32-bit |
 
+## <ParagraphTitleWithIcon icon={<FiPower className="text-shadow-lg" />}>Startup</ParagraphTitleWithIcon>
+
+When a PlayStation 1 boots, a spinning logo animation plays alongside a short, deliberately unsettling chime.
+Sound designer [Takafumi Fujisawa](https://blog.playstation.com/2019/12/05/how-takafumi-fujisawa-created-the-original-playstations-startup-sound/) built it in spring 1994, after being handed the already finished logo animation to score.
+He spent roughly two weeks settling on the structure, tones and instruments, though the studio recording itself took about two days, working within the tight limits of the console's ROM size and its ADPCM sound chip's polyphony,
+all while making sure it would still sound right through every kind of TV speaker in the world.
+
+- Musically the sound starts in stable equal temperament and drifts into pure intonation harmony, opening orchestral before adding an ethnic tone.
+Fujisawa described the goal as "something exciting, like that feeling when you walk into a cinema" (quoted in the [PlayStation Blog piece above](https://blog.playstation.com/2019/12/05/how-takafumi-fujisawa-created-the-original-playstations-startup-sound/)).
+- The sequence doubles as a diagnostic: the twinkling notes confirm the console booted cleanly, and the swooshing sound loops if the disc cannot be read.
+- Fujisawa also recorded a version featuring his own whispered voice saying "PlayStation", but it was rejected because it gave the impression the console was speaking to you
+([SVG's account](https://www.svg.com/1166714/how-takafumi-fujisawa-and-his-teams-created-the-classic-startup-sounds-for-playstation/)).
+
+<Youtube videoId="rwN3kZYJZiU" title="PlayStation 1 startup sequence" />
+
 ## <ParagraphTitleWithIcon icon={<FaLightbulb className="text-shadow-lg" />}>Trivia & Fun Facts</ParagraphTitleWithIcon>
 
 - Born from Revenge: The PlayStation exists because of a failed partnership. Nintendo originally contracted Sony to create a CD-ROM add-on for the SNES. 
 However, Nintendo publicly backed out at the 1991 CES, partnering with Philips instead. 
 Furious, Sony president Norio Ohga pushed to develop their own console to compete with (and beat) Nintendo.
-- The Iconic "Startup" Sound: The famous, atmospheric startup chime wasn't just for show. It was composed by [Takafumi Fujisawa](https://blog.playstation.com/2019/12/05/how-takafumi-fujisawa-created-the-original-playstations-startup-sound/) to signal to the user that the console's various components (CD drive, regional lockout, and BIOS) were functioning correctly. If it stopped halfway, you knew your disc was dirty or scratched.
 - The Symbolic Buttons: [Teiyu Goto](https://en.wikipedia.org/wiki/PlayStation_controller), the controller’s designer, chose the symbols specifically:
     - △ (Triangle) represented a viewpoint or direction.
     - ☐ (Square) represented a piece of paper (menus/documents).

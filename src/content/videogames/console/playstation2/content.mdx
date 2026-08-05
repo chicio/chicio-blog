@@ -32,8 +32,9 @@ metadata:
 ---
 
 import { ParagraphTitleWithIcon } from "@/components/design-system/molecules/typography/paragraph-title-with-icon";
-import { FiCpu } from "react-icons/fi";
+import { FiCpu, FiPower } from "react-icons/fi";
 import { FaLightbulb } from "react-icons/fa";
+import { Youtube } from "@/components/design-system/molecules/video/youtube";
 
 ## <ParagraphTitleWithIcon icon={<FiCpu className="text-shadow-lg" />}> Hardware specs</ParagraphTitleWithIcon>
 
@@ -49,9 +50,20 @@ import { FaLightbulb } from "react-icons/fa";
 | Audio Output | Stereo / Surround |
 | Architecture | 128-bit hybrid |
 
+## <ParagraphTitleWithIcon icon={<FiPower className="text-shadow-lg" />}>Startup</ParagraphTitleWithIcon>
+
+The PS2's chime and startup screen were again built by Fujisawa's team, now grown into a larger sound group.
+They narrowed the choices down to two candidates before settling on a sound built around an impactful fourth chord, meant to express simple strength and the image of landing somewhere from space,
+and it ended up considerably more layered than the sound Fujisawa made for the original PlayStation.
+
+- The boot screen's real curiosity is visual: the white columns rising behind the "Sony Computer Entertainment" logo are generated from the save data on your memory card, roughly one column per saved game,
+so the screen effectively renders your play history. Deleting individual saves does not shrink the towers back down; only a fresh memory card gives you a clean, tower-free boot
+([GameSpot](https://www.gamespot.com/articles/fun-fact-ps2-startup-blocks-were-tied-to-your-memory-card/1100-6503380/)).
+
+<Youtube videoId="1I_HMGRVwXs" title="PlayStation 2 startup sequence" />
+
 ## <ParagraphTitleWithIcon icon={<FaLightbulb className="text-shadow-lg" />}>Trivia & Fun Facts</ParagraphTitleWithIcon>
 
 - It is the best-selling consoles of all time with over 160 million units sold.
 - One of the biggest reasons for the PS2's early success wasn't just games. It was the cheapest DVD player on the market. In 2000, stand-alone DVD players often cost more than the console itself, making the PS2 an easy "sell" to parents and non-gamers.
-- Have you ever noticed the white towers of varying heights on the PS2 startup screen? They aren't random. The console checks your Memory Card and generates a tower for every game you’ve played. The more games you have, the more towers appear; the longer you've played a game, the taller its tower grows.
 - In a small but brilliant bit of industrial design, the PlayStation "PS" logo on the disc tray can be rotated by 90 degrees. This allowed the logo to stay upright whether the user positioned the console horizontally or vertically.
