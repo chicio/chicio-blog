@@ -1,6 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent } from "@/test-utils";
+import { act } from "@testing-library/react";
 import { EggSolution } from "./egg-solution";
+import { triggerRevealAllSolutions } from "@/lib/content/easter-eggs/reveal-all-signal";
 import { tracking } from "@/types/configuration/tracking";
 
 const { trackWithMock } = vi.hoisted(() => ({ trackWithMock: vi.fn() }));
@@ -68,6 +70,28 @@ describe("EggSolution", () => {
             fireEvent.click(screen.getByRole("button", { name: /hide/ }));
 
             expect(trackWithMock).toHaveBeenCalledTimes(1);
+        });
+    });
+
+    describe("reveal all solutions", () => {
+        it("expands the solution when the reveal-all signal fires", () => {
+            render(<EggSolution eggId="the_white_rabbit">the answer</EggSolution>);
+
+            act(() => {
+                triggerRevealAllSolutions();
+            });
+
+            expect(screen.getByText("the answer")).toBeInTheDocument();
+        });
+
+        it("does not fire the reveal-hint tracking action", () => {
+            render(<EggSolution eggId="the_white_rabbit">the answer</EggSolution>);
+
+            act(() => {
+                triggerRevealAllSolutions();
+            });
+
+            expect(trackWithMock).not.toHaveBeenCalled();
         });
     });
 });

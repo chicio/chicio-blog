@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { subscribeToRevealAllSolutions } from "@/lib/content/easter-eggs/reveal-all-signal";
 import { trackWith } from "@/lib/tracking/tracking";
 import { tracking } from "@/types/configuration/tracking";
 import type { ComponentStore } from "@/types/component-store";
@@ -15,6 +16,11 @@ interface EggSolutionEffects {
 
 export const useEggSolutionStore = (eggId: string): ComponentStore<EggSolutionState, EggSolutionEffects> => {
     const [revealed, setRevealed] = useState(false);
+
+    useEffect(() => {
+        const handleRevealAll = () => setRevealed(true);
+        return subscribeToRevealAllSolutions(handleRevealAll);
+    }, []);
 
     const toggleReveal = useCallback(() => {
         setRevealed((wasRevealed) => {

@@ -54,3 +54,12 @@ export const resetFoundEasterEggs = (): void => {
 
     notify();
 };
+
+export const subscribeToEasterEggFound = (callback: () => void): (() => void) => {
+    if (typeof window === "undefined") {
+        return () => {};
+    }
+
+    window.addEventListener(easterEggFoundChangeEvent, callback);
+    return () => window.removeEventListener(easterEggFoundChangeEvent, callback);
+};

@@ -5,6 +5,7 @@ import {
     markEasterEggFound,
     readFoundEasterEggs,
     resetFoundEasterEggs,
+    subscribeToEasterEggFound,
 } from "./easter-egg-found";
 
 const STORAGE_KEY = "fabrizioduroni_chicio-easter-egg-hunt";
@@ -101,6 +102,24 @@ describe("easter-egg-found", () => {
             resetFoundEasterEggs();
             window.removeEventListener(easterEggFoundChangeEvent, listener);
             expect(listener).toHaveBeenCalledOnce();
+        });
+    });
+
+    describe("subscribeToEasterEggFound", () => {
+        it("notifies the callback when an egg is marked found", () => {
+            const callback = vi.fn();
+            const unsubscribe = subscribeToEasterEggFound(callback);
+            markEasterEggFound("the-one");
+            expect(callback).toHaveBeenCalledOnce();
+            unsubscribe();
+        });
+
+        it("stops notifying after unsubscribing", () => {
+            const callback = vi.fn();
+            const unsubscribe = subscribeToEasterEggFound(callback);
+            unsubscribe();
+            markEasterEggFound("the-one");
+            expect(callback).not.toHaveBeenCalled();
         });
     });
 });
