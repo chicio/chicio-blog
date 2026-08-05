@@ -1,6 +1,6 @@
 "use client";
 
-import { MouseEvent, useCallback, useEffect, useState } from "react";
+import { MouseEvent, useCallback, useEffect, useRef, useState } from "react";
 import { matrixRainPanelOpenEvent } from "@/components/design-system/state/command-palette/command-palette-events";
 import {
     MATRIX_RAIN_DEFAULTS,
@@ -9,6 +9,8 @@ import {
     writeMatrixSettings,
 } from "@/components/design-system/state/matrix-rain/matrix-settings";
 import type { MatrixRainSettings } from "@/components/design-system/state/matrix-rain/matrix-settings";
+import { isRainSpeedAtMax } from "@/lib/easter-eggs/rain-speed-max";
+import { triggerEasterEgg } from "@/lib/easter-eggs/trigger-easter-egg";
 import { trackWith } from "@/lib/tracking/tracking";
 import { tracking } from "@/types/configuration/tracking";
 import { ComponentStore } from "@/types/component-store";
@@ -66,6 +68,7 @@ export const useMatrixRainControlPanelStore = (): ComponentStore<
     const [open, setOpen] = useState(false);
     const [settings, setSettings] = useState<MatrixRainSettings>(MATRIX_RAIN_DEFAULTS);
     const [fontSizeDragIndex, setFontSizeDragIndex] = useState<number | null>(null);
+    const hasFiredDodgeThis = useRef(false);
 
     const close = useCallback(() => setOpen(false), []);
 
@@ -116,7 +119,14 @@ export const useMatrixRainControlPanelStore = (): ComponentStore<
     );
 
     const onRainStepRateChange = useCallback(
-        (v: number) => applySettings({ ...settings, rain: { ...settings.rain, stepRate: v } }),
+        (v: number) => {
+            applySettings({ ...settings, rain: { ...settings.rain, stepRate: v } });
+
+            if (isRainSpeedAtMax(v, RAIN_STEP_RATE_MAX) && !hasFiredDodgeThis.current) {
+                hasFiredDodgeThis.current = true;
+                triggerEasterEgg("dodge-this");
+            }
+        },
         [applySettings, settings],
     );
 
