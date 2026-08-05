@@ -12,12 +12,24 @@ describe("Youtube", () => {
 
         it("uses the provided title as the accessible name when passed", () => {
             render(<Youtube videoId="abc123" title="Console startup sequence" />);
-            expect(screen.getByTitle("Console startup sequence")).toBeInTheDocument();
+            expect(screen.getByTitle("Console startup sequence")).toHaveAccessibleName("Console startup sequence");
         });
 
         it("falls back to the default title when title is omitted", () => {
             render(<Youtube videoId="abc123" />);
-            expect(screen.getByTitle("YouTube video")).toBeInTheDocument();
+            expect(screen.getByTitle("YouTube video")).toHaveAccessibleName("YouTube video");
+        });
+
+        it("keeps the required embed attributes regardless of title", () => {
+            render(<Youtube videoId="abc123" title="Console startup sequence" />);
+            const iframe = screen.getByTitle("Console startup sequence");
+            expect(iframe).toHaveAttribute("loading", "lazy");
+            expect(iframe).toHaveAttribute(
+                "allow",
+                "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            );
+            expect(iframe).toHaveAttribute("referrerPolicy", "strict-origin-when-cross-origin");
+            expect(iframe).toHaveAttribute("allowFullScreen", "");
         });
     });
 });
