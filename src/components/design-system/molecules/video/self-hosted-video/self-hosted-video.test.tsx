@@ -40,6 +40,31 @@ describe("SelfHostedVideo", () => {
         });
     });
 
+    describe("captions", () => {
+        it("renders a captions track with the given src when captions is provided", () => {
+            const { container } = render(
+                <SelfHostedVideo src="/video/demo.mp4" captions="/video/demo.vtt" />,
+            );
+            const track = container.querySelector("track");
+            expect(track).toHaveAttribute("kind", "captions");
+            expect(track).toHaveAttribute("srclang", "en");
+            expect(track).toHaveAttribute("label", "English");
+            expect(track).toHaveAttribute("src", "/video/demo.vtt");
+        });
+
+        it("does not set default on the captions track", () => {
+            const { container } = render(
+                <SelfHostedVideo src="/video/demo.mp4" captions="/video/demo.vtt" />,
+            );
+            expect(container.querySelector("track")).not.toHaveAttribute("default");
+        });
+
+        it("does not render a track element when captions is not provided", () => {
+            const { container } = render(<SelfHostedVideo src="/video/demo.mp4" />);
+            expect(container.querySelector("track")).toBeNull();
+        });
+    });
+
     describe("autoPlay", () => {
         it("sets the autoPlay attribute when autoPlay is true", () => {
             const { container } = render(<SelfHostedVideo src="/video/demo.mp4" autoPlay />);
