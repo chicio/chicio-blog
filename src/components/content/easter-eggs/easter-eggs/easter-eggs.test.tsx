@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import type { ReactNode } from "react";
 import { render, screen, fireEvent } from "@/test-utils";
 import { EasterEggs } from "./easter-eggs";
@@ -42,7 +42,7 @@ vi.mock("@/content/easter-egg-hunt/content.mdx", async () => {
     const FakeEasterEggHuntContent = () => (
         <>
             <EasterEggIntroTerminal />
-            <EggCard title={firstHint.title}>
+            <EggCard title={firstHint.title} slug="the-white-rabbit">
                 <p>{firstHint.crypticHint}</p>
                 <EggSolution eggId="the_white_rabbit">
                     <ul>
@@ -52,7 +52,7 @@ vi.mock("@/content/easter-egg-hunt/content.mdx", async () => {
                     </ul>
                 </EggSolution>
             </EggCard>
-            <EggCard title={secondHint.title}>
+            <EggCard title={secondHint.title} slug="deja-vu">
                 <p>{secondHint.crypticHint}</p>
                 <EggSolution eggId="deja_vu">
                     <ul>
@@ -69,6 +69,17 @@ vi.mock("@/content/easter-egg-hunt/content.mdx", async () => {
 });
 
 describe("EasterEggs", () => {
+    beforeEach(() => {
+        localStorage.clear();
+    });
+
+    describe("hunt progress", () => {
+        it("renders the found counter against the total number of eggs", () => {
+            render(<EasterEggs />);
+            expect(screen.getByText(/0 \/ 6 easter eggs found/)).toBeInTheDocument();
+        });
+    });
+
     describe("intro", () => {
         it("renders the page title and description from the MDX frontmatter", () => {
             render(<EasterEggs />);
@@ -98,6 +109,11 @@ describe("EasterEggs", () => {
         });
     });
 
+    const getCardRevealButtons = () =>
+        screen
+            .getAllByRole("button", { name: /reveal/ })
+            .filter((button) => !/all solutions/.test(button.textContent ?? ""));
+
     describe("egg cards", () => {
         it("renders every card title and cryptic hint from the MDX body", () => {
             render(<EasterEggs />);
@@ -121,7 +137,7 @@ describe("EasterEggs", () => {
         it("reveals the solution steps for a card when the reveal toggle is clicked", () => {
             render(<EasterEggs />);
 
-            fireEvent.click(screen.getAllByRole("button", { name: /reveal/ })[0]);
+            fireEvent.click(getCardRevealButtons()[0]);
 
             firstHint.steps.forEach((step) => {
                 expect(screen.getByText(step)).toBeInTheDocument();
@@ -131,7 +147,7 @@ describe("EasterEggs", () => {
         it("renders the revealed solution steps as a bullet list, not a numbered list", () => {
             render(<EasterEggs />);
 
-            fireEvent.click(screen.getAllByRole("button", { name: /reveal/ })[0]);
+            fireEvent.click(getCardRevealButtons()[0]);
             const list = screen.getByText(firstHint.steps[0]).closest("ul");
 
             expect(list).toBeInTheDocument();
@@ -141,7 +157,7 @@ describe("EasterEggs", () => {
         it("hides the solution steps again when toggled a second time", () => {
             render(<EasterEggs />);
 
-            fireEvent.click(screen.getAllByRole("button", { name: /reveal/ })[0]);
+            fireEvent.click(getCardRevealButtons()[0]);
             fireEvent.click(screen.getAllByRole("button", { name: /hide/ })[0]);
 
             firstHint.steps.forEach((step) => {
@@ -152,7 +168,7 @@ describe("EasterEggs", () => {
         it("only reveals the toggled card, leaving the other collapsed", () => {
             render(<EasterEggs />);
 
-            fireEvent.click(screen.getAllByRole("button", { name: /reveal/ })[0]);
+            fireEvent.click(getCardRevealButtons()[0]);
 
             secondHint.steps.forEach((step) => {
                 expect(screen.queryByText(step)).not.toBeInTheDocument();
