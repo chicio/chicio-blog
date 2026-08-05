@@ -97,9 +97,8 @@ AI agents and tools that send `Accept: text/markdown` receive a Markdown represe
 
 ## Agentic SDLC Pipeline (code work)
 
-Non-trivial **code** changes can be run through an orchestrated, multi-agent SDLC. The **interactive** modes are
-manual and main-thread — invoke the orchestrator skill explicitly; it never auto-triggers. The **autonomous** mode
-runs the same pipeline unattended from a GitHub issue.
+Non-trivial **code** changes can be run through an orchestrated, multi-agent SDLC. It is manual and main-thread —
+invoke the orchestrator skill explicitly; it never auto-triggers.
 
 - **Orchestrator**: `/fabrizioduroni-blog-sdlc [description] [--fix] [--in-place]` — sequences the agents, hosts two
   human gates (plan approval, PR approval), and runs a bounded implement⇄review loop (max 3 rounds). Code only — it
@@ -107,21 +106,6 @@ runs the same pipeline unattended from a GitHub issue.
   to run in the current tree); isolation is pipeline-level, never per-agent.
 - **Feature mode**: explore → brainstorm (grilling) 🚪 → implement ⇄ review → PR 🚪.
 - **Fix mode** (`--fix` or a pasted stack trace): investigate → confirm-root-cause 🚪 → implement ⇄ review → PR 🚪.
-- **Autonomous mode** (`--autonomous --from-issue <N>`, Phase 2): reads GitHub issue `#N` as the contract and runs
-  unattended — the `loop:ready` label + a pre-flight contract check replace the plan gate; it opens a PR and **never
-  merges** (the human merge click is the async gate). Terminal state is a PR (`loop:review`) or `loop:blocked` with a
-  reason. Driven by the session-bound `fabrizioduroni-loop` skill via `/loop 30m /fabrizioduroni-loop`.
-- **Author a loop task** (`/fabrizioduroni-task [idea]`): the async front-half of the pipeline — brainstorm an idea
-  (adaptive explore → grilling) into a loop-ready issue contract and file it via `gh`. Files **without** `loop:ready`
-  by default (approval stays a separate act; `--ready` opts in). Phase 2 spec in `docs/agentic-sdlc/`.
-- **Scout** (`/fabrizioduroni-scout`, run by `/loop`): the producer — runs deterministic code-health
-  scanners and files `loop-task` issues with machine-generated acceptance criteria, labeled by dimension
-  (`loop:coverage` / `loop:hygiene` / `loop:a11y`), deduped against open issues and capped per run. Files **without**
-  `loop:ready` — you curate which findings to queue.
-- **Autopilot** (`/fabrizioduroni-autopilot`, run by `/loop`): the **self-feeding** loop — one sequential tick either
-  drains a `loop:ready` issue to a PR or, when the queue is empty, refills via the scout **auto-approved** (files
-  `loop:ready` itself). Removes the human curation valve (only the merge gate remains); still never merges, never
-  prompts. Use `fabrizioduroni-loop` instead if you want to curate what gets built.
 
 Agent roster:
 
@@ -137,8 +121,7 @@ Content agents are **separate** and unchanged: `fabrizioduroni-writer-engineer` 
 `fabrizioduroni-writer-dsa-engineer` (DSA articles).
 
 **When to use what**: full pipeline for non-trivial code features/fixes; call `fabrizioduroni-implementer` **directly**
-as a quick-path escape hatch for trivial, well-specified code changes; use the writer agents for content. Design spec
-(temporary, while the pipeline is being built out): `docs/agentic-sdlc/`.
+as a quick-path escape hatch for trivial, well-specified code changes; use the writer agents for content.
 
 ## Commit Convention
 
