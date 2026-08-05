@@ -1,38 +1,34 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@/test-utils";
-import { nextImageMock } from "@/test-utils";
 import { fireEvent, act } from "@testing-library/react";
 import { DejavuEasterEgg } from "./dejavu";
-
-vi.mock("next/image", () => nextImageMock());
-
-vi.mock("@/components/design-system/atoms/effects/overlay", () => ({
-    Overlay: ({ children }: React.PropsWithChildren) => <div data-testid="overlay">{children}</div>,
-}));
-
-vi.mock("@/components/design-system/molecules/effects/matrix-terminal", () => ({
-    MatrixTerminal: () => <div data-testid="matrix-terminal" />,
-}));
-
-vi.mock("@/components/features/easter-eggs/center-container", () => ({
-    CenterContainer: ({ children }: React.PropsWithChildren) => <div>{children}</div>,
-}));
+import { closeEasterEgg, getEasterEggOverlaySlug } from "@/lib/easter-eggs/easter-egg-overlay-state";
 
 describe("DejavuEasterEgg", () => {
+    beforeEach(() => {
+        closeEasterEgg();
+        localStorage.clear();
+        document.body.classList.remove("glitch-active");
+    });
+
     describe("initial state", () => {
-        it("renders children without showing the overlay", () => {
+        it("renders children", () => {
             render(
                 <DejavuEasterEgg>
                     <span>child content</span>
                 </DejavuEasterEgg>,
             );
             expect(screen.getByText("child content")).toBeInTheDocument();
-            expect(screen.queryByTestId("overlay")).toBeNull();
+        });
+
+        it("does not open the overlay before 4 clicks", () => {
+            render(<DejavuEasterEgg />);
+            expect(getEasterEggOverlaySlug()).toBeNull();
         });
     });
 
     describe("after 4 logo clicks", () => {
-        it("shows the dejavu overlay once the glitch timeout fires", async () => {
+        it("adds the glitch-active class immediately", () => {
             vi.useFakeTimers();
             const { container } = render(<DejavuEasterEgg />);
             const wrapper = container.firstChild as HTMLElement;
@@ -41,15 +37,11 @@ describe("DejavuEasterEgg", () => {
                 fireEvent.click(wrapper);
             }
 
-            await act(async () => {
-                vi.advanceTimersByTime(400);
-            });
-
-            expect(screen.getByTestId("overlay")).toBeInTheDocument();
+            expect(document.body.classList.contains("glitch-active")).toBe(true);
             vi.useRealTimers();
         });
 
-        it("hides the overlay after the reset timeout", async () => {
+        it("opens the deja-vu egg once the glitch timeout fires", async () => {
             vi.useFakeTimers();
             const { container } = render(<DejavuEasterEgg />);
             const wrapper = container.firstChild as HTMLElement;
@@ -61,12 +53,51 @@ describe("DejavuEasterEgg", () => {
             await act(async () => {
                 vi.advanceTimersByTime(400);
             });
-            expect(screen.getByTestId("overlay")).toBeInTheDocument();
 
+            expect(document.body.classList.contains("glitch-active")).toBe(false);
+            expect(getEasterEggOverlaySlug()).toBe("deja-vu");
+            vi.useRealTimers();
+        });
+
+        it("does not trigger again on the 5th click without 4 more clicks", async () => {
+            vi.useFakeTimers();
+            const { container } = render(<DejavuEasterEgg />);
+            const wrapper = container.firstChild as HTMLElement;
+
+            for (let i = 0; i < 4; i++) {
+                fireEvent.click(wrapper);
+            }
             await act(async () => {
-                vi.advanceTimersByTime(4000);
+                vi.advanceTimersByTime(400);
             });
-            expect(screen.queryByTestId("overlay")).toBeNull();
+
+            closeEasterEgg();
+            fireEvent.click(wrapper);
+            expect(getEasterEggOverlaySlug()).toBeNull();
+            vi.useRealTimers();
+        });
+
+        it("can trigger again after a fresh set of 4 clicks", async () => {
+            vi.useFakeTimers();
+            const { container } = render(<DejavuEasterEgg />);
+            const wrapper = container.firstChild as HTMLElement;
+
+            for (let i = 0; i < 4; i++) {
+                fireEvent.click(wrapper);
+            }
+            await act(async () => {
+                vi.advanceTimersByTime(400);
+            });
+            closeEasterEgg();
+
+            for (let i = 0; i < 4; i++) {
+                fireEvent.click(wrapper);
+            }
+            await act(async () => {
+                vi.advanceTimersByTime(400);
+            });
+
+            expect(getEasterEggOverlaySlug()).toBe("deja-vu");
             vi.useRealTimers();
         });
     });
