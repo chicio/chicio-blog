@@ -22,6 +22,21 @@ const VIDEO_CLASS = [
     "border-accent-alpha-40 shadow-lg",
 ].join(" ");
 
+/**
+ * The clip fades in, and deliberately keeps its full layout size while hidden.
+ *
+ * It must stay mounted AND laid out from the moment the overlay opens: mounting early is what keeps
+ * the play attempt inside the user-activation window that permits unmuted autoplay, and Chrome will
+ * not start autoplay on a zero-size element — collapsing the space (via a `0fr` grid row, say) leaves
+ * the video paused at 0 and pushes the real play attempt away from the gesture that authorised it.
+ *
+ * Reserving the space also means the card never changes height, so the reveal is a pure crossfade
+ * with no reflow.
+ */
+const REVEAL_TRANSITION_CLASS = "transition-opacity duration-500 ease-out";
+const REVEALED_CLASS = "opacity-100";
+const HIDDEN_CLASS = "pointer-events-none opacity-0";
+
 export const EasterEggOverlay: FC = () => {
     const { state, effects } = useEasterEggOverlayStore();
     const { entry, bootComplete, reducedMotion, skipSignal } = state;
@@ -32,6 +47,7 @@ export const EasterEggOverlay: FC = () => {
     }
 
     const popClassName = reducedMotion ? "" : "animate-ee-pop";
+    const revealTransitionClass = reducedMotion ? "" : REVEAL_TRANSITION_CLASS;
 
     return (
         <Overlay delay={0} onClick={close} className="z-60">
@@ -64,13 +80,7 @@ export const EasterEggOverlay: FC = () => {
                         onBootComplete={handleBootComplete}
                     />
 
-                    <div
-                        className={
-                            bootComplete
-                                ? `${popClassName} [animation-duration:0.3s]`
-                                : "pointer-events-none absolute -z-10 opacity-0"
-                        }
-                    >
+                    <div className={`${revealTransitionClass} ${bootComplete ? REVEALED_CLASS : HIDDEN_CLASS}`}>
                         <SelfHostedVideo
                             src={entry.videoSrc}
                             poster={entry.poster}

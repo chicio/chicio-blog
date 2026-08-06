@@ -1,8 +1,22 @@
 import { FC, PropsWithChildren } from "react";
 
-export const TerminalLine: FC<PropsWithChildren> = ({ children }) => {
+export type TerminalLineSize = "sm" | "lg";
+
+/**
+ * Expressed as a lookup rather than an appended `className` because the two sets are both font-size
+ * utilities: which one wins would come down to their order in the generated stylesheet, not to the
+ * order they are written in. There is no tailwind-merge in this project to arbitrate that.
+ */
+const TERMINAL_LINE_SIZE_CLASS: Record<TerminalLineSize, string> = {
+    sm: "text-xs sm:text-sm",
+    lg: "text-base sm:text-lg",
+};
+
+export const TerminalLine: FC<PropsWithChildren<{ size?: TerminalLineSize }>> = ({ children, size = "sm" }) => {
     return (
-        <div className="text-shadow-md mb-2 font-mono font-bold leading-tight text-accent break-words text-xs sm:text-sm">
+        <div
+            className={`text-shadow-md mb-2 font-mono font-bold leading-tight text-accent break-words ${TERMINAL_LINE_SIZE_CLASS[size]}`}
+        >
             {children}
         </div>
     );

@@ -5,7 +5,6 @@ import remarkMdx from "remark-mdx";
 import remarkStringify from "remark-stringify";
 import { toString as mdastToString } from "mdast-util-to-string";
 import type { Emphasis, Heading, Image, Link, Paragraph, PhrasingContent, Root, RootContent, Strong, Text } from "mdast";
-import { easterEggHuntIntroLines } from "@/lib/content/easter-eggs/easter-eggs-content";
 import type { MdxJsxAttribute, MdxJsxAttributeValueExpression, MdxJsxFlowElement, MdxJsxTextElement } from "mdast-util-mdx-jsx";
 import type { Expression } from "estree-jsx";
 
@@ -152,13 +151,6 @@ const transformEggSolution = (node: MdxJsxElement): AnyContent[] => [
 ];
 
 /**
- * The intro terminal takes its lines from TypeScript (they are typed-out animation input, not page
- * prose), so it has no MDX children to inline — emit those same lines as paragraphs.
- */
-const transformEasterEggIntroTerminal = (): AnyContent[] =>
-    easterEggHuntIntroLines.map((line) => paragraphNode([textNode(line)]));
-
-/**
  * Components whose information the surrounding generator already renders as markdown. The videogames
  * page lists its consoles and games straight after placing the browser, so an "open the page"
  * placeholder there would be noise rather than a hint.
@@ -180,9 +172,6 @@ const transformJsxElement = (node: MdxJsxElement): AnyContent[] => {
     }
     if (name === "EggSolution") {
         return transformEggSolution(node);
-    }
-    if (name === "EasterEggIntroTerminal") {
-        return transformEasterEggIntroTerminal();
     }
     if (name === "ParagraphTitleWithIcon") {
         return transformParagraphTitleWithIcon(node);

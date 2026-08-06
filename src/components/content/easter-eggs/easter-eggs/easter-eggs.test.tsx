@@ -2,7 +2,6 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import type { ReactNode } from "react";
 import { render, screen, fireEvent } from "@/test-utils";
 import { EasterEggs } from "./easter-eggs";
-import { easterEggHuntIntroLines } from "@/lib/content/easter-eggs/easter-eggs-content";
 
 vi.mock("@/lib/tracking/tracking", () => ({ trackWith: vi.fn() }));
 
@@ -33,15 +32,11 @@ const secondHint = {
 };
 
 vi.mock("@/content/easter-egg-hunt/content.mdx", async () => {
-    const { EasterEggIntroTerminal } = await import(
-        "@/components/content/easter-eggs/easter-egg-intro-terminal"
-    );
     const { EggCard } = await import("@/components/content/easter-eggs/egg-card");
     const { EggSolution } = await import("@/components/content/easter-eggs/egg-solution");
 
     const FakeEasterEggHuntContent = () => (
         <>
-            <EasterEggIntroTerminal />
             <EggCard title={firstHint.title} slug="the-white-rabbit">
                 <p>{firstHint.crypticHint}</p>
                 <EggSolution eggId="the_white_rabbit">
@@ -92,13 +87,6 @@ describe("EasterEggs", () => {
             ).toBeInTheDocument();
         });
 
-        it("renders every intro line", () => {
-            render(<EasterEggs />);
-
-            easterEggHuntIntroLines.forEach((line) => {
-                expect(screen.getByText(line)).toBeInTheDocument();
-            });
-        });
 
         it("does not render an icon in the page title", () => {
             render(<EasterEggs />);

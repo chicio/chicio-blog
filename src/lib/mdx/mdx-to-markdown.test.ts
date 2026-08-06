@@ -172,16 +172,6 @@ Some prose after the heading.
         });
     });
 
-    describe("EasterEggIntroTerminal transform", () => {
-        it("emits the terminal intro lines, which live in TypeScript rather than in the MDX body", () => {
-            const result = mdxToMarkdown(`<EasterEggIntroTerminal />`);
-
-            expect(result).toContain("Wake up...");
-            expect(result).toContain("Follow the clues. Trigger them yourself.");
-            expect(result).not.toContain("[interactive:");
-        });
-    });
-
     describe("components whose generator renders their data", () => {
         it("emits nothing for them, rather than a placeholder pointing at the page", () => {
             const result = mdxToMarkdown(`intro\n\n<VideogamesStats />\n\n<VideogamesCatalog />`);

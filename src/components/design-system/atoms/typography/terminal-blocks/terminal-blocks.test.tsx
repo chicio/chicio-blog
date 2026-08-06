@@ -23,6 +23,23 @@ describe("TerminalLine", () => {
             expect(el.className).toContain("text-accent");
         });
     });
+
+    describe("size", () => {
+        it("renders at the small size by default", () => {
+            const { container } = render(<TerminalLine>cmd</TerminalLine>);
+            const el = container.firstChild as HTMLElement;
+            expect(el.className).toContain("text-xs");
+            expect(el.className).toContain("sm:text-sm");
+        });
+
+        it("renders at the large size when asked, without also keeping the small one", () => {
+            const { container } = render(<TerminalLine size="lg">cmd</TerminalLine>);
+            const el = container.firstChild as HTMLElement;
+            expect(el.className).toContain("text-base");
+            expect(el.className).toContain("sm:text-lg");
+            expect(el.className).not.toContain("text-xs");
+        });
+    });
 });
 
 describe("TerminalQuoteLine", () => {

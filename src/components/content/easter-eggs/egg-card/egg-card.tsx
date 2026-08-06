@@ -34,7 +34,7 @@ export const EggCard: FC<EggCardProps> = ({ title, slug, children }) => {
     return (
         <div className={`${glassmorphismClass} ${foundCardClass} my-4 p-4 sm:p-6`}>
             <div className="flex items-center justify-between gap-3">
-                <TerminalLine>
+                <TerminalLine size="lg">
                     {">"} {title}
                 </TerminalLine>
                 <span className={`${BADGE_CLASS} ${badgeStateClass}`}>{found ? "found" : "hidden"}</span>
