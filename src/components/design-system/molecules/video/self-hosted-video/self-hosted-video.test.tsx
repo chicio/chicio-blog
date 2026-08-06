@@ -65,6 +65,18 @@ describe("SelfHostedVideo", () => {
         });
     });
 
+    describe("muted", () => {
+        it("mutes the video when muted is true", () => {
+            const { container } = render(<SelfHostedVideo src="/video/demo.mp4" muted />);
+            expect(container.querySelector("video")).toHaveProperty("muted", true);
+        });
+
+        it("does not mute the video when muted is not provided", () => {
+            const { container } = render(<SelfHostedVideo src="/video/demo.mp4" />);
+            expect(container.querySelector("video")).toHaveProperty("muted", false);
+        });
+    });
+
     describe("autoPlay", () => {
         it("sets the autoPlay attribute when autoPlay is true", () => {
             const { container } = render(<SelfHostedVideo src="/video/demo.mp4" autoPlay />);

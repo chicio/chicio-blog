@@ -5,7 +5,7 @@ import { Cursor, TerminalLine } from "@/components/design-system/atoms/typograph
 import type { EasterEggSlug } from "@/lib/easter-eggs/easter-egg-catalog";
 import { useBootTerminalStore } from "./use-boot-terminal-store";
 
-export interface BootTerminalProps {
+interface BootTerminalProps {
     slug: EasterEggSlug;
     reducedMotion: boolean;
     skipSignal: number;

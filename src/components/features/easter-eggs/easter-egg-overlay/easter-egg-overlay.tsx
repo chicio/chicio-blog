@@ -25,7 +25,7 @@ const VIDEO_CLASS = [
 export const EasterEggOverlay: FC = () => {
     const { state, effects } = useEasterEggOverlayStore();
     const { entry, bootComplete, reducedMotion, skipSignal } = state;
-    const { close, handleCardClick, handleBootComplete, setContainerEl } = effects;
+    const { close, handleCardClick, handleBootComplete, setContainerEl, setVideoEl } = effects;
 
     if (!entry) {
         return null;
@@ -76,6 +76,8 @@ export const EasterEggOverlay: FC = () => {
                             poster={entry.poster}
                             captions={entry.captions}
                             autoPlay
+                            muted={!bootComplete}
+                            videoRef={setVideoEl}
                             ariaLabel={entry.title}
                             className={VIDEO_CLASS}
                         />

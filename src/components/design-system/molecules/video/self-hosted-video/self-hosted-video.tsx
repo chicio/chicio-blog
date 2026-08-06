@@ -9,6 +9,7 @@ interface Props {
     caption?: string;
     captions?: string;
     autoPlay?: boolean;
+    muted?: boolean;
     onEnded?: () => void;
     videoRef?: (el: HTMLVideoElement | null) => void;
     ariaLabel?: string;
@@ -21,6 +22,7 @@ export const SelfHostedVideo: FC<Props> = ({
     caption,
     captions,
     autoPlay,
+    muted,
     onEnded,
     videoRef,
     ariaLabel,
@@ -35,6 +37,7 @@ export const SelfHostedVideo: FC<Props> = ({
                 preload="metadata"
                 playsInline
                 autoPlay={autoPlay}
+                muted={muted}
                 onEnded={onEnded}
                 poster={poster}
                 aria-label={ariaLabel}

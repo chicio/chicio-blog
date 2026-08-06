@@ -110,10 +110,65 @@ describe("EasterEggOverlay", () => {
         });
     });
 
+    describe("audio and playback position while hidden behind the boot terminal", () => {
+        it("mutes the video while boot is running, then unmutes and resets currentTime on reveal", async () => {
+            vi.useFakeTimers();
+            const { container } = render(<EasterEggOverlay />);
+            act(() => {
+                openEasterEgg("the-one");
+            });
+
+            const video = container.querySelector("video") as HTMLVideoElement;
+            expect(video.muted).toBe(true);
+
+            // Simulate the clip having already played a couple of seconds ahead while hidden.
+            video.currentTime = 2.7;
+
+            await advanceUntil(() => !video.muted);
+
+            expect(video.muted).toBe(false);
+            expect(video.currentTime).toBe(0);
+        });
+
+        it("unmutes and resets currentTime when the boot is skipped by a keypress", () => {
+            const { container } = render(<EasterEggOverlay />);
+            act(() => {
+                openEasterEgg("the-one");
+            });
+
+            const video = container.querySelector("video") as HTMLVideoElement;
+            expect(video.muted).toBe(true);
+            video.currentTime = 0.57;
+
+            fireEvent.keyDown(window, { key: "a" });
+
+            expect(video.muted).toBe(false);
+            expect(video.currentTime).toBe(0);
+        });
+
+        it("does not reset currentTime again on subsequent re-renders once revealed", async () => {
+            const { container } = render(<EasterEggOverlay />);
+            act(() => {
+                openEasterEgg("the-one");
+            });
+
+            const video = container.querySelector("video") as HTMLVideoElement;
+            fireEvent.keyDown(window, { key: "a" });
+            expect(video.currentTime).toBe(0);
+
+            // Simulate normal playback continuing after the reveal — a further click on the card
+            // (which no longer means "skip", since boot already completed) must not rewind it again.
+            video.currentTime = 12;
+            fireEvent.click(screen.getByText("the-one"));
+
+            expect(video.currentTime).toBe(12);
+        });
+    });
+
     describe("opening a second egg after closing the first", () => {
         it("types the boot lines from scratch instead of reusing the first egg's finished state", async () => {
             vi.useFakeTimers();
-            render(<EasterEggOverlay />);
+            const { container } = render(<EasterEggOverlay />);
             const textNow = () => screen.getByRole("dialog").textContent ?? "";
 
             act(() => {
@@ -121,6 +176,9 @@ describe("EasterEggOverlay", () => {
             });
             await advanceUntil(() => textNow().includes("playback ready"));
             expect(textNow()).toContain("playback ready");
+
+            const firstVideo = container.querySelector("video") as HTMLVideoElement;
+            await advanceUntil(() => !firstVideo.muted);
 
             act(() => {
                 closeEasterEgg();
@@ -133,6 +191,34 @@ describe("EasterEggOverlay", () => {
 
             const justOpened = textNow();
             expect(justOpened).not.toContain("playback ready");
+
+            const secondVideo = container.querySelector("video") as HTMLVideoElement;
+            expect(secondVideo.muted).toBe(true);
+
+            await advanceUntil(() => textNow().includes("playback ready"));
+            expect(textNow()).toContain("playback ready");
+        });
+    });
+
+    describe("opening a second egg directly, without an intervening close", () => {
+        it("still types the boot lines from scratch, defended by the key on BootTerminal", async () => {
+            vi.useFakeTimers();
+            render(<EasterEggOverlay />);
+            const textNow = () => screen.getByRole("dialog").textContent ?? "";
+
+            act(() => {
+                openEasterEgg("the-one");
+            });
+            await advanceUntil(() => textNow().includes("playback ready"));
+            expect(textNow()).toContain("playback ready");
+
+            // No closeEasterEgg() in between — this is what the replay button does when a second
+            // egg is opened while the overlay is still showing an earlier one.
+            act(() => {
+                openEasterEgg("dodge-this");
+            });
+
+            expect(textNow()).not.toContain("playback ready");
 
             await advanceUntil(() => textNow().includes("playback ready"));
             expect(textNow()).toContain("playback ready");

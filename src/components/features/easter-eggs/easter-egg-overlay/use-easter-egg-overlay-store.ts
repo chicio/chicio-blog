@@ -24,6 +24,7 @@ interface EasterEggOverlayEffects {
     handleCardClick: (event: MouseEvent) => void;
     handleBootComplete: () => void;
     setContainerEl: (el: HTMLDivElement | null) => void;
+    setVideoEl: (el: HTMLVideoElement | null) => void;
 }
 
 export const useEasterEggOverlayStore = (): ComponentStore<EasterEggOverlayState, EasterEggOverlayEffects> => {
@@ -34,6 +35,12 @@ export const useEasterEggOverlayStore = (): ComponentStore<EasterEggOverlayState
     const [previousEntry, setPreviousEntry] = useState<EasterEggCatalogEntry | null>(null);
     const [containerEl, setContainerEl] = useState<HTMLDivElement | null>(null);
     const triggerElRef = useRef<HTMLElement | null>(null);
+    const videoElRef = useRef<HTMLVideoElement | null>(null);
+    const hasResetPlaybackRef = useRef(false);
+
+    const setVideoEl = useCallback((el: HTMLVideoElement | null) => {
+        videoElRef.current = el;
+    }, []);
 
     const entry = slug ? EASTER_EGG_CATALOG[slug] : null;
 
@@ -48,8 +55,21 @@ export const useEasterEggOverlayStore = (): ComponentStore<EasterEggOverlayState
     useEffect(() => {
         if (entry) {
             triggerElRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+            hasResetPlaybackRef.current = false;
         }
     }, [entry]);
+
+    // The clip autoplays muted from the moment the overlay opens (see the video's `muted={!bootComplete}`
+    // prop) to preserve the unmuted-autoplay activation window while staying silent behind the boot
+    // terminal. At the boot→reveal transition it has already played a few seconds ahead, so jump it back
+    // to the start exactly once — guarded by hasResetPlaybackRef so re-renders never restart the clip
+    // mid-watch — before the `muted` prop flips to false on the very next render.
+    useEffect(() => {
+        if (bootComplete && videoElRef.current && !hasResetPlaybackRef.current) {
+            hasResetPlaybackRef.current = true;
+            videoElRef.current.currentTime = 0;
+        }
+    }, [bootComplete]);
 
     // Focus moves to the dialog container itself, not the close button, so a keypress during boot
     // (Enter/Space included) never activates a focused control and falls through to the skip
@@ -89,6 +109,6 @@ export const useEasterEggOverlayStore = (): ComponentStore<EasterEggOverlayState
 
     return {
         state: { entry, bootComplete, reducedMotion, skipSignal },
-        effects: { close, handleCardClick, handleBootComplete, setContainerEl },
+        effects: { close, handleCardClick, handleBootComplete, setContainerEl, setVideoEl },
     };
 };
