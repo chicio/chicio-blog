@@ -237,7 +237,7 @@ const executeSearch = (args: string[], cwd: string): TerminalExecutionResult => 
 export const execute = (command: TerminalCommand, cwd: string, root: TerminalDirNode): TerminalExecutionResult => {
     const { name, args } = command;
 
-    if (matchesWhoamiCommand(name)) {
+    if (matchesWhoamiCommand(name) && args.length === 0) {
         return executeWhoami(cwd);
     }
 

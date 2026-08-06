@@ -4,7 +4,11 @@ import { useCallback, useSyncExternalStore } from "react";
 import { useReducedMotions } from "@/components/design-system/hooks/use-reduced-motions";
 import { triggerRevealAllSolutions } from "@/lib/content/easter-eggs/reveal-all-signal";
 import { EASTER_EGG_SLUGS } from "@/lib/easter-eggs/easter-egg-catalog";
-import { readFoundEasterEggs, resetFoundEasterEggs, subscribeToEasterEggFound } from "@/lib/easter-eggs/easter-egg-found";
+import {
+    readFoundEasterEggs,
+    resetFoundEasterEggs,
+    subscribeToEasterEggFound,
+} from "@/lib/easter-eggs/easter-egg-found";
 import { trackWith } from "@/lib/tracking/tracking";
 import { tracking } from "@/types/configuration/tracking";
 import type { ComponentStore } from "@/types/component-store";

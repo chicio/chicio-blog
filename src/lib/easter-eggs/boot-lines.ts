@@ -1,4 +1,6 @@
-export const bootLinesFor = (slug: string): string[] => [
+import type { EasterEggSlug } from "./easter-egg-catalog";
+
+export const bootLinesFor = (slug: EasterEggSlug): string[] => [
     `$ ./easter-egg --reveal ${slug}`,
     "> decrypting payload … ok",
     "> mounting /dev/matrix",

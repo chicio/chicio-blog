@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@/test-utils";
 import { fireEvent, waitFor } from "@testing-library/react";
 import { MatrixRainControlPanel } from "./matrix-rain-control-panel";
+import { RAIN_STEP_RATE_MAX } from "./use-matrix-rain-control-panel-store";
 import { closeEasterEgg, getEasterEggOverlaySlug } from "@/lib/easter-eggs/easter-egg-overlay-state";
 
 vi.mock("framer-motion", () => ({
@@ -124,7 +125,7 @@ describe("MatrixRainControlPanel", () => {
             render(<MatrixRainControlPanel />);
             openPanel();
             const slider = await screen.findByTestId("slider-Speed (Hz)");
-            fireEvent.change(slider, { target: { value: "30" } });
+            fireEvent.change(slider, { target: { value: String(RAIN_STEP_RATE_MAX) } });
             expect(getEasterEggOverlaySlug()).toBe("dodge-this");
         });
 
@@ -132,7 +133,7 @@ describe("MatrixRainControlPanel", () => {
             render(<MatrixRainControlPanel />);
             openPanel();
             const slider = await screen.findByTestId("slider-Speed (Hz)");
-            fireEvent.change(slider, { target: { value: "20" } });
+            fireEvent.change(slider, { target: { value: String(RAIN_STEP_RATE_MAX - 10) } });
             expect(getEasterEggOverlaySlug()).toBeNull();
         });
 
@@ -140,11 +141,11 @@ describe("MatrixRainControlPanel", () => {
             render(<MatrixRainControlPanel />);
             openPanel();
             const slider = await screen.findByTestId("slider-Speed (Hz)");
-            fireEvent.change(slider, { target: { value: "30" } });
+            fireEvent.change(slider, { target: { value: String(RAIN_STEP_RATE_MAX) } });
             expect(getEasterEggOverlaySlug()).toBe("dodge-this");
 
             closeEasterEgg();
-            fireEvent.change(slider, { target: { value: "30" } });
+            fireEvent.change(slider, { target: { value: String(RAIN_STEP_RATE_MAX) } });
             expect(getEasterEggOverlaySlug()).toBeNull();
         });
     });

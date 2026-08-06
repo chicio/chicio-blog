@@ -23,6 +23,10 @@ export const useEggCardStore = (slug: EasterEggSlug): ComponentStore<EggCardStat
         getServerFoundSnapshot,
     );
 
+    // Calls openEasterEgg directly rather than triggerEasterEgg on purpose: this egg is already
+    // found (that's the only way the replay button renders at all), so it must not re-run
+    // markEasterEggFound/tracking, and it must not be blocked by triggerEasterEgg's
+    // "already open" guard either. Do not "simplify" this to triggerEasterEgg(slug).
     const replay = useCallback(() => {
         openEasterEgg(slug);
     }, [slug]);

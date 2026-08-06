@@ -21,6 +21,23 @@ vi.mock("@/components/design-system/atoms/effects/matrix-rain/matrix-rain", () =
     MatrixRain: () => <div data-testid="matrix-rain" />,
 }));
 
+/**
+ * Chained setTimeout-driven state updates (one per typed character) only advance if React gets to
+ * re-render and reschedule the next timer between each tick — a single large `advanceTimersByTime`
+ * call does not drive that chain. Polling in small increments (mirroring use-typewriter.test.ts's
+ * own `advanceUntil` helper) is the working pattern in this codebase.
+ */
+const advanceUntil = async (predicate: () => boolean, stepMs = 20, maxIterations = 400) => {
+    for (let i = 0; i < maxIterations; i++) {
+        if (predicate()) {
+            return;
+        }
+        await act(async () => {
+            vi.advanceTimersByTime(stepMs);
+        });
+    }
+};
+
 describe("EasterEggOverlay", () => {
     beforeEach(() => {
         mockUseReducedMotions.mockReturnValue(false);
@@ -29,6 +46,7 @@ describe("EasterEggOverlay", () => {
 
     afterEach(() => {
         closeEasterEgg();
+        vi.useRealTimers();
     });
 
     describe("when no egg is open", () => {
@@ -47,12 +65,26 @@ describe("EasterEggOverlay", () => {
             expect(screen.getByRole("dialog", { name: "The One" })).toBeInTheDocument();
         });
 
-        it("types the boot lines one character at a time before showing the video", () => {
+        it("types the boot lines progressively, completing only after enough time has passed", async () => {
+            vi.useFakeTimers();
             render(<EasterEggOverlay />);
             act(() => {
                 openEasterEgg("the-one");
             });
-            expect(screen.queryByText(/playback ready/)).not.toBeInTheDocument();
+
+            const textNow = () => screen.getByRole("dialog").textContent ?? "";
+
+            await advanceUntil(() => textNow().includes("$"));
+            const early = textNow();
+            expect(early).not.toContain("playback ready");
+
+            await advanceUntil(() => textNow().length > early.length);
+            const later = textNow();
+            expect(later.length).toBeGreaterThan(early.length);
+            expect(later).not.toContain("playback ready");
+
+            await advanceUntil(() => textNow().includes("playback ready"));
+            expect(textNow()).toContain("playback ready");
         });
 
         it("reveals the video with the right src, poster and captions once boot completes", async () => {
@@ -78,6 +110,35 @@ describe("EasterEggOverlay", () => {
         });
     });
 
+    describe("opening a second egg after closing the first", () => {
+        it("types the boot lines from scratch instead of reusing the first egg's finished state", async () => {
+            vi.useFakeTimers();
+            render(<EasterEggOverlay />);
+            const textNow = () => screen.getByRole("dialog").textContent ?? "";
+
+            act(() => {
+                openEasterEgg("the-one");
+            });
+            await advanceUntil(() => textNow().includes("playback ready"));
+            expect(textNow()).toContain("playback ready");
+
+            act(() => {
+                closeEasterEgg();
+            });
+            expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+
+            act(() => {
+                openEasterEgg("dodge-this");
+            });
+
+            const justOpened = textNow();
+            expect(justOpened).not.toContain("playback ready");
+
+            await advanceUntil(() => textNow().includes("playback ready"));
+            expect(textNow()).toContain("playback ready");
+        });
+    });
+
     describe("under reduced motion", () => {
         it("renders all boot lines instantly instead of typing", () => {
             mockUseReducedMotions.mockReturnValue(true);
@@ -86,6 +147,17 @@ describe("EasterEggOverlay", () => {
                 openEasterEgg("the-one");
             });
             expect(screen.getByText(/playback ready/)).toBeInTheDocument();
+        });
+    });
+
+    describe("focus management", () => {
+        it("moves focus to the dialog container, not the close button, when it opens", () => {
+            render(<EasterEggOverlay />);
+            act(() => {
+                openEasterEgg("the-one");
+            });
+            expect(document.activeElement).toBe(screen.getByRole("dialog"));
+            expect(document.activeElement).not.toBe(screen.getByRole("button", { name: "Close" }));
         });
     });
 
@@ -134,6 +206,35 @@ describe("EasterEggOverlay", () => {
                 openEasterEgg("the-one");
             });
             fireEvent.keyDown(window, { key: "a" });
+            expect(screen.getByText(/playback ready/)).toBeInTheDocument();
+        });
+
+        it("does not close the dialog when Enter is pressed during boot", () => {
+            render(<EasterEggOverlay />);
+            act(() => {
+                openEasterEgg("the-one");
+            });
+            fireEvent.keyDown(window, { key: "Enter" });
+            expect(screen.getByRole("dialog")).toBeInTheDocument();
+            expect(screen.getByText(/playback ready/)).toBeInTheDocument();
+        });
+
+        it("does not close the dialog when Space is pressed during boot", () => {
+            render(<EasterEggOverlay />);
+            act(() => {
+                openEasterEgg("the-one");
+            });
+            fireEvent.keyDown(window, { key: " " });
+            expect(screen.getByRole("dialog")).toBeInTheDocument();
+            expect(screen.getByText(/playback ready/)).toBeInTheDocument();
+        });
+
+        it("jumps straight to the video when the card is clicked", () => {
+            render(<EasterEggOverlay />);
+            act(() => {
+                openEasterEgg("the-one");
+            });
+            fireEvent.click(screen.getByText("the-one"));
             expect(screen.getByText(/playback ready/)).toBeInTheDocument();
         });
     });

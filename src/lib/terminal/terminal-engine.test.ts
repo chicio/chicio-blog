@@ -304,6 +304,11 @@ describe("terminal-engine", () => {
                 const result = execute({ name: "help", args: [] }, "/", fixtureRoot);
                 expect(result.lines.some((line) => line.text.includes("whoami"))).toBe(false);
             });
+
+            it("does not trigger the easter egg when called with any arguments", () => {
+                const result = execute({ name: "whoami", args: ["--help"] }, "/blog", fixtureRoot);
+                expect(result.triggerEasterEgg).toBeUndefined();
+            });
         });
 
         describe("unknown command", () => {

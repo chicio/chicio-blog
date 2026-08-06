@@ -4,13 +4,28 @@ import { FC } from "react";
 import { Overlay } from "@/components/design-system/atoms/effects/overlay";
 import { MatrixRain } from "@/components/design-system/atoms/effects/matrix-rain/matrix-rain";
 import { SelfHostedVideo } from "@/components/design-system/molecules/video/self-hosted-video";
-import { Cursor, TerminalLine } from "@/components/design-system/atoms/typography/terminal-blocks";
+import { BootTerminal } from "./boot-terminal";
 import { useEasterEggOverlayStore } from "./use-easter-egg-overlay-store";
+
+const CARD_CLASS = [
+    "glow-border relative flex w-full max-w-[720px] max-h-[92vh] flex-col overflow-y-auto",
+    "gap-[clamp(12px,3vw,16px)] bg-black-alpha-75 p-[clamp(14px,4vw,22px)] backdrop-blur-[6px]",
+].join(" ");
+
+const CLOSE_BUTTON_CLASS = [
+    "border-accent-alpha-25 hover:border-accent flex min-h-11 min-w-11 items-center",
+    "justify-center rounded-md border border-solid font-mono text-xs text-accent",
+].join(" ");
+
+const VIDEO_CLASS = [
+    "aspect-[640/267] w-full rounded-xl border border-solid",
+    "border-accent-alpha-40 shadow-lg",
+].join(" ");
 
 export const EasterEggOverlay: FC = () => {
     const { state, effects } = useEasterEggOverlayStore();
-    const { entry, completedBootLines, activeBootLine, bootComplete, reducedMotion } = state;
-    const { close, handleCardClick, setCloseButtonEl } = effects;
+    const { entry, bootComplete, reducedMotion, skipSignal } = state;
+    const { close, handleCardClick, handleBootComplete, setContainerEl } = effects;
 
     if (!entry) {
         return null;
@@ -21,44 +36,33 @@ export const EasterEggOverlay: FC = () => {
     return (
         <Overlay delay={0} onClick={close} className="z-60">
             <div
+                ref={setContainerEl}
                 role="dialog"
                 aria-modal="true"
                 aria-label={entry.title}
-                className="fixed inset-0 flex items-center justify-center px-4"
+                tabIndex={-1}
+                className="fixed inset-0 flex items-center justify-center px-4 outline-none"
             >
                 <div className="absolute inset-0 -z-10 overflow-hidden opacity-[0.55]">
                     <MatrixRain />
                 </div>
-                <div
-                    onClick={handleCardClick}
-                    className={`glow-border relative flex w-full max-w-[720px] max-h-[92vh] flex-col overflow-y-auto gap-[clamp(12px,3vw,16px)] bg-black-alpha-75 p-[clamp(14px,4vw,22px)] backdrop-blur-[6px] ${popClassName}`}
-                >
+                <div onClick={handleCardClick} className={`${CARD_CLASS} ${popClassName}`}>
                     <div className="flex items-center justify-between gap-3">
                         <span className="text-accent wrap-anywhere font-mono text-[13px] uppercase tracking-[.1em]">
                             {entry.slug}
                         </span>
-                        <button
-                            ref={setCloseButtonEl}
-                            type="button"
-                            onClick={close}
-                            aria-label="Close"
-                            className="border-accent-alpha-25 hover:border-accent flex min-h-11 min-w-11 items-center justify-center rounded-md border border-solid font-mono text-xs text-accent"
-                        >
+                        <button type="button" onClick={close} aria-label="Close" className={CLOSE_BUTTON_CLASS}>
                             esc
                         </button>
                     </div>
 
-                    <div className="min-h-24">
-                        {completedBootLines.map((line, index) => (
-                            <TerminalLine key={`${entry.slug}-boot-${index}`}>{line}</TerminalLine>
-                        ))}
-                        {!bootComplete && (
-                            <TerminalLine>
-                                {activeBootLine}
-                                <Cursor />
-                            </TerminalLine>
-                        )}
-                    </div>
+                    <BootTerminal
+                        key={entry.slug}
+                        slug={entry.slug}
+                        reducedMotion={reducedMotion}
+                        skipSignal={skipSignal}
+                        onBootComplete={handleBootComplete}
+                    />
 
                     <div
                         className={
@@ -73,7 +77,7 @@ export const EasterEggOverlay: FC = () => {
                             captions={entry.captions}
                             autoPlay
                             ariaLabel={entry.title}
-                            className="aspect-[640/267] w-full rounded-xl border border-solid border-accent-alpha-40 shadow-lg"
+                            className={VIDEO_CLASS}
                         />
                         <p className="mt-3 font-mono text-[15px] text-accent">{entry.title}</p>
                     </div>
