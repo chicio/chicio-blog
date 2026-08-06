@@ -68,7 +68,7 @@ export const EasterEggOverlay: FC = () => {
                             {entry.slug}
                         </span>
                         <button type="button" onClick={close} aria-label="Close" className={CLOSE_BUTTON_CLASS}>
-                            esc
+                            Esc
                         </button>
                     </div>
 

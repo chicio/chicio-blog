@@ -30,32 +30,6 @@ describe("PillsButtons", () => {
                 expect(screen.getByRole("button")).toBeDisabled();
             });
         });
-
-        describe("className", () => {
-            /**
-             * It has to reach the `button` itself: Tailwind's preflight sets `text-transform: none` on
-             * `button`, so an inheritable utility placed on any ancestor never reaches the pill label.
-             */
-            it("applies the given class to the button element, keeping the base classes", () => {
-                render(
-                    <RedPillButton onClick={vi.fn()} className="uppercase">
-                        Red
-                    </RedPillButton>,
-                );
-                const button = screen.getByRole("button");
-                expect(button.className).toContain("uppercase");
-                expect(button.className).toContain("cursor-pointer");
-            });
-
-            it("keeps the accessible name in its original case so it is not read out letter by letter", () => {
-                render(
-                    <RedPillButton onClick={vi.fn()} className="uppercase">
-                        reveal all solutions
-                    </RedPillButton>,
-                );
-                expect(screen.getByRole("button", { name: "reveal all solutions" })).toBeInTheDocument();
-            });
-        });
     });
 
     describe("BluePillButton", () => {

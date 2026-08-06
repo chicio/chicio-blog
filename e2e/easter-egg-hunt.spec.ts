@@ -47,7 +47,7 @@ test.describe("Easter Egg Hunt page", () => {
     test("reveals the solution steps for an egg after clicking reveal", async ({ page }) => {
         await page.goto("/easter-egg-hunt");
         const cardRevealButton = page
-            .getByRole("button", { name: /reveal/ })
+            .getByRole("button", { name: /reveal/i })
             .filter({ hasNotText: "all solutions" })
             .first();
 

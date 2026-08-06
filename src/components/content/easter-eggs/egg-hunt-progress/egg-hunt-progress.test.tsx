@@ -57,13 +57,13 @@ describe("EggHuntProgress", () => {
         it("clears every found egg", () => {
             markEasterEggFound("the-one");
             render(<EggHuntProgress />);
-            fireEvent.click(screen.getByRole("button", { name: /reset hunt/ }));
+            fireEvent.click(screen.getByRole("button", { name: /reset hunt/i }));
             expect(readFoundEasterEggs()).toEqual([]);
         });
 
         it("fires the reset tracking action", () => {
             render(<EggHuntProgress />);
-            fireEvent.click(screen.getByRole("button", { name: /reset hunt/ }));
+            fireEvent.click(screen.getByRole("button", { name: /reset hunt/i }));
             expect(trackWith).toHaveBeenCalledWith({
                 category: tracking.category.easter_egg_hunt,
                 label: tracking.label.body,
@@ -77,20 +77,20 @@ describe("EggHuntProgress", () => {
             const listener = vi.fn();
             window.addEventListener(revealAllSolutionsEvent, listener);
             render(<EggHuntProgress />);
-            fireEvent.click(screen.getByRole("button", { name: /reveal all solutions/ }));
+            fireEvent.click(screen.getByRole("button", { name: /reveal all solutions/i }));
             window.removeEventListener(revealAllSolutionsEvent, listener);
             expect(listener).toHaveBeenCalledOnce();
         });
 
         it("does not mark anything as found", () => {
             render(<EggHuntProgress />);
-            fireEvent.click(screen.getByRole("button", { name: /reveal all solutions/ }));
+            fireEvent.click(screen.getByRole("button", { name: /reveal all solutions/i }));
             expect(readFoundEasterEggs()).toEqual([]);
         });
 
         it("fires the reveal-all tracking action", () => {
             render(<EggHuntProgress />);
-            fireEvent.click(screen.getByRole("button", { name: /reveal all solutions/ }));
+            fireEvent.click(screen.getByRole("button", { name: /reveal all solutions/i }));
             expect(trackWith).toHaveBeenCalledWith({
                 category: tracking.category.easter_egg_hunt,
                 label: tracking.label.body,

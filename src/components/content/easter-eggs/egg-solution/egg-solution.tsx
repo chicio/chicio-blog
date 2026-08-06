@@ -30,8 +30,8 @@ export const EggSolution: FC<EggSolutionProps> = ({ eggId, children }) => {
             <TerminalButton
                 onClick={toggleReveal}
                 ariaExpanded={revealed}
-                label={revealed ? "hide" : "reveal"}
-                className="mt-3 uppercase"
+                label={revealed ? "Hide" : "Reveal"}
+                className="mt-3"
             />
             {revealed && <div className={`mt-3 ${stepListClass}`}>{children}</div>}
         </>

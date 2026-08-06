@@ -36,7 +36,7 @@ describe("EggCard", () => {
                     <p>a cryptic hint</p>
                 </EggCard>,
             );
-            expect(screen.queryByRole("button", { name: /replay/ })).not.toBeInTheDocument();
+            expect(screen.queryByRole("button", { name: /replay/i })).not.toBeInTheDocument();
         });
     });
 
@@ -69,7 +69,7 @@ describe("EggCard", () => {
                     <p>a cryptic hint</p>
                 </EggCard>,
             );
-            fireEvent.click(screen.getByRole("button", { name: /replay/ }));
+            fireEvent.click(screen.getByRole("button", { name: /replay/i }));
             expect(getEasterEggOverlaySlug()).toBe("the-one");
         });
     });

@@ -9,16 +9,6 @@ vi.mock("@/components/features/content/content-page", () => ({
     ContentPage: ({ children }: { children?: ReactNode }) => <div>{children}</div>,
 }));
 
-vi.mock("@/components/design-system/molecules/effects/matrix-terminal", () => ({
-    MatrixTerminal: ({ lines }: { lines: { text: string }[] }) => (
-        <div data-testid="matrix-terminal">
-            {lines.map((line) => (
-                <p key={line.text}>{line.text}</p>
-            ))}
-        </div>
-    ),
-}));
-
 const firstHint = {
     title: "The White Rabbit",
     crypticHint: "There is a place where you can search the whole site.",
@@ -99,7 +89,7 @@ describe("EasterEggs", () => {
 
     const getCardRevealButtons = () =>
         screen
-            .getAllByRole("button", { name: /reveal/ })
+            .getAllByRole("button", { name: /reveal/i })
             .filter((button) => !/all solutions/.test(button.textContent ?? ""));
 
     describe("egg cards", () => {
@@ -146,7 +136,7 @@ describe("EasterEggs", () => {
             render(<EasterEggs />);
 
             fireEvent.click(getCardRevealButtons()[0]);
-            fireEvent.click(screen.getAllByRole("button", { name: /hide/ })[0]);
+            fireEvent.click(screen.getAllByRole("button", { name: /hide/i })[0]);
 
             firstHint.steps.forEach((step) => {
                 expect(screen.queryByText(step)).not.toBeInTheDocument();

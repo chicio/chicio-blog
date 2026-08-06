@@ -29,12 +29,8 @@ export const EggHuntProgress: FC = () => {
                 shouldReduceMotion={shouldReduceMotion}
             />
             <div className="flex flex-wrap items-center justify-center gap-4">
-                <RedPillButton onClick={revealAll} className="uppercase">
-                    reveal all solutions
-                </RedPillButton>
-                <BluePillButton onClick={resetHunt} className="uppercase">
-                    reset hunt
-                </BluePillButton>
+                <RedPillButton onClick={revealAll}>Reveal all solutions</RedPillButton>
+                <BluePillButton onClick={resetHunt}>Reset hunt</BluePillButton>
             </div>
         </div>
     );
