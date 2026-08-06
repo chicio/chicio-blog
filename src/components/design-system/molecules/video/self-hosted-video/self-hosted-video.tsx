@@ -7,7 +7,9 @@ interface Props {
     src: string;
     poster?: string;
     caption?: string;
+    captions?: string;
     autoPlay?: boolean;
+    muted?: boolean;
     onEnded?: () => void;
     videoRef?: (el: HTMLVideoElement | null) => void;
     ariaLabel?: string;
@@ -18,7 +20,9 @@ export const SelfHostedVideo: FC<Props> = ({
     src,
     poster,
     caption,
+    captions,
     autoPlay,
+    muted,
     onEnded,
     videoRef,
     ariaLabel,
@@ -33,12 +37,14 @@ export const SelfHostedVideo: FC<Props> = ({
                 preload="metadata"
                 playsInline
                 autoPlay={autoPlay}
+                muted={muted}
                 onEnded={onEnded}
                 poster={poster}
                 aria-label={ariaLabel}
                 className={className ?? DEFAULT_VIDEO_CLASS_NAME}
             >
                 <source src={sourceSrc} />
+                {captions && <track kind="captions" srcLang="en" label="English" src={captions} />}
                 Your browser does not support the video tag.{" "}
                 <a href={src}>Download the video</a>.
             </video>

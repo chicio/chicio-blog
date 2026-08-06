@@ -1,14 +1,3 @@
-export type EasterEggTerminalLines = {
-    text: string;
-    type?: "normal" | "quote";
-    delay?: number;
-  }[]
-
-export type EasterEggSearchResult = {
-  type: "easterEgg";
-  terminalLines: EasterEggTerminalLines;
-};
-
 export type SearchablePostFields = {
   slug: string;
   title: string;
@@ -17,8 +6,4 @@ export type SearchablePostFields = {
   authors: string[];
 };
 
-type ContentSearchResult = { type: "search"; results: SearchablePostFields[] };
-
-export type SearchResult =
-  | ContentSearchResult
-  | EasterEggSearchResult;
+export type SearchResult = { type: "search"; results: SearchablePostFields[] };

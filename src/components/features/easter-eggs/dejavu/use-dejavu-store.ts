@@ -1,45 +1,40 @@
-import { useEffect, useState } from "react";
-import { ComponentStore } from "@/types/component-store";
+"use client";
 
-interface DejavuState {
-    showDejavu: boolean;
-}
+import { useCallback, useEffect, useState } from "react";
+import { isHeaderClickSequenceComplete } from "@/lib/easter-eggs/header-click-sequence";
+import { triggerEasterEgg } from "@/lib/easter-eggs/trigger-easter-egg";
+import type { EffectsStore } from "@/types/component-store";
+
+const GLITCH_DURATION_MS = 400;
 
 interface DejavuEffects {
     handleLogoClick: () => void;
 }
 
-export const useDejavuStore = (): ComponentStore<DejavuState, DejavuEffects> => {
+export const useDejavuStore = (): EffectsStore<DejavuEffects> => {
     const [logoClicks, setLogoClicks] = useState(0);
-    const [showDejavu, setShowDejavu] = useState(false);
 
     useEffect(() => {
-        if (logoClicks === 4) {
-            document.body.classList.add("glitch-active");
-            const glitchTimeout = setTimeout(() => {
-                document.body.classList.remove("glitch-active");
-                setShowDejavu(true);
-            }, 400);
-            const resetTimeout = setTimeout(() => {
-                setShowDejavu(false);
-                setLogoClicks(0);
-            }, 4000);
-            return () => {
-                clearTimeout(glitchTimeout);
-                clearTimeout(resetTimeout);
-                document.body.classList.remove("glitch-active");
-            };
+        if (!isHeaderClickSequenceComplete(logoClicks)) {
+            return;
         }
+
+        document.body.classList.add("glitch-active");
+        const glitchTimeout = setTimeout(() => {
+            document.body.classList.remove("glitch-active");
+            triggerEasterEgg("deja-vu");
+            setLogoClicks(0);
+        }, GLITCH_DURATION_MS);
+
+        return () => {
+            clearTimeout(glitchTimeout);
+            document.body.classList.remove("glitch-active");
+        };
     }, [logoClicks]);
 
-    const handleLogoClick = () => {
-        if (!showDejavu && logoClicks < 4) {
-            setLogoClicks((prev) => prev + 1);
-        }
-    };
+    const handleLogoClick = useCallback(() => {
+        setLogoClicks((prev) => (isHeaderClickSequenceComplete(prev) ? prev : prev + 1));
+    }, []);
 
-    return {
-        state: { showDejavu },
-        effects: { handleLogoClick },
-    };
+    return { effects: { handleLogoClick } };
 };

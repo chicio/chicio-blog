@@ -1,23 +1,12 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import type { ReactNode } from "react";
 import { render, screen, fireEvent } from "@/test-utils";
 import { EasterEggs } from "./easter-eggs";
-import { easterEggHuntIntroLines } from "@/lib/content/easter-eggs/easter-eggs-content";
 
 vi.mock("@/lib/tracking/tracking", () => ({ trackWith: vi.fn() }));
 
 vi.mock("@/components/features/content/content-page", () => ({
     ContentPage: ({ children }: { children?: ReactNode }) => <div>{children}</div>,
-}));
-
-vi.mock("@/components/design-system/molecules/effects/matrix-terminal", () => ({
-    MatrixTerminal: ({ lines }: { lines: { text: string }[] }) => (
-        <div data-testid="matrix-terminal">
-            {lines.map((line) => (
-                <p key={line.text}>{line.text}</p>
-            ))}
-        </div>
-    ),
 }));
 
 const firstHint = {
@@ -33,18 +22,14 @@ const secondHint = {
 };
 
 vi.mock("@/content/easter-egg-hunt/content.mdx", async () => {
-    const { EasterEggIntroTerminal } = await import(
-        "@/components/content/easter-eggs/easter-egg-intro-terminal"
-    );
     const { EggCard } = await import("@/components/content/easter-eggs/egg-card");
     const { EggSolution } = await import("@/components/content/easter-eggs/egg-solution");
 
     const FakeEasterEggHuntContent = () => (
         <>
-            <EasterEggIntroTerminal />
-            <EggCard title={firstHint.title}>
+            <EggCard title={firstHint.title} slug="the-white-rabbit">
                 <p>{firstHint.crypticHint}</p>
-                <EggSolution eggId="the_white_rabbit">
+                <EggSolution slug="the-white-rabbit">
                     <ul>
                         {firstHint.steps.map((step) => (
                             <li key={step}>{step}</li>
@@ -52,9 +37,9 @@ vi.mock("@/content/easter-egg-hunt/content.mdx", async () => {
                     </ul>
                 </EggSolution>
             </EggCard>
-            <EggCard title={secondHint.title}>
+            <EggCard title={secondHint.title} slug="deja-vu">
                 <p>{secondHint.crypticHint}</p>
-                <EggSolution eggId="deja_vu">
+                <EggSolution slug="deja-vu">
                     <ul>
                         {secondHint.steps.map((step) => (
                             <li key={step}>{step}</li>
@@ -69,6 +54,17 @@ vi.mock("@/content/easter-egg-hunt/content.mdx", async () => {
 });
 
 describe("EasterEggs", () => {
+    beforeEach(() => {
+        localStorage.clear();
+    });
+
+    describe("hunt progress", () => {
+        it("renders the found counter against the total number of eggs", () => {
+            render(<EasterEggs />);
+            expect(screen.getByText(/0 \/ 6 easter eggs found/)).toBeInTheDocument();
+        });
+    });
+
     describe("intro", () => {
         it("renders the page title and description from the MDX frontmatter", () => {
             render(<EasterEggs />);
@@ -81,13 +77,6 @@ describe("EasterEggs", () => {
             ).toBeInTheDocument();
         });
 
-        it("renders every intro line", () => {
-            render(<EasterEggs />);
-
-            easterEggHuntIntroLines.forEach((line) => {
-                expect(screen.getByText(line)).toBeInTheDocument();
-            });
-        });
 
         it("does not render an icon in the page title", () => {
             render(<EasterEggs />);
@@ -97,6 +86,11 @@ describe("EasterEggs", () => {
             expect(heading.querySelector("svg")).not.toBeInTheDocument();
         });
     });
+
+    const getCardRevealButtons = () =>
+        screen
+            .getAllByRole("button", { name: /reveal/i })
+            .filter((button) => !/all solutions/.test(button.textContent ?? ""));
 
     describe("egg cards", () => {
         it("renders every card title and cryptic hint from the MDX body", () => {
@@ -121,7 +115,7 @@ describe("EasterEggs", () => {
         it("reveals the solution steps for a card when the reveal toggle is clicked", () => {
             render(<EasterEggs />);
 
-            fireEvent.click(screen.getAllByRole("button", { name: /reveal/ })[0]);
+            fireEvent.click(getCardRevealButtons()[0]);
 
             firstHint.steps.forEach((step) => {
                 expect(screen.getByText(step)).toBeInTheDocument();
@@ -131,7 +125,7 @@ describe("EasterEggs", () => {
         it("renders the revealed solution steps as a bullet list, not a numbered list", () => {
             render(<EasterEggs />);
 
-            fireEvent.click(screen.getAllByRole("button", { name: /reveal/ })[0]);
+            fireEvent.click(getCardRevealButtons()[0]);
             const list = screen.getByText(firstHint.steps[0]).closest("ul");
 
             expect(list).toBeInTheDocument();
@@ -141,8 +135,8 @@ describe("EasterEggs", () => {
         it("hides the solution steps again when toggled a second time", () => {
             render(<EasterEggs />);
 
-            fireEvent.click(screen.getAllByRole("button", { name: /reveal/ })[0]);
-            fireEvent.click(screen.getAllByRole("button", { name: /hide/ })[0]);
+            fireEvent.click(getCardRevealButtons()[0]);
+            fireEvent.click(screen.getAllByRole("button", { name: /hide/i })[0]);
 
             firstHint.steps.forEach((step) => {
                 expect(screen.queryByText(step)).not.toBeInTheDocument();
@@ -152,7 +146,7 @@ describe("EasterEggs", () => {
         it("only reveals the toggled card, leaving the other collapsed", () => {
             render(<EasterEggs />);
 
-            fireEvent.click(screen.getAllByRole("button", { name: /reveal/ })[0]);
+            fireEvent.click(getCardRevealButtons()[0]);
 
             secondHint.steps.forEach((step) => {
                 expect(screen.queryByText(step)).not.toBeInTheDocument();
