@@ -25,19 +25,27 @@ describe("TerminalLine", () => {
     });
 
     describe("size", () => {
+        /**
+         * Asserted against the exact class list rather than with `toContain`, because the size classes
+         * are substrings of one another: "sm:text-sm" contains "text-sm", so a substring match cannot
+         * tell the small size from the medium one.
+         */
+        const fontSizeClassesOf = (el: HTMLElement) =>
+            el.className.split(" ").filter((token) => /^(sm:)?text-(xs|sm|base|lg|xl)$/.test(token));
+
         it("renders at the small size by default", () => {
             const { container } = render(<TerminalLine>cmd</TerminalLine>);
-            const el = container.firstChild as HTMLElement;
-            expect(el.className).toContain("text-xs");
-            expect(el.className).toContain("sm:text-sm");
+            expect(fontSizeClassesOf(container.firstChild as HTMLElement)).toEqual(["text-xs", "sm:text-sm"]);
         });
 
-        it("renders at the large size when asked, without also keeping the small one", () => {
+        it("renders at the medium size when asked, replacing the small classes rather than adding to them", () => {
+            const { container } = render(<TerminalLine size="md">cmd</TerminalLine>);
+            expect(fontSizeClassesOf(container.firstChild as HTMLElement)).toEqual(["text-sm", "sm:text-base"]);
+        });
+
+        it("renders at the large size when asked, replacing the small classes rather than adding to them", () => {
             const { container } = render(<TerminalLine size="lg">cmd</TerminalLine>);
-            const el = container.firstChild as HTMLElement;
-            expect(el.className).toContain("text-base");
-            expect(el.className).toContain("sm:text-lg");
-            expect(el.className).not.toContain("text-xs");
+            expect(fontSizeClassesOf(container.firstChild as HTMLElement)).toEqual(["text-base", "sm:text-lg"]);
         });
     });
 });

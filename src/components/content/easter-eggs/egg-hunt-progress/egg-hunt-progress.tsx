@@ -19,7 +19,7 @@ export const EggHuntProgress: FC = () => {
 
     return (
         <div className="glassmorphism-lite-no-scale my-4 flex flex-col items-center gap-4 p-4 sm:p-6">
-            <TerminalLine>
+            <TerminalLine size="md">
                 {">"} {foundCount} / {totalCount} easter eggs found
             </TerminalLine>
             <TerminalProgressBar

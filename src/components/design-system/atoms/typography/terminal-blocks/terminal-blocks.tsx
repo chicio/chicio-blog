@@ -1,6 +1,6 @@
 import { FC, PropsWithChildren } from "react";
 
-export type TerminalLineSize = "sm" | "lg";
+export type TerminalLineSize = "sm" | "md" | "lg";
 
 /**
  * Expressed as a lookup rather than an appended `className` because the two sets are both font-size
@@ -9,6 +9,7 @@ export type TerminalLineSize = "sm" | "lg";
  */
 const TERMINAL_LINE_SIZE_CLASS: Record<TerminalLineSize, string> = {
     sm: "text-xs sm:text-sm",
+    md: "text-sm sm:text-base",
     lg: "text-base sm:text-lg",
 };
 
