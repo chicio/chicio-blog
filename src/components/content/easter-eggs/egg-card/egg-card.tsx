@@ -2,7 +2,6 @@
 
 import { FC, PropsWithChildren } from "react";
 import { TerminalLine } from "@/components/design-system/atoms/typography/terminal-blocks";
-import { TerminalButton } from "@/components/design-system/molecules/buttons/terminal-button";
 import { useGlassmorphism } from "@/components/design-system/hooks/use-glassmorphism";
 import type { EasterEggSlug } from "@/lib/easter-eggs/easter-egg-catalog";
 import { useEggCardStore } from "./use-egg-card-store";
@@ -22,9 +21,8 @@ const BADGE_CLASS = "rounded-full border border-solid px-2.5 py-[3px] text-[12px
 
 export const EggCard: FC<EggCardProps> = ({ title, slug, children }) => {
     const { glassmorphismClass } = useGlassmorphism();
-    const { state, effects } = useEggCardStore(slug);
+    const { state } = useEggCardStore(slug);
     const { found } = state;
-    const { replay } = effects;
 
     const foundCardClass = found ? "border-accent bg-general-background-light" : "";
     const badgeStateClass = found
@@ -40,7 +38,6 @@ export const EggCard: FC<EggCardProps> = ({ title, slug, children }) => {
                 <span className={`${BADGE_CLASS} ${badgeStateClass}`}>{found ? "found" : "hidden"}</span>
             </div>
             <div className={hintParagraphClass}>{children}</div>
-            {found && <TerminalButton label="Replay" onClick={replay} className="mt-3" />}
         </div>
     );
 };

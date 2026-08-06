@@ -2,10 +2,11 @@
 
 import { FC, PropsWithChildren } from "react";
 import { TerminalButton } from "@/components/design-system/molecules/buttons/terminal-button";
+import type { EasterEggSlug } from "@/lib/easter-eggs/easter-egg-catalog";
 import { useEggSolutionStore } from "./use-egg-solution-store";
 
 export type EggSolutionProps = PropsWithChildren<{
-    eggId: string;
+    slug: EasterEggSlug;
 }>;
 
 /**
@@ -20,19 +21,28 @@ const stepListClass = [
     "[&_li]:text-accent [&_li]:text-shadow-md [&_li]:break-words [&_li]:text-xs sm:[&_li]:text-sm",
 ].join(" ");
 
-export const EggSolution: FC<EggSolutionProps> = ({ eggId, children }) => {
-    const { state, effects } = useEggSolutionStore(eggId);
-    const { revealed } = state;
-    const { toggleReveal } = effects;
+/**
+ * Owns the replay button as well as the reveal toggle so the two sit on one row. `EggCard` cannot
+ * render replay itself and still have it share a line: the solution is authored inside the card's MDX
+ * body, so a button placed by the card would always be a sibling of that whole body rather than of
+ * this toggle. Both read the found state straight from the global store, so nothing has to be threaded
+ * down through the MDX.
+ */
+export const EggSolution: FC<EggSolutionProps> = ({ slug, children }) => {
+    const { state, effects } = useEggSolutionStore(slug);
+    const { revealed, found } = state;
+    const { toggleReveal, replay } = effects;
 
     return (
         <>
-            <TerminalButton
-                onClick={toggleReveal}
-                ariaExpanded={revealed}
-                label={revealed ? "Hide" : "Reveal"}
-                className="mt-3"
-            />
+            <div className="mt-3 flex flex-wrap items-center gap-3">
+                <TerminalButton
+                    onClick={toggleReveal}
+                    ariaExpanded={revealed}
+                    label={revealed ? "Hide" : "Reveal"}
+                />
+                {found && <TerminalButton label="Replay" onClick={replay} />}
+            </div>
             {revealed && <div className={`mt-3 ${stepListClass}`}>{children}</div>}
         </>
     );

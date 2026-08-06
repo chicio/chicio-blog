@@ -29,7 +29,7 @@ vi.mock("@/content/easter-egg-hunt/content.mdx", async () => {
         <>
             <EggCard title={firstHint.title} slug="the-white-rabbit">
                 <p>{firstHint.crypticHint}</p>
-                <EggSolution eggId="the_white_rabbit">
+                <EggSolution slug="the-white-rabbit">
                     <ul>
                         {firstHint.steps.map((step) => (
                             <li key={step}>{step}</li>
@@ -39,7 +39,7 @@ vi.mock("@/content/easter-egg-hunt/content.mdx", async () => {
             </EggCard>
             <EggCard title={secondHint.title} slug="deja-vu">
                 <p>{secondHint.crypticHint}</p>
-                <EggSolution eggId="deja_vu">
+                <EggSolution slug="deja-vu">
                     <ul>
                         {secondHint.steps.map((step) => (
                             <li key={step}>{step}</li>
