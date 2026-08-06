@@ -70,6 +70,9 @@
 ## Features (continued 11)
 - [DropdownMenu A11y & Grouping](arch_dropdown_menu_a11y.md) — groups-only nested-list, role=menu/aria-haspopup removed, Escape-to-refocus in store; globals.css re-adds bulleted ul/li styling AFTER preflight (always check it), needs explicit list-none/role=list resets; panel height regressions masquerade as e2e cookie-banner flakiness; panel width unified to fixed xs:w-60/240px, real Playwright boundingBox assertions added (2026-07-31)
 
+## Features (continued 12)
+- [Console Startup Section](feature_console_startup_section.md) — Startup section (10/11 consoles) via existing Youtube molecule; fixed hardcoded iframe title bug; mdx-to-markdown already handled Youtube+ParagraphTitleWithIcon; search index never sees body text
+
 ## Feedback
 - [Review-fix workflow](feedback_review_fix_disk_and_reset_soft.md) — git reset --soft path-restaging to reshape commits; disk-full is often transient (retry, don't clean system caches); e2e hangs on a long-lived ad hoc port are stale-server artifacts, not regressions — verify with a fresh port + origin/main control
 - [PWA & State Patterns](feedback_pwa_patterns.md) — useSyncExternalStore for localStorage state, consent-gated UI, banner/error page alignment rules
