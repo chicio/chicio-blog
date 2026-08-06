@@ -40,7 +40,7 @@ export const EggCard: FC<EggCardProps> = ({ title, slug, children }) => {
                 <span className={`${BADGE_CLASS} ${badgeStateClass}`}>{found ? "found" : "hidden"}</span>
             </div>
             <div className={hintParagraphClass}>{children}</div>
-            {found && <TerminalButton label="replay" onClick={replay} className="mt-3" />}
+            {found && <TerminalButton label="replay" onClick={replay} className="mt-3 uppercase" />}
         </div>
     );
 };
