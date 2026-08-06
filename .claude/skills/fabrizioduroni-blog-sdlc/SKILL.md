@@ -1,14 +1,14 @@
 ---
 name: fabrizioduroni-blog-sdlc
-description: Orchestrate the full code SDLC for chicio-blog — explore → brainstorm → implement ⇄ review → PR (feature mode), or investigate → confirm → implement ⇄ review → PR (fix mode). Interactive, with two human gates (plan approval, PR approval). Code work only.
+description: Orchestrate the full code SDLC for chicio-blog — explore → brainstorm → implement ⇄ review → PR (feature mode), or investigate → confirm → implement ⇄ review → PR (fix mode). One human gate (plan approval); the PR opens automatically. Code work only.
 disable-model-invocation: true
 ---
 
 # fabrizioduroni-blog-sdlc — orchestrator
 
 You (the main thread) run this pipeline manually and in sequence, dispatching the specialized agents and hosting the
-human gates. This is deliberately a **visible, main-thread** orchestration (not an opaque orchestrator agent) so the
-sequencing is deterministic, the implement⇄review loop is observable, the human gates are real, and token spend is
+human gate. This is deliberately a **visible, main-thread** orchestration (not an opaque orchestrator agent) so the
+sequencing is deterministic, the implement⇄review loop is observable, the human gate is real, and token spend is
 controlled.
 
 **Scope: CODE work only.** Content (MDX blog prose, DSA articles) is out of scope — see the Content firewall in
@@ -31,11 +31,15 @@ sanity-checking a finding, sizing a change — use `codegraph_explore` yourself 
 
 Create a todo list with one item per stage of the selected mode, and work them in order. Do not skip a gate.
 
-## Human gates (read before you start)
+## Human gate (read before you start)
 
-The pipeline is **interactive and human-gated**. Every human-interactive step is marked **[INTERACTIVE]** — grilling at
-Gate 1, the confirm gate in fix mode, the PR gate. Keep all interaction inside those steps: the non-interactive stages
-(Explore, Implement, Review, the 3⇄4 loop) must never bake in prompts of their own.
+The pipeline has **exactly one** human gate: the brainstorm at Stage 2 in feature mode, or the confirm-root-cause at
+Stage 2' in fix mode. That step is marked **[INTERACTIVE]** — keep all interaction inside it. Every other stage
+(Explore, Implement, Review, the 3⇄4 loop, and the pull request) is non-interactive and must never bake in prompts of
+its own.
+
+Stage 6 opens the PR **automatically** once review converges. The plan is where human judgement is load-bearing; a pull
+request is already a reviewable, closable proposal, so gating it only bought a wait. The pipeline still never merges.
 
 ## Stage 0 — Intake (always)
 
@@ -58,7 +62,7 @@ Dispatch **`fabrizioduroni-explorer`** (haiku, read-only) with the description. 
 report (files by layer, reusable design-system surface, registration points, test surface, decisions to resolve).
 Keep the report; it feeds Stages 2 and 3.
 
-### Stage 2 — Brainstorm 🚪 **[INTERACTIVE] — HUMAN GATE 1**
+### Stage 2 — Brainstorm 🚪 **[INTERACTIVE] — THE HUMAN GATE**
 Invoke the **`grilling`** skill in the main thread, fed the exploration report + the description (+ any §9 "decisions
 to resolve" the explorer surfaced). Interview the user until the approach is nailed and an **approved plan** exists.
 - Plan handoff: **inline** in the implementer's prompt for small feature-slices; **persisted to a scratchpad plan
@@ -94,14 +98,21 @@ inside the single Stage-5 loop — no separate loop path.
   finding after a valid-looking rebuttal, escalate to the human** — do not keep looping on a standoff.
 - After 3 rounds without convergence, **stop** and surface the open findings to the human; do not loop further.
 
-### Stage 6 — Pull request 🚪 **[INTERACTIVE] — HUMAN GATE 2**
-Show the human the final diff + a review summary (verdict, findings resolved, any open non-blocking notes).
-**Wait for approval.** On approval:
+### Stage 6 — Pull request (automatic, no gate)
+As soon as the review converges (verdict `PASS`, zero blocking findings), open the PR **without pausing for approval**:
 1. Push the feature branch.
 2. Open the PR with `gh pr create` to `main`, conventional-commit + Gitmoji title, using the PR template below.
 3. Start a **non-blocking** CI watch (don't block the human on it).
 4. Unless `--in-place`: `ExitWorktree` (the pushed branch remains for review).
-Return the PR URL.
+
+Then report to the human in one message: the PR URL, the review verdict, which blocking findings were fixed across how
+many rounds, and every open non-blocking note. They read what shipped and intervene on the PR itself if they disagree —
+that is what makes the missing gate safe.
+
+**Never merge.** Opening a PR is reversible; merging is the human's call and is outside this pipeline.
+
+If the loop hit its 3-round cap **without** converging, do NOT open a PR — fall back to surfacing the open findings
+(§ Stage 5) and stop.
 
 ## Fix mode (delta)
 
@@ -112,7 +123,7 @@ Dispatch **`fabrizioduroni-bug-investigator`** (opus) with the pasted stack trac
 a structured root-cause report (offending code, introducing commit, root cause, blast radius, fix direction + the
 failing-test shape). It writes its findings to memory **regardless** of what happens next.
 
-### Stage 2' — Confirm root cause 🚪 **[INTERACTIVE] — HUMAN GATE 1']**
+### Stage 2' — Confirm root cause 🚪 **[INTERACTIVE] — THE HUMAN GATE**
 Present the root-cause report. The human decides:
 - **Proceed** → the report becomes the approved plan; continue to Stage 3 (implementer writes the failing test first,
   then the fix — strict red-green).

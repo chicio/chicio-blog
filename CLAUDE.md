@@ -100,12 +100,14 @@ AI agents and tools that send `Accept: text/markdown` receive a Markdown represe
 Non-trivial **code** changes can be run through an orchestrated, multi-agent SDLC. It is manual and main-thread —
 invoke the orchestrator skill explicitly; it never auto-triggers.
 
-- **Orchestrator**: `/fabrizioduroni-blog-sdlc [description] [--fix] [--in-place]` — sequences the agents, hosts two
-  human gates (plan approval, PR approval), and runs a bounded implement⇄review loop (max 3 rounds). Code only — it
+- **Orchestrator**: `/fabrizioduroni-blog-sdlc [description] [--fix] [--in-place]` — sequences the agents, hosts one
+  human gate (plan approval), and runs a bounded implement⇄review loop (max 3 rounds). Code only — it
   refuses content tasks and points at the writer agents. **Runs in an isolated worktree by default** (pass `--in-place`
   to run in the current tree); isolation is pipeline-level, never per-agent.
-- **Feature mode**: explore → brainstorm (grilling) 🚪 → implement ⇄ review → PR 🚪.
-- **Fix mode** (`--fix` or a pasted stack trace): investigate → confirm-root-cause 🚪 → implement ⇄ review → PR 🚪.
+- **Feature mode**: explore → brainstorm (grilling) 🚪 → implement ⇄ review → PR.
+- **Fix mode** (`--fix` or a pasted stack trace): investigate → confirm-root-cause 🚪 → implement ⇄ review → PR.
+- The PR **opens automatically** once review converges (no approval stop). The pipeline never merges, and it opens no
+  PR at all if the review loop hits its 3-round cap without converging.
 
 Agent roster:
 
