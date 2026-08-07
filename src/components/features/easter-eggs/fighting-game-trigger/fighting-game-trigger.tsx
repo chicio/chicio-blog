@@ -17,6 +17,10 @@ export type FightingGameTriggerProps = PropsWithChildren<{
  * "Fighting" until you know it is a better joke anyway.
  *
  * Renders its children untouched on every other genre, so this is inert on the rest of the collection.
+ *
+ * The armed pill takes `cursor-pointer` as its only tell. Nothing else about it changes, so it still
+ * reads as an ordinary label until a pointer crosses it, and touch devices show nothing at all. It is
+ * deliberately not given a button role: announcing it to assistive tech would give the hunt away.
  */
 export const FightingGameTrigger: FC<FightingGameTriggerProps> = ({ genre, children }) => {
     const { effects } = useFightingGameTriggerStore();
@@ -27,7 +31,7 @@ export const FightingGameTrigger: FC<FightingGameTriggerProps> = ({ genre, child
     }
 
     return (
-        <div onClick={registerTap} data-testid="fighting-game-trigger">
+        <div onClick={registerTap} data-testid="fighting-game-trigger" className="cursor-pointer">
             {children}
         </div>
     );

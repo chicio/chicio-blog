@@ -46,6 +46,12 @@ describe("FightingGameTrigger", () => {
 
             expect(screen.getByText(/Genre: Fighting/)).toBeInTheDocument();
         });
+
+        it("shows a pointer cursor, the only hint that the pill does anything", () => {
+            renderTrigger("Fighting");
+
+            expect(screen.getByTestId("fighting-game-trigger")).toHaveClass("cursor-pointer");
+        });
     });
 
     describe("on every other genre", () => {
