@@ -2,7 +2,7 @@
 
 import { ReadingContentPageTemplate } from "@/components/design-system/templates/reading-content-page-template";
 import type { ReadingContentPageProps as DesignSystemReadingContentPageProps } from "@/components/design-system/templates/reading-content-page-template";
-import { DejavuEasterEgg } from "@/components/features/easter-eggs/dejavu";
+import { TheChoiceEasterEgg } from "@/components/features/easter-eggs/the-choice";
 import { FC } from "react";
 import { useReadingContentPageStore } from "./use-reading-content-page-store";
 import { menuNavHrefs, footerNavHrefs, socialContactLinks } from "../nav-config";
@@ -27,7 +27,7 @@ export const ReadingContentPage: FC<ReadingContentPageProps> = ({ trackingCatego
     return (
         <ReadingContentPageTemplate
             {...rest}
-            headerWrapper={DejavuEasterEgg}
+            headerWrapper={TheChoiceEasterEgg}
             navHrefs={menuNavHrefs}
             footerNavHrefs={footerNavHrefs}
             socialLinks={socialContactLinks}

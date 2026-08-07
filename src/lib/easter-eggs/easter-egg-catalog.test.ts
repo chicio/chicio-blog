@@ -6,7 +6,7 @@ describe("easter-egg-catalog", () => {
         it("lists exactly the six committed easter eggs", () => {
             expect(EASTER_EGG_SLUGS).toEqual([
                 "the-white-rabbit",
-                "deja-vu",
+                "the-choice",
                 "i-know-kung-fu",
                 "there-is-no-spoon",
                 "the-one",

@@ -40,14 +40,14 @@ describe("easter-egg-overlay-state", () => {
             const callback = vi.fn();
             const unsubscribe = subscribeToEasterEggOverlay(callback);
 
-            openEasterEgg("deja-vu");
+            openEasterEgg("the-choice");
 
             expect(callback).toHaveBeenCalledOnce();
             unsubscribe();
         });
 
         it("notifies subscribers when the egg closes", () => {
-            openEasterEgg("deja-vu");
+            openEasterEgg("the-choice");
             const callback = vi.fn();
             const unsubscribe = subscribeToEasterEggOverlay(callback);
 

@@ -2,7 +2,7 @@ import { tracking } from "@/types/configuration/tracking";
 
 export type EasterEggSlug =
     | "the-white-rabbit"
-    | "deja-vu"
+    | "the-choice"
     | "i-know-kung-fu"
     | "there-is-no-spoon"
     | "the-one"
@@ -20,7 +20,7 @@ export interface EasterEggCatalogEntry {
 
 export const EASTER_EGG_SLUGS: readonly EasterEggSlug[] = [
     "the-white-rabbit",
-    "deja-vu",
+    "the-choice",
     "i-know-kung-fu",
     "there-is-no-spoon",
     "the-one",
@@ -53,7 +53,7 @@ export const EASTER_EGG_CATALOG: Record<EasterEggSlug, EasterEggCatalogEntry> = 
         tracking.action.easter_egg_white_rabbit,
         "the_white_rabbit",
     ),
-    "deja-vu": catalogEntry("deja-vu", "Déjà Vu", tracking.action.easter_egg_deja_vu, "deja_vu"),
+    "the-choice": catalogEntry("the-choice", "The Choice", tracking.action.easter_egg_the_choice, "the_choice"),
     "i-know-kung-fu": catalogEntry(
         "i-know-kung-fu",
         "I Know Kung Fu",

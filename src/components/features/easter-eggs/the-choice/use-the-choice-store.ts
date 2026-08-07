@@ -5,7 +5,7 @@ import { isHeaderClickSequenceComplete } from "@/lib/easter-eggs/header-click-se
 import { triggerEasterEgg } from "@/lib/easter-eggs/trigger-easter-egg";
 import type { EffectsStore } from "@/types/component-store";
 
-interface DejavuEffects {
+interface TheChoiceEffects {
     handleLogoClick: () => void;
 }
 
@@ -19,7 +19,7 @@ interface DejavuEffects {
  * would mean opening the egg from an effect, which is the wrong place for a side effect and is what
  * `react-hooks/set-state-in-effect` objects to.
  */
-export const useDejavuStore = (): EffectsStore<DejavuEffects> => {
+export const useTheChoiceStore = (): EffectsStore<TheChoiceEffects> => {
     const logoClicksRef = useRef(0);
 
     const handleLogoClick = useCallback(() => {
@@ -27,7 +27,7 @@ export const useDejavuStore = (): EffectsStore<DejavuEffects> => {
 
         if (isHeaderClickSequenceComplete(logoClicksRef.current)) {
             logoClicksRef.current = 0;
-            triggerEasterEgg("deja-vu");
+            triggerEasterEgg("the-choice");
         }
     }, []);
 

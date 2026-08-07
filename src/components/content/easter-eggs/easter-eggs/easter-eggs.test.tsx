@@ -16,7 +16,7 @@ const firstHint = {
 };
 
 const secondHint = {
-    title: "Déjà Vu",
+    title: "The Choice",
     crypticHint: "A déjà vu is a glitch in the matrix.",
     steps: ["Click the page header 4 times."],
 };
@@ -37,9 +37,9 @@ vi.mock("@/content/easter-egg-hunt/content.mdx", async () => {
                     </ul>
                 </EggSolution>
             </EggCard>
-            <EggCard title={secondHint.title} slug="deja-vu">
+            <EggCard title={secondHint.title} slug="the-choice">
                 <p>{secondHint.crypticHint}</p>
-                <EggSolution slug="deja-vu">
+                <EggSolution slug="the-choice">
                     <ul>
                         {secondHint.steps.map((step) => (
                             <li key={step}>{step}</li>
