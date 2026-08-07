@@ -98,7 +98,7 @@ export const CommandPalette: FC<CommandPaletteProps> = ({
                                 {">"}
                             </span>
                             <Command.Input
-                                className="text-accent placeholder:text-accent/40 caret-accent flex-1 bg-transparent font-mono text-base outline-none"
+                                className="text-accent placeholder:text-accent/40 caret-accent flex-1 bg-transparent font-mono outline-none"
                                 placeholder="type to search_"
                                 onValueChange={handleSearchInput}
                                 autoFocus
