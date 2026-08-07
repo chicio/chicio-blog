@@ -46,7 +46,7 @@ export const EasterEggOverlay: FC = () => {
         return null;
     }
 
-    const popClassName = reducedMotion ? "" : "animate-ee-pop";
+    const fadeClassName = reducedMotion ? "" : "animate-ee-fade";
     const revealTransitionClass = reducedMotion ? "" : REVEAL_TRANSITION_CLASS;
 
     return (
@@ -62,7 +62,7 @@ export const EasterEggOverlay: FC = () => {
                 <div className="absolute inset-0 -z-10 overflow-hidden opacity-[0.55]">
                     <MatrixRain />
                 </div>
-                <div onClick={handleCardClick} className={`${CARD_CLASS} ${popClassName}`}>
+                <div onClick={handleCardClick} className={`${CARD_CLASS} ${fadeClassName}`}>
                     <div className="flex items-center justify-between gap-3">
                         <span className="text-accent wrap-anywhere font-mono text-[13px] uppercase tracking-[.1em]">
                             {entry.slug}

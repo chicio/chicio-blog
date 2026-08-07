@@ -33,7 +33,7 @@ describe("EggHuntProgress", () => {
             expect(screen.getByText(/0 \/ 6 easter eggs found/)).toBeInTheDocument();
 
             act(() => {
-                markEasterEggFound("deja-vu");
+                markEasterEggFound("the-choice");
             });
 
             expect(screen.getByText(/1 \/ 6 easter eggs found/)).toBeInTheDocument();

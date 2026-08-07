@@ -54,35 +54,35 @@ describe("easter-egg-found", () => {
 
     describe("markEasterEggFound", () => {
         it("adds the slug to the stored found list", () => {
-            markEasterEggFound("deja-vu");
-            expect(readFoundEasterEggs()).toEqual(["deja-vu"]);
+            markEasterEggFound("the-choice");
+            expect(readFoundEasterEggs()).toEqual(["the-choice"]);
         });
 
         it("accumulates multiple distinct slugs", () => {
-            markEasterEggFound("deja-vu");
+            markEasterEggFound("the-choice");
             markEasterEggFound("the-one");
-            expect(readFoundEasterEggs().sort()).toEqual(["deja-vu", "the-one"]);
+            expect(readFoundEasterEggs().sort()).toEqual(["the-choice", "the-one"]);
         });
 
         it("does not duplicate a slug marked found twice", () => {
-            markEasterEggFound("deja-vu");
-            markEasterEggFound("deja-vu");
-            expect(readFoundEasterEggs()).toEqual(["deja-vu"]);
+            markEasterEggFound("the-choice");
+            markEasterEggFound("the-choice");
+            expect(readFoundEasterEggs()).toEqual(["the-choice"]);
         });
 
         it("dispatches the found-change event when a new slug is recorded", () => {
             const listener = vi.fn();
             window.addEventListener(easterEggFoundChangeEvent, listener);
-            markEasterEggFound("deja-vu");
+            markEasterEggFound("the-choice");
             window.removeEventListener(easterEggFoundChangeEvent, listener);
             expect(listener).toHaveBeenCalledOnce();
         });
 
         it("does not dispatch the found-change event for an already-found slug", () => {
-            markEasterEggFound("deja-vu");
+            markEasterEggFound("the-choice");
             const listener = vi.fn();
             window.addEventListener(easterEggFoundChangeEvent, listener);
-            markEasterEggFound("deja-vu");
+            markEasterEggFound("the-choice");
             window.removeEventListener(easterEggFoundChangeEvent, listener);
             expect(listener).not.toHaveBeenCalled();
         });
@@ -90,7 +90,7 @@ describe("easter-egg-found", () => {
 
     describe("resetFoundEasterEggs", () => {
         it("clears every previously found slug", () => {
-            markEasterEggFound("deja-vu");
+            markEasterEggFound("the-choice");
             markEasterEggFound("the-one");
             resetFoundEasterEggs();
             expect(readFoundEasterEggs()).toEqual([]);

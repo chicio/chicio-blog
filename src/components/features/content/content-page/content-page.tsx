@@ -2,7 +2,7 @@
 
 import { ContentPageTemplate } from "@/components/design-system/templates/content-page-template";
 import type { ContentPageProps as DesignSystemContentPageProps } from "@/components/design-system/templates/content-page-template";
-import { DejavuEasterEgg } from "@/components/features/easter-eggs/dejavu";
+import { TheChoiceEasterEgg } from "@/components/features/easter-eggs/the-choice";
 import { FC } from "react";
 import { useContentPageStore } from "./use-content-page-store";
 import { menuNavHrefs, footerNavHrefs, socialContactLinks } from "../nav-config";
@@ -27,7 +27,7 @@ export const ContentPage: FC<ContentPageProps> = ({ trackingCategory, ...rest })
     return (
         <ContentPageTemplate
             {...rest}
-            headerWrapper={DejavuEasterEgg}
+            headerWrapper={TheChoiceEasterEgg}
             navHrefs={menuNavHrefs}
             footerNavHrefs={footerNavHrefs}
             socialLinks={socialContactLinks}

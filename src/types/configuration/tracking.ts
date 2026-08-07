@@ -77,7 +77,7 @@ export const tracking = {
     easter_egg_kung_fu: "easter_egg_kung_fu",
     easter_egg_spoon: "easter_egg_spoon",
     easter_egg_white_rabbit: "easter_egg_white_rabbit",
-    easter_egg_deja_vu: "easter_egg_deja_vu",
+    easter_egg_the_choice: "easter_egg_the_choice",
     easter_egg_the_one: "easter_egg_the_one",
     easter_egg_dodge_this: "easter_egg_dodge_this",
     open_matrix_rain_webgpu: "open_matrix_rain_webgpu",

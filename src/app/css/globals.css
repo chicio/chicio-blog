@@ -150,17 +150,16 @@
     --animate-bounce: bounce 2s infinite;
     --animate-opacity: opacity 0.3s;
     --animate-blink: blink 1s infinite;
-    --animate-ee-pop: ee-pop 0.28s ease-out both;
+    /* Every easter egg opens the same way: a plain fade, no slide and no scale. */
+    --animate-ee-fade: ee-fade 0.35s ease-out both;
 
-    @keyframes ee-pop {
+    @keyframes ee-fade {
         from {
             opacity: 0;
-            transform: translateY(10px) scale(0.98);
         }
 
         to {
             opacity: 1;
-            transform: none;
         }
     }
 
@@ -259,6 +258,24 @@
 
     html {
         @apply max-w-full overflow-x-hidden h-full;
+    }
+
+    /**
+     * iOS Safari zooms the viewport in when a focused form control's font size is under 16px, and it
+     * never zooms back out — you are left on a magnified, sideways-scrolling page. The alternative fix
+     * is a `maximum-scale=1` viewport meta, which also blocks deliberate pinch-zoom and is an
+     * accessibility regression, so the size is floored here instead.
+     *
+     * `max(1rem, 1em)` means "at least 16px, but keep growing with the surrounding text", so a control
+     * inside a deliberately large block still scales up. This is a base-layer rule so it reaches raw
+     * `input` elements and third-party ones alike — cmdk's `Command.Input` is not ours to style from a
+     * React component. Tailwind utilities sit in a later layer and still win, so putting `text-sm` on
+     * an input opts back into the zoom: don't, and there is no reason to.
+     */
+    input,
+    textarea,
+    select {
+        font-size: max(1rem, 1em);
     }
 
     body {
@@ -466,11 +483,6 @@
         content: unset !important;
         display: none !important;
         all: unset;
-    }
-
-    body.glitch-active {
-        @apply animate-glitch duration-300;
-        animation-duration: 300ms !important;
     }
 
     .chat-message-user * {

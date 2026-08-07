@@ -1,5 +1,5 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen } from "@/test-utils";
+import { describe, it, expect, beforeEach } from "vitest";
+import { render } from "@/test-utils";
 import { fireEvent } from "@testing-library/react";
 import { EasterEggTriggers } from "./easter-egg-triggers";
 import { closeEasterEgg, getEasterEggOverlaySlug } from "@/lib/easter-eggs/easter-egg-overlay-state";
@@ -30,10 +30,9 @@ describe("EasterEggTriggers", () => {
     });
 
     describe("render", () => {
-        it("renders an aria-hidden tap hotspot in the bottom-right corner", () => {
-            render(<EasterEggTriggers />);
-            const hotspot = screen.getByTestId("kung-fu-tap-hotspot");
-            expect(hotspot).toHaveAttribute("aria-hidden", "true");
+        it("renders nothing, since both triggers it owns are global listeners", () => {
+            const { container } = render(<EasterEggTriggers />);
+            expect(container).toBeEmptyDOMElement();
         });
     });
 
@@ -48,26 +47,6 @@ describe("EasterEggTriggers", () => {
             render(<EasterEggTriggers />);
             fireEvent.keyDown(document, { key: "ArrowUp" });
             fireEvent.keyDown(document, { key: "ArrowUp" });
-            expect(getEasterEggOverlaySlug()).toBeNull();
-        });
-    });
-
-    describe("bottom-right tap hotspot", () => {
-        it("opens the kung-fu egg after five quick taps", () => {
-            render(<EasterEggTriggers />);
-            const hotspot = screen.getByTestId("kung-fu-tap-hotspot");
-            for (let i = 0; i < 5; i++) {
-                fireEvent.click(hotspot);
-            }
-            expect(getEasterEggOverlaySlug()).toBe("i-know-kung-fu");
-        });
-
-        it("does not trigger before the fifth tap", () => {
-            render(<EasterEggTriggers />);
-            const hotspot = screen.getByTestId("kung-fu-tap-hotspot");
-            for (let i = 0; i < 4; i++) {
-                fireEvent.click(hotspot);
-            }
             expect(getEasterEggOverlaySlug()).toBeNull();
         });
     });

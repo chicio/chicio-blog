@@ -17,8 +17,8 @@ vi.mock("@/components/design-system/templates/content-page-template", () => ({
     ),
 }));
 
-vi.mock("@/components/features/easter-eggs/dejavu", () => ({
-    DejavuEasterEgg: ({ children }: React.PropsWithChildren) => <div>{children}</div>,
+vi.mock("@/components/features/easter-eggs/the-choice", () => ({
+    TheChoiceEasterEgg: ({ children }: React.PropsWithChildren) => <div>{children}</div>,
 }));
 
 vi.mock("@/lib/tracking/tracking", () => ({ trackWith: vi.fn() }));

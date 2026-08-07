@@ -2,6 +2,7 @@ import { IoGameControllerOutline } from "react-icons/io5";
 import { FC } from "react";
 import { ReleaseYear } from "@/components/content/videogames/release-year";
 import { InfoPill } from "@/components/content/videogames/info-pill";
+import { FightingGameTrigger } from "@/components/features/easter-eggs/fighting-game-trigger";
 import { MdOutlineDeveloperBoard } from "react-icons/md";
 import { IoNewspaperOutline } from "react-icons/io5";
 import { GiVibratingShield } from "react-icons/gi";
@@ -38,7 +39,11 @@ export const GameInformation: FC<GameInformationProps> = ({
             {acquiredYear && <InfoPill icon={<BiCalendar />} label="Acquired" value={acquiredYear} />}
             {developer && <InfoPill icon={<MdOutlineDeveloperBoard />} label="Developer" value={developer} />}
             {publisher && <InfoPill icon={<IoNewspaperOutline />} label="Publisher" value={publisher} />}
-            {genre && <InfoPill icon={<IoGameControllerOutline />} label="Genre" value={genre} />}
+            {genre && (
+                <FightingGameTrigger genre={genre}>
+                    <InfoPill icon={<IoGameControllerOutline />} label="Genre" value={genre} />
+                </FightingGameTrigger>
+            )}
             {pegiRating && <InfoPill icon={<GiVibratingShield />} label="PEGI Rating" value={pegiRating} />}
             {region && <InfoPill icon={<MdOutlinePlace />} label="Region" value={region} />}
             {console && <InfoPill icon={<GiGameConsole />} label="Console" value={console} />}
