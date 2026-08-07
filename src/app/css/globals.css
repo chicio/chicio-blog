@@ -150,17 +150,16 @@
     --animate-bounce: bounce 2s infinite;
     --animate-opacity: opacity 0.3s;
     --animate-blink: blink 1s infinite;
-    --animate-ee-pop: ee-pop 0.28s ease-out both;
+    /* Every easter egg opens the same way: a plain fade, no slide and no scale. */
+    --animate-ee-fade: ee-fade 0.35s ease-out both;
 
-    @keyframes ee-pop {
+    @keyframes ee-fade {
         from {
             opacity: 0;
-            transform: translateY(10px) scale(0.98);
         }
 
         to {
             opacity: 1;
-            transform: none;
         }
     }
 
@@ -466,11 +465,6 @@
         content: unset !important;
         display: none !important;
         all: unset;
-    }
-
-    body.glitch-active {
-        @apply animate-glitch duration-300;
-        animation-duration: 300ms !important;
     }
 
     .chat-message-user * {
