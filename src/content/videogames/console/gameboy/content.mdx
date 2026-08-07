@@ -22,8 +22,9 @@ metadata:
 ---
 
 import { ParagraphTitleWithIcon } from "@/components/design-system/molecules/typography/paragraph-title-with-icon";
-import { FiCpu } from "react-icons/fi";
+import { FiCpu, FiPower } from "react-icons/fi";
 import { FaLightbulb } from "react-icons/fa";
+import { Youtube } from "@/components/design-system/molecules/video/youtube";
 
 ## <ParagraphTitleWithIcon icon={<FiCpu className="text-shadow-lg" />}> Hardware specs</ParagraphTitleWithIcon>
 
@@ -37,6 +38,17 @@ import { FaLightbulb } from "react-icons/fa";
 | Video Output | LCD 160×144, 4 shades monochrome |
 | Architecture | 8-bit |
 
+## <ParagraphTitleWithIcon icon={<FiPower className="text-shadow-lg" />}>Startup</ParagraphTitleWithIcon>
+
+The Game Boy's entire boot sequence lives in just 256 bytes of ROM: it scrolls the Nintendo logo down the screen and plays a single "ding".
+The twist is that the logo it displays does not come from the console itself. Every officially licensed cartridge carries its own copy of the logo in its header (bytes 0x104 to 0x133),
+and the boot ROM reads that copy, compares it against its own internal reference, and locks up if the two don't match.
+
+- That check was a legal mechanism, not a technical one. Forcing every cartridge to carry and display Nintendo's trademark meant an unlicensed cartridge had to reproduce that trademark too,
+giving Nintendo grounds to sue for trademark infringement. Nintendo chose this route over a hardware lockout chip like the one in the NES, likely for cost and power consumption reasons
+(see [Pan Docs](https://gbdev.io/pandocs/Power_Up_Sequence.html) and the [cartridge header spec](https://gbdev.io/pandocs/The_Cartridge_Header.html)).
+
+<Youtube videoId="Hz2QPBkDkFc" title="Game Boy startup sequence" />
 
 ## <ParagraphTitleWithIcon icon={<FaLightbulb className="text-shadow-lg" />}>Trivia & Fun Facts</ParagraphTitleWithIcon>
 

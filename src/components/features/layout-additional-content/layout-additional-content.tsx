@@ -2,7 +2,6 @@
 
 import { FC } from "react";
 import dynamic from "next/dynamic";
-import { whiteRabbitEasterEgg } from "@/components/features/easter-eggs/white-rabbit";
 import { searchIndexFileName } from "@/lib/content/search-filename";
 import { slugs } from "@/types/configuration/slug";
 import { useLayoutAdditionalContentStore } from "./use-layout-additional-content-store";
@@ -39,11 +38,6 @@ const CommandPalette = dynamic(
     { ssr: false },
 );
 
-const NeoRoomEasterEgg = dynamic(
-    () => import("@/components/features/easter-eggs/neo-room-easter-egg"),
-    { ssr: false },
-);
-
 const MatrixRainControlPanel = dynamic(
     () =>
         import("@/components/features/matrix-rain-panel/matrix-rain-control-panel").then(
@@ -57,18 +51,18 @@ const Terminal = dynamic(
     { ssr: false },
 );
 
-const KungFuEasterEgg = dynamic(
+const EasterEggOverlay = dynamic(
     () =>
-        import("@/components/features/easter-eggs/kung-fu-easter-egg").then(
-            (m) => m.KungFuEasterEgg,
+        import("@/components/features/easter-eggs/easter-egg-overlay").then(
+            (m) => m.EasterEggOverlay,
         ),
     { ssr: false },
 );
 
-const SpoonEasterEgg = dynamic(
+const EasterEggTriggers = dynamic(
     () =>
-        import("@/components/features/easter-eggs/spoon-easter-egg").then(
-            (m) => m.SpoonEasterEgg,
+        import("@/components/features/easter-eggs/easter-egg-triggers").then(
+            (m) => m.EasterEggTriggers,
         ),
     { ssr: false },
 );
@@ -91,6 +85,8 @@ export const LayoutAdditionalContent: FC = () => {
         trackCommandPaletteCustomizeMatrixRain,
         trackCommandPaletteOpenEasterEggHunt,
         trackCommandPaletteOpenTerminal,
+        matchesEasterEggQuery,
+        handleEasterEggQueryMatch,
     } = effects;
 
     return (
@@ -108,13 +104,13 @@ export const LayoutAdditionalContent: FC = () => {
                     onOpenEasterEggHunt: trackCommandPaletteOpenEasterEggHunt,
                     onOpenTerminal: trackCommandPaletteOpenTerminal,
                 }}
-                searchEasterEgg={whiteRabbitEasterEgg}
-                SearchEasterEggComponent={NeoRoomEasterEgg}
+                matchesEasterEggQuery={matchesEasterEggQuery}
+                onEasterEggMatch={handleEasterEggQueryMatch}
             />
             <MatrixRainControlPanel />
             <Terminal />
-            <KungFuEasterEgg />
-            <SpoonEasterEgg />
+            <EasterEggOverlay />
+            <EasterEggTriggers />
             <Lightbox />
             <CookieConsentBanner decided={decided} onAccept={acceptConsent} onReject={rejectConsent} />
             <TrackingOptIn enabled={consented} />

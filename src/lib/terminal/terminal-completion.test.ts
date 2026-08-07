@@ -29,6 +29,11 @@ describe("terminal-completion", () => {
             expect(completeInput("cl", "/", fixtureRoot)).toEqual(["clear", "close"]);
         });
 
+        it("does not offer whoami as a completion — it is a hidden easter egg, not an advertised command", () => {
+            expect(completeInput("who", "/", fixtureRoot)).toEqual([]);
+            expect(COMMAND_NAMES).not.toContain("whoami");
+        });
+
         it("returns no command completions once a full command plus space is typed with no matching path", () => {
             expect(completeInput("cd nope", "/", fixtureRoot)).toEqual([]);
         });

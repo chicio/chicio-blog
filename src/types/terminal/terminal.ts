@@ -46,6 +46,7 @@ export interface TerminalExecutionResult {
     searchQuery?: string;
     renderContent?: TerminalRenderContentIntent;
     close?: boolean;
+    triggerEasterEgg?: boolean;
 }
 
 export type TerminalContentBlockStatus = "loading" | "success" | "unavailable" | "error";

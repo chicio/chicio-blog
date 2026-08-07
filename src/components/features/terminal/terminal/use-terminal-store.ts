@@ -11,10 +11,10 @@ import { execute, formatSearchResults, needsFilesystem, parse } from "@/lib/term
 import { ROOT_PATH, resolveRouteForPopstate } from "@/lib/terminal/terminal-path";
 import { toScreenLines } from "@/lib/terminal/terminal-screen-lines";
 import type { TerminalScrollbackEntry } from "@/lib/terminal/terminal-screen-lines";
+import { triggerEasterEgg } from "@/lib/easter-eggs/trigger-easter-egg";
 import { trackWith } from "@/lib/tracking/tracking";
 import { tracking } from "@/types/configuration/tracking";
 import type { ComponentStore } from "@/types/component-store";
-import type { SearchResult } from "@/types/search/search";
 import type { TerminalContentBlockData, TerminalDirNode, TerminalRenderContentIntent } from "@/types/terminal/terminal";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, FormEvent, KeyboardEvent, useCallback, useEffect, useState } from "react";
@@ -38,8 +38,6 @@ interface TerminalEffects {
     closeOverlay: () => void;
     stopPropagation: (e: React.MouseEvent) => void;
 }
-
-const noopEasterEgg = (): SearchResult | null => null;
 
 const EMPTY_ROOT: TerminalDirNode = { type: "dir", children: {} };
 
@@ -73,7 +71,7 @@ export const useTerminalStore = (): ComponentStore<TerminalState, TerminalEffect
     const [inputEl, setInputEl] = useState<HTMLInputElement | null>(null);
     const [scrollAnchorEl, setScrollAnchorEl] = useState<HTMLDivElement | null>(null);
 
-    const { handleSearch, search } = useSearch(true, noopEasterEgg, searchIndexFileName);
+    const { handleSearch, search } = useSearch(true, searchIndexFileName);
     const [previousSearch, setPreviousSearch] = useState(search);
 
     if (previousSearch !== search) {
@@ -297,6 +295,10 @@ export const useTerminalStore = (): ComponentStore<TerminalState, TerminalEffect
 
             if (result.close) {
                 closeOverlay();
+            }
+
+            if (result.triggerEasterEgg) {
+                triggerEasterEgg("the-one");
             }
         },
         [cwd, root, router, handleSearch, renderContentFor, closeOverlay],

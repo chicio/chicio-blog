@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { renderHook, act, RenderHookResult } from "@testing-library/react";
 import { ChangeEvent } from "react";
-import type { SearchResult, EasterEggSearchResult } from "@/types/search/search";
+import type { SearchResult } from "@/types/search/search";
 
 const mockSearch = vi.fn(() => [{ ref: "post-1" }]);
 const mockGetDoc = vi.fn(() => ({
@@ -25,24 +25,18 @@ vi.mock("elasticlunr", () => ({
 
 import { useSearch } from "./use-search";
 
-const noEasterEgg = (): SearchResult | null => null;
-
 function getResultsFromSearchResult(result: SearchResult) {
-    if (result.type === "search") {
-        return result.results;
-    }
-    return [];
+    return result.results;
 }
 
 type UseSearchReturn = ReturnType<typeof useSearch>;
 
 const renderLoadedSearch = async (
-    easterEgg: (query: string) => SearchResult | null = noEasterEgg,
     searchIndexFileName = "search-index.json",
 ): Promise<RenderHookResult<UseSearchReturn, unknown>> => {
     let rendered!: RenderHookResult<UseSearchReturn, unknown>;
     await act(async () => {
-        rendered = renderHook(() => useSearch(true, easterEgg, searchIndexFileName));
+        rendered = renderHook(() => useSearch(true, searchIndexFileName));
     });
     return rendered;
 };
@@ -62,16 +56,12 @@ describe("useSearch", () => {
 
     describe("initial state", () => {
         it("returns empty search results initially", () => {
-            const { result } = renderHook(() =>
-                useSearch(false, noEasterEgg, "search-index.json"),
-            );
+            const { result } = renderHook(() => useSearch(false, "search-index.json"));
             expect(getResultsFromSearchResult(result.current.search)).toHaveLength(0);
         });
 
         it("returns isPending false initially", () => {
-            const { result } = renderHook(() =>
-                useSearch(false, noEasterEgg, "search-index.json"),
-            );
+            const { result } = renderHook(() => useSearch(false, "search-index.json"));
             expect(result.current.isPending).toBe(false);
         });
     });
@@ -79,7 +69,7 @@ describe("useSearch", () => {
     describe("when startSearch becomes true", () => {
         it("fetches the search index file", async () => {
             await act(async () => {
-                renderHook(() => useSearch(true, noEasterEgg, "my-search-index.json"));
+                renderHook(() => useSearch(true, "my-search-index.json"));
             });
             expect(fetch).toHaveBeenCalledWith("/my-search-index.json");
         });
@@ -87,32 +77,12 @@ describe("useSearch", () => {
 
     describe("handleSearch", () => {
         it("does nothing when startSearch is false", async () => {
-            const { result } = renderHook(() =>
-                useSearch(false, noEasterEgg, "search-index.json"),
-            );
+            const { result } = renderHook(() => useSearch(false, "search-index.json"));
             const event = { target: { value: "test query" } } as ChangeEvent<HTMLInputElement>;
             await act(async () => {
                 result.current.handleSearch(event);
             });
             expect(getResultsFromSearchResult(result.current.search)).toHaveLength(0);
-        });
-
-        it("returns easter egg result and short-circuits the index search when easterEgg returns non-null", async () => {
-            const easterEggResult: EasterEggSearchResult = {
-                type: "easterEgg",
-                terminalLines: [{ text: "Wake up, Neo..." }],
-            };
-            const easterEgg = vi.fn((): SearchResult | null => easterEggResult);
-
-            const { result } = await renderLoadedSearch(easterEgg);
-
-            const event = { target: { value: "matrix" } } as ChangeEvent<HTMLInputElement>;
-            await act(async () => {
-                result.current.handleSearch(event);
-            });
-
-            expect(result.current.search).toEqual(easterEggResult);
-            expect(mockSearch).not.toHaveBeenCalled();
         });
 
         it("returns empty results when the query is below the 3-char minimum", async () => {
@@ -152,9 +122,7 @@ describe("useSearch", () => {
 
     describe("resetSearch", () => {
         it("resets search results to type search with empty results", async () => {
-            const { result } = renderHook(() =>
-                useSearch(false, noEasterEgg, "search-index.json"),
-            );
+            const { result } = renderHook(() => useSearch(false, "search-index.json"));
             await act(async () => {
                 result.current.resetSearch();
             });

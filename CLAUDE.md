@@ -100,12 +100,14 @@ AI agents and tools that send `Accept: text/markdown` receive a Markdown represe
 Non-trivial **code** changes can be run through an orchestrated, multi-agent SDLC. It is manual and main-thread —
 invoke the orchestrator skill explicitly; it never auto-triggers.
 
-- **Orchestrator**: `/fabrizioduroni-blog-sdlc [description] [--fix] [--in-place]` — sequences the agents, hosts two
-  human gates (plan approval, PR approval), and runs a bounded implement⇄review loop (max 3 rounds). Code only — it
+- **Orchestrator**: `/fabrizioduroni-blog-sdlc [description] [--fix] [--in-place]` — sequences the agents, hosts one
+  human gate (plan approval), and runs a bounded implement⇄review loop (max 3 rounds). Code only — it
   refuses content tasks and points at the writer agents. **Runs in an isolated worktree by default** (pass `--in-place`
   to run in the current tree); isolation is pipeline-level, never per-agent.
-- **Feature mode**: explore → brainstorm (grilling) 🚪 → implement ⇄ review → PR 🚪.
-- **Fix mode** (`--fix` or a pasted stack trace): investigate → confirm-root-cause 🚪 → implement ⇄ review → PR 🚪.
+- **Feature mode**: explore → brainstorm (grilling) 🚪 → implement ⇄ review → PR.
+- **Fix mode** (`--fix` or a pasted stack trace): investigate → confirm-root-cause 🚪 → implement ⇄ review → PR.
+- The PR **opens automatically** once review converges (no approval stop). The pipeline never merges, and it opens no
+  PR at all if the review loop hits its 3-round cap without converging.
 
 Agent roster:
 
@@ -127,3 +129,13 @@ as a quick-path escape hatch for trivial, well-specified code changes; use the w
 
 - Scopes: `performance`, `ux`, `capabilities`, `content`, `ai`, `deps`
 - Conventional commits with Gitmoji convention
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->

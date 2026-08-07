@@ -20,9 +20,6 @@ vi.mock("@/lib/background-sync/contact-queue", () => ({
 
 vi.mock("@/lib/tracking/tracking", () => ({ trackWith: vi.fn() }));
 vi.mock("@/lib/content/search-filename", () => ({ searchIndexFileName: "search.json" }));
-vi.mock("@/components/features/easter-eggs/white-rabbit", () => ({
-    whiteRabbitEasterEgg: vi.fn().mockReturnValue(null),
-}));
 
 vi.mock("./use-layout-additional-content-store", () => ({
     useLayoutAdditionalContentStore: () => ({
@@ -35,6 +32,10 @@ vi.mock("./use-layout-additional-content-store", () => ({
             trackCommandPaletteSearchResultSelect: vi.fn(),
             trackCommandPaletteToggleMotion: vi.fn(),
             trackCommandPaletteCustomizeMatrixRain: vi.fn(),
+            trackCommandPaletteOpenEasterEggHunt: vi.fn(),
+            trackCommandPaletteOpenTerminal: vi.fn(),
+            matchesEasterEggQuery: vi.fn().mockReturnValue(false),
+            handleEasterEggQueryMatch: vi.fn(),
         },
     }),
 }));

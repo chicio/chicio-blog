@@ -350,27 +350,41 @@ describe("CommandPalette", () => {
         });
     });
 
-    describe("easter egg", () => {
-        it("renders the easter egg component instead of the search dialog", () => {
-            searchMockState.current = {
-                type: "easterEgg",
-                terminalLines: [{ text: "you found neo" }],
-            };
-            const SearchEasterEggComponent = ({ lines }: { lines: { text: string }[] }) => (
-                <div data-testid="easter-egg">{lines.map((line) => line.text).join(",")}</div>
-            );
+    describe("easter egg query match", () => {
+        it("calls onEasterEggMatch and closes the palette instead of searching when the query matches", () => {
+            const onEasterEggMatch = vi.fn();
             render(
                 <CommandPalette
                     searchIndexFileName="search.json"
                     chatSlug="/chat"
                     easterEggHuntSlug="/easter-egg-hunt"
-                    searchEasterEgg={() => null}
-                    SearchEasterEggComponent={SearchEasterEggComponent}
+                    matchesEasterEggQuery={(query) => query === "101"}
+                    onEasterEggMatch={onEasterEggMatch}
                 />,
             );
             openViaShortcut();
-            expect(screen.getByTestId("easter-egg")).toHaveTextContent("you found neo");
+            fireEvent.change(screen.getByPlaceholderText("type to search_"), { target: { value: "101" } });
+            expect(onEasterEggMatch).toHaveBeenCalledOnce();
+            expect(stableHandleSearch).not.toHaveBeenCalled();
             expect(screen.queryByPlaceholderText("type to search_")).toBeNull();
+        });
+
+        it("searches normally when the query does not match", () => {
+            const onEasterEggMatch = vi.fn();
+            render(
+                <CommandPalette
+                    searchIndexFileName="search.json"
+                    chatSlug="/chat"
+                    easterEggHuntSlug="/easter-egg-hunt"
+                    matchesEasterEggQuery={(query) => query === "101"}
+                    onEasterEggMatch={onEasterEggMatch}
+                />,
+            );
+            openViaShortcut();
+            fireEvent.change(screen.getByPlaceholderText("type to search_"), { target: { value: "matrix" } });
+            expect(onEasterEggMatch).not.toHaveBeenCalled();
+            expect(stableHandleSearch).toHaveBeenCalled();
+            expect(screen.getByPlaceholderText("type to search_")).toBeInTheDocument();
         });
     });
 });

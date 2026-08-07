@@ -63,7 +63,12 @@ test.describe("Chat page", () => {
         await input.fill("there is no spoon");
         await page.keyboard.press("Enter");
 
-        await expect(page.locator('[style*="matrix-spoon-clip"]')).toBeVisible({ timeout: 10000 });
+        const dialog = page.getByRole("dialog", { name: "There Is No Spoon" });
+        await expect(dialog).toBeVisible({ timeout: 10000 });
+        await expect(dialog.locator("video").locator("source")).toHaveAttribute(
+            "src",
+            "/media/video/there-is-no-spoon.mp4",
+        );
         await expect(input).toHaveValue("");
         expect(apiCalled).toBe(false);
     });

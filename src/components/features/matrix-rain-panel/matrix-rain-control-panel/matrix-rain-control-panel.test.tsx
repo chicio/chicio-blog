@@ -1,7 +1,9 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@/test-utils";
 import { fireEvent, waitFor } from "@testing-library/react";
 import { MatrixRainControlPanel } from "./matrix-rain-control-panel";
+import { RAIN_STEP_RATE_MAX } from "./use-matrix-rain-control-panel-store";
+import { closeEasterEgg, getEasterEggOverlaySlug } from "@/lib/easter-eggs/easter-egg-overlay-state";
 
 vi.mock("framer-motion", () => ({
     AnimatePresence: ({ children }: React.PropsWithChildren) => <>{children}</>,
@@ -23,7 +25,13 @@ vi.mock("framer-motion", () => ({
 }));
 
 vi.mock("@/components/design-system/molecules/controls/control-slider", () => ({
-    ControlSlider: ({ label }: { label: string }) => <div data-testid={`slider-${label}`} />,
+    ControlSlider: ({ label, onChange }: { label: string; onChange: (v: number) => void }) => (
+        <input
+            data-testid={`slider-${label}`}
+            type="range"
+            onChange={(e) => onChange(Number(e.target.value))}
+        />
+    ),
 }));
 
 vi.mock("@/components/design-system/atoms/buttons/switch", () => ({
@@ -62,6 +70,11 @@ vi.mock("@/lib/tracking/tracking", () => ({ trackWith: vi.fn() }));
 const openPanel = () => window.dispatchEvent(new Event("matrix-rain-panel-open"));
 
 describe("MatrixRainControlPanel", () => {
+    beforeEach(() => {
+        closeEasterEgg();
+        localStorage.clear();
+    });
+
     describe("closed by default", () => {
         it("renders nothing before the panel is opened", () => {
             const { container } = render(<MatrixRainControlPanel />);
@@ -104,6 +117,36 @@ describe("MatrixRainControlPanel", () => {
             await screen.findByText(/Matrix Rain Settings/);
             fireEvent.keyDown(window, { key: "Escape" });
             await waitFor(() => expect(screen.queryByText(/Matrix Rain Settings/)).toBeNull());
+        });
+    });
+
+    describe("dodge-this easter egg", () => {
+        it("opens the dodge-this egg once the rain speed slider hits its maximum", async () => {
+            render(<MatrixRainControlPanel />);
+            openPanel();
+            const slider = await screen.findByTestId("slider-Speed (Hz)");
+            fireEvent.change(slider, { target: { value: String(RAIN_STEP_RATE_MAX) } });
+            expect(getEasterEggOverlaySlug()).toBe("dodge-this");
+        });
+
+        it("does not open the egg below the maximum", async () => {
+            render(<MatrixRainControlPanel />);
+            openPanel();
+            const slider = await screen.findByTestId("slider-Speed (Hz)");
+            fireEvent.change(slider, { target: { value: String(RAIN_STEP_RATE_MAX - 10) } });
+            expect(getEasterEggOverlaySlug()).toBeNull();
+        });
+
+        it("fires only once per session even after multiple nudges at max", async () => {
+            render(<MatrixRainControlPanel />);
+            openPanel();
+            const slider = await screen.findByTestId("slider-Speed (Hz)");
+            fireEvent.change(slider, { target: { value: String(RAIN_STEP_RATE_MAX) } });
+            expect(getEasterEggOverlaySlug()).toBe("dodge-this");
+
+            closeEasterEgg();
+            fireEvent.change(slider, { target: { value: String(RAIN_STEP_RATE_MAX) } });
+            expect(getEasterEggOverlaySlug()).toBeNull();
         });
     });
 });
