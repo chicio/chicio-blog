@@ -94,7 +94,7 @@
     "@types/node": "^25",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
-    "@vitejs/plugin-react": "^6.0.3",
+    "@vitejs/plugin-react": "^6.0.5",
     "@vitest/coverage-v8": "^4.1.9",
     "agent-browser": "^0.33.2",
     "babel-plugin-react-compiler": "^1.0.0",
