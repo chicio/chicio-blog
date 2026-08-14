@@ -1,5 +1,29 @@
 # Changelog
 
+## [4.0.0](https://github.com/chicio/chicio-blog/compare/v3.21.0...v4.0.0) (2026-08-14)
+
+### Features
+
+* **capabilities:** :sparkles: add 'I Know Kung Fu' and 'There Is No Spoon' Matrix easter eggs ([#479](https://github.com/chicio/chicio-blog/issues/479)) ([cda4691](https://github.com/chicio/chicio-blog/commit/cda4691b051c9f3992ceb2988597c8e9660086a9))
+* **capabilities:** :sparkles: full-screen terminal overlay navigation ([#480](https://github.com/chicio/chicio-blog/issues/480)) ([174b3eb](https://github.com/chicio/chicio-blog/commit/174b3ebd0680365dde4868024350f33733f54832))
+* **capabilities:** :sparkles: make the chat the only trigger for the "there is no spoon" egg ([#488](https://github.com/chicio/chicio-blog/issues/488)) ([960090b](https://github.com/chicio/chicio-blog/commit/960090bf7152a4b258698c7fa123bd4559286902))
+* **capabilities:** :sparkles: play the Matrix clip in the "I know kung fu" easter egg ([#483](https://github.com/chicio/chicio-blog/issues/483)) ([c3c2b53](https://github.com/chicio/chicio-blog/commit/c3c2b537d4434b936f15bc1966aea91734a57f70))
+* **capabilities:** ✨ content registry driving markdown + search (Tier 2 of 3) ([#487](https://github.com/chicio/chicio-blog/issues/487)) ([ff71323](https://github.com/chicio/chicio-blog/commit/ff71323ab3c023af8595d2f2c5deaeec1c969c85))
+* **content:** :sparkles: add Startup intro section to videogame console pages ([#518](https://github.com/chicio/chicio-blog/issues/518)) ([0aed78c](https://github.com/chicio/chicio-blog/commit/0aed78c67dd1eea1e05dd0235f8534645b637784))
+* **content:** ✨ move the videogames home page into MDX, so it describes itself ([#492](https://github.com/chicio/chicio-blog/issues/492)) ([#494](https://github.com/chicio/chicio-blog/issues/494)) ([4503ee4](https://github.com/chicio/chicio-blog/commit/4503ee474db377c7a7e516cd205754a01efcd4db))
+* **ux:** :clapper: standardize every easter egg into one Matrix video overlay ([#519](https://github.com/chicio/chicio-blog/issues/519)) ([7b82f89](https://github.com/chicio/chicio-blog/commit/7b82f89ffe01bc79877157e6566a1aea267c44dc))
+* **ux:** :red_circle: rename the pill egg to The Choice, retrigger kung fu, and stop iOS Safari zooming ([#520](https://github.com/chicio/chicio-blog/issues/520)) ([afd19aa](https://github.com/chicio/chicio-blog/commit/afd19aad7b0af0ea094001380fbfad975c56c4fb))
+* **ux:** :wheelchair: divide every nav dropdown into sections and rebuild the menu a11y semantics ([#500](https://github.com/chicio/chicio-blog/issues/500)) ([65e260c](https://github.com/chicio/chicio-blog/commit/65e260cb3d98b96870f456747a2b90727407458e))
+
+### Bug Fixes
+
+* **capabilities:** 🐛 repair llms.txt and derive its page list from the registry ([#490](https://github.com/chicio/chicio-blog/issues/490)) ([b92931d](https://github.com/chicio/chicio-blog/commit/b92931d3440d4906f4ce551d1fb229ec5e383db0))
+* **capabilities:** 🐛 sitemap from the content registry — 22 missing pages, 2 broken image paths ([#489](https://github.com/chicio/chicio-blog/issues/489)) ([f24839c](https://github.com/chicio/chicio-blog/commit/f24839c634cf1b1eb782c06dd4c9c5f750cb4829))
+
+### Performance Improvements
+
+* **performance:** :zap: resize videogame gallery photos to 2048px and strip EXIF ([#493](https://github.com/chicio/chicio-blog/issues/493)) ([f8fbc1d](https://github.com/chicio/chicio-blog/commit/f8fbc1dc8f6410085971f34e2b18ac0b58e9ede6))
+
 ## [3.21.0](https://github.com/chicio/chicio-blog/compare/v3.20.0...v3.21.0) (2026-07-19)
 
 ### Features
