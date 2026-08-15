@@ -42,13 +42,17 @@ export async function POST(req: Request) {
   }
 
   const result = streamText({
-    model: groq("llama-3.3-70b-versatile"),
-    // model: groq("llama-3.1-8b-instant"),
+    model: groq("openai/gpt-oss-120b"),
     messages: await convertToModelMessages(messages),
     system: createSystemPrompt(),
-    maxOutputTokens: 1000,
+    maxOutputTokens: 2000,
     temperature: 0.5,
     stopWhen: stepCountIs(5),
+    providerOptions: {
+      groq: {
+        reasoningFormat: "hidden",
+      },
+    },
     tools: {
       getFabrizioDuroniBlogKnowledge: tool({
         description: `Retrieve relevant knowledge from Fabrizio Duroni website blog posts published on fabrizioduroni.it`,
