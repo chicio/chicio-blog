@@ -36,7 +36,7 @@ This project is a Next.js (App Router) blog with a Matrix-inspired UI, using Rea
 - **Tracking**: All navigation and UI actions are tracked via Google Analytics (gated by cookie consent). Use `trackWith` helper and update [`src/types/tracking.ts`](src/types/tracking.ts) for new events.
 - **Menu & Navigation**: Main menu is in [`src/components/design-system/organism/menu.tsx`](src/components/design-system/organism/menu.tsx) (uses `MenuItemWithTracking`). Add new sections in [`src/types/slug.ts`](src/types/slug.ts) and register in the menu.
 - **Chat**: 
-  - Uses `@ai-sdk/groq` (Llama 3.3 70B) and `@ai-sdk/react` for AI chat functionality
+  - Uses `@ai-sdk/groq` (GPT-OSS 120B) and `@ai-sdk/react` for AI chat functionality
   - Chat UI is in [`src/components/sections/chat/components`](src/components/sections/chat/components)
   - Chat state management in [`src/components/sections/chat/hooks/useFabrizioChat.ts`](src/components/sections/chat/hooks/useFabrizioChat.ts)
   - LLM system prompt configuration in [`src/lib/chat/llm-prompt.ts`](src/lib/chat/llm-prompt.ts)
@@ -55,7 +55,7 @@ This project is a Next.js (App Router) blog with a Matrix-inspired UI, using Rea
   - MDX support via `@next/mdx` for interactive content with React components
   - Custom MDX components mapped in [`src/mdx-components.tsx`](src/mdx-components.tsx)
 - **Upstash Vector**: Used for RAG in chat feature (requires `UPSTASH_VECTOR_REST_URL` and `UPSTASH_VECTOR_REST_TOKEN` env vars).
-- **Groq AI**: LLM provider for chat feature using Llama 3.3 70B model.
+- **Groq AI**: LLM provider for chat feature using GPT-OSS 120B model.
 - **Analytics**: 
   - Google Analytics via `@next/third-parties`
   - Vercel Analytics and Speed Insights

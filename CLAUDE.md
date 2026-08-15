@@ -60,7 +60,7 @@ See `.claude/rules/code-style.md`. Key points: 4 spaces, 120 char lines, always 
 
 ## Technology Stack
 
-Next.js 16 (App Router), React 19, TailwindCSS v4, Framer Motion v12, TypeScript 5 (strict), MDX (@next/mdx), Groq AI (Llama 3.3 70B), Upstash Vector (RAG), elasticlunr (search), Vercel Analytics & Speed Insights, Google Analytics (@next/third-parties).
+Next.js 16 (App Router), React 19, TailwindCSS v4, Framer Motion v12, TypeScript 5 (strict), MDX (@next/mdx), Groq AI (GPT-OSS 120B), Upstash Vector (RAG), elasticlunr (search), Vercel Analytics & Speed Insights, Google Analytics (@next/third-parties).
 
 ## Environment Setup
 
