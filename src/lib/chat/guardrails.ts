@@ -94,6 +94,7 @@ const checkTopicRelevance = async (message: string): Promise<GuardrailResult> =>
         // An empty completion is inconclusive (e.g. reasoning budget exhausted before any
         // answer text was produced), not a rejection — fail open like the catch block below.
         if (trimmedText.length === 0) {
+            console.warn("Topic relevance check returned an empty completion, allowing request");
             return { safe: true };
         }
 

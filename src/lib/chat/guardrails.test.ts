@@ -147,9 +147,12 @@ describe("runGuardrails", () => {
             const relevanceCallArgs = mockGenerateText.mock.calls[1][0] as {
                 model: { modelId: string };
                 maxOutputTokens: number;
+                providerOptions: { groq: { reasoningFormat: string; reasoningEffort: string } };
             };
             expect(relevanceCallArgs.model).toEqual({ modelId: "openai/gpt-oss-20b" });
-            expect(relevanceCallArgs.maxOutputTokens).toBeGreaterThan(5);
+            expect(relevanceCallArgs.maxOutputTokens).toBe(512);
+            expect(relevanceCallArgs.providerOptions.groq.reasoningFormat).toBe("hidden");
+            expect(relevanceCallArgs.providerOptions.groq.reasoningEffort).toBe("low");
         });
     });
 });
