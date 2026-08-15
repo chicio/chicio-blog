@@ -12,7 +12,7 @@ authors: [fabrizio_duroni]
 ---
 
 If you've visited the [chat page](/chat) on this blog, you know I have an AI chatbot that can answer questions about me, my work experience, my projects, and software development in general.
-It's built with the [Vercel AI SDK](https://ai-sdk.dev/), powered by [Groq](https://groq.com/) running Llama 3.3 70B, with a RAG pipeline backed by [Upstash Vector](https://upstash.com/docs/vector/overall/getstarted) that gives the model access to information about me.
+It's built with the [Vercel AI SDK](https://ai-sdk.dev/), powered by [Groq](https://groq.com/) running GPT-OSS 120B, with a RAG pipeline backed by [Upstash Vector](https://upstash.com/docs/vector/overall/getstarted) that gives the model access to information about me.
 Pretty cool, right?
 
 But here's the thing: when you expose an LLM-powered chat to the public internet, you're also exposing it to people who will try to break it.
@@ -50,7 +50,7 @@ You need external checks that run *before* the model sees the message.
 
 ## Architecture overview
 
-My guardrail system follows a pipeline pattern: every user message passes through three sequential checks before reaching the main Llama 3.3 70B model.
+My guardrail system follows a pipeline pattern: every user message passes through three sequential checks before reaching the main GPT-OSS 120B model.
 If any check fails, the message is rejected with a friendly error message, and the main model never sees it.
 
 As you can see in the diagram below, the flow starts with a synchronous regex-based prompt injection check (instant and free).
@@ -63,15 +63,15 @@ graph TD
     B -- "Pattern matched" --> C["Reject: friendly\nredirect message"]
     B -- "Pass" --> D["Promise.all"]
     D --> E{"Prompt Guard 2 86M\ninjection detection"}
-    D --> F{"Llama 3.1 8B\ntopic relevance"}
+    D --> F{"GPT-OSS 20B\ntopic relevance"}
     E -- "Score ≥ 0.5" --> G["Reject: injection\ndetected message"]
     E -- "Score < 0.5" --> H{"Both passed?"}
     F -- "Off-topic" --> I["Reject: off-topic\nredirect message"]
     F -- "On-topic" --> H
-    H -- "Yes" --> J["Main Llama 3.3 70B\nmodel + RAG"]
+    H -- "Yes" --> J["Main GPT-OSS 120B\nmodel + RAG"]
 ```
 
-The whole pipeline adds minimal overhead because Groq's inference is extremely fast, and the two checks use small models (86M and 8B parameters respectively).
+The whole pipeline adds minimal overhead because Groq's inference is extremely fast, and the two checks use small models (86M and 20B parameters respectively).
 
 Let's look at the implementation.
 
@@ -229,20 +229,35 @@ The system prompt is designed to be as explicit as possible about what's allowed
 I've intentionally made the on-topic scope somewhat broad: it includes not just professional questions but also personal life topics, greetings, and meta-questions about the chatbot itself.
 This avoids frustrating false positives where someone asks "What are your hobbies?" and gets blocked.
 
-The check function uses Llama 3.1 8B Instant, a small and fast model that's perfect for binary classification:
+The check function uses GPT-OSS 20B, a small and fast model that's perfect for binary classification.
+It took the place of Llama 3.1 8B Instant when Groq deprecated it, and that swap has a story of its own that I'll tell you later in this post:
 
 ```typescript
 export const checkTopicRelevance = async (message: string): Promise<GuardrailResult> => {
     try {
         const { text } = await generateText({
-            model: groq("llama-3.1-8b-instant"),
+            model: groq("openai/gpt-oss-20b"),
             system: TOPIC_RELEVANCE_SYSTEM_PROMPT,
             prompt: message,
-            maxOutputTokens: 5,
+            maxOutputTokens: 512,
             temperature: 0,
+            providerOptions: {
+                groq: {
+                    reasoningFormat: "hidden",
+                    reasoningEffort: "low",
+                },
+            },
         });
 
-        const isOnTopic = text.trim().toLowerCase().startsWith("yes");
+        const trimmedText = text.trim();
+
+        // An empty completion is inconclusive (e.g. reasoning budget exhausted before any
+        // answer text was produced), not a rejection — fail open like the catch block below.
+        if (trimmedText.length === 0) {
+            return { safe: true };
+        }
+
+        const isOnTopic = trimmedText.toLowerCase().startsWith("yes");
 
         if (!isOnTopic) {
             return {
@@ -254,6 +269,7 @@ export const checkTopicRelevance = async (message: string): Promise<GuardrailRes
 
         return { safe: true };
     } catch (error) {
+        // Fail open — if the relevance model is unavailable, allow the request through
         console.warn("Topic relevance check failed, allowing request:", error);
         return { safe: true };
     }
@@ -262,8 +278,13 @@ export const checkTopicRelevance = async (message: string): Promise<GuardrailRes
 
 A few important implementation details:
 
-- **`maxOutputTokens: 5`**: Since I only need a "yes" or "no", I cap the output at 5 tokens to minimize latency and cost.
+- **`maxOutputTokens: 512`**: This value used to be `5`. A "yes" or a "no" is a single token, so a cap of 5 kept latency and cost at the absolute floor.
+That reasoning stopped working the day the classifier became a reasoning model.
+GPT-OSS 20B spends its output budget *thinking* before it writes the first character of the answer, so those 5 tokens were consumed mid-thought and the completion came back empty.
+The cap now sits at 512, which is a ceiling and not a bill: with `reasoningEffort: "low"` the classifier settles at roughly 22 tokens per call, so I'm nowhere near the limit in practice.
 - **`temperature: 0`**: Deterministic output. For a binary classifier, I don't want any randomness. The same input should always produce the same classification.
+- **Empty completion means "inconclusive", not "no"**: The classification is derived from `startsWith("yes")`, and an empty string does not start with "yes".
+Without an explicit guard, a truncated (or simply blank) completion would silently read as a rejection. Treating an empty completion as fail-open keeps a missing answer from turning into a block.
 - **Fail-open**: Same strategy as the Prompt Guard check. If the topic relevance model is unavailable, the request goes through.
 - **Friendly blocked reason**: Again, the rejection message is constructive and tells the user what *they can* ask about, rather than just saying "no".
 
@@ -276,7 +297,7 @@ The advantages are:
 - **Zero training data needed**: You describe the task in natural language.
 - **Easy to iterate**: Changing the classification criteria is just a prompt edit.
 - **Handles nuance**: Natural language descriptions can express complex, context-dependent rules that would be hard to encode in a traditional classifier.
-- **Small models work great**: For binary classification tasks, 8B parameter models are more than capable, fast, and cheap to run.
+- **Small models work great**: For binary classification tasks, a 20B parameter model is more than capable, fast, and cheap to run.
 
 The trade-off is latency (you're making an API call), but as I mentioned, Groq's inference speed makes this negligible.
 
@@ -366,12 +387,17 @@ export async function POST(req: Request) {
   }
 
   const result = streamText({
-    model: groq("llama-3.3-70b-versatile"),
+    model: groq("openai/gpt-oss-120b"),
     messages: await convertToModelMessages(messages),
     system: createSystemPrompt(),
-    maxOutputTokens: 1000,
+    maxOutputTokens: 2000,
     temperature: 0.5,
     stopWhen: stepCountIs(5),
+    providerOptions: {
+      groq: {
+        reasoningFormat: "hidden",
+      },
+    },
     tools: {
       getFabrizioDuroniBlogKnowledge: tool({
         description: `Retrieve relevant knowledge from Fabrizio Duroni website blog posts published on fabrizioduroni.it`,
@@ -390,7 +416,7 @@ export async function POST(req: Request) {
 Let me walk you through the key points:
 
 - **Message extraction**: The route extracts the last user message from the conversation history. This is important because we only need to check the *latest* message, not the entire conversation. Previous messages have already been checked when they were sent.
-- **Guardrails before inference**: The `runGuardrails` call happens *before* `streamText`. If the message is rejected, we return immediately without ever calling the main Llama 3.3 70B model, saving both latency and tokens.
+- **Guardrails before inference**: The `runGuardrails` call happens *before* `streamText`. If the message is rejected, we return immediately without ever calling the main GPT-OSS 120B model, saving both latency and tokens.
 - **Streamed rejections**: Blocked messages are returned as a proper UI message stream using the Vercel AI SDK's `createUIMessageStreamResponse` and `createUIMessageStream`.
 This means the blocked reason appears as a normal assistant message in the chat interface, which is exactly what the user expects.
 An earlier version returned a `400` HTTP status with the blocked reason as plain text in the body. The problem?
@@ -400,6 +426,55 @@ By returning a valid 200 streamed response, the blocked reason flows through the
 - **RAG tool**: The main model has access to a `getFabrizioDuroniBlogKnowledge` tool that queries my Upstash Vector database to find relevant content about me.
 At the moment, the vector store contains information about me that the model can retrieve at query time to provide accurate, grounded answers.
 If you want to know more about RAG, check out the dedicated section in my [LLM hitchhiker's guide](/blog/post/2025/03/01/llm).
+
+## When your model gets deprecated: migrating to a reasoning model
+
+A few months after I shipped this system, Groq announced that both models I was using were going away on August 16th, 2026:
+`llama-3.3-70b-versatile` for the main chat and `llama-3.1-8b-instant` for the topic relevance check.
+Each one came with an official replacement, `openai/gpt-oss-120b` and `openai/gpt-oss-20b`.
+The obvious move is a find and replace on two strings, a green build, and a merged pull request. That would have taken the chatbot down completely, and it would have done it silently.
+
+Here's the catch: both replacements are *reasoning models*.
+They generate reasoning tokens *before* they produce any answer text, and those tokens are charged against the very same output budget you set with `maxOutputTokens`.
+
+Now go back to the classifier: it was capped at `maxOutputTokens: 5`, which is perfect for a model that answers "yes" on the first token.
+I ran the exact same configuration against `openai/gpt-oss-20b`, and this is what came back:
+
+```json
+{
+  "choices": [
+    {
+      "message": { "role": "assistant", "content": "" },
+      "finish_reason": "length"
+    }
+  ]
+}
+```
+
+Five tokens spent mid-thought, zero characters of answer.
+And since the guardrail decided with `text.trim().toLowerCase().startsWith("yes")`, an empty string reads as "not yes".
+Every single message, on-topic or not, would have been classified as off-topic and blocked. The entire chat, dead.
+The fail-open catch block wouldn't have saved anything either, because nothing ever threw: the API returned a perfectly valid, perfectly empty completion.
+This is the worst kind of outage, silent and total, reported by nobody except a very puzzled visitor :sweat_smile:.
+Raising the cap to 512 with `reasoningEffort: "low"` fixed it, and the classifier now settles at roughly 22 tokens per call.
+
+The second surprise was on the main model.
+Reasoning parts stream to the browser (`sendReasoning` defaults to `true` in the AI SDK), and my chat UI only knows how to render `text` and tool parts.
+The result: the assistant bubble sits there visibly empty while the model thinks.
+Setting `reasoningFormat: "hidden"` in `providerOptions.groq` keeps the reasoning server side.
+Worth saying honestly: those tokens are still generated and still billed, they're just not sent down the wire.
+
+Two more things that are easy to get wrong, both of which I found the hard way against the live API:
+
+- `reasoning_effort: "none"` is rejected by Groq with a `400` for these models. Only `low`, `medium`, and `high` are accepted.
+- At `low` effort, the 120B model was observed emitting a malformed tool name that Groq's own tool validation rejected. So the main chat stayed on the default effort level, and only the classifier runs at `low`.
+
+Prompt Guard, meanwhile, came through the migration completely untouched.
+It's a BERT classifier, not a generative model, so it has no reasoning phase and none of this applied to it.
+A nice illustration that the small, specialized, boring model was the most stable piece of the whole stack.
+
+The lesson worth landing is this: a guardrail that fails closed by accident is worse than no guardrail at all, because it takes the product down with it.
+And a model swap is never just a string change. Test the actual behavior of the replacement, not just that the name resolves.
 
 ## Conclusion
 
@@ -412,6 +487,8 @@ The key takeaways from this implementation are:
 - **Performance-conscious design**: The synchronous regex check runs first (free and instant), and the two model-based checks run in parallel. This minimizes the latency impact on legitimate users.
 - **Fail-open strategy**: For a portfolio chatbot, availability matters more than absolute lockdown. If the safety models are down, the system prompt provides a baseline defense. Adjust this strategy based on your risk profile.
 - **User-friendly rejections**: Every blocked reason is constructive and redirecting, not punitive. The goal is to guide users toward legitimate questions, not to alienate them.
+- **A model swap is never just a string change**: Migrating the classifier to a reasoning model nearly turned a fail-open guardrail into a fail-closed one, because reasoning tokens ate an output budget sized for a one word answer.
+Always test the behavior of the replacement model, not just that its name resolves.
 
 The LLM-as-judge pattern in particular is something I think deserves more adoption.
 It's incredibly flexible, requires zero training data, and works surprisingly well even with small models.
