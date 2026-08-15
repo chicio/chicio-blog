@@ -27,3 +27,14 @@ Guardrails implemented in `src/lib/chat/guardrails.ts`. Pipeline runs before eve
 route file before trusting the old "plain text 400" claim if it resurfaces elsewhere.
 
 **PR:** https://github.com/chicio/chicio-blog/pull/283 (original three-layer guardrail pipeline)
+
+**Coverage gotcha (2026-08-15 review round):** a config object literal (`providerOptions: { groq: { reasoningFormat, reasoningEffort } }`)
+is invisible to branch/line coverage — there's no branch to hit, so 100% coverage says nothing about whether the keys are asserted.
+The reviewer proved this by deleting the whole `providerOptions` block from `guardrails.ts` and all 1557 tests stayed green.
+Fix pattern: destructure the relevant `mockGenerateText.mock.calls[n][0]` object in the existing "invokes ... with model id"
+test and assert on the nested config values directly (`relevanceCallArgs.providerOptions.groq.reasoningFormat`), same pattern
+already used in `route.test.ts:127-136` for the main-chat model call. Also tightened `maxOutputTokens` assertion from
+`toBeGreaterThan(5)` (passes even at a broken value like 6) to `toBe(512)` (the real contract). When reviewing/writing tests
+for any Groq call site, treat `providerOptions`/model-config objects as needing an explicit assertion, not implied by coverage %.
+Also added a `console.warn` on the empty-completion fail-open path in `checkTopicRelevance` (matching its sibling fail-open
+paths) so a future budget/effort regression is visible in logs instead of silently disabling the guardrail.
