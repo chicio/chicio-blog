@@ -127,5 +127,29 @@ describe("runGuardrails", () => {
             const result = await runGuardrails("What are Fabrizio's main skills?");
             expect(result.safe).toBe(true);
         });
+
+        it("fails open (treats as inconclusive, not off-topic) when the relevance model returns an empty completion", async () => {
+            mockGenerateText
+                .mockResolvedValueOnce({ text: "0.0" }) // safety: safe
+                .mockResolvedValueOnce({ text: "" }); // relevance: reasoning budget consumed, no answer text
+
+            const result = await runGuardrails("What are Fabrizio's main skills?");
+            expect(result.safe).toBe(true);
+        });
+
+        it("invokes the relevance check with the gpt-oss-20b model id and a reasoning-safe output budget", async () => {
+            mockGenerateText
+                .mockResolvedValueOnce({ text: "0.0" }) // safety: safe
+                .mockResolvedValueOnce({ text: "yes" }); // relevance: on-topic
+
+            await runGuardrails("What are Fabrizio's main skills?");
+
+            const relevanceCallArgs = mockGenerateText.mock.calls[1][0] as {
+                model: { modelId: string };
+                maxOutputTokens: number;
+            };
+            expect(relevanceCallArgs.model).toEqual({ modelId: "openai/gpt-oss-20b" });
+            expect(relevanceCallArgs.maxOutputTokens).toBeGreaterThan(5);
+        });
     });
 });
