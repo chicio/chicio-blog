@@ -67,6 +67,19 @@ describe("/api/mcp", () => {
             expect(response.headers.get("Access-Control-Allow-Origin")).toBe("*");
         });
 
+        it("reports the refusal as a JSON-RPC error, matching the shape the SDK uses", async () => {
+            const response = await GET();
+            expect(response.headers.get("Content-Type")).toBe("application/json");
+            await expect(response.json()).resolves.toEqual({
+                jsonrpc: "2.0",
+                error: {
+                    code: -32000,
+                    message: "This MCP server is stateless and does not offer a standalone SSE stream via GET.",
+                },
+                id: null,
+            });
+        });
+
         it("does not construct the transport or the MCP server", async () => {
             await GET();
             expect(mockCreateMcpServer).not.toHaveBeenCalled();

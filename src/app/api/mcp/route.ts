@@ -38,7 +38,12 @@ export async function GET(): Promise<Response> {
     return withCors(
         new Response(
             JSON.stringify({
-                error: "This MCP server is stateless and does not offer a standalone SSE stream via GET.",
+                jsonrpc: "2.0",
+                error: {
+                    code: -32000,
+                    message: "This MCP server is stateless and does not offer a standalone SSE stream via GET.",
+                },
+                id: null,
             }),
             { status: 405, headers: { "Content-Type": "application/json", Allow: "POST, DELETE, OPTIONS" } }
         )
