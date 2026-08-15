@@ -25,21 +25,6 @@ npm run release          # Release with conventional changelog
 
 ## Architecture
 
-### Directory Structure
-
-```
-src/
-├── app/                          # Next.js App Router pages and layouts
-├── components/
-│   ├── design-system/           # Atomic design: atoms → molecules → organisms → templates
-│   │   └── hooks/               # Shared hooks (motion, glassmorphism, in-view, search, etc.)
-│   ├── content/                 # Page-content components, one folder per route (mirrors src/content/)
-│   └── features/                # Cross-cutting UI not tied to a route: pwa/, easter-eggs/, seo/
-├── content/                      # All MDX content, filesystem-as-database
-├── lib/                         # Core business logic and utilities (no JSX)
-└── types/                       # TypeScript type definitions
-```
-
 ### Key Patterns
 
 - **Folder-Per-Component + Store Model**: every component lives in its own kebab-case folder with a `<name>.tsx`, a `use-<name>-store.ts` hook, and an `index.ts` barrel. Components call exactly one hook (`use<Name>Store()`). `useGlassmorphism` is permanently exempt. See `.claude/rules/component-architecture.md` for the full specification.
@@ -58,13 +43,8 @@ src/
 
 See `.claude/rules/code-style.md`. Key points: 4 spaces, 120 char lines, always braces on `if`, `@/` import alias, conventional commits with Gitmoji, one-hook-per-component, no functions in JSX.
 
-## Technology Stack
-
-Next.js 16 (App Router), React 19, TailwindCSS v4, Framer Motion v12, TypeScript 5 (strict), MDX (@next/mdx), Groq AI (GPT-OSS 120B), Upstash Vector (RAG), elasticlunr (search), Vercel Analytics & Speed Insights, Google Analytics (@next/third-parties).
-
 ## Environment Setup
 
-- **Node**: 24.x (specified in `package.json`)
 - **Env files**: `.env.development`, `.env.production`
 - **Required secrets**: `UPSTASH_VECTOR_REST_URL`, `UPSTASH_VECTOR_REST_TOKEN`
 
@@ -97,33 +77,16 @@ AI agents and tools that send `Accept: text/markdown` receive a Markdown represe
 
 ## Agentic SDLC Pipeline (code work)
 
-Non-trivial **code** changes can be run through an orchestrated, multi-agent SDLC. It is manual and main-thread —
-invoke the orchestrator skill explicitly; it never auto-triggers.
+Non-trivial **code** changes can be run through an orchestrated, multi-agent SDLC via the
+`/fabrizioduroni-blog-sdlc` skill — manual and main-thread, one human gate (plan approval), a bounded
+implement⇄review loop, and an isolated worktree by default. The skill documents every stage, both modes
+(feature and `--fix`), the agent roster with models, and the mechanical gates; it loads on invocation, so that
+detail is not repeated here.
 
-- **Orchestrator**: `/fabrizioduroni-blog-sdlc [description] [--fix] [--in-place]` — sequences the agents, hosts one
-  human gate (plan approval), and runs a bounded implement⇄review loop (max 3 rounds). Code only — it
-  refuses content tasks and points at the writer agents. **Runs in an isolated worktree by default** (pass `--in-place`
-  to run in the current tree); isolation is pipeline-level, never per-agent.
-- **Feature mode**: explore → brainstorm (grilling) 🚪 → implement ⇄ review → PR.
-- **Fix mode** (`--fix` or a pasted stack trace): investigate → confirm-root-cause 🚪 → implement ⇄ review → PR.
-- The PR **opens automatically** once review converges (no approval stop). The pipeline never merges, and it opens no
-  PR at all if the review loop hits its 3-round cap without converging.
-
-Agent roster:
-
-| Agent | Model | Role |
-|-------|-------|------|
-| `fabrizioduroni-explorer` | haiku | read-only map of the change area (files, reusable design-system surface, registration points, test surface) |
-| `fabrizioduroni-implementer` | sonnet | writes code + tests, micro-commits, runs the mechanical gates (repurposed from the former senior-engineer) |
-| `fabrizioduroni-code-reviewer` | opus | re-runs the gates to verify + reviews the diff against rules/plan; severity-classified findings |
-| `fabrizioduroni-bug-investigator` | opus | fix-mode root-cause report from the codebase + git history (no Sentry/Jira) |
-| `fabrizioduroni-e2e-sentinel` | sonnet | review-stage live-QA arm: drives agent-browser against the running app when UI/route/flow changed; findings fold into the review verdict |
-
-Content agents are **separate** and unchanged: `fabrizioduroni-writer-engineer` (blog prose),
-`fabrizioduroni-writer-dsa-engineer` (DSA articles).
-
-**When to use what**: full pipeline for non-trivial code features/fixes; call `fabrizioduroni-implementer` **directly**
-as a quick-path escape hatch for trivial, well-specified code changes; use the writer agents for content.
+**When to use what**: full pipeline (`/fabrizioduroni-blog-sdlc`) for non-trivial code features/fixes; call
+`fabrizioduroni-implementer` **directly** as a quick-path escape hatch for trivial, well-specified code
+changes; use the writer agents (`fabrizioduroni-writer-engineer`, `fabrizioduroni-writer-dsa-engineer`) for
+content — the pipeline refuses content tasks.
 
 ## Commit Convention
 
