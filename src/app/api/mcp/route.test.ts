@@ -47,23 +47,44 @@ describe("/api/mcp", () => {
     });
 
     describe("GET", () => {
-        it("creates an MCP server and connects a transport", async () => {
-            const req = new Request("https://www.fabrizioduroni.it/api/mcp");
-            await GET(req);
-            expect(mockCreateMcpServer).toHaveBeenCalledTimes(1);
-            expect(mockConnect).toHaveBeenCalledTimes(1);
+        it("returns 405 instead of opening the SSE stream", async () => {
+            const response = await GET();
+            expect(response.status).toBe(405);
         });
 
-        it("delegates the request to the transport handler", async () => {
-            const req = new Request("https://www.fabrizioduroni.it/api/mcp");
-            await GET(req);
-            expect(mockHandleRequest).toHaveBeenCalledWith(req);
+        it("advertises the supported methods without GET in the Allow header", async () => {
+            const response = await GET();
+            const allow = response.headers.get("Allow");
+            expect(allow).not.toBeNull();
+            expect(allow).not.toContain("GET");
+            expect(allow).toContain("POST");
+            expect(allow).toContain("DELETE");
+            expect(allow).toContain("OPTIONS");
         });
 
-        it("attaches CORS headers to the response", async () => {
-            const req = new Request("https://www.fabrizioduroni.it/api/mcp");
-            const response = await GET(req);
+        it("attaches CORS headers to the 405 response", async () => {
+            const response = await GET();
             expect(response.headers.get("Access-Control-Allow-Origin")).toBe("*");
+        });
+
+        it("reports the refusal as a JSON-RPC error, matching the shape the SDK uses", async () => {
+            const response = await GET();
+            expect(response.headers.get("Content-Type")).toBe("application/json");
+            await expect(response.json()).resolves.toEqual({
+                jsonrpc: "2.0",
+                error: {
+                    code: -32000,
+                    message: "This MCP server is stateless and does not offer a standalone SSE stream via GET.",
+                },
+                id: null,
+            });
+        });
+
+        it("does not construct the transport or the MCP server", async () => {
+            await GET();
+            expect(mockCreateMcpServer).not.toHaveBeenCalled();
+            expect(mockConnect).not.toHaveBeenCalled();
+            expect(mockHandleRequest).not.toHaveBeenCalled();
         });
     });
 

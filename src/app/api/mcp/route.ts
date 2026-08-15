@@ -27,8 +27,27 @@ const handleMcpRequest = async (req: Request): Promise<Response> => {
     return withCors(response);
 };
 
-export async function GET(req: Request): Promise<Response> {
-    return handleMcpRequest(req);
+// GET opens the MCP Streamable HTTP standalone SSE notification stream. This transport is
+// constructed with sessionIdGenerator: undefined (stateless mode), so every request gets a fresh
+// server/transport pair with no session to correlate server-initiated notifications to: there is
+// nothing to push over that stream. The SDK's handleGetRequest has no stateless guard though, so
+// delegating GET here would open a stream that never closes and hangs until Vercel's 300s
+// serverless timeout kills it. The MCP spec makes this stream optional, so refuse it with 405
+// instead: clients handle that by simply not reopening the GET stream.
+export async function GET(): Promise<Response> {
+    return withCors(
+        new Response(
+            JSON.stringify({
+                jsonrpc: "2.0",
+                error: {
+                    code: -32000,
+                    message: "This MCP server is stateless and does not offer a standalone SSE stream via GET.",
+                },
+                id: null,
+            }),
+            { status: 405, headers: { "Content-Type": "application/json", Allow: "POST, DELETE, OPTIONS" } }
+        )
+    );
 }
 
 export async function POST(req: Request): Promise<Response> {

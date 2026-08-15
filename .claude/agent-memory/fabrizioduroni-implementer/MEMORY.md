@@ -74,6 +74,9 @@
 ## Features (continued 12)
 - [Console Startup Section](feature_console_startup_section.md) — Startup section (10/11 consoles) via existing Youtube molecule; fixed hardcoded iframe title bug; mdx-to-markdown already handled Youtube+ParagraphTitleWithIcon; search index never sees body text
 
+## Bug Fixes
+- [MCP GET SSE timeout fix](feature_mcp_get_sse_timeout_fix.md) — GET /api/mcp now 405s (stateless, no session for SSE notifications); fixed Vercel 300s hang loop (2026-08-15)
+
 ## Feedback
 - [Review-fix workflow](feedback_review_fix_disk_and_reset_soft.md) — git reset --soft path-restaging to reshape commits; disk-full is often transient (retry, don't clean system caches); e2e hangs on a long-lived ad hoc port are stale-server artifacts, not regressions — verify with a fresh port + origin/main control
 - [PWA & State Patterns](feedback_pwa_patterns.md) — useSyncExternalStore for localStorage state, consent-gated UI, banner/error page alignment rules
