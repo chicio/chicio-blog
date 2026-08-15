@@ -68,7 +68,7 @@ describe("/api/chat POST", () => {
 
     beforeEach(() => {
         vi.clearAllMocks();
-        mockGroq.mockReturnValue({ modelId: "llama-3.3-70b-versatile" });
+        mockGroq.mockReturnValue({ modelId: "openai/gpt-oss-120b" });
         mockConvertToModelMessages.mockResolvedValue([]);
         mockFindRelevantContent.mockResolvedValue([]);
         mockRunGuardrails.mockResolvedValue({ safe: true });
@@ -121,7 +121,18 @@ describe("/api/chat POST", () => {
             const req = makeRequest([makeUserMessage("What is Fabrizio's experience?")]);
             await POST(req);
             expect(mockStreamText).toHaveBeenCalledTimes(1);
-            expect(mockGroq).toHaveBeenCalledWith("llama-3.3-70b-versatile");
+            expect(mockGroq).toHaveBeenCalledWith("openai/gpt-oss-120b");
+        });
+
+        it("hides reasoning parts and raises the output budget for the reasoning model", async () => {
+            const req = makeRequest([makeUserMessage("What is Fabrizio's experience?")]);
+            await POST(req);
+            const callArgs = mockStreamText.mock.calls[0][0] as {
+                maxOutputTokens: number;
+                providerOptions: { groq: { reasoningFormat: string } };
+            };
+            expect(callArgs.maxOutputTokens).toBe(2000);
+            expect(callArgs.providerOptions.groq.reasoningFormat).toBe("hidden");
         });
 
         it("passes converted messages to streamText", async () => {

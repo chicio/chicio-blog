@@ -76,14 +76,29 @@ const checkInputSafety = async (message: string): Promise<GuardrailResult> => {
 const checkTopicRelevance = async (message: string): Promise<GuardrailResult> => {
     try {
         const { text } = await generateText({
-            model: groq("llama-3.1-8b-instant"),
+            model: groq("openai/gpt-oss-20b"),
             system: TOPIC_RELEVANCE_SYSTEM_PROMPT,
             prompt: message,
-            maxOutputTokens: 5,
+            maxOutputTokens: 512,
             temperature: 0,
+            providerOptions: {
+                groq: {
+                    reasoningFormat: "hidden",
+                    reasoningEffort: "low",
+                },
+            },
         });
 
-        const isOnTopic = text.trim().toLowerCase().startsWith("yes");
+        const trimmedText = text.trim();
+
+        // An empty completion is inconclusive (e.g. reasoning budget exhausted before any
+        // answer text was produced), not a rejection — fail open like the catch block below.
+        if (trimmedText.length === 0) {
+            console.warn("Topic relevance check returned an empty completion, allowing request");
+            return { safe: true };
+        }
+
+        const isOnTopic = trimmedText.toLowerCase().startsWith("yes");
 
         if (!isOnTopic) {
             return {

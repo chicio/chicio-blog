@@ -8,10 +8,17 @@ paths:
 # API Route Conventions
 
 ## Chat API (`src/app/api/chat/route.ts`)
-- Model: Groq `llama-3.3-70b-versatile`, max tokens: 1000, temperature: 0.5
+- Model: Groq `openai/gpt-oss-120b` (reasoning model), max tokens: 2000, temperature: 0.5
+- `providerOptions.groq.reasoningFormat: "hidden"` suppresses reasoning parts from the stream (the chat UI only
+  handles `text` and `tool-getFabrizioDuroniBlogKnowledge` part types, so unhidden reasoning would render as an
+  empty bubble). Reasoning tokens are generated before answer text and count against `maxOutputTokens`.
 - RAG tool: `getFabrizioDuroniBlogKnowledge` queries Upstash Vector
 - Streaming via `toUIMessageStreamResponse()`
 - System prompt defined in `src/lib/chat/llm-prompt.ts`
+- Guardrails (`src/lib/chat/guardrails.ts`) topic-relevance check uses Groq `openai/gpt-oss-20b` with
+  `reasoningFormat: "hidden"` and `reasoningEffort: "low"`; an empty completion is treated as inconclusive and
+  fails open (`safe: true`), matching the module's fail-open design. Input-safety check still uses
+  `meta-llama/llama-prompt-guard-2-86m` (not a reasoning model, unaffected by this migration).
 
 ## Contact API (`src/app/api/contact/route.ts`)
 - Resend API for transactional emails

@@ -12,7 +12,8 @@
 - [Media Co-location & Public Static Media](arch_image_colocation.md) — all media under public/media/ (content/ gitignored; sounds/, authors/, clowns/, PNGs flat at top level); copy-content-media.ts; 3 redirects; SelfHostedVideo molecule
 
 ## Integrations
-- [Chat Feature](integration_chat.md) — Groq LLM + Upstash Vector RAG, streaming, knowledge upload
+- [Chat Feature](integration_chat.md) — Groq LLM + Upstash Vector RAG, streaming, knowledge upload; gpt-oss-120b migration 2026-08-15
+- [Chat Guardrails](feature_chat_guardrails.md) — 3-layer pipeline; gpt-oss-20b relevance check empty-completion fail-open fix (2026-08-15)
 - [Contact & Rate Limiting](integration_contact_ratelimit.md) — Resend emails, honeypot, Upstash Redis rate limiting
 
 ## Features
