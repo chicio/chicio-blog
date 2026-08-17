@@ -73,7 +73,7 @@
     "remark-stringify": "^11.0.0",
     "resend": "^6.18.1",
     "serwist": "^9.5.11",
-    "tailwindcss": "^4.3.1",
+    "tailwindcss": "^4.3.3",
     "tsx": "^4.23.1",
     "unified": "^11.0.5",
     "zod": "^4.4.3"
