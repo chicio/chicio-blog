@@ -27,6 +27,7 @@ export default async function BlogArchivePage() {
       posts={allPosts}
       author={author}
       trackingCategory={tracking.category.blog_archive}
+      prefetch="hover"
     />
   );
 }

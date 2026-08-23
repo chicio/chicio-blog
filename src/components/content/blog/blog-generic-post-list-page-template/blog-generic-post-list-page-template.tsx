@@ -5,6 +5,7 @@ import { FC } from "react";
 import { ContentPage } from "@/components/features/content/content-page";
 import { JsonLd } from "@/components/features/seo/jsond-ld";
 import { siteMetadata } from "@/types/configuration/site-metadata";
+import type { PrefetchStrategy } from "@/types/next/prefetch";
 
 export interface BlogGenericPostListPageProps {
     title: string;
@@ -12,6 +13,7 @@ export interface BlogGenericPostListPageProps {
     author: string;
     trackingCategory: string;
     keywords?: string[];
+    prefetch?: PrefetchStrategy;
 }
 
 export const BlogGenericPostListPageTemplate: FC<BlogGenericPostListPageProps> = ({
@@ -20,6 +22,7 @@ export const BlogGenericPostListPageTemplate: FC<BlogGenericPostListPageProps> =
     author,
     trackingCategory,
     keywords,
+    prefetch = "viewport",
 }) => (
     <ContentPage author={author} trackingCategory={trackingCategory}>
         <PageTitle>{title}</PageTitle>
@@ -34,6 +37,7 @@ export const BlogGenericPostListPageTemplate: FC<BlogGenericPostListPageProps> =
                 <div className="flex-5/6">
                     <InternalLink
                         className="text-xl"
+                        prefetch={prefetch}
                         to={post.slug.formatted}
                     >
                         {post.frontmatter.title}
