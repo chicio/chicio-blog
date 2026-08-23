@@ -10,6 +10,7 @@ vi.mock("next/link", () => ({
         className,
         onClick,
         onMouseEnter,
+        onFocus,
         prefetch,
     }: React.AnchorHTMLAttributes<HTMLAnchorElement> & { href: string; prefetch?: boolean | null }) => (
         <a
@@ -17,6 +18,7 @@ vi.mock("next/link", () => ({
             className={className}
             onClick={onClick}
             onMouseEnter={onMouseEnter}
+            onFocus={onFocus}
             data-prefetch={prefetch === undefined ? "undefined" : String(prefetch)}
         >
             {children}
@@ -93,6 +95,20 @@ describe("InternalLink", () => {
             expect(link).toHaveAttribute("data-prefetch", "false");
 
             await userEvent.hover(link);
+            expect(link).toHaveAttribute("data-prefetch", "null");
+        });
+
+        it("disables prefetch until focused when set to hover", async () => {
+            render(
+                <InternalLink to="/blog" prefetch="hover">
+                    Blog
+                </InternalLink>,
+            );
+            const link = screen.getByRole("link");
+            expect(link).toHaveAttribute("data-prefetch", "false");
+
+            await userEvent.tab();
+            expect(link).toHaveFocus();
             expect(link).toHaveAttribute("data-prefetch", "null");
         });
     });

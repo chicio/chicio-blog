@@ -22,7 +22,7 @@ export const InternalLink: FC<InternalLinkProps> = ({
 }) => {
     const { state, effects } = useInternalLinkStore(prefetch);
     const { prefetch: prefetchProp } = state;
-    const { handleMouseEnter } = effects;
+    const { handleMouseEnter, handleFocus } = effects;
 
     return (
         <Link
@@ -30,6 +30,7 @@ export const InternalLink: FC<InternalLinkProps> = ({
             href={to}
             prefetch={prefetchProp}
             onMouseEnter={handleMouseEnter}
+            onFocus={handleFocus}
             onClick={onClick}
         >
             {children}

@@ -10,22 +10,24 @@ interface InternalLinkState {
 
 interface InternalLinkEffects {
     handleMouseEnter: (() => void) | undefined;
+    handleFocus: (() => void) | undefined;
 }
 
 export const useInternalLinkStore = (
     strategy: PrefetchStrategy,
 ): ComponentStore<InternalLinkState, InternalLinkEffects> => {
-    const [hovered, setHovered] = useState(false);
+    const [intentShown, setIntentShown] = useState(false);
 
     if (strategy === "hover") {
+        const showIntent = () => setIntentShown(true);
         return {
-            state: { prefetch: hovered ? null : false },
-            effects: { handleMouseEnter: () => setHovered(true) },
+            state: { prefetch: intentShown ? null : false },
+            effects: { handleMouseEnter: showIntent, handleFocus: showIntent },
         };
     }
 
     return {
         state: { prefetch: strategy === "never" ? false : undefined },
-        effects: { handleMouseEnter: undefined },
+        effects: { handleMouseEnter: undefined, handleFocus: undefined },
     };
 };
