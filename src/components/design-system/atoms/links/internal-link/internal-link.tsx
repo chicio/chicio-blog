@@ -2,12 +2,14 @@
 
 import Link from "next/link";
 import { FC, ReactNode } from "react";
+import type { PrefetchStrategy } from "@/types/next/prefetch";
+import { useInternalLinkStore } from "./use-internal-link-store";
 
 type InternalLinkProps = {
     to: string;
     className?: string;
     children?: ReactNode;
-    prefetch?: boolean;
+    prefetch?: PrefetchStrategy;
     onClick?: () => void;
 };
 
@@ -16,10 +18,21 @@ export const InternalLink: FC<InternalLinkProps> = ({
     className,
     to,
     onClick,
-    prefetch = false,
+    prefetch = "viewport",
 }) => {
+    const { state, effects } = useInternalLinkStore(prefetch);
+    const { prefetch: prefetchProp } = state;
+    const { handleMouseEnter, handleFocus } = effects;
+
     return (
-        <Link className={className} href={to} prefetch={prefetch} onClick={onClick}>
+        <Link
+            className={className}
+            href={to}
+            prefetch={prefetchProp}
+            onMouseEnter={handleMouseEnter}
+            onFocus={handleFocus}
+            onClick={onClick}
+        >
             {children}
         </Link>
     );

@@ -18,9 +18,13 @@ export function nextLinkMock() {
         default: ({
             href,
             children,
+            prefetch,
             ...rest
-        }: AnchorHTMLAttributes<HTMLAnchorElement> & { href: string }) => (
-            <a href={href} {...rest}>
+        }: AnchorHTMLAttributes<HTMLAnchorElement> & {
+            href: string;
+            prefetch?: boolean | null;
+        }) => (
+            <a href={href} data-prefetch={prefetch === undefined ? "undefined" : String(prefetch)} {...rest}>
                 {children}
             </a>
         ),

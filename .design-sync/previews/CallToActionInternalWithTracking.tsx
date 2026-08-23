@@ -22,7 +22,7 @@ export const NavigationRow = () => (
         <CallToActionInternalWithTracking to="/data-structures-and-algorithms/roadmap">
             DSA roadmap
         </CallToActionInternalWithTracking>
-        <CallToActionInternalWithTracking to="/chat" prefetch>
+        <CallToActionInternalWithTracking to="/chat">
             Chat with my AI
         </CallToActionInternalWithTracking>
     </div>

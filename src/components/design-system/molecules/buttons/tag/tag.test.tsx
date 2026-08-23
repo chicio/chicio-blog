@@ -4,8 +4,23 @@ import userEvent from "@testing-library/user-event";
 import { Tag } from "./tag";
 
 vi.mock("next/link", () => ({
-    default: ({ href, children, className, onClick }: React.AnchorHTMLAttributes<HTMLAnchorElement> & { href: string }) => (
-        <a href={href} className={className} onClick={onClick}>{children}</a>
+    default: ({
+        href,
+        children,
+        className,
+        onClick,
+        onMouseEnter,
+        prefetch,
+    }: React.AnchorHTMLAttributes<HTMLAnchorElement> & { href: string; prefetch?: boolean | null }) => (
+        <a
+            href={href}
+            className={className}
+            onClick={onClick}
+            onMouseEnter={onMouseEnter}
+            data-prefetch={prefetch === undefined ? "undefined" : String(prefetch)}
+        >
+            {children}
+        </a>
     ),
 }));
 
@@ -40,6 +55,22 @@ describe("Tag", () => {
             render(<Tag tag="click-me" link="/tags/click-me" big={false} onClick={onClick} />);
             await userEvent.click(screen.getByRole("link"));
             expect(onClick).toHaveBeenCalledOnce();
+        });
+    });
+
+    describe("prefetch", () => {
+        it("defaults to the hover strategy: no prefetch until hovered", async () => {
+            render(<Tag tag="typescript" link="/tags/typescript" big={false} />);
+            const link = screen.getByRole("link");
+            expect(link).toHaveAttribute("data-prefetch", "false");
+
+            await userEvent.hover(link);
+            expect(link).toHaveAttribute("data-prefetch", "null");
+        });
+
+        it("forwards an explicit prefetch override to the underlying link", () => {
+            render(<Tag tag="typescript" link="/tags/typescript" big={false} prefetch="viewport" />);
+            expect(screen.getByRole("link")).toHaveAttribute("data-prefetch", "undefined");
         });
     });
 });

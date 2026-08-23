@@ -51,7 +51,6 @@ export const MenuItem: FC<MenuItemProps> = ({
     return (
         <Link
             href={to}
-            prefetch={false}
             className={composedClassName}
             onClick={handleClick(onClick)}
         >

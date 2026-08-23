@@ -1,13 +1,9 @@
 import { describe, it, expect, vi } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, nextLinkMock } from "@/test-utils";
 import userEvent from "@testing-library/user-event";
 import { MenuItem } from "./menu-item";
 
-vi.mock("next/link", () => ({
-    default: ({ href, children, className, onClick }: React.AnchorHTMLAttributes<HTMLAnchorElement> & { href: string }) => (
-        <a href={href} className={className} onClick={onClick}>{children}</a>
-    ),
-}));
+vi.mock("next/link", () => nextLinkMock());
 
 describe("MenuItem", () => {
     describe("render", () => {
@@ -55,6 +51,13 @@ describe("MenuItem", () => {
             );
             await userEvent.click(screen.getByRole("link"));
             expect(onClick).toHaveBeenCalledOnce();
+        });
+    });
+
+    describe("prefetch", () => {
+        it("uses Next's default prefetching (nav links only render once their dropdown is open)", () => {
+            render(<MenuItem to="/blog" selected={false}>Blog</MenuItem>);
+            expect(screen.getByRole("link")).toHaveAttribute("data-prefetch", "undefined");
         });
     });
 });

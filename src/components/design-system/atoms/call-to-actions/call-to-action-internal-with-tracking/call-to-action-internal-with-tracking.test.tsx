@@ -1,15 +1,9 @@
 import { describe, it, expect, vi } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, nextLinkMock } from "@/test-utils";
 import userEvent from "@testing-library/user-event";
 import { CallToActionInternalWithTracking } from "./call-to-action-internal-with-tracking";
 
-vi.mock("next/link", () => ({
-    default: ({ href, children, className, onClick, prefetch: _prefetch }: React.AnchorHTMLAttributes<HTMLAnchorElement> & { href: string; prefetch?: boolean }) => (
-        <a href={href} className={className} onClick={onClick}>
-            {children}
-        </a>
-    ),
-}));
+vi.mock("next/link", () => nextLinkMock());
 
 describe("CallToActionInternalWithTracking", () => {
     describe("render", () => {
@@ -50,6 +44,13 @@ describe("CallToActionInternalWithTracking", () => {
             );
             await userEvent.click(screen.getByRole("link"));
             expect(onClick).toHaveBeenCalledOnce();
+        });
+    });
+
+    describe("prefetch", () => {
+        it("uses Next's default prefetching (CTAs are primary actions)", () => {
+            render(<CallToActionInternalWithTracking to="/blog">Blog</CallToActionInternalWithTracking>);
+            expect(screen.getByRole("link")).toHaveAttribute("data-prefetch", "undefined");
         });
     });
 });
