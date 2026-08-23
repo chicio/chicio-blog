@@ -111,5 +111,21 @@ describe("InternalLink", () => {
             expect(link).toHaveFocus();
             expect(link).toHaveAttribute("data-prefetch", "null");
         });
+
+        it("stays prefetchable when intent is shown again after the first time", async () => {
+            render(
+                <InternalLink to="/blog" prefetch="hover">
+                    Blog
+                </InternalLink>,
+            );
+            const link = screen.getByRole("link");
+
+            await userEvent.hover(link);
+            expect(link).toHaveAttribute("data-prefetch", "null");
+
+            await userEvent.tab();
+            expect(link).toHaveFocus();
+            expect(link).toHaveAttribute("data-prefetch", "null");
+        });
     });
 });
