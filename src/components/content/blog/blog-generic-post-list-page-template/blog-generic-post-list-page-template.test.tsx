@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen, nextLinkMock } from "@/test-utils";
+import userEvent from "@testing-library/user-event";
 import type { ReactNode } from "react";
 import { BlogGenericPostListPageTemplate } from "./index";
 import type { Content } from "@/types/content/content";
@@ -65,7 +66,7 @@ describe("BlogGenericPostListPageTemplate", () => {
             expect(screen.getByRole("link", { name: "First post" })).toHaveAttribute("data-prefetch", "undefined");
         });
 
-        it("forwards an explicit hover strategy to every post link", () => {
+        it("forwards an explicit hover strategy to every post link, prefetching only once hovered", async () => {
             render(
                 <BlogGenericPostListPageTemplate
                     title="Archive"
@@ -75,8 +76,14 @@ describe("BlogGenericPostListPageTemplate", () => {
                     prefetch="hover"
                 />,
             );
-            expect(screen.getByRole("link", { name: "First post" })).toHaveAttribute("data-prefetch", "false");
-            expect(screen.getByRole("link", { name: "Second post" })).toHaveAttribute("data-prefetch", "false");
+            const firstLink = screen.getByRole("link", { name: "First post" });
+            const secondLink = screen.getByRole("link", { name: "Second post" });
+            expect(firstLink).toHaveAttribute("data-prefetch", "false");
+            expect(secondLink).toHaveAttribute("data-prefetch", "false");
+
+            await userEvent.hover(firstLink);
+            expect(firstLink).toHaveAttribute("data-prefetch", "null");
+            expect(secondLink).toHaveAttribute("data-prefetch", "false");
         });
     });
 });
