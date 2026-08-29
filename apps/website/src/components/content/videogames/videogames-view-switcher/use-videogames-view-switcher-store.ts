@@ -1,7 +1,7 @@
 "use client";
 
 import { ChangeEvent, useCallback, useState, useTransition } from "react";
-import { ComponentStore } from "@/types/component-store";
+import { ComponentStore } from "matrix-component-store";
 import { Content } from "@/types/content/content";
 import { ConsoleMetadata, GameMetadata } from "@/types/content/videogames";
 import { useVideogamesViewStore } from "@/components/content/videogames/use-videogames-view-store";

@@ -9,7 +9,7 @@ import { tracking } from "@/types/configuration/tracking";
 import { useConsentStore } from "@/components/features/consent/use-consent-store";
 import { useHasConsentDecision } from "@/components/features/consent/use-has-consent-decision";
 import { writeConsent } from "@/lib/consents/consents";
-import { ComponentStore } from "@/types/component-store";
+import { ComponentStore } from "matrix-component-store";
 
 interface LayoutAdditionalContentState {
     consented: boolean;

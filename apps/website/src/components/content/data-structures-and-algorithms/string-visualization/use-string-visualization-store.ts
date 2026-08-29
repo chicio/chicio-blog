@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ComponentStore } from "@/types/component-store";
+import { ComponentStore } from "matrix-component-store";
 
 const inputString = "hello";
 const addedString = " world";

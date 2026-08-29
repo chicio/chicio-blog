@@ -2,7 +2,7 @@
 
 import { trackWith } from "@/lib/tracking/tracking";
 import { tracking } from "@/types/configuration/tracking";
-import { EffectsStore } from "@/types/component-store";
+import { EffectsStore } from "matrix-component-store";
 import { useCallback } from "react";
 
 interface ProfilePresentationEffects {

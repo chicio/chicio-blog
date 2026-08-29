@@ -5,7 +5,7 @@ import {
     commandPaletteOpenEvent,
 } from "@/components/design-system/state/command-palette/command-palette-events";
 import type { CommandPaletteTrigger } from "@/components/design-system/state/command-palette/command-palette-trigger";
-import type { ComponentStore } from "@/types/component-store";
+import type { ComponentStore } from "matrix-component-store";
 import { useCallback, useEffect, useState } from "react";
 
 interface CommandPaletteState {

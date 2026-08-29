@@ -1,7 +1,7 @@
 "use client";
 
 import { useMotionStore } from "@/components/design-system/hooks/use-motion-store";
-import type { StateStore } from "@/types/component-store";
+import type { StateStore } from "matrix-component-store";
 
 interface MotionDivState {
     motionEnabled: boolean;

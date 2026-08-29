@@ -4,7 +4,7 @@ import type { CommandPaletteTrigger } from "@/components/design-system/state/com
 import { closeCommandPalette } from "@/components/design-system/state/command-palette/command-palette-events";
 import { useSearch } from "@/components/features/search/use-search";
 import { openTerminalOverlay } from "@/lib/terminal/terminal-events";
-import type { ComponentStore } from "@/types/component-store";
+import type { ComponentStore } from "matrix-component-store";
 import type { SearchResult } from "@/types/search/search";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, useCallback, useState } from "react";

@@ -2,7 +2,7 @@
 
 import { trackWith } from "@/lib/tracking/tracking";
 import { tracking } from "@/types/configuration/tracking";
-import type { EffectsStore } from "@/types/component-store";
+import type { EffectsStore } from "matrix-component-store";
 import type { MenuTrackingCallbacks } from "@/components/features/design-system-next/menu";
 import type {
     FooterNavTrackingCallbacks,

@@ -6,7 +6,7 @@ import {
     lightboxOpenEvent,
     type LightboxOpenDetail,
 } from "@/components/design-system/state/lightbox/lightbox-events";
-import type { ComponentStore } from "@/types/component-store";
+import type { ComponentStore } from "matrix-component-store";
 
 interface LightboxState {
     open: boolean;

@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import type { StateStore } from "@/types/component-store";
+import type { StateStore } from "matrix-component-store";
 
 interface MenuState {
     currentPath: string;

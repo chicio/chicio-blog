@@ -1,6 +1,6 @@
 "use client";
 
-import type { EffectsStore } from "@/types/component-store";
+import type { EffectsStore } from "matrix-component-store";
 
 interface MenuItemEffects {
     handleClick: (onClick?: () => void) => () => void;

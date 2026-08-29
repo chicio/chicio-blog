@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import remarkParse from "remark-parse";
 import { unified } from "unified";
-import type { StateStore } from "@/types/component-store";
+import type { StateStore } from "matrix-component-store";
 import { markdownRemarkPlugins } from "./markdown-plugins";
 
 const parser = unified().use(remarkParse).use(markdownRemarkPlugins);

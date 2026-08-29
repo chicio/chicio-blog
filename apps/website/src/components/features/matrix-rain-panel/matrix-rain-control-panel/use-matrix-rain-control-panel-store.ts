@@ -13,7 +13,7 @@ import { isRainSpeedAtMax } from "@/lib/easter-eggs/rain-speed-max";
 import { triggerEasterEgg } from "@/lib/easter-eggs/trigger-easter-egg";
 import { trackWith } from "@/lib/tracking/tracking";
 import { tracking } from "@/types/configuration/tracking";
-import { ComponentStore } from "@/types/component-store";
+import { ComponentStore } from "matrix-component-store";
 
 export const FONT_SIZE_STEPS = [12, 16, 20, 24, 28, 32, 36, 40] as const;
 export const RAIN_DENSITY_MIN = 0.8;

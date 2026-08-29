@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef } from "react";
 import { isTapSequenceComplete, TAP_RESET_WINDOW_MS } from "@/lib/easter-eggs/fighting-genre";
 import { triggerEasterEgg } from "@/lib/easter-eggs/trigger-easter-egg";
-import type { EffectsStore } from "@/types/component-store";
+import type { EffectsStore } from "matrix-component-store";
 
 interface FightingGameTriggerEffects {
     registerTap: () => void;

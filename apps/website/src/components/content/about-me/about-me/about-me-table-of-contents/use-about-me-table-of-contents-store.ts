@@ -1,6 +1,6 @@
 "use client";
 
-import { EffectsStore } from "@/types/component-store";
+import { EffectsStore } from "matrix-component-store";
 
 interface AboutMeTableOfContentsEffects {
     scrollToSection: (id: string) => () => void;

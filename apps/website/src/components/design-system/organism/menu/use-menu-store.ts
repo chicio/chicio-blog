@@ -4,7 +4,7 @@ import { openCommandPalette } from "@/components/design-system/state/command-pal
 import { useState, useCallback } from "react";
 import { ScrollDirection, useScrollDirection } from "@/components/design-system/hooks/use-scroll-direction";
 import { useOsModifierKey, OsModifierKey } from "@/components/design-system/hooks/use-os-modifier-key";
-import type { ComponentStore } from "@/types/component-store";
+import type { ComponentStore } from "matrix-component-store";
 
 interface MenuState {
     pathname: string;

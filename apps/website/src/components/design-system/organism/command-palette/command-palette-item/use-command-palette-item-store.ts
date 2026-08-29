@@ -1,7 +1,7 @@
 "use client";
 
 import { CommandPaletteContext } from "@/components/design-system/state/command-palette/command-palette-context";
-import type { EffectsStore } from "@/types/component-store";
+import type { EffectsStore } from "matrix-component-store";
 import { useCallback, useContext } from "react";
 
 interface CommandPaletteItemEffects {

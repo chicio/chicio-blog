@@ -5,7 +5,7 @@ import { useConsentStore } from "@/components/features/consent/use-consent-store
 import { writePwaInstallDecision } from "@/lib/pwa/pwa-install-decision";
 import { trackWith } from "@/lib/tracking/tracking";
 import { tracking } from "@/types/configuration/tracking";
-import { ComponentStore } from "@/types/component-store";
+import { ComponentStore } from "matrix-component-store";
 import { usePwaInstallDecision } from "./use-pwa-install-decision";
 
 interface BeforeInstallPromptEvent extends Event {

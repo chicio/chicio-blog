@@ -11,7 +11,7 @@ import {
 } from "@/lib/easter-eggs/easter-egg-found";
 import { trackWith } from "@/lib/tracking/tracking";
 import { tracking } from "@/types/configuration/tracking";
-import type { ComponentStore } from "@/types/component-store";
+import type { ComponentStore } from "matrix-component-store";
 
 interface EggHuntProgressState {
     foundCount: number;

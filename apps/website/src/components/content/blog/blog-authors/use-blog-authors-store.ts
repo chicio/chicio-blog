@@ -1,7 +1,7 @@
 "use client";
 
 import { ChangeEvent, useCallback, useState } from "react";
-import type { ComponentStore } from "@/types/component-store";
+import type { ComponentStore } from "matrix-component-store";
 import type { AuthorSummary } from "@/types/content/author";
 
 interface BlogAuthorsState {

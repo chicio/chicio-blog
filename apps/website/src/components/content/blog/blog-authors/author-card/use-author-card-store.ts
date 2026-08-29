@@ -3,7 +3,7 @@
 import { useCallback } from "react";
 import { trackWith } from "@/lib/tracking/tracking";
 import { tracking } from "@/types/configuration/tracking";
-import type { ComponentStore } from "@/types/component-store";
+import type { ComponentStore } from "matrix-component-store";
 import { useInViewList } from "@/components/design-system/hooks/use-in-view-list";
 
 interface AuthorCardState {

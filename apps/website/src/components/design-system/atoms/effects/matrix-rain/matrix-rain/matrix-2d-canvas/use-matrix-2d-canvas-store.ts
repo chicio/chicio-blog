@@ -3,7 +3,7 @@
 import type { MatrixRainDrawContext } from "@/types/effects/matrix-rain";
 import { useEffect, useRef, useState } from "react";
 import { debounce } from "./debounce";
-import type { EffectsStore } from "@/types/component-store";
+import type { EffectsStore } from "matrix-component-store";
 
 const matrix = "ﾊﾐﾋｰｳｼﾅﾓﾆｻﾜﾂｵﾘｱﾎﾃﾏｹﾒｴｶｷﾑﾕﾗｾﾈｽﾀﾇﾍ012345789Z:.=*+-<>".split("");
 const colors = [

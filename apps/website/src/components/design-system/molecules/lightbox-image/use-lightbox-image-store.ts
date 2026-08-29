@@ -2,7 +2,7 @@
 
 import { useCallback } from "react";
 import { openLightbox } from "@/components/design-system/state/lightbox/lightbox-events";
-import type { EffectsStore } from "@/types/component-store";
+import type { EffectsStore } from "matrix-component-store";
 
 interface LightboxImageEffects {
     handleOpen: () => void;

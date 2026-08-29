@@ -1,7 +1,7 @@
 "use client";
 
 import { ReactEventHandler, useCallback, useState } from "react";
-import type { ComponentStore } from "@/types/component-store";
+import type { ComponentStore } from "matrix-component-store";
 
 interface PlainImageState {
     loaded: boolean;

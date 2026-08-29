@@ -47,6 +47,7 @@
     "framer-motion": "^12.42.2",
     "gray-matter": "^4.0.3",
     "katex": "^0.16.45",
+    "matrix-component-store": "^1.0.0",
     "matrix-rain-webgpu": "^2.0.0",
     "mdast-util-mdx-jsx": "^3.2.0",
     "mdast-util-to-string": "^4.0.0",

@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { StateStore } from "@/types/component-store";
+import { StateStore } from "matrix-component-store";
 
 interface AmortizedDataPoint {
     operation: number;

@@ -1,7 +1,7 @@
 "use client";
 
 import { useGlassmorphism } from "@/components/design-system/hooks/use-glassmorphism";
-import type { StateStore } from "@/types/component-store";
+import type { StateStore } from "matrix-component-store";
 
 type GlassmorphismBackgroundState = {
     glassmorphismClass: string;

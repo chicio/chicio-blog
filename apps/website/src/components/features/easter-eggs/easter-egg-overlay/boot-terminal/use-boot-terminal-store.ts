@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useTypewriter } from "@/components/design-system/hooks/use-typewriter";
 import { bootLinesFor, toTypewriterLines } from "@/lib/easter-eggs/boot-lines";
 import type { EasterEggSlug } from "@/lib/easter-eggs/easter-egg-catalog";
-import type { StateStore } from "@/types/component-store";
+import type { StateStore } from "matrix-component-store";
 
 const BOOT_TYPING_SPEED_MS = 25;
 

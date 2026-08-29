@@ -1,6 +1,6 @@
 "use client";
 
-import type { EffectsStore } from "@/types/component-store";
+import type { EffectsStore } from "matrix-component-store";
 
 type SwitchEffects = {
     onToggle: () => void;

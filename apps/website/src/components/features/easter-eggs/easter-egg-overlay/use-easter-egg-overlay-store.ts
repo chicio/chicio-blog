@@ -8,7 +8,7 @@ import {
     getEasterEggOverlaySlug,
     subscribeToEasterEggOverlay,
 } from "@/lib/easter-eggs/easter-egg-overlay-state";
-import type { ComponentStore } from "@/types/component-store";
+import type { ComponentStore } from "matrix-component-store";
 
 const getServerSlugSnapshot = (): null => null;
 

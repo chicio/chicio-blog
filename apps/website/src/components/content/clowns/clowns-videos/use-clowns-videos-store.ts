@@ -2,7 +2,7 @@
 
 import { useSyncExternalStore } from "react";
 import { shuffleArray } from "@/lib/shuffle-array/shuffle-array";
-import { StateStore } from "@/types/component-store";
+import { StateStore } from "matrix-component-store";
 
 const videos = [
     "https://www.youtube.com/embed/zogb9j4xr5M",

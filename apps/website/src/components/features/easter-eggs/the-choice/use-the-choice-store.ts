@@ -3,7 +3,7 @@
 import { useCallback, useRef } from "react";
 import { isHeaderClickSequenceComplete } from "@/lib/easter-eggs/header-click-sequence";
 import { triggerEasterEgg } from "@/lib/easter-eggs/trigger-easter-egg";
-import type { EffectsStore } from "@/types/component-store";
+import type { EffectsStore } from "matrix-component-store";
 
 interface TheChoiceEffects {
     handleLogoClick: () => void;
