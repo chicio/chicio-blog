@@ -21,6 +21,13 @@ apps/website/         the Next.js site — src/, public/, e2e/, and its own tsco
 Run tasks from the root: `npm run <task>` delegates to `turbo run <task>` across the workspaces.
 To run something in the website only, use `npm run <task> --workspace=website`.
 
+**Environment variables must be declared in `turbo.json`'s `globalEnv`.** Turborepo filters the
+environment it passes to tasks, so an undeclared variable is silently stripped. The list cannot be
+derived by grepping for `process.env.X`: `GROQ_API_KEY` is read implicitly by `@ai-sdk/groq` and
+never appears in the source, and the `GOOGLE_ANALYTICS_*` keys are destructured from an injected
+`env` object. Treat `apps/website/.env.production` and the Vercel project settings as the
+authoritative list.
+
 ## Development Commands
 
 ```bash

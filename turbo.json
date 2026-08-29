@@ -1,21 +1,35 @@
 {
     "$schema": "https://turborepo.com/schema.json",
     "ui": "stream",
-    "globalDependencies": [".prettierrc", ".nvmrc"],
+    "globalDependencies": [
+        ".prettierrc",
+        ".nvmrc"
+    ],
     "globalEnv": [
-        "UPSTASH_VECTOR_REST_URL",
-        "UPSTASH_VECTOR_REST_TOKEN",
-        "UPSTASH_REDIS_REST_URL",
-        "UPSTASH_REDIS_REST_TOKEN",
-        "RESEND_API_KEY",
+        "CI",
         "CONTACT_EMAIL",
         "GOOGLE_ANALYTICS_API_SECRET",
-        "NODE_ENV"
+        "GOOGLE_ANALYTICS_PROPERTY_ID",
+        "GOOGLE_ANALYTICS_SA_CLIENT_EMAIL",
+        "GOOGLE_ANALYTICS_SA_PRIVATE_KEY",
+        "GROQ_API_KEY",
+        "NODE_ENV",
+        "RESEND_API_KEY",
+        "UPSTASH_REDIS_REST_TOKEN",
+        "UPSTASH_REDIS_REST_URL",
+        "UPSTASH_VECTOR_REST_TOKEN",
+        "UPSTASH_VECTOR_REST_URL"
     ],
     "tasks": {
         "build": {
-            "dependsOn": ["^build"],
-            "outputs": [".next/**", "!.next/cache/**", "dist/**"]
+            "dependsOn": [
+                "^build"
+            ],
+            "outputs": [
+                ".next/**",
+                "!.next/cache/**",
+                "dist/**"
+            ]
         },
         "dev": {
             "cache": false,
@@ -26,13 +40,19 @@
             "persistent": true
         },
         "lint": {
-            "dependsOn": ["^build"]
+            "dependsOn": [
+                "^build"
+            ]
         },
         "knip": {
-            "dependsOn": ["^build"]
+            "dependsOn": [
+                "^build"
+            ]
         },
         "typecheck": {
-            "dependsOn": ["^build"]
+            "dependsOn": [
+                "^build"
+            ]
         },
         "validate-architecture": {},
         "test": {
@@ -40,15 +60,25 @@
             "persistent": true
         },
         "test:run": {
-            "dependsOn": ["^build"]
+            "dependsOn": [
+                "^build"
+            ]
         },
         "test:coverage": {
-            "dependsOn": ["^build"],
-            "outputs": ["coverage/**"]
+            "dependsOn": [
+                "^build"
+            ],
+            "outputs": [
+                "coverage/**"
+            ]
         },
         "test:e2e": {
-            "dependsOn": ["build"],
-            "outputs": ["playwright-report/**"]
+            "dependsOn": [
+                "build"
+            ],
+            "outputs": [
+                "playwright-report/**"
+            ]
         }
     }
 }
