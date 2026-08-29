@@ -27,5 +27,18 @@ describe("Markdown", () => {
                 "https://example.com",
             );
         });
+
+        it("renders each top-level block, splitting on markdown structure", async () => {
+            render(<Markdown content={"# Title\n\nFirst paragraph.\n\nSecond paragraph."} id="test-5" />);
+            expect(await screen.findByRole("heading", { level: 1, name: "Title" })).toBeInTheDocument();
+            expect(await screen.findByText("First paragraph.")).toBeInTheDocument();
+            expect(await screen.findByText("Second paragraph.")).toBeInTheDocument();
+        });
+
+        it("keeps a GFM table in a single block", async () => {
+            render(<Markdown content={"| a | b |\n| - | - |\n| 1 | 2 |"} id="test-6" />);
+            expect(await screen.findByRole("table")).toBeInTheDocument();
+            expect(await screen.findByRole("cell", { name: "1" })).toBeInTheDocument();
+        });
     });
 });
