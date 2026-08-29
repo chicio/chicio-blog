@@ -4,6 +4,7 @@ import {
     commandPaletteCloseEvent,
     commandPaletteOpenEvent,
 } from "@/components/design-system/state/command-palette/command-palette-events";
+import type { CommandPaletteTrigger } from "@/components/design-system/state/command-palette/command-palette-trigger";
 import type { ComponentStore } from "@/types/component-store";
 import { useCallback, useEffect, useState } from "react";
 
@@ -18,34 +19,30 @@ interface CommandPaletteEffects {
 }
 
 export const useCommandPaletteStore = (
-    onOpenChange?: (open: boolean) => void,
+    onOpenChange?: (open: boolean, trigger: CommandPaletteTrigger) => void,
     onQueryChange?: (query: string) => void,
 ): ComponentStore<CommandPaletteState, CommandPaletteEffects> => {
     const [open, setOpen] = useState(false);
 
     const changeOpen = useCallback(
-        (next: boolean) => {
+        (next: boolean, trigger: CommandPaletteTrigger) => {
             setOpen(next);
-            onOpenChange?.(next);
+            onOpenChange?.(next, trigger);
         },
         [onOpenChange],
     );
 
-    const close = useCallback(() => changeOpen(false), [changeOpen]);
+    const close = useCallback(() => changeOpen(false, "dismiss"), [changeOpen]);
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             if ((e.metaKey || e.ctrlKey) && e.key === "k") {
                 e.preventDefault();
-                setOpen((previous) => {
-                    onOpenChange?.(!previous);
-
-                    return !previous;
-                });
+                changeOpen(!open, "shortcut");
             }
         };
-        const handleOpenEvent = () => changeOpen(true);
-        const handleCloseEvent = () => changeOpen(false);
+        const handleOpenEvent = () => changeOpen(true, "event");
+        const handleCloseEvent = () => changeOpen(false, "event");
 
         window.addEventListener("keydown", handleKeyDown, true);
         window.addEventListener(commandPaletteOpenEvent, handleOpenEvent);
@@ -56,7 +53,7 @@ export const useCommandPaletteStore = (
             window.removeEventListener(commandPaletteOpenEvent, handleOpenEvent);
             window.removeEventListener(commandPaletteCloseEvent, handleCloseEvent);
         };
-    }, [changeOpen, onOpenChange]);
+    }, [changeOpen, open]);
 
     useEffect(() => {
         if (!open) {
@@ -65,14 +62,14 @@ export const useCommandPaletteStore = (
 
         const handleEsc = (e: KeyboardEvent) => {
             if (e.key === "Escape") {
-                close();
+                changeOpen(false, "escape");
             }
         };
 
         window.addEventListener("keydown", handleEsc, true);
 
         return () => window.removeEventListener("keydown", handleEsc, true);
-    }, [open, close]);
+    }, [open, changeOpen]);
 
     const stopPropagation = useCallback((e: React.MouseEvent) => e.stopPropagation(), []);
 

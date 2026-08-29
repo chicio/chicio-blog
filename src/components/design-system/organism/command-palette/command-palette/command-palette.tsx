@@ -2,6 +2,8 @@
 
 import { Overlay } from "@/components/design-system/atoms/effects/overlay";
 import { useGlassmorphism } from "@/components/design-system/hooks/use-glassmorphism";
+import { CommandPaletteContext } from "@/components/design-system/state/command-palette/command-palette-context";
+import type { CommandPaletteTrigger } from "@/components/design-system/state/command-palette/command-palette-trigger";
 import { motion } from "framer-motion";
 import { FC, ReactNode } from "react";
 import { Command } from "cmdk";
@@ -9,7 +11,7 @@ import { useCommandPaletteStore } from "./use-command-palette-store";
 
 export interface CommandPaletteProps {
     placeholder?: string;
-    onOpenChange?: (open: boolean) => void;
+    onOpenChange?: (open: boolean, trigger: CommandPaletteTrigger) => void;
     onQueryChange?: (query: string) => void;
     children: ReactNode;
 }
@@ -52,7 +54,9 @@ export const CommandPalette: FC<CommandPaletteProps> = ({
                             />
                         </div>
 
-                        <Command.List className="max-h-[55vh] overflow-y-auto py-2">{children}</Command.List>
+                        <Command.List className="max-h-[55vh] overflow-y-auto py-2">
+                            <CommandPaletteContext.Provider value={close}>{children}</CommandPaletteContext.Provider>
+                        </Command.List>
 
                         <div className="border-accent/20 text-accent/40 xs:flex hidden gap-6 border-t px-4 py-2 font-mono text-xs">
                             <span>↑↓ navigate</span>

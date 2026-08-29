@@ -2,15 +2,13 @@ import { memo } from "react";
 import ReactMarkdown from "react-markdown";
 import rehypeHighlight from "rehype-highlight";
 import rehypeKatex from "rehype-katex";
-import remarkEmoji from "remark-emoji";
-import remarkGfm from "remark-gfm";
-import remarkMath from "remark-math";
+import { markdownRemarkPlugins } from "./markdown-plugins";
 import { useMarkdownStore } from "./use-markdown-store";
 
 const MarkdownBlock = memo(
     ({ content }: { content: string }) => (
         <ReactMarkdown
-            remarkPlugins={[remarkGfm, remarkMath, remarkEmoji]}
+            remarkPlugins={markdownRemarkPlugins}
             rehypePlugins={[rehypeHighlight, rehypeKatex]}
         >
             {content}

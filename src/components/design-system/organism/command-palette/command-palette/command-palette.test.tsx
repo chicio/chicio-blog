@@ -47,6 +47,15 @@ describe("CommandPalette", () => {
             expect(screen.getByText("content")).toBeInTheDocument();
         });
 
+        it("distinguishes an event-driven open from a keyboard one", () => {
+            const onOpenChange = vi.fn();
+            render(<CommandPalette onOpenChange={onOpenChange}>content</CommandPalette>);
+            act(() => {
+                window.dispatchEvent(new Event("command-palette-open"));
+            });
+            expect(onOpenChange).toHaveBeenCalledWith(true, "event");
+        });
+
         it("opens on the command palette open event", () => {
             render(<CommandPalette>content</CommandPalette>);
             act(() => {
@@ -77,11 +86,11 @@ describe("CommandPalette", () => {
             const onOpenChange = vi.fn();
             render(<CommandPalette onOpenChange={onOpenChange}>content</CommandPalette>);
             act(openViaShortcut);
-            expect(onOpenChange).toHaveBeenCalledWith(true);
+            expect(onOpenChange).toHaveBeenCalledWith(true, "shortcut");
             act(() => {
                 fireEvent.keyDown(window, { key: "Escape" });
             });
-            expect(onOpenChange).toHaveBeenCalledWith(false);
+            expect(onOpenChange).toHaveBeenCalledWith(false, "escape");
         });
     });
 

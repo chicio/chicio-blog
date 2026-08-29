@@ -39,12 +39,12 @@ const config = {
         {
             name: "import-only-via-index",
             comment:
-                "A component's internal .tsx may only be imported through its folder's index.ts barrel. The flat shared-hooks home (design-system/hooks/) is exempt — its hooks are imported directly, without barrels.",
+                "A component's internal .tsx may only be imported through its folder's index.ts barrel. The flat shared-hooks homes (design-system/hooks/ and features/hooks/) are exempt — their hooks are imported directly, without barrels.",
             severity: "error",
             from: { pathNot: "/index\\.ts$" },
             to: {
                 path: "^src/components/.+\\.tsx$",
-                pathNot: "^src/components/design-system/hooks/",
+                pathNot: "^src/components/(design-system|features)/hooks/",
             },
         },
         {

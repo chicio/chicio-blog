@@ -1,8 +1,8 @@
 "use client";
 
-import { closeCommandPalette } from "@/components/design-system/state/command-palette/command-palette-events";
+import { CommandPaletteContext } from "@/components/design-system/state/command-palette/command-palette-context";
 import type { EffectsStore } from "@/types/component-store";
-import { useCallback } from "react";
+import { useCallback, useContext } from "react";
 
 interface CommandPaletteItemEffects {
     handleSelect: () => void;
@@ -12,13 +12,15 @@ export const useCommandPaletteItemStore = (
     onSelect: (() => void) | undefined,
     closeOnSelect: boolean,
 ): EffectsStore<CommandPaletteItemEffects> => {
+    const closePalette = useContext(CommandPaletteContext);
+
     const handleSelect = useCallback(() => {
         onSelect?.();
 
         if (closeOnSelect) {
-            closeCommandPalette();
+            closePalette?.();
         }
-    }, [onSelect, closeOnSelect]);
+    }, [onSelect, closeOnSelect, closePalette]);
 
     return { effects: { handleSelect } };
 };

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import { Markdown } from "./markdown";
 
 describe("Markdown", () => {
@@ -39,6 +39,12 @@ describe("Markdown", () => {
             render(<Markdown content={"| a | b |\n| - | - |\n| 1 | 2 |"} id="test-6" />);
             expect(await screen.findByRole("table")).toBeInTheDocument();
             expect(await screen.findByRole("cell", { name: "1" })).toBeInTheDocument();
+        });
+
+        it("keeps display math containing blank lines in a single block", async () => {
+            const { container } = render(<Markdown content={"$$\n\nE = mc^2\n\n$$"} id="test-7" />);
+            await waitFor(() => expect(container.querySelector(".katex-display")).toBeInTheDocument());
+            expect(container.textContent).not.toContain("$$");
         });
     });
 });

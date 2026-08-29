@@ -13,7 +13,9 @@ paths:
 - **Organisms** (`src/components/design-system/organism/`): Complex composed sections
 - Page-level layouts are NOT part of the design system: they arrange this site's chrome and live in
   `src/components/features/content/`
-- **Hooks** (`src/components/design-system/hooks/`): Shared hooks used by 2+ components (motion, glassmorphism, search, in-view, etc.)
+- **Hooks** (`src/components/design-system/hooks/`): Shared hooks used by 2+ components (motion, glassmorphism,
+  in-view, etc.). Hooks that depend on this site (e.g. `useSearch`, which fetches the site's search index) live
+  in `src/components/features/hooks/` instead.
 
 Always compose from existing lower-level components before creating new ones. New atoms should be justified — check if an existing atom can be extended first.
 

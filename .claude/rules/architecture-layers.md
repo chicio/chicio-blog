@@ -10,6 +10,9 @@ src/app/          → composition root (pages, layouts, API routes)
 src/components/
   content/<page>/ → page-scoped UI components (one folder per route)
   features/<f>/   → cross-cutting UI not tied to a route (pwa, easter-eggs, seo, consent, layout)
+    content/      → page-level layouts (page-template, content-page-template, …): they arrange
+                    THIS site's chrome, so they are not part of the design system
+    hooks/        → shared hooks that depend on this site (useSearch, …)
   design-system/  → pure, self-contained UI library (atoms → molecules → organisms)
 src/lib/          → pure business logic (no JSX, no React components)
 src/types/        → TypeScript types and pure configuration constants
