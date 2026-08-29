@@ -6,10 +6,10 @@ export const openCommandPalette = () => {
     }
 };
 
-export const matrixRainPanelOpenEvent = "matrix-rain-panel-open";
+export const commandPaletteCloseEvent = "command-palette-close";
 
-export const openMatrixRainPanel = () => {
+export const closeCommandPalette = () => {
     if (typeof window !== "undefined") {
-        window.dispatchEvent(new Event(matrixRainPanelOpenEvent));
+        window.dispatchEvent(new Event(commandPaletteCloseEvent));
     }
 };

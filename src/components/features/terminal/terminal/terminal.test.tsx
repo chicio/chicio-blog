@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { act, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { render, nextImageMock, nextLinkMock, motionDivMock, makeNextNavigationMock } from "@/test-utils";
-import { terminalOverlayOpenEvent } from "@/components/design-system/state/terminal/terminal-events";
+import { terminalOverlayOpenEvent } from "@/lib/terminal/terminal-events";
 import { registerAppRootElement } from "@/lib/terminal/terminal-overlay-dom";
 import { Terminal } from "./terminal";
 

@@ -1,1 +1,8 @@
 export { CommandPalette } from "./command-palette";
+export type { CommandPaletteProps } from "./command-palette";
+export { CommandPaletteGroup } from "./command-palette-group";
+export type { CommandPaletteGroupProps } from "./command-palette-group";
+export { CommandPaletteItem } from "./command-palette-item";
+export type { CommandPaletteItemProps } from "./command-palette-item";
+export { ToggleMotionItem } from "./toggle-motion-item";
+export type { ToggleMotionItemProps } from "./toggle-motion-item";

@@ -27,7 +27,7 @@ vi.mock("@/components/design-system/hooks/use-reduced-motions", () => ({
     useReducedMotions: mockUseReducedMotions,
 }));
 
-vi.mock("@/components/design-system/state/command-palette/command-palette-events", () => ({
+vi.mock("@/lib/matrix-rain/matrix-rain-panel-events", () => ({
     openMatrixRainPanel: mockOpenMatrixRainPanel,
 }));
 
@@ -42,29 +42,29 @@ describe("CustomizeMatrixRainItem", () => {
 
     describe("visibility", () => {
         it("renders the item when WebGPU is supported and motion is enabled", () => {
-            render(<CustomizeMatrixRainItem onClose={vi.fn()} />);
+            render(<CustomizeMatrixRainItem onTrack={vi.fn()} />);
             expect(customizeButton()).toBeInTheDocument();
         });
 
         it("does not render when WebGPU is unsupported", () => {
             mockUseWebGpuSupported.mockReturnValue(false);
-            render(<CustomizeMatrixRainItem onClose={vi.fn()} />);
+            render(<CustomizeMatrixRainItem onTrack={vi.fn()} />);
             expect(customizeButton()).not.toBeInTheDocument();
         });
 
         it("does not render when the user prefers reduced motion", () => {
             mockUseReducedMotions.mockReturnValue(true);
-            render(<CustomizeMatrixRainItem onClose={vi.fn()} />);
+            render(<CustomizeMatrixRainItem onTrack={vi.fn()} />);
             expect(customizeButton()).not.toBeInTheDocument();
         });
     });
 
     describe("interaction", () => {
-        it("calls onClose and opens the matrix rain panel when selected", async () => {
-            const onClose = vi.fn();
-            render(<CustomizeMatrixRainItem onClose={onClose} />);
+        it("calls onTrack and opens the matrix rain panel when selected", async () => {
+            const onTrack = vi.fn();
+            render(<CustomizeMatrixRainItem onTrack={onTrack} />);
             await userEvent.click(customizeButton()!);
-            expect(onClose).toHaveBeenCalledOnce();
+            expect(onTrack).toHaveBeenCalledOnce();
             expect(mockOpenMatrixRainPanel).toHaveBeenCalledOnce();
         });
     });

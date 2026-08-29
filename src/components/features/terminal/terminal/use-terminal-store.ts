@@ -1,7 +1,7 @@
 "use client";
 
-import { useSearch } from "@/components/design-system/hooks/use-search";
-import { terminalOverlayOpenEvent } from "@/components/design-system/state/terminal/terminal-events";
+import { useSearch } from "@/components/features/hooks/use-search";
+import { terminalOverlayOpenEvent } from "@/lib/terminal/terminal-events";
 import { searchIndexFileName } from "@/lib/content/search-filename";
 import { filesystemManifestFileName } from "@/lib/terminal/filesystem-filename";
 import { toMarkdownFetchUrl } from "@/lib/terminal/terminal-markdown-route";
