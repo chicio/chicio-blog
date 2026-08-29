@@ -29,7 +29,14 @@ export interface FooterProps {
     socialTracking?: FooterSocialTrackingCallbacks;
 }
 
-export const Footer: FC<FooterProps> = ({ author, navHrefs, socialLinks, navTracking, socialTracking, linkComponent }) => {
+export const Footer: FC<FooterProps> = ({
+    author,
+    navHrefs,
+    socialLinks,
+    navTracking,
+    socialTracking,
+    linkComponent,
+}) => {
     const { effects } = useFooterStore(navTracking, socialTracking);
     const {
         onTrackHome,
@@ -61,10 +68,20 @@ export const Footer: FC<FooterProps> = ({ author, navHrefs, socialLinks, navTrac
                     <MenuItem linkComponent={linkComponent} to={navHrefs.art} onClick={onTrackArt} selected={false}>
                         Art
                     </MenuItem>
-                    <MenuItem linkComponent={linkComponent} to={navHrefs.aboutMe} onClick={onTrackAboutMe} selected={false}>
+                    <MenuItem
+                        linkComponent={linkComponent}
+                        to={navHrefs.aboutMe}
+                        onClick={onTrackAboutMe}
+                        selected={false}
+                    >
                         About Me
                     </MenuItem>
-                    <MenuItem linkComponent={linkComponent} to={navHrefs.archive} onClick={onTrackArchive} selected={false}>
+                    <MenuItem
+                        linkComponent={linkComponent}
+                        to={navHrefs.archive}
+                        onClick={onTrackArchive}
+                        selected={false}
+                    >
                         Archive
                     </MenuItem>
                     <MenuItem linkComponent={linkComponent} to={navHrefs.tags} onClick={onTrackTags} selected={false}>

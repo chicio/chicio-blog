@@ -97,7 +97,8 @@ export const Menu: FC<MenuProps> = ({ navHrefs, onPaletteTrigger, tracking, link
 
     const renderMenuItems = (isMobile: boolean) => (
         <>
-            <MenuItem linkComponent={linkComponent}
+            <MenuItem
+                linkComponent={linkComponent}
                 className={baseClassName(isMobile)}
                 key={`home-${isMobile ? "mobile" : "desktop"}`}
                 to={"/"}
@@ -106,7 +107,8 @@ export const Menu: FC<MenuProps> = ({ navHrefs, onPaletteTrigger, tracking, link
             >
                 Home
             </MenuItem>
-            <DropdownMenu linkComponent={linkComponent}
+            <DropdownMenu
+                linkComponent={linkComponent}
                 key={`blog-${isMobile ? "mobile" : "desktop"}`}
                 label="Blog"
                 className={dropdownClassName(isMobile)}
@@ -160,7 +162,8 @@ export const Menu: FC<MenuProps> = ({ navHrefs, onPaletteTrigger, tracking, link
                     },
                 ]}
             />
-            <DropdownMenu linkComponent={linkComponent}
+            <DropdownMenu
+                linkComponent={linkComponent}
                 label="Explore"
                 className={dropdownClassName(isMobile)}
                 items={[
@@ -222,7 +225,8 @@ export const Menu: FC<MenuProps> = ({ navHrefs, onPaletteTrigger, tracking, link
                     },
                 ]}
             />
-            <DropdownMenu linkComponent={linkComponent}
+            <DropdownMenu
+                linkComponent={linkComponent}
                 label="The Author"
                 className={dropdownClassName(isMobile)}
                 items={[

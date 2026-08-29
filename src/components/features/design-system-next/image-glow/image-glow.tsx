@@ -1,6 +1,9 @@
 import NextImage from "next/image";
 import { FC } from "react";
-import { ImageGlow as DesignSystemImageGlow, type ImageGlowProps } from "@/components/design-system/atoms/effects/image-glow";
+import {
+    ImageGlow as DesignSystemImageGlow,
+    type ImageGlowProps,
+} from "@/components/design-system/atoms/effects/image-glow";
 
 export type { ImageGlowProps };
 

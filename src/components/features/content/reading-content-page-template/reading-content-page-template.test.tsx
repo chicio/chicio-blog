@@ -54,7 +54,7 @@ vi.mock("@/components/design-system/molecules/effects/matrix-header-background",
     MatrixHeaderBackground: () => <div data-testid="matrix-header-background" />,
 }));
 
-vi.mock("@/components/features/design-system-next/image-glow", () => ({
+vi.mock("@/components/design-system/atoms/effects/image-glow", () => ({
     ImageGlow: ({
         alt,
         src,

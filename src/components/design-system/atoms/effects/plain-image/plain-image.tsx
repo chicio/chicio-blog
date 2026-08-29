@@ -1,4 +1,7 @@
+"use client";
+
 import type { CSSProperties, FC, ImgHTMLAttributes, ReactEventHandler } from "react";
+import { usePlainImageStore } from "./use-plain-image-store";
 
 export type ImagePlaceholder = "blur" | "empty" | `data:image/${string}`;
 
@@ -37,20 +40,34 @@ export interface ImageComponentProps
  */
 export type ImageComponent = FC<ImageComponentProps>;
 
+/**
+ * `next/image`'s `fill` positions the image to cover its ancestor but sets no `object-fit`, leaving
+ * that to the caller's class. Setting one here as an inline style would silently beat that class.
+ */
 const fillStyle: CSSProperties = {
     position: "absolute",
     height: "100%",
     width: "100%",
     inset: 0,
-    objectFit: "cover",
 };
 
 /**
- * The framework-free default: a real `<img>`. Two behaviours are reproduced rather than dropped,
- * because design-system layouts depend on them — `fill`, which components rely on for positioning,
- * and `placeholder` + `blurDataURL`, rendered as a background so a shimmer still shows while the
- * image loads. Optimisation-only props are destructured away instead of being spread onto the DOM,
- * which would make React warn about unknown attributes.
+ * Resolves what to paint behind a loading image. `next/image` treats a `data:` placeholder as the
+ * image to show directly, and `"blur"` as an instruction to use `blurDataURL`.
+ */
+const placeholderSource = (placeholder?: ImagePlaceholder, blurDataURL?: string): string | undefined => {
+    if (!placeholder || placeholder === "empty") {
+        return undefined;
+    }
+
+    return placeholder === "blur" ? blurDataURL : placeholder;
+};
+
+/**
+ * The framework-free default: a real `<img>`. It reproduces the `next/image` behaviours design-system
+ * layouts depend on — `fill` positioning, a placeholder painted behind the image until it loads, and
+ * lazy loading unless the caller marks the image as priority. Optimisation-only props are
+ * destructured away instead of spread onto the DOM, where React would warn about them.
  */
 export const PlainImage: ImageComponent = ({
     src,
@@ -59,21 +76,34 @@ export const PlainImage: ImageComponent = ({
     placeholder,
     blurDataURL,
     style,
-    priority: _priority,
+    loading,
+    priority,
+    onLoad,
     quality: _quality,
     ...rest
 }) => {
+    const { state, effects } = usePlainImageStore(onLoad);
+    const { loaded } = state;
+    const { setImage, handleLoad } = effects;
+
     const resolvedSrc = typeof src === "string" ? src : src.src;
-    const blurred =
-        placeholder && placeholder !== "empty" && blurDataURL
-            ? { backgroundImage: `url(${blurDataURL})`, backgroundSize: "cover", backgroundPosition: "center" }
-            : undefined;
+    const background = loaded ? undefined : placeholderSource(placeholder, blurDataURL);
 
     return (
         <img
+            ref={setImage}
             src={resolvedSrc}
             alt={alt}
-            style={{ ...(fill ? fillStyle : undefined), ...blurred, ...style }}
+            loading={loading ?? (priority ? "eager" : "lazy")}
+            fetchPriority={priority ? "high" : undefined}
+            onLoad={handleLoad}
+            style={{
+                ...(fill ? fillStyle : undefined),
+                ...(background
+                    ? { backgroundImage: `url(${background})`, backgroundSize: "cover", backgroundPosition: "center" }
+                    : undefined),
+                ...style,
+            }}
             {...rest}
         />
     );

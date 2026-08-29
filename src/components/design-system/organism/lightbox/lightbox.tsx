@@ -44,6 +44,7 @@ export const Lightbox: FC = () => {
                     exit="exit"
                     className="flex h-full w-full items-center justify-center"
                 >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={src} alt={alt} className="max-h-[90vh] max-w-[90vw] rounded-xl object-contain" />
                 </MotionDiv>
             </div>

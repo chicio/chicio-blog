@@ -48,7 +48,10 @@ describe("InternalLink", () => {
 
         it("renders a plain anchor when no link component is injected", () => {
             render(<InternalLink to="/blog">Blog</InternalLink>);
-            expect(screen.getByRole("link")).not.toHaveAttribute("data-prefetch");
+            const link = screen.getByRole("link");
+            expect(link.tagName).toBe("A");
+            expect(link).toHaveAttribute("href", "/blog");
+            expect(link).not.toHaveAttribute("prefetch");
         });
 
         it("renders through the injected link component", () => {

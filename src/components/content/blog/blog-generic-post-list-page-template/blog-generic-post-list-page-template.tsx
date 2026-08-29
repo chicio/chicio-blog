@@ -5,7 +5,7 @@ import { FC } from "react";
 import { ContentPage } from "@/components/features/content/content-page";
 import { JsonLd } from "@/components/features/seo/jsond-ld";
 import { siteMetadata } from "@/types/configuration/site-metadata";
-import type { PrefetchStrategy } from "@/components/design-system/atoms/links/anchor-link";
+import type { PrefetchStrategy } from "@/components/features/design-system-next/tag";
 
 export interface BlogGenericPostListPageProps {
     title: string;

@@ -15,6 +15,7 @@ export const LightboxImage: FC<LightboxImageProps> = ({ alt, ...props }) => {
             onClick={handleOpen}
             className="block w-full cursor-zoom-in border-0 bg-transparent p-0"
         >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img loading="lazy" decoding="async" alt={alt ?? ""} {...props} />
         </button>
     );

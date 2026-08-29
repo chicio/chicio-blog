@@ -20,7 +20,14 @@ const TerminalContent: FC<{ label: string }> = ({ label }) => (
     </>
 );
 
-export const TerminalButton: FC<TerminalButtonProps> = ({ label, to, onClick, className, ariaExpanded, linkComponent }) => {
+export const TerminalButton: FC<TerminalButtonProps> = ({
+    label,
+    to,
+    onClick,
+    className,
+    ariaExpanded,
+    linkComponent,
+}) => {
     const buttonClassName = `w-fit${className ? ` ${className}` : ""}`;
 
     if (to) {
