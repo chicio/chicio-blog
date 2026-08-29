@@ -1,6 +1,6 @@
 "use client";
 
-import { useSearch } from "@/components/features/hooks/use-search";
+import { useSearch } from "@/components/features/search/use-search";
 import { terminalOverlayOpenEvent } from "@/lib/terminal/terminal-events";
 import { searchIndexFileName } from "@/lib/content/search-filename";
 import { filesystemManifestFileName } from "@/lib/terminal/filesystem-filename";

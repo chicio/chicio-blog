@@ -2,7 +2,7 @@
 
 import type { CommandPaletteTrigger } from "@/components/design-system/state/command-palette/command-palette-trigger";
 import { closeCommandPalette } from "@/components/design-system/state/command-palette/command-palette-events";
-import { useSearch } from "@/components/features/hooks/use-search";
+import { useSearch } from "@/components/features/search/use-search";
 import { openTerminalOverlay } from "@/lib/terminal/terminal-events";
 import type { ComponentStore } from "@/types/component-store";
 import type { SearchResult } from "@/types/search/search";

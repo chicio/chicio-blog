@@ -73,7 +73,7 @@ vi.mock("cmdk", () => ({
     ),
 }));
 
-vi.mock("@/components/features/hooks/use-search", () => ({
+vi.mock("@/components/features/search/use-search", () => ({
     useSearch: () => ({
         handleSearch: stableHandleSearch,
         resetSearch: stableResetSearch,

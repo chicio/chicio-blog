@@ -14,8 +14,8 @@ paths:
 - Page-level layouts are NOT part of the design system: they arrange this site's chrome and live in
   `src/components/features/content/`
 - **Hooks** (`src/components/design-system/hooks/`): Shared hooks used by 2+ components (motion, glassmorphism,
-  in-view, etc.). Hooks that depend on this site (e.g. `useSearch`, which fetches the site's search index) live
-  in `src/components/features/hooks/` instead.
+  in-view, etc.). A hook that depends on this site lives in its feature domain instead
+  (e.g. `useSearch` in `src/components/features/search/`).
 
 Always compose from existing lower-level components before creating new ones. New atoms should be justified — check if an existing atom can be extended first.
 

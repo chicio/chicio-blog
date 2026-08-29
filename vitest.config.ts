@@ -31,7 +31,7 @@ export default defineConfig({
                 "src/components/features/content/page-template/**",
                 "src/components/features/content/content-page-template/**",
                 "src/components/features/content/reading-content-page-template/**",
-                "src/components/features/hooks/**",
+                "src/components/features/search/**",
                 "src/components/features/command-palette/**",
             ],
             // Matrix CG/canvas effects cannot run in jsdom, so they are excluded from
