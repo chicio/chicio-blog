@@ -1,0 +1,130 @@
+/**
+ * Element-level styling every design-system component's text sits on: headings, paragraphs, lists,
+ * tables, links. A component rendered without these looks unstyled, so they ship with the package
+ * rather than with the site.
+ */
+@layer base {
+    html {
+        @apply h-full max-w-full overflow-x-hidden;
+    }
+
+    /**
+     * iOS Safari zooms the viewport in when a focused form control's font size is under 16px, and it
+     * never zooms back out — you are left on a magnified, sideways-scrolling page. The alternative fix
+     * is a `maximum-scale=1` viewport meta, which also blocks deliberate pinch-zoom and is an
+     * accessibility regression, so the size is floored here instead.
+     *
+     * `max(1rem, 1em)` means "at least 16px, but keep growing with the surrounding text", so a control
+     * inside a deliberately large block still scales up. This is a base-layer rule so it reaches raw
+     * `input` elements and third-party ones alike — cmdk's `Command.Input` is not ours to style from a
+     * React component. Tailwind utilities sit in a later layer and still win, so putting `text-sm` on
+     * an input opts back into the zoom: don't, and there is no reason to.
+     */
+    input,
+    textarea,
+    select {
+        font-size: max(1rem, 1em);
+    }
+
+    body {
+        @apply bg-general-background text-primary-text m-0 flex h-full max-w-full flex-col font-sans;
+    }
+
+    h1 {
+        @apply text-accent mt-4 text-4xl leading-normal font-bold text-shadow-md sm:text-5xl;
+    }
+
+    h2 {
+        @apply text-accent mt-4 text-3xl leading-normal font-bold text-shadow-md sm:text-4xl;
+    }
+
+    h3 {
+        @apply text-accent mt-4 text-2xl leading-normal font-bold text-shadow-md sm:text-3xl;
+    }
+
+    h4 {
+        @apply text-accent mt-4 text-xl leading-normal font-bold text-shadow-md sm:text-2xl;
+    }
+
+    h5 {
+        @apply text-accent mt-4 text-lg leading-normal font-bold text-shadow-md sm:text-xl;
+    }
+
+    h6 {
+        @apply text-accent mt-4 text-base leading-normal font-bold text-shadow-md;
+    }
+
+    p {
+        @apply text-primary-text text-left text-base leading-normal;
+    }
+
+    strong {
+        @apply font-bold;
+    }
+
+    blockquote {
+        @apply border-accent text-accent border-l-4 pl-4 italic;
+    }
+
+    blockquote * {
+        @apply text-accent;
+    }
+
+    ul {
+        @apply text-primary-text m-4 list-none p-0 text-base leading-normal;
+    }
+
+    ul li {
+        @apply relative mb-2 pl-4;
+    }
+
+    ul li::before {
+        @apply text-primary absolute left-0 font-bold content-['▸'];
+    }
+
+    time {
+        @apply text-secondary-text;
+    }
+
+    a {
+        @apply text-accent text-base leading-normal break-words no-underline text-shadow-sm;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+        a:hover {
+            @apply underline;
+        }
+    }
+
+    hr {
+        @apply from-general-background-light via-accent to-general-background-light h-px w-full border-0 bg-gradient-to-r;
+    }
+
+    table {
+        @apply mx-auto w-full table-auto border-collapse;
+    }
+
+    th {
+        @apply text-accent bg-primary-dark px-4 py-3 text-left font-bold;
+    }
+
+    td {
+        @apply text-primary-text px-4 py-2 text-left;
+    }
+
+    tbody tr:nth-child(even) td {
+        background-color: var(--color-general-background-light);
+    }
+
+    .table-wrapper {
+        @apply border-accent my-4 overflow-x-auto rounded-xl border shadow-lg;
+    }
+
+    figcaption {
+        @apply text-secondary-text mt-2 mb-3 text-center text-base leading-normal italic;
+    }
+}
+
+:root {
+    color-scheme: dark;
+}

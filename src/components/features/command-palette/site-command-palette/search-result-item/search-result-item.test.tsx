@@ -3,20 +3,13 @@ import { render, screen } from "@testing-library/react";
 import { SearchResultItem } from "./search-result-item";
 
 vi.mock("cmdk", () => ({
-    Command: Object.assign(
-        ({ children }: React.PropsWithChildren) => <div>{children}</div>,
-        {
-            Item: ({
-                children,
-                onSelect,
-                value,
-            }: React.PropsWithChildren<{ onSelect?: () => void; value?: string }>) => (
-                <div role="option" aria-label={value} onClick={onSelect}>
-                    {children}
-                </div>
-            ),
-        },
-    ),
+    Command: Object.assign(({ children }: React.PropsWithChildren) => <div>{children}</div>, {
+        Item: ({ children, onSelect, value }: React.PropsWithChildren<{ onSelect?: () => void; value?: string }>) => (
+            <div role="option" aria-label={value} onClick={onSelect}>
+                {children}
+            </div>
+        ),
+    }),
 }));
 
 describe("SearchResultItem", () => {

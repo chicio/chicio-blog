@@ -6,72 +6,69 @@ import { ChangeEvent, useCallback, useEffect, useState, useMemo, useTransition }
 
 const hasMinimumCharsToSearch = (query: string): boolean => query.length >= 3;
 
-const searchFor = (
-  query: string,
-  searchIndex: elasticlunr.Index<SearchablePostFields>,
-): SearchResult => {
-  if (query && hasMinimumCharsToSearch(query) && searchIndex) {
-    return {
-      type: "search",
-      results: searchIndex
-        .search(query, { expand: true })
-        .map((result) => searchIndex.documentStore.getDoc(result.ref)),
-    };
-  }
-  return { type: "search", results: [] };
+const searchFor = (query: string, searchIndex: elasticlunr.Index<SearchablePostFields>): SearchResult => {
+    if (query && hasMinimumCharsToSearch(query) && searchIndex) {
+        return {
+            type: "search",
+            results: searchIndex
+                .search(query, { expand: true })
+                .map((result) => searchIndex.documentStore.getDoc(result.ref)),
+        };
+    }
+    return { type: "search", results: [] };
 };
 
-export const useSearch = (
-  startSearch: boolean,
-  searchIndexFileName: string,
-) => {
-  const [search, setSearch] = useState<SearchResult>({
-    type: "search",
-    results: [],
-  });
-  const [searchIndex, setSearchIndex] =
-    useState<elasticlunr.Index<SearchablePostFields>>();
-  const [isPending, startTransition] = useTransition();
+export const useSearch = (startSearch: boolean, searchIndexFileName: string) => {
+    const [search, setSearch] = useState<SearchResult>({
+        type: "search",
+        results: [],
+    });
+    const [searchIndex, setSearchIndex] = useState<elasticlunr.Index<SearchablePostFields>>();
+    const [isPending, startTransition] = useTransition();
 
-  useEffect(() => {
-    if (startSearch && !searchIndex) {
-      fetch(`/${searchIndexFileName}`)
-        .then((res) => res.json())
-        .then((data) => {
-          startTransition(() => {
-            setSearchIndex(elasticlunr.Index.load<SearchablePostFields>(data));
-          });
-        });
-    }
-  }, [startSearch, searchIndex, searchIndexFileName]);
-
-  const searchUsing = useMemo(
-      () => (value: string) => {
-        if (searchIndex) {
-          startTransition(() => setSearch(searchFor(value, searchIndex)));
-        } else {
-          setSearch({ type: "search", results: [] });
+    useEffect(() => {
+        if (startSearch && !searchIndex) {
+            fetch(`/${searchIndexFileName}`)
+                .then((res) => res.json())
+                .then((data) => {
+                    startTransition(() => {
+                        setSearchIndex(elasticlunr.Index.load<SearchablePostFields>(data));
+                    });
+                })
+                // A missing or malformed index would otherwise surface only as an unhandled
+                // rejection. Leaving searchIndex unset means the next time search starts — reopening
+                // the palette, say — this effect runs again and retries.
+                .catch(() => undefined);
         }
-      },
-    [searchIndex],
-  );
+    }, [startSearch, searchIndex, searchIndexFileName]);
 
-  const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
-      if (!startSearch) {
-        return;
-      }
+    const searchUsing = useMemo(
+        () => (value: string) => {
+            if (searchIndex) {
+                startTransition(() => setSearch(searchFor(value, searchIndex)));
+            } else {
+                setSearch({ type: "search", results: [] });
+            }
+        },
+        [searchIndex],
+    );
 
-    const value = e.target.value.trim();
+    const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
+        if (!startSearch) {
+            return;
+        }
 
-    searchUsing(value);
-  };
+        const value = e.target.value.trim();
 
-  const resetSearch = useCallback(() => setSearch({ type: "search", results: [] }), []);
+        searchUsing(value);
+    };
 
-  return {
-    handleSearch,
-    resetSearch,
-    search,
-    isPending,
-  };
+    const resetSearch = useCallback(() => setSearch({ type: "search", results: [] }), []);
+
+    return {
+        handleSearch,
+        resetSearch,
+        search,
+        isPending,
+    };
 };

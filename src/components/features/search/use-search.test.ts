@@ -147,4 +147,30 @@ describe("useSearch", () => {
             expect(getResultsFromSearchResult(result.current.search)).toHaveLength(0);
         });
     });
+    describe("when the index cannot be loaded", () => {
+        it("does not reject, and reports no results rather than throwing", async () => {
+            const unhandled = vi.fn();
+            process.on("unhandledRejection", unhandled);
+            vi.spyOn(globalThis, "fetch").mockRejectedValue(new Error("404"));
+
+            const { result } = await renderLoadedSearch();
+            await act(async () => {
+                result.current.handleSearch({ target: { value: "matrix" } } as ChangeEvent<HTMLInputElement>);
+            });
+
+            expect(getResultsFromSearchResult(result.current.search)).toHaveLength(0);
+            expect(unhandled).not.toHaveBeenCalled();
+            process.off("unhandledRejection", unhandled);
+        });
+
+        it("survives an index that is not valid json", async () => {
+            vi.spyOn(globalThis, "fetch").mockResolvedValue({
+                json: () => Promise.reject(new SyntaxError("Unexpected token")),
+            } as unknown as Response);
+
+            const { result } = await renderLoadedSearch();
+
+            expect(getResultsFromSearchResult(result.current.search)).toHaveLength(0);
+        });
+    });
 });

@@ -26,7 +26,7 @@ Menu/DropdownMenu again:
   `effects.getGroupId(index)` curried-by-index function (`${id}-group-${index}`) — component just
   calls `getGroupId(idx)` in the render loop, not a raw template literal computed inline.
 - **CRITICAL — Tailwind v4 preflight is NOT the last word on list styling in this repo.**
-  `src/app/css/globals.css` has an `@layer base` block (~line 294) that runs AFTER preflight and
+  `src/components/design-system/styles/base.css` has an `@layer base` block that runs AFTER preflight and
   unconditionally re-adds, on every bare `ul`/`ul li` in the app:
   `ul { list-style: none; ...; padding: 0; margin: 1rem; }`, `ul li { position: relative; padding-left: 1rem; margin-bottom: 0.5rem; }`,
   `ul li::before { content: "▸"; position: absolute; left: 0; color: var(--color-primary); font-weight: bold; }`.
@@ -40,7 +40,7 @@ Menu/DropdownMenu again:
   `form-error-summary.tsx` uses `<li className="before:content-none">`, and
   `globals.css` has a `ul.recharts-default-legend li.recharts-legend-item::before { content: unset !important; }`
   escape for the same reason. **Do not trust `node_modules/tailwindcss/preflight.css` in isolation for
-  this repo** — always grep `src/app/css/globals.css` for a later unscoped `ul`/`ol`/`li` rule before
+  this repo** — always grep `src/components/design-system/styles/base.css` for a later unscoped `ul`/`ol`/`li` rule before
   assuming a bare list element is unstyled.
 - **`list-style: none` also strips the `list`/`listitem` ARIA roles in WebKit** (Safari/VoiceOver),
   even though Chromium computes them anyway (which is why RTL/jsdom and Playwright/Chromium stay

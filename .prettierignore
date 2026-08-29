@@ -1,0 +1,14 @@
+# Articles: prose and MDX-embedded JSX, where reflowing changes what gets published.
+src/content/**
+
+# Generated or vendored.
+.next/
+coverage/
+dist/
+ds-bundle/
+.ds-sync/
+playwright-report/
+test-results/
+public/
+package-lock.json
+CHANGELOG.md

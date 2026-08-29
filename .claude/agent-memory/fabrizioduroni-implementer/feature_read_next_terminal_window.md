@@ -20,7 +20,7 @@ almost verbatim but static (no cmdk, no input, no animation):
   identical to the palette prompt, followed by an `<h2>` for the title — this is the ONLY heading, doing
   double duty as visible terminal prompt text and semantic section heading (no sr-only duplication). The
   global `h2` base-layer rule (`text-accent font-bold text-shadow-md text-3xl sm:text-4xl leading-normal
-  mt-4` in `src/app/css/globals.css`) is overridden by later utility classes (`m-0 font-mono text-sm`)
+  mt-4` in `src/components/design-system/styles/base.css`) is overridden by later utility classes (`m-0 font-mono text-sm`)
   because Tailwind v4 puts `@layer base` below the utilities layer regardless of source order — same
   pattern the old code already relied on (`className="my-2"` overriding `mt-4`).
 - body `px-4 py-2` wrapping `{children}` (the existing per-post rows)

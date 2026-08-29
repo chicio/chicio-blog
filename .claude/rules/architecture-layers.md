@@ -17,7 +17,8 @@ src/components/
                     next/image, the router path and this site's logo. Everything the site
                     renders imports from here, not from design-system/ directly.
   design-system/  → pure, self-contained UI library (atoms → molecules → organisms).
-                    Framework-agnostic: it imports nothing from next.
+                    Framework-agnostic: it imports nothing from next. Owns its own CSS in
+                    styles/ (theme tokens, base element styling, composed classes, pills).
 src/lib/          → pure business logic (no JSX, no React components)
 src/types/        → TypeScript types and pure configuration constants
 ```

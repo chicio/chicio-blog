@@ -17,6 +17,30 @@ paths:
   in-view, etc.). A hook that depends on this site lives in its feature domain instead
   (e.g. `useSearch` in `src/components/features/search/`).
 
+## Styling
+
+The design system owns its stylesheet: `src/components/design-system/styles/`.
+
+- `theme.css` — the `@theme` tokens and the overridden breakpoint scale (`md:` is 992px, not 768px).
+  It also defines the `hide-scrollbar` utility, so this file is not safe to import as tokens only
+- `base.css` — element-level styling components assume (headings, lists, tables, links); a component
+  rendered without it looks unstyled
+- `components.css` — the composed classes (`.glassmorphism*`, `.glow-*`, `.container-*`, `.call-to-action`)
+- `pills.css` — the pill motif
+- `index.css` — the entry a consumer imports after `@import "tailwindcss"`
+
+The four files share no selectors, so their order relative to each other does not affect the cascade.
+The ordering that IS load-bearing is one level up: `globals.css` must import `index.css` BEFORE its own
+`@layer base`, so the site's article rules can override the element styling `base.css` sets.
+
+Three rules are deliberately **outside** any `@layer` and therefore beat every Tailwind utility:
+`:root { color-scheme: dark }` in base.css, and `.scroll-locked .menu-container` / `.remove-scroll-width`
+in components.css (they read `--scrollbar-width`, which a utility cannot express). Trying to override
+those with a utility class will silently lose.
+
+The site's own `globals.css` imports that entry and adds only what is specific to this site: the
+`#reading-content-container` article layout, katex and the chat bubble.
+
 ## Framework injection
 
 The design system imports nothing from `next` — `design-system-no-next` fails CI on any such import.

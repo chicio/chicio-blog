@@ -41,24 +41,20 @@ vi.mock("cmdk", () => ({
         ({
             children,
             ...props
-        }: React.HTMLAttributes<HTMLDivElement> & { shouldFilter?: boolean; value?: string; onValueChange?: (v: string) => void }) => (
-            <div {...props}>{children}</div>
-        ),
+        }: React.HTMLAttributes<HTMLDivElement> & {
+            shouldFilter?: boolean;
+            value?: string;
+            onValueChange?: (v: string) => void;
+        }) => <div {...props}>{children}</div>,
         {
             Input: ({
                 onValueChange,
                 placeholder,
                 ...rest
             }: React.InputHTMLAttributes<HTMLInputElement> & { onValueChange?: (v: string) => void }) => (
-                <input
-                    placeholder={placeholder}
-                    onChange={(e) => onValueChange?.(e.target.value)}
-                    {...rest}
-                />
+                <input placeholder={placeholder} onChange={(e) => onValueChange?.(e.target.value)} {...rest} />
             ),
-            List: ({ children, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-                <div {...props}>{children}</div>
-            ),
+            List: ({ children, ...props }: React.HTMLAttributes<HTMLDivElement>) => <div {...props}>{children}</div>,
             Group: ({ children }: React.PropsWithChildren) => <div>{children}</div>,
             Item: ({
                 children,
@@ -130,7 +126,11 @@ describe("SiteCommandPalette", () => {
     describe("when closed", () => {
         it("renders nothing before being opened", () => {
             const { container } = render(
-                <SiteCommandPalette searchIndexFileName="search.json" chatSlug="/chat" easterEggHuntSlug="/easter-egg-hunt" />,
+                <SiteCommandPalette
+                    searchIndexFileName="search.json"
+                    chatSlug="/chat"
+                    easterEggHuntSlug="/easter-egg-hunt"
+                />,
             );
             expect(container.firstChild).toBeNull();
         });
@@ -138,25 +138,49 @@ describe("SiteCommandPalette", () => {
 
     describe("opening the palette", () => {
         it("renders the search input after Ctrl+K is pressed", () => {
-            render(<SiteCommandPalette searchIndexFileName="search.json" chatSlug="/chat" easterEggHuntSlug="/easter-egg-hunt" />);
+            render(
+                <SiteCommandPalette
+                    searchIndexFileName="search.json"
+                    chatSlug="/chat"
+                    easterEggHuntSlug="/easter-egg-hunt"
+                />,
+            );
             openViaShortcut();
             expect(screen.getByPlaceholderText("type to search_")).toBeInTheDocument();
         });
 
         it("renders the search input after Cmd+K (metaKey) is pressed", () => {
-            render(<SiteCommandPalette searchIndexFileName="search.json" chatSlug="/chat" easterEggHuntSlug="/easter-egg-hunt" />);
+            render(
+                <SiteCommandPalette
+                    searchIndexFileName="search.json"
+                    chatSlug="/chat"
+                    easterEggHuntSlug="/easter-egg-hunt"
+                />,
+            );
             fireEvent.keyDown(window, { key: "k", metaKey: true });
             expect(screen.getByPlaceholderText("type to search_")).toBeInTheDocument();
         });
 
         it("shows quick actions when not searching", () => {
-            render(<SiteCommandPalette searchIndexFileName="search.json" chatSlug="/chat" easterEggHuntSlug="/easter-egg-hunt" />);
+            render(
+                <SiteCommandPalette
+                    searchIndexFileName="search.json"
+                    chatSlug="/chat"
+                    easterEggHuntSlug="/easter-egg-hunt"
+                />,
+            );
             openViaShortcut();
             expect(screen.getByText(/Open chat/)).toBeInTheDocument();
         });
 
         it("closes on Escape key", () => {
-            render(<SiteCommandPalette searchIndexFileName="search.json" chatSlug="/chat" easterEggHuntSlug="/easter-egg-hunt" />);
+            render(
+                <SiteCommandPalette
+                    searchIndexFileName="search.json"
+                    chatSlug="/chat"
+                    easterEggHuntSlug="/easter-egg-hunt"
+                />,
+            );
             openViaShortcut();
             expect(screen.getByPlaceholderText("type to search_")).toBeInTheDocument();
             fireEvent.keyDown(window, { key: "Escape" });
@@ -183,7 +207,13 @@ describe("SiteCommandPalette", () => {
 
     describe("dismissing the palette", () => {
         it("closes when clicking the overlay backdrop", () => {
-            const { container } = render(<SiteCommandPalette searchIndexFileName="search.json" chatSlug="/chat" easterEggHuntSlug="/easter-egg-hunt" />);
+            const { container } = render(
+                <SiteCommandPalette
+                    searchIndexFileName="search.json"
+                    chatSlug="/chat"
+                    easterEggHuntSlug="/easter-egg-hunt"
+                />,
+            );
             openViaShortcut();
             expect(screen.getByPlaceholderText("type to search_")).toBeInTheDocument();
             fireEvent.click(container.firstChild as Element);
@@ -191,7 +221,13 @@ describe("SiteCommandPalette", () => {
         });
 
         it("does not close when clicking inside the dialog", () => {
-            render(<SiteCommandPalette searchIndexFileName="search.json" chatSlug="/chat" easterEggHuntSlug="/easter-egg-hunt" />);
+            render(
+                <SiteCommandPalette
+                    searchIndexFileName="search.json"
+                    chatSlug="/chat"
+                    easterEggHuntSlug="/easter-egg-hunt"
+                />,
+            );
             openViaShortcut();
             const input = screen.getByPlaceholderText("type to search_");
             fireEvent.click(input);
@@ -201,7 +237,13 @@ describe("SiteCommandPalette", () => {
 
     describe("search input", () => {
         it("stays on quick actions when the query is under 3 characters", () => {
-            render(<SiteCommandPalette searchIndexFileName="search.json" chatSlug="/chat" easterEggHuntSlug="/easter-egg-hunt" />);
+            render(
+                <SiteCommandPalette
+                    searchIndexFileName="search.json"
+                    chatSlug="/chat"
+                    easterEggHuntSlug="/easter-egg-hunt"
+                />,
+            );
             openViaShortcut();
             fireEvent.change(screen.getByPlaceholderText("type to search_"), { target: { value: "ab" } });
             expect(screen.getByText(/Open chat/)).toBeInTheDocument();
@@ -209,14 +251,26 @@ describe("SiteCommandPalette", () => {
         });
 
         it("ignores leading/trailing whitespace when checking the minimum length", () => {
-            render(<SiteCommandPalette searchIndexFileName="search.json" chatSlug="/chat" easterEggHuntSlug="/easter-egg-hunt" />);
+            render(
+                <SiteCommandPalette
+                    searchIndexFileName="search.json"
+                    chatSlug="/chat"
+                    easterEggHuntSlug="/easter-egg-hunt"
+                />,
+            );
             openViaShortcut();
             fireEvent.change(screen.getByPlaceholderText("type to search_"), { target: { value: "  ab " } });
             expect(screen.getByText(/Open chat/)).toBeInTheDocument();
         });
 
         it("switches to searching state at exactly 3 characters", () => {
-            render(<SiteCommandPalette searchIndexFileName="search.json" chatSlug="/chat" easterEggHuntSlug="/easter-egg-hunt" />);
+            render(
+                <SiteCommandPalette
+                    searchIndexFileName="search.json"
+                    chatSlug="/chat"
+                    easterEggHuntSlug="/easter-egg-hunt"
+                />,
+            );
             openViaShortcut();
             fireEvent.change(screen.getByPlaceholderText("type to search_"), { target: { value: "abc" } });
             expect(screen.queryByText(/Open chat/)).toBeNull();
@@ -226,11 +280,15 @@ describe("SiteCommandPalette", () => {
         it("shows search results returned by the index", () => {
             searchMockState.current = {
                 type: "search",
-                results: [
-                    { slug: "/blog/post-1", title: "First Post", description: "desc 1", tags: [], authors: [] },
-                ],
+                results: [{ slug: "/blog/post-1", title: "First Post", description: "desc 1", tags: [], authors: [] }],
             };
-            render(<SiteCommandPalette searchIndexFileName="search.json" chatSlug="/chat" easterEggHuntSlug="/easter-egg-hunt" />);
+            render(
+                <SiteCommandPalette
+                    searchIndexFileName="search.json"
+                    chatSlug="/chat"
+                    easterEggHuntSlug="/easter-egg-hunt"
+                />,
+            );
             openViaShortcut();
             fireEvent.change(screen.getByPlaceholderText("type to search_"), { target: { value: "post" } });
             expect(screen.getByRole("option", { name: "First Post" })).toBeInTheDocument();
@@ -333,9 +391,7 @@ describe("SiteCommandPalette", () => {
         it("navigates to the result slug, fires tracking and closes when a result is selected", async () => {
             searchMockState.current = {
                 type: "search",
-                results: [
-                    { slug: "/blog/post-1", title: "First Post", description: "desc 1", tags: [], authors: [] },
-                ],
+                results: [{ slug: "/blog/post-1", title: "First Post", description: "desc 1", tags: [], authors: [] }],
             };
             const onSearchResultSelect = vi.fn();
             const user = userEvent.setup();
