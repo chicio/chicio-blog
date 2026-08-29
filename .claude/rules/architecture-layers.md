@@ -13,7 +13,11 @@ src/components/
     content/      → page-level layouts (page-template, content-page-template, …): they arrange
                     THIS site's chrome, so they are not part of the design system
     search/       → site search (useSearch); site-specific shared hooks live in their domain
-  design-system/  → pure, self-contained UI library (atoms → molecules → organisms)
+  design-system/  → pure, self-contained UI library (atoms → molecules → organisms).
+                    Framework-agnostic: it imports nothing from next.
+  design-system-next/ → the site's Next bindings for the design system. Injects next/link,
+                    next/image, the router path and this site's logo; everything the site
+                    renders imports from here, not from design-system/ directly.
 src/lib/          → pure business logic (no JSX, no React components)
 src/types/        → TypeScript types and pure configuration constants
 ```
@@ -27,12 +31,15 @@ src/types/        → TypeScript types and pure configuration constants
 - other files within `design-system/**`
 - `src/types/**` — **type-only** (`import type { ... }`) exclusively
 
-**Forbidden** at error level (enforced by `design-system-no-features`, `design-system-no-lib`, and `design-system-types-type-only` rules):
+**Forbidden** at error level (enforced by `design-system-no-features`, `design-system-no-lib`,
+`design-system-no-next`, and `design-system-types-type-only` rules):
 - Any runtime import from `src/lib/**`
 - Any import from `src/components/features/**`
 - Any import from `src/components/content/**`
 - Any import from `src/app/**`
 - Any value (non-type-only) import from `src/types/**` — including `slugs`, `siteMetadata`, and `tracking`
+- Any import from `next` — link and image implementations are injected as props (`linkComponent`,
+  `imageComponent`), the active route arrives as `currentPath`, and site assets like the logo are props
 
 **Rationale**: the design-system is a reusable UI library. It must not know about application concerns (tracking, consent, chat, PWA, route slugs, or site metadata). Route hrefs, social contact links, and per-item tracking callbacks are injected as props from the feature/content layer above. The `design-system-types-type-only` rule enforces this: any `import { ... }` (not `import type`) from `src/types/` inside design-system is a CI error.
 

@@ -21,6 +21,14 @@ const config = {
             to: { path: "^src/lib/" },
         },
         {
+            name: "design-system-no-next",
+            comment:
+                "Design-system must not import from next. It is framework-agnostic: a consumer injects its own link and image implementations (see AnchorLink / PlainImage), and the site's Next bindings live in src/components/design-system-next/.",
+            severity: "error",
+            from: { path: "^src/components/design-system/" },
+            to: { path: "^node_modules/next/" },
+        },
+        {
             name: "design-system-types-type-only",
             comment:
                 "Inside design-system, imports from src/types/ must be type-only (import type {...}). Runtime value imports (slugs, siteMetadata, tracking, ...) are forbidden — inject them as props from the app/features layer.",
