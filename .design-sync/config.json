@@ -3,7 +3,7 @@
     "globalName": "ChicioDS",
     "projectId": "e5de76b0-e20e-414b-852b-210defebffac",
     "shape": "package",
-    "srcDir": "src/components/design-system",
+    "srcDir": "apps/website/src/components/design-system",
     "tsconfig": ".design-sync/tsconfig.sync.json",
     "buildCmd": "npx tsc -p .design-sync/tsconfig.dts.json && ./.ds-sync/node_modules/.bin/tailwindcss -i .design-sync/tailwind-entry.css -o .design-sync/.cache/design-system.css",
     "cssEntry": ".design-sync/.cache/design-system.css",

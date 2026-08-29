@@ -1,13 +1,3 @@
 {
-    "extends": "../tsconfig.json",
-    "compilerOptions": {
-        "baseUrl": "..",
-        "paths": {
-            "next/link": ["./.design-sync/shims/next-link.tsx"],
-            "next/image": ["./.design-sync/shims/next-image.tsx"],
-            "next/navigation": ["./.design-sync/shims/next-navigation.ts"],
-            "next/dist/shared/lib/get-img-props": ["./.design-sync/shims/next-get-img-props.ts"],
-            "elasticlunr": ["./.design-sync/shims/elasticlunr.ts"]
-        }
-    }
+    "extends": "../apps/website/tsconfig.json"
 }

@@ -1,7 +1,7 @@
 ---
 paths:
-  - "src/content/**/*.mdx"
-  - "src/mdx-components.tsx"
+  - "apps/website/src/content/**/*.mdx"
+  - "apps/website/src/mdx-components.tsx"
 ---
 
 # MDX Content Conventions
@@ -9,12 +9,12 @@ paths:
 ## File Structure
 All content is MDX (`.mdx`). Each content piece is a `content.mdx` file inside a directory whose path encodes the route parameters.
 
-- Blog posts: `src/content/blog/post/[year]/[month]/[day]/[slug]/content.mdx`
-- DSA topics: `src/content/data-structures-and-algorithms/topic/[topic]/content.mdx`
-- DSA exercises: `src/content/data-structures-and-algorithms/topic/[topic]/exercise/[exercise]/content.mdx`
-- Videogame consoles: `src/content/videogames/console/[console]/content.mdx`
-- Videogame games: `src/content/videogames/console/[console]/game/[game]/content.mdx`
-- About me: `src/content/about-me/content.mdx`
+- Blog posts: `apps/website/src/content/blog/post/[year]/[month]/[day]/[slug]/content.mdx`
+- DSA topics: `apps/website/src/content/data-structures-and-algorithms/topic/[topic]/content.mdx`
+- DSA exercises: `apps/website/src/content/data-structures-and-algorithms/topic/[topic]/exercise/[exercise]/content.mdx`
+- Videogame consoles: `apps/website/src/content/videogames/console/[console]/content.mdx`
+- Videogame games: `apps/website/src/content/videogames/console/[console]/game/[game]/content.mdx`
+- About me: `apps/website/src/content/about-me/content.mdx`
 
 ## Frontmatter (required)
 ```yaml
@@ -45,7 +45,7 @@ Additional metadata fields per content type:
 - Import components at the top of the MDX file, right after frontmatter
 - Use `@/` import alias: `import { Youtube } from "@/components/design-system/molecules/video/youtube"`
 - DSA topics import from `@/components/content/data-structures-and-algorithms/components/`
-- Only `<table>` is globally mapped in `src/mdx-components.tsx` — all other custom components must be explicitly imported
+- Only `<table>` is globally mapped in `apps/website/src/mdx-components.tsx` — all other custom components must be explicitly imported
 
 ## DSA Content Style
 - Start with an `# H1` heading matching the topic name

@@ -1,25 +1,25 @@
 ---
 paths:
-  - "src/components/design-system/**/*"
-  - "src/app/css/**/*"
+  - "apps/website/src/components/design-system/**/*"
+  - "apps/website/src/app/css/**/*"
 ---
 
 # Design System Rules
 
 ## Atomic Design Hierarchy
 
-- **Atoms** (`src/components/design-system/atoms/`): Basic UI elements (buttons, typography, icons, effects, links, loader)
-- **Molecules** (`src/components/design-system/molecules/`): Composed from atoms (button variants, form components, menu items, breadcrumbs, accordion, animation, effects)
-- **Organisms** (`src/components/design-system/organism/`): Complex composed sections
+- **Atoms** (`apps/website/src/components/design-system/atoms/`): Basic UI elements (buttons, typography, icons, effects, links, loader)
+- **Molecules** (`apps/website/src/components/design-system/molecules/`): Composed from atoms (button variants, form components, menu items, breadcrumbs, accordion, animation, effects)
+- **Organisms** (`apps/website/src/components/design-system/organism/`): Complex composed sections
 - Page-level layouts are NOT part of the design system: they arrange this site's chrome and live in
-  `src/components/features/content/`
-- **Hooks** (`src/components/design-system/hooks/`): Shared hooks used by 2+ components (motion, glassmorphism,
+  `apps/website/src/components/features/content/`
+- **Hooks** (`apps/website/src/components/design-system/hooks/`): Shared hooks used by 2+ components (motion, glassmorphism,
   in-view, etc.). A hook that depends on this site lives in its feature domain instead
-  (e.g. `useSearch` in `src/components/features/search/`).
+  (e.g. `useSearch` in `apps/website/src/components/features/search/`).
 
 ## Styling
 
-The design system owns its stylesheet: `src/components/design-system/styles/`.
+The design system owns its stylesheet: `apps/website/src/components/design-system/styles/`.
 
 - `theme.css` — the `@theme` tokens and the overridden breakpoint scale (`md:` is 992px, not 768px).
   It also defines the `hide-scrollbar` utility, so this file is not safe to import as tokens only
@@ -52,7 +52,7 @@ Where a component needs framework behaviour it takes it as a prop, with a framew
 - `currentPath` on `Menu`, instead of reading a router
 - site assets, such as `BrandHeader`'s `logo`
 
-The site's bindings live in `src/components/features/design-system-next/`, which is what website code imports.
+The site's bindings live in `apps/website/src/components/features/design-system-next/`, which is what website code imports.
 `PrefetchStrategy` ("viewport" | "hover" | "never") belongs to the design system — deciding *when* to
 prefetch is a design concern; the adapter decides *how*.
 

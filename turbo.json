@@ -1,0 +1,54 @@
+{
+    "$schema": "https://turborepo.com/schema.json",
+    "ui": "stream",
+    "globalDependencies": [".prettierrc", ".nvmrc"],
+    "globalEnv": [
+        "UPSTASH_VECTOR_REST_URL",
+        "UPSTASH_VECTOR_REST_TOKEN",
+        "UPSTASH_REDIS_REST_URL",
+        "UPSTASH_REDIS_REST_TOKEN",
+        "RESEND_API_KEY",
+        "CONTACT_EMAIL",
+        "GOOGLE_ANALYTICS_API_SECRET",
+        "NODE_ENV"
+    ],
+    "tasks": {
+        "build": {
+            "dependsOn": ["^build"],
+            "outputs": [".next/**", "!.next/cache/**", "dist/**"]
+        },
+        "dev": {
+            "cache": false,
+            "persistent": true
+        },
+        "start": {
+            "cache": false,
+            "persistent": true
+        },
+        "lint": {
+            "dependsOn": ["^build"]
+        },
+        "knip": {
+            "dependsOn": ["^build"]
+        },
+        "typecheck": {
+            "dependsOn": ["^build"]
+        },
+        "validate-architecture": {},
+        "test": {
+            "cache": false,
+            "persistent": true
+        },
+        "test:run": {
+            "dependsOn": ["^build"]
+        },
+        "test:coverage": {
+            "dependsOn": ["^build"],
+            "outputs": ["coverage/**"]
+        },
+        "test:e2e": {
+            "dependsOn": ["build"],
+            "outputs": ["playwright-report/**"]
+        }
+    }
+}

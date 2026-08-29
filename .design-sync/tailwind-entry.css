@@ -10,9 +10,9 @@
  * Nothing here redefines any style — the design system's styles/ remains the single source of truth. The compiled
  * output is what cfg.cssEntry points at.
  */
-@import "../src/app/css/globals.css";
+@import "../apps/website/src/app/css/globals.css";
 
-@source "../src/components/design-system/**/*.tsx";
+@source "../apps/website/src/components/design-system/**/*.tsx";
 
 /*
  * Authored preview cards are scanned too. Without this, any utility a preview uses that no

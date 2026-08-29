@@ -6,36 +6,52 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is a Next.js 16 blog (App Router) with a Matrix-inspired UI theme, built by Fabrizio Duroni. The site features blog posts, DSA (Data Structures & Algorithms) content, an AI chat interface, and various interactive elements. The codebase follows atomic design principles and uses TypeScript with strict type safety.
 
+## Repository Layout
+
+An npm-workspaces monorepo orchestrated by Turborepo. **Every path in this file and in `.claude/rules/`
+is written from the repository root**, so the website's sources are under `apps/website/`.
+
+```
+package.json          workspace root: workspaces, turbo, husky, release-it, prettier
+turbo.json            the task graph (build, lint, typecheck, test, e2e)
+apps/website/         the Next.js site — src/, public/, e2e/, and its own tsconfig,
+                      eslint, knip, vitest, playwright and dependency-cruiser configs
+```
+
+Run tasks from the root: `npm run <task>` delegates to `turbo run <task>` across the workspaces.
+To run something in the website only, use `npm run <task> --workspace=website`.
+
 ## Development Commands
 
 ```bash
-npm install              # Install dependencies
+npm install              # Install every workspace (run from the repository root)
 npm run dev              # Dev server (auto-generates search index + copies images)
 npm run build && npm start  # Production build
 npm run lint             # Linting (--max-warnings 0 in CI)
 npm run validate-architecture  # dependency-cruiser: import rules, layering, isolation (all at error)
+npm run format           # Prettier over the repo (4 spaces / 120 cols; see .prettierrc)
 # Search index generation and content-media copy have no standalone npm script:
-# both run automatically via src/lib/build/prebuild.ts before dev/build (see note below).
+# both run automatically via apps/website/src/lib/build/prebuild.ts before dev/build (see note below).
 # The copy step mirrors <post-dir>/media/ into public/media/content/.
 npm run chat-knowledge-upload  # Upload blog content to Upstash Vector for RAG
 npm run release          # Release with conventional changelog
 ```
 
-**Important**: Search index and content image copy both run automatically before `dev` and `build` via `src/lib/build/prebuild.ts`. `validate-architecture` is NOT part of prebuild — it runs as its own CI job (and should be run during development; see below) and fails CI on violations.
+**Important**: Search index and content image copy both run automatically before `dev` and `build` via `apps/website/src/lib/build/prebuild.ts`. `validate-architecture` is NOT part of prebuild — it runs as its own CI job (and should be run during development; see below) and fails CI on violations.
 
 ## Architecture
 
 ### Key Patterns
 
 - **Folder-Per-Component + Store Model**: every component lives in its own kebab-case folder with a `<name>.tsx`, a `use-<name>-store.ts` hook, and an `index.ts` barrel. Components call exactly one hook (`use<Name>Store()`). `useGlassmorphism` is permanently exempt. See `.claude/rules/component-architecture.md` for the full specification.
-- **Atomic Design System**: atoms → molecules → organisms. Layering enforced at error by dependency-cruiser. Page-level templates live in `src/components/features/content/`, not in the design system. The design system is framework-agnostic (it imports nothing from `next`); the site's Next bindings live in `src/components/features/design-system-next/`. See `.claude/rules/design-system.md`
-- **Page-Content Isolation**: Each route's components live in `src/components/content/<page>/` (no separate `components/` or `hooks/` subdirs — folder-per-component directly). Cross-cutting UI lives in `src/components/features/<feature>/`. See `.claude/rules/content.md`
-- **Business Logic in lib/**: Components are thin. Non-hook pure logic lives in `src/lib/`, never in `design-system/utils/` (eliminated).
-- **Type Safety**: Shared types in `src/types/`, TypeScript strict mode
+- **Atomic Design System**: atoms → molecules → organisms. Layering enforced at error by dependency-cruiser. Page-level templates live in `apps/website/src/components/features/content/`, not in the design system. The design system is framework-agnostic (it imports nothing from `next`); the site's Next bindings live in `apps/website/src/components/features/design-system-next/`. See `.claude/rules/design-system.md`
+- **Page-Content Isolation**: Each route's components live in `apps/website/src/components/content/<page>/` (no separate `components/` or `hooks/` subdirs — folder-per-component directly). Cross-cutting UI lives in `apps/website/src/components/features/<feature>/`. See `.claude/rules/content.md`
+- **Business Logic in lib/**: Components are thin. Non-hook pure logic lives in `apps/website/src/lib/`, never in `design-system/utils/` (eliminated).
+- **Type Safety**: Shared types in `apps/website/src/types/`, TypeScript strict mode
 - **Store Return Types**: `StateStore<S>`, `EffectsStore<E>`, `ComponentStore<S,E>` from `@/types/component-store`. Never pad with `Record<string,never>` or `{}`.
 - **No Functions in JSX**: `react/jsx-no-bind` enforced at error. Curry handlers in the store.
 - **Content as MDX**: Filesystem-as-database. See `.claude/rules/mdx-content.md`
-- **Co-located Images**: Blog post images live in `<post-dir>/media/`, other content images in `src/content/<section>/media/` (the folder MUST be named `media` — the copy script keys off that path segment). A build-time script (`src/lib/images/copy-content-media.ts`) mirrors them to `public/media/content/`. The `public/media/content/` directory is gitignored and regenerated on every build.
+- **Co-located Images**: Blog post images live in `<post-dir>/media/`, other content images in `apps/website/src/content/<section>/media/` (the folder MUST be named `media` — the copy script keys off that path segment). A build-time script (`apps/website/src/lib/images/copy-content-media.ts`) mirrors them to `public/media/content/`. The `public/media/content/` directory is gitignored and regenerated on every build.
 - **API Routes**: Chat (Groq + Upstash Vector RAG) and Contact (Resend). See `.claude/rules/api-routes.md`
 - **Testing**: Automated suite — Vitest (node project for `lib/**`, jsdom + RTL for `components/**`), Playwright e2e, plus lint + typecheck + build; CI gates on coverage thresholds. agent-browser for local live-QA. See `.claude/rules/testing.md`
 
@@ -69,11 +85,11 @@ The workspace is indexed by CodeGraph (`.codegraph/`, MCP server in `.mcp.json`)
 AI agents and tools that send `Accept: text/markdown` receive a Markdown representation of the requested page instead of HTML.
 
 **Architecture**:
-- `src/middleware.ts` — re-exports `proxy` from `src/proxy.ts` as `middleware`, providing Next.js middleware wiring
-- `src/proxy.ts` — generic proxy: if `Accept: text/markdown`, prepends `/markdown` to the path and rewrites; never needs updating for new pages
-- `src/app/markdown/[[...path]]/route.ts` — single catch-all route handler; dispatches by path segments to per-section markdown generators; statically pre-rendered via `generateStaticParams`
+- `apps/website/src/middleware.ts` — re-exports `proxy` from `apps/website/src/proxy.ts` as `middleware`, providing Next.js middleware wiring
+- `apps/website/src/proxy.ts` — generic proxy: if `Accept: text/markdown`, prepends `/markdown` to the path and rewrites; never needs updating for new pages
+- `apps/website/src/app/markdown/[[...path]]/route.ts` — single catch-all route handler; dispatches by path segments to per-section markdown generators; statically pre-rendered via `generateStaticParams`
 
-**Adding markdown for a new page**: Add a new path-matching `if` block in the `GET` handler in `src/app/markdown/[[...path]]/route.ts`, add the path to `generateStaticParams`, and write a generator function that uses existing `src/lib/content/` functions.
+**Adding markdown for a new page**: Add a new path-matching `if` block in the `GET` handler in `apps/website/src/app/markdown/[[...path]]/route.ts`, add the path to `generateStaticParams`, and write a generator function that uses existing `apps/website/src/lib/content/` functions.
 
 ## Agentic SDLC Pipeline (code work)
 
