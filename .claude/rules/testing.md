@@ -13,25 +13,25 @@ always: true
 | E2E | Playwright | Full-page flows with real production build + mocked external APIs |
 | Live QA | agent-browser (local only) | Agent-driven a11y tree + click-through smoke walks |
 
-Coverage: v8 provider, text + json-summary reporters. **Threshold ratchet is active** — thresholds are set in `vitest.config.ts` and the CI `test` job gates on them. The floor is the measured baseline over `src/lib/**`, `src/components/design-system/**` and the page-level
+Coverage: v8 provider, text + json-summary reporters. **Threshold ratchet is active** — thresholds are set in `apps/website/vitest.config.ts` and the CI `test` job gates on them. The floor is the measured baseline over `apps/website/src/lib/**`, `apps/website/src/components/design-system/**` and the page-level
 templates, site palette and shared site hooks that moved out of the design system (Matrix CG effects excluded —
-they are canvas-only and cannot run in jsdom). See `coverage.include` in `vitest.config.ts` for the exact scope. Floor values: statements 92%, branches 84%, functions 89%, lines 92% (as set in `vitest.config.ts`). Raise the floor whenever tests improve coverage; never lower it.
+they are canvas-only and cannot run in jsdom). See `coverage.include` in `apps/website/vitest.config.ts` for the exact scope. Floor values: statements 92%, branches 84%, functions 89%, lines 92% (as set in `apps/website/vitest.config.ts`). Raise the floor whenever tests improve coverage; never lower it.
 
 ## File Layout
 
 Tests are co-located beside source files:
 
 ```
-src/lib/chat/
+apps/website/src/lib/chat/
     guardrails.ts
     guardrails.test.ts        <- unit (node project)
 
-src/components/design-system/molecules/accordion/accordion/
+apps/website/src/components/design-system/molecules/accordion/accordion/
     accordion.tsx
     accordion.test.tsx        <- component (jsdom project)
     use-accordion-store.ts
 
-e2e/
+apps/website/e2e/
     homepage.spec.ts
     chat.spec.ts
     contact.spec.ts
@@ -39,10 +39,10 @@ e2e/
 
 ## Vitest Projects
 
-`vitest.config.ts` defines two projects:
+`apps/website/vitest.config.ts` defines two projects:
 
-- **node** — `src/lib/**/*.test.ts` — environment: node
-- **jsdom** — `src/components/**/*.test.tsx` and `src/components/**/*.test.ts` — environment: jsdom, globals: true, setup: `vitest.setup.ts`
+- **node** — `apps/website/src/lib/**/*.test.ts` — environment: node
+- **jsdom** — `apps/website/src/components/**/*.test.tsx` and `apps/website/src/components/**/*.test.ts` — environment: jsdom, globals: true, setup: `apps/website/vitest.setup.ts`
 
 The `@vitejs/plugin-react` v6 plugin is used via `react()` with no extra options. Note: v6 removed the `babel` and `presets` options from its `Options` interface; the `reactCompilerPreset` export is for use with `@rolldown/plugin-babel`, not for vitest. The React Compiler is a production optimization applied by Next.js at build time — it is not replicated in the test transform. Components that use hooks compile and render correctly in tests without it.
 
@@ -56,11 +56,11 @@ The `@vitejs/plugin-react` v6 plugin is used via `react()` with no extra options
 ### Unit (lib/)
 
 Security-sensitive and correctness-sensitive pure functions have the highest ROI:
-- `src/lib/chat/guardrails.ts` — injection pattern matching, LLM gate mocking, fail-open paths
-- `src/lib/rate-limit/rate-limit.ts` — throttle window, daily limit, counter increment, fail-open
-- `src/lib/consents/consents.ts` — read/write localStorage wrapper, event dispatch
-- `src/lib/seo/seo.ts` — metadata shape, structured data, date formatting, headline truncation
-- `src/lib/content/search-index-factory.ts` — index creation, search by field, ref correctness
+- `apps/website/src/lib/chat/guardrails.ts` — injection pattern matching, LLM gate mocking, fail-open paths
+- `apps/website/src/lib/rate-limit/rate-limit.ts` — throttle window, daily limit, counter increment, fail-open
+- `apps/website/src/lib/consents/consents.ts` — read/write localStorage wrapper, event dispatch
+- `apps/website/src/lib/seo/seo.ts` — metadata shape, structured data, date formatting, headline truncation
+- `apps/website/src/lib/content/search-index-factory.ts` — index creation, search by field, ref correctness
 
 ### Component (RTL)
 
@@ -75,9 +75,9 @@ Do NOT test `features/` or `content/` components without Next.js context — the
 Playwright runs against a **production build** (`next build && next start`). External APIs are ROUTE-MOCKED via `page.route()` — no real Groq, Upstash, or Resend calls, no secrets needed.
 
 Committed specs:
-1. `e2e/homepage.spec.ts` — homepage loads, navigation exists, /blog and /about-me routes work
-2. `e2e/chat.spec.ts` — chat page loads, input visible, mocked stream response renders
-3. `e2e/contact.spec.ts` — form validation errors appear, mocked success shows confirmation
+1. `apps/website/e2e/homepage.spec.ts` — homepage loads, navigation exists, /blog and /about-me routes work
+2. `apps/website/e2e/chat.spec.ts` — chat page loads, input visible, mocked stream response renders
+3. `apps/website/e2e/contact.spec.ts` — form validation errors appear, mocked success shows confirmation
 
 ## Loop Discipline
 
@@ -92,12 +92,12 @@ npm run test:run         # vitest run once (CI-friendly)
 npm run test:coverage    # vitest run --coverage (v8, prints text summary)
 npm run test:e2e         # playwright test (builds prod first)
 npm run test:e2e:ui      # playwright test --ui (interactive mode)
-npm run typecheck        # tsc --noEmit over the single tsconfig.json (src + tests + e2e + config)
+npm run typecheck        # tsc --noEmit over the single apps/website/tsconfig.json (src + tests + e2e + config)
 ```
 
 ## Typecheck Coverage
 
-There is a SINGLE `tsconfig.json`, used by the editor, `next build`, and `npm run typecheck` alike. Its `types` include `vitest/globals` (so `describe`/`it`/`expect`/`vi` and the `@testing-library/jest-dom/vitest` matcher augmentation resolve in test files) and `next/image-types/global` (so `.png`/`.jpg` imports resolve in a clean CI checkout without a generated `next-env.d.ts`). The matcher augmentation is loaded at type level via `vitest.setup.ts` (included in the program) and at runtime by the same file.
+There is a SINGLE `apps/website/tsconfig.json`, used by the editor, `next build`, and `npm run typecheck` alike. Its `types` include `vitest/globals` (so `describe`/`it`/`expect`/`vi` and the `@testing-library/jest-dom/vitest` matcher augmentation resolve in test files) and `next/image-types/global` (so `.png`/`.jpg` imports resolve in a clean CI checkout without a generated `next-env.d.ts`). The matcher augmentation is loaded at type level via `apps/website/vitest.setup.ts` (included in the program) and at runtime by the same file.
 
 `npm run typecheck` (`tsc --noEmit`) is the authoritative type gate for the full repo, covering src + tests + e2e + config files. It exists because `next build` only type-checks files reachable from the build graph — orphan test files are never checked by it. Because the editor and the typecheck gate use the same config, what's green in CI is green in VS Code (no separate test-only tsconfig, no editor/CLI drift).
 
@@ -110,7 +110,7 @@ validate-arch  -+- typecheck -+- test -> build -> e2e
                               -+
 ```
 
-- **typecheck** job: `npm run typecheck` — covers `src/**`, `**/*.test.*`, `e2e/**`, and config files. Zero errors required.
+- **typecheck** job: `npm run typecheck` — covers `apps/website/src/**`, `**/*.test.*`, `apps/website/e2e/**`, and config files. Zero errors required.
 - **test** job: `npm run test:coverage` — prints coverage summary and **gates on thresholds** (statements 92%, branches 84%, functions 89%, lines 92%). Coverage below the floor fails CI.
 - **e2e** job: runs after build, Playwright browsers cached, report uploaded as artifact; no third-party secrets needed (externals are mocked)
 
@@ -128,9 +128,9 @@ E2E is NOT in pre-push — the production build takes too long. Run `npm run tes
 
 ESLint and dependency-cruiser ignore test files entirely. knip does not — read its bullet carefully:
 
-- **ESLint** (`eslint.config.mjs`) — `**/*.test.ts`, `**/*.test.tsx`, `**/*.spec.ts`, `**/*.spec.tsx`, `e2e/**`, `vitest.config.ts`, `vitest.setup.ts`, `playwright.config.ts` in `ignores`
-- **knip** (`knip.json`) — there is **no `ignore` key**. Test files fall under `project` (`src/**/*.{ts,tsx,mdx}`); `e2e/**/*.ts` is both `entry` and `project`; `src/test-utils/index.ts` is an `entry`. `ignoreExportsUsedInFile: true` is set. **Consequence**: because test files count as usage, a green `npm run knip` does NOT prove a deletion is complete when a leftover test still imports the deleted symbol, that import keeps the export looking "used". Grep for the deleted symbol separately before trusting a green knip run.
-- **dependency-cruiser** (`.dependency-cruiser.js`) — `\.(test|spec)\.(ts|tsx)$` in `options.exclude.path`
+- **ESLint** (`apps/website/eslint.config.mjs`) — `**/*.test.ts`, `**/*.test.tsx`, `**/*.spec.ts`, `**/*.spec.tsx`, `apps/website/e2e/**`, `apps/website/vitest.config.ts`, `apps/website/vitest.setup.ts`, `apps/website/playwright.config.ts` in `ignores`
+- **knip** (`apps/website/knip.json`) — there is **no `ignore` key**. Test files fall under `project` (`apps/website/src/**/*.{ts,tsx,mdx}`); `apps/website/e2e/**/*.ts` is both `entry` and `project`; `apps/website/src/test-utils/index.ts` is an `entry`. `ignoreExportsUsedInFile: true` is set. **Consequence**: because test files count as usage, a green `npm run knip` does NOT prove a deletion is complete when a leftover test still imports the deleted symbol, that import keeps the export looking "used". Grep for the deleted symbol separately before trusting a green knip run.
+- **dependency-cruiser** (`apps/website/.dependency-cruiser.js`) — `\.(test|spec)\.(ts|tsx)$` in `options.exclude.path`
 
 ## Verification Checklist
 

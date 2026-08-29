@@ -1,8 +1,9 @@
 # Articles: prose and MDX-embedded JSX, where reflowing changes what gets published.
-src/content/**
+apps/website/src/content/**
 
-# Generated or vendored.
+# Generated or vendored. Directory patterns without a slash match at any workspace depth.
 .next/
+.turbo/
 coverage/
 dist/
 ds-bundle/

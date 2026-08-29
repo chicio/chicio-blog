@@ -1,15 +1,19 @@
 {
-    "extends": "../tsconfig.json",
+    "extends": "../apps/website/tsconfig.json",
     "compilerOptions": {
         "noEmit": false,
         "declaration": true,
         "emitDeclarationOnly": true,
         "declarationMap": false,
         "outDir": "../dist/types",
-        "rootDir": "../src",
+        "rootDir": "../apps/website/src",
         "skipLibCheck": true,
         "jsx": "react-jsx"
     },
-    "include": ["../src/components/design-system/**/*.ts", "../src/components/design-system/**/*.tsx", "../src/types/**/*.ts"],
+    "include": [
+        "../apps/website/src/components/design-system/**/*.ts",
+        "../apps/website/src/components/design-system/**/*.tsx",
+        "../apps/website/src/types/**/*.ts"
+    ],
     "exclude": ["../**/*.test.ts", "../**/*.test.tsx"]
 }
