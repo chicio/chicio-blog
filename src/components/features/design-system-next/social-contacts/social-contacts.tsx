@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { SocialContacts as DesignSystemSocialContacts, type SocialContactsProps } from "@/components/design-system/organism/social-contacts";
-import { NextLink } from "@/components/design-system-next/next-link";
+import { NextLink } from "@/components/features/design-system-next/next-link";
 
 export type { SocialContactsProps };
 

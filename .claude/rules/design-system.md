@@ -28,7 +28,7 @@ Where a component needs framework behaviour it takes it as a prop, with a framew
 - `currentPath` on `Menu`, instead of reading a router
 - site assets, such as `BrandHeader`'s `logo`
 
-The site's bindings live in `src/components/design-system-next/`, which is what website code imports.
+The site's bindings live in `src/components/features/design-system-next/`, which is what website code imports.
 `PrefetchStrategy` ("viewport" | "hover" | "never") belongs to the design system — deciding *when* to
 prefetch is a design concern; the adapter decides *how*.
 

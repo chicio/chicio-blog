@@ -1,4 +1,4 @@
-import { InternalLink } from "@/components/design-system-next/internal-link";
+import { InternalLink } from "@/components/features/design-system-next/internal-link";
 import { PageTitle } from "@/components/design-system/molecules/typography/page-title";
 import { Content } from "@/types/content/content";
 import { FC } from "react";

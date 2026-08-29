@@ -1,8 +1,8 @@
 import { describe, it, expect, vi, beforeAll } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { ReadingContentPageTemplate } from "./reading-content-page-template";
-import type { MenuNavHrefs } from "@/components/design-system-next/menu";
-import type { FooterNavHrefs, SocialContactLinks } from "@/components/design-system-next/footer";
+import type { MenuNavHrefs } from "@/components/features/design-system-next/menu";
+import type { FooterNavHrefs, SocialContactLinks } from "@/components/features/design-system-next/footer";
 
 vi.mock("next/navigation", () => ({
     usePathname: () => "/",
@@ -54,7 +54,7 @@ vi.mock("@/components/design-system/molecules/effects/matrix-header-background",
     MatrixHeaderBackground: () => <div data-testid="matrix-header-background" />,
 }));
 
-vi.mock("@/components/design-system-next/image-glow", () => ({
+vi.mock("@/components/features/design-system-next/image-glow", () => ({
     ImageGlow: ({
         alt,
         src,

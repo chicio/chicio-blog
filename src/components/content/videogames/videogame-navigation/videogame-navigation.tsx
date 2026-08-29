@@ -1,4 +1,4 @@
-import { BluePillLink, RedPillLink } from "@/components/design-system-next/pills-links";
+import { BluePillLink, RedPillLink } from "@/components/features/design-system-next/pills-links";
 import { FC } from "react";
 
 interface VideogameNavigationProps {

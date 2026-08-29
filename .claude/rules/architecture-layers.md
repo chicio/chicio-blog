@@ -13,11 +13,11 @@ src/components/
     content/      → page-level layouts (page-template, content-page-template, …): they arrange
                     THIS site's chrome, so they are not part of the design system
     search/       → site search (useSearch); site-specific shared hooks live in their domain
+    design-system-next/ → the site's Next bindings for the design system: injects next/link,
+                    next/image, the router path and this site's logo. Everything the site
+                    renders imports from here, not from design-system/ directly.
   design-system/  → pure, self-contained UI library (atoms → molecules → organisms).
                     Framework-agnostic: it imports nothing from next.
-  design-system-next/ → the site's Next bindings for the design system. Injects next/link,
-                    next/image, the router path and this site's logo; everything the site
-                    renders imports from here, not from design-system/ directly.
 src/lib/          → pure business logic (no JSX, no React components)
 src/types/        → TypeScript types and pure configuration constants
 ```

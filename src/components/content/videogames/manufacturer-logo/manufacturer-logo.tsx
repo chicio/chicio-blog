@@ -1,4 +1,4 @@
-import { ImageGlow } from "@/components/design-system-next/image-glow";
+import { ImageGlow } from "@/components/features/design-system-next/image-glow";
 
 export const ManufacturerLogo: React.FC<{ logoUrl: string; name: string }> = ({ logoUrl, name }) => (
     <ImageGlow

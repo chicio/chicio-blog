@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { Breadcrumb as DesignSystemBreadcrumb, type BreadcrumbProps } from "@/components/design-system/molecules/breadcrumbs/breadcrumb";
-import { NextLink } from "@/components/design-system-next/next-link";
+import { NextLink } from "@/components/features/design-system-next/next-link";
 
 export type { BreadcrumbProps };
 

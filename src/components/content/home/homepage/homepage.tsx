@@ -1,5 +1,5 @@
 import { MatrixBackground } from "@/components/design-system/molecules/effects/matrix-background";
-import { Menu } from "@/components/design-system-next/menu";
+import { Menu } from "@/components/features/design-system-next/menu";
 import { JsonLd } from "@/components/features/seo/jsond-ld";
 import { ProfilePresentation } from "./profile-presentation";
 import { siteMetadata } from "@/types/configuration/site-metadata";

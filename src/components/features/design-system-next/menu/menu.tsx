@@ -2,7 +2,7 @@
 
 import { FC } from "react";
 import { Menu as DesignSystemMenu, type MenuProps } from "@/components/design-system/organism/menu";
-import { NextLink } from "@/components/design-system-next/next-link";
+import { NextLink } from "@/components/features/design-system-next/next-link";
 import { useMenuStore } from "./use-menu-store";
 
 export type { MenuProps };

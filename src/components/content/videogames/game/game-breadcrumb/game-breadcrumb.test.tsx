@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen, nextLinkMock } from "@/test-utils";
 import { GameBreadcrumb } from "./index";
-import type { BreadcrumbItem } from "@/components/design-system-next/breadcrumb";
+import type { BreadcrumbItem } from "@/components/features/design-system-next/breadcrumb";
 
 vi.mock("next/link", () => nextLinkMock());
 

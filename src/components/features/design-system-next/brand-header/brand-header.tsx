@@ -6,7 +6,7 @@ import {
     BrandHeader as DesignSystemBrandHeader,
     type BrandHeaderProps,
 } from "@/components/design-system/organism/header/brand-header";
-import logoImage from "../../../../public/media/logo.png";
+import logoImage from "../../../../../public/media/logo.png";
 
 export type BrandHeaderNextProps = Omit<BrandHeaderProps, "imageComponent" | "logo">;
 

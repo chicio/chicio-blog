@@ -33,7 +33,7 @@ export default defineConfig({
                 "src/components/features/content/reading-content-page-template/**",
                 "src/components/features/search/**",
                 // the Next bindings that replaced next/* imports inside the design system
-                "src/components/design-system-next/**",
+                "src/components/features/design-system-next/**",
                 "src/components/features/command-palette/**",
             ],
             // Matrix CG/canvas effects cannot run in jsdom, so they are excluded from

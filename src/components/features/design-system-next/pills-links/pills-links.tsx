@@ -4,7 +4,7 @@ import {
     RedPillLink as DesignSystemRedPillLink,
     type PillProps,
 } from "@/components/design-system/molecules/links/pills-links";
-import { NextLink } from "@/components/design-system-next/next-link";
+import { NextLink } from "@/components/features/design-system-next/next-link";
 
 export type { PillProps };
 

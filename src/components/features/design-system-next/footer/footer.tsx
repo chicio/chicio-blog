@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { Footer as DesignSystemFooter, type FooterProps } from "@/components/design-system/organism/footer";
-import { NextLink } from "@/components/design-system-next/next-link";
+import { NextLink } from "@/components/features/design-system-next/next-link";
 
 export type { FooterProps };
 

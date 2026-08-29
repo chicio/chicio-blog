@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { InternalLink } from "@/components/design-system-next/internal-link";
+import { InternalLink } from "@/components/features/design-system-next/internal-link";
 import { GlassmorphismBackground } from "@/components/design-system/atoms/effects/glassmorphism-background";
 import { GameMetadata, VideogamesNavigationOrigin } from "@/types/content/videogames";
 import { Content } from "@/types/content/content";

@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { Tag as DesignSystemTag, type TagProps } from "@/components/design-system/molecules/buttons/tag";
-import { NextLink } from "@/components/design-system-next/next-link";
+import { NextLink } from "@/components/features/design-system-next/next-link";
 
 export type { TagProps };
 

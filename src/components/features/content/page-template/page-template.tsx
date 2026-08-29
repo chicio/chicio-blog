@@ -1,14 +1,14 @@
 import { ContentContainer } from "@/components/design-system/molecules/containers/content-container";
-import { Footer } from "@/components/design-system-next/footer";
-import { Menu } from "@/components/design-system-next/menu";
+import { Footer } from "@/components/features/design-system-next/footer";
+import { Menu } from "@/components/features/design-system-next/menu";
 import { FC, ReactNode } from "react";
-import type { MenuNavHrefs, MenuTrackingCallbacks } from "@/components/design-system-next/menu";
+import type { MenuNavHrefs, MenuTrackingCallbacks } from "@/components/features/design-system-next/menu";
 import type {
     FooterNavHrefs,
     SocialContactLinks,
     FooterNavTrackingCallbacks,
     FooterSocialTrackingCallbacks,
-} from "@/components/design-system-next/footer";
+} from "@/components/features/design-system-next/footer";
 
 export interface BlogPageProps {
     header: React.ReactElement;

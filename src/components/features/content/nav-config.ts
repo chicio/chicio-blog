@@ -1,7 +1,7 @@
 import { slugs } from "@/types/configuration/slug";
 import { siteMetadata } from "@/types/configuration/site-metadata";
-import type { MenuNavHrefs } from "@/components/design-system-next/menu";
-import type { FooterNavHrefs, SocialContactLinks } from "@/components/design-system-next/footer";
+import type { MenuNavHrefs } from "@/components/features/design-system-next/menu";
+import type { FooterNavHrefs, SocialContactLinks } from "@/components/features/design-system-next/footer";
 
 export const menuNavHrefs: MenuNavHrefs = {
     blog: slugs.blog.home,

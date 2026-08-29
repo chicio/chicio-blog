@@ -1,4 +1,4 @@
-import { InternalLink } from "@/components/design-system-next/internal-link";
+import { InternalLink } from "@/components/features/design-system-next/internal-link";
 import { TerminalListItem } from "@/components/design-system/molecules/terminal-list-item";
 import { getReadNextPosts } from "@/lib/content/posts/posts";
 import { FC } from "react";

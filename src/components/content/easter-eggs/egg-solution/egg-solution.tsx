@@ -1,7 +1,7 @@
 "use client";
 
 import { FC, PropsWithChildren } from "react";
-import { TerminalButton } from "@/components/design-system-next/terminal-button";
+import { TerminalButton } from "@/components/features/design-system-next/terminal-button";
 import type { EasterEggSlug } from "@/lib/easter-eggs/easter-egg-catalog";
 import { useEggSolutionStore } from "./use-egg-solution-store";
 

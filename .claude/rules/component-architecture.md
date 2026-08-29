@@ -170,7 +170,7 @@ Enforced by dependency-cruiser at error:
 - `src/components/features/content/` — page-level layouts (`page-template`, `content-page-template`,
   `reading-content-page-template`); these arrange this site's chrome, so they are not part of the
   reusable design system
-- `src/components/design-system-next/` — the site's Next bindings for design-system components
+- `src/components/features/design-system-next/` — the site's Next bindings for design-system components
   (next/link, next/image, the router path, the logo). Website code imports these, not the raw
   design-system components that need injection
 - `src/components/content/<page>/` — page-scoped components (one folder per route)

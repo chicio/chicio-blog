@@ -1,4 +1,4 @@
-import { Tag } from "@/components/design-system-next/tag";
+import { Tag } from "@/components/features/design-system-next/tag";
 import { generateTagSlug } from "@/lib/tags/tags";
 import { FC } from "react";
 

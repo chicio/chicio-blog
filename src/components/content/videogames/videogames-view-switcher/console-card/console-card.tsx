@@ -1,7 +1,7 @@
 import { FC } from "react";
 import Image from "next/image";
-import { InternalLink } from "@/components/design-system-next/internal-link";
-import { TerminalButton } from "@/components/design-system-next/terminal-button";
+import { InternalLink } from "@/components/features/design-system-next/internal-link";
+import { TerminalButton } from "@/components/features/design-system-next/terminal-button";
 import { ConsoleMetadata } from "@/types/content/videogames";
 import { Content } from "@/types/content/content";
 import { ConsoleTimeInformation } from "@/components/content/videogames/console-time-information";

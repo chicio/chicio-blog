@@ -1,7 +1,7 @@
 import {
     BluePillLink,
     RedPillLink,
-} from "@/components/design-system-next/pills-links";
+} from "@/components/features/design-system-next/pills-links";
 import { Content } from "@/types/content/content";
 import { FC } from "react";
 

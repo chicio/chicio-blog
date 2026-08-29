@@ -1,13 +1,13 @@
 import { PageTemplate } from "@/components/features/content/page-template";
-import { BrandHeader } from "@/components/design-system-next/brand-header";
+import { BrandHeader } from "@/components/features/design-system-next/brand-header";
 import { FC, PropsWithChildren, ReactNode } from "react";
-import type { MenuNavHrefs, MenuTrackingCallbacks } from "@/components/design-system-next/menu";
+import type { MenuNavHrefs, MenuTrackingCallbacks } from "@/components/features/design-system-next/menu";
 import type {
     FooterNavHrefs,
     SocialContactLinks,
     FooterNavTrackingCallbacks,
     FooterSocialTrackingCallbacks,
-} from "@/components/design-system-next/footer";
+} from "@/components/features/design-system-next/footer";
 
 export interface ContentPageProps {
     author: string;
