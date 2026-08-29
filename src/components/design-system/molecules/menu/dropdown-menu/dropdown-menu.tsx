@@ -4,6 +4,7 @@ import { AnimatePresence } from "framer-motion";
 import { FC } from "react";
 import { BiChevronDown } from "react-icons/bi";
 import { MenuItem } from "@/components/design-system/molecules/menu/menu-item";
+import type { LinkComponent } from "@/components/design-system/atoms/links/anchor-link";
 import { useDropdownMenuStore } from "./use-dropdown-menu-store";
 
 interface DropdownMenuItem {
@@ -19,7 +20,8 @@ interface DropdownMenuGroup {
     items: DropdownMenuItem[];
 }
 
-interface DropdownMenuProps {
+export interface DropdownMenuProps {
+    linkComponent?: LinkComponent;
     label: string;
     items: DropdownMenuGroup[];
     className?: string;
@@ -31,6 +33,7 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
     items,
     className = "",
     chevronClassName = "",
+    linkComponent,
 }) => {
     const hasSelected = items.flatMap((group) => group.items).some((item) => item.selected);
     const { state, effects } = useDropdownMenuStore(hasSelected);
@@ -88,6 +91,7 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
                                                 className="mb-0 pl-0 before:content-none"
                                             >
                                                 <MenuItem
+                                                    linkComponent={linkComponent}
                                                     to={item.to}
                                                     selected={item.selected ?? false}
                                                     className="xs:whitespace-nowrap m-2 text-center"

@@ -1,5 +1,5 @@
 import { ReadingContentPage } from "@/components/features/content/reading-content-page";
-import { BreadcrumbItem } from "@/components/design-system/molecules/breadcrumbs/breadcrumb";
+import { BreadcrumbItem } from "@/components/features/design-system-next/breadcrumb";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { FC, PropsWithChildren } from "react";
 import { JsonLd } from "@/components/features/seo/jsond-ld";
@@ -8,7 +8,7 @@ import { getAllGamesForConsole } from "@/lib/content/videogames/videogames";
 import { ConsoleMetadata } from "@/types/content/videogames";
 import { ConsoleTimeInformation } from "@/components/content/videogames/console-time-information";
 import { IoGameControllerOutline } from "react-icons/io5";
-import { ImageCarousel } from "@/components/design-system/organism/image-carousel";
+import { ImageCarousel } from "@/components/features/design-system-next/image-carousel";
 import { slugs } from "@/types/configuration/slug";
 import { GamesGrid } from "@/components/content/videogames/games-grid";
 import { VideogameNavigation } from "@/components/content/videogames/videogame-navigation";

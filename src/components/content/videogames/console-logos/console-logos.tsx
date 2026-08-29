@@ -1,7 +1,7 @@
-import { InternalLink } from "@/components/design-system/atoms/links/internal-link";
+import { InternalLink } from "@/components/features/design-system-next/internal-link";
 import { FC } from "react";
 import { ManufacturerLogo } from "@/components/content/videogames/manufacturer-logo";
-import { ImageGlow } from "@/components/design-system/atoms/effects/image-glow";
+import { ImageGlow } from "@/components/features/design-system-next/image-glow";
 
 interface ConsoleLogosProps {
     manufacturer: string;

@@ -1,11 +1,11 @@
-import { InternalLink } from "@/components/design-system/atoms/links/internal-link";
+import { InternalLink } from "@/components/features/design-system-next/internal-link";
 import { PageTitle } from "@/components/design-system/molecules/typography/page-title";
 import { Content } from "@/types/content/content";
 import { FC } from "react";
 import { ContentPage } from "@/components/features/content/content-page";
 import { JsonLd } from "@/components/features/seo/jsond-ld";
 import { siteMetadata } from "@/types/configuration/site-metadata";
-import type { PrefetchStrategy } from "@/types/next/prefetch";
+import type { PrefetchStrategy } from "@/components/features/design-system-next/tag";
 
 export interface BlogGenericPostListPageProps {
     title: string;

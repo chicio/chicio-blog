@@ -1,30 +1,8 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import type { LinkComponent } from "@/components/design-system/atoms/links/anchor-link";
 import { InternalLink } from "./internal-link";
-
-vi.mock("next/link", () => ({
-    default: ({
-        href,
-        children,
-        className,
-        onClick,
-        onMouseEnter,
-        onFocus,
-        prefetch,
-    }: React.AnchorHTMLAttributes<HTMLAnchorElement> & { href: string; prefetch?: boolean | null }) => (
-        <a
-            href={href}
-            className={className}
-            onClick={onClick}
-            onMouseEnter={onMouseEnter}
-            onFocus={onFocus}
-            data-prefetch={prefetch === undefined ? "undefined" : String(prefetch)}
-        >
-            {children}
-        </a>
-    ),
-}));
 
 describe("InternalLink", () => {
     describe("render", () => {
@@ -61,71 +39,46 @@ describe("InternalLink", () => {
         });
     });
 
-    describe("prefetch", () => {
-        it("passes no prefetch override by default (viewport strategy)", () => {
+    describe("link component injection", () => {
+        const spyLink: LinkComponent = ({ href, prefetch, children }) => (
+            <a href={href} data-prefetch={prefetch}>
+                {children}
+            </a>
+        );
+
+        it("renders a plain anchor when no link component is injected", () => {
             render(<InternalLink to="/blog">Blog</InternalLink>);
-            expect(screen.getByRole("link")).toHaveAttribute("data-prefetch", "undefined");
-        });
-
-        it("passes no prefetch override when explicitly set to viewport", () => {
-            render(
-                <InternalLink to="/blog" prefetch="viewport">
-                    Blog
-                </InternalLink>,
-            );
-            expect(screen.getByRole("link")).toHaveAttribute("data-prefetch", "undefined");
-        });
-
-        it("disables prefetch when set to never", () => {
-            render(
-                <InternalLink to="/blog" prefetch="never">
-                    Blog
-                </InternalLink>,
-            );
-            expect(screen.getByRole("link")).toHaveAttribute("data-prefetch", "false");
-        });
-
-        it("disables prefetch until hovered when set to hover", async () => {
-            render(
-                <InternalLink to="/blog" prefetch="hover">
-                    Blog
-                </InternalLink>,
-            );
             const link = screen.getByRole("link");
-            expect(link).toHaveAttribute("data-prefetch", "false");
-
-            await userEvent.hover(link);
-            expect(link).toHaveAttribute("data-prefetch", "null");
+            expect(link.tagName).toBe("A");
+            expect(link).toHaveAttribute("href", "/blog");
+            expect(link).not.toHaveAttribute("prefetch");
         });
 
-        it("disables prefetch until focused when set to hover", async () => {
+        it("renders through the injected link component", () => {
             render(
-                <InternalLink to="/blog" prefetch="hover">
+                <InternalLink to="/blog" linkComponent={spyLink}>
                     Blog
                 </InternalLink>,
             );
-            const link = screen.getByRole("link");
-            expect(link).toHaveAttribute("data-prefetch", "false");
-
-            await userEvent.tab();
-            expect(link).toHaveFocus();
-            expect(link).toHaveAttribute("data-prefetch", "null");
+            expect(screen.getByRole("link")).toHaveAttribute("href", "/blog");
         });
 
-        it("stays prefetchable when intent is shown again after the first time", async () => {
+        it("forwards the viewport prefetch strategy by default", () => {
             render(
-                <InternalLink to="/blog" prefetch="hover">
+                <InternalLink to="/blog" linkComponent={spyLink}>
                     Blog
                 </InternalLink>,
             );
-            const link = screen.getByRole("link");
+            expect(screen.getByRole("link")).toHaveAttribute("data-prefetch", "viewport");
+        });
 
-            await userEvent.hover(link);
-            expect(link).toHaveAttribute("data-prefetch", "null");
-
-            await userEvent.tab();
-            expect(link).toHaveFocus();
-            expect(link).toHaveAttribute("data-prefetch", "null");
+        it("forwards an explicit prefetch strategy", () => {
+            render(
+                <InternalLink to="/blog" prefetch="hover" linkComponent={spyLink}>
+                    Blog
+                </InternalLink>,
+            );
+            expect(screen.getByRole("link")).toHaveAttribute("data-prefetch", "hover");
         });
     });
 });

@@ -1,17 +1,18 @@
-"use client";
-
-import Link from "next/link";
 import { FC, ReactNode } from "react";
-import type { PrefetchStrategy } from "@/types/next/prefetch";
-import { useInternalLinkStore } from "./use-internal-link-store";
+import {
+    AnchorLink,
+    type LinkComponent,
+    type PrefetchStrategy,
+} from "@/components/design-system/atoms/links/anchor-link";
 
-type InternalLinkProps = {
+export interface InternalLinkProps {
     to: string;
     className?: string;
     children?: ReactNode;
     prefetch?: PrefetchStrategy;
     onClick?: () => void;
-};
+    linkComponent?: LinkComponent;
+}
 
 export const InternalLink: FC<InternalLinkProps> = ({
     children,
@@ -19,21 +20,9 @@ export const InternalLink: FC<InternalLinkProps> = ({
     to,
     onClick,
     prefetch = "viewport",
-}) => {
-    const { state, effects } = useInternalLinkStore(prefetch);
-    const { prefetch: prefetchProp } = state;
-    const { handleMouseEnter, handleFocus } = effects;
-
-    return (
-        <Link
-            className={className}
-            href={to}
-            prefetch={prefetchProp}
-            onMouseEnter={handleMouseEnter}
-            onFocus={handleFocus}
-            onClick={onClick}
-        >
-            {children}
-        </Link>
-    );
-};
+    linkComponent: Link = AnchorLink,
+}) => (
+    <Link className={className} href={to} prefetch={prefetch} onClick={onClick}>
+        {children}
+    </Link>
+);

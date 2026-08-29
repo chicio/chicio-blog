@@ -3,8 +3,11 @@
 import { trackWith } from "@/lib/tracking/tracking";
 import { tracking } from "@/types/configuration/tracking";
 import type { EffectsStore } from "@/types/component-store";
-import type { MenuTrackingCallbacks } from "@/components/design-system/organism/menu";
-import type { FooterNavTrackingCallbacks, FooterSocialTrackingCallbacks } from "@/components/design-system/organism/footer";
+import type { MenuTrackingCallbacks } from "@/components/features/design-system-next/menu";
+import type {
+    FooterNavTrackingCallbacks,
+    FooterSocialTrackingCallbacks,
+} from "@/components/features/design-system-next/footer";
 import { useCallback } from "react";
 
 interface ContentPageEffects {

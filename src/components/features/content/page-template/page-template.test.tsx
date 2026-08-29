@@ -1,8 +1,8 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { PageTemplate } from "./page-template";
-import type { MenuNavHrefs } from "@/components/design-system/organism/menu";
-import type { FooterNavHrefs, SocialContactLinks } from "@/components/design-system/organism/footer";
+import type { MenuNavHrefs } from "@/components/features/design-system-next/menu";
+import type { FooterNavHrefs, SocialContactLinks } from "@/components/features/design-system-next/footer";
 
 vi.mock("next/navigation", () => ({
     usePathname: () => "/",

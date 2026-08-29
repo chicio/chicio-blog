@@ -3,6 +3,7 @@
 import { FC } from "react";
 import { MenuItem } from "@/components/design-system/molecules/menu/menu-item";
 import { SocialContacts } from "@/components/design-system/organism/social-contacts";
+import type { LinkComponent } from "@/components/design-system/atoms/links/anchor-link";
 import { Cursor, TerminalLine } from "@/components/design-system/atoms/typography/terminal-blocks";
 import type { FooterNavTrackingCallbacks, FooterSocialTrackingCallbacks } from "./use-footer-store";
 import { useFooterStore } from "./use-footer-store";
@@ -19,7 +20,8 @@ export interface FooterNavHrefs {
     contact: string;
 }
 
-interface FooterProps {
+export interface FooterProps {
+    linkComponent?: LinkComponent;
     author: string;
     navHrefs: FooterNavHrefs;
     socialLinks: SocialContactLinks;
@@ -27,7 +29,14 @@ interface FooterProps {
     socialTracking?: FooterSocialTrackingCallbacks;
 }
 
-export const Footer: FC<FooterProps> = ({ author, navHrefs, socialLinks, navTracking, socialTracking }) => {
+export const Footer: FC<FooterProps> = ({
+    author,
+    navHrefs,
+    socialLinks,
+    navTracking,
+    socialTracking,
+    linkComponent,
+}) => {
     const { effects } = useFooterStore(navTracking, socialTracking);
     const {
         onTrackHome,
@@ -50,28 +59,39 @@ export const Footer: FC<FooterProps> = ({ author, navHrefs, socialLinks, navTrac
         <footer className="bg-primary-dark border-t-accent relative w-full shrink-0 snap-start border-t-2 border-solid shadow-lg">
             <div className="flex flex-col w-full items-center">
                 <div className="grid grid-cols-2 gap-3 py-7 px-5 w-full sm:grid-cols-[repeat(6,auto)] sm:justify-center sm:max-w-4xl sm:mx-auto">
-                    <MenuItem to="/" onClick={onTrackHome} selected={false}>
+                    <MenuItem linkComponent={linkComponent} to="/" onClick={onTrackHome} selected={false}>
                         Home
                     </MenuItem>
-                    <MenuItem to={navHrefs.blog} onClick={onTrackBlog} selected={false}>
+                    <MenuItem linkComponent={linkComponent} to={navHrefs.blog} onClick={onTrackBlog} selected={false}>
                         Blog
                     </MenuItem>
-                    <MenuItem to={navHrefs.art} onClick={onTrackArt} selected={false}>
+                    <MenuItem linkComponent={linkComponent} to={navHrefs.art} onClick={onTrackArt} selected={false}>
                         Art
                     </MenuItem>
-                    <MenuItem to={navHrefs.aboutMe} onClick={onTrackAboutMe} selected={false}>
+                    <MenuItem
+                        linkComponent={linkComponent}
+                        to={navHrefs.aboutMe}
+                        onClick={onTrackAboutMe}
+                        selected={false}
+                    >
                         About Me
                     </MenuItem>
-                    <MenuItem to={navHrefs.archive} onClick={onTrackArchive} selected={false}>
+                    <MenuItem
+                        linkComponent={linkComponent}
+                        to={navHrefs.archive}
+                        onClick={onTrackArchive}
+                        selected={false}
+                    >
                         Archive
                     </MenuItem>
-                    <MenuItem to={navHrefs.tags} onClick={onTrackTags} selected={false}>
+                    <MenuItem linkComponent={linkComponent} to={navHrefs.tags} onClick={onTrackTags} selected={false}>
                         Tags
                     </MenuItem>
                 </div>
                 <hr />
                 <div className="w-full flex flex-col items-center justify-center gap-3 py-6 px-4 bg-gradient-to-b from-general-background-light to-primary-color-dark">
                     <SocialContacts
+                        linkComponent={linkComponent}
                         links={socialLinks}
                         contactHref={navHrefs.contact}
                         onTrackGithub={onTrackGithub}

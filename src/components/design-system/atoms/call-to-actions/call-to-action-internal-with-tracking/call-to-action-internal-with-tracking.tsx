@@ -1,10 +1,11 @@
 "use client";
 
-import Link from "next/link";
+import { AnchorLink, type LinkComponent } from "@/components/design-system/atoms/links/anchor-link";
 import { FC, ReactNode } from "react";
 
-type CallToActionInternalWithTrackingProps = {
+export type CallToActionInternalWithTrackingProps = {
     to: string;
+    linkComponent?: LinkComponent;
     className?: string;
     children?: ReactNode;
     onClick?: () => void;
@@ -15,6 +16,7 @@ export const CallToActionInternalWithTracking: FC<CallToActionInternalWithTracki
     className,
     to,
     onClick,
+    linkComponent: Link = AnchorLink,
 }) => {
     return (
         <Link

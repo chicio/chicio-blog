@@ -1,7 +1,7 @@
 "use client";
 
 import { FC } from "react";
-import { InternalLink } from "@/components/design-system/atoms/links/internal-link";
+import { InternalLink } from "@/components/features/design-system-next/internal-link";
 import type { TopPost } from "@/types/content/analytics-stats";
 
 interface TopPostsListProps {

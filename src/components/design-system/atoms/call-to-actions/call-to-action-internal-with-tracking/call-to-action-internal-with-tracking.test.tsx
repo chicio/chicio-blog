@@ -1,9 +1,8 @@
 import { describe, it, expect, vi } from "vitest";
-import { render, screen, nextLinkMock } from "@/test-utils";
+import { render, screen } from "@/test-utils";
 import userEvent from "@testing-library/user-event";
+import type { LinkComponent } from "@/components/design-system/atoms/links/anchor-link";
 import { CallToActionInternalWithTracking } from "./call-to-action-internal-with-tracking";
-
-vi.mock("next/link", () => nextLinkMock());
 
 describe("CallToActionInternalWithTracking", () => {
     describe("render", () => {
@@ -47,10 +46,24 @@ describe("CallToActionInternalWithTracking", () => {
         });
     });
 
-    describe("prefetch", () => {
-        it("uses Next's default prefetching (CTAs are primary actions)", () => {
+    describe("link component injection", () => {
+        it("renders a plain anchor when no link component is injected", () => {
             render(<CallToActionInternalWithTracking to="/blog">Blog</CallToActionInternalWithTracking>);
-            expect(screen.getByRole("link")).toHaveAttribute("data-prefetch", "undefined");
+            expect(screen.getByRole("link")).toHaveAttribute("href", "/blog");
+        });
+
+        it("renders through the injected link component", () => {
+            const spyLink: LinkComponent = ({ href, children }) => (
+                <a href={href} data-injected="true">
+                    {children}
+                </a>
+            );
+            render(
+                <CallToActionInternalWithTracking to="/blog" linkComponent={spyLink}>
+                    Blog
+                </CallToActionInternalWithTracking>,
+            );
+            expect(screen.getByRole("link")).toHaveAttribute("data-injected", "true");
         });
     });
 });

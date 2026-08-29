@@ -1,5 +1,5 @@
 import { CallToActionExternalWithTracking } from "@/components/design-system/atoms/call-to-actions/call-to-action-external-with-tracking";
-import { ImageGlow } from "@/components/design-system/atoms/effects/image-glow";
+import { ImageGlow } from "@/components/features/design-system-next/image-glow";
 import { Project } from "@/content/home/projects";
 import { FC } from "react";
 

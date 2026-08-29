@@ -1,7 +1,7 @@
 "use client";
 
-import { ImageGlow } from "@/components/design-system/atoms/effects/image-glow";
-import { InternalLink } from "@/components/design-system/atoms/links/internal-link";
+import { ImageGlow } from "@/components/features/design-system-next/image-glow";
+import { InternalLink } from "@/components/features/design-system-next/internal-link";
 import { Author } from "@/types/content/author";
 import { authorHref } from "@/lib/content/authors/author-slug";
 import { FC } from "react";

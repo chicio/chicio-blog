@@ -5,7 +5,7 @@ import { tracking } from "@/types/configuration/tracking";
 import { ContentPage } from "@/components/features/content/content-page";
 import { FC } from "react";
 import { Tag } from "@/types/content/tag";
-import { Tag as TagItem } from "@/components/design-system/molecules/buttons/tag";
+import { Tag as TagItem } from "@/components/features/design-system-next/tag";
 
 interface BlogTagsProps {
     author: string;

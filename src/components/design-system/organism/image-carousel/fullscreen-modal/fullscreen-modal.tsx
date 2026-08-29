@@ -2,19 +2,20 @@
 
 import { FC } from "react";
 import { BiX } from "react-icons/bi";
-import Image from "next/image";
 import { Button } from "@/components/design-system/atoms/buttons/button";
+import { PlainImage, type ImageComponent } from "@/components/design-system/atoms/effects/plain-image";
 import { MotionDiv } from "@/components/design-system/atoms/animation/motion-div";
 import { NavigationButtons } from "@/components/design-system/organism/image-carousel/navigation-buttons";
 import { PageIndicators } from "@/components/design-system/organism/image-carousel/page-indicators";
 import { useFullscreenModalStore } from "./use-fullscreen-modal-store";
 
-interface FullscreenModalProps {
+export interface FullscreenModalProps {
     images: string[];
     currentIndex: number;
     onClose: () => void;
     onNavigate?: (index: number) => void;
     alt: string;
+    imageComponent?: ImageComponent;
 }
 
 export const FullscreenModal: FC<FullscreenModalProps> = ({
@@ -23,6 +24,7 @@ export const FullscreenModal: FC<FullscreenModalProps> = ({
     onClose,
     onNavigate,
     alt,
+    imageComponent: Image = PlainImage,
 }) => {
     const { state, effects } = useFullscreenModalStore(images, initialIndex, onClose, onNavigate);
     const { currentIndex } = state;

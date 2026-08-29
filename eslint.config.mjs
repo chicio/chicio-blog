@@ -37,6 +37,30 @@ const ignores = {
     ],
 };
 
+// `_`-prefixed parameters are the conventional way to drop a prop from a rest spread — the design
+// system does this to keep framework-only props off the DOM, where React would warn about them.
+// Scoped to the design system: relaxing this repo-wide would let unused values through everywhere.
+const unusedVarsRules = {
+    files: ["src/components/design-system/**/*.{ts,tsx}"],
+    rules: {
+        "@typescript-eslint/no-unused-vars": [
+            "error",
+            { argsIgnorePattern: "^_", varsIgnorePattern: "^_", caughtErrorsIgnorePattern: "^_" },
+        ],
+    },
+};
+
+// PlainImage is the design system's documented framework-free fallback: rendering a real <img> is
+// its entire purpose. Scoped to that one component so every other design-system file still has to
+// justify a raw <img> — reaching for one instead of the injected imageComponent is the mistake the
+// framework-agnostic split exists to prevent.
+const plainImageRules = {
+    files: ["src/components/design-system/atoms/effects/plain-image/**/*.tsx"],
+    rules: {
+        "@next/next/no-img-element": "off",
+    },
+};
+
 const componentStoreRules = {
     files: ["src/components/**/*.tsx"],
     ignores: ["src/components/**/use-*.tsx"],
@@ -68,6 +92,8 @@ const eslintConfig = [
     ignores,
     ...coreWebVitals,
     ...typescript,
+    unusedVarsRules,
+    plainImageRules,
     componentStoreRules,
     storeHookRules,
     indexBarrelRules,

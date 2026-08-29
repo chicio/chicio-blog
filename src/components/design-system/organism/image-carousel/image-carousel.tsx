@@ -2,22 +2,29 @@
 
 import { FC } from "react";
 import { ImageGlow } from "@/components/design-system/atoms/effects/image-glow";
+import { PlainImage, type ImageComponent } from "@/components/design-system/atoms/effects/plain-image";
 import { MotionDiv } from "@/components/design-system/atoms/animation/motion-div";
-import Image from "next/image";
 import { imageShimmerPlaceholder } from "@/components/design-system/atoms/effects/image-shimmer-placeholder";
 import { NavigationButtons } from "@/components/design-system/organism/image-carousel/navigation-buttons";
 import { PageIndicators } from "@/components/design-system/organism/image-carousel/page-indicators";
 import { FullscreenModal } from "@/components/design-system/organism/image-carousel/fullscreen-modal";
 import { useImageCarouselStore } from "./use-image-carousel-store";
 
-interface ImageCarouselProps {
+export interface ImageCarouselProps {
     images: string[];
     alt: string;
     caption?: string;
     className?: string;
+    imageComponent?: ImageComponent;
 }
 
-export const ImageCarousel: FC<ImageCarouselProps> = ({ images, alt, caption, className }) => {
+export const ImageCarousel: FC<ImageCarouselProps> = ({
+    images,
+    alt,
+    caption,
+    className,
+    imageComponent: Image = PlainImage,
+}) => {
     const { state, effects } = useImageCarouselStore(images.length);
     const { currentIndex, isFullscreen } = state;
     const { goToPrevious, goToNext, openFullscreen, closeFullscreen, setCurrentIndex, handleDragEnd } = effects;
@@ -28,6 +35,7 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({ images, alt, caption, cl
         return (
             <div className={className}>
                 <ImageGlow
+                    imageComponent={Image}
                     src={singleImage}
                     alt={alt}
                     width={800}
@@ -37,7 +45,13 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({ images, alt, caption, cl
                 />
                 {caption && <figcaption>{caption}</figcaption>}
                 {isFullscreen && (
-                    <FullscreenModal images={images} currentIndex={0} onClose={closeFullscreen} alt={alt} />
+                    <FullscreenModal
+                        images={images}
+                        currentIndex={0}
+                        onClose={closeFullscreen}
+                        alt={alt}
+                        imageComponent={Image}
+                    />
                 )}
             </div>
         );
@@ -89,6 +103,7 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({ images, alt, caption, cl
                     onClose={closeFullscreen}
                     onNavigate={setCurrentIndex}
                     alt={alt}
+                    imageComponent={Image}
                 />
             )}
         </div>

@@ -21,6 +21,27 @@ const config = {
             to: { path: "^src/lib/" },
         },
         {
+            name: "design-system-no-next",
+            comment:
+                "Design-system must not import from next. It is framework-agnostic: a consumer injects its own link and image implementations (see AnchorLink / PlainImage), and the site's Next bindings live in src/components/features/design-system-next/.",
+            severity: "error",
+            from: { path: "^src/components/design-system/" },
+            to: { path: "^node_modules/next/" },
+        },
+        {
+            name: "injectable-design-system-via-bindings",
+            comment:
+                "These design-system components need a link or image implementation injected, and silently fall back to a plain <a>/<img> without one — no client-side routing, no prefetching, no image optimisation, and every gate still green. Import them from src/components/features/design-system-next/ instead, which binds next/link and next/image.",
+            severity: "error",
+            from: {
+                path: "^src/(app|components/(content|features))/",
+                pathNot: "^src/components/features/design-system-next/",
+            },
+            to: {
+                path: "^src/components/design-system/(atoms/(links/internal-link|call-to-actions/call-to-action-internal-with-tracking|effects/image-glow)|molecules/(menu/(menu-item|dropdown-menu)|buttons/(tag|terminal-button)|links/pills-links|breadcrumbs/breadcrumb)|organism/(menu|footer|social-contacts|header/brand-header|image-carousel|profile-photo))/",
+            },
+        },
+        {
             name: "design-system-types-type-only",
             comment:
                 "Inside design-system, imports from src/types/ must be type-only (import type {...}). Runtime value imports (slugs, siteMetadata, tracking, ...) are forbidden — inject them as props from the app/features layer.",

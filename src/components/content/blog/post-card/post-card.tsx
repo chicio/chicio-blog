@@ -1,12 +1,12 @@
 import { imageShimmerPlaceholder } from "@/components/design-system/atoms/effects/image-shimmer-placeholder";
-import { InternalLink } from "@/components/design-system/atoms/links/internal-link";
+import { InternalLink } from "@/components/features/design-system-next/internal-link";
 import { Author } from "@/types/content/author";
 import Image from "next/image";
 import { FC } from "react";
 import { PostAuthors } from "@/components/content/blog/post-authors";
 import { PostMeta } from "@/components/content/blog/post-meta";
 import { PostTags } from "@/components/content/blog/post-tags";
-import { TerminalButton } from "@/components/design-system/molecules/buttons/terminal-button";
+import { TerminalButton } from "@/components/features/design-system-next/terminal-button";
 
 interface BigCardProps {
     big: boolean;
