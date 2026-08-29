@@ -2,19 +2,22 @@
 
 import { MatrixHeaderBackground } from "@/components/design-system/molecules/effects/matrix-header-background";
 import { FC, PropsWithChildren } from "react";
-import logoImage from "../../../../../../public/media/logo.png";
 import { ImageGlow } from "@/components/design-system/atoms/effects/image-glow";
+import type { ImageComponent, ImageSource } from "@/components/design-system/atoms/effects/plain-image";
 import { Cursor } from "@/components/design-system/atoms/typography/terminal-blocks";
 import { useGlassmorphism } from "@/components/design-system/hooks/use-glassmorphism";
 
 const Passthrough: FC<PropsWithChildren> = ({ children }) => <>{children}</>;
 
-interface BrandHeaderProps {
+export interface BrandHeaderProps {
     big: boolean;
     wrapper?: FC<PropsWithChildren>;
+    /** Injected by the consumer: the design system ships no site assets of its own. */
+    logo: ImageSource;
+    imageComponent?: ImageComponent;
 }
 
-export const BrandHeader: FC<BrandHeaderProps> = ({ big, wrapper: Wrapper = Passthrough }) => {
+export const BrandHeader: FC<BrandHeaderProps> = ({ big, wrapper: Wrapper = Passthrough, logo, imageComponent }) => {
     const { glassmorphismClass } = useGlassmorphism({ noScale: true });
     const height = big ? "h-auto" : "h-[170px] md:h-[200px]";
     const margins = big ? "mt-14 mb-8" : "mt-12";
@@ -27,7 +30,8 @@ export const BrandHeader: FC<BrandHeaderProps> = ({ big, wrapper: Wrapper = Pass
                     <div className={`${glassmorphismClass} w-full p-5 md:p-9 z-30`}>
                         <div className="flex w-full items-center">
                             <ImageGlow
-                                src={logoImage}
+                                imageComponent={imageComponent}
+                                src={logo}
                                 alt={"blog logo"}
                                 width={80}
                                 height={80}

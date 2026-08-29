@@ -8,7 +8,7 @@ import { getAllGamesForConsole } from "@/lib/content/videogames/videogames";
 import { ConsoleMetadata } from "@/types/content/videogames";
 import { ConsoleTimeInformation } from "@/components/content/videogames/console-time-information";
 import { IoGameControllerOutline } from "react-icons/io5";
-import { ImageCarousel } from "@/components/design-system/organism/image-carousel";
+import { ImageCarousel } from "@/components/design-system-next/image-carousel";
 import { slugs } from "@/types/configuration/slug";
 import { GamesGrid } from "@/components/content/videogames/games-grid";
 import { VideogameNavigation } from "@/components/content/videogames/videogame-navigation";

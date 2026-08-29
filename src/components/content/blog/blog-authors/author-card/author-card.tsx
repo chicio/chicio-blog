@@ -1,6 +1,6 @@
 "use client";
 
-import { ImageGlow } from "@/components/design-system/atoms/effects/image-glow";
+import { ImageGlow } from "@/components/design-system-next/image-glow";
 import { InternalLink } from "@/components/design-system/atoms/links/internal-link";
 import { Chip } from "@/components/design-system/atoms/chip";
 import { useGlassmorphism } from "@/components/design-system/hooks/use-glassmorphism";

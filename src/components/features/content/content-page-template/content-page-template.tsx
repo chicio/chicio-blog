@@ -1,5 +1,5 @@
 import { PageTemplate } from "@/components/features/content/page-template";
-import { BrandHeader } from "@/components/design-system/organism/header/brand-header";
+import { BrandHeader } from "@/components/design-system-next/brand-header";
 import { FC, PropsWithChildren, ReactNode } from "react";
 import type { MenuNavHrefs, MenuTrackingCallbacks } from "@/components/design-system/organism/menu";
 import type {

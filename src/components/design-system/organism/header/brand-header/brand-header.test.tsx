@@ -14,28 +14,22 @@ vi.mock("@/components/design-system/atoms/effects/image-glow", () => ({
     }: React.ImgHTMLAttributes<HTMLImageElement> & { src: string }) => <img alt={alt} src={src} {...rest} />,
 }));
 
-vi.mock("next/image", () => ({
-    default: ({
-        alt,
-        src,
-        ...rest
-    }: React.ImgHTMLAttributes<HTMLImageElement> & { src: string }) => <img alt={alt} src={src} {...rest} />,
-}));
+const logo = { src: "/logo.png", width: 80, height: 80 };
 
 describe("BrandHeader", () => {
     describe("render", () => {
         it("renders the site title", () => {
-            render(<BrandHeader big={false} />);
+            render(<BrandHeader big={false} logo={logo} />);
             expect(screen.getByText(/CHICIO CODING/)).toBeInTheDocument();
         });
 
         it("renders the site tagline", () => {
-            render(<BrandHeader big={false} />);
+            render(<BrandHeader big={false} logo={logo} />);
             expect(screen.getByText(/Pixels\. Code\. Unplugged\./)).toBeInTheDocument();
         });
 
         it("renders the logo image", () => {
-            render(<BrandHeader big={false} />);
+            render(<BrandHeader big={false} logo={logo} />);
             expect(screen.getByAltText("blog logo")).toBeInTheDocument();
         });
 
@@ -43,7 +37,7 @@ describe("BrandHeader", () => {
             const Wrapper = ({ children }: React.PropsWithChildren) => (
                 <div data-testid="custom-wrapper">{children}</div>
             );
-            render(<BrandHeader big={false} wrapper={Wrapper} />);
+            render(<BrandHeader big={false} wrapper={Wrapper} logo={logo} />);
             expect(screen.getByTestId("custom-wrapper")).toBeInTheDocument();
         });
     });

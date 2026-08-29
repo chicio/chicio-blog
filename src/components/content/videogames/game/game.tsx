@@ -4,7 +4,7 @@ import { FC, PropsWithChildren } from "react";
 import { JsonLd } from "@/components/features/seo/jsond-ld";
 import { Content } from "@/types/content/content";
 import { ConsoleMetadata, GameMetadata } from "@/types/content/videogames";
-import { ImageCarousel } from "@/components/design-system/organism/image-carousel";
+import { ImageCarousel } from "@/components/design-system-next/image-carousel";
 import { PageTitle } from "@/components/design-system/molecules/typography/page-title";
 import { ConsoleLogos } from "@/components/content/videogames/console-logos";
 import { GameFormatIcon } from "@/components/content/videogames/game-format-icon";

@@ -1,6 +1,6 @@
 "use client";
 
-import { ImageGlow } from "@/components/design-system/atoms/effects/image-glow";
+import { ImageGlow } from "@/components/design-system-next/image-glow";
 import { useClownsPhotosGridStore } from "./use-clowns-photos-grid-store";
 
 export const ClownsPhotosGrid = () => {
