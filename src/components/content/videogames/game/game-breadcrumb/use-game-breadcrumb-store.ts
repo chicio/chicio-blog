@@ -1,7 +1,7 @@
 "use client";
 
 import { StateStore } from "@/types/component-store";
-import { BreadcrumbItem } from "@/components/design-system/molecules/breadcrumbs/breadcrumb";
+import { BreadcrumbItem } from "@/components/design-system-next/breadcrumb";
 import { slugs } from "@/types/configuration/slug";
 import { useVideogamesNavigationOriginStore } from "@/components/content/videogames/use-videogames-navigation-origin-store";
 import { VideogamesNavigationOrigin } from "@/types/content/videogames";

@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { IoMdArrowRoundBack } from "react-icons/io";
 
 import { InternalLink } from "@/components/design-system/atoms/links/internal-link";
+import type { LinkComponent } from "@/components/design-system/atoms/links/anchor-link";
 import { useGlassmorphism } from "@/components/design-system/hooks/use-glassmorphism";
 import { useBreadcrumbStore } from "./use-breadcrumb-store";
 
@@ -19,16 +20,18 @@ export type BreadcrumbItem =
 
 type ClickableBreadcrumbItem = Extract<BreadcrumbItem, { isCurrent: false }>;
 
-interface BreadcrumbProps {
+export interface BreadcrumbProps {
     items: BreadcrumbItem[];
+    linkComponent?: LinkComponent;
 }
 
 interface BreadcrumbContentProps {
     items: BreadcrumbItem[];
     parentItem: ClickableBreadcrumbItem | null;
+    linkComponent?: LinkComponent;
 }
 
-const BreadcrumbContent: FC<BreadcrumbContentProps> = ({ items, parentItem }) => (
+const BreadcrumbContent: FC<BreadcrumbContentProps> = ({ items, parentItem, linkComponent }) => (
     <>
         {parentItem && (
             <ol className="flex min-w-0 flex-row flex-nowrap items-center overflow-hidden sm:hidden">
@@ -40,6 +43,7 @@ const BreadcrumbContent: FC<BreadcrumbContentProps> = ({ items, parentItem }) =>
                         <IoMdArrowRoundBack />
                     </span>
                     <InternalLink
+                        linkComponent={linkComponent}
                         to={parentItem.href}
                         onClick={parentItem.onClick}
                         className="min-w-0 truncate py-2 text-sm"
@@ -72,6 +76,7 @@ const BreadcrumbContent: FC<BreadcrumbContentProps> = ({ items, parentItem }) =>
                         </span>
                     ) : (
                         <InternalLink
+                            linkComponent={linkComponent}
                             to={item.href}
                             onClick={item.onClick}
                             className="block truncate py-2 whitespace-nowrap text-sm"
@@ -85,7 +90,7 @@ const BreadcrumbContent: FC<BreadcrumbContentProps> = ({ items, parentItem }) =>
     </>
 );
 
-export const Breadcrumb: FC<BreadcrumbProps> = ({ items }) => {
+export const Breadcrumb: FC<BreadcrumbProps> = ({ items, linkComponent }) => {
     const { state } = useBreadcrumbStore();
     const { navRef, isVisible } = state;
     const { glassmorphismClass } = useGlassmorphism();
@@ -100,7 +105,7 @@ export const Breadcrumb: FC<BreadcrumbProps> = ({ items }) => {
                 aria-label="Breadcrumb"
                 className="glow-container mb-4 px-3 py-2 font-mono text-sm"
             >
-                <BreadcrumbContent items={items} parentItem={parentItem} />
+                <BreadcrumbContent items={items} parentItem={parentItem} linkComponent={linkComponent} />
             </nav>
             <motion.nav
                 aria-label="Breadcrumb"
@@ -114,7 +119,7 @@ export const Breadcrumb: FC<BreadcrumbProps> = ({ items }) => {
                 }}
                 style={{ pointerEvents: isVisible ? "auto" : "none" }}
             >
-                <BreadcrumbContent items={items} parentItem={parentItem} />
+                <BreadcrumbContent items={items} parentItem={parentItem} linkComponent={linkComponent} />
             </motion.nav>
         </>
     );

@@ -1,28 +1,8 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import type { LinkComponent } from "@/components/design-system/atoms/links/anchor-link";
 import { Tag } from "./tag";
-
-vi.mock("next/link", () => ({
-    default: ({
-        href,
-        children,
-        className,
-        onClick,
-        onMouseEnter,
-        prefetch,
-    }: React.AnchorHTMLAttributes<HTMLAnchorElement> & { href: string; prefetch?: boolean | null }) => (
-        <a
-            href={href}
-            className={className}
-            onClick={onClick}
-            onMouseEnter={onMouseEnter}
-            data-prefetch={prefetch === undefined ? "undefined" : String(prefetch)}
-        >
-            {children}
-        </a>
-    ),
-}));
 
 describe("Tag", () => {
     describe("render", () => {
@@ -58,19 +38,24 @@ describe("Tag", () => {
         });
     });
 
-    describe("prefetch", () => {
-        it("defaults to the hover strategy: no prefetch until hovered", async () => {
-            render(<Tag tag="typescript" link="/tags/typescript" big={false} />);
-            const link = screen.getByRole("link");
-            expect(link).toHaveAttribute("data-prefetch", "false");
 
-            await userEvent.hover(link);
-            expect(link).toHaveAttribute("data-prefetch", "null");
+    describe("link component injection", () => {
+        const spyLink: LinkComponent = ({ href, prefetch, children }) => (
+            <a href={href} data-prefetch={prefetch}>
+                {children}
+            </a>
+        );
+
+        it("forwards its default hover strategy to the injected link", () => {
+            render(<Tag tag="typescript" link="/tags/typescript" big={false} linkComponent={spyLink} />);
+            expect(screen.getByRole("link")).toHaveAttribute("data-prefetch", "hover");
         });
 
-        it("forwards an explicit prefetch override to the underlying link", () => {
-            render(<Tag tag="typescript" link="/tags/typescript" big={false} prefetch="viewport" />);
-            expect(screen.getByRole("link")).toHaveAttribute("data-prefetch", "undefined");
+        it("forwards an explicit prefetch override to the injected link", () => {
+            render(
+                <Tag tag="typescript" link="/tags/typescript" big={false} prefetch="viewport" linkComponent={spyLink} />,
+            );
+            expect(screen.getByRole("link")).toHaveAttribute("data-prefetch", "viewport");
         });
     });
 });

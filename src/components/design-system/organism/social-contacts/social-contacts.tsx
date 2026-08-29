@@ -11,6 +11,7 @@ import { FaXTwitter } from "react-icons/fa6";
 import { FC } from "react";
 import { SocialContact } from "@/components/design-system/molecules/buttons/social-contact";
 import { CallToActionInternalWithTracking } from "@/components/design-system/atoms/call-to-actions/call-to-action-internal-with-tracking";
+import type { LinkComponent } from "@/components/design-system/atoms/links/anchor-link";
 
 export interface SocialContactLinks {
     github: string;
@@ -23,6 +24,7 @@ export interface SocialContactLinks {
 }
 
 export interface SocialContactsProps {
+    linkComponent?: LinkComponent;
     links: SocialContactLinks;
     contactHref: string;
     onTrackGithub?: () => void;
@@ -46,6 +48,7 @@ export const SocialContacts: FC<SocialContactsProps> = ({
     onTrackTwitter,
     onTrackFacebook,
     onTrackInstagram,
+    linkComponent,
 }) => {
     return (
         <div className="flex flex-wrap items-center justify-center p-0 text-center">
@@ -60,6 +63,7 @@ export const SocialContacts: FC<SocialContactsProps> = ({
                 icon={<BiLogoLinkedin size={30} title={"Linkedin"} />}
             />
             <CallToActionInternalWithTracking
+                linkComponent={linkComponent}
                 to={contactHref}
                 onClick={onTrackContact}
                 className="min-w-auto!"

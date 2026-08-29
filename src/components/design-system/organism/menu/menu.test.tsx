@@ -6,15 +6,10 @@ import type { MenuNavHrefs } from "./menu";
 import type { MenuTrackingCallbacks } from "./use-menu-store";
 import { ScrollDirection } from "@/components/design-system/hooks/use-scroll-direction";
 
-let mockPathname = "/";
+let currentPath = "/";
 let mockScrollDirection: ScrollDirection = ScrollDirection.up;
 let mockModifierKey: "meta" | "ctrl" | null = null;
 const openCommandPaletteMock = vi.fn();
-
-vi.mock("next/navigation", () => ({
-    usePathname: () => mockPathname,
-    useRouter: () => ({ push: vi.fn() }),
-}));
 
 vi.mock("@/components/design-system/hooks/use-scroll-direction", async () => {
     const actual = await vi.importActual<typeof import("@/components/design-system/hooks/use-scroll-direction")>(
@@ -78,7 +73,7 @@ const navHrefs: MenuNavHrefs = {
 };
 
 afterEach(() => {
-    mockPathname = "/";
+    currentPath = "/";
     mockScrollDirection = ScrollDirection.up;
     mockModifierKey = null;
     openCommandPaletteMock.mockClear();
@@ -119,20 +114,20 @@ const navCases: NavCase[] = [
 describe("Menu", () => {
     describe("render", () => {
         it("renders the Home nav link", () => {
-            render(<Menu navHrefs={navHrefs} />);
+            render(<Menu navHrefs={navHrefs} currentPath={currentPath} />);
             const homeLinks = screen.getAllByRole("link", { name: "Home" });
             expect(homeLinks.length).toBeGreaterThan(0);
             expect(homeLinks[0]).toHaveAttribute("href", "/");
         });
 
         it("renders a Blog dropdown trigger", () => {
-            render(<Menu navHrefs={navHrefs} />);
+            render(<Menu navHrefs={navHrefs} currentPath={currentPath} />);
             const blogButtons = screen.getAllByRole("button", { name: "Blog" });
             expect(blogButtons.length).toBeGreaterThan(0);
         });
 
         it("lists Latest posts, Archive, Authors, Tags and Stats in the Blog dropdown, grouped in order", async () => {
-            render(<Menu navHrefs={navHrefs} />);
+            render(<Menu navHrefs={navHrefs} currentPath={currentPath} />);
             await userEvent.click(screen.getAllByRole("button", { name: "Blog" })[0]);
             const menu = screen.getAllByRole("list", { name: "Blog" })[0];
             expect(within(menu).getByText("Posts")).toBeInTheDocument();
@@ -154,23 +149,23 @@ describe("Menu", () => {
         });
 
         it("marks Authors as selected when on an author detail page", async () => {
-            mockPathname = "/blog/author/francesco-bonfadelli";
-            render(<Menu navHrefs={navHrefs} />);
+            currentPath = "/blog/author/francesco-bonfadelli";
+            render(<Menu navHrefs={navHrefs} currentPath={currentPath} />);
             await userEvent.click(screen.getAllByRole("button", { name: "Blog" })[0]);
             const menu = screen.getAllByRole("list", { name: "Blog" })[0];
             expect(within(menu).getByRole("link", { name: "Authors" })).toHaveClass("border-accent");
         });
 
         it("does not mark Authors as selected on an unrelated page", async () => {
-            mockPathname = "/contact";
-            render(<Menu navHrefs={navHrefs} />);
+            currentPath = "/contact";
+            render(<Menu navHrefs={navHrefs} currentPath={currentPath} />);
             await userEvent.click(screen.getAllByRole("button", { name: "Blog" })[0]);
             const menu = screen.getAllByRole("list", { name: "Blog" })[0];
             expect(within(menu).getByRole("link", { name: "Authors" })).not.toHaveClass("border-accent");
         });
 
         it("moves Easter eggs into the Explore dropdown under a Secrets section", async () => {
-            render(<Menu navHrefs={navHrefs} />);
+            render(<Menu navHrefs={navHrefs} currentPath={currentPath} />);
             await userEvent.click(screen.getAllByRole("button", { name: "Explore" })[0]);
             const menu = screen.getAllByRole("list", { name: "Explore" })[0];
             expect(within(menu).getByText("Secrets")).toBeInTheDocument();
@@ -181,7 +176,7 @@ describe("Menu", () => {
         });
 
         it("renders the search button", () => {
-            render(<Menu navHrefs={navHrefs} />);
+            render(<Menu navHrefs={navHrefs} currentPath={currentPath} />);
             expect(screen.getByRole("button", { name: "Open command palette" })).toBeInTheDocument();
         });
     });
@@ -189,21 +184,21 @@ describe("Menu", () => {
     describe("interaction", () => {
         it("calls onPaletteTrigger and opens the command palette when search button is clicked", async () => {
             const onPaletteTrigger = vi.fn();
-            render(<Menu navHrefs={navHrefs} onPaletteTrigger={onPaletteTrigger} />);
+            render(<Menu navHrefs={navHrefs} currentPath={currentPath} onPaletteTrigger={onPaletteTrigger} />);
             await userEvent.click(screen.getByRole("button", { name: "Open command palette" }));
             expect(onPaletteTrigger).toHaveBeenCalledOnce();
             expect(openCommandPaletteMock).toHaveBeenCalledOnce();
         });
 
         it("opens the command palette even without an onPaletteTrigger prop", async () => {
-            render(<Menu navHrefs={navHrefs} />);
+            render(<Menu navHrefs={navHrefs} currentPath={currentPath} />);
             await userEvent.click(screen.getByRole("button", { name: "Open command palette" }));
             expect(openCommandPaletteMock).toHaveBeenCalledOnce();
         });
 
         it("calls tracking callback when a Blog dropdown item is clicked", async () => {
             const onTrackBlogAuthors = vi.fn();
-            render(<Menu navHrefs={navHrefs} tracking={{ onTrackBlogAuthors }} />);
+            render(<Menu navHrefs={navHrefs} currentPath={currentPath} tracking={{ onTrackBlogAuthors }} />);
             await userEvent.click(screen.getAllByRole("button", { name: "Blog" })[0]);
             const menu = screen.getAllByRole("list", { name: "Blog" })[0];
             await userEvent.click(within(menu).getByRole("link", { name: "Authors" }));
@@ -212,7 +207,7 @@ describe("Menu", () => {
 
         it("calls tracking callback when the Stats dropdown item is clicked", async () => {
             const onTrackBlogStats = vi.fn();
-            render(<Menu navHrefs={navHrefs} tracking={{ onTrackBlogStats }} />);
+            render(<Menu navHrefs={navHrefs} currentPath={currentPath} tracking={{ onTrackBlogStats }} />);
             await userEvent.click(screen.getAllByRole("button", { name: "Blog" })[0]);
             const menu = screen.getAllByRole("list", { name: "Blog" })[0];
             await userEvent.click(within(menu).getByRole("link", { name: "Stats" }));
@@ -222,14 +217,14 @@ describe("Menu", () => {
 
     describe("mobile menu", () => {
         it("opens the mobile menu when the hamburger icon is clicked", async () => {
-            const { container } = render(<Menu navHrefs={navHrefs} />);
+            const { container } = render(<Menu navHrefs={navHrefs} currentPath={currentPath} />);
             expect(getMobilePanel(container)).toBeNull();
             await openMobileMenu(container);
             expect(getMobilePanel(container)).not.toBeNull();
         });
 
         it("closes the mobile menu when the close icon is clicked", async () => {
-            const { container } = render(<Menu navHrefs={navHrefs} />);
+            const { container } = render(<Menu navHrefs={navHrefs} currentPath={currentPath} />);
             await openMobileMenu(container);
             const mobilePanel = getMobilePanel(container)!;
             const closeIcon = mobilePanel.querySelector<SVGElement>(
@@ -246,7 +241,7 @@ describe("Menu", () => {
             async ({ label, trackingKey, dropdown }) => {
                 const trackingFn = vi.fn();
                 const tracking: MenuTrackingCallbacks = { [trackingKey]: trackingFn };
-                const { container } = render(<Menu navHrefs={navHrefs} tracking={tracking} />);
+                const { container } = render(<Menu navHrefs={navHrefs} currentPath={currentPath} tracking={tracking} />);
                 await openMobileMenu(container);
                 const mobilePanel = getMobilePanel(container)!;
 
@@ -263,25 +258,25 @@ describe("Menu", () => {
 
     describe("hide on scroll", () => {
         it("hides the menu bar when scrolling down on a non-chat page", () => {
-            mockPathname = "/blog";
+            currentPath = "/blog";
             mockScrollDirection = ScrollDirection.down;
-            const { container } = render(<Menu navHrefs={navHrefs} />);
+            const { container } = render(<Menu navHrefs={navHrefs} currentPath={currentPath} />);
             const menuBar = container.querySelector(".menu-container");
             expect(menuBar).toHaveAttribute("animate", "hidden");
         });
 
         it("keeps the menu bar visible when scrolling up", () => {
-            mockPathname = "/blog";
+            currentPath = "/blog";
             mockScrollDirection = ScrollDirection.up;
-            const { container } = render(<Menu navHrefs={navHrefs} />);
+            const { container } = render(<Menu navHrefs={navHrefs} currentPath={currentPath} />);
             const menuBar = container.querySelector(".menu-container");
             expect(menuBar).toHaveAttribute("animate", "visible");
         });
 
         it("keeps the menu bar visible on the chat page even when scrolling down", () => {
-            mockPathname = navHrefs.chat;
+            currentPath = navHrefs.chat;
             mockScrollDirection = ScrollDirection.down;
-            const { container } = render(<Menu navHrefs={navHrefs} />);
+            const { container } = render(<Menu navHrefs={navHrefs} currentPath={currentPath} />);
             const menuBar = container.querySelector(".menu-container");
             expect(menuBar).toHaveAttribute("animate", "visible");
         });
@@ -290,13 +285,13 @@ describe("Menu", () => {
     describe("os modifier key shortcut badge", () => {
         it("shows the K shortcut badge when a modifier key is detected", () => {
             mockModifierKey = "meta";
-            render(<Menu navHrefs={navHrefs} />);
+            render(<Menu navHrefs={navHrefs} currentPath={currentPath} />);
             expect(screen.getByText("K")).toBeInTheDocument();
         });
 
         it("hides the shortcut badge when no modifier key is detected", () => {
             mockModifierKey = null;
-            render(<Menu navHrefs={navHrefs} />);
+            render(<Menu navHrefs={navHrefs} currentPath={currentPath} />);
             expect(screen.queryByText("K")).not.toBeInTheDocument();
         });
     });

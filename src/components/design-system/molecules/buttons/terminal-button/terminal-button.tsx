@@ -1,6 +1,7 @@
 import { InternalLink } from "@/components/design-system/atoms/links/internal-link";
 import { Cursor } from "@/components/design-system/atoms/typography/terminal-blocks";
 import { Button } from "@/components/design-system/atoms/buttons/button";
+import type { LinkComponent } from "@/components/design-system/atoms/links/anchor-link";
 import { FC } from "react";
 
 export interface TerminalButtonProps {
@@ -9,6 +10,7 @@ export interface TerminalButtonProps {
     onClick?: () => void;
     className?: string;
     ariaExpanded?: boolean;
+    linkComponent?: LinkComponent;
 }
 
 const TerminalContent: FC<{ label: string }> = ({ label }) => (
@@ -18,13 +20,18 @@ const TerminalContent: FC<{ label: string }> = ({ label }) => (
     </>
 );
 
-export const TerminalButton: FC<TerminalButtonProps> = ({ label, to, onClick, className, ariaExpanded }) => {
+export const TerminalButton: FC<TerminalButtonProps> = ({ label, to, onClick, className, ariaExpanded, linkComponent }) => {
     const buttonClassName = `w-fit${className ? ` ${className}` : ""}`;
 
     if (to) {
         return (
             <Button className={buttonClassName}>
-                <InternalLink to={to} onClick={onClick} className="font-mono text-lg no-underline hover:no-underline">
+                <InternalLink
+                    linkComponent={linkComponent}
+                    to={to}
+                    onClick={onClick}
+                    className="font-mono text-lg no-underline hover:no-underline"
+                >
                     <span className="text-shadow-sm text-accent">
                         <TerminalContent label={label} />
                     </span>

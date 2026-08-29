@@ -1,7 +1,6 @@
 "use client";
 
 import { openCommandPalette } from "@/components/design-system/state/command-palette/command-palette-events";
-import { usePathname } from "next/navigation";
 import { useState, useCallback } from "react";
 import { ScrollDirection, useScrollDirection } from "@/components/design-system/hooks/use-scroll-direction";
 import { useOsModifierKey, OsModifierKey } from "@/components/design-system/hooks/use-os-modifier-key";
@@ -56,11 +55,11 @@ export interface MenuTrackingCallbacks {
 }
 
 export const useMenuStore = (
+    pathname: string,
     chatSlug: string,
     onPaletteTrigger?: () => void,
     tracking?: MenuTrackingCallbacks,
 ): ComponentStore<MenuState, MenuEffects> => {
-    const pathname = usePathname();
     const direction = useScrollDirection();
     const [shouldOpenMenu, setShouldOpenMenu] = useState(false);
     const modifierKey = useOsModifierKey();

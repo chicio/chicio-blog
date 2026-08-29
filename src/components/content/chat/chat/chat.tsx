@@ -7,7 +7,7 @@ import { ContentContainer } from "@/components/design-system/molecules/container
 import { PageTitle } from "@/components/design-system/molecules/typography/page-title";
 import { ParagraphTitleWithIcon } from "@/components/design-system/molecules/typography/paragraph-title-with-icon";
 import { BrandHeader } from "@/components/design-system-next/brand-header";
-import { Menu } from "@/components/design-system/organism/menu";
+import { Menu } from "@/components/design-system-next/menu";
 import { FC } from "react";
 import { ChatInput } from "./chat-input";
 import { ChatMessage } from "./chat-message";

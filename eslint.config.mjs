@@ -37,6 +37,27 @@ const ignores = {
     ],
 };
 
+// `_`-prefixed parameters are the conventional way to drop a prop from a rest spread — the design
+// system does this to keep framework-only props off the DOM, where React would warn about them.
+const unusedVarsRules = {
+    files: ["src/**/*.{ts,tsx}"],
+    rules: {
+        "@typescript-eslint/no-unused-vars": [
+            "error",
+            { argsIgnorePattern: "^_", varsIgnorePattern: "^_", caughtErrorsIgnorePattern: "^_" },
+        ],
+    },
+};
+
+// The design system is framework-agnostic: it renders a real <img> as the documented fallback when
+// no image component is injected, and it must not be held to Next-specific rules.
+const designSystemRules = {
+    files: ["src/components/design-system/**/*.{ts,tsx}"],
+    rules: {
+        "@next/next/no-img-element": "off",
+    },
+};
+
 const componentStoreRules = {
     files: ["src/components/**/*.tsx"],
     ignores: ["src/components/**/use-*.tsx"],
@@ -68,6 +89,8 @@ const eslintConfig = [
     ignores,
     ...coreWebVitals,
     ...typescript,
+    unusedVarsRules,
+    designSystemRules,
     componentStoreRules,
     storeHookRules,
     indexBarrelRules,

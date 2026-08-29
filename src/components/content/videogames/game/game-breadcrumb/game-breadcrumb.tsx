@@ -1,7 +1,7 @@
 "use client";
 
 import { FC } from "react";
-import { Breadcrumb } from "@/components/design-system/molecules/breadcrumbs/breadcrumb";
+import { Breadcrumb } from "@/components/design-system-next/breadcrumb";
 import { useGameBreadcrumbStore } from "./use-game-breadcrumb-store";
 
 interface GameBreadcrumbProps {

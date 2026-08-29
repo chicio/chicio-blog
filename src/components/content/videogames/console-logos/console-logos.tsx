@@ -1,4 +1,4 @@
-import { InternalLink } from "@/components/design-system/atoms/links/internal-link";
+import { InternalLink } from "@/components/design-system-next/internal-link";
 import { FC } from "react";
 import { ManufacturerLogo } from "@/components/content/videogames/manufacturer-logo";
 import { ImageGlow } from "@/components/design-system-next/image-glow";

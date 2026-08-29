@@ -1,9 +1,8 @@
 import { describe, it, expect, vi } from "vitest";
-import { render, screen, nextLinkMock } from "@/test-utils";
+import { render, screen } from "@/test-utils";
 import userEvent from "@testing-library/user-event";
+import type { LinkComponent } from "@/components/design-system/atoms/links/anchor-link";
 import { MenuItem } from "./menu-item";
-
-vi.mock("next/link", () => nextLinkMock());
 
 describe("MenuItem", () => {
     describe("render", () => {
@@ -54,10 +53,42 @@ describe("MenuItem", () => {
         });
     });
 
-    describe("prefetch", () => {
-        it("uses Next's default prefetching (nav links only render once their dropdown is open)", () => {
-            render(<MenuItem to="/blog" selected={false}>Blog</MenuItem>);
-            expect(screen.getByRole("link")).toHaveAttribute("data-prefetch", "undefined");
+    describe("link component injection", () => {
+        it("renders a plain anchor when no link component is injected", () => {
+            render(
+                <MenuItem to="/blog" selected={false}>
+                    Blog
+                </MenuItem>,
+            );
+            expect(screen.getByRole("link")).toHaveAttribute("href", "/blog");
+        });
+
+        it("renders internal links through the injected link component", () => {
+            const spyLink: LinkComponent = ({ href, children }) => (
+                <a href={href} data-injected="true">
+                    {children}
+                </a>
+            );
+            render(
+                <MenuItem to="/blog" selected={false} linkComponent={spyLink}>
+                    Blog
+                </MenuItem>,
+            );
+            expect(screen.getByRole("link")).toHaveAttribute("data-injected", "true");
+        });
+
+        it("keeps external links as plain anchors, bypassing the injected component", () => {
+            const spyLink: LinkComponent = ({ href, children }) => (
+                <a href={href} data-injected="true">
+                    {children}
+                </a>
+            );
+            render(
+                <MenuItem to="https://example.com" selected={false} external linkComponent={spyLink}>
+                    Away
+                </MenuItem>,
+            );
+            expect(screen.getByRole("link")).not.toHaveAttribute("data-injected");
         });
     });
 });

@@ -1,11 +1,12 @@
 "use client";
 
 import { FC, ReactNode } from "react";
-import Link from "next/link";
+import { AnchorLink, type LinkComponent } from "@/components/design-system/atoms/links/anchor-link";
 import { useMenuItemStore } from "./use-menu-item-store";
 
 export type MenuItemProps = {
     to: string;
+    linkComponent?: LinkComponent;
     selected: boolean;
     children?: ReactNode;
     className?: string;
@@ -20,6 +21,7 @@ export const MenuItem: FC<MenuItemProps> = ({
     selected,
     onClick,
     external,
+    linkComponent: Link = AnchorLink,
 }) => {
     const { effects } = useMenuItemStore();
     const { handleClick } = effects;

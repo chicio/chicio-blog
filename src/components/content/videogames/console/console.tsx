@@ -1,5 +1,5 @@
 import { ReadingContentPage } from "@/components/features/content/reading-content-page";
-import { BreadcrumbItem } from "@/components/design-system/molecules/breadcrumbs/breadcrumb";
+import { BreadcrumbItem } from "@/components/design-system-next/breadcrumb";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { FC, PropsWithChildren } from "react";
 import { JsonLd } from "@/components/features/seo/jsond-ld";

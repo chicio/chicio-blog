@@ -7,6 +7,7 @@ import { Close } from "@/components/design-system/molecules/menu/close";
 import { DropdownMenu } from "@/components/design-system/molecules/menu/dropdown-menu";
 import { HamburgerMenu } from "@/components/design-system/molecules/menu/hamburger-menu";
 import { MenuItem } from "@/components/design-system/molecules/menu/menu-item";
+import type { LinkComponent } from "@/components/design-system/atoms/links/anchor-link";
 import { useGlassmorphism } from "@/components/design-system/hooks/use-glassmorphism";
 import { MotionDiv } from "@/components/design-system/atoms/animation/motion-div";
 import { LuCommand } from "react-icons/lu";
@@ -55,14 +56,17 @@ export interface MenuNavHrefs {
 }
 
 export interface MenuProps {
+    linkComponent?: LinkComponent;
+    /** The path currently being viewed, used to mark the active entry. Injected by the consumer's router. */
+    currentPath: string;
     navHrefs: MenuNavHrefs;
     onPaletteTrigger?: () => void;
     tracking?: MenuTrackingCallbacks;
 }
 
-export const Menu: FC<MenuProps> = ({ navHrefs, onPaletteTrigger, tracking }) => {
+export const Menu: FC<MenuProps> = ({ navHrefs, onPaletteTrigger, tracking, linkComponent, currentPath }) => {
     const { glassmorphismClass } = useGlassmorphism({ noScale: true });
-    const { state, effects } = useMenuStore(navHrefs.chat, onPaletteTrigger, tracking);
+    const { state, effects } = useMenuStore(currentPath, navHrefs.chat, onPaletteTrigger, tracking);
     const { pathname, shouldHideMenu, shouldOpenMenu, modifierKey } = state;
     const {
         openMenu,
@@ -93,7 +97,7 @@ export const Menu: FC<MenuProps> = ({ navHrefs, onPaletteTrigger, tracking }) =>
 
     const renderMenuItems = (isMobile: boolean) => (
         <>
-            <MenuItem
+            <MenuItem linkComponent={linkComponent}
                 className={baseClassName(isMobile)}
                 key={`home-${isMobile ? "mobile" : "desktop"}`}
                 to={"/"}
@@ -102,7 +106,7 @@ export const Menu: FC<MenuProps> = ({ navHrefs, onPaletteTrigger, tracking }) =>
             >
                 Home
             </MenuItem>
-            <DropdownMenu
+            <DropdownMenu linkComponent={linkComponent}
                 key={`blog-${isMobile ? "mobile" : "desktop"}`}
                 label="Blog"
                 className={dropdownClassName(isMobile)}
@@ -156,7 +160,7 @@ export const Menu: FC<MenuProps> = ({ navHrefs, onPaletteTrigger, tracking }) =>
                     },
                 ]}
             />
-            <DropdownMenu
+            <DropdownMenu linkComponent={linkComponent}
                 label="Explore"
                 className={dropdownClassName(isMobile)}
                 items={[
@@ -218,7 +222,7 @@ export const Menu: FC<MenuProps> = ({ navHrefs, onPaletteTrigger, tracking }) =>
                     },
                 ]}
             />
-            <DropdownMenu
+            <DropdownMenu linkComponent={linkComponent}
                 label="The Author"
                 className={dropdownClassName(isMobile)}
                 items={[

@@ -1,7 +1,7 @@
 "use client";
 
 import { GlassmorphismBackground } from "@/components/design-system/atoms/effects/glassmorphism-background";
-import { SocialContacts } from "@/components/design-system/organism/social-contacts";
+import { SocialContacts } from "@/components/design-system-next/social-contacts";
 import { Variants } from "framer-motion";
 import { FC } from "react";
 import { ProfilePhoto } from "@/components/design-system-next/profile-photo";
