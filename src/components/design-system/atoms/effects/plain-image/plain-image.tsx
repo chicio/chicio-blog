@@ -12,11 +12,10 @@ export type ImagePlaceholder = "blur" | "empty" | `data:image/${string}`;
  */
 export type ImageSource = string | { src: string; width: number; height: number; blurDataURL?: string };
 
-export interface ImageComponentProps
-    extends Omit<
-        ImgHTMLAttributes<HTMLImageElement>,
-        "src" | "alt" | "placeholder" | "width" | "height" | "loading"
-    > {
+export interface ImageComponentProps extends Omit<
+    ImgHTMLAttributes<HTMLImageElement>,
+    "src" | "alt" | "placeholder" | "width" | "height" | "loading"
+> {
     src: ImageSource;
     alt: string;
     width?: number | `${number}`;

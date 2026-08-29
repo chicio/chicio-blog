@@ -23,13 +23,7 @@ export const NextLink: FC<LinkComponentProps> = ({
     const { handleMouseEnter, handleFocus } = effects;
 
     return (
-        <NextJsLink
-            href={href}
-            prefetch={nextPrefetch}
-            onMouseEnter={handleMouseEnter}
-            onFocus={handleFocus}
-            {...rest}
-        >
+        <NextJsLink href={href} prefetch={nextPrefetch} onMouseEnter={handleMouseEnter} onFocus={handleFocus} {...rest}>
             {children}
         </NextJsLink>
     );

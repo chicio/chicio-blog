@@ -4,13 +4,20 @@ import userEvent from "@testing-library/user-event";
 import { TerminalItem } from "./terminal-item";
 
 vi.mock("cmdk", () => ({
-    Command: Object.assign({}, {
-        Item: ({ children, onSelect, value }: React.PropsWithChildren<{ onSelect?: () => void; value?: string }>) => (
-            <button onClick={onSelect} aria-label={value}>
-                {children}
-            </button>
-        ),
-    }),
+    Command: Object.assign(
+        {},
+        {
+            Item: ({
+                children,
+                onSelect,
+                value,
+            }: React.PropsWithChildren<{ onSelect?: () => void; value?: string }>) => (
+                <button onClick={onSelect} aria-label={value}>
+                    {children}
+                </button>
+            ),
+        },
+    ),
 }));
 
 const terminalButton = () => screen.getByRole("button", { name: "open terminal" });

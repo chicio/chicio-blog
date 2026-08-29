@@ -4,13 +4,20 @@ import userEvent from "@testing-library/user-event";
 import { EasterEggHuntItem } from "./easter-egg-hunt-item";
 
 vi.mock("cmdk", () => ({
-    Command: Object.assign({}, {
-        Item: ({ children, onSelect, value }: React.PropsWithChildren<{ onSelect?: () => void; value?: string }>) => (
-            <button onClick={onSelect} aria-label={value}>
-                {children}
-            </button>
-        ),
-    }),
+    Command: Object.assign(
+        {},
+        {
+            Item: ({
+                children,
+                onSelect,
+                value,
+            }: React.PropsWithChildren<{ onSelect?: () => void; value?: string }>) => (
+                <button onClick={onSelect} aria-label={value}>
+                    {children}
+                </button>
+            ),
+        },
+    ),
 }));
 
 const easterEggHuntButton = () => screen.getByRole("button", { name: "easter egg hunt" });
