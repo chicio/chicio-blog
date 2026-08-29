@@ -1,11 +1,6 @@
 "use client";
 
-import { RedPillNoReflection } from "@/components/design-system/atoms/effects/pills";
-import { ChatIcon } from "@/components/design-system/atoms/icons/chat-icon";
-import { Markdown } from "@/components/design-system/atoms/typography/markdown";
-import { ContentContainer } from "@/components/design-system/molecules/containers/content-container";
-import { PageTitle } from "@/components/design-system/molecules/typography/page-title";
-import { ParagraphTitleWithIcon } from "@/components/design-system/molecules/typography/paragraph-title-with-icon";
+import { ChatIcon, ContentContainer, Markdown, PageTitle, ParagraphTitleWithIcon, RedPillNoReflection } from "matrix-design-system";
 import { BrandHeader } from "@/components/features/design-system-next/brand-header";
 import { Menu } from "@/components/features/design-system-next/menu";
 import { FC } from "react";

@@ -1,7 +1,7 @@
 "use client";
 
 import { FC } from "react";
-import { DonutChart } from "@/components/design-system/molecules/chart/donut-chart";
+import { DonutChart } from "matrix-design-system";
 import type { DimensionCount } from "@/types/content/analytics-stats";
 
 interface ContinentChartProps {

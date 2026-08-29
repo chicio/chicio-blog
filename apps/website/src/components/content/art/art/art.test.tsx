@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { render, screen } from "@/test-utils";
 import userEvent from "@testing-library/user-event";
 import { Art } from "./index";
+import { lightboxOpenEvent } from "matrix-design-system";
 
 vi.mock("@/lib/tracking/tracking", () => ({ trackWith: vi.fn() }));
 
@@ -10,14 +11,8 @@ vi.mock("@/components/features/content/content-page", () => ({
     ContentPage: ({ children }: { children?: ReactNode }) => <div>{children}</div>,
 }));
 
-const { openLightboxMock } = vi.hoisted(() => ({ openLightboxMock: vi.fn() }));
-
-vi.mock("@/components/design-system/state/lightbox/lightbox-events", () => ({
-    openLightbox: openLightboxMock,
-}));
-
 vi.mock("@/content/art/content.mdx", async () => {
-    const { LightboxImage } = await import("@/components/design-system/molecules/lightbox-image");
+    const { LightboxImage } = await import("matrix-design-system");
 
     const FakeArtContent = () => (
         <>
@@ -51,15 +46,19 @@ describe("Art", () => {
 
     describe("lightbox", () => {
         it("opens the shared lightbox when a gallery image is clicked", async () => {
+            const lightboxOpened = vi.fn();
+            window.addEventListener(lightboxOpenEvent, lightboxOpened);
             const user = userEvent.setup();
             render(<Art />);
 
             await user.click(screen.getByAltText("Giant pumpkin"));
 
-            expect(openLightboxMock).toHaveBeenCalledWith({
+            expect(lightboxOpened).toHaveBeenCalledTimes(1);
+            expect(lightboxOpened.mock.calls[0][0].detail).toEqual({
                 src: "/media/content/art/2023-10-31.jpg",
                 alt: "Giant pumpkin",
             });
+            window.removeEventListener(lightboxOpenEvent, lightboxOpened);
         });
     });
 });

@@ -1,7 +1,7 @@
 "use client";
 
 import { FC } from "react";
-import { Cursor, TerminalLine } from "@/components/design-system/atoms/typography/terminal-blocks";
+import { Cursor, TerminalLine } from "matrix-design-system";
 import type { EasterEggSlug } from "@/lib/easter-eggs/easter-egg-catalog";
 import { useBootTerminalStore } from "./use-boot-terminal-store";
 

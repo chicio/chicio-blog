@@ -2,11 +2,8 @@
 
 import { FC } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ControlSlider } from "@/components/design-system/molecules/controls/control-slider";
-import { Switch } from "@/components/design-system/atoms/buttons/switch";
+import { Button, ControlSlider, Switch, useGlassmorphism } from "matrix-design-system";
 import { MdClose } from "react-icons/md";
-import { useGlassmorphism } from "@/components/design-system/hooks/use-glassmorphism";
-import { Button } from "@/components/design-system/atoms/buttons/button";
 import {
     useMatrixRainControlPanelStore,
     FONT_SIZE_STEPS,

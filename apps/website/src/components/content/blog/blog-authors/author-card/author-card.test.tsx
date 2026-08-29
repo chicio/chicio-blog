@@ -7,10 +7,10 @@ import type { Author } from "@/types/content/author";
 vi.mock("next/image", () => nextImageMock());
 vi.mock("next/link", () => nextLinkMock());
 
-vi.mock("@/components/design-system/hooks/use-in-view-list", () => ({
+vi.mock("matrix-design-system", async (importOriginal) => ({
+    ...(await importOriginal<typeof import("matrix-design-system")>()),
     useInViewList: () => [vi.fn(), true],
 }));
-
 const trackWith = vi.fn();
 vi.mock("@/lib/tracking/tracking", () => ({ trackWith: (...args: unknown[]) => trackWith(...args) }));
 

@@ -6,16 +6,7 @@ import {
     BiUser,
     BiMessageDetail,
 } from "react-icons/bi";
-import { PageTitle } from "@/components/design-system/molecules/typography/page-title";
-import { FormField } from "@/components/design-system/molecules/form/form-field";
-import { FormTextarea } from "@/components/design-system/molecules/form/form-textarea";
-import { FormErrorSummary } from "@/components/design-system/molecules/form/form-error-summary";
-import { FormSuccessMessage } from "@/components/design-system/molecules/form/form-success-message";
-import {
-    RedPillButton,
-    BluePillButton,
-} from "@/components/design-system/molecules/buttons/pills-buttons";
-import { LoadingBar } from "@/components/design-system/organism/loading-bar";
+import { BluePillButton, FormErrorSummary, FormField, FormSuccessMessage, FormTextarea, LoadingBar, PageTitle, RedPillButton } from "matrix-design-system";
 import { useContactFormStore } from "./use-contact-form-store";
 
 export interface ContactFormProps {

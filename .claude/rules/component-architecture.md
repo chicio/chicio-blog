@@ -1,7 +1,7 @@
 ---
 paths:
   - "apps/website/src/components/**/*"
-  - "apps/website/tools/eslint/**/*"
+  - "packages/eslint-plugin-chicio/**/*"
   - "apps/website/.dependency-cruiser.js"
 ---
 
@@ -14,7 +14,7 @@ This is the authoritative reference for how UI components are structured, typed,
 Every component lives in its own kebab-case folder where the folder name equals the `.tsx` basename:
 
 ```
-apps/website/src/components/design-system/atoms/buttons/pill-button/
+packages/matrix-design-system/src/atoms/buttons/pill-button/
     pill-button.tsx          # component
     use-pill-button-store.ts # store hook
     index.ts                 # barrel
@@ -92,7 +92,7 @@ Never use `document.querySelector`. Never allowlist `useRef` in eslint-disable c
 
 ## Shared Hooks
 
-Shared hooks (used by 2+ consumers) live in `apps/website/src/components/design-system/hooks/` when they are generic UI
+Shared hooks (used by 2+ consumers) live in `packages/matrix-design-system/src/hooks/` when they are generic UI
 concerns. A hook that depends on this site belongs to its feature domain instead: `useSearch` lives in
 `apps/website/src/components/features/search/`, next to `features/consent/use-consent-store.ts`. There is no layer bucket
 under `features/` — every folder there is named for a domain, never for a kind of file. They may return callback refs (e.g. `useInViewList` returns a `setEl` callback). The consuming store calls the shared hook and re-exposes its callback ref via `effects`.
@@ -107,7 +107,7 @@ Global `useSyncExternalStore`-based stores (e.g. `useMotionStore`) keep their na
 ## Worked Example
 
 ```
-apps/website/src/components/design-system/molecules/accordion/accordion-item/
+packages/matrix-design-system/src/molecules/accordion/accordion-item/
     accordion-item.tsx
     use-accordion-item-store.ts
     index.ts
@@ -163,10 +163,10 @@ Enforced by dependency-cruiser at error:
 
 ## Directory Homes
 
-- `apps/website/src/components/design-system/hooks/` — shared hooks (incl. `useSyncExternalStore` stores and shared ref hooks like `useInViewList`)
-- `apps/website/src/components/design-system/atoms/` — basic UI elements
-- `apps/website/src/components/design-system/molecules/` — composed from atoms
-- `apps/website/src/components/design-system/organism/` — complex composed sections (the top design-system layer)
+- `packages/matrix-design-system/src/hooks/` — shared hooks (incl. `useSyncExternalStore` stores and shared ref hooks like `useInViewList`)
+- `packages/matrix-design-system/src/atoms/` — basic UI elements
+- `packages/matrix-design-system/src/molecules/` — composed from atoms
+- `packages/matrix-design-system/src/organism/` — complex composed sections (the top design-system layer)
 - `apps/website/src/components/features/content/` — page-level layouts (`page-template`, `content-page-template`,
   `reading-content-page-template`); these arrange this site's chrome, so they are not part of the
   reusable design system
@@ -177,7 +177,7 @@ Enforced by dependency-cruiser at error:
 - `apps/website/src/components/features/<feature>/` — cross-cutting UI not tied to a route, one folder per domain; a
   site-specific shared hook lives in its domain folder (e.g. `features/search/use-search.ts`)
 - `apps/website/src/lib/` — pure business logic (no JSX); non-hook utilities live here
-- `apps/website/src/types/component-store.ts` — `ComponentStore`, `StateStore`, `EffectsStore` type definitions
+- `packages/matrix-component-store` — `ComponentStore`, `StateStore`, `EffectsStore` type definitions
 
 `design-system/utils/` has been eliminated — non-hook pure logic lives in `apps/website/src/lib/`, shared SEO/structured-data components in `apps/website/src/components/features/seo/`.
 
@@ -192,7 +192,7 @@ npm run lint                # ESLint: chicio/prefer-component-store, store-retur
 npm run validate-architecture  # dependency-cruiser: all rules at error
 ```
 
-ESLint plugin source: `apps/website/tools/eslint/rules/`
+ESLint plugin source: `packages/eslint-plugin-chicio/rules/`
 - `prefer-component-store` — one hook per component file (useGlassmorphism permanently exempt)
 - `store-return-shape` — store returns only the named typed halves it has
 - `index-only-component` — index barrels export only components and prop types

@@ -1,7 +1,7 @@
 "use client";
 
 import { FC } from "react";
-import { Menu as DesignSystemMenu, type MenuProps } from "@/components/design-system/organism/menu";
+import { Menu as DesignSystemMenu, type MenuProps } from "matrix-design-system";
 import { NextLink } from "@/components/features/design-system-next/next-link";
 import { useMenuStore } from "./use-menu-store";
 

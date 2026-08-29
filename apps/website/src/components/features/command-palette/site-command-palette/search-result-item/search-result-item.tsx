@@ -1,7 +1,6 @@
 "use client";
 
-import { TerminalListItem } from "@/components/design-system/molecules/terminal-list-item";
-import { CommandPaletteItem } from "@/components/design-system/organism/command-palette";
+import { CommandPaletteItem, TerminalListItem } from "matrix-design-system";
 import { FC } from "react";
 import { useSearchResultItemStore } from "./use-search-result-item-store";
 

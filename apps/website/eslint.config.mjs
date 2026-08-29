@@ -3,7 +3,7 @@ import typescript from "eslint-config-next/typescript";
 import { createRequire } from "module";
 
 const require = createRequire(import.meta.url);
-const chicio = require("./tools/eslint/index.js");
+const chicio = require("eslint-plugin-chicio");
 
 const ignores = {
     ignores: [
@@ -24,7 +24,6 @@ const ignores = {
         "ds-bundle/**",
         ".ds-sync/**",
         "public/**",
-        "tools/**",
         "**/*.test.ts",
         "**/*.test.tsx",
         "**/*.spec.ts",
@@ -35,30 +34,6 @@ const ignores = {
         "playwright.config.ts",
         "src/test-utils/**",
     ],
-};
-
-// `_`-prefixed parameters are the conventional way to drop a prop from a rest spread — the design
-// system does this to keep framework-only props off the DOM, where React would warn about them.
-// Scoped to the design system: relaxing this repo-wide would let unused values through everywhere.
-const unusedVarsRules = {
-    files: ["src/components/design-system/**/*.{ts,tsx}"],
-    rules: {
-        "@typescript-eslint/no-unused-vars": [
-            "error",
-            { argsIgnorePattern: "^_", varsIgnorePattern: "^_", caughtErrorsIgnorePattern: "^_" },
-        ],
-    },
-};
-
-// PlainImage is the design system's documented framework-free fallback: rendering a real <img> is
-// its entire purpose. Scoped to that one component so every other design-system file still has to
-// justify a raw <img> — reaching for one instead of the injected imageComponent is the mistake the
-// framework-agnostic split exists to prevent.
-const plainImageRules = {
-    files: ["src/components/design-system/atoms/effects/plain-image/**/*.tsx"],
-    rules: {
-        "@next/next/no-img-element": "off",
-    },
 };
 
 const componentStoreRules = {
@@ -88,15 +63,59 @@ const indexBarrelRules = {
     },
 };
 
+// These design-system components need a link or image implementation injected and fall back to a
+// plain <a>/<img> without one: no client-side routing, no prefetching, no image optimisation — and
+// every other gate stays green. The site must reach them through features/design-system-next/.
+// dependency-cruiser cannot express this: with a single barrel it only sees the module, not which
+// named export was imported.
+const INJECTABLE = [
+    "BrandHeader",
+    "Breadcrumb",
+    "CallToActionInternalWithTracking",
+    "DropdownMenu",
+    "Footer",
+    "FullscreenModal",
+    "ImageCarousel",
+    "ImageGlow",
+    "InternalLink",
+    "Menu",
+    "MenuItem",
+    "ProfilePhoto",
+    "SocialContacts",
+    "Tag",
+    "TerminalButton",
+    "BluePillLink",
+    "RedPillLink",
+];
+
+const injectableViaBindings = {
+    files: ["src/**/*.{ts,tsx}"],
+    ignores: ["src/components/features/design-system-next/**"],
+    rules: {
+        "no-restricted-imports": [
+            "error",
+            {
+                paths: [
+                    {
+                        name: "matrix-design-system",
+                        importNames: INJECTABLE,
+                        message:
+                            "This component needs next/link or next/image injected. Import it from @/components/features/design-system-next/ instead, or it silently renders a plain <a>/<img>.",
+                    },
+                ],
+            },
+        ],
+    },
+};
+
 const eslintConfig = [
     ignores,
     ...coreWebVitals,
     ...typescript,
-    unusedVarsRules,
-    plainImageRules,
     componentStoreRules,
     storeHookRules,
     indexBarrelRules,
+    injectableViaBindings,
 ];
 
 export default eslintConfig;

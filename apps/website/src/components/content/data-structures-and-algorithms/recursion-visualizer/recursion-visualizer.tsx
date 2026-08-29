@@ -1,10 +1,7 @@
 "use client";
 
 import { FC } from "react";
-import {
-    RedPillButton,
-    BluePillButton,
-} from "@/components/design-system/molecules/buttons/pills-buttons";
+import { BluePillButton, RedPillButton } from "matrix-design-system";
 import { useRecursionVisualizerStore } from "./use-recursion-visualizer-store";
 
 export const RecursiveCallStackVisualizer: FC = () => {

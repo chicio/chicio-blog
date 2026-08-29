@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Footer as DesignSystemFooter, type FooterProps } from "@/components/design-system/organism/footer";
+import { Footer as DesignSystemFooter, type FooterProps } from "matrix-design-system";
 import { NextLink } from "@/components/features/design-system-next/next-link";
 
 export type { FooterProps };

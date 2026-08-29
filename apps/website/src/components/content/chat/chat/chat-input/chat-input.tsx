@@ -1,4 +1,4 @@
-import { InputField } from "@/components/design-system/atoms/typography/input-field";
+import { InputField } from "matrix-design-system";
 import { ChangeEvent, FC, FormEvent } from "react";
 import { BiSend } from "react-icons/bi";
 

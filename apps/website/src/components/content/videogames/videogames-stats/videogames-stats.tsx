@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { StatCard } from "@/components/design-system/molecules/stat-card";
+import { StatCard } from "matrix-design-system";
 import { consoles, games } from "@/lib/content/videogames/videogames";
 
 const collectionStartYear = 1992;

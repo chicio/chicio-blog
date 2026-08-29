@@ -1,6 +1,5 @@
 import { FC } from "react";
-import { SectionHeading } from "@/components/design-system/molecules/typography/section-heading";
-import { Chip } from "@/components/design-system/atoms/chip";
+import { Chip, SectionHeading } from "matrix-design-system";
 import { getArchivedCommentsBy } from "@/lib/content/comments/comments";
 import { ArchivedCommentReply } from "@/types/content/comment";
 

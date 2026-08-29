@@ -13,9 +13,17 @@ always: true
 | E2E | Playwright | Full-page flows with real production build + mocked external APIs |
 | Live QA | agent-browser (local only) | Agent-driven a11y tree + click-through smoke walks |
 
-Coverage: v8 provider, text + json-summary reporters. **Threshold ratchet is active** — thresholds are set in `apps/website/vitest.config.ts` and the CI `test` job gates on them. The floor is the measured baseline over `apps/website/src/lib/**`, `apps/website/src/components/design-system/**` and the page-level
+Coverage: v8 provider, text + json-summary reporters. **Threshold ratchet is active** — thresholds are set in `apps/website/vitest.config.ts` and the CI `test` job gates on them. The floor is the measured baseline over `apps/website/src/lib/**`, `packages/matrix-design-system/src/**` and the page-level
 templates, site palette and shared site hooks that moved out of the design system (Matrix CG effects excluded —
-they are canvas-only and cannot run in jsdom). See `coverage.include` in `apps/website/vitest.config.ts` for the exact scope. Floor values: statements 92%, branches 84%, functions 89%, lines 92% (as set in `apps/website/vitest.config.ts`). Raise the floor whenever tests improve coverage; never lower it.
+they are canvas-only and cannot run in jsdom). See `coverage.include` in `apps/website/vitest.config.ts` for the exact scope. Each workspace has its own floor, measured after the design system was extracted:
+
+| Workspace | statements | branches | functions | lines |
+|---|---|---|---|---|
+| `packages/matrix-design-system` | 94 | 83 | 91 | 95 |
+| `apps/website` | 90 | 85 | 88 | 90 |
+
+The website's numbers dropped when the design system stopped carrying its average — the floors are
+the measured baseline of each workspace, not the old combined figure. Raise the floor whenever tests improve coverage; never lower it.
 
 ## File Layout
 
@@ -26,7 +34,7 @@ apps/website/src/lib/chat/
     guardrails.ts
     guardrails.test.ts        <- unit (node project)
 
-apps/website/src/components/design-system/molecules/accordion/accordion/
+packages/matrix-design-system/src/molecules/accordion/accordion/
     accordion.tsx
     accordion.test.tsx        <- component (jsdom project)
     use-accordion-store.ts
@@ -111,7 +119,7 @@ validate-arch  -+- typecheck -+- test -> build -> e2e
 ```
 
 - **typecheck** job: `npm run typecheck` — covers `apps/website/src/**`, `**/*.test.*`, `apps/website/e2e/**`, and config files. Zero errors required.
-- **test** job: `npm run test:coverage` — prints coverage summary and **gates on thresholds** (statements 92%, branches 84%, functions 89%, lines 92%). Coverage below the floor fails CI.
+- **test** job: `npm run test:coverage` — prints coverage summary and **gates on thresholds** (the per-workspace floors above). Coverage below the floor fails CI.
 - **e2e** job: runs after build, Playwright browsers cached, report uploaded as artifact; no third-party secrets needed (externals are mocked)
 
 ## Pre-Push Hook (.husky/pre-push)

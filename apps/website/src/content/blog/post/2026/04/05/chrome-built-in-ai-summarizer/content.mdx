@@ -7,7 +7,7 @@ tags: [web development, chrome, ai, typescript, react]
 authors: [fabrizio_duroni, alessandro_romano]
 ---
 
-import { Youtube } from "@/components/design-system/molecules/video/youtube";
+import { Youtube, useDeviceCapabilities } from "matrix-design-system";
 
 *Learn how I integrated Chrome's Built-in AI Summarizer API to add TL;DR and Key Points features to my blog posts, with progressive enhancement, streaming responses, and on-device privacy.*
 
@@ -115,7 +115,6 @@ Than I create the `useChromeSummarize` hook, the core of the feature. This is a 
 "use client";
 
 import { useCallback, useEffect, useState, useRef } from "react";
-import { useDeviceCapabilities } from "@/components/design-system/hooks/use-device-capabilities";
 
 export type SummaryType = "tldr" | "key-points";
 export type SummaryStatus = "idle" | "downloading" | "loading" | "streaming" | "done" | "error";

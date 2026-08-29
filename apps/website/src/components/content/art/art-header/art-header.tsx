@@ -1,4 +1,4 @@
-import { PageTitle } from "@/components/design-system/molecules/typography/page-title";
+import { PageTitle } from "matrix-design-system";
 import { FC } from "react";
 
 export const ArtHeader: FC = () => (

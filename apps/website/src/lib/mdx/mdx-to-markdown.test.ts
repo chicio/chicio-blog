@@ -4,7 +4,7 @@ import { mdxToMarkdown } from "./mdx-to-markdown";
 describe("mdxToMarkdown", () => {
     it("strips import statements", () => {
         const mdx = `import { FaGamepad } from "react-icons/fa";
-import { ImageCarousel } from "@/components/design-system/organism/image-carousel";
+import { ImageCarousel } from "matrix-design-system";
 
 # Title
 
@@ -44,7 +44,7 @@ Some prose.
     describe("ParagraphTitleWithIcon transform", () => {
         it("unwraps to plain heading text when nested inside a real markdown heading (real content shape)", () => {
             const mdx = `import { FaGamepad } from "react-icons/fa";
-import { ParagraphTitleWithIcon } from "@/components/design-system/molecules/typography/paragraph-title-with-icon";
+import { ParagraphTitleWithIcon } from "matrix-design-system";
 
 ## <ParagraphTitleWithIcon icon={<FaGamepad className="text-shadow-lg" />}>Gameplay</ParagraphTitleWithIcon>
 
@@ -58,7 +58,7 @@ Some prose after the heading.
         });
 
         it("preserves the original heading depth (### case from real MCP content)", () => {
-            const mdx = `import { ParagraphTitleWithIcon } from "@/components/design-system/molecules/typography/paragraph-title-with-icon";
+            const mdx = `import { ParagraphTitleWithIcon } from "matrix-design-system";
 
 ### <ParagraphTitleWithIcon icon={<BiTerminal className="text-accent text-xl" />}>Claude Code</ParagraphTitleWithIcon>
 `;
@@ -70,7 +70,7 @@ Some prose after the heading.
 
     describe("ImageCarousel transform", () => {
         it("expands each image to its own markdown image link, plus an italic caption line (real Batman game shape)", () => {
-            const mdx = `import { ImageCarousel } from "@/components/design-system/organism/image-carousel";
+            const mdx = `import { ImageCarousel } from "matrix-design-system";
 
 <ImageCarousel
     images={[

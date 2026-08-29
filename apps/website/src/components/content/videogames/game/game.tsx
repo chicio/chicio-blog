@@ -5,7 +5,7 @@ import { JsonLd } from "@/components/features/seo/jsond-ld";
 import { Content } from "@/types/content/content";
 import { ConsoleMetadata, GameMetadata } from "@/types/content/videogames";
 import { ImageCarousel } from "@/components/features/design-system-next/image-carousel";
-import { PageTitle } from "@/components/design-system/molecules/typography/page-title";
+import { PageTitle } from "matrix-design-system";
 import { ConsoleLogos } from "@/components/content/videogames/console-logos";
 import { GameFormatIcon } from "@/components/content/videogames/game-format-icon";
 import { VideogameNavigation } from "@/components/content/videogames/videogame-navigation";

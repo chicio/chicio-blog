@@ -1,4 +1,4 @@
-import { PaginationNavigation } from "@/components/design-system/molecules/buttons/pagination-navigation";
+import { PaginationNavigation } from "matrix-design-system";
 import { ContentPage } from "@/components/features/content/content-page";
 import { JsonLd } from "@/components/features/seo/jsond-ld";
 import { siteMetadata } from "@/types/configuration/site-metadata";

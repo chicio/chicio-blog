@@ -1,5 +1,4 @@
-import { Button } from "@/components/design-system/atoms/buttons/button";
-import { GlassmorphismBackground } from "@/components/design-system/atoms/effects/glassmorphism-background";
+import { Button, GlassmorphismBackground } from "matrix-design-system";
 import { FC } from "react";
 
 type ChatWelcomeProps = {

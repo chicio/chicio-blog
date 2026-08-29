@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { PageTitle } from "@/components/design-system/molecules/typography/page-title";
+import { PageTitle } from "matrix-design-system";
 import { ContentPage } from "@/components/features/content/content-page";
 import { EggHuntProgress } from "@/components/content/easter-eggs/egg-hunt-progress";
 import { easterEggHunt } from "@/lib/content/easter-eggs/easter-eggs";

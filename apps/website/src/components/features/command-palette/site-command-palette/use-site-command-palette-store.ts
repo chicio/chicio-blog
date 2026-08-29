@@ -1,7 +1,6 @@
 "use client";
 
-import type { CommandPaletteTrigger } from "@/components/design-system/state/command-palette/command-palette-trigger";
-import { closeCommandPalette } from "@/components/design-system/state/command-palette/command-palette-events";
+import { closeCommandPalette, type CommandPaletteTrigger } from "matrix-design-system";
 import { useSearch } from "@/components/features/search/use-search";
 import { openTerminalOverlay } from "@/lib/terminal/terminal-events";
 import type { ComponentStore } from "matrix-component-store";

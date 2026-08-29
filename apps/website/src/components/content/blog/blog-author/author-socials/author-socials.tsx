@@ -1,4 +1,4 @@
-import { ExternalLink } from "@/components/design-system/atoms/links/external-link";
+import { ExternalLink } from "matrix-design-system";
 import { Author } from "@/types/content/author";
 import { FC } from "react";
 import { BiGlobe, BiLogoGithub, BiLogoLinkedin } from "react-icons/bi";

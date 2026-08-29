@@ -7,18 +7,15 @@ const { mockUseReducedMotions } = vi.hoisted(() => ({
     mockUseReducedMotions: vi.fn().mockReturnValue(false),
 }));
 
-vi.mock("@/components/design-system/hooks/use-reduced-motions", () => ({
+vi.mock("matrix-design-system", async (importOriginal) => ({
+    ...(await importOriginal<typeof import("matrix-design-system")>()),
     useReducedMotions: mockUseReducedMotions,
+    MatrixRain: () => <div data-testid="matrix-rain" />,
 }));
-
 vi.mock("framer-motion", () => ({
     motion: {
         div: ({ children, ...props }: React.HTMLAttributes<HTMLDivElement>) => <div {...props}>{children}</div>,
     },
-}));
-
-vi.mock("@/components/design-system/atoms/effects/matrix-rain/matrix-rain", () => ({
-    MatrixRain: () => <div data-testid="matrix-rain" />,
 }));
 
 /**

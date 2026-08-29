@@ -2,7 +2,10 @@ import { describe, it, expect, vi } from "vitest";
 import { render, screen, motionDivMock } from "@/test-utils";
 import { AboutMeTableOfContents } from "./index";
 
-vi.mock("@/components/design-system/atoms/animation/motion-div", () => motionDivMock());
+vi.mock("matrix-design-system", async (importOriginal) => ({
+    ...(await importOriginal<typeof import("matrix-design-system")>()),
+    ...motionDivMock(),
+}));
 
 describe("AboutMeTableOfContents", () => {
     describe("render", () => {

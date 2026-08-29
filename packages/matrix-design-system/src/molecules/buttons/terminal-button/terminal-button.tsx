@@ -1,0 +1,57 @@
+import { InternalLink } from "../../../atoms/links/internal-link";
+import { Cursor } from "../../../atoms/typography/terminal-blocks";
+import { Button } from "../../../atoms/buttons/button";
+import type { LinkComponent } from "../../../atoms/links/anchor-link";
+import { FC } from "react";
+
+export interface TerminalButtonProps {
+    label: string;
+    to?: string;
+    onClick?: () => void;
+    className?: string;
+    ariaExpanded?: boolean;
+    linkComponent?: LinkComponent;
+}
+
+const TerminalContent: FC<{ label: string }> = ({ label }) => (
+    <>
+        {">"} {label}
+        <Cursor />
+    </>
+);
+
+export const TerminalButton: FC<TerminalButtonProps> = ({
+    label,
+    to,
+    onClick,
+    className,
+    ariaExpanded,
+    linkComponent,
+}) => {
+    const buttonClassName = `w-fit${className ? ` ${className}` : ""}`;
+
+    if (to) {
+        return (
+            <Button className={buttonClassName}>
+                <InternalLink
+                    linkComponent={linkComponent}
+                    to={to}
+                    onClick={onClick}
+                    className="font-mono text-lg no-underline hover:no-underline"
+                >
+                    <span className="text-shadow-sm text-accent">
+                        <TerminalContent label={label} />
+                    </span>
+                </InternalLink>
+            </Button>
+        );
+    }
+
+    return (
+        <Button onClick={onClick} aria-expanded={ariaExpanded} className={buttonClassName}>
+            <span className="font-mono text-lg text-shadow-sm text-accent">
+                <TerminalContent label={label} />
+            </span>
+        </Button>
+    );
+};

@@ -1,5 +1,4 @@
-import { MatrixRain } from "@/components/design-system/atoms/effects/matrix-rain/matrix-rain";
-import { MatrixTerminal } from "@/components/design-system/molecules/effects/matrix-terminal";
+import { MatrixRain, MatrixTerminal } from "matrix-design-system";
 import { BluePillLink, RedPillLink } from "@/components/features/design-system-next/pills-links";
 
 const terminalLines = [

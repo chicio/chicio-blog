@@ -4,8 +4,7 @@ import { useCallback } from "react";
 import { ComponentStore } from "matrix-component-store";
 import { VideogamesNavigationOrigin } from "@/types/content/videogames";
 import { writeVideogamesNavigationOrigin } from "@/lib/videogames/videogames-navigation-origin";
-import { useInViewList } from "@/components/design-system/hooks/use-in-view-list";
-
+import { useInViewList } from "matrix-design-system";
 interface GameCardState {
     isInView: boolean;
 }

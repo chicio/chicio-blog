@@ -1,6 +1,4 @@
-import { PageTitle } from "@/components/design-system/molecules/typography/page-title";
-import { ProfileHero } from "@/components/design-system/organism/profile-hero";
-import { Chip } from "@/components/design-system/atoms/chip";
+import { Chip, PageTitle, ProfileHero } from "matrix-design-system";
 import { ContentPage } from "@/components/features/content/content-page";
 import { JsonLd } from "@/components/features/seo/jsond-ld";
 import { PostsRow } from "@/components/content/blog/posts-row";

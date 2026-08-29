@@ -1,9 +1,7 @@
 "use client";
 
 import { FC } from "react";
-import { Overlay } from "@/components/design-system/atoms/effects/overlay";
-import { MatrixRain } from "@/components/design-system/atoms/effects/matrix-rain/matrix-rain";
-import { SelfHostedVideo } from "@/components/design-system/molecules/video/self-hosted-video";
+import { MatrixRain, Overlay, SelfHostedVideo } from "matrix-design-system";
 import { BootTerminal } from "./boot-terminal";
 import { useEasterEggOverlayStore } from "./use-easter-egg-overlay-store";
 

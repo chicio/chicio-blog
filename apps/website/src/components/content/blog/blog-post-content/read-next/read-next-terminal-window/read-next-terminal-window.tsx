@@ -1,6 +1,6 @@
 "use client";
 
-import { useGlassmorphism } from "@/components/design-system/hooks/use-glassmorphism";
+import { useGlassmorphism } from "matrix-design-system";
 import { FC, ReactNode } from "react";
 
 export interface ReadNextTerminalWindowProps {

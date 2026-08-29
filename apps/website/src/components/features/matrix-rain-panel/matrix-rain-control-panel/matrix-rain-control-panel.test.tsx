@@ -24,7 +24,8 @@ vi.mock("framer-motion", () => ({
     },
 }));
 
-vi.mock("@/components/design-system/molecules/controls/control-slider", () => ({
+vi.mock("matrix-design-system", async (importOriginal) => ({
+    ...(await importOriginal<typeof import("matrix-design-system")>()),
     ControlSlider: ({ label, onChange }: { label: string; onChange: (v: number) => void }) => (
         <input
             data-testid={`slider-${label}`}
@@ -32,9 +33,6 @@ vi.mock("@/components/design-system/molecules/controls/control-slider", () => ({
             onChange={(e) => onChange(Number(e.target.value))}
         />
     ),
-}));
-
-vi.mock("@/components/design-system/atoms/buttons/switch", () => ({
     Switch: ({
         label,
         checked,
@@ -51,9 +49,6 @@ vi.mock("@/components/design-system/atoms/buttons/switch", () => ({
             onChange={(e) => onChange(e.target.checked)}
         />
     ),
-}));
-
-vi.mock("@/components/design-system/atoms/buttons/button", () => ({
     Button: ({
         children,
         onClick,
@@ -64,7 +59,6 @@ vi.mock("@/components/design-system/atoms/buttons/button", () => ({
         </button>
     ),
 }));
-
 vi.mock("@/lib/tracking/tracking", () => ({ trackWith: vi.fn() }));
 
 const openPanel = () => window.dispatchEvent(new Event("matrix-rain-panel-open"));

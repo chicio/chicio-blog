@@ -1,8 +1,7 @@
 "use client";
 
 import { FC } from "react";
-import { StatCard } from "@/components/design-system/molecules/stat-card";
-import { ChartPanel } from "@/components/design-system/molecules/chart/chart-panel";
+import { ChartPanel, StatCard } from "matrix-design-system";
 import { formatAnalyticsMonth } from "@/lib/blog-stats/format-month";
 import type { AllTimeAnalytics, AnalyticsStats } from "@/types/content/analytics-stats";
 import { ContinentChart } from "./continent-chart";

@@ -2,8 +2,7 @@
 
 import React from "react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
-import { ChartPanel } from "@/components/design-system/molecules/chart/chart-panel";
-import { ChartTooltip } from "@/components/design-system/molecules/chart/chart-tooltip";
+import { ChartPanel, ChartTooltip } from "matrix-design-system";
 import { chartTheme } from "@/types/configuration/chart-theme";
 
 const data = [

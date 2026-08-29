@@ -16,7 +16,7 @@ Components follow the folder-per-component + store pattern; the full contract is
 
 1. Create `apps/website/src/components/content/<name>/` (folder-per-component for each component)
 2. Add page type to `apps/website/src/types/slug.ts`
-3. Register in `apps/website/src/components/design-system/organism/menu/menu.tsx` (uses `MenuItemWithTracking`)
+3. Register in `packages/matrix-design-system/src/organism/menu/menu.tsx` (uses `MenuItemWithTracking`)
 4. Add tracking events in `apps/website/src/types/tracking.ts`
 5. Create route in `apps/website/src/app/<name>/page.tsx`
 6. If the page renders MDX, create the matching `apps/website/src/content/<name>/` folder

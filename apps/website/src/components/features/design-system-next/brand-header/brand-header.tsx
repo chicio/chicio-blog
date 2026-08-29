@@ -2,10 +2,7 @@
 
 import NextImage from "next/image";
 import { FC } from "react";
-import {
-    BrandHeader as DesignSystemBrandHeader,
-    type BrandHeaderProps,
-} from "@/components/design-system/organism/header/brand-header";
+import { BrandHeader as DesignSystemBrandHeader, type BrandHeaderProps } from "matrix-design-system";
 import logoImage from "../../../../../public/media/logo.png";
 
 export type BrandHeaderNextProps = Omit<BrandHeaderProps, "imageComponent" | "logo">;

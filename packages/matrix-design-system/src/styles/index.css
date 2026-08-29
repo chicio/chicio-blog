@@ -1,0 +1,20 @@
+/**
+ * The design system's stylesheet. A consumer imports this after `@import "tailwindcss"` and gets the
+ * theme, the base element styling its components assume, and the composed classes they use.
+ *
+ * These four files share no selectors, so their order relative to each other does not affect the
+ * cascade. The ordering that IS load-bearing lives one level up: the site's globals.css must import
+ * this entry BEFORE its own `@layer base`, so its article rules can override the element styling
+ * base.css sets.
+ */
+/**
+ * Tailwind ignores node_modules when scanning for class names, so a consumer would generate none of
+ * the utilities this package's components use. @source opts the package's own sources back in,
+ * relative to this file.
+ */
+@source "../**/*.{ts,tsx}";
+
+@import "./pills.css";
+@import "./theme.css";
+@import "./base.css";
+@import "./components.css";

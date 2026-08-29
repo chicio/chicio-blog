@@ -2,7 +2,7 @@
 
 import { FC } from "react";
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import { ChartTooltip } from "@/components/design-system/molecules/chart/chart-tooltip";
+import { ChartTooltip } from "matrix-design-system";
 import { chartTheme } from "@/types/configuration/chart-theme";
 import type { AuthorCount } from "@/types/content/blog-stats";
 import { LinkedAxisTick } from "../linked-axis-tick";

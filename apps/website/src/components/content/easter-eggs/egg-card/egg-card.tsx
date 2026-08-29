@@ -1,8 +1,7 @@
 "use client";
 
 import { FC, PropsWithChildren } from "react";
-import { TerminalLine } from "@/components/design-system/atoms/typography/terminal-blocks";
-import { useGlassmorphism } from "@/components/design-system/hooks/use-glassmorphism";
+import { TerminalLine, useGlassmorphism } from "matrix-design-system";
 import type { EasterEggSlug } from "@/lib/easter-eggs/easter-egg-catalog";
 import { useEggCardStore } from "./use-egg-card-store";
 

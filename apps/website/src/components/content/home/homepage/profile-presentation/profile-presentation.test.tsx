@@ -3,7 +3,10 @@ import { render, screen, nextLinkMock, motionDivMock } from "@/test-utils";
 import { ProfilePresentation } from "./index";
 
 vi.mock("next/link", () => nextLinkMock());
-vi.mock("@/components/design-system/atoms/animation/motion-div", () => motionDivMock());
+vi.mock("matrix-design-system", async (importOriginal) => ({
+    ...(await importOriginal<typeof import("matrix-design-system")>()),
+    ...motionDivMock(),
+}));
 
 describe("ProfilePresentation", () => {
     describe("render", () => {

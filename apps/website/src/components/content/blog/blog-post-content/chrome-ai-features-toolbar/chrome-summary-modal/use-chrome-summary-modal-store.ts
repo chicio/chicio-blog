@@ -1,6 +1,6 @@
 "use client";
 
-import { useReducedMotions } from "@/components/design-system/hooks/use-reduced-motions";
+import { useReducedMotions } from "matrix-design-system";
 import { ComponentStore } from "matrix-component-store";
 import React from "react";
 

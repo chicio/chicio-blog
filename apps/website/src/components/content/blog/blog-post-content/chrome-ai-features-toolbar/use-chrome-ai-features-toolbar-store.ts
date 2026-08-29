@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useDeviceCapabilities } from "@/components/design-system/hooks/use-device-capabilities";
+import { useDeviceCapabilities } from "matrix-design-system";
 import { ComponentStore } from "matrix-component-store";
 import { trackWith } from "@/lib/tracking/tracking";
 import { tracking } from "@/types/configuration/tracking";
