@@ -1,4 +1,4 @@
-import { PageTemplate } from "@/components/design-system/templates/page-template";
+import { PageTemplate } from "@/components/features/content/page-template";
 import { BrandHeader } from "@/components/design-system/organism/header/brand-header";
 import { FC, PropsWithChildren, ReactNode } from "react";
 import type { MenuNavHrefs, MenuTrackingCallbacks } from "@/components/design-system/organism/menu";

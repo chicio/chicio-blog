@@ -10,7 +10,7 @@ src/app/          → composition root (pages, layouts, API routes)
 src/components/
   content/<page>/ → page-scoped UI components (one folder per route)
   features/<f>/   → cross-cutting UI not tied to a route (pwa, easter-eggs, seo, consent, layout)
-  design-system/  → pure, self-contained UI library (atoms → molecules → organisms → templates)
+  design-system/  → pure, self-contained UI library (atoms → molecules → organisms)
 src/lib/          → pure business logic (no JSX, no React components)
 src/types/        → TypeScript types and pure configuration constants
 ```
@@ -64,9 +64,8 @@ Cross-page shared UI must be extracted to `src/components/features/` or `src/com
 ## Atomic Design Layering (within design-system)
 
 Enforced at error level:
-- `atoms/` must not import from `molecules/`, `organism/`, or `templates/`
-- `molecules/` must not import from `organism/` or `templates/`
-- `organism/` must not import from `templates/`
+- `atoms/` must not import from `molecules/` or `organism/`
+- `molecules/` must not import from `organism/`
 - All layers may import from `hooks/` (shared hooks)
 
 ## Adding a New Rule

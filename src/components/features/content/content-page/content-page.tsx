@@ -1,14 +1,14 @@
 "use client";
 
-import { ContentPageTemplate } from "@/components/design-system/templates/content-page-template";
-import type { ContentPageProps as DesignSystemContentPageProps } from "@/components/design-system/templates/content-page-template";
+import { ContentPageTemplate } from "@/components/features/content/content-page-template";
+import type { ContentPageProps as ContentPageTemplateProps } from "@/components/features/content/content-page-template";
 import { TheChoiceEasterEgg } from "@/components/features/easter-eggs/the-choice";
 import { FC } from "react";
 import { useContentPageStore } from "./use-content-page-store";
 import { menuNavHrefs, footerNavHrefs, socialContactLinks } from "../nav-config";
 
 export type ContentPageProps = Omit<
-    DesignSystemContentPageProps,
+    ContentPageTemplateProps,
     | "navHrefs"
     | "footerNavHrefs"
     | "socialLinks"

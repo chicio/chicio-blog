@@ -1,8 +1,8 @@
 import { FC, PropsWithChildren, ReactNode } from "react";
 import { ContentProgressBar } from "@/components/design-system/organism/reading-content-progress-bar";
-import { ContentPageTemplate } from "@/components/design-system/templates/content-page-template";
+import { ContentPageTemplate } from "@/components/features/content/content-page-template";
 import { Breadcrumb, BreadcrumbItem } from "@/components/design-system/molecules/breadcrumbs/breadcrumb";
-import type { ContentPageProps } from "@/components/design-system/templates/content-page-template";
+import type { ContentPageProps } from "@/components/features/content/content-page-template";
 
 export type ReadingContentPageProps = ContentPageProps & {
     breadcrumbs?: BreadcrumbItem[];
