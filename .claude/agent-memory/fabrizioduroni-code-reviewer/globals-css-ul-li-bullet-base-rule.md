@@ -5,7 +5,7 @@ metadata:
   type: feedback
 ---
 
-`src/app/css/globals.css` `@layer base` contains **unscoped** rules that override Tailwind v4 preflight:
+`src/components/design-system/styles/base.css` `@layer base` contains **unscoped** rules that override Tailwind v4 preflight:
 
 ```css
 ul     { @apply list-none text-primary-text text-base leading-normal p-0 m-4; }

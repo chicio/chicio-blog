@@ -3,10 +3,11 @@
  *
  * Next compiles the app's CSS through @tailwindcss/postcss, so there is no standalone stylesheet on
  * disk for the converter to ship. This entry reproduces that compile outside Next: it pulls in the
- * repo's real globals.css (theme tokens, @layer components, the overridden breakpoint scale, and its
- * own @import of pills.css) and scopes utility generation to the design system.
+ * repo's real globals.css, which imports the design system's own stylesheet
+ * (src/components/design-system/styles/: theme tokens, base element styling, the composed classes,
+ * pills, and the overridden breakpoint scale), and scopes utility generation to the design system.
  *
- * Nothing here redefines any style — globals.css remains the single source of truth. The compiled
+ * Nothing here redefines any style — the design system's styles/ remains the single source of truth. The compiled
  * output is what cfg.cssEntry points at.
  */
 @import "../src/app/css/globals.css";
@@ -24,13 +25,13 @@
 /*
  * Re-assert the page surface the design system already declares for itself.
  *
- * globals.css sets `body { @apply bg-general-background text-primary-text … }` (#001100 on #E8FFE8),
+ * base.css sets `body { @apply bg-general-background text-primary-text … }` (#001100 on #E8FFE8),
  * but every generated preview card emits its own `<style>body{…;background:#fff}</style>` AFTER the
  * stylesheet link. Equal specificity, later in source order — so the card's white wins and a
  * green-on-black system renders on white, where most of its components are close to invisible.
  *
  * `html body` (0,0,2) outranks that bare `body` (0,0,1) regardless of order. This adds no new design
- * decision: it restates the values globals.css already owns, so the tokens remain the single source of
+ * decision: it restates the values theme.css already owns, so the tokens remain the single source of
  * truth. It is deliberately in the styles.css closure rather than the card scaffolding, because
  * designs built with this DS should get the dark surface too — that is what the real site does.
  */

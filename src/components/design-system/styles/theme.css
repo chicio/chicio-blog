@@ -2,40 +2,43 @@
  * The design system's design tokens: colours, fonts, shadows and the overridden breakpoint scale.
  * Tailwind v4 turns every entry here into a utility, so consumers can write `bg-general-background`
  * or `md:` (992px, not Tailwind's 768px) against this theme.
+ *
+ * It also defines the `hide-scrollbar` utility, which base.css and the site's article styling both
+ * use: a token-only import of this file would break them.
  */
 @theme {
     --font-sans: "Open Sans", Arial, sans-serif;
     --font-mono: "Courier Prime", "Courier New", monospace;
 
-    --color-primary: #00FF41;
-    --color-primary-alpha-0: #00FF4100;
-    --color-secondary: #00CC33;
-    --color-primary-dark: #003D10;
-    --color-primary-light: #39FF14;
+    --color-primary: #00ff41;
+    --color-primary-alpha-0: #00ff4100;
+    --color-secondary: #00cc33;
+    --color-primary-dark: #003d10;
+    --color-primary-light: #39ff14;
     --color-general-background: #001100;
-    --color-general-background-alpha-60: #001100A0;
+    --color-general-background-alpha-60: #001100a0;
     --color-text-above-primary: #000000;
-    --color-primary-text: #E8FFE8;
-    --color-secondary-text: #00CC33;
-    --color-accent: #39FF14;
-    --color-accent-alpha-70: #39FF14B3;
-    --color-accent-alpha-50: #39FF1480;
-    --color-accent-alpha-40: #39FF1466;
-    --color-accent-alpha-25: #39FF1440;
-    --color-accent-alpha-15: #39FF1426;
-    --color-accent-alpha-10: #39FF141A;
+    --color-primary-text: #e8ffe8;
+    --color-secondary-text: #00cc33;
+    --color-accent: #39ff14;
+    --color-accent-alpha-70: #39ff14b3;
+    --color-accent-alpha-50: #39ff1480;
+    --color-accent-alpha-40: #39ff1466;
+    --color-accent-alpha-25: #39ff1440;
+    --color-accent-alpha-15: #39ff1426;
+    --color-accent-alpha-10: #39ff141a;
     --color-general-background-light: #002200;
     --color-box-shadow-light: rgba(0, 255, 65, 0.3);
-    --color-divider: #00CC33;
+    --color-divider: #00cc33;
     --color-confirm: #ff2a2a;
-    --color-confirm-alpha-60: #ff2a2aA0;
+    --color-confirm-alpha-60: #ff2a2aa0;
     --color-confirm-alpha-25: #ff2a2a40;
     --color-confirm-alpha-20: #ff2a2a33;
     --color-undo: #33aaff;
-    --color-undo-alpha-60: #33aaffA0;
+    --color-undo-alpha-60: #33aaffa0;
     --color-undo-alpha-25: #33aaff40;
     --color-undo-alpha-20: #33aaff33;
-    --color-black-alpha-75: #000000BF;
+    --color-black-alpha-75: #000000bf;
 
     --spacing: 0.25rem;
 
@@ -61,11 +64,14 @@
     --text-shadow-2xs: 0px 0px 1px var(--color-accent-alpha-50), 0px 0px 6px var(--color-accent-alpha-25);
     --text-shadow-xs: 0px 0px 3px var(--color-accent-alpha-50), 0px 0px 8px var(--color-accent-alpha-25);
     --text-shadow-sm:
-        0px 0px 5px var(--color-accent-alpha-50), 0px 0px 10px var(--color-accent-alpha-25), 0px 0px 15px var(--color-accent-alpha-10);
+        0px 0px 5px var(--color-accent-alpha-50), 0px 0px 10px var(--color-accent-alpha-25),
+        0px 0px 15px var(--color-accent-alpha-10);
     --text-shadow-md:
-        0px 0px 7px var(--color-accent-alpha-50), 0px 0px 12px var(--color-accent-alpha-25), 0px 0px 17px var(--color-accent-alpha-10);
+        0px 0px 7px var(--color-accent-alpha-50), 0px 0px 12px var(--color-accent-alpha-25),
+        0px 0px 17px var(--color-accent-alpha-10);
     --text-shadow-lg:
-        0px 0px 9px var(--color-accent-alpha-50), 0px 0px 14px var(--color-accent-alpha-25), 0px 0px 19px var(--color-accent-alpha-10);
+        0px 0px 9px var(--color-accent-alpha-50), 0px 0px 14px var(--color-accent-alpha-25),
+        0px 0px 19px var(--color-accent-alpha-10);
 
     --blur-xs: 1px;
     --blur-sm: 4px;
@@ -119,12 +125,6 @@
     --tracking-wider: 0.05em;
     --tracking-widest: 0.1em;
 
-    --leading-tight: 1.25;
-    --leading-snug: 1.375;
-    --leading-normal: 1.5;
-    --leading-relaxed: 1.625;
-    --leading-loose: 2;
-
     --radius-xs: 0.125rem;
     --radius-sm: 0.25rem;
     --radius-md: 0.375rem;
@@ -166,7 +166,6 @@
     }
 
     @keyframes glitch {
-
         0%,
         100% {
             transform: translateX(0);
@@ -204,7 +203,6 @@
     }
 
     @keyframes bounce {
-
         0%,
         20%,
         50%,
@@ -233,7 +231,6 @@
     }
 
     @keyframes blink {
-
         0%,
         50% {
             opacity: 1;

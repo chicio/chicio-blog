@@ -5,7 +5,7 @@
  */
 @layer base {
     html {
-        @apply max-w-full overflow-x-hidden h-full;
+        @apply h-full max-w-full overflow-x-hidden;
     }
 
     /**
@@ -27,31 +27,31 @@
     }
 
     body {
-        @apply bg-general-background text-primary-text font-sans max-w-full h-full m-0 flex flex-col;
+        @apply bg-general-background text-primary-text m-0 flex h-full max-w-full flex-col font-sans;
     }
 
     h1 {
-        @apply text-accent font-bold text-shadow-md text-4xl sm:text-5xl leading-normal mt-4;
+        @apply text-accent mt-4 text-4xl leading-normal font-bold text-shadow-md sm:text-5xl;
     }
 
     h2 {
-        @apply text-accent font-bold text-shadow-md text-3xl sm:text-4xl leading-normal mt-4;
+        @apply text-accent mt-4 text-3xl leading-normal font-bold text-shadow-md sm:text-4xl;
     }
 
     h3 {
-        @apply text-accent font-bold text-shadow-md text-2xl sm:text-3xl leading-normal mt-4;
+        @apply text-accent mt-4 text-2xl leading-normal font-bold text-shadow-md sm:text-3xl;
     }
 
     h4 {
-        @apply text-accent font-bold text-shadow-md text-xl sm:text-2xl leading-normal mt-4;
+        @apply text-accent mt-4 text-xl leading-normal font-bold text-shadow-md sm:text-2xl;
     }
 
     h5 {
-        @apply text-accent font-bold text-shadow-md text-lg sm:text-xl leading-normal mt-4;
+        @apply text-accent mt-4 text-lg leading-normal font-bold text-shadow-md sm:text-xl;
     }
 
     h6 {
-        @apply text-accent font-bold text-shadow-md text-base leading-normal mt-4;
+        @apply text-accent mt-4 text-base leading-normal font-bold text-shadow-md;
     }
 
     p {
@@ -63,7 +63,7 @@
     }
 
     blockquote {
-        @apply border-l-4 border-accent pl-4 italic text-accent;
+        @apply border-accent text-accent border-l-4 pl-4 italic;
     }
 
     blockquote * {
@@ -71,15 +71,15 @@
     }
 
     ul {
-        @apply list-none text-primary-text text-base leading-normal p-0 m-4;
+        @apply text-primary-text m-4 list-none p-0 text-base leading-normal;
     }
 
     ul li {
-        @apply relative pl-4 mb-2;
+        @apply relative mb-2 pl-4;
     }
 
     ul li::before {
-        @apply content-['▸'] absolute left-0 text-primary font-bold;
+        @apply text-primary absolute left-0 font-bold content-['▸'];
     }
 
     time {
@@ -87,7 +87,7 @@
     }
 
     a {
-        @apply text-accent text-shadow-sm text-base leading-normal no-underline break-words;
+        @apply text-accent text-base leading-normal break-words no-underline text-shadow-sm;
     }
 
     @media (hover: hover) and (pointer: fine) {
@@ -97,19 +97,19 @@
     }
 
     hr {
-        @apply w-full h-px bg-gradient-to-r from-general-background-light via-accent to-general-background-light border-0;
+        @apply from-general-background-light via-accent to-general-background-light h-px w-full border-0 bg-gradient-to-r;
     }
 
     table {
-        @apply w-full table-auto mx-auto border-collapse;
+        @apply mx-auto w-full table-auto border-collapse;
     }
 
     th {
-        @apply px-4 py-3 text-left font-bold text-accent bg-primary-dark;
+        @apply text-accent bg-primary-dark px-4 py-3 text-left font-bold;
     }
 
     td {
-        @apply px-4 py-2 text-left text-primary-text;
+        @apply text-primary-text px-4 py-2 text-left;
     }
 
     tbody tr:nth-child(even) td {
@@ -117,22 +117,11 @@
     }
 
     .table-wrapper {
-        @apply overflow-x-auto rounded-xl border border-accent shadow-lg my-4;
+        @apply border-accent my-4 overflow-x-auto rounded-xl border shadow-lg;
     }
 
     figcaption {
-        @apply text-secondary-text text-base leading-normal text-center italic mt-2 mb-3;
-    }
-
-    /**
-     * The `ul li::before` rule above paints the Matrix bullet on every list item, which lands on
-     * chart legends too. Recharts legends are rendered by design-system chart components, so the
-     * reset belongs here with the rule that causes it.
-     */
-    ul.recharts-default-legend li.recharts-legend-item::before {
-        content: unset !important;
-        display: none !important;
-        all: unset;
+        @apply text-secondary-text mt-2 mb-3 text-center text-base leading-normal italic;
     }
 }
 

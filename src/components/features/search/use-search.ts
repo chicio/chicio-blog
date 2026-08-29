@@ -34,7 +34,11 @@ export const useSearch = (startSearch: boolean, searchIndexFileName: string) => 
                     startTransition(() => {
                         setSearchIndex(elasticlunr.Index.load<SearchablePostFields>(data));
                     });
-                });
+                })
+                // A missing or malformed index would otherwise surface only as an unhandled
+                // rejection. Leaving searchIndex unset means the next time search starts — reopening
+                // the palette, say — this effect runs again and retries.
+                .catch(() => undefined);
         }
     }, [startSearch, searchIndex, searchIndexFileName]);
 

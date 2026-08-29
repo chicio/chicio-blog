@@ -5,7 +5,8 @@ always: true
 # Code Style
 
 - **Indentation**: 4 spaces (not tabs)
-- **Line length**: 120 characters max
+- **Line length**: 120 characters max. The one exception is a CSS `@apply` declaration: prettier keeps
+  each on a single line and cannot wrap it, so several in `design-system/styles/` exceed 120 by design
 - **Braces**: Always use curly braces on `if` statements, never one-liners (e.g., `if (cond) { doSomething(); }`, not `if (cond) doSomething();`)
 - **Import alias**: Use `@/` for imports (maps to `src/` via `tsconfig.json`)
 - **Export style**: Use named exports for all modules, avoid default exports if possible/not strictly needed

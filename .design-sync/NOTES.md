@@ -84,7 +84,7 @@ change in source, that config entry goes stale silently** — nothing cross-chec
 Next compiles the CSS through `@tailwindcss/postcss`, so nothing on disk is shippable. The compile is
 reproduced outside Next by `cfg.buildCmd`, which runs the Tailwind CLI over
 `.design-sync/tailwind-entry.css` (that entry only `@import`s the repo's real
-`src/app/css/globals.css` and scopes `@source` to the design system — it redefines nothing). Output
+`src/app/css/globals.css`, which imports `src/components/design-system/styles/`, and scopes `@source` to the design system — it redefines nothing). Output
 lands in the gitignored `.design-sync/.cache/design-system.css`, which `cfg.cssEntry` points at, so a
 fresh clone regenerates it via `buildCmd` before the converter runs.
 

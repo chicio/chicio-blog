@@ -4,7 +4,7 @@
  * Structured after giscus's own built-in "dark" / "transparent_dark" themes
  * (https://github.com/giscus/giscus/tree/main/public/themes, MIT License,
  * Copyright (c) 2018 GitHub Inc.), with every custom property re-mapped to
- * this site's Matrix green-on-black palette (see src/app/css/globals.css)
+ * this site's Matrix green-on-black palette (see src/components/design-system/styles/theme.css)
  * and font stack (Open Sans / Courier Prime).
  *
  * giscus loads this file as a full replacement stylesheet (via the `theme`

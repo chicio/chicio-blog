@@ -7,8 +7,19 @@
  * code), so it is deliberately not part of the design system.
  */
 @layer base {
+    /**
+     * Undoes the design system's `ul li::before` Matrix bullet for recharts legends. Every chart
+     * with a legend on this site is a content component — the design system's chart molecules do
+     * not render one — so, like katex below, this is the site's business, not the package's.
+     */
+    ul.recharts-default-legend li.recharts-legend-item::before {
+        content: unset !important;
+        display: none !important;
+        all: unset;
+    }
+
     .katex-display .katex {
-        @apply hide-scrollbar inline-block whitespace-nowrap max-w-full overflow-x-scroll;
+        @apply hide-scrollbar inline-block max-w-full overflow-x-scroll whitespace-nowrap;
     }
 
     #reading-content-container p {
@@ -16,17 +27,16 @@
     }
 
     #reading-content-container figure figcaption {
-        @apply text-secondary-text text-base leading-normal text-center italic mt-2 mb-3;
+        @apply text-secondary-text mt-2 mb-3 text-center text-base leading-normal italic;
     }
 
     #reading-content-container figure img {
-        @apply w-full border border-solid border-accent-alpha-40 rounded-xl hover:border-accent active:border-accent focus:border-accent shadow-lg transition-all duration-500 hover:scale-102;
+        @apply border-accent-alpha-40 hover:border-accent active:border-accent focus:border-accent w-full rounded-xl border border-solid shadow-lg transition-all duration-500 hover:scale-102;
     }
 
     #reading-content-container iframe {
-        @apply w-full h-auto aspect-video border border-solid border-accent-alpha-40 rounded-xl hover:border-accent active:border-accent focus:border-accent shadow-lg transition-all duration-500 hover:scale-102;
+        @apply border-accent-alpha-40 hover:border-accent active:border-accent focus:border-accent aspect-video h-auto w-full rounded-xl border border-solid shadow-lg transition-all duration-500 hover:scale-102;
     }
-
 
     #reading-content-container p code {
         color: #d2a8ff;
@@ -41,7 +51,7 @@
     }
 
     #reading-content-container #code-block {
-        @apply border border-solid border-accent-alpha-40 rounded-xl hover:border-accent active:border-accent focus:border-accent shadow-lg transition-all duration-500 hover:scale-101 overflow-hidden;
+        @apply border-accent-alpha-40 hover:border-accent active:border-accent focus:border-accent overflow-hidden rounded-xl border border-solid shadow-lg transition-all duration-500 hover:scale-101;
     }
 
     /** Anchor link styles for headings **/
@@ -66,7 +76,7 @@
         font-size: inherit;
         line-height: inherit;
         text-shadow: inherit;
-        @apply no-underline relative;
+        @apply relative no-underline;
     }
 
     #reading-content-container h2 a::before,
@@ -75,7 +85,7 @@
     #reading-content-container h5 a::before,
     #reading-content-container h6 a::before {
         content: "#";
-        @apply text-accent opacity-0 transition-opacity duration-300 absolute;
+        @apply text-accent absolute opacity-0 transition-opacity duration-300;
     }
 
     #reading-content-container h2 a::before {
