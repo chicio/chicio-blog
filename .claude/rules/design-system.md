@@ -17,6 +17,22 @@ paths:
   in-view, etc.). A hook that depends on this site lives in its feature domain instead
   (e.g. `useSearch` in `src/components/features/search/`).
 
+## Styling
+
+The design system owns its stylesheet: `src/components/design-system/styles/`.
+
+- `theme.css` — the `@theme` tokens and the overridden breakpoint scale (`md:` is 992px, not 768px)
+- `base.css` — element-level styling components assume (headings, lists, tables, links); a component
+  rendered without it looks unstyled
+- `components.css` — the composed classes (`.glassmorphism*`, `.glow-*`, `.container-*`, `.call-to-action`)
+- `pills.css` — the pill motif
+- `index.css` — the entry a consumer imports after `@import "tailwindcss"`
+
+Import order inside `index.css` is load-bearing: within one cascade layer, source order decides.
+
+The site's own `globals.css` imports that entry and adds only what is specific to this site: the
+`#reading-content-container` article layout, katex and the chat bubble.
+
 ## Framework injection
 
 The design system imports nothing from `next` — `design-system-no-next` fails CI on any such import.

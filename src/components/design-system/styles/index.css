@@ -1,0 +1,11 @@
+/**
+ * The design system's stylesheet. A consumer imports this after `@import "tailwindcss"` and gets the
+ * theme, the base element styling its components assume, and the composed classes they use.
+ *
+ * pills.css comes first to preserve the order it had in the site's globals.css: within one cascade
+ * layer, source order decides, so reordering these imports reorders the emitted rules.
+ */
+@import "./pills.css";
+@import "./theme.css";
+@import "./base.css";
+@import "./components.css";

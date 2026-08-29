@@ -1,0 +1,57 @@
+/**
+ * The composed classes the design system's look is built from: the glassmorphism panels, the accent
+ * glow, the page containers and the call-to-action button.
+ */
+@layer components {
+    .container-fixed {
+        @apply w-full px-4 mx-auto max-w-[540px] sm:max-w-[720px] md:max-w-[960px];
+    }
+
+    .container-fluid {
+        @apply w-full px-4 mx-auto;
+    }
+
+    .container-fullscreen {
+        @apply flex justify-center items-center flex-col h-screen min-h-screen w-full bg-transparent;
+    }
+
+    .container-section {
+        @apply w-full py-4 mx-auto max-w-[540px] sm:max-w-[720px] md:max-w-[960px];
+    }
+
+    .call-to-action {
+        @apply text-lg bg-accent text-text-above-primary p-3 m-1 border-0 rounded-xl leading-none text-center inline-block min-w-[120px] no-underline transition-all hover:shadow-xl hover:scale-105;
+    }
+
+    .glow-border {
+        @apply border border-solid border-accent-alpha-40 rounded-xl hover:border-accent active:border-accent focus:border-accent;
+    }
+
+    .glow-container {
+        @apply border border-solid border-accent-alpha-40 rounded-xl hover:border-accent active:border-accent focus:border-accent shadow-lg transition-all duration-300 hover:scale-102;
+    }
+
+    .glassmorphism-lite {
+        @apply border border-solid border-accent-alpha-40 rounded-xl hover:border-accent active:border-accent focus:border-accent shadow-lg transition-transform duration-300 hover:scale-102 bg-general-background;
+    }
+
+    .glassmorphism-lite-no-scale {
+        @apply border border-solid border-accent-alpha-40 rounded-xl hover:border-accent active:border-accent focus:border-accent shadow-lg transition-colors duration-300 bg-general-background;
+    }
+
+    .glassmorphism {
+        @apply border border-solid border-accent-alpha-40 rounded-xl hover:border-accent active:border-accent focus:border-accent shadow-lg transition-transform duration-300 hover:scale-102 backdrop-blur-sm bg-general-background-alpha-60;
+    }
+
+    .glassmorphism-no-scale {
+        @apply border border-solid border-accent-alpha-40 rounded-xl hover:border-accent active:border-accent focus:border-accent shadow-lg transition-colors duration-300 backdrop-blur-sm bg-general-background-alpha-60;
+    }
+}
+
+.scroll-locked .menu-container {
+    right: var(--scrollbar-width, 0px);
+}
+
+.remove-scroll-width {
+    right: var(--scrollbar-width, 0px);
+}

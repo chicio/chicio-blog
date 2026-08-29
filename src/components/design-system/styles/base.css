@@ -1,0 +1,141 @@
+/**
+ * Element-level styling every design-system component's text sits on: headings, paragraphs, lists,
+ * tables, links. A component rendered without these looks unstyled, so they ship with the package
+ * rather than with the site.
+ */
+@layer base {
+    html {
+        @apply max-w-full overflow-x-hidden h-full;
+    }
+
+    /**
+     * iOS Safari zooms the viewport in when a focused form control's font size is under 16px, and it
+     * never zooms back out — you are left on a magnified, sideways-scrolling page. The alternative fix
+     * is a `maximum-scale=1` viewport meta, which also blocks deliberate pinch-zoom and is an
+     * accessibility regression, so the size is floored here instead.
+     *
+     * `max(1rem, 1em)` means "at least 16px, but keep growing with the surrounding text", so a control
+     * inside a deliberately large block still scales up. This is a base-layer rule so it reaches raw
+     * `input` elements and third-party ones alike — cmdk's `Command.Input` is not ours to style from a
+     * React component. Tailwind utilities sit in a later layer and still win, so putting `text-sm` on
+     * an input opts back into the zoom: don't, and there is no reason to.
+     */
+    input,
+    textarea,
+    select {
+        font-size: max(1rem, 1em);
+    }
+
+    body {
+        @apply bg-general-background text-primary-text font-sans max-w-full h-full m-0 flex flex-col;
+    }
+
+    h1 {
+        @apply text-accent font-bold text-shadow-md text-4xl sm:text-5xl leading-normal mt-4;
+    }
+
+    h2 {
+        @apply text-accent font-bold text-shadow-md text-3xl sm:text-4xl leading-normal mt-4;
+    }
+
+    h3 {
+        @apply text-accent font-bold text-shadow-md text-2xl sm:text-3xl leading-normal mt-4;
+    }
+
+    h4 {
+        @apply text-accent font-bold text-shadow-md text-xl sm:text-2xl leading-normal mt-4;
+    }
+
+    h5 {
+        @apply text-accent font-bold text-shadow-md text-lg sm:text-xl leading-normal mt-4;
+    }
+
+    h6 {
+        @apply text-accent font-bold text-shadow-md text-base leading-normal mt-4;
+    }
+
+    p {
+        @apply text-primary-text text-left text-base leading-normal;
+    }
+
+    strong {
+        @apply font-bold;
+    }
+
+    blockquote {
+        @apply border-l-4 border-accent pl-4 italic text-accent;
+    }
+
+    blockquote * {
+        @apply text-accent;
+    }
+
+    ul {
+        @apply list-none text-primary-text text-base leading-normal p-0 m-4;
+    }
+
+    ul li {
+        @apply relative pl-4 mb-2;
+    }
+
+    ul li::before {
+        @apply content-['▸'] absolute left-0 text-primary font-bold;
+    }
+
+    time {
+        @apply text-secondary-text;
+    }
+
+    a {
+        @apply text-accent text-shadow-sm text-base leading-normal no-underline break-words;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+        a:hover {
+            @apply underline;
+        }
+    }
+
+    hr {
+        @apply w-full h-px bg-gradient-to-r from-general-background-light via-accent to-general-background-light border-0;
+    }
+
+    table {
+        @apply w-full table-auto mx-auto border-collapse;
+    }
+
+    th {
+        @apply px-4 py-3 text-left font-bold text-accent bg-primary-dark;
+    }
+
+    td {
+        @apply px-4 py-2 text-left text-primary-text;
+    }
+
+    tbody tr:nth-child(even) td {
+        background-color: var(--color-general-background-light);
+    }
+
+    .table-wrapper {
+        @apply overflow-x-auto rounded-xl border border-accent shadow-lg my-4;
+    }
+
+    figcaption {
+        @apply text-secondary-text text-base leading-normal text-center italic mt-2 mb-3;
+    }
+
+    /**
+     * The `ul li::before` rule above paints the Matrix bullet on every list item, which lands on
+     * chart legends too. Recharts legends are rendered by design-system chart components, so the
+     * reset belongs here with the rule that causes it.
+     */
+    ul.recharts-default-legend li.recharts-legend-item::before {
+        content: unset !important;
+        display: none !important;
+        all: unset;
+    }
+}
+
+:root {
+    color-scheme: dark;
+}
