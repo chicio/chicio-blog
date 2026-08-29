@@ -11,8 +11,11 @@ paths:
 - **Atoms** (`src/components/design-system/atoms/`): Basic UI elements (buttons, typography, icons, effects, links, loader)
 - **Molecules** (`src/components/design-system/molecules/`): Composed from atoms (button variants, form components, menu items, breadcrumbs, accordion, animation, effects)
 - **Organisms** (`src/components/design-system/organism/`): Complex composed sections
-- **Templates** (`src/components/design-system/templates/`): Page-level layouts
-- **Hooks** (`src/components/design-system/hooks/`): Shared hooks used by 2+ components (motion, glassmorphism, search, in-view, etc.)
+- Page-level layouts are NOT part of the design system: they arrange this site's chrome and live in
+  `src/components/features/content/`
+- **Hooks** (`src/components/design-system/hooks/`): Shared hooks used by 2+ components (motion, glassmorphism,
+  in-view, etc.). A hook that depends on this site lives in its feature domain instead
+  (e.g. `useSearch` in `src/components/features/search/`).
 
 Always compose from existing lower-level components before creating new ones. New atoms should be justified — check if an existing atom can be extended first.
 

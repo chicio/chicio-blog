@@ -92,7 +92,10 @@ Never use `document.querySelector`. Never allowlist `useRef` in eslint-disable c
 
 ## Shared Hooks
 
-Shared hooks (used by 2+ consumers) live in `src/components/design-system/hooks/`. They may return callback refs (e.g. `useInViewList` returns a `setEl` callback). The consuming store calls the shared hook and re-exposes its callback ref via `effects`.
+Shared hooks (used by 2+ consumers) live in `src/components/design-system/hooks/` when they are generic UI
+concerns. A hook that depends on this site belongs to its feature domain instead: `useSearch` lives in
+`src/components/features/search/`, next to `features/consent/use-consent-store.ts`. There is no layer bucket
+under `features/` — every folder there is named for a domain, never for a kind of file. They may return callback refs (e.g. `useInViewList` returns a `setEl` callback). The consuming store calls the shared hook and re-exposes its callback ref via `effects`.
 
 Global `useSyncExternalStore`-based stores (e.g. `useMotionStore`) keep their names and snapshot caching — they are not subject to the `use-*-store.ts` naming convention because they are not component-scoped.
 
@@ -150,9 +153,8 @@ export type { AccordionItemProps } from "./accordion-item";
 ## Layering (Atomic Design)
 
 Enforced by dependency-cruiser at error:
-- atoms may not import from molecules, organism, or templates
-- molecules may not import from organism or templates
-- organism may not import from templates
+- atoms may not import from molecules or organism
+- molecules may not import from organism
 - `design-system/**` may not import from `features/**` (features are injected at the app/composition layer via props)
 - content pages may not import from each other (`content-page-isolation`)
 - imports crossing a component folder boundary must go through `index.ts`
@@ -164,10 +166,13 @@ Enforced by dependency-cruiser at error:
 - `src/components/design-system/hooks/` — shared hooks (incl. `useSyncExternalStore` stores and shared ref hooks like `useInViewList`)
 - `src/components/design-system/atoms/` — basic UI elements
 - `src/components/design-system/molecules/` — composed from atoms
-- `src/components/design-system/organism/` — complex composed sections
-- `src/components/design-system/templates/` — page-level layouts
+- `src/components/design-system/organism/` — complex composed sections (the top design-system layer)
+- `src/components/features/content/` — page-level layouts (`page-template`, `content-page-template`,
+  `reading-content-page-template`); these arrange this site's chrome, so they are not part of the
+  reusable design system
 - `src/components/content/<page>/` — page-scoped components (one folder per route)
-- `src/components/features/<feature>/` — cross-cutting UI not tied to a route
+- `src/components/features/<feature>/` — cross-cutting UI not tied to a route, one folder per domain; a
+  site-specific shared hook lives in its domain folder (e.g. `features/search/use-search.ts`)
 - `src/lib/` — pure business logic (no JSX); non-hook utilities live here
 - `src/types/component-store.ts` — `ComponentStore`, `StateStore`, `EffectsStore` type definitions
 

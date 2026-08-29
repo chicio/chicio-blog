@@ -1,77 +1,31 @@
 "use client";
 
 import { Overlay } from "@/components/design-system/atoms/effects/overlay";
-import { TerminalLine } from "@/components/design-system/atoms/typography/terminal-blocks";
 import { useGlassmorphism } from "@/components/design-system/hooks/use-glassmorphism";
+import { CommandPaletteContext } from "@/components/design-system/state/command-palette/command-palette-context";
+import type { CommandPaletteTrigger } from "@/components/design-system/state/command-palette/command-palette-trigger";
 import { motion } from "framer-motion";
-import { FC } from "react";
-import { BiChat } from "react-icons/bi";
+import { FC, ReactNode } from "react";
 import { Command } from "cmdk";
-import { ToggleMotionItem } from "@/components/design-system/organism/command-palette/command-palette/toggle-motion-item";
-import { CustomizeMatrixRainItem } from "@/components/design-system/organism/command-palette/command-palette/customize-matrix-rain-item";
-import { SearchResultItem } from "@/components/design-system/organism/command-palette/command-palette/search-result-item";
-import { EasterEggHuntItem } from "@/components/design-system/organism/command-palette/command-palette/easter-egg-hunt-item";
-import { TerminalItem } from "@/components/design-system/organism/command-palette/command-palette/terminal-item";
 import { useCommandPaletteStore } from "./use-command-palette-store";
 
-const ITEM_CLASS =
-    "px-4 py-2 cursor-pointer aria-selected:bg-accent-alpha-10 aria-selected:border-l-2 aria-selected:border-accent transition-colors duration-100";
-
-const GroupLabel: FC<{ children: React.ReactNode }> = ({ children }) => (
-    <div className="text-accent/50 px-4 py-1 font-mono text-xs tracking-wider uppercase">{children}</div>
-);
-
-interface CommandPaletteTrackingProps {
-    onOpen?: () => void;
-    onOpenChat?: () => void;
-    onSearchResultSelect?: () => void;
-    onToggleMotion?: () => void;
-    onCustomizeMatrixRain?: () => void;
-    onOpenEasterEggHunt?: () => void;
-    onOpenTerminal?: () => void;
-}
-
-interface CommandPaletteProps {
-    searchIndexFileName: string;
-    chatSlug: string;
-    easterEggHuntSlug: string;
-    tracking?: CommandPaletteTrackingProps;
-    matchesEasterEggQuery?: (query: string) => boolean;
-    onEasterEggMatch?: () => void;
+export interface CommandPaletteProps {
+    placeholder?: string;
+    onOpenChange?: (open: boolean, trigger: CommandPaletteTrigger) => void;
+    onQueryChange?: (query: string) => void;
+    children: ReactNode;
 }
 
 export const CommandPalette: FC<CommandPaletteProps> = ({
-    searchIndexFileName,
-    chatSlug,
-    easterEggHuntSlug,
-    tracking,
-    matchesEasterEggQuery,
-    onEasterEggMatch,
+    placeholder = "type to search_",
+    onOpenChange,
+    onQueryChange,
+    children,
 }) => {
     const { glassmorphismClass } = useGlassmorphism({ noScale: true });
-    const { state, effects } = useCommandPaletteStore(
-        searchIndexFileName,
-        chatSlug,
-        easterEggHuntSlug,
-        tracking,
-        matchesEasterEggQuery,
-        onEasterEggMatch,
-    );
-    const { open, isSearching, selectedValue, search } = state;
-    const {
-        close,
-        stopPropagation,
-        handleSearchInput,
-        handleOpenChat,
-        handleOpenEasterEggHunt,
-        handleOpenTerminal,
-        handleSearchResultSelect,
-        setSelectedValue,
-        onToggleMotion,
-        handleCustomizeMatrixRainClose,
-    } = effects;
-
-    const hasSearchResults = search.type === "search" && search.results.length > 0;
+    const { state, effects } = useCommandPaletteStore(onOpenChange, onQueryChange);
+    const { open } = state;
+    const { close, stopPropagation, handleQueryChange } = effects;
 
     if (!open) {
         return null;
@@ -87,60 +41,23 @@ export const CommandPalette: FC<CommandPaletteProps> = ({
                     transition={{ duration: 0.15, ease: "easeOut" }}
                     onClick={stopPropagation}
                 >
-                    <Command
-                        shouldFilter={false}
-                        className="flex flex-col"
-                        value={selectedValue}
-                        onValueChange={setSelectedValue}
-                    >
+                    <Command shouldFilter={false} className="flex flex-col">
                         <div className="border-accent/20 flex items-center gap-2 border-b px-4 py-3">
                             <span className="text-accent shrink-0 font-mono text-sm font-bold text-shadow-md">
                                 {">"}
                             </span>
                             <Command.Input
                                 className="text-accent placeholder:text-accent/40 caret-accent flex-1 bg-transparent font-mono outline-none"
-                                placeholder="type to search_"
-                                onValueChange={handleSearchInput}
+                                placeholder={placeholder}
+                                onValueChange={handleQueryChange}
                                 autoFocus
                             />
                         </div>
 
                         <Command.List className="max-h-[55vh] overflow-y-auto py-2">
-                            {isSearching && hasSearchResults && (
-                                <Command.Group>
-                                    <GroupLabel>Content</GroupLabel>
-                                    {search.results.map((result, i) => (
-                                        <SearchResultItem
-                                            key={`result-${i}`}
-                                            title={result.title}
-                                            description={result.description}
-                                            slug={result.slug}
-                                            onSelect={handleSearchResultSelect}
-                                        />
-                                    ))}
-                                </Command.Group>
-                            )}
-                            {isSearching && !hasSearchResults && (
-                                <div className="text-accent/40 px-4 py-6 text-center font-mono text-xs">
-                                    {">"} no results found_
-                                </div>
-                            )}
-                            {!isSearching && (
-                                <Command.Group>
-                                    <GroupLabel>Quick Actions</GroupLabel>
-                                    <Command.Item value="open ai chat" className={ITEM_CLASS} onSelect={handleOpenChat}>
-                                        <TerminalLine>
-                                            <BiChat className="mr-2 mb-0.5 inline" />
-                                            {">"} Open chat
-                                        </TerminalLine>
-                                    </Command.Item>
-                                    <EasterEggHuntItem onSelect={handleOpenEasterEggHunt} />
-                                    <TerminalItem onSelect={handleOpenTerminal} />
-                                    <ToggleMotionItem onTrack={onToggleMotion} />
-                                    <CustomizeMatrixRainItem onClose={handleCustomizeMatrixRainClose} />
-                                </Command.Group>
-                            )}
+                            <CommandPaletteContext.Provider value={close}>{children}</CommandPaletteContext.Provider>
                         </Command.List>
+
                         <div className="border-accent/20 text-accent/40 xs:flex hidden gap-6 border-t px-4 py-2 font-mono text-xs">
                             <span>↑↓ navigate</span>
                             <span>↵ select</span>

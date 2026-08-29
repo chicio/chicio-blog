@@ -28,7 +28,7 @@ npm run release          # Release with conventional changelog
 ### Key Patterns
 
 - **Folder-Per-Component + Store Model**: every component lives in its own kebab-case folder with a `<name>.tsx`, a `use-<name>-store.ts` hook, and an `index.ts` barrel. Components call exactly one hook (`use<Name>Store()`). `useGlassmorphism` is permanently exempt. See `.claude/rules/component-architecture.md` for the full specification.
-- **Atomic Design System**: atoms → molecules → organisms → templates. Layering enforced at error by dependency-cruiser. See `.claude/rules/design-system.md`
+- **Atomic Design System**: atoms → molecules → organisms. Layering enforced at error by dependency-cruiser. Page-level templates live in `src/components/features/content/`, not in the design system. See `.claude/rules/design-system.md`
 - **Page-Content Isolation**: Each route's components live in `src/components/content/<page>/` (no separate `components/` or `hooks/` subdirs — folder-per-component directly). Cross-cutting UI lives in `src/components/features/<feature>/`. See `.claude/rules/content.md`
 - **Business Logic in lib/**: Components are thin. Non-hook pure logic lives in `src/lib/`, never in `design-system/utils/` (eliminated).
 - **Type Safety**: Shared types in `src/types/`, TypeScript strict mode

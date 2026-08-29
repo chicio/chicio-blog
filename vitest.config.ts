@@ -18,12 +18,22 @@ export default defineConfig({
             provider: "v8",
             reporter: ["text", "json-summary"],
             thresholds: {
-                statements: 91,
+                statements: 92,
                 branches: 84,
-                functions: 88,
+                functions: 89,
                 lines: 92,
             },
-            include: ["src/lib/**", "src/components/design-system/**"],
+            include: [
+                "src/lib/**",
+                "src/components/design-system/**",
+                // Moved out of design-system/ by the boundary audit; they stay measured so the
+                // ratchet keeps covering the same code it did before the move.
+                "src/components/features/content/page-template/**",
+                "src/components/features/content/content-page-template/**",
+                "src/components/features/content/reading-content-page-template/**",
+                "src/components/features/search/**",
+                "src/components/features/command-palette/**",
+            ],
             // Matrix CG/canvas effects cannot run in jsdom, so they are excluded from
             // coverage rather than carried by meaningless smoke tests.
             // Build/ops entry-point scripts (tsx side-effect scripts run via npm scripts,
@@ -46,6 +56,8 @@ export default defineConfig({
                     name: "node",
                     include: ["src/lib/**/*.test.ts", "src/app/**/*.test.ts", "src/*.test.ts"],
                     exclude: [
+                        "src/lib/matrix-rain/**",
+                        "src/lib/terminal/terminal-events.test.ts",
                         "src/lib/consents/**",
                         "src/lib/local-storage/**",
                         "src/lib/session-storage/**",
@@ -68,6 +80,8 @@ export default defineConfig({
                     include: [
                         "src/components/**/*.test.tsx",
                         "src/components/**/*.test.ts",
+                        "src/lib/matrix-rain/**/*.test.ts",
+                        "src/lib/terminal/terminal-events.test.ts",
                         "src/lib/consents/**/*.test.ts",
                         "src/lib/local-storage/**/*.test.ts",
                         "src/lib/session-storage/**/*.test.ts",

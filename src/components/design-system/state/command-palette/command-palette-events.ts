@@ -6,10 +6,14 @@ export const openCommandPalette = () => {
     }
 };
 
-export const matrixRainPanelOpenEvent = "matrix-rain-panel-open";
+export const commandPaletteCloseEvent = "command-palette-close";
 
-export const openMatrixRainPanel = () => {
+/**
+ * Closes every mounted palette. Items inside a palette must not use this — they close their own
+ * palette through CommandPaletteContext. This exists for callers outside the palette's React tree.
+ */
+export const closeCommandPalette = () => {
     if (typeof window !== "undefined") {
-        window.dispatchEvent(new Event(matrixRainPanelOpenEvent));
+        window.dispatchEvent(new Event(commandPaletteCloseEvent));
     }
 };

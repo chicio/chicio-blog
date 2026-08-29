@@ -30,10 +30,10 @@ const InstallPromptBanner = dynamic(
     { ssr: false },
 );
 
-const CommandPalette = dynamic(
+const SiteCommandPalette = dynamic(
     () =>
-        import("@/components/design-system/organism/command-palette").then(
-            (m) => m.CommandPalette,
+        import("@/components/features/command-palette/site-command-palette").then(
+            (m) => m.SiteCommandPalette,
         ),
     { ssr: false },
 );
@@ -91,7 +91,7 @@ export const LayoutAdditionalContent: FC = () => {
 
     return (
         <>
-            <CommandPalette
+            <SiteCommandPalette
                 searchIndexFileName={searchIndexFileName}
                 chatSlug={slugs.chat}
                 easterEggHuntSlug={slugs.easterEggHunt}

@@ -57,24 +57,17 @@ const config = {
         },
         {
             name: "design-system-layering-atoms",
-            comment: "Atoms must not import from molecules/organism/templates.",
+            comment: "Atoms must not import from molecules/organism.",
             severity: "error",
             from: { path: "^src/components/design-system/atoms/" },
-            to: { path: "^src/components/design-system/(molecules|organism|templates)/" },
+            to: { path: "^src/components/design-system/(molecules|organism)/" },
         },
         {
             name: "design-system-layering-molecules",
-            comment: "Molecules must not import from organism/templates.",
+            comment: "Molecules must not import from organism.",
             severity: "error",
             from: { path: "^src/components/design-system/molecules/" },
-            to: { path: "^src/components/design-system/(organism|templates)/" },
-        },
-        {
-            name: "design-system-layering-organism",
-            comment: "Organism must not import from templates.",
-            severity: "error",
-            from: { path: "^src/components/design-system/organism/" },
-            to: { path: "^src/components/design-system/templates/" },
+            to: { path: "^src/components/design-system/organism/" },
         },
         {
             name: "no-circular",

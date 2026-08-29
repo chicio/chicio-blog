@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@/test-utils";
 import { ReadingContentPage } from "./reading-content-page";
 
-vi.mock("@/components/design-system/templates/reading-content-page-template", () => ({
+vi.mock("@/components/features/content/reading-content-page-template", () => ({
     ReadingContentPageTemplate: ({
         children,
         navHrefs,

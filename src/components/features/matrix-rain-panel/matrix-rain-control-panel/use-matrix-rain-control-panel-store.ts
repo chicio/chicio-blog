@@ -1,7 +1,7 @@
 "use client";
 
 import { MouseEvent, useCallback, useEffect, useRef, useState } from "react";
-import { matrixRainPanelOpenEvent } from "@/components/design-system/state/command-palette/command-palette-events";
+import { matrixRainPanelOpenEvent } from "@/lib/matrix-rain/matrix-rain-panel-events";
 import {
     MATRIX_RAIN_DEFAULTS,
     MATRIX_RAIN_PRESETS,

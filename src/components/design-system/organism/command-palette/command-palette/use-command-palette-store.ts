@@ -1,91 +1,59 @@
 "use client";
 
-import { useSearch } from "@/components/design-system/hooks/use-search";
-import { commandPaletteOpenEvent } from "@/components/design-system/state/command-palette/command-palette-events";
-import { openTerminalOverlay } from "@/components/design-system/state/terminal/terminal-events";
-import type { SearchResult } from "@/types/search/search";
-import { ChangeEvent, useCallback, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import {
+    commandPaletteCloseEvent,
+    commandPaletteOpenEvent,
+} from "@/components/design-system/state/command-palette/command-palette-events";
+import type { CommandPaletteTrigger } from "@/components/design-system/state/command-palette/command-palette-trigger";
 import type { ComponentStore } from "@/types/component-store";
+import { useCallback, useEffect, useState } from "react";
 
 interface CommandPaletteState {
     open: boolean;
-    isSearching: boolean;
-    selectedValue: string;
-    search: SearchResult;
 }
 
 interface CommandPaletteEffects {
     close: () => void;
     stopPropagation: (e: React.MouseEvent) => void;
-    handleSearchInput: (value: string) => void;
-    handleOpenChat: () => void;
-    handleOpenEasterEggHunt: () => void;
-    handleOpenTerminal: () => void;
-    handleSearchResultSelect: (slug: string) => void;
-    setSelectedValue: (value: string) => void;
-    onToggleMotion?: () => void;
-    handleCustomizeMatrixRainClose: () => void;
-}
-
-interface CommandPaletteTrackingCallbacks {
-    onOpen?: () => void;
-    onOpenChat?: () => void;
-    onSearchResultSelect?: () => void;
-    onToggleMotion?: () => void;
-    onCustomizeMatrixRain?: () => void;
-    onOpenEasterEggHunt?: () => void;
-    onOpenTerminal?: () => void;
+    handleQueryChange: (value: string) => void;
 }
 
 export const useCommandPaletteStore = (
-    searchIndexFileName: string,
-    chatSlug: string,
-    easterEggHuntSlug: string,
-    tracking?: CommandPaletteTrackingCallbacks,
-    matchesEasterEggQuery?: (query: string) => boolean,
-    onEasterEggMatch?: () => void,
+    onOpenChange?: (open: boolean, trigger: CommandPaletteTrigger) => void,
+    onQueryChange?: (query: string) => void,
 ): ComponentStore<CommandPaletteState, CommandPaletteEffects> => {
     const [open, setOpen] = useState(false);
-    const [isSearching, setIsSearching] = useState(false);
-    const [selectedValue, setSelectedValue] = useState("open ai chat");
-    const { handleSearch, resetSearch, search } = useSearch(open, searchIndexFileName);
-    const [previousSearch, setPreviousSearch] = useState(search);
-    const router = useRouter();
 
-    if (previousSearch !== search) {
-        setPreviousSearch(search);
-        setSelectedValue(
-            search.type === "search" && search.results.length > 0 ? search.results[0].title : "open ai chat",
-        );
-    }
+    const changeOpen = useCallback(
+        (next: boolean, trigger: CommandPaletteTrigger) => {
+            setOpen(next);
+            onOpenChange?.(next, trigger);
+        },
+        [onOpenChange],
+    );
 
-    const close = useCallback(() => {
-        setOpen(false);
-        setIsSearching(false);
-        resetSearch();
-    }, [resetSearch]);
+    const close = useCallback(() => changeOpen(false, "dismiss"), [changeOpen]);
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             if ((e.metaKey || e.ctrlKey) && e.key === "k") {
                 e.preventDefault();
-                setOpen((prev) => !prev);
+                changeOpen(!open, "shortcut");
             }
         };
-        const handleOpenEvent = () => {
-            setOpen(true);
-            tracking?.onOpen?.();
-        };
+        const handleOpenEvent = () => changeOpen(true, "event");
+        const handleCloseEvent = () => changeOpen(false, "event");
 
         window.addEventListener("keydown", handleKeyDown, true);
         window.addEventListener(commandPaletteOpenEvent, handleOpenEvent);
+        window.addEventListener(commandPaletteCloseEvent, handleCloseEvent);
 
         return () => {
             window.removeEventListener("keydown", handleKeyDown, true);
             window.removeEventListener(commandPaletteOpenEvent, handleOpenEvent);
+            window.removeEventListener(commandPaletteCloseEvent, handleCloseEvent);
         };
-    }, [tracking]);
+    }, [changeOpen, open]);
 
     useEffect(() => {
         if (!open) {
@@ -94,78 +62,26 @@ export const useCommandPaletteStore = (
 
         const handleEsc = (e: KeyboardEvent) => {
             if (e.key === "Escape") {
-                close();
+                changeOpen(false, "escape");
             }
         };
 
         window.addEventListener("keydown", handleEsc, true);
 
         return () => window.removeEventListener("keydown", handleEsc, true);
-    }, [open, close]);
+    }, [open, changeOpen]);
 
     const stopPropagation = useCallback((e: React.MouseEvent) => e.stopPropagation(), []);
 
-    const handleSearchInput = useCallback(
+    const handleQueryChange = useCallback(
         (value: string) => {
-            const trimmed = value.trim();
-
-            if (matchesEasterEggQuery?.(trimmed)) {
-                onEasterEggMatch?.();
-                close();
-                return;
-            }
-
-            setIsSearching(trimmed.length >= 3);
-            handleSearch({ target: { value } } as ChangeEvent<HTMLInputElement>);
+            onQueryChange?.(value.trim());
         },
-        [handleSearch, matchesEasterEggQuery, onEasterEggMatch, close],
+        [onQueryChange],
     );
-
-    const handleOpenChat = useCallback(() => {
-        tracking?.onOpenChat?.();
-        router.push(chatSlug);
-        close();
-    }, [tracking, router, chatSlug, close]);
-
-    const handleOpenEasterEggHunt = useCallback(() => {
-        tracking?.onOpenEasterEggHunt?.();
-        router.push(easterEggHuntSlug);
-        close();
-    }, [tracking, router, easterEggHuntSlug, close]);
-
-    const handleOpenTerminal = useCallback(() => {
-        tracking?.onOpenTerminal?.();
-        openTerminalOverlay();
-        close();
-    }, [tracking, close]);
-
-    const handleSearchResultSelect = useCallback(
-        (slug: string) => {
-            tracking?.onSearchResultSelect?.();
-            router.push(slug);
-            close();
-        },
-        [tracking, router, close],
-    );
-
-    const handleCustomizeMatrixRainClose = useCallback(() => {
-        tracking?.onCustomizeMatrixRain?.();
-        close();
-    }, [tracking, close]);
 
     return {
-        state: { open, isSearching, selectedValue, search },
-        effects: {
-            close,
-            stopPropagation,
-            handleSearchInput,
-            handleOpenChat,
-            handleOpenEasterEggHunt,
-            handleOpenTerminal,
-            handleSearchResultSelect,
-            setSelectedValue,
-            onToggleMotion: tracking?.onToggleMotion,
-            handleCustomizeMatrixRainClose,
-        },
+        state: { open },
+        effects: { close, stopPropagation, handleQueryChange },
     };
 };

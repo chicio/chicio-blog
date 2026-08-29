@@ -1,14 +1,14 @@
 "use client";
 
-import { ReadingContentPageTemplate } from "@/components/design-system/templates/reading-content-page-template";
-import type { ReadingContentPageProps as DesignSystemReadingContentPageProps } from "@/components/design-system/templates/reading-content-page-template";
+import { ReadingContentPageTemplate } from "@/components/features/content/reading-content-page-template";
+import type { ReadingContentPageProps as ReadingContentPageTemplateProps } from "@/components/features/content/reading-content-page-template";
 import { TheChoiceEasterEgg } from "@/components/features/easter-eggs/the-choice";
 import { FC } from "react";
 import { useReadingContentPageStore } from "./use-reading-content-page-store";
 import { menuNavHrefs, footerNavHrefs, socialContactLinks } from "../nav-config";
 
 export type ReadingContentPageProps = Omit<
-    DesignSystemReadingContentPageProps,
+    ReadingContentPageTemplateProps,
     | "navHrefs"
     | "footerNavHrefs"
     | "socialLinks"
