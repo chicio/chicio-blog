@@ -29,11 +29,20 @@
         },
         "CommandPalette": {
             "cardMode": "single",
-            "primaryStory": "Open"
+            "primaryStory": "Closed",
+            "skip": [
+                "organism-command-palette--open",
+                "organism-command-palette--custom-placeholder"
+            ]
         },
         "ContentProgressBar": {
             "cardMode": "single",
-            "primaryStory": "Default"
+            "primaryStory": "Default",
+            "skip": [
+                "organism-reading-content-progress-bar--default",
+                "organism-reading-content-progress-bar--nearly-finished",
+                "organism-reading-content-progress-bar--just-started"
+            ]
         },
         "CookieConsentBanner": {
             "cardMode": "single",
@@ -52,11 +61,21 @@
         "Menu": {
             "cardMode": "single",
             "primaryStory": "Default",
-            "viewport": "1200x700"
+            "viewport": "1200x700",
+            "skip": [
+                "organism-menu--blog-dropdown-open",
+                "organism-menu--explore-dropdown-open",
+                "organism-menu--author-dropdown-open"
+            ]
         },
         "Overlay": {
             "cardMode": "single",
             "primaryStory": "WithDialog"
+        },
+        "ImageGlow": {
+            "skip": [
+                "atoms-effects-image-glow--fill-cover"
+            ]
         }
     }
 }
