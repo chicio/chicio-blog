@@ -20,20 +20,37 @@ The design system is a published npm package (`matrix-design-system`) with real 
 - **No Tailwind CLI compile.** The converter takes the compiled stylesheet out of the storybook
   reference, so `cssEntry` and `tailwind-entry.css` are gone.
 
+## Where this lives, and where to run it from
+
+`.design-sync/` and `.ds-sync/` both live in `packages/matrix-design-system/`, and **every path is
+resolved from the cwd the converter runs in** — it does no upward search for `.design-sync/`, so
+running from the repo root fails with `[CONFIG] … ENOENT`.
+
+**Run the design-sync session rooted at this package**, not at the repo root. That is what keeps the
+skill consistent with itself: it stages `.ds-sync/` relative to the session root, so a package-rooted
+session stages it here rather than recreating a second copy at the repo root.
+
+The two folders **must stay siblings**: the fork in `.design-sync/overrides/source-kit.mjs` imports
+`../.ds-sync/lib/common.mjs`, and `.design-sync/node_modules` is a symlink to `../.ds-sync/node_modules`
+(that is how the fork reaches ts-morph). Moving one without the other breaks both, with a plain
+`ERR_MODULE_NOT_FOUND`.
+
 ## Running it
 
 ```sh
+# from packages/matrix-design-system
 npx turbo run build --filter=matrix-design-system
 
-# The reference the compare loop diffs against. Repo-root -o: the converter resolves .design-sync/
-# from the cwd it is run in, and it is always run from the repo root.
-cd apps/matrix-design-system-showcase
-npx storybook build -c .storybook -o "$(git rev-parse --show-toplevel)/.design-sync/sb-reference" --quiet
+# The reference the compare loop diffs against. NOT the SKILL's documented
+# `-o "$(git rev-parse --show-toplevel)/…"` — the git toplevel is still the repo root, which would
+# put the reference where cfg.storybookStatic (cwd-relative) will not find it.
+cd ../../apps/matrix-design-system-showcase
+npx storybook build -c .storybook -o ../../packages/matrix-design-system/.design-sync/sb-reference --quiet
 cd -
 
 node .ds-sync/package-build.mjs --config .design-sync/config.json \
-  --node-modules ./node_modules \
-  --entry ./packages/matrix-design-system/dist/index.mjs \
+  --node-modules ../../node_modules \
+  --entry ./dist/index.mjs \
   --out ./ds-bundle
 node .ds-sync/package-validate.mjs ./ds-bundle
 ```
@@ -83,6 +100,9 @@ variant shows the component.
 - **`libOverrides` must declare `.design-sync/overrides/source-kit.mjs`.** The fork is still loaded
   under the storybook shape (`resolvePackage`), and dropping the declaration logs
   `[OVERRIDE_UNDECLARED]`.
+- **The root `.gitignore` needs `**/` on the `.design-sync/*` patterns.** A pattern with a middle
+  slash is anchored to the file's directory, so `.design-sync/.cache/` stopped matching when this
+  folder left the repo root — staging 99 build artifacts before it was caught.
 - **`ContentProgressBar` reports `[RENDER_BLANK]`** (PNG ~4.5 KB against a 5 KB heuristic). It is a
   hairline fixed strip; the card is genuinely mostly empty. Non-blocking, and not worth an authored
   preview — that would reintroduce a second source of truth.

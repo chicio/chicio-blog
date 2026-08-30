@@ -17,11 +17,11 @@ would break.
 Everything in the root barrel works with just those installed. Three groups need heavier libraries,
 so they live behind their own entry points and you install a peer only if you import one:
 
-| Import from | Install | For |
-|---|---|---|
-| `matrix-design-system/chart` | `recharts` | `ChartPanel`, `ChartTooltip`, `DonutChart` |
-| `matrix-design-system/markdown` | `react-markdown`, `unified`, the remark/rehype plugins | `Markdown` |
-| `matrix-design-system/command-palette` | `cmdk` | `CommandPalette` and its items |
+| Import from                            | Install                                                | For                                        |
+| -------------------------------------- | ------------------------------------------------------ | ------------------------------------------ |
+| `matrix-design-system/chart`           | `recharts`                                             | `ChartPanel`, `ChartTooltip`, `DonutChart` |
+| `matrix-design-system/markdown`        | `react-markdown`, `unified`, the remark/rehype plugins | `Markdown`                                 |
+| `matrix-design-system/command-palette` | `cmdk`                                                 | `CommandPalette` and its items             |
 
 Nothing else is optional: the rain effect is part of the design system's identity — `BrandHeader`
 and the matrix backgrounds all render it — so `matrix-rain-webgpu` is a plain dependency and comes
@@ -50,12 +50,12 @@ components are near-invisible on white.
 Style your own layout with Tailwind utilities — they resolve against this theme, so use its names
 rather than stock Tailwind colours:
 
-| Family | Names |
-|---|---|
-| Brand | `primary` (#00FF41), `primary-dark`, `secondary`, `accent` (#39FF14) |
+| Family   | Names                                                                        |
+| -------- | ---------------------------------------------------------------------------- |
+| Brand    | `primary` (#00FF41), `primary-dark`, `secondary`, `accent` (#39FF14)         |
 | Surfaces | `general-background` (#001100), `general-background-light`, `black`, `white` |
-| Text | `primary-text` (#E8FFE8), `secondary-text`, `text-above-primary` |
-| Fonts | `font-sans` → Open Sans · `font-mono` → Courier Prime |
+| Text     | `primary-text` (#E8FFE8), `secondary-text`, `text-above-primary`             |
+| Fonts    | `font-sans` → Open Sans · `font-mono` → Courier Prime                        |
 
 **The breakpoint scale is overridden**: `xs` 576 · `sm` 768 · `md` 992 · `lg` 1200 · `xl` 1600 ·
 `2xl` 2000 (px). So `md:` starts at 992px, not 768px — the most common way a layout built with this
@@ -93,3 +93,19 @@ custom properties, and the two global preferences (motion, glassmorphism variant
 ## License
 
 MIT © Fabrizio Duroni
+
+## Claude Design sync
+
+`.design-sync/` and `.ds-sync/` in this folder are the [claude.ai/design](https://claude.ai/design)
+converter. It reads the Storybook stories beside each component — there are no hand-authored
+previews, so a story is the only place a component's example lives.
+
+**Run `/design-sync` from a session rooted at this package, not at the repository root.** Every path
+the converter uses is resolved from its working directory and it does no upward search, so a
+root-level run fails with `[CONFIG] … ENOENT`. Rooting the session here also keeps the skill
+consistent with itself, since it stages `.ds-sync/` relative to the session root.
+
+The two folders must stay siblings: the fork in `.design-sync/overrides/` imports `../.ds-sync/lib/`,
+and `.design-sync/node_modules` symlinks to `../.ds-sync/node_modules`.
+
+`.design-sync/NOTES.md` has the full invocation and the re-sync watch-list.

@@ -4,7 +4,7 @@
     "projectId": "e5de76b0-e20e-414b-852b-210defebffac",
     "shape": "storybook",
     "storybookStatic": ".design-sync/sb-reference",
-    "storybookConfigDir": "apps/matrix-design-system-showcase/.storybook",
+    "storybookConfigDir": "../../apps/matrix-design-system-showcase/.storybook",
     "buildCmd": "npx turbo run build --filter=matrix-design-system",
     "extraEntries": [
         "./dist/chart.mjs",
