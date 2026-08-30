@@ -1,9 +1,6 @@
 "use client";
 
-import {
-    BluePillButton,
-    RedPillButton,
-} from "@/components/design-system/molecules/buttons/pills-buttons";
+import { BluePillButton, RedPillButton } from "matrix-design-system";
 import React from "react";
 import { useKadaneVisualizerStore } from "./use-kadane-visualizer-store";
 

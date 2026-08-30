@@ -1,9 +1,8 @@
 "use client";
 
 import { MouseEventHandler, FocusEventHandler, useState } from "react";
-import type { ComponentStore } from "@/types/component-store";
-import type { PrefetchStrategy } from "@/components/design-system/atoms/links/anchor-link";
-
+import type { ComponentStore } from "matrix-component-store";
+import { type PrefetchStrategy } from "matrix-design-system";
 interface NextLinkState {
     prefetch: boolean | null | undefined;
 }

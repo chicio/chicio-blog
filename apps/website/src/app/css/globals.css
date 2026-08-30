@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@import "../../components/design-system/styles/index.css";
+@import "matrix-design-system/styles.css";
 
 /**
  * Site-only styling: how THIS site lays out long-form MDX content. It is keyed to the container id

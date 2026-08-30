@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "@/components/design-system/atoms/buttons/button";
-import { ProfileHero } from "@/components/design-system/organism/profile-hero";
+import { ProfileHero } from "@/components/features/design-system-next/profile-hero";
+import { Button } from "matrix-design-system";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { useAboutMeTableOfContentsStore } from "./use-about-me-table-of-contents-store";
 

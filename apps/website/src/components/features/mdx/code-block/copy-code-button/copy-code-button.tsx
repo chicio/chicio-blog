@@ -1,8 +1,7 @@
 "use client";
 
 import { FC } from "react";
-import { CopiedIcon, CopyErrorIcon, CopyIcon } from "@/components/design-system/atoms/icons/copy-icon";
-import { Button } from "@/components/design-system/atoms/buttons/button";
+import { Button, CopiedIcon, CopyErrorIcon, CopyIcon } from "matrix-design-system";
 import { useCopyCodeButtonStore } from "./use-copy-code-button-store";
 
 interface CopyCodeButtonProps {

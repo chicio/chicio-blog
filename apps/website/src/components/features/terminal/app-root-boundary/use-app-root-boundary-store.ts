@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { registerAppRootElement } from "@/lib/terminal/terminal-overlay-dom";
-import type { EffectsStore } from "@/types/component-store";
+import type { EffectsStore } from "matrix-component-store";
 
 interface AppRootBoundaryEffects {
     setEl: (el: HTMLDivElement | null) => void;

@@ -1,7 +1,7 @@
 "use client";
 
-import { TerminalLine } from "@/components/design-system/atoms/typography/terminal-blocks";
-import { CommandPaletteItem } from "@/components/design-system/organism/command-palette";
+import { TerminalLine } from "matrix-design-system";
+import { CommandPaletteItem } from "matrix-design-system/command-palette";
 import { BiTerminal } from "react-icons/bi";
 import { FC } from "react";
 

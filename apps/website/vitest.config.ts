@@ -18,16 +18,15 @@ export default defineConfig({
             provider: "v8",
             reporter: ["text", "json-summary"],
             thresholds: {
-                statements: 92,
-                branches: 84,
-                functions: 89,
-                lines: 92,
+                statements: 90,
+                branches: 85,
+                functions: 88,
+                lines: 90,
             },
             include: [
                 "src/lib/**",
-                "src/components/design-system/**",
-                // Moved out of design-system/ by the boundary audit; they stay measured so the
-                // ratchet keeps covering the same code it did before the move.
+                // Site code that came out of the design system; kept measured so the ratchet still
+                // covers what it covered before those moves.
                 "src/components/features/content/page-template/**",
                 "src/components/features/content/content-page-template/**",
                 "src/components/features/content/reading-content-page-template/**",
@@ -42,10 +41,6 @@ export default defineConfig({
             // touching fs/network) are excluded for the same reason — they have no
             // meaningful unit-test surface and would only be covered by mock-heavy noise.
             exclude: [
-                "src/components/design-system/atoms/effects/matrix-rain/**",
-                "src/components/design-system/molecules/effects/matrix-background/**",
-                "src/components/design-system/molecules/effects/matrix-header-background/**",
-                "src/components/design-system/molecules/effects/matrix-terminal/**",
                 "src/lib/chat/chat-knowledge-upload.ts",
                 "src/lib/images/copy-content-media.ts",
                 "src/lib/build/prebuild.ts",

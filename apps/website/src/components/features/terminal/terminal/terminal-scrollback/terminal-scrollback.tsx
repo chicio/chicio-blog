@@ -1,4 +1,4 @@
-import { ErrorText, SuccessText, TerminalLine } from "@/components/design-system/atoms/typography/terminal-blocks";
+import { ErrorText, SuccessText, TerminalLine } from "matrix-design-system";
 import type { TerminalScrollbackEntry } from "@/lib/terminal/terminal-screen-lines";
 import { TerminalContentBlock } from "./terminal-content-block";
 import { FC } from "react";

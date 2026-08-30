@@ -1,6 +1,6 @@
 "use client";
 
-import { InputField } from "@/components/design-system/atoms/typography/input-field";
+import { InputField } from "matrix-design-system";
 import React from "react";
 import { useBitwiseVisualizerStore } from "./use-bitwise-visualizer-store";
 

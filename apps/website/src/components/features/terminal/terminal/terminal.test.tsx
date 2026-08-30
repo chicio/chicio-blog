@@ -14,7 +14,10 @@ const { mockRouterPush, mockRouterReplace } = vi.hoisted(() => ({
 vi.mock("next/navigation", () => makeNextNavigationMock({ push: mockRouterPush, replace: mockRouterReplace })());
 vi.mock("next/link", () => nextLinkMock());
 vi.mock("next/image", () => nextImageMock());
-vi.mock("@/components/design-system/atoms/animation/motion-div", () => motionDivMock());
+vi.mock("matrix-design-system", async (importOriginal) => ({
+    ...(await importOriginal<typeof import("matrix-design-system")>()),
+    ...motionDivMock(),
+}));
 vi.mock("framer-motion", () => ({
     AnimatePresence: ({ children }: React.PropsWithChildren) => <>{children}</>,
     motion: {

@@ -1,7 +1,7 @@
 "use client";
 
 import { FC } from "react";
-import { RedPillButton, BluePillButton } from "@/components/design-system/molecules/buttons/pills-buttons";
+import { BluePillButton, RedPillButton } from "matrix-design-system";
 import { useBacktrackingVisualizerStore } from "./use-backtracking-visualizer-store";
 
 export const BacktrackingVisualizer: FC = () => {

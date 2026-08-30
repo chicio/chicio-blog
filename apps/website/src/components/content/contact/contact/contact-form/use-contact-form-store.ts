@@ -4,7 +4,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { tracking } from "@/types/configuration/tracking";
 import { trackWith } from "@/lib/tracking/tracking";
 import { contactQueue } from "@/lib/background-sync/contact-queue";
-import { ComponentStore } from "@/types/component-store";
+import { ComponentStore } from "matrix-component-store";
 
 type ContactFormErrors = Record<string, string>;
 

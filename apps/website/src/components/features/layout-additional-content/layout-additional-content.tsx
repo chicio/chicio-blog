@@ -8,7 +8,7 @@ import { useLayoutAdditionalContentStore } from "./use-layout-additional-content
 
 const CookieConsentBanner = dynamic(
     () =>
-        import("@/components/design-system/organism/cookie-consent-banner").then(
+        import("matrix-design-system").then(
             (m) => m.CookieConsentBanner,
         ),
     { ssr: false },
@@ -68,7 +68,7 @@ const EasterEggTriggers = dynamic(
 );
 
 const Lightbox = dynamic(
-    () => import("@/components/design-system/organism/lightbox").then((m) => m.Lightbox),
+    () => import("matrix-design-system").then((m) => m.Lightbox),
     { ssr: false },
 );
 

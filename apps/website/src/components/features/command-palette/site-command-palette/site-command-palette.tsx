@@ -1,12 +1,12 @@
 "use client";
 
-import { TerminalLine } from "@/components/design-system/atoms/typography/terminal-blocks";
+import { TerminalLine } from "matrix-design-system";
 import {
     CommandPalette,
     CommandPaletteGroup,
     CommandPaletteItem,
     ToggleMotionItem,
-} from "@/components/design-system/organism/command-palette";
+} from "matrix-design-system/command-palette";
 import { BiChat } from "react-icons/bi";
 import { FC } from "react";
 import { CustomizeMatrixRainItem } from "./customize-matrix-rain-item";

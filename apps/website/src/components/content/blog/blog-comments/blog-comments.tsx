@@ -3,7 +3,7 @@
 import Giscus from "@giscus/react";
 import { FC } from "react";
 import { giscusConfig } from "@/types/configuration/giscus";
-import { TerminalProgressBar } from "@/components/design-system/molecules/terminal-progress-bar";
+import { TerminalProgressBar } from "matrix-design-system";
 import { useBlogCommentsStore } from "./use-blog-comments-store";
 
 /**

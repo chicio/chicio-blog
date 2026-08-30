@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { PageTitle } from "@/components/design-system/molecules/typography/page-title";
+import { PageTitle } from "matrix-design-system";
 import { videogamesHome } from "@/lib/content/videogames/videogames";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { slugs } from "@/types/configuration/slug";

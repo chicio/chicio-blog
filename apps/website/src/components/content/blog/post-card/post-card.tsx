@@ -1,4 +1,4 @@
-import { imageShimmerPlaceholder } from "@/components/design-system/atoms/effects/image-shimmer-placeholder";
+import { imageShimmerPlaceholder } from "matrix-design-system";
 import { InternalLink } from "@/components/features/design-system-next/internal-link";
 import { Author } from "@/types/content/author";
 import Image from "next/image";

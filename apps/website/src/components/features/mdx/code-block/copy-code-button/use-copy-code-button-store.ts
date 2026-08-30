@@ -1,10 +1,10 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { useClipboardAvailable } from "@/components/design-system/hooks/use-clipboard-available";
+import { useClipboardAvailable } from "matrix-design-system";
 import { trackWith } from "@/lib/tracking/tracking";
 import { tracking } from "@/types/configuration/tracking";
-import type { ComponentStore } from "@/types/component-store";
+import type { ComponentStore } from "matrix-component-store";
 
 interface CopyCodeButtonState {
     copied: boolean;

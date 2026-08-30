@@ -29,10 +29,22 @@ vi.mock("next/image", () => ({
     }: React.ImgHTMLAttributes<HTMLImageElement> & { src: string }) => <img alt={alt} src={src} {...rest} />,
 }));
 
-vi.mock("@/components/design-system/atoms/animation/motion-div", () => ({
+vi.mock("matrix-design-system", async (importOriginal) => ({
+    ...(await importOriginal<typeof import("matrix-design-system")>()),
     MotionDiv: ({ children, ...props }: React.HTMLAttributes<HTMLDivElement>) => <div {...props}>{children}</div>,
+    MatrixHeaderBackground: () => <div data-testid="matrix-header-background" />,
+    ImageGlow: ({
+        alt,
+        src,
+        ...rest
+    }: React.ImgHTMLAttributes<HTMLImageElement> & { src: string }) => <img alt={alt} src={src} {...rest} />,
+    commandPaletteOpenEvent: "command-palette-open",
+    openCommandPalette: vi.fn(),
+    openMatrixRainPanel: vi.fn(),
+    writeMotion: vi.fn(),
+    hasMotion: () => true,
+    motionChangeEvent: "motion-change",
 }));
-
 vi.mock("framer-motion", () => ({
     AnimatePresence: ({ children }: React.PropsWithChildren) => <>{children}</>,
     motion: {
@@ -48,30 +60,6 @@ vi.mock("framer-motion", () => ({
 vi.mock("matrix-rain-webgpu", () => ({
     isWebGPUSupported: () => false,
     MatrixRainWebGPU: () => <div data-testid="matrix-rain-webgpu" />,
-}));
-
-vi.mock("@/components/design-system/molecules/effects/matrix-header-background", () => ({
-    MatrixHeaderBackground: () => <div data-testid="matrix-header-background" />,
-}));
-
-vi.mock("@/components/design-system/atoms/effects/image-glow", () => ({
-    ImageGlow: ({
-        alt,
-        src,
-        ...rest
-    }: React.ImgHTMLAttributes<HTMLImageElement> & { src: string }) => <img alt={alt} src={src} {...rest} />,
-}));
-
-vi.mock("@/components/design-system/state/command-palette/command-palette-events", () => ({
-    commandPaletteOpenEvent: "command-palette-open",
-    openCommandPalette: vi.fn(),
-    openMatrixRainPanel: vi.fn(),
-}));
-
-vi.mock("@/components/design-system/state/motion/motion", () => ({
-    writeMotion: vi.fn(),
-    hasMotion: () => true,
-    motionChangeEvent: "motion-change",
 }));
 
 const navHrefs: MenuNavHrefs = {

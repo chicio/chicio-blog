@@ -14,7 +14,7 @@ import type { TerminalScrollbackEntry } from "@/lib/terminal/terminal-screen-lin
 import { triggerEasterEgg } from "@/lib/easter-eggs/trigger-easter-egg";
 import { trackWith } from "@/lib/tracking/tracking";
 import { tracking } from "@/types/configuration/tracking";
-import type { ComponentStore } from "@/types/component-store";
+import type { ComponentStore } from "matrix-component-store";
 import type { TerminalContentBlockData, TerminalDirNode, TerminalRenderContentIntent } from "@/types/terminal/terminal";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, FormEvent, KeyboardEvent, useCallback, useEffect, useState } from "react";

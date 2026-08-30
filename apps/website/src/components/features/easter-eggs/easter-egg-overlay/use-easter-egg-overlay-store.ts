@@ -1,14 +1,14 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore, type MouseEvent } from "react";
-import { useReducedMotions } from "@/components/design-system/hooks/use-reduced-motions";
+import { useReducedMotions } from "matrix-design-system";
 import { EASTER_EGG_CATALOG, type EasterEggCatalogEntry } from "@/lib/easter-eggs/easter-egg-catalog";
 import {
     closeEasterEgg,
     getEasterEggOverlaySlug,
     subscribeToEasterEggOverlay,
 } from "@/lib/easter-eggs/easter-egg-overlay-state";
-import type { ComponentStore } from "@/types/component-store";
+import type { ComponentStore } from "matrix-component-store";
 
 const getServerSlugSnapshot = (): null => null;
 

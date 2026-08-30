@@ -4,7 +4,7 @@ import { useChat } from "@ai-sdk/react";
 import { UIMessage } from "ai";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { trySpoonPhrase } from "@/lib/easter-eggs/spoon-activation";
-import { ComponentStore } from "@/types/component-store";
+import { ComponentStore } from "matrix-component-store";
 
 const exampleQuestions = [
     "Which programming languages does Fabrizio Duroni know?",

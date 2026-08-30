@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useReducedMotions } from "@/components/design-system/hooks/use-reduced-motions";
-import type { StateStore } from "@/types/component-store";
+import { useReducedMotions } from "matrix-design-system";
+import type { StateStore } from "matrix-component-store";
 
 const GISCUS_ORIGIN = "https://giscus.app";
 const MAX_SIMULATED_PERCENTAGE = 90;

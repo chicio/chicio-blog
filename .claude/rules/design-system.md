@@ -1,6 +1,6 @@
 ---
 paths:
-  - "apps/website/src/components/design-system/**/*"
+  - "packages/matrix-design-system/src/**/*"
   - "apps/website/src/app/css/**/*"
 ---
 
@@ -8,18 +8,18 @@ paths:
 
 ## Atomic Design Hierarchy
 
-- **Atoms** (`apps/website/src/components/design-system/atoms/`): Basic UI elements (buttons, typography, icons, effects, links, loader)
-- **Molecules** (`apps/website/src/components/design-system/molecules/`): Composed from atoms (button variants, form components, menu items, breadcrumbs, accordion, animation, effects)
-- **Organisms** (`apps/website/src/components/design-system/organism/`): Complex composed sections
+- **Atoms** (`packages/matrix-design-system/src/atoms/`): Basic UI elements (buttons, typography, icons, effects, links, loader)
+- **Molecules** (`packages/matrix-design-system/src/molecules/`): Composed from atoms (button variants, form components, menu items, breadcrumbs, accordion, animation, effects)
+- **Organisms** (`packages/matrix-design-system/src/organism/`): Complex composed sections
 - Page-level layouts are NOT part of the design system: they arrange this site's chrome and live in
   `apps/website/src/components/features/content/`
-- **Hooks** (`apps/website/src/components/design-system/hooks/`): Shared hooks used by 2+ components (motion, glassmorphism,
+- **Hooks** (`packages/matrix-design-system/src/hooks/`): Shared hooks used by 2+ components (motion, glassmorphism,
   in-view, etc.). A hook that depends on this site lives in its feature domain instead
   (e.g. `useSearch` in `apps/website/src/components/features/search/`).
 
 ## Styling
 
-The design system owns its stylesheet: `apps/website/src/components/design-system/styles/`.
+The design system owns its stylesheet: `packages/matrix-design-system/src/styles/`.
 
 - `theme.css` — the `@theme` tokens and the overridden breakpoint scale (`md:` is 992px, not 768px).
   It also defines the `hide-scrollbar` utility, so this file is not safe to import as tokens only

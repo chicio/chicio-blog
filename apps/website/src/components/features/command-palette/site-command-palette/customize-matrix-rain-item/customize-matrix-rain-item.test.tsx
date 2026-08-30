@@ -19,14 +19,11 @@ vi.mock("cmdk", () => ({
     }),
 }));
 
-vi.mock("@/components/design-system/hooks/use-webgpu-supported", () => ({
+vi.mock("matrix-design-system", async (importOriginal) => ({
+    ...(await importOriginal<typeof import("matrix-design-system")>()),
     useWebGpuSupported: mockUseWebGpuSupported,
-}));
-
-vi.mock("@/components/design-system/hooks/use-reduced-motions", () => ({
     useReducedMotions: mockUseReducedMotions,
 }));
-
 vi.mock("@/lib/matrix-rain/matrix-rain-panel-events", () => ({
     openMatrixRainPanel: mockOpenMatrixRainPanel,
 }));

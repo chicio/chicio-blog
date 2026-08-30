@@ -1,4 +1,4 @@
-import { ExternalLink } from "@/components/design-system/atoms/links/external-link";
+import { ExternalLink } from "matrix-design-system";
 import Image from "next/image";
 import { FC } from "react";
 import { BiBriefcase, BiSolidGraduation } from "react-icons/bi";

@@ -1,4 +1,4 @@
-import { PageTitle } from "@/components/design-system/molecules/typography/page-title";
+import { PageTitle } from "matrix-design-system";
 import { JsonLd } from "@/components/features/seo/jsond-ld";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { tracking } from "@/types/configuration/tracking";

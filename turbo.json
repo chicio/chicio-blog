@@ -2,8 +2,7 @@
     "$schema": "https://turborepo.com/schema.json",
     "ui": "stream",
     "globalDependencies": [
-        ".prettierrc",
-        ".nvmrc"
+        ".prettierrc"
     ],
     "globalEnv": [
         "CI",
@@ -32,10 +31,16 @@
             ]
         },
         "dev": {
+            "dependsOn": [
+                "^build"
+            ],
             "cache": false,
             "persistent": true
         },
         "start": {
+            "dependsOn": [
+                "^build"
+            ],
             "cache": false,
             "persistent": true
         },
@@ -56,6 +61,9 @@
         },
         "validate-architecture": {},
         "test": {
+            "dependsOn": [
+                "^build"
+            ],
             "cache": false,
             "persistent": true
         },

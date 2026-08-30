@@ -44,6 +44,7 @@
   ],
   "exclude": [
     "node_modules",
-    "agent"
+    "agent",
+    "src/app/sw.ts"
   ]
 }

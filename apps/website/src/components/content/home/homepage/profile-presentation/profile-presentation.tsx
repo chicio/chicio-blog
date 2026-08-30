@@ -1,11 +1,10 @@
 "use client";
 
-import { GlassmorphismBackground } from "@/components/design-system/atoms/effects/glassmorphism-background";
+import { GlassmorphismBackground, MotionDiv } from "matrix-design-system";
 import { SocialContacts } from "@/components/features/design-system-next/social-contacts";
 import { Variants } from "framer-motion";
 import { FC } from "react";
 import { ProfilePhoto } from "@/components/features/design-system-next/profile-photo";
-import { MotionDiv } from "@/components/design-system/atoms/animation/motion-div";
 import { useProfilePresentationStore } from "./use-profile-presentation-store";
 import { socialContactLinks } from "@/components/features/content/nav-config";
 import { slugs } from "@/types/configuration/slug";

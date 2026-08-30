@@ -1,10 +1,7 @@
 "use client";
 
-import { MatrixRain } from "@/components/design-system/atoms/effects/matrix-rain/matrix-rain";
-import { MatrixTerminal } from "@/components/design-system/molecules/effects/matrix-terminal";
+import { MatrixRain, MatrixTerminal, RedPillButton } from "matrix-design-system";
 import { BluePillLink } from "@/components/features/design-system-next/pills-links";
-import { RedPillButton } from "@/components/design-system/molecules/buttons/pills-buttons";
-
 const terminalLines = [
     { text: "Connecting to Matrix...", delay: 600 },
     { text: "PING 8.8.8.8 ... Request timeout", type: "error" as const, delay: 700 },

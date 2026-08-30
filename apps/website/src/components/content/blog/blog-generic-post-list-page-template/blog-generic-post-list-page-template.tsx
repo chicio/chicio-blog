@@ -1,5 +1,5 @@
 import { InternalLink } from "@/components/features/design-system-next/internal-link";
-import { PageTitle } from "@/components/design-system/molecules/typography/page-title";
+import { PageTitle } from "matrix-design-system";
 import { Content } from "@/types/content/content";
 import { FC } from "react";
 import { ContentPage } from "@/components/features/content/content-page";

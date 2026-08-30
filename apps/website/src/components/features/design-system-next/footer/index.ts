@@ -5,4 +5,4 @@ export type {
     SocialContactLinks,
     FooterNavTrackingCallbacks,
     FooterSocialTrackingCallbacks,
-} from "@/components/design-system/organism/footer";
+} from "matrix-design-system";

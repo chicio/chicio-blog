@@ -3,8 +3,7 @@
 import { memo } from "react";
 import { Content } from "@/types/content/content";
 import { GameMetadata } from "@/types/content/videogames";
-import { SegmentedControl, SegmentOption } from "@/components/design-system/molecules/buttons/segmented-control";
-import { FilterInput } from "@/components/design-system/molecules/form/filter-input";
+import { FilterInput, SegmentOption, SegmentedControl } from "matrix-design-system";
 import { GamesGrid } from "@/components/content/videogames/games-grid";
 import { IoGameControllerOutline } from "react-icons/io5";
 import { GiGameConsole } from "react-icons/gi";

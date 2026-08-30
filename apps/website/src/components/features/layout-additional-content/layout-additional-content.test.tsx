@@ -46,7 +46,9 @@ vi.mock("next/dynamic", () => ({
     default: (loader: () => Promise<{ [key: string]: React.ComponentType }>) => {
         let key = "";
         const loaderString = loader.toString();
-        if (loaderString.includes("cookie-consent-banner")) {
+        // matched on the exported name: the loader now imports the package barrel, so the
+        // old kebab-case path fragment is no longer in the loader source
+        if (loaderString.includes("CookieConsentBanner")) {
             key = "cookie-consent-banner";
         } else {
             return () => null;

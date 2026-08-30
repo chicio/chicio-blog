@@ -1,9 +1,7 @@
 "use client";
 
 import { FC } from "react";
-import { TerminalLine } from "@/components/design-system/atoms/typography/terminal-blocks";
-import { BluePillButton, RedPillButton } from "@/components/design-system/molecules/buttons/pills-buttons";
-import { TerminalProgressBar } from "@/components/design-system/molecules/terminal-progress-bar";
+import { BluePillButton, RedPillButton, TerminalLine, TerminalProgressBar } from "matrix-design-system";
 import { useEggHuntProgressStore } from "./use-egg-hunt-progress-store";
 
 /**

@@ -3,7 +3,7 @@
 import { useSyncExternalStore } from "react";
 import type { EasterEggSlug } from "@/lib/easter-eggs/easter-egg-catalog";
 import { isEasterEggFound, subscribeToEasterEggFound } from "@/lib/easter-eggs/easter-egg-found";
-import type { StateStore } from "@/types/component-store";
+import type { StateStore } from "matrix-component-store";
 
 interface EggCardState {
     found: boolean;

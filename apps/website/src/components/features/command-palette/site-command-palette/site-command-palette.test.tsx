@@ -78,21 +78,18 @@ vi.mock("@/components/features/search/use-search", () => ({
     }),
 }));
 
-vi.mock("@/components/design-system/hooks/use-webgpu-supported", () => ({
+vi.mock("matrix-design-system", async (importOriginal) => ({
+    ...(await importOriginal<typeof import("matrix-design-system")>()),
     useWebGpuSupported: mockUseWebGpuSupported,
-}));
-
-vi.mock("@/components/design-system/hooks/use-reduced-motions", () => ({
     useReducedMotions: mockUseReducedMotions,
-}));
-
-vi.mock("@/components/design-system/state/command-palette/command-palette-events", () => ({
     commandPaletteOpenEvent: "command-palette-open",
     openCommandPalette: vi.fn(),
     commandPaletteCloseEvent: "command-palette-close",
     closeCommandPalette: () => window.dispatchEvent(new Event("command-palette-close")),
+    writeMotion: vi.fn(),
+    hasMotion: () => true,
+    motionChangeEvent: "motion-change",
 }));
-
 vi.mock("@/lib/matrix-rain/matrix-rain-panel-events", () => ({
     matrixRainPanelOpenEvent: "matrix-rain-panel-open",
     openMatrixRainPanel,
@@ -101,12 +98,6 @@ vi.mock("@/lib/matrix-rain/matrix-rain-panel-events", () => ({
 vi.mock("@/lib/terminal/terminal-events", () => ({
     terminalOverlayOpenEvent: "terminal-overlay-open",
     openTerminalOverlay,
-}));
-
-vi.mock("@/components/design-system/state/motion/motion", () => ({
-    writeMotion: vi.fn(),
-    hasMotion: () => true,
-    motionChangeEvent: "motion-change",
 }));
 
 const openViaShortcut = () => fireEvent.keyDown(window, { key: "k", ctrlKey: true });

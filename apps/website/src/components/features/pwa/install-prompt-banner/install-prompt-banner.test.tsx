@@ -24,7 +24,8 @@ vi.mock("framer-motion", () => ({
     },
 }));
 
-vi.mock("@/components/design-system/molecules/buttons/pills-buttons", () => ({
+vi.mock("matrix-design-system", async (importOriginal) => ({
+    ...(await importOriginal<typeof import("matrix-design-system")>()),
     BluePillButton: ({
         children,
         onClick,
@@ -44,7 +45,6 @@ vi.mock("@/components/design-system/molecules/buttons/pills-buttons", () => ({
         </button>
     ),
 }));
-
 vi.mock("@/lib/tracking/tracking", () => ({ trackWith: vi.fn() }));
 vi.mock("@/lib/pwa/pwa-install-decision", () => ({
     writePwaInstallDecision: vi.fn(),

@@ -1,7 +1,7 @@
 "use client";
 
 import { FC } from "react";
-import { RedPillButton } from "@/components/design-system/molecules/buttons/pills-buttons";
+import { RedPillButton } from "matrix-design-system";
 import { useStringVisualizationStore } from "./use-string-visualization-store";
 
 interface CharBoxProps {

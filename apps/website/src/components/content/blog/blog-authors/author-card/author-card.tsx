@@ -2,8 +2,7 @@
 
 import { ImageGlow } from "@/components/features/design-system-next/image-glow";
 import { InternalLink } from "@/components/features/design-system-next/internal-link";
-import { Chip } from "@/components/design-system/atoms/chip";
-import { useGlassmorphism } from "@/components/design-system/hooks/use-glassmorphism";
+import { Chip, useGlassmorphism } from "matrix-design-system";
 import { Author } from "@/types/content/author";
 import { authorHref } from "@/lib/content/authors/author-slug";
 import { FC } from "react";

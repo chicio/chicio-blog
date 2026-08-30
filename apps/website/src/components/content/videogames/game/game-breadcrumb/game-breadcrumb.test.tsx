@@ -14,12 +14,12 @@ vi.mock("framer-motion", () => ({
     AnimatePresence: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
 
-vi.mock("@/components/design-system/molecules/breadcrumbs/breadcrumb/use-breadcrumb-store", () => ({
+vi.mock("matrix-design-system", async (importOriginal) => ({
+    ...(await importOriginal<typeof import("matrix-design-system")>()),
     useBreadcrumbStore: () => ({
         state: { navRef: { current: null }, isVisible: false },
     }),
 }));
-
 const defaultProps = {
     gameTitle: "The Legend of Zelda",
     gameSlug: "/videogames/zelda",

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { ComponentStore } from "@/types/component-store";
+import { ComponentStore } from "matrix-component-store";
 
 interface GraphPropertiesVisualizerState {
     selectedIndex: number;

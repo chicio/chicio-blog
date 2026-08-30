@@ -9,10 +9,10 @@ vi.mock("next/image", () => nextImageMock());
 vi.mock("next/link", () => nextLinkMock());
 vi.mock("@/lib/tracking/tracking", () => ({ trackWith: vi.fn() }));
 
-vi.mock("@/components/design-system/hooks/use-in-view-list", () => ({
+vi.mock("matrix-design-system", async (importOriginal) => ({
+    ...(await importOriginal<typeof import("matrix-design-system")>()),
     useInViewList: () => [vi.fn(), true],
 }));
-
 vi.mock("@/components/features/content/content-page", () => ({
     ContentPage: ({ children }: { children?: ReactNode }) => <div>{children}</div>,
 }));

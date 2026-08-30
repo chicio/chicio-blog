@@ -1,4 +1,4 @@
-import { ContentContainer } from "@/components/design-system/molecules/containers/content-container";
+import { ContentContainer } from "matrix-design-system";
 import { Footer } from "@/components/features/design-system-next/footer";
 import { Menu } from "@/components/features/design-system-next/menu";
 import { FC, ReactNode } from "react";

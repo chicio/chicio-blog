@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import type { ComponentStore } from "@/types/component-store";
+import type { ComponentStore } from "matrix-component-store";
 
 interface CodeBlockState {
     getText: () => string;

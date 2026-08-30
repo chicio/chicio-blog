@@ -27,7 +27,7 @@ apps/website/src/types/        → TypeScript types and pure configuration const
 
 ### design-system is self-contained
 
-`apps/website/src/components/design-system/**` may ONLY import from:
+`packages/matrix-design-system/src/**` may ONLY import from:
 - npm packages
 - other files within `design-system/**`
 - `apps/website/src/types/**` — **type-only** (`import type { ... }`) exclusively
@@ -61,7 +61,7 @@ apps/website/src/types/        → TypeScript types and pure configuration const
 
 `apps/website/src/components/features/**` may import from:
 - `apps/website/src/lib/**`
-- `apps/website/src/components/design-system/**` (through `index.ts` barrels)
+- `packages/matrix-design-system/src/**` (through `index.ts` barrels)
 - `apps/website/src/types/**`
 - npm packages
 
@@ -70,7 +70,7 @@ Features must NOT import from `apps/website/src/components/content/**` (content 
 ### content pages are isolated from each other
 
 `apps/website/src/components/content/<pageA>/**` must NOT import from `apps/website/src/components/content/<pageB>/**`.
-Cross-page shared UI must be extracted to `apps/website/src/components/features/` or `apps/website/src/components/design-system/`.
+Cross-page shared UI must be extracted to `apps/website/src/components/features/` or `packages/matrix-design-system/src/`.
 
 ## Atomic Design Layering (within design-system)
 

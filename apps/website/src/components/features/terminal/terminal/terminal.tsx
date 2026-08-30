@@ -1,6 +1,6 @@
 "use client";
 
-import { Overlay } from "@/components/design-system/atoms/effects/overlay";
+import { Overlay } from "matrix-design-system";
 import { FC } from "react";
 import { TerminalPrompt } from "./terminal-prompt";
 import { TerminalScrollback } from "./terminal-scrollback";

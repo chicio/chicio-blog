@@ -2,7 +2,7 @@
 
 import NextJsLink from "next/link";
 import { FC } from "react";
-import type { LinkComponentProps } from "@/components/design-system/atoms/links/anchor-link";
+import { type LinkComponentProps } from "matrix-design-system";
 import { useNextLinkStore } from "./use-next-link-store";
 
 /**

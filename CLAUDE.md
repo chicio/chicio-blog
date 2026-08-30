@@ -12,14 +12,31 @@ An npm-workspaces monorepo orchestrated by Turborepo. **Every path in this file 
 is written from the repository root**, so the website's sources are under `apps/website/`.
 
 ```
-package.json          workspace root: workspaces, turbo, husky, release-it, prettier
-turbo.json            the task graph (build, lint, typecheck, test, e2e)
-apps/website/         the Next.js site — src/, public/, e2e/, and its own tsconfig,
-                      eslint, knip, vitest, playwright and dependency-cruiser configs
+package.json                      workspace root: workspaces, turbo, husky, release-it, prettier
+turbo.json                        the task graph (build, lint, typecheck, test, e2e)
+apps/website/                     the Next.js site, with its own tsconfig, eslint, knip,
+                                  vitest, playwright and dependency-cruiser configs
+packages/matrix-design-system/    the published design system: framework-agnostic React
+                                  components, its own stylesheet, built with tsdown
+packages/matrix-component-store/  the published ComponentStore/StateStore/EffectsStore contract
+packages/eslint-plugin-chicio/    the component-store lint rules, shared by both workspaces
 ```
+
+The website depends on the packages by version (`"matrix-design-system": "^1.0.0"`), and npm
+resolves that to the workspace copy — so the site always builds against the local packages, while
+they stay publishable for outside consumers.
+
+It resolves them through their **built output** (`dist/`), not their source, so every task that runs
+or builds the site depends on `^build` in `turbo.json`. `npm run dev` also starts each package's
+`tsdown --watch`, so a change in `packages/` reaches the running dev server.
 
 Run tasks from the root: `npm run <task>` delegates to `turbo run <task>` across the workspaces.
 To run something in the website only, use `npm run <task> --workspace=website`.
+
+**`allowScripts` and `overrides` belong in the ROOT package.json.** npm reads both only from the
+project root; in a workspace it prints `allowScripts in workspace … is ignored` and carries on. The
+npm version is declared as `devEngines.packageManager` with a same-major range (`^11.0.0`) — Turborepo
+requires a package manager to be declared and rejects a range spanning majors.
 
 **Environment variables must be declared in `turbo.json`'s `globalEnv`.** Turborepo filters the
 environment it passes to tasks, so an undeclared variable is silently stripped. The list cannot be
@@ -51,7 +68,7 @@ npm run release          # Release with conventional changelog
 ### Key Patterns
 
 - **Folder-Per-Component + Store Model**: every component lives in its own kebab-case folder with a `<name>.tsx`, a `use-<name>-store.ts` hook, and an `index.ts` barrel. Components call exactly one hook (`use<Name>Store()`). `useGlassmorphism` is permanently exempt. See `.claude/rules/component-architecture.md` for the full specification.
-- **Atomic Design System**: atoms → molecules → organisms. Layering enforced at error by dependency-cruiser. Page-level templates live in `apps/website/src/components/features/content/`, not in the design system. The design system is framework-agnostic (it imports nothing from `next`); the site's Next bindings live in `apps/website/src/components/features/design-system-next/`. See `.claude/rules/design-system.md`
+- **Atomic Design System**: atoms → molecules → organisms, published as `packages/matrix-design-system`. Layering enforced at error by its own dependency-cruiser config. Page-level templates live in `apps/website/src/components/features/content/`, not in the design system. The design system is framework-agnostic (it imports nothing from `next`); the site's Next bindings live in `apps/website/src/components/features/design-system-next/`. The package applies the React Compiler itself, in its tsdown build, to `"use client"` modules only — Next skips `node_modules` and confines its compiler loader to the app directory, so it never sees these sources, and compiling a server component crashes the render. Most components come from the root barrel, but the three groups needing optional peer dependencies have their own entry points — `matrix-design-system/chart`, `/markdown` and `/command-palette` — and a dependency-cruiser rule fails the build if the root barrel ever reaches one of those libraries again. See `.claude/rules/design-system.md`
 - **Page-Content Isolation**: Each route's components live in `apps/website/src/components/content/<page>/` (no separate `components/` or `hooks/` subdirs — folder-per-component directly). Cross-cutting UI lives in `apps/website/src/components/features/<feature>/`. See `.claude/rules/content.md`
 - **Business Logic in lib/**: Components are thin. Non-hook pure logic lives in `apps/website/src/lib/`, never in `design-system/utils/` (eliminated).
 - **Type Safety**: Shared types in `apps/website/src/types/`, TypeScript strict mode

@@ -1,8 +1,5 @@
 import { FC } from "react";
-import {
-    InternalLink as DesignSystemInternalLink,
-    type InternalLinkProps,
-} from "@/components/design-system/atoms/links/internal-link";
+import { InternalLink as DesignSystemInternalLink, type InternalLinkProps } from "matrix-design-system";
 import { NextLink } from "@/components/features/design-system-next/next-link";
 
 export type { InternalLinkProps };

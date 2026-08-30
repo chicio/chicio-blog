@@ -1,11 +1,8 @@
 "use client";
 
 import { FC } from "react";
-import {
-    RedPillButton,
-    BluePillButton,
-} from "@/components/design-system/molecules/buttons/pills-buttons";
-import { ChartPanel } from "@/components/design-system/molecules/chart/chart-panel";
+import { BluePillButton, RedPillButton } from "matrix-design-system";
+import { ChartPanel } from "matrix-design-system/chart";
 import { useTreeTypesVisualizerStore } from "./use-tree-types-visualizer-store";
 
 interface TreeNodeData {

@@ -1,15 +1,14 @@
 "use client";
 
 import { FC } from "react";
-import { PageTitle } from "@/components/design-system/molecules/typography/page-title";
-import { StatCard } from "@/components/design-system/molecules/stat-card";
+import { PageTitle, StatCard } from "matrix-design-system";
+import { ChartPanel } from "matrix-design-system/chart";
 import { ContentPage } from "@/components/features/content/content-page";
 import { JsonLd } from "@/components/features/seo/jsond-ld";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { tracking } from "@/types/configuration/tracking";
 import type { BlogStats as BlogStatsData } from "@/types/content/blog-stats";
 import type { AllTimeAnalytics, AnalyticsStats } from "@/types/content/analytics-stats";
-import { ChartPanel } from "@/components/design-system/molecules/chart/chart-panel";
 import { PostsPerYearChart } from "./posts-per-year-chart";
 import { TagDistributionChart } from "./tag-distribution-chart";
 import { AuthorsChart } from "./authors-chart";

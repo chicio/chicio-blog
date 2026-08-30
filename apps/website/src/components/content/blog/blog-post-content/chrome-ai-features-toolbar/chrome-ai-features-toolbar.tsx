@@ -2,10 +2,7 @@
 
 import { FC } from "react";
 import { AnimatePresence } from "framer-motion";
-import { Accordion } from "@/components/design-system/molecules/accordion/accordion";
-import { Button } from "@/components/design-system/atoms/buttons/button";
-import { ExternalLink } from "@/components/design-system/atoms/links/external-link";
-import { useGlassmorphism } from "@/components/design-system/hooks/use-glassmorphism";
+import { Accordion, Button, ExternalLink, useGlassmorphism } from "matrix-design-system";
 import { SiProbot } from "react-icons/si";
 import { useChromeAiFeaturesToolbarStore } from "./use-chrome-ai-features-toolbar-store";
 import { ChromeSummaryModal } from "./chrome-summary-modal";

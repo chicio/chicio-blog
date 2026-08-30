@@ -2,7 +2,7 @@
 
 import { FC, ReactNode } from "react";
 import { Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import { ChartTooltip } from "@/components/design-system/molecules/chart/chart-tooltip";
+import { ChartTooltip } from "matrix-design-system/chart";
 import { formatShortAnalyticsMonth } from "@/lib/blog-stats/format-month";
 import { chartTheme } from "@/types/configuration/chart-theme";
 import type { ViewsPoint } from "@/types/content/analytics-stats";

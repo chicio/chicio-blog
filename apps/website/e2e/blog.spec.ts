@@ -102,7 +102,11 @@ test.describe("Blog section", () => {
 
         test("clicking the site owner's author card navigates to the about-me page", async ({ page }) => {
             await page.goto("/blog/authors");
-            await page.getByRole("link", { name: /Fabrizio Duroni/ }).first().click();
+            // The card is gated behind useInViewList, so its link is client-rendered rather than
+            // server-rendered: wait for it instead of racing the commit that mounts it.
+            const ownerCardLink = page.getByRole("link", { name: /Fabrizio Duroni/ }).first();
+            await expect(ownerCardLink).toBeVisible();
+            await ownerCardLink.click();
             await expect(page).toHaveURL(/\/about-me/);
         });
     });

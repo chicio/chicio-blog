@@ -1,5 +1,5 @@
 import { InternalLink } from "@/components/features/design-system-next/internal-link";
-import { TerminalListItem } from "@/components/design-system/molecules/terminal-list-item";
+import { TerminalListItem } from "matrix-design-system";
 import { getReadNextPosts } from "@/lib/content/posts/posts";
 import { FC } from "react";
 import { ReadNextTerminalWindow } from "./read-next-terminal-window";

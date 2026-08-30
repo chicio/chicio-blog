@@ -1,7 +1,6 @@
 import { MediaGrid } from "./media-grid";
 import { ContentPage } from "@/components/features/content/content-page";
-import { PageTitle } from "@/components/design-system/molecules/typography/page-title";
-import { ParagraphTitleWithIcon } from "@/components/design-system/molecules/typography/paragraph-title-with-icon";
+import { PageTitle, ParagraphTitleWithIcon } from "matrix-design-system";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { tracking } from "@/types/configuration/tracking";
 import { ClownSvgIcon } from "./clown-svg-icon";

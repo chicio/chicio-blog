@@ -3,7 +3,10 @@ import userEvent from "@testing-library/user-event";
 import { render, screen, motionDivMock } from "@/test-utils";
 import { ChromeSummaryModal } from "./index";
 
-vi.mock("@/components/design-system/atoms/animation/motion-div", () => motionDivMock());
+vi.mock("matrix-design-system", async (importOriginal) => ({
+    ...(await importOriginal<typeof import("matrix-design-system")>()),
+    ...motionDivMock(),
+}));
 
 const defaultProps = {
     title: "TL;DR",

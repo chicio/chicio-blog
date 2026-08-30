@@ -1,6 +1,5 @@
-import { ErrorText } from "@/components/design-system/atoms/typography/terminal-blocks";
-import { Markdown } from "@/components/design-system/atoms/typography/markdown";
-import { MotionDiv } from "@/components/design-system/atoms/animation/motion-div";
+import { ErrorText, MotionDiv } from "matrix-design-system";
+import { Markdown } from "matrix-design-system/markdown";
 import { FC } from "react";
 import type { TerminalContentBlockData } from "@/types/terminal/terminal";
 

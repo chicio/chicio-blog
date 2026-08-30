@@ -1,6 +1,6 @@
 "use client";
 
-import { BluePillButton, RedPillButton } from "@/components/design-system/molecules/buttons/pills-buttons";
+import { BluePillButton, RedPillButton } from "matrix-design-system";
 import { FC } from "react";
 import { useDynamicArrayVisualizerStore } from "./use-dynamic-array-visualizer-store";
 

@@ -1,5 +1,5 @@
 import { FC, PropsWithChildren, ReactNode } from "react";
-import { ContentProgressBar } from "@/components/design-system/organism/reading-content-progress-bar";
+import { ContentProgressBar } from "matrix-design-system";
 import { ContentPageTemplate } from "@/components/features/content/content-page-template";
 import { Breadcrumb, BreadcrumbItem } from "@/components/features/design-system-next/breadcrumb";
 import type { ContentPageProps } from "@/components/features/content/content-page-template";
