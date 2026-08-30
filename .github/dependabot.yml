@@ -1,15 +1,98 @@
-# To get started with Dependabot version updates, you'll need to specify which
-# package ecosystems to update and where the package manifests are located.
-# Please see the documentation for all configuration options:
 # https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
-
 version: 2
 updates:
-  - package-ecosystem: "npm" # See documentation for possible values
-    directory: "/" # Location of package manifests
+  - package-ecosystem: "npm"
+    # `directories`, not `directory`: every dependency that matters moved out of the root manifest
+    # when this became a monorepo. The root now declares 6 devDependencies; the website declares 82,
+    # the design system 40, the showcase 21.
+    directories:
+      - "/"
+      - "/apps/*"
+      - "/packages/*"
     schedule:
       interval: "weekly"
     assignees:
       - "chicio"
     commit-message:
       prefix: "chore(deps): :arrow_up: "
+    # Five manifests share 34 packages, so an ungrouped bump of react or typescript arrives as four
+    # or five PRs that are only correct if they all land. Raised together, CI validates them as the
+    # unit they actually are.
+    open-pull-requests-limit: 10
+    groups:
+      react:
+        # The root pins @types/react and @types/react-dom in `overrides`, so a types bump that is not
+        # applied everywhere at once resolves to two copies and breaks the typecheck.
+        patterns:
+          - "react"
+          - "react-dom"
+          - "@types/react"
+          - "@types/react-dom"
+          - "react-icons"
+          - "babel-plugin-react-compiler"
+      ai-sdk:
+        # @ai-sdk/react exact-pins `ai`. Bumping one alone duplicates the package and fails the
+        # typecheck — this cluster has to move as a whole.
+        patterns:
+          - "ai"
+          - "@ai-sdk/*"
+      next:
+        patterns:
+          - "next"
+          - "@next/*"
+          - "eslint-config-next"
+      design-system-peers:
+        # Declared by the design system as peer dependencies AND by the apps that install them. A
+        # bump landing in one place leaves the declared range disagreeing with what is installed —
+        # and for framer-motion a second copy breaks AnimatePresence across the package boundary.
+        patterns:
+          - "unified"
+          - "remark-*"
+          - "rehype-*"
+          - "react-markdown"
+          - "cmdk"
+          - "recharts"
+          - "framer-motion"
+      typescript:
+        patterns:
+          - "typescript"
+          - "typescript-eslint"
+          - "tsdown"
+          - "tsx"
+      lint:
+        patterns:
+          - "eslint"
+          - "@eslint/*"
+          - "eslint-plugin-*"
+          - "dependency-cruiser"
+          - "knip"
+        exclude-patterns:
+          # A workspace package, not a registry one.
+          - "eslint-plugin-chicio"
+      testing:
+        patterns:
+          - "vitest"
+          - "@vitest/*"
+          - "@testing-library/*"
+          - "jsdom"
+          - "@playwright/*"
+          - "playwright"
+          - "@vitejs/plugin-react"
+      storybook:
+        patterns:
+          - "storybook"
+          - "@storybook/*"
+      tailwind:
+        patterns:
+          - "tailwindcss"
+          - "@tailwindcss/*"
+          - "prettier-plugin-tailwindcss"
+      upstash:
+        patterns:
+          - "@upstash/*"
+    ignore:
+      # Workspace packages. npm resolves these to the local copy whatever the range says, so a bump
+      # PR changes a number that nothing reads.
+      - dependency-name: "matrix-design-system"
+      - dependency-name: "matrix-component-store"
+      - dependency-name: "eslint-plugin-chicio"
