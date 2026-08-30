@@ -27,6 +27,10 @@ export default defineConfig({
                 "src/molecules/effects/matrix-header-background/**",
                 "src/molecules/effects/matrix-terminal/**",
                 "src/test-utils/**",
+                // Stories document the components; they are not shipped (`files` excludes them) and
+                // nothing tests them, so counting them drags the real figure down by ~34 points.
+                "src/**/*.stories.tsx",
+                "src/stories/**",
                 "src/index.ts",
                 "src/**/index.ts",
             ],

@@ -17,7 +17,9 @@ turbo.json                        the task graph (build, lint, typecheck, test, 
 apps/website/                     the Next.js site, with its own tsconfig, eslint, knip,
                                   vitest, playwright and dependency-cruiser configs
 packages/matrix-design-system/    the published design system: framework-agnostic React
-                                  components, its own stylesheet, built with tsdown
+                                  components, its own stylesheet, built with tsdown. Stories live
+                                  beside their components as *.stories.tsx
+apps/matrix-design-system-showcase/  Storybook over those stories; deploys to GitHub Pages
 packages/matrix-component-store/  the published ComponentStore/StateStore/EffectsStore contract
 packages/eslint-plugin-chicio/    the component-store lint rules, shared by both workspaces
 ```
@@ -109,6 +111,7 @@ The workspace is indexed by CodeGraph (`.codegraph/`, MCP server in `.mcp.json`)
 AI agents and tools that send `Accept: text/markdown` receive a Markdown representation of the requested page instead of HTML.
 
 **Architecture**:
+
 - `apps/website/src/middleware.ts` — re-exports `proxy` from `apps/website/src/proxy.ts` as `middleware`, providing Next.js middleware wiring
 - `apps/website/src/proxy.ts` — generic proxy: if `Accept: text/markdown`, prepends `/markdown` to the path and rewrites; never needs updating for new pages
 - `apps/website/src/app/markdown/[[...path]]/route.ts` — single catch-all route handler; dispatches by path segments to per-section markdown generators; statically pre-rendered via `generateStaticParams`
