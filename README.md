@@ -10,7 +10,7 @@
 
 My personal website, and the Matrix-inspired design system it is built from.
 
-![Fabrizio duroni blog](https://github.com/chicio/chicio-blog/blob/main/apps/website/public/chicio-coding-feature-graphic.png?raw=true)
+![Fabrizio duroni blog](https://github.com/chicio/chicio-blog/blob/main/brand/readme-hero.jpg?raw=true)
 
 ***
 
