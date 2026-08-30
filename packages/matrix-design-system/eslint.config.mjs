@@ -38,7 +38,17 @@ export default [
     },
     {
         files: ["src/**/*.tsx"],
-        ignores: ["src/**/use-*.tsx", "src/**/*.test.tsx", "src/test-utils/**"],
+        // Stories document the components; they are not components. folder-composition would
+        // reject every *.stories.tsx for not matching its folder, and jsx-no-bind would reject the
+        // inline handlers a story uses to stand in for real behaviour. Tests are ignored here for
+        // the same reason.
+        ignores: [
+            "src/**/use-*.tsx",
+            "src/**/*.test.tsx",
+            "src/**/*.stories.tsx",
+            "src/test-utils/**",
+            "src/stories/**",
+        ],
         plugins: { chicio },
         rules: {
             "react/jsx-no-bind": ["error", { allowArrowFunctions: false, allowFunctions: false, allowBind: false }],

@@ -55,7 +55,10 @@ const config = {
     ],
     options: {
         doNotFollow: { path: "node_modules" },
-        exclude: { path: "(\\.(test|spec)\\.(ts|tsx)$|src/test-utils/)" },
+        // Stories are documentation, not shipped code: they are excluded from `files`, and they
+        // compose across layers on purpose — an atom's story may show it inside a realistic
+        // molecule. Same reasoning as tests, which were already excluded.
+        exclude: { path: "(\\.(test|spec|stories)\\.(ts|tsx)$|src/(test-utils|stories)/)" },
         tsPreCompilationDeps: true,
         tsConfig: { fileName: "tsconfig.json" },
         moduleSystems: ["es6", "cjs"],

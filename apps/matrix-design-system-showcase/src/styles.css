@@ -1,0 +1,6 @@
+/*
+ * Exactly what a consumer writes, and in the order the design system's README specifies. The
+ * showcase is worth nothing if it styles components in a way real consumers cannot reproduce.
+ */
+@import "tailwindcss";
+@import "matrix-design-system/styles.css";
