@@ -6,18 +6,7 @@
     ],
     "globalEnv": [
         "CI",
-        "CONTACT_EMAIL",
-        "GOOGLE_ANALYTICS_API_SECRET",
-        "GOOGLE_ANALYTICS_PROPERTY_ID",
-        "GOOGLE_ANALYTICS_SA_CLIENT_EMAIL",
-        "GOOGLE_ANALYTICS_SA_PRIVATE_KEY",
-        "GROQ_API_KEY",
-        "NODE_ENV",
-        "RESEND_API_KEY",
-        "UPSTASH_REDIS_REST_TOKEN",
-        "UPSTASH_REDIS_REST_URL",
-        "UPSTASH_VECTOR_REST_TOKEN",
-        "UPSTASH_VECTOR_REST_URL"
+        "NODE_ENV"
     ],
     "tasks": {
         "build": {
