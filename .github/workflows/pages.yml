@@ -1,0 +1,65 @@
+name: Deploy Pages
+
+# The hub and the design-system showcase. Only rebuilt when the things it publishes change —
+# the site itself deploys to Vercel and has nothing to do with this.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'packages/matrix-design-system/**'
+      - 'apps/matrix-design-system-showcase/**'
+      - '.github/pages/**'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# One deploy at a time, and never interrupt one in flight.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version-file: 'package.json'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci
+      # --filter pulls in the design system's build, which the showcase resolves through dist.
+      - name: Build the showcase
+        run: npx turbo run build --filter=matrix-design-system-showcase
+      # Storybook emits relative asset paths, so it needs no knowledge of the subpath it is served
+      # from — the directory can simply be moved into place.
+      - name: Assemble the site
+        run: |
+          mkdir -p _site
+          cp .github/pages/index.html _site/index.html
+          cp -r apps/matrix-design-system-showcase/dist _site/design-system
+          echo "assembled:" && find _site -maxdepth 2 -name index.html
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

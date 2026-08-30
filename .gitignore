@@ -90,6 +90,8 @@ agent/
 # The storybook build design-sync compares against — regenerated, minutes to build.
 **/.design-sync/sb-reference/
 ds-bundle/
+# assembled by the Pages workflow
+_site/
 **/.design-sync/.cache/
 **/.design-sync/learnings/
 **/.design-sync/node_modules
