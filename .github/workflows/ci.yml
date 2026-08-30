@@ -99,10 +99,29 @@ jobs:
       - name: Run tests with coverage
         run: npx turbo run test:coverage
 
+  verify-packages:
+    name: Verify published packages
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version-file: 'package.json'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci
+      # Packs the real tarballs, lints the published surface and installs them into a throwaway
+      # app. The website resolves these through the workspace, so nothing else in CI exercises
+      # what the registry would actually serve.
+      - name: Verify published packages
+        run: npm run verify-packages
+
   build:
     name: Build
     runs-on: ubuntu-latest
-    needs: [lint, knip, validate-architecture, typecheck, test]
+    needs: [lint, knip, validate-architecture, typecheck, test, verify-packages]
     steps:
       - name: Checkout
         uses: actions/checkout@v5

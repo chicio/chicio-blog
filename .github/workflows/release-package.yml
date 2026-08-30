@@ -1,0 +1,73 @@
+name: Release package
+
+# Manual on purpose: these are public artifacts, and a release should be a decision rather than a
+# side effect of merging. Mirrors the flow matrix-rain-webgpu already uses.
+on:
+  workflow_dispatch:
+    inputs:
+      package:
+        description: 'Which package to release'
+        type: choice
+        options:
+          - matrix-component-store
+          - matrix-design-system
+        required: true
+      increment:
+        description: 'Which release to cut ("initial" publishes the version already in package.json)'
+        type: choice
+        options: [initial, patch, minor, major, beta, major-beta]
+        default: patch
+      dry_run:
+        description: 'Dry run (no publish, tag or push)'
+        type: boolean
+        default: true
+
+permissions:
+  contents: write # push the bump/changelog commit + tag, create the GH release
+  id-token: write # OIDC token for trusted publishing (+ automatic provenance)
+
+jobs:
+  release:
+    name: Release ${{ inputs.package }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0 # full history so conventional-changelog can diff tags
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version-file: 'package.json'
+          cache: 'npm'
+          registry-url: 'https://registry.npmjs.org'
+      - name: Use an npm that supports trusted publishing
+        run: npm install -g npm@latest # needs >= 11.5.1
+      - name: Install dependencies
+        run: npm ci
+      # matrix-design-system consumes matrix-component-store's dist, so build through turbo to pick
+      # up ^build rather than building the package alone.
+      - name: Build the package and its dependencies
+        run: npx turbo run build --filter=${{ inputs.package }}
+      # Never publish a tarball that has not been proven installable.
+      - name: Verify the published surface
+        run: node scripts/verify-packages.mjs
+      - name: Configure git identity
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+      - name: Map increment to release-it args
+        id: args
+        run: |
+          case "${{ inputs.increment }}" in
+            initial)     echo "args=--no-increment" >> "$GITHUB_OUTPUT" ;;
+            beta)        echo "args=--preRelease=beta" >> "$GITHUB_OUTPUT" ;;
+            major-beta)  echo "args=major --preRelease=beta" >> "$GITHUB_OUTPUT" ;;
+            *)           echo "args=${{ inputs.increment }}" >> "$GITHUB_OUTPUT" ;;
+          esac
+      - name: Release
+        working-directory: packages/${{ inputs.package }}
+        run: npx release-it ${{ steps.args.outputs.args }} ${{ inputs.dry_run && '--dry-run' || '' }} --ci
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # No NPM_TOKEN — OIDC trusted publishing authenticates the publish.
