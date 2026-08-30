@@ -41,8 +41,11 @@ jobs:
           node-version-file: 'package.json'
           cache: 'npm'
           registry-url: 'https://registry.npmjs.org'
+      # Trusted publishing needs npm >= 11.5.1. Pinned to the 11.x line rather than @latest: the
+      # repo declares npm ^11.0.0 in devEngines, and npm 12 both contradicts that and changed the
+      # shape of `npm pack --json`, which broke the verification step on its release day.
       - name: Use an npm that supports trusted publishing
-        run: npm install -g npm@latest # needs >= 11.5.1
+        run: npm install -g "npm@^11.5.1"
       - name: Install dependencies
         run: npm ci
       # matrix-design-system consumes matrix-component-store's dist, so build through turbo to pick

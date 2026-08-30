@@ -63,7 +63,10 @@ try {
     const tarballs = [];
     for (const name of PACKAGES) {
         const dir = join(repoRoot, "packages", name);
-        const file = JSON.parse(run("npm", ["pack", "--json", "--pack-destination", workDir], dir))[0].filename;
+        // npm 11 returns an array of packed entries; npm 12 returns an object keyed by package
+        // name. Accept either, so the script does not depend on which npm the caller happens to run.
+        const packed = JSON.parse(run("npm", ["pack", "--json", "--pack-destination", workDir], dir));
+        const [{ filename: file }] = Array.isArray(packed) ? packed : Object.values(packed);
         tarballs.push(join(workDir, file));
         console.log(`  packed ${file}`);
 
