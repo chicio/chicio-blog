@@ -10,9 +10,9 @@ const config: StorybookConfig = {
         name: "@storybook/react-vite",
         options: {},
     },
+    // The TypeScript-aware docgen, so prop tables carry the real types rather than what can be
+    // inferred from JS. Slower than the default, which does not matter at this size.
     typescript: {
-        // The package ships its own declarations; re-deriving prop tables from source would make
-        // the showcase disagree with what consumers actually get.
         reactDocgen: "react-docgen-typescript",
     },
 };
