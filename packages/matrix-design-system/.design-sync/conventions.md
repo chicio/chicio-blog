@@ -32,6 +32,16 @@ names rather than stock Tailwind colours:
 
 Used as `bg-general-background`, `text-accent`, `border-accent-alpha-25`, `font-mono`, and so on.
 
+**The stylesheet is prebuilt and closed — it is not a live Tailwind build.** `_ds_bundle.css` carries
+only the utilities this design system's own components use, so a utility you would normally reach for
+may simply not exist here: `py-8`, `mt-4`, `grid-cols-1`, `md:grid-cols-3`, `max-w-full` and `md:flex`
+are all absent. A class that is not there fails silently — the element just renders unstyled.
+
+Verified present, and safe to build layout with: `flex`, `flex-col`, `flex-wrap`, `grid`,
+`items-center`, `justify-center`, `justify-between`, `gap-2`, `gap-3`, `gap-4`, `gap-6`, `w-full`,
+`p-4`, `mb-4`, `text-primary-text`, `text-secondary-text`, `text-accent`, `font-mono`. For anything
+else, use an inline `style={{ ... }}` or one of the composed classes below.
+
 **The breakpoint scale is overridden — do not assume Tailwind defaults:**
 
 `xs` 576 · `sm` 768 · `md` 992 · `lg` 1200 · `xl` 1600 · `2xl` 2000 (px)
@@ -60,23 +70,22 @@ an index signature, the component takes children and little else.
 ### An idiomatic composition
 
 ```jsx
-<section className="container-fixed flex flex-col gap-6 py-8">
-  <SectionHeading title="Latest posts" description="Long-form writing on iOS, web and graphics." />
+<ContentContainer>
+  <PageTitle>Latest posts</PageTitle>
 
-  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-    <StatCard value={96} label="Articles" />
-    <StatCard value={287} label="DSA lessons" />
-    <StatCard value="12k" label="Monthly readers" />
+  <div className="flex flex-wrap gap-2">
+    <Chip>TypeScript</Chip>
+    <Chip>Next.js</Chip>
+    <Chip big>SwiftUI</Chip>
   </div>
 
-  <Accordion title="What is this?" defaultOpen>
-    <p className="text-primary-text">
-      Composed from the design system: <Chip>real components</Chip> for the parts,
-      theme utilities for the layout around them.
-    </p>
-  </Accordion>
-</section>
+  <div className="glassmorphism flex flex-col gap-4 p-4">
+    <p className="text-primary-text">Long-form writing on iOS, web and graphics.</p>
+    <Button>Read the full article</Button>
+  </div>
+</ContentContainer>
 ```
 
 Note the split: library components carry the look, and your own layout glue uses the theme's utility
-names (`container-fixed`, `gap-6`, `md:grid-cols-3`, `text-primary-text`) — never hardcoded hex values.
+names (`flex-wrap`, `gap-2`, `p-4`, `text-primary-text`) — never hardcoded hex values. Every class and
+prop above is verified against the shipped bundle.
