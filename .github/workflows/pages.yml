@@ -36,7 +36,7 @@ jobs:
       - name: Assemble the site
         run: |
           mkdir -p _site
-          cp .github/pages/index.html _site/index.html
+          cp .github/pages/index.html .github/pages/logo.png _site/
           cp -r apps/matrix-design-system-showcase/dist _site/design-system
           echo "assembled:" && find _site -maxdepth 2 -name index.html
       - name: Upload artifact
