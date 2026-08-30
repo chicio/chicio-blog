@@ -117,7 +117,11 @@ See `.claude/rules/code-style.md`. Key points: 4 spaces, 120 char lines, always 
 
 ## CI/CD
 
-GitHub Actions (`.github/workflows/ci.yml`): four jobs — lint (ESLint `--max-warnings 0`), knip, validate-architecture (dependency-cruiser, all rules at error), and build (Next.js). lint, knip, and validate-architecture all gate build. Upstash/Resend secrets injected for build.
+Three workflows:
+
+- **`ci.yml`** — lint (ESLint `--max-warnings 0`), knip, validate-architecture (dependency-cruiser, all rules at error), typecheck, test (coverage-gated), verify-packages, then build (Next.js) and e2e. Everything before `build` gates it. Upstash/Resend secrets injected for build.
+- **`release-package.yml`** — manual `workflow_dispatch` to publish a package, authenticated by npm OIDC trusted publishing (no `NPM_TOKEN`). Pick the package and the increment; `initial` maps to `--no-increment` for a first release.
+- **`pages.yml`** — builds the design-system showcase and deploys it with the landing page to GitHub Pages, at `chicio.github.io/chicio-blog/` with the Storybook under `/design-system/`. Only runs when the package, the showcase or the hub changes; the site itself deploys to Vercel and is unrelated. The hub source is `.github/pages/index.html`, deliberately dependency-free. Storybook emits relative asset paths, so nothing needs to know the subpath it is served from.
 
 ## Release
 
