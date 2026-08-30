@@ -13,7 +13,9 @@ const chicio = require("eslint-plugin-chicio");
  * rendering a real <img> in PlainImage is the documented fallback, not a mistake.
  */
 export default [
-    { ignores: ["dist/**", "node_modules/**"] },
+    // .design-sync/ and .ds-sync/ are the Claude Design converter: staged third-party scripts and
+// generated previews, none of it this package's source.
+    { ignores: ["dist/**", "node_modules/**", ".design-sync/**", ".ds-sync/**", "ds-bundle/**"] },
     js.configs.recommended,
     ...tseslint.configs.recommended,
     {

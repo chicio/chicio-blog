@@ -1,0 +1,62 @@
+{
+    "pkg": "matrix-design-system",
+    "globalName": "ChicioDS",
+    "projectId": "e5de76b0-e20e-414b-852b-210defebffac",
+    "shape": "storybook",
+    "storybookStatic": ".design-sync/sb-reference",
+    "storybookConfigDir": "../../apps/matrix-design-system-showcase/.storybook",
+    "buildCmd": "npx turbo run build --filter=matrix-design-system",
+    "extraEntries": [
+        "./dist/chart.mjs",
+        "./dist/markdown.mjs",
+        "./dist/command-palette.mjs"
+    ],
+    "titleMap": {
+        "TerminalBlocks": "TerminalLine",
+        "PillsLinks": "BluePillLink",
+        "ReadingContentProgressBar": "ContentProgressBar",
+        "Markdown": "Markdown",
+        "CommandPalette": "CommandPalette"
+    },
+    "libOverrides": {
+        "source-kit.mjs": "kebab-case component dirs vs PascalCase export names broke the group heuristic (~60 groups of one). Still loaded under the storybook shape for resolvePackage."
+    },
+    "readmeHeader": ".design-sync/conventions.md",
+    "overrides": {
+        "Breadcrumb": {
+            "cardMode": "single",
+            "primaryStory": "DeepTrail"
+        },
+        "CommandPalette": {
+            "cardMode": "single",
+            "primaryStory": "Open"
+        },
+        "ContentProgressBar": {
+            "cardMode": "single",
+            "primaryStory": "Default"
+        },
+        "CookieConsentBanner": {
+            "cardMode": "single",
+            "primaryStory": "Default"
+        },
+        "Footer": {
+            "cardMode": "column"
+        },
+        "InputField": {
+            "cardMode": "column"
+        },
+        "Lightbox": {
+            "cardMode": "single",
+            "primaryStory": "Open"
+        },
+        "Menu": {
+            "cardMode": "single",
+            "primaryStory": "Default",
+            "viewport": "1200x700"
+        },
+        "Overlay": {
+            "cardMode": "single",
+            "primaryStory": "WithDialog"
+        }
+    }
+}

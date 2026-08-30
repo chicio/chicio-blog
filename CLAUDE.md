@@ -20,6 +20,8 @@ packages/matrix-design-system/    the published design system: framework-agnosti
                                   components, its own stylesheet, built with tsdown. Stories live
                                   beside their components as *.stories.tsx
 apps/matrix-design-system-showcase/  Storybook over those stories; deploys to GitHub Pages
+                                  (packages/matrix-design-system/.design-sync/ + .ds-sync/
+                                  are the Claude Design converter — see below)
 packages/matrix-component-store/  the published ComponentStore/StateStore/EffectsStore contract
 packages/eslint-plugin-chicio/    the component-store lint rules, shared by both workspaces
 ```
@@ -46,6 +48,29 @@ derived by grepping for `process.env.X`: `GROQ_API_KEY` is read implicitly by `@
 never appears in the source, and the `GOOGLE_ANALYTICS_*` keys are destructured from an injected
 `env` object. Treat `apps/website/.env.production` and the Vercel project settings as the
 authoritative list.
+
+## Claude Design Sync
+
+The [claude.ai/design](https://claude.ai/design) converter lives in
+`packages/matrix-design-system/.design-sync/` (durable inputs) and `.ds-sync/` (staged scripts). It
+runs in **storybook shape**: previews are generated from the `*.stories.tsx` beside each component,
+so a story is the single source of truth and there are no hand-authored previews to drift.
+
+**Invoke `/design-sync` from a session rooted at `packages/matrix-design-system`, not at the
+repository root.** Every path is resolved from the converter's working directory and there is no
+upward search — a root-level run fails with `[CONFIG] … ENOENT`. Rooting the session at the package
+also keeps the skill's own staging consistent, since it creates `.ds-sync/` relative to the session
+root.
+
+Two traps, both silent:
+
+- The two folders must stay **siblings** — the fork in `.design-sync/overrides/` imports
+  `../.ds-sync/lib/`, and `.design-sync/node_modules` symlinks to `../.ds-sync/node_modules`.
+- `.gitignore` patterns for them need a `**/` prefix. A pattern with a middle slash is anchored to
+  the repository root, so a bare `.design-sync/.cache/` matches nothing here.
+
+`packages/matrix-design-system/.design-sync/NOTES.md` carries the invocation and the re-sync
+watch-list.
 
 ## Development Commands
 
