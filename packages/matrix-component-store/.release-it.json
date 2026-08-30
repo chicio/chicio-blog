@@ -1,0 +1,30 @@
+{
+    "$schema": "https://unpkg.com/release-it/schema/release-it.json",
+    "git": {
+        "tagName": "matrix-component-store@${version}",
+        "tagMatch": "matrix-component-store@*",
+        "tagAnnotation": "matrix-component-store ${version}",
+        "commitMessage": "chore(release): :bookmark: matrix-component-store ${version}",
+        "commitsPath": ".",
+        "requireCommits": true
+    },
+    "github": {
+        "release": true,
+        "releaseName": "matrix-component-store ${version}"
+    },
+    "npm": {
+        "publish": true
+    },
+    "hooks": {
+        "before:init": "npm run build"
+    },
+    "plugins": {
+        "@release-it/conventional-changelog": {
+            "preset": "conventionalcommits",
+            "infile": "CHANGELOG.md",
+            "tagPrefix": "matrix-component-store@",
+            "commitsOpts": { "path": "." },
+            "gitRawCommitsOpts": { "path": "." }
+        }
+    }
+}

@@ -13,7 +13,25 @@
   "plugins": {
     "@release-it/conventional-changelog": {
       "preset": "conventionalcommits",
-      "infile": "CHANGELOG.md"
+      "infile": "CHANGELOG.md",
+      "tagPrefix": "v",
+      "commitsOpts": {
+        "path": [
+          ".",
+          ":(exclude)packages"
+        ]
+      },
+      "gitRawCommitsOpts": {
+        "path": [
+          ".",
+          ":(exclude)packages"
+        ]
+      }
     }
+  },
+  "git": {
+    "tagName": "v${version}",
+    "tagMatch": "v[0-9]*",
+    "commitsPath": "."
   }
 }

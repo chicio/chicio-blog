@@ -63,7 +63,8 @@
     "test": "vitest",
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
-    "validate-architecture": "depcruise src --config .dependency-cruiser.cjs"
+    "validate-architecture": "depcruise src --config .dependency-cruiser.cjs",
+    "release": "release-it"
   },
   "peerDependencies": {
     "cmdk": ">=1",

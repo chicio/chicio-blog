@@ -1,0 +1,30 @@
+{
+    "$schema": "https://unpkg.com/release-it/schema/release-it.json",
+    "git": {
+        "tagName": "matrix-design-system@${version}",
+        "tagMatch": "matrix-design-system@*",
+        "tagAnnotation": "matrix-design-system ${version}",
+        "commitMessage": "chore(release): :bookmark: matrix-design-system ${version}",
+        "commitsPath": ".",
+        "requireCommits": true
+    },
+    "github": {
+        "release": true,
+        "releaseName": "matrix-design-system ${version}"
+    },
+    "npm": {
+        "publish": true
+    },
+    "hooks": {
+        "before:init": "npm run build"
+    },
+    "plugins": {
+        "@release-it/conventional-changelog": {
+            "preset": "conventionalcommits",
+            "infile": "CHANGELOG.md",
+            "tagPrefix": "matrix-design-system@",
+            "commitsOpts": { "path": "." },
+            "gitRawCommitsOpts": { "path": "." }
+        }
+    }
+}
