@@ -57,6 +57,7 @@
   },
   "scripts": {
     "build": "tsdown",
+    "prepublishOnly": "npx turbo run build --filter=matrix-design-system",
     "dev": "tsdown --watch",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
