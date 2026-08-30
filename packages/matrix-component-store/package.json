@@ -38,6 +38,7 @@
   },
   "scripts": {
     "build": "tsdown",
+    "prepublishOnly": "npx turbo run build --filter=matrix-component-store",
     "dev": "tsdown --watch",
     "typecheck": "tsc --noEmit",
     "release": "release-it"
