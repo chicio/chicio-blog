@@ -76,7 +76,6 @@ export const PerformanceComparisonChart: FC = () => (
                     <Legend
                         verticalAlign="top"
                         height={40}
-                        style={{ marginTop: 40 }}
                         labelStyle={{ color: chartTheme.legendTextColor }}
                     />
                 </LineChart>
