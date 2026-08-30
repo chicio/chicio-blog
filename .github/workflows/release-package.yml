@@ -48,13 +48,11 @@ jobs:
         run: npm install -g "npm@^11.5.1"
       - name: Install dependencies
         run: npm ci
-      # matrix-design-system consumes matrix-component-store's dist, so build through turbo to pick
-      # up ^build rather than building the package alone.
-      - name: Build the package and its dependencies
-        run: npx turbo run build --filter=${{ inputs.package }}
-      # Never publish a tarball that has not been proven installable.
+      # Never publish a tarball that has not been proven installable. This builds every package
+      # itself: verification packs them all, so a build scoped to the selected package would leave
+      # the other one without a dist and fail here for the wrong reason.
       - name: Verify the published surface
-        run: node scripts/verify-packages.mjs
+        run: npm run verify-packages
       - name: Configure git identity
         run: |
           git config user.name  "github-actions[bot]"

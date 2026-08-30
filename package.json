@@ -29,7 +29,7 @@
     "knip": "turbo run knip",
     "typecheck": "turbo run typecheck",
     "validate-architecture": "turbo run validate-architecture",
-    "verify-packages": "turbo run build --filter=./packages/* && node scripts/verify-packages.mjs",
+    "verify-packages": "node scripts/verify-packages.mjs",
     "test": "turbo run test",
     "test:run": "turbo run test:run",
     "test:coverage": "turbo run test:coverage",

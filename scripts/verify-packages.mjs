@@ -51,6 +51,18 @@ const run = (cmd, args, cwd) =>
     execFileSync(cmd, args, { cwd, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
 
 const repoRoot = resolve(import.meta.dirname, "..");
+
+// Build every package before packing, rather than trusting the caller to have done it. dist/ is
+// gitignored, so on a fresh checkout it does not exist, and `npm pack` will happily produce a
+// tarball without it — which then fails here as a dozen confusing downstream errors instead of one
+// clear cause. Turbo makes this close to free when the build is already current.
+execFileSync("npx", ["turbo", "run", "build", "--filter=./packages/*"], {
+    cwd: repoRoot,
+    encoding: "utf8",
+    stdio: ["ignore", "pipe", "pipe"],
+});
+console.log("  built every package");
+
 const workDir = mkdtempSync(join(tmpdir(), "verify-packages-"));
 let failed = false;
 
