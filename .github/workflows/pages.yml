@@ -1,7 +1,5 @@
 name: Deploy Pages
 
-# The hub and the design-system showcase. Only rebuilt when the things it publishes change —
-# the site itself deploys to Vercel and has nothing to do with this.
 on:
   push:
     branches: [main]
