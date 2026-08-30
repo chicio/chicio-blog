@@ -13,7 +13,8 @@
         "releaseName": "matrix-component-store ${version}"
     },
     "npm": {
-        "publish": true
+        "publish": true,
+        "skipChecks": true
     },
     "hooks": {
         "before:init": "npm run build"
@@ -23,8 +24,12 @@
             "preset": "conventionalcommits",
             "infile": "CHANGELOG.md",
             "tagPrefix": "matrix-component-store@",
-            "commitsOpts": { "path": "." },
-            "gitRawCommitsOpts": { "path": "." }
+            "commitsOpts": {
+                "path": "."
+            },
+            "gitRawCommitsOpts": {
+                "path": "."
+            }
         }
     }
 }
