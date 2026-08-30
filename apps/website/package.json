@@ -23,8 +23,8 @@
     "chat-knowledge-upload": "tsx --env-file=.env.production src/lib/chat/chat-knowledge-upload.ts"
   },
   "dependencies": {
-    "@ai-sdk/groq": "^4.0.17",
-    "@ai-sdk/react": "^4.0.40",
+    "@ai-sdk/groq": "^4.0.33",
+    "@ai-sdk/react": "^4.0.86",
     "@giscus/react": "^3.1.0",
     "@google-analytics/data": "^7.0.0",
     "@mdx-js/loader": "^3.1.1",
@@ -40,7 +40,7 @@
     "@upstash/vector": "^1.2.3",
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
-    "ai": "^7.0.44",
+    "ai": "^7.0.83",
     "cmdk": "^1.1.1",
     "elasticlunr": "^0.9.5",
     "feed": "^5.2.1",
