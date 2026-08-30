@@ -69,7 +69,7 @@
   },
   "peerDependencies": {
     "cmdk": ">=1",
-    "framer-motion": "^12.42.2",
+    "framer-motion": "^13.1.1",
     "react": ">=19",
     "react-dom": ">=19",
     "react-markdown": ">=10",
@@ -139,7 +139,7 @@
     "eslint-plugin-chicio": "^1.0.0",
     "eslint-plugin-react": "^7",
     "eslint-plugin-react-hooks": "^7",
-    "framer-motion": "^12.42.2",
+    "framer-motion": "^13.1.1",
     "globals": "^16",
     "jsdom": "^30.0.0",
     "react": "19.2.6",
