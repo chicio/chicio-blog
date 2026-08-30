@@ -5,17 +5,6 @@ import { Footer } from "./footer";
 import type { FooterNavHrefs } from "./footer";
 import type { SocialContactLinks } from "./footer";
 
-vi.mock("next/link", () => ({
-    default: ({
-        href,
-        children,
-        ...rest
-    }: React.AnchorHTMLAttributes<HTMLAnchorElement> & { href: string }) => (
-        <a href={href} {...rest}>
-            {children}
-        </a>
-    ),
-}));
 
 const navHrefs: FooterNavHrefs = {
     blog: "/blog",

@@ -3,11 +3,6 @@ import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { DropdownMenu } from "./dropdown-menu";
 
-vi.mock("next/link", () => ({
-    default: ({ href, children, className, onClick }: React.AnchorHTMLAttributes<HTMLAnchorElement> & { href: string }) => (
-        <a href={href} className={className} onClick={onClick}>{children}</a>
-    ),
-}));
 
 vi.mock("framer-motion", () => ({
     AnimatePresence: ({ children }: { children: React.ReactNode }) => <>{children}</>,

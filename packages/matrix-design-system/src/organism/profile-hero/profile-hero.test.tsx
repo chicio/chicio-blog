@@ -1,12 +1,7 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { ProfileHero } from "./profile-hero";
 
-vi.mock("next/image", () => ({
-    default: ({ alt, src, ...rest }: React.ImgHTMLAttributes<HTMLImageElement> & { src: string }) => (
-        <img alt={alt} src={src} {...rest} />
-    ),
-}));
 
 describe("ProfileHero", () => {
     describe("render", () => {

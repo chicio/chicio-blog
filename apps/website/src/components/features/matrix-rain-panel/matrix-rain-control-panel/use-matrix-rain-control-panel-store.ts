@@ -2,7 +2,13 @@
 
 import { MouseEvent, useCallback, useEffect, useRef, useState } from "react";
 import { matrixRainPanelOpenEvent } from "@/lib/matrix-rain/matrix-rain-panel-events";
-import { MATRIX_RAIN_DEFAULTS, MATRIX_RAIN_PRESETS, readMatrixSettings, writeMatrixSettings, type MatrixRainSettings } from "matrix-design-system";
+import {
+    MATRIX_RAIN_DEFAULTS,
+    MATRIX_RAIN_PRESETS,
+    readMatrixSettings,
+    writeMatrixSettings,
+    type MatrixRainSettings,
+} from "matrix-design-system";
 import { isRainSpeedAtMax } from "@/lib/easter-eggs/rain-speed-max";
 import { triggerEasterEgg } from "@/lib/easter-eggs/trigger-easter-egg";
 import { trackWith } from "@/lib/tracking/tracking";

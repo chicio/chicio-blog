@@ -1,20 +1,7 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { ImageGlow } from "./image-glow";
 
-vi.mock("next/image", () => ({
-    default: ({
-        src,
-        alt,
-        className,
-        placeholder: _placeholder,
-        blurDataURL: _blurDataURL,
-        fill: _fill,
-        ...rest
-    }: React.ImgHTMLAttributes<HTMLImageElement> & { fill?: boolean; placeholder?: string; blurDataURL?: string }) => (
-        <img src={String(src)} alt={alt} className={className} {...rest} />
-    ),
-}));
 
 describe("ImageGlow", () => {
     describe("render", () => {

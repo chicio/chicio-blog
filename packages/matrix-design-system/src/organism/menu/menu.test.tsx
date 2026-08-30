@@ -29,17 +29,6 @@ vi.mock("../../state/command-palette/command-palette-events", () => ({
     openCommandPalette: () => openCommandPaletteMock(),
 }));
 
-vi.mock("next/link", () => ({
-    default: ({
-        href,
-        children,
-        ...rest
-    }: React.AnchorHTMLAttributes<HTMLAnchorElement> & { href: string }) => (
-        <a href={href} {...rest}>
-            {children}
-        </a>
-    ),
-}));
 
 vi.mock("../../atoms/animation/motion-div", () => ({
     MotionDiv: ({ children, ...props }: React.HTMLAttributes<HTMLDivElement>) => (

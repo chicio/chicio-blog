@@ -6,7 +6,16 @@ import {
     BiUser,
     BiMessageDetail,
 } from "react-icons/bi";
-import { BluePillButton, FormErrorSummary, FormField, FormSuccessMessage, FormTextarea, LoadingBar, PageTitle, RedPillButton } from "matrix-design-system";
+import {
+    BluePillButton,
+    FormErrorSummary,
+    FormField,
+    FormSuccessMessage,
+    FormTextarea,
+    LoadingBar,
+    PageTitle,
+    RedPillButton,
+} from "matrix-design-system";
 import { useContactFormStore } from "./use-contact-form-store";
 
 export interface ContactFormProps {

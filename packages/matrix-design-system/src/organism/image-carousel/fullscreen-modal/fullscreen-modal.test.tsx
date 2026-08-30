@@ -4,15 +4,6 @@ import userEvent from "@testing-library/user-event";
 import { fireEvent } from "@testing-library/react";
 import { FullscreenModal } from "./fullscreen-modal";
 
-vi.mock("next/image", () => ({
-    default: ({
-        alt,
-        src,
-        ...rest
-    }: React.ImgHTMLAttributes<HTMLImageElement> & { src: string; fill?: boolean }) => (
-        <img alt={alt} src={src} {...rest} />
-    ),
-}));
 
 vi.mock("../../../atoms/animation/motion-div", () => ({
     MotionDiv: ({ children, ...props }: React.HTMLAttributes<HTMLDivElement>) => <div {...props}>{children}</div>,

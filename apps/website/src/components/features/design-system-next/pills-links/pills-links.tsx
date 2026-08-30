@@ -1,5 +1,9 @@
 import { FC } from "react";
-import { BluePillLink as DesignSystemBluePillLink, RedPillLink as DesignSystemRedPillLink, type PillProps } from "matrix-design-system";
+import {
+    BluePillLink as DesignSystemBluePillLink,
+    RedPillLink as DesignSystemRedPillLink,
+    type PillProps,
+} from "matrix-design-system";
 import { NextLink } from "@/components/features/design-system-next/next-link";
 
 export type { PillProps };

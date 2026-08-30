@@ -3,11 +3,6 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { PaginationNavigation } from "./pagination-navigation";
 
-vi.mock("next/link", () => ({
-    default: ({ href, children, className, onClick }: React.AnchorHTMLAttributes<HTMLAnchorElement> & { href: string }) => (
-        <a href={href} className={className} onClick={onClick}>{children}</a>
-    ),
-}));
 
 describe("PaginationNavigation", () => {
     describe("render", () => {
