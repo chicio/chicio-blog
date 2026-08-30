@@ -1,6 +1,7 @@
 "use client";
 
-import { CommandPaletteItem, TerminalLine } from "matrix-design-system";
+import { TerminalLine } from "matrix-design-system";
+import { CommandPaletteItem } from "matrix-design-system/command-palette";
 import { SiCoderabbit } from "react-icons/si";
 import { FC } from "react";
 

@@ -1,6 +1,7 @@
 "use client";
 
-import { Button, Loader, Markdown, MotionDiv, Overlay, TerminalProgressBar } from "matrix-design-system";
+import { Button, Loader, MotionDiv, Overlay, TerminalProgressBar } from "matrix-design-system";
+import { Markdown } from "matrix-design-system/markdown";
 import { Variants } from "framer-motion";
 import { FC } from "react";
 import { useChromeSummaryModalStore } from "./use-chrome-summary-modal-store";

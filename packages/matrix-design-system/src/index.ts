@@ -6,6 +6,13 @@
  * whether something is an atom, a molecule or an organism — a classification that can then
  * change without breaking anyone.
  *
+ * The exceptions are the three groups that need optional peer dependencies — charts (recharts),
+ * markdown (the unified/remark/rehype stack) and the command palette (cmdk). They live behind
+ * `matrix-design-system/chart`, `/markdown` and `/command-palette` so that everything here
+ * resolves with nothing but the required peers installed. Anything reachable from this file must
+ * stay that way: adding an optional-peer component here silently breaks every consumer that did
+ * not install it.
+ *
  * Generated from the component barrels; keep it sorted and complete.
  */
 
@@ -32,7 +39,6 @@ export * from "./atoms/links/internal-link";
 export * from "./atoms/loader/loader";
 export * from "./atoms/typography/input-field";
 export * from "./atoms/typography/label";
-export * from "./atoms/typography/markdown";
 export * from "./atoms/typography/terminal-blocks";
 export * from "./atoms/typography/textarea";
 export * from "./molecules/accordion/accordion";
@@ -43,9 +49,6 @@ export * from "./molecules/buttons/segmented-control";
 export * from "./molecules/buttons/social-contact";
 export * from "./molecules/buttons/tag";
 export * from "./molecules/buttons/terminal-button";
-export * from "./molecules/chart/chart-panel";
-export * from "./molecules/chart/chart-tooltip";
-export * from "./molecules/chart/donut-chart";
 export * from "./molecules/containers/content-container";
 export * from "./molecules/controls/control-slider";
 export * from "./molecules/effects/matrix-background";
@@ -70,7 +73,6 @@ export * from "./molecules/typography/paragraph-title-with-icon";
 export * from "./molecules/typography/section-heading";
 export * from "./molecules/video/self-hosted-video";
 export * from "./molecules/video/youtube";
-export * from "./organism/command-palette";
 export * from "./organism/cookie-consent-banner";
 export * from "./organism/footer";
 export * from "./organism/header/brand-header";

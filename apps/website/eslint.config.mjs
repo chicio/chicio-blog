@@ -96,12 +96,14 @@ const injectableViaBindings = {
             "error",
             {
                 paths: [
-                    {
-                        name: "matrix-design-system",
+                    // Every published entry point, not just the root barrel: an injectable component
+                    // moved behind a subpath would otherwise slip past this rule unnoticed.
+                    ...["", "/chart", "/markdown", "/command-palette"].map((entry) => ({
+                        name: `matrix-design-system${entry}`,
                         importNames: INJECTABLE,
                         message:
                             "This component needs next/link or next/image injected. Import it from @/components/features/design-system-next/ instead, or it silently renders a plain <a>/<img>.",
-                    },
+                    })),
                 ],
             },
         ],

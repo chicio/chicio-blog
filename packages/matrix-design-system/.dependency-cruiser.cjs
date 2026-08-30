@@ -13,6 +13,17 @@ const config = {
             to: { path: "node_modules/next/" },
         },
         {
+            name: "root-barrel-no-optional-peers",
+            comment:
+                "Nothing reachable from the root barrel may need an optional peer dependency. Those libraries are optional precisely because charts, markdown and the command palette live behind their own entry points (matrix-design-system/chart, /markdown, /command-palette); re-exporting one of them from src/index.ts makes `import { Button }` fail to resolve for every consumer who did not install it. Type-only imports count: a recharts type in the published .d.mts breaks a consumer's typecheck just as hard. Move the export to the matching entry file instead.",
+            severity: "error",
+            from: { path: "^src/index\\.ts$" },
+            to: {
+                path: "node_modules/(recharts|cmdk|react-markdown|rehype-[a-z]+|remark-[a-z]+|unified)/",
+                reachable: true,
+            },
+        },
+        {
             name: "layering-atoms",
             comment: "Atoms must not import from molecules or organism.",
             severity: "error",

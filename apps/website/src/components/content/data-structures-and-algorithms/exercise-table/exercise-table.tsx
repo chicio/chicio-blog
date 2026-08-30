@@ -1,7 +1,7 @@
 import { Content } from "@/types/content/content";
 import { ExerciseMetadata } from "@/types/content/data-structures-and-algorithms";
 import { FC } from "react";
-import { Markdown } from "matrix-design-system";
+import { Markdown } from "matrix-design-system/markdown";
 import { difficultyColor } from "./difficulty-color";
 
 interface ExerciseTableProps {

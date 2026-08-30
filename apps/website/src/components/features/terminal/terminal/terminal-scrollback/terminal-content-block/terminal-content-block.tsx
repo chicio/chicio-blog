@@ -1,4 +1,5 @@
-import { ErrorText, Markdown, MotionDiv } from "matrix-design-system";
+import { ErrorText, MotionDiv } from "matrix-design-system";
+import { Markdown } from "matrix-design-system/markdown";
 import { FC } from "react";
 import type { TerminalContentBlockData } from "@/types/terminal/terminal";
 

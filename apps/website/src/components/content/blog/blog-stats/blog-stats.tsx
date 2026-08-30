@@ -1,7 +1,8 @@
 "use client";
 
 import { FC } from "react";
-import { ChartPanel, PageTitle, StatCard } from "matrix-design-system";
+import { PageTitle, StatCard } from "matrix-design-system";
+import { ChartPanel } from "matrix-design-system/chart";
 import { ContentPage } from "@/components/features/content/content-page";
 import { JsonLd } from "@/components/features/seo/jsond-ld";
 import { siteMetadata } from "@/types/configuration/site-metadata";

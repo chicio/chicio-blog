@@ -1,6 +1,7 @@
 "use client";
 
-import { CommandPaletteItem, TerminalLine } from "matrix-design-system";
+import { TerminalLine } from "matrix-design-system";
+import { CommandPaletteItem } from "matrix-design-system/command-palette";
 import { MdTune } from "react-icons/md";
 import { FC } from "react";
 import { useCustomizeMatrixRainItemStore } from "./use-customize-matrix-rain-item-store";

@@ -10,7 +10,7 @@ import {
     XAxis,
     YAxis,
 } from "recharts";
-import { ChartPanel, ChartTooltip } from "matrix-design-system";
+import { ChartPanel, ChartTooltip } from "matrix-design-system/chart";
 import { chartTheme } from "@/types/configuration/chart-theme";
 
 const data = () => {

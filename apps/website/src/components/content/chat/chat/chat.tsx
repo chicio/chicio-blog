@@ -1,6 +1,7 @@
 "use client";
 
-import { ChatIcon, ContentContainer, Markdown, PageTitle, ParagraphTitleWithIcon, RedPillNoReflection } from "matrix-design-system";
+import { ChatIcon, ContentContainer, PageTitle, ParagraphTitleWithIcon, RedPillNoReflection } from "matrix-design-system";
+import { Markdown } from "matrix-design-system/markdown";
 import { BrandHeader } from "@/components/features/design-system-next/brand-header";
 import { Menu } from "@/components/features/design-system-next/menu";
 import { FC } from "react";

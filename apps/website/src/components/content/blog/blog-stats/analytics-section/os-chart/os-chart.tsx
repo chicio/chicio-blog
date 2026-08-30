@@ -1,7 +1,7 @@
 "use client";
 
 import { FC } from "react";
-import { DonutChart } from "matrix-design-system";
+import { DonutChart } from "matrix-design-system/chart";
 import type { DimensionCount } from "@/types/content/analytics-stats";
 
 interface OsChartProps {

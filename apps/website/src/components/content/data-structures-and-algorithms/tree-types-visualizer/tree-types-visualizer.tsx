@@ -1,7 +1,8 @@
 "use client";
 
 import { FC } from "react";
-import { BluePillButton, ChartPanel, RedPillButton } from "matrix-design-system";
+import { BluePillButton, RedPillButton } from "matrix-design-system";
+import { ChartPanel } from "matrix-design-system/chart";
 import { useTreeTypesVisualizerStore } from "./use-tree-types-visualizer-store";
 
 interface TreeNodeData {

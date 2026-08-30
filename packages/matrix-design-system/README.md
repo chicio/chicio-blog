@@ -10,14 +10,28 @@ anything terminal-flavoured. Every component here is a real component from
 npm install matrix-design-system
 ```
 
-`react` and `react-dom` are peer dependencies. A few components need an optional peer as well —
-`recharts` for the charts, `cmdk` for the command palette, `matrix-rain-webgpu` for the rain effect,
-and the `react-markdown` + remark/rehype stack for `Markdown`. Install only what you use.
+`react`, `react-dom` and `framer-motion` are peer dependencies — `framer-motion` because its
+`AnimatePresence` context has to be shared with your own animated components, which a second copy
+would break.
+
+Everything in the root barrel works with just those installed. Three groups need heavier libraries,
+so they live behind their own entry points and you install a peer only if you import one:
+
+| Import from | Install | For |
+|---|---|---|
+| `matrix-design-system/chart` | `recharts` | `ChartPanel`, `ChartTooltip`, `DonutChart` |
+| `matrix-design-system/markdown` | `react-markdown`, `unified`, the remark/rehype plugins | `Markdown` |
+| `matrix-design-system/command-palette` | `cmdk` | `CommandPalette` and its items |
+
+Nothing else is optional: the rain effect is part of the design system's identity — `BrandHeader`
+and the matrix backgrounds all render it — so `matrix-rain-webgpu` is a plain dependency and comes
+along automatically.
 
 ## Use
 
 ```tsx
 import { Accordion, Chip, SectionHeading, StatCard } from "matrix-design-system";
+import { DonutChart } from "matrix-design-system/chart";
 import "matrix-design-system/styles.css";
 ```
 
