@@ -1,0 +1,76 @@
+{
+    "$schema": "https://turborepo.com/schema.json",
+    "extends": [
+        "//"
+    ],
+    // Only this app reads these, so they belong here rather than in the root globalEnv, where
+    // every variable is a cache key for every task in every workspace: changing GROQ_API_KEY
+    // there invalidates the design system's build, which cannot possibly use it.
+    //
+    // Listed only on the tasks that actually run this app's code. Turborepo's strict env mode
+    // filters the environment it hands a task, so a variable missing here is silently undefined
+    // rather than an error — and /blog/stats is prerendered, which means the Google Analytics
+    // ones are read during `next build`, not only at request time.
+    "tasks": {
+        "build": {
+            "env": [
+                "CONTACT_EMAIL",
+                "GOOGLE_ANALYTICS_API_SECRET",
+                "GOOGLE_ANALYTICS_PROPERTY_ID",
+                "GOOGLE_ANALYTICS_SA_CLIENT_EMAIL",
+                "GOOGLE_ANALYTICS_SA_PRIVATE_KEY",
+                "GROQ_API_KEY",
+                "RESEND_API_KEY",
+                "UPSTASH_REDIS_REST_TOKEN",
+                "UPSTASH_REDIS_REST_URL",
+                "UPSTASH_VECTOR_REST_TOKEN",
+                "UPSTASH_VECTOR_REST_URL"
+            ]
+        },
+        "dev": {
+            "env": [
+                "CONTACT_EMAIL",
+                "GOOGLE_ANALYTICS_API_SECRET",
+                "GOOGLE_ANALYTICS_PROPERTY_ID",
+                "GOOGLE_ANALYTICS_SA_CLIENT_EMAIL",
+                "GOOGLE_ANALYTICS_SA_PRIVATE_KEY",
+                "GROQ_API_KEY",
+                "RESEND_API_KEY",
+                "UPSTASH_REDIS_REST_TOKEN",
+                "UPSTASH_REDIS_REST_URL",
+                "UPSTASH_VECTOR_REST_TOKEN",
+                "UPSTASH_VECTOR_REST_URL"
+            ]
+        },
+        "start": {
+            "env": [
+                "CONTACT_EMAIL",
+                "GOOGLE_ANALYTICS_API_SECRET",
+                "GOOGLE_ANALYTICS_PROPERTY_ID",
+                "GOOGLE_ANALYTICS_SA_CLIENT_EMAIL",
+                "GOOGLE_ANALYTICS_SA_PRIVATE_KEY",
+                "GROQ_API_KEY",
+                "RESEND_API_KEY",
+                "UPSTASH_REDIS_REST_TOKEN",
+                "UPSTASH_REDIS_REST_URL",
+                "UPSTASH_VECTOR_REST_TOKEN",
+                "UPSTASH_VECTOR_REST_URL"
+            ]
+        },
+        "test:e2e": {
+            "env": [
+                "CONTACT_EMAIL",
+                "GOOGLE_ANALYTICS_API_SECRET",
+                "GOOGLE_ANALYTICS_PROPERTY_ID",
+                "GOOGLE_ANALYTICS_SA_CLIENT_EMAIL",
+                "GOOGLE_ANALYTICS_SA_PRIVATE_KEY",
+                "GROQ_API_KEY",
+                "RESEND_API_KEY",
+                "UPSTASH_REDIS_REST_TOKEN",
+                "UPSTASH_REDIS_REST_URL",
+                "UPSTASH_VECTOR_REST_TOKEN",
+                "UPSTASH_VECTOR_REST_URL"
+            ]
+        }
+    }
+}

@@ -38,7 +38,7 @@ project root; in a workspace it prints `allowScripts in workspace … is ignored
 npm version is declared as `devEngines.packageManager` with a same-major range (`^11.0.0`) — Turborepo
 requires a package manager to be declared and rejects a range spanning majors.
 
-**Environment variables must be declared in `turbo.json`'s `globalEnv`.** Turborepo filters the
+**Environment variables must be declared in `turbo.json`.** The website's secrets live in `apps/website/turbo.json`, on the tasks that run the app (`build`, `dev`, `start`, `test:e2e`) — not in the root `globalEnv`, where every entry becomes a cache key for every task in every workspace and a changed `GROQ_API_KEY` needlessly rebuilds the design system. Only `CI` and `NODE_ENV` are global. Turborepo filters the
 environment it passes to tasks, so an undeclared variable is silently stripped. The list cannot be
 derived by grepping for `process.env.X`: `GROQ_API_KEY` is read implicitly by `@ai-sdk/groq` and
 never appears in the source, and the `GOOGLE_ANALYTICS_*` keys are destructured from an injected
