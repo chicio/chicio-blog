@@ -52,7 +52,9 @@ apps/website/e2e/
 - **node** — `apps/website/src/lib/**/*.test.ts` — environment: node
 - **jsdom** — `apps/website/src/components/**/*.test.tsx` and `apps/website/src/components/**/*.test.ts` — environment: jsdom, globals: true, setup: `apps/website/vitest.setup.ts`
 
-The `@vitejs/plugin-react` v6 plugin is used via `react()` with no extra options. Note: v6 removed the `babel` and `presets` options from its `Options` interface; the `reactCompilerPreset` export is for use with `@rolldown/plugin-babel`, not for vitest. The React Compiler is a production optimization applied by Next.js at build time — it is not replicated in the test transform. Components that use hooks compile and render correctly in tests without it.
+The `@vitejs/plugin-react` v6 plugin is used via `react()` with no extra options. Note: v6 removed the `babel` and `presets` options from its `Options` interface; the `reactCompilerPreset` export is for use with `@rolldown/plugin-babel`, not for vitest.
+
+**The React Compiler never runs in tests, in either workspace.** For the website it is a Next build-time optimization; for `packages/matrix-design-system` it runs in the package's own tsdown build (see its `tsdown.config.ts`), and vitest tests the package's `src/`, not `dist/`. Components that use hooks compile and render correctly in tests without it. The practical consequence: **the compiled output is only ever exercised by the website build and the Playwright suite** — a compiler-induced regression cannot be caught by a unit test, so run E2E when changing anything about the compiler configuration.
 
 ## Test Structure Conventions
 
