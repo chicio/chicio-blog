@@ -4,3 +4,17 @@
  */
 @import "tailwindcss";
 @import "matrix-design-system/styles.css";
+
+/*
+ * The stories' own scaffolding, which no consumer ever writes. The package's stylesheet opts its
+ * components back into Tailwind's scan with `@source "../../dist/**\/*.mjs"`, but stories are not
+ * published to dist, so the wrapper utilities a story uses to frame its component — `h-32`,
+ * `min-h-96`, `h-64` — resolved to nothing. Their wrappers then collapsed to height 0 and, with
+ * `overflow-hidden`, clipped the component out of the frame entirely: the Menu dropdown stories,
+ * CommandPalette/Open, ImageGlow/FillCover and all three Reading Content Progress Bar stories
+ * rendered blank here and in the deployed showcase.
+ *
+ * This adds only the stories' scaffolding, never the components' own classes, so the rule above
+ * still holds: components are styled exactly as a consumer can reproduce.
+ */
+@source "../../../packages/matrix-design-system/src/**/*.stories.tsx";
