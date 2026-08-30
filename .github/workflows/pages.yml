@@ -13,7 +13,6 @@ on:
 permissions:
   contents: read
 
-# One deploy at a time, and never interrupt one in flight.
 concurrency:
   group: pages
   cancel-in-progress: false
@@ -32,11 +31,8 @@ jobs:
           cache: 'npm'
       - name: Install dependencies
         run: npm ci
-      # --filter pulls in the design system's build, which the showcase resolves through dist.
       - name: Build the showcase
         run: npx turbo run build --filter=matrix-design-system-showcase
-      # Storybook emits relative asset paths, so it needs no knowledge of the subpath it is served
-      # from — the directory can simply be moved into place.
       - name: Assemble the site
         run: |
           mkdir -p _site
