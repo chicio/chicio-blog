@@ -83,6 +83,8 @@ agent/
 # The durable inputs under .design-sync/ (config.json, NOTES.md, conventions.md,
 # shims/, fonts/, previews/, tailwind-entry.css, tsconfig.sync.json) ARE committed.
 .ds-sync/
+# The storybook build design-sync compares against — regenerated, minutes to build.
+.design-sync/sb-reference/
 ds-bundle/
 .design-sync/.cache/
 .design-sync/learnings/

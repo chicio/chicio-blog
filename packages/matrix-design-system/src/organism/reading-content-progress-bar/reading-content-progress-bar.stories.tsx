@@ -35,9 +35,21 @@ const readingFixture = (top: string, height: string) => ({ top, height });
 
 const FreezeBlink = () => <style>{".ds-blink-still .animate-blink{animation-play-state:paused}"}</style>;
 
+// The measuring article is parked off-screen so the hook resolves a real percentage, which leaves
+// the cell empty apart from the hairline bar. This is the prose a reader would actually be scrolling
+// past, so the card shows the bar doing its job rather than floating in a void.
+const ReadingContent = () => (
+    <div className="text-secondary-text absolute inset-x-0 top-0 space-y-2 p-4 font-mono text-xs">
+        <p>The Matrix has you, Neo.</p>
+        <p>Follow the white rabbit. Knock, knock.</p>
+        <p>There is no spoon; it is only yourself that bends.</p>
+    </div>
+);
+
 const DefaultStory = () => (
     <div className="ds-blink-still relative h-32 w-full overflow-hidden">
         <FreezeBlink />
+        <ReadingContent />
         <div style={dockBar}>
             <ContentProgressBar contentId="blog-post-content" />
         </div>
@@ -48,6 +60,7 @@ const DefaultStory = () => (
 const NearlyFinishedStory = () => (
     <div className="ds-blink-still relative h-32 w-full overflow-hidden">
         <FreezeBlink />
+        <ReadingContent />
         <div style={dockBar}>
             <ContentProgressBar contentId="dsa-topic-content" />
         </div>
@@ -58,6 +71,7 @@ const NearlyFinishedStory = () => (
 const JustStartedStory = () => (
     <div className="ds-blink-still relative h-32 w-full overflow-hidden">
         <FreezeBlink />
+        <ReadingContent />
         <div style={dockBar}>
             <ContentProgressBar contentId="about-me-content" />
         </div>
