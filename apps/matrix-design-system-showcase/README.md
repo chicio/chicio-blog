@@ -28,10 +28,3 @@ uses everywhere else: `packages/` publishes to npm, `apps/` deploys to a URL.
 
 A showcase that styles components in a way real consumers cannot reproduce is worth nothing, so
 resist adding anything else here.
-
-## Deploying under a subpath
-
-Nothing to configure. Storybook emits relative asset references, so the same build works at the
-root or under `/chicio-blog/design-system/`. An earlier version of this config threaded a
-`STORYBOOK_BASE_PATH` through vite's `base`; building with two different values produced identical
-output, so it was removed rather than left to look meaningful.
