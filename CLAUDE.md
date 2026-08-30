@@ -23,8 +23,12 @@ packages/eslint-plugin-chicio/    the component-store lint rules, shared by both
 ```
 
 The website depends on the packages by version (`"matrix-design-system": "^1.0.0"`), and npm
-resolves that to the workspace copy — so the site always builds against local source, while the
-package is still published for outside consumers.
+resolves that to the workspace copy — so the site always builds against the local packages, while
+they stay publishable for outside consumers.
+
+It resolves them through their **built output** (`dist/`), not their source, so every task that runs
+or builds the site depends on `^build` in `turbo.json`. `npm run dev` also starts each package's
+`tsdown --watch`, so a change in `packages/` reaches the running dev server.
 
 Run tasks from the root: `npm run <task>` delegates to `turbo run <task>` across the workspaces.
 To run something in the website only, use `npm run <task> --workspace=website`.

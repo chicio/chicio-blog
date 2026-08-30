@@ -10,6 +10,11 @@
     "node": "24.x"
   },
   "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": "^24.0.0",
+      "onFail": "warn"
+    },
     "packageManager": {
       "name": "npm",
       "version": "^11.0.0",

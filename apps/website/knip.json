@@ -4,7 +4,6 @@
         "src/app/sw.ts",
         "src/content/**/content.mdx",
         "serwist.config.mjs",
-        "src/types/component-store.ts",
         "e2e/**/*.ts",
         "src/test-utils/index.ts"
     ],

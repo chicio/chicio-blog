@@ -9,10 +9,13 @@
  */
 /**
  * Tailwind ignores node_modules when scanning for class names, so a consumer would generate none of
- * the utilities this package's components use. @source opts the package's own sources back in,
- * relative to this file.
+ * the utilities this package's components use. @source opts them back in.
+ *
+ * It must point at dist, not src: `files` publishes only dist and this styles folder, so a glob over
+ * src matches nothing once the package is installed from the registry — the components would render
+ * with no colours, spacing or layout. The built .mjs carry the same className strings.
  */
-@source "../**/*.{ts,tsx}";
+@source "../../dist/**/*.mjs";
 
 @import "./pills.css";
 @import "./theme.css";
