@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.0.1](https://github.com/chicio/chicio-blog/compare/matrix-rain-webgpu@2.0.0...matrix-rain-webgpu@2.0.1) (2026-08-31)
+
+### Features
+
+* **capabilities:** :construction_worker: wire matrix-rain-webgpu releases into the monorepo ([#567](https://github.com/chicio/chicio-blog/issues/567)) ([5a1262e](https://github.com/chicio/chicio-blog/commit/5a1262e3746f99dfdf028d5354dc20dc5a601c05)), closes [#564](https://github.com/chicio/chicio-blog/issues/564)
+
 ## [2.0.0](https://github.com/chicio/matrix-rain-webgpu/compare/1.0.1...2.0.0) (2026-07-03)
 
 ### Features
