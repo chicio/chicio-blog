@@ -1,0 +1,44 @@
+{
+  "name": "matrix-rain-showcase",
+  "type": "module",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "check": "astro check"
+  },
+  "dependencies": {
+    "@astrojs/react": "^6.0.1",
+    "@astrojs/starlight": "^0.41.3",
+    "@mermaid-js/layout-elk": "^0.2.2",
+    "@typegpu/noise": "^0.11.0",
+    "@typegpu/react": "^0.11.2",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "astro": "^7.1.2",
+    "astro-mermaid": "^2.1.0",
+    "cookie": "2.0.1",
+    "mermaid": "^11.16.0",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "sharp": "^0.35.3",
+    "typegpu": "^0.11.9"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.9",
+    "@webgpu/types": "^0.1.71",
+    "katex": "^0.18.1",
+    "rehype-external-links": "^3.0.0",
+    "rehype-katex": "^7.0.1",
+    "remark-math": "^6.0.0",
+    "typescript": "npm:tsover@6.0.2",
+    "unplugin-typegpu": "^0.11.6"
+  },
+  "overrides": {
+    "typescript": "npm:tsover@6.0.2"
+  }
+}

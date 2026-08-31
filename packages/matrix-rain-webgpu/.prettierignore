@@ -1,0 +1,6 @@
+# oxfmt reads this file by default for ignores.
+# Markdown is hand-written prose (README, changelog, release notes); don't reflow it.
+*.md
+
+# Build output.
+dist/

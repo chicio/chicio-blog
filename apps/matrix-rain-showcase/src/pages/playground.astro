@@ -1,0 +1,70 @@
+---
+// The full manual-testing demo (canvas + debug rail + observability + atlas-debug).
+// Internal demo App — imports library internals via @lib; client-only (WebGPU).
+import PlaygroundApp from '../components/demo/PlaygroundApp';
+import '../components/demo/demo.css';
+
+const base = import.meta.env.BASE_URL;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href={`${base}favicon.ico`} type="image/x-icon" />
+    <title>Playground — matrix-rain-webgpu</title>
+    <style>
+      #back-link {
+        position: fixed;
+        left: 12px;
+        top: 10px;
+        z-index: 10;
+        font: 13px/1 ui-monospace, monospace;
+        color: #00ff41;
+        text-decoration: none;
+        border: 1px solid #00ff41;
+        background: rgba(0, 0, 0, 0.45);
+        padding: 6px 11px;
+        border-radius: 6px;
+      }
+      #back-link:hover {
+        background: rgba(0, 255, 65, 0.15);
+      }
+      #site-credit {
+        position: fixed;
+        left: 12px;
+        bottom: 10px;
+        z-index: 10;
+        font: 12px/1 ui-monospace, monospace;
+        color: #9bffb0;
+        opacity: 0.7;
+        text-decoration: none;
+        background: rgba(0, 0, 0, 0.45);
+        padding: 4px 8px;
+        border-radius: 6px;
+      }
+      #site-credit:hover {
+        opacity: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <a id="back-link" href={base}>← Back</a>
+    <PlaygroundApp client:only="react" />
+    <a id="site-credit" href="https://www.fabrizioduroni.it" target="_blank" rel="noopener">
+      by Fabrizio Duroni
+    </a>
+    <script>
+      // Prefer returning to the actual referring page (home or docs); the href is the
+      // direct-load fallback when there's no in-site history to step back to.
+      const backLink = document.getElementById('back-link');
+      backLink?.addEventListener('click', (event) => {
+        if (window.history.length > 1) {
+          event.preventDefault();
+          window.history.back();
+        }
+      });
+    </script>
+  </body>
+</html>

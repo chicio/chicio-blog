@@ -1,0 +1,28 @@
+/* KaTeX styles for math rendering (remark-math + rehype-katex). */
+@import 'katex/dist/katex.min.css';
+
+/* Matrix-green accent for Starlight. */
+:root {
+	--sl-color-accent-low: #002b10;
+	--sl-color-accent: #00b32d;
+	--sl-color-accent-high: #9bffb0;
+}
+:root[data-theme='light'] {
+	--sl-color-accent-low: #b6ffc4;
+	--sl-color-accent: #007a1f;
+	--sl-color-accent-high: #00350d;
+}
+
+/* Hide the raw mermaid source until astro-mermaid renders it to SVG
+   (it sets data-processed="true" when done) — avoids the source flashing in. */
+pre.mermaid:not([data-processed='true']) {
+	visibility: hidden;
+}
+
+/* Header logo — rounded + matrix-green border, matching the hero logo. */
+.site-title img {
+	box-sizing: border-box;
+	border: 2px solid #00ff41;
+	border-radius: 8px;
+	box-shadow: 0 0 10px rgba(0, 255, 65, 0.4);
+}
