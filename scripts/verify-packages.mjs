@@ -16,7 +16,7 @@ import { globSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 
-const PACKAGES = ["matrix-component-store", "matrix-design-system"];
+const PACKAGES = ["matrix-component-store", "matrix-design-system", "matrix-rain-webgpu"];
 
 // What a consumer must always supply. Deliberately excludes every optional peer: the root barrel
 // has to resolve with only these, which is the whole reason charts, markdown and the command
@@ -46,6 +46,34 @@ const OPTIONAL_ENTRIES = [
         ],
     },
 ];
+
+// matrix-rain-webgpu's declarations carry extensionless relative imports (`./matrix-rain`,
+// `./types`), which TypeScript rejects in an ESM package under `moduleResolution: nodenext`. A
+// consumer on a current toolchain therefore gets resolution errors on this package's types. (attw
+// calls that mode "node16", after the Node release that introduced the algorithm — it is not about
+// running Node 16.)
+//
+// Ignored deliberately, not pending. This is not a packaging regression: the published 2.0.0
+// reports the same, so it predates the move into this repo. Both available fixes were tried and
+// rejected:
+//
+//   - `.js` extensions in the source, or `rewriteRelativeImportExtensions` with `.ts` ones, put
+//     extensions in the code where the files do not have them (and the latter silently did nothing
+//     here, emitting `.ts` specifiers, because moduleResolution is `bundler`).
+//   - A post-emit rewrite of dist/**/*.d.ts works — verified, attw goes green — but adds a custom
+//     build step to a package deliberately kept free of them.
+//
+// The other two packages need none of this because tsdown, being a bundler, writes specifiers for
+// its output format and emits `.mjs`; `tsc --emitDeclarationOnly` copies through what the source
+// wrote. Building this package with tsdown too would remove the problem, but its `'use gpu'`
+// transform would move from unplugin-typegpu's actively maintained Vite variant to the Rolldown one,
+// which the TypeGPU docs list as limited-stability — a bad trade for a WebGPU library.
+//
+// Revisit only if this package's toolchain is ever converged. The other two packages remain held to
+// the full rule set.
+const ATTW_IGNORE_RULES = {
+    "matrix-rain-webgpu": ["internal-resolution-error"],
+};
 
 const run = (cmd, args, cwd) =>
     execFileSync(cmd, args, { cwd, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
@@ -101,6 +129,7 @@ try {
                     "--yes", "@arethetypeswrong/cli", join(workDir, file),
                     "--profile", "esm-only",
                     "--exclude-entrypoints", "styles.css", "theme.css",
+                    ...(ATTW_IGNORE_RULES[name] ?? []).flatMap((rule) => ["--ignore-rules", rule]),
                 ],
                 repoRoot,
             );
@@ -132,6 +161,15 @@ try {
         console.log("  root barrel imports with no optional peer installed");
     } catch (error) {
         fail(`root barrel needs an optional peer: ${(error.stderr || error.message).trim().split("\n")[0]}`);
+    }
+
+    // matrix-rain-webgpu declares no optional peers — typegpu and friends are real dependencies —
+    // so it has to import with only react/react-dom installed.
+    try {
+        importProbe("matrix-rain-webgpu", ["MatrixRainWebGPU", "isWebGPUSupported"]);
+        console.log("  matrix-rain-webgpu imports with only its required peers");
+    } catch (error) {
+        fail(`matrix-rain-webgpu\n${(error.stderr || error.stdout || error.message).trim()}`);
     }
 
     run("npm", ["install", "--no-audit", "--no-fund", "typescript@^5"], app);

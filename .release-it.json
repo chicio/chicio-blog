@@ -18,13 +18,17 @@
       "commitsOpts": {
         "path": [
           ".",
-          ":(exclude)packages"
+          ":(exclude)packages",
+          ":(exclude)apps/matrix-design-system-showcase",
+          ":(exclude)apps/matrix-rain-showcase"
         ]
       },
       "gitRawCommitsOpts": {
         "path": [
           ".",
-          ":(exclude)packages"
+          ":(exclude)packages",
+          ":(exclude)apps/matrix-design-system-showcase",
+          ":(exclude)apps/matrix-rain-showcase"
         ]
       }
     }

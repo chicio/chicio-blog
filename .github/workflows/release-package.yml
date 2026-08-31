@@ -11,6 +11,7 @@ on:
         options:
           - matrix-component-store
           - matrix-design-system
+          - matrix-rain-webgpu
         required: true
       increment:
         description: 'Which release to cut ("initial" publishes the version already in package.json)'

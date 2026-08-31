@@ -1,8 +1,16 @@
 {
   "$schema": "https://unpkg.com/release-it/schema/release-it.json",
+  "git": {
+    "tagName": "matrix-rain-webgpu@${version}",
+    "tagMatch": "matrix-rain-webgpu@*",
+    "tagAnnotation": "matrix-rain-webgpu ${version}",
+    "commitMessage": "chore(release): :bookmark: matrix-rain-webgpu ${version}",
+    "commitsPath": ".",
+    "requireCommits": true
+  },
   "github": {
     "release": true,
-    "web": true
+    "releaseName": "matrix-rain-webgpu ${version}"
   },
   "npm": {
     "publish": true,
@@ -14,7 +22,14 @@
   "plugins": {
     "@release-it/conventional-changelog": {
       "preset": "conventionalcommits",
-      "infile": "CHANGELOG.md"
+      "infile": "CHANGELOG.md",
+      "tagPrefix": "matrix-rain-webgpu@",
+      "commitsOpts": {
+        "path": [".", "../../apps/matrix-rain-showcase"]
+      },
+      "gitRawCommitsOpts": {
+        "path": [".", "../../apps/matrix-rain-showcase"]
+      }
     }
   }
 }
