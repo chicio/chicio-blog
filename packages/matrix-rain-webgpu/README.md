@@ -71,19 +71,27 @@ Full docs live on the site — including the interactive playground:
 
 ## Local development
 
-This repo is two packages: the publishable library at the root (`src/`) and the docs + demo site (`docs/`, an Astro + Starlight app).
+This package lives in the [chicio-blog](https://github.com/chicio/chicio-blog) monorepo. The library
+is here; its docs and demo site are the sibling [`apps/matrix-rain-showcase`](../../apps/matrix-rain-showcase)
+workspace, an Astro + Starlight app.
+
+Clone the monorepo and install once from its root — npm workspaces links the two together, so the
+showcase renders this package's source rather than a published copy.
 
 ```sh
-# Library — typecheck + lint/format
-npm install
-npm run types
-npm run check
+npm install                                          # from the repository root
 
-# Docs + demo site (Astro)
-npm --prefix docs install
-npm --prefix docs run dev
+npm run build   --workspace=matrix-rain-webgpu       # library: vite + declarations
+npm run lint    --workspace=matrix-rain-webgpu       # oxlint + oxfmt
+npm run types   --workspace=matrix-rain-webgpu       # tsc -b
+
+npm run dev     --workspace=matrix-rain-showcase     # the docs + demo site
 ```
+
+This package keeps its own toolchain — oxlint, oxfmt and Vite — rather than the monorepo's ESLint and
+tsdown. `lint` and `typecheck` are thin aliases over the former so it still joins the repository-wide
+gates (`npm run lint` from the root fans out across every workspace).
 
 ## Author
 
-Built by [Fabrizio Duroni](https://www.fabrizioduroni.it). If you enjoy it, a visit to the site is the best way to support the work. Also don't forget :star: to star this repository :star:.
+Built by [Fabrizio Duroni](https://www.fabrizioduroni.it). If you enjoy it, a visit to the site is the best way to support the work. Also don't forget :star: to star [the monorepo](https://github.com/chicio/chicio-blog) :star:.
