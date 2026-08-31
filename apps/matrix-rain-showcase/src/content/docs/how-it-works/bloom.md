@@ -4,7 +4,7 @@ sidebar:
   order: 5
 ---
 
-**Source:** [`src/gpu/pipelines/bloom.ts`](https://github.com/chicio/matrix-rain-webgpu/blob/main/src/gpu/pipelines/bloom.ts)
+**Source:** [`src/gpu/pipelines/bloom.ts`](https://github.com/chicio/chicio-blog/blob/main/packages/matrix-rain-webgpu/src/gpu/pipelines/bloom.ts)
 
 Bloom is the glow around bright heads. It's the classic three-step image-space effect: **extract** bright pixels, **blur** them, **add** them back. It runs at half resolution (cheap) into HDR targets, only when `bloom` is enabled.
 

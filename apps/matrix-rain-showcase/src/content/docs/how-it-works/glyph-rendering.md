@@ -4,7 +4,7 @@ sidebar:
   order: 3
 ---
 
-**Source:** [`src/gpu/pipelines/render-glyphs.ts`](https://github.com/chicio/matrix-rain-webgpu/blob/main/src/gpu/pipelines/render-glyphs.ts), [`src/gpu/material/hash.ts`](https://github.com/chicio/matrix-rain-webgpu/blob/main/src/gpu/material/hash.ts)
+**Source:** [`src/gpu/pipelines/render-glyphs.ts`](https://github.com/chicio/chicio-blog/blob/main/packages/matrix-rain-webgpu/src/gpu/pipelines/render-glyphs.ts), [`src/gpu/material/hash.ts`](https://github.com/chicio/chicio-blog/blob/main/packages/matrix-rain-webgpu/src/gpu/material/hash.ts)
 
 The glyph pass is a single full-screen fragment shader. There's no per-glyph geometry — every pixel figures out which cell it belongs to, which glyph that cell shows, and how bright it is. This is the heart of the effect.
 

@@ -4,7 +4,7 @@ sidebar:
   order: 2
 ---
 
-**Source:** [`src/gpu/atlas/build-sdf-atlas.ts`](https://github.com/chicio/matrix-rain-webgpu/blob/main/src/gpu/atlas/build-sdf-atlas.ts), [`src/gpu/atlas/glyph-set.ts`](https://github.com/chicio/matrix-rain-webgpu/blob/main/src/gpu/atlas/glyph-set.ts)
+**Source:** [`src/gpu/atlas/build-sdf-atlas.ts`](https://github.com/chicio/chicio-blog/blob/main/packages/matrix-rain-webgpu/src/gpu/atlas/build-sdf-atlas.ts), [`src/gpu/atlas/glyph-set.ts`](https://github.com/chicio/chicio-blog/blob/main/packages/matrix-rain-webgpu/src/gpu/atlas/glyph-set.ts)
 
 Text on the GPU is hard to do crisply at arbitrary scale. The trick this effect uses — and the reason the glyphs stay sharp at any `fontSize` — is **signed distance fields** (SDF), baked once on the CPU at startup into a texture array.
 

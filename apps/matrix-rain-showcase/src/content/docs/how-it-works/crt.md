@@ -4,7 +4,7 @@ sidebar:
   order: 6
 ---
 
-**Source:** [`src/gpu/pipelines/crt.ts`](https://github.com/chicio/matrix-rain-webgpu/blob/main/src/gpu/pipelines/crt.ts)
+**Source:** [`src/gpu/pipelines/crt.ts`](https://github.com/chicio/chicio-blog/blob/main/packages/matrix-rain-webgpu/src/gpu/pipelines/crt.ts)
 
 The final full-screen pass stamps a CRT character onto the composited scene before it reaches the swap chain: **chromatic aberration → tone-map → scanlines**. When `crt={false}`, this is swapped for a plain passthrough blit.
 

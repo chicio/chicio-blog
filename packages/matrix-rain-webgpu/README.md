@@ -1,12 +1,12 @@
 # matrix-rain-webgpu
 
 [![npm](https://img.shields.io/npm/v/matrix-rain-webgpu)](https://www.npmjs.com/package/matrix-rain-webgpu)
-[![CI](https://github.com/chicio/matrix-rain-webgpu/actions/workflows/ci.yml/badge.svg)](https://github.com/chicio/matrix-rain-webgpu/actions/workflows/ci.yml)
-[![Deploy](https://github.com/chicio/matrix-rain-webgpu/actions/workflows/deploy.yml/badge.svg)](https://github.com/chicio/matrix-rain-webgpu/actions/workflows/deploy.yml)
+[![CI](https://github.com/chicio/chicio-blog/actions/workflows/ci.yml/badge.svg)](https://github.com/chicio/chicio-blog/actions/workflows/ci.yml)
+[![Deploy](https://github.com/chicio/chicio-blog/actions/workflows/pages.yml/badge.svg)](https://github.com/chicio/chicio-blog/actions/workflows/pages.yml)
 
 > A Matrix-style "digital rain" background effect for React, rendered on the GPU with WebGPU via [TypeGPU](https://docs.swmansion.com/TypeGPU/). GPU-driven simulation, signed-distance-field glyphs, depth parallax, bloom, and a CRT post-process.
 
-**▶ Live demo & full documentation: https://chicio.github.io/matrix-rain-webgpu/**
+**▶ Live demo & full documentation: https://chicio.github.io/chicio-blog/matrix-rain/**
 
 It powers the animated background on [fabrizioduroni.it](https://www.fabrizioduroni.it). Requires a WebGPU-capable browser (recent Chrome / Edge / Safari / Firefox).
 
@@ -64,10 +64,10 @@ return isWebGPUSupported() ? <MatrixRainWebGPU /> : <My2DFallback />;
 
 Full docs live on the site — including the interactive playground:
 
-- **[Getting started](https://chicio.github.io/matrix-rain-webgpu/overview/getting-started/)** & **[Public API](https://chicio.github.io/matrix-rain-webgpu/usage/public-api/)** — install, props, recipes.
-- **[Architecture](https://chicio.github.io/matrix-rain-webgpu/architecture/pipeline-overview/)** — how the pieces connect.
-- **[How it works](https://chicio.github.io/matrix-rain-webgpu/how-it-works/glyph-rendering/)** — per-component deep dives, with the computer-graphics concepts and the math.
-- **[Playground](https://chicio.github.io/matrix-rain-webgpu/playground/)** — the live demo with every knob exposed.
+- **[Getting started](https://chicio.github.io/chicio-blog/matrix-rain/overview/getting-started/)** & **[Public API](https://chicio.github.io/chicio-blog/matrix-rain/usage/public-api/)** — install, props, recipes.
+- **[Architecture](https://chicio.github.io/chicio-blog/matrix-rain/architecture/pipeline-overview/)** — how the pieces connect.
+- **[How it works](https://chicio.github.io/chicio-blog/matrix-rain/how-it-works/glyph-rendering/)** — per-component deep dives, with the computer-graphics concepts and the math.
+- **[Playground](https://chicio.github.io/chicio-blog/matrix-rain/playground/)** — the live demo with every knob exposed.
 
 ## Local development
 
