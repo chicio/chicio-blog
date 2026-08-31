@@ -1,6 +1,6 @@
 {
   "name": "matrix-rain-webgpu",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "WebGPU/TypeGPU Matrix-rain background effect for React.",
   "keywords": [
     "background-effect",
