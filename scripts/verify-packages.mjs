@@ -16,7 +16,7 @@ import { globSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 
-const PACKAGES = ["matrix-component-store", "matrix-design-system"];
+const PACKAGES = ["matrix-component-store", "matrix-design-system", "matrix-rain-webgpu"];
 
 // What a consumer must always supply. Deliberately excludes every optional peer: the root barrel
 // has to resolve with only these, which is the whole reason charts, markdown and the command
@@ -46,6 +46,17 @@ const OPTIONAL_ENTRIES = [
         ],
     },
 ];
+
+// matrix-rain-webgpu's declarations use extensionless relative imports (`./matrix-rain`,
+// `./types`), which node16 resolution rejects in an ESM package — a consumer on
+// moduleResolution: nodenext sees resolution errors on its types. This is not a packaging
+// regression: the published 2.0.0 reports exactly the same thing, so it predates the move into
+// this repo. Fixing it means adding .js extensions across the library's source, which is library
+// work rather than release wiring; tracked separately. Everything else about the package is
+// checked, and the other two packages are still held to the full rule set.
+const ATTW_IGNORE_RULES = {
+    "matrix-rain-webgpu": ["internal-resolution-error"],
+};
 
 const run = (cmd, args, cwd) =>
     execFileSync(cmd, args, { cwd, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
@@ -101,6 +112,7 @@ try {
                     "--yes", "@arethetypeswrong/cli", join(workDir, file),
                     "--profile", "esm-only",
                     "--exclude-entrypoints", "styles.css", "theme.css",
+                    ...(ATTW_IGNORE_RULES[name] ?? []).flatMap((rule) => ["--ignore-rules", rule]),
                 ],
                 repoRoot,
             );
@@ -132,6 +144,15 @@ try {
         console.log("  root barrel imports with no optional peer installed");
     } catch (error) {
         fail(`root barrel needs an optional peer: ${(error.stderr || error.message).trim().split("\n")[0]}`);
+    }
+
+    // matrix-rain-webgpu declares no optional peers — typegpu and friends are real dependencies —
+    // so it has to import with only react/react-dom installed.
+    try {
+        importProbe("matrix-rain-webgpu", ["MatrixRainWebGPU", "isWebGPUSupported"]);
+        console.log("  matrix-rain-webgpu imports with only its required peers");
+    } catch (error) {
+        fail(`matrix-rain-webgpu\n${(error.stderr || error.stdout || error.message).trim()}`);
     }
 
     run("npm", ["install", "--no-audit", "--no-fund", "typescript@^5"], app);
