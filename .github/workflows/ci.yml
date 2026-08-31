@@ -33,7 +33,10 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Lint
-        run: npx turbo run lint -- --max-warnings 0
+        # Strictness lives in each workspace's own lint script, so `npm run lint` locally
+        # enforces exactly what CI does — and turbo does not append eslint flags to a
+        # workspace that lints with something else.
+        run: npx turbo run lint
 
   knip:
     name: Knip

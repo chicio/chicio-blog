@@ -40,7 +40,7 @@
     "build": "vite build && tsc -p tsconfig.build.json",
     "prepublishOnly": "npm run build",
     "release": "release-it",
-    "lint": "oxlint && oxfmt --check",
+    "lint": "oxlint --max-warnings 0 && oxfmt --check",
     "typecheck": "tsc -b"
   },
   "dependencies": {
