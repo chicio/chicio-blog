@@ -11,7 +11,7 @@
     "prebuild": "tsx src/lib/build/prebuild.ts",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint .",
+    "lint": "eslint . --max-warnings 0",
     "knip": "knip",
     "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.sw.json",
     "validate-architecture": "depcruise src --config .dependency-cruiser.js",

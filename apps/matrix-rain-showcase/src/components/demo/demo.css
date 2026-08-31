@@ -1,0 +1,369 @@
+:root {
+  color-scheme: dark;
+
+  --bg: #0a0a0a;
+  --rail-bg: #16171d;
+  --rail-border: #2e303a;
+  --text: #cfd1d6;
+  --text-dim: #8a8d96;
+  --text-bright: #f3f4f6;
+  --accent: #00ff41;
+  --err: #ff5a5a;
+
+  --rail-width: 320px;
+  --rail-pad: 12px;
+
+  font:
+    14px/1.4 ui-monospace,
+    'JetBrains Mono',
+    Consolas,
+    monospace;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body,
+html,
+#root {
+  margin: 0;
+  height: 100%;
+}
+
+#shell {
+  display: grid;
+  grid-template-columns: 1fr var(--rail-width);
+  height: 100vh;
+  height: 100dvh;
+}
+
+#stage {
+  position: relative;
+  /* Faint grid behind the canvas frame so the vacated area is visible when the
+     frame is dragged smaller — makes the resize path obvious during testing. */
+  background:
+    repeating-linear-gradient(0deg, transparent 0 23px, var(--rail-border) 23px 24px),
+    repeating-linear-gradient(90deg, transparent 0 23px, var(--rail-border) 23px 24px), #050505;
+  overflow: hidden;
+  padding: 0;
+}
+
+/* Canvas wrapper. "Fit to window" (default) leaves width/height at 100% so it
+   fills the stage; the Canvas-size panel controls pin explicit px via inline
+   styles to exercise the split-purpose resize logic. autoResize matches the
+   drawing buffer to this element's CSS size. Capped to the stage so a custom
+   size never overflows — the faint grid behind shows the vacated area. */
+#canvas-frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-width: 240px;
+  min-height: 160px;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  background: #000;
+}
+
+#stage canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Canvas-size preset buttons — wrap into a tidy 2-up grid. */
+.rail-presets {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.rail-presets .rail-button {
+  width: 100%;
+  margin: 0;
+}
+
+#rail {
+  background: var(--rail-bg);
+  border-left: 1px solid var(--rail-border);
+  overflow-y: auto;
+  padding: var(--rail-pad);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.rail-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.rail-heading {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-bright);
+  border-bottom: 1px solid var(--rail-border);
+  padding-bottom: 4px;
+}
+
+/* Debug panel groups */
+.rail-group {
+  border: 1px solid var(--rail-border);
+  border-radius: 4px;
+  margin: 0;
+  padding: 6px 10px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.015);
+}
+
+.rail-group[disabled] {
+  opacity: 0.55;
+}
+
+.rail-group legend {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 0 6px;
+  font-size: 11px;
+}
+
+.rail-group-title {
+  color: var(--text-bright);
+  font-weight: 600;
+}
+
+.rail-group-tag {
+  color: var(--text-dim);
+  font-size: 10px;
+  font-style: italic;
+}
+
+.rail-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--text);
+}
+
+/* Slider rows stack the label on its own full-width line, with the track and
+   value beneath. Avoids a fixed label column that long names like
+   "scanlineStrength" overflow, and reads cleanly at any width. */
+.rail-row:has(input[type='range']) {
+  grid-template-columns: 1fr 44px;
+  align-items: center;
+  column-gap: 8px;
+}
+
+.rail-row:has(input[type='range']) > span:first-child {
+  grid-column: 1 / -1;
+  overflow-wrap: anywhere;
+}
+
+.rail-row:has(input[type='checkbox']) {
+  grid-template-columns: 16px 1fr;
+  align-items: center;
+}
+
+.rail-row input[type='range'] {
+  width: 100%;
+  min-width: 0;
+  accent-color: var(--accent);
+}
+
+/* Coarse-pointer (touch) devices get a taller hit area for the slider thumb. */
+@media (pointer: coarse) {
+  .rail-row input[type='range'] {
+    height: 28px;
+  }
+}
+
+.rail-value {
+  text-align: right;
+  color: var(--text-dim);
+  font-variant-numeric: tabular-nums;
+}
+
+.rail-button {
+  background: transparent;
+  border: 1px solid var(--rail-border);
+  color: var(--text);
+  padding: 4px 8px;
+  font: inherit;
+  font-size: 12px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.rail-button:disabled {
+  cursor: not-allowed;
+}
+
+/* Render mode selector */
+.rail-select {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+}
+
+.rail-label {
+  color: var(--text-bright);
+  font-weight: 600;
+}
+
+.rail-select select {
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--rail-border);
+  padding: 4px 6px;
+  font: inherit;
+  font-size: 12px;
+  border-radius: 3px;
+}
+
+/* Observability */
+.rail-stats {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: 2px 8px;
+  margin: 0;
+  font-size: 12px;
+}
+
+.rail-stats dt {
+  color: var(--text-dim);
+}
+
+.rail-stats dd {
+  margin: 0;
+  color: var(--text-bright);
+  font-variant-numeric: tabular-nums;
+}
+
+.rail-stat-aux {
+  color: var(--text-dim);
+  font-size: 11px;
+}
+
+.rail-console {
+  background: #000;
+  border: 1px solid var(--rail-border);
+  border-radius: 3px;
+  padding: 6px;
+  max-height: 180px;
+  overflow-y: auto;
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.rail-console-empty {
+  margin: 0;
+  color: var(--text-dim);
+  font-style: italic;
+}
+
+.rail-console-line {
+  margin: 0 0 4px;
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: 6px;
+  word-break: break-word;
+}
+
+.rail-console-kind {
+  text-transform: uppercase;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--err);
+}
+
+.rail-console-rejection .rail-console-kind {
+  color: #ffaa3a;
+}
+
+.rail-console-msg {
+  color: var(--text-bright);
+}
+
+/* ---- Mobile drawer ----------------------------------------------------- */
+/* The floating trigger and backdrop exist only to drive the drawer on narrow
+   screens; both are hidden on desktop, where #rail is a static grid column. */
+#panel-toggle {
+  display: none;
+}
+
+#panel-backdrop {
+  display: none;
+}
+
+@media (max-width: 720px) {
+  /* Canvas goes full-bleed; the rail leaves the grid and slides in over it. */
+  #shell {
+    grid-template-columns: 1fr;
+  }
+
+  #rail {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: min(88vw, 360px);
+    border-left: 1px solid var(--rail-border);
+    transform: translateX(100%);
+    transition: transform 0.22s ease;
+    z-index: 20;
+    box-shadow: -8px 0 24px rgba(0, 0, 0, 0.5);
+  }
+
+  #rail[data-open] {
+    transform: translateX(0);
+  }
+
+  #panel-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.22s ease;
+    z-index: 15;
+  }
+
+  #panel-backdrop[data-open] {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  #panel-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: 1px solid var(--rail-border);
+    background: var(--rail-bg);
+    color: var(--accent);
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+    z-index: 25;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+  }
+}

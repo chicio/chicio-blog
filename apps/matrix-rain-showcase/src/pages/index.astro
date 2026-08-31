@@ -1,0 +1,123 @@
+---
+import { HeroRain } from '../components/HeroRain';
+import logo from '../assets/logo.png';
+
+const base = import.meta.env.BASE_URL;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href={`${base}favicon.ico`} type="image/x-icon" />
+    <title>matrix-rain-webgpu</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        background: #0a0a0a;
+        color: #e6ffe6;
+        font-family: ui-monospace, 'JetBrains Mono', monospace;
+      }
+      #bg {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+      }
+      #hero {
+        position: relative;
+        z-index: 1;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        gap: 1.2rem;
+        padding: 2rem;
+        pointer-events: none;
+      }
+      .logo {
+        width: 96px;
+        height: 96px;
+        box-sizing: border-box;
+        border: 2px solid #00ff41;
+        border-radius: 8px;
+        box-shadow: 0 0 18px rgba(0, 255, 65, 0.45);
+      }
+      h1 {
+        font-size: clamp(2rem, 6vw, 4rem);
+        margin: 0;
+        text-shadow: 0 0 12px rgba(0, 255, 65, 0.5);
+      }
+      .credit {
+        font-size: 0.85rem;
+        opacity: 0.7;
+        margin: 0;
+        pointer-events: auto;
+      }
+      .credit a {
+        color: #9bffb0;
+      }
+      p {
+        opacity: 0.85;
+        max-width: 46ch;
+        line-height: 1.5;
+      }
+      .cta {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        justify-content: center;
+        pointer-events: auto;
+      }
+      a.btn {
+        border: 1px solid #00ff41;
+        color: #00ff41;
+        padding: 0.6rem 1.1rem;
+        border-radius: 6px;
+        text-decoration: none;
+        background: rgba(0, 0, 0, 0.4);
+      }
+      a.btn:hover {
+        background: rgba(0, 255, 65, 0.15);
+      }
+      @media (max-width: 480px) {
+        .cta {
+          flex-direction: column;
+          align-items: stretch;
+          width: 100%;
+          max-width: 18rem;
+        }
+        a.btn {
+          text-align: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="bg"><HeroRain client:only="react" /></div>
+    <main id="hero">
+      <img class="logo" src={logo.src} alt="" width="96" height="96" />
+      <h1>matrix-rain-webgpu</h1>
+      <p>A WebGPU Matrix-rain background effect for React — built with TypeGPU.</p>
+      <div class="cta">
+        <a class="btn" href={`${base}overview/introduction/`}>Docs</a>
+        <a class="btn" href={`${base}playground`}>Playground ▸</a>
+        <a
+          class="btn"
+          href="https://github.com/chicio/matrix-rain-webgpu"
+          target="_blank"
+          rel="noopener"
+        >
+          GitHub ▸
+        </a>
+      </div>
+      <p class="credit">
+        by <a href="https://www.fabrizioduroni.it" target="_blank" rel="noopener">Fabrizio Duroni</a>
+      </p>
+    </main>
+  </body>
+</html>
