@@ -206,7 +206,7 @@ export const Menu: FC<MenuProps> = ({ navHrefs, onPaletteTrigger, tracking, link
                         items: [
                             {
                                 label: "Matrix Rain",
-                                to: "https://chicio.github.io/matrix-rain-webgpu/",
+                                to: "https://chicio.github.io/chicio-blog/matrix-rain/",
                                 external: true,
                                 onClick: onClickMatrixRain,
                             },

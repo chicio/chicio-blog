@@ -71,7 +71,7 @@ const exploreItems = [
     },
     {
         label: "Computer Graphics",
-        items: [{ label: "Matrix Rain", to: "https://chicio.github.io/matrix-rain-webgpu/", external: true }],
+        items: [{ label: "Matrix Rain", to: "https://chicio.github.io/chicio-blog/matrix-rain/", external: true }],
     },
 ];
 

@@ -17,7 +17,7 @@ type Story = StoryObj;
 const DefaultStory = () => (
     <div className="flex">
         <CallToActionExternalWithTracking
-            href="https://github.com/chicio/matrix-rain-webgpu"
+            href="https://github.com/chicio/chicio-blog"
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => {}}
