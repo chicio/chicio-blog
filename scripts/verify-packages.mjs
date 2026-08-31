@@ -48,12 +48,15 @@ const OPTIONAL_ENTRIES = [
 ];
 
 // matrix-rain-webgpu's declarations use extensionless relative imports (`./matrix-rain`,
-// `./types`), which node16 resolution rejects in an ESM package — a consumer on
-// moduleResolution: nodenext sees resolution errors on its types. This is not a packaging
-// regression: the published 2.0.0 reports exactly the same thing, so it predates the move into
-// this repo. Fixing it means adding .js extensions across the library's source, which is library
-// work rather than release wiring; tracked separately. Everything else about the package is
-// checked, and the other two packages are still held to the full rule set.
+// `./types`). TypeScript rejects those in an ESM package under `moduleResolution: nodenext` — the
+// setting current projects are told to use — so a consumer on a modern toolchain gets resolution
+// errors on this package's types. (attw labels that resolution mode "node16" after the Node release
+// that introduced the algorithm; it is not about running Node 16, and nodenext behaves the same.)
+//
+// Ignored here only because it is not a packaging regression: the published 2.0.0 reports exactly
+// the same, so it predates the move into this repo, and a release-wiring change is the wrong place
+// to alter what the library emits. The fix is to add .js extensions across the library's source.
+// The other two packages are still held to the full rule set.
 const ATTW_IGNORE_RULES = {
     "matrix-rain-webgpu": ["internal-resolution-error"],
 };
