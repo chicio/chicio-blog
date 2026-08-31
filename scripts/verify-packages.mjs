@@ -47,16 +47,30 @@ const OPTIONAL_ENTRIES = [
     },
 ];
 
-// matrix-rain-webgpu's declarations use extensionless relative imports (`./matrix-rain`,
-// `./types`). TypeScript rejects those in an ESM package under `moduleResolution: nodenext` — the
-// setting current projects are told to use — so a consumer on a modern toolchain gets resolution
-// errors on this package's types. (attw labels that resolution mode "node16" after the Node release
-// that introduced the algorithm; it is not about running Node 16, and nodenext behaves the same.)
+// matrix-rain-webgpu's declarations carry extensionless relative imports (`./matrix-rain`,
+// `./types`), which TypeScript rejects in an ESM package under `moduleResolution: nodenext`. A
+// consumer on a current toolchain therefore gets resolution errors on this package's types. (attw
+// calls that mode "node16", after the Node release that introduced the algorithm — it is not about
+// running Node 16.)
 //
-// Ignored here only because it is not a packaging regression: the published 2.0.0 reports exactly
-// the same, so it predates the move into this repo, and a release-wiring change is the wrong place
-// to alter what the library emits. The fix is to add .js extensions across the library's source.
-// The other two packages are still held to the full rule set.
+// Ignored deliberately, not pending. This is not a packaging regression: the published 2.0.0
+// reports the same, so it predates the move into this repo. Both available fixes were tried and
+// rejected:
+//
+//   - `.js` extensions in the source, or `rewriteRelativeImportExtensions` with `.ts` ones, put
+//     extensions in the code where the files do not have them (and the latter silently did nothing
+//     here, emitting `.ts` specifiers, because moduleResolution is `bundler`).
+//   - A post-emit rewrite of dist/**/*.d.ts works — verified, attw goes green — but adds a custom
+//     build step to a package deliberately kept free of them.
+//
+// The other two packages need none of this because tsdown, being a bundler, writes specifiers for
+// its output format and emits `.mjs`; `tsc --emitDeclarationOnly` copies through what the source
+// wrote. Building this package with tsdown too would remove the problem, but its `'use gpu'`
+// transform would move from unplugin-typegpu's actively maintained Vite variant to the Rolldown one,
+// which the TypeGPU docs list as limited-stability — a bad trade for a WebGPU library.
+//
+// Revisit only if this package's toolchain is ever converged. The other two packages remain held to
+// the full rule set.
 const ATTW_IGNORE_RULES = {
     "matrix-rain-webgpu": ["internal-resolution-error"],
 };
