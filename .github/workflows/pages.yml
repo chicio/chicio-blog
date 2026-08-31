@@ -6,6 +6,8 @@ on:
     paths:
       - 'packages/matrix-design-system/**'
       - 'apps/matrix-design-system-showcase/**'
+      - 'packages/matrix-rain-webgpu/**'
+      - 'apps/matrix-rain-showcase/**'
       - '.github/pages/**'
       - '.github/workflows/pages.yml'
   workflow_dispatch:
@@ -32,12 +34,13 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Build the showcase
-        run: npx turbo run build --filter=matrix-design-system-showcase
+        run: npx turbo run build --filter=matrix-design-system-showcase --filter=matrix-rain-showcase
       - name: Assemble the site
         run: |
           mkdir -p _site
           cp .github/pages/index.html .github/pages/logo.png _site/
           cp -r apps/matrix-design-system-showcase/dist _site/design-system
+          cp -r apps/matrix-rain-showcase/dist _site/matrix-rain
           echo "assembled:" && find _site -maxdepth 2 -name index.html
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
