@@ -55,7 +55,7 @@
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.3",
     "@webgpu/types": "^0.1.71",
-    "eslint-plugin-typegpu": "^0.11.1",
+    "eslint-plugin-typegpu": "^0.12.0",
     "oxfmt": "^0.58.0",
     "oxlint": "^1.72.0",
     "react": "^19.2.7",
