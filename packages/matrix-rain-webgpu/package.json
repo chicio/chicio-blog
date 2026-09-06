@@ -44,23 +44,23 @@
     "typecheck": "tsc -b"
   },
   "dependencies": {
-    "@typegpu/noise": "0.11.0",
-    "@typegpu/react": "0.11.2",
-    "typegpu": "0.11.9"
+    "@typegpu/noise": "0.12.0",
+    "@typegpu/react": "0.12.0",
+    "typegpu": "0.12.4"
   },
   "devDependencies": {
     "@types/node": "^26.1.0",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.7",
     "@vitejs/plugin-react": "^6.1.1",
-    "@webgpu/types": "^0.1.71",
+    "@webgpu/types": "^0.1.72",
     "eslint-plugin-typegpu": "^0.11.1",
     "oxfmt": "^0.58.0",
     "oxlint": "^1.72.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "typescript": "npm:tsover@6.0.2",
-    "unplugin-typegpu": "^0.11.6",
+    "unplugin-typegpu": "^0.12.3",
     "vite": "^8.1.3"
   },
   "peerDependencies": {
