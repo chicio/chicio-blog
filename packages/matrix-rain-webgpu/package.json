@@ -59,7 +59,7 @@
     "oxlint": "^1.81.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
-    "typescript": "npm:tsover@6.0.2",
+    "typescript": "npm:tsover@^6.0.2",
     "unplugin-typegpu": "^0.12.3",
     "vite": "^8.1.3"
   },
