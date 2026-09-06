@@ -131,7 +131,7 @@
     "@types/react": "19.2.18",
     "@types/react-dom": "19.2.5",
     "@vitejs/plugin-react": "^6.1.1",
-    "@vitest/coverage-v8": "^4.1.9",
+    "@vitest/coverage-v8": "^5.0.0",
     "babel-plugin-react-compiler": "^1.0.0",
     "cmdk": "^1.1.1",
     "dependency-cruiser": "^18.1.0",
@@ -156,6 +156,6 @@
     "typescript": "^5",
     "typescript-eslint": "^8",
     "unified": "^11.0.5",
-    "vitest": "^4.1.10"
+    "vitest": "^5.0.0"
   }
 }
