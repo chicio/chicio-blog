@@ -1,6 +1,7 @@
 // @ts-check
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'astro/config';
+import { unified } from '@astrojs/markdown-remark';
 import starlight from '@astrojs/starlight';
 import react from '@astrojs/react';
 import typegpu from 'unplugin-typegpu/vite';
@@ -16,10 +17,14 @@ export default defineConfig({
 	site: 'https://chicio.github.io',
 	base: '/chicio-blog/matrix-rain/',
 	markdown: {
-		remarkPlugins: [remarkMath],
-		// External (http) links open in a new tab — covers the GitHub source links
-		// in the docs. Internal/relative links are untouched.
-		rehypePlugins: [rehypeKatex, [rehypeExternalLinks, { target: '_blank', rel: ['noopener', 'noreferrer'] }]],
+		// Sätteri is Astro's default processor but parses math without rendering it and has no
+		// external-link handling, so the docs' KaTeX and new-tab links need the unified processor.
+		processor: unified({
+			remarkPlugins: [remarkMath],
+			// External (http) links open in a new tab — covers the GitHub source links
+			// in the docs. Internal/relative links are untouched.
+			rehypePlugins: [rehypeKatex, [rehypeExternalLinks, { target: '_blank', rel: ['noopener', 'noreferrer'] }]],
+		}),
 	},
 	integrations: [
 		// Renders ```mermaid code blocks client-side (no build-time headless browser).
