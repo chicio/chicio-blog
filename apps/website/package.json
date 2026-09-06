@@ -93,7 +93,7 @@
     "@types/mdast": "^4.0.4",
     "@types/node": "^26.4.1",
     "@types/react": "19.2.18",
-    "@types/react-dom": "19.2.7",
+    "@types/react-dom": "^19.2.7",
     "@vitejs/plugin-react": "^6.1.1",
     "@vitest/coverage-v8": "^5.0.0",
     "agent-browser": "^0.36.0",
