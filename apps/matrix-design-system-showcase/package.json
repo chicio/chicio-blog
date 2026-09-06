@@ -14,7 +14,7 @@
     "react-dom": "^19.2.6"
   },
   "devDependencies": {
-    "@storybook/react-vite": "^10.0.0",
+    "@storybook/react-vite": "^10.6.0",
     "@tailwindcss/vite": "^4.3.3",
     "@types/react": "19.2.18",
     "@types/react-dom": "19.2.5",
@@ -27,7 +27,7 @@
     "remark-gfm": "^4.0.1",
     "remark-math": "^6.0.0",
     "remark-parse": "^11.0.0",
-    "storybook": "^10.0.0",
+    "storybook": "^10.6.0",
     "tailwindcss": "^4.3.3",
     "typescript": "^5.9.3",
     "unified": "^11.0.5",
