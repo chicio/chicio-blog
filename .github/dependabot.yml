@@ -104,9 +104,23 @@ updates:
           - "@typegpu/*"
           - "unplugin-typegpu"
           - "@webgpu/types"
+      serwist:
+        # @serwist/next peers on serwist itself and the three ship in lockstep. They are already
+        # drifting — @serwist/build sits at both 9.5.11 and 9.5.12 in the lockfile today.
+        patterns:
+          - "serwist"
+          - "@serwist/*"
+      release:
+        # release-it and its changelog plugin move as a pair: plugin 11 accepts release-it
+        # ^18 || ^19 || ^20, plugin 12 adds ^21. A bump landing one without the other leaves a peer
+        # range nothing satisfies.
+        patterns:
+          - "release-it"
+          - "@release-it/conventional-changelog"
     ignore:
       # Workspace packages. npm resolves these to the local copy whatever the range says, so a bump
       # PR changes a number that nothing reads.
       - dependency-name: "matrix-design-system"
       - dependency-name: "matrix-component-store"
       - dependency-name: "eslint-plugin-chicio"
+      - dependency-name: "matrix-rain-webgpu"
