@@ -6,7 +6,6 @@ import {
 } from "matrix-design-system";
 import { NextLink } from "@/components/features/design-system-next/next-link";
 
-export type { PillProps };
 
 type BoundPillProps = Omit<PillProps, "linkComponent">;
 

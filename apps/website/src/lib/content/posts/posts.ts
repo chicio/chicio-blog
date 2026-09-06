@@ -8,7 +8,7 @@ import { createSection } from "../section";
 import { paginate } from "@/lib/pagination/paginate";
 import { authorSlugToId } from "../authors/author-slug";
 
-export { authorIdToSlug, authorSlugToId, generateAuthorSlug } from "../authors/author-slug";
+export { authorIdToSlug } from "../authors/author-slug";
 
 /**
  * POSTS
