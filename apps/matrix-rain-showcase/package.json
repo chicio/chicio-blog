@@ -12,7 +12,7 @@
     "check": "astro check"
   },
   "dependencies": {
-    "@astrojs/react": "^6.0.1",
+    "@astrojs/react": "^6.0.5",
     "@astrojs/starlight": "^0.41.3",
     "@mermaid-js/layout-elk": "^0.2.2",
     "@typegpu/noise": "^0.12.0",
