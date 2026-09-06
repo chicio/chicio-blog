@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@/test-utils";
-import { fireEvent, waitFor } from "@testing-library/react";
+import { act, fireEvent, waitFor } from "@testing-library/react";
 import { MatrixRainControlPanel } from "./matrix-rain-control-panel";
 import { RAIN_STEP_RATE_MAX } from "./use-matrix-rain-control-panel-store";
 import { closeEasterEgg, getEasterEggOverlaySlug } from "@/lib/easter-eggs/easter-egg-overlay-state";
@@ -61,7 +61,13 @@ vi.mock("matrix-design-system", async (importOriginal) => ({
 }));
 vi.mock("@/lib/tracking/tracking", () => ({ trackWith: vi.fn() }));
 
-const openPanel = () => window.dispatchEvent(new Event("matrix-rain-panel-open"));
+// act() so the open state and the effect that registers the Escape listener both flush before
+// the test interacts. Without it findByText can resolve on a committed render whose passive
+// effects have not run, and a keyDown lands with no listener attached.
+const openPanel = () =>
+    act(() => {
+        window.dispatchEvent(new Event("matrix-rain-panel-open"));
+    });
 
 describe("MatrixRainControlPanel", () => {
     beforeEach(() => {
