@@ -18,7 +18,7 @@
     "@typegpu/noise": "^0.11.0",
     "@typegpu/react": "^0.11.2",
     "@types/react": "^19.2.17",
-    "@types/react-dom": "^19.2.3",
+    "@types/react-dom": "^19.2.7",
     "astro": "^7.1.2",
     "astro-mermaid": "^2.1.0",
     "cookie": "2.0.1",
