@@ -110,6 +110,14 @@ updates:
         patterns:
           - "serwist"
           - "@serwist/*"
+      oxc:
+        # Not a peer contract — oxlint and oxfmt are on independent version lines. Grouped because
+        # they are one toolchain in one workspace, so a week that moves both is one review, not two.
+        patterns:
+          - "oxlint"
+          - "oxfmt"
+          - "oxc-*"
+          - "@oxc-project/*"
       release:
         # release-it and its changelog plugin move as a pair: plugin 11 accepts release-it
         # ^18 || ^19 || ^20, plugin 12 adds ^21. A bump landing one without the other leaves a peer
