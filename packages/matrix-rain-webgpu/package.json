@@ -56,7 +56,7 @@
     "@webgpu/types": "^0.1.72",
     "eslint-plugin-typegpu": "^0.11.1",
     "oxfmt": "^0.58.0",
-    "oxlint": "^1.72.0",
+    "oxlint": "^1.81.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "typescript": "npm:tsover@6.0.2",
