@@ -10,6 +10,14 @@ export default defineConfig({
     use: {
         baseURL: "http://localhost:3000",
         trace: "on-first-retry",
+        // The root layout registers a Serwist service worker on every page, and nothing in this
+        // suite exercises it. Left enabled it installs mid-test: traces from the two CI failures
+        // show `/sw.js` loading and then, 95ms and 207ms later, every subsequent request ceasing to
+        // complete — zero of them, permanently — so the router never received the RSC payload for
+        // the clicked link and the URL never changed. Both failures were a click shortly after
+        // load, which is exactly the activation window. Blocking it removes the race; PWA
+        // behaviour is no less covered than before, since no test asserted on it.
+        serviceWorkers: "block",
     },
     projects: [
         {
