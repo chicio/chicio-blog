@@ -105,7 +105,7 @@
     "eslint-plugin-chicio": "^1.0.0",
     "jsdom": "^30.0.0",
     "knip": "^6.34.0",
-    "typescript": "^5",
+    "typescript": "^6.0.3",
     "vitest": "^5.0.0"
   }
 }
