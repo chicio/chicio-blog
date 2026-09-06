@@ -13,6 +13,17 @@
     // ones are read during `next build`, not only at request time.
     "tasks": {
         "build": {
+            // prebuild writes outside .next: `serwist build` emits public/sw*, and
+            // copy-content-media mirrors post images into public/media/content. Neither was
+            // declared, so a cache hit restored .next, skipped prebuild, and left the site with no
+            // service worker and no content images. A workspace task replaces the root's outputs
+            // rather than merging them, so the .next entries are restated here.
+            "outputs": [
+                ".next/**",
+                "!.next/cache/**",
+                "public/sw*",
+                "public/media/content/**"
+            ],
             "env": [
                 "CONTACT_EMAIL",
                 "GOOGLE_ANALYTICS_API_SECRET",
