@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import { tracking } from "@/types/configuration/tracking";
 import { trackWith } from "@/lib/tracking/tracking";
 import { contactQueue } from "@/lib/background-sync/contact-queue";
 import { ComponentStore } from "matrix-component-store";
+import { useIsOffline } from "./use-online-status";
 
 type ContactFormErrors = Record<string, string>;
 
@@ -39,23 +40,8 @@ export const useContactFormStore = (trackingCategory: string): ComponentStore<Co
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
     const [isQueued, setIsQueued] = useState(false);
-    const [isOffline, setIsOffline] = useState(false);
+    const isOffline = useIsOffline();
     const [submitError, setSubmitError] = useState<{ submit?: string }>({});
-
-    useEffect(() => {
-        setIsOffline(!navigator.onLine);
-
-        const handleOnline = () => setIsOffline(false);
-        const handleOffline = () => setIsOffline(true);
-
-        window.addEventListener("online", handleOnline);
-        window.addEventListener("offline", handleOffline);
-
-        return () => {
-            window.removeEventListener("online", handleOnline);
-            window.removeEventListener("offline", handleOffline);
-        };
-    }, []);
 
     const validateForm = useCallback((): boolean => {
         const newErrors: ContactFormErrors = {};
