@@ -19,7 +19,11 @@ updates:
     # Five manifests share 34 packages, so an ungrouped bump of react or typescript arrives as four
     # or five PRs that are only correct if they all land. Raised together, CI validates them as the
     # unit they actually are.
-    open-pull-requests-limit: 10
+    #
+    # The limit is 20 rather than the default 5: eleven groups plus the ungrouped packages can
+    # legitimately need more than ten slots in one week, and a PR that cannot merge holds its slot
+    # until someone closes it. At ten, two stuck PRs were enough to starve typegpu for a month.
+    open-pull-requests-limit: 20
     groups:
       react:
         # The root pins @types/react and @types/react-dom in `overrides`, so a types bump that is not
