@@ -136,11 +136,15 @@ updates:
       # none) while every workspace's own `typescript` is major 7 (the faster type checker, no
       # compiler API needed there). `ignore` has no per-manifest or per-directory scope, only
       # ecosystem-wide, so this blocks BOTH majors moving together: root 6.x -> 7.x and workspaces
-      # 7.x -> 8.x. A second directory-scoped `updates:` entry was tried and reverted (#582): every
-      # job rewrites the single shared package-lock.json, last writer wins, `npm ci` dies before any
-      # gate (#566, #574). Aliasing root to `npm:@typescript/typescript6` was also tried: npm
+      # 7.x -> 8.x. A second directory-scoped `updates:` entry is not an option here for the same
+      # shared-lockfile reason recorded above (#566, #574); what was actually tried and reverted in
+      # #582 was adding those directory globs to THIS entry's `directories:` list, which spawns one
+      # job per directory instead. Aliasing root to `npm:@typescript/typescript6` was also tried: npm
       # collapses the alias onto real `typescript@6.x` because many root packages peer-depend on
-      # `typescript`, so the manifest would disagree with the installed tree. Minor/patch bumps on
-      # both majors still flow through normally. Revisit once typescript-eslint supports TS 7.
+      # `typescript`, so the manifest would disagree with the installed tree. Minor bumps are not
+      # blocked by this ignore rule, but a 6.1 minor would still fail at root: typescript-eslint@8.69
+      # peers `typescript` at `>=4.8.4 <6.1.0`, so Dependabot's attempt would fail CI on arrival, not
+      # merge silently. Patch bumps on both majors flow through normally. Revisit once
+      # typescript-eslint supports TS 7.
       - dependency-name: "typescript"
         update-types: ["version-update:semver-major"]
