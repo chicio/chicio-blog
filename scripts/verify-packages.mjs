@@ -172,7 +172,7 @@ try {
         fail(`matrix-rain-webgpu\n${(error.stderr || error.stdout || error.message).trim()}`);
     }
 
-    run("npm", ["install", "--no-audit", "--no-fund", "typescript@^5"], app);
+    run("npm", ["install", "--no-audit", "--no-fund", "typescript@^7"], app);
     writeFileSync(
         join(app, "tsconfig.json"),
         JSON.stringify({ compilerOptions: { module: "nodenext", moduleResolution: "nodenext", strict: true, noEmit: true, skipLibCheck: true } }),
