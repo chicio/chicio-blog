@@ -49,6 +49,23 @@ never appears in the source, and the `GOOGLE_ANALYTICS_*` keys are destructured 
 `env` object. Treat `apps/website/.env.production` and the Vercel project settings as the
 authoritative list.
 
+**TypeScript sits on two majors on purpose: root is 6, every workspace is 7.** `typescript@7.0.2`
+ships no compiler API (only `bin/tsc` and a Go binary; 7.1 will ship a new, different API) and no
+`tsserver`. `typescript-eslint` needs that API and throws on import, and it resolves `typescript`
+from wherever it itself is installed. Both eslint configs load the one `typescript-eslint` copy at
+root `node_modules` (`packages/matrix-design-system/eslint.config.mjs` directly, `apps/website`
+transitively through `eslint-config-next/typescript`), so root must keep a TS 6 `typescript` for
+`typescript-eslint` (declared in `packages/matrix-design-system/package.json`, the one place that
+imports it directly) and `dependency-cruiser` to resolve, and for VS Code's "Use Workspace Version"
+to give the editor a working `tsserver`. Every workspace's own `typescript` devDependency is `^7.0.2`
+and resolves to a nested copy, so `next build`/`tsc --noEmit` run the faster TS 7 type checker
+(measured 6x on this repo) while root tooling keeps working. Do not "align" the two, and do not
+remove or bump the root `typescript` past 6 — that is the same kind of deliberate mismatch as
+`matrix-rain-webgpu` and `matrix-rain-showcase` pinning `typescript: "npm:tsover@6.0.2"` for
+operator-overloading support (unrelated reason, same lesson: check why a `typescript` version looks
+wrong before "fixing" it). `.github/dependabot.yml` ignores major bumps of `typescript` for exactly
+this reason; revisit when TS 7.1 ships its compiler API and `typescript-eslint` follows.
+
 ## Claude Design Sync
 
 The [claude.ai/design](https://claude.ai/design) converter lives in
