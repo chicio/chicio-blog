@@ -109,7 +109,7 @@ npm run typecheck        # tsc --noEmit over the single apps/website/tsconfig.js
 
 There is a SINGLE `apps/website/tsconfig.json`, used by the editor, `next build`, and `npm run typecheck` alike. Its `types` include `vitest/globals` (so `describe`/`it`/`expect`/`vi` and the `@testing-library/jest-dom/vitest` matcher augmentation resolve in test files) and `next/image-types/global` (so `.png`/`.jpg` imports resolve in a clean CI checkout without a generated `next-env.d.ts`). The matcher augmentation is loaded at type level via `apps/website/vitest.setup.ts` (included in the program) and at runtime by the same file.
 
-`npm run typecheck` (`tsc --noEmit`) is the authoritative type gate for the full repo, covering src + tests + e2e + config files. It exists because `next build` only type-checks files reachable from the build graph — orphan test files are never checked by it. Because the editor and the typecheck gate use the same config, what's green in CI is green in VS Code (no separate test-only tsconfig, no editor/CLI drift).
+`npm run typecheck` (`tsc --noEmit`) is the authoritative type gate for the full repo, covering src + tests + e2e + config files. It exists because `next build` only type-checks files reachable from the build graph — orphan test files are never checked by it. Because the editor and the typecheck gate use the same config, what's green in CI is green in VS Code (no separate test-only tsconfig, no editor/CLI drift) — same *config*, but not the same *compiler*: the editor's `tsserver` resolves root TypeScript 6 (TS 7 ships none), while `apps/website/package.json` pins TS 7 for this gate. See the TypeScript paragraph in `CLAUDE.md` for why that split exists and is deliberate.
 
 ## CI Shape
 
