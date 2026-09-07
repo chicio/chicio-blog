@@ -53,9 +53,11 @@ authoritative list.
 does export an API surface (`./unstable/sync`, `./unstable/async`, `./unstable/fs`,
 `./unstable/ast*`), but not the classic `lib/typescript.js` entry `typescript-eslint` imports:
 `exports["."]` is `./lib/version.cjs`, and `lib/` holds only `tsc.js`, `getExePath.js`/`.d.ts` and
-`version.cjs`/`.d.cts` — no `lib/typescript.js`. It also ships no `tsserver` (7.1 will ship a new, different API).
-`typescript-eslint` throws on import and resolves `typescript` from wherever it itself is
-installed. No Go binary ships inside the `typescript` package itself — it arrives via 20
+`version.cjs`/`.d.cts` — no `lib/typescript.js`. It also ships no `tsserver`, and 7.1 is expected
+to ship a new, different API. `typescript-eslint` throws at import once the compiler's major is
+`>= 7` (that is how PR #620 failed, so the lint job already enforces this pin on its own), and it
+resolves `typescript` from wherever it itself is installed. No Go binary ships inside the
+`typescript` package itself — it arrives via 20
 platform-specific `optionalDependencies` (`@typescript/typescript-<platform>-<arch>`), recorded at
 root in `package-lock.json` with `os`/`cpu` guards. That is a CI fact, not trivia: `npm ci` on
 `ubuntu-latest` pulls down `@typescript/typescript-linux-x64`, while a Mac gets
