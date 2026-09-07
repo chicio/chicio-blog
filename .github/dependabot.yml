@@ -132,3 +132,15 @@ updates:
       - dependency-name: "matrix-component-store"
       - dependency-name: "eslint-plugin-chicio"
       - dependency-name: "matrix-rain-webgpu"
+      # Root `typescript` is pinned to major 6 (typescript-eslint needs its compiler API; TS 7 ships
+      # none) while every workspace's own `typescript` is major 7 (the faster type checker, no
+      # compiler API needed there). `ignore` has no per-manifest or per-directory scope, only
+      # ecosystem-wide, so this blocks BOTH majors moving together: root 6.x -> 7.x and workspaces
+      # 7.x -> 8.x. A second directory-scoped `updates:` entry was tried and reverted (#582): every
+      # job rewrites the single shared package-lock.json, last writer wins, `npm ci` dies before any
+      # gate (#566, #574). Aliasing root to `npm:@typescript/typescript6` was also tried: npm
+      # collapses the alias onto real `typescript@6.x` because many root packages peer-depend on
+      # `typescript`, so the manifest would disagree with the installed tree. Minor/patch bumps on
+      # both majors still flow through normally. Revisit once typescript-eslint supports TS 7.
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
