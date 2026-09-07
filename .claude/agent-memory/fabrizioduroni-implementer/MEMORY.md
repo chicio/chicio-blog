@@ -77,6 +77,9 @@
 ## Bug Fixes
 - [MCP GET SSE timeout fix](feature_mcp_get_sse_timeout_fix.md) — GET /api/mcp now 405s (stateless, no session for SSE notifications); fixed Vercel 300s hang loop (2026-08-15)
 
+## Architecture (continued 2)
+- [TypeScript 7 split](arch_typescript_7_split.md) — root TS6 / workspaces TS7; tsc-file-arg+tsconfig TS5112 false-green gotcha in verify-packages.mjs (2026-09-08)
+
 ## Feedback
 - [Review-fix workflow](feedback_review_fix_disk_and_reset_soft.md) — git reset --soft path-restaging to reshape commits; disk-full is often transient (retry, don't clean system caches); e2e hangs on a long-lived ad hoc port are stale-server artifacts, not regressions — verify with a fresh port + origin/main control
 - [PWA & State Patterns](feedback_pwa_patterns.md) — useSyncExternalStore for localStorage state, consent-gated UI, banner/error page alignment rules
