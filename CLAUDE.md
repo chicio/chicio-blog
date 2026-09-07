@@ -67,8 +67,8 @@ Root `node_modules` also hoists `knip`, `dependency-cruiser`, `react-docgen-type
 (Storybook's prop-table generator) and `rolldown-plugin-dts` (tsdown's `.d.ts` emit) alongside
 `typescript-eslint` — none of the five has its own nested `typescript`, so all resolve the one
 root copy. Consequence: `packages/matrix-design-system` and `packages/matrix-component-store`'s
-*published* `.d.ts` files are emitted by TS 6 (`rolldown-plugin-dts`, inside each package's tsdown
-build), while their *sources* are type-checked by TS 7 (`tsc --noEmit` in each workspace).
+_published_ `.d.ts` files are emitted by TS 6 (`rolldown-plugin-dts`, inside each package's tsdown
+build), while their _sources_ are type-checked by TS 7 (`tsc --noEmit` in each workspace).
 
 Both eslint configs load the one `typescript-eslint` copy at root `node_modules`
 (`packages/matrix-design-system/eslint.config.mjs` directly, `apps/website` transitively through
