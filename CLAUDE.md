@@ -52,8 +52,8 @@ authoritative list.
 **TypeScript sits on two majors on purpose: root is 6, every workspace is 7.** `typescript@7.0.2`
 does export an API surface (`./unstable/sync`, `./unstable/async`, `./unstable/fs`,
 `./unstable/ast*`), but not the classic `lib/typescript.js` entry `typescript-eslint` imports:
-`exports["."]` is `./lib/version.cjs`, and `lib/` holds only `tsc.js`, `getExePath.js` and
-`version.cjs`. It also ships no `tsserver` (7.1 will ship a new, different API).
+`exports["."]` is `./lib/version.cjs`, and `lib/` holds only `tsc.js`, `getExePath.js`/`.d.ts` and
+`version.cjs`/`.d.cts` — no `lib/typescript.js`. It also ships no `tsserver` (7.1 will ship a new, different API).
 `typescript-eslint` throws on import and resolves `typescript` from wherever it itself is
 installed. No Go binary ships inside the `typescript` package itself — it arrives via 20
 platform-specific `optionalDependencies` (`@typescript/typescript-<platform>-<arch>`), recorded at
@@ -73,8 +73,10 @@ Both eslint configs load the one `typescript-eslint` copy at root `node_modules`
 `eslint-config-next/typescript`), so root must keep a TS 6 `typescript` for all five root-hoisted
 consumers above to resolve (declared in `packages/matrix-design-system/package.json`, the one
 place that imports `typescript-eslint` directly), and for VS Code's "Use Workspace Version" to
-give the editor a working `tsserver`. Every workspace's own `typescript` devDependency is `^7.0.2`
-and resolves to a nested copy, so `next build`/`tsc --noEmit` run the faster TS 7 type checker
+give the editor a working `tsserver`. `apps/website`, `packages/matrix-design-system` and
+`packages/matrix-component-store` each pin their own `typescript` devDependency to `^7.0.2`
+(`packages/eslint-plugin-chicio` declares none; the `matrix-rain-*` packages keep the `tsover@6.0.2`
+pin noted below), resolving to a nested copy so `next build`/`tsc --noEmit` run the faster TS 7 type checker
 (measured 6x on this repo) while root tooling keeps working. Do not "align" the two, and do not
 remove or bump the root `typescript` past 6 — that is the same kind of deliberate mismatch as
 `matrix-rain-webgpu` and `matrix-rain-showcase` pinning `typescript: "npm:tsover@6.0.2"` for

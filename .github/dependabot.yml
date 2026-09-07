@@ -142,9 +142,14 @@ updates:
       # job per directory instead. Aliasing root to `npm:@typescript/typescript6` was also tried: npm
       # collapses the alias onto real `typescript@6.x` because many root packages peer-depend on
       # `typescript`, so the manifest would disagree with the installed tree. Minor bumps are not
-      # blocked by this ignore rule, but a 6.1 minor would still fail at root: typescript-eslint@8.69
-      # peers `typescript` at `>=4.8.4 <6.1.0`, so Dependabot's attempt would fail CI on arrival, not
-      # merge silently. Patch bumps on both majors flow through normally. Revisit once
-      # typescript-eslint supports TS 7.
+      # blocked by this ignore rule. What actually matters, root never reaching major 7, is already
+      # enforced elsewhere and hard: typescript-eslint throws at import once the compiler's major is
+      # >= 7, failing the lint job outright (how PR #620 failed) — this ignore is belt-and-braces on
+      # top of that, not the only guard. A root 6.1 minor is caught by nothing here: `legacy-peer-deps
+      # = true` (root `.npmrc`) skips peer-range enforcement at install, so typescript-eslint@8.69's
+      # `typescript` peer of `>=4.8.4 <6.1.0` is never checked, and typescript-eslint only warns while
+      # the major stays 6. It would most likely just work, but it is outside typescript-eslint's
+      # tested range and unverified here. Patch bumps on both majors flow through normally. Revisit
+      # once typescript-eslint supports TS 7.
       - dependency-name: "typescript"
         update-types: ["version-update:semver-major"]
