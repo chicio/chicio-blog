@@ -23,10 +23,16 @@ import { test as base, expect } from "@playwright/test";
  * Rewriting the request to its source keeps real image bytes in the page and leaves the
  * production build untouched; it only takes the optimizer out of the loop, where nothing in this
  * suite asserts on it and any request can poison the run.
+ *
+ * The route goes on the CONTEXT, not the page, and that is the whole point rather than a detail.
+ * A page route leaves service-worker fetches alone, and pwa.spec.ts opts service workers back in:
+ * with `page.route` that spec still drove 16 requests into the optimizer, and against pre-poisoned
+ * keys its `page.reload()` hung until the 30s test timeout. On the context the worker's fetches are
+ * intercepted too, and the whole suite now reaches the optimizer exactly zero times.
  */
 export const test = base.extend({
-    page: async ({ page }, use) => {
-        await page.route("**/_next/image**", async (route) => {
+    context: async ({ context }, use) => {
+        await context.route("**/_next/image**", async (route) => {
             const requestUrl = route.request().url();
             const source = new URL(requestUrl).searchParams.get("url");
 
@@ -38,7 +44,7 @@ export const test = base.extend({
             await route.continue({ url: new URL(source, requestUrl).toString() });
         });
 
-        await use(page);
+        await use(context);
     },
 });
 
