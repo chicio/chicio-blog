@@ -49,6 +49,45 @@ never appears in the source, and the `GOOGLE_ANALYTICS_*` keys are destructured 
 `env` object. Treat `apps/website/.env.production` and the Vercel project settings as the
 authoritative list.
 
+**TypeScript sits on two majors on purpose: root is 6, every workspace is 7.** `typescript@7.0.2`
+does export an API surface (`./unstable/sync`, `./unstable/async`, `./unstable/fs`,
+`./unstable/ast*`), but not the classic `lib/typescript.js` entry `typescript-eslint` imports:
+`exports["."]` is `./lib/version.cjs`, and `lib/` holds only `tsc.js`, `getExePath.js`/`.d.ts` and
+`version.cjs`/`.d.cts` — no `lib/typescript.js`. It also ships no `tsserver`, and 7.1 is expected
+to ship a new, different API. `typescript-eslint` throws at import once the compiler's major is
+`>= 7` (that is how PR #620 failed, so the lint job already enforces this pin on its own), and it
+resolves `typescript` from wherever it itself is installed. No Go binary ships inside the
+`typescript` package itself — it arrives via 20
+platform-specific `optionalDependencies` (`@typescript/typescript-<platform>-<arch>`), recorded at
+root in `package-lock.json` with `os`/`cpu` guards. That is a CI fact, not trivia: `npm ci` on
+`ubuntu-latest` pulls down `@typescript/typescript-linux-x64`, while a Mac gets
+`typescript-darwin-arm64`.
+
+Root `node_modules` also hoists `knip`, `dependency-cruiser`, `react-docgen-typescript`
+(Storybook's prop-table generator) and `rolldown-plugin-dts` (tsdown's `.d.ts` emit) alongside
+`typescript-eslint` — none of the five has its own nested `typescript`, so all resolve the one
+root copy. Consequence: `packages/matrix-design-system` and `packages/matrix-component-store`'s
+_published_ `.d.ts` files are emitted by TS 6 (`rolldown-plugin-dts`, inside each package's tsdown
+build), while their _sources_ are type-checked by TS 7 (`tsc --noEmit` in each workspace).
+
+Both eslint configs load the one `typescript-eslint` copy at root `node_modules`
+(`packages/matrix-design-system/eslint.config.mjs` directly, `apps/website` transitively through
+`eslint-config-next/typescript`), so root must keep a TS 6 `typescript`, declared in the root
+`package.json`, for all five root-hoisted consumers above to resolve, and for VS Code's "Use
+Workspace Version" to give the editor a working `tsserver`. (`typescript-eslint` itself is declared
+in `packages/matrix-design-system/package.json`, the only manifest that lists it.) `apps/website`,
+`apps/matrix-design-system-showcase`, `packages/matrix-design-system` and
+`packages/matrix-component-store` each pin their own `typescript` devDependency to `^7.0.2`
+(`packages/eslint-plugin-chicio` declares none; the `matrix-rain-*` packages keep the
+`tsover@6.0.2` pin noted below), resolving to a nested copy so `next build`/`tsc --noEmit` run the
+faster TS 7 type checker
+(measured 6x on this repo) while root tooling keeps working. Do not "align" the two, and do not
+remove or bump the root `typescript` past 6 — that is the same kind of deliberate mismatch as
+`matrix-rain-webgpu` and `matrix-rain-showcase` pinning `typescript: "npm:tsover@6.0.2"` for
+operator-overloading support (unrelated reason, same lesson: check why a `typescript` version looks
+wrong before "fixing" it). `.github/dependabot.yml` ignores major bumps of `typescript` for exactly
+this reason; revisit when TS 7.1 ships its compiler API and `typescript-eslint` follows.
+
 ## Claude Design Sync
 
 The [claude.ai/design](https://claude.ai/design) converter lives in

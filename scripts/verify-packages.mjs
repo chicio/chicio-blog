@@ -172,7 +172,7 @@ try {
         fail(`matrix-rain-webgpu\n${(error.stderr || error.stdout || error.message).trim()}`);
     }
 
-    run("npm", ["install", "--no-audit", "--no-fund", "typescript@^5"], app);
+    run("npm", ["install", "--no-audit", "--no-fund", "typescript@^7"], app);
     writeFileSync(
         join(app, "tsconfig.json"),
         JSON.stringify({ compilerOptions: { module: "nodenext", moduleResolution: "nodenext", strict: true, noEmit: true, skipLibCheck: true } }),
@@ -184,7 +184,12 @@ try {
             `export type { _Check };\n`,
     );
     try {
-        run("npx", ["tsc", "--noEmit", "probe.ts"], app);
+        // Project mode, deliberately no file argument: `tsc --noEmit probe.ts` next to a
+        // tsconfig.json bails out with TS5112 ("tsconfig.json is present but will not be loaded if
+        // files are specified on commandline") on TypeScript >= 6, so nothing is compiled and the
+        // resolution failure this probe exists to catch can never surface. Passing no file lets tsc
+        // load tsconfig.json itself, so the written `nodenext` moduleResolution is actually honoured.
+        run("npx", ["tsc", "--noEmit"], app);
         console.log(`  types resolve from a consumer: ${TYPE_ONLY_PROBE.entry}`);
     } catch (error) {
         // The union above intentionally passes the wrong arity to some of them; only a resolution
