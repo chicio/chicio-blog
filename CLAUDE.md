@@ -72,13 +72,15 @@ build), while their _sources_ are type-checked by TS 7 (`tsc --noEmit` in each w
 
 Both eslint configs load the one `typescript-eslint` copy at root `node_modules`
 (`packages/matrix-design-system/eslint.config.mjs` directly, `apps/website` transitively through
-`eslint-config-next/typescript`), so root must keep a TS 6 `typescript` for all five root-hoisted
-consumers above to resolve (declared in `packages/matrix-design-system/package.json`, the one
-place that imports `typescript-eslint` directly), and for VS Code's "Use Workspace Version" to
-give the editor a working `tsserver`. `apps/website`, `packages/matrix-design-system` and
+`eslint-config-next/typescript`), so root must keep a TS 6 `typescript`, declared in the root
+`package.json`, for all five root-hoisted consumers above to resolve, and for VS Code's "Use
+Workspace Version" to give the editor a working `tsserver`. (`typescript-eslint` itself is declared
+in `packages/matrix-design-system/package.json`, the only manifest that lists it.) `apps/website`,
+`apps/matrix-design-system-showcase`, `packages/matrix-design-system` and
 `packages/matrix-component-store` each pin their own `typescript` devDependency to `^7.0.2`
-(`packages/eslint-plugin-chicio` declares none; the `matrix-rain-*` packages keep the `tsover@6.0.2`
-pin noted below), resolving to a nested copy so `next build`/`tsc --noEmit` run the faster TS 7 type checker
+(`packages/eslint-plugin-chicio` declares none; the `matrix-rain-*` packages keep the
+`tsover@6.0.2` pin noted below), resolving to a nested copy so `next build`/`tsc --noEmit` run the
+faster TS 7 type checker
 (measured 6x on this repo) while root tooling keeps working. Do not "align" the two, and do not
 remove or bump the root `typescript` past 6 — that is the same kind of deliberate mismatch as
 `matrix-rain-webgpu` and `matrix-rain-showcase` pinning `typescript: "npm:tsover@6.0.2"` for
