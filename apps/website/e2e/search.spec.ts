@@ -1,4 +1,4 @@
-import { test, expect, type Page } from "@playwright/test";
+import { test, expect, type Page } from "./fixtures";
 
 const openPalette = async (page: Page) => {
     const trigger = page.getByRole("button", { name: "Open command palette" });

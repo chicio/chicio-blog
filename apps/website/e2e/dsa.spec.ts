@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./fixtures";
 
 test.describe("Data Structures and Algorithms section", () => {
     test.describe("roadmap page", () => {

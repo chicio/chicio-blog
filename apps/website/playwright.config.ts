@@ -10,13 +10,16 @@ export default defineConfig({
     use: {
         baseURL: "http://localhost:3000",
         trace: "on-first-retry",
-        // The root layout registers a Serwist service worker on every page, and nothing in this
-        // suite exercises it. Left enabled it installs mid-test: traces from the two CI failures
-        // show `/sw.js` loading and then, 95ms and 207ms later, every subsequent request ceasing to
-        // complete — zero of them, permanently — so the router never received the RSC payload for
-        // the clicked link and the URL never changed. Both failures were a click shortly after
-        // load, which is exactly the activation window. Blocking it removes the race; PWA
-        // behaviour is no less covered than before, since no test asserted on it.
+        // The root layout registers a Serwist service worker on every page, and only pwa.spec.ts
+        // exercises it — it opts back in with `test.use({ serviceWorkers: "allow" })`. Everywhere
+        // else it is noise that installs mid-test, so it stays blocked.
+        //
+        // It was also blamed, on the evidence of two traces, for the "every subsequent request
+        // stops completing, permanently, so the clicked link never navigates" failures. That was
+        // the wrong culprit: the same symptom came back with the worker blocked, and the cause is
+        // Next's image optimizer deadlocking on abandoned requests. `e2e/fixtures.ts` documents it
+        // and routes around it — a fix that needs a page, so it is a fixture rather than an option
+        // here, and every spec imports `test` from there rather than from `@playwright/test`.
         serviceWorkers: "block",
     },
     projects: [

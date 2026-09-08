@@ -40,6 +40,7 @@ packages/matrix-design-system/src/molecules/accordion/accordion/
     use-accordion-store.ts
 
 apps/website/e2e/
+    fixtures.ts               <- the shared `test`/`expect` every spec imports
     homepage.spec.ts
     chat.spec.ts
     contact.spec.ts
@@ -83,6 +84,8 @@ Do NOT test `features/` or `content/` components without Next.js context — the
 ### E2E (Playwright)
 
 Playwright runs against a **production build** (`next build && next start`). External APIs are ROUTE-MOCKED via `page.route()` — no real Groq, Upstash, or Resend calls, no secrets needed.
+
+**Every spec imports `test` and `expect` from `apps/website/e2e/fixtures.ts`, never from `@playwright/test`.** The fixture overrides `page` to rewrite `/_next/image` requests to the source file they optimize. This is not cosmetic. `next start`'s image optimizer deadlocks a cache key for the rest of the process's life as soon as one client abandons a `/_next/image` request mid-flight: it reads the source through a mocked request that carries the real client socket, so `send`'s on-finished listener destroys the file stream when that socket closes, the mocked response never emits `finish`, and the response cache's pending promise for that key never settles — every later request for the same image joins it and hangs forever. Playwright abandons exactly those requests whenever a test ends while a page is still loading images. The next test to render them then has six hung requests in flight, which is Chrome's entire per-origin socket budget, so a clicked link's RSC payload is queued behind them and `toHaveURL` times out on a click that never navigated. That was the long-running "e2e fails randomly" flake, twice misdiagnosed; `fixtures.ts` carries the full write-up and the reproduction.
 
 Committed specs:
 1. `apps/website/e2e/homepage.spec.ts` — homepage loads, navigation exists, /blog and /about-me routes work

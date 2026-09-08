@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./fixtures";
 
 test.describe("Homepage and primary navigation", () => {
     test("homepage loads and displays the site title", async ({ page }) => {
