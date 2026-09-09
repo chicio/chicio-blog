@@ -1,4 +1,4 @@
-import { test, expect, type Page } from "@playwright/test";
+import { test, expect, type Page } from "./fixtures";
 
 // The suite blocks service workers by default (see playwright.config.ts): the root layout registers
 // one on every page, and a test that neither blocks nor waits for it races its activation, which is
