@@ -4,9 +4,9 @@ description: List of all DSA course topics completed so far, with their section 
 type: project
 ---
 
-## Completed Topics (as of 2026-05-15)
+## Completed Topics (as of 2026-09-11)
 
-All 31 topics below have been published. Some may be reviewed later for consistency.
+All 39 topics below have been published, which is the WHOLE roadmap: the course is complete against the AlgoMaster am_300 list and the "topics still not available" table is gone. Some may be reviewed later for consistency.
 
 ### Greedy / Optimization
 
@@ -82,3 +82,31 @@ All 31 topics below have been published. Some may be reviewed later for consiste
 |-------|---------------|-------------------|----------------------|
 | dp-foundations-1d-dp | The Two Pillars of Dynamic Programming (Optimal substructure, Overlapping subproblems), The DP Problem-Solving Framework (State, Recurrence, Base cases, Computation order, Answer), Memoization vs Tabulation, State Definition and Recurrence Patterns in 1D DP (Counting paths, Cost minimization, Adjacency constraints, Circular constraints), Space Optimization (Rolling variables), A Complete Walkthrough, Dynamic Programming vs Greedy vs Divide-and-Conquer, Time and Space Complexity | Prose | None |
 | knapsack-dp | The Knapsack Abstraction, Space Optimization: From 2D to 1D, Variant Objectives: Boolean Counting and Minimization, The Subset Sum Transformation, The Unbounded Knapsack, Unbounded Knapsack Variants, The Inner Loop Direction: A Unified View, Time and Space Complexity | Prose | None |
+
+### Course Completion Batch (2026-09-04 to 2026-09-11)
+
+The eight topics below closed the roadmap. They were written in one session, one agent per topic, all landing in a
+single pull request rather than the usual one PR per topic.
+
+| Topic | Date | Sections (H2) | Complexity Format | Interactive Components |
+|-------|------|---------------|-------------------|----------------------|
+| string-dp | 2026-09-04 | The Two-Index State, Aligning Two Sequences, Palindromic Substructure, Segmentation and Decoding of a Single String, Wildcard and Pattern Matching, Space Optimization, Time and Space Complexity | Prose | None |
+| state-machine-dp | 2026-09-05 | When the State Is a Mode Not a Position, The Anatomy of a State Machine DP, The Stock Automaton: Two Modes, The Cooldown Edge: A Third Mode, At Most k Transactions: A Chain of 2k Modes, Collapsing the Table into Rolling Scalars, The Layered Graph View, Designing an Automaton for a New Problem, Time and Space Complexity | Prose | None (ASCII automata) |
+| tree-graph-dp | 2026-09-06 | The Tree Is Its Own Subproblem Graph, The State Is a Node Plus a Mode, A Mode That Encodes an Obligation, Dynamic Programming That Builds Structures, Rerooting: One Traversal for Every Root, Dynamic Programming Over a Graph, Time and Space Complexity | Prose | None |
+| advanced-dp-techniques | 2026-09-07 | Bitmask DP: When the State Is a Set, Digit DP: When the State Is a Position in a Numeral, Probability DP: When the State Is Not Deterministic, Time and Space Complexity | Prose | None |
+| string-matching | 2026-09-08 | The cost of forgetting, Borders and the prefix function, Searching without ever backing up, Rabin-Karp and the polynomial rolling hash, Binary search on the answer with a rolling hash, Choosing between the algorithms, Time and Space Complexity | Prose | None (ASCII failure-function trace) |
+| binary-indexed-tree-segment-tree | 2026-09-09 | The Segment Tree, The Recursive Implementation, The Iterative Bottom-Up Segment Tree, Beyond Sums: Monoids and Lazy Propagation, The Fenwick Tree, Counting Inversions and Smaller Elements to the Right, Time and Space Complexity | Table (one per structure) | None |
+| maths-geometry | 2026-09-10 | Digit Manipulation Without Strings, Number Theory, Computational Geometry on Integer Coordinates, Numerical Robustness, Time and Space Complexity | Prose | None |
+| line-sweep | 2026-09-11 | The Anatomy of a Sweep, Building the Event List, Tie-Breaking at Equal Coordinates, The Counter Sweep, Lazy Deletion, The Offline Query Sweep, The Status Structure Sweep, Time and Space Complexity | Prose | None (ASCII sweep diagram) |
+
+Notes worth keeping:
+
+- `string-dp` replaces the old `longest-common-subsequence-DP` naming. The solutions folder was renamed to `string-DP`
+  to match the current AlgoMaster group name, and the two pre-existing LCS solutions moved into it.
+- `advanced-dp-techniques` merges three AlgoMaster groups (Bitmask, Digit, Probability DP) into one article, but the
+  solutions repo keeps them as three separate folders, because folder names follow AlgoMaster groups while ARTICLES
+  follow the agreed grouping.
+- `binary-indexed-tree-segment-tree` deliberately solves one exercise with a segment tree and the other with a Fenwick
+  tree, so the article has one worked application per structure.
+- `line-sweep` is the last topic of the roadmap and closes with an understated paragraph tying the technique back to
+  the course.

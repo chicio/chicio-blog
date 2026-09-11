@@ -1,0 +1,596 @@
+---
+title: "Advanced DP Techniques"
+description: "Advanced state modelling in dynamic programming: bitmask DP encoding a set as an integer, digit DP walking the decimal representation of a bound, and probability DP where the value of a state is a probability or an expectation."
+date: 2026-09-07
+image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [dynamic programming, bitmask dp, digit dp, probability dp, data structures, algorithms]
+authors: [fabrizio_duroni]
+---
+
+import { TopicExercises } from "@/components/content/data-structures-and-algorithms/topic-exercises";
+
+# Advanced DP Techniques
+
+Every dynamic programming problem solved so far in this course shares a comfortable assumption:
+the state is a small tuple of integers with an obvious meaning, and the value stored in it is the best score achievable from that state.
+The [one-dimensional foundations](/data-structures-and-algorithms/topic/dp-foundations-1d-dp) index by position,
+[knapsack DP](/data-structures-and-algorithms/topic/knapsack-dp) adds a capacity axis,
+[grid DP](/data-structures-and-algorithms/topic/2d-grid-dp) and [string DP](/data-structures-and-algorithms/topic/string-dp) index by two coordinates,
+[state machine DP](/data-structures-and-algorithms/topic/state-machine-dp) adds a small enumerated mode,
+and [tree and graph DP](/data-structures-and-algorithms/topic/tree-graph-dp) replaces the linear order with a topological one.
+In all of them the modelling step is short, because the natural state is already a good state.
+
+This article is about the problems where it is not.
+Three situations break the comfortable assumption, and each of the three techniques below is an answer to one of them.
+The obvious state can be **too large**, because what must be remembered is a set of already used elements rather than a count of them.
+The obvious state can be **not a number**, because the quantity being counted ranges over an interval of integers so wide that the integers themselves cannot be enumerated,
+and what actually varies is the decimal representation rather than the value.
+The obvious state can be **not deterministic**, because the process moves at random and the question asks for a probability or an expectation rather than for an optimum.
+
+Bitmask DP answers the first by encoding a set as an integer, accepting an exponential number of states in exchange for polynomial work per state.
+Digit DP answers the second by indexing on a position inside the numeral together with a flag recording whether the prefix built so far still hugs the upper bound,
+turning a count over an interval of integers into a walk over at most a dozen digits.
+Probability DP answers the third by storing a probability or an expected value instead of a best value,
+so that the recurrence averages over the outgoing transitions weighted by their probabilities instead of maximizing over them.
+The three belong together because they are variations on the same skill, deciding what the state should be when the problem does not hand you one.
+
+## Bitmask DP: When the State Is a Set
+
+A recurrence needs to remember whatever distinguishes one subproblem from another.
+Sometimes that is genuinely a set.
+Consider partitioning a collection of tasks into work sessions: what remains to be scheduled is not "how many tasks are left" but "exactly which ones",
+because two different subsets of the same size behave differently.
+There is no way to compress that information, so the state space has $2^n$ elements and the only question is whether $n$ is small enough.
+
+The tell is in the constraints.
+When a problem bounds the input at ten, twelve or twenty elements while everything else in the statement suggests an NP-hard flavour,
+the intended solution is almost always exponential in the number of elements and polynomial in everything else.
+Twenty elements give a million states, which is comfortable.
+Twenty four give sixteen million, which is the practical ceiling in a managed runtime.
+
+### Subsets as integers
+
+The encoding identifies a subset of $\{0, 1, \dots, n-1\}$ with the integer whose $i$-th bit is set exactly when element $i$ belongs to the subset.
+Union becomes bitwise or, intersection becomes bitwise and, and the complement relative to a mask becomes exclusive or.
+The full set is $2^n - 1$, the empty set is zero, and iterating over every subset is a plain loop from $0$ to $2^n - 1$,
+which incidentally visits the subsets in an order where every mask comes after all of its proper submasks, since removing a bit strictly decreases the integer.
+That ordering is what makes a bottom up loop over masks a valid DP order without any explicit topological sort.
+
+The operations worth having at hand are few, and they all come from
+[two's complement arithmetic](/data-structures-and-algorithms/topic/bit-manipulation).
+
+```ts
+const contains = (mask: number, i: number): boolean => (mask & (1 << i)) !== 0;
+
+const withElement = (mask: number, i: number): number => mask | (1 << i);
+
+const withoutElement = (mask: number, i: number): number => mask & ~(1 << i);
+
+const lowestSetBit = (mask: number): number => mask & -mask;
+
+const isSubsetOf = (small: number, big: number): boolean => (small & big) === small;
+```
+
+The lowest set bit deserves a comment, because it is the workhorse of incremental precomputation.
+In two's complement, $-mask$ is the bitwise complement of $mask$ plus one,
+so every bit below the lowest set bit is flipped to one by the complement and then carried back to zero by the increment,
+the lowest set bit itself survives, and every bit above it is flipped.
+The bitwise and therefore isolates exactly the lowest set bit.
+This gives a one line recurrence for any additive statistic over subsets: the statistic of a mask is the statistic of that mask with its lowest element removed, plus the contribution of that element.
+Filling a table of subset sums that way costs $O(2^n)$ instead of the $O(2^n \cdot n)$ of the naive double loop.
+
+```ts
+function subsetSums(values: number[]): number[] {
+    const n = values.length;
+    const sums = new Array(1 << n).fill(0);
+
+    for (let mask = 1; mask < 1 << n; mask++) {
+        const lowest = mask & -mask;
+        const index = Math.log2(lowest);
+        sums[mask] = sums[mask ^ lowest] + values[index];
+    }
+
+    return sums;
+}
+```
+
+### Enumerating the submasks
+
+Many bitmask recurrences do not transition by adding one element at a time, but by removing a whole block at once.
+The canonical example is partitioning: the answer for a set is built by choosing which of its elements form the **last** group,
+and that choice ranges over all subsets of the current mask.
+The idiom that enumerates them is one of the few pieces of code worth memorizing exactly.
+
+```ts
+for (let sub = mask; sub > 0; sub = (sub - 1) & mask) {
+    // sub runs over every non-empty submask of mask, in decreasing numerical order
+}
+```
+
+The reason it works is worth spelling out, because it looks like a coincidence and is not.
+Restrict attention to the positions where $mask$ has a one.
+A submask is an arbitrary assignment of zeros and ones to those positions, and reading them off in order gives a number between zero and $2^{popcount(mask)} - 1$.
+The iteration wants to visit those numbers in decreasing order, which means repeatedly subtracting one in that compressed numbering.
+Subtracting one from the full integer $sub$ clears its lowest set bit and turns every bit below it into a one,
+which is precisely the borrow behaviour of decrementing in the compressed numbering,
+except that it also lights up the positions where $mask$ has a zero.
+The bitwise and with $mask$ wipes exactly those spurious positions, leaving the correct predecessor.
+The loop starts at $mask$ itself, the largest submask, and stops when it reaches zero,
+so the empty submask must be handled separately whenever it is a legal choice.
+
+The cost of nesting that loop inside a loop over all masks is $O(3^n)$, not $O(4^n)$.
+The counting argument is direct.
+The total work is $\sum_{mask} 2^{popcount(mask)}$, and grouping the masks by popcount gives
+$\sum_{k=0}^{n} \binom{n}{k} 2^k = (1 + 2)^n = 3^n$ by the binomial theorem.
+The same number has a cleaner combinatorial reading: choosing a mask and then a submask of it assigns each of the $n$ elements to one of three places,
+inside the submask, inside the mask but outside the submask, or outside the mask entirely.
+Three independent choices per element give $3^n$ pairs, which is exactly the number of iterations performed.
+For $n = 14$ that is under five million, and for $n = 16$ around forty three million, which sets the practical limit of this pattern.
+
+### Partitioning a set into groups
+
+With those two pieces the archetypal problem writes itself.
+Given a collection of items and a predicate saying whether a subset is an acceptable group,
+find the minimum number of groups that covers everything.
+The state is the set of items already placed, the transition chooses the content of the last group,
+and the base case is the empty set needing zero groups.
+
+```ts
+function minimumGroups(n: number, isValidGroup: (mask: number) => boolean): number {
+    const total = 1 << n;
+    const dp = new Array(total).fill(Infinity);
+    dp[0] = 0;
+
+    for (let mask = 1; mask < total; mask++) {
+        for (let sub = mask; sub > 0; sub = (sub - 1) & mask) {
+            if (isValidGroup(sub)) {
+                dp[mask] = Math.min(dp[mask], dp[mask ^ sub] + 1);
+            }
+        }
+    }
+
+    return dp[total - 1];
+}
+```
+
+Two details make or break this template.
+The first is that the predicate must be precomputed into a table, otherwise the work hidden inside it multiplies the $3^n$ by another factor of $n$.
+The second is that `dp[mask ^ sub]` is a strictly smaller mask, because `sub` is a non-empty submask,
+so the ascending loop over masks guarantees the dependency has already been computed.
+This is the shape of the **minimum number of work sessions** problem, where the predicate is "the durations in this subset sum to at most the session length".
+
+A useful variation appears when the number of groups is fixed in advance and the objective is not the count of groups but a function of their contents.
+Then the natural formulation adds one layer per group, and the values of a layer are computed from the previous layer rather than from the same array.
+**Fair distribution of cookies** is exactly that: the objective minimizes the maximum load over a fixed number of children,
+so each layer hands one child a submask and combines the load of that child with the running maximum of everyone before it.
+The outer loop over the $k$ children multiplies the cost by $k$, and the table can be kept as two rolling arrays of size $2^n$.
+
+An important observation about this family is that the group index does not need to be part of the state when the groups are interchangeable.
+Children, sessions and bins are unlabelled, so a distribution and any relabelling of it are the same solution,
+and adding an explicit group identifier would only multiply the state space by a factor that buys nothing.
+
+### The mask riding along: state space expansion
+
+The second face of bitmask DP is not a DP over subsets at all, but an ordinary
+[graph search](/data-structures-and-algorithms/topic/graph) whose state has been enlarged with a mask.
+The situation arises whenever a path problem carries a requirement that plain shortest path cannot express,
+such as "visit all nodes", "collect all keys" or "pass through these checkpoints in any order".
+Marking a node as visited is then wrong, because an optimal walk may legitimately return to a node it has already used.
+
+The fix is to search the product of the original graph with the lattice of subsets.
+A state is the pair made of the current node and the set of objectives already achieved,
+so the same physical node appears once per subset, and returning to it with a different history is a genuinely different state that is never pruned away.
+When all edges have unit weight a [breadth-first search](/data-structures-and-algorithms/topic/graph) over that product suffices,
+and when they do not, the same expansion runs under [Dijkstra](/data-structures-and-algorithms/topic/shortest-path).
+
+```ts
+function shortestWalkVisitingAll(graph: number[][]): number {
+    const n = graph.length;
+    const complete = (1 << n) - 1;
+    const seen: boolean[][] = Array.from({ length: n }, () => new Array(1 << n).fill(false));
+    let frontier: Array<[number, number]> = [];
+
+    for (let node = 0; node < n; node++) {
+        frontier.push([node, 1 << node]);
+        seen[node][1 << node] = true;
+    }
+
+    let steps = 0;
+
+    while (frontier.length > 0) {
+        const next: Array<[number, number]> = [];
+
+        for (const [node, mask] of frontier) {
+            if (mask === complete) {
+                return steps;
+            }
+
+            for (const neighbour of graph[node]) {
+                const grown = mask | (1 << neighbour);
+
+                if (!seen[neighbour][grown]) {
+                    seen[neighbour][grown] = true;
+                    next.push([neighbour, grown]);
+                }
+            }
+        }
+
+        frontier = next;
+        steps++;
+    }
+
+    return -1;
+}
+```
+
+The pattern is visible in **shortest path visiting all nodes**, where every node is a legal starting point,
+so all $n$ initial states are seeded into the first layer at once.
+Seeding them together is not an optimization detail: it is what turns "the best over all starting nodes" into a single search rather than $n$ separate ones,
+and it works because a breadth-first search from a set of sources computes the minimum distance from any of them.
+The visited mask is also monotone, it only ever gains bits, so the expanded graph can never cycle back to an identical state with fewer objectives achieved,
+and the search terminates for the same reason the subset lattice is acyclic.
+
+## Digit DP: When the State Is a Position in a Numeral
+
+The second technique attacks a different kind of blow up.
+Counting how many integers in $[0, N]$ satisfy some property is trivial when $N$ is small and impossible by enumeration when $N$ is a billion or a quintillion.
+What saves the situation is that the properties involved are almost always properties of the **decimal representation**,
+the number of occurrences of a given digit, the absence of repetitions, membership of each digit in a set, divisibility of the digit sum.
+A number with eighteen decimal places has an enormous value but a very short representation,
+and a DP over the representation has a length proportional to the logarithm of the bound.
+
+The mental model is a walk down a decision tree of depth $L$, where $L$ is the number of digits of the bound
+and each level chooses the digit at that position, from the most significant to the least significant.
+Left unconstrained, the tree has $10^L$ leaves, one per number of exactly that length, leading zeros included.
+Two observations collapse it.
+First, most subtrees are identical, because once the prefix is irrelevant to the property being counted,
+the number of valid completions depends only on the remaining length and on a small summary of the prefix.
+Second, the constraint "do not exceed $N$" is felt at exactly one boundary of the tree, the leftmost path that follows the digits of $N$.
+
+### The tight flag
+
+That second observation is the heart of the technique.
+At every level the walk is in one of two situations.
+Either the prefix built so far is strictly smaller than the corresponding prefix of $N$, in which case the rest of the number is completely free and any digit from zero to nine may follow,
+or the prefix is exactly equal to the prefix of $N$, in which case the current digit may not exceed the corresponding digit of $N$.
+The boolean that distinguishes the two cases is traditionally called the **tight** flag.
+It starts true, it stays true only when the digit placed equals the bound digit at that position, and once it becomes false it never becomes true again.
+
+That monotonicity has a consequence that must be understood before writing a single line,
+because getting it wrong produces a solution that is correct on small inputs and quietly wrong on large ones.
+For a given position there is exactly **one** tight prefix, namely the prefix of $N$ itself.
+A tight state is therefore visited at most once during the whole recursion, and memoizing it gains nothing.
+Worse, if the tight flag is not part of the memo key, the value computed for a tight state,
+which was restricted by the bound, would later be served to a free state that was not restricted at all, producing an undercount.
+There are two correct ways out, and they cost the same.
+Either the flag is included in the key, or the cache is consulted and written only when the flag is false.
+The second is the one used below, and it keeps the key smaller.
+
+### The canonical template
+
+Putting the pieces together gives a template that changes very little from problem to problem.
+The signature carries the position, the tight flag, a **started** flag discussed in a moment,
+and whatever problem specific accumulator the property requires.
+
+```ts
+function countUpTo(n: number, combine: (accumulator: number, digit: number) => number): number {
+    const bound = String(n);
+    const memo = new Map<string, number>();
+
+    function walk(position: number, accumulator: number, tight: boolean, started: boolean): number {
+        if (position === bound.length) {
+            return started ? 1 : 0;
+        }
+
+        const key = `${position}:${accumulator}:${started}`;
+
+        if (!tight) {
+            const cached = memo.get(key);
+
+            if (cached !== undefined) {
+                return cached;
+            }
+        }
+
+        const limit = tight ? Number(bound[position]) : 9;
+        let total = 0;
+
+        for (let digit = 0; digit <= limit; digit++) {
+            const stillLeading = !started && digit === 0;
+            const nextAccumulator = stillLeading ? accumulator : combine(accumulator, digit);
+            total += walk(position + 1, nextAccumulator, tight && digit === limit, started || digit !== 0);
+        }
+
+        if (!tight) {
+            memo.set(key, total);
+        }
+
+        return total;
+    }
+
+    return walk(0, 0, true, false);
+}
+```
+
+Three lines of that template carry all the subtlety.
+The expression `tight && digit === limit` is the only place where tightness propagates, and it is correct precisely because `limit` equals the bound digit when tight and nine otherwise:
+once the walk is free, `digit === limit` can still be true for a nine, but the conjunction with a false `tight` keeps the result false.
+The base case decides what an all zero walk means: returning one counts the number zero as a valid answer, returning `started ? 1 : 0` excludes it.
+And the accumulator is skipped while the number has not started, which is the subject of the next paragraph.
+
+### Leading zeros and the started flag
+
+A fixed length walk over $L$ positions naturally generates numbers with leading zeros,
+and those zeros are an artefact of the padding, not digits of the number being counted.
+Whether they matter depends entirely on the property.
+Counting the occurrences of the digit one is immune, because a leading zero is not a one and contributes nothing,
+which is why the **number of digit one** solution needs no started flag at all.
+Counting numbers whose digits are all distinct is not immune: the padding of a three digit walk representing the number seven contains two zeros,
+and treating them as real digits would both mark zero as used, blocking a later legitimate zero, and declare the padding itself a repetition.
+
+The started flag solves this by distinguishing "no significant digit has been written yet" from "a zero was deliberately placed".
+While the number has not started, a zero leaves the accumulator untouched, and any non zero digit starts the number.
+This is exactly the structure of **count numbers with unique digits**, where the accumulator is a ten bit mask of the digits already used
+and the leading zeros are excluded from it, so the two techniques of this article meet inside a single recursion.
+Notice also that the started flag belongs in the memo key whenever the accumulator is interpreted differently before and after the start,
+since a state with an empty accumulator and a started number is not the same as a state with an empty accumulator and nothing written yet.
+
+### Counting a statistic instead of counting numbers
+
+A digit DP whose value is a plain integer answers "how many numbers".
+Some problems ask instead "how many times does something happen across all those numbers", which is a different question and needs a different return type.
+The clean way to express it is to make every state return a pair, the number of completions hanging below it and the total of the statistic over those completions.
+The recurrence then has two terms: the statistic accumulated deeper in the tree, and the contribution of the digit placed right now,
+which occurs once in each of the completions below it and must therefore be multiplied by their count.
+
+```ts
+type Tally = { numbers: number; occurrences: number };
+
+function combineChild(child: Tally, contributesHere: boolean): Tally {
+    return {
+        numbers: child.numbers,
+        occurrences: child.occurrences + (contributesHere ? child.numbers : 0)
+    };
+}
+```
+
+This is the structure of **number of digit one**, and it generalizes immediately to counting any digit, to summing the digits of every number in a range,
+or to any statistic that is additive over positions.
+The reason it works is linearity: the total over a subtree is the sum of the totals of its children plus the local contribution repeated once per leaf,
+and both quantities propagate upward together in a single traversal.
+
+### When the recurrence collapses into a closed form
+
+Digit DP is a framework, not an obligation.
+Whenever the free states carry no accumulator, the value of a free state depends only on how many positions remain,
+and that value is a closed form rather than something a table must discover.
+If every position may be filled with any of $|D|$ allowed digits independently, a suffix of length $r$ admits exactly $|D|^r$ completions.
+
+**Numbers at most n given digit set** is exactly that situation, and it is worth dwelling on why.
+The allowed digits are given as a set, the property is simply "every digit belongs to the set", so there is nothing to accumulate.
+The statement also guarantees that zero is not in the set, which removes the need for a started flag
+and makes numbers shorter than the bound unambiguous: any number with fewer digits is automatically smaller and has all of its positions free,
+so the lengths below $L$ contribute $\sum_{r=1}^{L-1} |D|^r$ with no case analysis at all.
+For numbers of the same length as the bound, the walk stays tight and at each position splits into two kinds of branches.
+Every allowed digit strictly smaller than the bound digit ends the tightness immediately and leaves all the remaining positions free, contributing $|D|^{L-p-1}$.
+At most one allowed digit equals the bound digit, and it keeps the walk tight for one more position.
+If no allowed digit equals the bound digit at some position, no number can remain tight past it and the walk stops.
+Surviving every position means the bound itself is writable with the allowed digits and counts as one final number.
+The result is a single pass over the digits of the bound with no memo table,
+which is the general template with every memoized value replaced by its closed form.
+
+## Probability DP: When the State Is Not Deterministic
+
+The third technique changes what the table holds.
+Until now the value of a state has been an optimum, and the recurrence has combined the children with a maximum, a minimum or a count.
+In a randomized process there is no choice to optimize: the next state is drawn from a distribution, and the question is what happens on average.
+The recurrence therefore combines the children with a weighted average, where the weights are the transition probabilities.
+
+Formally, if $f(s)$ is the quantity of interest at state $s$ and the process moves from $s$ to $t$ with probability $p(s \to t)$, then
+
+$$
+f(s) = \sum_{t} p(s \to t) \cdot f(t)
+$$
+
+for a probability, and the same expression with an added local reward for an expectation.
+Both rest on [linearity of expectation](https://en.wikipedia.org/wiki/Expected_value#Linearity),
+which is what allows the value of a state to be written in terms of the values of its successors without any independence assumption between them.
+
+The single most useful invariant when writing these recurrences is that the transition probabilities out of a state must sum to one.
+Every time a solution produces a number greater than one or a suspiciously small answer, that invariant is the first thing to check,
+because a missing branch or a double counted one shows up there immediately.
+It holds unless probability mass is deliberately allowed to leave the system, which is the subject of a later paragraph.
+
+### Pushing forward or pulling backward
+
+Two equivalent formulations exist, and the choice between them is usually dictated by where the terminal states are.
+The backward, or pull, formulation is the recursive one written above: the value of a state is computed from the values of the states it leads to,
+and the recursion bottoms out at absorbing states whose value is known.
+The forward, or push, formulation walks the process in time: the table holds the probability of currently being in each state,
+and every step redistributes each entry over its successors.
+
+```ts
+function step(distribution: number[], transitions: Array<Array<[number, number]>>): number[] {
+    const next = new Array(distribution.length).fill(0);
+
+    for (let state = 0; state < distribution.length; state++) {
+        if (distribution[state] === 0) {
+            continue;
+        }
+
+        for (const [target, probability] of transitions[state]) {
+            next[target] += distribution[state] * probability;
+        }
+    }
+
+    return next;
+}
+```
+
+The push formulation is the natural one when the process runs for a fixed number of steps,
+since the step count becomes the outer loop and only two layers of the table need to exist at any moment.
+The pull formulation is the natural one when the process runs until an absorbing condition is met,
+since there is no step counter to iterate over and the recursion is bounded by the state space instead.
+
+### Mass that leaves the system
+
+A subtle and very common modelling point is that the probabilities out of a state do not have to sum to one **inside the table**,
+as long as the missing part corresponds to the process leaving the system in a way the problem considers final.
+**Knight probability in chessboard** is the cleanest illustration.
+The knight picks one of eight moves uniformly, so an eighth of the mass of each cell flows to each destination,
+but destinations outside the board are simply dropped.
+That dropped mass is the probability of the knight having left the board, and the problem never asks about it again,
+so there is no need to model an explicit "off the board" absorbing state.
+The consequence is that the total mass in the table decreases monotonically, and the answer is precisely the mass remaining after the last step,
+obtained by summing the final layer.
+
+Writing this with a push formulation is the natural choice, because the number of moves is given and bounded,
+and because two layers of an $n \times n$ table are enough.
+The alternative pull formulation, where the value of a cell is the probability of surviving a given number of further moves starting from it, is equally valid and costs the same.
+Recognizing that the two are the same recurrence read in opposite directions is more useful than preferring one of them.
+
+### Rescaling the state space
+
+Probability problems often state their quantities in units far finer than the granularity of the process.
+When every transition moves the state by a multiple of some quantity, the reachable states form a sublattice,
+and working in those coarser units divides each axis of the table by the common factor.
+
+**Soup servings** is the textbook case.
+The two soups start with $n$ millilitres each, and the four possible operations serve amounts that are all multiples of twenty five.
+A state measured in millilitres would waste twenty four out of every twenty five entries on states that can never be reached.
+Dividing by twenty five, rounding up so that a partial unit still counts as a unit that must be served,
+shrinks each axis by a factor of twenty five and the two dimensional table by a factor of six hundred and twenty five.
+The rounding up is not a detail: it encodes the rule that serving from a soup holding less than the requested amount empties it and still counts as a full operation.
+
+### The asymptotic cut-off
+
+The rescaling alone does not rescue **soup servings**, because the input bound is a billion millilitres, which is still forty million units per axis.
+The second idea is of a different nature, and it is one of the few places in an algorithms course where an analytical argument replaces a computational one.
+Look at the drift of the process.
+The four operations serve, on average, $(100 + 75 + 50 + 25) / 4 = 62.5$ millilitres of soup A and $(0 + 25 + 50 + 75) / 4 = 37.5$ of soup B per turn.
+Soup A therefore drains twenty five millilitres per turn faster than soup B in expectation.
+For the answer to be anything other than one, the process must deviate from its mean for its entire duration,
+and by standard [concentration inequalities](https://en.wikipedia.org/wiki/Hoeffding%27s_inequality) the probability of such a sustained deviation decays exponentially in the number of turns,
+which itself grows linearly with $n$.
+
+That is why a cut-off here is numerically safe rather than a hack.
+The problem accepts answers within a tolerance of $10^{-5}$,
+and past a few thousand millilitres the difference between the true answer and one is orders of magnitude below that tolerance,
+so returning one is not an approximation the judge tolerates, it is the correctly rounded answer.
+The cut-off constant is chosen by computing the answer for increasing $n$ until it stops changing at the required precision,
+and the usual value of about four thousand eight hundred millilitres has a comfortable margin.
+The remaining state space, bounded by that constant on both axes, is a fixed table of a few tens of thousands of entries, independent of the input.
+
+### Sliding windows over a uniform transition
+
+The last optimization is structural rather than probabilistic, and it is a direct application of the
+[prefix sum](/data-structures-and-algorithms/topic/prefix-sum) and [sliding window](/data-structures-and-algorithms/topic/sliding-window) ideas inside a DP recurrence.
+Whenever a state is reached from a contiguous block of predecessors with equal probability, the recurrence contains a sum over that block,
+and consecutive states share all of it but the two ends.
+Maintaining the sum incrementally replaces a linear inner loop with two updates.
+
+**New 21 game** is built on exactly this.
+The value $dp[i]$ is the probability that the score passes through $i$ at some point,
+and a score is reached from any of the $maxPts$ scores below it, each with probability $1 / maxPts$, provided that score was still below the stopping threshold $k$.
+
+$$
+dp[i] = \frac{1}{maxPts} \sum_{j = \max(0,\, i - maxPts)}^{\min(i - 1,\, k - 1)} dp[j]
+$$
+
+The window slides by one as $i$ increases, so the entry $i - 1$ enters it, if the game continued from there,
+and the entry $i - maxPts - 1$ leaves it.
+Two further points are worth noticing in this problem.
+The first is the distinction between passing through a score and stopping at it: scores below $k$ feed later scores,
+scores at or above $k$ are terminal and contribute to the answer only when they do not exceed $n$,
+and conflating the two is the most common way to get this problem wrong.
+The second is the short circuit at the top: if $k$ is zero no draw ever happens, and if $n \ge k + maxPts - 1$ even the unluckiest final draw cannot overshoot $n$,
+so the answer is one in both cases and the loop is skipped entirely.
+
+```ts
+function slidingProbability(n: number, k: number, maxPts: number): number {
+    if (k === 0 || n >= k + maxPts - 1) {
+        return 1;
+    }
+
+    const dp = new Array(n + 1).fill(0);
+    dp[0] = 1;
+    let window = 1;
+    let answer = 0;
+
+    for (let score = 1; score <= n; score++) {
+        dp[score] = window / maxPts;
+
+        if (score < k) {
+            window += dp[score];
+        } else {
+            answer += dp[score];
+        }
+
+        const leaving = score - maxPts;
+
+        if (leaving >= 0 && leaving < k) {
+            window -= dp[leaving];
+        }
+    }
+
+    return answer;
+}
+```
+
+One caveat applies to every probability DP written in floating point.
+An incremental window accumulates rounding error, since values are added and later subtracted,
+and the same is true of any running sum of probabilities.
+Within the tolerances these problems allow the error is irrelevant,
+but the habit of reasoning about it is what separates a solution that happens to pass from one that is known to be correct.
+A second boundary is worth flagging.
+When the transition graph is cyclic, that is when a state can reach itself, no ordering of the states makes the DP well founded,
+and the problem stops being a DP and becomes a linear system to be solved by elimination or by iterating to a fixed point.
+Recognizing that boundary is as valuable as knowing the techniques on this side of it.
+
+## Time and Space Complexity
+
+The three techniques have genuinely different cost profiles, so they are analysed separately.
+
+**Bitmask DP** has a state space of exactly $2^n$ subsets, and the total cost is that number multiplied by the work performed per state.
+When a transition adds or removes a single element, the work per state is $O(n)$ and the total is $O(2^n \cdot n)$,
+which is also the cost of a precomputation phase that tests every subset against a predicate by scanning its bits.
+When a transition enumerates submasks, the total is $O(3^n)$ by the counting argument given above,
+and the exponential base of three rather than four is what makes the pattern usable at all.
+Space is $O(2^n)$ for a single table, and it stays $O(2^n)$ even when the recurrence is layered, because two rolling layers suffice.
+
+Applied to the exercises, the **minimum number of work sessions** solution pays $O(2^n \cdot n)$ to build the feasibility table
+and $O(3^n)$ for the main loop, so the total is $O(3^n)$ time and $O(2^n)$ space, with $n \le 14$ giving under five million operations.
+**Fair distribution of cookies** precomputes the subset sums in $O(2^n)$ thanks to the lowest set bit recurrence,
+then runs $k - 1$ layers of submask enumeration for $O(k \cdot 3^n)$ time and $O(2^n)$ space,
+which with eight bags and at most eight children is a few hundred thousand operations.
+**Shortest path visiting all nodes** does not enumerate submasks at all: it has $n \cdot 2^n$ states,
+and each state is expanded once over the adjacency list of its node, so the total work is bounded by the sum of the degrees over all states,
+giving $O(2^n \cdot n^2)$ time in the worst case of a dense graph and $O(2^n \cdot n)$ space for the seen table.
+
+**Digit DP** replaces the magnitude of the bound with its length.
+With $L = \lfloor \log_{10} N \rfloor + 1$ digits, a base of ten, and $S$ distinct values of the problem specific accumulator,
+the number of memoized states is $O(L \cdot S)$ and each of them iterates over at most ten digits, for $O(L \cdot S \cdot 10)$ time and $O(L \cdot S)$ space.
+The tight states add only $O(L)$ extra work in total, since there is exactly one tight prefix per position, which is why excluding them from the cache costs nothing.
+
+For **count numbers with unique digits** the accumulator is a ten bit mask and the started flag doubles it,
+so the bound is $O(L \cdot 2^{10} \cdot 2 \cdot 10)$ time and $O(L \cdot 2^{10})$ space, which with $L \le 8$ is a few hundred thousand operations.
+In practice far fewer states are reachable, because a mask with $p$ bits set can only occur at position $p$ or later.
+**Number of digit one** carries no accumulator at all, so its memoized state is the position alone:
+$O(L)$ states with ten transitions each, giving $O(L) = O(\log N)$ time and space, a genuinely logarithmic solution to a problem stated over a range of two billion integers.
+**Numbers at most n given digit set** has no table: the closed form replaces the memo, and the two passes over the digits of the bound cost $O(L \cdot |D|)$ time
+with $O(1)$ extra space, since only a running total is kept.
+
+**Probability DP** costs what its state space and its step count dictate, exactly like any other DP, with no special exponential behaviour.
+**Knight probability in chessboard** has $n^2$ cells, eight transitions per cell and $k$ steps, for $O(k \cdot n^2)$ time,
+and it keeps two layers of the board for $O(n^2)$ space.
+With a board of side twenty five and a hundred moves that is about five million operations.
+**Soup servings** would be quadratic in the number of units, $O(u^2)$ with four transitions per state,
+but the cut-off bounds $u$ by a constant of roughly one hundred and ninety two units, so both time and space are $O(1)$ in the size of the input,
+a fixed table of a few tens of thousands of entries.
+**New 21 game** is the clearest illustration of the sliding window payoff: the direct recurrence sums $maxPts$ entries per score for $O(n \cdot maxPts)$ time,
+which with both at ten thousand is a hundred million operations, while the incremental window reduces it to $O(n)$ time with $O(n)$ space,
+and that space could be lowered to $O(maxPts)$ by keeping only the entries still inside the window.
+
+## Exercises
+
+<TopicExercises topic="advanced-dp-techniques" />

@@ -1,0 +1,77 @@
+---
+title: "Binary Tree Cameras"
+description: "Place the minimum number of cameras on a binary tree so that every node is monitored, knowing that a camera watches its own node, its parent and its direct children."
+date: 2026-09-06
+image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [dynamic programming, tree dp, graph dp, rerooting, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Three-state post-order tree DP collapsed into a greedy bottom-up placement"
+  leetcodeUrl: "https://leetcode.com/problems/binary-tree-cameras/"
+  difficulty: "Hard"
+---
+# Binary Tree Cameras
+
+Leetcode Problem 968: [Binary Tree Cameras](https://leetcode.com/problems/binary-tree-cameras/description/)
+
+## Problem Summary
+Cameras can be installed on the nodes of a binary tree, and each camera monitors the node it sits on, that node's parent
+and that node's direct children. Return the minimum number of cameras needed so that every node of the tree is
+monitored. The tree holds between **1** and **1,000** nodes, and every node value is **0**, so only the shape of the
+tree matters.
+
+The full dynamic program keeps three values per node: the cost with a camera at the node, the cost with the node covered
+by a child, and the cost with the whole subtree covered except the node itself. Those three values collapse, because
+installing a camera at the parent of an uncovered node dominates installing it at the node, the parent covering strictly
+more of what is still unresolved once the traversal is post-order. The collapsed version returns a single label per
+node, and a leaf reporting that it needs coverage is what forces its parent to spend a camera.
+
+## Techniques
+- Dynamic Programming
+- Tree
+- Depth-First Search
+- Binary Tree
+
+## Solution
+```ts
+import { TreeNode } from "../tree-node";
+
+const NEEDS_COVER = 0
+const HAS_CAMERA = 1
+const COVERED = 2
+
+function minCameraCover(root: TreeNode | null): number {
+    let cameras = 0
+
+    // post-order: a node decides only after both children have reported their state
+    function cover(node: TreeNode | null): number {
+        if (!node) {
+            // a missing child never forces its parent to spend a camera
+            return COVERED
+        }
+
+        const left = cover(node.left)
+        const right = cover(node.right)
+
+        if (left === NEEDS_COVER || right === NEEDS_COVER) {
+            // a child is uncovered and this is the last chance to protect it
+            cameras++
+
+            return HAS_CAMERA
+        }
+
+        if (left === HAS_CAMERA || right === HAS_CAMERA) {
+            return COVERED
+        }
+
+        // both children are covered by someone below, so this node waits for its parent
+        return NEEDS_COVER
+    }
+
+    if (cover(root) === NEEDS_COVER) {
+        cameras++
+    }
+
+    return cameras
+};
+```

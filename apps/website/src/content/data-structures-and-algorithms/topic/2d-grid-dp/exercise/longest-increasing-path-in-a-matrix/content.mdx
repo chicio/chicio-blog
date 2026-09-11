@@ -1,0 +1,80 @@
+---
+title: "Longest Increasing Path in a Matrix"
+description: "Find the length of the longest strictly increasing path in a matrix, moving only in the four cardinal directions."
+date: 2026-07-12
+image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [dynamic programming, 2d grid dp, matrix, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Memoized DFS over the DAG induced by strictly increasing moves"
+  leetcodeUrl: "https://leetcode.com/problems/longest-increasing-path-in-a-matrix/"
+  difficulty: "Hard"
+---
+# Longest Increasing Path in a Matrix
+
+Leetcode Problem 329: [Longest Increasing Path in a Matrix](https://leetcode.com/problems/longest-increasing-path-in-a-matrix/description/)
+
+## Problem Summary
+Given an integer matrix, return the length of the longest strictly increasing path. From each cell you may move left, right, up or down, but never diagonally and never outside the matrix boundary. The matrix has between **1** and **200** rows and columns, and each value is a non negative integer up to **2^31 - 1**.
+
+This exercise is the one problem in the topic where the recurrence does not follow a fixed sweep order. The dependency between cells is dictated by the values rather than by the coordinates, so no row by row or column by column iteration can guarantee that a cell is computed after the cells it depends on. The observation that unlocks it is that the requirement of a **strict** increase makes the implicit graph acyclic, since a path can never return to a cell it has already visited. On a directed acyclic graph a memoized depth first search computes the recurrence in a valid order automatically, which is why this problem behaves like dynamic programming even though it is written as a traversal.
+
+## Techniques
+- Array
+- Dynamic Programming
+- Depth-First Search
+- Breadth-First Search
+- Graph
+- Topological Sort
+- Memoization
+- Matrix
+
+## Solution
+```ts
+const INCREASING_PATH_DIRECTIONS = [[0, 1], [1, 0], [0, -1], [-1, 0]]
+
+function longestIncreasingPath(matrix: number[][]): number {
+    const rows = matrix.length
+    const columns = matrix[0].length
+    // memo[row][column] = length of the longest increasing path starting at that cell
+    const memo: number[][] = Array.from({ length: rows }, () => Array(columns).fill(0))
+
+    // the strict increase makes the implicit graph acyclic, so plain memoized DFS is enough
+    function longestFrom(row: number, column: number): number {
+        if (memo[row][column] !== 0) {
+            return memo[row][column]
+        }
+
+        let best = 1
+
+        for (const [moveRow, moveColumn] of INCREASING_PATH_DIRECTIONS) {
+            const nextRow = row + moveRow
+            const nextColumn = column + moveColumn
+
+            if (nextRow < 0 || nextRow >= rows || nextColumn < 0 || nextColumn >= columns) {
+                continue
+            }
+
+            if (matrix[nextRow][nextColumn] <= matrix[row][column]) {
+                continue
+            }
+
+            best = Math.max(best, 1 + longestFrom(nextRow, nextColumn))
+        }
+
+        memo[row][column] = best
+
+        return best
+    }
+
+    let answer = 0
+
+    for (let row = 0; row < rows; row++) {
+        for (let column = 0; column < columns; column++) {
+            answer = Math.max(answer, longestFrom(row, column))
+        }
+    }
+
+    return answer
+};
+```

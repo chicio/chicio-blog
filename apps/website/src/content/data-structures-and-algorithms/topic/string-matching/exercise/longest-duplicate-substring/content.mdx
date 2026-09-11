@@ -1,0 +1,102 @@
+---
+title: "Longest Duplicate Substring"
+description: "Find the longest substring that occurs at least twice in a string, by binary searching the answer length with a Rabin-Karp rolling hash as the feasibility test."
+date: 2026-09-08
+image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [string matching, kmp, rabin-karp, rolling hash, strings, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Binary search on the answer length with a Rabin-Karp feasibility test"
+  leetcodeUrl: "https://leetcode.com/problems/longest-duplicate-substring/"
+  difficulty: "Hard"
+---
+# Longest Duplicate Substring
+
+Leetcode Problem 1044: [Longest Duplicate Substring](https://leetcode.com/problems/longest-duplicate-substring/description/)
+
+## Problem Summary
+Given a string **s**, return the longest substring that occurs at least twice inside it, where the two occurrences may overlap. If no substring is duplicated, return the empty string. The string is at most thirty thousand characters long and contains only lowercase English letters.
+
+There are quadratically many substrings, so candidates cannot be enumerated. The way in is the monotonicity of the predicate "a duplicated substring of length **L** exists": if two equal blocks of length **L** start at two distinct positions, their prefixes of length **L - 1** are equal too and still start at distinct positions, so feasibility is true up to some threshold and false above it. That is exactly the shape binary search on the answer needs. The feasibility test for a fixed width is a Rabin-Karp sweep, rolling a polynomial hash over every window in constant time per step. Equal hashes are only a filter, so the candidate positions sharing a hash are compared character by character before a duplicate is accepted.
+
+## Techniques
+- String
+- Binary Search
+- Sliding Window
+- Hash Function
+- Rolling Hash
+- Suffix Array
+
+## Solution
+```ts
+const HASH_MODULO = 2 ** 31 - 1
+const HASH_BASE = 26
+
+function longestDupSubstring(s: string): string {
+    const length = s.length
+    const codes = [...s].map((character) => character.charCodeAt(0) - 97)
+
+    // Rabin-Karp: slide a rolling hash of the given width and report the first repeated window
+    function findDuplicateOfLength(width: number): number {
+        let hash = 0
+
+        for (let i = 0; i < width; i++) {
+            hash = (hash * HASH_BASE + codes[i]) % HASH_MODULO
+        }
+
+        // the weight of the character about to leave the window
+        let highestPower = 1
+
+        for (let i = 1; i < width; i++) {
+            highestPower = (highestPower * HASH_BASE) % HASH_MODULO
+        }
+
+        const seen = new Map<number, number[]>()
+        seen.set(hash, [0])
+
+        for (let start = 1; start + width <= length; start++) {
+            hash = (hash - ((codes[start - 1] * highestPower) % HASH_MODULO) + HASH_MODULO) % HASH_MODULO
+            hash = (hash * HASH_BASE + codes[start + width - 1]) % HASH_MODULO
+
+            const candidates = seen.get(hash)
+
+            if (!candidates) {
+                seen.set(hash, [start])
+                continue
+            }
+
+            // equal hashes are only a hint, so the substrings are compared before accepting a match
+            const candidate = s.substring(start, start + width)
+
+            for (const other of candidates) {
+                if (s.substring(other, other + width) === candidate) {
+                    return start
+                }
+            }
+
+            candidates.push(start)
+        }
+
+        return -1
+    }
+
+    // a duplicate of length L implies a duplicate of every shorter length, so the answer is monotonic
+    let low = 1
+    let high = length - 1
+    let result = ""
+
+    while (low <= high) {
+        const width = Math.floor((low + high) / 2)
+        const start = findDuplicateOfLength(width)
+
+        if (start !== -1) {
+            result = s.substring(start, start + width)
+            low = width + 1
+        } else {
+            high = width - 1
+        }
+    }
+
+    return result
+};
+```

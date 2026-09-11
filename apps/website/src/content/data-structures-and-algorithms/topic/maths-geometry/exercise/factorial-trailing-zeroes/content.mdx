@@ -1,0 +1,38 @@
+---
+title: "Factorial Trailing Zeroes"
+description: "Count the trailing zeroes of n factorial by counting how many times five divides it, using Legendre's formula instead of computing the factorial."
+date: 2026-09-10
+image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [maths, geometry, number theory, computational geometry, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Legendre's formula for the multiplicity of a prime in a factorial"
+  leetcodeUrl: "https://leetcode.com/problems/factorial-trailing-zeroes/"
+  difficulty: "Medium"
+---
+# Factorial Trailing Zeroes
+
+Leetcode Problem 172: [Factorial Trailing Zeroes](https://leetcode.com/problems/factorial-trailing-zeroes/description/)
+
+## Problem Summary
+Given a non negative integer **n**, return the number of trailing zeroes in **n!**. The input is bounded by ten thousand, which already makes the factorial far too large to represent, so the answer has to be derived without ever building the product. The follow up asks for a solution running in logarithmic time.
+
+A trailing zero is a factor of ten, and a factor of ten is a factor of two paired with a factor of five, so the answer is the minimum between the multiplicity of two and the multiplicity of five in the factorization of the factorial. Since every second integer is even while only every fifth is a multiple of five, the factors of two always outnumber the factors of five, and the minimum is simply the multiplicity of five. That multiplicity is given by Legendre's formula: among the integers up to **n** there are **n / 5** multiples of five, each contributing one factor, plus **n / 25** multiples of twenty five contributing a second one, and so on. Summing the floored quotients over the increasing powers of five counts every factor exactly once, and the sum ends as soon as the power exceeds **n**.
+
+## Techniques
+- Math
+
+## Solution
+```ts
+function trailingZeroes(n: number): number {
+    // a trailing zero needs a factor 2 and a factor 5, and factors of 2 are always the more abundant
+    // so the answer is how many times 5 divides into n!, counted by Legendre's formula
+    let zeroes = 0
+
+    for (let powerOfFive = 5; powerOfFive <= n; powerOfFive *= 5) {
+        zeroes += Math.floor(n / powerOfFive)
+    }
+
+    return zeroes
+};
+```

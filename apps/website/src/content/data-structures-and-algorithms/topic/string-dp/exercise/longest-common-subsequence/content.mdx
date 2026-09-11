@@ -1,0 +1,48 @@
+---
+title: "Longest Common Subsequence"
+description: "Find the length of the longest subsequence shared by two strings, where a subsequence preserves order but not contiguity."
+date: 2026-09-04
+image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [dynamic programming, string dp, strings, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Two-sequence prefix alignment table with match and mismatch branches"
+  leetcodeUrl: "https://leetcode.com/problems/longest-common-subsequence/"
+  difficulty: "Medium"
+---
+# Longest Common Subsequence
+
+Leetcode Problem 1143: [Longest Common Subsequence](https://leetcode.com/problems/longest-common-subsequence/description/)
+
+## Problem Summary
+Given two strings **text1** and **text2**, return the length of their longest common subsequence, or **0** if they share none. A subsequence of a string is obtained by deleting zero or more characters without changing the relative order of the remaining ones, so it need not be contiguous. A common subsequence is one that can be obtained from both strings. Each string is at most one thousand characters long and contains only lowercase English letters.
+
+This is the archetypal two-sequence alignment problem, and the state is the pair of prefix lengths, so the table has one extra row and one extra column for the empty prefixes. The recurrence follows from an exchange argument on the last characters. When they are equal, some optimal solution pairs them, so the answer is one plus the answer on both shorter prefixes, and the other two neighbours need not be consulted. When they differ, at least one of the two characters is unused, so the answer is the better of the two ways of discarding one.
+
+## Techniques
+- String
+- Dynamic Programming
+
+## Solution
+```ts
+function longestCommonSubsequence(text1: string, text2: string): number {
+    const m = text1.length
+    const n = text2.length
+
+    const dp: number[][] = Array.from({ length: m + 1 }, () =>
+        Array.from({ length: n + 1 }, () => 0)
+    );
+
+    for (let i = 1; i <= m; i++) {
+        for (let j = 1; j <= n; j++) {
+            if (text1[i - 1] === text2[j - 1]) {
+                dp[i][j] = 1 + dp[i - 1][j - 1]
+            } else {
+                dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1])
+            }
+        }
+    }
+
+    return dp[m][n]
+};
+```

@@ -1,0 +1,64 @@
+---
+title: "Minimum Interval to Include Each Query"
+description: "For each query point, find the size of the smallest interval that contains it, sweeping intervals and queries together in increasing coordinate order."
+date: 2026-09-11
+image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [line sweep, sweep line, intervals, events, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Offline query sweep with a min-heap by interval size and lazy eviction"
+  leetcodeUrl: "https://leetcode.com/problems/minimum-interval-to-include-each-query/"
+  difficulty: "Hard"
+---
+# Minimum Interval to Include Each Query
+
+Leetcode Problem 1851: [Minimum Interval to Include Each Query](https://leetcode.com/problems/minimum-interval-to-include-each-query/description/)
+
+## Problem Summary
+You are given a list of intervals, each described by a left and a right endpoint and both endpoints included, and a list of query points. The size of an interval is the number of integers it contains, which is its right endpoint minus its left endpoint plus one. For every query, return the size of the smallest interval that contains that query point, or **-1** when no interval contains it. The answers must be returned in the order of the queries in the input. There are up to 100,000 intervals and up to 100,000 queries, and all coordinates are positive integers up to about one billion.
+
+The queries are all known in advance, so they can be answered in any order and permuted back at the end, which is what makes a sweep possible. Sorting the intervals by left endpoint and the queries by value lets a single line move to the right over both: every interval that has opened by the current query is inserted into a min-heap keyed by size, and any interval sitting at the top whose right endpoint lies behind the line is stale and is discarded lazily. After the eviction the top of the heap is both alive and the smallest, which is exactly the answer for that query.
+
+## Techniques
+- Array
+- Binary Search
+- Line Sweep
+- Sorting
+- Heap (Priority Queue)
+
+## Solution
+```ts
+import { Heap } from "../heap";
+
+type SizedInterval = { size: number, right: number };
+
+function minInterval(intervals: number[][], queries: number[]): number[] {
+    // both sides are swept in increasing coordinate order
+    const sortedIntervals = [...intervals].sort((a, b) => a[0] - b[0])
+    const sortedQueries = queries
+        .map((value, index) => ({ value, index }))
+        .sort((a, b) => a.value - b.value)
+
+    const bySize = new Heap<SizedInterval>((a, b) => a.size - b.size)
+    const answer: number[] = Array(queries.length).fill(-1)
+    let next = 0
+
+    for (const { value, index } of sortedQueries) {
+        // admit every interval that has already opened by the time the sweep reaches this query
+        while (next < sortedIntervals.length && sortedIntervals[next][0] <= value) {
+            const [left, right] = sortedIntervals[next]
+            bySize.insert({ size: right - left + 1, right })
+            next++
+        }
+
+        // the smallest interval on top is useless once it has closed behind the sweep line
+        while (bySize.size() > 0 && bySize.peek()!.right < value) {
+            bySize.extract()
+        }
+
+        answer[index] = bySize.size() > 0 ? bySize.peek()!.size : -1
+    }
+
+    return answer
+};
+```

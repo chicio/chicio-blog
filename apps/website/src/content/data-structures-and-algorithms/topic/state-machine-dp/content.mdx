@@ -1,0 +1,585 @@
+---
+title: "State Machine DP"
+description: "A guide to dynamic programming over finite automata: states as qualitative modes rather than positions, transitions weighted by gains and costs, the whole stock trading family from one transaction to k transactions with cooldowns and fees, the collapse into rolling scalars, and the layered DAG longest path view."
+date: 2026-09-05
+image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [dynamic programming, state machine dp, data structures, algorithms]
+authors: [fabrizio_duroni]
+---
+
+import { TopicExercises } from "@/components/content/data-structures-and-algorithms/topic-exercises";
+
+# State Machine DP
+
+Every dynamic programming formulation begins with the same act of faith: we declare what the state is, and everything else
+follows mechanically from that declaration.
+In the [foundations of dynamic programming](/data-structures-and-algorithms/topic/dp-foundations-1d-dp) the state is almost
+always a position, an index into a sequence, a capacity left in a knapsack, a cell of a grid.
+The recurrence then describes how to move from smaller positions to larger ones.
+
+There is a family of problems where this instinct fails, not because the problems are harder, but because the quantity that
+determines the future is not a position at all.
+It is a qualitative condition, a **mode** the process is in.
+Do I currently own a share, or not?
+Have I already spent both of my allowed transactions?
+Did I sell yesterday, and am therefore forbidden to buy today?
+Two runs that reach the same index with the same accumulated profit can still have completely different futures, because one
+of them is holding a share and the other is not.
+The index alone is not enough to predict what happens next.
+
+When this happens, the natural object to write down is not an array but a **finite state machine**.
+The modes become the states of an automaton, the legal actions become labelled transitions between them, and the immediate
+profit or cost of an action becomes the weight of the corresponding edge.
+Dynamic programming over this object is then extremely mechanical: for every step of the input we push the value of every
+state through every outgoing edge and keep the best arrival value at each destination.
+This article develops that idea in full, using the
+[Best Time to Buy and Sell Stock](https://leetcode.com/problems/best-time-to-buy-and-sell-stock/) family as the canonical
+illustration, because it is the rare case where six different problems turn out to be the *same* automaton drawn with
+slightly different edges.
+
+## When the State Is a Mode, Not a Position
+
+The formal requirement behind every DP state definition is that the state be a **sufficient statistic** for the future.
+Given the state, the optimal continuation must not depend on any other detail of how we arrived there.
+This is the same [Markov property](https://en.wikipedia.org/wiki/Markov_property) that underlies
+[Bellman](https://en.wikipedia.org/wiki/Richard_E._Bellman)'s principle of optimality: the decisions still to be taken form
+an optimal policy with respect to the situation produced by the decisions already taken.
+
+Consider the simplest stock problem.
+We are given daily prices and we may buy and sell as often as we like, holding at most one share at a time, and we want the
+maximum total profit.
+Suppose we define $dp[i]$ as the maximum profit achievable using the first $i$ days.
+This definition is not a sufficient statistic, and it is easy to see why.
+Two different optimal-so-far histories with the same profit can leave the process in two incompatible situations: one has
+already sold everything and holds cash, the other still owns a share bought at some price.
+The second history carries a hidden liability that the number $dp[i]$ does not record, so the recurrence cannot be closed.
+We would need to know, on top of the profit, *what we own*.
+
+The fix is not to invent a cleverer single number.
+The fix is to admit that the state has two components: the position in the sequence, which advances by one at every step,
+and the mode, which is drawn from a small fixed set.
+We therefore define a family of values indexed by both, $dp[i][s]$, meaning the best value achievable after processing the
+first $i$ days and ending in mode $s$.
+Because the set of modes is small and does not grow with the input, this costs almost nothing: the table has $n$ rows and
+a constant (or parameter-sized) number of columns.
+
+What makes this a genuinely different way of thinking, rather than just a two-dimensional DP, is that the recurrence is no
+longer derived by case analysis on the input.
+It is derived by **drawing a diagram**.
+The modes are the nodes, the legal actions are the arrows, and the recurrence is nothing more than a transcription of the
+arrows into code.
+Constraints that would otherwise appear as awkward conditionals inside the loop instead appear as *missing arrows*, which is
+both easier to get right and much easier to verify.
+
+## The Anatomy of a State Machine DP
+
+A state machine DP is fully described by five ingredients.
+A finite set of states $S$, the qualitative modes the process can be in.
+A set of transitions, each an ordered pair of states, describing which mode may follow which.
+A weight function that gives, for each transition and each step $i$, the immediate gain of taking that transition at that
+step, where negative gains are costs.
+An initial assignment of values to states, saying which modes are legal before any input is consumed.
+A set of accepting states, the modes in which the process is allowed to finish.
+
+The recurrence is then always the same:
+
+$$dp[i][s] = \max_{p \,\to\, s} \left( dp[i-1][p] + w(p \to s,\ i) \right)$$
+
+and the answer is the maximum of $dp[n][s]$ over the accepting states $s$.
+Unreachable states are initialised to $-\infty$, which is the neutral element of the maximum, exactly the way $0$ is the
+neutral element of addition.
+Using $-\infty$ rather than a special case keeps the loop uniform: an impossible mode simply never wins a maximum.
+
+Two subtleties are worth fixing immediately, because almost every bug in this family of problems comes from one of them.
+First, **doing nothing is a transition too**.
+If a mode may persist from one step to the next, the automaton needs an explicit self-loop with weight $0$, otherwise the
+value of that mode would be forced to be rebuilt from scratch at every step.
+Second, the recurrence reads exclusively from row $i-1$.
+Every arrow crosses the boundary between one step and the next, so a state's new value must never be computed from another
+state's *new* value unless we have checked that the shortcut is harmless, a point we return to when we collapse the table.
+
+Written directly, the generic machine looks like this.
+
+```ts
+type Transition<S extends string> = {
+    from: S;
+    to: S;
+    gain: (step: number) => number;
+};
+
+function runStateMachine<S extends string>(
+    states: readonly S[],
+    transitions: readonly Transition<S>[],
+    steps: number,
+    initial: Record<S, number>,
+    accepting: readonly S[]
+): number {
+    let current = { ...initial };
+
+    for (let step = 0; step < steps; step++) {
+        const next = {} as Record<S, number>;
+        for (const state of states) {
+            next[state] = -Infinity;
+        }
+
+        for (const transition of transitions) {
+            const candidate = current[transition.from] + transition.gain(step);
+            if (candidate > next[transition.to]) {
+                next[transition.to] = candidate;
+            }
+        }
+
+        current = next;
+    }
+
+    return Math.max(...accepting.map((state) => current[state]));
+}
+```
+
+Nobody writes this generic driver in practice, because with three or four states the specialised version is shorter and
+faster.
+It is worth reading once, though, because it makes the shape of the computation explicit: the input length enters only
+through the outer loop, and the problem enters only through the transition table.
+Everything that distinguishes one problem in this family from another lives in that table.
+
+## The Stock Automaton: Two Modes
+
+Start with [Best Time to Buy and Sell Stock II](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/), where
+we may complete as many transactions as we want but may hold at most one share at a time.
+The modes are obvious once the question is asked properly: at the end of any given day we either own a share or we do not.
+
+```text
+    idle: +0                                   idle: +0
+     +---+                                      +---+
+     |   v           buy: -prices[i]            |   v
+   +------+  ------------------------------>  +---------+
+   | FREE |                                   | HOLDING |
+   +------+  <------------------------------  +---------+
+                    sell: +prices[i]
+```
+
+The automaton has four edges and the recurrence is a literal transcription of them.
+Arriving in `FREE` on day $i$ is possible either by having been `FREE` on day $i-1$ and doing nothing, or by having been
+`HOLDING` and selling today at $prices[i]$.
+Arriving in `HOLDING` is possible either by having been `HOLDING` already, or by having been `FREE` and paying $prices[i]$
+to buy.
+
+$$free[i] = \max(free[i-1],\ holding[i-1] + prices[i])$$
+
+$$holding[i] = \max(holding[i-1],\ free[i-1] - prices[i])$$
+
+The initial values follow from the semantics: before the first day we are `FREE` with profit $0$, and `HOLDING` is
+unreachable, so it starts at $-\infty$.
+The only accepting state is `FREE`, because ending the process still owning a share is never better than not having bought
+it at all.
+
+```ts
+function maxProfitUnlimited(prices: number[]): number {
+    let free = 0;
+    let holding = -Infinity;
+
+    for (const price of prices) {
+        const previousFree = free;
+        free = Math.max(free, holding + price);
+        holding = Math.max(holding, previousFree - price);
+    }
+
+    return free;
+}
+```
+
+It is instructive to notice what this formulation does *not* do.
+The well known greedy solution to this problem, summing every positive difference between consecutive days, is correct, but
+it is a theorem, not an observation, and it requires an exchange argument to justify.
+The automaton requires no argument at all.
+It is the brute force search over all sequences of legal actions, made polynomial by the fact that only two situations are
+distinguishable.
+
+### One transaction only
+
+[Best Time to Buy and Sell Stock I](https://leetcode.com/problems/best-time-to-buy-and-sell-stock/) allows at most one buy
+and one sell.
+The temptation is to add a counter of transactions used, and that instinct is correct in general, but here the counter has
+only two values and can be absorbed into the state names themselves.
+The automaton becomes a chain rather than a cycle: `START` leads to `HOLDING` leads to `SOLD`, with no edge back.
+
+```text
+    idle: +0             idle: +0            idle: +0
+     +---+                +---+               +---+
+     |   v                |   v               |   v
+   +-------+  --------> +---------+  -----> +------+
+   | START |   -price   | HOLDING |  +price | SOLD |
+   +-------+            +---------+         +------+
+```
+
+```ts
+function maxProfitSingleTransaction(prices: number[]): number {
+    let holding = -Infinity;
+    let sold = 0;
+
+    for (const price of prices) {
+        holding = Math.max(holding, -price);
+        sold = Math.max(sold, holding + price);
+    }
+
+    return sold;
+}
+```
+
+The entire difference between the two problems is one term.
+In the unlimited version, `HOLDING` is entered from `free - price`, which recycles profit already banked and therefore
+permits an unbounded number of round trips.
+In the single transaction version, `HOLDING` is entered from `-price`, which is the value of the `START` state, permanently
+pinned at $0$.
+Because the profit from a previous sale can never flow back into a purchase, the machine is acyclic, and an acyclic machine
+can traverse the buy edge only once.
+The familiar "track the minimum price so far" solution is exactly the line `holding = Math.max(holding, -price)` in
+disguise: maximising $-price$ is minimising $price$.
+
+### A cost on an edge
+
+[Best Time to Buy and Sell Stock with Transaction Fee](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/)
+changes nothing structurally.
+The automaton is the two-state cycle of the unlimited problem, and the fee is simply subtracted on the sell edge.
+
+```ts
+function maxProfitWithFee(prices: number[], fee: number): number {
+    let free = 0;
+    let holding = -Infinity;
+
+    for (const price of prices) {
+        const previousFree = free;
+        free = Math.max(free, holding + price - fee);
+        holding = Math.max(holding, previousFree - price);
+    }
+
+    return free;
+}
+```
+
+This is the clearest demonstration of why the automaton is a good abstraction.
+A constraint about *cost* is an edge weight, and it never touches the topology.
+A constraint about *legality*, as we are about to see, is a change in topology, and it never touches the weights.
+Keeping those two kinds of change separate is most of the skill in this topic.
+
+## The Cooldown Edge: A Third Mode
+
+[Best Time to Buy and Sell Stock with Cooldown](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/)
+adds a rule that looks temporal and therefore looks like it should require remembering the past: after selling, we may not
+buy on the following day.
+Remembering the past is precisely what a state is for.
+The rule says that the day immediately after a sale is qualitatively different from any other day in which we hold no share,
+so it is a different mode.
+We split the old `FREE` state into two: `JUST SOLD`, meaning we sold today and are therefore frozen, and `RESTING`, meaning
+we hold no share and are free to buy.
+
+```text
+    idle: +0                                        idle: +0
+     +---+                                           +---+
+     |   v            buy: -prices[i]                |   v
+  +---------+  ------------------------------>  +---------+
+  | RESTING |                                   | HOLDING |
+  +---------+                                   +---------+
+       ^                                             |
+       |                                             |  sell: +prices[i]
+       |  cooldown: +0                               v
+       |                                       +-----------+
+       +-------------------------------------  | JUST SOLD |
+                                               +-----------+
+```
+
+Every property of the problem is now visible in the picture.
+`JUST SOLD` has exactly one outgoing edge, to `RESTING`, and that edge consumes a day.
+There is no arrow from `JUST SOLD` to `HOLDING`, and the absence of that arrow *is* the cooldown rule.
+Nothing in the code needs to check how many days have passed since the last sale, because a run that sold on day $i$ is in
+`JUST SOLD` on day $i$, in `RESTING` no earlier than day $i+1$, and therefore in `HOLDING` no earlier than day $i+2$.
+Notice also that `JUST SOLD` has no self-loop: staying still after a sale means moving to `RESTING`, not remaining sold,
+since "just sold" describes a single day and not a lasting condition.
+
+$$holding[i] = \max(holding[i-1],\ resting[i-1] - prices[i])$$
+
+$$justSold[i] = holding[i-1] + prices[i]$$
+
+$$resting[i] = \max(resting[i-1],\ justSold[i-1])$$
+
+The middle line has no maximum because `JUST SOLD` has a single incoming edge.
+The accepting states are `JUST SOLD` and `RESTING`, since the process may legitimately end on the day of a sale or on any
+later day, but never while still holding a share.
+
+```ts
+function maxProfitWithCooldown(prices: number[]): number {
+    let holding = -Infinity;
+    let justSold = -Infinity;
+    let resting = 0;
+
+    for (const price of prices) {
+        const previousHolding = holding;
+        const previousJustSold = justSold;
+        const previousResting = resting;
+
+        holding = Math.max(previousHolding, previousResting - price);
+        justSold = previousHolding + price;
+        resting = Math.max(previousResting, previousJustSold);
+    }
+
+    return Math.max(justSold, resting);
+}
+```
+
+The three snapshots taken at the top of the loop body are not defensive programming, they are the whole correctness argument,
+and the next section explains exactly why they cannot be removed here even though the analogous snapshots can be removed
+elsewhere.
+
+A useful way to check that a three-state model is the right one is to ask what a longer cooldown would require.
+A cooldown of $d$ days needs $d$ chained frozen modes, `JUST SOLD` leading to `FROZEN 1` leading to `FROZEN 2` and so on up
+to `RESTING`, which is a machine with $d + 2$ states and a linear pipeline in the middle.
+The cost of the algorithm grows with the number of modes, not with the input, which tells us immediately that a cooldown of
+one day is free and a cooldown proportional to $n$ would not be.
+
+## At Most k Transactions: A Chain of 2k Modes
+
+[Best Time to Buy and Sell Stock III](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/) allows at most two
+transactions, and
+[Best Time to Buy and Sell Stock IV](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iv/) generalises this to
+at most $k$.
+Here the mode must record not only whether we hold a share, but how much of our transaction budget we have already burned.
+Since a transaction consists of a buy followed by a sell, and the budget can be consumed only by completing those two steps,
+the modes form a chain of $2k$ nodes: buy the first share, sell the first share, buy the second share, sell the second share,
+and so on.
+
+```text
+   +-------+  -price   +--------+  +price   +--------+  -price   +--------+  +price   +--------+
+   | START | --------> | BUY 1  | --------> | SELL 1 | --------> | BUY 2  | --------> | SELL 2 |
+   +-------+           +--------+           +--------+           +--------+           +--------+
+                          ^  |                 ^  |                 ^  |                 ^  |
+                          +--+                 +--+                 +--+                 +--+
+                        idle: +0             idle: +0             idle: +0             idle: +0
+```
+
+This is the single-transaction machine repeated $k$ times and glued end to end, and the glue is the only interesting part.
+The edge from `SELL 1` into `BUY 2` says that the capital available for the second purchase is whatever the first completed
+transaction left behind.
+The chain is acyclic and directed forward, so no run can traverse more than $k$ buy edges, which is exactly the constraint.
+The answer is the value of the last sell state, because the idle self-loops let a run that uses fewer than $k$ transactions
+carry its value forward to the end of the chain for free.
+
+$$buy_t[i] = \max(buy_t[i-1],\ sell_{t-1}[i-1] - prices[i])$$
+
+$$sell_t[i] = \max(sell_t[i-1],\ buy_t[i-1] + prices[i])$$
+
+with $sell_0$ identically $0$, which is the `START` state.
+The general implementation keeps one scalar per node of the chain.
+
+```ts
+function maxProfitAtMostK(k: number, prices: number[]): number {
+    if (k >= prices.length / 2) {
+        return maxProfitUnlimited(prices);
+    }
+
+    const buy = new Array(k + 1).fill(-Infinity);
+    const sell = new Array(k + 1).fill(0);
+
+    for (const price of prices) {
+        for (let t = 1; t <= k; t++) {
+            buy[t] = Math.max(buy[t], sell[t - 1] - price);
+            sell[t] = Math.max(sell[t], buy[t] + price);
+        }
+    }
+
+    return sell[k];
+}
+```
+
+The guard at the top matters more than it looks.
+A profitable transaction needs at least two distinct days, so no run can ever complete more than $\lfloor n/2 \rfloor$
+transactions.
+Once $k$ reaches that threshold the budget stops being a constraint and the problem degenerates into the unlimited version,
+which the two-state machine solves in linear time.
+Without the guard, an input with $n$ small and $k$ in the order of $10^9$ would allocate two arrays of a billion entries to
+express a constraint that is already vacuous.
+This is a recurring theme in state machine DP: when a parameter enters the *number of states*, always ask what value of that
+parameter makes the machine collapse.
+
+For the two transaction case the chain has five nodes and the arrays are unnecessary, which gives the compact form that
+reads like the diagram.
+
+```ts
+function maxProfitAtMostTwoTransactions(prices: number[]): number {
+    let firstBuy = -Infinity;
+    let firstSell = 0;
+    let secondBuy = -Infinity;
+    let secondSell = 0;
+
+    for (const price of prices) {
+        firstBuy = Math.max(firstBuy, -price);
+        firstSell = Math.max(firstSell, firstBuy + price);
+        secondBuy = Math.max(secondBuy, firstSell - price);
+        secondSell = Math.max(secondSell, secondBuy + price);
+    }
+
+    return secondSell;
+}
+```
+
+## Collapsing the Table into Rolling Scalars
+
+Every machine in this article has been written with scalars rather than with a two-dimensional table, and it is worth being
+explicit about why that is legitimate and where it stops being legitimate.
+The recurrence reads only from row $i-1$, so a table of $n$ rows is never needed: two rows suffice, and two rows of a handful
+of entries are just a handful of variables.
+This is the same [space optimization](/data-structures-and-algorithms/topic/dp-foundations-1d-dp) that turns any DP with a
+one-row-back dependency into constant space, applied to an unusually narrow table.
+
+The delicate part is that the two implementations above treat the boundary between rows differently, and both are correct
+for reasons that do not transfer.
+In `maxProfitWithCooldown` every right-hand side reads a snapshot taken before any assignment, so the loop body is a faithful
+simulation of the row-to-row update.
+Removing the snapshots would be a real bug.
+If `resting` were computed from the freshly updated `justSold`, the machine would allow a run to sell and immediately become
+free within the same day, traversing two edges in one step and erasing the cooldown day entirely.
+The cooldown exists only because the arrow from `JUST SOLD` to `RESTING` consumes a day, and an in-place update would spend
+nothing.
+
+In `maxProfitAtMostTwoTransactions` the updates are deliberately sequential and in place, so `firstSell` is computed from the
+`firstBuy` of the *current* day rather than the previous one.
+This looks like the same bug and is not, and the reason is specific to the weights on the chain.
+The leaked path buys and sells on the same day at the same price, so it contributes $-prices[i] + prices[i] = 0$ to the
+profit, which is never better than the value already carried by the idle self-loop of the destination.
+A zero-weight shortcut can never win a maximum against a path that is at least as good, so the extra paths the in-place
+update admits are all dominated and the answer is unchanged.
+The same argument covers `maxProfitAtMostK` and, with the fee subtracted, makes the shortcut strictly losing rather than
+merely non-winning.
+
+The general rule is therefore simple and worth stating once.
+In-place sequential updates over the states of a machine are safe if and only if every extra path they create, that is every
+path that traverses two or more edges within a single step, has a total weight that cannot improve the destination.
+When in doubt, snapshot.
+The cost of snapshotting a constant number of scalars is nothing, and the bug it prevents is the kind that passes the small
+examples and fails on the large ones.
+
+## The Layered Graph View: DP as a Longest Path in a DAG
+
+There is a second way to look at all of this that explains, rather than merely describes, why it works.
+Take the automaton and **unroll it over time**.
+Draw $n + 1$ copies of the state set, one per step boundary, arrange them in layers from left to right, and for every
+transition of the automaton draw an edge from its source in layer $i-1$ to its destination in layer $i$, weighted by the
+gain of taking that transition at step $i$.
+
+The result is a [directed acyclic graph](/data-structures-and-algorithms/topic/topological-sort) with $n \cdot |S|$ nodes
+and $n \cdot |T|$ edges, in which every edge goes from one layer to the next and therefore no cycle can exist.
+A run of the process is exactly a path from a source node in layer $0$ to an accepting node in layer $n$, and its profit is
+exactly the total weight of that path.
+The dynamic program is therefore nothing more than a **longest path computation on a DAG**, and the layer index is a ready
+made [topological order](/data-structures-and-algorithms/topic/topological-sort), which is why a single left to right sweep
+suffices.
+
+This reframing pays for itself immediately.
+Longest path is [NP-hard](https://en.wikipedia.org/wiki/Longest_path_problem) on general graphs, and it is linear on a DAG,
+so the acyclicity of the unrolled machine is not a detail, it is the entire reason the problem is tractable.
+Negative edge weights, which would rule out [Dijkstra's algorithm](/data-structures-and-algorithms/topic/shortest-path) if we
+were minimising on a general graph, are harmless here for the same reason: relaxing edges in topological order needs no
+assumption about their sign, which is also why
+[Bellman-Ford](/data-structures-and-algorithms/topic/shortest-path) style relaxation is the right mental model for dynamic
+programming over graphs in general.
+Reconstructing the optimal sequence of actions, rather than just its value, becomes the standard path reconstruction: store
+for each node the predecessor that produced its value, then walk backwards from the best accepting node.
+
+The layered view also draws a sharp line around what this technique can and cannot do.
+The size of the graph is $n \cdot |S|$, so the method is efficient exactly when the number of modes is small.
+If a constraint forces the mode to remember something that grows with the input, the state set explodes and we are no longer
+in this family: that is the boundary between state machine DP and, say, bitmask DP over subsets.
+
+Two generalisations are worth knowing.
+The first is that the per-layer update is a matrix-vector product.
+If we arrange the state values in a vector and the transition weights in a matrix, one step of the machine is a product in
+the [tropical semiring](https://en.wikipedia.org/wiki/Tropical_semiring), where addition is replaced by maximum and
+multiplication by addition.
+When the weights do not depend on the step, the whole $n$-step evolution is a matrix power, computable by fast exponentiation
+in $O(|S|^3 \log n)$ time, which turns problems with astronomically long horizons into logarithmic ones.
+The stock problems do not qualify, since their weights change every day with the price, but counting problems over automata
+(how many strings of length $n$ avoid a given pattern, how many tilings of a strip of length $n$ exist) do, and they use the
+ordinary sum-product semiring instead of the tropical one.
+The second generalisation is that when the automaton is derived from a pattern rather than invented by hand, for example the
+failure automaton of Knuth-Morris-Pratt or an [Aho-Corasick](/data-structures-and-algorithms/topic/tries) automaton built
+over a set of forbidden words, dynamic programming over its states solves an entire class of string counting problems with
+no new machinery.
+The probabilistic cousin of the same computation, with products of probabilities instead of sums of gains, is the
+[Viterbi algorithm](https://en.wikipedia.org/wiki/Viterbi_algorithm) over a hidden Markov model, which is the most widely
+deployed state machine DP in existence.
+
+## Designing an Automaton for a New Problem
+
+The stock family is the canonical illustration, but the method is what should be retained, and it can be reduced to a short
+sequence of questions.
+
+Ask first what the process is allowed to do at each step, and then what fact about the past decides which of those actions
+are legal.
+That fact is the mode, and the set of its possible values is the state set.
+If the answer is "nothing about the past matters", the problem is not a state machine DP and a plain one-dimensional
+recurrence will do.
+
+Draw one arrow per legal action, from the mode it starts in to the mode it produces, and label it with the immediate gain.
+Add a self-loop wherever the process may stay put.
+Then check the diagram against the problem statement one constraint at a time, and insist that each constraint be expressed
+either as a missing arrow or as an extra mode, never as a condition buried in the loop.
+A rule of the form "you may not do X immediately after Y" always becomes an intermediate mode, exactly like the cooldown.
+A rule of the form "X costs you something" always becomes an edge weight, exactly like the fee.
+A rule of the form "you may do X at most $k$ times" always becomes $k$ copies of part of the machine, exactly like the
+transaction chain.
+
+Finally decide the initial values, $0$ for the modes that are legal before any input and $-\infty$ for the rest, and the set
+of accepting modes, which is the set of situations in which stopping is legitimate.
+Taking the maximum over the wrong accepting set is a surprisingly common error: in the stock problems, including `HOLDING`
+would report the profit of a run that never sold the share it bought.
+
+Once the habit is formed, machines start appearing in problems that are never presented as such.
+[House Robber](/data-structures-and-algorithms/topic/dp-foundations-1d-dp) is a two-mode machine, robbed or skipped, where
+the missing arrow from robbed to robbed encodes the adjacency constraint.
+[Kadane's algorithm](/data-structures-and-algorithms/topic/kadane-algorithm) is a two-mode machine, inside or outside the
+chosen subarray, where the arrow that re-enters the segment resets the accumulated sum to zero.
+Painting houses with no two adjacent houses sharing a colour is a machine whose modes are the colours themselves.
+In each case the automaton was always there, and naming it turns an ad hoc recurrence into a diagram that can be checked by
+inspection.
+
+## Time and Space Complexity
+
+The cost of a state machine DP is determined almost entirely by the size of the automaton, and this is the property that
+makes the family so uniform.
+Every step of the input consumes each state once and relaxes each transition once, so the running time is
+$O(n \cdot |T|)$, which for a machine whose states all have a bounded number of incoming edges is simply $O(n \cdot |S|)$.
+The space, before any optimization, is $O(n \cdot |S|)$ for the full table, and $O(|S|)$ after collapsing to rolling values,
+since the recurrence only ever reads the previous layer.
+
+For the machines with a fixed number of modes this gives linear time and constant space.
+The two-state unlimited transaction problem, the three-state cooldown problem and the fee variant all run in $O(n)$ time and
+$O(1)$ space, since two or three scalars are all that survives the collapse.
+The single transaction problem is the same, which is the formal statement of the fact that the classic "track the minimum
+price" one-liner and the automaton are the same algorithm.
+Linear time is also optimal for all of them, because the answer depends on every price and any correct algorithm must read
+the whole input.
+
+For the bounded transaction problems the parameter $k$ enters the state count, and the chain has $2k + 1$ nodes.
+The running time is therefore $O(nk)$ and the space is $O(k)$ with rolling scalars, against $O(nk)$ for the uncollapsed
+table.
+At most two transactions is the case $k = 2$, so the machine has five nodes, the running time is $O(n)$ and the space is
+$O(1)$: the four variables in the implementation are the entire state of the algorithm.
+For the general $k$ version the collapse to unlimited transactions when $k \geq n/2$ caps the real cost at
+$O(n \cdot \min(k, n))$, which is $O(n^2)$ in the worst case and linear whenever $k$ is small or absurdly large.
+Without that guard the algorithm would still be $O(nk)$ in time and $O(k)$ in space even for values of $k$ that no input can
+exercise, which is a correctness-preserving but practically fatal difference.
+
+The recursive formulation with memoization has the same asymptotic time, since it computes the same $n \cdot |S|$ values
+once each, but it cannot benefit from the rolling collapse: the memo table must persist in full, giving $O(n \cdot |S|)$
+space plus $O(n)$ of call stack.
+For a machine with three states over $10^5$ days that is the difference between three numbers and three hundred thousand,
+which is why the bottom-up sweep is the natural formulation here even for readers who normally prefer top-down.
+
+Finally, the layered graph view gives the same numbers from a different direction and confirms them.
+The unrolled DAG has $n \cdot |S|$ nodes and $n \cdot |T|$ edges, and a longest path computation in topological order visits
+each node and each edge exactly once, which is $O(n \cdot |S| + n \cdot |T|)$.
+Path reconstruction, when the sequence of actions is required and not only its value, adds $O(n \cdot |S|)$ space for the
+predecessor pointers and no asymptotic time, which is the one situation in which the rolling collapse must be given up.
+
+## Exercises
+
+<TopicExercises topic="state-machine-dp" />

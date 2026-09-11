@@ -1,0 +1,60 @@
+---
+title: "House Robber III"
+description: "Maximise the money robbed from a binary tree of houses, knowing that two directly connected houses cannot both be robbed on the same night."
+date: 2026-09-06
+image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [dynamic programming, tree dp, graph dp, rerooting, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Post-order tree DP returning a robbed and skipped pair per node"
+  leetcodeUrl: "https://leetcode.com/problems/house-robber-iii/"
+  difficulty: "Medium"
+---
+# House Robber III
+
+Leetcode Problem 337: [House Robber III](https://leetcode.com/problems/house-robber-iii/description/)
+
+## Problem Summary
+The houses of a neighbourhood are arranged as a binary tree, with the entrance at the **root** and each node holding the
+amount of money stored in that house. The alarm goes off whenever two houses that are directly connected, meaning a node
+and one of its children, are robbed on the same night. Return the maximum amount of money that can be robbed without
+triggering the alarm. The tree holds between **1** and **10,000** nodes, and each house holds between **0** and
+**10,000**.
+
+The constraint links a node only to its children, so the value of a subtree is not a single number: it depends on
+whether the root of that subtree was robbed. Each node therefore returns a pair of conditional optima, the best result
+when it is robbed and the best result when it is skipped. Robbing a node forces both children into the skipped value,
+while skipping it lets each child pick whichever of its two values is larger, and this asymmetry is exactly what
+enforces the adjacency rule.
+
+## Techniques
+- Dynamic Programming
+- Tree
+- Depth-First Search
+- Binary Tree
+
+## Solution
+```ts
+import { TreeNode } from "../tree-node";
+
+function rob(root: TreeNode | null): number {
+    // every node returns the best it can do when robbed and when skipped
+    function robSubtree(node: TreeNode | null): [robbed: number, skipped: number] {
+        if (!node) {
+            return [0, 0]
+        }
+
+        const [leftRobbed, leftSkipped] = robSubtree(node.left)
+        const [rightRobbed, rightSkipped] = robSubtree(node.right)
+
+        // robbing this node forbids robbing either child
+        const robbed = node.val + leftSkipped + rightSkipped
+        // skipping it leaves each child free to pick its own best
+        const skipped = Math.max(leftRobbed, leftSkipped) + Math.max(rightRobbed, rightSkipped)
+
+        return [robbed, skipped]
+    }
+
+    return Math.max(...robSubtree(root))
+};
+```

@@ -1,0 +1,465 @@
+---
+title: "Maths / Geometry"
+description: "A guide to the mathematical toolbox behind algorithmic problem solving: digit manipulation without strings, fixed width integer overflow, divisibility and the Euclidean algorithm, Legendre's formula, modular arithmetic, and exact computational geometry on integer coordinates."
+date: 2026-09-10
+image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [maths, geometry, number theory, computational geometry, data structures, algorithms]
+authors: [fabrizio_duroni]
+---
+
+import { TopicExercises } from "@/components/content/data-structures-and-algorithms/topic-exercises";
+
+# Maths / Geometry
+
+Every other topic in this course is organised around a structure or around a strategy.
+A heap is a structure, binary search is a strategy, dynamic programming is a way of decomposing a problem into overlapping subproblems.
+Maths and geometry are neither.
+There is no single data structure to learn here and no single template to instantiate, because what this topic collects is a **toolbox**: a set of facts about integers, divisibility, primes and points in the plane that, once known, make certain problems dissolve.
+
+What distinguishes the topic is where the decisive insight lives.
+In most algorithmic work the breakthrough is structural: you notice that the state can be memoised, that the array is sorted, that the graph is a tree.
+Here the breakthrough is mathematical: you notice that a trailing zero in a factorial is really a factor of five, that two segments sharing a midpoint and a length are necessarily the diagonals of a rectangle,
+that two points define a direction which can be reduced to a canonical form and hashed.
+The moment you see it, an exponential or quadratic brute force collapses into a closed form or a single pass.
+That is why these problems are so unforgiving when approached by pattern matching alone, and so easy once the right observation is in hand.
+
+There is also a discipline that runs through the whole topic and deserves to be stated at the start.
+Almost every problem in this family is posed over the **integers**, and almost every correct solution stays over the integers from beginning to end.
+Floating point arithmetic is introduced only when the answer itself is irrational, and even then as late as possible.
+Keeping the computation exact is not a stylistic preference: it is what makes an equality test meaningful, and it is the difference between a predicate that is always right and one that is right for the test cases you happened to try.
+
+## Digit Manipulation Without Strings
+
+The decimal representation of a non negative integer can be taken apart with two operations and nothing else.
+The remainder `n % 10` yields the least significant digit, and the quotient `Math.floor(n / 10)` removes it.
+Repeating the pair until the number reaches zero enumerates the digits from least to most significant, and the loop runs once per digit, so it performs $O(\log_{10} n)$ iterations.
+
+```ts
+function digitsOf(value: number): number[] {
+    const digits: number[] = [];
+
+    while (value > 0) {
+        digits.push(value % 10);
+        value = Math.floor(value / 10);
+    }
+
+    return digits.length > 0 ? digits : [0];
+}
+```
+
+The inverse operation rebuilds a number from digits supplied most significant first, by the Horner scheme `result = result * 10 + digit`.
+Every step shifts the accumulated value one decimal position to the left and drops the new digit into the vacated units place.
+Combining the two, extracting from the right and rebuilding from the left, reverses the decimal representation of a number without ever materialising a string.
+
+```ts
+function reverseDigits(value: number): number {
+    let reversed = 0;
+
+    while (value > 0) {
+        reversed = reversed * 10 + (value % 10);
+        value = Math.floor(value / 10);
+    }
+
+    return reversed;
+}
+```
+
+Two JavaScript specific details deserve attention, because they are the usual source of silent bugs.
+The division operator is not integer division: `7 / 2` is `3.5`, so the explicit floor is mandatory and not decorative.
+The remainder operator keeps the sign of the dividend, so `-7 % 10` is `-7` and not `3`, which means that a digit loop over a negative number produces negative digits.
+For negative inputs the usual remedy is to work on the absolute value and reattach the sign at the end.
+When truncation towards zero rather than towards minus infinity is what you want, `Math.trunc` is the correct choice, since `Math.floor(-7 / 10)` is `-1` while `Math.trunc(-7 / 10)` is `0`.
+
+### Fixed Width Integers and Explicit Overflow Checks
+
+Many problems in this family are stated over a **signed 32 bit integer**, which is a specific and finite object.
+Thirty two bits encoded in [two's complement](/data-structures-and-algorithms/topic/bit-manipulation) represent the values from $-2^{31}$ to $2^{31} - 1$, that is from `-2147483648` to `2147483647`.
+The range is asymmetric because zero has to live somewhere, and it lives on the non negative side, leaving one more slot available for negatives than for positives.
+An immediate consequence is that the negation of the minimum value is not representable: `-(-2147483648)` would be `2147483648`, which is one past the maximum.
+Any routine that begins by taking an absolute value has a latent edge case there, and in a language with real 32 bit arithmetic that case wraps around silently.
+
+JavaScript numbers are IEEE 754 doubles, so none of this happens by itself.
+Integers are represented exactly up to $2^{53} - 1$, which comfortably contains the whole 32 bit range, and arithmetic that would overflow a 32 bit register simply produces a larger correct double.
+That is convenient, and it is also a trap: a problem that asks you to detect overflow is asking about a machine that JavaScript is not emulating, so the check has to be written by hand.
+
+```ts
+const INT_MAX = 2 ** 31 - 1;
+const INT_MIN = -(2 ** 31);
+
+function fitsInSigned32Bits(value: number): boolean {
+    return value >= INT_MIN && value <= INT_MAX;
+}
+```
+
+Checking after the fact works in JavaScript precisely because the intermediate result is still exact.
+In a genuinely fixed width language the test has to be made before the overflowing operation, by asking whether the accumulator has already grown past `(INT_MAX - digit) / 10` before multiplying it by ten.
+It is worth being able to write both, because the pre check is the version that generalises, and because it makes explicit that the dangerous step is the multiplication and not the addition.
+
+### The Half Reversal Trick
+
+Deciding whether a number reads the same forwards and backwards can be done by reversing it entirely and comparing, but that construction has a flaw: the reversal of a valid 32 bit integer need not itself be a valid 32 bit integer, so the very act of testing can overflow.
+The repair is to reverse only **half** of the number.
+
+The loop consumes digits from the right end of the original and appends them to a growing reversed value, and it stops as soon as the reversed value has caught up with what remains of the original.
+That crossing point is exactly the middle of the number.
+For an even digit count the two halves end up side by side and a direct comparison decides the question.
+For an odd digit count the middle digit is left on the reversed side, where it is irrelevant to the palindrome property, so dividing the reversed half by ten discards it before comparing.
+
+```ts
+function isPalindromeNumber(x: number): boolean {
+    if (x < 0 || (x % 10 === 0 && x !== 0)) {
+        return false;
+    }
+
+    let reversedHalf = 0;
+
+    while (x > reversedHalf) {
+        reversedHalf = reversedHalf * 10 + (x % 10);
+        x = Math.floor(x / 10);
+    }
+
+    return x === reversedHalf || x === Math.floor(reversedHalf / 10);
+}
+```
+
+The two guards at the top are not cosmetic.
+A negative number is never a palindrome, because the minus sign appears at one end and not at the other.
+A number whose last digit is zero cannot be a palindrome either, since reading it backwards would require a leading zero, and the single exception is zero itself.
+Without that second guard the loop would terminate immediately on a value like `10` and report a false positive, because the reversed half would still be zero while the remaining value is not.
+The construction halves the number of iterations, but its real merit is that it never builds a value larger than the input, which removes overflow from the picture entirely.
+
+## Number Theory
+
+Number theory contributes the facts about divisibility that turn counting problems into arithmetic.
+The most useful of them is that questions about the divisors of a number, or about the number of times a prime appears in a product, almost never require constructing the number itself.
+
+### Divisibility and the Euclidean Algorithm
+
+For integers $a$ and $b$ with $b \neq 0$, we say that $b$ **divides** $a$ when there exists an integer $q$ with $a = qb$.
+The **greatest common divisor** of $a$ and $b$ is the largest integer dividing both, and the [Euclidean algorithm](https://en.wikipedia.org/wiki/Euclidean_algorithm) computes it in logarithmic time.
+
+```ts
+function greatestCommonDivisor(a: number, b: number): number {
+    while (b !== 0) {
+        const remainder = a % b;
+        a = b;
+        b = remainder;
+    }
+
+    return a;
+}
+```
+
+The algorithm rests on a single identity: $\gcd(a, b) = \gcd(b, a \bmod b)$.
+The proof is short and worth internalising, because it explains why the reduction is lossless rather than merely convenient.
+Write $a = qb + r$ with $r = a \bmod b$.
+Any common divisor $d$ of $a$ and $b$ divides $a - qb$, which is $r$, so $d$ is also a common divisor of $b$ and $r$.
+Conversely, any common divisor $d$ of $b$ and $r$ divides $qb + r$, which is $a$, so $d$ is also a common divisor of $a$ and $b$.
+The two pairs therefore have exactly the same set of common divisors, and in particular the same greatest one.
+
+Termination follows from the fact that the remainder is a non negative integer strictly smaller than the divisor, so the second argument decreases strictly at every step and must reach zero.
+The speed of that decrease is the content of [Lamé's theorem](https://en.wikipedia.org/wiki/Lam%C3%A9%27s_theorem): the number of iterations is $O(\log \min(a, b))$,
+and the worst case is attained by consecutive [Fibonacci numbers](https://en.wikipedia.org/wiki/Fibonacci_sequence), where each division removes as little as it possibly can.
+The least common multiple follows immediately from the identity $\operatorname{lcm}(a, b) \cdot \gcd(a, b) = a \cdot b$, and it should be computed as `a / gcd * b` rather than `a * b / gcd`, so that the intermediate product never grows larger than the answer.
+
+### Primes, Factorization and the Sieve
+
+A prime is an integer greater than one whose only positive divisors are one and itself, and the [fundamental theorem of arithmetic](https://en.wikipedia.org/wiki/Fundamental_theorem_of_arithmetic) states that every integer greater than one factors into primes in exactly one way up to ordering.
+That uniqueness is what makes prime factorization a canonical form, and canonical forms are what allow hashing, comparison and counting.
+
+Factoring a single number is done by trial division, and the loop only has to reach the square root of the value.
+The reason is that if $n = ab$ with $a \leq b$, then $a \leq \sqrt{n}$, so a composite number always has a factor at or below its square root.
+Whatever survives the loop is either one or a prime larger than the square root of the original input, and in the latter case it is the last factor.
+
+```ts
+function primeFactors(value: number): Map<number, number> {
+    const factors = new Map<number, number>();
+
+    for (let candidate = 2; candidate * candidate <= value; candidate++) {
+        while (value % candidate === 0) {
+            factors.set(candidate, (factors.get(candidate) ?? 0) + 1);
+            value /= candidate;
+        }
+    }
+
+    if (value > 1) {
+        factors.set(value, (factors.get(value) ?? 0) + 1);
+    }
+
+    return factors;
+}
+```
+
+When primality is needed for many numbers rather than one, the [sieve of Eratosthenes](https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes) is the right tool.
+It marks every multiple of every prime as composite, and the two refinements that matter are to stop the outer loop at the square root of the limit,
+and to begin crossing out at $p^2$ rather than at $2p$, because every smaller multiple of $p$ already carries a smaller prime factor and has therefore already been marked.
+
+```ts
+function sieveOfEratosthenes(limit: number): boolean[] {
+    const isPrime = new Array<boolean>(limit + 1).fill(true);
+    isPrime[0] = false;
+
+    if (limit >= 1) {
+        isPrime[1] = false;
+    }
+
+    for (let candidate = 2; candidate * candidate <= limit; candidate++) {
+        if (isPrime[candidate]) {
+            for (let multiple = candidate * candidate; multiple <= limit; multiple += candidate) {
+                isPrime[multiple] = false;
+            }
+        }
+    }
+
+    return isPrime;
+}
+```
+
+The total work is the sum of $n / p$ over all primes $p$ below $n$, which by Mertens' theorem is $O(n \log \log n)$.
+That is close enough to linear that for any limit a problem statement will impose, the sieve is effectively free.
+
+### Legendre's Formula
+
+The most striking demonstration of the toolbox in action is counting how many times a prime divides a factorial.
+The naive approach computes $n!$ and factors it, which is impossible for even moderate $n$, since $100!$ has 158 digits.
+The right question is not what the product is, but how many factors of $p$ the product absorbs.
+
+Consider the integers from $1$ to $n$.
+Exactly $\lfloor n / p \rfloor$ of them are multiples of $p$, and each contributes at least one factor $p$ to the product.
+Of those, exactly $\lfloor n / p^2 \rfloor$ are multiples of $p^2$, and each contributes a second factor beyond the one already counted.
+Continuing in this way, each power of $p$ counts the numbers that carry at least that many copies of $p$, and summing the counts adds each copy exactly once.
+This is [Legendre's formula](https://en.wikipedia.org/wiki/Legendre%27s_formula):
+
+$$
+v_p(n!) = \sum_{i \geq 1} \left\lfloor \frac{n}{p^i} \right\rfloor
+$$
+
+The sum is finite, because as soon as $p^i$ exceeds $n$ every term is zero, so it has $\lfloor \log_p n \rfloor$ non zero terms.
+
+```ts
+function multiplicityInFactorial(n: number, prime: number): number {
+    let multiplicity = 0;
+
+    for (let power = prime; power <= n; power *= prime) {
+        multiplicity += Math.floor(n / power);
+    }
+
+    return multiplicity;
+}
+```
+
+Counting the trailing zeroes of $n!$ is this formula in disguise.
+A trailing zero is a factor of ten, and a factor of ten is a factor of two paired with a factor of five, so the number of trailing zeroes is $\min(v_2(n!), v_5(n!))$.
+Since every second integer is even while only every fifth is a multiple of five, $v_2(n!)$ always dominates, and the minimum is simply $v_5(n!)$.
+The whole problem therefore reduces to one logarithmic loop, and the astronomical intermediate value is never constructed.
+
+### Modular Arithmetic
+
+When a problem asks for a count that grows beyond any fixed width, the conventional answer is to report it modulo a large prime, most often $10^9 + 7$.
+The reason this works is that reduction modulo $m$ is a ring homomorphism: addition, subtraction and multiplication all commute with taking the remainder, so intermediate results can be reduced at every step without changing the final answer.
+
+The prime choice is not arbitrary.
+A prime modulus makes every non zero residue invertible, which is what allows division to be simulated, and [Fermat's little theorem](https://en.wikipedia.org/wiki/Fermat%27s_little_theorem) gives the inverse explicitly as $a^{m-2} \bmod m$.
+Computing that power naively would take $m$ multiplications, but **binary exponentiation** does it in $O(\log e)$ by squaring the base and consuming the exponent one bit at a time.
+
+```ts
+function modularPower(base: bigint, exponent: bigint, modulo: bigint): bigint {
+    let result = 1n;
+    let factor = base % modulo;
+    let remaining = exponent;
+
+    while (remaining > 0n) {
+        if (remaining % 2n === 1n) {
+            result = (result * factor) % modulo;
+        }
+
+        factor = (factor * factor) % modulo;
+        remaining /= 2n;
+    }
+
+    return result;
+}
+```
+
+The signature uses `bigint` deliberately, and this is a point where JavaScript differs from the languages these techniques are usually presented in.
+Two residues modulo $10^9 + 7$ can each be close to $10^9$, so their product approaches $10^{18}$, which is well past the $2^{53}$ exactness limit of a double.
+The multiplication would therefore be silently rounded, and every subsequent reduction would be computed from a wrong value.
+Either the arithmetic moves to `BigInt`, or the modulus is kept small enough that products of two residues stay under $2^{53}$, which means roughly below $10^{7}$.
+
+## Computational Geometry on Integer Coordinates
+
+Geometry problems in this family are almost always posed on a grid of integer coordinates, and the central discipline is to never leave that grid.
+Every predicate worth computing, whether two segments are parallel, whether three points are collinear, which of two distances is larger, whether four points form a square,
+can be expressed using only additions, subtractions and multiplications of the input coordinates.
+All three operations map integers to integers, so every intermediate value remains exact and every equality test is decisive.
+The moment a square root or a division enters the computation, exactness is gone and equality becomes a matter of tolerance.
+
+### Points, Vectors and Exact Predicates
+
+A point is a pair of coordinates, and the difference of two points is a **vector** describing a displacement.
+The two products that carry almost all the geometric information are the dot product and the cross product.
+
+For vectors $u = (u_x, u_y)$ and $v = (v_x, v_y)$, the **dot product** is $u \cdot v = u_x v_x + u_y v_y$, and it equals $\lVert u \rVert \lVert v \rVert \cos \theta$.
+Its sign therefore tells whether the angle between the vectors is acute, right or obtuse, and it vanishes exactly when the vectors are perpendicular.
+The **cross product** in two dimensions is the scalar $u \times v = u_x v_y - u_y v_x$, and it equals $\lVert u \rVert \lVert v \rVert \sin \theta$.
+Its absolute value is the area of the parallelogram spanned by the two vectors, its sign gives the orientation of the turn from $u$ to $v$, counterclockwise when positive and clockwise when negative,
+and it vanishes exactly when the vectors are parallel.
+
+The **squared distance** between two points completes the set.
+Because the square root is monotonically increasing on non negative numbers, comparing distances and comparing squared distances give the same answer,
+so the square root can simply be omitted whenever the distance is only used in a comparison or an equality test.
+
+```ts
+type Point = readonly [number, number];
+
+function squaredDistance(a: Point, b: Point): number {
+    return (a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2;
+}
+
+function dotProduct(origin: Point, first: Point, second: Point): number {
+    return (first[0] - origin[0]) * (second[0] - origin[0]) + (first[1] - origin[1]) * (second[1] - origin[1]);
+}
+
+function crossProduct(origin: Point, first: Point, second: Point): number {
+    return (first[0] - origin[0]) * (second[1] - origin[1]) - (first[1] - origin[1]) * (second[0] - origin[0]);
+}
+```
+
+### Collinearity and the Cross Product
+
+Three points $a$, $b$ and $c$ are collinear exactly when the vectors $b - a$ and $c - a$ are parallel, which by the discussion above means that their cross product is zero.
+This is the correct way to test collinearity, and it should be preferred over comparing slopes for two reasons.
+The slope $(b_y - a_y) / (b_x - a_x)$ is undefined for a vertical segment, which forces a special case, and it is a division, which introduces rounding where none is needed.
+The cross product has neither defect: it is a single expression, it is exact, and it handles vertical and horizontal configurations without any branch.
+
+The same quantity computes the area of a triangle, as half of the absolute cross product, and by extension the area of any simple polygon through the shoelace formula.
+It is also the primitive underlying orientation tests in convex hull algorithms, segment intersection and point in polygon queries, which is why it is worth recognising in all its forms.
+
+### Normalized Directions and Counting Points on a Line
+
+Given a set of points, finding the largest number of them lying on a common line is the problem where exact arithmetic and hashing meet.
+The brute force enumerates triples in $O(n^3)$.
+The improvement comes from a simple observation: any line containing at least two of the points contains a point of smallest index,
+so if each point in turn is taken as an **anchor** and the remaining points are grouped by the direction in which they lie from it, every maximal collinear set is discovered at the iteration of its own first point.
+
+Grouping by direction requires a key, and the key must satisfy one property: two points lying on the same line through the anchor must produce the same key, and points on different lines must not.
+The displacement $(\Delta x, \Delta y)$ is not itself a usable key, because $(1, 2)$ and $(2, 4)$ describe the same direction.
+Dividing by the [greatest common divisor](https://en.wikipedia.org/wiki/Greatest_common_divisor) of the two components reduces every displacement to the primitive vector along that direction, which makes the representation canonical.
+
+One subtlety remains, and it is the part most implementations get wrong.
+Reduction alone maps $(1, 2)$ and $(-1, -2)$ to themselves, yet both describe the same line through the anchor, pointing in opposite senses.
+The canonical form must therefore also fix the **sign**: force the first non zero component to be positive, so that a direction and its opposite collapse onto the same key.
+Without that step a single line would be split into two groups, and any anchor that sees points on both sides of itself would undercount.
+
+```ts
+function directionKey(fromX: number, fromY: number, toX: number, toY: number): string {
+    let deltaX = toX - fromX;
+    let deltaY = toY - fromY;
+
+    const divisor = greatestCommonDivisor(Math.abs(deltaX), Math.abs(deltaY)) || 1;
+    deltaX /= divisor;
+    deltaY /= divisor;
+
+    if (deltaX < 0 || (deltaX === 0 && deltaY < 0)) {
+        deltaX = -deltaX;
+        deltaY = -deltaY;
+    }
+
+    return `${deltaX}:${deltaY}`;
+}
+```
+
+The `|| 1` guard covers the degenerate case of two coincident points, where both deltas are zero and the greatest common divisor is zero as well, which would otherwise produce a division by zero.
+A vertical direction reduces to $(0, 1)$ and a horizontal one to $(1, 0)$, with no special casing required, because $\gcd(k, 0) = k$.
+With the key in hand, the counting is a [hash table](/data-structures-and-algorithms/topic/hashtable) tally per anchor, and the whole algorithm runs in $O(n^2)$ time.
+
+### Characterizing a Square by its Distance Multiset
+
+Four points form a square if and only if the multiset of the six pairwise squared distances consists of four equal positive values followed by two equal values that are twice the first.
+This characterization is worth dwelling on, because it is the rare case where a purely metric condition captures a shape completely, with no need to consider ordering, orientation or angles.
+
+Necessity is immediate: a square has four equal sides and two equal diagonals, and by Pythagoras the squared diagonal is twice the squared side.
+Sufficiency takes a little more care.
+Suppose the sorted squared distances are $s, s, s, s, d, d$ with $s > 0$ and $d = 2s$.
+The condition $s > 0$ rules out coincident points, so the four points are distinct.
+Four segments of equal length among four points close up into a quadrilateral with four equal sides, that is a rhombus, and the remaining two segments are its diagonals.
+In a rhombus the diagonals bisect each other at right angles, so by the parallelogram law the two squared diagonals sum to $4s$.
+Requiring them to be equal to each other forces each of them to be $2s$, which is exactly the condition $d = 2s$, and a rhombus whose diagonals are equal is a square.
+
+The implementation is therefore six squared distances, one sort of six elements, and three integer comparisons.
+Nothing is ever square rooted, nothing is ever divided, and the predicate is exact for any integer input.
+
+### Rectangles of Arbitrary Orientation
+
+The final and most elegant characterization concerns rectangles that are not axis aligned.
+The brute force over four points is $O(n^4)$, and the insight that removes two factors of $n$ is a statement about **diagonals** rather than sides.
+
+Two segments are the diagonals of a rectangle if and only if they share a midpoint and have the same length.
+The proof is a circle argument.
+If the two segments share a midpoint $c$ and both have length $2r$, then all four endpoints lie at distance $r$ from $c$, hence on the circle of centre $c$ and radius $r$.
+Each segment passes through the centre, so each is a diameter, and by [Thales' theorem](https://en.wikipedia.org/wiki/Thales%27s_theorem) every angle subtended by a diameter from a point on the circle is a right angle.
+The quadrilateral formed by the four endpoints therefore has four right angles, which makes it a rectangle.
+The converse is the familiar fact that the diagonals of a rectangle are equal and bisect each other.
+
+The algorithm follows directly.
+Enumerate all $\binom{n}{2}$ segments, group them by the pair (midpoint, squared length), and within each group every pair of segments yields one rectangle.
+Two implementation details keep the arithmetic exact.
+The midpoint is stored **doubled**, as the sum of the two endpoint coordinates rather than their average, which avoids halves and keeps the key integral.
+The length is stored squared, for the same reason.
+
+The area does require a square root, since it is generally irrational, but it can be deferred to a single operation.
+Given two diagonals meeting at a corner, the two adjacent sides have squared lengths $s_1$ and $s_2$, and the area is $\sqrt{s_1} \cdot \sqrt{s_2}$.
+Computing it as $\sqrt{s_1 s_2}$ performs one square root on an exact integer product rather than two on separate values, which both halves the rounding and keeps the comparison across candidates as faithful as floating point allows.
+
+## Numerical Robustness
+
+The recurring rule across this entire topic is that exactness is a property to be preserved, not recovered.
+Integer addition, subtraction and multiplication preserve it, while division and square roots destroy it, so the shape of a robust solution is a long exact computation followed by at most one inexact step at the very end.
+
+Prefer exact integer arithmetic wherever the problem allows.
+Compare squared distances rather than distances, test collinearity with a cross product rather than with a slope, key a hash map on a reduced integer pair rather than on a floating point ratio.
+Store a midpoint doubled rather than halved, and reduce a fraction by its greatest common divisor rather than evaluating it.
+Each of these substitutions replaces a value that is approximately right with one that is exactly right, at no cost in complexity.
+
+Delay square roots until the final answer, and take as few of them as possible.
+If a quantity is only compared, never square root it at all.
+If it must be reported, apply the root once, to the largest exact expression available, as in the $\sqrt{s_1 s_2}$ formulation above.
+
+Compare with a tolerance only when there is genuinely no alternative, which in practice means when the input itself is floating point or when the quantity being compared is intrinsically irrational.
+In that case the comparison must be relative rather than absolute, because a fixed epsilon such as `1e-9` is far too large for values near $10^{-12}$ and far too small for values near $10^{12}$.
+The usual form is to accept a difference bounded by `epsilon * Math.max(1, Math.abs(a), Math.abs(b))`.
+Awareness of the $2^{53}$ exactness limit belongs here too: coordinates bounded by $10^4$ produce squared distances bounded by $10^9$ and products of two such values bounded by $10^{18}$,
+which is already past the limit, so knowing the bound on the input is part of knowing whether the computation is exact.
+
+## Time and Space Complexity
+
+Digit manipulation is logarithmic in the value of the input and constant in space.
+A loop that repeatedly divides by ten runs once per decimal digit, so it performs $\lfloor \log_{10} n \rfloor + 1$ iterations, which for any value fitting in 32 bits is at most ten.
+The half reversal halves that count, which does not change the asymptotic class but does eliminate the risk of overflow, and the working set is two scalars regardless of the input, so the space cost is $O(1)$.
+
+The Euclidean algorithm runs in $O(\log \min(a, b))$ arithmetic operations, because each step replaces the pair by a strictly smaller one and the decrease is geometric: after two steps the larger argument is at most half of what it was.
+The worst case is realised by consecutive Fibonacci numbers, where each division has quotient one and removes as little as possible, and the iterative formulation uses $O(1)$ space.
+Trial division factorization costs $O(\sqrt{n})$, since the outer loop advances a candidate up to the square root while the inner division loop runs a total number of times bounded by $\log_2 n$,
+the maximum number of prime factors counted with multiplicity.
+The sieve of Eratosthenes costs $O(n \log \log n)$ time and $O(n)$ space, the time bound coming from the sum of $n / p$ over primes $p \leq n$, which grows like $n \ln \ln n$ by Mertens' theorem.
+Legendre's formula is the cheapest of all, at $O(\log_p n)$ time and $O(1)$ space, because the loop multiplies the running power by $p$ at each iteration and stops as soon as it exceeds $n$.
+Binary exponentiation modulo $m$ costs $O(\log e)$ multiplications for exponent $e$, since it consumes one bit of the exponent per iteration.
+
+Geometry on points is dominated by how many tuples of points must be examined.
+Computing the pairwise distances of a fixed set of four points is $O(1)$, which is why the square predicate is constant time regardless of coordinate magnitude: six distances, a sort of six elements, three comparisons.
+Counting the maximum number of collinear points is $O(n^2)$ time and $O(n)$ space, because each of the $n$ anchors builds a hash map over at most $n$ directions, and that map is discarded before the next anchor begins.
+This is a quadratic improvement over the $O(n^3)$ enumeration of triples, obtained entirely by replacing a test with a canonical key.
+The rectangle search enumerates $\binom{n}{2} = O(n^2)$ segments and stores them in a hash map keyed by midpoint and squared length, so building the map is $O(n^2)$ in both time and space.
+Scanning the groups is more subtle, because every pair of segments inside a group is examined and the cost depends on how large a single group can grow.
+Since all segments in one group are diameters of the same circle, and distinct diameters of a circle have disjoint endpoints, a group holds at most $n / 2$ segments.
+The scan therefore costs at most $O(n)$ per stored segment, giving $O(n^3)$ in the extreme configuration where every point lies on a common circle,
+while in typical inputs the groups are tiny and the cost collapses back to the $O(n^2)$ of building the map.
+
+The pattern behind all of these numbers is worth naming.
+Every bound in the number theory group is logarithmic or sublinear in the *value* of the input, because the technique replaces the construction of a number by reasoning about its factors.
+Every bound in the geometry group is polynomial in the *number of points*, because the technique replaces the enumeration of larger tuples by hashing a canonical invariant of smaller ones.
+Recognising which of the two regimes a problem lives in is most of the work.
+
+## Exercises
+
+<TopicExercises topic="maths-geometry" />

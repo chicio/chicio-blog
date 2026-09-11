@@ -1,0 +1,49 @@
+---
+title: "Reverse Integer"
+description: "Reverse the decimal digits of a signed integer and return zero when the result falls outside the signed 32 bit range."
+date: 2026-09-10
+image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [maths, geometry, number theory, computational geometry, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Digit extraction with an explicit fixed width overflow check"
+  leetcodeUrl: "https://leetcode.com/problems/reverse-integer/"
+  difficulty: "Medium"
+---
+# Reverse Integer
+
+Leetcode Problem 7: [Reverse Integer](https://leetcode.com/problems/reverse-integer/description/)
+
+## Problem Summary
+Given a signed integer **x**, return the value obtained by reversing the order of its decimal digits, keeping the sign. The input fits in a signed 32 bit integer, and if the reversed value falls outside that same range the answer must be **0**. The environment is assumed to provide no 64 bit type, so the result cannot simply be computed in a wider register and truncated.
+
+The reversal itself is a digit loop: the remainder modulo ten peels off the least significant digit, the floored quotient removes it, and the Horner scheme rebuilds the number in the opposite order. The interesting part is the range check. JavaScript numbers are doubles that represent every integer below two to the fifty third exactly, so the reversed value is computed without loss and the overflow condition can be tested after the fact against the boundaries of the signed 32 bit range. In a language with real fixed width arithmetic the same check would have to be made before the multiplication that overflows.
+
+## Techniques
+- Math
+
+## Solution
+```ts
+const INT_MAX = 2 ** 31 - 1
+const INT_MIN = -(2 ** 31)
+
+function reverseInteger(x: number): number {
+    const sign = x < 0 ? -1 : 1
+    let remaining = Math.abs(x)
+    let reversed = 0
+
+    while (remaining > 0) {
+        reversed = reversed * 10 + (remaining % 10)
+        remaining = Math.floor(remaining / 10)
+    }
+
+    reversed *= sign
+
+    // the environment stores signed 32 bit integers, so anything outside the range is discarded
+    if (reversed < INT_MIN || reversed > INT_MAX) {
+        return 0
+    }
+
+    return reversed
+};
+```

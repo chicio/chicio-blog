@@ -1,0 +1,60 @@
+---
+title: "Decode Ways"
+description: "Count how many ways a string of digits can be decoded into letters, where each letter is encoded by a number from one to twenty-six."
+date: 2026-09-04
+image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [dynamic programming, string dp, strings, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Bounded-piece segmentation collapsing to a guarded Fibonacci recurrence"
+  leetcodeUrl: "https://leetcode.com/problems/decode-ways/"
+  difficulty: "Medium"
+---
+# Decode Ways
+
+Leetcode Problem 91: [Decode Ways](https://leetcode.com/problems/decode-ways/description/)
+
+## Problem Summary
+Letters are encoded as numbers, with **A** mapped to **1** and **Z** mapped to **26**. Given a string **s** made only of digits, return the number of ways it can be decoded back into letters. A grouping is valid only if every group maps to a letter, so a group may never start with a zero and a two-digit group may never exceed twenty-six. The string holds between one and one hundred digits, and the answer is guaranteed to fit in a 32-bit signed integer.
+
+This is a segmentation DP over a single string where the pieces have bounded length, since a code is one or two digits and never more. The scan over all possible positions of the last cut therefore degenerates into a constant-size lookback, and the recurrence becomes a guarded Fibonacci relation: the ways ending at the previous position carry over when the last digit is a valid single-digit code, and the ways ending two positions back carry over when the last two digits form a number between ten and twenty-six. Because the lookback is bounded, the table collapses into two rolling variables and the algorithm uses constant space. Reaching a position with zero ways means the string is undecodable and the scan can stop.
+
+## Techniques
+- String
+- Dynamic Programming
+
+## Solution
+```ts
+function numDecodings(s: string): number {
+    if (s.length === 0 || s[0] === "0") {
+        return 0
+    }
+
+    // rolling variables: ways to decode the prefix ending two chars back and one char back
+    let twoBack = 1
+    let oneBack = 1
+
+    for (let i = 1; i < s.length; i++) {
+        let current = 0
+
+        if (s[i] !== "0") {
+            current += oneBack
+        }
+
+        const twoDigits = Number(s.substring(i - 1, i + 1))
+
+        if (twoDigits >= 10 && twoDigits <= 26) {
+            current += twoBack
+        }
+
+        if (current === 0) {
+            return 0
+        }
+
+        twoBack = oneBack
+        oneBack = current
+    }
+
+    return oneBack
+};
+```

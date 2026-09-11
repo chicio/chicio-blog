@@ -1,0 +1,510 @@
+---
+title: "Binary Indexed Tree / Segment Tree"
+description: "A comprehensive guide to the two classical structures for dynamic range queries: the segment tree, in its recursive and iterative bottom-up form, and the Fenwick tree, with its lowest-set-bit decomposition, coordinate compression and inversion counting."
+date: 2026-09-09
+image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [segment tree, binary indexed tree, fenwick tree, range queries, data structures, algorithms]
+authors: [fabrizio_duroni]
+---
+
+import { TopicExercises } from "@/components/content/data-structures-and-algorithms/topic-exercises";
+
+# Binary Indexed Tree / Segment Tree
+
+Almost every array problem eventually asks the same two questions.
+What is the aggregate of the elements between two indices, and what happens to that aggregate when one element changes?
+Taken separately, both questions have trivial answers.
+Taken together, in a workload that interleaves them, they expose a tension that no plain array representation can resolve.
+
+Consider the two obvious representations.
+A plain array supports an update in $O(1)$, because writing `nums[i] = value` touches exactly one memory cell,
+but answering "what is the sum of the elements between $l$ and $r$" requires walking the whole range, which costs $O(n)$ in the worst case.
+A [prefix sum](/data-structures-and-algorithms/topic/prefix-sum) array inverts the trade-off exactly.
+Precomputing $P[i] = a[0] + a[1] + \ldots + a[i-1]$ makes any range sum a single subtraction $P[r+1] - P[l]$, so queries cost $O(1)$,
+but a single element update invalidates every prefix from that position onward, so updates cost $O(n)$.
+Each structure is optimal for one operation and degenerate for the other.
+
+Now imagine a workload of $q$ operations in which updates and queries are freely interleaved, roughly half and half.
+The plain array pays $O(qn)$, and so does the prefix sum array.
+With $n$ and $q$ both around $10^5$, that is $10^{10}$ elementary operations, which is far beyond what any machine will do inside a time limit.
+The asymmetry of the two representations is not an accident of implementation.
+It is a consequence of the granularity at which they store information.
+The plain array stores information about single elements, so a query must reassemble the whole range from scratch.
+The prefix sum array stores information about ranges anchored at zero, so any element belongs to almost every stored range,
+and an update must repair almost all of them.
+
+The way out is to store information at an intermediate granularity.
+Instead of keeping either the $n$ singletons or the $n$ prefixes, we keep a carefully chosen family of $O(n)$ nested ranges,
+organized so that two properties hold at the same time.
+Any query range decomposes into $O(\log n)$ of the stored ranges, and any single index belongs to only $O(\log n)$ of them.
+The first property bounds the cost of a query, the second bounds the cost of an update.
+Both the segment tree and the binary indexed tree are instances of this idea, differing only in which family of ranges they choose and how they address it.
+
+This article assumes familiarity with [trees](/data-structures-and-algorithms/topic/tree) and with the halving argument behind
+[binary search](/data-structures-and-algorithms/topic/binary-search), since both structures are ultimately logarithmic for the same reason.
+It will also come back to [merge sort](/data-structures-and-algorithms/topic/merge-sort), which offers the other classical route to counting inversions.
+
+## The Segment Tree
+
+The [segment tree](https://en.wikipedia.org/wiki/Segment_tree) chooses the family of ranges recursively.
+The root is responsible for the whole index interval $[0, n-1]$.
+Any node responsible for $[lo, hi]$ with $lo < hi$ splits at the midpoint $m = \lfloor (lo + hi) / 2 \rfloor$ and delegates $[lo, m]$ to its left child
+and $[m+1, hi]$ to its right child.
+Nodes with $lo = hi$ are leaves and correspond to single array elements.
+Every node stores the aggregate of its own interval, computed from the aggregates of its two children.
+
+Two structural facts follow immediately.
+The recursion halves the interval at each level, so the tree has height $\lceil \log_2 n \rceil$ and the intervals of the nodes at any fixed depth
+form a partition of $[0, n-1]$.
+The number of leaves is $n$ and every internal node has exactly two children, so there are $n - 1$ internal nodes
+and $2n - 1$ nodes in total, which is $O(n)$ memory.
+
+The decisive property is the one about queries.
+Given an arbitrary range $[l, r]$, the recursive descent from the root classifies each visited node into one of three cases.
+If the node interval is disjoint from $[l, r]$, the subtree contributes nothing and the recursion stops.
+If the node interval is entirely contained in $[l, r]$, the stored aggregate is exactly what we need and the recursion stops again,
+which makes that node a **canonical node** of the decomposition.
+Otherwise the node interval partially overlaps $[l, r]$, and the recursion continues into both children.
+
+Any range decomposes into $O(\log n)$ canonical nodes, and the proof is a counting argument on the partially overlapping nodes.
+A node partially overlaps $[l, r]$ only if one of the two boundaries of the query falls strictly inside it,
+so it must contain both $l - 1$ and $l$, or both $r$ and $r + 1$.
+At each depth of the tree the intervals are disjoint, so at most two nodes per level can be partially overlapping,
+one straddling the left boundary and one straddling the right.
+Every canonical node is the child of a partially overlapping node, so the number of canonical nodes per level is bounded by a constant,
+and summing over $\lceil \log_2 n \rceil$ levels gives the logarithmic bound.
+In other words, the query range is cut into a logarithmic number of pieces whose aggregates are already precomputed,
+and the answer is the combination of those pieces.
+
+Updates enjoy the mirrored property.
+A single index belongs to exactly one node per level, the one on the root-to-leaf path ending at its leaf.
+Changing that element invalidates only those $\lceil \log_2 n \rceil + 1$ aggregates, and repairing them is a single walk back up the path,
+recomputing each parent from its two children.
+
+## The Recursive Implementation
+
+The canonical implementation stores the tree implicitly in an array, with the root at index $1$, the children of node $i$ at $2i$ and $2i + 1$,
+and no explicit pointers at all.
+The array is sized $4n$ rather than $2n$, because when $n$ is not a power of two the recursion produces a tree that is not perfectly balanced
+and the largest index used can exceed $2n$.
+Padding to $4n$ is the standard safe upper bound.
+
+```ts
+class SegmentTree {
+    private readonly n: number;
+    private readonly tree: number[];
+
+    constructor(values: number[]) {
+        this.n = values.length;
+        this.tree = new Array(4 * this.n).fill(0);
+        this.build(values, 1, 0, this.n - 1);
+    }
+
+    private build(values: number[], node: number, low: number, high: number): void {
+        if (low === high) {
+            this.tree[node] = values[low];
+            return;
+        }
+
+        const mid = Math.floor((low + high) / 2);
+        this.build(values, 2 * node, low, mid);
+        this.build(values, 2 * node + 1, mid + 1, high);
+        this.tree[node] = this.tree[2 * node] + this.tree[2 * node + 1];
+    }
+
+    query(left: number, right: number): number {
+        return this.rangeSum(1, 0, this.n - 1, left, right);
+    }
+
+    private rangeSum(node: number, low: number, high: number, left: number, right: number): number {
+        if (right < low || high < left) {
+            return 0;
+        }
+
+        if (left <= low && high <= right) {
+            return this.tree[node];
+        }
+
+        const mid = Math.floor((low + high) / 2);
+        const leftSum = this.rangeSum(2 * node, low, mid, left, right);
+        const rightSum = this.rangeSum(2 * node + 1, mid + 1, high, left, right);
+
+        return leftSum + rightSum;
+    }
+
+    update(index: number, value: number): void {
+        this.pointUpdate(1, 0, this.n - 1, index, value);
+    }
+
+    private pointUpdate(node: number, low: number, high: number, index: number, value: number): void {
+        if (low === high) {
+            this.tree[node] = value;
+            return;
+        }
+
+        const mid = Math.floor((low + high) / 2);
+
+        if (index <= mid) {
+            this.pointUpdate(2 * node, low, mid, index, value);
+        } else {
+            this.pointUpdate(2 * node + 1, mid + 1, high, index, value);
+        }
+
+        this.tree[node] = this.tree[2 * node] + this.tree[2 * node + 1];
+    }
+}
+```
+
+Three details deserve attention.
+The build is $O(n)$ and not $O(n \log n)$, because it visits each of the $2n - 1$ nodes exactly once and does constant work per node.
+The disjoint case returns $0$, which is the identity element of addition, so a subtree contributing nothing can be combined without changing the result.
+The partial overlap case is the only one that recurses into both children, which is precisely what the counting argument above bounds.
+
+## The Iterative Bottom-Up Segment Tree
+
+The recursive form is the one to reason with, but there is a substantially shorter iterative form that fits in a $2n$ array and avoids the recursion entirely.
+It is the one used in the Range Sum Query problem below, and it repays a careful reading.
+
+The layout is deliberately flat.
+The $n$ leaves occupy the second half of the array, so element $i$ of the input lives at position $n + i$.
+Every internal node $i$ in the first half stores the combination of its two children $2i$ and $2i + 1$, and the build loop fills the first half backwards,
+from $n - 1$ down to $1$, so that both children of a node are already final when the node itself is computed.
+Position $0$ is unused.
+
+```ts
+constructor(nums: number[]) {
+    this.size = nums.length;
+    this.tree = new Array(2 * this.size).fill(0);
+
+    for (let i = 0; i < this.size; i++) {
+        this.tree[this.size + i] = nums[i];
+    }
+
+    for (let i = this.size - 1; i > 0; i--) {
+        this.tree[i] = this.tree[2 * i] + this.tree[2 * i + 1];
+    }
+}
+```
+
+An update is a leaf assignment followed by a walk to the root, where the parent of node $i$ is $\lfloor i / 2 \rfloor$.
+No interval bookkeeping is needed, because the position of a node already encodes its place in the hierarchy.
+
+The query is the interesting part.
+It works on the half-open interval $[low, high)$, where `low = left + n` and `high = right + 1 + n` are the leaf positions of the two ends,
+and it climbs both ends towards the root one level at a time, collecting the nodes that are fully contained in the range.
+The two conditions inside the loop are the heart of the technique.
+
+If `low` is odd, then `low` is a **right** child.
+Its parent also covers the sibling immediately to the left, which lies outside the query range, so the parent cannot be used
+and the node itself must be collected now.
+After collecting it, `low` is incremented, so the remaining range starts at a left child and can be safely delegated upward.
+If `low` is even it is already a left child, its parent covers exactly it and its right sibling, both still inside the range,
+so nothing is collected at this level and the parent will account for both.
+
+The symmetric reasoning holds on the right, remembering that `high` is exclusive.
+If `high` is odd, then `high - 1` is a right child whose sibling lies to the left, so its parent would reach outside the part of the range
+that is still to be collected.
+The node `high - 1` is therefore collected and `high` is decremented.
+If `high` is even, the boundary aligns with a parent and nothing is collected.
+
+After the two tests, both pointers are halved, moving up one level, and the loop repeats until they meet.
+Every level contributes at most two collected nodes, which is exactly the $O(\log n)$ canonical decomposition of the recursive analysis,
+produced without any recursion.
+
+```ts
+sumRange(left: number, right: number): number {
+    let sum = 0;
+    let low = left + this.size;
+    let high = right + this.size + 1;
+
+    while (low < high) {
+        if (low % 2 === 1) {
+            sum += this.tree[low];
+            low++;
+        }
+
+        if (high % 2 === 1) {
+            high--;
+            sum += this.tree[high];
+        }
+
+        low = Math.floor(low / 2);
+        high = Math.floor(high / 2);
+    }
+
+    return sum;
+}
+```
+
+One subtlety is worth stating explicitly, because it is easy to miss.
+When $n$ is not a power of two, the leaves in the second half are not laid out as a single left-to-right traversal of a perfect tree.
+They are a rotation of the array, with part of the input sitting one level deeper than the rest.
+The node intervals therefore do not always correspond to contiguous index ranges of the original array.
+The bottom-up climb remains correct, because it still collects a set of nodes whose leaf sets partition the query range exactly,
+but that set may be collected out of left-to-right order.
+For sum, minimum, maximum and gcd this does not matter, since those operations are commutative.
+For a non-commutative combine, such as matrix multiplication or string concatenation,
+the two sides must be accumulated separately and joined at the end in the right order.
+
+## Beyond Sums: Monoids and Lazy Propagation
+
+Nothing in the argument above uses subtraction, or even the specific meaning of addition.
+The only requirements on the combine function are **associativity**, so that the aggregate of a node does not depend on how its interval was split,
+and the existence of an **identity element**, so that empty or skipped portions can be combined harmlessly.
+A set with an associative operation and an identity is a [monoid](https://en.wikipedia.org/wiki/Monoid), and a segment tree works over any monoid.
+Sum with identity $0$, minimum with identity $+\infty$, maximum with identity $-\infty$, gcd with identity $0$, bitwise and with identity all-ones,
+and the pair made of the maximum together with the count of its occurrences are all valid instantiations.
+
+The generic version makes both the requirement and the non-commutative handling explicit.
+
+```ts
+class AssociativeSegmentTree<T> {
+    private readonly n: number;
+    private readonly tree: T[];
+    private readonly combine: (left: T, right: T) => T;
+    private readonly identity: T;
+
+    constructor(values: T[], combine: (left: T, right: T) => T, identity: T) {
+        this.n = values.length;
+        this.combine = combine;
+        this.identity = identity;
+        this.tree = new Array<T>(2 * this.n).fill(identity);
+
+        for (let i = 0; i < this.n; i++) {
+            this.tree[this.n + i] = values[i];
+        }
+
+        for (let i = this.n - 1; i > 0; i--) {
+            this.tree[i] = this.combine(this.tree[2 * i], this.tree[2 * i + 1]);
+        }
+    }
+
+    query(left: number, right: number): T {
+        let fromLeft = this.identity;
+        let fromRight = this.identity;
+        let low = left + this.n;
+        let high = right + this.n + 1;
+
+        while (low < high) {
+            if (low % 2 === 1) {
+                fromLeft = this.combine(fromLeft, this.tree[low]);
+                low++;
+            }
+
+            if (high % 2 === 1) {
+                high--;
+                fromRight = this.combine(this.tree[high], fromRight);
+            }
+
+            low = Math.floor(low / 2);
+            high = Math.floor(high / 2);
+        }
+
+        return this.combine(fromLeft, fromRight);
+    }
+}
+```
+
+The natural extension of the structure goes in the other direction, towards **range updates**.
+Adding a constant to every element of a range with the machinery seen so far would cost $O(r - l + 1)$ point updates, which defeats the purpose.
+The technique that restores the logarithmic bound is **lazy propagation**.
+A parallel array stores, for each node, a pending modification that has already been applied to the aggregate of the node itself
+but not yet to the aggregates of its descendants.
+A range update descends exactly as a range query does, and when it reaches a canonical node it updates that aggregate in $O(1)$,
+using the length of the interval to scale the contribution, then records the pending value instead of recursing further.
+Any later traversal that needs to enter a node carrying a pending modification first pushes it down to the two children, then continues.
+The invariant is that the aggregate of a node is always correct, while its descendants may be stale by exactly the recorded amount.
+Since both range update and range query still touch only $O(\log n)$ nodes, plus the $O(\log n)$ push-down operations along the two boundary paths,
+both remain $O(\log n)$.
+The implementation is mechanical once the invariant is clear, but it requires the recursive form, because the push-down has to happen on the way down.
+The iterative bottom-up layout has no natural downward phase, which is exactly the price paid for its brevity.
+
+## The Fenwick Tree
+
+The [Fenwick tree](https://en.wikipedia.org/wiki/Fenwick_tree), also called binary indexed tree or BIT, answers a narrower question with far less machinery.
+It supports point updates and **prefix** aggregates, and it derives range aggregates from prefixes by subtraction.
+Its family of ranges is chosen not by recursive splitting but by the binary representation of the indices.
+
+The whole structure rests on a single expression, `i & -i`, which isolates the **lowest set bit** of `i`.
+In two's complement, $-i$ is the bitwise complement of $i$ plus one, which flips every bit above the lowest set bit and leaves that bit standing,
+so the bitwise and of the two keeps exactly that bit and nothing else.
+For $i = 12 = 1100_2$ the result is $4 = 100_2$, for $i = 6 = 110_2$ it is $2$, and for a power of two it is the number itself.
+If you want the details of that arithmetic, the [bit manipulation](/data-structures-and-algorithms/topic/bit-manipulation) article covers two's complement in full.
+
+The convention is the following: node $i$ of the tree is responsible for the half-open range of positions $(i - \text{lowbit}(i), \; i]$,
+that is, for the $\text{lowbit}(i)$ elements ending at position $i$.
+Node $8 = 1000_2$ covers eight positions, from $1$ to $8$.
+Node $12 = 1100_2$ covers four positions, from $9$ to $12$.
+Node $7 = 111_2$ covers one position, itself.
+Odd indices are always responsible for a single element, while indices with many trailing zeros are responsible for large blocks.
+The block sizes are exactly the powers of two appearing in the binary expansion of the indices, which is where the name binary indexed tree comes from.
+
+Two walks follow from this definition, and they move in opposite directions.
+
+The **prefix sum** over positions $1$ through $i$ is obtained by stripping the lowest set bit repeatedly.
+Node $i$ covers the last $\text{lowbit}(i)$ positions of the prefix.
+What remains is the prefix of length $i - \text{lowbit}(i)$, which is exactly the next index to visit.
+Each step clears one set bit, so the number of steps equals the number of ones in the binary representation of $i$, at most $\lfloor \log_2 i \rfloor + 1$.
+For $i = 13 = 1101_2$ the walk visits $13$, covering position $13$, then $12$, covering $9$ to $12$, then $8$, covering $1$ to $8$, then reaches $0$ and stops.
+The three disjoint blocks reconstruct the prefix exactly, and their sizes $1, 4, 8$ are the powers of two that make up $13$.
+
+The **point update** goes the other way, adding the lowest set bit repeatedly.
+The nodes responsible for a position $p$ are those whose covering range contains $p$, and it is a small exercise in binary arithmetic to show
+that if $i$ is one of them then the next one is $i + \text{lowbit}(i)$.
+Each addition carries into a higher bit position, so the lowest set bit strictly moves up at every step and the walk terminates in at most $\log_2 n$ steps.
+Updating position $5$ in a tree of size $16$ visits $5$, then $6$, then $8$, then $16$.
+
+The zero index is the reason the structure is **one-indexed**.
+The lowest set bit of $0$ is $0$, so the upward walk would loop forever at index $0$, and the downward walk would never terminate.
+Index $0$ is therefore reserved as a sentinel: it terminates the prefix walk and it never stores anything.
+The exercise below keeps a zero-based public interface and adds one internally, which is the usual compromise between the mathematics and the call site.
+
+```ts
+class FenwickTree {
+    private readonly tree: number[];
+
+    constructor(size: number) {
+        this.tree = new Array(size + 1).fill(0);
+    }
+
+    add(index: number, delta: number): void {
+        for (let i = index + 1; i < this.tree.length; i += i & -i) {
+            this.tree[i] += delta;
+        }
+    }
+
+    prefixSum(index: number): number {
+        let sum = 0;
+
+        for (let i = index + 1; i > 0; i -= i & -i) {
+            sum += this.tree[i];
+        }
+
+        return sum;
+    }
+
+    rangeSum(left: number, right: number): number {
+        if (left === 0) {
+            return this.prefixSum(right);
+        }
+
+        return this.prefixSum(right) - this.prefixSum(left - 1);
+    }
+}
+```
+
+Building from an existing array naively costs $O(n \log n)$, one `add` per element, but there is a linear alternative.
+Copy the values into positions $1$ to $n$, then for each $i$ in increasing order push `tree[i]` into `tree[i + lowbit(i)]` when that index is still in range.
+Each node is pushed exactly once, so the build is $O(n)$, matching the segment tree.
+
+The honest comparison with the segment tree is the following.
+The Fenwick tree uses a single array of $n + 1$ numbers instead of $2n$ or $4n$, its two loops are three lines each,
+and its constant factor is smaller, because it touches roughly the number of set bits of the index rather than two nodes per level,
+with an access pattern that is friendlier to the cache.
+The price is expressiveness.
+Deriving a range aggregate as the difference of two prefixes requires the operation to be **invertible**, which holds for sum and xor
+but fails for minimum, maximum and gcd, so a Fenwick tree cannot answer a general range minimum query.
+Range updates need a second tree and a change of representation, and any query that is not prefix shaped, such as descending to find
+the first position where a running sum exceeds a threshold, needs a specialised binary-lifting walk rather than the plain loop.
+The rule of thumb is simple: if the problem is prefix aggregates of an invertible operation with point updates, reach for the Fenwick tree,
+and if it needs a non-invertible combine, range assignments or a structural descent, reach for the segment tree.
+
+## Counting Inversions and Smaller Elements to the Right
+
+The most instructive application of the Fenwick tree has nothing to do with sums of the input values.
+It indexes the tree by **value** instead of by position, and it stores counts.
+
+The problem is counting, for each element, how many elements to its right are strictly smaller,
+which is the per-element refinement of counting the [inversions](https://en.wikipedia.org/wiki/Inversion_(discrete_mathematics)) of an array,
+that is, the pairs $i < j$ with $a[i] > a[j]$.
+The sum of the per-element answers is exactly the number of inversions.
+[Merge sort](/data-structures-and-algorithms/topic/merge-sort) offers the other classical route to that total,
+counting during the merge step how many elements of the left half jump over each element of the right half,
+and it can be extended with index bookkeeping to produce the per-element counts as well.
+The Fenwick approach is shorter and generalizes more easily to related queries.
+
+Two ideas make it work.
+
+The first is the **direction of the sweep**.
+Processing the array from right to left means that, when element $i$ is reached, the tree contains exactly the elements at positions $i+1$ through $n-1$,
+that is, exactly the candidates that are allowed to be counted.
+The question "how many elements to my right are smaller than me" becomes "how many elements currently in the tree have a value smaller than mine",
+which is a prefix query over the value domain.
+No condition on positions appears anywhere in the query, because the sweep order has already enforced it.
+This is the same trick that lets an offline sweep collapse a two-dimensional dominance condition into a one-dimensional query,
+and it is worth recognizing as a pattern in its own right.
+
+The second is **coordinate compression**.
+A Fenwick tree indexed by value would need an array as large as the value domain, which is wasteful when values range over $\pm 10^4$ or more,
+and outright meaningless when they are negative, since there is no index $-5$.
+What the query actually needs is not the value but its **rank** in the sorted order of the distinct values, because the relation "smaller than" is preserved
+by any order-preserving remapping.
+Sorting the distinct values and mapping each of them to its position gives a domain of size at most $n$, non-negative and dense.
+Compression costs $O(n \log n)$ for the sort, which does not change the overall bound, and it shrinks the tree from the size of the value range to the size of the input.
+
+```ts
+function countSmaller(nums: number[]): number[] {
+    const sorted = [...new Set(nums)].sort((a, b) => a - b);
+    const rankOf = new Map<number, number>();
+
+    sorted.forEach((value, rank) => rankOf.set(value, rank));
+
+    const tree = new FenwickTree(sorted.length);
+    const counts: number[] = [];
+
+    for (let i = nums.length - 1; i >= 0; i--) {
+        const rank = rankOf.get(nums[i])!;
+        counts.push(rank > 0 ? tree.prefixSum(rank - 1) : 0);
+        tree.add(rank, 1);
+    }
+
+    return counts.reverse();
+}
+```
+
+The query is `prefixSum(rank - 1)` and not `prefixSum(rank)`, because the problem asks for strictly smaller elements
+and the bucket at `rank` holds the equal ones.
+The guard on `rank > 0` handles the minimum value, whose prefix is empty.
+The answers are produced in reverse order by construction, hence the final reversal.
+Small variations of the same skeleton answer a whole family of questions.
+Counting strictly greater elements to the right is a suffix query, obtained as the number of insertions so far minus `prefixSum(rank)`.
+Counting smaller elements to the left is the same sweep run from left to right.
+Counting the elements whose value falls inside a window is the difference of two prefix queries, since counting is invertible.
+
+## Time and Space Complexity
+
+Both structures reduce every operation from linear to logarithmic, and both use linear memory, but the details differ in ways that matter in practice.
+
+| Segment tree operation | Time | Space | Why |
+|---|---|---|---|
+| Build | $O(n)$ | $O(n)$ | Each of the $2n-1$ nodes is computed once from its two children, with constant work per node. |
+| Point update | $O(\log n)$ | $O(1)$ | Only the nodes on the root-to-leaf path of the index become stale, and that path has logarithmic length. |
+| Range query | $O(\log n)$ | $O(1)$ | The range decomposes into a constant number of canonical nodes per level, over $\lceil \log_2 n \rceil$ levels. |
+| Range update with lazy propagation | $O(\log n)$ | $O(n)$ | The update stops at the same canonical nodes as a query, recording a pending value instead of descending further. |
+
+The memory constant depends on the layout.
+The recursive form allocates $4n$ slots, because an index in an unbalanced tree can exceed $2n$ when $n$ is not a power of two.
+The iterative bottom-up form allocates exactly $2n$, one half for the leaves and one for the internal nodes,
+which is both the tightest and the most cache-friendly option available.
+Recursion also adds $O(\log n)$ stack frames to the query and update paths, which the iterative form does not pay.
+
+| Fenwick tree operation | Time | Space | Why |
+|---|---|---|---|
+| Build from an array | $O(n)$ | $O(n)$ | Each node pushes its value once into $i + \text{lowbit}(i)$, so the linear build touches every node exactly once. |
+| Point add | $O(\log n)$ | $O(1)$ | Each step of `i += i & -i` strictly raises the position of the lowest set bit, so at most $\log_2 n$ nodes cover a position. |
+| Prefix query | $O(\log n)$ | $O(1)$ | Each step of `i -= i & -i` clears one set bit, so the number of steps is the popcount of the index, at most $\log_2 n$. |
+| Range query | $O(\log n)$ | $O(1)$ | Two prefix queries and one subtraction, valid only because the operation is invertible. |
+
+The memory is a single array of $n + 1$ numbers, roughly a quarter of the recursive segment tree and half of the iterative one.
+The time bounds are asymptotically identical, but the Fenwick constant is noticeably smaller: a prefix query touches the popcount of the index,
+which averages $\frac{1}{2}\log_2 n$ rather than the two nodes per level of the segment tree,
+and the loop contains no branch other than the termination test.
+
+For the mixed workload that motivated this article, both structures turn $O(qn)$ into $O((n + q)\log n)$.
+With $n = q = 10^5$ that is around $3.4 \times 10^6$ elementary operations instead of $10^{10}$, which is the difference between an instant answer and none at all.
+The inversion counting application inherits the same bound, $O(n \log n)$ for the sort that builds the compression
+plus $O(n \log n)$ for the $n$ pairs of tree operations, with $O(n)$ space for the tree, the sorted values and the rank map.
+
+## Exercises
+
+<TopicExercises topic="binary-indexed-tree-segment-tree" />

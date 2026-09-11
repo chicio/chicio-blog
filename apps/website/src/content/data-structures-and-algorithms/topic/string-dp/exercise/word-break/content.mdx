@@ -1,0 +1,49 @@
+---
+title: "Word Break"
+description: "Decide whether a string can be segmented into a sequence of words taken from a dictionary, with repetitions allowed."
+date: 2026-09-04
+image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [dynamic programming, string dp, strings, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Prefix feasibility DP scanning every split point against a hash set"
+  leetcodeUrl: "https://leetcode.com/problems/word-break/"
+  difficulty: "Medium"
+---
+# Word Break
+
+Leetcode Problem 139: [Word Break](https://leetcode.com/problems/word-break/description/)
+
+## Problem Summary
+Given a string **s** and a dictionary **wordDict** of distinct words, return whether **s** can be segmented into a space-separated sequence of dictionary words. The same word may be reused any number of times. The string is at most three hundred characters long, the dictionary holds at most one thousand words of at most twenty characters each, and everything is lowercase English letters.
+
+This is the general segmentation DP over a single string, where the piece length is unbounded and the predicate is dictionary membership. The state **dp[i]** records whether the first **i** characters are segmentable, the empty prefix is segmentable by definition, and the transition scans every possible position of the last cut. Storing the dictionary in a hash set makes each membership test cost only the hashing of the candidate piece, and the loop can break as soon as one split succeeds, since feasibility does not care how it was achieved. The greedy alternative of taking the longest matching word at each position is wrong, because a long match can consume characters that a later word needs and nothing local signals the conflict.
+
+## Techniques
+- Array
+- Hash Table
+- String
+- Dynamic Programming
+- Trie
+- Memoization
+
+## Solution
+```ts
+function wordBreak(s: string, wordDict: string[]): boolean {
+    const words = new Set(wordDict)
+    // dp[i] = true when the first i characters can be segmented
+    const dp: boolean[] = Array(s.length + 1).fill(false)
+    dp[0] = true
+
+    for (let end = 1; end <= s.length; end++) {
+        for (let start = 0; start < end; start++) {
+            if (dp[start] && words.has(s.substring(start, end))) {
+                dp[end] = true
+                break
+            }
+        }
+    }
+
+    return dp[s.length]
+};
+```

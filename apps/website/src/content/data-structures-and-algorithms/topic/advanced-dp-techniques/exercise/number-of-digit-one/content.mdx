@@ -1,0 +1,75 @@
+---
+title: "Number of Digit One"
+description: "Count how many times the digit one appears across every number from zero up to a given bound."
+date: 2026-09-07
+image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [dynamic programming, bitmask dp, digit dp, probability dp, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Digit DP accumulating an occurrence statistic alongside the count of numbers"
+  leetcodeUrl: "https://leetcode.com/problems/number-of-digit-one/"
+  difficulty: "Hard"
+---
+# Number of Digit One
+
+Leetcode Problem 233: [Number of Digit One](https://leetcode.com/problems/number-of-digit-one/description/)
+
+## Problem Summary
+Given an integer **n**, count the total number of occurrences of the digit **1** in the decimal representations of all non-negative integers less than or equal to **n**. The bound can be as large as two billion, so enumerating the numbers one by one is out of the question.
+
+This problem asks for an **occurrence statistic** rather than for a count of numbers, and that changes the shape of the return value. A single number is no longer enough: each state must report both how many numbers hang below it and how many ones those numbers contain. Placing a one at the current position contributes exactly one occurrence to every number in the suffix, which is why the count of suffixes is needed to weight it. Leading zeros contribute no ones, so no started flag is required, and the memoized state collapses to the position alone.
+
+## Techniques
+- Math
+- Dynamic Programming
+- Recursion
+
+## Solution
+```ts
+type DigitOneResult = { numbers: number, ones: number };
+
+function countDigitOne(n: number): number {
+    if (n <= 0) {
+        return 0
+    }
+
+    const bound = String(n)
+    // leading zeros contribute no ones, so the state is just the position and whether we hug the bound
+    const memo = new Map<number, DigitOneResult>()
+
+    function count(position: number, tight: boolean): DigitOneResult {
+        if (position === bound.length) {
+            return { numbers: 1, ones: 0 }
+        }
+
+        if (!tight) {
+            const cached = memo.get(position)
+
+            if (cached !== undefined) {
+                return cached
+            }
+        }
+
+        const limit = tight ? Number(bound[position]) : 9
+        let numbers = 0
+        let ones = 0
+
+        for (let digit = 0; digit <= limit; digit++) {
+            const suffix = count(position + 1, tight && digit === limit)
+            numbers += suffix.numbers
+            // a one placed here appears once in each of the suffixes hanging below it
+            ones += suffix.ones + (digit === 1 ? suffix.numbers : 0)
+        }
+
+        const result = { numbers, ones }
+
+        if (!tight) {
+            memo.set(position, result)
+        }
+
+        return result
+    }
+
+    return count(0, true).ones
+};
+```

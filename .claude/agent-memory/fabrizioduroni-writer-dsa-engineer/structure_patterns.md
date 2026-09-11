@@ -83,3 +83,9 @@ Topics within the same group share a similar article layout and can be used as t
 - **Data structures** → use a **table** (operations vs time/space)
 - **Algorithms** (sorting, searching, recursive paradigms) → use **prose** explaining where costs come from
 - **Techniques** (sliding window, prefix sum, intervals) → use a **table** (patterns vs time/space)
+
+## Line Sweep group
+
+line-sweep sits with intervals, heap and greedy: sorted events plus a status structure.
+Its article reuses the intervals layout (concept, construction, pitfall, then one section per pattern drilled by the exercises) but uses PROSE for complexity, like the algorithm topics, not a table.
+Recurring idiom worth reusing in future articles: lazy deletion in a heap, justified by "a stale entry can only delay, never corrupt, the answer".

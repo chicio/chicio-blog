@@ -1,0 +1,58 @@
+---
+title: "Interleaving String"
+description: "Decide whether a third string can be formed by interleaving two others while preserving the relative order of each."
+date: 2026-09-04
+image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [dynamic programming, string dp, strings, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Boolean reachability table over two prefixes, with the third index derived"
+  leetcodeUrl: "https://leetcode.com/problems/interleaving-string/"
+  difficulty: "Medium"
+---
+# Interleaving String
+
+Leetcode Problem 97: [Interleaving String](https://leetcode.com/problems/interleaving-string/description/)
+
+## Problem Summary
+Given three strings **s1**, **s2** and **s3**, return whether **s3** is an interleaving of the first two. An interleaving splits each of **s1** and **s2** into consecutive pieces and concatenates them alternately, so the characters of each source string must appear in **s3** in their original relative order. Any of the strings may be empty, the first two are at most one hundred characters long, the third at most two hundred, all lowercase English letters.
+
+The naive state tracks a position in each of the three strings, but one of the three indices is redundant: having consumed **i** characters of **s1** and **j** characters of **s2** means exactly **i + j** characters of **s3** have been produced. Dropping the derived index turns a cubic state space into a quadratic one. The table then records reachability, and a state is reachable when the last produced character came from **s1** and the state above was reachable, or came from **s2** and the state on the left was reachable. The greedy instinct fails precisely when both sources match the next character, because committing now constrains what remains later, and the table exists to keep both branches alive.
+
+## Techniques
+- String
+- Dynamic Programming
+
+## Solution
+```ts
+function isInterleave(s1: string, s2: string, s3: string): boolean {
+    const rows = s1.length
+    const columns = s2.length
+
+    if (rows + columns !== s3.length) {
+        return false
+    }
+
+    // dp[i][j] = the first i chars of s1 and the first j chars of s2 interleave into the first i + j chars of s3
+    const dp: boolean[][] = Array.from({ length: rows + 1 }, () => Array(columns + 1).fill(false))
+    dp[0][0] = true
+
+    for (let i = 1; i <= rows; i++) {
+        dp[i][0] = dp[i - 1][0] && s1[i - 1] === s3[i - 1]
+    }
+
+    for (let j = 1; j <= columns; j++) {
+        dp[0][j] = dp[0][j - 1] && s2[j - 1] === s3[j - 1]
+    }
+
+    for (let i = 1; i <= rows; i++) {
+        for (let j = 1; j <= columns; j++) {
+            const takeFromS1 = dp[i - 1][j] && s1[i - 1] === s3[i + j - 1]
+            const takeFromS2 = dp[i][j - 1] && s2[j - 1] === s3[i + j - 1]
+            dp[i][j] = takeFromS1 || takeFromS2
+        }
+    }
+
+    return dp[rows][columns]
+};
+```

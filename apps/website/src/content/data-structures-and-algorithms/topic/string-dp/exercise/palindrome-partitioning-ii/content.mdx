@@ -1,0 +1,58 @@
+---
+title: "Palindrome Partitioning II"
+description: "Find the minimum number of cuts that splits a string into pieces that are all palindromes."
+date: 2026-09-04
+image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [dynamic programming, string dp, strings, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Segmentation DP over prefixes driven by a precomputed palindrome table"
+  leetcodeUrl: "https://leetcode.com/problems/palindrome-partitioning-ii/"
+  difficulty: "Hard"
+---
+# Palindrome Partitioning II
+
+Leetcode Problem 132: [Palindrome Partitioning II](https://leetcode.com/problems/palindrome-partitioning-ii/description/)
+
+## Problem Summary
+Given a string **s**, partition it so that every piece is a palindrome, and return the minimum number of cuts needed to do so. A string that is already a palindrome needs no cuts at all. The string holds between one and two thousand lowercase English letters.
+
+The solution composes two ideas. The first phase precomputes, for every interval of the string, whether it is a palindrome, using the interval recurrence that a substring is a palindrome when its two ends agree and its strict interior already is. Filling the table from the longest starting index downwards guarantees that each cell finds its core resolved, and the two degenerate cases of length one and length two are handled by the empty-interior condition. The second phase is the segmentation DP over prefixes, minimising the number of cuts by scanning every position of the last cut, with the palindromicity test now costing constant time. A prefix that is itself a palindrome must be recorded as zero cuts rather than one, since there is no cut at the very beginning of the string.
+
+## Techniques
+- String
+- Dynamic Programming
+
+## Solution
+```ts
+function minCut(s: string): number {
+    const length = s.length
+    // isPalindrome[start][end] = the substring s[start..end] reads the same in both directions
+    const isPalindrome: boolean[][] = Array.from({ length }, () => Array(length).fill(false))
+
+    // expand around every centre, so a longer palindrome always sees its shorter core already filled
+    for (let start = length - 1; start >= 0; start--) {
+        for (let end = start; end < length; end++) {
+            if (s[start] === s[end] && (end - start < 2 || isPalindrome[start + 1][end - 1])) {
+                isPalindrome[start][end] = true
+            }
+        }
+    }
+
+    // cuts[i] = minimum cuts needed for the first i characters
+    const cuts: number[] = Array(length + 1).fill(0)
+
+    for (let end = 1; end <= length; end++) {
+        cuts[end] = Infinity
+
+        for (let start = 0; start < end; start++) {
+            if (isPalindrome[start][end - 1]) {
+                // no cut is needed when the whole prefix is already a palindrome
+                cuts[end] = start === 0 ? 0 : Math.min(cuts[end], cuts[start] + 1)
+            }
+        }
+    }
+
+    return cuts[length]
+};
+```
