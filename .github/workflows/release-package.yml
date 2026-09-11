@@ -1,5 +1,10 @@
 name: Release package
 
+# Without this every run in the Actions list is titled "Release package", so a release history is
+# unreadable without opening each one. inputs is available to run-name, and dry_run arrives as a
+# real boolean, the same way the release step below already relies on.
+run-name: Release ${{ inputs.package }} (${{ inputs.increment }}${{ inputs.dry_run && ', dry run' || '' }})
+
 # Manual on purpose: these are public artifacts, and a release should be a decision rather than a
 # side effect of merging. Mirrors the flow matrix-rain-webgpu already uses.
 on:

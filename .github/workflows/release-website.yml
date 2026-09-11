@@ -1,0 +1,122 @@
+name: Release website
+
+run-name: Release website ${{ inputs.increment }}${{ inputs.dry_run && ' (dry run)' || '' }}
+
+# Manual on purpose, for the same reason as release-package.yml: a release should be a decision
+# rather than a side effect of merging. Unlike the packages this publishes nothing — the site
+# deploys continuously from main via Vercel, so cutting a release here only produces the version
+# bump, the changelog entry, the tag and the GitHub release.
+#
+# Deliberately NOT a build. The root .release-it.json runs `npm run build` as a before:init hook
+# so that a local `npm run release` cannot tag something broken, but in CI that guarantee is
+# already covered — and covered better — by ci.yml having gone green on this exact commit, which
+# this workflow refuses to run without. So the hook is switched off here and no application
+# secret is needed at all.
+on:
+  workflow_dispatch:
+    inputs:
+      increment:
+        description: "Which release to cut"
+        type: choice
+        options: [patch, minor, major]
+        default: minor
+      dry_run:
+        description: "Dry run (no commit, tag, push or release)"
+        type: boolean
+        default: true
+
+permissions:
+  contents: write # push the bump/changelog commit + tag, create the GH release
+
+# Two releases interleaving would race on the tag and the changelog. Never cancel a run in
+# progress: it may already have pushed the tag, and killing it there leaves the repo half-released.
+concurrency:
+  group: release-website
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Release website
+    runs-on: ubuntu-latest
+    steps:
+      # workflow_dispatch lets the caller pick any ref. Releasing off a feature branch would tag a
+      # tree that was never on main, so refuse before doing anything else.
+      - name: Require main
+        if: github.ref_name != 'main'
+        run: |
+          echo "::error::Releases are cut from main only. This run targets ${{ github.ref_name }}."
+          exit 1
+
+      # ci.yml chains every gate into the build and the build into e2e, so the e2e check having
+      # concluded successfully is proof that lint, format, knip, validate-architecture, typecheck,
+      # test, verify-packages and build all passed on this exact commit. Checking the one terminal
+      # job keeps this gate from drifting as jobs are added upstream of it.
+      - name: Require a green CI run for this commit
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          conclusion=$(gh api "repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/check-runs?per_page=100" \
+            --jq '.check_runs[] | select(.name == "E2E (Playwright)") | .conclusion // "pending"')
+          case "$conclusion" in
+            success)
+              echo "CI is green for $GITHUB_SHA."
+              ;;
+            "")
+              echo "::error::No \"E2E (Playwright)\" check exists for $GITHUB_SHA. Has CI run?"
+              exit 1
+              ;;
+            pending)
+              echo "::error::CI has not finished for $GITHUB_SHA. Wait for it, then re-run."
+              exit 1
+              ;;
+            *)
+              echo "::error::CI is not green for $GITHUB_SHA (E2E concluded: $conclusion)."
+              exit 1
+              ;;
+          esac
+
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0 # full history so conventional-changelog can diff tags
+
+      # The gate above vouches for github.sha, but checkout resolves the main branch, which may
+      # have moved between the dispatch and this step. Releasing that newer tip would tag commits
+      # nothing has verified.
+      - name: Require main not to have moved since dispatch
+        run: |
+          head=$(git rev-parse HEAD)
+          if [ "$head" != "$GITHUB_SHA" ]; then
+            echo "::error::main moved from $GITHUB_SHA to $head after this run was dispatched."
+            echo "::error::Re-run once CI is green for $head."
+            exit 1
+          fi
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version-file: "package.json"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Configure git identity
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      # --no-hooks.before:init drops the `npm run build` hook, which the CI gate above replaces.
+      # --no-github.web is the one that matters: the root config sets github.web because a human
+      # running this locally wants the pre-filled release form in a browser, but on a runner that
+      # only prints a link nobody clicks and creates no release. Both are overridden here rather
+      # than in .release-it.json so `npm run release` keeps behaving exactly as it does today.
+      - name: Release
+        run: >-
+          npx release-it ${{ inputs.increment }}
+          --no-hooks.before:init
+          --no-github.web
+          ${{ inputs.dry_run && '--dry-run' || '' }}
+          --ci
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
