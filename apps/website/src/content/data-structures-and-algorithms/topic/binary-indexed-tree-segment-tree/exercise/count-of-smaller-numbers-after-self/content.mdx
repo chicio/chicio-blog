@@ -1,0 +1,79 @@
+---
+title: "Count of Smaller Numbers After Self"
+description: "For every element of an array, count how many elements to its right are strictly smaller, using a Fenwick tree over compressed values."
+date: 2026-09-09
+image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [segment tree, binary indexed tree, fenwick tree, range queries, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Fenwick tree over compressed values with a right-to-left sweep"
+  leetcodeUrl: "https://leetcode.com/problems/count-of-smaller-numbers-after-self/"
+  difficulty: "Hard"
+---
+# Count of Smaller Numbers After Self
+
+Leetcode Problem 315: [Count of Smaller Numbers After Self](https://leetcode.com/problems/count-of-smaller-numbers-after-self/description/)
+
+## Problem Summary
+Given an integer array **nums**, return an array **counts** where **counts[i]** is the number of elements to the right of **nums[i]** that are strictly smaller than it. The array holds up to 100,000 values, each between **-10,000** and **10,000**.
+
+The quadratic solution compares every pair, which is far too slow at this size, so the counting has to become a query over a structure. Sweeping the array from right to left makes a Fenwick tree contain exactly the elements already passed, that is exactly the elements to the right of the current position, so the answer for each element is a prefix query over the value domain and no condition on positions is ever needed. Since values can be large and negative, they are first replaced by their rank in the sorted order of the distinct values, which preserves the "smaller than" relation and shrinks the tree to the size of the input.
+
+## Techniques
+- Array
+- Binary Search
+- Divide and Conquer
+- Binary Indexed Tree
+- Segment Tree
+- Merge Sort
+- Ordered Set
+
+## Solution
+```ts
+class FenwickTree {
+    private readonly tree: number[]
+
+    constructor(size: number) {
+        // one extra slot, because a binary indexed tree is addressed from 1
+        this.tree = Array(size + 1).fill(0)
+    }
+
+    add(index: number, delta: number): void {
+        // each step jumps to the next node responsible for this position
+        for (let i = index + 1; i < this.tree.length; i += i & -i) {
+            this.tree[i] += delta
+        }
+    }
+
+    prefixSum(index: number): number {
+        let sum = 0
+
+        // each step strips the lowest set bit, walking down the covering ranges
+        for (let i = index + 1; i > 0; i -= i & -i) {
+            sum += this.tree[i]
+        }
+
+        return sum
+    }
+}
+
+function countSmaller(nums: number[]): number[] {
+    // values can be large and negative, so they are compressed to their rank first
+    const sorted = [...new Set(nums)].sort((a, b) => a - b)
+    const rankOf = new Map<number, number>()
+
+    sorted.forEach((value, rank) => rankOf.set(value, rank))
+
+    const tree = new FenwickTree(sorted.length)
+    const counts: number[] = []
+
+    // sweeping right to left means the tree only ever holds the elements already passed
+    for (let i = nums.length - 1; i >= 0; i--) {
+        const rank = rankOf.get(nums[i])!
+        counts.push(rank > 0 ? tree.prefixSum(rank - 1) : 0)
+        tree.add(rank, 1)
+    }
+
+    return counts.reverse()
+};
+```

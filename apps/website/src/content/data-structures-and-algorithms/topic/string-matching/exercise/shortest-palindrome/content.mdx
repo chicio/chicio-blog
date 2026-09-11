@@ -1,0 +1,62 @@
+---
+title: "Shortest Palindrome"
+description: "Build the shortest palindrome obtainable by adding characters only in front of a string, using the KMP failure function over the string concatenated with its reverse."
+date: 2026-09-08
+image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [string matching, kmp, rabin-karp, rolling hash, strings, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "KMP failure function over string, separator and reversed string"
+  leetcodeUrl: "https://leetcode.com/problems/shortest-palindrome/"
+  difficulty: "Hard"
+---
+# Shortest Palindrome
+
+Leetcode Problem 214: [Shortest Palindrome](https://leetcode.com/problems/shortest-palindrome/description/)
+
+## Problem Summary
+Given a string **s**, characters may be added only in front of it. Return the shortest palindrome that can be produced this way. The string is at most fifty thousand characters long and contains only lowercase English letters, and it may be empty.
+
+Adding only at the front means the tail of **s** is untouchable, so the answer is determined entirely by the longest **palindromic prefix** of **s**: everything after it has to be mirrored in front. Finding that prefix in linear time is a job for the KMP failure function. Concatenating **s**, a separator and the reverse of **s**, the final failure value is the length of the longest prefix of **s** that is also a suffix of its reverse, and a prefix is a suffix of the reverse exactly when it equals its own reverse, that is, exactly when it is a palindrome. The separator is mandatory, since without it the border could spill across the junction and exceed the length of **s** on inputs like a run of identical characters.
+
+## Techniques
+- String
+- String Matching
+- Hash Function
+- Rolling Hash
+
+## Solution
+```ts
+function shortestPalindrome(s: string): string {
+    if (s.length === 0) {
+        return ""
+    }
+
+    const reversed = s.split("").reverse().join("")
+    // the separator stops the border from spilling across the two halves
+    const combined = `${s}#${reversed}`
+
+    // the KMP failure function: failure[i] is the longest proper border of combined[0..i]
+    const failure: number[] = Array(combined.length).fill(0)
+
+    for (let i = 1; i < combined.length; i++) {
+        let length = failure[i - 1]
+
+        while (length > 0 && combined[i] !== combined[length]) {
+            length = failure[length - 1]
+        }
+
+        if (combined[i] === combined[length]) {
+            length++
+        }
+
+        failure[i] = length
+    }
+
+    // the final border is the longest prefix of s that is also a suffix of its reverse,
+    // which is exactly the longest palindromic prefix of s
+    const longestPalindromicPrefix = failure[combined.length - 1]
+
+    return reversed.substring(0, s.length - longestPalindromicPrefix) + s
+};
+```

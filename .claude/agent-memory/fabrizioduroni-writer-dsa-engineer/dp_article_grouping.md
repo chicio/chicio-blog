@@ -12,13 +12,13 @@ The roadmap file was updated on 2026-05-15 to reflect this grouping.
 | # | Article Title | AlgoMaster sub-topics merged | Exercise folders | Status |
 |---|---------------|------------------------------|-----------------|--------|
 | 1 | DP Foundations & 1D DP | Core DP theory + 1D DP | `1D-DP` (4 exercises: Climbing Stairs, Min Cost Climbing Stairs, House Robber, House Robber II) | **Published** (2026-05-15, PR #334) |
-| 2 | Knapsack DP | 0/1 Knapsack + Unbounded Knapsack | `knapsack-DP` + `unbounded-knapsack-DP` (6 exercises) | **Written** (2026-05-16, PR #335) |
-| 3 | Longest Increasing Subsequence DP | LIS DP | `longest-increasing-subsequence-DP` (3 exercises) | Not started |
-| 4 | 2D Grid DP | 2D Grid DP | `2D-grid-DP` (8 exercises) | Not started |
-| 5 | String DP | String DP | TBD | Not started |
-| 6 | State Machine DP | State Machine DP | TBD | Not started |
-| 7 | Tree & Graph DP | Tree/Graph DP | TBD | Not started |
-| 8 | Advanced DP Techniques | Bitmask DP + Digit DP + Probability DP | TBD | Not started |
+| 2 | Knapsack DP | 0/1 Knapsack + Unbounded Knapsack | `knapsack-DP` + `unbounded-knapsack-DP` (6 exercises) | **Published** (2026-05-16, PR #335) |
+| 3 | Longest Increasing Subsequence DP | LIS DP | `longest-increasing-subsequence-DP` (3 exercises) | **Published** (2026-06-01) |
+| 4 | 2D Grid DP | 2D Grid DP | `2D-grid-DP` (9 exercises) | **Published** (2026-07-12) |
+| 5 | String DP | String DP | `string-DP` (9 exercises) | **Published** (2026-09-04) |
+| 6 | State Machine DP | State Machine DP | `state-machine-DP` (2 exercises) | **Published** (2026-09-05) |
+| 7 | Tree & Graph DP | Tree/Graph DP | `tree-graph-DP` (5 exercises) | **Published** (2026-09-06) |
+| 8 | Advanced DP Techniques | Bitmask DP + Digit DP + Probability DP | `bitmask-DP` + `digit-DP` + `probability-DP` (9 exercises, flat under `advanced-dp-techniques`) | **Published** (2026-09-07) |
 
 ## Key Merge Decisions
 
@@ -43,3 +43,15 @@ Based on the pattern of existing topics, the expected folder names under `src/co
 - `advanced-dp-techniques` (Article 8)
 
 These are tentative and will be confirmed when each article is created.
+
+## Status: COMPLETE (2026-09-11)
+
+All 8 DP articles are published. The DP arc of the course is finished, and so is the course as a whole.
+
+The `string-DP` folder name: the solutions repo folder was renamed from `longest-common-subsequence-DP` to
+`string-DP`, because folder names follow the CURRENT AlgoMaster group names. The rule agreed with the user is that
+solutions-repo folders mirror AlgoMaster pattern groups one to one, while ARTICLES follow the grouping in the table
+above, so Bitmask, Digit and Probability DP stay three folders but become one article.
+
+2D Grid DP gained a ninth exercise (329, Longest Increasing Path in a Matrix) during the completion session: it was
+the only am_300 problem left unsolved anywhere in the course.

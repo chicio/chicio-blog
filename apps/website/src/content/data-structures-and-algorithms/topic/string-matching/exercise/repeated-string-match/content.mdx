@@ -1,0 +1,44 @@
+---
+title: "Repeated String Match"
+description: "Find the minimum number of times a string must be repeated so that another string becomes one of its substrings."
+date: 2026-09-08
+image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [string matching, kmp, rabin-karp, rolling hash, strings, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Bounding the periodic text before running a substring search"
+  leetcodeUrl: "https://leetcode.com/problems/repeated-string-match/"
+  difficulty: "Medium"
+---
+# Repeated String Match
+
+Leetcode Problem 686: [Repeated String Match](https://leetcode.com/problems/repeated-string-match/description/)
+
+## Problem Summary
+Given two strings **a** and **b**, return the minimum number of times **a** has to be repeated so that **b** becomes a substring of the resulting text. If no number of repetitions works, return **-1**. Both strings are at most ten thousand characters long and consist of lowercase English letters.
+
+The difficulty is that the candidate text is unbounded, so the search space has to be cut down before any matching happens. Two arguments do it. Since a text shorter than **b** cannot contain **b**, at least the ceiling of the ratio between the two lengths is needed. Since the repetition is periodic with period equal to the length of **a**, any occurrence can be shifted back until it starts inside the first copy, and an occurrence starting there spans at most one block beyond the copies that cover its own length. Only two candidate counts therefore need to be tested, and everything beyond them is provably useless.
+
+## Techniques
+- String
+- String Matching
+
+## Solution
+```ts
+function repeatedStringMatch(a: string, b: string): number {
+    // b needs at least enough copies of a to cover its own length
+    const minimumCopies = Math.ceil(b.length / a.length)
+    const repeated = a.repeat(minimumCopies)
+
+    if (repeated.includes(b)) {
+        return minimumCopies
+    }
+
+    // one extra copy is the most that can help, since it covers any offset into the first block
+    if ((repeated + a).includes(b)) {
+        return minimumCopies + 1
+    }
+
+    return -1
+};
+```

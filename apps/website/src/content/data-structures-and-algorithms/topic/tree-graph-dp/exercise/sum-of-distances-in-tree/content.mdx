@@ -1,0 +1,81 @@
+---
+title: "Sum of Distances in Tree"
+description: "Compute, for every node of an undirected tree, the sum of the distances to all the other nodes, using a rooted pass followed by a rerooting pass."
+date: 2026-09-06
+image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [dynamic programming, tree dp, graph dp, rerooting, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Two-pass rerooting converting the answer at one node into the answer at every node"
+  leetcodeUrl: "https://leetcode.com/problems/sum-of-distances-in-tree/"
+  difficulty: "Hard"
+---
+# Sum of Distances in Tree
+
+Leetcode Problem 834: [Sum of Distances in Tree](https://leetcode.com/problems/sum-of-distances-in-tree/description/)
+
+## Problem Summary
+An undirected connected tree has **n** nodes labelled from **0** to **n - 1**, described by a list of **n - 1** edges.
+Return an array where the element at index **i** is the sum of the distances between node **i** and every other node of
+the tree, the distance being the number of edges on the path joining them. The tree holds between **1** and **30,000**
+nodes, and the input is guaranteed to be a valid tree.
+
+Running a rooted traversal from each node in turn would answer the question in quadratic time, which the input size
+rules out. The linear solution roots the tree once at node **0** and computes, bottom-up, the size of each subtree and
+the distance sum restricted to that subtree, which gives the final answer at the root only. A second traversal then
+moves the origin one edge at a time: crossing the edge from a node to one of its children brings every node of the child
+subtree one edge closer and pushes every other node one edge further, so the answer transfers in constant time and the
+whole tree is resolved in two passes.
+
+## Techniques
+- Dynamic Programming
+- Tree
+- Depth-First Search
+- Graph
+
+## Solution
+```ts
+function sumOfDistancesInTree(n: number, edges: number[][]): number[] {
+    const graph: number[][] = Array.from({ length: n }, () => [])
+
+    for (const [from, to] of edges) {
+        graph[from].push(to)
+        graph[to].push(from)
+    }
+
+    const subtreeSize: number[] = Array(n).fill(1)
+    const answer: number[] = Array(n).fill(0)
+
+    // first pass: rooted at 0, accumulate subtree sizes and the distance sum seen from the root
+    function collect(node: number, parent: number): void {
+        for (const child of graph[node]) {
+            if (child === parent) {
+                continue
+            }
+
+            collect(child, node)
+            subtreeSize[node] += subtreeSize[child]
+            // every node in the child subtree is one edge further away from this node
+            answer[node] += answer[child] + subtreeSize[child]
+        }
+    }
+
+    // second pass: reroot, moving the origin one edge at a time
+    function reroot(node: number, parent: number): void {
+        for (const child of graph[node]) {
+            if (child === parent) {
+                continue
+            }
+
+            // the child subtree gets one edge closer, everything else gets one edge further
+            answer[child] = answer[node] - subtreeSize[child] + (n - subtreeSize[child])
+            reroot(child, node)
+        }
+    }
+
+    collect(0, -1)
+    reroot(0, -1)
+
+    return answer
+};
+```

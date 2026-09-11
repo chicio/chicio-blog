@@ -1,0 +1,669 @@
+---
+title: "String DP"
+description: "A complete guide to dynamic programming over strings: the two-index prefix table, two-sequence alignment with longest common subsequence, edit distance, distinct subsequences and interleaving, palindromic substructure over intervals, segmentation and decoding of a single string, wildcard pattern matching, and rolling-row space optimization."
+date: 2026-09-04
+image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [dynamic programming, string dp, strings, data structures, algorithms]
+authors: [fabrizio_duroni]
+---
+
+import { TopicExercises } from "@/components/content/data-structures-and-algorithms/topic-exercises";
+
+# String DP
+
+Strings are sequences, and sequences are the natural habitat of dynamic programming.
+What makes strings special is not the alphabet, it is the fact that almost every interesting question about two strings
+can be phrased as a question about their **prefixes**, and almost every interesting question about one string can be
+phrased as a question about its prefixes or its substrings.
+Once a problem is phrased that way the sub-problem structure appears immediately, because a prefix of a prefix is again a
+prefix, and the recursion bottoms out at the empty string.
+This article is about exploiting that structure systematically.
+
+The problems in this family look wildly different on the surface.
+Finding the longest subsequence shared by two texts, computing the minimum number of single-character edits that turn one
+word into another, counting how many ways a digit string can be decoded into letters, deciding whether a pattern with
+wildcards matches a text, cutting a string into palindromic pieces.
+Underneath, almost all of them reduce to one of four recurrences, and all four are built from the same skeleton:
+a table indexed by how much of each string has been consumed, and a transition that asks what happens to the **last**
+character on each side.
+
+This article assumes you are comfortable with the material in
+[DP foundations and 1D DP](/data-structures-and-algorithms/topic/dp-foundations-1d-dp),
+in particular state definition, recurrence relations, base cases, and the choice between memoization and tabulation.
+It also builds directly on [2D grid DP](/data-structures-and-algorithms/topic/2d-grid-dp),
+because a two-string DP table is a grid and the fill order obeys the same dependency reasoning.
+Familiarity with the [string](/data-structures-and-algorithms/topic/string) data structure is useful for the cost of
+substring extraction and comparison, which is easy to underestimate when counting operations.
+
+## The Two-Index State
+
+The defining move of string DP is to index the state by **how many characters of each string have been consumed**,
+not by which characters are involved.
+For two strings $s$ of length $m$ and $t$ of length $n$, the state is a pair $(i, j)$ with $0 \le i \le m$ and
+$0 \le j \le n$, and $dp[i][j]$ is the answer to the sub-problem restricted to the first $i$ characters of $s$ and the
+first $j$ characters of $t$.
+The table therefore has dimensions $(m+1) \times (n+1)$ and not $m \times n$, and that extra row and extra column are
+not padding, they are the most important part of the construction.
+
+The reason is that **the empty prefix is a legitimate sub-problem**.
+Row $0$ describes the situation in which $s$ has contributed nothing, and column $0$ describes the same for $t$.
+Every recursion on prefixes eventually shrinks one side to nothing, and the answer at that point is known without any
+further recursion: the longest common subsequence with the empty string is empty, the edit distance from a prefix of
+length $i$ to the empty string is $i$ deletions, the number of subsequences of any prefix equal to the empty target is
+exactly one.
+If you allocate an $m \times n$ table you are forced to special-case the first row and the first column inside the loop
+body, which is where most off-by-one errors in this family are born.
+Allocating $(m+1) \times (n+1)$ moves those cases out of the loop and into explicit initialization, where they are
+visible and can be reasoned about one at a time.
+
+The price of this convention is an **index shift** that must be internalised once and then never questioned.
+Because $dp[i][j]$ speaks about the first $i$ characters, the last character of that prefix is $s[i-1]$, not $s[i]$.
+Every comparison in every recurrence in this article is written as `s[i - 1] === t[j - 1]`, and the offset is not a
+detail of the implementation, it is a consequence of the state definition.
+The alternative convention, where $dp[i][j]$ refers to the **suffixes** starting at $i$ and $j$, avoids the shift but
+moves the base cases to the last row and the last column and reverses the fill order.
+The two formulations are mirror images and neither is more correct, but mixing them halfway through a derivation is a
+reliable way to produce a table that is subtly wrong.
+
+The transition always asks the same question: **what happens to the last character of each prefix**.
+There are only a few possible answers and they map onto a small set of neighbouring cells.
+Consuming a character from both strings at once moves to $dp[i-1][j-1]$, the diagonal neighbour.
+Consuming a character from $s$ alone moves to $dp[i-1][j]$, the cell above.
+Consuming a character from $t$ alone moves to $dp[i][j-1]$, the cell on the left.
+Consuming nothing is not an option, because the state must strictly decrease for the recursion to terminate.
+Since every dependency points up, left, or up-left, a single pass with $i$ increasing in the outer loop and $j$
+increasing in the inner loop resolves every cell in dependency order.
+
+This is exactly the dependency pattern of a monotone lattice path in
+[2D grid DP](/data-structures-and-algorithms/topic/2d-grid-dp), and the correspondence is not a coincidence.
+An **alignment** of two strings is a monotone path from the top-left corner of the table to the bottom-right corner,
+where a diagonal step pairs a character of $s$ with a character of $t$, a vertical step leaves a character of $s$
+unpaired, and a horizontal step leaves a character of $t$ unpaired.
+Every distinct alignment is a distinct path, and the DP is a shortest-path or longest-path computation over the
+resulting [directed acyclic graph](https://en.wikipedia.org/wiki/Directed_acyclic_graph).
+Seeing the table this way makes the whole family intelligible: the different problems differ only in the weight assigned
+to each kind of step, and in whether we minimise, maximise, count, or test for reachability.
+
+The skeleton that all of this produces is short enough to memorise, and everything in the rest of this article is a
+variation on it.
+
+```ts
+function twoStringSkeleton(s: string, t: string): number {
+    const m = s.length;
+    const n = t.length;
+    const dp: number[][] = Array.from({ length: m + 1 }, () => Array(n + 1).fill(0));
+
+    for (let i = 0; i <= m; i++) {
+        dp[i][0] = baseForEmptyT(i);
+    }
+
+    for (let j = 0; j <= n; j++) {
+        dp[0][j] = baseForEmptyS(j);
+    }
+
+    for (let i = 1; i <= m; i++) {
+        for (let j = 1; j <= n; j++) {
+            if (s[i - 1] === t[j - 1]) {
+                dp[i][j] = combineOnMatch(dp[i - 1][j - 1], dp[i - 1][j], dp[i][j - 1]);
+            } else {
+                dp[i][j] = combineOnMismatch(dp[i - 1][j - 1], dp[i - 1][j], dp[i][j - 1]);
+            }
+        }
+    }
+
+    return dp[m][n];
+}
+```
+
+## Aligning Two Sequences
+
+The canonical two-sequence problem is the **longest common subsequence**, and it deserves a careful derivation because
+every other alignment recurrence is a perturbation of it.
+A subsequence is obtained by deleting zero or more characters without reordering the survivors, so a common subsequence
+of $s$ and $t$ is a pair of strictly increasing position sequences, one in each string, matched pairwise with equal
+characters.
+Define $dp[i][j]$ as the length of the longest common subsequence of the first $i$ characters of $s$ and the first $j$
+characters of $t$.
+
+The correctness of the recurrence rests on an **exchange argument** about the last characters, and it splits into two
+cases.
+Suppose first that $s[i-1] = t[j-1]$ and let $Z$ be an optimal common subsequence of the two prefixes, of length $k$.
+If the last character of $Z$ is not equal to $s[i-1]$, we can append $s[i-1]$ to $Z$ and obtain a common subsequence of
+length $k+1$, contradicting optimality, so the last character of $Z$ must equal $s[i-1]$.
+Removing it leaves a common subsequence of the first $i-1$ and $j-1$ characters, and that residual must itself be
+optimal, otherwise a better residual would yield a better $Z$.
+Hence $dp[i][j] = 1 + dp[i-1][j-1]$, and crucially we do **not** need to also consider the cell above and the cell on
+the left, because we have just proved that pairing the two equal last characters loses nothing.
+
+Suppose instead that $s[i-1] \ne t[j-1]$.
+An optimal $Z$ cannot end with both characters at once, so at least one of them is unused, and discarding an unused last
+character reduces the problem to a strictly smaller prefix on that side.
+Taking the better of the two possibilities gives $dp[i][j] = \max(dp[i-1][j], dp[i][j-1])$.
+The base cases are the whole of row $0$ and column $0$ set to zero, because nothing can be shared with an empty string.
+
+```ts
+function longestCommonSubsequence(text1: string, text2: string): number {
+    const m = text1.length;
+    const n = text2.length;
+    const dp: number[][] = Array.from({ length: m + 1 }, () => Array(n + 1).fill(0));
+
+    for (let i = 1; i <= m; i++) {
+        for (let j = 1; j <= n; j++) {
+            if (text1[i - 1] === text2[j - 1]) {
+                dp[i][j] = 1 + dp[i - 1][j - 1];
+            } else {
+                dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+            }
+        }
+    }
+
+    return dp[m][n];
+}
+```
+
+**Edit distance** is the same table with a different objective and a richer transition.
+We want the minimum number of single-character insertions, deletions and replacements that turn $s$ into $t$.
+Each of the three operations corresponds to one of the three neighbours, and once that correspondence is clear the
+recurrence writes itself.
+Replacing $s[i-1]$ with $t[j-1]$ consumes one character on each side and costs one, so it reads $1 + dp[i-1][j-1]$.
+Deleting $s[i-1]$ consumes one character of $s$ only and costs one, so it reads $1 + dp[i-1][j]$.
+Inserting $t[j-1]$ into $s$ consumes one character of $t$ only and costs one, so it reads $1 + dp[i][j-1]$.
+When the two last characters already agree there is nothing to pay, and the same exchange argument as before shows that
+aligning them is never worse than any alternative, so the value passes through unchanged from the diagonal.
+
+The base cases now carry real information rather than zeros.
+Turning a prefix of length $i$ into the empty string requires exactly $i$ deletions, so $dp[i][0] = i$.
+Building a prefix of length $j$ from the empty string requires exactly $j$ insertions, so $dp[0][j] = j$.
+These two lines are the whole reason the extra row and column exist.
+
+```ts
+function minDistance(word1: string, word2: string): number {
+    const rows = word1.length;
+    const columns = word2.length;
+    const dp: number[][] = Array.from({ length: rows + 1 }, () => Array(columns + 1).fill(0));
+
+    for (let i = 0; i <= rows; i++) {
+        dp[i][0] = i;
+    }
+
+    for (let j = 0; j <= columns; j++) {
+        dp[0][j] = j;
+    }
+
+    for (let i = 1; i <= rows; i++) {
+        for (let j = 1; j <= columns; j++) {
+            if (word1[i - 1] === word2[j - 1]) {
+                dp[i][j] = dp[i - 1][j - 1];
+            } else {
+                dp[i][j] = 1 + Math.min(dp[i - 1][j - 1], dp[i][j - 1], dp[i - 1][j]);
+            }
+        }
+    }
+
+    return dp[rows][columns];
+}
+```
+
+It is worth noticing that edit distance is a genuine **metric** on strings, satisfying identity, symmetry and the
+triangle inequality, which is why it underpins spell checkers, diff tools and biological sequence alignment.
+Symmetry is visible in the recurrence: swapping the roles of the two strings swaps insertion with deletion and leaves
+the total cost unchanged.
+Assigning different weights to the three operations, or a substitution cost that depends on the pair of characters,
+turns the same table into weighted alignment and changes nothing structural.
+
+**Distinct subsequences** keeps the alignment table but replaces optimisation with **counting**, which changes the
+combinator from a maximum to a sum.
+We count how many subsequences of $s$ equal the string $t$, so $dp[i][j]$ is the number of ways the first $i$ characters
+of $s$ can produce the first $j$ characters of $t$.
+Skipping $s[i-1]$ is always allowed and contributes $dp[i-1][j]$ ways.
+When $s[i-1] = t[j-1]$ we may additionally consume both characters together, contributing $dp[i-1][j-1]$ ways, and the
+two families of solutions are disjoint because they differ in whether position $i-1$ of $s$ is used to match position
+$j-1$ of $t$.
+Disjointness is what licenses the sum, and it is the step people skip when a counting DP silently double counts.
+
+The base cases invert the intuition of the previous problems.
+Column $0$ is filled with ones, because the empty target is matched by exactly one subsequence of any prefix, namely the
+empty subsequence, while the rest of row $0$ is zero, because a non-empty target cannot be produced from nothing.
+
+**Interleaving string** is the boolean member of the family.
+Given $s_1$, $s_2$ and $s_3$, we ask whether $s_3$ can be formed by interleaving $s_1$ and $s_2$ while preserving the
+relative order within each.
+The state seems to need three indices, one per string, but there is a reduction that collapses it to two: if we have
+consumed $i$ characters of $s_1$ and $j$ characters of $s_2$, then we have necessarily produced exactly $i + j$
+characters of $s_3$.
+The third index is a function of the first two and can be dropped, which is the difference between an $O(mn)$ algorithm
+and an $O(mnk)$ one.
+The recurrence then tests reachability: the state $(i, j)$ is reachable if the last produced character of $s_3$ came
+from $s_1$ and $(i-1, j)$ was reachable, or it came from $s_2$ and $(i, j-1)$ was reachable.
+
+```ts
+function isInterleave(s1: string, s2: string, s3: string): boolean {
+    const rows = s1.length;
+    const columns = s2.length;
+
+    if (rows + columns !== s3.length) {
+        return false;
+    }
+
+    const dp: boolean[][] = Array.from({ length: rows + 1 }, () => Array(columns + 1).fill(false));
+    dp[0][0] = true;
+
+    for (let i = 1; i <= rows; i++) {
+        dp[i][0] = dp[i - 1][0] && s1[i - 1] === s3[i - 1];
+    }
+
+    for (let j = 1; j <= columns; j++) {
+        dp[0][j] = dp[0][j - 1] && s2[j - 1] === s3[j - 1];
+    }
+
+    for (let i = 1; i <= rows; i++) {
+        for (let j = 1; j <= columns; j++) {
+            const takeFromS1 = dp[i - 1][j] && s1[i - 1] === s3[i + j - 1];
+            const takeFromS2 = dp[i][j - 1] && s2[j - 1] === s3[i + j - 1];
+            dp[i][j] = takeFromS1 || takeFromS2;
+        }
+    }
+
+    return dp[rows][columns];
+}
+```
+
+The length check at the top is not an optimisation, it is a precondition: if the lengths do not add up, no interleaving
+exists and the table would be meaningless.
+The greedy instinct, consuming from whichever string happens to match the next character of $s_3$, fails precisely when
+both match, because the choice made now constrains what remains available later.
+That ambiguity is the signature of a problem that needs a table rather than a scan.
+
+Four problems, four combinators over the same three neighbours.
+The longest common subsequence maximises, edit distance minimises, distinct subsequences sums, interleaving takes a
+logical or.
+Recognising which of the four you need is usually the whole modelling step.
+
+## Palindromic Substructure
+
+Palindromes break the prefix convention, because a palindrome is defined by a symmetry between its two ends and a prefix
+only exposes one of them.
+The right state is therefore an **interval**: $dp[i][j]$ describes the substring $s[i..j]$ inclusive, the table is
+$n \times n$, and only the upper triangle is ever used.
+This is the same interval DP idea that appears in
+[2D grid DP](/data-structures-and-algorithms/topic/2d-grid-dp) for problems on sub-arrays, applied to characters.
+
+For the **longest palindromic subsequence** the transition inspects both ends at once.
+If $s[i] = s[j]$ those two characters can be used as the outermost pair of a palindrome, contributing two to the length
+and leaving the strictly inner interval $s[i+1..j-1]$ to solve.
+The exchange argument that justifies committing to the pair is the same one used for the longest common subsequence:
+if an optimal palindromic subsequence of $s[i..j]$ does not already use both ends, it can be rewritten to use them
+without becoming shorter.
+If the two ends differ, at least one of them cannot participate in an optimal solution as an outer character, so we drop
+one end at a time and take the better of $dp[i+1][j]$ and $dp[i][j-1]$.
+Single characters are palindromes of length one, which seeds the diagonal.
+
+The fill order is the subtle part.
+Both $dp[i+1][j-1]$ and $dp[i+1][j]$ have a larger first index, so the outer loop must run $i$ **downwards**, while
+$dp[i][j-1]$ has a smaller second index, so the inner loop runs $j$ upwards from $i$.
+An equivalent and often clearer formulation iterates by increasing interval length, which makes it obvious that every
+shorter interval is already resolved.
+
+```ts
+function longestPalindromeSubseq(s: string): number {
+    const n = s.length;
+    const dp: number[][] = Array.from({ length: n }, () => Array(n).fill(0));
+
+    for (let i = n - 1; i >= 0; i--) {
+        dp[i][i] = 1;
+
+        for (let j = i + 1; j < n; j++) {
+            if (s[i] === s[j]) {
+                dp[i][j] = 2 + dp[i + 1][j - 1];
+            } else {
+                dp[i][j] = Math.max(dp[i + 1][j], dp[i][j - 1]);
+            }
+        }
+    }
+
+    return dp[0][n - 1];
+}
+```
+
+There is an elegant alternative derivation worth knowing, because it links this problem back to the previous section.
+The longest palindromic subsequence of $s$ equals the longest common subsequence of $s$ and its reverse.
+The intuition is that a palindromic subsequence read forwards in $s$ appears identically when $s$ is read backwards, so
+it is common to both strings, and conversely a common subsequence of a string and its reverse can always be rearranged
+into a palindromic subsequence of the same length.
+The reduction costs the same $O(n^2)$ time and gives the same answer, which is a good sanity check on both recurrences.
+
+The second palindromic tool is a **precomputed palindrome table**, a boolean matrix where $isPalindrome[i][j]$ records
+whether the substring $s[i..j]$ reads the same in both directions.
+Computing it naively by checking each substring costs $O(n^3)$, but the same interval recurrence makes it $O(n^2)$:
+a substring is a palindrome when its two ends agree and its strict interior is already known to be a palindrome, with
+substrings of length one and two handled by the degenerate case where the interior is empty.
+Once this table exists, any query about palindromicity is $O(1)$, and that is what turns palindrome partitioning from an
+exponential search into a quadratic DP, as the next section shows.
+
+```ts
+function buildPalindromeTable(s: string): boolean[][] {
+    const length = s.length;
+    const isPalindrome: boolean[][] = Array.from({ length }, () => Array(length).fill(false));
+
+    for (let start = length - 1; start >= 0; start--) {
+        for (let end = start; end < length; end++) {
+            if (s[start] === s[end] && (end - start < 2 || isPalindrome[start + 1][end - 1])) {
+                isPalindrome[start][end] = true;
+            }
+        }
+    }
+
+    return isPalindrome;
+}
+```
+
+Note the fill order again: `isPalindrome[start + 1][end - 1]` refers to a shorter interval, so the outer loop runs
+downwards and each cell finds its core already computed.
+The condition `end - start < 2` covers the two degenerate cases, a single character and a pair of equal adjacent
+characters, whose interior is empty and therefore vacuously a palindrome.
+
+## Segmentation and Decoding of a Single String
+
+A third family operates on a **single** string and asks how it can be cut into pieces that satisfy some predicate.
+The state collapses back to one dimension, $dp[i]$ describing the first $i$ characters, exactly as in
+[1D DP](/data-structures-and-algorithms/topic/dp-foundations-1d-dp), but the transition is different from the
+fixed-stride recurrences met there.
+Instead of looking back a constant number of positions, we look back over **every possible position of the last cut**,
+and we combine the answer for the prefix before the cut with a check on the piece after it.
+
+The skeleton is always the same.
+The value $dp[0]$ is the neutral element, true for feasibility problems, one for counting problems, zero for
+minimisation of the number of cuts, because the empty prefix is trivially segmented with no cuts and in exactly one way.
+For every end position we scan every start position, and whenever the prefix ending at the start is already solved and
+the piece from start to end satisfies the predicate, the state at end inherits the appropriate combination.
+The cost is $O(n^2)$ splits multiplied by the cost of testing one piece, which is why making the predicate $O(1)$ is the
+central optimisation of the whole family.
+
+**Decode ways** is the degenerate case in which the pieces have bounded length, and this changes the complexity class of
+the problem.
+Digits map to letters through the codes $1$ to $26$, so a valid piece is one digit or two digits, never more.
+The scan over all cut positions therefore degenerates to a scan over the last one or two characters, and the recurrence
+becomes a guarded Fibonacci relation: $dp[i] = dp[i-1]$ when the last digit is a valid single-digit code, plus
+$dp[i-2]$ when the last two digits form a number between $10$ and $26$.
+The guards carry all the difficulty.
+A leading zero has no letter, so it can never stand alone, and a two-digit group is valid only if it does not itself
+start with a zero, which is exactly what the lower bound of $10$ enforces.
+Because the recurrence looks back at most two positions, the whole table collapses to two rolling variables and the
+algorithm runs in $O(1)$ space.
+
+```ts
+function numDecodings(s: string): number {
+    if (s.length === 0 || s[0] === "0") {
+        return 0;
+    }
+
+    let twoBack = 1;
+    let oneBack = 1;
+
+    for (let i = 1; i < s.length; i++) {
+        let current = 0;
+
+        if (s[i] !== "0") {
+            current += oneBack;
+        }
+
+        const twoDigits = Number(s.substring(i - 1, i + 1));
+
+        if (twoDigits >= 10 && twoDigits <= 26) {
+            current += twoBack;
+        }
+
+        if (current === 0) {
+            return 0;
+        }
+
+        twoBack = oneBack;
+        oneBack = current;
+    }
+
+    return oneBack;
+}
+```
+
+**Word break** is the general case, with an unbounded piece length and a dictionary as the predicate.
+Here $dp[i]$ is a boolean recording whether the first $i$ characters can be segmented into dictionary words, $dp[0]$ is
+true, and the transition tries every split point.
+Storing the dictionary in a [hash set](/data-structures-and-algorithms/topic/hashtable) makes the membership test
+expected $O(L)$ in the length of the piece, dominated by hashing the substring rather than by the lookup itself, and an
+early exit on the first successful split avoids pointless work.
+A [trie](/data-structures-and-algorithms/topic/tries) built over the dictionary is the alternative: walking the trie
+forward from each start position tests all pieces beginning there in a single pass and avoids materialising substrings
+altogether, which matters when the string is long.
+
+```ts
+function wordBreak(s: string, wordDict: string[]): boolean {
+    const words = new Set(wordDict);
+    const dp: boolean[] = Array(s.length + 1).fill(false);
+    dp[0] = true;
+
+    for (let end = 1; end <= s.length; end++) {
+        for (let start = 0; start < end; start++) {
+            if (dp[start] && words.has(s.substring(start, end))) {
+                dp[end] = true;
+                break;
+            }
+        }
+    }
+
+    return dp[s.length];
+}
+```
+
+The greedy alternative, taking the longest matching word at each position, is wrong for a reason worth stating precisely:
+a long match now can consume characters that a later word needs, and there is no local signal that distinguishes the two
+cases.
+The table exists to remember that a prefix was segmentable in **some** way, without committing to which way.
+
+**Palindrome partitioning II** combines this skeleton with the palindrome table of the previous section, and shows how
+the two ideas compose.
+We want the minimum number of cuts that splits the string into palindromic pieces, so $dp[i]$ is the minimum number of
+cuts for the first $i$ characters, the predicate is palindromicity, and the combination is a minimum plus one rather
+than a logical or.
+The special case is the prefix that is itself a palindrome, which needs zero cuts and must not be charged for the
+imaginary cut at position zero.
+
+```ts
+function minCut(s: string): number {
+    const length = s.length;
+    const isPalindrome = buildPalindromeTable(s);
+    const cuts: number[] = Array(length + 1).fill(0);
+
+    for (let end = 1; end <= length; end++) {
+        cuts[end] = Infinity;
+
+        for (let start = 0; start < end; start++) {
+            if (isPalindrome[start][end - 1]) {
+                cuts[end] = start === 0 ? 0 : Math.min(cuts[end], cuts[start] + 1);
+            }
+        }
+    }
+
+    return cuts[length];
+}
+```
+
+The two-phase structure is the lesson here.
+Phase one precomputes a predicate over all $O(n^2)$ intervals in $O(n^2)$ time, phase two runs the segmentation DP whose
+inner test is now $O(1)$.
+Without phase one the same algorithm would be $O(n^3)$, and the separation between an expensive predicate and a cheap
+one is often the entire difference between a feasible and an infeasible solution.
+
+## Wildcard and Pattern Matching
+
+Pattern matching with wildcards returns to the two-index table, with $dp[i][j]$ meaning that the first $i$ characters of
+the text match the first $j$ characters of the pattern.
+The alphabet of the pattern contains two special symbols: `?` matches exactly one arbitrary character, and `*` matches
+any sequence of characters including the empty one.
+The single-character wildcard is trivial, it behaves like a character that always agrees, so it takes the diagonal
+transition unconditionally.
+The star is where the interesting reasoning lives.
+
+The naive treatment of a star enumerates how many characters it absorbs, giving a disjunction over all $dp[k][j-1]$ with
+$k \le i$, and therefore $O(m)$ work per cell and $O(m^2 n)$ overall.
+That disjunction, however, has an overlapping structure that the table already captures.
+The set of terms at row $i$ differs from the set at row $i-1$ by exactly one element, so the disjunction satisfies its
+own recurrence.
+Concretely, a star at pattern position $j$ either matches the empty sequence, in which case the pattern prefix without
+the star must already match the whole text prefix, giving $dp[i][j-1]$, or it absorbs at least one character, in which
+case the same star is still available to absorb the earlier ones, giving $dp[i-1][j]$.
+These two cases are exhaustive and the recurrence collapses to a two-term disjunction evaluated in $O(1)$.
+This is the same move as
+[optimizing a transition](/data-structures-and-algorithms/topic/2d-grid-dp) in grid DP: the number of states does not
+change, the cost per state does.
+
+The base row is the second place where stars matter.
+A non-empty pattern can match the empty text only if it consists entirely of stars, so $dp[0][j]$ is true exactly when
+every pattern character up to $j$ is a star, which the recurrence expresses by propagating $dp[0][j-1]$ through a star
+and leaving the cell false otherwise.
+Forgetting this initialization is the classic failure mode, because the table is then unable to represent a pattern that
+legitimately consumes nothing.
+The base column needs no work: a non-empty text cannot match an empty pattern, and the default of false already says so.
+
+```ts
+function isMatchWildcard(s: string, p: string): boolean {
+    const rows = s.length;
+    const columns = p.length;
+    const dp: boolean[][] = Array.from({ length: rows + 1 }, () => Array(columns + 1).fill(false));
+    dp[0][0] = true;
+
+    for (let j = 1; j <= columns; j++) {
+        if (p[j - 1] === "*") {
+            dp[0][j] = dp[0][j - 1];
+        }
+    }
+
+    for (let i = 1; i <= rows; i++) {
+        for (let j = 1; j <= columns; j++) {
+            if (p[j - 1] === "*") {
+                dp[i][j] = dp[i][j - 1] || dp[i - 1][j];
+            } else if (p[j - 1] === "?" || p[j - 1] === s[i - 1]) {
+                dp[i][j] = dp[i - 1][j - 1];
+            }
+        }
+    }
+
+    return dp[rows][columns];
+}
+```
+
+It is instructive to contrast this with **regular expression matching**, where `*` means zero or more occurrences of the
+preceding element rather than an arbitrary sequence.
+That single change in semantics forces the transition to read two pattern characters at a time and to branch on whether
+the repeated element matches the current text character, which produces a different recurrence over the same table.
+The structural lesson is that the shape of the state, prefix against prefix, survives changes in the matching semantics,
+and only the transition needs redesign.
+When the pattern language has no star-like operator at all, dynamic programming is overkill and a linear scan or a
+string-matching automaton is the right tool, which is the boundary at which this family stops being a DP problem.
+
+## Space Optimization
+
+Every recurrence in the two-string sections reads only from the current row and the immediately preceding one.
+That observation alone reduces the memory footprint from $O(mn)$ to $O(\min(m, n))$, and the reduction is mechanical.
+Keep two arrays, the previous row and the current row, compute the current row left to right, then swap them and move on.
+Choosing the shorter string as the one indexed by the inner loop makes the rows as short as possible, which is where the
+minimum in the bound comes from.
+
+The single-array version is tighter and slightly trickier.
+If we overwrite one array in place, the cell we are about to write still holds the value of $dp[i-1][j]$, which we need,
+while the cell to its left already holds $dp[i][j-1]$, the freshly computed value.
+The only missing ingredient is $dp[i-1][j-1]$, which was destroyed one step earlier, so we must save it in a scalar
+before overwriting.
+This is the standard diagonal carry, and it is the reason the loop keeps a temporary variable.
+
+```ts
+function longestCommonSubsequenceOptimized(text1: string, text2: string): number {
+    const [shorter, longer] = text1.length <= text2.length ? [text1, text2] : [text2, text1];
+    const dp: number[] = Array(shorter.length + 1).fill(0);
+
+    for (let i = 1; i <= longer.length; i++) {
+        let diagonal = 0;
+
+        for (let j = 1; j <= shorter.length; j++) {
+            const previousDiagonal = dp[j];
+
+            if (longer[i - 1] === shorter[j - 1]) {
+                dp[j] = 1 + diagonal;
+            } else {
+                dp[j] = Math.max(dp[j], dp[j - 1]);
+            }
+
+            diagonal = previousDiagonal;
+        }
+    }
+
+    return dp[shorter.length];
+}
+```
+
+The same transformation applies to edit distance, distinct subsequences, interleaving and wildcard matching without
+modification, because they share the dependency pattern.
+It does **not** apply to the palindromic interval recurrences, whose dependencies reach across rows at offsets that vary
+with the interval, nor is it needed for the segmentation DPs, which already use linear space and sometimes constant
+space, as decode ways does with its two rolling variables.
+
+There is one cost to the rolling optimisation that is easy to overlook: **reconstruction becomes impossible**.
+Recovering the actual longest common subsequence, or the actual sequence of edits, requires walking backwards from the
+bottom-right corner and following the decisions that produced each value, and those decisions live in the discarded
+rows.
+The classical resolution is
+[Hirschberg's algorithm](https://en.wikipedia.org/wiki/Hirschberg%27s_algorithm), which recovers the alignment itself in
+$O(\min(m, n))$ space while keeping $O(mn)$ time, by computing forward scores for the top half of the table and backward
+scores for the bottom half, splitting at the column that maximises their sum, and recursing on the two halves.
+The recursion halves the work at each level, so the total time only doubles.
+When a problem asks for a numeric answer, use the rolling array.
+When it asks for the alignment itself, either keep the full table or reach for the divide and conquer.
+
+## Time and Space Complexity
+
+The cost of a string DP is, as always, the number of states multiplied by the work done at each state, and in this family
+the state count is determined by how many string positions the state has to remember.
+
+The two-sequence alignment problems all have $(m+1)(n+1)$ states and resolve each of them with a constant number of
+comparisons and arithmetic operations over at most three neighbours.
+They therefore run in $O(mn)$ time and, in their tabular form, use $O(mn)$ space.
+This covers the longest common subsequence, edit distance, distinct subsequences and interleaving string alike, and the
+rolling-row transformation brings the space down to $O(\min(m, n))$ for all of them, at the cost of losing the ability
+to reconstruct the alignment.
+Interleaving string deserves a footnote: the naive three-index state would have $O(mnk)$ states, and it is the
+observation that the position in the third string equals $i + j$ that removes an entire dimension.
+Distinct subsequences deserves another: the counts grow combinatorially, so the accumulated values can approach the
+limits of exact integer arithmetic even when the strings are short, which is why the problem statement guarantees the
+answer fits in a 32-bit signed integer rather than leaving it to chance.
+
+The palindromic interval problems have $O(n^2)$ states, one per substring, and each is resolved in $O(1)$ from at most
+two shorter intervals, giving $O(n^2)$ time and $O(n^2)$ space.
+The longest palindromic subsequence reaches this bound directly, and the reduction to the longest common subsequence of
+the string and its reverse has the same cost, which is unsurprising given that both strings have length $n$ there.
+The palindrome table used by palindrome partitioning II is likewise $O(n^2)$ in both time and space, and it is the
+enabler of the quadratic bound rather than an overhead, because it turns each palindromicity test from $O(n)$ into
+$O(1)$.
+
+The segmentation problems on a single string have $O(n)$ states, but the transition scans every cut position, so the work
+per state is $O(n)$ and the total is $O(n^2)$ multiplied by the cost of testing one piece.
+Word break tests a piece by hashing a substring, which is linear in the length of the piece and therefore $O(n^3)$ in the
+worst case with naive substring extraction, reduced to $O(n^2)$ by bounding the piece length with the longest dictionary
+word, or by walking a trie instead of materialising substrings.
+Space is $O(n)$ for the table plus the size of the dictionary.
+Palindrome partitioning II keeps the $O(n^2)$ scan with an $O(1)$ predicate and therefore runs in $O(n^2)$ time and
+$O(n^2)$ space, dominated by the palindrome table.
+Decode ways is the outlier of the family: because the pieces have length at most two, the scan over cut positions is
+bounded by a constant, so the algorithm is $O(n)$ in time and $O(1)$ in space with two rolling variables.
+
+Wildcard matching has $(m+1)(n+1)$ states like the alignment problems, and the entire point of the two-term star
+recurrence is to keep the work per state at $O(1)$.
+The naive enumeration of how many characters a star absorbs would cost $O(m)$ per state and $O(m^2 n)$ overall, which is
+a meaningful difference at the input sizes involved.
+The optimized version therefore runs in $O(mn)$ time with $O(mn)$ space, reducible to $O(n)$ with a rolling row since
+each cell depends only on the previous row and the cell to its left.
+A greedy two-pointer algorithm that backtracks to the last seen star solves the same problem in $O(m + n)$ expected time
+and $O(1)$ space, but its correctness argument is far more delicate than the table's, and the table generalises to richer
+pattern languages while the greedy does not.
+
+## Exercises
+
+<TopicExercises topic="string-dp" />

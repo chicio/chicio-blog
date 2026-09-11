@@ -1,0 +1,45 @@
+---
+title: "Best Time to Buy and Sell Stock III"
+description: "Maximise the profit from at most two stock transactions by walking a four-state chain of buys and sells."
+date: 2026-09-05
+image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [dynamic programming, state machine dp, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Chain of 2k states, one per buy and sell, collapsed into rolling scalars"
+  leetcodeUrl: "https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/"
+  difficulty: "Hard"
+---
+# Best Time to Buy and Sell Stock III
+
+Leetcode Problem 123: [Best Time to Buy and Sell Stock III](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/description/)
+
+## Problem Summary
+You are given an array **prices** where **prices[i]** is the price of a given stock on day **i**. You may complete at most two transactions, and you may not engage in multiple transactions at the same time, so a share must be sold before buying another one. Return the maximum profit achievable. The price array holds at most 100,000 entries, each price between zero and 100,000.
+
+The transaction budget belongs in the state, not in a counter checked inside the loop. With at most **k** transactions the process walks a forward chain of **2k** states, one per buy and one per sell, here **firstBuy**, **firstSell**, **secondBuy** and **secondSell**, each with an implicit idle self-loop that carries its value forward when nothing happens. The chain is acyclic, so no run can traverse more than two buy edges, which is exactly the constraint. The edge into **secondBuy** reads **firstSell**, expressing that the capital available for the second purchase is whatever the first completed transaction left behind. Updating the four scalars sequentially in place is safe because the only extra paths it creates buy and sell on the same day at the same price, contributing zero profit and therefore never improving on the idle self-loop.
+
+## Techniques
+- Array
+- Dynamic Programming
+
+## Solution
+```ts
+function maxProfitAtMostTwoTransactions(prices: number[]): number {
+    // the machine walks through four states, one per buy and sell of the two allowed transactions
+    let firstBuy = -Infinity
+    let firstSell = 0
+    let secondBuy = -Infinity
+    let secondSell = 0
+
+    for (const price of prices) {
+        firstBuy = Math.max(firstBuy, -price)
+        firstSell = Math.max(firstSell, firstBuy + price)
+        // the second purchase is funded by whatever the first transaction left behind
+        secondBuy = Math.max(secondBuy, firstSell - price)
+        secondSell = Math.max(secondSell, secondBuy + price)
+    }
+
+    return secondSell
+};
+```

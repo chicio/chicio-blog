@@ -1,0 +1,62 @@
+---
+title: "Fair Distribution of Cookies"
+description: "Hand out bags of cookies to children so that the largest total received by any single child is as small as possible."
+date: 2026-09-07
+image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [dynamic programming, bitmask dp, digit dp, probability dp, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Bitmask DP partitioning a set into k groups, one child per layer"
+  leetcodeUrl: "https://leetcode.com/problems/fair-distribution-of-cookies/"
+  difficulty: "Medium"
+---
+# Fair Distribution of Cookies
+
+Leetcode Problem 2305: [Fair Distribution of Cookies](https://leetcode.com/problems/fair-distribution-of-cookies/description/)
+
+## Problem Summary
+You are given an array **cookies**, where **cookies[i]** is the number of cookies inside the **i**-th bag, and an integer **k** counting the children. Every bag must be handed out, and a single bag must go entirely to one child. The unfairness of a distribution is the largest total received by any single child. Return the minimum unfairness over all possible distributions. There are at most **8** bags, each holding up to one hundred thousand cookies, and the number of children is at least **2** and never exceeds the number of bags.
+
+This is the archetypal partition-into-groups problem. The subset totals are precomputed in a single sweep using the lowest set bit, so the total for a mask is the total for that same mask with its lowest bag removed, plus that bag. The DP then handles one child per layer: **dp[mask]** is the smallest achievable unfairness once exactly the bags in **mask** have been distributed among the children processed so far, and the next child receives some submask of that set.
+
+## Techniques
+- Array
+- Dynamic Programming
+- Backtracking
+- Bit Manipulation
+- Bitmask
+
+## Solution
+```ts
+function distributeCookies(cookies: number[], k: number): number {
+    const n = cookies.length
+    const total = 1 << n
+
+    // sums[mask] = total cookies handed to a child receiving exactly the bags in mask
+    const sums: number[] = Array(total).fill(0)
+
+    for (let mask = 1; mask < total; mask++) {
+        const lowestBit = mask & -mask
+        const index = Math.log2(lowestBit)
+        sums[mask] = sums[mask ^ lowestBit] + cookies[index]
+    }
+
+    // dp[mask] = smallest possible unfairness after distributing the bags in mask to the children so far
+    let dp: number[] = sums.slice()
+
+    for (let child = 1; child < k; child++) {
+        const next: number[] = Array(total).fill(Infinity)
+
+        for (let mask = 0; mask < total; mask++) {
+            // give this child any submask, leaving the rest to the children before it
+            for (let submask = mask; submask > 0; submask = (submask - 1) & mask) {
+                next[mask] = Math.min(next[mask], Math.max(dp[mask ^ submask], sums[submask]))
+            }
+        }
+
+        dp = next
+    }
+
+    return dp[total - 1]
+};
+```

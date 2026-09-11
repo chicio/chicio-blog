@@ -1,0 +1,57 @@
+---
+title: "Wildcard Matching"
+description: "Decide whether a pattern containing single-character and multi-character wildcards matches an entire string."
+date: 2026-09-04
+image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [dynamic programming, string dp, strings, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Prefix matching table with the star collapsed to a two-term disjunction"
+  leetcodeUrl: "https://leetcode.com/problems/wildcard-matching/"
+  difficulty: "Hard"
+---
+# Wildcard Matching
+
+Leetcode Problem 44: [Wildcard Matching](https://leetcode.com/problems/wildcard-matching/description/)
+
+## Problem Summary
+Given a string **s** and a pattern **p**, return whether the pattern matches the whole string. The pattern may contain the wildcard **?**, which matches exactly one arbitrary character, and the wildcard **\***, which matches any sequence of characters including the empty one. The match must cover the entire string, not just a part of it. Either input may be empty and neither exceeds two thousand characters, with the string made of lowercase English letters and the pattern of lowercase letters plus the two wildcards.
+
+The state is the pair of prefix lengths, and the ordinary characters plus **?** take the diagonal transition. The star is the interesting case: a naive treatment enumerates how many characters it absorbs, costing linear work per cell, but the resulting disjunction has an overlapping structure that the table already captures. Either the star matches nothing, in which case the pattern prefix without it must already match the whole text prefix, or it absorbs at least one character and remains available for the earlier ones. These two cases are exhaustive and reduce the transition to constant work. The base row is the other subtlety: a non-empty pattern matches the empty string only if it consists entirely of stars.
+
+## Techniques
+- String
+- Dynamic Programming
+- Greedy
+- Recursion
+
+## Solution
+```ts
+function isMatchWildcard(s: string, p: string): boolean {
+    const rows = s.length
+    const columns = p.length
+    // dp[i][j] = the first i chars of s match the first j chars of p
+    const dp: boolean[][] = Array.from({ length: rows + 1 }, () => Array(columns + 1).fill(false))
+    dp[0][0] = true
+
+    // only a prefix made entirely of '*' can match the empty string
+    for (let j = 1; j <= columns; j++) {
+        if (p[j - 1] === "*") {
+            dp[0][j] = dp[0][j - 1]
+        }
+    }
+
+    for (let i = 1; i <= rows; i++) {
+        for (let j = 1; j <= columns; j++) {
+            if (p[j - 1] === "*") {
+                // '*' matches the empty sequence, or absorbs one more character of s
+                dp[i][j] = dp[i][j - 1] || dp[i - 1][j]
+            } else if (p[j - 1] === "?" || p[j - 1] === s[i - 1]) {
+                dp[i][j] = dp[i - 1][j - 1]
+            }
+        }
+    }
+
+    return dp[rows][columns]
+};
+```

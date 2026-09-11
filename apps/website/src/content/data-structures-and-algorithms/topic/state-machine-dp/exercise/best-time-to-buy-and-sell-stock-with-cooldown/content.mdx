@@ -1,0 +1,48 @@
+---
+title: "Best Time to Buy and Sell Stock with Cooldown"
+description: "Maximise the profit from unlimited stock transactions when a sale forbids buying again on the following day."
+date: 2026-09-05
+image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [dynamic programming, state machine dp, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Three-state automaton where a frozen mode between the sale and the next purchase encodes the cooldown"
+  leetcodeUrl: "https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/"
+  difficulty: "Medium"
+---
+# Best Time to Buy and Sell Stock with Cooldown
+
+Leetcode Problem 309: [Best Time to Buy and Sell Stock with Cooldown](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/description/)
+
+## Problem Summary
+You are given an array **prices** where **prices[i]** is the price of a given stock on day **i**. You may complete as many transactions as you like, buying and selling one share at a time, with the restriction that you can never hold more than one share simultaneously and that you cannot buy on the day immediately after a sale. Return the maximum profit achievable. The price array holds between one and five thousand entries, each price between zero and one thousand.
+
+The cooldown rule looks temporal but is purely structural. A day on which we hold no share is not always the same situation: the day right after a sale forbids buying, every other free day allows it, so the two must be distinct **states**. The process therefore walks a three-state machine, **holding** a share, having **just sold** one, and **resting** with the right to buy. The cooldown is expressed by the fact that no transition leads from **just sold** directly to **holding**: the only way out of a sale is through the resting state, which costs a day. Reading the previous day's values from snapshots is essential, since computing **resting** from the freshly updated **just sold** would let a run sell and become free within the same day, erasing the cooldown entirely.
+
+## Techniques
+- Array
+- Dynamic Programming
+
+## Solution
+```ts
+function maxProfitWithCooldown(prices: number[]): number {
+    // three states: holding a share, having just sold one, and being free to buy again
+    let holding = -Infinity
+    let justSold = -Infinity
+    let resting = 0
+
+    for (const price of prices) {
+        const previousHolding = holding
+        const previousJustSold = justSold
+        const previousResting = resting
+
+        // we can only buy out of the resting state, never the day right after a sale
+        holding = Math.max(previousHolding, previousResting - price)
+        justSold = previousHolding + price
+        // the cooldown day turns "just sold" into "resting"
+        resting = Math.max(previousResting, previousJustSold)
+    }
+
+    return Math.max(justSold, resting)
+};
+```
