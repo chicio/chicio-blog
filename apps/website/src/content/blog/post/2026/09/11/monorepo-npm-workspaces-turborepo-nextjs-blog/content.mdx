@@ -30,17 +30,15 @@ from `next`. You could not have lifted it out of the app with anything short of 
 not be published, showcased, or reused. A reusable library that cannot leave the building is just a folder with
 ambitions.
 
-So I turned the whole thing into a monorepo: npm workspaces plus Turborepo, seven workspaces (three apps and four
-packages), three of which are now published on npm. This post is the playbook. It follows the real chronology, five
-acts and the pipeline they all converge on, with the gotchas landed exactly where they bit me, because a few of them
-cost me a lot more time than they should have.
+So I turned the whole thing into a monorepo: npm workspaces plus [Turborepo](https://turborepo.com), seven workspaces
+(three apps and four packages), three of which are now published on npm. This post is the playbook. It follows the
+real chronology, five acts and the pipeline they all converge on, with the gotchas landed exactly where they bit me,
+because a few of them cost me a lot more time than they should have.
 
-One note on how this got done, and then I'll never mention it again. The whole migration ran through the agentic SDLC
-pipeline I described in
-[the post about our software engineer skills pyramid](/blog/post/2026/07/10/software-engineer-skills-pyramid-harness-sdlc):
-explore, plan, implement and review in a bounded loop, then a pull request. That's the only reason a side project
-produced around 27 tightly scoped pull requests instead of one enormous "monorepo" commit that nobody (including
-future me) could ever review. Small PRs are a discipline, and having a harness makes the discipline cheap.
+One note before we start. The migration ran through the agentic SDLC pipeline I described in
+[the software engineer skills pyramid post](/blog/post/2026/07/10/software-engineer-skills-pyramid-harness-sdlc):
+explore, plan, implement and review in a loop, then a pull request. That is why this is around 27 small pull requests
+instead of one unreviewable "monorepo" commit.
 
 Let's start.
 
@@ -51,7 +49,8 @@ Five tools do all the work here:
 - **npm workspaces** for the workspace graph, hoisting, and a single lockfile
 - **Turborepo** for the task graph, the caching, and the ordering between workspaces
 - **tsdown** to build the packages (ESM output plus type declarations)
-- **release-it** with `@release-it/conventional-changelog` to cut releases and changelogs
+- **[release-it](https://github.com/release-it/release-it)** with `@release-it/conventional-changelog` to cut
+  releases and changelogs
 - **npm OIDC trusted publishing** to publish without any long lived token
 
 I want to be honest about how these were chosen, because monorepo posts love to present a tooling decision as the
@@ -74,13 +73,13 @@ generator, just scoped differently. Fewer concepts beat better concepts when you
 
 Here's the single most useful thing I learned, and it happened before the monorepo existed at all.
 
-Three pull requests (#534, #535, and #536) landed while the repository was still one plain Next.js app. None of them
+Three pull requests ([#534](https://github.com/chicio/chicio-blog/pull/534), [#535](https://github.com/chicio/chicio-blog/pull/535), and [#536](https://github.com/chicio/chicio-blog/pull/536)) landed while the repository was still one plain Next.js app. None of them
 created a workspace. None of them moved a file into `packages/`. All they did was sever the design system from
 everything around it:
 
-- **#534** made it independent of the website: no imports from `lib/`, from `features/`, or from `content/`
-- **#535** made it framework agnostic: no imports from `next` at all
-- **#536** gave it its own stylesheet, instead of borrowing the app's global CSS
+- **[#534](https://github.com/chicio/chicio-blog/pull/534)** made it independent of the website: no imports from `lib/`, from `features/`, or from `content/`
+- **[#535](https://github.com/chicio/chicio-blog/pull/535)** made it framework agnostic: no imports from `next` at all
+- **[#536](https://github.com/chicio/chicio-blog/pull/536)** gave it its own stylesheet, instead of borrowing the app's global CSS
 
 ```mermaid
 graph TD
@@ -102,12 +101,12 @@ graph TD
         BIND2["design-system-next bindings"]
         DS2["matrix-design-system"]
         SITE2 --> BIND2
-        BIND2 -->|"linkComponent, imageComponent, currentPath, logo"| DS2
+        BIND2 -->|"injected props"| DS2
     end
     Before ~~~ After
 ```
 
-The interesting half is #535, because "remove the `next` import" sounds trivial until you notice that a design system
+The interesting half is [#535](https://github.com/chicio/chicio-blog/pull/535), because "remove the `next` import" sounds trivial until you notice that a design system
 is mostly links and images, and both of those are Next components. The fix is dependency injection at the component
 level. The design system declares the *shape* of a link it needs, and ships a framework free default:
 
@@ -199,7 +198,7 @@ boundaries don't exist yet, the boundaries are the project. The folder move is a
 
 ## Act 1: seven workspaces
 
-PR #537 is the one that turned the repository into a monorepo. The final layout, three apps and four packages:
+PR [#537](https://github.com/chicio/chicio-blog/pull/537) is the one that turned the repository into a monorepo. The final layout, three apps and four packages:
 
 ```shell
 package.json                          workspace root: workspaces, turbo, husky, release-it, prettier
@@ -382,9 +381,8 @@ That same `dist/` indirection would make development miserable (edit a package, 
 `npm run dev` didn't also start each package's `tsdown --watch`. Because `dev` declares `dependsOn: ["^build"]` and
 each package has its own `dev` script, a change under `packages/` reaches the running Next dev server on its own.
 
-The second gotcha is environment variables, and this one is subtle enough that I want to quote the config. Turborepo
-requires every variable a task reads to be declared, and **an undeclared variable is silently stripped rather than
-erroring**. The site's secrets therefore live in `apps/website/turbo.json`, on the tasks that actually run the app:
+The second gotcha is environment variables. Turborepo requires every variable a task reads to be declared, and
+**an undeclared variable is silently stripped rather than erroring**. The site's secrets therefore live in `apps/website/turbo.json`, on the tasks that actually run the app:
 
 ```json
 {
@@ -456,7 +454,7 @@ What Act 1 bought: **one lockfile, one install, one CI run**.
 
 ## Act 2: extract and publish
 
-PRs #538 through #546 did the actual extraction and put the result on npm. This is where "monorepo" stops being a
+PRs [#538](https://github.com/chicio/chicio-blog/pull/538) through [#546](https://github.com/chicio/chicio-blog/pull/546) did the actual extraction and put the result on npm. This is where "monorepo" stops being a
 folder layout and starts being a distribution decision.
 
 The package surface is the part I'd tell anyone to think about first. The design system's root barrel must stay
@@ -498,8 +496,14 @@ so it never sees these sources at all, and compiling a server component crashes 
 
 ### The verification step, and why it exists
 
-This is the piece I'd port to any repository that publishes from a workspace, and the reasoning is worth quoting from
-the script's own header, because it's the whole argument:
+The repository has a script for this, `scripts/verify-packages.mjs`, and it runs both as its own CI job and again
+before every publish. It does six things in order: it builds every package, runs `npm pack` on each one to produce the
+real tarball, lints that tarball's published surface with `publint --strict`, checks its type resolution with
+`@arethetypeswrong/cli`, installs the actual tarballs into a throwaway app in a temp directory, and imports them from
+there exactly as a consumer would.
+
+It's the piece I'd port to any repository that publishes from a workspace, and the reasoning is worth quoting from the
+script's own header, because it's the whole argument:
 
 ```javascript
 /**
@@ -520,10 +524,8 @@ That middle paragraph is the trap that makes workspace publishing dangerous. Eve
 the package through the workspace symlink, so everything in your repository tests the **source tree**. Your tests
 pass, your build passes, your site renders perfectly, and the tarball you upload is missing a file.
 
-`scripts/verify-packages.mjs` closes that gap by doing what a real consumer does. It builds every package, runs
-`npm pack` on each one, lints the published surface with `publint --strict`, checks the type resolution with
-`@arethetypeswrong/cli`, then installs the actual tarballs into a throwaway app in a temp directory and imports them.
-The most important line in the whole script is the peer list:
+The script closes that gap by doing exactly what a real consumer does, and the most important line in it is the peer
+list:
 
 ```javascript
 // What a consumer must always supply. Deliberately excludes every optional peer: the root barrel
@@ -666,7 +668,7 @@ What Act 2 bought: **publishing from the same tree I develop in**.
 
 ## Act 3: showcase and GitHub Pages
 
-PRs #547 through #550 gave the design system a public face. Two decisions here are worth stealing.
+PRs [#547](https://github.com/chicio/chicio-blog/pull/547) through [#550](https://github.com/chicio/chicio-blog/pull/550) gave the design system a public face. Two decisions here are worth stealing.
 
 The first: **Storybook is an app, the stories are not**. The Storybook host lives in
 `apps/matrix-design-system-showcase`, but the stories stay in the package, right next to the components they document,
@@ -704,13 +706,15 @@ anyone had saved. Assembling the hub is six lines:
 ```
 
 Storybook emits relative asset paths, so nothing needs to know which subpath it's served from, which is what makes
-this arrangement free. The whole thing is live at
-[chicio.github.io/chicio-blog/](https://chicio.github.io/chicio-blog/), and it deploys independently of the site
-itself (the blog goes to Vercel, and the workflow only runs when the packages, the showcases, or the hub change).
+this arrangement free. The hub is live as [fabrizioduroni.it labs](https://chicio.github.io/chicio-blog/), with the
+[design system Storybook](https://chicio.github.io/chicio-blog/design-system/) under `/design-system/` and, once the
+next act lands, the [matrix rain showcase](https://chicio.github.io/chicio-blog/matrix-rain/) under `/matrix-rain/`.
+It deploys independently of the site itself (the blog goes to Vercel, and the workflow only runs when the packages,
+the showcases, or the hub change).
 
 ## Act 4: absorbing a second repository
 
-PRs #565, #567, and #568 brought `matrix-rain-webgpu` and its Astro documentation site in from their own repository.
+PRs [#565](https://github.com/chicio/chicio-blog/pull/565), [#567](https://github.com/chicio/chicio-blog/pull/567), and [#568](https://github.com/chicio/chicio-blog/pull/568) brought `matrix-rain-webgpu` and its Astro documentation site in from their own repository.
 This is the act with the most failure modes, because you're not moving code inside a repository you control, you're
 merging two independent histories, two toolchains, and two release lines.
 
@@ -770,7 +774,8 @@ Three more things this act taught me, all of them cheap to avoid and expensive t
   be deployed *before* you archive, not after. After is too late, permanently
 
 The Astro showcase was promoted to `apps/matrix-rain-showcase` and its private lockfile deleted, so the root lockfile
-governs it like everything else. Its release line stays scoped to both directories at once, since the package and its
+governs it like everything else. It now sits on the hub as the
+[matrix rain showcase](https://chicio.github.io/chicio-blog/matrix-rain/), next to the design system's Storybook. Its release line stays scoped to both directories at once, since the package and its
 docs move together:
 
 ```json
@@ -865,9 +870,9 @@ share dozens of packages, and some of those are only correct if they all move to
 place and not the others resolves to two copies and breaks the typecheck. In the monorepo those arrive as one pull
 request against one lockfile:
 
-- PR #553 bumped the React group **across 4 directories with 5 updates**, in a single PR
-- PR #559 did the same for the testing group across 3 directories with 8 updates
-- PR #555 did it for the Next group across 2 directories
+- PR [#553](https://github.com/chicio/chicio-blog/pull/553) bumped the React group **across 4 directories with 5 updates**, in a single PR
+- PR [#559](https://github.com/chicio/chicio-blog/pull/559) did the same for the testing group across 3 directories with 8 updates
+- PR [#555](https://github.com/chicio/chicio-blog/pull/555) did it for the Next group across 2 directories
 
 Before the monorepo, everything shared with the rain effect (React and TypeScript above all) arrived as separate pull
 requests in separate repositories, each green on its own, with no guarantee they landed together or in the right
@@ -929,8 +934,9 @@ Everything here is public, so you can check every claim in this post yourself:
 - [matrix-design-system](https://www.npmjs.com/package/matrix-design-system) on npm (1.1.0)
 - [matrix-component-store](https://www.npmjs.com/package/matrix-component-store) on npm (1.0.0)
 - [matrix-rain-webgpu](https://www.npmjs.com/package/matrix-rain-webgpu) on npm (2.0.2)
-- the [Storybook](https://chicio.github.io/chicio-blog/design-system/) for the design system
-- the [GitHub Pages hub](https://chicio.github.io/chicio-blog/) with both showcases
+- the [fabrizioduroni.it labs](https://chicio.github.io/chicio-blog/) hub, which collects both showcases
+- the [design system Storybook](https://chicio.github.io/chicio-blog/design-system/), every component with its stories
+- the [matrix rain showcase](https://chicio.github.io/chicio-blog/matrix-rain/), the WebGPU effect and its docs
 - the [repository itself](https://github.com/chicio/chicio-blog), configs, workflows, verification script, and all
 
 Pretty cool, isn't it? :rocket:
