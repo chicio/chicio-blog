@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.0.3](https://github.com/chicio/chicio-blog/compare/matrix-rain-webgpu%402.0.2...matrix-rain-webgpu%402.0.3) (2026-09-11)
+
+### Bug Fixes
+
+* **capabilities:** :art: make the formatting gate runnable and enforce it in CI ([#635](https://github.com/chicio/chicio-blog/issues/635)) ([2359bf3](https://github.com/chicio/chicio-blog/commit/2359bf3f7ccdcfdeb52adb07c0cd75c304176ad0))
+* **capabilities:** :heavy_plus_sign: declare @astrojs/markdown-remark and move onto its processor ([#614](https://github.com/chicio/chicio-blog/issues/614)) ([38e0dc5](https://github.com/chicio/chicio-blog/commit/38e0dc5001a48da77a6289052df7cf053df1f3dd)), references [#610](https://github.com/chicio/chicio-blog/issues/610)
+* **deps:** :heavy_minus_sign: share the root release tooling with matrix-rain-webgpu ([#587](https://github.com/chicio/chicio-blog/issues/587)) ([ddd99dc](https://github.com/chicio/chicio-blog/commit/ddd99dc27d17c99072ebeeb8ddf007301382e3ca))
+
 ## [2.0.2](https://github.com/chicio/chicio-blog/compare/matrix-rain-webgpu@2.0.1...matrix-rain-webgpu@2.0.2) (2026-08-31)
 
 ## [2.0.1](https://github.com/chicio/chicio-blog/compare/matrix-rain-webgpu@2.0.0...matrix-rain-webgpu@2.0.1) (2026-08-31)
