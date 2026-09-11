@@ -11,12 +11,16 @@ concurrency:
 
 permissions:
   contents: read
+  id-token: write # exchanged for a short-lived Turborepo remote-cache token, see below
 
-# Turborepo remote caching. Without these secrets turbo simply runs without a remote cache,
-# so the workflow works before they are configured.
-env:
-  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-  TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+# Turborepo remote caching. Every job that runs turbo exchanges GitHub's OIDC token for a
+# short-lived, team-scoped Turborepo token, which also exports TURBO_TOKEN and TURBO_TEAM for the
+# steps after it. Preferred over a long-lived personal access token: nothing is stored as a
+# secret, the token only grants access to the remote cache, and it is revoked when the job ends.
+#
+# That step is `continue-on-error` in every job on purpose. Without a matching OIDC policy, on a
+# fork, or before the TURBO_TEAM variable exists, turbo simply runs with no remote cache instead
+# of failing the job, which is exactly how this workflow behaved before caching was wired up.
 
 jobs:
   lint:
@@ -32,6 +36,11 @@ jobs:
           cache: "npm"
       - name: Install dependencies
         run: npm ci
+      - name: Set up Turborepo remote cache
+        continue-on-error: true
+        uses: vercel/setup-turborepo-remote-cache-action@v1.1.0
+        with:
+          team: ${{ vars.TURBO_TEAM }}
       - name: Lint
         # Strictness lives in each workspace's own lint script, so `npm run lint` locally
         # enforces exactly what CI does — and turbo does not append eslint flags to a
@@ -69,6 +78,11 @@ jobs:
           cache: "npm"
       - name: Install dependencies
         run: npm ci
+      - name: Set up Turborepo remote cache
+        continue-on-error: true
+        uses: vercel/setup-turborepo-remote-cache-action@v1.1.0
+        with:
+          team: ${{ vars.TURBO_TEAM }}
       - name: Knip
         run: npx turbo run knip
 
@@ -85,6 +99,11 @@ jobs:
           cache: "npm"
       - name: Install dependencies
         run: npm ci
+      - name: Set up Turborepo remote cache
+        continue-on-error: true
+        uses: vercel/setup-turborepo-remote-cache-action@v1.1.0
+        with:
+          team: ${{ vars.TURBO_TEAM }}
       - name: Validate architecture
         run: npx turbo run validate-architecture
 
@@ -101,6 +120,11 @@ jobs:
           cache: "npm"
       - name: Install dependencies
         run: npm ci
+      - name: Set up Turborepo remote cache
+        continue-on-error: true
+        uses: vercel/setup-turborepo-remote-cache-action@v1.1.0
+        with:
+          team: ${{ vars.TURBO_TEAM }}
       - name: Typecheck (src + tests + e2e + config files)
         run: npx turbo run typecheck
 
@@ -117,6 +141,11 @@ jobs:
           cache: "npm"
       - name: Install dependencies
         run: npm ci
+      - name: Set up Turborepo remote cache
+        continue-on-error: true
+        uses: vercel/setup-turborepo-remote-cache-action@v1.1.0
+        with:
+          team: ${{ vars.TURBO_TEAM }}
       - name: Run tests with coverage
         run: npx turbo run test:coverage
 
@@ -133,6 +162,11 @@ jobs:
           cache: "npm"
       - name: Install dependencies
         run: npm ci
+      - name: Set up Turborepo remote cache
+        continue-on-error: true
+        uses: vercel/setup-turborepo-remote-cache-action@v1.1.0
+        with:
+          team: ${{ vars.TURBO_TEAM }}
       # Packs the real tarballs, lints the published surface and installs them into a throwaway
       # app. The website resolves these through the workspace, so nothing else in CI exercises
       # what the registry would actually serve.
@@ -153,6 +187,11 @@ jobs:
           cache: "npm"
       - name: Install dependencies
         run: npm ci
+      - name: Set up Turborepo remote cache
+        continue-on-error: true
+        uses: vercel/setup-turborepo-remote-cache-action@v1.1.0
+        with:
+          team: ${{ vars.TURBO_TEAM }}
       - name: Build
         run: npx turbo run build
         env:
@@ -181,6 +220,11 @@ jobs:
           cache: "npm"
       - name: Install dependencies
         run: npm ci
+      - name: Set up Turborepo remote cache
+        continue-on-error: true
+        uses: vercel/setup-turborepo-remote-cache-action@v1.1.0
+        with:
+          team: ${{ vars.TURBO_TEAM }}
       - name: Cache Playwright browsers
         uses: actions/cache@v4
         with:
