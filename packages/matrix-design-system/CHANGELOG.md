@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.1.1](https://github.com/chicio/chicio-blog/compare/matrix-design-system%401.1.0...matrix-design-system%401.1.1) (2026-09-11)
+
+### Features
+
+* **capabilities:** :truck: bring matrix-rain-webgpu and its showcase into the monorepo ([#565](https://github.com/chicio/chicio-blog/issues/565)) ([e3bccbf](https://github.com/chicio/chicio-blog/commit/e3bccbfcfdbdeba8941394b2fac5a2babc65c202)), references [#564](https://github.com/chicio/chicio-blog/issues/564)
+
+### Bug Fixes
+
+* **capabilities:** :art: make the formatting gate runnable and enforce it in CI ([#635](https://github.com/chicio/chicio-blog/issues/635)) ([2359bf3](https://github.com/chicio/chicio-blog/commit/2359bf3f7ccdcfdeb52adb07c0cd75c304176ad0))
+
 ## [1.1.0](https://github.com/chicio/chicio-blog/compare/matrix-design-system%401.0.0...matrix-design-system%401.1.0) (2026-08-30)
 
 ### Features
