@@ -5,16 +5,16 @@ import { siteMetadata } from "@/types/configuration/site-metadata";
 import { slugs } from "@/types/configuration/slug";
 
 export const metadata = createMetadata({
-  author: siteMetadata.author,
-  title: siteMetadata.title,
-  description: siteMetadata.description,
-  slug: slugs.dataStructuresAndAlgorithms.roadmap,
-  imageUrl: siteMetadata.featuredImage,
-  ogPageType: "website",
+    author: siteMetadata.author,
+    title: siteMetadata.title,
+    description: siteMetadata.description,
+    slug: slugs.dataStructuresAndAlgorithms.roadmap,
+    imageUrl: siteMetadata.featuredImage,
+    ogPageType: "website",
 });
 
 export default async function RoadmapPage() {
-  const roadmap = dsaRoadmap.single()!;
+    const roadmap = dsaRoadmap.single()!;
 
-  return <Roadmap roadmap={roadmap} />;
+    return <Roadmap roadmap={roadmap} />;
 }

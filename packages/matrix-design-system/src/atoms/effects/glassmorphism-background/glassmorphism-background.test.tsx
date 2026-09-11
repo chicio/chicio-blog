@@ -3,9 +3,7 @@ import { render, screen } from "@testing-library/react";
 import { GlassmorphismBackground } from "./glassmorphism-background";
 
 vi.mock("../../animation/motion-div", () => ({
-    MotionDiv: ({ children, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-        <div {...props}>{children}</div>
-    ),
+    MotionDiv: ({ children, ...props }: React.HTMLAttributes<HTMLDivElement>) => <div {...props}>{children}</div>,
 }));
 
 describe("GlassmorphismBackground", () => {

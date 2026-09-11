@@ -1,9 +1,4 @@
-import {
-    consoles,
-    games,
-    getAllGamesForConsole,
-    videogamesHome,
-} from "@/lib/content/videogames/videogames";
+import { consoles, games, getAllGamesForConsole, videogamesHome } from "@/lib/content/videogames/videogames";
 import { contentBodyMarkdown } from "@/lib/mdx/content-body-markdown";
 import { contentItemMarkdown } from "@/lib/mdx/content-item-markdown";
 import { siteMetadata } from "@/types/configuration/site-metadata";
@@ -33,11 +28,15 @@ export const consoleMarkdown = contentItemMarkdown(consoles, (consoleItem) => {
 **Generation:** ${frontmatter.metadata?.generation ?? "unknown"}
 
 ${contentBodyMarkdown(consoleItem)}
-${consoleGames.length > 0 ? `
+${
+    consoleGames.length > 0
+        ? `
 ## Games (${consoleGames.length})
 
 ${consoleGames.map((g) => `- [${g.frontmatter.title}](${siteMetadata.siteUrl}${g.slug.formatted}) (${g.frontmatter.metadata?.releaseYear ?? "unknown"}) — ${g.frontmatter.description}`).join("\n")}
-` : ""}`;
+`
+        : ""
+}`;
 });
 
 export const gameMarkdown = contentItemMarkdown(

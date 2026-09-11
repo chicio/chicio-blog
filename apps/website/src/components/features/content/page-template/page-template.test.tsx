@@ -10,11 +10,7 @@ vi.mock("next/navigation", () => ({
 }));
 
 vi.mock("next/link", () => ({
-    default: ({
-        href,
-        children,
-        ...rest
-    }: React.AnchorHTMLAttributes<HTMLAnchorElement> & { href: string }) => (
+    default: ({ href, children, ...rest }: React.AnchorHTMLAttributes<HTMLAnchorElement> & { href: string }) => (
         <a href={href} {...rest}>
             {children}
         </a>
@@ -22,11 +18,9 @@ vi.mock("next/link", () => ({
 }));
 
 vi.mock("next/image", () => ({
-    default: ({
-        alt,
-        src,
-        ...rest
-    }: React.ImgHTMLAttributes<HTMLImageElement> & { src: string }) => <img alt={alt} src={src} {...rest} />,
+    default: ({ alt, src, ...rest }: React.ImgHTMLAttributes<HTMLImageElement> & { src: string }) => (
+        <img alt={alt} src={src} {...rest} />
+    ),
 }));
 
 vi.mock("matrix-design-system", async (importOriginal) => ({
@@ -42,12 +36,34 @@ vi.mock("matrix-design-system", async (importOriginal) => ({
 vi.mock("framer-motion", () => ({
     AnimatePresence: ({ children }: React.PropsWithChildren) => <>{children}</>,
     motion: {
-        div: ({ children, initial: _i, animate: _a, exit: _e, transition: _t, style: _s, ...props }: React.HTMLAttributes<HTMLDivElement> & { initial?: unknown; animate?: unknown; exit?: unknown; transition?: unknown }) => (
-            <div {...props}>{children}</div>
-        ),
-        nav: ({ children, initial: _i, animate: _a, exit: _e, transition: _t, style: _s, ...props }: React.HTMLAttributes<HTMLElement> & { initial?: unknown; animate?: unknown; exit?: unknown; transition?: unknown }) => (
-            <nav {...props}>{children}</nav>
-        ),
+        div: ({
+            children,
+            initial: _i,
+            animate: _a,
+            exit: _e,
+            transition: _t,
+            style: _s,
+            ...props
+        }: React.HTMLAttributes<HTMLDivElement> & {
+            initial?: unknown;
+            animate?: unknown;
+            exit?: unknown;
+            transition?: unknown;
+        }) => <div {...props}>{children}</div>,
+        nav: ({
+            children,
+            initial: _i,
+            animate: _a,
+            exit: _e,
+            transition: _t,
+            style: _s,
+            ...props
+        }: React.HTMLAttributes<HTMLElement> & {
+            initial?: unknown;
+            animate?: unknown;
+            exit?: unknown;
+            transition?: unknown;
+        }) => <nav {...props}>{children}</nav>,
     },
 }));
 

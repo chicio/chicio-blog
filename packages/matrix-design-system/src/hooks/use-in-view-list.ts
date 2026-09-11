@@ -26,9 +26,9 @@ interface UseInViewListOptions {
     rootMargin: string;
 }
 
-export const useInViewList = <T extends HTMLElement = HTMLDivElement>(
-    { rootMargin }: UseInViewListOptions,
-): [(el: T | null) => void, boolean] => {
+export const useInViewList = <T extends HTMLElement = HTMLDivElement>({
+    rootMargin,
+}: UseInViewListOptions): [(el: T | null) => void, boolean] => {
     const [element, setElement] = useState<T | null>(null);
     const [isInView, setIsInView] = useState(false);
     const setEl = useCallback((el: T | null) => setElement(el), []);

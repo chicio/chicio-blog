@@ -21,14 +21,14 @@ on one.
 Style your own layout with Tailwind utility classes. They resolve against this theme, so use these
 names rather than stock Tailwind colours:
 
-| Family | Real names |
-|---|---|
-| Brand colour | `primary` (#00FF41), `primary-dark`, `secondary`, `accent` (#39FF14) |
-| Surfaces | `general-background` (#001100), `general-background-light` (#002200), `black`, `white` |
-| Text | `primary-text` (#E8FFE8), `secondary-text`, `text-above-primary` |
-| Semantic | `confirm`, `undo`, `amber-500`, `red-400`, `red-500`, `green-500`, `yellow-400` |
+| Family         | Real names                                                                                                                                                  |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Brand colour   | `primary` (#00FF41), `primary-dark`, `secondary`, `accent` (#39FF14)                                                                                        |
+| Surfaces       | `general-background` (#001100), `general-background-light` (#002200), `black`, `white`                                                                      |
+| Text           | `primary-text` (#E8FFE8), `secondary-text`, `text-above-primary`                                                                                            |
+| Semantic       | `confirm`, `undo`, `amber-500`, `red-400`, `red-500`, `green-500`, `yellow-400`                                                                             |
 | Alpha variants | `accent-alpha-{10,15,25,40,50,70}`, `confirm-alpha-{20,25,60}`, `undo-alpha-{20,25,60}`, `black-alpha-75`, `general-background-alpha-60`, `primary-alpha-0` |
-| Fonts | `font-sans` → Open Sans · `font-mono` → Courier Prime |
+| Fonts          | `font-sans` → Open Sans · `font-mono` → Courier Prime                                                                                                       |
 
 Used as `bg-general-background`, `text-accent`, `border-accent-alpha-25`, `font-mono`, and so on.
 
@@ -71,18 +71,18 @@ an index signature, the component takes children and little else.
 
 ```jsx
 <ContentContainer>
-  <PageTitle>Latest posts</PageTitle>
+    <PageTitle>Latest posts</PageTitle>
 
-  <div className="flex flex-wrap gap-2">
-    <Chip>TypeScript</Chip>
-    <Chip>Next.js</Chip>
-    <Chip big>SwiftUI</Chip>
-  </div>
+    <div className="flex flex-wrap gap-2">
+        <Chip>TypeScript</Chip>
+        <Chip>Next.js</Chip>
+        <Chip big>SwiftUI</Chip>
+    </div>
 
-  <div className="glassmorphism flex flex-col gap-4 p-4">
-    <p className="text-primary-text">Long-form writing on iOS, web and graphics.</p>
-    <Button>Read the full article</Button>
-  </div>
+    <div className="glassmorphism flex flex-col gap-4 p-4">
+        <p className="text-primary-text">Long-form writing on iOS, web and graphics.</p>
+        <Button>Read the full article</Button>
+    </div>
 </ContentContainer>
 ```
 

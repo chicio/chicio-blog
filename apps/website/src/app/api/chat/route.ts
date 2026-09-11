@@ -14,55 +14,55 @@ import {
 import z from "zod";
 
 export async function POST(req: Request) {
-  const { messages }: { messages: UIMessage[] } = await req.json();
+    const { messages }: { messages: UIMessage[] } = await req.json();
 
-  const lastUserMessage = messages.findLast((m) => m.role === "user");
-  const lastUserText =
-    lastUserMessage?.parts
-      .filter((p) => p.type === "text")
-      .map((p) => p.text)
-      .join(" ")
-      .trim() ?? "";
+    const lastUserMessage = messages.findLast((m) => m.role === "user");
+    const lastUserText =
+        lastUserMessage?.parts
+            .filter((p) => p.type === "text")
+            .map((p) => p.text)
+            .join(" ")
+            .trim() ?? "";
 
-  if (lastUserText) {
-    const guardrailResult = await runGuardrails(lastUserText);
+    if (lastUserText) {
+        const guardrailResult = await runGuardrails(lastUserText);
 
-    if (!guardrailResult.safe) {
-      return createUIMessageStreamResponse({
-        stream: createUIMessageStream({
-          execute: ({ writer }) => {
-            const blockedMessage = guardrailResult.blockedReason ?? "";
-            writer.write({ type: "text-start", id: "guardrail-block" });
-            writer.write({ type: "text-delta", id: "guardrail-block", delta: blockedMessage });
-            writer.write({ type: "text-end", id: "guardrail-block" });
-          },
-        }),
-      });
+        if (!guardrailResult.safe) {
+            return createUIMessageStreamResponse({
+                stream: createUIMessageStream({
+                    execute: ({ writer }) => {
+                        const blockedMessage = guardrailResult.blockedReason ?? "";
+                        writer.write({ type: "text-start", id: "guardrail-block" });
+                        writer.write({ type: "text-delta", id: "guardrail-block", delta: blockedMessage });
+                        writer.write({ type: "text-end", id: "guardrail-block" });
+                    },
+                }),
+            });
+        }
     }
-  }
 
-  const result = streamText({
-    model: groq("openai/gpt-oss-120b"),
-    messages: await convertToModelMessages(messages),
-    system: createSystemPrompt(),
-    maxOutputTokens: 2000,
-    temperature: 0.5,
-    stopWhen: stepCountIs(5),
-    providerOptions: {
-      groq: {
-        reasoningFormat: "hidden",
-      },
-    },
-    tools: {
-      getFabrizioDuroniBlogKnowledge: tool({
-        description: `Retrieve relevant knowledge from Fabrizio Duroni website blog posts published on fabrizioduroni.it`,
-        inputSchema: z.object({
-          question: z.string().describe("The question to search for"),
-        }),
-        execute: async ({ question }) => findRelevantContent(question),
-      }),
-    },
-  });
+    const result = streamText({
+        model: groq("openai/gpt-oss-120b"),
+        messages: await convertToModelMessages(messages),
+        system: createSystemPrompt(),
+        maxOutputTokens: 2000,
+        temperature: 0.5,
+        stopWhen: stepCountIs(5),
+        providerOptions: {
+            groq: {
+                reasoningFormat: "hidden",
+            },
+        },
+        tools: {
+            getFabrizioDuroniBlogKnowledge: tool({
+                description: `Retrieve relevant knowledge from Fabrizio Duroni website blog posts published on fabrizioduroni.it`,
+                inputSchema: z.object({
+                    question: z.string().describe("The question to search for"),
+                }),
+                execute: async ({ question }) => findRelevantContent(question),
+            }),
+        },
+    });
 
-  return result.toUIMessageStreamResponse();
+    return result.toUIMessageStreamResponse();
 }

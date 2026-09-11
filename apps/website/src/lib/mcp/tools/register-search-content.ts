@@ -13,10 +13,7 @@ export const registerSearchContent = (server: McpServer): void => {
                 "Returns matching items with their slug, title, description, and tags.",
             inputSchema: {
                 query: z.string().describe("Search query text"),
-                limit: z
-                    .number()
-                    .optional()
-                    .describe("Maximum number of results to return (default: 10, max: 30)"),
+                limit: z.number().optional().describe("Maximum number of results to return (default: 10, max: 30)"),
             },
         },
         async ({ query, limit }) => {

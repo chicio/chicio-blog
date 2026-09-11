@@ -52,9 +52,15 @@ export const useFullscreenModalStore = (
     const stopPropagation = (e: React.MouseEvent) => e.stopPropagation();
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
-        if (e.key === "Escape") { onClose(); }
-        if (e.key === "ArrowLeft") { goToPrevious(); }
-        if (e.key === "ArrowRight") { goToNext(); }
+        if (e.key === "Escape") {
+            onClose();
+        }
+        if (e.key === "ArrowLeft") {
+            goToPrevious();
+        }
+        if (e.key === "ArrowRight") {
+            goToNext();
+        }
     };
 
     const handleDragEnd = (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {

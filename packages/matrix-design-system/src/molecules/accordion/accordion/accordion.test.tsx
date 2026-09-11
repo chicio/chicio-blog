@@ -4,9 +4,7 @@ import userEvent from "@testing-library/user-event";
 import { Accordion } from "./accordion";
 
 vi.mock("../../../atoms/animation/motion-div", () => ({
-    MotionDiv: ({ children, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-        <div {...props}>{children}</div>
-    ),
+    MotionDiv: ({ children, ...props }: React.HTMLAttributes<HTMLDivElement>) => <div {...props}>{children}</div>,
 }));
 
 describe("Accordion", () => {
@@ -52,7 +50,11 @@ describe("Accordion", () => {
         });
 
         it("collapses on second click", async () => {
-            render(<Accordion title="Section" defaultOpen={true}>Content</Accordion>);
+            render(
+                <Accordion title="Section" defaultOpen={true}>
+                    Content
+                </Accordion>,
+            );
             const trigger = screen.getByRole("button");
             await userEvent.click(trigger);
             expect(trigger).toHaveAttribute("aria-expanded", "false");

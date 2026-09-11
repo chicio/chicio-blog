@@ -16,14 +16,10 @@ export const TerminalContentBlock: FC<TerminalContentBlockProps> = ({ route, tit
     >
         <div className="text-accent/50 mb-2 font-mono text-xs">{`─── ${route} ───`}</div>
 
-        {status === "loading" && (
-            <p className="text-primary-text/60 font-mono text-xs">{`loading ${title}...`}</p>
-        )}
+        {status === "loading" && <p className="text-primary-text/60 font-mono text-xs">{`loading ${title}...`}</p>}
 
         {status === "unavailable" && (
-            <ErrorText>
-                {`${title}: no terminal view available — run \`close\` to open it in the browser`}
-            </ErrorText>
+            <ErrorText>{`${title}: no terminal view available — run \`close\` to open it in the browser`}</ErrorText>
         )}
 
         {status === "error" && (
@@ -33,7 +29,7 @@ export const TerminalContentBlock: FC<TerminalContentBlockProps> = ({ route, tit
         {status === "success" && markdown && (
             <div
                 data-testid="terminal-content-phosphor-images"
-                className="text-primary-text/90 [&_h1]:text-lg [&_h2]:text-base [&_h3]:text-sm [&_p]:my-2 [&_p]:text-xs [&_p]:sm:text-sm [&_ul]:my-2 [&_img]:[filter:url(#terminal-phosphor)] [&_img]:border-accent/40 [&_img]:border [&_img]:rounded [&_img]:shadow-[0_0_8px_var(--color-accent-alpha-25)] text-xs leading-relaxed sm:text-sm"
+                className="text-primary-text/90 [&_img]:border-accent/40 text-xs leading-relaxed sm:text-sm [&_h1]:text-lg [&_h2]:text-base [&_h3]:text-sm [&_img]:rounded [&_img]:border [&_img]:shadow-[0_0_8px_var(--color-accent-alpha-25)] [&_img]:[filter:url(#terminal-phosphor)] [&_p]:my-2 [&_p]:text-xs [&_p]:sm:text-sm [&_ul]:my-2"
             >
                 <Markdown content={markdown} id={`terminal-content-${route}`} />
             </div>

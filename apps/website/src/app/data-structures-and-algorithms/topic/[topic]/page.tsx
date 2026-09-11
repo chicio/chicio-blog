@@ -10,48 +10,42 @@ import { topics } from "@/lib/content/data-structures-and-algorithms/data-struct
 import { siblingsOf } from "@/lib/content/siblings";
 import { Topic } from "@/components/content/data-structures-and-algorithms/topic";
 
-export async function generateMetadata({
-  params,
-}: NextDataStructuresAndAlgorithmsParameters): Promise<Metadata> {
-  const receivedParameters = await params;
-  const topic = topics.single(receivedParameters)!;
+export async function generateMetadata({ params }: NextDataStructuresAndAlgorithmsParameters): Promise<Metadata> {
+    const receivedParameters = await params;
+    const topic = topics.single(receivedParameters)!;
 
-  if (!topic) {
-    return {};
-  }
+    if (!topic) {
+        return {};
+    }
 
-  const { frontmatter } = topic;
+    const { frontmatter } = topic;
 
-  return createMetadata({
-    author: siteMetadata.author,
-    title: frontmatter.title,
-    slug: topic.slug.formatted,
-    imageUrl: frontmatter.image,
-    description: frontmatter.description,
-    ogPageType: "article",
-    keywords: frontmatter.tags,
-  });
+    return createMetadata({
+        author: siteMetadata.author,
+        title: frontmatter.title,
+        slug: topic.slug.formatted,
+        imageUrl: frontmatter.image,
+        description: frontmatter.description,
+        ogPageType: "article",
+        keywords: frontmatter.tags,
+    });
 }
 
 export async function generateStaticParams() {
-  return topics.list().map(
-    (topic) => topic.slug.params,
-  );
+    return topics.list().map((topic) => topic.slug.params);
 }
 
 export default async function DataStructureAndAlgorithmTopicPage({
-  params,
+    params,
 }: NextDataStructuresAndAlgorithmsParameters) {
-  const receivedParameters = await params;
-  const topic = topics.single(receivedParameters);
+    const receivedParameters = await params;
+    const topic = topics.single(receivedParameters);
 
-  if (!topic) {
-    notFound();
-  }
+    if (!topic) {
+        notFound();
+    }
 
-  const siblings = siblingsOf(topics.list(), topic.slug.formatted);
+    const siblings = siblingsOf(topics.list(), topic.slug.formatted);
 
-  return (
-    <Topic topic={topic} previous={siblings?.previous} next={siblings?.next} />
-  );
+    return <Topic topic={topic} previous={siblings?.previous} next={siblings?.next} />;
 }

@@ -5,18 +5,16 @@ import { slugs } from "@/types/configuration/slug";
 import { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
-  return createMetadata({
-    author: siteMetadata.author,
-    title: siteMetadata.title,
-    description: siteMetadata.description,
-    slug: slugs.art,
-    imageUrl: siteMetadata.featuredImage,
-    ogPageType: "profile",
-  });
+    return createMetadata({
+        author: siteMetadata.author,
+        title: siteMetadata.title,
+        description: siteMetadata.description,
+        slug: slugs.art,
+        imageUrl: siteMetadata.featuredImage,
+        ogPageType: "profile",
+    });
 }
 
 export default async function AboutMePage() {
-  return (
-    <AboutMe />
-  );
+    return <AboutMe />;
 }

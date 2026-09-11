@@ -6,35 +6,22 @@ import { searchIndexFileName } from "@/lib/content/search-filename";
 import { slugs } from "@/types/configuration/slug";
 import { useLayoutAdditionalContentStore } from "./use-layout-additional-content-store";
 
-const CookieConsentBanner = dynamic(
-    () =>
-        import("matrix-design-system").then(
-            (m) => m.CookieConsentBanner,
-        ),
-    { ssr: false },
-);
+const CookieConsentBanner = dynamic(() => import("matrix-design-system").then((m) => m.CookieConsentBanner), {
+    ssr: false,
+});
 
 const TrackingOptIn = dynamic(
-    () =>
-        import("@/components/features/tracking/tracking-optin").then(
-            (m) => m.TrackingOptIn,
-        ),
+    () => import("@/components/features/tracking/tracking-optin").then((m) => m.TrackingOptIn),
     { ssr: false },
 );
 
 const InstallPromptBanner = dynamic(
-    () =>
-        import("@/components/features/pwa/install-prompt-banner").then(
-            (m) => m.InstallPromptBanner,
-        ),
+    () => import("@/components/features/pwa/install-prompt-banner").then((m) => m.InstallPromptBanner),
     { ssr: false },
 );
 
 const SiteCommandPalette = dynamic(
-    () =>
-        import("@/components/features/command-palette/site-command-palette").then(
-            (m) => m.SiteCommandPalette,
-        ),
+    () => import("@/components/features/command-palette/site-command-palette").then((m) => m.SiteCommandPalette),
     { ssr: false },
 );
 
@@ -46,31 +33,21 @@ const MatrixRainControlPanel = dynamic(
     { ssr: false },
 );
 
-const Terminal = dynamic(
-    () => import("@/components/features/terminal/terminal").then((m) => m.Terminal),
-    { ssr: false },
-);
+const Terminal = dynamic(() => import("@/components/features/terminal/terminal").then((m) => m.Terminal), {
+    ssr: false,
+});
 
 const EasterEggOverlay = dynamic(
-    () =>
-        import("@/components/features/easter-eggs/easter-egg-overlay").then(
-            (m) => m.EasterEggOverlay,
-        ),
+    () => import("@/components/features/easter-eggs/easter-egg-overlay").then((m) => m.EasterEggOverlay),
     { ssr: false },
 );
 
 const EasterEggTriggers = dynamic(
-    () =>
-        import("@/components/features/easter-eggs/easter-egg-triggers").then(
-            (m) => m.EasterEggTriggers,
-        ),
+    () => import("@/components/features/easter-eggs/easter-egg-triggers").then((m) => m.EasterEggTriggers),
     { ssr: false },
 );
 
-const Lightbox = dynamic(
-    () => import("matrix-design-system").then((m) => m.Lightbox),
-    { ssr: false },
-);
+const Lightbox = dynamic(() => import("matrix-design-system").then((m) => m.Lightbox), { ssr: false });
 
 export const LayoutAdditionalContent: FC = () => {
     const { state, effects } = useLayoutAdditionalContentStore();

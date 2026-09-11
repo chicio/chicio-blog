@@ -13,7 +13,9 @@ interface ExercisesProps {
 }
 
 export const Exercises: FC<PropsWithChildren<ExercisesProps>> = async ({ exercises }) => {
-    const { default: ExercisesContent } = await import(`@/content/data-structures-and-algorithms/exercises/content.mdx`);
+    const { default: ExercisesContent } = await import(
+        `@/content/data-structures-and-algorithms/exercises/content.mdx`
+    );
 
     return (
         <ReadingContentPage

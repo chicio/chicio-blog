@@ -51,11 +51,7 @@ export const MenuItem: FC<MenuItemProps> = ({
     }
 
     return (
-        <Link
-            href={to}
-            className={composedClassName}
-            onClick={handleClick(onClick)}
-        >
+        <Link href={to} className={composedClassName} onClick={handleClick(onClick)}>
             {children}
         </Link>
     );

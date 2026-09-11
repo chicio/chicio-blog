@@ -7,9 +7,7 @@ vi.mock("next/link", () => nextLinkMock());
 
 vi.mock("framer-motion", () => ({
     motion: {
-        nav: ({ children, ...props }: React.HTMLAttributes<HTMLElement>) => (
-            <nav {...props}>{children}</nav>
-        ),
+        nav: ({ children, ...props }: React.HTMLAttributes<HTMLElement>) => <nav {...props}>{children}</nav>,
     },
     AnimatePresence: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));

@@ -13,12 +13,16 @@ export const useNavigationButtonsStore = (
     stopPropagation: boolean,
 ): EffectsStore<NavigationButtonsEffects> => {
     const handlePrevious = (e: React.MouseEvent) => {
-        if (stopPropagation) { e.stopPropagation(); }
+        if (stopPropagation) {
+            e.stopPropagation();
+        }
         onPrevious();
     };
 
     const handleNext = (e: React.MouseEvent) => {
-        if (stopPropagation) { e.stopPropagation(); }
+        if (stopPropagation) {
+            e.stopPropagation();
+        }
         onNext();
     };
 

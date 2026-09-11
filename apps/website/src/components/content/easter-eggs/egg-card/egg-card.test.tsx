@@ -29,7 +29,6 @@ describe("EggCard", () => {
             );
             expect(screen.getByText("hidden")).toBeInTheDocument();
         });
-
     });
 
     describe("found state", () => {

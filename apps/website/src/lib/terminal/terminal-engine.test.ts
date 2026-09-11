@@ -158,11 +158,7 @@ describe("terminal-engine", () => {
         describe("tree", () => {
             it("renders a nested tree with unicode connectors", () => {
                 const result = execute({ name: "tree", args: ["blog"] }, "/", fixtureRoot);
-                expect(result.lines.map((line) => line.text)).toEqual([
-                    "/blog",
-                    "└── 2024/",
-                    "    └── hello-world",
-                ]);
+                expect(result.lines.map((line) => line.text)).toEqual(["/blog", "└── 2024/", "    └── hello-world"]);
             });
 
             it("errors for a non-existent directory", () => {
@@ -190,10 +186,7 @@ describe("terminal-engine", () => {
 
             it("falls back to printing the title and description for a dir with metadata but no route", () => {
                 const result = execute({ name: "cat", args: ["blog/2024"] }, "/", fixtureRoot);
-                expect(result.lines).toEqual([
-                    { text: "2024", kind: "success" },
-                    { text: "Posts in 2024" },
-                ]);
+                expect(result.lines).toEqual([{ text: "2024", kind: "success" }, { text: "Posts in 2024" }]);
                 expect(result.renderContent).toBeUndefined();
             });
 

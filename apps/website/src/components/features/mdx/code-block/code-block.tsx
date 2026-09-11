@@ -16,7 +16,7 @@ export const CodeBlock: FC<CodeBlockProps> = ({ children, className, ...rest }) 
     const { setPreEl } = effects;
 
     return (
-        <div id="code-block" className="relative group flex flex-col sm:block my-4">
+        <div id="code-block" className="group relative my-4 flex flex-col sm:block">
             <pre ref={setPreEl} className={className} {...rest}>
                 {children}
             </pre>

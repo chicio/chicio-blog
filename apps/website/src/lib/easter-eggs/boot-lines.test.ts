@@ -14,11 +14,7 @@ describe("boot-lines", () => {
 
         it("keeps the remaining three lines identical regardless of slug", () => {
             const lines = bootLinesFor("the-choice");
-            expect(lines.slice(1)).toEqual([
-                "> decrypting payload … ok",
-                "> mounting /dev/matrix",
-                "> playback ready",
-            ]);
+            expect(lines.slice(1)).toEqual(["> decrypting payload … ok", "> mounting /dev/matrix", "> playback ready"]);
         });
     });
 

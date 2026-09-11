@@ -5,6 +5,4 @@ interface HamburgerMenuProps {
     onClick: () => void;
 }
 
-export const HamburgerMenu: FC<HamburgerMenuProps> = ({ onClick }) => (
-    <BiMenu className="size-9" onClick={onClick} />
-);
+export const HamburgerMenu: FC<HamburgerMenuProps> = ({ onClick }) => <BiMenu className="size-9" onClick={onClick} />;

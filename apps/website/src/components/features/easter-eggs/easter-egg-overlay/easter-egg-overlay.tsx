@@ -15,10 +15,9 @@ const CLOSE_BUTTON_CLASS = [
     "justify-center rounded-md border border-solid font-mono text-xs text-accent",
 ].join(" ");
 
-const VIDEO_CLASS = [
-    "aspect-[640/267] w-full rounded-xl border border-solid",
-    "border-accent-alpha-40 shadow-lg",
-].join(" ");
+const VIDEO_CLASS = ["aspect-[640/267] w-full rounded-xl border border-solid", "border-accent-alpha-40 shadow-lg"].join(
+    " ",
+);
 
 /**
  * The clip fades in, and deliberately keeps its full layout size while hidden.
@@ -62,7 +61,7 @@ export const EasterEggOverlay: FC = () => {
                 </div>
                 <div onClick={handleCardClick} className={`${CARD_CLASS} ${fadeClassName}`}>
                     <div className="flex items-center justify-between gap-3">
-                        <span className="text-accent wrap-anywhere font-mono text-[13px] uppercase tracking-[.1em]">
+                        <span className="text-accent font-mono text-[13px] tracking-[.1em] wrap-anywhere uppercase">
                             {entry.slug}
                         </span>
                         <button type="button" onClick={close} aria-label="Close" className={CLOSE_BUTTON_CLASS}>
@@ -89,7 +88,7 @@ export const EasterEggOverlay: FC = () => {
                             ariaLabel={entry.title}
                             className={VIDEO_CLASS}
                         />
-                        <p className="mt-3 font-mono text-[15px] text-accent">{entry.title}</p>
+                        <p className="text-accent mt-3 font-mono text-[15px]">{entry.title}</p>
                     </div>
                 </div>
             </div>

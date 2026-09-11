@@ -41,8 +41,14 @@ const OPTIONAL_ENTRIES = [
         entry: "matrix-design-system/markdown",
         expect: ["Markdown"],
         peers: [
-            "react-markdown@^10", "unified@^11", "remark-parse@^11", "remark-gfm@^4",
-            "remark-math@^6", "remark-emoji@^5", "rehype-katex@^7", "rehype-highlight@^7",
+            "react-markdown@^10",
+            "unified@^11",
+            "remark-parse@^11",
+            "remark-gfm@^4",
+            "remark-math@^6",
+            "remark-emoji@^5",
+            "rehype-katex@^7",
+            "rehype-highlight@^7",
         ],
     },
 ];
@@ -75,8 +81,7 @@ const ATTW_IGNORE_RULES = {
     "matrix-rain-webgpu": ["internal-resolution-error"],
 };
 
-const run = (cmd, args, cwd) =>
-    execFileSync(cmd, args, { cwd, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
+const run = (cmd, args, cwd) => execFileSync(cmd, args, { cwd, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
 
 const repoRoot = resolve(import.meta.dirname, "..");
 
@@ -126,9 +131,14 @@ try {
             run(
                 "npx",
                 [
-                    "--yes", "@arethetypeswrong/cli", join(workDir, file),
-                    "--profile", "esm-only",
-                    "--exclude-entrypoints", "styles.css", "theme.css",
+                    "--yes",
+                    "@arethetypeswrong/cli",
+                    join(workDir, file),
+                    "--profile",
+                    "esm-only",
+                    "--exclude-entrypoints",
+                    "styles.css",
+                    "theme.css",
                     ...(ATTW_IGNORE_RULES[name] ?? []).flatMap((rule) => ["--ignore-rules", rule]),
                 ],
                 repoRoot,
@@ -175,7 +185,15 @@ try {
     run("npm", ["install", "--no-audit", "--no-fund", "typescript@^7"], app);
     writeFileSync(
         join(app, "tsconfig.json"),
-        JSON.stringify({ compilerOptions: { module: "nodenext", moduleResolution: "nodenext", strict: true, noEmit: true, skipLibCheck: true } }),
+        JSON.stringify({
+            compilerOptions: {
+                module: "nodenext",
+                moduleResolution: "nodenext",
+                strict: true,
+                noEmit: true,
+                skipLibCheck: true,
+            },
+        }),
     );
     writeFileSync(
         join(app, "probe.ts"),
@@ -238,7 +256,6 @@ try {
             fail(`${entry}\n${(error.stderr || error.stdout || error.message).trim()}`);
         }
     }
-
 } finally {
     rmSync(workDir, { recursive: true, force: true });
 }

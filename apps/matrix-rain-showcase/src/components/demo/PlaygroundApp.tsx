@@ -1,6 +1,6 @@
-import { useRootWithStatus } from '@typegpu/react';
+import { useRootWithStatus } from "@typegpu/react";
 
-import App from './App';
+import App from "./App";
 
 // App calls useConfigureContext + the renderer hook, both of which call useRoot()
 // at the top of App's hook list. Before the GPU device is ready useRoot SUSPENDS
@@ -12,9 +12,9 @@ import App from './App';
 // root is resolved means its useRoot() calls return synchronously and never
 // suspend — the same pattern the public MatrixRainWebGPU component uses.
 export default function PlaygroundApp() {
-  const root = useRootWithStatus();
-  if (root.status !== 'fulfilled') {
-    return null;
-  }
-  return <App />;
+    const root = useRootWithStatus();
+    if (root.status !== "fulfilled") {
+        return null;
+    }
+    return <App />;
 }

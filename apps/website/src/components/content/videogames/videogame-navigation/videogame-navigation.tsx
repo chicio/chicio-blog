@@ -14,15 +14,7 @@ interface VideogameNavigationProps {
 
 export const VideogameNavigation: FC<VideogameNavigationProps> = ({ previous, next }) => (
     <div className="mt-8 flex flex-row flex-wrap justify-center gap-4">
-        {previous && (
-            <BluePillLink to={previous.url}>
-                {previous.title}
-            </BluePillLink>
-        )}
-        {next && (
-            <RedPillLink to={next.url}>
-                {next.title}
-            </RedPillLink>
-        )}
+        {previous && <BluePillLink to={previous.url}>{previous.title}</BluePillLink>}
+        {next && <RedPillLink to={next.url}>{next.title}</RedPillLink>}
     </div>
 );

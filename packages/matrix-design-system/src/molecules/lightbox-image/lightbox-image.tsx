@@ -10,11 +10,7 @@ export const LightboxImage: FC<LightboxImageProps> = ({ alt, ...props }) => {
     const { handleOpen } = effects;
 
     return (
-        <button
-            type="button"
-            onClick={handleOpen}
-            className="block w-full cursor-zoom-in border-0 bg-transparent p-0"
-        >
+        <button type="button" onClick={handleOpen} className="block w-full cursor-zoom-in border-0 bg-transparent p-0">
             <img loading="lazy" decoding="async" alt={alt ?? ""} {...props} />
         </button>
     );

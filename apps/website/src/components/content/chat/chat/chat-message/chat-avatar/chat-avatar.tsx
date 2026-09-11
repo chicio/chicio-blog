@@ -8,7 +8,7 @@ export const ChatAvatar: FC<{ isUser: boolean }> = ({ isUser }) => {
 
     return (
         <div
-            className={`flex h-8 w-8 sm:h-10 sm:w-10 flex-shrink-0 items-center justify-center rounded-full ${backgroundColor} ${color} overflow-hidden`}
+            className={`flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full sm:h-10 sm:w-10 ${backgroundColor} ${color} overflow-hidden`}
         >
             {isUser ? (
                 <BiUser className="size-5" />

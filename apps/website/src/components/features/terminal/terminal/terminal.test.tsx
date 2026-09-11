@@ -256,9 +256,7 @@ describe("Terminal", () => {
             await user.type(screen.getByPlaceholderText("follow the white rabbit_"), "open chat{Enter}");
 
             expect(mockRouterPush).toHaveBeenCalledWith("/chat");
-            await waitFor(() =>
-                expect(screen.getByText(/no terminal view available/)).toBeInTheDocument(),
-            );
+            await waitFor(() => expect(screen.getByText(/no terminal view available/)).toBeInTheDocument());
         });
     });
 

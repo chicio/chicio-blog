@@ -1,46 +1,45 @@
-'use client'
+"use client";
 
 import { useEffect, useState } from "react";
 
 export enum ScrollDirection {
-  up = "up",
-  down = "down",
+    up = "up",
+    down = "down",
 }
 
 export const useScrollDirection = () => {
-  const threshold = 100;
-  const [scrollDir, setScrollDir] = useState(ScrollDirection.up);
+    const threshold = 100;
+    const [scrollDir, setScrollDir] = useState(ScrollDirection.up);
 
-  useEffect(() => {
-    let previousScrollYPosition = window.scrollY;
+    useEffect(() => {
+        let previousScrollYPosition = window.scrollY;
 
-    const scrolledMoreThanThreshold = (currentScrollYPosition: number) =>
-      Math.abs(currentScrollYPosition - previousScrollYPosition) > threshold;
+        const scrolledMoreThanThreshold = (currentScrollYPosition: number) =>
+            Math.abs(currentScrollYPosition - previousScrollYPosition) > threshold;
 
-    const isScrollingUp = (currentScrollYPosition: number) =>
-      currentScrollYPosition > previousScrollYPosition &&
-      !(previousScrollYPosition > 0 && currentScrollYPosition === 0) &&
-      !(currentScrollYPosition > 0 && previousScrollYPosition === 0);
+        const isScrollingUp = (currentScrollYPosition: number) =>
+            currentScrollYPosition > previousScrollYPosition &&
+            !(previousScrollYPosition > 0 && currentScrollYPosition === 0) &&
+            !(currentScrollYPosition > 0 && previousScrollYPosition === 0);
 
-    const updateScrollDir = () => {
-      const currentScrollYPosition = window.scrollY;
+        const updateScrollDir = () => {
+            const currentScrollYPosition = window.scrollY;
 
-      if (scrolledMoreThanThreshold(currentScrollYPosition)) {
-        const newScrollDirection = isScrollingUp(currentScrollYPosition)
-          ? ScrollDirection.down
-          : ScrollDirection.up;
-        setScrollDir(newScrollDirection);
-        previousScrollYPosition =
-          currentScrollYPosition > 0 ? currentScrollYPosition : 0;
-      }
-    };
+            if (scrolledMoreThanThreshold(currentScrollYPosition)) {
+                const newScrollDirection = isScrollingUp(currentScrollYPosition)
+                    ? ScrollDirection.down
+                    : ScrollDirection.up;
+                setScrollDir(newScrollDirection);
+                previousScrollYPosition = currentScrollYPosition > 0 ? currentScrollYPosition : 0;
+            }
+        };
 
-    const onScroll = () => window.requestAnimationFrame(updateScrollDir);
+        const onScroll = () => window.requestAnimationFrame(updateScrollDir);
 
-    window.addEventListener("scroll", onScroll);
+        window.addEventListener("scroll", onScroll);
 
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+        return () => window.removeEventListener("scroll", onScroll);
+    }, []);
 
-  return scrollDir;
+    return scrollDir;
 };

@@ -7,7 +7,7 @@ export interface SectionHeadingProps {
 
 export const SectionHeading: FC<SectionHeadingProps> = ({ title, description }) => (
     <div className="mb-5">
-        <h2 className="text-accent text-shadow-md mb-1 text-lg font-bold">
+        <h2 className="text-accent mb-1 text-lg font-bold text-shadow-md">
             <span aria-hidden="true">&gt;&nbsp;</span>
             {title}
         </h2>

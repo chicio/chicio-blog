@@ -10,147 +10,137 @@ const contentRootDirectory = path.join(process.cwd(), "src/content");
 const contentMdxFileName = "content.mdx";
 
 const extractParametersValueFrom = (
-  filePath: string,
-  routeParams: { name: string; positionInSlug: number }[],
+    filePath: string,
+    routeParams: { name: string; positionInSlug: number }[],
 ): Record<string, string> => {
-  const segments = filePath.split(path.sep).filter((s) => s.length > 0);
-  const params: Record<string, string> = {};
+    const segments = filePath.split(path.sep).filter((s) => s.length > 0);
+    const params: Record<string, string> = {};
 
-  for (const routeParam of routeParams) {
-    params[routeParam.name] = segments[routeParam.positionInSlug];
-  }
+    for (const routeParam of routeParams) {
+        params[routeParam.name] = segments[routeParam.positionInSlug];
+    }
 
-  return params;
+    return params;
 };
 
 const getAllFoldersContainedIn = (directory: string) => {
-  const directories: string[] = [];
-  const fullPath = path.join(contentRootDirectory, directory);
+    const directories: string[] = [];
+    const fullPath = path.join(contentRootDirectory, directory);
 
-  if (!fs.existsSync(fullPath)) {
-    return directories;
-  }
-
-  const entries = fs.readdirSync(fullPath, { withFileTypes: true });
-
-  for (const entry of entries) {
-    if (entry.isDirectory()) {
-      directories.push(path.join(directory, entry.name));
+    if (!fs.existsSync(fullPath)) {
+        return directories;
     }
-  }
 
-  return directories;
+    const entries = fs.readdirSync(fullPath, { withFileTypes: true });
+
+    for (const entry of entries) {
+        if (entry.isDirectory()) {
+            directories.push(path.join(directory, entry.name));
+        }
+    }
+
+    return directories;
 };
 
 const findAllContent = (dynamicSlug: string) => {
-  const segments = segmentsOfSlugTemplate(dynamicSlug);
-  const directoriesQueue: string[] = [segments[0]];
-  const detectedDynamicRouteParams: { name: string; positionInSlug: number }[] =
-    [];
-  let currentSegmentPosition = 1;
+    const segments = segmentsOfSlugTemplate(dynamicSlug);
+    const directoriesQueue: string[] = [segments[0]];
+    const detectedDynamicRouteParams: { name: string; positionInSlug: number }[] = [];
+    let currentSegmentPosition = 1;
 
-  while (currentSegmentPosition < segments.length) {
-    let currentLevelDimension = directoriesQueue.length;
-    const currentSegment = segments[currentSegmentPosition];
-    const dynamicRouteParam = paramNameOfSegment(currentSegment);
+    while (currentSegmentPosition < segments.length) {
+        let currentLevelDimension = directoriesQueue.length;
+        const currentSegment = segments[currentSegmentPosition];
+        const dynamicRouteParam = paramNameOfSegment(currentSegment);
 
-    if (dynamicRouteParam) {
-      while (currentLevelDimension > 0) {
-        const currentDirectory = directoriesQueue.shift()!;
-        const folders = getAllFoldersContainedIn(currentDirectory);
-        directoriesQueue.push(...folders);
-        currentLevelDimension--;
-      }
-      detectedDynamicRouteParams.push({
-        name: dynamicRouteParam,
-        positionInSlug: currentSegmentPosition,
-      });
-    } else {
-      while (currentLevelDimension > 0) {
-        const currentDirectory = directoriesQueue.shift()!;
-        directoriesQueue.push(path.join(currentDirectory, currentSegment));
-        currentLevelDimension--;
-      }
+        if (dynamicRouteParam) {
+            while (currentLevelDimension > 0) {
+                const currentDirectory = directoriesQueue.shift()!;
+                const folders = getAllFoldersContainedIn(currentDirectory);
+                directoriesQueue.push(...folders);
+                currentLevelDimension--;
+            }
+            detectedDynamicRouteParams.push({
+                name: dynamicRouteParam,
+                positionInSlug: currentSegmentPosition,
+            });
+        } else {
+            while (currentLevelDimension > 0) {
+                const currentDirectory = directoriesQueue.shift()!;
+                directoriesQueue.push(path.join(currentDirectory, currentSegment));
+                currentLevelDimension--;
+            }
+        }
+
+        currentSegmentPosition++;
     }
 
-    currentSegmentPosition++;
-  }
+    const results = [];
 
-  const results = [];
+    for (const directory of directoriesQueue) {
+        results.push({
+            fullPath: path.join(contentRootDirectory, directory, contentMdxFileName),
+            relativePath: directory,
+            params: extractParametersValueFrom(directory, detectedDynamicRouteParams),
+        });
+    }
 
-  for (const directory of directoriesQueue) {
-    results.push({
-      fullPath: path.join(contentRootDirectory, directory, contentMdxFileName),
-      relativePath: directory,
-      params: extractParametersValueFrom(directory, detectedDynamicRouteParams),
-    });
-  }
-
-  return results;
+    return results;
 };
 
 export const getAllContentFor = <TMeta>(
-  dynamicSlug: string,
-  metadataAdapter?: (raw: unknown) => TMeta,
+    dynamicSlug: string,
+    metadataAdapter?: (raw: unknown) => TMeta,
 ): Content<TMeta>[] => {
-  return cached("all:" + dynamicSlug, () => {
-    const contents: {
-      params: Record<string, string>;
-      fullPath: string;
-      relativePath: string;
-    }[] = findAllContent(dynamicSlug);
+    return cached("all:" + dynamicSlug, () => {
+        const contents: {
+            params: Record<string, string>;
+            fullPath: string;
+            relativePath: string;
+        }[] = findAllContent(dynamicSlug);
 
-    return contents.map((item) => {
-      const { frontmatter, content } = grayMatterContent<TMeta>(
-        item.fullPath,
-        metadataAdapter,
-      );
+        return contents.map((item) => {
+            const { frontmatter, content } = grayMatterContent<TMeta>(item.fullPath, metadataAdapter);
 
-      return {
-        frontmatter,
-        slug: {
-          params: item.params,
-          formatted: slugFor(dynamicSlug, item.params),
-        },
-        readingTime: calculateReadingTime(content),
-        contentFileRelativePath: item.relativePath,
-        content,
-      };
-    });
-  }) as Content<TMeta>[];
+            return {
+                frontmatter,
+                slug: {
+                    params: item.params,
+                    formatted: slugFor(dynamicSlug, item.params),
+                },
+                readingTime: calculateReadingTime(content),
+                contentFileRelativePath: item.relativePath,
+                content,
+            };
+        });
+    }) as Content<TMeta>[];
 };
 
 export const getSingleContentBy = <TMeta>(
-  dynamicSlug: string,
-  params?: Record<string, string>,
-  metadataAdapter?: (raw: unknown) => TMeta,
+    dynamicSlug: string,
+    params?: Record<string, string>,
+    metadataAdapter?: (raw: unknown) => TMeta,
 ): Content<TMeta> | undefined => {
-  const sanitizedParams = params || {};
-  return cached("single:" + dynamicSlug + ":" + JSON.stringify(sanitizedParams), () => {
-    try {
-      const slug = slugFor(dynamicSlug, sanitizedParams);
-      const filePath = path.join(contentRootDirectory, slug, contentMdxFileName);
-      const { frontmatter, content } = grayMatterContent<TMeta>(
-        filePath,
-        metadataAdapter,
-      );
-      const relativePath = path.relative(
-        contentRootDirectory,
-        path.dirname(filePath),
-      );
+    const sanitizedParams = params || {};
+    return cached("single:" + dynamicSlug + ":" + JSON.stringify(sanitizedParams), () => {
+        try {
+            const slug = slugFor(dynamicSlug, sanitizedParams);
+            const filePath = path.join(contentRootDirectory, slug, contentMdxFileName);
+            const { frontmatter, content } = grayMatterContent<TMeta>(filePath, metadataAdapter);
+            const relativePath = path.relative(contentRootDirectory, path.dirname(filePath));
 
-      return {
-        frontmatter,
-        slug: {
-          params: sanitizedParams,
-          formatted: slug,
-        },
-        readingTime: calculateReadingTime(content),
-        contentFileRelativePath: relativePath,
-        content,
-      } as Content<TMeta>;
-    } catch {
-      return undefined;
-    }
-  }) as Content<TMeta> | undefined;
+            return {
+                frontmatter,
+                slug: {
+                    params: sanitizedParams,
+                    formatted: slug,
+                },
+                readingTime: calculateReadingTime(content),
+                contentFileRelativePath: relativePath,
+                content,
+            } as Content<TMeta>;
+        } catch {
+            return undefined;
+        }
+    }) as Content<TMeta> | undefined;
 };

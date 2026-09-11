@@ -26,10 +26,7 @@ export const PostsPerYearChart: FC<PostsPerYearChartProps> = ({ data }) => (
                     tickLine={false}
                     axisLine={{ stroke: chartTheme.axis.lineColor }}
                 />
-                <Tooltip
-                    content={<ChartTooltip labelPrefix="Year: " />}
-                    cursor={{ fill: chartTheme.cursorFill }}
-                />
+                <Tooltip content={<ChartTooltip labelPrefix="Year: " />} cursor={{ fill: chartTheme.cursorFill }} />
                 <Bar dataKey="count" name="Posts" fill="#00FF41" radius={[6, 6, 0, 0]} />
             </BarChart>
         </ResponsiveContainer>

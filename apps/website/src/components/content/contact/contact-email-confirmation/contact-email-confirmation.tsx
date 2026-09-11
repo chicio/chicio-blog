@@ -1,13 +1,4 @@
-import {
-    Body,
-    Container,
-    Head,
-    Html,
-    Hr,
-    Preview,
-    Section,
-    Text,
-} from "@react-email/components";
+import { Body, Container, Head, Html, Hr, Preview, Section, Text } from "@react-email/components";
 import { EmailBrandHeader } from "@/components/content/contact/contact-email-shared-brand-header";
 import { emailColors, emailFonts } from "@/components/content/contact/contact-email-shared-colors";
 import { EmailFooter } from "@/components/content/contact/contact-email-shared-footer";
@@ -34,23 +25,20 @@ export function ContactConfirmationEmail({ message }: ContactConfirmationEmailPr
                             <span style={prompt}>{">"}</span> TRANSMISSION_CONFIRMED
                         </Text>
                         <Text style={terminalLine}>
-                            <span style={prompt}>{">"}</span> STATUS:{" "}
-                            <span style={statusSuccess}>DELIVERED</span>
+                            <span style={prompt}>{">"}</span> STATUS: <span style={statusSuccess}>DELIVERED</span>
                         </Text>
                         <Text style={confirmationText}>
                             Thank you for reaching out! Your message has been successfully delivered.
                         </Text>
-                        <Text style={confirmationText}>
-                            I&apos;ll get back to you as soon as possible.
-                        </Text>
+                        <Text style={confirmationText}>I&apos;ll get back to you as soon as possible.</Text>
                     </Section>
                     <Hr style={divider} />
                     <MessageSummary message={message} label="YOUR_MESSAGE:" />
                     <Hr style={divider} />
                     <Section style={quoteSection}>
                         <Text style={quoteText}>
-                            <span style={prompt}>{">"}</span> &quot;Unfortunately, no one can be
-                            told what the Matrix is.&quot;
+                            <span style={prompt}>{">"}</span> &quot;Unfortunately, no one can be told what the Matrix
+                            is.&quot;
                         </Text>
                         <Text style={quoteText}>
                             <span style={prompt}>{">"}</span> &quot;You have to see it for yourself.&quot;

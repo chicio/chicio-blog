@@ -45,8 +45,8 @@ export async function GET(): Promise<Response> {
                 },
                 id: null,
             }),
-            { status: 405, headers: { "Content-Type": "application/json", Allow: "POST, DELETE, OPTIONS" } }
-        )
+            { status: 405, headers: { "Content-Type": "application/json", Allow: "POST, DELETE, OPTIONS" } },
+        ),
     );
 }
 

@@ -21,13 +21,7 @@ describe("StatCard", () => {
         });
 
         it("renders the icon slot when provided", () => {
-            render(
-                <StatCard
-                    value={1}
-                    label="Years"
-                    icon={<span data-testid="stat-icon">*</span>}
-                />,
-            );
+            render(<StatCard value={1} label="Years" icon={<span data-testid="stat-icon">*</span>} />);
             expect(screen.getByTestId("stat-icon")).toBeInTheDocument();
         });
 

@@ -9,12 +9,7 @@ export interface PostTagsProps {
 export const PostTags: FC<PostTagsProps> = ({ tags }) => (
     <div className="mx-0 my-5">
         {tags!.map((tag) => (
-            <Tag
-                tag={tag!}
-                link={generateTagSlug(tag!)}
-                big={false}
-                key={tag}
-            />
+            <Tag tag={tag!} link={generateTagSlug(tag!)} big={false} key={tag} />
         ))}
     </div>
 );

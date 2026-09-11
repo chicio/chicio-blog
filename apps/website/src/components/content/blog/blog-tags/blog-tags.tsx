@@ -15,11 +15,8 @@ interface BlogTagsProps {
 export const BlogTags: FC<BlogTagsProps> = ({ tags, author }) => {
     return (
         <>
-            <ContentPage
-                author={author}
-                trackingCategory={tracking.category.blog_tags}
-            >
-                <div className="container-fluid p-0 mb-5">
+            <ContentPage author={author} trackingCategory={tracking.category.blog_tags}>
+                <div className="container-fluid mb-5 p-0">
                     <PageTitle>Tags</PageTitle>
                     {tags.map((tag) => (
                         <TagItem

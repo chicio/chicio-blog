@@ -32,10 +32,7 @@ describe("ContentPage", () => {
 
         it("passes nav hrefs to the template", () => {
             render(<ContentPage trackingCategory="test" author="Fabrizio" />);
-            expect(screen.getByTestId("content-page-template")).toHaveAttribute(
-                "data-has-nav-hrefs",
-                "true",
-            );
+            expect(screen.getByTestId("content-page-template")).toHaveAttribute("data-has-nav-hrefs", "true");
         });
 
         it("renders children", () => {

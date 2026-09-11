@@ -46,26 +46,12 @@ const allTime: AllTimeAnalytics = {
 describe("BlogStats", () => {
     describe("render", () => {
         it("renders the page title", () => {
-            render(
-                <BlogStats
-                    author="Fabrizio Duroni"
-                    stats={stats}
-                    allTime={allTime}
-                    analytics={null}
-                />,
-            );
+            render(<BlogStats author="Fabrizio Duroni" stats={stats} allTime={allTime} analytics={null} />);
             expect(screen.getByRole("heading", { level: 1, name: "Blog Stats" })).toBeInTheDocument();
         });
 
         it("renders every headline counter next to its label", () => {
-            render(
-                <BlogStats
-                    author="Fabrizio Duroni"
-                    stats={stats}
-                    allTime={allTime}
-                    analytics={null}
-                />,
-            );
+            render(<BlogStats author="Fabrizio Duroni" stats={stats} allTime={allTime} analytics={null} />);
 
             const expectations: [string, string][] = [
                 ["Posts", "42"],
@@ -82,28 +68,14 @@ describe("BlogStats", () => {
         });
 
         it("renders the section labels for each chart", () => {
-            render(
-                <BlogStats
-                    author="Fabrizio Duroni"
-                    stats={stats}
-                    allTime={allTime}
-                    analytics={null}
-                />,
-            );
+            render(<BlogStats author="Fabrizio Duroni" stats={stats} allTime={allTime} analytics={null} />);
             expect(screen.getByRole("heading", { level: 2, name: "Posts per year" })).toBeInTheDocument();
             expect(screen.getByRole("heading", { level: 2, name: "Top tags" })).toBeInTheDocument();
             expect(screen.getByRole("heading", { level: 2, name: "Posts per external authors" })).toBeInTheDocument();
         });
 
         it("renders the all-time traffic section even when analytics is null (stub mode)", () => {
-            render(
-                <BlogStats
-                    author="Fabrizio Duroni"
-                    stats={stats}
-                    allTime={allTime}
-                    analytics={null}
-                />,
-            );
+            render(<BlogStats author="Fabrizio Duroni" stats={stats} allTime={allTime} analytics={null} />);
             expect(screen.getByRole("heading", { level: 2, name: "Traffic" })).toBeInTheDocument();
             expect(screen.getByRole("heading", { level: 2, name: "Views over time" })).toBeInTheDocument();
             expect(screen.queryByRole("heading", { level: 2, name: "Top posts by views" })).not.toBeInTheDocument();

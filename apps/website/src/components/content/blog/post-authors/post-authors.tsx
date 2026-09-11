@@ -18,10 +18,7 @@ export const PostAuthors: FC<PostAuthorsProps> = ({ postAuthors }) => {
     return (
         <div className="mx-0 my-4 flex flex-col gap-2 p-0">
             {postAuthors.map((author) => (
-                <div
-                    className="mt-1 flex items-center gap-2 p-0"
-                    key={author.id}
-                >
+                <div className="mt-1 flex items-center gap-2 p-0" key={author.id}>
                     <ImageGlow
                         className="rounded-full"
                         alt={author.name}
@@ -31,10 +28,7 @@ export const PostAuthors: FC<PostAuthorsProps> = ({ postAuthors }) => {
                         noPlaceholder={true}
                     />
                     <p>
-                        <InternalLink
-                            to={authorHref(author.id)}
-                            onClick={onClickAuthor}
-                        >
+                        <InternalLink to={authorHref(author.id)} onClick={onClickAuthor}>
                             {author.name}
                         </InternalLink>
                     </p>

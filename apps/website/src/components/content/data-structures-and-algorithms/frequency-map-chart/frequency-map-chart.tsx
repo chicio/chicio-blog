@@ -32,12 +32,7 @@ export const FrequencyMapChart: React.FC = () => {
                             content={<ChartTooltip labelPrefix="Char: " />}
                             cursor={{ fill: chartTheme.cursorFill }}
                         />
-                        <Bar
-                            dataKey="count"
-                            name="Count"
-                            fill={chartTheme.series[0]}
-                            radius={[6, 6, 0, 0]}
-                        />
+                        <Bar dataKey="count" name="Count" fill={chartTheme.series[0]} radius={[6, 6, 0, 0]} />
                     </BarChart>
                 </ResponsiveContainer>
             </div>

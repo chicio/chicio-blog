@@ -1,14 +1,7 @@
 "use client";
 
 import { FC } from "react";
-import {
-    ResponsiveContainer,
-    LineChart,
-    Line,
-    Tooltip,
-    XAxis,
-    YAxis,
-} from "recharts";
+import { ResponsiveContainer, LineChart, Line, Tooltip, XAxis, YAxis } from "recharts";
 import { ChartPanel, ChartTooltip } from "matrix-design-system/chart";
 import { chartTheme } from "@/types/configuration/chart-theme";
 

@@ -10,12 +10,7 @@ export interface FormTextareaProps extends Omit<TextareaHTMLAttributes<HTMLTextA
     hasError?: boolean;
 }
 
-export const FormTextarea: FC<FormTextareaProps> = ({
-    label,
-    icon,
-    hasError = false,
-    ...textareaProps
-}) => (
+export const FormTextarea: FC<FormTextareaProps> = ({ label, icon, hasError = false, ...textareaProps }) => (
     <div>
         <Label id={textareaProps.id} value={label} icon={icon} />
         <Textarea

@@ -13,15 +13,14 @@ interface RecursionVisualizerEffects {
     reset: () => void;
 }
 
-export const useRecursionVisualizerStore = (): ComponentStore<
-    RecursionVisualizerState,
-    RecursionVisualizerEffects
-> => {
+export const useRecursionVisualizerStore = (): ComponentStore<RecursionVisualizerState, RecursionVisualizerEffects> => {
     const [stack, setStack] = useState<{ n: number }[]>([{ n: 3 }]);
     const [returnValue, setReturnValue] = useState<number | null>(null);
 
     const step = () => {
-        if (stack.length === 0) { return; }
+        if (stack.length === 0) {
+            return;
+        }
 
         const top = stack[stack.length - 1];
 

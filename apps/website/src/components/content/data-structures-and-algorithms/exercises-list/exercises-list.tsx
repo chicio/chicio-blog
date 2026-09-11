@@ -1,7 +1,4 @@
-import {
-    topics,
-    exercises,
-} from "@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms";
+import { topics, exercises } from "@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms";
 import { Content } from "@/types/content/content";
 import { ExerciseMetadata } from "@/types/content/data-structures-and-algorithms";
 import { FC } from "react";

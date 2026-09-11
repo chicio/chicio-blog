@@ -38,7 +38,6 @@ describe("Tag", () => {
         });
     });
 
-
     describe("link component injection", () => {
         const spyLink: LinkComponent = ({ href, prefetch, children }) => (
             <a href={href} data-prefetch={prefetch}>
@@ -53,7 +52,13 @@ describe("Tag", () => {
 
         it("forwards an explicit prefetch override to the injected link", () => {
             render(
-                <Tag tag="typescript" link="/tags/typescript" big={false} prefetch="viewport" linkComponent={spyLink} />,
+                <Tag
+                    tag="typescript"
+                    link="/tags/typescript"
+                    big={false}
+                    prefetch="viewport"
+                    linkComponent={spyLink}
+                />,
             );
             expect(screen.getByRole("link")).toHaveAttribute("data-prefetch", "viewport");
         });

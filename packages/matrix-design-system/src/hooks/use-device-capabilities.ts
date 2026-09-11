@@ -28,7 +28,7 @@ const computeCapabilities = (): DeviceCapabilities => {
     const cores = nav.hardwareConcurrency ?? 4;
     const saveData = nav.connection?.saveData ?? false;
     const isLowEnd = (deviceMemory != null && deviceMemory <= 2) || cores <= 2 || saveData;
-    
+
     return { deviceMemory, cores, saveData, isLowEnd };
 };
 

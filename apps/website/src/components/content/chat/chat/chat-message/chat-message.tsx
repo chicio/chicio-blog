@@ -11,10 +11,10 @@ export const ChatMessage: FC<
     const color = isUser ? "chat-message-user" : "text-primary-text";
 
     return (
-        <div className={`flex ${flexDirection} items-start gap-2 animate-opacity`}>
+        <div className={`flex ${flexDirection} animate-opacity items-start gap-2`}>
             <ChatAvatar isUser={isUser} />
             <div
-                className={`max-w-[80%] md:max-w-[70%] gap-2 py-3 px-4 rounded-xl text-left text-base leading-normal flex flex-col-reverse ${background} ${color}`}
+                className={`flex max-w-[80%] flex-col-reverse gap-2 rounded-xl px-4 py-3 text-left text-base leading-normal md:max-w-[70%] ${background} ${color}`}
             >
                 {children}
             </div>

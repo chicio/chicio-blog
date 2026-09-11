@@ -15,7 +15,7 @@ interface AccordionEffects {
 
 export const useAccordionStore = (
     defaultOpen: boolean,
-    onToggle?: () => void
+    onToggle?: () => void,
 ): ComponentStore<AccordionState, AccordionEffects> => {
     const [isOpen, setIsOpen] = useState(defaultOpen);
     const id = useId();

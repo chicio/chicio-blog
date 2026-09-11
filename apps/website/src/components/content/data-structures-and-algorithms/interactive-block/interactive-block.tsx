@@ -6,9 +6,9 @@ interface InteractiveBlockProps {
 
 export const InteractiveBlock: FC<PropsWithChildren<InteractiveBlockProps>> = ({ title, children }) => (
     <div className="my-8">
-        <div className="glow-container px-4 py-6 shadow-lg rounded-2xl border-2 border-accent">
+        <div className="glow-container border-accent rounded-2xl border-2 px-4 py-6 shadow-lg">
             <div className="flex flex-col items-center gap-4">
-                <span className="text-accent text-center text-lg font-bold tracking-widest uppercase mb-2">
+                <span className="text-accent mb-2 text-center text-lg font-bold tracking-widest uppercase">
                     {title}
                 </span>
                 {children}

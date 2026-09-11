@@ -3,7 +3,7 @@ import { FC } from "react";
 import { ProjectCard } from "./project-card";
 
 export const Projects: FC = () => (
-    <div className="flex flex-col my-9 gap-2 w-full md:gap-3">
+    <div className="my-9 flex w-full flex-col gap-2 md:gap-3">
         {Object.keys(projects).map((projectKey) => {
             const project = projects[projectKey];
 

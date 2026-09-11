@@ -10,8 +10,13 @@ export const ClownsPhotosGrid = () => {
     return (
         <>
             {photos.map((photo, index) => (
-                <div className="flex justify-center items-center" key={index}>
-                    <ImageGlow fill={true} className="relative! w-full! h-full! object-cover" src={photo} alt={`Clown Photo ${index + 1}`} />
+                <div className="flex items-center justify-center" key={index}>
+                    <ImageGlow
+                        fill={true}
+                        className="relative! h-full! w-full! object-cover"
+                        src={photo}
+                        alt={`Clown Photo ${index + 1}`}
+                    />
                 </div>
             ))}
         </>

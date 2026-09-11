@@ -1,10 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
-const {
-    mockCheckRateLimitFor,
-    mockIncrementRateLimit,
-    mockResendEmailsSend,
-} = vi.hoisted(() => ({
+const { mockCheckRateLimitFor, mockIncrementRateLimit, mockResendEmailsSend } = vi.hoisted(() => ({
     mockCheckRateLimitFor: vi.fn(),
     mockIncrementRateLimit: vi.fn(),
     mockResendEmailsSend: vi.fn(),
@@ -66,7 +62,7 @@ describe("/api/contact POST", () => {
             });
             const response = await POST(req);
             expect(response.status).toBe(200);
-            const body = await response.json() as { success: boolean };
+            const body = (await response.json()) as { success: boolean };
             expect(body.success).toBe(true);
             expect(mockResendEmailsSend).not.toHaveBeenCalled();
         });
@@ -86,17 +82,20 @@ describe("/api/contact POST", () => {
             });
             const response = await POST(req);
             expect(response.status).toBe(429);
-            const body = await response.json() as { error: string };
+            const body = (await response.json()) as { error: string };
             expect(body.error).toMatch(/wait/i);
         });
 
         it("passes the client IP to the rate limit check", async () => {
-            const req = makeRequest({
-                name: "Fabrizio",
-                email: "fabrizio@example.com",
-                message: "Hello from a specific IP",
-                honeypot: "",
-            }, "203.0.113.42");
+            const req = makeRequest(
+                {
+                    name: "Fabrizio",
+                    email: "fabrizio@example.com",
+                    message: "Hello from a specific IP",
+                    honeypot: "",
+                },
+                "203.0.113.42",
+            );
             await POST(req);
             expect(mockCheckRateLimitFor).toHaveBeenCalledWith("203.0.113.42");
         });
@@ -112,7 +111,7 @@ describe("/api/contact POST", () => {
             });
             const response = await POST(req);
             expect(response.status).toBe(400);
-            const body = await response.json() as { error: string };
+            const body = (await response.json()) as { error: string };
             expect(body.error).toMatch(/required/i);
         });
 
@@ -125,7 +124,7 @@ describe("/api/contact POST", () => {
             });
             const response = await POST(req);
             expect(response.status).toBe(400);
-            const body = await response.json() as { error: string };
+            const body = (await response.json()) as { error: string };
             expect(body.error).toMatch(/email/i);
         });
 
@@ -138,7 +137,7 @@ describe("/api/contact POST", () => {
             });
             const response = await POST(req);
             expect(response.status).toBe(400);
-            const body = await response.json() as { error: string };
+            const body = (await response.json()) as { error: string };
             expect(body.error).toMatch(/10 characters/i);
         });
     });
@@ -153,7 +152,7 @@ describe("/api/contact POST", () => {
             });
             const response = await POST(req);
             expect(response.status).toBe(200);
-            const body = await response.json() as { success: boolean };
+            const body = (await response.json()) as { success: boolean };
             expect(body.success).toBe(true);
         });
 
@@ -169,12 +168,15 @@ describe("/api/contact POST", () => {
         });
 
         it("increments the rate limit counter after a successful send", async () => {
-            const req = makeRequest({
-                name: "Fabrizio",
-                email: "fabrizio@example.com",
-                message: "Hello, this is a proper test message",
-                honeypot: "",
-            }, "203.0.113.1");
+            const req = makeRequest(
+                {
+                    name: "Fabrizio",
+                    email: "fabrizio@example.com",
+                    message: "Hello, this is a proper test message",
+                    honeypot: "",
+                },
+                "203.0.113.1",
+            );
             await POST(req);
             expect(mockIncrementRateLimit).toHaveBeenCalledWith("203.0.113.1");
         });
@@ -191,7 +193,7 @@ describe("/api/contact POST", () => {
             });
             const response = await POST(req);
             expect(response.status).toBe(500);
-            const body = await response.json() as { error: string };
+            const body = (await response.json()) as { error: string };
             expect(body.error).toMatch(/notification/i);
         });
 
@@ -221,7 +223,7 @@ describe("/api/contact POST", () => {
             });
             const response = await POST(req);
             expect(response.status).toBe(500);
-            const body = await response.json() as { error: string };
+            const body = (await response.json()) as { error: string };
             expect(body.error).toMatch(/internal server error/i);
         });
     });

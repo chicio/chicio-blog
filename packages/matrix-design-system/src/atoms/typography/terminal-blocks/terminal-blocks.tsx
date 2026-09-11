@@ -16,7 +16,7 @@ const TERMINAL_LINE_SIZE_CLASS: Record<TerminalLineSize, string> = {
 export const TerminalLine: FC<PropsWithChildren<{ size?: TerminalLineSize }>> = ({ children, size = "sm" }) => {
     return (
         <div
-            className={`text-shadow-md mb-2 font-mono font-bold leading-tight text-accent break-words ${TERMINAL_LINE_SIZE_CLASS[size]}`}
+            className={`text-accent mb-2 font-mono leading-tight font-bold break-words text-shadow-md ${TERMINAL_LINE_SIZE_CLASS[size]}`}
         >
             {children}
         </div>
@@ -24,7 +24,7 @@ export const TerminalLine: FC<PropsWithChildren<{ size?: TerminalLineSize }>> = 
 };
 
 export const TerminalQuoteLine: FC<PropsWithChildren> = ({ children }) => {
-    return <div className="my-2 leading-tight break-words text-xs sm:text-sm text-center">{children}</div>;
+    return <div className="my-2 text-center text-xs leading-tight break-words sm:text-sm">{children}</div>;
 };
 
 export const Cursor: FC<PropsWithChildren> = () => <span className="animate-blink">_</span>;
@@ -38,5 +38,5 @@ export const SuccessText: FC<PropsWithChildren> = ({ children }) => (
 );
 
 export const QuoteText: FC<PropsWithChildren> = ({ children }) => (
-    <span className="w-full text-center font-bold text-accent italic m-6 font-mono">{children}</span>
+    <span className="text-accent m-6 w-full text-center font-mono font-bold italic">{children}</span>
 );

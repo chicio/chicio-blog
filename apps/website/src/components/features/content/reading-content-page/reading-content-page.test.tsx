@@ -32,10 +32,7 @@ describe("ReadingContentPage", () => {
 
         it("passes nav hrefs to the template", () => {
             render(<ReadingContentPage author="Fabrizio" />);
-            expect(screen.getByTestId("reading-content-page-template")).toHaveAttribute(
-                "data-has-nav-hrefs",
-                "true",
-            );
+            expect(screen.getByTestId("reading-content-page-template")).toHaveAttribute("data-has-nav-hrefs", "true");
         });
 
         it("renders children", () => {

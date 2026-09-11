@@ -22,9 +22,7 @@ describe("SelfHostedVideo", () => {
         });
 
         it("does not append #t=0.1 when poster is provided", () => {
-            const { container } = render(
-                <SelfHostedVideo src="/video/demo.mp4" poster="/img/poster.jpg" />,
-            );
+            const { container } = render(<SelfHostedVideo src="/video/demo.mp4" poster="/img/poster.jpg" />);
             const source = container.querySelector("source");
             expect(source).toHaveAttribute("src", "/video/demo.mp4");
         });
@@ -42,9 +40,7 @@ describe("SelfHostedVideo", () => {
 
     describe("captions", () => {
         it("renders a captions track with the given src when captions is provided", () => {
-            const { container } = render(
-                <SelfHostedVideo src="/video/demo.mp4" captions="/video/demo.vtt" />,
-            );
+            const { container } = render(<SelfHostedVideo src="/video/demo.mp4" captions="/video/demo.vtt" />);
             const track = container.querySelector("track");
             expect(track).toHaveAttribute("kind", "captions");
             expect(track).toHaveAttribute("srclang", "en");
@@ -53,9 +49,7 @@ describe("SelfHostedVideo", () => {
         });
 
         it("does not set default on the captions track", () => {
-            const { container } = render(
-                <SelfHostedVideo src="/video/demo.mp4" captions="/video/demo.vtt" />,
-            );
+            const { container } = render(<SelfHostedVideo src="/video/demo.mp4" captions="/video/demo.vtt" />);
             expect(container.querySelector("track")).not.toHaveAttribute("default");
         });
 

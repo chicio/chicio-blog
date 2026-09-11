@@ -12,44 +12,24 @@ export interface AuthorSocialsProps {
 
 export const AuthorSocials: FC<AuthorSocialsProps> = ({ author }) => (
     <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
-        <ExternalLink
-            className={linkClassName}
-            href={author.linkedinUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-        >
+        <ExternalLink className={linkClassName} href={author.linkedinUrl} target="_blank" rel="noopener noreferrer">
             <BiLogoLinkedin size={20} />
             <span>LinkedIn</span>
         </ExternalLink>
         {author.githubUrl && (
-            <ExternalLink
-                className={linkClassName}
-                href={author.githubUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-            >
+            <ExternalLink className={linkClassName} href={author.githubUrl} target="_blank" rel="noopener noreferrer">
                 <BiLogoGithub size={20} />
                 <span>GitHub</span>
             </ExternalLink>
         )}
         {author.xUrl && (
-            <ExternalLink
-                className={linkClassName}
-                href={author.xUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-            >
+            <ExternalLink className={linkClassName} href={author.xUrl} target="_blank" rel="noopener noreferrer">
                 <FaXTwitter size={18} />
                 <span>X</span>
             </ExternalLink>
         )}
         {author.siteUrl && (
-            <ExternalLink
-                className={linkClassName}
-                href={author.siteUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-            >
+            <ExternalLink className={linkClassName} href={author.siteUrl} target="_blank" rel="noopener noreferrer">
                 <BiGlobe size={20} />
                 <span>Website</span>
             </ExternalLink>

@@ -5,6 +5,11 @@
   "description": "The component-store architecture rules, shared by every workspace that holds components.",
   "type": "commonjs",
   "main": "./index.js",
-  "files": ["index.js", "rules"],
-  "peerDependencies": { "eslint": ">=9" }
+  "files": [
+    "index.js",
+    "rules"
+  ],
+  "peerDependencies": {
+    "eslint": ">=9"
+  }
 }

@@ -1,15 +1,7 @@
 "use client";
 
 import { FC } from "react";
-import {
-    Legend,
-    Line,
-    LineChart,
-    ResponsiveContainer,
-    Tooltip,
-    XAxis,
-    YAxis,
-} from "recharts";
+import { Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { ChartPanel, ChartTooltip } from "matrix-design-system/chart";
 import { chartTheme } from "@/types/configuration/chart-theme";
 
@@ -68,10 +60,7 @@ export const StackFrameComparisonChart: FC = () => {
                             content={<ChartTooltip />}
                             cursor={{ stroke: chartTheme.cursorStroke, strokeWidth: 1 }}
                         />
-                        <Legend
-                            verticalAlign="top"
-                            labelStyle={{ color: chartTheme.legendTextColor }}
-                        />
+                        <Legend verticalAlign="top" labelStyle={{ color: chartTheme.legendTextColor }} />
                         <Line
                             type="monotone"
                             dataKey="normal"

@@ -36,10 +36,7 @@ const BreadcrumbContent: FC<BreadcrumbContentProps> = ({ items, parentItem, link
         {parentItem && (
             <ol className="flex min-w-0 flex-row flex-nowrap items-center overflow-hidden sm:hidden">
                 <li className="flex min-w-0 items-center">
-                    <span
-                        className="text-secondary text-sm mr-1.5 shrink-0 select-none"
-                        aria-hidden="true"
-                    >
+                    <span className="text-secondary mr-1.5 shrink-0 text-sm select-none" aria-hidden="true">
                         <IoMdArrowRoundBack />
                     </span>
                     <InternalLink
@@ -53,25 +50,19 @@ const BreadcrumbContent: FC<BreadcrumbContentProps> = ({ items, parentItem, link
                 </li>
             </ol>
         )}
-        <ol className="hidden min-w-0 flex-row flex-nowrap items-center overflow-hidden sm:flex text-sm">
+        <ol className="hidden min-w-0 flex-row flex-nowrap items-center overflow-hidden text-sm sm:flex">
             {items.map((item, index) => (
                 <li
                     key={item.href}
                     className={`flex items-center text-sm ${item.isCurrent ? "min-w-0 shrink" : "shrink-0"}`}
                 >
                     {index > 0 && (
-                        <span
-                            className="text-secondary text-sm mx-1.5 shrink-0 select-none"
-                            aria-hidden="true"
-                        >
+                        <span className="text-secondary mx-1.5 shrink-0 text-sm select-none" aria-hidden="true">
                             {">"}
                         </span>
                     )}
                     {item.isCurrent ? (
-                        <span
-                            className="text-primary-text block truncate text-sm"
-                            aria-current="page"
-                        >
+                        <span className="text-primary-text block truncate text-sm" aria-current="page">
                             {item.label}
                         </span>
                     ) : (
@@ -79,7 +70,7 @@ const BreadcrumbContent: FC<BreadcrumbContentProps> = ({ items, parentItem, link
                             linkComponent={linkComponent}
                             to={item.href}
                             onClick={item.onClick}
-                            className="block truncate py-2 whitespace-nowrap text-sm"
+                            className="block truncate py-2 text-sm whitespace-nowrap"
                         >
                             {item.label}
                         </InternalLink>
@@ -95,22 +86,17 @@ export const Breadcrumb: FC<BreadcrumbProps> = ({ items, linkComponent }) => {
     const { navRef, isVisible } = state;
     const { glassmorphismClass } = useGlassmorphism();
 
-    const parentItem =
-        items.length >= 2 ? (items[items.length - 2] as ClickableBreadcrumbItem) : null;
+    const parentItem = items.length >= 2 ? (items[items.length - 2] as ClickableBreadcrumbItem) : null;
 
     return (
         <>
-            <nav
-                ref={navRef}
-                aria-label="Breadcrumb"
-                className="glow-container mb-4 px-3 py-2 font-mono text-sm"
-            >
+            <nav ref={navRef} aria-label="Breadcrumb" className="glow-container mb-4 px-3 py-2 font-mono text-sm">
                 <BreadcrumbContent items={items} parentItem={parentItem} linkComponent={linkComponent} />
             </nav>
             <motion.nav
                 aria-label="Breadcrumb"
                 aria-hidden={!isVisible}
-                className={`${glassmorphismClass} container-fixed fixed top-17 sm:top-19 right-0 left-0 z-55 px-3 py-1 font-mono text-sm`}
+                className={`${glassmorphismClass} container-fixed fixed top-17 right-0 left-0 z-55 px-3 py-1 font-mono text-sm sm:top-19`}
                 initial={false}
                 animate={{
                     y: isVisible ? 0 : -200,

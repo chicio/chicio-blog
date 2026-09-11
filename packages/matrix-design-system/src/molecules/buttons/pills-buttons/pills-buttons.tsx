@@ -9,13 +9,13 @@ type PillProps = PropsWithChildren<{
 }>;
 
 export const RedPillButton: FC<PillProps> = ({ children, onClick, disabled }) => (
-    <button className="bg-transparent border-none cursor-pointer p-0" onClick={onClick} disabled={disabled}>
+    <button className="cursor-pointer border-none bg-transparent p-0" onClick={onClick} disabled={disabled}>
         <RedPill>{children}</RedPill>
     </button>
 );
 
 export const BluePillButton: FC<PillProps> = ({ children, onClick, disabled }) => (
-    <button className="bg-transparent border-none cursor-pointer p-0" onClick={onClick} disabled={disabled}>
+    <button className="cursor-pointer border-none bg-transparent p-0" onClick={onClick} disabled={disabled}>
         <BluePill>{children}</BluePill>
     </button>
 );

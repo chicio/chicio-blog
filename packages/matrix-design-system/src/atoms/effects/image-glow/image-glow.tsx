@@ -1,10 +1,6 @@
 import { FC } from "react";
 import { imageShimmerPlaceholder } from "../image-shimmer-placeholder";
-import {
-    PlainImage,
-    type ImageComponent,
-    type ImageComponentProps,
-} from "../plain-image";
+import { PlainImage, type ImageComponent, type ImageComponentProps } from "../plain-image";
 
 export interface ImageGlowProps extends ImageComponentProps {
     className?: string;

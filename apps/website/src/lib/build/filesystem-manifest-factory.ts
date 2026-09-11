@@ -1,9 +1,6 @@
 import { aboutMe } from "@/lib/content/about-me/about-me";
 import { easterEggHunt } from "@/lib/content/easter-eggs/easter-eggs";
-import {
-    topics,
-    exercises,
-} from "@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms";
+import { topics, exercises } from "@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms";
 import { posts } from "@/lib/content/posts/posts";
 import { consoles, games } from "@/lib/content/videogames/videogames";
 import { slugs } from "@/types/configuration/slug";
@@ -18,12 +15,7 @@ const dir = (partial: Partial<TerminalDirNode> = {}): TerminalDirNode => ({
     ...partial,
 });
 
-const file = (
-    title: string,
-    description: string,
-    route: string,
-    extra?: Record<string, string>,
-): TerminalFileNode => ({
+const file = (title: string, description: string, route: string, extra?: Record<string, string>): TerminalFileNode => ({
     type: "file",
     title,
     description,
@@ -98,10 +90,7 @@ const buildDsaTree = (topics: Content[], exercises: Content<ExerciseMetadata>[])
     return dsa;
 };
 
-const buildVideogamesTree = (
-    consoles: Content<ConsoleMetadata>[],
-    games: Content<GameMetadata>[],
-): TerminalDirNode => {
+const buildVideogamesTree = (consoles: Content<ConsoleMetadata>[], games: Content<GameMetadata>[]): TerminalDirNode => {
     const videogames = dir({
         route: slugs.videogames.home,
         title: "videogames",
@@ -128,10 +117,15 @@ const buildVideogamesTree = (
             return;
         }
 
-        consoleDir.children[gameSlug] = file(game.frontmatter.title, game.frontmatter.description, game.slug.formatted, {
-            releaseYear: game.frontmatter.metadata?.releaseYear ?? "",
-            genre: game.frontmatter.metadata?.genre ?? "",
-        });
+        consoleDir.children[gameSlug] = file(
+            game.frontmatter.title,
+            game.frontmatter.description,
+            game.slug.formatted,
+            {
+                releaseYear: game.frontmatter.metadata?.releaseYear ?? "",
+                genre: game.frontmatter.metadata?.genre ?? "",
+            },
+        );
     });
 
     return videogames;

@@ -23,12 +23,5 @@ export default async function Stats() {
     const { allTime, ga4 } = await getAnalyticsData();
     const author = siteMetadata.author;
 
-    return (
-        <BlogStats
-            author={author}
-            stats={stats}
-            allTime={allTime}
-            analytics={ga4}
-        />
-    );
+    return <BlogStats author={author} stats={stats} allTime={allTime} analytics={ga4} />;
 }

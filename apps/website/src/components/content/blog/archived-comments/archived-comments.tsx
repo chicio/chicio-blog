@@ -14,10 +14,7 @@ const ArchivedCommentEntry: FC<{ comment: ArchivedCommentReply }> = ({ comment }
     <>
         <div className="mb-2 flex flex-wrap items-center gap-2">
             <Chip>{comment.author}</Chip>
-            <time
-                className="text-secondary-text text-sm"
-                dateTime={comment.date}
-            >
+            <time className="text-secondary-text text-sm" dateTime={comment.date}>
                 {formatArchivedDate(comment.date)}
             </time>
         </div>
@@ -41,18 +38,12 @@ export const ArchivedComments: FC<ArchivedCommentsProps> = ({ slug }) => {
             />
             <div className="flex flex-col gap-6">
                 {comments.map((comment) => (
-                    <div
-                        className="glow-container p-4"
-                        key={`${comment.author}-${comment.date}`}
-                    >
+                    <div className="glow-container p-4" key={`${comment.author}-${comment.date}`}>
                         <ArchivedCommentEntry comment={comment} />
                         {comment.replies.length > 0 && (
                             <div className="border-accent-alpha-25 mt-4 flex flex-col gap-4 border-l-2 pl-4">
                                 {comment.replies.map((reply) => (
-                                    <ArchivedCommentEntry
-                                        comment={reply}
-                                        key={`${reply.author}-${reply.date}`}
-                                    />
+                                    <ArchivedCommentEntry comment={reply} key={`${reply.author}-${reply.date}`} />
                                 ))}
                             </div>
                         )}

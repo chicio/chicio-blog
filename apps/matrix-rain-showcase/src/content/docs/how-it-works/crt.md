@@ -1,7 +1,7 @@
 ---
 title: CRT post-process
 sidebar:
-  order: 6
+    order: 6
 ---
 
 **Source:** [`src/gpu/pipelines/crt.ts`](https://github.com/chicio/chicio-blog/blob/main/packages/matrix-rain-webgpu/src/gpu/pipelines/crt.ts)
@@ -23,7 +23,7 @@ $$
 
 ## 2. Tone-map — clamp, not Reinhard
 
-The composite is HDR (bloom can push values past 1.0). Mapping it to the displayable 0..1 range is tone-mapping. A common operator is Reinhard, $x/(x+1)$ — but that's for *true* HDR (values ≫ 1). Our signal is mostly in [0,1] (heads clamp at 1.0; bloom adds a modest overshoot), so Reinhard would crush midtones — a 1.0 head would map to 0.5, darkening everything. Instead we **clamp**:
+The composite is HDR (bloom can push values past 1.0). Mapping it to the displayable 0..1 range is tone-mapping. A common operator is Reinhard, $x/(x+1)$ — but that's for _true_ HDR (values ≫ 1). Our signal is mostly in [0,1] (heads clamp at 1.0; bloom adds a modest overshoot), so Reinhard would crush midtones — a 1.0 head would map to 0.5, darkening everything. Instead we **clamp**:
 
 $$ \text{color} = \operatorname{saturate}(r, g, b) = \operatorname{clamp}(\cdot,\,0,\,1) $$
 

@@ -35,11 +35,7 @@ export const BlogGenericPostListPageTemplate: FC<BlogGenericPostListPageProps> =
                     <time className="text-xl">{post.frontmatter.date.formatted}</time>
                 </div>
                 <div className="flex-5/6">
-                    <InternalLink
-                        className="text-xl"
-                        prefetch={prefetch}
-                        to={post.slug.formatted}
-                    >
+                    <InternalLink className="text-xl" prefetch={prefetch} to={post.slug.formatted}>
                         {post.frontmatter.title}
                     </InternalLink>
                 </div>

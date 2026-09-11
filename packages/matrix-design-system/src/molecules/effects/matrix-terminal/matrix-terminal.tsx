@@ -38,18 +38,9 @@ const renderLineContent = (text: string, type?: "normal" | "error" | "success" |
     }
 };
 
-const renderLine = (
-    line: TerminalLineData,
-    text: string,
-    showCursor: boolean,
-    index: number
-) => {
+const renderLine = (line: TerminalLineData, text: string, showCursor: boolean, index: number) => {
     if (line.type === "quote") {
-        return (
-            <TerminalQuoteLine key={`line-${index}`}>
-                {renderLineContent(text, line.type)}
-            </TerminalQuoteLine>
-        );
+        return <TerminalQuoteLine key={`line-${index}`}>{renderLineContent(text, line.type)}</TerminalQuoteLine>;
     }
 
     return (
@@ -73,7 +64,7 @@ export const MatrixTerminal: FC<MatrixTerminalProps> = ({
     return (
         <div ref={containerRef}>
             <MotionDiv
-                className={`${glassmorphismClass} ${widthClassName} p-4 min-h-[150px] sm:min-h-[200px]`}
+                className={`${glassmorphismClass} ${widthClassName} min-h-[150px] p-4 sm:min-h-[200px]`}
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.2, ease: "easeOut" }}

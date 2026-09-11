@@ -5,7 +5,11 @@ import { RoundedIcon } from "./rounded-icon";
 describe("RoundedIcon", () => {
     describe("render", () => {
         it("renders children inside the icon container", () => {
-            render(<RoundedIcon><span>icon</span></RoundedIcon>);
+            render(
+                <RoundedIcon>
+                    <span>icon</span>
+                </RoundedIcon>,
+            );
             expect(screen.getByText("icon")).toBeInTheDocument();
         });
 

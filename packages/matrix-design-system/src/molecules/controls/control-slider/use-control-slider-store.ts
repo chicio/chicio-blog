@@ -8,10 +8,9 @@ interface ControlSliderEffects {
 }
 
 export const useControlSliderStore = (): EffectsStore<ControlSliderEffects> => {
-    const handleChange =
-        (onChange: (v: number) => void) => (e: React.ChangeEvent<HTMLInputElement>) => {
-            onChange(parseFloat(e.target.value));
-        };
+    const handleChange = (onChange: (v: number) => void) => (e: React.ChangeEvent<HTMLInputElement>) => {
+        onChange(parseFloat(e.target.value));
+    };
 
     return { effects: { handleChange } };
 };

@@ -1,7 +1,7 @@
 ---
 title: SDF glyph atlas
 sidebar:
-  order: 2
+    order: 2
 ---
 
 **Source:** [`src/gpu/atlas/build-sdf-atlas.ts`](https://github.com/chicio/chicio-blog/blob/main/packages/matrix-rain-webgpu/src/gpu/atlas/build-sdf-atlas.ts), [`src/gpu/atlas/glyph-set.ts`](https://github.com/chicio/chicio-blog/blob/main/packages/matrix-rain-webgpu/src/gpu/atlas/glyph-set.ts)
@@ -31,7 +31,7 @@ The result is a single `r8unorm` 2D-**array** texture, one glyph per layer, uplo
 
 ## The distance transform: 8SSEDT
 
-Computing the exact nearest-edge distance for every texel naively is $O(n^2)$ per texel. Instead we use **8SSEDT** — *8-points Signed Sequential Euclidean Distance Transform* — which approximates it in two linear sweeps.
+Computing the exact nearest-edge distance for every texel naively is $O(n^2)$ per texel. Instead we use **8SSEDT** — _8-points Signed Sequential Euclidean Distance Transform_ — which approximates it in two linear sweeps.
 
 Each texel stores a **vector offset** $(\Delta x, \Delta y)$ to its nearest source texel (a source = a texel of the target class). Sources start at $(0,0)$; everything else starts at a large sentinel. Then two sweeps propagate offsets between neighbours:
 
@@ -42,11 +42,11 @@ Propagation keeps whichever offset is shorter. If a neighbour at relative step $
 
 $$ o_{\text{cand}} = o_n - (dx, dy), \qquad \text{keep if } \lVert o_{\text{cand}} \rVert^2 < \lVert o_{\text{cur}} \rVert^2 $$
 
-(because *source* $= \text{neighbor.pos} + o_n$, and we want $o = \text{source} - \text{my.pos}$). After both sweeps, distance is just $\lVert (\Delta x, \Delta y) \rVert$.
+(because _source_ $= \text{neighbor.pos} + o_n$, and we want $o = \text{source} - \text{my.pos}$). After both sweeps, distance is just $\lVert (\Delta x, \Delta y) \rVert$.
 
 ## Signed = two transforms
 
-A single transform gives unsigned distance. To get the **sign**, we run the transform twice — once treating *inside* texels as sources, once treating *outside* texels as sources — and combine:
+A single transform gives unsigned distance. To get the **sign**, we run the transform twice — once treating _inside_ texels as sources, once treating _outside_ texels as sources — and combine:
 
 $$
 \text{signed} = \begin{cases} +\,\text{distFromOutside} & \text{texel inside} \\ -\,\text{distFromInside} & \text{texel outside} \end{cases}

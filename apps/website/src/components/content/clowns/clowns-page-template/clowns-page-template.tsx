@@ -12,9 +12,7 @@ export const ClownsPageTemplate: FC<PropsWithChildren> = ({ children }) => {
             <PageTitle>
                 <ParagraphTitleWithIcon icon={<ClownSvgIcon />}>Clownified!!!</ParagraphTitleWithIcon>
             </PageTitle>
-            <MediaGrid>
-                {children}
-            </MediaGrid>
+            <MediaGrid>{children}</MediaGrid>
         </ContentPage>
     );
 };

@@ -26,10 +26,7 @@ export const Tag: FC<TagProps> = ({ tag, link, big, onClick, prefetch = "hover",
             prefetch={prefetch}
             to={link}
         >
-            <Chip
-                big={big}
-                className={margins}
-            >
+            <Chip big={big} className={margins}>
                 {tag}
             </Chip>
         </InternalLink>

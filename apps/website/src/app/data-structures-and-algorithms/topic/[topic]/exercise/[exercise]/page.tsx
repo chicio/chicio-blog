@@ -6,10 +6,7 @@ import { NextDataStructuresAndAlgorithmsExerciseParameters } from "@/types/next/
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import {
-    exercises,
-    topics,
-} from "@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms";
+import { exercises, topics } from "@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms";
 import { Exercise } from "@/components/content/data-structures-and-algorithms/exercise";
 
 export async function generateMetadata({

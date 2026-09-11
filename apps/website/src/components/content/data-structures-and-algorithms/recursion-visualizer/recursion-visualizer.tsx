@@ -15,7 +15,7 @@ export const RecursiveCallStackVisualizer: FC = () => {
                 <p className="mb-2 font-semibold">Call Stack (top at the bottom)</p>
                 <div className="flex flex-col gap-2">
                     {stack.map((frame, i) => (
-                        <div key={i} className="rounded-xl bg-primary-dark px-4 py-2 text-white">
+                        <div key={i} className="bg-primary-dark rounded-xl px-4 py-2 text-white">
                             sum({frame.n})
                         </div>
                     ))}

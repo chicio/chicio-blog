@@ -18,9 +18,7 @@ beforeAll(() => {
 vi.mock("framer-motion", () => ({
     AnimatePresence: ({ children }: React.PropsWithChildren) => <>{children}</>,
     motion: {
-        div: ({ children, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-            <div {...props}>{children}</div>
-        ),
+        div: ({ children, ...props }: React.HTMLAttributes<HTMLDivElement>) => <div {...props}>{children}</div>,
     },
 }));
 

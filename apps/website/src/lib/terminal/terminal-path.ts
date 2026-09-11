@@ -2,9 +2,11 @@ import { TerminalDirNode, TerminalNode } from "@/types/terminal/terminal";
 
 export const ROOT_PATH = "/";
 
-export const splitPath = (targetPath: string): string[] => targetPath.split("/").filter((segment) => segment.length > 0);
+export const splitPath = (targetPath: string): string[] =>
+    targetPath.split("/").filter((segment) => segment.length > 0);
 
-export const joinSegments = (segments: string[]): string => (segments.length === 0 ? ROOT_PATH : `/${segments.join("/")}`);
+export const joinSegments = (segments: string[]): string =>
+    segments.length === 0 ? ROOT_PATH : `/${segments.join("/")}`;
 
 export const resolvePath = (cwd: string, target: string): string => {
     if (target === "" || target === undefined) {

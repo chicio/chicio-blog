@@ -19,10 +19,7 @@ const artGalleryGridClass = [
 
 export const Art = () => {
     return (
-        <ContentPage
-            author={siteMetadata.author}
-            trackingCategory={tracking.category.art}
-        >
+        <ContentPage author={siteMetadata.author} trackingCategory={tracking.category.art}>
             <ArtHeader />
             <div className={artGalleryGridClass}>
                 <ArtContent />

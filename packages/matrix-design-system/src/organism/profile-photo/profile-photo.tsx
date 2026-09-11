@@ -14,7 +14,7 @@ export const ProfilePhoto: FC<ProfilePhotoProps> = ({ author, src = defaultProfi
     <div className="flex items-center justify-center">
         <ImageGlow
             imageComponent={imageComponent}
-            className="w-[150px] h-[150px] rounded-full"
+            className="h-[150px] w-[150px] rounded-full"
             src={src}
             alt={author}
             width={150}

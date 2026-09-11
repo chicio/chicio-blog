@@ -7,11 +7,9 @@ vi.mock("../../../molecules/effects/matrix-header-background", () => ({
 }));
 
 vi.mock("../../../atoms/effects/image-glow", () => ({
-    ImageGlow: ({
-        alt,
-        src,
-        ...rest
-    }: React.ImgHTMLAttributes<HTMLImageElement> & { src: string }) => <img alt={alt} src={src} {...rest} />,
+    ImageGlow: ({ alt, src, ...rest }: React.ImgHTMLAttributes<HTMLImageElement> & { src: string }) => (
+        <img alt={alt} src={src} {...rest} />
+    ),
 }));
 
 const logo = { src: "/logo.png", width: 80, height: 80 };

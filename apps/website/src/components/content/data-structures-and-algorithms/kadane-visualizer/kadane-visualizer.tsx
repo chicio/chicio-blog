@@ -17,12 +17,14 @@ export const KadaneVisualizer: React.FC<KadaneVisualizerProps> = ({ nums }) => {
 
     return (
         <div className="font-sans">
-            <div className="flex gap-2 mb-4">
+            <div className="mb-4 flex gap-2">
                 {nums.map((num, i) => (
                     <div
                         key={i}
-                        className={`px-3 py-2 rounded ${
-                            highlighted.includes(i) ? "bg-secondary text-white" : "bg-general-background-light text-white"
+                        className={`rounded px-3 py-2 ${
+                            highlighted.includes(i)
+                                ? "bg-secondary text-white"
+                                : "bg-general-background-light text-white"
                         }`}
                     >
                         {num}
@@ -42,7 +44,7 @@ export const KadaneVisualizer: React.FC<KadaneVisualizerProps> = ({ nums }) => {
                 <strong>Current Subarray:</strong> [{currentSubarray.join(", ")}]
             </p>
 
-            <div className="flex flex-row gap-2 mt-4">
+            <div className="mt-4 flex flex-row gap-2">
                 <RedPillButton onClick={onStep} disabled={finished}>
                     <span className="text-primary-text">Step</span>
                 </RedPillButton>

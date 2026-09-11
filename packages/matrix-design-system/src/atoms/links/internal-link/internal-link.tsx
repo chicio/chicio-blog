@@ -1,9 +1,5 @@
 import { FC, ReactNode } from "react";
-import {
-    AnchorLink,
-    type LinkComponent,
-    type PrefetchStrategy,
-} from "../anchor-link";
+import { AnchorLink, type LinkComponent, type PrefetchStrategy } from "../anchor-link";
 
 export interface InternalLinkProps {
     to: string;

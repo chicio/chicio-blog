@@ -13,12 +13,7 @@ const Matrix2DCanvasRenderer: React.FC<Matrix2DCanvasProps> = ({ fontSize, densi
     const { effects } = useMatrix2dCanvasStore(fontSize, density, paused);
     const { setCanvasEl } = effects;
 
-    return (
-        <canvas
-            className="pointer-events-none absolute top-0 left-0 block h-full w-full"
-            ref={setCanvasEl}
-        />
-    );
+    return <canvas className="pointer-events-none absolute top-0 left-0 block h-full w-full" ref={setCanvasEl} />;
 };
 
 export const Matrix2DCanvas = memo(Matrix2DCanvasRenderer);

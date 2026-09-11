@@ -34,60 +34,33 @@ export const AnalyticsSection: FC<AnalyticsSectionProps> = ({ allTime, ga4 }) =>
                 <h2>Traffic</h2>
                 <p className="mb-4">{estimateNote}</p>
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-                    <StatCard
-                        value={totals.pageViews.toLocaleString("en-US")}
-                        label="Page views"
-                    />
-                    <StatCard
-                        value={totals.users.toLocaleString("en-US")}
-                        label="Users"
-                    />
-                    <StatCard
-                        value={totals.sessions.toLocaleString("en-US")}
-                        label="Sessions"
-                    />
+                    <StatCard value={totals.pageViews.toLocaleString("en-US")} label="Page views" />
+                    <StatCard value={totals.users.toLocaleString("en-US")} label="Users" />
+                    <StatCard value={totals.sessions.toLocaleString("en-US")} label="Sessions" />
                 </div>
             </div>
             <div className={TWO_COLUMN_GRID}>
-                <ChartPanel
-                    title="Users by continent"
-                    description="Where readers connect from."
-                >
+                <ChartPanel title="Users by continent" description="Where readers connect from.">
                     <ContinentChart data={byContinent} />
                 </ChartPanel>
-                <ChartPanel
-                    title="Users by device"
-                    description="How readers browse the blog."
-                >
+                <ChartPanel title="Users by device" description="How readers browse the blog.">
                     <DeviceChart data={byDevice} />
                 </ChartPanel>
             </div>
-            <ChartPanel
-                title="Views over time"
-                description={viewsNote}
-            >
+            <ChartPanel title="Views over time" description={viewsNote}>
                 <ViewsOverTimeChart data={pageViewsTimeline} />
             </ChartPanel>
             {ga4 && (
                 <>
                     <div className={TWO_COLUMN_GRID}>
-                        <ChartPanel
-                            title="Users by browser"
-                            description="The browsers readers use (GA4)."
-                        >
+                        <ChartPanel title="Users by browser" description="The browsers readers use (GA4).">
                             <BrowserChart data={ga4.byBrowser} />
                         </ChartPanel>
-                        <ChartPanel
-                            title="Users by OS"
-                            description="The operating systems readers use (GA4)."
-                        >
+                        <ChartPanel title="Users by OS" description="The operating systems readers use (GA4).">
                             <OsChart data={ga4.byOs} />
                         </ChartPanel>
                     </div>
-                    <ChartPanel
-                        title="Top posts by views"
-                        description={topPostsNote}
-                    >
+                    <ChartPanel title="Top posts by views" description={topPostsNote}>
                         <TopPostsList data={ga4.topPosts} />
                     </ChartPanel>
                 </>

@@ -3,47 +3,26 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { PaginationNavigation } from "./pagination-navigation";
 
-
 describe("PaginationNavigation", () => {
     describe("render", () => {
         it("renders Previous link when previousPageUrl is provided", () => {
-            render(
-                <PaginationNavigation
-                    previousPageUrl="/blog/page/1"
-                    nextPageUrl={undefined}
-                />,
-            );
+            render(<PaginationNavigation previousPageUrl="/blog/page/1" nextPageUrl={undefined} />);
             expect(screen.getByText("Previous")).toBeInTheDocument();
         });
 
         it("renders Next link when nextPageUrl is provided", () => {
-            render(
-                <PaginationNavigation
-                    previousPageUrl={undefined}
-                    nextPageUrl="/blog/page/3"
-                />,
-            );
+            render(<PaginationNavigation previousPageUrl={undefined} nextPageUrl="/blog/page/3" />);
             expect(screen.getByText("Next")).toBeInTheDocument();
         });
 
         it("renders both links when both URLs are provided", () => {
-            render(
-                <PaginationNavigation
-                    previousPageUrl="/blog/page/1"
-                    nextPageUrl="/blog/page/3"
-                />,
-            );
+            render(<PaginationNavigation previousPageUrl="/blog/page/1" nextPageUrl="/blog/page/3" />);
             expect(screen.getByText("Previous")).toBeInTheDocument();
             expect(screen.getByText("Next")).toBeInTheDocument();
         });
 
         it("renders nothing when both URLs are undefined", () => {
-            const { container } = render(
-                <PaginationNavigation
-                    previousPageUrl={undefined}
-                    nextPageUrl={undefined}
-                />,
-            );
+            const { container } = render(<PaginationNavigation previousPageUrl={undefined} nextPageUrl={undefined} />);
             expect(screen.queryByText("Previous")).not.toBeInTheDocument();
             expect(screen.queryByText("Next")).not.toBeInTheDocument();
             expect(container.querySelector("a")).toBeNull();

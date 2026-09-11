@@ -149,10 +149,7 @@ describe("analytics", () => {
     });
 
     describe("aggregateTopPosts", () => {
-        const resolve =
-            (map: Record<string, { title: string; url: string }>) =>
-            (key: string) =>
-                map[key] ?? null;
+        const resolve = (map: Record<string, { title: string; url: string }>) => (key: string) => map[key] ?? null;
 
         it("sums views for one post across legacy + current paths, mapped to the current URL", () => {
             const rows = [
@@ -182,7 +179,11 @@ describe("analytics", () => {
             ];
 
             expect(
-                aggregateTopPosts(rows, resolve({ "2022/01/02/known": { title: "Known", url: "/blog/post/2022/01/02/known" } }), 1),
+                aggregateTopPosts(
+                    rows,
+                    resolve({ "2022/01/02/known": { title: "Known", url: "/blog/post/2022/01/02/known" } }),
+                    1,
+                ),
             ).toEqual([{ path: "/blog/post/2022/01/02/known", title: "Known", views: 10 }]);
         });
 

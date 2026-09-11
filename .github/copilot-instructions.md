@@ -1,4 +1,3 @@
-
 <!--
 AI Agent Instructions for chicio-blog
 -->
@@ -13,11 +12,11 @@ This project is a Next.js (App Router) blog with a Matrix-inspired UI, using Rea
 - **Section Isolation**: Each main feature (blog, chat, art, etc.) lives in `src/components/sections/<section>`, with its own `components/` and `hooks/`.
 - **Business Logic**: All core logic/utilities are in [`src/lib`](src/lib) (e.g., post parsing, search, tracking, motion, local storage).
 - **Types**: All shared types are in [`src/types`](src/types). Update these when changing data models or tracked events.
-- **Content**: 
-  - Blog posts are Markdown (`.md`) files in [`src/content/posts`](src/content/posts) with frontmatter
-  - DSA content in [`src/content/dsa`](src/content/dsa) uses MDX (`.mdx`) for interactive components
-  - Parsing handled by `gray-matter` and custom logic in [`src/lib/posts`](src/lib/posts)
-  - MDX components defined in [`src/mdx-components.tsx`](src/mdx-components.tsx)
+- **Content**:
+    - Blog posts are Markdown (`.md`) files in [`src/content/posts`](src/content/posts) with frontmatter
+    - DSA content in [`src/content/dsa`](src/content/dsa) uses MDX (`.mdx`) for interactive components
+    - Parsing handled by `gray-matter` and custom logic in [`src/lib/posts`](src/lib/posts)
+    - MDX components defined in [`src/mdx-components.tsx`](src/mdx-components.tsx)
 
 ## Developer Workflows
 
@@ -35,13 +34,13 @@ This project is a Next.js (App Router) blog with a Matrix-inspired UI, using Rea
 - **Glassmorphism & Motion**: Use `useGlassmorphism` and `useMotionSettings` for UI effects. Motion settings are stored in localStorage with a `fabrizioduroni_` prefix.
 - **Tracking**: All navigation and UI actions are tracked via Google Analytics (gated by cookie consent). Use `trackWith` helper and update [`src/types/tracking.ts`](src/types/tracking.ts) for new events.
 - **Menu & Navigation**: Main menu is in [`src/components/design-system/organism/menu.tsx`](src/components/design-system/organism/menu.tsx) (uses `MenuItemWithTracking`). Add new sections in [`src/types/slug.ts`](src/types/slug.ts) and register in the menu.
-- **Chat**: 
-  - Uses `@ai-sdk/groq` (GPT-OSS 120B) and `@ai-sdk/react` for AI chat functionality
-  - Chat UI is in [`src/components/sections/chat/components`](src/components/sections/chat/components)
-  - Chat state management in [`src/components/sections/chat/hooks/useFabrizioChat.ts`](src/components/sections/chat/hooks/useFabrizioChat.ts)
-  - LLM system prompt configuration in [`src/lib/chat/llm-prompt.ts`](src/lib/chat/llm-prompt.ts)
-  - RAG (Retrieval Augmented Generation) using Upstash Vector in [`src/lib/chat/upstash-vector.ts`](src/lib/chat/upstash-vector.ts)
-  - Chat API endpoint at [`src/app/api/chat/route.ts`](src/app/api/chat/route.ts)
+- **Chat**:
+    - Uses `@ai-sdk/groq` (GPT-OSS 120B) and `@ai-sdk/react` for AI chat functionality
+    - Chat UI is in [`src/components/sections/chat/components`](src/components/sections/chat/components)
+    - Chat state management in [`src/components/sections/chat/hooks/useFabrizioChat.ts`](src/components/sections/chat/hooks/useFabrizioChat.ts)
+    - LLM system prompt configuration in [`src/lib/chat/llm-prompt.ts`](src/lib/chat/llm-prompt.ts)
+    - RAG (Retrieval Augmented Generation) using Upstash Vector in [`src/lib/chat/upstash-vector.ts`](src/lib/chat/upstash-vector.ts)
+    - Chat API endpoint at [`src/app/api/chat/route.ts`](src/app/api/chat/route.ts)
 - **Search**: Powered by `elasticlunr`, index built from Markdown frontmatter and stored in [`public/search-index.json`](public/search-index.json).
 - **Easter Eggs**: Special features (Matrix rain, white rabbit, etc.) are in [`src/components/sections/easter-eggs`](src/components/sections/easter-eggs).
 
@@ -50,15 +49,15 @@ This project is a Next.js (App Router) blog with a Matrix-inspired UI, using Rea
 - **Next.js**: App Router in [`src/app`](src/app). Update routes/layouts here. Currently using Next.js 15.0.3.
 - **TailwindCSS**: Utility-first styling, config in [`tailwind.config.mjs`](tailwind.config.mjs). Uses @tailwindcss/postcss v4.
 - **Framer Motion**: For all UI animations (v12.0.0-alpha.1).
-- **Markdown & MDX Rendering**: 
-  - Uses `remark`, `rehype`, `katex`, and plugins for math, emoji, GFM, syntax highlighting
-  - MDX support via `@next/mdx` for interactive content with React components
-  - Custom MDX components mapped in [`src/mdx-components.tsx`](src/mdx-components.tsx)
+- **Markdown & MDX Rendering**:
+    - Uses `remark`, `rehype`, `katex`, and plugins for math, emoji, GFM, syntax highlighting
+    - MDX support via `@next/mdx` for interactive content with React components
+    - Custom MDX components mapped in [`src/mdx-components.tsx`](src/mdx-components.tsx)
 - **Upstash Vector**: Used for RAG in chat feature (requires `UPSTASH_VECTOR_REST_URL` and `UPSTASH_VECTOR_REST_TOKEN` env vars).
 - **Groq AI**: LLM provider for chat feature using GPT-OSS 120B model.
-- **Analytics**: 
-  - Google Analytics via `@next/third-parties`
-  - Vercel Analytics and Speed Insights
+- **Analytics**:
+    - Google Analytics via `@next/third-parties`
+    - Vercel Analytics and Speed Insights
 - **React**: Version 19.0.0-rc-66855b96-20241106 (React and React DOM).
 
 ## Code Style & Quality
@@ -72,14 +71,14 @@ This project is a Next.js (App Router) blog with a Matrix-inspired UI, using Rea
 
 ## File Organization
 
-- **Content**: 
-  - Blog posts in [`src/content/posts`](src/content/posts) (Markdown `.md` with frontmatter)
-  - DSA content in [`src/content/dsa`](src/content/dsa) (MDX `.mdx` for interactive components)
+- **Content**:
+    - Blog posts in [`src/content/posts`](src/content/posts) (Markdown `.md` with frontmatter)
+    - DSA content in [`src/content/dsa`](src/content/dsa) (MDX `.mdx` for interactive components)
 - **Public assets**: [`public/`](public/) for static files, images, icons
 - **Brand assets**: [`brand/`](brand/) for logos, featured images
-- **Environment**: 
-  - [`.env.development`](.env.development) for development
-  - [`.env.production`](.env.production) for production
+- **Environment**:
+    - [`.env.development`](.env.development) for development
+    - [`.env.production`](.env.production) for production
 - **Node version**: 22.x (specified in [`package.json`](package.json))
 
 ## Examples
@@ -107,4 +106,5 @@ This project is a Next.js (App Router) blog with a Matrix-inspired UI, using Rea
 - **Security Policy**: [`SECURITY.md`](SECURITY.md)
 
 ---
+
 For more, see [`README.md`](README.md), [`src/types`](src/types), and [`src/lib`](src/lib). Keep this file up to date with new patterns or workflows.

@@ -9,13 +9,11 @@ const rule = {
     meta: {
         type: "suggestion",
         docs: {
-            description:
-                "Component-folder index.ts files must not export hooks (use* named exports).",
+            description: "Component-folder index.ts files must not export hooks (use* named exports).",
         },
         schema: [],
         messages: {
-            hookExport:
-                "index.ts must not re-export hooks. '{{name}}' looks like a hook — remove it from the barrel.",
+            hookExport: "index.ts must not re-export hooks. '{{name}}' looks like a hook — remove it from the barrel.",
         },
     },
     create(context) {
@@ -38,8 +36,7 @@ const rule = {
             ExportNamedDeclaration(node) {
                 for (const specifier of node.specifiers) {
                     const exported = specifier.exported;
-                    const exportedName =
-                        exported.type === "Identifier" ? exported.name : String(exported.value);
+                    const exportedName = exported.type === "Identifier" ? exported.name : String(exported.value);
                     if (/^use[A-Z]/.test(exportedName)) {
                         context.report({
                             node: specifier,

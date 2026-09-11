@@ -1,16 +1,7 @@
 "use client";
 
 import { FC } from "react";
-import {
-    Legend,
-    Line,
-    LineChart,
-    ReferenceLine,
-    ResponsiveContainer,
-    Tooltip,
-    XAxis,
-    YAxis,
-} from "recharts";
+import { Legend, Line, LineChart, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { ChartPanel, ChartTooltip } from "matrix-design-system/chart";
 import { chartTheme } from "@/types/configuration/chart-theme";
 import { useAmortizedAnalysisStore } from "./use-amortized-analysis-store";
@@ -69,10 +60,7 @@ export const AmortizedAnalysis: FC = () => {
                             dot={false}
                             name="Amortized average"
                         />
-                        <Legend
-                            verticalAlign="top"
-                            labelStyle={{ color: chartTheme.legendTextColor }}
-                        />
+                        <Legend verticalAlign="top" labelStyle={{ color: chartTheme.legendTextColor }} />
                     </LineChart>
                 </ResponsiveContainer>
             </div>

@@ -22,13 +22,7 @@ const MatrixRainRenderer: React.FC = () => {
             style={{ backgroundColor }}
         >
             {showWebGpu && (
-                <MatrixRainWebGPU
-                    paused={paused}
-                    rain={rain}
-                    bloom={bloom}
-                    crt={crt}
-                    onError={onWebGpuError}
-                />
+                <MatrixRainWebGPU paused={paused} rain={rain} bloom={bloom} crt={crt} onError={onWebGpuError} />
             )}
             {showFallback && (
                 <Matrix2DCanvas fontSize={settings.rain.fontSize} density={settings.rain.density} paused={paused} />

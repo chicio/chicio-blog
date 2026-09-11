@@ -29,11 +29,8 @@ vi.mock("../../state/command-palette/command-palette-events", () => ({
     openCommandPalette: () => openCommandPaletteMock(),
 }));
 
-
 vi.mock("../../atoms/animation/motion-div", () => ({
-    MotionDiv: ({ children, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-        <div {...props}>{children}</div>
-    ),
+    MotionDiv: ({ children, ...props }: React.HTMLAttributes<HTMLDivElement>) => <div {...props}>{children}</div>,
 }));
 
 vi.mock("framer-motion", () => ({
@@ -74,8 +71,7 @@ const openMobileMenu = async (container: HTMLElement) => {
     await userEvent.click(icon!);
 };
 
-const getMobilePanel = (container: HTMLElement) =>
-    container.querySelector<HTMLElement>('[class*="touch-pan-y"]');
+const getMobilePanel = (container: HTMLElement) => container.querySelector<HTMLElement>('[class*="touch-pan-y"]');
 
 interface NavCase {
     label: string;
@@ -158,10 +154,7 @@ describe("Menu", () => {
             await userEvent.click(screen.getAllByRole("button", { name: "Explore" })[0]);
             const menu = screen.getAllByRole("list", { name: "Explore" })[0];
             expect(within(menu).getByText("Secrets")).toBeInTheDocument();
-            expect(within(menu).getByRole("link", { name: "Easter eggs" })).toHaveAttribute(
-                "href",
-                "/easter-egg-hunt",
-            );
+            expect(within(menu).getByRole("link", { name: "Easter eggs" })).toHaveAttribute("href", "/easter-egg-hunt");
         });
 
         it("renders the search button", () => {
@@ -216,9 +209,7 @@ describe("Menu", () => {
             const { container } = render(<Menu navHrefs={navHrefs} currentPath={currentPath} />);
             await openMobileMenu(container);
             const mobilePanel = getMobilePanel(container)!;
-            const closeIcon = mobilePanel.querySelector<SVGElement>(
-                'div[class="absolute top-2.5 left-2.5"] svg',
-            )!;
+            const closeIcon = mobilePanel.querySelector<SVGElement>('div[class="absolute top-2.5 left-2.5"] svg')!;
             await userEvent.click(closeIcon);
             expect(getMobilePanel(container)).toBeNull();
         });
@@ -230,7 +221,9 @@ describe("Menu", () => {
             async ({ label, trackingKey, dropdown }) => {
                 const trackingFn = vi.fn();
                 const tracking: MenuTrackingCallbacks = { [trackingKey]: trackingFn };
-                const { container } = render(<Menu navHrefs={navHrefs} currentPath={currentPath} tracking={tracking} />);
+                const { container } = render(
+                    <Menu navHrefs={navHrefs} currentPath={currentPath} tracking={tracking} />,
+                );
                 await openMobileMenu(container);
                 const mobilePanel = getMobilePanel(container)!;
 

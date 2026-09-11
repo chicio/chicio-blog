@@ -1,7 +1,7 @@
 ---
 title: Recipes
 sidebar:
-  order: 2
+    order: 2
 ---
 
 Common patterns for using `<MatrixRainWebGPU>`. See the [Public API](/matrix-rain-webgpu/usage/public-api/) for every option.
@@ -11,11 +11,11 @@ Common patterns for using `<MatrixRainWebGPU>`. See the [Public API](/matrix-rai
 The canvas fills its positioned parent and ignores pointer events, so put it behind your content with a positioned wrapper:
 
 ```tsx
-<div style={{ position: 'relative', minHeight: '100dvh' }}>
-  <div style={{ position: 'absolute', inset: 0 }}>
-    <MatrixRainWebGPU />
-  </div>
-  <main style={{ position: 'relative' }}>{children}</main>
+<div style={{ position: "relative", minHeight: "100dvh" }}>
+    <div style={{ position: "absolute", inset: 0 }}>
+        <MatrixRainWebGPU />
+    </div>
+    <main style={{ position: "relative" }}>{children}</main>
 </div>
 ```
 
@@ -24,16 +24,16 @@ The canvas fills its positioned parent and ignores pointer events, so put it beh
 `paused` is the single off-state knob — merge every "should it stop" signal into it yourself:
 
 ```tsx
-import { useReducedMotion } from 'framer-motion'; // or your own
+import { useReducedMotion } from "framer-motion"; // or your own
 function useShouldPause(ref: RefObject<Element>) {
-  const reduced = useReducedMotion();
-  const [offscreen, setOffscreen] = useState(false);
-  useEffect(() => {
-    const io = new IntersectionObserver(([e]) => setOffscreen(!e.isIntersecting));
-    if (ref.current) io.observe(ref.current);
-    return () => io.disconnect();
-  }, [ref]);
-  return reduced || offscreen;
+    const reduced = useReducedMotion();
+    const [offscreen, setOffscreen] = useState(false);
+    useEffect(() => {
+        const io = new IntersectionObserver(([e]) => setOffscreen(!e.isIntersecting));
+        if (ref.current) io.observe(ref.current);
+        return () => io.disconnect();
+    }, [ref]);
+    return reduced || offscreen;
 }
 
 // <MatrixRainWebGPU paused={useShouldPause(wrapperRef)} />
@@ -56,10 +56,10 @@ Disabling `bloom`/`crt` also skips their GPU passes (a real cost saving), not ju
 
 ```tsx
 <MatrixRainWebGPU
-  rain={{ fontSize: 28, density: 0.97, stepRate: 14, tailRange: [10, 40] }}
-  parallax={{ speedRange: [0.3, 1.8], depthDim: 0.5 }}
-  bloom={{ intensity: 2, threshold: 0.7 }}
-  crt={{ scanlineStrength: 0.2, aberration: 0.5 }}
+    rain={{ fontSize: 28, density: 0.97, stepRate: 14, tailRange: [10, 40] }}
+    parallax={{ speedRange: [0.3, 1.8], depthDim: 0.5 }}
+    bloom={{ intensity: 2, threshold: 0.7 }}
+    crt={{ scanlineStrength: 0.2, aberration: 0.5 }}
 />
 ```
 
@@ -68,7 +68,7 @@ Every field is optional; omit any to keep its default. The [Playground](/matrix-
 ## Feature-detect with a fallback
 
 ```tsx
-import { MatrixRainWebGPU, isWebGPUSupported } from 'matrix-rain-webgpu';
+import { MatrixRainWebGPU, isWebGPUSupported } from "matrix-rain-webgpu";
 
 const canRun = useMemo(() => isWebGPUSupported(), []);
 return canRun ? <MatrixRainWebGPU /> : <My2DFallback />;
@@ -80,10 +80,10 @@ The component never throws into your tree; on a fatal renderer error it renders 
 
 ```tsx
 <MatrixRainWebGPU
-  onError={(err) => {
-    setRainFailed(true); // swap in a fallback, log, etc.
-    console.warn('matrix-rain disabled:', err);
-  }}
+    onError={(err) => {
+        setRainFailed(true); // swap in a fallback, log, etc.
+        console.warn("matrix-rain disabled:", err);
+    }}
 />
 ```
 

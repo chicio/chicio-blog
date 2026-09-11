@@ -36,10 +36,7 @@ const getStandaloneSnapshot = () =>
 
 const getStandaloneServerSnapshot = () => false;
 
-export const useInstallPromptBannerStore = (): ComponentStore<
-    InstallPromptBannerState,
-    InstallPromptBannerEffects
-> => {
+export const useInstallPromptBannerStore = (): ComponentStore<InstallPromptBannerState, InstallPromptBannerEffects> => {
     const cookieAccepted = useConsentStore();
     const decision = usePwaInstallDecision();
     const isStandalone = useSyncExternalStore(

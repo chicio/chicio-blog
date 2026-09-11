@@ -23,9 +23,7 @@ export const BitwiseVisualizer: React.FC = () => {
 
     return (
         <div className="rounded-xl p-6 shadow-sm">
-            <h3 className="mb-4 text-lg font-semibold">
-                Bitwise Operator Visualizer
-            </h3>
+            <h3 className="mb-4 text-lg font-semibold">Bitwise Operator Visualizer</h3>
             <div className="mb-4 flex gap-4">
                 <div>
                     <label className="mr-2 mb-1">A:</label>
@@ -46,12 +44,14 @@ export const BitwiseVisualizer: React.FC = () => {
                     />
                 </div>
             </div>
-            <div className="text-accent mb-4 flex flex-col md:flex-row gap-4 font-mono">
+            <div className="text-accent mb-4 flex flex-col gap-4 font-mono md:flex-row">
                 <div>
-                    <span className="font-bold">A:</span> <span className="text-xs md:text-base break-all">{formatBinary(a)}</span>
+                    <span className="font-bold">A:</span>{" "}
+                    <span className="text-xs break-all md:text-base">{formatBinary(a)}</span>
                 </div>
                 <div>
-                    <span className="font-bold">B:</span> <span className="text-xs md:text-base break-all">{formatBinary(b)}</span>
+                    <span className="font-bold">B:</span>{" "}
+                    <span className="text-xs break-all md:text-base">{formatBinary(b)}</span>
                 </div>
             </div>
             <table>
@@ -67,7 +67,9 @@ export const BitwiseVisualizer: React.FC = () => {
                         <tr key={op.name} className="border-b">
                             <td className="px-2 py-1 font-medium">{op.name}</td>
                             <td className="px-2 py-1">{op.value}</td>
-                            <td className="px-2 py-1 font-mono text-xs md:text-base break-all">{formatBinary(op.value)}</td>
+                            <td className="px-2 py-1 font-mono text-xs break-all md:text-base">
+                                {formatBinary(op.value)}
+                            </td>
                         </tr>
                     ))}
                 </tbody>

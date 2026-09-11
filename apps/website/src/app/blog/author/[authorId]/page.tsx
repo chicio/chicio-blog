@@ -44,10 +44,5 @@ export default async function AuthorPage({ params }: NextAuthorParameters) {
         notFound();
     }
 
-    return (
-        <BlogAuthor
-            author={entry.author}
-            posts={entry.posts}
-        />
-    );
+    return <BlogAuthor author={entry.author} posts={entry.posts} />;
 }

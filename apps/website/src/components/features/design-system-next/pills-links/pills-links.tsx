@@ -6,7 +6,6 @@ import {
 } from "matrix-design-system";
 import { NextLink } from "@/components/features/design-system-next/next-link";
 
-
 type BoundPillProps = Omit<PillProps, "linkComponent">;
 
 /** Pill links bound to next/link. See design-system-next/next-link for the prefetch mapping. */

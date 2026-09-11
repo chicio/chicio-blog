@@ -7,12 +7,20 @@ import { MenuItem } from "./menu-item";
 describe("MenuItem", () => {
     describe("render", () => {
         it("renders children text", () => {
-            render(<MenuItem to="/blog" selected={false}>Blog</MenuItem>);
+            render(
+                <MenuItem to="/blog" selected={false}>
+                    Blog
+                </MenuItem>,
+            );
             expect(screen.getByText("Blog")).toBeInTheDocument();
         });
 
         it("renders as an internal link when external is false", () => {
-            render(<MenuItem to="/blog" selected={false}>Blog</MenuItem>);
+            render(
+                <MenuItem to="/blog" selected={false}>
+                    Blog
+                </MenuItem>,
+            );
             expect(screen.getByRole("link")).toHaveAttribute("href", "/blog");
         });
 
@@ -30,12 +38,20 @@ describe("MenuItem", () => {
 
     describe("props", () => {
         it("applies accent class when selected is true", () => {
-            render(<MenuItem to="/blog" selected={true}>Blog</MenuItem>);
+            render(
+                <MenuItem to="/blog" selected={true}>
+                    Blog
+                </MenuItem>,
+            );
             expect(screen.getByRole("link")).toHaveClass("text-accent");
         });
 
         it("applies primary-text class when selected is false", () => {
-            render(<MenuItem to="/blog" selected={false}>Blog</MenuItem>);
+            render(
+                <MenuItem to="/blog" selected={false}>
+                    Blog
+                </MenuItem>,
+            );
             expect(screen.getByRole("link")).toHaveClass("text-primary-text");
         });
     });

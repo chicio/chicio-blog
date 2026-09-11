@@ -16,7 +16,14 @@ vi.mock("@/lib/content/posts/posts", () => ({
 const makePost = (slug: string, title: string, description: string): Content =>
     ({
         slug: { params: { slug }, formatted: `/blog/post/2026/01/01/${slug}` },
-        frontmatter: { title, description, tags: [], authors: [], date: { year: 2026, month: 1, day: 1, formatted: "2026-01-01" }, image: "/media/posts/test.jpg" },
+        frontmatter: {
+            title,
+            description,
+            tags: [],
+            authors: [],
+            date: { year: 2026, month: 1, day: 1, formatted: "2026-01-01" },
+            image: "/media/posts/test.jpg",
+        },
         readingTime: { text: "5 min read", minutes: 5, time: 300000, words: 100 },
         contentFileRelativePath: `blog/post/2026/01/01/${slug}/content.mdx`,
         content: "",

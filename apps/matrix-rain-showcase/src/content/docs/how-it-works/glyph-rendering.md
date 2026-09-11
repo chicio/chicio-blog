@@ -1,7 +1,7 @@
 ---
 title: Glyph rendering
 sidebar:
-  order: 3
+    order: 3
 ---
 
 **Source:** [`src/gpu/pipelines/render-glyphs.ts`](https://github.com/chicio/chicio-blog/blob/main/packages/matrix-rain-webgpu/src/gpu/pipelines/render-glyphs.ts), [`src/gpu/material/hash.ts`](https://github.com/chicio/chicio-blog/blob/main/packages/matrix-rain-webgpu/src/gpu/material/hash.ts)
@@ -45,6 +45,7 @@ The atlas stores each glyph as a [signed distance field](/matrix-rain-webgpu/how
 $$
 \text{band} = \tfrac{1}{2}\,\operatorname{fwidth}(\text{localUv}_x)\cdot \text{softness}
 $$
+
 $$
 \text{coverage} = \operatorname{smoothstep}(0.5 - \text{band},\; 0.5 + \text{band},\; s)
 $$
@@ -64,6 +65,7 @@ Three factors multiply into the final brightness:
 $$
 \text{falloff} = \big(\operatorname{clamp}(1 - \tfrac{k}{\text{tailLength}},\,0,\,1)\big)^{1.5}
 $$
+
 $$
 \text{depthDimming} = \operatorname{mix}(1 - \text{depthDim},\; 1,\; \text{depth})
 $$
@@ -83,6 +85,7 @@ The head is the bright `head` color; trail cells interpolate `trail → fade` by
 $$
 \text{trailColor} = \operatorname{mix}(\text{trail},\,\text{fade},\, \tfrac{k}{\text{tailLength}})
 $$
+
 $$
 \text{rgb} = \operatorname{mix}\big(\text{background},\; \text{baseColor}\cdot\text{brightness},\; \text{coverage}\big)
 $$

@@ -26,7 +26,7 @@ describe("Youtube", () => {
             expect(iframe).toHaveAttribute("loading", "lazy");
             expect(iframe).toHaveAttribute(
                 "allow",
-                "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share",
             );
             expect(iframe).toHaveAttribute("referrerPolicy", "strict-origin-when-cross-origin");
             expect(iframe).toHaveAttribute("allowFullScreen", "");

@@ -21,19 +21,21 @@ export const Exercise: FC<PropsWithChildren<ExerciseProps>> = async ({ exercise,
     return (
         <ReadingContentPage
             author={siteMetadata.author}
-            breadcrumbs={[
-                {
-                    label: "DSA",
-                    href: slugs.dataStructuresAndAlgorithms.roadmap,
-                    isCurrent: false,
-                },
-                {
-                    label: topic.frontmatter.title,
-                    href: topic.slug.formatted,
-                    isCurrent: false,
-                },
-                { label: exercise.frontmatter.title, href: exercise.slug.formatted, isCurrent: true },
-            ] satisfies BreadcrumbItem[]}
+            breadcrumbs={
+                [
+                    {
+                        label: "DSA",
+                        href: slugs.dataStructuresAndAlgorithms.roadmap,
+                        isCurrent: false,
+                    },
+                    {
+                        label: topic.frontmatter.title,
+                        href: topic.slug.formatted,
+                        isCurrent: false,
+                    },
+                    { label: exercise.frontmatter.title, href: exercise.slug.formatted, isCurrent: true },
+                ] satisfies BreadcrumbItem[]
+            }
         >
             <ExerciseContent />
             <JsonLd

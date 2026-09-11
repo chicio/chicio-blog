@@ -12,7 +12,7 @@ interface CharBoxProps {
 
 const CharBox: FC<CharBoxProps> = ({ char, index, highlight }) => (
     <div
-        className={`flex h-10 w-10 items-center justify-center rounded border font-mono text-text-above-primary ${
+        className={`text-text-above-primary flex h-10 w-10 items-center justify-center rounded border font-mono ${
             highlight ? "bg-primary-dark text-white" : "bg-gray-200"
         }`}
         key={index}
@@ -27,8 +27,8 @@ export const StringVisualization: FC = () => {
     const { handleConcatenate } = effects;
 
     return (
-        <div className="glow-container h-32 w-full p-5 my-5 flex flex-col items-center justify-center">
-            <div className="flex flex-wrap gap-2 mb-4">
+        <div className="glow-container my-5 flex h-32 w-full flex-col items-center justify-center p-5">
+            <div className="mb-4 flex flex-wrap gap-2">
                 {result.map((char, idx) => (
                     <CharBox key={idx} char={char} index={idx} highlight={idx >= inputLength} />
                 ))}

@@ -27,9 +27,12 @@ export const useGraphPropertiesVisualizerStore = (
         setSelectedIndex((prev) => (prev + 1) % totalExamples);
     }, [totalExamples]);
 
-    const selectIndex = useCallback((index: number) => () => {
-        setSelectedIndex(index);
-    }, []);
+    const selectIndex = useCallback(
+        (index: number) => () => {
+            setSelectedIndex(index);
+        },
+        [],
+    );
 
     return {
         state: { selectedIndex, totalExamples },

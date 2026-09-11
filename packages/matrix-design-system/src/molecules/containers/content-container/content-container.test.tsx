@@ -5,7 +5,11 @@ import { ContentContainer } from "./content-container";
 describe("ContentContainer", () => {
     describe("render", () => {
         it("renders children", () => {
-            render(<ContentContainer><p>Hello</p></ContentContainer>);
+            render(
+                <ContentContainer>
+                    <p>Hello</p>
+                </ContentContainer>,
+            );
             expect(screen.getByText("Hello")).toBeInTheDocument();
         });
 

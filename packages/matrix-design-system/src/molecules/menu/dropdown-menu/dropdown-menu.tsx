@@ -41,12 +41,7 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
     const { toggleOpen, handleBlur, handleKeyDown, getGroupId } = effects;
 
     return (
-        <div
-            className="relative z-50 mb-0"
-            tabIndex={-1}
-            onBlur={handleBlur}
-            onKeyDown={handleKeyDown}
-        >
+        <div className="relative z-50 mb-0" tabIndex={-1} onBlur={handleBlur} onKeyDown={handleKeyDown}>
             <button
                 ref={buttonRef}
                 className={`${className} xs:pl-4 xs:pr-1 xs:py-1 hover:bg-accent-alpha-10 hover:text-accent hover:border-accent relative flex flex-nowrap items-center justify-center gap-2 rounded-xl border border-solid px-1 py-2 text-center text-sm leading-normal text-shadow-md md:text-base ${open || selected ? "border-accent bg-accent-alpha-15 text-accent" : "border-transparent"}`}
@@ -68,7 +63,7 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
                         id={panelId}
                         aria-label={label}
                         role="list"
-                        className={`glow-container ${shouldReduceMotions ? "xs:bg-general-background" : "xs:bg-general-background/90"} relative mt-2 min-w-max list-none m-0 p-0 rounded-xl py-2 xs:absolute xs:right-0 xs:left-0 xs:w-60`}
+                        className={`glow-container ${shouldReduceMotions ? "xs:bg-general-background" : "xs:bg-general-background/90"} xs:absolute xs:right-0 xs:left-0 xs:w-60 relative m-0 mt-2 min-w-max list-none rounded-xl p-0 py-2`}
                         tabIndex={-1}
                     >
                         {items.map((group, idx) => {
@@ -80,16 +75,13 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
                                     )}
                                     <span
                                         id={groupId}
-                                        className="text-secondary-text block px-4 pt-3 pb-1 text-sm font-bold uppercase tracking-wider cursor-default select-none"
+                                        className="text-secondary-text block cursor-default px-4 pt-3 pb-1 text-sm font-bold tracking-wider uppercase select-none"
                                     >
                                         {group.label}
                                     </span>
-                                    <ul aria-labelledby={groupId} role="list" className="list-none m-0 p-0">
+                                    <ul aria-labelledby={groupId} role="list" className="m-0 list-none p-0">
                                         {group.items.map((item, itemIdx) => (
-                                            <li
-                                                key={item.label + itemIdx}
-                                                className="mb-0 pl-0 before:content-none"
-                                            >
+                                            <li key={item.label + itemIdx} className="mb-0 pl-0 before:content-none">
                                                 <MenuItem
                                                     linkComponent={linkComponent}
                                                     to={item.to}

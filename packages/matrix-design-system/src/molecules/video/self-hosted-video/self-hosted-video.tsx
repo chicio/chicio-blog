@@ -1,7 +1,6 @@
 import { FC } from "react";
 
-const DEFAULT_VIDEO_CLASS_NAME =
-    "aspect-video w-full rounded-xl border border-solid border-accent-alpha-40 shadow-lg";
+const DEFAULT_VIDEO_CLASS_NAME = "aspect-video w-full rounded-xl border border-solid border-accent-alpha-40 shadow-lg";
 
 interface Props {
     src: string;
@@ -45,8 +44,7 @@ export const SelfHostedVideo: FC<Props> = ({
             >
                 <source src={sourceSrc} />
                 {captions && <track kind="captions" srcLang="en" label="English" src={captions} />}
-                Your browser does not support the video tag.{" "}
-                <a href={src}>Download the video</a>.
+                Your browser does not support the video tag. <a href={src}>Download the video</a>.
             </video>
             {caption && <figcaption>{caption}</figcaption>}
         </figure>

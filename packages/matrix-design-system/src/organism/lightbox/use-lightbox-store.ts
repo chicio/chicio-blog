@@ -2,10 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import type { MouseEvent } from "react";
-import {
-    lightboxOpenEvent,
-    type LightboxOpenDetail,
-} from "../../state/lightbox/lightbox-events";
+import { lightboxOpenEvent, type LightboxOpenDetail } from "../../state/lightbox/lightbox-events";
 import type { ComponentStore } from "matrix-component-store";
 
 interface LightboxState {

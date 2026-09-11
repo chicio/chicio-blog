@@ -5,6 +5,4 @@ interface CloseProps {
     onClick: () => void;
 }
 
-export const Close: FC<CloseProps> = ({ onClick }) => (
-    <BiX className="size-9 text-primary-text" onClick={onClick} />
-);
+export const Close: FC<CloseProps> = ({ onClick }) => <BiX className="text-primary-text size-9" onClick={onClick} />;

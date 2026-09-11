@@ -26,31 +26,30 @@ export const ConsoleCard: FC<ConsoleCardProps> = ({ console, gamesCount }) => (
             </div>
         </div>
         <InternalLink to={console.slug.formatted}>
-            <div className="border-accent-alpha-40 bg-black relative h-96 flex justify-center items-center overflow-hidden border-b">
+            <div className="border-accent-alpha-40 relative flex h-96 items-center justify-center overflow-hidden border-b bg-black">
                 <Image
                     src={console.frontmatter.metadata!.gallery[0]}
                     alt={console.frontmatter.title}
                     width={800}
                     height={400}
-                    className="absolute w-full h-96 object-cover blur-lg"
+                    className="absolute h-96 w-full object-cover blur-lg"
                 />
                 <Image
                     src={console.frontmatter.metadata!.gallery[0]}
                     alt={console.frontmatter.title}
                     width={800}
                     height={400}
-                    className="relative z-10 w-full h-100 object-contain"
+                    className="relative z-10 h-100 w-full object-contain"
                 />
-                <div className="glow-border bg-general-background-light absolute top-4 right-2 flex items-center px-3 py-2 z-20">
-                    <span className="text-primary font-mono text-xs text-shadow-sm">{console.frontmatter.metadata?.sku}</span>
+                <div className="glow-border bg-general-background-light absolute top-4 right-2 z-20 flex items-center px-3 py-2">
+                    <span className="text-primary font-mono text-xs text-shadow-sm">
+                        {console.frontmatter.metadata?.sku}
+                    </span>
                 </div>
             </div>
         </InternalLink>
         <div className="p-4 sm:p-6">
-            <InternalLink
-                className="no-underline hover:no-underline"
-                to={console.slug.formatted}
-            >
+            <InternalLink className="no-underline hover:no-underline" to={console.slug.formatted}>
                 <div className="mb-6">
                     <h2 className="text-primary font-bold text-shadow-sm">{console.frontmatter.metadata?.name}</h2>
                     <ManufacturerLogo
@@ -66,10 +65,7 @@ export const ConsoleCard: FC<ConsoleCardProps> = ({ console, gamesCount }) => (
                 />
                 <p className="mb-4 pt-4">{console.frontmatter.description}</p>
             </InternalLink>
-            <TerminalButton
-                to={console.slug.formatted}
-                label="See more"
-            />
+            <TerminalButton to={console.slug.formatted} label="See more" />
         </div>
     </div>
 );

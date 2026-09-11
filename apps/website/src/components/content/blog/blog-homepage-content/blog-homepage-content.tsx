@@ -18,11 +18,7 @@ export const BlogHomePageContent: FC<BlogHomeProps> = ({ pagination, author }) =
 
     return (
         <>
-            <ContentPage
-                author={author}
-                trackingCategory={tracking.category.blog_home}
-                big={true}
-            >
+            <ContentPage author={author} trackingCategory={tracking.category.blog_home} big={true}>
                 <PostCard
                     big={true}
                     key={launchPost.slug.formatted}
@@ -38,10 +34,7 @@ export const BlogHomePageContent: FC<BlogHomeProps> = ({ pagination, author }) =
                 {postsGrouped.map((postsGroup, index) => (
                     <PostsRow postsGroup={postsGroup} key={`PostCardsRow${index}`} />
                 ))}
-                <PaginationNavigation
-                    previousPageUrl={previousPageUrl}
-                    nextPageUrl={nextPageUrl}
-                />
+                <PaginationNavigation previousPageUrl={previousPageUrl} nextPageUrl={nextPageUrl} />
             </ContentPage>
             <JsonLd
                 type="Blog"

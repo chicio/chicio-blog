@@ -2,7 +2,6 @@ import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { ProfileHero } from "./profile-hero";
 
-
 describe("ProfileHero", () => {
     describe("render", () => {
         it("renders the name", () => {

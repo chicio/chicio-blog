@@ -2,84 +2,79 @@ import type { NextConfig } from "next";
 import createMDX from "@next/mdx";
 
 const withMDX = createMDX({
-  options: {
-    remarkPlugins: [
-      "remark-gfm",
-      "remark-emoji",
-      "remark-math",
-      "remark-frontmatter",
-    ],
-    rehypePlugins: [
-      "rehype-slug",
-      [
-        "rehype-autolink-headings",
-        {
-          behavior: "wrap",
-          properties: { className: ["heading-anchor"] },
-        },
-      ],
-      "rehype-highlight",
-      ["rehype-katex", { strict: 'ignore' }],
-      "@microflash/rehype-figure",
-    ],
-  },
+    options: {
+        remarkPlugins: ["remark-gfm", "remark-emoji", "remark-math", "remark-frontmatter"],
+        rehypePlugins: [
+            "rehype-slug",
+            [
+                "rehype-autolink-headings",
+                {
+                    behavior: "wrap",
+                    properties: { className: ["heading-anchor"] },
+                },
+            ],
+            "rehype-highlight",
+            ["rehype-katex", { strict: "ignore" }],
+            "@microflash/rehype-figure",
+        ],
+    },
 });
 
 const nextConfig: NextConfig = {
-  images: {
-    formats: ["image/avif", "image/webp"],
-    minimumCacheTTL: 86400,
-  },
-  outputFileTracingExcludes: {
-    "/**": ["public/media/**", "src/content/**/media/**"],
-  },
-  async headers() {
-    return [
-      {
-        source: "/",
-        headers: [
-          {
-            key: "Link",
-            value: [
-              '</.well-known/api-catalog>; rel="api-catalog"',
-              '</api/mcp>; rel="service-desc"',
-              '</.well-known/oauth-protected-resource>; rel="describedby"',
-            ].join(", "),
-          },
-        ],
-      },
-    ];
-  },
-  async redirects() {
-    return [
-      {
-        source: "/:year(\\d{4})/:month(\\d{2})/:day(\\d{2})/:slug.html",
-        destination: "/:year/:month/:day/:slug",
-        permanent: true,
-      },
-      {
-        source: "/:year(\\d{4})/:month(\\d{2})/:day(\\d{2})/:slug",
-        destination: "/blog/post/:year/:month/:day/:slug",
-        permanent: true,
-      },
-      {
-        source: "/images/content/:path*",
-        destination: "/media/content/:path*",
-        permanent: true,
-      },
-      {
-        source: "/images/:path*",
-        destination: "/media/:path*",
-        permanent: true,
-      },
-      {
-        source: "/sounds/:path*",
-        destination: "/media/sounds/:path*",
-        permanent: true,
-      },
-    ];
-  },
-  reactCompiler: true,
+    images: {
+        formats: ["image/avif", "image/webp"],
+        minimumCacheTTL: 86400,
+    },
+    outputFileTracingExcludes: {
+        "/**": ["public/media/**", "src/content/**/media/**"],
+    },
+    async headers() {
+        return [
+            {
+                source: "/",
+                headers: [
+                    {
+                        key: "Link",
+                        value: [
+                            '</.well-known/api-catalog>; rel="api-catalog"',
+                            '</api/mcp>; rel="service-desc"',
+                            '</.well-known/oauth-protected-resource>; rel="describedby"',
+                        ].join(", "),
+                    },
+                ],
+            },
+        ];
+    },
+    async redirects() {
+        return [
+            {
+                source: "/:year(\\d{4})/:month(\\d{2})/:day(\\d{2})/:slug.html",
+                destination: "/:year/:month/:day/:slug",
+                permanent: true,
+            },
+            {
+                source: "/:year(\\d{4})/:month(\\d{2})/:day(\\d{2})/:slug",
+                destination: "/blog/post/:year/:month/:day/:slug",
+                permanent: true,
+            },
+            {
+                source: "/images/content/:path*",
+                destination: "/media/content/:path*",
+                permanent: true,
+            },
+            {
+                source: "/images/:path*",
+                destination: "/media/:path*",
+                permanent: true,
+            },
+            {
+                source: "/sounds/:path*",
+                destination: "/media/sounds/:path*",
+                permanent: true,
+            },
+        ];
+    },
+    reactCompiler: true,
 };
 
 export default withMDX(nextConfig);

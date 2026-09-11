@@ -20,10 +20,5 @@ export default async function Authors() {
     const authors = getAuthorsWithPosts();
     const author = siteMetadata.author;
 
-    return (
-        <BlogAuthors
-            author={author}
-            authors={authors}
-        />
-    );
+    return <BlogAuthors author={author} authors={authors} />;
 }

@@ -77,7 +77,6 @@ describe("EasterEggs", () => {
             ).toBeInTheDocument();
         });
 
-
         it("does not render an icon in the page title", () => {
             render(<EasterEggs />);
 

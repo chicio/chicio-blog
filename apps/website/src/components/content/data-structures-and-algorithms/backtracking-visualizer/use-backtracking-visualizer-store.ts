@@ -16,7 +16,10 @@ interface BacktrackingVisualizerEffects {
 
 const stepDelay = 500;
 
-export const useBacktrackingVisualizerStore = (): ComponentStore<BacktrackingVisualizerState, BacktrackingVisualizerEffects> => {
+export const useBacktrackingVisualizerStore = (): ComponentStore<
+    BacktrackingVisualizerState,
+    BacktrackingVisualizerEffects
+> => {
     const [path, setPath] = useState<string[]>([]);
     const [pathsHistory, setPathsHistory] = useState<string[][]>([]);
     const [isRunning, setIsRunning] = useState(false);

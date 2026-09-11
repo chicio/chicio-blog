@@ -2,7 +2,6 @@ import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { ImageGlow } from "./image-glow";
 
-
 describe("ImageGlow", () => {
     describe("render", () => {
         it("renders an image with the provided src and alt", () => {

@@ -40,16 +40,12 @@ export const FullscreenModal: FC<FullscreenModalProps> = ({
             aria-modal="true"
             tabIndex={0}
         >
-            <Button
-                onClick={onClose}
-                className="absolute top-4 right-4 z-10 p-2!"
-                aria-label="Close fullscreen"
-            >
+            <Button onClick={onClose} className="absolute top-4 right-4 z-10 p-2!" aria-label="Close fullscreen">
                 <BiX className="size-8 md:size-10" />
             </Button>
 
             <div
-                className="glow-container relative flex h-10/12 sm:h-full w-full max-w-11/12 sm:max-w-10/12 items-center bg-general-background justify-center overflow-hidden"
+                className="glow-container bg-general-background relative flex h-10/12 w-full max-w-11/12 items-center justify-center overflow-hidden sm:h-full sm:max-w-10/12"
                 onClick={stopPropagation}
             >
                 <MotionDiv

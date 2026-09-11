@@ -122,7 +122,8 @@ is correct for consumers — but **stories are not published to dist**, so a uti
 story's wrapper resolves to nothing. `h-32`, `h-64`, `min-h-96` and `min-h-40` are all absent from
 the compiled stylesheet; those wrappers collapse and their `overflow-hidden` clips the component out
 of the frame entirely. Affected: `ContentProgressBar` (all 3 stories, `h-32`), `CommandPalette/Open`
-+ `CustomPlaceholder` (`min-h-96`), `ImageGlow/FillCover` (`h-64`).
+
+- `CustomPlaceholder` (`min-h-96`), `ImageGlow/FillCover` (`h-64`).
 
 This reproduces in the **deployed showcase**, not just in the converter — the reference and the
 published site are the same build. Adding
@@ -183,7 +184,11 @@ they still render, but the agent gets no contract for them). Fix the example bef
 Every `<Name>.html` card sets, after the two stylesheet links:
 
 ```css
-body{margin:0;padding:24px;background:#fff}
+body {
+    margin: 0;
+    padding: 24px;
+    background: #fff;
+}
 ```
 
 That rule is **unlayered**, while the design system's own `body` rule lives in `@layer base`

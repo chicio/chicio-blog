@@ -25,7 +25,9 @@ export function StackVisualizer() {
                 </div>
             </div>
             <div className="mt-2 flex flex-col items-center">
-                <p>In this example the stack has a max capacity of {capacity}, but in general it can grow dynamically.</p>
+                <p>
+                    In this example the stack has a max capacity of {capacity}, but in general it can grow dynamically.
+                </p>
                 <div className="mt-2 flex flex-row gap-2">
                     <RedPillButton onClick={push}>
                         <span className="text-primary-text">Push</span>

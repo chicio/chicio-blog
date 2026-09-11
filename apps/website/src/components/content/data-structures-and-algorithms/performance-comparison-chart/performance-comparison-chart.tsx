@@ -1,15 +1,7 @@
 "use client";
 
 import { FC } from "react";
-import {
-    LineChart,
-    Line,
-    XAxis,
-    YAxis,
-    Tooltip,
-    ResponsiveContainer,
-    Legend,
-} from "recharts";
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import { ChartPanel, ChartTooltip } from "matrix-design-system/chart";
 import { chartTheme } from "@/types/configuration/chart-theme";
 
@@ -48,10 +40,7 @@ export const PerformanceComparisonChart: FC = () => (
                             style: { textAnchor: "middle", fill: chartTheme.axis.tickColor },
                         }}
                     />
-                    <Tooltip
-                        content={<ChartTooltip />}
-                        cursor={{ stroke: chartTheme.cursorStroke, strokeWidth: 1 }}
-                    />
+                    <Tooltip content={<ChartTooltip />} cursor={{ stroke: chartTheme.cursorStroke, strokeWidth: 1 }} />
                     <Line
                         type="monotone"
                         dataKey="bubble"
@@ -73,11 +62,7 @@ export const PerformanceComparisonChart: FC = () => (
                         stroke={chartTheme.series[2]}
                         name="Quick Sort"
                     />
-                    <Legend
-                        verticalAlign="top"
-                        height={40}
-                        labelStyle={{ color: chartTheme.legendTextColor }}
-                    />
+                    <Legend verticalAlign="top" height={40} labelStyle={{ color: chartTheme.legendTextColor }} />
                 </LineChart>
             </ResponsiveContainer>
         </div>

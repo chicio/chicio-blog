@@ -1,7 +1,20 @@
 import { TerminalDirNode } from "@/types/terminal/terminal";
 import { findDir, resolvePath } from "./terminal-path";
 
-export const COMMAND_NAMES = ["ls", "cd", "pwd", "tree", "cat", "open", "help", "man", "clear", "search", "close", "exit"];
+export const COMMAND_NAMES = [
+    "ls",
+    "cd",
+    "pwd",
+    "tree",
+    "cat",
+    "open",
+    "help",
+    "man",
+    "clear",
+    "search",
+    "close",
+    "exit",
+];
 
 const completePathToken = (partial: string, cwd: string, root: TerminalDirNode): string[] => {
     const lastSlashIndex = partial.lastIndexOf("/");
@@ -22,7 +35,10 @@ const completePathToken = (partial: string, cwd: string, root: TerminalDirNode):
 
 export const completeInput = (input: string, cwd: string, root: TerminalDirNode): string[] => {
     const hasTrailingSpace = /\s$/.test(input);
-    const tokens = input.trimStart().split(/\s+/).filter((token) => token.length > 0);
+    const tokens = input
+        .trimStart()
+        .split(/\s+/)
+        .filter((token) => token.length > 0);
 
     if (tokens.length === 0) {
         return [...COMMAND_NAMES];
@@ -48,7 +64,10 @@ export const completeInput = (input: string, cwd: string, root: TerminalDirNode)
 
 export const applyCompletion = (input: string, completion: string): string => {
     const hasTrailingSpace = /\s$/.test(input);
-    const tokens = input.trimStart().split(/\s+/).filter((token) => token.length > 0);
+    const tokens = input
+        .trimStart()
+        .split(/\s+/)
+        .filter((token) => token.length > 0);
     const isFirstToken = tokens.length === 0 || (tokens.length === 1 && !hasTrailingSpace);
     const prefixTokens = hasTrailingSpace ? tokens : tokens.slice(0, -1);
     const prefix = prefixTokens.length > 0 ? `${prefixTokens.join(" ")} ` : "";

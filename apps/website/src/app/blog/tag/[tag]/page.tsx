@@ -1,14 +1,14 @@
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { tracking } from "@/types/configuration/tracking";
-import {getPostsForTag, getTags} from "@/lib/content/posts/posts";
+import { getPostsForTag, getTags } from "@/lib/content/posts/posts";
 import { NextTagParameters } from "@/types/next/page-parameters";
-import {Metadata} from "next";
-import {createMetadata} from "@/lib/seo/seo";
+import { Metadata } from "next";
+import { createMetadata } from "@/lib/seo/seo";
 import { BlogGenericPostListPageTemplate } from "@/components/content/blog/blog-generic-post-list-page-template";
 import { generateTagSlug } from "@/lib/tags/tags";
 
 export async function generateMetadata({ params }: NextTagParameters): Promise<Metadata> {
-    const { tag } = await params
+    const { tag } = await params;
 
     return createMetadata({
         author: siteMetadata.author,
@@ -16,31 +16,31 @@ export async function generateMetadata({ params }: NextTagParameters): Promise<M
         description: siteMetadata.description,
         slug: generateTagSlug(tag),
         imageUrl: siteMetadata.featuredImage,
-        ogPageType: 'website',
-    })
+        ogPageType: "website",
+    });
 }
 
 export async function generateStaticParams() {
     const tags = getTags();
 
     return tags.map((tag) => ({
-        tag: tag.tagSlugText
+        tag: tag.tagSlugText,
     }));
 }
 
 export default async function TagPage({ params }: NextTagParameters) {
-  const { tag } = await params;
-  const parsedTag = tag.replaceAll("-", " ");
-  const posts = getPostsForTag(parsedTag);
-  const tagHeader = `${parsedTag} (${posts.length})`;
+    const { tag } = await params;
+    const parsedTag = tag.replaceAll("-", " ");
+    const posts = getPostsForTag(parsedTag);
+    const tagHeader = `${parsedTag} (${posts.length})`;
 
-  return (
-      <BlogGenericPostListPageTemplate
-        title={tagHeader}
-        posts={posts}
-        author={siteMetadata.author}
-        trackingCategory={tracking.category.blog_tag}
-        keywords={[tag]}
-      />
-  );
+    return (
+        <BlogGenericPostListPageTemplate
+            title={tagHeader}
+            posts={posts}
+            author={siteMetadata.author}
+            trackingCategory={tracking.category.blog_tag}
+            keywords={[tag]}
+        />
+    );
 }

@@ -27,27 +27,10 @@ vi.mock("framer-motion", () => ({
 vi.mock("matrix-design-system", async (importOriginal) => ({
     ...(await importOriginal<typeof import("matrix-design-system")>()),
     ControlSlider: ({ label, onChange }: { label: string; onChange: (v: number) => void }) => (
-        <input
-            data-testid={`slider-${label}`}
-            type="range"
-            onChange={(e) => onChange(Number(e.target.value))}
-        />
+        <input data-testid={`slider-${label}`} type="range" onChange={(e) => onChange(Number(e.target.value))} />
     ),
-    Switch: ({
-        label,
-        checked,
-        onChange,
-    }: {
-        label: string;
-        checked: boolean;
-        onChange: (v: boolean) => void;
-    }) => (
-        <input
-            type="checkbox"
-            aria-label={label}
-            checked={checked}
-            onChange={(e) => onChange(e.target.checked)}
-        />
+    Switch: ({ label, checked, onChange }: { label: string; checked: boolean; onChange: (v: boolean) => void }) => (
+        <input type="checkbox" aria-label={label} checked={checked} onChange={(e) => onChange(e.target.checked)} />
     ),
     Button: ({
         children,

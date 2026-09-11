@@ -18,7 +18,9 @@ interface ImageCarouselEffects {
     handleDragEnd: (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => void;
 }
 
-export const useImageCarouselStore = (imagesLength: number): ComponentStore<ImageCarouselState, ImageCarouselEffects> => {
+export const useImageCarouselStore = (
+    imagesLength: number,
+): ComponentStore<ImageCarouselState, ImageCarouselEffects> => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isFullscreen, setIsFullscreen] = useState(false);
 

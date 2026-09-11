@@ -1,26 +1,16 @@
 {
-    "$schema": "https://unpkg.com/knip@6/schema.json",
-    "entry": [
-        "src/app/sw.ts",
-        "src/content/**/content.mdx",
-        "serwist.config.mjs",
-        "e2e/**/*.ts",
-        "src/test-utils/index.ts"
-    ],
-    "project": [
-        "src/**/*.{ts,tsx,mdx}",
-        "e2e/**/*.ts",
-        "src/test-utils/**/*.{ts,tsx}"
-    ],
-    "mdx": {
-        "entry": [
-            "src/content/**/content.mdx"
-        ]
-    },
-    "ignoreDependencies": [
-        "tailwindcss",
-        "highlight.js",
-        "agent-browser"
-    ],
-    "ignoreExportsUsedInFile": true
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "entry": [
+    "src/app/sw.ts",
+    "src/content/**/content.mdx",
+    "serwist.config.mjs",
+    "e2e/**/*.ts",
+    "src/test-utils/index.ts"
+  ],
+  "project": ["src/**/*.{ts,tsx,mdx}", "e2e/**/*.ts", "src/test-utils/**/*.{ts,tsx}"],
+  "mdx": {
+    "entry": ["src/content/**/content.mdx"]
+  },
+  "ignoreDependencies": ["tailwindcss", "highlight.js", "agent-browser"],
+  "ignoreExportsUsedInFile": true
 }

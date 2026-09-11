@@ -6,7 +6,7 @@ export interface PostMetaProps {
 }
 
 export const PostMeta: FC<PostMetaProps> = ({ date, readingTime }) => (
-    <p className="mt-1 mb-3 mx-0">
+    <p className="mx-0 mt-1 mb-3">
         <time>{date}</time> · <time>{readingTime}</time>
     </p>
 );

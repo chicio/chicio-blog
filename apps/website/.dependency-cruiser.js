@@ -14,8 +14,7 @@ const config = {
         },
         {
             name: "import-only-via-index",
-            comment:
-                "A component's internal .tsx may only be imported through its folder's index.ts barrel.",
+            comment: "A component's internal .tsx may only be imported through its folder's index.ts barrel.",
             severity: "error",
             from: { pathNot: "/index\\.ts$" },
             to: { path: "^src/components/.+\\.tsx$" },

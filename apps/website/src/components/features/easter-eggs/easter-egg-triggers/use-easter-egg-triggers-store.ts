@@ -41,5 +41,4 @@ export const useEasterEggTriggersStore = (): void => {
 
         return () => window.removeEventListener(spoonActivationEvent, handleSpoonActivation);
     }, []);
-
 };

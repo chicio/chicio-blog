@@ -1,18 +1,7 @@
 import fs from "fs";
 import path from "path";
 
-const MEDIA_EXTENSIONS = new Set([
-    ".jpg",
-    ".jpeg",
-    ".png",
-    ".gif",
-    ".webp",
-    ".avif",
-    ".svg",
-    ".ico",
-    ".mp4",
-    ".webm",
-]);
+const MEDIA_EXTENSIONS = new Set([".jpg", ".jpeg", ".png", ".gif", ".webp", ".avif", ".svg", ".ico", ".mp4", ".webm"]);
 
 const contentRoot = path.join(process.cwd(), "src", "content");
 const outputRoot = path.join(process.cwd(), "public", "media", "content");

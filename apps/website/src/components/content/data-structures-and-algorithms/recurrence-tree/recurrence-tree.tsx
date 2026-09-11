@@ -1,15 +1,7 @@
 "use client";
 
 import { FC } from "react";
-import {
-    Legend,
-    Line,
-    LineChart,
-    ResponsiveContainer,
-    Tooltip,
-    XAxis,
-    YAxis,
-} from "recharts";
+import { Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { ChartPanel, ChartTooltip } from "matrix-design-system/chart";
 import { chartTheme } from "@/types/configuration/chart-theme";
 
@@ -63,10 +55,7 @@ export const RecurrenceTree: FC = () => (
                             style: { textAnchor: "middle", fill: chartTheme.axis.tickColor },
                         }}
                     />
-                    <Tooltip
-                        content={<ChartTooltip />}
-                        cursor={{ stroke: chartTheme.cursorStroke, strokeWidth: 1 }}
-                    />
+                    <Tooltip content={<ChartTooltip />} cursor={{ stroke: chartTheme.cursorStroke, strokeWidth: 1 }} />
                     <Legend labelStyle={{ color: chartTheme.legendTextColor }} />
                     <Line
                         type="monotone"

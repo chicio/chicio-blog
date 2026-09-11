@@ -2,11 +2,9 @@ import { describe, it, expect } from "vitest";
 import { createElement } from "react";
 import { extractMermaidDefinition } from "./mermaid";
 
-const mermaidChild = (definition: string) =>
-    createElement("code", { className: "language-mermaid" }, definition);
+const mermaidChild = (definition: string) => createElement("code", { className: "language-mermaid" }, definition);
 
-const nonMermaidChild = (definition: string) =>
-    createElement("code", { className: "language-typescript" }, definition);
+const nonMermaidChild = (definition: string) => createElement("code", { className: "language-typescript" }, definition);
 
 describe("extractMermaidDefinition", () => {
     describe("valid mermaid code block", () => {

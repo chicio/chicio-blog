@@ -1,13 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
-import {
-    TerminalLine,
-    TerminalQuoteLine,
-    Cursor,
-    ErrorText,
-    SuccessText,
-    QuoteText,
-} from "./terminal-blocks";
+import { TerminalLine, TerminalQuoteLine, Cursor, ErrorText, SuccessText, QuoteText } from "./terminal-blocks";
 
 describe("TerminalLine", () => {
     describe("render", () => {

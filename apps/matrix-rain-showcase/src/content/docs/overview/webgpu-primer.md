@@ -1,7 +1,7 @@
 ---
 title: WebGPU primer
 sidebar:
-  order: 2
+    order: 2
 ---
 
 A quick tour of the WebGPU concepts the rest of these docs assume. If you've done modern graphics work, skim it; if not, this is enough to follow the deep dives. Where it helps, each concept is tied to where this project uses it.
@@ -17,7 +17,7 @@ GPU memory you allocate. Two kinds matter here:
 - **Uniform buffer** — small, **read-only** in shaders, the same value broadcast to every shader invocation. Ideal for per-frame parameters. → our [`Uniforms`](/matrix-rain-webgpu/architecture/data-model/) (time, resolution, effect knobs).
 - **Storage buffer** — larger, **read-write** in shaders, indexable as an array. Needed when the GPU itself mutates data. → our [`Column[]`](/matrix-rain-webgpu/architecture/data-model/) particle state, which the compute pass advances.
 
-The distinction is load-bearing: column state *must* be a storage buffer because the compute shader writes to it; the parameter block *can* be a uniform because it's only read.
+The distinction is load-bearing: column state _must_ be a storage buffer because the compute shader writes to it; the parameter block _can_ be a uniform because it's only read.
 
 ## Textures, samplers, views
 
@@ -31,7 +31,7 @@ Shaders don't reach out for resources; resources are bound to them. A **bind gro
 
 Work is recorded into **passes** and submitted:
 
-- A **render pass** runs the vertex → fragment pipeline and writes to one or more target textures (an *attachment*). Our glyph, bloom, and CRT passes are render passes.
+- A **render pass** runs the vertex → fragment pipeline and writes to one or more target textures (an _attachment_). Our glyph, bloom, and CRT passes are render passes.
 - A **compute pass** runs a compute shader over a grid of workgroups, with no fixed output — it reads/writes storage buffers/textures. Our simulation step is a compute pass that advances `Column[]`.
 
 This effect is essentially **one compute pass** (advance the sim) followed by **a chain of render passes** (draw + post-process). See the [Pipeline overview](/matrix-rain-webgpu/architecture/pipeline-overview/).

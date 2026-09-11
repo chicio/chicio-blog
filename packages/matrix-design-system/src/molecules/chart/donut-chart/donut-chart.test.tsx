@@ -35,11 +35,7 @@ describe("DonutChart", () => {
 
         it("renders the optional center label and sublabel", () => {
             render(
-                <DonutChart
-                    data={[{ label: "Desktop", value: 10 }]}
-                    centerLabel="153,325"
-                    centerSublabel="users"
-                />,
+                <DonutChart data={[{ label: "Desktop", value: 10 }]} centerLabel="153,325" centerSublabel="users" />,
             );
 
             expect(screen.getByText("153,325")).toBeInTheDocument();

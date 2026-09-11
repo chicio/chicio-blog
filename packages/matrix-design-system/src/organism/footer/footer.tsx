@@ -57,8 +57,8 @@ export const Footer: FC<FooterProps> = ({
 
     return (
         <footer className="bg-primary-dark border-t-accent relative w-full shrink-0 snap-start border-t-2 border-solid shadow-lg">
-            <div className="flex flex-col w-full items-center">
-                <div className="grid grid-cols-2 gap-3 py-7 px-5 w-full sm:grid-cols-[repeat(6,auto)] sm:justify-center sm:max-w-4xl sm:mx-auto">
+            <div className="flex w-full flex-col items-center">
+                <div className="grid w-full grid-cols-2 gap-3 px-5 py-7 sm:mx-auto sm:max-w-4xl sm:grid-cols-[repeat(6,auto)] sm:justify-center">
                     <MenuItem linkComponent={linkComponent} to="/" onClick={onTrackHome} selected={false}>
                         Home
                     </MenuItem>
@@ -89,7 +89,7 @@ export const Footer: FC<FooterProps> = ({
                     </MenuItem>
                 </div>
                 <hr />
-                <div className="w-full flex flex-col items-center justify-center gap-3 py-6 px-4 bg-gradient-to-b from-general-background-light to-primary-color-dark">
+                <div className="from-general-background-light to-primary-color-dark flex w-full flex-col items-center justify-center gap-3 bg-gradient-to-b px-4 py-6">
                     <SocialContacts
                         linkComponent={linkComponent}
                         links={socialLinks}

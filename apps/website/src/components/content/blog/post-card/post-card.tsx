@@ -35,7 +35,7 @@ export const PostCard: FC<PostCardProps> = ({
     description,
 }) => (
     <div
-        className={`glow-container bg-general-background-light flex flex-col relative mt-5 ${big ? "w-full" : "w-full md:w-[48%]"}`}
+        className={`glow-container bg-general-background-light relative mt-5 flex flex-col ${big ? "w-full" : "w-full md:w-[48%]"}`}
         key={slug}
     >
         <InternalLink to={slug}>
@@ -49,23 +49,14 @@ export const PostCard: FC<PostCardProps> = ({
             />
         </InternalLink>
         <div className="flex flex-1 flex-col p-5">
-            <InternalLink
-                className="no-underline hover:no-underline"
-                to={slug}
-            >
+            <InternalLink className="no-underline hover:no-underline" to={slug}>
                 <h3 className="mt-0!">{title}</h3>
             </InternalLink>
             <PostAuthors postAuthors={authors} />
             <PostMeta date={date} readingTime={readingTime} />
             <p className="mx-0 text-shadow-md">{`${description} [...]`}</p>
-            {tags && (
-                <PostTags tags={tags} />
-            )}
+            {tags && <PostTags tags={tags} />}
         </div>
-        <TerminalButton
-            className="mt-auto mb-4 mx-5 align-self-start justify-self-start"
-            to={slug}
-            label="Read more"
-        />
+        <TerminalButton className="align-self-start mx-5 mt-auto mb-4 justify-self-start" to={slug} label="Read more" />
     </div>
 );

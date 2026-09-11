@@ -7,10 +7,11 @@ interface UseGlassmorphismOptions {
 
 export const useGlassmorphism = ({ noScale = false, increaseContrast = false }: UseGlassmorphismOptions = {}) => {
     const shouldReduceMotion = useReducedMotions();
-    const increaseContrastRule = increaseContrast ? "backdrop-blur-2xl!" : ""
+    const increaseContrastRule = increaseContrast ? "backdrop-blur-2xl!" : "";
 
     return {
-        glassmorphismClass: 
-            !shouldReduceMotion ? `glassmorphism${noScale ? "-no-scale" : ""} ${increaseContrastRule}` : `glassmorphism-lite${noScale ? "-no-scale" : ""} ${increaseContrastRule}`,
+        glassmorphismClass: !shouldReduceMotion
+            ? `glassmorphism${noScale ? "-no-scale" : ""} ${increaseContrastRule}`
+            : `glassmorphism-lite${noScale ? "-no-scale" : ""} ${increaseContrastRule}`,
     };
 };

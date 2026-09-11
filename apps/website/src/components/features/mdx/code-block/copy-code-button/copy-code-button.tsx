@@ -21,11 +21,7 @@ export const CopyCodeButton: FC<CopyCodeButtonProps> = ({ getText }) => {
         <Button
             onClick={handleCopy(getText)}
             aria-label={copied ? "Copied!" : copyError ? "Copy failed" : "Copy code"}
-            className={`
-                text-primary!
-                sm:absolute sm:top-2 sm:right-2
-                ${copied ? "text-primary" : copyError ? "border-confirm text-confirm" : ""}
-            `}
+            className={`text-primary! sm:absolute sm:top-2 sm:right-2 ${copied ? "text-primary" : copyError ? "border-confirm text-confirm" : ""} `}
         >
             {copied ? <CopiedIcon /> : copyError ? <CopyErrorIcon /> : <CopyIcon />}
         </Button>

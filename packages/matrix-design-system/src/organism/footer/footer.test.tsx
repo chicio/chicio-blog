@@ -5,7 +5,6 @@ import { Footer } from "./footer";
 import type { FooterNavHrefs } from "./footer";
 import type { SocialContactLinks } from "./footer";
 
-
 const navHrefs: FooterNavHrefs = {
     blog: "/blog",
     art: "/art",

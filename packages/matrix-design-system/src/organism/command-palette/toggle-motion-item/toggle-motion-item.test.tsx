@@ -4,20 +4,13 @@ import userEvent from "@testing-library/user-event";
 import { ToggleMotionItem } from "./toggle-motion-item";
 
 vi.mock("cmdk", () => ({
-    Command: Object.assign(
-        ({ children }: React.PropsWithChildren) => <div>{children}</div>,
-        {
-            Item: ({
-                children,
-                onSelect,
-                value,
-            }: React.PropsWithChildren<{ onSelect?: () => void; value?: string }>) => (
-                <button onClick={onSelect} aria-label={value}>
-                    {children}
-                </button>
-            ),
-        },
-    ),
+    Command: Object.assign(({ children }: React.PropsWithChildren) => <div>{children}</div>, {
+        Item: ({ children, onSelect, value }: React.PropsWithChildren<{ onSelect?: () => void; value?: string }>) => (
+            <button onClick={onSelect} aria-label={value}>
+                {children}
+            </button>
+        ),
+    }),
 }));
 
 vi.mock("../../../state/motion/motion", () => ({

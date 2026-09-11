@@ -36,11 +36,7 @@ export const EggSolution: FC<EggSolutionProps> = ({ slug, children }) => {
     return (
         <>
             <div className="mt-3 flex flex-wrap items-center gap-3">
-                <TerminalButton
-                    onClick={toggleReveal}
-                    ariaExpanded={revealed}
-                    label={revealed ? "Hide" : "Reveal"}
-                />
+                <TerminalButton onClick={toggleReveal} ariaExpanded={revealed} label={revealed ? "Hide" : "Reveal"} />
                 {found && <TerminalButton label="Replay" onClick={replay} />}
             </div>
             {revealed && <div className={`mt-3 ${stepListClass}`}>{children}</div>}

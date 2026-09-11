@@ -28,10 +28,7 @@ export const GameCard: FC<GameCardProps> = ({ game, navigationOrigin = "console"
             onClick={onClick}
         >
             {isInView && (
-                <InternalLink
-                    to={game.slug.formatted}
-                    className="block h-full w-full"
-                >
+                <InternalLink to={game.slug.formatted} className="block h-full w-full">
                     <Image
                         src={game.frontmatter.image}
                         alt={game.frontmatter.title}
@@ -53,11 +50,11 @@ export const GameCard: FC<GameCardProps> = ({ game, navigationOrigin = "console"
                             <p className="my-1 px-2 text-center text-white">{game.frontmatter.title}</p>
                         </GlassmorphismBackground>
                     </div>
-                    <div className="absolute top-1 right-1 z-20 flex flex-row gap-1 items-center">
+                    <div className="absolute top-1 right-1 z-20 flex flex-row items-center gap-1">
                         {game.frontmatter.metadata?.formats.map((format) => (
                             <span
                                 key={format}
-                                className="glow-border bg-general-background-light px-2 py-2 text-primary font-mono text-base text-shadow-sm"
+                                className="glow-border bg-general-background-light text-primary px-2 py-2 font-mono text-base text-shadow-sm"
                             >
                                 <GameFormatIcon format={format} />
                             </span>

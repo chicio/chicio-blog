@@ -27,7 +27,7 @@ export const BrandHeader: FC<BrandHeaderProps> = ({ big, wrapper: Wrapper = Pass
             <MatrixHeaderBackground big={big} />
             <Wrapper>
                 <div className={`flex items-center ${margins}`}>
-                    <div className={`${glassmorphismClass} w-full p-5 md:p-9 z-30`}>
+                    <div className={`${glassmorphismClass} z-30 w-full p-5 md:p-9`}>
                         <div className="flex w-full items-center">
                             <ImageGlow
                                 imageComponent={imageComponent}

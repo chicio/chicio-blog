@@ -21,7 +21,7 @@ interface MatrixTerminalState {
 
 export const useMatrixTerminalStore = (
     lines: TerminalLine[],
-    onComplete?: () => void
+    onComplete?: () => void,
 ): StateStore<MatrixTerminalState> => {
     const [containerRef, isInView] = useInView<HTMLDivElement>({ threshold: 0.1, triggerOnce: true });
     const { completedLines, currentLine, currentText } = useTypewriter(lines, 50, isInView);

@@ -1,9 +1,5 @@
 import { FC } from "react";
-import {
-    Cursor,
-    SuccessText,
-    TerminalLine,
-} from "../../atoms/typography/terminal-blocks";
+import { Cursor, SuccessText, TerminalLine } from "../../atoms/typography/terminal-blocks";
 
 const getBar = (percentage: number, length = 24) => {
     const filled = Math.round((percentage / 100) * length);

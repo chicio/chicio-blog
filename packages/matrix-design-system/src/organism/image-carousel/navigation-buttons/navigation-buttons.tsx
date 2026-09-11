@@ -9,11 +9,7 @@ interface NavigationButtonsProps {
     stopPropagation?: boolean;
 }
 
-export const NavigationButtons: FC<NavigationButtonsProps> = ({
-    onPrevious,
-    onNext,
-    stopPropagation = false,
-}) => {
+export const NavigationButtons: FC<NavigationButtonsProps> = ({ onPrevious, onNext, stopPropagation = false }) => {
     const { effects } = useNavigationButtonsStore(onPrevious, onNext, stopPropagation);
     const { handlePrevious, handleNext } = effects;
 
@@ -21,14 +17,14 @@ export const NavigationButtons: FC<NavigationButtonsProps> = ({
         <>
             <Button
                 onClick={handlePrevious}
-                className="absolute top-1/2 left-4 -translate-y-1/2 hidden md:flex"
+                className="absolute top-1/2 left-4 hidden -translate-y-1/2 md:flex"
                 aria-label="Previous image"
             >
                 <BiChevronLeft className="size-10 md:size-12" />
             </Button>
             <Button
                 onClick={handleNext}
-                className="absolute top-1/2 right-4 -translate-y-1/2 hidden md:flex"
+                className="absolute top-1/2 right-4 hidden -translate-y-1/2 md:flex"
                 aria-label="Next image"
             >
                 <BiChevronRight className="size-10 md:size-12" />

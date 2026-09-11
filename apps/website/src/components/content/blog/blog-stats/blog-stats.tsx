@@ -28,11 +28,8 @@ export const BlogStats: FC<BlogStatsProps> = ({ author, stats, allTime, analytic
 
     return (
         <>
-            <ContentPage
-                author={author}
-                trackingCategory={tracking.category.blog_stats}
-            >
-                <div className="container-fluid p-0 mb-5">
+            <ContentPage author={author} trackingCategory={tracking.category.blog_stats}>
+                <div className="container-fluid mb-5 p-0">
                     <PageTitle>Blog Stats</PageTitle>
                     <p>
                         A look at the numbers behind this blog: how much has been written, how it has grown over the
@@ -54,10 +51,7 @@ export const BlogStats: FC<BlogStatsProps> = ({ author, stats, allTime, analytic
                             >
                                 <PostsPerYearChart data={postsPerYear} />
                             </ChartPanel>
-                            <ChartPanel
-                                title="Top tags"
-                                description="The most used tags across all posts."
-                            >
+                            <ChartPanel title="Top tags" description="The most used tags across all posts.">
                                 <TagDistributionChart data={tagDistribution} />
                             </ChartPanel>
                         </div>
@@ -68,10 +62,7 @@ export const BlogStats: FC<BlogStatsProps> = ({ author, stats, allTime, analytic
                             <AuthorsChart data={externalAuthorDistribution} />
                         </ChartPanel>
                     </div>
-                    <AnalyticsSection
-                        allTime={allTime}
-                        ga4={analytics}
-                    />
+                    <AnalyticsSection allTime={allTime} ga4={analytics} />
                 </div>
             </ContentPage>
             <JsonLd
