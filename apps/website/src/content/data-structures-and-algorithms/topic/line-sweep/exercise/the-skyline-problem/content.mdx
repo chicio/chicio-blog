@@ -1,0 +1,75 @@
+---
+title: "The Skyline Problem"
+description: "Compute the upper envelope of a set of rectangular buildings, emitting a key point wherever the visible height changes, with a sweep line and a max-heap of live buildings."
+date: 2026-09-11
+image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [line sweep, sweep line, intervals, events, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Sweep line with a max-heap status, lazy deletion and a ground sentinel"
+  leetcodeUrl: "https://leetcode.com/problems/the-skyline-problem/"
+  difficulty: "Hard"
+---
+# The Skyline Problem
+
+Leetcode Problem 218: [The Skyline Problem](https://leetcode.com/problems/the-skyline-problem/description/)
+
+## Problem Summary
+A city is described by a list of rectangular buildings, each given by the x coordinate of its left edge, the x coordinate of its right edge and its height, all standing on a perfectly flat ground of height zero. The skyline is the outer contour of the union of those rectangles seen from a distance, and it must be returned as a list of key points sorted by x coordinate, where a key point is the left endpoint of a horizontal segment of the contour. Consecutive horizontal segments of the same height must be merged, so no two adjacent key points may report the same height, and the last key point always has height zero. There are up to 10,000 buildings, the coordinates reach about two billion, and the input is already sorted by left edge.
+
+The contour changes only at a vertical edge, so the sweep visits one event per wall. The status structure is a max-heap of the buildings the line currently intersects, seeded with a sentinel of height zero and infinite right endpoint so that the skyline can fall back to the ground without a special case. Buildings that have closed behind the line are removed lazily, when they surface at the top of the heap, and a key point is emitted only when the visible maximum after processing an event differs from the previous one, which is what suppresses the edges hidden behind a taller building. Encoding a left edge as a negative height and a right edge as zero makes a single comparison order the ties correctly: openings before closings, taller before shorter.
+
+## Techniques
+- Array
+- Divide and Conquer
+- Binary Indexed Tree
+- Segment Tree
+- Line Sweep
+- Heap (Priority Queue)
+- Ordered Set
+
+## Solution
+```ts
+import { Heap } from "../heap";
+
+type LiveBuilding = { height: number, right: number };
+
+function getSkyline(buildings: number[][]): number[][] {
+    // one event per wall: a negative height marks a left edge, zero marks a right edge
+    const events: number[][] = []
+
+    for (const [left, right, height] of buildings) {
+        events.push([left, -height, right])
+        events.push([right, 0, 0])
+    }
+
+    // ties are broken so that taller buildings open before shorter ones, and openings precede closings
+    events.sort((a, b) => a[0] - b[0] || a[1] - b[1])
+
+    const tallest = new Heap<LiveBuilding>((a, b) => b.height - a.height)
+    // the ground is always in play, so the skyline can fall back to zero
+    tallest.insert({ height: 0, right: Infinity })
+
+    const skyline: number[][] = []
+
+    for (const [x, negativeHeight, right] of events) {
+        // lazy deletion: buildings already behind the sweep line are dropped when they surface
+        while (tallest.peek()!.right <= x) {
+            tallest.extract()
+        }
+
+        if (negativeHeight < 0) {
+            tallest.insert({ height: -negativeHeight, right })
+        }
+
+        const currentHeight = tallest.peek()!.height
+
+        // a key point exists only where the visible height actually changes
+        if (skyline.length === 0 || skyline[skyline.length - 1][1] !== currentHeight) {
+            skyline.push([x, currentHeight])
+        }
+    }
+
+    return skyline
+};
+```

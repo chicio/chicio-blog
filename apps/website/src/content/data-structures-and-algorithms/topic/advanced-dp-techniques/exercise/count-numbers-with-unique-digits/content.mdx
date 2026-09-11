@@ -1,0 +1,83 @@
+---
+title: "Count Numbers With Unique Digits"
+description: "Count how many non-negative integers below a power of ten have no repeated digit."
+date: 2026-09-07
+image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [dynamic programming, bitmask dp, digit dp, probability dp, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Digit DP with a used-digit bitmask, a tight flag and a started flag"
+  leetcodeUrl: "https://leetcode.com/problems/count-numbers-with-unique-digits/"
+  difficulty: "Medium"
+---
+# Count Numbers With Unique Digits
+
+Leetcode Problem 357: [Count Numbers With Unique Digits](https://leetcode.com/problems/count-numbers-with-unique-digits/description/)
+
+## Problem Summary
+Given an integer **n**, count how many integers **x** satisfy **0 ≤ x < 10ⁿ** and have all distinct digits. The exponent **n** is between **0** and **8**, so the upper bound never exceeds one hundred million.
+
+The upper bound is a number written as **n** nines, which makes this a clean instance of the digit DP template. The walk moves over the positions of the bound from the most significant to the least significant, carrying three pieces of information: the set of digits already placed, encoded as a ten-bit mask, whether the prefix built so far still hugs the bound, and whether a significant digit has been written yet. That last flag is what makes leading zeros free: while the number has not started, a zero is not a real digit, so it is not added to the used set and does not block a later zero.
+
+## Techniques
+- Math
+- Dynamic Programming
+- Backtracking
+
+## Solution
+```ts
+function countNumbersWithUniqueDigits(n: number): number {
+    if (n === 0) {
+        return 1
+    }
+
+    // the upper bound is 10^n - 1, which is simply n nines
+    const bound = "9".repeat(n)
+    // only the free states (not pinned to the bound) can be reused across branches
+    const memo = new Map<string, number>()
+
+    function count(position: number, usedDigits: number, tight: boolean, started: boolean): number {
+        if (position === bound.length) {
+            // reaching the end always yields exactly one number, zero included
+            return 1
+        }
+
+        const key = `${position}:${usedDigits}:${started}`
+
+        if (!tight) {
+            const cached = memo.get(key)
+
+            if (cached !== undefined) {
+                return cached
+            }
+        }
+
+        const limit = tight ? Number(bound[position]) : 9
+        let total = 0
+
+        for (let digit = 0; digit <= limit; digit++) {
+            const leadingZero = !started && digit === 0
+
+            // a digit already placed cannot be reused, unless we are still in the leading zeros
+            if (!leadingZero && (usedDigits & (1 << digit))) {
+                continue
+            }
+
+            total += count(
+                position + 1,
+                leadingZero ? usedDigits : usedDigits | (1 << digit),
+                tight && digit === limit,
+                started || digit !== 0
+            )
+        }
+
+        if (!tight) {
+            memo.set(key, total)
+        }
+
+        return total
+    }
+
+    return count(0, 0, true, false)
+};
+```

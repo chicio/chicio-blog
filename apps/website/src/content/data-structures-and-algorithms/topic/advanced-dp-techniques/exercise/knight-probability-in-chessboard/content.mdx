@@ -1,0 +1,66 @@
+---
+title: "Knight Probability in Chessboard"
+description: "Compute the probability that a knight making a fixed number of uniformly random legal moves is still standing on the board."
+date: 2026-09-07
+image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [dynamic programming, bitmask dp, digit dp, probability dp, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Probability DP propagating mass forward, with mass leaving the system"
+  leetcodeUrl: "https://leetcode.com/problems/knight-probability-in-chessboard/"
+  difficulty: "Medium"
+---
+# Knight Probability in Chessboard
+
+Leetcode Problem 688: [Knight Probability in Chessboard](https://leetcode.com/problems/knight-probability-in-chessboard/description/)
+
+## Problem Summary
+On an **n** by **n** chessboard a knight starts on the cell at row **row** and column **column**, with rows and columns numbered from zero. The knight makes exactly **k** moves, each chosen uniformly at random among its eight moves, and it keeps moving even if that takes it off the board. Once it leaves the board it stops moving. Return the probability that the knight is still on the board after it has finished all its moves. The board side is at most **25** and the number of moves at most **100**.
+
+The DP value is a probability rather than a best score, and the table stores, for each cell, the probability that the knight is standing there after the moves made so far. Every state pushes an eighth of its mass into each of the eight destinations, and a destination that falls outside the board is simply dropped: that mass leaves the system and is never recovered, which is exactly the semantics of the knight walking off the edge. The answer is therefore the mass still inside the board after **k** layers, obtained by summing the final table.
+
+## Techniques
+- Dynamic Programming
+
+## Solution
+```ts
+const KNIGHT_MOVES = [
+    [-2, -1], [-2, 1], [-1, -2], [-1, 2],
+    [1, -2], [1, 2], [2, -1], [2, 1]
+]
+
+function knightProbability(n: number, k: number, row: number, column: number): number {
+    // dp[r][c] = probability of still standing on the board after the moves made so far
+    let dp: number[][] = Array.from({ length: n }, () => Array(n).fill(0))
+    dp[row][column] = 1
+
+    for (let move = 0; move < k; move++) {
+        const next: number[][] = Array.from({ length: n }, () => Array(n).fill(0))
+
+        for (let r = 0; r < n; r++) {
+            for (let c = 0; c < n; c++) {
+                if (dp[r][c] === 0) {
+                    continue
+                }
+
+                // the eight destinations are equally likely, so each inherits an eighth of the mass
+                for (const [moveRow, moveColumn] of KNIGHT_MOVES) {
+                    const nextRow = r + moveRow
+                    const nextColumn = c + moveColumn
+
+                    if (nextRow < 0 || nextRow >= n || nextColumn < 0 || nextColumn >= n) {
+                        // probability leaving the board is simply lost
+                        continue
+                    }
+
+                    next[nextRow][nextColumn] += dp[r][c] / 8
+                }
+            }
+        }
+
+        dp = next
+    }
+
+    return dp.flat().reduce((total, probability) => total + probability, 0)
+};
+```

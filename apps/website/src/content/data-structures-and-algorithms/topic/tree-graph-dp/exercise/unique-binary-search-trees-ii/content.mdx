@@ -1,0 +1,78 @@
+---
+title: "Unique Binary Search Trees II"
+description: "Generate every structurally unique binary search tree holding the keys from one to n, building the trees with a memoized recursion over key ranges."
+date: 2026-09-06
+image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [dynamic programming, tree dp, graph dp, rerooting, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Memoized recursion over key ranges building structures instead of values"
+  leetcodeUrl: "https://leetcode.com/problems/unique-binary-search-trees-ii/"
+  difficulty: "Medium"
+---
+# Unique Binary Search Trees II
+
+Leetcode Problem 95: [Unique Binary Search Trees II](https://leetcode.com/problems/unique-binary-search-trees-ii/description/)
+
+## Problem Summary
+Given an integer **n**, return all the structurally unique binary search trees whose nodes hold exactly the keys from
+**1** to **n**, each key used once. The trees may be returned in any order. The value of **n** is between **1** and
+**8**.
+
+The ordering property of a binary search tree removes almost all the freedom: once a key is chosen as the root of a
+range, every smaller key must go to the left subtree and every larger key to the right subtree, so the only decisions
+left are the shapes of the two sides, and those sides are independent of each other. The recursion therefore enumerates
+each key of the range as the root and combines the left and right results with a cartesian product, which is an ordinary
+dynamic program whose state value happens to be a list of trees instead of a number. The empty range returns a list
+containing a single null tree, and that base case is what keeps the product from collapsing. Memoizing on the range
+makes the subtrees shared across many results, which is what keeps the memory proportional to the number of distinct
+subtrees.
+
+## Techniques
+- Dynamic Programming
+- Tree
+- Binary Search Tree
+- Backtracking
+- Binary Tree
+
+## Solution
+```ts
+import { TreeNode } from "../tree-node";
+
+function generateTrees(n: number): Array<TreeNode | null> {
+    const memo = new Map<string, Array<TreeNode | null>>()
+
+    // every value in [start, end] takes a turn as the root, splitting the range in two
+    function build(start: number, end: number): Array<TreeNode | null> {
+        if (start > end) {
+            return [null]
+        }
+
+        const key = `${start}:${end}`
+        const cached = memo.get(key)
+
+        if (cached) {
+            return cached
+        }
+
+        const trees: Array<TreeNode | null> = []
+
+        for (let root = start; root <= end; root++) {
+            const leftSubtrees = build(start, root - 1)
+            const rightSubtrees = build(root + 1, end)
+
+            for (const left of leftSubtrees) {
+                for (const right of rightSubtrees) {
+                    trees.push(new TreeNode(root, left, right))
+                }
+            }
+        }
+
+        memo.set(key, trees)
+
+        return trees
+    }
+
+    return build(1, n)
+};
+```

@@ -1,0 +1,595 @@
+---
+title: "Tree & Graph DP"
+description: "Dynamic programming on trees and graphs: post-order DP on rooted trees, states made of a node plus a mode, recurrences that build structures instead of values, rerooting with two traversals, and DP over the DAG induced by a shortest-path algorithm."
+date: 2026-09-06
+image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [dynamic programming, tree dp, graph dp, rerooting, data structures, algorithms]
+authors: [fabrizio_duroni]
+---
+
+import { TopicExercises } from "@/components/content/data-structures-and-algorithms/topic-exercises";
+
+# Tree & Graph DP
+
+Every dynamic programming problem is, underneath, a question about a graph.
+Not the graph in the input, but the **subproblem graph**: the directed graph whose vertices are the states and whose
+edges point from a state to the states it depends on.
+Dynamic programming works exactly when that graph is acyclic and small, because acyclicity gives a valid evaluation
+order and a small vertex set makes memoization pay off.
+In [1D DP](/data-structures-and-algorithms/topic/dp-foundations-1d-dp) and in
+[2D grid DP](/data-structures-and-algorithms/topic/2d-grid-dp) we impose that structure ourselves,
+by indexing states with a prefix length or a pair of coordinates and then choosing a fill order that respects the
+dependencies.
+On a tree we do not have to impose anything.
+The input itself is already an acyclic dependency structure, and the recursion that visits it is already the evaluation
+order we need.
+
+This article is about dynamic programming whose state space is carved out of a
+[tree](/data-structures-and-algorithms/topic/tree) or a [graph](/data-structures-and-algorithms/topic/graph).
+We start from the shared skeleton, the post-order computation in which every node returns a small tuple of alternatives
+and its parent combines them, and we push it in three directions.
+The first is the enrichment of the state, from a single number per node to a node plus a **mode**, a small label that
+records the commitment the node has made towards its parent.
+The second is the observation that nothing forces the value of a DP state to be a number: a state can hold a list of
+objects, and the recurrence can assemble structures rather than optimize a scalar.
+The third is **rerooting**, the technique that converts an answer computed for one root into the answer for all $n$
+roots with a single additional traversal, turning a naive $O(n^2)$ repetition into a linear algorithm.
+We close on general graphs, which are not naturally amenable to DP at all, and on the two ways of making them so:
+finding or inducing a directed acyclic graph, and expanding the state space until the cycles disappear.
+
+## The Tree Is Its Own Subproblem Graph
+
+Fix a root and orient every edge away from it.
+A [rooted tree](https://en.wikipedia.org/wiki/Tree_(graph_theory)) now defines, for each node $v$, a canonical
+subproblem: solve the problem restricted to $\mathrm{subtree}(v)$, the set of nodes reachable from $v$ through
+downward edges.
+These subproblems have two properties that together make DP not just applicable but almost automatic.
+
+The first is [optimal substructure](https://en.wikipedia.org/wiki/Optimal_substructure) by construction.
+The subtrees of the children of $v$ are disjoint, and every edge of $\mathrm{subtree}(v)$ either joins $v$ to a child or
+lies entirely inside one child subtree.
+So any decision taken at $v$ interacts with the children only through the edges $v \to c$, and once we know, for every
+child, the best value attainable under each relevant assumption about that edge, the value at $v$ follows.
+This is a stronger statement than it looks.
+In a general graph a decision at a vertex can propagate to arbitrarily distant vertices through many different paths,
+and the subproblems overlap in ways that no small state can summarize.
+In a tree the interaction between a node and the rest of the world passes through a single edge, its edge to the parent,
+and that bottleneck is what keeps the state small.
+
+The second property is that the dependency order is already materialized.
+The subproblem graph has one vertex per node and an edge from $v$ to each of its children, so it is literally the tree
+itself, reversed.
+A [post-order](/data-structures-and-algorithms/topic/tree) depth-first traversal is therefore a topological order of the
+dependency graph: when the traversal returns to $v$, every subproblem $v$ depends on has already been solved.
+There is no table to fill in the right order, no ambiguity about whether to iterate forwards or backwards, and no need
+for an explicit memo, since each subproblem is reached exactly once through its unique parent edge.
+Recursion is the tabulation.
+
+The canonical shape of a tree DP is therefore a single function that returns, for a node, the vector of values of all
+its states, computed from the vectors returned by the children.
+
+```ts
+type NodeStates = number[];
+
+function treeDp(node: TreeNode | null): NodeStates {
+    if (node === null) {
+        return neutralStates();
+    }
+
+    const left = treeDp(node.left);
+    const right = treeDp(node.right);
+
+    return combine(node.val, left, right);
+}
+```
+
+Everything specific to a problem lives in three places: what the states mean, what the neutral value of a missing child
+is, and how `combine` merges the children under each state.
+The rest of this article is a series of answers to those three questions.
+
+## The State Is a Node Plus a Mode
+
+A single number per node is rarely enough.
+The moment a problem forbids some combination of choices between a node and its children, the value of a subtree stops
+being well defined on its own: it depends on what the node promised to its parent.
+The fix is to index the state by a node **and** a mode, where the mode enumerates the finitely many commitments a node
+can make towards the outside world.
+Formally, the state becomes $dp[v][m]$, the optimum over $\mathrm{subtree}(v)$ given that $v$ is in mode $m$,
+and the number of modes is a constant that does not grow with $n$.
+
+The cleanest example is the tree version of the house robber problem.
+Each node holds an amount of money, and we may not take money from two nodes joined by an edge.
+The forbidden interaction is exactly "parent taken and child taken", so two modes suffice: $v$ is robbed, or $v$ is
+skipped.
+Under the first mode the children are forced to be skipped, under the second each child is free to pick whichever of
+its own two modes is better.
+
+$$
+dp[v][\text{robbed}] = val(v) + \sum_{c} dp[c][\text{skipped}]
+$$
+
+$$
+dp[v][\text{skipped}] = \sum_{c} \max(dp[c][\text{robbed}], dp[c][\text{skipped}])
+$$
+
+The base case is the missing child, which contributes zero under both modes, and the answer is the maximum of the two
+modes at the root.
+Notice the asymmetry that makes this correct: the robbed mode constrains the children, the skipped mode does not,
+and it is precisely because the skipped mode takes a maximum over the child modes that a node can never be robbed
+together with its parent.
+Returning a tuple rather than writing to a table keeps the implementation to a dozen lines.
+
+```ts
+function rob(root: TreeNode | null): number {
+    function robSubtree(node: TreeNode | null): [robbed: number, skipped: number] {
+        if (!node) {
+            return [0, 0];
+        }
+
+        const [leftRobbed, leftSkipped] = robSubtree(node.left);
+        const [rightRobbed, rightSkipped] = robSubtree(node.right);
+
+        const robbed = node.val + leftSkipped + rightSkipped;
+        const skipped = Math.max(leftRobbed, leftSkipped) + Math.max(rightRobbed, rightSkipped);
+
+        return [robbed, skipped];
+    }
+
+    return Math.max(...robSubtree(root));
+}
+```
+
+Two observations generalize far beyond this problem.
+The first is that the tuple returned by the recursion is the entire interface between a subtree and the rest of the
+tree, so designing a tree DP is mostly the exercise of finding the smallest such interface.
+If you find yourself needing to know something about a subtree that is not in the tuple, the tuple is incomplete and the
+recurrence is wrong.
+The second is that the modes are not required to be mutually exclusive descriptions of the optimum.
+They are conditional optima, one per assumption, and the caller decides which assumption it wants to buy.
+This is the same reasoning that turns a greedy dead end into a correct DP, and it costs only a constant factor.
+
+## A Mode That Encodes an Obligation
+
+Modes become considerably more interesting when they do not describe a choice but a debt.
+Consider placing cameras on the nodes of a binary tree, where a camera monitors the node it sits on, its parent and its
+direct children, and we want the minimum number of cameras that monitors every node.
+A node is now in one of three situations, and none of them is a decision in the sense of the previous section:
+it holds a camera, it holds no camera but is already monitored by one of its children, or it holds no camera and is not
+yet monitored, in which case it is asking its parent for coverage.
+
+The full DP is the natural one.
+Let $a(v)$ be the minimum number of cameras that covers $\mathrm{subtree}(v)$ with a camera placed at $v$,
+$b(v)$ the minimum that covers $\mathrm{subtree}(v)$ entirely with no camera at $v$, and $c(v)$ the minimum that covers
+every node of $\mathrm{subtree}(v)$ except possibly $v$ itself.
+
+$$
+a(v) = 1 + \sum_{ch} \min(a(ch), b(ch), c(ch))
+$$
+
+$$
+b(v) = \sum_{ch} \min(a(ch), b(ch)) \quad \text{with at least one } ch \text{ in state } a
+$$
+
+$$
+c(v) = \sum_{ch} b(ch)
+$$
+
+In $a(v)$ the camera at $v$ covers all children, so each child only needs its own subtree handled and may be left
+uncovered itself, which is why $c(ch)$ is admissible there.
+In $b(v)$ the node $v$ is covered, so some child must hold a camera, and no child may be left uncovered.
+In $c(v)$ nobody covers $v$, so every child must be covered without help from above, and none of them may hold a camera,
+since a camera at a child would have covered $v$ and put us in state $b$.
+The answer is $\min(a(root), b(root))$, because the root has no parent to ask.
+
+This DP is correct and runs in linear time, but the three values are so tightly related that they collapse.
+The key inequality is that placing a camera as late as possible, at the parent of an uncovered node rather than at the
+node itself, is never worse: a camera at the parent covers everything a camera at the node would cover, except the
+children of that node, which a post-order traversal has already taken care of by the time the parent decides.
+So the optimal strategy is forced, and instead of three numbers each node can return a single label plus a global
+counter.
+A leaf returns "needs cover", its parent is therefore obliged to place a camera, and the obligation propagates upwards
+two levels at a time.
+
+```ts
+const NEEDS_COVER = 0;
+const HAS_CAMERA = 1;
+const COVERED = 2;
+
+function minCameraCover(root: TreeNode | null): number {
+    let cameras = 0;
+
+    function cover(node: TreeNode | null): number {
+        if (!node) {
+            return COVERED;
+        }
+
+        const left = cover(node.left);
+        const right = cover(node.right);
+
+        if (left === NEEDS_COVER || right === NEEDS_COVER) {
+            cameras++;
+
+            return HAS_CAMERA;
+        }
+
+        if (left === HAS_CAMERA || right === HAS_CAMERA) {
+            return COVERED;
+        }
+
+        return NEEDS_COVER;
+    }
+
+    if (cover(root) === NEEDS_COVER) {
+        cameras++;
+    }
+
+    return cameras;
+}
+```
+
+The detail that makes this work is the base case.
+A missing child returns `COVERED` and not `NEEDS_COVER`, because a node that does not exist imposes no obligation,
+and returning `NEEDS_COVER` would waste a camera at every leaf.
+The other detail is the check on the root after the traversal, which pays the one camera that nobody above can pay.
+This solution is usually labelled greedy, and it is, but the greedy is only a justified collapse of the three-mode DP.
+Deriving the DP first and proving the collapse afterwards is the reliable order of operations.
+
+## Dynamic Programming That Builds Structures
+
+Nothing in the definition of dynamic programming requires the value of a state to be a number.
+A state can hold a set, a string, or a list of objects, and the recurrence can combine those values with a cartesian
+product instead of a $\min$ or a $\sum$.
+The problem of generating all structurally unique binary search trees over the keys $1 \dots n$ is the archetype.
+
+The search space looks daunting until we use the defining property of a
+[binary search tree](/data-structures-and-algorithms/topic/binary-search-tree): the in-order traversal is the sorted key
+sequence.
+Choosing a root $r$ for the key range $[start, end]$ therefore forces the keys $[start, r-1]$ into the left subtree and
+$[r+1, end]$ into the right subtree, with no freedom whatsoever about which keys go where.
+The only remaining freedom is the shape of each side, and the two sides are independent.
+So the recurrence is a cartesian product over contiguous key ranges.
+
+$$
+T(start, end) = \bigcup_{r=start}^{end} \; \{\, \mathrm{node}(r, L, R) \;:\; L \in T(start, r-1),\; R \in T(r+1, end) \,\}
+$$
+
+with $T(start, end) = \{ \varnothing \}$ when $start > end$, the single empty tree, which is the value that makes the
+product non-degenerate at the boundary.
+Returning a list containing `null` rather than an empty list is the whole base case, and getting it wrong collapses the
+product to nothing.
+
+```ts
+function generateTrees(n: number): Array<TreeNode | null> {
+    const memo = new Map<string, Array<TreeNode | null>>();
+
+    function build(start: number, end: number): Array<TreeNode | null> {
+        if (start > end) {
+            return [null];
+        }
+
+        const key = `${start}:${end}`;
+        const cached = memo.get(key);
+
+        if (cached) {
+            return cached;
+        }
+
+        const trees: Array<TreeNode | null> = [];
+
+        for (let root = start; root <= end; root++) {
+            const leftSubtrees = build(start, root - 1);
+            const rightSubtrees = build(root + 1, end);
+
+            for (const left of leftSubtrees) {
+                for (const right of rightSubtrees) {
+                    trees.push(new TreeNode(root, left, right));
+                }
+            }
+        }
+
+        memo.set(key, trees);
+
+        return trees;
+    }
+
+    return build(1, n);
+}
+```
+
+The state here is an interval of keys, not a node, so this is interval DP wearing the clothes of a tree problem, and the
+number of distinct states is only $O(n^2)$.
+The memo is what makes the algorithm sane: the range $[3, 5]$ appears as the right part of many different roots, and
+recomputing its trees each time would multiply the cost by an exponential factor with no benefit.
+Caching has a consequence worth stating explicitly, because it is the kind of thing that is easy to miss.
+The cached list contains node objects that are **shared** across all the trees using that range as a subtree.
+Structure sharing is what keeps the memory proportional to the number of distinct subtrees rather than to the number of
+trees times their size, and it is harmless as long as nobody mutates a returned tree.
+If the caller needs independent trees, the memo must return deep copies, and the benefit of sharing disappears.
+
+The size of the output is a [Catalan number](https://en.wikipedia.org/wiki/Catalan_number),
+$C_n = \frac{1}{n+1}\binom{2n}{n} \sim \frac{4^n}{n^{3/2}\sqrt{\pi}}$, which no algorithm can beat, since it has to
+print them all.
+The counting variant of the same problem, which asks only for $C_n$, is a pure 1D DP with the recurrence
+$C_n = \sum_{r=1}^{n} C_{r-1} C_{n-r}$, and it is the same recurrence with the cartesian product replaced by a product
+of cardinalities.
+That correspondence is the clean way to remember the relationship between enumerating and counting: counting is
+enumeration with the cardinality operator applied to every combinator.
+
+## Rerooting: One Traversal for Every Root
+
+Every technique so far computes an answer that is relative to the chosen root.
+Many problems instead ask for an answer at every node, and the naive approach of rerunning the rooted DP $n$ times
+costs $O(n^2)$, which is already too slow when $n$ reaches $10^4$.
+Rerooting is the two-pass technique that fixes this, and it is worth deriving carefully because the derivation
+generalizes far beyond the example.
+
+Take the problem of computing, for every node $v$ of a tree with $n$ nodes, the quantity
+
+$$
+S(v) = \sum_{u \in V} d(v, u)
+$$
+
+where $d$ is the number of edges on the unique path between two nodes.
+Root the tree arbitrarily at node $0$ and define two rooted quantities:
+$\mathrm{size}(v) = |\mathrm{subtree}(v)|$ and $\mathrm{down}(v) = \sum_{u \in \mathrm{subtree}(v)} d(v, u)$,
+the distance sum restricted to the subtree below $v$.
+
+The first pass computes both bottom-up.
+For a child $c$ of $v$, every node $u$ of $\mathrm{subtree}(c)$ satisfies $d(v, u) = d(c, u) + 1$, because the path from
+$v$ to $u$ is the edge $v \to c$ followed by the path from $c$ to $u$.
+Summing over $\mathrm{subtree}(c)$ contributes $\mathrm{down}(c) + \mathrm{size}(c)$, and summing over the children
+gives the recurrence.
+
+$$
+\mathrm{size}(v) = 1 + \sum_{c} \mathrm{size}(c)
+\qquad
+\mathrm{down}(v) = \sum_{c} \big( \mathrm{down}(c) + \mathrm{size}(c) \big)
+$$
+
+At the root, and only at the root, the subtree is the whole tree, so $S(0) = \mathrm{down}(0)$.
+For every other node $\mathrm{down}(v)$ is a partial answer, missing all the nodes that do not lie below $v$.
+
+The second pass repairs that, one edge at a time, using the following transfer.
+
+**Claim.** If $c$ is a child of $v$, then $S(c) = S(v) - \mathrm{size}(c) + (n - \mathrm{size}(c))$.
+
+**Proof.** Removing the edge $\{v, c\}$ from a tree disconnects it into exactly two components, because a tree has
+$n-1$ edges and no cycles, so every one of its edges is a bridge.
+Call $A = \mathrm{subtree}(c)$, of size $\mathrm{size}(c)$, the component containing $c$, and $B = V \setminus A$, of
+size $n - \mathrm{size}(c)$, the component containing $v$.
+For $u \in A$, the unique path from $v$ to $u$ must leave $B$, and the only edge leaving $B$ towards $u$ is
+$\{v, c\}$, so that path is $v \to c$ followed by the path from $c$ to $u$, and therefore $d(c, u) = d(v, u) - 1$.
+Symmetrically, for $u \in B$ the unique path from $c$ to $u$ starts with $c \to v$, so $d(c, u) = d(v, u) + 1$.
+Summing over the partition $V = A \sqcup B$,
+
+$$
+S(c) = \sum_{u \in A} \big( d(v,u) - 1 \big) + \sum_{u \in B} \big( d(v,u) + 1 \big)
+     = S(v) - |A| + |B|
+     = S(v) - \mathrm{size}(c) + \big( n - \mathrm{size}(c) \big). \qquad \blacksquare
+$$
+
+The claim converts the answer at a node into the answer at a neighbour in $O(1)$, so a second depth-first traversal
+starting from the root, where $S$ is already known, propagates correct answers to the entire tree in linear time.
+
+```ts
+function sumOfDistancesInTree(n: number, edges: number[][]): number[] {
+    const graph: number[][] = Array.from({ length: n }, () => []);
+
+    for (const [from, to] of edges) {
+        graph[from].push(to);
+        graph[to].push(from);
+    }
+
+    const subtreeSize: number[] = Array(n).fill(1);
+    const answer: number[] = Array(n).fill(0);
+
+    function collect(node: number, parent: number): void {
+        for (const child of graph[node]) {
+            if (child === parent) {
+                continue;
+            }
+
+            collect(child, node);
+            subtreeSize[node] += subtreeSize[child];
+            answer[node] += answer[child] + subtreeSize[child];
+        }
+    }
+
+    function reroot(node: number, parent: number): void {
+        for (const child of graph[node]) {
+            if (child === parent) {
+                continue;
+            }
+
+            answer[child] = answer[node] - subtreeSize[child] + (n - subtreeSize[child]);
+            reroot(child, node);
+        }
+    }
+
+    collect(0, -1);
+    reroot(0, -1);
+
+    return answer;
+}
+```
+
+The `answer` array carries two different meanings during the run, $\mathrm{down}$ after the first pass and $S$ after the
+second, which saves an array at the price of a subtlety that deserves a comment in production code.
+The `parent` argument is the standard way of walking an undirected adjacency list as if it were rooted, and it replaces
+a visited set, because in a tree the only way back is the edge we came from.
+
+The general framework behind the claim is worth stating in the abstract, because most rerooting problems have nothing to
+do with distances.
+Write the answer at $v$ as the merge of a **downward** contribution, computed by the first pass, and an **upward**
+contribution $\mathrm{up}(v)$ that accounts for everything reachable through the parent edge.
+The second pass computes $\mathrm{up}(c)$ for a child $c$ from $\mathrm{up}(v)$ and from the downward contributions of
+the siblings of $c$, since from the point of view of $c$ the outside world is exactly the outside world of the parent,
+plus the parent itself, plus the subtrees of the siblings.
+When the merge operator is invertible, like addition, the aggregate of the siblings is obtained by subtracting the
+contribution of $c$ from the aggregate of the parent, which is what the $- \mathrm{size}(c)$ term does above.
+When the merge is not invertible, like $\max$, subtraction is unavailable and the standard fix is to precompute prefix
+and suffix aggregates over the ordered list of children of $v$, so that the aggregate excluding the $i$-th child is
+$\mathrm{prefix}[i-1] \oplus \mathrm{suffix}[i+1]$.
+That restores $O(1)$ per edge and keeps the whole algorithm linear, and it is the reason rerooting is described as a
+technique rather than as a trick specific to one problem.
+
+## Dynamic Programming Over a Graph
+
+A general [graph](/data-structures-and-algorithms/topic/graph) is hostile to dynamic programming for a single reason:
+the subproblem graph inherits its cycles.
+If the state is "the best value at vertex $v$" and $v$ lies on a cycle, then $v$ depends on itself, the recurrence is not
+a definition but an equation, and the recursion does not terminate.
+There are exactly two ways out, and every graph DP is one of them, or a combination of both.
+
+The first is to work on a [directed acyclic graph](https://en.wikipedia.org/wiki/Directed_acyclic_graph).
+On a DAG the dependency order exists and is computed by a
+[topological sort](/data-structures-and-algorithms/topic/topological-sort), which plays the role that the post-order
+traversal plays on a tree, and any recurrence over incoming edges can be evaluated in that order.
+A DAG may come from the problem statement, or from a preprocessing step: condensing the strongly connected components
+of a digraph yields a DAG, and so does adding a monotone coordinate to the state, such as time or the number of edges
+used, which is the second way out.
+**State-space expansion** replaces the vertex $v$ with the pair $(v, k)$ where $k$ is a quantity that strictly increases
+along every transition, and the expanded graph is acyclic by construction, because a cycle would require $k$ to return
+to a value it already had.
+The cost is a state space multiplied by the range of $k$, which is why the Bellman-Ford style DP over "shortest walk
+using at most $k$ edges" costs $O(k \cdot m)$.
+
+The most elegant instance of the first way out is a DAG that another algorithm induces on an arbitrary weighted graph.
+Given a graph with strictly positive weights and a source $s$, run
+[Dijkstra](/data-structures-and-algorithms/topic/shortest-path) to obtain $dist(v)$ for every vertex, then keep only the
+edges that a shortest path could possibly use.
+
+$$
+E^{*} = \{\, (u, v) \in E \;:\; dist(u) + w(u, v) = dist(v) \,\}
+$$
+
+This **shortest-path DAG** is acyclic: along any edge of $E^{*}$ the value of $dist$ strictly increases, since
+$w(u,v) > 0$, and a cycle would force $dist$ to come back down to a value it has already exceeded.
+Its paths from $s$ are exactly the shortest paths of the original graph, and therefore counting shortest paths becomes a
+plain path-counting recurrence on a DAG.
+
+$$
+ways(s) = 1
+\qquad
+ways(v) = \sum_{(u, v) \in E^{*}} ways(u)
+$$
+
+We could materialize $E^{*}$ and topologically sort it, but there is no need, because Dijkstra already produces a valid
+evaluation order for free.
+The order in which vertices are finalized, meaning extracted from the priority queue with their final distance, is
+non-decreasing in $dist$, and every predecessor of $v$ in $E^{*}$ has a strictly smaller distance, so it has already
+been finalized when $v$ is.
+The DP can therefore be folded into the relaxation loop: when a vertex is popped its count is final, and it pushes that
+count into its successors.
+Each relaxation is one of two cases.
+A strictly shorter route to a neighbour invalidates everything counted so far for it, so the count is **overwritten**.
+A route of exactly the same length is an additional family of shortest paths, so the count is **accumulated**.
+
+```ts
+function countPaths(n: number, roads: number[][]): number {
+    const graph: RoadEdge[][] = Array.from({ length: n }, () => []);
+
+    for (const [from, to, time] of roads) {
+        graph[from].push({ node: to, cost: time });
+        graph[to].push({ node: from, cost: time });
+    }
+
+    const distances: number[] = Array(n).fill(Infinity);
+    const ways: bigint[] = Array(n).fill(BigInt(0));
+    distances[0] = 0;
+    ways[0] = BigInt(1);
+
+    const minCostHeap = new Heap<RoadHeapNode>((a, b) => a.cost - b.cost);
+    minCostHeap.insert({ node: 0, cost: 0 });
+
+    while (minCostHeap.size() > 0) {
+        const { node, cost } = minCostHeap.extract()!;
+
+        if (cost > distances[node]) {
+            continue;
+        }
+
+        for (const { node: next, cost: time } of graph[node]) {
+            const newCost = cost + time;
+
+            if (newCost < distances[next]) {
+                distances[next] = newCost;
+                ways[next] = ways[node];
+                minCostHeap.insert({ node: next, cost: newCost });
+            } else if (newCost === distances[next]) {
+                ways[next] = (ways[next] + ways[node]) % MODULO;
+            }
+        }
+    }
+
+    return Number(ways[n - 1] % MODULO);
+}
+```
+
+Three details carry the correctness of this loop.
+The guard `cost > distances[node]` discards stale [heap](/data-structures-and-algorithms/topic/heap) entries, and it is
+enough to guarantee that each vertex is expanded exactly once, because an entry is inserted only when the distance
+strictly decreases, so all the entries for a vertex carry distinct costs and only the smallest of them passes the guard.
+Expanding a vertex exactly once is what prevents a predecessor from contributing its count twice.
+The strict positivity of the weights is load bearing as well: with a zero-weight edge two vertices could share the same
+distance and each could be a predecessor of the other, the induced graph would contain a cycle, and the finalization
+order would no longer be a topological order of it.
+Finally the counts are reduced modulo $10^9 + 7$ at every accumulation.
+The sum of two reduced values stays far inside the range of integers exactly representable by a double, so `BigInt` is a
+belt-and-braces choice here rather than a necessity, and at these sizes it costs nothing.
+
+The same template covers a wide family of questions.
+Replacing the sum with a $\min$ or a $\max$ over the shortest-path DAG answers "among all shortest paths, which one
+minimizes the number of edges, or the largest single edge, or some secondary cost", and it does so without ever
+enumerating the paths, whose number can be exponential.
+Whenever a problem asks for an aggregate over all optimal solutions rather than for one optimal solution, the reflex
+should be to look for the DAG of optimal solutions and to run a DP on it.
+
+## Time and Space Complexity
+
+The cost of a tree DP follows the universal DP formula, the number of states multiplied by the work per state.
+A tree DP with $k$ modes per node has $kn$ states, and resolving the states of a node requires combining the tuples of
+its children, which costs $O(k \cdot \deg(v))$.
+Since $\sum_v \deg(v) = 2(n-1)$ in a tree, the total is $O(kn)$, and with $k$ constant this is simply $O(n)$.
+Both the house robber variant and the camera placement therefore run in $O(n)$ time, each node being visited once and
+performing a constant amount of arithmetic on the two tuples returned by its children.
+Their space is the recursion stack, $O(h)$ where $h$ is the height of the tree, which is $O(\log n)$ for a balanced tree
+but degrades to $O(n)$ for a degenerate path-shaped tree, the worst case an adversarial input will always pick.
+Converting the traversal to an explicit stack does not change the asymptotics, it only moves the memory from the call
+stack to the heap, which matters in practice when the recursion depth would overflow.
+
+Generating all unique binary search trees is a different regime, because the output itself is exponential.
+The number of shapes over $n$ keys is the Catalan number $C_n \sim 4^n / (n^{3/2}\sqrt{\pi})$, so no algorithm can run
+in less than $\Omega(C_n)$ time.
+The memoized recurrence matches that bound up to polynomial factors.
+It has $O(n^2)$ distinct states, one per key range, and the nodes it allocates for a range of length $L$ number $C_L$,
+so the total allocation count is $\sum_{L=1}^{n} (n - L + 1) \, C_L = \Theta(C_n)$, dominated by the top-level range
+since the Catalan numbers grow by a factor of roughly four per step.
+Time and space are therefore both $\Theta(C_n)$, and the space figure holds only thanks to structure sharing:
+the $C_n$ returned trees contain $n$ nodes each, so a version that deep-copied every subtree would need
+$\Theta(n \cdot C_n)$ nodes.
+The counting-only variant, by contrast, is a $O(n^2)$ time and $O(n)$ space 1D DP, which is a good reminder of how much
+of the cost here belongs to the enumeration and not to the reasoning.
+
+Rerooting is linear, and its whole point is that it is.
+Building the adjacency list from the edge list is $O(n)$ since a tree has $n-1$ edges, the first pass visits every node
+once and every edge twice, and the second pass does the same with $O(1)$ work per edge thanks to the transfer formula.
+The total is $O(n)$ time against the $O(n^2)$ of running the rooted DP from each of the $n$ roots, and the space is
+$O(n)$ for the adjacency list and the two arrays, plus $O(n)$ worst-case recursion depth on a path-shaped tree.
+The variant with a non-invertible merge adds prefix and suffix aggregates over the children of each node, whose sizes
+sum to $O(n)$ across the whole tree and therefore do not change the bound.
+
+Counting shortest paths inherits the cost of [Dijkstra](/data-structures-and-algorithms/topic/shortest-path) plus a
+constant amount of extra work.
+With a binary heap that admits duplicate entries rather than a decrease-key operation, every edge can push at most one
+entry, so the heap holds $O(m)$ items and the loop performs $O(m)$ extractions at $O(\log m)$ each, for $O(m \log m)$
+time, usually written $O(m \log n)$ since $m \le n^2$ makes the two logarithms differ by a constant factor.
+The counting adds one addition or one assignment per relaxation, so it is absorbed.
+Space is $O(n + m)$ for the adjacency list, the distance array, the count array and the heap.
+The crucial point is what we did not pay: the number of distinct shortest paths can be exponential in $n$,
+and the DP aggregates over all of them in time proportional to the size of the graph, which is the entire reason for
+running a dynamic program over the shortest-path DAG instead of enumerating its paths.
+
+## Exercises
+
+<TopicExercises topic="tree-graph-dp" />

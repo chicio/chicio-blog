@@ -1,0 +1,78 @@
+---
+title: "Shortest Path Visiting All Nodes"
+description: "Find the length of the shortest walk that visits every node of an undirected connected graph, starting anywhere and revisiting nodes and edges freely."
+date: 2026-09-07
+image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [dynamic programming, bitmask dp, digit dp, probability dp, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "State space expansion: breadth-first search over (node, visited mask) pairs"
+  leetcodeUrl: "https://leetcode.com/problems/shortest-path-visiting-all-nodes/"
+  difficulty: "Hard"
+---
+# Shortest Path Visiting All Nodes
+
+Leetcode Problem 847: [Shortest Path Visiting All Nodes](https://leetcode.com/problems/shortest-path-visiting-all-nodes/description/)
+
+## Problem Summary
+You are given an undirected connected graph of **n** nodes, described by an adjacency list **graph** where **graph[i]** holds the neighbours of node **i**. Return the length of the shortest walk that visits every node. You may start and stop at any node, you may pass through a node more than once, and you may reuse edges. The graph has at most **12** nodes, contains no self loops and no repeated edges.
+
+The plain shortest path formulation fails here, because a node can legitimately be visited more than once, so "already seen this node" is not a valid pruning rule. The fix is state space expansion: the state becomes the pair made of the current node and the set of nodes visited so far, encoded as a bitmask. Every edge has unit weight, so a breadth-first search over the expanded state graph discovers the shortest walk layer by layer, and all **n** starting positions enter the first layer together.
+
+## Techniques
+- Dynamic Programming
+- Bit Manipulation
+- Breadth-First Search
+- Graph
+- Bitmask
+
+## Solution
+```ts
+type VisitState = { node: number, mask: number };
+
+function shortestPathLength(graph: number[][]): number {
+    const n = graph.length
+    const allVisited = (1 << n) - 1
+
+    if (n === 1) {
+        return 0
+    }
+
+    // the state is the pair (current node, set of visited nodes), so BFS explores it layer by layer
+    const queue: VisitState[] = []
+    const seen: boolean[][] = Array.from({ length: n }, () => Array(1 << n).fill(false))
+
+    // every node is a valid starting point, so they all enter the first BFS layer
+    for (let node = 0; node < n; node++) {
+        queue.push({ node, mask: 1 << node })
+        seen[node][1 << node] = true
+    }
+
+    let steps = 0
+
+    while (queue.length > 0) {
+        const levelSize = queue.length
+
+        for (let i = 0; i < levelSize; i++) {
+            const { node, mask } = queue.shift()!
+
+            if (mask === allVisited) {
+                return steps
+            }
+
+            for (const next of graph[node]) {
+                const nextMask = mask | (1 << next)
+
+                if (!seen[next][nextMask]) {
+                    seen[next][nextMask] = true
+                    queue.push({ node: next, mask: nextMask })
+                }
+            }
+        }
+
+        steps++
+    }
+
+    return -1
+};
+```

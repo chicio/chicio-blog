@@ -1,0 +1,64 @@
+---
+title: "New 21 Game"
+description: "Compute the probability that a blackjack-like drawing process, which stops once the score reaches a threshold, ends at or below a given value."
+date: 2026-09-07
+image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [dynamic programming, bitmask dp, digit dp, probability dp, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Probability DP with a sliding window over a uniform transition"
+  leetcodeUrl: "https://leetcode.com/problems/new-21-game/"
+  difficulty: "Medium"
+---
+# New 21 Game
+
+Leetcode Problem 837: [New 21 Game](https://leetcode.com/problems/new-21-game/description/)
+
+## Problem Summary
+Alice starts with a score of zero and keeps drawing numbers while her score is strictly below **k**. Each draw adds a value chosen uniformly at random among the integers from **1** to **maxPts**, and every draw is independent. She stops as soon as her score reaches **k** or more. Return the probability that her final score is at most **n**. All three inputs can be as large as ten thousand, and the answer is accepted within a tolerance of ten to the minus fifth.
+
+The DP value here is the probability of the score passing through a given value, which is not the same as the probability of stopping there. A score below **k** feeds the scores above it, while a score at or beyond **k** is terminal and contributes to the answer when it does not exceed **n**. The naive recurrence sums the **maxPts** entries below each score, giving a quadratic cost, but because the transition is uniform that sum is a sliding window: each step adds the score just left behind, if the game continued from it, and removes the score that has fallen out of reach. Two boundary cases short-circuit the whole computation, namely a threshold of zero, where no draw ever happens, and a bound large enough that even the unluckiest run cannot overshoot it.
+
+## Techniques
+- Math
+- Dynamic Programming
+- Sliding Window
+- Probability and Statistics
+
+## Solution
+```ts
+function new21Game(n: number, k: number, maxPts: number): number {
+    // drawing stops immediately, or even the unluckiest run cannot overshoot n
+    if (k === 0 || n >= k + maxPts - 1) {
+        return 1
+    }
+
+    // dp[i] = probability of the score passing through exactly i points
+    const dp: number[] = Array(n + 1).fill(0)
+    dp[0] = 1
+
+    // each score is reached from the maxPts scores below it, so a sliding window replaces the inner loop
+    let windowSum = 1
+    let result = 0
+
+    for (let score = 1; score <= n; score++) {
+        dp[score] = windowSum / maxPts
+
+        if (score < k) {
+            // the game continues from here, so this score can feed later ones
+            windowSum += dp[score]
+        } else {
+            // the game stops here and the score is within n
+            result += dp[score]
+        }
+
+        const leaving = score - maxPts
+
+        if (leaving >= 0 && leaving < k) {
+            windowSum -= dp[leaving]
+        }
+    }
+
+    return result
+};
+```

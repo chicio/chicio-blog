@@ -1,0 +1,48 @@
+---
+title: "Longest Palindromic Subsequence"
+description: "Find the length of the longest subsequence of a string that reads the same forwards and backwards."
+date: 2026-09-04
+image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [dynamic programming, string dp, strings, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Interval DP over substrings, expanding from both ends"
+  leetcodeUrl: "https://leetcode.com/problems/longest-palindromic-subsequence/"
+  difficulty: "Medium"
+---
+# Longest Palindromic Subsequence
+
+Leetcode Problem 516: [Longest Palindromic Subsequence](https://leetcode.com/problems/longest-palindromic-subsequence/description/)
+
+## Problem Summary
+Given a string **s**, return the length of its longest palindromic subsequence. A subsequence is obtained by deleting zero or more characters without reordering the survivors, and a palindrome reads the same in both directions. The string is at most one thousand characters long and contains only lowercase English letters.
+
+A palindrome is defined by the symmetry between its two ends, so the state must be an **interval** rather than a prefix, and **dp[i][j]** holds the answer for the substring from **i** to **j** inclusive. When the two ends agree they can serve as the outermost pair, adding two to the answer of the strictly inner interval. When they differ, at least one of them is useless as an outer character, so we drop one end at a time and keep the better result. The outer loop runs downwards because every transition reads a larger first index, which guarantees that the shorter intervals are already resolved. The same answer can also be obtained as the longest common subsequence of the string and its reverse.
+
+## Techniques
+- String
+- Dynamic Programming
+
+## Solution
+```ts
+function longestPalindromeSubseq(s: string): number {
+    const n = s.length
+
+    const dp: number[][] = Array.from({ length: n }, () =>
+        Array.from({ length: n }, () => 0)
+    );
+
+    for (let i = n - 1; i >= 0; i--) {
+        dp[i][i] = 1
+        for (let j = i + 1; j < n; j++) {
+            if (s[i] === s[j]) {
+                dp[i][j] = 2 + dp[i + 1][j - 1]
+            } else {
+                dp[i][j] = Math.max(dp[i + 1][j], dp[i][j - 1])
+            }
+        }
+    }
+
+    return dp[0][n - 1]
+};
+```

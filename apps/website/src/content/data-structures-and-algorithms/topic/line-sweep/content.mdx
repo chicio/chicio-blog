@@ -1,0 +1,360 @@
+---
+title: "Line Sweep"
+description: "The sweep line technique: turning geometric and interval problems into a sorted sequence of events, with the status structures, tie-breaking rules and lazy deletion idioms that make the single pass correct."
+date: 2026-09-11
+image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [line sweep, sweep line, intervals, events, data structures, algorithms]
+authors: [fabrizio_duroni]
+---
+
+import { TopicExercises } from "@/components/content/data-structures-and-algorithms/topic-exercises";
+
+# Line Sweep
+
+Many problems that look geometric are not really about geometry.
+They are about a small number of moments in which something changes.
+Picture a set of buildings drawn on a plane, or a set of intervals laid out on a number line, and imagine a vertical line that starts at minus infinity and slides continuously to the right.
+Between two consecutive edges nothing at all happens: the set of objects the line intersects is exactly the same at $x = 4.1$ and at $x = 4.9$, so every quantity computed from that set is also the same.
+The continuous motion is therefore an illusion, and the only coordinates worth visiting are those where an object begins or ends.
+
+This is the whole idea of **line sweep**, also called the **sweep line** technique.
+A problem stated over a continuous space collapses into a finite, sorted sequence of **events**, and the algorithm becomes a single pass over that sequence while maintaining the set of objects that the line currently intersects.
+The plane is reduced to a line, the line is reduced to a list, and the geometry is reduced to bookkeeping.
+The paradigm goes back to Shamos and Hoey, who in 1976 used a sweeping line to decide whether any two of $n$ segments intersect, and to Bentley and Ottmann, who in 1979 extended it to reporting every intersection.
+
+The course has already touched the simplest form of this idea.
+In [intervals](/data-structures-and-algorithms/topic/intervals) the intervals are sorted by start and a single running interval is extended while the next one overlaps it.
+That algorithm is a sweep whose state happens to be a single pair of numbers, which is enough because merging only ever asks about the union of what has been seen.
+Line sweep is the general version of the same move: the state can be a counter, a heap, a balanced tree, or any structure at all, and the question asked at each event can be far richer than "does this overlap the previous one".
+How many intervals cover this point, what is the tallest live building, what is the smallest interval still open, how much vertical length is currently covered.
+Once the state stops being a single interval, the sorted scan stops being a merge and becomes a sweep.
+
+## The Anatomy of a Sweep
+
+Every sweep, no matter how complicated the problem, is built out of three parts.
+
+The first is the **event list**.
+An event is a coordinate together with a description of what changes there.
+Events are produced from the input, not from the geometry, so their number is proportional to the input size: an interval contributes two events, a rectangle contributes two vertical edges, a query contributes one.
+Sorting the event list by coordinate is what linearizes the problem, and it is almost always the dominant cost of the algorithm.
+
+The second is the **status structure**, sometimes called the sweep line status.
+It holds the objects that the line currently intersects, in whatever form the question requires.
+Its choice is the real design decision of the algorithm.
+A problem that asks "how many" needs only an integer counter, a problem that asks "the largest" needs a [heap](/data-structures-and-algorithms/topic/heap), a problem that asks "the neighbours above and below" needs an ordered set, and a problem that asks "how much length is covered" needs a segment tree.
+
+The third, and the part that is usually left implicit, is the **invariant** the status maintains.
+It is a sentence of the form: *immediately after processing every event with coordinate at most $x$, the status contains exactly the objects alive at $x$, and nothing else*.
+Every line of the loop body exists to restore that sentence, and every bug in a sweep is a moment where the sentence is false.
+Writing it down before writing the code is the cheapest way to get the sweep right, because it tells you what has to happen at an event, and in which order.
+
+The skeleton that follows from the three parts is short, and it is the same in every problem.
+
+```ts
+type SweepEvent = {
+    x: number;
+    kind: "open" | "close";
+    payload: number;
+};
+
+function sweep(events: SweepEvent[]): void {
+    events.sort((a, b) => a.x - b.x || rankOf(a) - rankOf(b));
+
+    for (const event of events) {
+        if (event.kind === "open") {
+            insertIntoStatus(event.payload);
+        } else {
+            removeFromStatus(event.payload);
+        }
+
+        emitAnswerIfChanged(event.x);
+    }
+}
+```
+
+Everything interesting happens inside `rankOf`, which decides what to do when two events share a coordinate, and inside the status operations, which decide what the sweep is able to answer.
+
+## Building the Event List
+
+For a set of intervals the construction is immediate.
+An interval $[l, r]$ becomes an opening event at $l$ and a closing event at $r$, and the object itself is carried along as the payload, because the status will need to know which object left when the closing event arrives.
+
+```ts
+type Interval = { left: number; right: number };
+type IntervalEvent = { x: number; delta: 1 | -1; interval: Interval };
+
+function eventsOf(intervals: Interval[]): IntervalEvent[] {
+    const events: IntervalEvent[] = [];
+
+    for (const interval of intervals) {
+        events.push({ x: interval.left, delta: 1, interval });
+        events.push({ x: interval.right, delta: -1, interval });
+    }
+
+    return events.sort((a, b) => a.x - b.x || a.delta - b.delta);
+}
+```
+
+For rectangles the construction is the same one dimension higher.
+A rectangle is swept along $x$, so it contributes its two vertical edges as events, and each edge carries the vertical extent that becomes alive or dies at that coordinate.
+The status then lives in the $y$ dimension, and the sweep asks it a one-dimensional question at every event, for instance how much of the $y$ axis is covered by the currently live edges.
+
+```ts
+type Rectangle = { x1: number; y1: number; x2: number; y2: number };
+type VerticalEdge = { x: number; yLow: number; yHigh: number; delta: 1 | -1 };
+
+function edgesOf(rectangles: Rectangle[]): VerticalEdge[] {
+    const edges: VerticalEdge[] = [];
+
+    for (const { x1, y1, x2, y2 } of rectangles) {
+        edges.push({ x: x1, yLow: y1, yHigh: y2, delta: 1 });
+        edges.push({ x: x2, yLow: y1, yHigh: y2, delta: -1 });
+    }
+
+    return edges.sort((a, b) => a.x - b.x || a.delta - b.delta);
+}
+```
+
+This is the shape of the classic area of union of rectangles algorithm.
+Between two consecutive event coordinates the covered vertical length is constant, so the area contributed by that vertical strip is the covered length times the width of the strip, and the total area is the sum over the strips.
+The geometry disappears entirely, and what remains is a one-dimensional structure queried at $O(n)$ coordinates.
+
+The lesson generalises beyond rectangles.
+The sweep direction is chosen so that the objects have a simple birth and death along it, and the status structure is chosen so that the remaining dimension can be queried cheaply.
+When both choices work out, a two-dimensional problem costs barely more than sorting.
+
+## Tie-Breaking at Equal Coordinates
+
+The single most common source of bugs in a sweep is not the status structure.
+It is the moment when several events share the same coordinate, because the sort is free to put them in any order unless it is told otherwise, and different orders produce different answers.
+
+The rule to apply is derived, never guessed, and it is derived from one question: at a coordinate where one object ends and another begins, are they considered to be touching or overlapping?
+
+If touching counts as overlapping, the openings must be processed before the closings.
+The interval $[1, 3]$ and the interval $[3, 5]$ must both be alive when the line stands exactly on $3$, so the opening of the second has to be applied before the closing of the first, otherwise the count drops to one and the overlap is missed.
+
+If touching does not count as overlapping, the order is reversed and the closings come first.
+A meeting room freed at $10$ can host a meeting starting at $10$, so the release has to be applied before the request, otherwise the algorithm allocates a second room that is not needed.
+
+A third rule appears when events carry a magnitude rather than a mere presence, and the skyline problem is the canonical instance.
+Two buildings that start at the same $x$ are both opened at that coordinate, but only the taller one is visible, so the taller opening must be applied first if the sweep intends to emit at most one key point per coordinate.
+Symmetrically, when two buildings end at the same $x$, the shorter one should be closed first, so that the visible height falls in a single step rather than in two.
+Encoding the height as a negative number for the openings and as zero for the closings makes a single numeric comparison enforce all of this at once: openings sort before closings because a negative number is smaller than zero, and among the openings the taller building sorts first because its negation is more negative.
+
+There is also an encoding trick that removes the question altogether for integer coordinates.
+Treat every interval as half open, so $[l, r]$ becomes $[l, r + 1)$, and the closing event moves one unit to the right.
+Touching intervals no longer collide at a shared coordinate, the ambiguity disappears, and the sort needs no special rule.
+The price is that the encoding only works when the coordinates are integers and the problem is discrete, which is why it is common on arrays and absent in computational geometry.
+
+## The Counter Sweep
+
+The simplest possible status structure is an integer, and the sweep it produces is worth internalising, because a large family of problems reduces to it.
+The question is "how many intervals cover this point", and the answer is maintained by adding one at every opening and subtracting one at every closing.
+
+```ts
+function maximumOverlap(intervals: Interval[]): number {
+    const events: [number, number][] = [];
+
+    for (const { left, right } of intervals) {
+        events.push([left, 1]);
+        events.push([right + 1, -1]);
+    }
+
+    events.sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+
+    let active = 0;
+    let best = 0;
+
+    for (const [, delta] of events) {
+        active += delta;
+        best = Math.max(best, active);
+    }
+
+    return best;
+}
+```
+
+Two details in those few lines carry the whole correctness argument.
+The closing event is placed at `right + 1` because the intervals are closed on both ends, so an interval is still alive at `right` and only dies one unit later.
+The secondary sort key puts the closings first among the events that share a coordinate, which matters exactly for the intervals that end where another begins: after the shift they close at the coordinate where the other opens, and processing the closing first prevents counting a coverage that does not exist.
+
+When the coordinates are small and dense the same computation can drop the sort entirely.
+Write $+1$ at `left` and $-1$ at `right + 1` directly into an array indexed by coordinate, then take the running sum, which is the [prefix sum](/data-structures-and-algorithms/topic/prefix-sum) of a difference array and costs $O(n + m)$ for a coordinate range of size $m$.
+The difference array and the counter sweep are the same algorithm seen from two angles: one sorts the events, the other uses the coordinate itself as the sort, in the spirit of a counting sort.
+Choosing between them is a matter of whether the coordinate range is small enough to be materialised.
+
+## Lazy Deletion
+
+Before looking at the two richer sweeps it is worth isolating an idiom that both of them use, because it is the part that most often looks wrong at first reading.
+
+A binary heap supports inserting an element and extracting the extreme one, both in $O(\log n)$, but it does not support removing an arbitrary element.
+Locating an element in the middle of the heap array requires an auxiliary index, and keeping that index correct through every sift costs more code than the problem deserves.
+A sweep, however, constantly needs to remove objects that have died behind the line, and those objects are almost never at the top of the heap.
+
+The way out is to not remove them at all.
+A stale entry is left in place and discarded only when it surfaces at the top, at the moment the sweep is about to read it.
+This is **lazy deletion**, and it is correct for a precise reason worth stating explicitly: a stale entry can only ever delay the answer, never corrupt it.
+While it sits buried in the heap it is invisible, so it cannot influence any query.
+When it reaches the top it is recognised as dead, using a field the sweep already carries such as the right endpoint compared against the current coordinate, and it is dropped before anything is read.
+The invariant the status must satisfy is therefore weakened from "the heap contains exactly the live objects" to "the top of the heap is live whenever it is read", which is all the algorithm actually needs.
+
+The cost argument is equally short.
+Every object is inserted exactly once, so it can be discarded at most once.
+A single event may pop a long run of stale entries, but the total number of pops over the whole sweep is bounded by the number of insertions, so the amortised cost per event stays $O(\log n)$ and the bound of the algorithm is unaffected.
+
+## The Offline Query Sweep
+
+The first pattern the exercises drill answers a set of queries whose order in the input has nothing to do with the order in which they are cheap to answer.
+The problem gives a collection of intervals and a collection of points, and for each point asks for the size of the smallest interval covering it.
+
+Answering a query in isolation forces a scan over all the intervals, which is quadratic overall.
+The escape is that every query is known in advance, and an algorithm allowed to look at all of its input before producing any output is called **offline**.
+Being offline means the queries can be reordered freely, so they are sorted by coordinate and interleaved with the intervals in a single sweep, and the answers are written back into the positions of the original input at the end, through the index carried along with each query.
+That permutation back to the input order is what makes the reordering invisible to the caller, and forgetting it is the classic mistake in this pattern.
+
+The sweep itself then becomes mechanical.
+The line stops at each query coordinate in increasing order.
+Every interval whose left endpoint has already been passed is admitted into a min-heap keyed by interval size, which answers the "smallest" part of the question in $O(1)$ at the top.
+Every interval at the top whose right endpoint lies behind the line is stale and is discarded lazily, which is exactly the idiom of the previous section, and after the discarding the top of the heap is both live and smallest, which is the answer.
+
+```ts
+type SizedInterval = { size: number; right: number };
+
+function minInterval(intervals: number[][], queries: number[]): number[] {
+    const sortedIntervals = [...intervals].sort((a, b) => a[0] - b[0]);
+    const sortedQueries = queries
+        .map((value, index) => ({ value, index }))
+        .sort((a, b) => a.value - b.value);
+
+    const bySize = new Heap<SizedInterval>((a, b) => a.size - b.size);
+    const answer: number[] = Array(queries.length).fill(-1);
+    let next = 0;
+
+    for (const { value, index } of sortedQueries) {
+        while (next < sortedIntervals.length && sortedIntervals[next][0] <= value) {
+            const [left, right] = sortedIntervals[next];
+            bySize.insert({ size: right - left + 1, right });
+            next++;
+        }
+
+        while (bySize.size() > 0 && bySize.peek()!.right < value) {
+            bySize.extract();
+        }
+
+        answer[index] = bySize.size() > 0 ? bySize.peek()!.size : -1;
+    }
+
+    return answer;
+}
+```
+
+The pointer `next` never moves backwards, which is the structural reason the sweep stays linear in the number of intervals despite the nested loop.
+Both sequences advance monotonically along the same axis, exactly as in a [two pointers](/data-structures-and-algorithms/topic/two-pointers) scan, and the heap is the only thing that adds a logarithmic factor.
+
+It is worth noticing what the heap is not doing.
+It is not ordered by right endpoint, so the eviction loop cannot remove every dead interval, only the dead ones that happen to be the smallest.
+That is enough, and it is enough for the reason given in the previous section: a dead interval that is not the smallest is not the answer anyway, and it will be evicted later if it ever becomes the top.
+
+## The Status Structure Sweep
+
+The second pattern lets the status carry the shape of the answer rather than a single scalar, and the skyline problem is its purest form.
+A city is given as a list of rectangular buildings, each described by its left edge, its right edge and its height, and the task is to output the upper envelope of their union as a list of key points, each marking a coordinate where the visible height changes.
+
+```
+height
+  15 |          +---------+
+     |          |         |
+  12 |          |         +-----------+
+     |          |         |           |
+  10 |  +-------+         |           |
+     |  |   A   |    B    |     C     |
+   0 -+--+------+---------+-----------+------>
+        2       3         7          12
+                     ^
+                     | sweep line
+```
+
+The picture already contains the algorithm.
+At every moment the visible height is the maximum height among the buildings the line currently intersects, so the status structure must be a max-heap of live heights and the answer is its top.
+Buildings A, B and C are all alive at the sweep position drawn above, and the visible height is the one of B, the largest of the three.
+Building A actually extends to the right of B, and its right edge produces an event where nothing is emitted, because C is taller there and the visible maximum does not change.
+That is the second half of the algorithm: an event is a candidate for a key point, not a key point, and a point is emitted only when the maximum after the event differs from the maximum before it.
+
+Two details make the implementation clean.
+The heap is seeded with a sentinel of height zero and right endpoint infinity, so the ground is always live and the skyline can fall back to zero when the last building of a cluster closes, without a special case for the empty heap.
+And the closing events carry no height at all: the encoding pushes a negative height for a left edge and a zero for a right edge, which as discussed makes a single comparison enforce openings before closings, taller before shorter.
+
+```ts
+type LiveBuilding = { height: number; right: number };
+
+function getSkyline(buildings: number[][]): number[][] {
+    const events: number[][] = [];
+
+    for (const [left, right, height] of buildings) {
+        events.push([left, -height, right]);
+        events.push([right, 0, 0]);
+    }
+
+    events.sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+
+    const tallest = new Heap<LiveBuilding>((a, b) => b.height - a.height);
+    tallest.insert({ height: 0, right: Infinity });
+
+    const skyline: number[][] = [];
+
+    for (const [x, negativeHeight, right] of events) {
+        while (tallest.peek()!.right <= x) {
+            tallest.extract();
+        }
+
+        if (negativeHeight < 0) {
+            tallest.insert({ height: -negativeHeight, right });
+        }
+
+        const currentHeight = tallest.peek()!.height;
+
+        if (skyline.length === 0 || skyline[skyline.length - 1][1] !== currentHeight) {
+            skyline.push([x, currentHeight]);
+        }
+    }
+
+    return skyline;
+}
+```
+
+The eviction loop compares the right endpoint with `<=` rather than `<`, which is the touching question again: a building that ends exactly where the line stands is no longer visible there, so it has to leave before the height is read.
+The closing events themselves exist only to force the sweep to stop at those coordinates.
+They insert nothing and remove nothing directly, and all the actual removal work is done by the lazy eviction at the top of the loop, which is why the algorithm never needs to look up a building by identity.
+
+The same skeleton, with a different status structure, solves a family of problems.
+Replace the max-heap with an ordered multiset and arbitrary deletion becomes possible, which removes the need for lazy eviction at the cost of a heavier structure.
+Replace it with a segment tree over compressed coordinates and the sweep answers "how much length is covered", which is the union of rectangles.
+Replace it with a balanced tree ordered by $y$ and the sweep finds segment intersections, which is where the technique started.
+
+## Time and Space Complexity
+
+The cost of a sweep is almost always decided before the loop begins.
+Each of the $n$ input objects contributes a constant number of events, so the event list has $\Theta(n)$ entries, and sorting it costs $O(n \log n)$.
+Nothing inside the loop is more expensive than that, so the sort is the dominant term and the whole algorithm lands on $O(n \log n)$, with the pleasant consequence that a two-dimensional problem ends up costing the same as sorting a one-dimensional array.
+When the coordinates are small integers the sort can be replaced by direct indexing into an array, as in the difference array formulation, and the sweep drops to $O(n + m)$ for a coordinate range of size $m$.
+
+The loop itself pays for the status structure.
+A counter sweep does constant work per event and therefore contributes $O(n)$ in total, which vanishes against the sort.
+A heap-based sweep does one insertion per opening event and one comparison per read, so it contributes $O(n \log n)$, matching the sort rather than exceeding it.
+The lazy evictions look dangerous, because a single event can pop an unbounded number of entries, but the total is bounded by the number of insertions: every object enters the heap exactly once and can be discarded exactly once, so the entire sequence of evictions over the whole sweep costs $O(n \log n)$, and the per-event cost is $O(\log n)$ amortised.
+
+When queries are swept alongside the data the two sizes stay separate.
+Sorting $n$ intervals and $q$ queries costs $O(n \log n + q \log q)$, the sweep performs at most $n$ insertions and $n$ evictions plus one read per query, so the total is $O((n + q) \log n)$ and the permutation back to the input order is linear.
+The skyline problem has no queries, so it is simply $O(n \log n)$ for $n$ buildings, and the output holds at most $2n$ key points, because every key point is produced at an event and at most one point is emitted per event.
+
+Space is $O(n)$ in every case.
+The event list holds a constant number of entries per object, the status structure holds at most one entry per live object plus the stale ones that have not surfaced yet, which is still bounded by the number of insertions, and the output is proportional to the number of events that changed the answer.
+The offline variant adds $O(q)$ for the sorted queries and the answer array, which cannot be avoided, because the answers have to be permuted back.
+
+Line sweep closes the roadmap of this course, and it is a fitting place to stop, because it borrows from nearly everything that came before it.
+It sorts like the interval algorithms, advances monotonic pointers like a two pointers scan, maintains a priority structure like the [greedy](/data-structures-and-algorithms/topic/greedy) schedulers, and reasons about amortised cost the way the stack and queue techniques do.
+What it adds is a change of perspective rather than a new data structure: stop asking what the answer is everywhere, and ask only where it changes.
+
+## Exercises
+
+<TopicExercises topic="line-sweep" />

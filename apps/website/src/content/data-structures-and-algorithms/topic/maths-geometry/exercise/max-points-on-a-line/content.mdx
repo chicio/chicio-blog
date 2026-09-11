@@ -1,0 +1,75 @@
+---
+title: "Max Points on a Line"
+description: "Find the largest number of points lying on a single straight line by anchoring each point and hashing the reduced direction to every other point."
+date: 2026-09-10
+image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [maths, geometry, number theory, computational geometry, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Slope normalization with the greatest common divisor and sign canonicalization"
+  leetcodeUrl: "https://leetcode.com/problems/max-points-on-a-line/"
+  difficulty: "Hard"
+---
+# Max Points on a Line
+
+Leetcode Problem 149: [Max Points on a Line](https://leetcode.com/problems/max-points-on-a-line/description/)
+
+## Problem Summary
+Given a set of distinct points with integer coordinates on the plane, return the maximum number of them that lie on the same straight line. There are at most three hundred points and the coordinates are bounded by a few hundred in absolute value, so a quadratic solution is comfortable while the cubic enumeration of triples is not.
+
+Every line containing at least two points contains one point of smallest index, so it is enough to take each point in turn as an anchor and group the points after it by the direction in which they lie. The grouping needs a key that is identical for two points on the same line and different otherwise, and the raw displacement is not such a key, because proportional displacements describe the same direction. Dividing both components by their greatest common divisor reduces every displacement to its primitive form, which makes the representation canonical and avoids the division and the vertical line special case that a slope would introduce. The sign still has to be fixed, forcing the first non zero component to be positive, so that a direction and its opposite hash to the same bucket instead of splitting one line into two groups. Each tally starts at one to account for the anchor itself.
+
+## Techniques
+- Array
+- Math
+- Geometry
+- Hash Table
+
+## Solution
+```ts
+function greatestCommonDivisor(a: number, b: number): number {
+    while (b !== 0) {
+        const remainder = a % b
+        a = b
+        b = remainder
+    }
+
+    return a
+}
+
+function maxPointsOnALine(points: number[][]): number {
+    if (points.length <= 2) {
+        return points.length
+    }
+
+    let best = 2
+
+    // anchor each point in turn, then group the remaining ones by the direction they lie in
+    for (let i = 0; i < points.length; i++) {
+        const slopes = new Map<string, number>()
+
+        for (let j = i + 1; j < points.length; j++) {
+            let deltaX = points[j][0] - points[i][0]
+            let deltaY = points[j][1] - points[i][1]
+
+            // reduce the direction to its canonical form so equal slopes hash identically
+            const divisor = greatestCommonDivisor(Math.abs(deltaX), Math.abs(deltaY)) || 1
+            deltaX /= divisor
+            deltaY /= divisor
+
+            // fix the sign so that a direction and its opposite share the same key
+            if (deltaX < 0 || (deltaX === 0 && deltaY < 0)) {
+                deltaX = -deltaX
+                deltaY = -deltaY
+            }
+
+            const key = `${deltaX}:${deltaY}`
+            const count = (slopes.get(key) ?? 1) + 1
+            slopes.set(key, count)
+            best = Math.max(best, count)
+        }
+    }
+
+    return best
+};
+```

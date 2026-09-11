@@ -1,0 +1,63 @@
+---
+title: "Numbers At Most N Given Digit Set"
+description: "Count the positive integers not greater than a bound that can be written using only digits taken from a given set, with repetition allowed."
+date: 2026-09-07
+image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [dynamic programming, bitmask dp, digit dp, probability dp, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Digit DP collapsing into a closed-form combinatorial count over free positions"
+  leetcodeUrl: "https://leetcode.com/problems/numbers-at-most-n-given-digit-set/"
+  difficulty: "Hard"
+---
+# Numbers At Most N Given Digit Set
+
+Leetcode Problem 902: [Numbers At Most N Given Digit Set](https://leetcode.com/problems/numbers-at-most-n-given-digit-set/description/)
+
+## Problem Summary
+You are given an array **digits** of distinct decimal digits, sorted in ascending order and never containing zero, and a positive integer **n**. Using the digits of that set as many times as you like, count how many positive integers you can write whose value is less than or equal to **n**. The set holds at most nine digits and the bound can reach a billion.
+
+Because the digit set never contains zero, there are no leading zeros to handle and no memoized accumulator to carry, so the digit DP degenerates into a direct combinatorial count. Numbers strictly shorter than the bound are automatically smaller, and each of their positions is free, so a block of length **size** contributes exactly the size of the alphabet raised to that length. For numbers of the same length as the bound, the walk stays tight until the first position where a strictly smaller digit is placed: from that point on every remaining position is free, which again is a pure power of the alphabet. The walk ends as soon as the bound digit at some position is not available in the set, because no number can stay tight past it, and surviving every position means the bound itself is writable and counts as one more.
+
+## Techniques
+- Array
+- Math
+- String
+- Binary Search
+- Dynamic Programming
+
+## Solution
+```ts
+function atMostNGivenDigitSet(digits: string[], n: number): number {
+    const bound = String(n)
+    const length = bound.length
+    const alphabet = digits.length
+    let total = 0
+
+    // any number with strictly fewer digits than n is automatically smaller
+    for (let size = 1; size < length; size++) {
+        total += Math.pow(alphabet, size)
+    }
+
+    // numbers of the same length: walk the bound, staying tight until a strictly smaller digit is placed
+    for (let position = 0; position < length; position++) {
+        let canStayTight = false
+
+        for (const digit of digits) {
+            if (digit < bound[position]) {
+                // once we go below the bound here, every remaining position is free
+                total += Math.pow(alphabet, length - position - 1)
+            } else if (digit === bound[position]) {
+                canStayTight = true
+            }
+        }
+
+        if (!canStayTight) {
+            return total
+        }
+    }
+
+    // surviving every position means n itself can be written with the given digits
+    return total + 1
+};
+```

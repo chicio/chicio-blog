@@ -1,0 +1,83 @@
+---
+title: "Range Sum Query - Mutable"
+description: "Answer range sum queries on an array whose elements can be updated at any time, keeping both operations logarithmic."
+date: 2026-09-09
+image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [segment tree, binary indexed tree, fenwick tree, range queries, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Iterative bottom-up segment tree over a 2n array"
+  leetcodeUrl: "https://leetcode.com/problems/range-sum-query-mutable/"
+  difficulty: "Medium"
+---
+# Range Sum Query - Mutable
+
+Leetcode Problem 307: [Range Sum Query - Mutable](https://leetcode.com/problems/range-sum-query-mutable/description/)
+
+## Problem Summary
+Design a structure initialized with an integer array **nums** that supports two operations. The operation **update(index, val)** replaces the value stored at **index** with **val**, and the operation **sumRange(left, right)** returns the sum of the elements between **left** and **right**, both included. The array holds up to 30,000 values, each between **-100** and **100**, and up to 30,000 calls are made to **update** and **sumRange** combined.
+
+The interleaving of the two operations is the whole point of the problem. A plain array answers **update** in constant time but scans the range on every query, while a prefix sum array answers **sumRange** in constant time but rebuilds every prefix after a single update, and both degrade to quadratic total cost on this workload. An iterative bottom-up segment tree keeps the leaves in the second half of a **2n** array, with every parent holding the sum of its two children, so an update repairs a single root-to-leaf path and a query climbs the two ends of the range towards the root, collecting at most two fully contained nodes per level. Both operations end up logarithmic.
+
+## Techniques
+- Array
+- Design
+- Binary Indexed Tree
+- Segment Tree
+
+## Solution
+```ts
+class NumArrayMutable {
+    private readonly size: number
+    private readonly tree: number[]
+
+    constructor(nums: number[]) {
+        this.size = nums.length
+        // an iterative segment tree: the leaves sit in the second half, every parent holds the sum of its two children
+        this.tree = Array(2 * this.size).fill(0)
+
+        for (let i = 0; i < this.size; i++) {
+            this.tree[this.size + i] = nums[i]
+        }
+
+        for (let i = this.size - 1; i > 0; i--) {
+            this.tree[i] = this.tree[2 * i] + this.tree[2 * i + 1]
+        }
+    }
+
+    update(index: number, val: number): void {
+        let node = index + this.size
+        this.tree[node] = val
+
+        // repair the single path from the leaf up to the root
+        while (node > 1) {
+            node = Math.floor(node / 2)
+            this.tree[node] = this.tree[2 * node] + this.tree[2 * node + 1]
+        }
+    }
+
+    sumRange(left: number, right: number): number {
+        let sum = 0
+        let low = left + this.size
+        let high = right + this.size + 1
+
+        // climb both ends towards the root, collecting any node that falls entirely inside the range
+        while (low < high) {
+            if (low % 2 === 1) {
+                sum += this.tree[low]
+                low++
+            }
+
+            if (high % 2 === 1) {
+                high--
+                sum += this.tree[high]
+            }
+
+            low = Math.floor(low / 2)
+            high = Math.floor(high / 2)
+        }
+
+        return sum
+    }
+}
+```

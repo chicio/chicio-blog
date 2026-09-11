@@ -1,0 +1,71 @@
+---
+title: "Minimum Area Rectangle II"
+description: "Find the smallest area rectangle with vertices among a set of points, allowing any orientation, by grouping segments that share a midpoint and a length."
+date: 2026-09-10
+image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [maths, geometry, number theory, computational geometry, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Diagonals grouped by shared midpoint and equal squared length"
+  leetcodeUrl: "https://leetcode.com/problems/minimum-area-rectangle-ii/"
+  difficulty: "Medium"
+---
+# Minimum Area Rectangle II
+
+Leetcode Problem 963: [Minimum Area Rectangle II](https://leetcode.com/problems/minimum-area-rectangle-ii/description/)
+
+## Problem Summary
+Given a set of distinct points with integer coordinates, return the minimum area of any rectangle whose four vertices belong to the set, or **0** when no such rectangle exists. Unlike the axis aligned variant of the problem, the sides of the rectangle may point in any direction. There are at most fifty points and the coordinates are bounded, and an answer within a small relative error is accepted.
+
+Enumerating four points at a time is quartic, and the observation that removes two factors is about the diagonals rather than the sides. Two segments are the diagonals of a rectangle exactly when they share a midpoint and have the same length: all four endpoints then lie on the circle centred at that midpoint, each segment is a diameter, and Thales' theorem makes every angle subtended by a diameter a right angle. Grouping all pairs of points by the key made of their midpoint and their length therefore turns the search into a scan over pairs within each group. The midpoint is kept doubled, as the sum of the coordinates rather than their average, and the length is kept squared, so that the key stays integral and two diagonals that genuinely match hash identically. The only inexact step is the final area, computed with one square root applied to the product of the two squared sides.
+
+## Techniques
+- Array
+- Math
+- Geometry
+- Hash Table
+
+## Solution
+```ts
+type Diagonal = { firstX: number, firstY: number, secondX: number, secondY: number };
+
+function minAreaFreeRect(points: number[][]): number {
+    // two segments form a rectangle exactly when they share a midpoint and have the same length,
+    // because then their four endpoints all sit on a circle centred on that midpoint
+    const diagonals = new Map<string, Diagonal[]>()
+
+    for (let i = 0; i < points.length; i++) {
+        for (let j = i + 1; j < points.length; j++) {
+            const [firstX, firstY] = points[i]
+            const [secondX, secondY] = points[j]
+            // the midpoint is kept doubled so it stays integral
+            const centreX = firstX + secondX
+            const centreY = firstY + secondY
+            const lengthSquared = (firstX - secondX) ** 2 + (firstY - secondY) ** 2
+            const key = `${centreX}:${centreY}:${lengthSquared}`
+
+            const group = diagonals.get(key) ?? []
+            group.push({ firstX, firstY, secondX, secondY })
+            diagonals.set(key, group)
+        }
+    }
+
+    let minArea = Infinity
+
+    for (const group of diagonals.values()) {
+        for (let i = 0; i < group.length; i++) {
+            for (let j = i + 1; j < group.length; j++) {
+                const a = group[i]
+                const b = group[j]
+                // the two sides meeting at one corner are the legs of the rectangle,
+                // multiplied under a single square root so the result keeps full precision
+                const sideOneSquared = (a.firstX - b.firstX) ** 2 + (a.firstY - b.firstY) ** 2
+                const sideTwoSquared = (a.firstX - b.secondX) ** 2 + (a.firstY - b.secondY) ** 2
+                minArea = Math.min(minArea, Math.sqrt(sideOneSquared * sideTwoSquared))
+            }
+        }
+    }
+
+    return minArea === Infinity ? 0 : minArea
+};
+```

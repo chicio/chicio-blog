@@ -1,0 +1,65 @@
+---
+title: "Minimum Number of Work Sessions to Finish the Tasks"
+description: "Partition a set of tasks into the fewest work sessions, where the total time of the tasks inside a single session never exceeds a fixed session length."
+date: 2026-09-07
+image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [dynamic programming, bitmask dp, digit dp, probability dp, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Bitmask DP over subsets, with submask enumeration choosing the last session"
+  leetcodeUrl: "https://leetcode.com/problems/minimum-number-of-work-sessions-to-finish-the-tasks/"
+  difficulty: "Medium"
+---
+# Minimum Number of Work Sessions to Finish the Tasks
+
+Leetcode Problem 1986: [Minimum Number of Work Sessions to Finish the Tasks](https://leetcode.com/problems/minimum-number-of-work-sessions-to-finish-the-tasks/description/)
+
+## Problem Summary
+You are given an array **tasks**, where **tasks[i]** is the number of hours needed to complete the **i**-th task, and an integer **sessionTime**. Tasks can be completed in any order, a task must be finished once started, and the total time of the tasks completed inside a single work session cannot exceed **sessionTime**. Return the minimum number of work sessions needed to finish every task. There are at most **14** tasks, each requiring at most **10** hours, and **sessionTime** is always at least as large as the longest single task.
+
+The very small bound on the number of tasks is the signal that the state is a **set**, not an index. Every subset of tasks is encoded as an integer mask, and the answer for a mask is obtained by deciding which tasks go into the **last** session: that choice is exactly a submask, and everything outside it is a strictly smaller subproblem. Precomputing which subsets fit inside one session turns the inner decision into a constant-time lookup.
+
+## Techniques
+- Array
+- Dynamic Programming
+- Backtracking
+- Bit Manipulation
+- Bitmask
+
+## Solution
+```ts
+function minSessions(tasks: number[], sessionTime: number): number {
+    const n = tasks.length
+    const total = 1 << n
+
+    // a subset is feasible when all its tasks fit inside a single session
+    const fitsInOneSession: boolean[] = Array(total).fill(false)
+
+    for (let mask = 0; mask < total; mask++) {
+        let sum = 0
+
+        for (let i = 0; i < n; i++) {
+            if (mask & (1 << i)) {
+                sum += tasks[i]
+            }
+        }
+
+        fitsInOneSession[mask] = sum <= sessionTime
+    }
+
+    // dp[mask] = fewest sessions needed to finish exactly the tasks in mask
+    const dp: number[] = Array(total).fill(Infinity)
+    dp[0] = 0
+
+    for (let mask = 1; mask < total; mask++) {
+        // enumerate every submask of mask as the content of the last session
+        for (let submask = mask; submask > 0; submask = (submask - 1) & mask) {
+            if (fitsInOneSession[submask]) {
+                dp[mask] = Math.min(dp[mask], dp[mask ^ submask] + 1)
+            }
+        }
+    }
+
+    return dp[total - 1]
+};
+```

@@ -1,0 +1,53 @@
+---
+title: "Distinct Subsequences"
+description: "Count how many distinct subsequences of one string are equal to another string."
+date: 2026-09-04
+image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [dynamic programming, string dp, strings, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Counting variant of the alignment table, summing skip and match branches"
+  leetcodeUrl: "https://leetcode.com/problems/distinct-subsequences/"
+  difficulty: "Hard"
+---
+# Distinct Subsequences
+
+Leetcode Problem 115: [Distinct Subsequences](https://leetcode.com/problems/distinct-subsequences/description/)
+
+## Problem Summary
+Given two strings **s** and **t**, return the number of distinct subsequences of **s** that equal **t**. Two occurrences count as distinct when they use different positions of **s**, even if the resulting characters are identical. Both strings are at most one thousand characters long and made of English letters, and the answer is guaranteed to fit in a 32-bit signed integer.
+
+This is the alignment table with counting in place of optimisation, so the combinator is a sum rather than a maximum. Skipping the current character of **s** is always permitted and contributes the count from the row above. When the two current characters agree, the pair may also be consumed together, contributing the count from the diagonal. The two families are disjoint, because they differ in whether that position of **s** is used to match that position of **t**, and disjointness is precisely what licenses adding them without double counting. The base column is filled with ones, since the empty target is matched by exactly one subsequence of any prefix, namely the empty one.
+
+## Techniques
+- String
+- Dynamic Programming
+
+## Solution
+```ts
+function numDistinct(s: string, t: string): number {
+    const rows = s.length
+    const columns = t.length
+    // dp[i][j] = number of subsequences of the first i chars of s equal to the first j chars of t
+    const dp: number[][] = Array.from({ length: rows + 1 }, () => Array(columns + 1).fill(0))
+
+    // the empty target is matched exactly once by every prefix of s
+    for (let i = 0; i <= rows; i++) {
+        dp[i][0] = 1
+    }
+
+    for (let i = 1; i <= rows; i++) {
+        for (let j = 1; j <= columns; j++) {
+            // skipping s[i - 1] is always an option
+            dp[i][j] = dp[i - 1][j]
+
+            if (s[i - 1] === t[j - 1]) {
+                // when the characters agree we may also consume both
+                dp[i][j] += dp[i - 1][j - 1]
+            }
+        }
+    }
+
+    return dp[rows][columns]
+};
+```

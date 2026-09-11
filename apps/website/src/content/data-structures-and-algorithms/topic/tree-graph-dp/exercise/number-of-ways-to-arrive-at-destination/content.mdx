@@ -1,0 +1,88 @@
+---
+title: "Number of Ways to Arrive at Destination"
+description: "Count the shortest routes between the two ends of a city road network, folding a path-counting recurrence into the relaxation loop of Dijkstra."
+date: 2026-09-06
+image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [dynamic programming, tree dp, graph dp, rerooting, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Path counting on the shortest-path DAG induced by Dijkstra"
+  leetcodeUrl: "https://leetcode.com/problems/number-of-ways-to-arrive-at-destination/"
+  difficulty: "Medium"
+---
+# Number of Ways to Arrive at Destination
+
+Leetcode Problem 1976: [Number of Ways to Arrive at Destination](https://leetcode.com/problems/number-of-ways-to-arrive-at-destination/description/)
+
+## Problem Summary
+A city has **n** intersections labelled from **0** to **n - 1**, connected by bidirectional roads, each described by its
+two endpoints and by the time needed to travel it. Return the number of ways to travel from intersection **0** to
+intersection **n - 1** in the shortest possible time, modulo **1,000,000,007**. There are at most **200**
+intersections, every pair of intersections is reachable from the other, no two roads join the same pair, and every
+travel time is between **1** and **1,000,000,000**.
+
+Keeping only the roads that a shortest route could use produces a directed acyclic graph, because the distance from the
+source strictly increases along each of those roads once every travel time is positive. Counting shortest routes is
+therefore a path-counting recurrence on that graph, and Dijkstra already visits its vertices in a valid evaluation
+order, since a vertex is finalised only after every predecessor of smaller distance. The count is carried inside the
+relaxation loop: a strictly shorter route replaces the count accumulated so far, while a route of the same length adds
+its own count to it.
+
+## Techniques
+- Dynamic Programming
+- Graph
+- Topological Sort
+- Shortest Path
+
+## Solution
+```ts
+import { Heap } from "../heap";
+
+type RoadEdge = { node: number, cost: number };
+type RoadHeapNode = { node: number, cost: number };
+
+const MODULO = BigInt(10 ** 9 + 7)
+
+function countPaths(n: number, roads: number[][]): number {
+    const graph: RoadEdge[][] = Array.from({ length: n }, () => [])
+
+    for (const [from, to, time] of roads) {
+        graph[from].push({ node: to, cost: time })
+        graph[to].push({ node: from, cost: time })
+    }
+
+    const distances: number[] = Array(n).fill(Infinity)
+    // ways[i] counts the shortest paths reaching i, kept as BigInt to survive the modulo arithmetic
+    const ways: bigint[] = Array(n).fill(BigInt(0))
+    distances[0] = 0
+    ways[0] = BigInt(1)
+
+    const minCostHeap = new Heap<RoadHeapNode>((a, b) => a.cost - b.cost)
+    minCostHeap.insert({ node: 0, cost: 0 })
+
+    while (minCostHeap.size() > 0) {
+        const { node, cost } = minCostHeap.extract()!
+
+        // entry is outdated
+        if (cost > distances[node]) {
+            continue
+        }
+
+        for (const { node: next, cost: time } of graph[node]) {
+            const newCost = cost + time
+
+            if (newCost < distances[next]) {
+                // a strictly better route discards everything counted so far
+                distances[next] = newCost
+                ways[next] = ways[node]
+                minCostHeap.insert({ node: next, cost: newCost })
+            } else if (newCost === distances[next]) {
+                // another route of the same length adds its own count
+                ways[next] = (ways[next] + ways[node]) % MODULO
+            }
+        }
+    }
+
+    return Number(ways[n - 1] % MODULO)
+};
+```

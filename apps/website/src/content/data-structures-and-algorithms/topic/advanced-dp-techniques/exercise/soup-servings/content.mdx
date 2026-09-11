@@ -1,0 +1,76 @@
+---
+title: "Soup Servings"
+description: "Compute the probability that soup A empties before soup B, counting half of the probability that they empty at the same time."
+date: 2026-09-07
+image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [dynamic programming, bitmask dp, digit dp, probability dp, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Probability DP with unit rescaling and an asymptotic cut-off"
+  leetcodeUrl: "https://leetcode.com/problems/soup-servings/"
+  difficulty: "Medium"
+---
+# Soup Servings
+
+Leetcode Problem 808: [Soup Servings](https://leetcode.com/problems/soup-servings/description/)
+
+## Problem Summary
+There are two soups, **A** and **B**, each starting with **n** millilitres. At every turn one of four operations is chosen with equal probability: serve 100 ml from A and none from B, serve 75 ml from A and 25 ml from B, serve 50 ml from each, or serve 25 ml from A and 75 ml from B. If a soup does not have enough left, as much as possible is served and the operation still counts. Return the probability that A empties first, plus half the probability that both empty on the same turn. The starting amount can reach one billion.
+
+Two reductions make the problem tractable. Every operation moves a multiple of 25 ml, so the state can be measured in 25 ml units, dividing each axis of the table by twenty five. That alone is not enough for a billion millilitres, so the second reduction is asymptotic: as the starting volume grows, A is drained faster than B on average and the answer converges to one very quickly. Beyond roughly 4800 units the result differs from one by less than the required tolerance, so returning one directly is numerically indistinguishable from computing it.
+
+## Techniques
+- Math
+- Dynamic Programming
+- Probability and Statistics
+
+## Solution
+```ts
+// every serving moves a multiple of 25 ml, so the state space shrinks by working in 25 ml units
+const SERVINGS = [[4, 0], [3, 1], [2, 2], [1, 3]]
+const LARGE_ENOUGH = 4800
+
+function soupServings(n: number): number {
+    if (n >= LARGE_ENOUGH) {
+        // A runs out first with probability indistinguishable from 1 at this scale
+        return 1
+    }
+
+    const units = Math.ceil(n / 25)
+    const memo = new Map<string, number>()
+
+    function probability(a: number, b: number): number {
+        if (a <= 0 && b <= 0) {
+            // both empty at the same time counts as half
+            return 0.5
+        }
+
+        if (a <= 0) {
+            return 1
+        }
+
+        if (b <= 0) {
+            return 0
+        }
+
+        const key = `${a}:${b}`
+        const cached = memo.get(key)
+
+        if (cached !== undefined) {
+            return cached
+        }
+
+        let total = 0
+
+        for (const [fromA, fromB] of SERVINGS) {
+            total += 0.25 * probability(a - fromA, b - fromB)
+        }
+
+        memo.set(key, total)
+
+        return total
+    }
+
+    return probability(units, units)
+};
+```

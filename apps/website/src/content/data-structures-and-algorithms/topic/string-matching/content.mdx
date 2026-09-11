@@ -1,0 +1,380 @@
+---
+title: "String Matching"
+description: "A rigorous treatment of exact string matching, covering the naive scan, borders and the Knuth-Morris-Pratt prefix function, the pattern-separator-text concatenation, the Rabin-Karp polynomial rolling hash, and binary search on the answer length."
+date: 2026-09-08
+image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [string matching, kmp, rabin-karp, rolling hash, strings, data structures, algorithms]
+authors: [fabrizio_duroni]
+---
+
+import { TopicExercises } from "@/components/content/data-structures-and-algorithms/topic-exercises";
+
+# String Matching
+
+In the [strings](/data-structures-and-algorithms/topic/string) article we looked at how a string is represented in memory and at the operations a language runtime gives us for free.
+In the [tries](/data-structures-and-algorithms/topic/tries) article we built an index over a *set* of strings, so that a query could be answered by walking down a path of characters.
+In the [hashtable](/data-structures-and-algorithms/topic/hashtable) article we saw how a well chosen hash function turns equality testing into an integer comparison.
+This article is about the problem those three tools circle around without ever solving directly: given a text $T$ of length $n$ and a pattern $P$ of length $m$, find every position where $P$ occurs inside $T$.
+
+The problem is called **exact string matching**, and it is one of the oldest and best understood problems in computer science.
+The naive solution is three lines long and quadratic.
+The two classical improvements, [Knuth-Morris-Pratt](https://en.wikipedia.org/wiki/Knuth%E2%80%93Morris%E2%80%93Pratt_algorithm) and [Rabin-Karp](https://en.wikipedia.org/wiki/Rabin%E2%80%93Karp_algorithm),
+reach linear time by two completely different routes: one exploits the internal self-similarity of the pattern, the other replaces character comparison with arithmetic on a hash that can be updated in constant time.
+Understanding both is worth far more than memorising either, because the ideas behind them, the border of a string and the polynomial rolling hash, are reusable well beyond the matching problem itself.
+
+## The cost of forgetting
+
+The naive algorithm aligns the pattern at every position of the text and compares characters until a mismatch or a full match.
+
+```ts
+function naiveSearch(text: string, pattern: string): number[] {
+    const occurrences: number[] = [];
+
+    for (let start = 0; start + pattern.length <= text.length; start++) {
+        let matched = 0;
+
+        while (matched < pattern.length && text[start + matched] === pattern[matched]) {
+            matched++;
+        }
+
+        if (matched === pattern.length) {
+            occurrences.push(start);
+        }
+    }
+
+    return occurrences;
+}
+```
+
+There are $n - m + 1$ alignments and each one can cost up to $m$ comparisons, so the worst case is $O(nm)$.
+That worst case is not exotic: a text of a million `a` characters and a pattern of a thousand `a` characters followed by a single `b` forces the inner loop to run to the end at every single alignment.
+
+The interesting question is not that the algorithm is quadratic, but *why*.
+Suppose the pattern is `ababaca` and at some alignment the first five characters match, so the text contains `ababa` starting at position `start`, and the sixth character disagrees.
+The naive algorithm throws that knowledge away, moves to `start + 1` and starts comparing from scratch.
+But we already know a great deal about the text: positions `start` through `start + 4` contain exactly `ababa`.
+The alignment at `start + 1` would compare the pattern against `babac`, which cannot match, because the pattern begins with `a` and the text has `b` there.
+The alignment at `start + 2` compares against `aba`, which is still consistent with the pattern, so that one is genuinely worth trying.
+All of this can be decided **before ever looking at the text**, because it only depends on how the pattern resembles itself.
+That observation is the whole of Knuth-Morris-Pratt.
+
+## Borders and the prefix function
+
+A **border** of a string $S$ is a string that is simultaneously a proper prefix and a suffix of $S$.
+Proper means strictly shorter than $S$ itself, so the empty string is always a border and $S$ is never a border of itself.
+The string `ababa` has borders `aba` and `a` and the empty string, with `aba` being the longest.
+The string `abcd` has only the empty border.
+
+Borders are the formal version of the intuition above.
+If the first $k$ characters of the pattern have matched and then the alignment fails, the only way a shifted alignment can still be consistent with what we have already read is if some prefix of the pattern coincides with a suffix of the matched block, which is exactly the definition of a border of that block.
+The longest border gives the smallest safe shift, so shifting by $k$ minus the length of the longest border of the first $k$ characters never skips an occurrence.
+
+The **prefix function** of a pattern $P$, known in the literature also as the **failure function** or the **LPS array** (longest proper prefix which is also a suffix), stores that number for every prefix.
+Formally, `failure[i]` is the length of the longest border of `P[0..i]`.
+
+```
+pattern:   a  b  a  b  a  c  a
+index:     0  1  2  3  4  5  6
+failure:   0  0  1  2  3  0  1
+```
+
+Read it position by position.
+At index 0 the prefix is `a`, and a single character has no proper border, so the value is 0.
+At index 1 the prefix is `ab`, whose only candidate border `a` does not equal the suffix `b`, so the value is 0.
+At index 2 the prefix is `aba`, whose suffix `a` equals the prefix `a`, so the value is 1.
+At index 3 the prefix is `abab` and the border is `ab`, so the value is 2.
+At index 4 the prefix is `ababa` and the border is `aba`, so the value is 3.
+At index 5 the prefix is `ababac`, which ends with `c`, a character the pattern never has at the front, so the value collapses to 0.
+At index 6 the prefix is `ababaca`, which ends in `a` and starts with `a`, so the value is back to 1.
+
+### The chain of borders
+
+The construction relies on one lemma that deserves to be stated explicitly, because everything else follows from it.
+
+> If $B$ is the longest border of $S$, then every other border of $S$ is a border of $B$.
+
+The proof is a picture argument.
+Let $C$ be a border of $S$ shorter than $B$.
+Since $C$ is a prefix of $S$ and $B$ is a prefix of $S$ with $|C| < |B|$, then $C$ is a prefix of $B$.
+Since $C$ is a suffix of $S$ and $B$ is a suffix of $S$ with $|C| < |B|$, then $C$ is a suffix of $B$.
+So $C$ is both a proper prefix and a proper suffix of $B$, which is the definition of a border of $B$.
+
+The consequence is that the borders of a prefix, listed in decreasing length, form a chain that we can enumerate by repeatedly applying the prefix function to itself:
+`failure[i]`, then `failure[failure[i] - 1]`, then `failure[failure[failure[i] - 1] - 1]`, down to zero.
+This chain is what the fallback loop in the code below walks.
+
+### Building the prefix function in linear time
+
+The algorithm computes `failure[i]` from `failure[i - 1]`.
+Let `length` be the longest border of the previous prefix.
+If `P[i]` equals `P[length]`, the border simply extends by one character and we are done.
+If not, the next candidate border length is the next element of the border chain, so we fall back to `failure[length - 1]` and try again, stopping when we either find a match or reach length zero.
+
+```ts
+function prefixFunction(pattern: string): number[] {
+    const failure = new Array(pattern.length).fill(0);
+
+    for (let i = 1; i < pattern.length; i++) {
+        let length = failure[i - 1];
+
+        while (length > 0 && pattern[i] !== pattern[length]) {
+            length = failure[length - 1];
+        }
+
+        if (pattern[i] === pattern[length]) {
+            length++;
+        }
+
+        failure[i] = length;
+    }
+
+    return failure;
+}
+```
+
+At first sight this looks quadratic, because of the nested loop.
+It is not, and the argument is a textbook example of **amortized analysis** with a potential function.
+Take `length` as the potential.
+It starts at 0 and it never exceeds $m$.
+Each iteration of the outer loop increases it by at most 1, so the total increase over the whole run is at most $m$.
+Each iteration of the inner `while` strictly decreases it by at least 1, and it can never become negative.
+A quantity that goes up at most $m$ times in total and never goes below zero cannot come down more than $m$ times in total, therefore the inner loop executes at most $m$ times summed over the entire construction.
+The prefix function is built in $O(m)$ time and $O(m)$ space.
+
+## Searching without ever backing up
+
+With the prefix function in hand, the search over the text is the same loop applied to a second string.
+We keep a counter `matched` of how many pattern characters currently align with the text ending at the current position.
+On a mismatch we do not move the text pointer, we shrink `matched` along the border chain until the pattern is consistent again.
+When `matched` reaches $m$ we report an occurrence and, instead of resetting to zero, we fall back to `failure[m - 1]`, which keeps the longest usable overlap and makes overlapping occurrences (like `aa` inside `aaaa`) come out correctly.
+
+```ts
+function kmpSearch(text: string, pattern: string): number[] {
+    if (pattern.length === 0) {
+        return [];
+    }
+
+    const failure = prefixFunction(pattern);
+    const occurrences: number[] = [];
+    let matched = 0;
+
+    for (let i = 0; i < text.length; i++) {
+        while (matched > 0 && text[i] !== pattern[matched]) {
+            matched = failure[matched - 1];
+        }
+
+        if (text[i] === pattern[matched]) {
+            matched++;
+        }
+
+        if (matched === pattern.length) {
+            occurrences.push(i - pattern.length + 1);
+            matched = failure[matched - 1];
+        }
+    }
+
+    return occurrences;
+}
+```
+
+The index `i` only ever increases, which is the defining property of the algorithm: every character of the text is read exactly once and is never revisited.
+This is what makes KMP usable on a stream, where backing up is not even possible.
+The amortized argument transfers verbatim, with `matched` playing the role of the potential, so the search costs $O(n)$ and the whole algorithm $O(n + m)$.
+
+### Pattern, separator, text
+
+There is a second, sometimes more convenient way to run the same machinery.
+Instead of writing a dedicated search loop, build the string `pattern + separator + text` and compute the prefix function over the whole thing.
+A position where the failure value equals $m$ marks the end of an occurrence of the pattern inside the text, because at that point the longest border of the concatenation up to there is the pattern itself.
+
+```ts
+function searchByConcatenation(text: string, pattern: string): number[] {
+    const combined = `${pattern}#${text}`;
+    const failure = prefixFunction(combined);
+    const occurrences: number[] = [];
+
+    for (let i = pattern.length + 1; i < combined.length; i++) {
+        if (failure[i] === pattern.length) {
+            occurrences.push(i - 2 * pattern.length);
+        }
+    }
+
+    return occurrences;
+}
+```
+
+The separator is not decoration, it is a correctness requirement.
+Nothing stops a border from spanning the junction between the two halves if they are simply glued together.
+With `pattern = "aa"` and `text = "aaa"` the concatenation `aaaaa` has failure values `0 1 2 3 4`, so values larger than $m$ appear and the positions where the value equals exactly $m$ no longer correspond to occurrences in the text.
+Inserting a character that occurs in neither string caps every failure value at $m$, because any longer border would have to contain the separator and would therefore align it against a non-separator character.
+The cost is one extra character, and the benefit is that a single generic routine answers the question.
+
+This is the whole solution to `shortest-palindrome`.
+We want the longest prefix of $s$ that is a palindrome, because the characters after it, reversed, are exactly what has to be prepended.
+Consider the string $s$ followed by the separator followed by the reverse of $s$.
+A prefix of $s$ of length $\ell$ is also a suffix of the reverse of $s$ precisely when it equals its own reverse, that is, precisely when it is a palindrome.
+So the final value of the failure function over `s + "#" + reverse(s)` is the length of the longest palindromic prefix of $s$, obtained in linear time with no palindrome specific reasoning at all.
+Here the separator is doubly necessary, since a string like `aaaa` would otherwise produce a border longer than $s$ itself and yield a nonsensical answer.
+
+### Bounding the text before searching
+
+Some problems do not hand us a text, they hand us a rule for generating one.
+`repeated-string-match` asks for the minimum number of concatenated copies of $a$ such that $b$ becomes a substring, and the generated text is unbounded, so the first task is to prove that only a finite prefix of it needs to be searched.
+
+Two observations settle it.
+First, a text shorter than $b$ cannot contain $b$, so at least $\lceil |b| / |a| \rceil$ copies are needed.
+Second, if $b$ occurs anywhere in the infinite repetition, then it occurs at some position $p$, and since the repetition is periodic with period $|a|$, it also occurs at $p \bmod |a|$, which lies inside the first copy.
+An occurrence starting inside the first copy spans at most one block beyond the $\lceil |b| / |a| \rceil$ copies that cover its length.
+Therefore testing $\lceil |b| / |a| \rceil$ and $\lceil |b| / |a| \rceil + 1$ copies is enough, and anything beyond that is provably useless.
+The search itself can then be delegated to any linear matcher, including the runtime's own `includes`, which in practice implements a variant of the two-way algorithm.
+
+## Rabin-Karp and the polynomial rolling hash
+
+KMP is deterministic and exploits the structure of the pattern.
+Rabin-Karp takes the opposite route: it makes comparison cheap instead of making shifts smart.
+The idea is to interpret a string as a number in base $B$ modulo $M$,
+
+$$
+h(S) = \left( \sum_{i=0}^{m-1} S[i] \cdot B^{\,m-1-i} \right) \bmod M
+$$
+
+and then compare the hash of the pattern against the hash of each window of the text.
+Two windows with different hashes are certainly different strings, so the hash acts as a filter that rejects almost everything at the cost of a single integer comparison.
+
+What makes this competitive is that consecutive windows share all but two characters, so the hash of the next window can be derived from the current one in constant time.
+Moving from the window starting at `start` to the window starting at `start + 1` requires removing the contribution of the character that leaves, which carries the weight $B^{m-1}$, multiplying the remainder by $B$ to shift every surviving character one position up, and adding the character that enters with weight $B^0$.
+
+```ts
+const HASH_BASE = 256;
+const HASH_MODULO = 1_000_000_007;
+
+function rabinKarpSearch(text: string, pattern: string): number[] {
+    const n = text.length;
+    const m = pattern.length;
+
+    if (m === 0 || m > n) {
+        return [];
+    }
+
+    let highestPower = 1;
+
+    for (let i = 1; i < m; i++) {
+        highestPower = (highestPower * HASH_BASE) % HASH_MODULO;
+    }
+
+    let patternHash = 0;
+    let windowHash = 0;
+
+    for (let i = 0; i < m; i++) {
+        patternHash = (patternHash * HASH_BASE + pattern.charCodeAt(i)) % HASH_MODULO;
+        windowHash = (windowHash * HASH_BASE + text.charCodeAt(i)) % HASH_MODULO;
+    }
+
+    const occurrences: number[] = [];
+
+    for (let start = 0; start + m <= n; start++) {
+        if (windowHash === patternHash && text.startsWith(pattern, start)) {
+            occurrences.push(start);
+        }
+
+        if (start + m < n) {
+            const leaving = (text.charCodeAt(start) * highestPower) % HASH_MODULO;
+            windowHash = (windowHash - leaving + HASH_MODULO) % HASH_MODULO;
+            windowHash = (windowHash * HASH_BASE + text.charCodeAt(start + m)) % HASH_MODULO;
+        }
+    }
+
+    return occurrences;
+}
+```
+
+The modulus plays two distinct roles.
+The practical one is keeping the value inside the range where arithmetic is exact.
+JavaScript numbers are IEEE 754 doubles with 53 bits of integer precision, so every intermediate product has to satisfy $B \cdot M < 2^{53}$, otherwise the low bits are silently lost and the hash becomes meaningless.
+With $B = 256$ and $M \approx 10^9$ the largest product is around $2.6 \cdot 10^{11}$, comfortably inside the safe range.
+The theoretical role is controlling collisions: the larger the modulus, the less likely two different windows produce the same value.
+The addition of `HASH_MODULO` before the final remainder is there because the subtraction of the leaving character can go negative, and the remainder operator in JavaScript keeps the sign of the dividend.
+
+### Why hash equality is only a filter
+
+The rolling hash is a **randomized** filter, not a proof of equality.
+Two distinct strings of length $m$ can hash to the same value, and when they do the algorithm reports a **spurious hit**.
+This is why the code compares the actual characters with `startsWith` before accepting a match: dropping that check turns a correct algorithm into one that is merely usually correct.
+
+The probability of a spurious hit is quantifiable.
+The difference of the two polynomials associated with two distinct strings of length $m$ is a nonzero polynomial of degree at most $m - 1$ over the field of integers modulo a prime $M$, so it has at most $m - 1$ roots.
+If the base $B$ is drawn uniformly at random, the chance that it happens to be one of those roots is at most $(m - 1) / M$, and over all $n$ windows the expected number of spurious hits is bounded by roughly $nm / M$.
+With $M$ near $10^9$ and inputs of the size we usually handle, that number is far below one, which is why the expected running time is linear.
+Note the condition: the base has to be random.
+A fixed, publicly known base and modulus can be attacked, and competitive programming platforms famously carry anti-hash tests built exactly to make a hard-coded pair collide thousands of times.
+
+The weighting by position is equally essential.
+A hash that ignores order, for instance the sum of the character codes or the multiset of character counts, collides on every pair of anagrams, so `abc` and `cab` would be indistinguishable and the filter would let through a hit at every permuted window.
+Multiplying each character by a distinct power of $B$ is exactly what encodes the order into the value.
+Character counting remains the right tool when anagrams are what we are *looking for*, as in the [sliding window](/data-structures-and-algorithms/topic/sliding-window) permutation problems, but it is the wrong tool for exact matching.
+
+## Binary search on the answer with a rolling hash
+
+Rabin-Karp shines when the pattern is not given.
+`longest-duplicate-substring` asks for the longest substring that occurs at least twice inside a single string, and the search space contains $\Theta(n^2)$ substrings, so enumerating candidates is hopeless.
+The decisive observation is about monotonicity.
+
+Define the predicate $P(L)$ as "some substring of length $L$ occurs at least twice".
+If $P(L)$ holds, there are two distinct starting positions $i \neq j$ where the same block of length $L$ begins.
+Truncating both occurrences to their first $L - 1$ characters gives the same block of length $L - 1$ starting at two still distinct positions, so $P(L - 1)$ holds as well.
+The predicate is therefore monotone, true for every length up to some threshold and false above it, which is exactly the shape that [binary search](/data-structures-and-algorithms/topic/binary-search) on the answer requires.
+
+The feasibility test for a fixed length is a plain Rabin-Karp sweep: roll a hash of that width across the string and record, for each hash value, the positions where it appeared.
+A repeated hash is a candidate that still has to be confirmed by comparing the actual substrings, since a spurious hit here would return a string that is not really duplicated.
+Storing a list of positions per hash value, rather than a single one, is what keeps the verification correct when several different substrings share a hash.
+
+The result is $O(\log n)$ feasibility tests, each linear in expectation, hence $O(n \log n)$ expected time.
+It is worth appreciating the composition here: the monotone predicate comes from combinatorics on words, the logarithm comes from binary search, and the linear test comes from the rolling hash.
+None of the three alone solves the problem.
+
+## Choosing between the algorithms
+
+KMP is the right default when there is a single known pattern and the worst case matters, because its $O(n + m)$ bound is deterministic and there is no probability of failure to reason about.
+Its real value, though, is often the prefix function itself rather than the search: the failure array encodes all the borders of every prefix, and the border of the full string gives the smallest **period** of the string, which is what problems about repetitions, rotations and minimal repeating units actually need.
+
+Rabin-Karp is the right choice when the pattern is not fixed.
+Searching for many patterns at once becomes a matter of putting all their hashes in a set and doing a single sweep.
+Comparing arbitrary substrings of a string in constant time becomes possible by precomputing prefix hashes and powers.
+Extending to two dimensions, for matching a rectangular sub-grid inside a [matrix](/data-structures-and-algorithms/topic/matrix), follows the same rolling idea applied twice.
+None of this has a natural KMP counterpart, which is why the rolling hash survives in modern systems well past the matching problem, for example in content defined chunking for deduplication.
+
+Two neighbouring tools are worth knowing by name.
+The [Z-algorithm](https://en.wikipedia.org/wiki/Z-function) computes, for every position, the length of the longest substring starting there that is also a prefix of the whole string.
+It carries the same information as the prefix function and has the same linear bound, and many people find it easier to reason about after a concatenation with a separator, so which of the two to reach for is largely a matter of taste.
+[Boyer-Moore](https://en.wikipedia.org/wiki/Boyer%E2%80%93Moore_string-search_algorithm) goes the other way and compares the pattern from right to left, using the bad character and good suffix rules to jump forward by more than one position on a mismatch.
+It can be sublinear in practice, skipping large portions of the text without ever reading them, and its simplified variants are what real tools like `grep` and standard library substring searches are built on.
+
+## Time and Space Complexity
+
+The naive scan pays $O(nm)$ in the worst case, because each of the $n - m + 1$ alignments can compare up to $m$ characters before failing.
+On random text over a reasonably sized alphabet the expected cost per alignment is constant, since a mismatch is found after a couple of characters, so the practical behaviour is closer to $O(n)$.
+That is why the naive method survives at all: it degrades only on highly periodic inputs, which are exactly the inputs adversarial tests are made of.
+Its auxiliary space is $O(1)$.
+
+KMP splits its cost cleanly in two.
+Preprocessing builds the prefix function in $O(m)$ time, and the amortized argument on the border pointer is what guarantees it: the pointer rises by at most one per position, for a total of $m$, and each fallback step lowers it by at least one, so the fallbacks cannot exceed $m$ in total.
+The search phase costs $O(n)$ by the identical argument applied to the match counter, with the text index moving strictly forward and every character read exactly once.
+The total is $O(n + m)$ in the worst case, not merely on average, with $O(m)$ auxiliary space for the failure array.
+The concatenation variant computes a prefix function over a string of length $n + m + 1$, so it is the same $O(n + m)$ time but $O(n + m)$ space, since the array now covers the text as well.
+That is the trade to be aware of when the text is large and memory is not free.
+
+Rabin-Karp preprocesses in $O(m)$ to hash the pattern and the first window, then performs $n - m + 1$ constant time rolls, so the running time is $O(n + m)$ **in expectation**, over the randomness of the base.
+The worst case is $O(nm)$, reached when every window collides with the pattern hash and every hit has to be verified character by character, which is what happens on a degenerate input engineered against a fixed base.
+Auxiliary space is $O(1)$ for a single pattern, since only a handful of integers are kept, and $O(k)$ when $k$ patterns are hashed into a set.
+
+The combination used for the longest duplicated substring costs $O(n \log n)$ in expectation.
+The logarithm comes from the binary search over candidate lengths, which halves the interval $[1, n - 1]$ each time, and each feasibility test is a full linear sweep with a constant time roll per position.
+Space is $O(n)$, because the map from hash values to starting positions can hold one entry per window.
+The worst case degrades to $O(n^2 \log n)$ if verification fires at every position, and the standard mitigations are a randomly chosen base or a double hash with two independent moduli, which makes the collision probability small enough to skip verification entirely.
+
+Reducing a generated text to a bounded one, as in the repeated concatenation problem, costs whatever the underlying matcher costs over a text of length $O(|a| + |b|)$, since the periodicity argument caps the number of useful copies at $\lceil |b| / |a| \rceil + 1$.
+With a linear matcher that is $O(|a| + |b|)$ time, and the space is dominated by the materialised text, also $O(|a| + |b|)$.
+
+## Exercises
+
+<TopicExercises topic="string-matching" />

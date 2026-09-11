@@ -1,0 +1,44 @@
+---
+title: "Palindrome Number"
+description: "Decide whether an integer reads the same forwards and backwards, without converting it to a string, by reversing only half of its digits."
+date: 2026-09-10
+image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [maths, geometry, number theory, computational geometry, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Half reversal of the decimal digits to avoid overflow"
+  leetcodeUrl: "https://leetcode.com/problems/palindrome-number/"
+  difficulty: "Easy"
+---
+# Palindrome Number
+
+Leetcode Problem 9: [Palindrome Number](https://leetcode.com/problems/palindrome-number/description/)
+
+## Problem Summary
+Given an integer **x**, return **true** when its decimal representation reads the same from left to right and from right to left. The input fits in a signed 32 bit integer, so it may be negative. The natural follow up asks to solve the problem without converting the number to a string.
+
+The key insight is that reversing the whole number is unnecessary and risky, because the reversal of a valid 32 bit integer may itself overflow. Reversing only the second half is enough: digits are stripped from the right of the original and appended to a growing reversed value until the two meet in the middle. Two early rejections simplify the loop, since a negative number carries its sign on one side only, and a number ending in zero would need a leading zero to match, which only zero itself can afford. When the digit count is odd the middle digit lands on the reversed side, where it plays no role, so dividing that side by ten discards it before the comparison.
+
+## Techniques
+- Math
+
+## Solution
+```ts
+function isPalindromeNumber(x: number): boolean {
+    // negatives read as a minus sign first, and a trailing zero can only match a leading one in 0 itself
+    if (x < 0 || (x % 10 === 0 && x !== 0)) {
+        return false
+    }
+
+    // reverse only the second half, so the number never has to be turned into a string
+    let reversedHalf = 0
+
+    while (x > reversedHalf) {
+        reversedHalf = reversedHalf * 10 + (x % 10)
+        x = Math.floor(x / 10)
+    }
+
+    // an odd digit count leaves the middle digit on the reversed side, where it does not matter
+    return x === reversedHalf || x === Math.floor(reversedHalf / 10)
+};
+```

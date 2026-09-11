@@ -1,0 +1,54 @@
+---
+title: "Valid Square"
+description: "Decide whether four points in the plane form a square by inspecting the multiset of their six pairwise squared distances."
+date: 2026-09-10
+image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+tags: [maths, geometry, number theory, computational geometry, data structures, algorithms]
+authors: [fabrizio_duroni]
+metadata:
+  technique: "Distance multiset characterization with exact squared distances"
+  leetcodeUrl: "https://leetcode.com/problems/valid-square/"
+  difficulty: "Medium"
+---
+# Valid Square
+
+Leetcode Problem 593: [Valid Square](https://leetcode.com/problems/valid-square/description/)
+
+## Problem Summary
+Given the coordinates of four points in the plane, return **true** when they are the vertices of a square. The points arrive in no particular order, the square may be rotated arbitrarily, and all coordinates are integers within a bounded range. A valid square requires four sides of equal positive length and four right angles.
+
+Rather than reasoning about ordering or angles, the shape can be characterized entirely by its distances. The six pairwise squared distances of a square consist of four equal side values and two equal diagonal values, with each diagonal equal to twice a side by Pythagoras. Those conditions are also sufficient: four equal segments among four points force a rhombus, the parallelogram law makes the two squared diagonals sum to four times the squared side, and requiring them to be equal pins each of them at twice the squared side, which is exactly the right angle condition. Working with squared distances keeps every value integral, so the three comparisons are exact and no floating point tolerance is ever involved. The requirement that the smallest distance be strictly positive is what rules out coincident points.
+
+## Techniques
+- Math
+- Geometry
+- Sorting
+
+## Solution
+```ts
+function squaredDistance(a: number[], b: number[]): number {
+    // squared distances stay integral, so no floating point comparison is ever needed
+    return (a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2
+}
+
+function validSquare(p1: number[], p2: number[], p3: number[], p4: number[]): boolean {
+    const points = [p1, p2, p3, p4]
+    const distances: number[] = []
+
+    for (let i = 0; i < points.length; i++) {
+        for (let j = i + 1; j < points.length; j++) {
+            distances.push(squaredDistance(points[i], points[j]))
+        }
+    }
+
+    distances.sort((a, b) => a - b)
+
+    // a square produces four equal sides followed by two equal diagonals
+    const sidesAreEqual = distances[0] > 0 && distances[0] === distances[3]
+    const diagonalsAreEqual = distances[4] === distances[5]
+    // the diagonal of a square is the side times the square root of two
+    const diagonalMatchesSide = distances[4] === 2 * distances[0]
+
+    return sidesAreEqual && diagonalsAreEqual && diagonalMatchesSide
+};
+```
