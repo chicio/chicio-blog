@@ -792,14 +792,15 @@ docs move together:
 
 What Act 4 bought: **one place, one CI run, one dependency stream**.
 
-## CI: six gates, one build, one e2e
+## CI: seven gates, one build, one e2e
 
-Everything above converges on a single pipeline. Six jobs run in parallel, all six gate the build, and the build gates
-the end to end suite:
+Everything above converges on a single pipeline. Seven jobs run in parallel, all seven gate the build, and the build
+gates the end to end suite:
 
 ```mermaid
 graph LR
     L["lint"] --> B["build"]
+    F["format"] --> B
     K["knip"] --> B
     A["validate-architecture"] --> B
     T["typecheck"] --> B
@@ -811,11 +812,9 @@ graph LR
 In the workflow that's one `needs` line:
 
 ```yaml
-env:
-  # Turborepo remote caching. Without these secrets turbo simply runs without a remote cache,
-  # so the workflow works before they are configured.
-  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-  TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+permissions:
+  contents: read
+  id-token: write # exchanged for a short-lived Turborepo remote-cache token
 
 jobs:
   # ...
@@ -833,29 +832,68 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-    needs: [lint, knip, validate-architecture, typecheck, test, verify-packages]
+    needs: [lint, format, knip, validate-architecture, typecheck, test, verify-packages]
     steps:
       - name: Checkout
         uses: actions/checkout@v5
       - name: Setup Node
         uses: actions/setup-node@v5
         with:
-          node-version-file: 'package.json'
-          cache: 'npm'
+          node-version-file: "package.json"
+          cache: "npm"
       - name: Install dependencies
         run: npm ci
+      - name: Set up Turborepo remote cache
+        continue-on-error: true
+        uses: vercel/setup-turborepo-remote-cache-action@v1.1.0
+        with:
+          team: ${{ vars.TURBO_TEAM }}
       - name: Build
         run: npx turbo run build
 ```
 
-Every job has the same three step preamble (checkout, setup Node, `npm ci`) and then calls exactly one
-`npx turbo run <task>`. The jobs don't know how many workspaces exist, which tools each one uses, or in what order
-things must build. Turbo knows, and it's the same command I run locally. Two details:
+Every job has the same preamble (checkout, setup Node, `npm ci`, authenticate the remote cache) and then calls exactly
+one `npx turbo run <task>`. The jobs don't know how many workspaces exist, which tools each one uses, or in what order
+things must build. Turbo knows, and it's the same command I run locally.
 
-- `node-version-file: 'package.json'` reads the `engines.node` field, so the Node version is declared once and
+`format` is the one gate that doesn't go through turbo. It runs `npm run format:check`, which is prettier over the
+whole repository, because prettier reads one root config and one root `.prettierignore`: scoping it per workspace
+would only hide files from it. Getting that gate to a state where it could run at all was its own small project. It
+reported 799 files, and the fix was two unrelated things. Some of those files prettier had no business walking (the
+vendored agent tooling, and `matrix-rain-webgpu`, which is formatted by oxfmt and whose own `lint` script runs
+`oxfmt --check`, so rewriting it would have turned lint red). The rest had genuinely never been formatted with this
+config. There was also a trap worth knowing about: prettier reads the **root** `.gitignore` only, so build output
+covered by a workspace's own `.gitignore` stayed visible to the gate, and it passed on a clean checkout while failing
+after a build.
+
+Three details in the workflow:
+
+- `node-version-file: "package.json"` reads the `engines.node` field, so the Node version is declared once and
   followed everywhere
-- remote caching is opt in and degrades gracefully. Without `TURBO_TOKEN` and `TURBO_TEAM` turbo simply runs without
-  a remote cache, which means the workflow worked before those were ever configured, and keeps working for a fork
+- remote caching authenticates with **OIDC**, not a stored token. Each job exchanges GitHub's OIDC token for a
+  short-lived Turborepo token scoped to the team rather than to me, uses it, and revokes it when the job ends. Nothing
+  lives in the repository as a secret, which is the same reasoning as the publishing workflow two acts ago
+- that exchange step is `continue-on-error` in every job, deliberately. The action fails hard when it cannot get a
+  token, so without it a missing policy, a fork, or any context where `id-token` is not granted would take all seven
+  gates red. With it, turbo simply runs without a remote cache
+
+That last point has a sharp edge worth stating, because it cost me a round of confusion. GitHub reports a
+`continue-on-error` step as **success** even when it exited non-zero, so a green checkmark tells you nothing about
+whether caching is actually on. The only honest signal is turbo's own log line, `• Remote caching enabled`. The first
+run after wiring this up was green in all eight jobs while every single one of them silently failed the exchange,
+because the `TURBO_TEAM` variable did not exist yet.
+
+Once it did, the numbers were real. Every CI job is a fresh runner with no local cache, so every restored task is a
+genuine remote hit: lint restored 2 of 6 tasks, typecheck 1 of 8, test 1 of 5, and build 3 of 6. And the build job is
+where the honesty tax from Act 1 shows up one more time:
+
+```
+WARNING  failed to contact remote cache: HTTP status client error (400 Bad Request)
+```
+
+That is the website's 427 MB `.next` being refused by the artifact store, exactly as it is on Vercel. Turbo logs it as
+a warning rather than an error, so the job still passes, and the small package artifacts around it still cache
+normally.
 
 ## What the monorepo actually bought me
 
@@ -908,7 +946,9 @@ obvious reasons: the packages now build separately before the site does, and the
 1,744.
 
 I'm not framing that as regret, because it was never on the list. Build speed is what a monorepo buys a large team
-with many independent apps that can share a remote cache. For one person and one site, the relevant levers turned out
+with many independent apps that can share a remote cache. Wiring that cache into CI later did help a little, as the
+numbers in the previous section show, but those are seconds shaved off gates that already run in parallel, not off the
+deploy that actually puts the site live. For one person and one site, the relevant levers turned out
 to be completely different ones (more build cores, or fewer prerendered pages), and a later round of measurement
 confirmed that package rebuilds don't even invalidate the website's Turbopack cache. If you're considering this
 migration because your build feels slow, measure first. You'll almost certainly find the time is somewhere else.
