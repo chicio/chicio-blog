@@ -3,9 +3,7 @@
 import { StateStore } from "matrix-component-store";
 import { BreadcrumbItem } from "@/components/features/design-system-next/breadcrumb";
 import { slugs } from "@/types/configuration/slug";
-import {
-    useVideogamesNavigationOriginStore,
-} from "@/components/content/videogames/use-videogames-navigation-origin-store";
+import { useVideogamesNavigationOriginStore } from "@/components/content/videogames/use-videogames-navigation-origin-store";
 import { VideogamesNavigationOrigin } from "@/types/content/videogames";
 
 interface GameBreadcrumbState {

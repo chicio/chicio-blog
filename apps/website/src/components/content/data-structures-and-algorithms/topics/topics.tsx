@@ -17,7 +17,9 @@ export const Topics: FC = () => {
                     {allTopics.map((topic) => (
                         <tr key={topic.slug.formatted}>
                             <td className="w-2/5">
-                                <a href={topic.slug.formatted}><strong>{topic.frontmatter.title}</strong></a>
+                                <a href={topic.slug.formatted}>
+                                    <strong>{topic.frontmatter.title}</strong>
+                                </a>
                             </td>
                             <td>{topic.frontmatter.description}</td>
                         </tr>

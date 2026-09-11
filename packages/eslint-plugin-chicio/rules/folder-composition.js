@@ -36,8 +36,7 @@ const rule = {
             fileNameMismatch:
                 "Component file '{{file}}' must match its folder name '{{dir}}' (expected '{{dir}}.tsx').",
             missingIndex: "Component folder '{{dir}}' is missing an index.ts barrel.",
-            storeNameMismatch:
-                "Store hook file '{{found}}' must be named 'use-{{dir}}-store.ts'.",
+            storeNameMismatch: "Store hook file '{{found}}' must be named 'use-{{dir}}-store.ts'.",
         },
     },
     create(context) {

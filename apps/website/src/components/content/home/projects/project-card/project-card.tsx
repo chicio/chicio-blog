@@ -7,7 +7,7 @@ export type ProjectProps = { project: Project };
 
 export const ProjectCard: FC<ProjectProps> = ({ project }) => (
     <div className="mx-auto w-full">
-        <div className="glow-container p-4 md:p-8 flex flex-col gap-5 md:mx-auto md:my-5 md:flex-row">
+        <div className="glow-container flex flex-col gap-5 p-4 md:mx-auto md:my-5 md:flex-row md:p-8">
             <div className="flex flex-1 flex-col">
                 <h3 className="mb-3">{project.name}</h3>
                 <p>{project.description}</p>

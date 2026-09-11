@@ -1,6 +1,9 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import z from "zod";
-import { exercises, getAllExercisesForTopic } from "@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms";
+import {
+    exercises,
+    getAllExercisesForTopic,
+} from "@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms";
 import { MCP_SITE_URL } from "@/lib/mcp/config";
 
 export const registerGetDsaExercises = (server: McpServer): void => {
@@ -13,10 +16,7 @@ export const registerGetDsaExercises = (server: McpServer): void => {
                 "Get the topic slug from get_dsa_topics.",
             inputSchema: {
                 topic: z.string().optional().describe("Topic slug to filter by (e.g. 'arrays', 'dynamic-programming')"),
-                difficulty: z
-                    .enum(["Easy", "Medium", "Hard"])
-                    .optional()
-                    .describe("Filter by difficulty level"),
+                difficulty: z.enum(["Easy", "Medium", "Hard"]).optional().describe("Filter by difficulty level"),
             },
         },
         async ({ topic, difficulty }) => {

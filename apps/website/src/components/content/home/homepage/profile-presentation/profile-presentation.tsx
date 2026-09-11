@@ -40,7 +40,7 @@ export const ProfilePresentation: FC<ProfilePresentationProps> = ({ author }) =>
     } = effects;
 
     return (
-        <div className="h-dvh w-full p-5 relative flex items-center justify-center flex-col bg-transparent">
+        <div className="relative flex h-dvh w-full flex-col items-center justify-center bg-transparent p-5">
             <GlassmorphismBackground>
                 <MotionDiv
                     variants={itemVariants}
@@ -50,12 +50,10 @@ export const ProfilePresentation: FC<ProfilePresentationProps> = ({ author }) =>
                     <ProfilePhoto author={author} />
                 </MotionDiv>
                 <MotionDiv variants={itemVariants}>
-                    <h1 className="mx-0 mt-3 text-center text-primary-text">{author}</h1>
+                    <h1 className="text-primary-text mx-0 mt-3 text-center">{author}</h1>
                 </MotionDiv>
                 <MotionDiv variants={itemVariants}>
-                    <h2 className="text-2xl! text-center text-secondary-text mt-0 mr-0 mb-6 ml-0">
-                        Software Engineer
-                    </h2>
+                    <h2 className="text-secondary-text mt-0 mr-0 mb-6 ml-0 text-center text-2xl!">Software Engineer</h2>
                 </MotionDiv>
                 <MotionDiv variants={itemVariants}>
                     <SocialContacts

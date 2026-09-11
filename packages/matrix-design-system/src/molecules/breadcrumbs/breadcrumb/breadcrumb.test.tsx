@@ -3,12 +3,9 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Breadcrumb, BreadcrumbItem } from "./breadcrumb";
 
-
 vi.mock("framer-motion", () => ({
     motion: {
-        nav: ({ children, ...props }: React.HTMLAttributes<HTMLElement>) => (
-            <nav {...props}>{children}</nav>
-        ),
+        nav: ({ children, ...props }: React.HTMLAttributes<HTMLElement>) => <nav {...props}>{children}</nav>,
     },
     AnimatePresence: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
@@ -40,9 +37,7 @@ describe("Breadcrumb", () => {
 
         it("marks the current page with aria-current=page", () => {
             render(<Breadcrumb items={items} />);
-            const current = screen.getAllByText("My Post").find(
-                (el) => el.getAttribute("aria-current") === "page",
-            );
+            const current = screen.getAllByText("My Post").find((el) => el.getAttribute("aria-current") === "page");
             expect(current).toBeInTheDocument();
         });
 

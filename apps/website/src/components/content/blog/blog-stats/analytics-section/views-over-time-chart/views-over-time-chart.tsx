@@ -16,11 +16,7 @@ const formatTooltipMonth = (label: ReactNode): string =>
 
 export const ViewsOverTimeChart: FC<ViewsOverTimeChartProps> = ({ data }) => (
     <div className="h-100 w-full">
-        <ResponsiveContainer
-            width={"100%"}
-            height={"100%"}
-            initialDimension={{ width: 320, height: 300 }}
-        >
+        <ResponsiveContainer width={"100%"} height={"100%"} initialDimension={{ width: 320, height: 300 }}>
             <LineChart data={data}>
                 <XAxis
                     dataKey="month"

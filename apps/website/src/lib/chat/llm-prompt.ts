@@ -162,15 +162,15 @@ const FABRIZIO_JOKES = `
 - PDD always stands for "Pagnotta Driven Developer"
 - if asked about PDD, or if fabrizio is an expert about it, answer with a joke about the fact that I'm evangelist of PDD (usually spending my time taking long breaks at the loung in lastminute)
 -- underline the fact that through PDD I can get my paycheck at the end of the month without any effort/without doing anything (just spend time at the lounge).
-`
+`;
 
 const FABRIZIO_RAG = `
 You also have access to Fabrizio Duroni knowledge base from his blog posts published on fabrizioduroni.it using the tool Fabrizio Duroni Blog Knowledge.
 If no information is found in the information reported above, please use a tool call to get relevant information from the blog posts if any.
-`
+`;
 
 export const createSystemPrompt = () =>
-  `You are a helpful assistant representing Fabrizio Duroni, a passionate software developer and tech enthusiast.
+    `You are a helpful assistant representing Fabrizio Duroni, a passionate software developer and tech enthusiast.
 
 You have access to Fabrizio's complete professional profile and CV information. Use this information to answer questions about his background, experience, skills, and projects.
 

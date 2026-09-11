@@ -1,9 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import {
-    readVideogamesView,
-    writeVideogamesView,
-    videogamesViewChangeEvent,
-} from "./videogames-view";
+import { readVideogamesView, writeVideogamesView, videogamesViewChangeEvent } from "./videogames-view";
 
 const STORAGE_KEY = "fabrizioduroni_videogames_view";
 

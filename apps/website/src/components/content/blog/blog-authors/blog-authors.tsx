@@ -22,25 +22,14 @@ export const BlogAuthors: FC<BlogAuthorsProps> = ({ author, authors }) => {
 
     return (
         <>
-            <ContentPage
-                author={author}
-                trackingCategory={tracking.category.blog_authors}
-            >
-                <div className="container-fluid p-0 mb-5">
+            <ContentPage author={author} trackingCategory={tracking.category.blog_authors}>
+                <div className="container-fluid mb-5 p-0">
                     <PageTitle>Authors</PageTitle>
-                    <FilterInput
-                        value={query}
-                        onChange={handleFilter}
-                        placeholder="Filter authors..."
-                    />
+                    <FilterInput value={query} onChange={handleFilter} placeholder="Filter authors..." />
                     {filteredAuthors.length > 0 ? (
                         <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                             {filteredAuthors.map((entry) => (
-                                <AuthorCard
-                                    key={entry.author.id}
-                                    author={entry.author}
-                                    postCount={entry.postCount}
-                                />
+                                <AuthorCard key={entry.author.id} author={entry.author} postCount={entry.postCount} />
                             ))}
                         </div>
                     ) : (

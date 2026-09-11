@@ -40,7 +40,7 @@ export const Loader: FC<LoaderProps> = ({ size = "md", className, label = "Loadi
                         delay: i * 0.15,
                         ease: "easeInOut",
                     }}
-                    className={`${sizeClasses[size]} rounded-full bg-accent`}
+                    className={`${sizeClasses[size]} bg-accent rounded-full`}
                 />
             ))}
         </div>

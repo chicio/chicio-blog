@@ -97,7 +97,9 @@ export const useChromeAiFeaturesToolbarStore = (
                 }
 
                 const { done, value } = await reader.read();
-                if (done) { break; }
+                if (done) {
+                    break;
+                }
 
                 const chunk = typeof value === "string" ? value : decoder.decode(value, { stream: true });
                 if (chunk.length > 0) {
@@ -108,7 +110,9 @@ export const useChromeAiFeaturesToolbarStore = (
 
             setStatus("done");
         } catch (error) {
-            if ((error as Error).name === "AbortError") { return; }
+            if ((error as Error).name === "AbortError") {
+                return;
+            }
             setStatus("error");
         }
     }, []);
@@ -137,7 +141,9 @@ export const useChromeAiFeaturesToolbarStore = (
 
     const handleClose = () => {
         setStatus((current) => {
-            if (current === "downloading") { return current; }
+            if (current === "downloading") {
+                return current;
+            }
             abortRef.current?.abort();
             abortRef.current = null;
             return "idle";

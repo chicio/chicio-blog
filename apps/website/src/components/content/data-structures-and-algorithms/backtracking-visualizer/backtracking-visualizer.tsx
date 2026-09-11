@@ -11,37 +11,38 @@ export const BacktrackingVisualizer: FC = () => {
 
     return (
         <div>
-            <p>
-                Current path (exploration in progress):
-            </p>
-            <div className="flex flex-wrap gap-2 mb-4">
-                {path.length > 0 ? path.map((p, i) => (
-                    <div
-                        key={i}
-                        className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary-dark text-white font-mono"
-                    >
-                        {p}
-                    </div>
-                )) : "-"}
+            <p>Current path (exploration in progress):</p>
+            <div className="mb-4 flex flex-wrap gap-2">
+                {path.length > 0
+                    ? path.map((p, i) => (
+                          <div
+                              key={i}
+                              className="bg-primary-dark flex h-10 w-10 items-center justify-center rounded-lg font-mono text-white"
+                          >
+                              {p}
+                          </div>
+                      ))
+                    : "-"}
             </div>
 
-            <p>
-                Completed solutions:
-            </p>
-            <div className="flex flex-wrap gap-2 mb-6">
-                {pathsHistory.length > 0 ? pathsHistory.map((p, i) => (
-                    <div
-                        key={i}
-                        className="flex h-10 w-10 items-center justify-center rounded-lg glow-container"
-                    >
-                        {p.join("")}
-                    </div>
-                )) : "-"}
+            <p>Completed solutions:</p>
+            <div className="mb-6 flex flex-wrap gap-2">
+                {pathsHistory.length > 0
+                    ? pathsHistory.map((p, i) => (
+                          <div key={i} className="glow-container flex h-10 w-10 items-center justify-center rounded-lg">
+                              {p.join("")}
+                          </div>
+                      ))
+                    : "-"}
             </div>
 
-            <div className="flex gap-2 justify-center">
-                <RedPillButton onClick={start} disabled={isRunning}>Run</RedPillButton>
-                <BluePillButton onClick={reset} disabled={isRunning}>Reset</BluePillButton>
+            <div className="flex justify-center gap-2">
+                <RedPillButton onClick={start} disabled={isRunning}>
+                    Run
+                </RedPillButton>
+                <BluePillButton onClick={reset} disabled={isRunning}>
+                    Reset
+                </BluePillButton>
             </div>
         </div>
     );

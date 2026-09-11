@@ -25,7 +25,11 @@ describe("Overlay", () => {
         });
 
         it("renders children inside the overlay", () => {
-            render(<Overlay delay={0}><span>Overlay content</span></Overlay>);
+            render(
+                <Overlay delay={0}>
+                    <span>Overlay content</span>
+                </Overlay>,
+            );
             expect(screen.getByText("Overlay content")).toBeInTheDocument();
         });
 

@@ -2,9 +2,9 @@ import { ClownsPageTemplate } from "@/components/content/clowns/clowns-page-temp
 import { ClownsVideos } from "@/components/content/clowns/clowns-videos";
 
 const ClownsPage = () => (
-  <ClownsPageTemplate>
-    <ClownsVideos />
-  </ClownsPageTemplate>
+    <ClownsPageTemplate>
+        <ClownsVideos />
+    </ClownsPageTemplate>
 );
 
 export default ClownsPage;

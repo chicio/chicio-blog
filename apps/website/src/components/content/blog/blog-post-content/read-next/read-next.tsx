@@ -19,10 +19,7 @@ export const RecentPosts: FC<RecentPostsProps> = ({ currentSlug }) => {
                         to={post.slug.formatted}
                         className="no-underline hover:no-underline"
                     >
-                        <TerminalListItem
-                            title={post.frontmatter.title}
-                            description={post.frontmatter.description}
-                        />
+                        <TerminalListItem title={post.frontmatter.title} description={post.frontmatter.description} />
                     </InternalLink>
                 ))}
             </ReadNextTerminalWindow>

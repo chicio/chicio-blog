@@ -10,7 +10,9 @@ describe("ParagraphTitleWithIcon", () => {
         });
 
         it("renders the icon", () => {
-            render(<ParagraphTitleWithIcon icon={<span data-testid="test-icon">X</span>}>Title</ParagraphTitleWithIcon>);
+            render(
+                <ParagraphTitleWithIcon icon={<span data-testid="test-icon">X</span>}>Title</ParagraphTitleWithIcon>,
+            );
             expect(screen.getByTestId("test-icon")).toBeInTheDocument();
         });
     });

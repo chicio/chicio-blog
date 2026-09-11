@@ -9,42 +9,38 @@ import { siteMetadata } from "@/types/configuration/site-metadata";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-export async function generateMetadata({
-  params,
-}: NextPostParameters): Promise<Metadata> {
-  const receivedParameters = await params;
-  const post = posts.single(receivedParameters)!;
-  
-  if (!post) {
-    return {};
-  }
+export async function generateMetadata({ params }: NextPostParameters): Promise<Metadata> {
+    const receivedParameters = await params;
+    const post = posts.single(receivedParameters)!;
 
-  const { frontmatter } = post;
+    if (!post) {
+        return {};
+    }
 
-  return createMetadata({
-    author: siteMetadata.author,
-    title: frontmatter.title,
-    slug: post.slug.formatted,
-    imageUrl: frontmatter.image,
-    description: frontmatter.description,
-    ogPageType: "article",
-    keywords: frontmatter.tags,
-  });
+    const { frontmatter } = post;
+
+    return createMetadata({
+        author: siteMetadata.author,
+        title: frontmatter.title,
+        slug: post.slug.formatted,
+        imageUrl: frontmatter.image,
+        description: frontmatter.description,
+        ogPageType: "article",
+        keywords: frontmatter.tags,
+    });
 }
 
 export async function generateStaticParams() {
-  return posts.list().map((post) => post.slug.params);
+    return posts.list().map((post) => post.slug.params);
 }
 
 export default async function BlogPostPage({ params }: NextPostParameters) {
-  const receivedParameters = await params;
-  const post = posts.single(receivedParameters);
+    const receivedParameters = await params;
+    const post = posts.single(receivedParameters);
 
-  if (!post) {
-    notFound();
-  }
+    if (!post) {
+        notFound();
+    }
 
-  return (
-    <BlogPostContent post={post} />
-  );
+    return <BlogPostContent post={post} />;
 }

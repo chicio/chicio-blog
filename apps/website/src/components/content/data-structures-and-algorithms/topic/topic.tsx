@@ -23,14 +23,16 @@ export const Topic: FC<PropsWithChildren<DsaProps>> = async ({ topic, previous, 
     return (
         <ReadingContentPage
             author={siteMetadata.author}
-            breadcrumbs={[
-                {
-                    label: "DSA",
-                    href: slugs.dataStructuresAndAlgorithms.roadmap,
-                    isCurrent: false,
-                },
-                { label: topic.frontmatter.title, href: topic.slug.formatted, isCurrent: true },
-            ] satisfies BreadcrumbItem[]}
+            breadcrumbs={
+                [
+                    {
+                        label: "DSA",
+                        href: slugs.dataStructuresAndAlgorithms.roadmap,
+                        isCurrent: false,
+                    },
+                    { label: topic.frontmatter.title, href: topic.slug.formatted, isCurrent: true },
+                ] satisfies BreadcrumbItem[]
+            }
         >
             <TopicContent />
             {(previous || next) && <CourseNavigation previousTopic={previous} nextTopic={next} />}

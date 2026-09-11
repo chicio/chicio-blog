@@ -1,7 +1,7 @@
 ---
 title: Pipeline overview
 sidebar:
-  order: 1
+    order: 1
 ---
 
 The effect is orchestrated by a single render graph (`src/gpu/render-graph.ts`) that owns the GPU resources and runs two things each frame: a **compute pass** that advances the simulation, and a **render pass chain** that draws the frame and applies post-processing.

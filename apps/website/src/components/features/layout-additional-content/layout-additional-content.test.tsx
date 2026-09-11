@@ -84,10 +84,7 @@ describe("LayoutAdditionalContent", () => {
 
         it("passes decided=false when no consent decision has been made", () => {
             render(<LayoutAdditionalContent />);
-            expect(screen.getByTestId("cookie-consent-banner")).toHaveAttribute(
-                "data-decided",
-                "false",
-            );
+            expect(screen.getByTestId("cookie-consent-banner")).toHaveAttribute("data-decided", "false");
         });
 
         it("calls writeConsent with accepted when Accept is clicked", () => {

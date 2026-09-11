@@ -5,8 +5,7 @@
  */
 const FIGHTING_GENRE = "fighting";
 
-export const isFightingGenre = (genre: string | undefined): boolean =>
-    genre?.trim().toLowerCase() === FIGHTING_GENRE;
+export const isFightingGenre = (genre: string | undefined): boolean => genre?.trim().toLowerCase() === FIGHTING_GENRE;
 
 export const TAPS_TO_TRIGGER = 5;
 

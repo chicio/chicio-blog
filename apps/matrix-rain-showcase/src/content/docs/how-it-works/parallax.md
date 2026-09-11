@@ -1,12 +1,12 @@
 ---
 title: Parallax
 sidebar:
-  order: 4
+    order: 4
 ---
 
 **Source:** [`src/gpu/render-graph.ts`](https://github.com/chicio/chicio-blog/blob/main/packages/matrix-rain-webgpu/src/gpu/render-graph.ts) (`initialColumns`), [`src/gpu/pipelines/render-glyphs.ts`](https://github.com/chicio/chicio-blog/blob/main/packages/matrix-rain-webgpu/src/gpu/pipelines/render-glyphs.ts)
 
-Parallax is the depth illusion: some columns read as *near* (fast, bright, crisp) and others as *far* (slow, dim, soft). It's driven entirely by one per-column value — `depth` — derived from the column's fall speed.
+Parallax is the depth illusion: some columns read as _near_ (fast, bright, crisp) and others as _far_ (slow, dim, soft). It's driven entirely by one per-column value — `depth` — derived from the column's fall speed.
 
 ## Depth from speed
 
@@ -35,7 +35,7 @@ The speed spread is the whole effect. Collapse `speedRange` to a single value an
 
 ## A note on `depthDim` vs `enabled`
 
-There's no `enabled` flag on parallax (unlike bloom/crt). It doesn't need one: "disabled" is fully expressed by the *values* (`speedRange = [1,1]`, `depthDim = 0`), so nothing downstream has to branch. `depthDim` is patched into the uniform every frame (live), while `speedRange` only takes effect on the next column (re)spawn, since it's baked into `depth` at creation.
+There's no `enabled` flag on parallax (unlike bloom/crt). It doesn't need one: "disabled" is fully expressed by the _values_ (`speedRange = [1,1]`, `depthDim = 0`), so nothing downstream has to branch. `depthDim` is patched into the uniform every frame (live), while `speedRange` only takes effect on the next column (re)spawn, since it's baked into `depth` at creation.
 
 ## `tailLength` is independent
 

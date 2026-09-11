@@ -40,12 +40,7 @@ const ga4: AnalyticsStats = {
 describe("AnalyticsSection", () => {
     describe("render", () => {
         it("renders the all-time totals even when GA4 is absent (stub mode)", () => {
-            render(
-                <AnalyticsSection
-                    allTime={{ ...allTime, hasGa4: false }}
-                    ga4={null}
-                />,
-            );
+            render(<AnalyticsSection allTime={{ ...allTime, hasGa4: false }} ga4={null} />);
 
             expect(screen.getByText("Page views").previousElementSibling).toHaveTextContent("12,345");
             expect(screen.getByText("Users").previousElementSibling).toHaveTextContent("6,789");
@@ -53,12 +48,7 @@ describe("AnalyticsSection", () => {
         });
 
         it("renders the all-time breakdown headings", () => {
-            render(
-                <AnalyticsSection
-                    allTime={allTime}
-                    ga4={ga4}
-                />,
-            );
+            render(<AnalyticsSection allTime={allTime} ga4={ga4} />);
 
             expect(screen.getByRole("heading", { level: 2, name: "Traffic" })).toBeInTheDocument();
             expect(screen.getByRole("heading", { level: 2, name: "Users by continent" })).toBeInTheDocument();
@@ -66,24 +56,14 @@ describe("AnalyticsSection", () => {
         });
 
         it("always renders Views over time but hides Top posts when GA4 is absent", () => {
-            render(
-                <AnalyticsSection
-                    allTime={{ ...allTime, hasGa4: false }}
-                    ga4={null}
-                />,
-            );
+            render(<AnalyticsSection allTime={{ ...allTime, hasGa4: false }} ga4={null} />);
 
             expect(screen.getByRole("heading", { level: 2, name: "Views over time" })).toBeInTheDocument();
             expect(screen.queryByRole("heading", { level: 2, name: "Top posts by views" })).not.toBeInTheDocument();
         });
 
         it("shows Top posts and the live-since caption when GA4 is present", () => {
-            render(
-                <AnalyticsSection
-                    allTime={allTime}
-                    ga4={ga4}
-                />,
-            );
+            render(<AnalyticsSection allTime={allTime} ga4={ga4} />);
 
             expect(screen.getByRole("heading", { level: 2, name: "Views over time" })).toBeInTheDocument();
             expect(screen.getByRole("heading", { level: 2, name: "Top posts by views" })).toBeInTheDocument();
@@ -91,23 +71,13 @@ describe("AnalyticsSection", () => {
         });
 
         it("notes the estimate is UA-only when GA4 is absent", () => {
-            render(
-                <AnalyticsSection
-                    allTime={{ ...allTime, hasGa4: false }}
-                    ga4={null}
-                />,
-            );
+            render(<AnalyticsSection allTime={{ ...allTime, hasGa4: false }} ga4={null} />);
 
             expect(screen.getByText(/estimated from Universal Analytics \(May 2017 – May 2021\)/)).toBeInTheDocument();
         });
 
         it("notes totals combine both eras when GA4 is present", () => {
-            render(
-                <AnalyticsSection
-                    allTime={allTime}
-                    ga4={ga4}
-                />,
-            );
+            render(<AnalyticsSection allTime={allTime} ga4={ga4} />);
 
             expect(screen.getByText(/combine live GA4 data with estimated Universal Analytics/)).toBeInTheDocument();
         });

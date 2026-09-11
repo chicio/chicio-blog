@@ -9,12 +9,7 @@ interface PageIndicatorsProps {
     glassmorphism?: boolean;
 }
 
-export const PageIndicators: FC<PageIndicatorsProps> = ({
-    images,
-    currentIndex,
-    onSelect,
-    glassmorphism = false,
-}) => {
+export const PageIndicators: FC<PageIndicatorsProps> = ({ images, currentIndex, onSelect, glassmorphism = false }) => {
     const { glassmorphismClass } = useGlassmorphism();
 
     return (

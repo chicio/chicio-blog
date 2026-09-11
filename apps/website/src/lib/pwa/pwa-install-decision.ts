@@ -7,14 +7,14 @@ const key = "pwaInstallDecision";
 export const pwaInstallDecisionChangeEvent = "pwaInstallDecisionChanged";
 
 export const readPwaInstallDecision = (): PwaInstallDecision | null => {
-  const value = readLocalStorage(key);
-  if (value === "dismissed" || value === "installed") {
-    return value;
-  }
-  return null;
+    const value = readLocalStorage(key);
+    if (value === "dismissed" || value === "installed") {
+        return value;
+    }
+    return null;
 };
 
 export const writePwaInstallDecision = (value: PwaInstallDecision) => {
-  writeLocalStorage(key, value);
-  window.dispatchEvent(new CustomEvent(pwaInstallDecisionChangeEvent, { detail: value }));
+    writeLocalStorage(key, value);
+    window.dispatchEvent(new CustomEvent(pwaInstallDecisionChangeEvent, { detail: value }));
 };

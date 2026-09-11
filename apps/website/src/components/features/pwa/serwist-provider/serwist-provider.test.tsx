@@ -3,9 +3,7 @@ import { render, screen } from "@/test-utils";
 import { SerwistProvider } from "./serwist-provider";
 
 vi.mock("@serwist/next/react", () => ({
-    SerwistProvider: ({ children }: React.PropsWithChildren) => (
-        <div data-testid="serwist-provider">{children}</div>
-    ),
+    SerwistProvider: ({ children }: React.PropsWithChildren) => <div data-testid="serwist-provider">{children}</div>,
 }));
 
 describe("SerwistProvider", () => {

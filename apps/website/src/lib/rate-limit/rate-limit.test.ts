@@ -41,9 +41,7 @@ describe("rate-limit", () => {
             const oldTimestamp = Date.now() - 120_000;
             // First call: throttle key → old timestamp (expired throttle)
             // Second call: rate limit key → count 1 (below limit)
-            mockGetValueFor
-                .mockResolvedValueOnce(oldTimestamp)
-                .mockResolvedValueOnce(1);
+            mockGetValueFor.mockResolvedValueOnce(oldTimestamp).mockResolvedValueOnce(1);
 
             const result = await checkRateLimitFor("127.0.0.1");
             expect(result.success).toBe(true);
@@ -52,9 +50,7 @@ describe("rate-limit", () => {
         it("blocks request when daily limit of 5 is reached", async () => {
             // First call: throttle key → null (no throttle)
             // Second call: rate limit key → 5 (at limit)
-            mockGetValueFor
-                .mockResolvedValueOnce(null)
-                .mockResolvedValueOnce(5);
+            mockGetValueFor.mockResolvedValueOnce(null).mockResolvedValueOnce(5);
 
             const result = await checkRateLimitFor("127.0.0.1");
             expect(result.success).toBe(false);
@@ -92,11 +88,7 @@ describe("rate-limit", () => {
         it("records the throttle timestamp", async () => {
             await incrementRateLimit("127.0.0.1");
             await new Promise((r) => setTimeout(r, 0));
-            expect(mockSetValueFor).toHaveBeenCalledWith(
-                "throttle:127.0.0.1",
-                expect.any(Number),
-                60,
-            );
+            expect(mockSetValueFor).toHaveBeenCalledWith("throttle:127.0.0.1", expect.any(Number), 60);
         });
     });
 });

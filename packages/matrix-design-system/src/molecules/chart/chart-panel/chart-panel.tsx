@@ -8,12 +8,7 @@ export interface ChartPanelProps {
 
 export const ChartPanel: FC<PropsWithChildren<ChartPanelProps>> = ({ title, description, children }) => (
     <section className="glow-container bg-accent-alpha-10 h-full p-6">
-        {title && (
-            <SectionHeading
-                title={title}
-                description={description}
-            />
-        )}
+        {title && <SectionHeading title={title} description={description} />}
         {children}
     </section>
 );

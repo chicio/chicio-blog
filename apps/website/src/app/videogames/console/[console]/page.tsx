@@ -7,49 +7,40 @@ import { consoles } from "@/lib/content/videogames/videogames";
 import { siblingsOf } from "@/lib/content/siblings";
 import { Console } from "@/components/content/videogames/console";
 
-export async function generateMetadata({
-  params,
-}: NextVideogamesConsoleParameters): Promise<Metadata> {
-  const receivedParameters = await params;
-  const console = consoles.single(receivedParameters)!;
+export async function generateMetadata({ params }: NextVideogamesConsoleParameters): Promise<Metadata> {
+    const receivedParameters = await params;
+    const console = consoles.single(receivedParameters)!;
 
-  if (!console) {
-    return {};
-  }
+    if (!console) {
+        return {};
+    }
 
-  const { frontmatter } = console;
+    const { frontmatter } = console;
 
-  return createMetadata({
-    author: siteMetadata.author,
-    title: frontmatter.title,
-    slug: console.slug.formatted,
-    imageUrl: frontmatter.image,
-    description: frontmatter.description,
-    ogPageType: "website",
-    keywords: frontmatter.tags,
-  });
+    return createMetadata({
+        author: siteMetadata.author,
+        title: frontmatter.title,
+        slug: console.slug.formatted,
+        imageUrl: frontmatter.image,
+        description: frontmatter.description,
+        ogPageType: "website",
+        keywords: frontmatter.tags,
+    });
 }
 
 export async function generateStaticParams() {
-  return consoles.list().map(
-    (console) => console.slug.params,
-  );
+    return consoles.list().map((console) => console.slug.params);
 }
 
-export default async function VideogamesGamesForConsolePage({
-  params,
-}: NextVideogamesConsoleParameters) {
-  const receivedParameters = await params;
-  const console =
-    consoles.single(receivedParameters);
+export default async function VideogamesGamesForConsolePage({ params }: NextVideogamesConsoleParameters) {
+    const receivedParameters = await params;
+    const console = consoles.single(receivedParameters);
 
-  if (!console) {
-    notFound();
-  }
+    if (!console) {
+        notFound();
+    }
 
-  const siblings = siblingsOf(consoles.list(), console.slug.formatted);
+    const siblings = siblingsOf(consoles.list(), console.slug.formatted);
 
-  return (
-    <Console console={console} previous={siblings?.previous} next={siblings?.next} />
-  );
+    return <Console console={console} previous={siblings?.previous} next={siblings?.next} />;
 }

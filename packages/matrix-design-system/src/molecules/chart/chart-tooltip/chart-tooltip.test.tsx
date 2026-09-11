@@ -24,9 +24,7 @@ describe("ChartTooltip", () => {
         });
 
         it("renders nothing when there is no payload", () => {
-            const { container } = render(
-                <ChartTooltip {...makeProps({ active: true, payload: undefined })} />,
-            );
+            const { container } = render(<ChartTooltip {...makeProps({ active: true, payload: undefined })} />);
             expect(container).toBeEmptyDOMElement();
         });
 

@@ -1,11 +1,7 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import {
-    readVideogamesView,
-    videogamesViewChangeEvent,
-    VideogamesView,
-} from "@/lib/videogames/videogames-view";
+import { readVideogamesView, videogamesViewChangeEvent, VideogamesView } from "@/lib/videogames/videogames-view";
 
 const subscribe = (callback: () => void) => {
     if (typeof window === "undefined") {

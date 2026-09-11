@@ -39,7 +39,10 @@ describe("AuthorSocials", () => {
                     }}
                 />,
             );
-            expect(screen.getByRole("link", { name: /github/i })).toHaveAttribute("href", "https://github.com/aleromano");
+            expect(screen.getByRole("link", { name: /github/i })).toHaveAttribute(
+                "href",
+                "https://github.com/aleromano",
+            );
             expect(screen.getByRole("link", { name: /^x$/i })).toHaveAttribute("href", "https://x.com/aleromano");
             expect(screen.getByRole("link", { name: /website/i })).toHaveAttribute("href", "https://aleromano.dev");
         });

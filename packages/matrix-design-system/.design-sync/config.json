@@ -1,81 +1,72 @@
 {
-    "pkg": "matrix-design-system",
-    "globalName": "ChicioDS",
-    "projectId": "e5de76b0-e20e-414b-852b-210defebffac",
-    "shape": "storybook",
-    "storybookStatic": ".design-sync/sb-reference",
-    "storybookConfigDir": "../../apps/matrix-design-system-showcase/.storybook",
-    "buildCmd": "npx turbo run build --filter=matrix-design-system",
-    "extraEntries": [
-        "./dist/chart.mjs",
-        "./dist/markdown.mjs",
-        "./dist/command-palette.mjs"
-    ],
-    "titleMap": {
-        "TerminalBlocks": "TerminalLine",
-        "PillsLinks": "BluePillLink",
-        "ReadingContentProgressBar": "ContentProgressBar",
-        "Markdown": "Markdown",
-        "CommandPalette": "CommandPalette"
+  "pkg": "matrix-design-system",
+  "globalName": "ChicioDS",
+  "projectId": "e5de76b0-e20e-414b-852b-210defebffac",
+  "shape": "storybook",
+  "storybookStatic": ".design-sync/sb-reference",
+  "storybookConfigDir": "../../apps/matrix-design-system-showcase/.storybook",
+  "buildCmd": "npx turbo run build --filter=matrix-design-system",
+  "extraEntries": ["./dist/chart.mjs", "./dist/markdown.mjs", "./dist/command-palette.mjs"],
+  "titleMap": {
+    "TerminalBlocks": "TerminalLine",
+    "PillsLinks": "BluePillLink",
+    "ReadingContentProgressBar": "ContentProgressBar",
+    "Markdown": "Markdown",
+    "CommandPalette": "CommandPalette"
+  },
+  "libOverrides": {
+    "source-kit.mjs": "kebab-case component dirs vs PascalCase export names broke the group heuristic (~60 groups of one). Still loaded under the storybook shape for resolvePackage."
+  },
+  "readmeHeader": ".design-sync/conventions.md",
+  "overrides": {
+    "Breadcrumb": {
+      "cardMode": "single",
+      "primaryStory": "DeepTrail"
     },
-    "libOverrides": {
-        "source-kit.mjs": "kebab-case component dirs vs PascalCase export names broke the group heuristic (~60 groups of one). Still loaded under the storybook shape for resolvePackage."
+    "CommandPalette": {
+      "cardMode": "single",
+      "primaryStory": "Closed",
+      "skip": ["organism-command-palette--open", "organism-command-palette--custom-placeholder"]
     },
-    "readmeHeader": ".design-sync/conventions.md",
-    "overrides": {
-        "Breadcrumb": {
-            "cardMode": "single",
-            "primaryStory": "DeepTrail"
-        },
-        "CommandPalette": {
-            "cardMode": "single",
-            "primaryStory": "Closed",
-            "skip": [
-                "organism-command-palette--open",
-                "organism-command-palette--custom-placeholder"
-            ]
-        },
-        "ContentProgressBar": {
-            "cardMode": "single",
-            "primaryStory": "Default",
-            "skip": [
-                "organism-reading-content-progress-bar--default",
-                "organism-reading-content-progress-bar--nearly-finished",
-                "organism-reading-content-progress-bar--just-started"
-            ]
-        },
-        "CookieConsentBanner": {
-            "cardMode": "single",
-            "primaryStory": "Default"
-        },
-        "Footer": {
-            "cardMode": "column"
-        },
-        "InputField": {
-            "cardMode": "column"
-        },
-        "Lightbox": {
-            "cardMode": "single",
-            "primaryStory": "Open"
-        },
-        "Menu": {
-            "cardMode": "single",
-            "primaryStory": "Default",
-            "viewport": "1200x700",
-            "skip": [
-                "organism-menu--blog-dropdown-open",
-                "organism-menu--explore-dropdown-open",
-                "organism-menu--author-dropdown-open"
-            ]
-        },
-        "Overlay": {
-            "cardMode": "single",
-            "primaryStory": "WithDialog"
-        },
-        "ImageGlow": {
-            "skip": [
-                "atoms-effects-image-glow--fill-cover"
-            ]
-        }
+    "ContentProgressBar": {
+      "cardMode": "single",
+      "primaryStory": "Default",
+      "skip": [
+        "organism-reading-content-progress-bar--default",
+        "organism-reading-content-progress-bar--nearly-finished",
+        "organism-reading-content-progress-bar--just-started"
+      ]
+    },
+    "CookieConsentBanner": {
+      "cardMode": "single",
+      "primaryStory": "Default"
+    },
+    "Footer": {
+      "cardMode": "column"
+    },
+    "InputField": {
+      "cardMode": "column"
+    },
+    "Lightbox": {
+      "cardMode": "single",
+      "primaryStory": "Open"
+    },
+    "Menu": {
+      "cardMode": "single",
+      "primaryStory": "Default",
+      "viewport": "1200x700",
+      "skip": [
+        "organism-menu--blog-dropdown-open",
+        "organism-menu--explore-dropdown-open",
+        "organism-menu--author-dropdown-open"
+      ]
+    },
+    "Overlay": {
+      "cardMode": "single",
+      "primaryStory": "WithDialog"
+    },
+    "ImageGlow": {
+      "skip": ["atoms-effects-image-glow--fill-cover"]
     }
+  }
 }

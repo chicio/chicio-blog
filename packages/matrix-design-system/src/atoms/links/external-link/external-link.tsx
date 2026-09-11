@@ -11,14 +11,7 @@ type ExternalLinkProps = {
     onClick?: () => void;
 };
 
-export const ExternalLink: FC<ExternalLinkProps> = ({
-    children,
-    href,
-    onClick,
-    target,
-    rel,
-    className,
-}) => {
+export const ExternalLink: FC<ExternalLinkProps> = ({ children, href, onClick, target, rel, className }) => {
     return (
         <a href={href} onClick={onClick} className={className} target={target} rel={rel}>
             {children}

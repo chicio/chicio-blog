@@ -36,16 +36,16 @@ export const MatrixRainControlPanel: FC = () => {
                     animate={{ y: 0, opacity: 1 }}
                     exit={{ y: "100%", opacity: 0 }}
                     transition={{ duration: 0.25, ease: "easeOut" }}
-                    className={`${glassmorphismClass} overflow-x-hidden hide-scrollbar container-fixed fixed z-40 overflow-y-auto bottom-0 left-0 right-0 max-h-[60vh]`}
+                    className={`${glassmorphismClass} hide-scrollbar container-fixed fixed right-0 bottom-0 left-0 z-40 max-h-[60vh] overflow-x-hidden overflow-y-auto`}
                     onClick={effects.stopPropagation}
                 >
-                    <div className="p-4 pb-24 flex flex-col gap-2">
-                        <div className="flex justify-between items-center mb-2">
+                    <div className="flex flex-col gap-2 p-4 pb-24">
+                        <div className="mb-2 flex items-center justify-between">
                             <h4>{">"} Matrix Rain Settings</h4>
                             <button
                                 type="button"
                                 onClick={effects.close}
-                                className="text-accent/50 hover:text-accent transition-colors duration-100 cursor-pointer"
+                                className="text-accent/50 hover:text-accent cursor-pointer transition-colors duration-100"
                                 aria-label="Close panel"
                             >
                                 <MdClose size={18} />
@@ -95,7 +95,7 @@ export const MatrixRainControlPanel: FC = () => {
                             displayValue={state.fontSizeDisplayValue}
                         />
 
-                        <div className="flex justify-between items-center mt-2">
+                        <div className="mt-2 flex items-center justify-between">
                             <h5 className="mb-0">Bloom</h5>
                             <Switch
                                 checked={state.settings.bloom.enabled}
@@ -135,7 +135,7 @@ export const MatrixRainControlPanel: FC = () => {
                             </>
                         )}
 
-                        <div className="flex justify-between items-center mt-2">
+                        <div className="mt-2 flex items-center justify-between">
                             <h5 className="mb-0">CRT</h5>
                             <Switch
                                 checked={state.settings.crt.enabled}
@@ -168,7 +168,7 @@ export const MatrixRainControlPanel: FC = () => {
                     </div>
                     <div
                         aria-hidden
-                        className="pointer-events-none sticky bottom-0 left-0 right-0 -mt-24 h-24 bg-gradient-to-t from-general-background to-transparent"
+                        className="from-general-background pointer-events-none sticky right-0 bottom-0 left-0 -mt-24 h-24 bg-gradient-to-t to-transparent"
                     />
                 </motion.div>
             )}

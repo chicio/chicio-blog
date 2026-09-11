@@ -16,17 +16,14 @@ export const AboutMeTableOfContents = () => {
     const { effects } = useAboutMeTableOfContentsStore();
 
     return (
-        <ProfileHero
-            name={siteMetadata.author}
-            role="Software Engineer"
-        >
-            <div className="mt-6 flex flex-col md:flex-row md:flex-wrap items-center justify-center gap-2">
+        <ProfileHero name={siteMetadata.author} role="Software Engineer">
+            <div className="mt-6 flex flex-col items-center justify-center gap-2 md:flex-row md:flex-wrap">
                 {sections.map((section) => (
                     <Button
                         key={section.id}
                         onClick={effects.scrollToSection(section.id)}
                         aria-label={`Jump to ${section.label} section`}
-                        className="text-primary-text w-full md:w-auto justify-center"
+                        className="text-primary-text w-full justify-center md:w-auto"
                     >
                         {section.label}
                     </Button>

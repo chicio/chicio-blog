@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       package:
-        description: 'Which package to release'
+        description: "Which package to release"
         type: choice
         options:
           - matrix-component-store
@@ -19,7 +19,7 @@ on:
         options: [initial, patch, minor, major, beta, major-beta]
         default: patch
       dry_run:
-        description: 'Dry run (no publish, tag or push)'
+        description: "Dry run (no publish, tag or push)"
         type: boolean
         default: true
 
@@ -39,9 +39,9 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v5
         with:
-          node-version-file: 'package.json'
-          cache: 'npm'
-          registry-url: 'https://registry.npmjs.org'
+          node-version-file: "package.json"
+          cache: "npm"
+          registry-url: "https://registry.npmjs.org"
       # Trusted publishing needs npm >= 11.5.1. Pinned to the 11.x line rather than @latest: the
       # repo declares npm ^11.0.0 in devEngines, and npm 12 both contradicts that and changed the
       # shape of `npm pack --json`, which broke the verification step on its release day.

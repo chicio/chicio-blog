@@ -10,8 +10,7 @@ const readLocalStorage = (key: string) => {
     }
 };
 
-const writeLocalStorage = (key: string, value: string) =>
-    localStorage.setItem(`${PREFIX}${key}`, value);
+const writeLocalStorage = (key: string, value: string) => localStorage.setItem(`${PREFIX}${key}`, value);
 
 const STORAGE_KEY = "matrix-rain-settings";
 const SETTINGS_VERSION = 1;
@@ -72,7 +71,7 @@ export const MATRIX_RAIN_PRESETS: Record<string, MatrixRainSettings> = {
     Classic: MATRIX_RAIN_DEFAULTS,
     Cyberpunk: {
         version: SETTINGS_VERSION,
-        rain: { density: 0.90, stepRate: 14, fontSize: 16 },
+        rain: { density: 0.9, stepRate: 14, fontSize: 16 },
         bloom: { enabled: true, intensity: 2.8, threshold: 0.5, emission: 2.0 },
         crt: { enabled: true, scanlineStrength: 0.4, aberration: 2.8 },
     },

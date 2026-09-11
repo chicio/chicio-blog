@@ -4,8 +4,24 @@ import remarkMath from "remark-math";
 import remarkMdx from "remark-mdx";
 import remarkStringify from "remark-stringify";
 import { toString as mdastToString } from "mdast-util-to-string";
-import type { Emphasis, Heading, Image, Link, Paragraph, PhrasingContent, Root, RootContent, Strong, Text } from "mdast";
-import type { MdxJsxAttribute, MdxJsxAttributeValueExpression, MdxJsxFlowElement, MdxJsxTextElement } from "mdast-util-mdx-jsx";
+import type {
+    Emphasis,
+    Heading,
+    Image,
+    Link,
+    Paragraph,
+    PhrasingContent,
+    Root,
+    RootContent,
+    Strong,
+    Text,
+} from "mdast";
+import type {
+    MdxJsxAttribute,
+    MdxJsxAttributeValueExpression,
+    MdxJsxFlowElement,
+    MdxJsxTextElement,
+} from "mdast-util-mdx-jsx";
 import type { Expression } from "estree-jsx";
 
 type MdxJsxElement = MdxJsxFlowElement | MdxJsxTextElement;

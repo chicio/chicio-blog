@@ -4,7 +4,6 @@ import userEvent from "@testing-library/user-event";
 import { fireEvent } from "@testing-library/react";
 import { FullscreenModal } from "./fullscreen-modal";
 
-
 vi.mock("../../../atoms/animation/motion-div", () => ({
     MotionDiv: ({ children, ...props }: React.HTMLAttributes<HTMLDivElement>) => <div {...props}>{children}</div>,
 }));

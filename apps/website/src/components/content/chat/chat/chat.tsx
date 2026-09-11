@@ -34,7 +34,7 @@ export const Chat: FC = () => {
                         <p>Ask anything about my work, projects and code.</p>
                     </>
                 )}
-                <div className="hide-scrollbar pb-[calc(140px+env(safe-area-inset-bottom,0px))] flex flex-1 flex-col gap-3 overflow-visible pt-6 sm:pt-10 sm:pb-[140px]">
+                <div className="hide-scrollbar flex flex-1 flex-col gap-3 overflow-visible pt-6 pb-[calc(140px+env(safe-area-inset-bottom,0px))] sm:pt-10 sm:pb-[140px]">
                     {!state.hasMessages && (
                         <ChatWelcome
                             exampleQuestions={state.exampleQuestions}
@@ -53,7 +53,7 @@ export const Chat: FC = () => {
                                         const statusText =
                                             part.state === "output-available" ? `completed` : `in progress…`;
                                         return (
-                                            <div className="my-3 mx-0 w-fit" key={`${message.id}-tool-${idx}`}>
+                                            <div className="mx-0 my-3 w-fit" key={`${message.id}-tool-${idx}`}>
                                                 <RedPillNoReflection
                                                     pillBodyClassName="h-8"
                                                     pillLabelClassName="text-xs"

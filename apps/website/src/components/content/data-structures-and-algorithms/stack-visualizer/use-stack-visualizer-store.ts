@@ -21,13 +21,17 @@ export const useStackVisualizerStore = (): ComponentStore<StackVisualizerState, 
     const [capacity] = useState(initialCapacity);
 
     const push = () => {
-        if (stack.length >= capacity) { return; }
+        if (stack.length >= capacity) {
+            return;
+        }
         const nextValue = stack.length > 0 ? stack[stack.length - 1] + 1 : 1;
         setStack([...stack, nextValue]);
     };
 
     const pop = () => {
-        if (stack.length === 0) { return; }
+        if (stack.length === 0) {
+            return;
+        }
         setStack(stack.slice(0, stack.length - 1));
     };
 

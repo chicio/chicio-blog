@@ -1,81 +1,48 @@
 {
-    "$schema": "https://turborepo.com/schema.json",
-    "ui": "stream",
-    "globalDependencies": [
-        ".prettierrc"
-    ],
-    "globalEnv": [
-        "CI",
-        "NODE_ENV"
-    ],
-    "tasks": {
-        "build": {
-            "dependsOn": [
-                "^build"
-            ],
-            "outputs": [
-                ".next/**",
-                "!.next/cache/**",
-                "dist/**"
-            ]
-        },
-        "dev": {
-            "dependsOn": [
-                "^build"
-            ],
-            "cache": false,
-            "persistent": true
-        },
-        "start": {
-            "dependsOn": [
-                "^build"
-            ],
-            "cache": false,
-            "persistent": true
-        },
-        "lint": {
-            "dependsOn": [
-                "^build"
-            ]
-        },
-        "knip": {
-            "dependsOn": [
-                "^build"
-            ]
-        },
-        "typecheck": {
-            "dependsOn": [
-                "^build"
-            ]
-        },
-        "validate-architecture": {},
-        "test": {
-            "dependsOn": [
-                "^build"
-            ],
-            "cache": false,
-            "persistent": true
-        },
-        "test:run": {
-            "dependsOn": [
-                "^build"
-            ]
-        },
-        "test:coverage": {
-            "dependsOn": [
-                "^build"
-            ],
-            "outputs": [
-                "coverage/**"
-            ]
-        },
-        "test:e2e": {
-            "dependsOn": [
-                "build"
-            ],
-            "outputs": [
-                "playwright-report/**"
-            ]
-        }
+  "$schema": "https://turborepo.com/schema.json",
+  "ui": "stream",
+  "globalDependencies": [".prettierrc"],
+  "globalEnv": ["CI", "NODE_ENV"],
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": [".next/**", "!.next/cache/**", "dist/**"]
+    },
+    "dev": {
+      "dependsOn": ["^build"],
+      "cache": false,
+      "persistent": true
+    },
+    "start": {
+      "dependsOn": ["^build"],
+      "cache": false,
+      "persistent": true
+    },
+    "lint": {
+      "dependsOn": ["^build"]
+    },
+    "knip": {
+      "dependsOn": ["^build"]
+    },
+    "typecheck": {
+      "dependsOn": ["^build"]
+    },
+    "validate-architecture": {},
+    "test": {
+      "dependsOn": ["^build"],
+      "cache": false,
+      "persistent": true
+    },
+    "test:run": {
+      "dependsOn": ["^build"]
+    },
+    "test:coverage": {
+      "dependsOn": ["^build"],
+      "outputs": ["coverage/**"]
+    },
+    "test:e2e": {
+      "dependsOn": ["build"],
+      "outputs": ["playwright-report/**"]
     }
+  }
 }

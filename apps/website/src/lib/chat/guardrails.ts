@@ -123,7 +123,10 @@ export const runGuardrails = async (message: string): Promise<GuardrailResult> =
         return injectionResult;
     }
 
-    const [safetyResult, relevanceResult] = await Promise.all([checkInputSafety(message), checkTopicRelevance(message)]);
+    const [safetyResult, relevanceResult] = await Promise.all([
+        checkInputSafety(message),
+        checkTopicRelevance(message),
+    ]);
 
     if (!safetyResult.safe) {
         return safetyResult;

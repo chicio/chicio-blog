@@ -7,10 +7,7 @@ import { useMarkdownStore } from "./use-markdown-store";
 
 const MarkdownBlock = memo(
     ({ content }: { content: string }) => (
-        <ReactMarkdown
-            remarkPlugins={markdownRemarkPlugins}
-            rehypePlugins={[rehypeHighlight, rehypeKatex]}
-        >
+        <ReactMarkdown remarkPlugins={markdownRemarkPlugins} rehypePlugins={[rehypeHighlight, rehypeKatex]}>
             {content}
         </ReactMarkdown>
     ),

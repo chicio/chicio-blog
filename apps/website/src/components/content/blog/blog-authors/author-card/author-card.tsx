@@ -21,10 +21,7 @@ export const AuthorCard: FC<AuthorCardProps> = ({ author, postCount }) => {
     const href = authorHref(author.id);
 
     return (
-        <div
-            ref={setEl}
-            className="flex min-h-[220px]"
-        >
+        <div ref={setEl} className="flex min-h-[220px]">
             {isInView && (
                 <InternalLink
                     className={`${glassmorphismClass} flex h-full w-full flex-col items-center gap-2 p-6 text-center no-underline hover:no-underline`}

@@ -48,9 +48,7 @@ export const computePostsPerYear = (posts: Content[]): PostsPerYear[] => {
         countsByYear.set(year, (countsByYear.get(year) ?? 0) + 1);
     });
 
-    return [...countsByYear.entries()]
-        .map(([year, count]) => ({ year, count }))
-        .sort((a, b) => a.year - b.year);
+    return [...countsByYear.entries()].map(([year, count]) => ({ year, count })).sort((a, b) => a.year - b.year);
 };
 
 export const computeTagDistribution = (tags: Tag[], limit: number): TagCount[] =>
@@ -59,10 +57,7 @@ export const computeTagDistribution = (tags: Tag[], limit: number): TagCount[] =
         .slice(0, limit)
         .map((tag) => ({ tag: tag.tagValue, count: tag.count, href: `${slugs.blog.tag}/${tag.tagSlugText}` }));
 
-export const computeAuthorDistribution = (
-    authorsWithPosts: AuthorSummary[],
-    excludeAuthorId?: string,
-): AuthorCount[] =>
+export const computeAuthorDistribution = (authorsWithPosts: AuthorSummary[], excludeAuthorId?: string): AuthorCount[] =>
     authorsWithPosts
         .filter((entry) => entry.author.id !== excludeAuthorId)
         .sort((a, b) => b.postCount - a.postCount || a.author.name.localeCompare(b.author.name))

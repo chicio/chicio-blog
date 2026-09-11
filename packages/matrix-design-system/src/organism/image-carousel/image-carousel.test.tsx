@@ -3,14 +3,8 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { ImageCarousel } from "./image-carousel";
 
-
 vi.mock("../../atoms/effects/image-glow", () => ({
-    ImageGlow: ({
-        alt,
-        src,
-        onClick,
-        ...rest
-    }: React.ImgHTMLAttributes<HTMLImageElement> & { src: string }) => (
+    ImageGlow: ({ alt, src, onClick, ...rest }: React.ImgHTMLAttributes<HTMLImageElement> & { src: string }) => (
         <img alt={alt} src={src} onClick={onClick} {...rest} />
     ),
 }));

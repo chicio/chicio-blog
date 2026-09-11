@@ -23,11 +23,7 @@ export const DonutChart: FC<DonutChartProps> = ({ data, colors = DEFAULT_COLORS,
     return (
         <div className="flex flex-wrap items-center gap-7">
             <div className="relative h-[170px] w-[170px] flex-none">
-                <ResponsiveContainer
-                    width={"100%"}
-                    height={"100%"}
-                    initialDimension={{ width: 170, height: 170 }}
-                >
+                <ResponsiveContainer width={"100%"} height={"100%"} initialDimension={{ width: 170, height: 170 }}>
                     <PieChart>
                         <Pie
                             data={data}
@@ -38,27 +34,21 @@ export const DonutChart: FC<DonutChartProps> = ({ data, colors = DEFAULT_COLORS,
                             stroke="none"
                         >
                             {data.map((entry, index) => (
-                                <Cell
-                                    key={entry.label}
-                                    fill={colors[index % colors.length]}
-                                />
+                                <Cell key={entry.label} fill={colors[index % colors.length]} />
                             ))}
                         </Pie>
                     </PieChart>
                 </ResponsiveContainer>
                 {centerLabel && (
                     <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center text-center">
-                        <span className="text-accent text-shadow-md text-lg font-bold tabular-nums">{centerLabel}</span>
+                        <span className="text-accent text-lg font-bold tabular-nums text-shadow-md">{centerLabel}</span>
                         {centerSublabel && <span className="text-secondary text-xs">{centerSublabel}</span>}
                     </div>
                 )}
             </div>
             <ul className="flex min-w-[170px] flex-1 list-none flex-col gap-2.5 p-0">
                 {data.map((entry, index) => (
-                    <li
-                        key={entry.label}
-                        className="flex items-center gap-2.5"
-                    >
+                    <li key={entry.label} className="flex items-center gap-2.5">
                         <span
                             className="inline-block h-2.5 w-2.5 flex-none rounded-full"
                             style={{ backgroundColor: colors[index % colors.length] }}

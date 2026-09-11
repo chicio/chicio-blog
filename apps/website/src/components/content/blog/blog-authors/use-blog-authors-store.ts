@@ -13,9 +13,7 @@ interface BlogAuthorsEffects {
     handleFilter: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
-export const useBlogAuthorsStore = (
-    authors: AuthorSummary[],
-): ComponentStore<BlogAuthorsState, BlogAuthorsEffects> => {
+export const useBlogAuthorsStore = (authors: AuthorSummary[]): ComponentStore<BlogAuthorsState, BlogAuthorsEffects> => {
     const [query, setQuery] = useState("");
     const [filteredAuthors, setFilteredAuthors] = useState(authors);
 

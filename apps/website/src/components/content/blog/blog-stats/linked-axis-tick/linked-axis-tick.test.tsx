@@ -23,12 +23,7 @@ describe("LinkedAxisTick", () => {
 
         it("renders a plain label when the value has no href", () => {
             const { container } = renderInSvg(
-                <LinkedAxisTick
-                    x={10}
-                    y={20}
-                    payload={{ value: "unknown" }}
-                    hrefByValue={new Map()}
-                />,
+                <LinkedAxisTick x={10} y={20} payload={{ value: "unknown" }} hrefByValue={new Map()} />,
             );
 
             expect(container.querySelector("a")).toBeNull();

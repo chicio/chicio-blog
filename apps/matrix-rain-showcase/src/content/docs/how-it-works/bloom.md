@@ -1,7 +1,7 @@
 ---
 title: Bloom
 sidebar:
-  order: 5
+    order: 5
 ---
 
 **Source:** [`src/gpu/pipelines/bloom.ts`](https://github.com/chicio/chicio-blog/blob/main/packages/matrix-rain-webgpu/src/gpu/pipelines/bloom.ts)
@@ -44,7 +44,7 @@ $$ \text{out} = \text{scene} + \text{intensity}\cdot\text{bloom} $$
 
 ## Head emission — giving bloom something to extract
 
-There's a catch the threshold and intensity can't fix on their own: if nothing in the scene exceeds `1.0`, there's barely anything *above the threshold* to extract, and on the bright pixels themselves `scene + intensity·bloom` just clamps back to `1.0` (no visible change). Cranking intensity multiplies a near-empty signal; lowering the threshold just blooms the whole scene uniformly. Either way the glow stays weak.
+There's a catch the threshold and intensity can't fix on their own: if nothing in the scene exceeds `1.0`, there's barely anything _above the threshold_ to extract, and on the bright pixels themselves `scene + intensity·bloom` just clamps back to `1.0` (no visible change). Cranking intensity multiplies a near-empty signal; lowering the threshold just blooms the whole scene uniformly. Either way the glow stays weak.
 
 The fix is **head emission**: the [glyph pass](/matrix-rain-webgpu/how-it-works/glyph-rendering/) multiplies the head by `bloom.emission` (default `2`) so it writes **above 1.0** into the HDR target — burning the head hotter than the display can show. Now the extract has real headroom (`emission − threshold` instead of `1 − threshold`), so blooming the heads produces a strong halo, and `threshold`/`intensity` actually bite.
 

@@ -30,11 +30,7 @@ const trackingLabelFor = (slug: EasterEggSlug) => slug.replace(/-/g, "_");
 
 export const useEggSolutionStore = (slug: EasterEggSlug): ComponentStore<EggSolutionState, EggSolutionEffects> => {
     const [revealed, setRevealed] = useState(false);
-    const found = useSyncExternalStore(
-        subscribeToEasterEggFound,
-        () => isEasterEggFound(slug),
-        getServerFoundSnapshot,
-    );
+    const found = useSyncExternalStore(subscribeToEasterEggFound, () => isEasterEggFound(slug), getServerFoundSnapshot);
 
     useEffect(() => {
         const handleRevealAll = () => setRevealed(true);

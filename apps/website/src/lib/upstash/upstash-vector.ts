@@ -1,21 +1,21 @@
-import { VectorData } from '@/types/chat/vector-data'
-import { Index } from '@upstash/vector'
+import { VectorData } from "@/types/chat/vector-data";
+import { Index } from "@upstash/vector";
 
 const index = new Index({
-  url: process.env.UPSTASH_VECTOR_REST_URL!,
-  token: process.env.UPSTASH_VECTOR_REST_TOKEN!,
-})
+    url: process.env.UPSTASH_VECTOR_REST_URL!,
+    token: process.env.UPSTASH_VECTOR_REST_TOKEN!,
+});
 
 export async function upsert(vectoreData: VectorData[]) {
-  await index.upsert(vectoreData)
+    await index.upsert(vectoreData);
 }
 
 export async function findRelevantContent(query: string, k = 2) {
-  const result = await index.query({
-    data: query,
-    topK: k,
-    includeMetadata: true,
-  })
+    const result = await index.query({
+        data: query,
+        topK: k,
+        includeMetadata: true,
+    });
 
-  return result
+    return result;
 }

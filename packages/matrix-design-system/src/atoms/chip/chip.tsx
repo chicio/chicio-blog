@@ -11,7 +11,7 @@ export const Chip: FC<ChipProps> = ({ children, big = false, className }) => {
 
     return (
         <span
-            className={`glow-container text-shadow-sm p-2 block text-primary-text ${textSize} leading-none${className ? ` ${className}` : ""}`}
+            className={`glow-container text-primary-text block p-2 text-shadow-sm ${textSize} leading-none${className ? ` ${className}` : ""}`}
         >
             {children}
         </span>

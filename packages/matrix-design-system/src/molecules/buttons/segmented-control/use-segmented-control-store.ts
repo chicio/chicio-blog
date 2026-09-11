@@ -7,7 +7,7 @@ interface SegmentedControlEffects<T extends string> {
 }
 
 export const useSegmentedControlStore = <T extends string>(
-    onChange: (value: T) => void
+    onChange: (value: T) => void,
 ): EffectsStore<SegmentedControlEffects<T>> => {
     const triggerChange = (value: T) => () => onChange(value);
     return { effects: { triggerChange } };

@@ -1,7 +1,7 @@
 ---
 title: Introduction
 sidebar:
-  order: 1
+    order: 1
 ---
 
 **matrix-rain-webgpu** is a Matrix-style "digital rain" background effect for React, rendered on the GPU with [WebGPU](https://www.w3.org/TR/webgpu/) via [TypeGPU](https://docs.swmansion.com/TypeGPU/).
@@ -9,7 +9,7 @@ sidebar:
 It drops in as a single component:
 
 ```tsx
-import { MatrixRainWebGPU } from 'matrix-rain-webgpu';
+import { MatrixRainWebGPU } from "matrix-rain-webgpu";
 
 <MatrixRainWebGPU />;
 ```

@@ -1,10 +1,6 @@
 import { Content } from "@/types/content/content";
 import { slugs } from "@/types/configuration/slug";
-import {
-    dsaExercisesList,
-    exercises,
-    topics,
-} from "./data-structures-and-algorithms/data-structures-and-algorithms";
+import { dsaExercisesList, exercises, topics } from "./data-structures-and-algorithms/data-structures-and-algorithms";
 import {
     dsaExerciseMarkdown,
     dsaExercisesListMarkdown,
@@ -90,7 +86,12 @@ export const contentRegistry: ContentRegistryEntry[] = [
         content: singleItem(dsaExercisesList),
         searchable: true,
     },
-    { slug: slugs.videogames.home, markdown: videogamesMarkdown, content: singleItem(videogamesHome), searchable: true },
+    {
+        slug: slugs.videogames.home,
+        markdown: videogamesMarkdown,
+        content: singleItem(videogamesHome),
+        searchable: true,
+    },
     {
         slug: slugs.blog.blogPost,
         params: paramsOf(posts),

@@ -3,7 +3,6 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { TerminalButton } from "./terminal-button";
 
-
 describe("TerminalButton", () => {
     describe("link mode", () => {
         it("renders the label text", () => {

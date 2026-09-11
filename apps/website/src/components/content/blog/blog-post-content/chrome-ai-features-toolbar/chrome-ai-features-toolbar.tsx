@@ -11,9 +11,7 @@ interface ChromeAiFeaturesToolbarProps {
     contentContainerId: string;
 }
 
-export const ChromeAiFeaturesToolbar: FC<ChromeAiFeaturesToolbarProps> = ({
-    contentContainerId,
-}) => {
+export const ChromeAiFeaturesToolbar: FC<ChromeAiFeaturesToolbarProps> = ({ contentContainerId }) => {
     const { state, effects } = useChromeAiFeaturesToolbarStore(contentContainerId);
     const { glassmorphismClass } = useGlassmorphism();
     const { isAvailable, modalOpen, modalTitle, summaryResult, summaryStatus, downloadProgress } = state;
@@ -29,7 +27,12 @@ export const ChromeAiFeaturesToolbar: FC<ChromeAiFeaturesToolbarProps> = ({
         <>
             <div className={`${glassmorphismClass} p-2`}>
                 <Accordion
-                    title={<h5 className="flex gap-3 items-center mt-0"><SiProbot className="inline text-shadow-md" />AI features</h5>}
+                    title={
+                        <h5 className="mt-0 flex items-center gap-3">
+                            <SiProbot className="inline text-shadow-md" />
+                            AI features
+                        </h5>
+                    }
                     onToggle={handleToggleAccordion}
                 >
                     <p>

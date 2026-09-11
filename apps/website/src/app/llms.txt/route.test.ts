@@ -128,7 +128,10 @@ describe("GET /llms.txt", () => {
             mockGetTags.mockReturnValue([]);
             mockListDsaTopics.mockReturnValue([]);
             mockPageContent.mockReturnValue([
-                { slug: { formatted: "/an-mdx-page", params: {} }, frontmatter: { title: "Real Title", description: "Real description" } },
+                {
+                    slug: { formatted: "/an-mdx-page", params: {} },
+                    frontmatter: { title: "Real Title", description: "Real description" },
+                },
             ]);
 
             const text = await (await GET()).text();

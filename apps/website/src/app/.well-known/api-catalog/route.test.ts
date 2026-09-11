@@ -16,13 +16,13 @@ describe(".well-known/api-catalog", () => {
 
         it("linkset contains anchor pointing to the MCP site URL", async () => {
             const response = await GET();
-            const body = await response.json() as { linkset: { anchor: string }[] };
+            const body = (await response.json()) as { linkset: { anchor: string }[] };
             expect(body.linkset[0].anchor).toBe("https://www.fabrizioduroni.it");
         });
 
         it("linkset contains service-desc entry pointing to /api/mcp", async () => {
             const response = await GET();
-            const body = await response.json() as {
+            const body = (await response.json()) as {
                 linkset: { "service-desc": { href: string; type: string }[] }[];
             };
             expect(body.linkset[0]["service-desc"][0].href).toContain("/api/mcp");
@@ -30,7 +30,7 @@ describe(".well-known/api-catalog", () => {
 
         it("linkset contains oauth-protected-resource entry", async () => {
             const response = await GET();
-            const body = await response.json() as {
+            const body = (await response.json()) as {
                 linkset: { "oauth-protected-resource": { href: string }[] }[];
             };
             expect(body.linkset[0]["oauth-protected-resource"][0].href).toContain(

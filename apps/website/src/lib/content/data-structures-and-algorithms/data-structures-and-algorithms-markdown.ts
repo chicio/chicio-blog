@@ -20,7 +20,8 @@ ${allTopics.map((topic) => `- [${topic.frontmatter.title}](${siteMetadata.siteUr
 
     return markdownDocument({
         title: `Data Structures & Algorithms — ${siteMetadata.title}`,
-        description: "A structured course covering fundamental data structures, algorithms, and problem-solving techniques.",
+        description:
+            "A structured course covering fundamental data structures, algorithms, and problem-solving techniques.",
         slug: slugs.dataStructuresAndAlgorithms.home,
         body,
     });
@@ -41,11 +42,15 @@ export const dsaTopicMarkdown = contentItemMarkdown(topics, (topic) => {
     return `**Tags:** ${topic.frontmatter.tags.join(", ")}
 
 ${contentBodyMarkdown(topic)}
-${topicExercises.length > 0 ? `
+${
+    topicExercises.length > 0
+        ? `
 ## Exercises
 
 ${topicExercises.map((e) => `- [${e.frontmatter.title}](${siteMetadata.siteUrl}${e.slug.formatted}) — ${e.frontmatter.metadata?.difficulty ?? "unknown"}, ${e.frontmatter.metadata?.technique ?? "unknown"}`).join("\n")}
-` : ""}`;
+`
+        : ""
+}`;
 });
 
 export const dsaExerciseMarkdown = contentItemMarkdown(

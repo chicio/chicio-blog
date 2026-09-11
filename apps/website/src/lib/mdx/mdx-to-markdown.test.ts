@@ -84,9 +84,15 @@ Some prose after the heading.
 `;
             const result = mdxToMarkdown(mdx);
 
-            expect(result).toContain("![Batman: the video game gameplay](/media/content/videogames/console/gameboy/game/batman/gameplay/1.jpg)");
-            expect(result).toContain("![Batman: the video game gameplay](/media/content/videogames/console/gameboy/game/batman/gameplay/2.jpg)");
-            expect(result).toContain("![Batman: the video game gameplay](/media/content/videogames/console/gameboy/game/batman/gameplay/3.jpg)");
+            expect(result).toContain(
+                "![Batman: the video game gameplay](/media/content/videogames/console/gameboy/game/batman/gameplay/1.jpg)",
+            );
+            expect(result).toContain(
+                "![Batman: the video game gameplay](/media/content/videogames/console/gameboy/game/batman/gameplay/2.jpg)",
+            );
+            expect(result).toContain(
+                "![Batman: the video game gameplay](/media/content/videogames/console/gameboy/game/batman/gameplay/3.jpg)",
+            );
             expect(result).toContain("*IGDB*");
             expect(result).not.toContain("ImageCarousel");
         });

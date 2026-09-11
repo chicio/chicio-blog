@@ -14,23 +14,19 @@ type SegmentedControlProps<T extends string> = {
     onChange: (value: T) => void;
 };
 
-export const SegmentedControl = <T extends string>({
-    options,
-    value,
-    onChange,
-}: SegmentedControlProps<T>) => {
+export const SegmentedControl = <T extends string>({ options, value, onChange }: SegmentedControlProps<T>) => {
     const { effects } = useSegmentedControlStore(onChange);
     const { triggerChange } = effects;
 
     return (
-        <GlassmorphismBackground className="rounded-full p-1! gap-1">
+        <GlassmorphismBackground className="gap-1 rounded-full p-1!">
             {options.map((option) => {
                 const isActive = option.value === value;
                 return (
                     <button
                         key={option.value}
                         onClick={triggerChange(option.value)}
-                        className={`cursor-pointer rounded-full px-5 py-2 text-sm font-medium transition-all duration-200 border-none ${
+                        className={`cursor-pointer rounded-full border-none px-5 py-2 text-sm font-medium transition-all duration-200 ${
                             isActive ? "bg-accent text-text-above-primary" : "hover:bg-white/10"
                         }`}
                     >

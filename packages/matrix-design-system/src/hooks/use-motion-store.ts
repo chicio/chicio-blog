@@ -2,7 +2,7 @@ import { useSyncExternalStore } from "react";
 import { hasMotion, motionChangeEvent } from "../state/motion/motion";
 
 const subscribe = (callback: () => void) => {
-    if (typeof window === "undefined") { 
+    if (typeof window === "undefined") {
         return () => {};
     }
 

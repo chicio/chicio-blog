@@ -1,7 +1,7 @@
 export const siteMetadata = {
-    title:
-        "Fabrizio Duroni | Chicio Coding",
-    description: "Official blog chicio coding. Property of Fabrizio Duroni. Main skills: mobile application development, computer graphics, web development.",
+    title: "Fabrizio Duroni | Chicio Coding",
+    description:
+        "Official blog chicio coding. Property of Fabrizio Duroni. Main skills: mobile application development, computer graphics, web development.",
     siteUrl: "https://www.fabrizioduroni.it",
     featuredImage: "/chicio-coding-feature-graphic.jpg",
     author: "Fabrizio Duroni",
@@ -16,14 +16,14 @@ export const siteMetadata = {
             instagram: "https://www.instagram.com/__chicio__/",
         },
     },
-}
+};
 
 export type SiteMetadataSocialLinks = {
-    twitter: string,
-    facebook: string,
-    linkedin: string,
-    github: string,
-    medium: string,
-    devto: string,
-    instagram: string,
-}
+    twitter: string;
+    facebook: string;
+    linkedin: string;
+    github: string;
+    medium: string;
+    devto: string;
+    instagram: string;
+};

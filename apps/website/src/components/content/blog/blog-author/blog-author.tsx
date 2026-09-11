@@ -21,16 +21,8 @@ export const BlogAuthor: FC<BlogAuthorProps> = ({ author, posts }) => {
 
     return (
         <>
-            <ContentPage
-                author={siteMetadata.author}
-                trackingCategory={tracking.category.blog_author}
-            >
-                <ProfileHero
-                    name={author.name}
-                    role={author.role}
-                    imageSrc={author.imageLarge}
-                    imageAlt={author.name}
-                >
+            <ContentPage author={siteMetadata.author} trackingCategory={tracking.category.blog_author}>
+                <ProfileHero name={author.name} role={author.role} imageSrc={author.imageLarge} imageAlt={author.name}>
                     {author.bio && <p className="mx-auto mt-4 max-w-2xl text-center">{author.bio}</p>}
                     <AuthorSocials author={author} />
                     <div className="mt-4 flex justify-center">
@@ -39,10 +31,7 @@ export const BlogAuthor: FC<BlogAuthorProps> = ({ author, posts }) => {
                 </ProfileHero>
                 <PageTitle>{`Posts published (${posts.length})`}</PageTitle>
                 {postsGrouped.map((postsGroup, index) => (
-                    <PostsRow
-                        postsGroup={postsGroup}
-                        key={`PostCardsRow${index}`}
-                    />
+                    <PostsRow postsGroup={postsGroup} key={`PostCardsRow${index}`} />
                 ))}
             </ContentPage>
             <JsonLd

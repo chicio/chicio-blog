@@ -30,7 +30,11 @@ describe("Button", () => {
     });
 
     it("passes arbitrary HTML button attributes through", () => {
-        render(<Button type="submit" disabled>Submit</Button>);
+        render(
+            <Button type="submit" disabled>
+                Submit
+            </Button>,
+        );
         const btn = screen.getByRole("button");
         expect(btn).toHaveAttribute("type", "submit");
         expect(btn).toBeDisabled();

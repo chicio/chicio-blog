@@ -1,12 +1,7 @@
 import { tracking } from "@/types/configuration/tracking";
 
 export type EasterEggSlug =
-    | "the-white-rabbit"
-    | "the-choice"
-    | "i-know-kung-fu"
-    | "there-is-no-spoon"
-    | "the-one"
-    | "dodge-this";
+    "the-white-rabbit" | "the-choice" | "i-know-kung-fu" | "there-is-no-spoon" | "the-one" | "dodge-this";
 
 export interface EasterEggCatalogEntry {
     slug: EasterEggSlug;

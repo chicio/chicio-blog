@@ -6,7 +6,9 @@ import { CallToActionExternalWithTracking } from "./call-to-action-external-with
 describe("CallToActionExternalWithTracking", () => {
     describe("render", () => {
         it("renders an anchor with the provided href", () => {
-            render(<CallToActionExternalWithTracking href="https://example.com">Visit</CallToActionExternalWithTracking>);
+            render(
+                <CallToActionExternalWithTracking href="https://example.com">Visit</CallToActionExternalWithTracking>,
+            );
             expect(screen.getByRole("link", { name: "Visit" })).toHaveAttribute("href", "https://example.com");
         });
 
@@ -28,11 +30,7 @@ describe("CallToActionExternalWithTracking", () => {
 
         it("forwards target and rel attributes", () => {
             render(
-                <CallToActionExternalWithTracking
-                    href="https://example.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
+                <CallToActionExternalWithTracking href="https://example.com" target="_blank" rel="noopener noreferrer">
                     Link
                 </CallToActionExternalWithTracking>,
             );

@@ -20,7 +20,7 @@ export const Switch: FC<SwitchProps> = ({ checked, onChange, label }) => {
             aria-checked={checked}
             aria-label={label}
             onClick={onToggle}
-            className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full border transition-colors duration-150 cursor-pointer ${
+            className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full border transition-colors duration-150 ${
                 checked
                     ? "border-accent bg-accent/20 shadow-[0_0_8px_var(--color-accent-alpha-50)]"
                     : "border-accent/30 bg-transparent"
@@ -29,8 +29,8 @@ export const Switch: FC<SwitchProps> = ({ checked, onChange, label }) => {
             <span
                 className={`pointer-events-none inline-block h-3.5 w-3.5 rounded-full transition-transform duration-150 ${
                     checked
-                        ? "translate-x-[18px] bg-accent shadow-[0_0_6px_var(--color-accent)]"
-                        : "translate-x-[3px] bg-accent/40"
+                        ? "bg-accent translate-x-[18px] shadow-[0_0_6px_var(--color-accent)]"
+                        : "bg-accent/40 translate-x-[3px]"
                 }`}
             />
         </button>

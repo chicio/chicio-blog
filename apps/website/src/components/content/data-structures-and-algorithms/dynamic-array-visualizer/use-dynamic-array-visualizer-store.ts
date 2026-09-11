@@ -16,7 +16,10 @@ interface DynamicArrayVisualizerEffects {
     reset: () => void;
 }
 
-export const useDynamicArrayVisualizerStore = (): ComponentStore<DynamicArrayVisualizerState, DynamicArrayVisualizerEffects> => {
+export const useDynamicArrayVisualizerStore = (): ComponentStore<
+    DynamicArrayVisualizerState,
+    DynamicArrayVisualizerEffects
+> => {
     const [arr, setArr] = useState(initialArray);
     const [capacity, setCapacity] = useState(initialCapacity);
 

@@ -1,8 +1,7 @@
 import { spawnSync } from "node:child_process";
 import { serwist } from "@serwist/next/config";
 
-const revision =
-    spawnSync("git", ["rev-parse", "HEAD"], { encoding: "utf-8" }).stdout?.trim() ?? crypto.randomUUID();
+const revision = spawnSync("git", ["rev-parse", "HEAD"], { encoding: "utf-8" }).stdout?.trim() ?? crypto.randomUUID();
 
 // serwist.withNextConfig receives the fully resolved Next.js config, so
 // basePath, distDir, and experimental flags stay in sync automatically.

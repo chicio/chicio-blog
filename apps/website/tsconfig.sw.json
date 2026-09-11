@@ -1,10 +1,10 @@
 {
-    "extends": "./tsconfig.json",
-    "compilerOptions": {
-        "lib": ["esnext", "webworker"],
-        "types": ["serwist"]
-    },
-    "include": [],
-    "exclude": [],
-    "files": ["src/app/sw.ts"]
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "lib": ["esnext", "webworker"],
+    "types": ["serwist"]
+  },
+  "include": [],
+  "exclude": [],
+  "files": ["src/app/sw.ts"]
 }

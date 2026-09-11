@@ -266,7 +266,11 @@ export const useTerminalStore = (): ComponentStore<TerminalState, TerminalEffect
                     return [];
                 }
 
-                const promptLine: TerminalScrollbackEntry = { id: `line-${prev.length}`, text: promptText, kind: "prompt" };
+                const promptLine: TerminalScrollbackEntry = {
+                    id: `line-${prev.length}`,
+                    text: promptText,
+                    kind: "prompt",
+                };
                 const resultScreenLines = toScreenLines(result.lines, prev.length + 1);
 
                 return [...prev, promptLine, ...resultScreenLines];

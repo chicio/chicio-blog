@@ -28,7 +28,9 @@ export const ExerciseTable: FC<ExerciseTableProps> = ({ exercises, markdownId })
                             </a>
                         </td>
                         <td>
-                            <span className={`font-semibold ${difficultyColor[exercise.frontmatter.metadata?.difficulty ?? "Easy"]}`}>
+                            <span
+                                className={`font-semibold ${difficultyColor[exercise.frontmatter.metadata?.difficulty ?? "Easy"]}`}
+                            >
                                 {exercise.frontmatter.metadata?.difficulty}
                             </span>
                         </td>

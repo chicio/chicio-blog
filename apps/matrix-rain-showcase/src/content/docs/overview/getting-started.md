@@ -1,7 +1,7 @@
 ---
 title: Getting started
 sidebar:
-  order: 3
+    order: 3
 ---
 
 ## Install
@@ -21,14 +21,14 @@ duplicate `typegpu` copies break the `'use gpu'` shader registry.
 The component renders a `<canvas>` that fills its **positioned parent**, so wrap it in a sized, positioned container:
 
 ```tsx
-import { MatrixRainWebGPU } from 'matrix-rain-webgpu';
+import { MatrixRainWebGPU } from "matrix-rain-webgpu";
 
 export function Background() {
-  return (
-    <div style={{ position: 'relative', width: '100%', height: '100dvh' }}>
-      <MatrixRainWebGPU />
-    </div>
-  );
+    return (
+        <div style={{ position: "relative", width: "100%", height: "100dvh" }}>
+            <MatrixRainWebGPU />
+        </div>
+    );
 }
 ```
 
@@ -39,11 +39,7 @@ The canvas is `pointer-events: none`, so it won't intercept clicks — layer you
 Everything is optional and grouped. Omit a group for defaults, pass an object to tune, or pass `false` to disable an effect:
 
 ```tsx
-<MatrixRainWebGPU
-  rain={{ fontSize: 24, density: 0.97 }}
-  bloom={{ intensity: 2 }}
-  crt={false}
-/>
+<MatrixRainWebGPU rain={{ fontSize: 24, density: 0.97 }} bloom={{ intensity: 2 }} crt={false} />
 ```
 
 See the [Public API](/matrix-rain-webgpu/usage/public-api/) for every option and its default.
@@ -53,20 +49,20 @@ See the [Public API](/matrix-rain-webgpu/usage/public-api/) for every option and
 WebGPU isn't everywhere yet. Gate on `isWebGPUSupported()` and render your own fallback (for example, the original 2D canvas effect) when it's missing:
 
 ```tsx
-import { MatrixRainWebGPU, isWebGPUSupported } from 'matrix-rain-webgpu';
+import { MatrixRainWebGPU, isWebGPUSupported } from "matrix-rain-webgpu";
 
 function Rain() {
-  if (!isWebGPUSupported()) {
-    return <My2DMatrixRain />; // your fallback
-  }
-  return <MatrixRainWebGPU />;
+    if (!isWebGPUSupported()) {
+        return <My2DMatrixRain />; // your fallback
+    }
+    return <MatrixRainWebGPU />;
 }
 ```
 
 The component is also defensive on its own: if the GPU fails to initialize or a frame throws, it renders `null`, calls your `onError`, and never throws into your React tree.
 
 ```tsx
-<MatrixRainWebGPU onError={(err) => console.warn('rain disabled:', err)} />
+<MatrixRainWebGPU onError={(err) => console.warn("rain disabled:", err)} />
 ```
 
 ## Pausing

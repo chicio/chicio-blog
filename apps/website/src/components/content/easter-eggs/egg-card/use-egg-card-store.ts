@@ -16,11 +16,7 @@ const getServerFoundSnapshot = (): boolean => false;
  * so that it can share a row with the reveal toggle, and reads the same global store itself.
  */
 export const useEggCardStore = (slug: EasterEggSlug): StateStore<EggCardState> => {
-    const found = useSyncExternalStore(
-        subscribeToEasterEggFound,
-        () => isEasterEggFound(slug),
-        getServerFoundSnapshot,
-    );
+    const found = useSyncExternalStore(subscribeToEasterEggFound, () => isEasterEggFound(slug), getServerFoundSnapshot);
 
     return { state: { found } };
 };

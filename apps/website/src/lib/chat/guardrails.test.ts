@@ -53,9 +53,7 @@ describe("runGuardrails", () => {
         });
 
         it("does NOT block legitimate questions about Fabrizio (injection check passes synchronously)", async () => {
-            mockGenerateText
-                .mockResolvedValueOnce({ text: "0.1" })
-                .mockResolvedValueOnce({ text: "yes" });
+            mockGenerateText.mockResolvedValueOnce({ text: "0.1" }).mockResolvedValueOnce({ text: "yes" });
             const result = await runGuardrails("Tell me about Fabrizio's experience with React");
             expect(result.safe).toBe(true);
         });

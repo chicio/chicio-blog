@@ -1,9 +1,6 @@
 "use client";
 
-import {
-    Cursor,
-    TerminalLine,
-} from "../../atoms/typography/terminal-blocks";
+import { Cursor, TerminalLine } from "../../atoms/typography/terminal-blocks";
 import { useLoadingBarStore } from "./use-loading-bar-store";
 
 interface LoadingBarProps {

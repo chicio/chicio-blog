@@ -13,8 +13,7 @@ const rule = {
         },
         schema: [],
         messages: {
-            wrongShape:
-                "Store hook must return a non-empty subset of { state, effects }. Found keys: {{found}}.",
+            wrongShape: "Store hook must return a non-empty subset of { state, effects }. Found keys: {{found}}.",
         },
     },
     create(context) {

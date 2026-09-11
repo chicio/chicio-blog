@@ -127,10 +127,12 @@ export const mapReportsToAnalyticsStats = (
 
 const buildPostResolver = (): ((key: string) => PostRef | null) => {
     const byKey = new Map(
-        posts.list().map((post) => [
-            normalizePostPathKey(post.slug.formatted),
-            { title: post.frontmatter.title, url: post.slug.formatted },
-        ]),
+        posts
+            .list()
+            .map((post) => [
+                normalizePostPathKey(post.slug.formatted),
+                { title: post.frontmatter.title, url: post.slug.formatted },
+            ]),
     );
 
     return (key: string): PostRef | null => byKey.get(key) ?? null;

@@ -42,10 +42,10 @@ export const ChromeSummaryModal: FC<ChromeSummaryModalProps> = ({
                 initial="hidden"
                 animate="visible"
                 exit="exit"
-                className="glow-border fixed top-1/2 left-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center rounded-xl bg-general-background p-8 w-[90%] sm:w-[70%] md:w-[60%] max-h-[80vh] overflow-auto"
+                className="glow-border bg-general-background fixed top-1/2 left-1/2 flex max-h-[80vh] w-[90%] -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center overflow-auto rounded-xl p-8 sm:w-[70%] md:w-[60%]"
                 onClick={stopPropagation}
             >
-                <h2 className="mb-4 text-xl font-bold text-accent">{title}</h2>
+                <h2 className="text-accent mb-4 text-xl font-bold">{title}</h2>
                 <hr />
                 <div className="my-4">
                     {status === "downloading" && (
@@ -64,10 +64,7 @@ export const ChromeSummaryModal: FC<ChromeSummaryModalProps> = ({
                     )}
 
                     {(status === "streaming" || status === "done") && content.length > 0 && (
-                        <div
-                            aria-live="polite"
-                            className="w-full text-primary-text leading-relaxed"
-                        >
+                        <div aria-live="polite" className="text-primary-text w-full leading-relaxed">
                             <Markdown content={content} id="chrome-ai-summary" />
                         </div>
                     )}
@@ -82,10 +79,7 @@ export const ChromeSummaryModal: FC<ChromeSummaryModalProps> = ({
                     )}
                 </div>
 
-                <Button
-                    className="relative mt-6 text-primary-text"
-                    onClick={onClose}
-                >
+                <Button className="text-primary-text relative mt-6" onClick={onClose}>
                     <p>Close</p>
                 </Button>
             </MotionDiv>

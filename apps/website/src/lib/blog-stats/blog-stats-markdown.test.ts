@@ -11,7 +11,14 @@ import { slugs } from "@/types/configuration/slug";
 describe("blogStatsMarkdown", () => {
     it("renders the canonical header with headline/year/tag/author sections", () => {
         mockGetBlogStats.mockReturnValue({
-            headline: { totalPosts: 42, totalWords: 1000, totalReadingMinutes: 30, yearsActive: 6, authorCount: 3, tagCount: 15 },
+            headline: {
+                totalPosts: 42,
+                totalWords: 1000,
+                totalReadingMinutes: 30,
+                yearsActive: 6,
+                authorCount: 3,
+                tagCount: 15,
+            },
             postsPerYear: [{ year: 2024, count: 5 }],
             tagDistribution: [{ tag: "react", count: 8 }],
             externalAuthorDistribution: [{ author: "Jane Doe", count: 2 }],

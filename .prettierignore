@@ -2,8 +2,13 @@
 apps/website/src/content/**
 
 # Generated or vendored. Directory patterns without a slash match at any workspace depth.
+# These must be listed here even when a workspace's own .gitignore already covers them:
+# prettier reads the ROOT .gitignore only, so a nested one (like the showcase's .astro/)
+# leaves build output visible to the gate and makes it fail only after a build has run.
 .next/
 .turbo/
+.astro/
+storybook-static/
 coverage/
 dist/
 ds-bundle/
@@ -13,3 +18,12 @@ test-results/
 public/
 package-lock.json
 CHANGELOG.md
+
+# Agent tooling: vendored plugin skills and this repo's own agent memory, rules and prompts.
+# Not shipped code, and reflowing instruction markdown is churn with no reader.
+.agents/
+.claude/
+
+# Formatted by oxfmt, not prettier: its `lint` script runs `oxfmt --check`, so letting
+# prettier rewrite these files makes `npm run lint` fail in that workspace.
+packages/matrix-rain-webgpu/

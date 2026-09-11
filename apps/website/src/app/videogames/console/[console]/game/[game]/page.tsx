@@ -7,55 +7,41 @@ import { consoles, games, getAllGamesForConsole } from "@/lib/content/videogames
 import { siblingsOf } from "@/lib/content/siblings";
 import { Game } from "@/components/content/videogames/game";
 
-export async function generateMetadata({
-  params,
-}: NextVideogamesGameParameters): Promise<Metadata> {
-  const receivedParameters = await params;
-  const game = games.single(receivedParameters)!;
+export async function generateMetadata({ params }: NextVideogamesGameParameters): Promise<Metadata> {
+    const receivedParameters = await params;
+    const game = games.single(receivedParameters)!;
 
-  if (!game) {
-    return {};
-  }
+    if (!game) {
+        return {};
+    }
 
-  const { frontmatter } = game;
+    const { frontmatter } = game;
 
-  return createMetadata({
-    author: siteMetadata.author,
-    title: frontmatter.title,
-    slug: game.slug.formatted,
-    imageUrl: frontmatter.image,
-    description: frontmatter.description,
-    ogPageType: "website",
-    keywords: frontmatter.tags,
-  });
+    return createMetadata({
+        author: siteMetadata.author,
+        title: frontmatter.title,
+        slug: game.slug.formatted,
+        imageUrl: frontmatter.image,
+        description: frontmatter.description,
+        ogPageType: "website",
+        keywords: frontmatter.tags,
+    });
 }
 
 export async function generateStaticParams() {
-  return games.list().map((game) => game.slug.params);
+    return games.list().map((game) => game.slug.params);
 }
 
-export default async function VideogamesGamePage({
-  params,
-}: NextVideogamesGameParameters) {
-  const receivedParameters = await params;
-  const game = games.single(receivedParameters);
-  const console = consoles.single(receivedParameters);
+export default async function VideogamesGamePage({ params }: NextVideogamesGameParameters) {
+    const receivedParameters = await params;
+    const game = games.single(receivedParameters);
+    const console = consoles.single(receivedParameters);
 
-  if (!game || !console) {
-    notFound();
-  }
+    if (!game || !console) {
+        notFound();
+    }
 
-  const siblings = siblingsOf(
-    getAllGamesForConsole(console.frontmatter.metadata!.name),
-    game.slug.formatted,
-  );
+    const siblings = siblingsOf(getAllGamesForConsole(console.frontmatter.metadata!.name), game.slug.formatted);
 
-  return (
-    <Game
-      game={game}
-      console={console}
-      previous={siblings?.previous}
-      next={siblings?.next}
-    />
-  );
+    return <Game game={game} console={console} previous={siblings?.previous} next={siblings?.next} />;
 }

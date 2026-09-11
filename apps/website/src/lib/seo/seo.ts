@@ -1,10 +1,10 @@
 import { authors } from "@/types/content/author";
-import { siteMetadata, SiteMetadataSocialLinks} from "@/types/configuration/site-metadata";
+import { siteMetadata, SiteMetadataSocialLinks } from "@/types/configuration/site-metadata";
 import { slugs } from "@/types/configuration/slug";
-import type {Metadata} from 'next'
+import type { Metadata } from "next";
 import { PublishDate } from "@/types/content/frontmatter";
 
-export type OgPageType = 'website' | 'article' | 'profile'
+export type OgPageType = "website" | "article" | "profile";
 
 const defaultKeywords = [
     "fabrizio duroni",
@@ -26,147 +26,149 @@ const defaultKeywords = [
     "swift",
     "swiftui",
     "backend",
-]
+];
 
 export const createMetadata = ({
-   author,
-   title,
-   slug: url,
-   imageUrl,
-   ogPageType,
-   description,
-   keywords
+    author,
+    title,
+    slug: url,
+    imageUrl,
+    ogPageType,
+    description,
+    keywords,
 }: {
-    author: string,
-    title: string,
-    slug: string,
-    imageUrl: string,
-    ogPageType: OgPageType,
-    description?: string,
-    keywords?: string[]
+    author: string;
+    title: string;
+    slug: string;
+    imageUrl: string;
+    ogPageType: OgPageType;
+    description?: string;
+    keywords?: string[];
 }): Metadata => ({
     metadataBase: new URL(siteMetadata.siteUrl),
     title,
     description: description || title,
-    authors: [{name: author}],
+    authors: [{ name: author }],
     keywords: keywords || defaultKeywords,
     openGraph: {
         title,
         description: description || title,
         url,
         siteName: author,
-        images: [{url: imageUrl}],
-        locale: 'en_US',
-        type: ogPageType
+        images: [{ url: imageUrl }],
+        locale: "en_US",
+        type: ogPageType,
     },
     alternates: {
-        canonical: url
+        canonical: url,
     },
     twitter: {
-        card: 'summary',
+        card: "summary",
         title,
         images: [imageUrl],
-        site: '@chicio86',
-        creator: '@chicio86'
+        site: "@chicio86",
+        creator: "@chicio86",
     },
     other: {
-        'p:domain_verify': '33d2d5dad0e1496d9f7974925340ea50',
-        'apple-mobile-web-app-status-bar-style': 'black',
-        'msapplication-config': 'browserconfig.xml',
-        'msapplication-TileColor': '#303f9f',
-        'msapplication-TileImage': '/mstile-144x144.png',
-        'yandex-verification': '741cf901cb1dbdf5',
-        'article:publisher': 'https://www.facebook.com/fabrizio.duroni',
-        'fb:app_id': '443203349348229'
-    }
+        "p:domain_verify": "33d2d5dad0e1496d9f7974925340ea50",
+        "apple-mobile-web-app-status-bar-style": "black",
+        "msapplication-config": "browserconfig.xml",
+        "msapplication-TileColor": "#303f9f",
+        "msapplication-TileImage": "/mstile-144x144.png",
+        "yandex-verification": "741cf901cb1dbdf5",
+        "article:publisher": "https://www.facebook.com/fabrizio.duroni",
+        "fb:app_id": "443203349348229",
+    },
 });
 
-type WebsiteJsonLd = 'Website'
-type PersonJsonLd = 'Person'
-type BlogJsonLd = 'Blog'
-type BlogPostingJsonLd = 'BlogPosting'
-export type JsonLdType = WebsiteJsonLd | PersonJsonLd | BlogPostingJsonLd | BlogJsonLd
+type WebsiteJsonLd = "Website";
+type PersonJsonLd = "Person";
+type BlogJsonLd = "Blog";
+type BlogPostingJsonLd = "BlogPosting";
+export type JsonLdType = WebsiteJsonLd | PersonJsonLd | BlogPostingJsonLd | BlogJsonLd;
 
 const jsonLdIds: Partial<Record<JsonLdType, string>> = {
-    'Person': `${siteMetadata.siteUrl}/#person`,
-    'Website': `${siteMetadata.siteUrl}/#website`,
-    'Blog': `${siteMetadata.siteUrl}/#blog`,
+    Person: `${siteMetadata.siteUrl}/#person`,
+    Website: `${siteMetadata.siteUrl}/#website`,
+    Blog: `${siteMetadata.siteUrl}/#blog`,
 };
 
-const formattedDate = (date: PublishDate): string => 
+const formattedDate = (date: PublishDate): string =>
     `${date.year}-${String(date.month).padStart(2, "0")}-${String(date.day).padStart(2, "0")}T00:00:00+00:00`;
 
 export function createStructuredData({
-   type,
-   url,
-   imageUrl,
-   author,
-   title,
-   links,
-   keywords,
-   description,
-   date
+    type,
+    url,
+    imageUrl,
+    author,
+    title,
+    links,
+    keywords,
+    description,
+    date,
 }: {
-    type: JsonLdType
-    url: string
-    imageUrl: string
-    author: string
-    title: string
-    links: SiteMetadataSocialLinks
-    keywords?: string[]
-    description?: string
-    date?: PublishDate
+    type: JsonLdType;
+    url: string;
+    imageUrl: string;
+    author: string;
+    title: string;
+    links: SiteMetadataSocialLinks;
+    keywords?: string[];
+    description?: string;
+    date?: PublishDate;
 }) {
     const jsonLd = {
-        '@context': 'https://schema.org',
-        '@type': type,
-        '@id': jsonLdIds[type] ?? url,
+        "@context": "https://schema.org",
+        "@type": type,
+        "@id": jsonLdIds[type] ?? url,
         name: author,
         url,
         image: `${siteMetadata.siteUrl}${imageUrl}`,
         description: description || title,
-        ...(type === 'BlogPosting' && date && {
-            datePublished: formattedDate(date),
-            dateModified: formattedDate(date)
-        }),
-        ...(type === 'BlogPosting' && {
+        ...(type === "BlogPosting" &&
+            date && {
+                datePublished: formattedDate(date),
+                dateModified: formattedDate(date),
+            }),
+        ...(type === "BlogPosting" && {
             headline: title.length > 110 ? title.substring(0, 110) : title,
             mainEntityOfPage: {
-                '@type': 'WebPage',
-                '@id': url
-            }
+                "@type": "WebPage",
+                "@id": url,
+            },
         }),
-        ...(type !== 'Person' && {
+        ...(type !== "Person" && {
             author: {
-                "@id":  jsonLdIds['Person'],
-                '@type': 'Person',
+                "@id": jsonLdIds["Person"],
+                "@type": "Person",
                 name: author,
                 image: authors.fabrizio_duroni.image,
-                url: `${siteMetadata.siteUrl}${slugs.aboutMe}`
+                url: `${siteMetadata.siteUrl}${slugs.aboutMe}`,
             },
             publisher: {
-                "@id":  jsonLdIds['Person'],
-                '@type': 'Person',
+                "@id": jsonLdIds["Person"],
+                "@type": "Person",
                 name: author,
                 image: authors.fabrizio_duroni.image,
-                url: `${siteMetadata.siteUrl}${slugs.aboutMe}`
-            }
+                url: `${siteMetadata.siteUrl}${slugs.aboutMe}`,
+            },
         }),
-        ...(type === 'Person' && links && {
-            sameAs: [
-                links.twitter,
-                links.facebook,
-                links.linkedin,
-                links.github,
-                links.medium,
-                links.devto,
-                links.instagram
-            ]
+        ...(type === "Person" &&
+            links && {
+                sameAs: [
+                    links.twitter,
+                    links.facebook,
+                    links.linkedin,
+                    links.github,
+                    links.medium,
+                    links.devto,
+                    links.instagram,
+                ],
+            }),
+        ...(type !== "Person" && {
+            keywords: keywords || defaultKeywords,
         }),
-        ...(type !== 'Person' && {
-            keywords: keywords || defaultKeywords
-        })
-    }
+    };
 
-    return jsonLd
+    return jsonLd;
 }

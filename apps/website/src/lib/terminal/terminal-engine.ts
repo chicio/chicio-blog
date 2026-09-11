@@ -1,10 +1,18 @@
 import { SearchablePostFields } from "@/types/search/search";
-import { TerminalCommand, TerminalDirNode, TerminalExecutionResult, TerminalOutputLine } from "@/types/terminal/terminal";
+import {
+    TerminalCommand,
+    TerminalDirNode,
+    TerminalExecutionResult,
+    TerminalOutputLine,
+} from "@/types/terminal/terminal";
 import { matchesWhoamiCommand } from "@/lib/easter-eggs/whoami-command";
 import { findDir, findNode, resolvePath, ROOT_PATH } from "./terminal-path";
 
 export const parse = (input: string): TerminalCommand => {
-    const tokens = input.trim().split(/\s+/).filter((token) => token.length > 0);
+    const tokens = input
+        .trim()
+        .split(/\s+/)
+        .filter((token) => token.length > 0);
     const [name = "", ...args] = tokens;
 
     return { name, args };
@@ -106,7 +114,11 @@ const executeTree = (args: string[], cwd: string, root: TerminalDirNode): Termin
 
 const executeCat = (args: string[], cwd: string, root: TerminalDirNode): TerminalExecutionResult => {
     if (!args[0]) {
-        return { lines: [{ text: "cat: missing file operand", kind: "error" }], newCwd: cwd, announcement: "cat: missing file operand" };
+        return {
+            lines: [{ text: "cat: missing file operand", kind: "error" }],
+            newCwd: cwd,
+            announcement: "cat: missing file operand",
+        };
     }
 
     const targetPath = resolvePath(cwd, args[0]);
@@ -137,10 +149,7 @@ const executeCat = (args: string[], cwd: string, root: TerminalDirNode): Termina
         };
     }
 
-    const lines: TerminalOutputLine[] = [
-        { text: node.title, kind: "success" },
-        { text: node.description ?? "" },
-    ];
+    const lines: TerminalOutputLine[] = [{ text: node.title, kind: "success" }, { text: node.description ?? "" }];
 
     Object.entries(node.extra ?? {}).forEach(([key, value]) => {
         if (value) {
@@ -153,7 +162,11 @@ const executeCat = (args: string[], cwd: string, root: TerminalDirNode): Termina
 
 const executeOpen = (args: string[], cwd: string, root: TerminalDirNode): TerminalExecutionResult => {
     if (!args[0]) {
-        return { lines: [{ text: "open: missing file operand", kind: "error" }], newCwd: cwd, announcement: "open: missing file operand" };
+        return {
+            lines: [{ text: "open: missing file operand", kind: "error" }],
+            newCwd: cwd,
+            announcement: "open: missing file operand",
+        };
     }
 
     const targetPath = resolvePath(cwd, args[0]);
@@ -215,10 +228,7 @@ const executeHelp = (args: string[], cwd: string): TerminalExecutionResult => {
 };
 
 const executeWhoami = (cwd: string): TerminalExecutionResult => ({
-    lines: [
-        { text: "neo", kind: "success" },
-        { text: "you have been down here before. you already know the answer." },
-    ],
+    lines: [{ text: "neo", kind: "success" }, { text: "you have been down here before. you already know the answer." }],
     newCwd: cwd,
     announcement: "whoami: neo",
     triggerEasterEgg: true,
@@ -228,7 +238,11 @@ const executeSearch = (args: string[], cwd: string): TerminalExecutionResult => 
     const query = args.join(" ").trim();
 
     if (!query) {
-        return { lines: [{ text: "search: missing query", kind: "error" }], newCwd: cwd, announcement: "search: missing query" };
+        return {
+            lines: [{ text: "search: missing query", kind: "error" }],
+            newCwd: cwd,
+            announcement: "search: missing query",
+        };
     }
 
     return { lines: [{ text: `searching for "${query}"...` }], newCwd: cwd, searchQuery: query };

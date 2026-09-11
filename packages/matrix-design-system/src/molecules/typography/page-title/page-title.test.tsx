@@ -10,7 +10,11 @@ describe("PageTitle", () => {
         });
 
         it("renders arbitrary children", () => {
-            render(<PageTitle><span>Nested</span></PageTitle>);
+            render(
+                <PageTitle>
+                    <span>Nested</span>
+                </PageTitle>,
+            );
             expect(screen.getByText("Nested")).toBeInTheDocument();
         });
     });

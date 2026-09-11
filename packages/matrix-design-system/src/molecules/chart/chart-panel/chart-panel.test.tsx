@@ -16,10 +16,7 @@ describe("ChartPanel", () => {
 
         it("renders a heading and description when a title is given", () => {
             render(
-                <ChartPanel
-                    title="Posts per year"
-                    description="How the blog has grown."
-                >
+                <ChartPanel title="Posts per year" description="How the blog has grown.">
                     <div>chart</div>
                 </ChartPanel>,
             );

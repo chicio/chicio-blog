@@ -13,13 +13,7 @@ interface AccordionProps {
     onToggle?: () => void;
 }
 
-export const Accordion: FC<AccordionProps> = ({
-    title,
-    children,
-    defaultOpen = false,
-    className,
-    onToggle,
-}) => {
+export const Accordion: FC<AccordionProps> = ({ title, children, defaultOpen = false, className, onToggle }) => {
     const { state, effects } = useAccordionStore(defaultOpen, onToggle);
     const { isOpen, panelId, triggerId } = state;
     const { toggle } = effects;

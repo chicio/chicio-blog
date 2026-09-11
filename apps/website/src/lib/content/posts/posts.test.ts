@@ -193,10 +193,7 @@ describe("aggregateAuthorsWithPosts", () => {
                 makePost("post-b", [], "2024-02-01", [alessandro]),
             ];
             const result = aggregateAuthorsWithPosts(posts);
-            expect(result.map((entry) => entry.author.name)).toEqual([
-                "Alessandro Romano",
-                "Francesco Bonfadelli",
-            ]);
+            expect(result.map((entry) => entry.author.name)).toEqual(["Alessandro Romano", "Francesco Bonfadelli"]);
         });
     });
 
@@ -310,11 +307,7 @@ describe("groupArrayBy", () => {
     });
 
     it("puts the remainder in the last, shorter group", () => {
-        expect(groupArrayBy([1, 2, 3, 4, 5], 2)).toEqual([
-            [1, 2],
-            [3, 4],
-            [5],
-        ]);
+        expect(groupArrayBy([1, 2, 3, 4, 5], 2)).toEqual([[1, 2], [3, 4], [5]]);
     });
 
     it("returns an empty array when given an empty array", () => {

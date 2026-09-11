@@ -5,35 +5,17 @@ import { TerminalProgressBar } from "./terminal-progress-bar";
 describe("TerminalProgressBar", () => {
     describe("render", () => {
         it("renders loading message when percentage is below 100", () => {
-            render(
-                <TerminalProgressBar
-                    percentage={50}
-                    loadingMessage="Loading..."
-                    completeMessage="Done!"
-                />,
-            );
+            render(<TerminalProgressBar percentage={50} loadingMessage="Loading..." completeMessage="Done!" />);
             expect(screen.getByText(/Loading\.\.\./)).toBeInTheDocument();
         });
 
         it("renders complete message when percentage is 100", () => {
-            render(
-                <TerminalProgressBar
-                    percentage={100}
-                    loadingMessage="Loading..."
-                    completeMessage="Done!"
-                />,
-            );
+            render(<TerminalProgressBar percentage={100} loadingMessage="Loading..." completeMessage="Done!" />);
             expect(screen.getByText(/Done!/)).toBeInTheDocument();
         });
 
         it("renders the progress bar characters", () => {
-            render(
-                <TerminalProgressBar
-                    percentage={50}
-                    loadingMessage="Loading"
-                    completeMessage="Done"
-                />,
-            );
+            render(<TerminalProgressBar percentage={50} loadingMessage="Loading" completeMessage="Done" />);
             expect(screen.getByText(/█.*░/)).toBeInTheDocument();
         });
     });

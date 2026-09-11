@@ -1,7 +1,7 @@
 ---
 title: Glossary
 sidebar:
-  order: 1
+    order: 1
 ---
 
 Terms used across these docs.
@@ -32,7 +32,7 @@ Terms used across these docs.
 
 **SDF (signed distance field)** — an image where each texel stores the signed distance to the nearest glyph edge (negative outside, positive inside, zero at the edge). Lets text render crisp at any scale. See [SDF atlas](/matrix-rain-webgpu/how-it-works/sdf-atlas/).
 
-**8SSEDT** — *8-points Signed Sequential Euclidean Distance Transform*, the algorithm used to compute the SDF from a rasterized glyph.
+**8SSEDT** — _8-points Signed Sequential Euclidean Distance Transform_, the algorithm used to compute the SDF from a rasterized glyph.
 
 **Separable blur** — a 2D Gaussian blur done as two cheap 1D passes (horizontal then vertical) instead of one expensive 2D kernel. Used by bloom.
 

@@ -24,7 +24,7 @@ export const TopPostsList: FC<TopPostsListProps> = ({ data }) => (
                 >
                     {post.title}
                 </InternalLink>
-                <span className="text-accent text-shadow-sm ml-auto min-w-[70px] text-right text-sm tabular-nums">
+                <span className="text-accent ml-auto min-w-[70px] text-right text-sm tabular-nums text-shadow-sm">
                     {post.views.toLocaleString("en-US")}
                 </span>
             </div>

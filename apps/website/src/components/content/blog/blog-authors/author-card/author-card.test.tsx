@@ -50,12 +50,7 @@ describe("AuthorCard", () => {
         });
 
         it("renders the role when present", () => {
-            render(
-                <AuthorCard
-                    author={{ ...author, role: "Software Engineer" }}
-                    postCount={1}
-                />,
-            );
+            render(<AuthorCard author={{ ...author, role: "Software Engineer" }} postCount={1} />);
             expect(screen.getByText("Software Engineer")).toBeInTheDocument();
         });
 
@@ -71,12 +66,7 @@ describe("AuthorCard", () => {
         });
 
         it("links a non-owner card to their author detail page", () => {
-            render(
-                <AuthorCard
-                    author={{ ...author, id: "marco_de_lucchi", name: "Marco De Lucchi" }}
-                    postCount={1}
-                />,
-            );
+            render(<AuthorCard author={{ ...author, id: "marco_de_lucchi", name: "Marco De Lucchi" }} postCount={1} />);
             const link = screen.getByRole("link");
             expect(link).toHaveAttribute("href", "/blog/author/marco-de-lucchi");
         });

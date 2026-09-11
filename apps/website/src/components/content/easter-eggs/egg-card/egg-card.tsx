@@ -24,9 +24,7 @@ export const EggCard: FC<EggCardProps> = ({ title, slug, children }) => {
     const { found } = state;
 
     const foundCardClass = found ? "border-accent bg-general-background-light" : "";
-    const badgeStateClass = found
-        ? "border-accent-alpha-40 text-accent"
-        : "border-accent-alpha-15 text-secondary-text";
+    const badgeStateClass = found ? "border-accent-alpha-40 text-accent" : "border-accent-alpha-15 text-secondary-text";
 
     return (
         <div className={`${glassmorphismClass} ${foundCardClass} my-4 p-4 sm:p-6`}>

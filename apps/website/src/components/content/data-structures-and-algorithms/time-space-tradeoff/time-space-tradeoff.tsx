@@ -26,7 +26,9 @@ const data = [
 ];
 
 const renderLabel = ({ x, y, value }: LabelProps) => {
-    if (typeof x !== "number" || typeof y !== "number" || value == null) { return null; }
+    if (typeof x !== "number" || typeof y !== "number" || value == null) {
+        return null;
+    }
 
     return (
         <text
@@ -48,10 +50,7 @@ export const TimeVsSpaceTradeoffVisualizer: FC = () => (
         <div className="h-80 w-full">
             <ResponsiveContainer width={"100%"} height={"100%"} initialDimension={{ width: 320, height: 300 }}>
                 <ScatterChart margin={{ top: 40, right: 40, bottom: 40, left: 40 }}>
-                    <CartesianGrid
-                        strokeDasharray="3 3"
-                        stroke={chartTheme.gridStroke}
-                    />
+                    <CartesianGrid strokeDasharray="3 3" stroke={chartTheme.gridStroke} />
                     <XAxis
                         type="number"
                         dataKey="time"
@@ -82,16 +81,9 @@ export const TimeVsSpaceTradeoffVisualizer: FC = () => (
                         domain={[0, 11]}
                     />
                     <ZAxis range={[80, 120]} />
-                    <Tooltip
-                        cursor={{ stroke: chartTheme.cursorStroke, strokeWidth: 1 }}
-                        content={<ChartTooltip />}
-                    />
+                    <Tooltip cursor={{ stroke: chartTheme.cursorStroke, strokeWidth: 1 }} content={<ChartTooltip />} />
                     <Legend labelStyle={{ color: chartTheme.legendTextColor }} />
-                    <Scatter
-                        data={data}
-                        fill={chartTheme.series[0]}
-                        name="Complexity Class"
-                    >
+                    <Scatter data={data} fill={chartTheme.series[0]} name="Complexity Class">
                         <LabelList dataKey="name" content={renderLabel} />
                     </Scatter>
                 </ScatterChart>

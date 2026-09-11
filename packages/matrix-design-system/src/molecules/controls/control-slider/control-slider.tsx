@@ -14,21 +14,13 @@ interface ControlSliderProps {
     displayValue?: string;
 }
 
-export const ControlSlider: FC<ControlSliderProps> = ({
-    label,
-    value,
-    min,
-    max,
-    step,
-    onChange,
-    displayValue,
-}) => {
+export const ControlSlider: FC<ControlSliderProps> = ({ label, value, min, max, step, onChange, displayValue }) => {
     const { effects } = useControlSliderStore();
     const { handleChange } = effects;
 
     return (
         <div className="flex flex-col gap-1">
-            <div className="flex justify-between items-center">
+            <div className="flex items-center justify-between">
                 <Label value={label} />
                 <span className="font-mono font-medium">{displayValue ?? value}</span>
             </div>
@@ -39,7 +31,7 @@ export const ControlSlider: FC<ControlSliderProps> = ({
                 step={step}
                 value={value}
                 onChange={handleChange(onChange)}
-                className="w-full accent-accent cursor-pointer"
+                className="accent-accent w-full cursor-pointer"
             />
         </div>
     );

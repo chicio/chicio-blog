@@ -26,7 +26,11 @@ describe("PillsButtons", () => {
             });
 
             it("is disabled when disabled prop is true", () => {
-                render(<RedPillButton onClick={vi.fn()} disabled={true}>Red</RedPillButton>);
+                render(
+                    <RedPillButton onClick={vi.fn()} disabled={true}>
+                        Red
+                    </RedPillButton>,
+                );
                 expect(screen.getByRole("button")).toBeDisabled();
             });
         });

@@ -17,7 +17,7 @@ const FilteredGameGrid = memo(
             <GamesGrid games={games} navigationOrigin="all-games" />
         ) : (
             <div className="text-secondary flex flex-col items-center gap-3 py-16">
-                <IoGameControllerOutline className="text-accent text-shadow-lg size-12" />
+                <IoGameControllerOutline className="text-accent size-12 text-shadow-lg" />
                 <p className="text-accent text-shadow-lg">No games found for &ldquo;{query}&rdquo;.</p>
             </div>
         ),
@@ -42,7 +42,7 @@ const FilteredConsoleList = memo(
             </div>
         ) : (
             <div className="text-secondary flex flex-col items-center gap-3 py-16">
-                <GiGameConsole className="text-accent text-shadow-lg size-12" />
+                <GiGameConsole className="text-accent size-12 text-shadow-lg" />
                 <p className="text-accent text-shadow-lg">No consoles found for &ldquo;{query}&rdquo;.</p>
             </div>
         ),
@@ -81,11 +81,7 @@ export const VideogamesViewSwitcher: React.FC<VideogamesViewSwitcherProps> = ({ 
             />
             <div className="transition-opacity duration-150">
                 {activeView === "consoles" ? (
-                    <FilteredConsoleList
-                        consolesWithGameCount={filteredConsoles}
-                        query={query}
-                        isPending={isPending}
-                    />
+                    <FilteredConsoleList consolesWithGameCount={filteredConsoles} query={query} isPending={isPending} />
                 ) : (
                     <FilteredGameGrid games={filteredGames} query={query} isPending={isPending} />
                 )}

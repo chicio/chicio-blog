@@ -4,12 +4,12 @@ on:
   push:
     branches: [main]
     paths:
-      - 'packages/matrix-design-system/**'
-      - 'apps/matrix-design-system-showcase/**'
-      - 'packages/matrix-rain-webgpu/**'
-      - 'apps/matrix-rain-showcase/**'
-      - '.github/pages/**'
-      - '.github/workflows/pages.yml'
+      - "packages/matrix-design-system/**"
+      - "apps/matrix-design-system-showcase/**"
+      - "packages/matrix-rain-webgpu/**"
+      - "apps/matrix-rain-showcase/**"
+      - ".github/pages/**"
+      - ".github/workflows/pages.yml"
   workflow_dispatch:
 
 permissions:
@@ -29,8 +29,8 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v5
         with:
-          node-version-file: 'package.json'
-          cache: 'npm'
+          node-version-file: "package.json"
+          cache: "npm"
       - name: Install dependencies
         run: npm ci
       - name: Build the showcase

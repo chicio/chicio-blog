@@ -40,7 +40,7 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
                     alt={alt}
                     width={800}
                     height={450}
-                    className="h-96 w-full cursor-pointer object-contain bg-general-background-light overflow-hidden"
+                    className="bg-general-background-light h-96 w-full cursor-pointer overflow-hidden object-contain"
                     onClick={openFullscreen}
                 />
                 {caption && <figcaption>{caption}</figcaption>}
@@ -84,7 +84,7 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
                                 width={800}
                                 height={450}
                                 loading={index === 0 ? "eager" : "lazy"}
-                                className="h-96 w-full cursor-pointer object-contain bg-general-background-light overflow-hidden"
+                                className="bg-general-background-light h-96 w-full cursor-pointer overflow-hidden object-contain"
                                 onClick={openFullscreen}
                                 placeholder={imageShimmerPlaceholder}
                             />

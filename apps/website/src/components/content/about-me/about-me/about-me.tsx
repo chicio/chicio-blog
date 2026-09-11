@@ -5,17 +5,15 @@ import { ReadingContentPage } from "@/components/features/content/reading-conten
 import { JsonLd } from "@/components/features/seo/jsond-ld";
 import { AboutMeTableOfContents } from "./about-me-table-of-contents";
 
-export const AboutMe: React.FC = () =>
-    <ReadingContentPage
-      author={siteMetadata.author}
-      trackingCategory={tracking.category.about_me}
-    >
-      <AboutMeTableOfContents />
-      <AboutMeContent />
-      <JsonLd
-        type="Person"
-        url={siteMetadata.siteUrl}
-        imageUrl={siteMetadata.featuredImage}
-        title={siteMetadata.title}
-      />
-    </ReadingContentPage>;
+export const AboutMe: React.FC = () => (
+    <ReadingContentPage author={siteMetadata.author} trackingCategory={tracking.category.about_me}>
+        <AboutMeTableOfContents />
+        <AboutMeContent />
+        <JsonLd
+            type="Person"
+            url={siteMetadata.siteUrl}
+            imageUrl={siteMetadata.featuredImage}
+            title={siteMetadata.title}
+        />
+    </ReadingContentPage>
+);

@@ -46,11 +46,7 @@ export function nextLinkMock() {
  */
 export function nextImageMock() {
     return {
-        default: ({
-            alt,
-            src,
-            ...rest
-        }: ImgHTMLAttributes<HTMLImageElement> & { src: string; alt: string }) => (
+        default: ({ alt, src, ...rest }: ImgHTMLAttributes<HTMLImageElement> & { src: string; alt: string }) => (
             <img alt={alt} src={src} {...rest} />
         ),
     };

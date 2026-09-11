@@ -4,9 +4,20 @@ import { ContentProgressBar } from "./reading-content-progress-bar";
 
 vi.mock("framer-motion", () => ({
     motion: {
-        div: ({ children, initial: _i, animate: _a, exit: _e, transition: _t, style: _s, ...props }: React.HTMLAttributes<HTMLDivElement> & { initial?: unknown; animate?: unknown; exit?: unknown; transition?: unknown }) => (
-            <div {...props}>{children}</div>
-        ),
+        div: ({
+            children,
+            initial: _i,
+            animate: _a,
+            exit: _e,
+            transition: _t,
+            style: _s,
+            ...props
+        }: React.HTMLAttributes<HTMLDivElement> & {
+            initial?: unknown;
+            animate?: unknown;
+            exit?: unknown;
+            transition?: unknown;
+        }) => <div {...props}>{children}</div>,
     },
 }));
 

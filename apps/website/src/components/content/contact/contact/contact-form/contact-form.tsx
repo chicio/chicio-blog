@@ -1,11 +1,7 @@
 "use client";
 
 import { FC } from "react";
-import {
-    BiEnvelope,
-    BiUser,
-    BiMessageDetail,
-} from "react-icons/bi";
+import { BiEnvelope, BiUser, BiMessageDetail } from "react-icons/bi";
 import {
     BluePillButton,
     FormErrorSummary,
@@ -24,18 +20,7 @@ export interface ContactFormProps {
 
 export const ContactForm: FC<ContactFormProps> = ({ trackingCategory }) => {
     const { state, effects } = useContactFormStore(trackingCategory);
-    const {
-        name,
-        email,
-        message,
-        honeypot,
-        errors,
-        isSubmitting,
-        isSuccess,
-        isQueued,
-        isOffline,
-        submitError,
-    } = state;
+    const { name, email, message, honeypot, errors, isSubmitting, isSuccess, isQueued, isOffline, submitError } = state;
     const { onNameChange, onEmailChange, onMessageChange, onHoneypotChange, handleSubmit, handleReset } = effects;
     const onReset = handleReset(trackingCategory);
 
@@ -47,7 +32,7 @@ export const ContactForm: FC<ContactFormProps> = ({ trackingCategory }) => {
                     Fill out the form to send me a message. I&apos;ll get back to you as soon as possible.
                 </p>
                 {isOffline && (
-                    <p className="mt-2 text-sm font-mono text-yellow-400/80">
+                    <p className="mt-2 font-mono text-sm text-yellow-400/80">
                         {">"} You are offline. Your message will be sent automatically when you reconnect.
                     </p>
                 )}
@@ -86,7 +71,7 @@ export const ContactForm: FC<ContactFormProps> = ({ trackingCategory }) => {
                     disabled={isSubmitting}
                     hasError={!!errors.message}
                 />
-                <div aria-hidden="true" className="absolute -left-2499.75 -top-2499.75 opacity-0">
+                <div aria-hidden="true" className="absolute -top-2499.75 -left-2499.75 opacity-0">
                     <FormField
                         label="Additional Information"
                         icon={<BiMessageDetail size={20} />}
@@ -98,7 +83,11 @@ export const ContactForm: FC<ContactFormProps> = ({ trackingCategory }) => {
                         autoComplete="off"
                     />
                 </div>
-                <FormErrorSummary show={Object.keys(errors).length > 0} errorName="Form incomplete" errorsList={errors} />
+                <FormErrorSummary
+                    show={Object.keys(errors).length > 0}
+                    errorName="Form incomplete"
+                    errorsList={errors}
+                />
                 <FormErrorSummary show={!!submitError?.submit} errorName={submitError?.submit} />
                 {isSuccess && (
                     <FormSuccessMessage message="Message sent! You should receive a confirmation email in your inbox shortly. I'll get back to you as soon as possible." />
@@ -106,9 +95,7 @@ export const ContactForm: FC<ContactFormProps> = ({ trackingCategory }) => {
                 {isQueued && (
                     <FormSuccessMessage message="You're offline — your message has been saved and will be sent automatically when you reconnect to the internet." />
                 )}
-                {isSubmitting && (
-                    <LoadingBar message="Sending message" />
-                )}
+                {isSubmitting && <LoadingBar message="Sending message" />}
                 <div className="mt-8 flex flex-row justify-center gap-4">
                     <BluePillButton onClick={onReset} disabled={isSubmitting}>
                         Reset

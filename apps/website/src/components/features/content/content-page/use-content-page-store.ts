@@ -60,7 +60,10 @@ export const useContentPageStore = (trackingCategory: string): EffectsStore<Cont
         [onTrackNavigation],
     );
     const onTrackBlogStats = useCallback(() => onTrackNavigation(tracking.action.open_blog_stats), [onTrackNavigation]);
-    const onTrackDsaRoadmap = useCallback(() => onTrackNavigation(tracking.action.open_dsa_roadmap), [onTrackNavigation]);
+    const onTrackDsaRoadmap = useCallback(
+        () => onTrackNavigation(tracking.action.open_dsa_roadmap),
+        [onTrackNavigation],
+    );
     const onTrackDsaExercises = useCallback(
         () => onTrackNavigation(tracking.action.open_dsa_exercises),
         [onTrackNavigation],

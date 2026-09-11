@@ -11,12 +11,7 @@ describe("SectionHeading", () => {
         });
 
         it("renders the optional description", () => {
-            render(
-                <SectionHeading
-                    title="Top tags"
-                    description="The 10 most used tags across all posts."
-                />,
-            );
+            render(<SectionHeading title="Top tags" description="The 10 most used tags across all posts." />);
 
             expect(screen.getByText("The 10 most used tags across all posts.")).toBeInTheDocument();
         });

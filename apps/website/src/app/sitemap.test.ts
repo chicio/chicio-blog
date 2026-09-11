@@ -1,15 +1,20 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
-const { mockGetTags, mockGetPostsTotalPages, mockGetAuthorsWithPosts, mockContent, mockGalleryContent, mockCollectionParams } = vi.hoisted(
-    () => ({
-        mockGetTags: vi.fn(),
-        mockGetPostsTotalPages: vi.fn(),
-        mockGetAuthorsWithPosts: vi.fn(),
-        mockContent: vi.fn(),
-        mockGalleryContent: vi.fn(),
-        mockCollectionParams: vi.fn(),
-    }),
-);
+const {
+    mockGetTags,
+    mockGetPostsTotalPages,
+    mockGetAuthorsWithPosts,
+    mockContent,
+    mockGalleryContent,
+    mockCollectionParams,
+} = vi.hoisted(() => ({
+    mockGetTags: vi.fn(),
+    mockGetPostsTotalPages: vi.fn(),
+    mockGetAuthorsWithPosts: vi.fn(),
+    mockContent: vi.fn(),
+    mockGalleryContent: vi.fn(),
+    mockCollectionParams: vi.fn(),
+}));
 
 vi.mock("@/lib/content/posts/posts", () => ({
     getTags: mockGetTags,

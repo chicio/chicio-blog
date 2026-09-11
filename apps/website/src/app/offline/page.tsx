@@ -14,17 +14,11 @@ export default function OfflinePage() {
         <div className="container-fullscreen text-accent-color relative min-h-screen overflow-hidden bg-black">
             <MatrixRain />
             <div className="relative z-10 flex flex-col items-center justify-center gap-2 p-2">
-                <h1 className="heading animate-glitch text-accent text-[72px] font-bold sm:text-[100px]">
-                    OFFLINE
-                </h1>
+                <h1 className="heading animate-glitch text-accent text-[72px] font-bold sm:text-[100px]">OFFLINE</h1>
                 <MatrixTerminal lines={terminalLines} />
-                <div className="flex flex-row gap-4 mt-3">
-                    <BluePillLink to="/">
-                        Stay cached
-                    </BluePillLink>
-                    <RedPillButton onClick={() => window.location.reload()}>
-                        Try again
-                    </RedPillButton>
+                <div className="mt-3 flex flex-row gap-4">
+                    <BluePillLink to="/">Stay cached</BluePillLink>
+                    <RedPillButton onClick={() => window.location.reload()}>Try again</RedPillButton>
                 </div>
             </div>
         </div>

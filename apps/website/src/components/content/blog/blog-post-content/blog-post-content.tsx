@@ -27,22 +27,21 @@ export const BlogPostContent: FC<PostProps> = async ({ post }) => {
             <ReadingContentPage
                 author={siteMetadata.author}
                 trackingCategory={tracking.category.blog_post}
-                breadcrumbs={[
-                    {
-                        label: "Blog",
-                        href: slugs.blog.home,
-                        isCurrent: false,
-                    },
-                    { label: frontmatter.title, href: post.slug.formatted, isCurrent: true },
-                ] satisfies BreadcrumbItem[]}
+                breadcrumbs={
+                    [
+                        {
+                            label: "Blog",
+                            href: slugs.blog.home,
+                            isCurrent: false,
+                        },
+                        { label: frontmatter.title, href: post.slug.formatted, isCurrent: true },
+                    ] satisfies BreadcrumbItem[]
+                }
                 beforeContent={
                     <>
                         <h1 className="leading-tight">{frontmatter.title}</h1>
                         <PostAuthors postAuthors={frontmatter.authors} />
-                        <PostMeta
-                            date={frontmatter.date.formatted}
-                            readingTime={readingTime.text}
-                        />
+                        <PostMeta date={frontmatter.date.formatted} readingTime={readingTime.text} />
                         <ChromeAiFeaturesToolbar contentContainerId="reading-content-container" />
                     </>
                 }

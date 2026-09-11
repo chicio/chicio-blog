@@ -1,9 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import {
-    revealAllSolutionsEvent,
-    subscribeToRevealAllSolutions,
-    triggerRevealAllSolutions,
-} from "./reveal-all-signal";
+import { revealAllSolutionsEvent, subscribeToRevealAllSolutions, triggerRevealAllSolutions } from "./reveal-all-signal";
 
 describe("reveal-all-signal", () => {
     describe("triggerRevealAllSolutions", () => {

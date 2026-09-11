@@ -17,7 +17,9 @@ interface KadaneVisualizerEffects {
     resetVisualization: (nums: number[]) => () => void;
 }
 
-export const useKadaneVisualizerStore = (nums: number[]): ComponentStore<KadaneVisualizerState, KadaneVisualizerEffects> => {
+export const useKadaneVisualizerStore = (
+    nums: number[],
+): ComponentStore<KadaneVisualizerState, KadaneVisualizerEffects> => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [currentMax, setCurrentMax] = useState(nums[0] || 0);
     const [globalMax, setGlobalMax] = useState(nums[0] || 0);

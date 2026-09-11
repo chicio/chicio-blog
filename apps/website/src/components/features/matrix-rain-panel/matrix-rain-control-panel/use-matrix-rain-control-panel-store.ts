@@ -99,19 +99,22 @@ export const useMatrixRainControlPanelStore = (): ComponentStore<
         writeMatrixSettings(next);
     }, []);
 
-    const applyPreset = useCallback((presetName: string) => () => {
-        const preset = MATRIX_RAIN_PRESETS[presetName];
-        if (!preset) {
-            return;
-        }
-        trackWith({
-            category: tracking.category.command_palette,
-            label: tracking.label.body,
-            action: tracking.action.command_palette_matrix_rain_preset_selected,
-        });
-        setFontSizeDragIndex(null);
-        applySettings(preset);
-    }, [applySettings]);
+    const applyPreset = useCallback(
+        (presetName: string) => () => {
+            const preset = MATRIX_RAIN_PRESETS[presetName];
+            if (!preset) {
+                return;
+            }
+            trackWith({
+                category: tracking.category.command_palette,
+                label: tracking.label.body,
+                action: tracking.action.command_palette_matrix_rain_preset_selected,
+            });
+            setFontSizeDragIndex(null);
+            applySettings(preset);
+        },
+        [applySettings],
+    );
 
     const onRainDensityChange = useCallback(
         (v: number) => applySettings({ ...settings, rain: { ...settings.rain, density: v } }),
@@ -176,7 +179,9 @@ export const useMatrixRainControlPanelStore = (): ComponentStore<
         [applySettings, settings],
     );
 
-    const stopPropagation = useCallback((e: MouseEvent) => { e.stopPropagation(); }, []);
+    const stopPropagation = useCallback((e: MouseEvent) => {
+        e.stopPropagation();
+    }, []);
 
     const fontSizeSliderIndex = fontSizeToSliderIndex(settings.rain.fontSize);
     const fontSizeThumbIndex = fontSizeDragIndex ?? fontSizeSliderIndex;
@@ -189,8 +194,7 @@ export const useMatrixRainControlPanelStore = (): ComponentStore<
             presetNames: Object.keys(MATRIX_RAIN_PRESETS),
             fontSizeThumbIndex,
             fontSizeDisplayValue,
-            isPresetActive: (name: string) =>
-                JSON.stringify(settings) === JSON.stringify(MATRIX_RAIN_PRESETS[name]),
+            isPresetActive: (name: string) => JSON.stringify(settings) === JSON.stringify(MATRIX_RAIN_PRESETS[name]),
         },
         effects: {
             close,

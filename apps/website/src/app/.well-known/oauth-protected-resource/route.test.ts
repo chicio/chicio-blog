@@ -11,13 +11,13 @@ describe(".well-known/oauth-protected-resource", () => {
 
         it("returns a resource field pointing to the MCP site URL", async () => {
             const response = await GET();
-            const body = await response.json() as { resource: string; authorization_servers: string[] };
+            const body = (await response.json()) as { resource: string; authorization_servers: string[] };
             expect(body.resource).toBe("https://www.fabrizioduroni.it");
         });
 
         it("returns an empty authorization_servers array (public, no auth required)", async () => {
             const response = await GET();
-            const body = await response.json() as { resource: string; authorization_servers: string[] };
+            const body = (await response.json()) as { resource: string; authorization_servers: string[] };
             expect(body.authorization_servers).toEqual([]);
         });
     });

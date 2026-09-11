@@ -50,11 +50,11 @@ export const Accordion: FC<AccordionProps> = ({ title, children }) => {
 
 ## The three types
 
-| Type | Use when the component has |
-|---|---|
-| `ComponentStore<TState, TEffects>` | both state and behaviour |
-| `StateStore<TState>` | state only, no callbacks |
-| `EffectsStore<TEffects>` | behaviour only, no state |
+| Type                               | Use when the component has |
+| ---------------------------------- | -------------------------- |
+| `ComponentStore<TState, TEffects>` | both state and behaviour   |
+| `StateStore<TState>`               | state only, no callbacks   |
+| `EffectsStore<TEffects>`           | behaviour only, no state   |
 
 `StateStore` and `EffectsStore` exist so a store with only one half does not have to pad the other
 with `Record<string, never>` or `{}`. Reach for the narrowest one that fits.

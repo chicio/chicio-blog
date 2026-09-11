@@ -1,15 +1,7 @@
 "use client";
 
 import React from "react";
-import {
-    LineChart,
-    Line,
-    XAxis,
-    YAxis,
-    Tooltip,
-    Legend,
-    ResponsiveContainer,
-} from "recharts";
+import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { ChartPanel, ChartTooltip } from "matrix-design-system/chart";
 import { chartTheme } from "@/types/configuration/chart-theme";
 
@@ -77,35 +69,11 @@ export const ComplexityGrowthVisualizer: React.FC = () => (
                             style: { textAnchor: "middle", fill: chartTheme.axis.tickColor },
                         }}
                     />
-                    <Tooltip
-                        content={<ChartTooltip />}
-                        cursor={{ stroke: chartTheme.cursorStroke, strokeWidth: 1 }}
-                    />
-                    <Legend
-                        verticalAlign="top"
-                        labelStyle={{ color: chartTheme.legendTextColor }}
-                    />
-                    <Line
-                        type="monotone"
-                        dataKey="o1"
-                        stroke={chartTheme.series[0]}
-                        dot={false}
-                        name="O(1)"
-                    />
-                    <Line
-                        type="monotone"
-                        dataKey="ologn"
-                        stroke={chartTheme.series[1]}
-                        dot={false}
-                        name="O(log n)"
-                    />
-                    <Line
-                        type="monotone"
-                        dataKey="on"
-                        stroke={chartTheme.series[2]}
-                        dot={false}
-                        name="O(n)"
-                    />
+                    <Tooltip content={<ChartTooltip />} cursor={{ stroke: chartTheme.cursorStroke, strokeWidth: 1 }} />
+                    <Legend verticalAlign="top" labelStyle={{ color: chartTheme.legendTextColor }} />
+                    <Line type="monotone" dataKey="o1" stroke={chartTheme.series[0]} dot={false} name="O(1)" />
+                    <Line type="monotone" dataKey="ologn" stroke={chartTheme.series[1]} dot={false} name="O(log n)" />
+                    <Line type="monotone" dataKey="on" stroke={chartTheme.series[2]} dot={false} name="O(n)" />
                     <Line
                         type="monotone"
                         dataKey="onlogn"
@@ -113,27 +81,9 @@ export const ComplexityGrowthVisualizer: React.FC = () => (
                         dot={false}
                         name="O(n log n)"
                     />
-                    <Line
-                        type="monotone"
-                        dataKey="on2"
-                        stroke={chartTheme.series[4]}
-                        dot={false}
-                        name="O(n²)"
-                    />
-                    <Line
-                        type="monotone"
-                        dataKey="o2n"
-                        stroke={chartTheme.series[5]}
-                        dot={false}
-                        name="O(2ⁿ)"
-                    />
-                    <Line
-                        type="monotone"
-                        dataKey="onfact"
-                        stroke={chartTheme.series[6]}
-                        dot={false}
-                        name="O(n!)"
-                    />
+                    <Line type="monotone" dataKey="on2" stroke={chartTheme.series[4]} dot={false} name="O(n²)" />
+                    <Line type="monotone" dataKey="o2n" stroke={chartTheme.series[5]} dot={false} name="O(2ⁿ)" />
+                    <Line type="monotone" dataKey="onfact" stroke={chartTheme.series[6]} dot={false} name="O(n!)" />
                 </LineChart>
             </ResponsiveContainer>
         </div>

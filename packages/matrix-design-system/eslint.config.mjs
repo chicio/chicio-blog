@@ -14,7 +14,7 @@ const chicio = require("eslint-plugin-chicio");
  */
 export default [
     // .design-sync/ and .ds-sync/ are the Claude Design converter: staged third-party scripts and
-// generated previews, none of it this package's source.
+    // generated previews, none of it this package's source.
     { ignores: ["dist/**", "node_modules/**", ".design-sync/**", ".ds-sync/**", "ds-bundle/**"] },
     js.configs.recommended,
     ...tseslint.configs.recommended,

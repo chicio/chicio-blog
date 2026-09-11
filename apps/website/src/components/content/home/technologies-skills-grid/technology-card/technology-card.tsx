@@ -9,7 +9,7 @@ export const TechnologyCard: FC<{ tech: Technology }> = ({ tech }) => {
             key={tech.name}
         >
             <Image
-                className="object-contain mb-3"
+                className="mb-3 object-contain"
                 src={tech.image}
                 alt={tech.name}
                 placeholder="blur"
@@ -17,7 +17,7 @@ export const TechnologyCard: FC<{ tech: Technology }> = ({ tech }) => {
                 height={60}
             />
             <span className="text-primary-text text-base font-medium">{tech.name}</span>
-            <span className="text-secondary text-sm mt-2">{tech.years}</span>
+            <span className="text-secondary mt-2 text-sm">{tech.years}</span>
         </div>
     );
 };

@@ -13,4 +13,4 @@ export const extractMermaidDefinition = (children: ReactNode): string | null => 
     }
 
     return null;
-}
+};

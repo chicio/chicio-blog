@@ -221,10 +221,10 @@ export const TreeTypesVisualizer: FC = () => {
                         <button
                             key={ex.label}
                             onClick={selectIndex(i)}
-                            className={`rounded-lg border px-3 py-1 text-sm font-mono transition-colors ${
+                            className={`rounded-lg border px-3 py-1 font-mono text-sm transition-colors ${
                                 i === selectedIndex
                                     ? "border-accent bg-primary-dark text-accent"
-                                    : "border-gray-600 bg-transparent text-gray-400 hover:border-accent hover:text-accent"
+                                    : "hover:border-accent hover:text-accent border-gray-600 bg-transparent text-gray-400"
                             }`}
                         >
                             {ex.label}
@@ -239,11 +239,7 @@ export const TreeTypesVisualizer: FC = () => {
                         aria-label={`Tree example: ${example.label}`}
                     >
                         {example.edges.map((edge) => (
-                            <TreeEdgeLine
-                                key={`${edge.from}-${edge.to}`}
-                                edge={edge}
-                                nodes={example.nodes}
-                            />
+                            <TreeEdgeLine key={`${edge.from}-${edge.to}`} edge={edge} nodes={example.nodes} />
                         ))}
                         {example.nodes.map((node) => (
                             <TreeNodeCircle key={node.id} node={node} />
@@ -252,7 +248,7 @@ export const TreeTypesVisualizer: FC = () => {
                 </div>
 
                 <p className="mt-3 text-center text-sm text-gray-300">
-                    <span className="font-bold text-accent">{example.label}</span>
+                    <span className="text-accent font-bold">{example.label}</span>
                     {" — "}
                     {example.description}
                 </p>

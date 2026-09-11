@@ -1,9 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import {
-    readPwaInstallDecision,
-    writePwaInstallDecision,
-    pwaInstallDecisionChangeEvent,
-} from "./pwa-install-decision";
+import { readPwaInstallDecision, writePwaInstallDecision, pwaInstallDecisionChangeEvent } from "./pwa-install-decision";
 
 const STORAGE_KEY = "fabrizioduroni_pwaInstallDecision";
 

@@ -19,11 +19,7 @@ export const CallToActionInternalWithTracking: FC<CallToActionInternalWithTracki
     linkComponent: Link = AnchorLink,
 }) => {
     return (
-        <Link
-            className={`call-to-action${className ? ` ${className}` : ""}`}
-            href={to}
-            onClick={onClick}
-        >
+        <Link className={`call-to-action${className ? ` ${className}` : ""}`} href={to} onClick={onClick}>
             {children}
         </Link>
     );

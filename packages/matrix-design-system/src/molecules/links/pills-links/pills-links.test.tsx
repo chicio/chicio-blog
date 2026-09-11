@@ -3,7 +3,6 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { RedPillLink, BluePillLink } from "./pills-links";
 
-
 describe("PillsLinks", () => {
     describe("RedPillLink", () => {
         describe("render", () => {
@@ -21,7 +20,11 @@ describe("PillsLinks", () => {
         describe("interaction", () => {
             it("calls onClick when clicked", async () => {
                 const onClick = vi.fn();
-                render(<RedPillLink to="/prev" onClick={onClick}>Previous</RedPillLink>);
+                render(
+                    <RedPillLink to="/prev" onClick={onClick}>
+                        Previous
+                    </RedPillLink>,
+                );
                 await userEvent.click(screen.getByRole("link"));
                 expect(onClick).toHaveBeenCalledOnce();
             });
@@ -44,7 +47,11 @@ describe("PillsLinks", () => {
         describe("interaction", () => {
             it("calls onClick when clicked", async () => {
                 const onClick = vi.fn();
-                render(<BluePillLink to="/next" onClick={onClick}>Next</BluePillLink>);
+                render(
+                    <BluePillLink to="/next" onClick={onClick}>
+                        Next
+                    </BluePillLink>,
+                );
                 await userEvent.click(screen.getByRole("link"));
                 expect(onClick).toHaveBeenCalledOnce();
             });

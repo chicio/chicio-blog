@@ -13,7 +13,9 @@ interface MermaidDiagramEffects {
     setContainerEl: (el: HTMLDivElement | null) => void;
 }
 
-export const useMermaidDiagramStore = (definition: string): ComponentStore<MermaidDiagramState, MermaidDiagramEffects> => {
+export const useMermaidDiagramStore = (
+    definition: string,
+): ComponentStore<MermaidDiagramState, MermaidDiagramEffects> => {
     const [containerEl, setContainerEl] = useState<HTMLDivElement | null>(null);
     const [rendered, setRendered] = useState(false);
     const [error, setError] = useState<string | null>(null);

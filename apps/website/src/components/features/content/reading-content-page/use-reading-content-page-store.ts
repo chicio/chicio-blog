@@ -50,7 +50,10 @@ export const useReadingContentPageStore = (trackingCategory: string = ""): Effec
 
     const onTrackHome = useCallback(() => onTrackNavigation(tracking.action.open_home), [onTrackNavigation]);
     const onTrackBlog = useCallback(() => onTrackNavigation(tracking.action.open_blog), [onTrackNavigation]);
-    const onTrackDsaRoadmap = useCallback(() => onTrackNavigation(tracking.action.open_dsa_roadmap), [onTrackNavigation]);
+    const onTrackDsaRoadmap = useCallback(
+        () => onTrackNavigation(tracking.action.open_dsa_roadmap),
+        [onTrackNavigation],
+    );
     const onTrackDsaExercises = useCallback(
         () => onTrackNavigation(tracking.action.open_dsa_exercises),
         [onTrackNavigation],
