@@ -156,11 +156,37 @@ See `.claude/rules/code-style.md`. Key points: 4 spaces, 120 char lines, always 
 
 ## CI/CD
 
-Three workflows:
+Five workflows:
 
 - **`ci.yml`** — lint (ESLint `--max-warnings 0`), knip, validate-architecture (dependency-cruiser, all rules at error), typecheck, test (coverage-gated), verify-packages, then build (Next.js) and e2e. Everything before `build` gates it. Upstash/Resend secrets injected for build.
 - **`release-package.yml`** — manual `workflow_dispatch` to publish a package, authenticated by npm OIDC trusted publishing (no `NPM_TOKEN`). Pick the package and the increment; `initial` maps to `--no-increment` for a first release.
 - **`pages.yml`** — builds the design-system showcase and deploys it with the landing page to GitHub Pages, at `chicio.github.io/chicio-blog/` with the Storybook under `/design-system/`. Only runs when the package, the showcase or the hub changes; the site itself deploys to Vercel and is unrelated. The hub source is `.github/pages/index.html`, deliberately dependency-free. Storybook emits relative asset paths, so nothing needs to know the subpath it is served from.
+- **`release-website.yml`** — manual `workflow_dispatch` to cut the site's version bump, changelog, tag and GitHub release. It publishes nothing (the site deploys continuously from `main`) and refuses to run unless `E2E (Playwright)` is green on the exact commit and `main` has not moved since dispatch.
+- **`scheduled-rebuild.yml`** — Monday 06:00 UTC, pings a Vercel deploy hook so time-dependent pages such as `/blog/stats` refresh even in a week with no site commits. Load-bearing now that unaffected commits skip their deploy: see **Vercel Deploys**.
+
+## Vercel Deploys
+
+The site deploys continuously from `main`. Two things about that project are not visible from the repository:
+
+- **The Root Directory is `apps/website`, not the repository root.** Vercel reads `vercel.json` from the Root Directory, so the file lives at `apps/website/vercel.json`; a repository-root `vercel.json` is silently ignored. (Tell: the build log's `npm install --prefix=../..`.) "Include files outside the Root Directory" is on, so the whole monorepo is cloned and the root `package-lock.json` resolves normally.
+- **The `ignoreCommand` skips deploys for commits that cannot affect the site.** What it replaced was Vercel's default ignore step, `git diff HEAD^ HEAD --quiet` — no path scope at all, so it only asked "did this commit change anything", to which the answer is always yes. One Dependabot batch produced 20 deployments in ten minutes that way.
+
+`turbo query affected` decides by turbo's dependency graph rather than by paths, so a `matrix-design-system` change correctly counts as a website change while a `matrix-rain-showcase` or `.github` change correctly does not. Those reach GitHub Pages through `pages.yml` instead. Nothing is lost on Vercel: the next website commit builds the full tree, and `scheduled-rebuild.yml` redeploys every Monday regardless.
+
+Turbo prunes the root lockfile per package, so a bump that only moves a `matrix-rain-showcase` dependency does **not** mark the website affected even though `package-lock.json` changed. That is the whole reason this works for Dependabot, and it is measured, not assumed — `101c5f67` (rain-showcase dependency + lockfile) skips, `5a8ccff6` (design-system dependency + lockfile) builds.
+
+`--exit-code` maps onto Vercel's contract directly: it returns 0 when nothing is affected, which is how Vercel is told to ignore the build, and 1 when something is, which lets it proceed.
+
+Four things here are easy to get wrong:
+
+- **`--base` must tolerate an empty value, which is why `${VERCEL_GIT_PREVIOUS_SHA:-HEAD^1}` is not decoration.** That variable holds the SHA of the last _successful_ deployment and is only exposed when an ignore step is configured, but it is **empty on any branch with no previous deployment** — which is every Dependabot PR. With an empty `--base`, `turbo query affected` exits **2**. `HEAD^1` is the right fallback for those branches because they are always a single commit off `main`.
+- **Do not pass `--head`.** Supplying `--base=<sha>^ --head=<sha>` reports the website affected for a rain-showcase-only commit, where `--base=<sha>^` alone correctly reports it unaffected. Let `HEAD` stay implicit.
+- **An unreachable base exits 1, so it builds rather than skips.** This is the desirable direction and a reason to prefer this over `turbo-ignore`, which would silently fall back to its `--fallback` ref and could wrongly skip. It matters more than it sounds: every skip leaves `VERCEL_GIT_PREVIOUS_SHA` pointing further back, so it drifts out of Vercel's clone depth precisely as this feature succeeds.
+- **`turbo` is pinned to a major (`turbo@^2`).** The ignore step runs _before_ `npm install`, so there is no `node_modules` and `npx` fetches turbo from the registry; unpinned, a future turbo 3 would silently change change-detection semantics mid-deploy.
+
+The predecessor here was `npx turbo-ignore website --fallback=HEAD^1`. It produces identical verdicts on both test commits above, but it is deprecated in favour of `turbo query affected`, prints a deprecation warning into every build log, and costs a second registry fetch because it shells out to `npx -y turbo@... --dry=json` itself. It is not npm-deprecated and still ships with every turbo release, so it remains a working fallback if the above ever misbehaves.
+
+The **Build Command** override and the **Skip deployments when there are no changes** toggle both still live only in the Vercel dashboard. Turn that toggle off: `ignoreCommand` overrides the default ignore step, and leaving both on means two mechanisms with different semantics deciding the same thing.
 
 ## Release
 
