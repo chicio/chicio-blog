@@ -156,11 +156,30 @@ See `.claude/rules/code-style.md`. Key points: 4 spaces, 120 char lines, always 
 
 ## CI/CD
 
-Three workflows:
+Five workflows:
 
 - **`ci.yml`** — lint (ESLint `--max-warnings 0`), knip, validate-architecture (dependency-cruiser, all rules at error), typecheck, test (coverage-gated), verify-packages, then build (Next.js) and e2e. Everything before `build` gates it. Upstash/Resend secrets injected for build.
 - **`release-package.yml`** — manual `workflow_dispatch` to publish a package, authenticated by npm OIDC trusted publishing (no `NPM_TOKEN`). Pick the package and the increment; `initial` maps to `--no-increment` for a first release.
 - **`pages.yml`** — builds the design-system showcase and deploys it with the landing page to GitHub Pages, at `chicio.github.io/chicio-blog/` with the Storybook under `/design-system/`. Only runs when the package, the showcase or the hub changes; the site itself deploys to Vercel and is unrelated. The hub source is `.github/pages/index.html`, deliberately dependency-free. Storybook emits relative asset paths, so nothing needs to know the subpath it is served from.
+- **`release-website.yml`** — manual `workflow_dispatch` to cut the site's version bump, changelog, tag and GitHub release. It publishes nothing (the site deploys continuously from `main`) and refuses to run unless `E2E (Playwright)` is green on the exact commit and `main` has not moved since dispatch.
+- **`scheduled-rebuild.yml`** — Monday 06:00 UTC, pings a Vercel deploy hook so time-dependent pages such as `/blog/stats` refresh even in a week with no site commits. Load-bearing now that unaffected commits skip their deploy: see **Vercel Deploys**.
+
+## Vercel Deploys
+
+The site deploys continuously from `main`. Two things about that project are not visible from the repository:
+
+- **The Root Directory is `apps/website`, not the repository root.** Vercel reads `vercel.json` from the Root Directory, so the file lives at `apps/website/vercel.json`; a repository-root `vercel.json` is silently ignored. (Tell: the build log's `npm install --prefix=../..`.) "Include files outside the Root Directory" is on, so the whole monorepo is cloned and the root `package-lock.json` resolves normally.
+- **The `ignoreCommand` skips deploys for commits that cannot affect the site.** What it replaced was Vercel's default ignore step, `git diff HEAD^ HEAD --quiet` — no path scope at all, so it only asked "did this commit change anything", to which the answer is always yes. One Dependabot batch produced 20 deployments in ten minutes that way.
+
+`npx turbo-ignore website --fallback=HEAD^1` decides by turbo's dependency graph rather than by paths, so a `matrix-design-system` change correctly counts as a website change while a `matrix-rain-showcase` or `.github` change correctly does not. Those reach GitHub Pages through `pages.yml` instead. Nothing is lost on Vercel: the next website commit builds the full tree, and `scheduled-rebuild.yml` redeploys every Monday regardless.
+
+Three things here are easy to get wrong:
+
+- **`turbo-ignore` is deprecated in favour of `turbo query affected`, and the replacement is not a drop-in.** Vercel's own documented snippet, `turbo query affected --base=$VERCEL_GIT_PREVIOUS_SHA --packages website --exit-code`, **exits 2** when that variable is empty — which it is on every branch without a previous deployment, meaning every Dependabot PR (measured, not assumed). `turbo-ignore` covers that case with `--fallback` and additionally checks the ref is reachable, which matters on Vercel's shallow clone. Do not "modernise" this until the empty-base case is solved.
+- **The comparison base is `VERCEL_GIT_PREVIOUS_SHA`, the last _successful_ deployment — not `HEAD^`.** Skipped builds land in `CANCELED`, so the base does not advance across them and a run of skipped commits still diffs against the last commit actually deployed. `HEAD^` is only `turbo-ignore`'s local default; `--fallback` applies solely when that variable is missing or unreachable, which is why it must stay set.
+- **A deploy hook bypasses the skip.** `scheduled-rebuild.yml`'s hook produced a full production build while redeploying an already-deployed commit with skipping enabled, so the Monday refresh is not defeated by this.
+
+The **Build Command** override and the **Skip deployments when there are no changes** toggle both still live only in the Vercel dashboard. Turn that toggle off: `ignoreCommand` overrides the default ignore step, and leaving both on means two mechanisms with different semantics deciding the same thing.
 
 ## Release
 
