@@ -51,6 +51,12 @@ jobs:
       # concluded successfully is proof that lint, format, knip, validate-architecture, typecheck,
       # test, verify-packages and build all passed on this exact commit. Checking the one terminal
       # job keeps this gate from drifting as jobs are added upstream of it.
+      #
+      # Asserting `conclusion == "success"` is what makes that safe, and it must stay that way. When
+      # an upstream gate fails, e2e does not run and reports the conclusion `skipped` — which GitHub
+      # treats as SUCCESS wherever required status checks are evaluated. Anything looser than an
+      # equality check here (a truthiness test, "not failure", a branch-protection rule) would read
+      # that `skipped` as a pass and release a tree whose typecheck was red.
       - name: Require a green CI run for this commit
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
