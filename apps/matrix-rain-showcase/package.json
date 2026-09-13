@@ -27,7 +27,7 @@
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "sharp": "^0.35.3",
-    "typegpu": "^0.12.4"
+    "typegpu": "^0.12.5"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",
