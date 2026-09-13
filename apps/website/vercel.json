@@ -1,4 +1,4 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "ignoreCommand": "npx --yes turbo-ignore website --fallback=HEAD^1"
+  "ignoreCommand": "npx --yes turbo@^2 query affected --base=\"${VERCEL_GIT_PREVIOUS_SHA:-HEAD^1}\" --packages website --exit-code"
 }
