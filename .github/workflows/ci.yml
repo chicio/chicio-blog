@@ -249,3 +249,43 @@ jobs:
           name: playwright-report
           path: apps/website/playwright-report/
           retention-days: 30
+
+  # The single check that branch protection requires, and the only one it may require.
+  #
+  # Requiring the terminal job instead would be unsafe: GitHub maps a `skipped` check conclusion to
+  # success when evaluating required status checks, and `build` and `e2e` report `skipped` whenever
+  # an upstream gate fails. PR #654, with a red Typecheck, therefore had a `skipped` "E2E
+  # (Playwright)" that would have satisfied such a rule and auto-merged. release-website.yml is safe
+  # from the same trap only because it asserts `conclusion == "success"` explicitly.
+  #
+  # `if: always()` is what makes this job trustworthy: it runs even when its dependencies fail or are
+  # skipped, and then refuses anything that is not literally `success`. Adding a job above means
+  # adding one line to `needs` here; forgetting to is the one failure mode, and it fails open, so
+  # keep this list complete.
+  ci-success:
+    name: CI success
+    runs-on: ubuntu-latest
+    if: always()
+    needs:
+      - lint
+      - format
+      - knip
+      - validate-architecture
+      - typecheck
+      - test
+      - verify-packages
+      - build
+      - e2e
+    steps:
+      - name: Assert every gate succeeded
+        env:
+          RESULTS: ${{ join(needs.*.result, ' ') }}
+        run: |
+          echo "Upstream job results: $RESULTS"
+          for result in $RESULTS; do
+            if [ "$result" != "success" ]; then
+              echo "::error::A CI gate did not succeed (results: $RESULTS)."
+              exit 1
+            fi
+          done
+          echo "Every CI gate succeeded."
