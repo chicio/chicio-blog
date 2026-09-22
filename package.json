@@ -47,12 +47,12 @@
     "@types/react-dom": "19.3.0",
     "framer-motion": "^13.3.0",
     "husky": "^9.1.7",
-    "prettier": "^3.9.6",
+    "prettier": "^3.9.8",
     "prettier-plugin-tailwindcss": "^0.8.1",
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "release-it": "^21.0.3",
-    "turbo": "^2.10.13",
+    "turbo": "^2.11.2",
     "typescript": "^6.0.3"
   },
   "overrides": {
