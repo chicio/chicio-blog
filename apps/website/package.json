@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@ai-sdk/groq": "^4.0.46",
-    "@ai-sdk/react": "^4.0.110",
+    "@ai-sdk/react": "^4.0.112",
     "@giscus/react": "^3.1.0",
     "@google-analytics/data": "^7.1.0",
     "@mdx-js/loader": "^3.1.1",
