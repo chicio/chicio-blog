@@ -63,10 +63,21 @@ report (files by layer, reusable design-system surface, registration points, tes
 Keep the report; it feeds Stages 2 and 3.
 
 ### Stage 2 — Brainstorm 🚪 **[INTERACTIVE] — THE HUMAN GATE**
-Invoke the **`grilling`** skill in the main thread, fed the exploration report + the description (+ any §9 "decisions
-to resolve" the explorer surfaced). Interview the user until the approach is nailed and an **approved plan** exists.
+Run **grill-with-docs** in the main thread, fed the exploration report + the description (+ any §9 "decisions to
+resolve" the explorer surfaced). `grill-with-docs` is `disable-model-invocation`, so do what it does: invoke the
+Skill tool twice, for **`grilling`** and **`domain-modeling`**. Interview the user until the approach is nailed and an
+**approved plan** exists, while writing the glossary (`CONTEXT.md`) and any ADRs (`docs/adr/`) as terms and decisions
+settle.
+- Load **both** skills. With only `grilling` loaded you get a good interview and no paper trail, which is the most
+  reported failure of grill-with-docs, and it is known to drop the file writes when run as a step inside a pipeline
+  like this one. Write each resolved term to `CONTEXT.md` the moment it resolves, and check the working tree before
+  closing the gate. A session with no new vocabulary and no ADR is legitimate: say so, don't invent entries.
+- Everything decided that is neither a term nor an ADR lives only in the conversation, so it goes into the plan.
 - Plan handoff: **inline** in the implementer's prompt for small feature-slices; **persisted to a scratchpad plan
   file** for full-feature work (and later fed to the reviewer alongside the diff).
+- Docs handoff: if the session created or changed `CONTEXT.md` or an ADR, commit them on the feature branch as a
+  `docs:` commit before Stage 3, and name them in the implementer's and reviewer's prompts so both use the agreed
+  vocabulary and decisions.
 - **Do not proceed to Stage 3 until the user has approved the plan.**
 
 ### Stage 3 — Implement
