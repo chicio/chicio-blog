@@ -9,6 +9,8 @@
   (`packages/eslint-plugin-chicio`); its showcase is `apps/matrix-design-system-showcase`
 - [Matrix Rain](./packages/matrix-rain-webgpu/CONTEXT.md): the published WebGPU digital-rain background effect; its
   showcase is `apps/matrix-rain-showcase`
+- [Agentic Delivery](./.claude/CONTEXT.md): how agents plan, build and review code changes to this repository (the
+  SDLC pipeline, its Human Gate and its Work Units)
 
 ## Relationships
 
@@ -16,3 +18,4 @@
   links, images, the current path and the site's branding; the design system knows nothing about the Website
 - **Website → Matrix Rain**: the Website mounts the rain as its page background and exposes its settings to the visitor
 - **Matrix Design System ↔ Matrix Rain**: independent; neither imports the other
+- **Agentic Delivery → all**: it changes the other three contexts' code and uses their language; none of them knows it

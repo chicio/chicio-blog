@@ -192,10 +192,13 @@ AI agents and tools that send `Accept: text/markdown` receive a Markdown represe
 ## Agentic SDLC Pipeline (code work)
 
 Non-trivial **code** changes can be run through an orchestrated, multi-agent SDLC via the
-`/fabrizioduroni-blog-sdlc` skill — manual and main-thread, one human gate (plan approval), a bounded
-implement⇄review loop, and an isolated worktree by default. The skill documents every stage, both modes
-(feature and `--fix`), the agent roster with models, and the mechanical gates; it loads on invocation, so that
-detail is not repeated here.
+`/fabrizioduroni-blog-sdlc` skill. The main thread explores and hosts the one Human Gate, where the plan is
+approved together with its Work Unit Graph. Then the saved workflow `.claude/workflows/fabrizioduroni-blog-sdlc.js`
+builds it Wave by Wave, parallel Work Units each in their own worktree, with bounded implement⇄review loops, the
+Full Checks and an Integration Review. The main thread then opens the PR. The skill documents every stage, both modes
+(feature and `--fix`), the agent roster and the checks; it loads on invocation, so that detail is not repeated here.
+Its vocabulary is the Agentic Delivery context (`.claude/CONTEXT.md`), and why it is shaped this way is
+`.claude/docs/adr/0001-parallel-work-units-in-a-workflow.md`.
 
 **When to use what**: full pipeline (`/fabrizioduroni-blog-sdlc`) for non-trivial code features/fixes; call
 `fabrizioduroni-implementer` **directly** as a quick-path escape hatch for trivial, well-specified code
