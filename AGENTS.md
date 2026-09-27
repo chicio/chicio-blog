@@ -184,8 +184,7 @@ AI agents and tools that send `Accept: text/markdown` receive a Markdown represe
 
 **Architecture**:
 
-- `apps/website/src/middleware.ts` — re-exports `proxy` from `apps/website/src/proxy.ts` as `middleware`, providing Next.js middleware wiring
-- `apps/website/src/proxy.ts` — generic proxy: if `Accept: text/markdown`, prepends `/markdown` to the path and rewrites; never needs updating for new pages
+- `apps/website/src/proxy.ts` — Next 16's proxy file convention (the successor of `middleware.ts`, which no longer exists here); a generic proxy: if `Accept: text/markdown`, prepends `/markdown` to the path and rewrites; never needs updating for new pages
 - `apps/website/src/app/markdown/[[...path]]/route.ts` — single catch-all route handler; derives both its static params and its dispatch from the Content Registry, so it never needs editing either
 
 **Adding markdown for a new page**: register it in the Content Registry (`apps/website/src/lib/content/registry.ts`). A Standalone Page backed by a standard `content.mdx` is one `mdxPage(slug)` call; a Collection needs an entry with `params` and a markdown generator built on the existing `apps/website/src/lib/content/` functions.

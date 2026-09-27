@@ -147,3 +147,7 @@ patterns worth catching faster next time (e.g. "design-system components keep im
 new ds component"). Do NOT store per-PR facts that go stale. Each memory is its own file with name/description
 frontmatter; keep a one-line pointer per file in that directory's `MEMORY.md`. Before acting on a memory that names a
 file/symbol/flag, verify it still exists — trust current code over remembered state.
+
+**Vocabulary.** The project glossary is authoritative: `CONTEXT-MAP.md` lists the contexts, each with its own
+`CONTEXT.md`. Memories use its terms and never redefine them; when a memory contradicts the glossary, the memory is
+wrong — fix it.
