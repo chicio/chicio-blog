@@ -68,6 +68,9 @@ resolve" the explorer surfaced). `grill-with-docs` is `disable-model-invocation`
 Skill tool twice, for **`grilling`** and **`domain-modeling`**. Interview the user until the approach is nailed and an
 **approved plan** exists, while writing the glossary (`CONTEXT.md`) and any ADRs (`docs/adr/`) as terms and decisions
 settle.
+- The repo has several contexts: read `CONTEXT-MAP.md` first and write each term to the `CONTEXT.md` of the context it
+  belongs to (Website, Matrix Design System, Matrix Rain), never to a root `CONTEXT.md`. ADRs go in that context's
+  `docs/adr/`, or in the root `docs/adr/` when the decision spans contexts.
 - Load **both** skills. With only `grilling` loaded you get a good interview and no paper trail, which is the most
   reported failure of grill-with-docs, and it is known to drop the file writes when run as a step inside a pipeline
   like this one. Write each resolved term to `CONTEXT.md` the moment it resolves, and check the working tree before
@@ -135,7 +138,10 @@ a structured root-cause report (offending code, introducing commit, root cause, 
 failing-test shape). It writes its findings to memory **regardless** of what happens next.
 
 ### Stage 2' — Confirm root cause 🚪 **[INTERACTIVE] — THE HUMAN GATE**
-Present the root-cause report. The human decides:
+Present the root-cause report, with **`domain-modeling`** loaded (Skill tool) for the discussion. Bugs regularly
+expose a misunderstood concept, and some fixes encode a decision: write each term to the relevant `CONTEXT.md` as it
+resolves, offer an ADR only when all three of its criteria hold, and handle the docs exactly as Stage 2's docs handoff
+does. A fix that surfaces no vocabulary writes nothing. The human decides:
 - **Proceed** → the report becomes the approved plan; continue to Stage 3 (implementer writes the failing test first,
   then the fix — strict red-green).
 - **Decline** → investigate-only. Stop the pipeline cleanly. (The investigator already persisted its memory, so the

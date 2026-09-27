@@ -9,11 +9,11 @@ type: project
 ## Architecture
 
 ### Serwist — Configurator Mode
-- `next.config.ts` has ZERO Serwist code — clean separation, bundler-agnostic
-- `serwist.config.mjs` uses `serwist.withNextConfig` to receive resolved Next.js config
-- `serwist build` runs as a post-build step: `next build && serwist build`
-- `predev` also builds SW: `npm run search-index && NODE_ENV=development serwist build`
-- SW output: `public/sw.js` (gitignored via `public/sw*`)
+- `apps/website/next.config.ts` has ZERO Serwist code — clean separation, bundler-agnostic
+- `apps/website/serwist.config.mjs` uses `serwist.withNextConfig` to receive resolved Next.js config
+- `serwist build` now runs inside the prebuild step (`apps/website/src/lib/build/prebuild.ts`, after the search index
+  and media copy), wired as `prebuild`/`predev` (`predev` sets `NODE_ENV=development`); verified 2026-09-27
+- SW output: `apps/website/public/sw.js` (gitignored via `public/sw*` in `apps/website/.gitignore`)
 
 ### Precache Optimization (2026-04-23)
 **Problem**: The original config precached ~685 URLs (590 HTML pages + JS/CSS chunks + static assets). Every visitor's SW install fetched all 685 resources from Vercel's edge cache, each counting as an ISR read. With `skipWaiting: true`, every new deploy triggered re-precaching for all active visitors. This caused ISR reads to spike from ~5k/day to 190k+/day, exceeding Vercel's Hobby plan limit (1,004,960 / 1,000,000 in 30 days).
@@ -27,18 +27,11 @@ type: project
 
 **Important**: The `exclude` option does NOT work with `@serwist/cli` (v9.x) — it throws "Received unrecognized keys: exclude". Use `globPatterns: []` + `precachePrerendered: false` instead.
 
-### `globIgnores` (serwist.config.mjs)
-Still present to exclude large assets from any future glob scanning:
-```js
-"public/images/**",
-"public/tesi-fabrizio-duroni-770157.pdf",
-"public/chicio-coding-feature-graphic.png",
-"public/chicio-coding-feature-graphic.jpg",
-"public/chicio-art-featured.png",
-"public/search-index.json",
-```
+### `globIgnores` (removed)
+An older `globIgnores` list (public images, the thesis PDF, feature graphics, search-index.json) is no longer in
+`serwist.config.mjs`; with `globPatterns: []` it had nothing to filter.
 
-### Service Worker (`src/app/sw.ts`)
+### Service Worker (`apps/website/src/app/sw.ts`)
 Three custom rules prepended before `...defaultCache`:
 1. `NetworkOnly` for `/api/*` — chat/contact must never be cached
 2. `CacheFirst` (500 entries, 30d) for `request.destination === "image"` with `handlerDidError` returning a Matrix SVG placeholder
@@ -64,7 +57,7 @@ Three custom rules prepended before `...defaultCache`:
 - Hard navigation (refresh/direct URL) to unvisited page → Matrix `/offline` fallback
 - Images not in cache → Matrix SVG placeholder (`> IMAGE_UNAVAILABLE`)
 
-### Offline Page (`src/app/offline/page.tsx`)
+### Offline Page (`apps/website/src/app/offline/page.tsx`)
 Matches 404 page structure exactly:
 - `MatrixRain` fullscreen background
 - "OFFLINE" heading with `animate-glitch`
@@ -72,23 +65,26 @@ Matches 404 page structure exactly:
 - `BluePillLink` to "/" + `RedPillButton` for `window.location.reload()`
 - `"use client"` required for reload button
 
-### Install Prompt (`src/components/sections/pwa/`)
-- `use-install-prompt.ts`: captures `beforeinstallprompt`, checks `display-mode: standalone`
-- `install-prompt-banner.tsx`: uses `useConsentStore` — only shows when cookie consent is ACCEPTED
+### Install Prompt (`apps/website/src/components/features/pwa/install-prompt-banner/`)
+- `use-pwa-install-decision.ts` + `use-install-prompt-banner-store.ts`: capture `beforeinstallprompt`, check `display-mode: standalone`
+  (originally `use-install-prompt.ts` under the old `sections/pwa/` tree)
+- `install-prompt-banner.tsx`: gated on the consent Shared Store — only shows when cookie consent is ACCEPTED
   - Reasoning: prompt fires GA tracking events → inconsistent to show to users who rejected tracking
   - Eliminates banner overlap with cookie consent banner
-- Uses `useGlassmorphism` + same layout as `cookie-consent-banner.tsx` (identical CSS classes)
+- Uses `useGlassmorphism` + same layout as the design system's `organism/cookie-consent-banner/cookie-consent-banner.tsx` (identical CSS classes)
 - `beforeinstallprompt` is Chromium-only — Safari/Firefox never see the prompt
 
-### Background Sync (`src/lib/background-sync/contact-queue.ts`)
+### Background Sync (`apps/website/src/lib/background-sync/contact-queue.ts`)
 - localStorage queue (key: `fabrizioduroni_contact_queue`)
 - Cross-browser including Safari (SW Background Sync API not supported on Safari)
-- `useOfflineContactQueue` hook mounted in `layout-additional-content.tsx` replays on `online` event
+- The replay now lives in `use-layout-additional-content-store.ts` (an `online` listener calling `replayQueue`);
+  originally a separate `useOfflineContactQueue` hook
 - Contact form detects `navigator.onLine`, queues offline submissions
 
-### `useConsentStore` (`src/components/design-system/utils/hooks/use-consent-store.ts`)
-New hook following `useMotionStore` pattern exactly:
-- `useSyncExternalStore` subscribing to `consentChangeEvent` from `src/lib/consents/consents.ts`
+### `useConsentStore` (`apps/website/src/components/features/consent/use-consent-store.ts`)
+A Shared Store hook following the `useMotionStore` pattern exactly (it began in the design system's hooks and moved
+to the Website, since consent is application state):
+- `useSyncExternalStore` subscribing to `consentChangeEvent` from `apps/website/src/lib/consents/consents.ts`
 - `writeConsent` dispatches `consentChangeEvent` (camelCase, matching `motionChangeEvent`)
 - `getServerSnapshot` returns `false` (no consent on server)
 - Reusable for any component that needs to react to consent changes
@@ -96,7 +92,7 @@ New hook following `useMotionStore` pattern exactly:
 ## Known Issues / Debugging History
 
 ### Bad exercise slug (fixed)
-`src/content/data-structures-and-algorithms/topic/tries/exercise/maximum-XOR-of-two-numbers-in-an -array` had a literal space in the directory name → URL with `%20` → `bad-precaching-response` SW install failure. Renamed to `maximum-xor-of-two-numbers-in-an-array`.
+`apps/website/src/content/data-structures-and-algorithms/topic/tries/exercise/maximum-XOR-of-two-numbers-in-an -array` had a literal space in the directory name → URL with `%20` → `bad-precaching-response` SW install failure. Renamed to `maximum-xor-of-two-numbers-in-an-array`.
 
 ### Precache cache key format
 Serwist stores non-versioned URLs with revision as query param: `/offline?__WB_REVISION__=abc123`. Always use `{ ignoreSearch: true }` when calling `caches.match` for precached non-versioned URLs.

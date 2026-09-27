@@ -1,6 +1,6 @@
 ---
 name: Chat Feature Integration
-description: Groq LLM + Upstash Vector RAG architecture for the AI chat feature
+description: Groq LLM + Knowledge Base (Upstash Vector) retrieval architecture for the Chat
 type: project
 ---
 
@@ -11,7 +11,7 @@ type: project
   and consume the same output budget), Temperature: 0.5
 - `providerOptions: { groq: { reasoningFormat: "hidden" } }` on the `streamText` call suppresses reasoning parts
   from the stream. Required because `sendReasoning` defaults `true` in `ai@7` but the chat UI's part-type switch
-  (`src/components/content/chat/chat/chat.tsx`) only handles `text` and the RAG tool part, no default case —
+  (`apps/website/src/components/content/chat/chat/chat.tsx`) only handles `text` and the retrieval tool part, no default case —
   unhidden reasoning silently renders as an empty bubble. Verified: `reasoningFormat: "hidden"` works with gpt-oss
   despite Groq's docs page saying otherwise, and coexists fine with tool calling.
 - Do NOT set `reasoningEffort` on the main chat model: at `low` effort the 120b was observed hallucinating a
@@ -22,18 +22,21 @@ type: project
 - React hook: `@ai-sdk/react` useChat
 - See [[feature_chat_guardrails]] for the topic-relevance gate's parallel migration to `openai/gpt-oss-20b`.
 
-## RAG Pipeline
+## Knowledge Base retrieval
+The Knowledge Base (see apps/website/CONTEXT.md) holds only the Posts explicitly uploaded; nothing from the DSA course,
+Videogames or other Sections.
 - Tool: `getFabrizioDuroniBlogKnowledge` registered in API route
-- Upstash Vector for semantic search of blog content
+- Upstash Vector for semantic search of Post chunks
 - Knowledge upload (`npm run chat-knowledge-upload`): chunks to 800 chars, splits by paragraphs then sentences
 - Metadata per chunk: postId, postTitle, postDate, postUrl, postDescription, postTags, postAuthors, chunkIndex
 
 ## Key Files
-- API route: `src/app/api/chat/route.ts`
-- System prompt: `src/lib/chat/llm-prompt.ts`
-- Vector client: `src/lib/chat/upstash-vector.ts`
-- Knowledge upload: `src/lib/chat/chat-knowledge-upload.ts`
-- Chat hook: `src/components/sections/chat/hooks/useFabrizioChat.ts`
+- API route: `apps/website/src/app/api/chat/route.ts`
+- System prompt: `apps/website/src/lib/chat/llm-prompt.ts`
+- Vector client: `apps/website/src/lib/upstash/upstash-vector.ts`
+- Knowledge upload: `apps/website/src/lib/chat/chat-knowledge-upload.ts`
+- Chat store: `apps/website/src/components/content/chat/chat/use-chat-store.ts` (wraps `useChat`; replaced the old
+  `useFabrizioChat` hook; also where `trySpoonPhrase` intercepts the spoon Trigger)
 
 ## Env Vars
 - `UPSTASH_VECTOR_REST_URL`, `UPSTASH_VECTOR_REST_TOKEN`

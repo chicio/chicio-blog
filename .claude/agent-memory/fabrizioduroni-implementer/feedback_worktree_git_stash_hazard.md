@@ -8,7 +8,7 @@ type: feedback
 **stash stack shared with the main repo and every other worktree**, because git worktrees share a single
 `.git` directory and its refs (including `refs/stash`). A `git stash pop` with an empty local diff will
 happily pop an old, unrelated stash entry left by the human on a totally different branch, and can produce
-merge conflicts in files you never touched (observed: popped a years-old content-article stash while just
+merge conflicts in files you never touched (observed: popped a years-old Post-draft stash while just
 trying to snapshot/restore state during a knip pre-existing-issue check on issue #422).
 
 **Why:** worktrees are separate working directories but NOT separate git object/ref stores — `refs/stash`

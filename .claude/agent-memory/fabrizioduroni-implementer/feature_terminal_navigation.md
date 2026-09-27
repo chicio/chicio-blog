@@ -6,37 +6,35 @@ type: project
 
 ## Overview
 
-A Unix-shell-style REPL over the site's content tree: `ls`, `cd`, `pwd`, `tree`, `cat`, `open`, `help`/`man`,
+The Terminal (see apps/website/CONTEXT.md; not the design system's Terminal Chrome) is a Unix-shell-style REPL over the site's content tree: `ls`, `cd`, `pwd`, `tree`, `cat`, `open`, `help`/`man`,
 `clear`, `search <query>`, `close`/`exit`. Shipped 2026-07-23 as a windowed `/terminal` route (draft PR #480),
 then EVOLVED the same day into a **global full-screen modal overlay** (Model A: "overlay drives the real
 router") per an approved grilling redesign. Branch `worktree-feat+terminal-navigation`.
 
 ## Current architecture (overlay model — supersedes the windowed-route version)
 
-- **Mounting**: `src/components/features/terminal/terminal/` (moved from `content/terminal/`), mounted
+- **Mounting**: `apps/website/src/components/features/terminal/terminal/` (moved from `content/terminal/`), mounted
   app-wide via `<Terminal />` in `layout-additional-content.tsx` (same pattern as `CommandPalette`). The
   component itself is ALWAYS mounted; it renders `null` unless its internal `open` state is true, so its
   store's effects (manifest fetch, popstate/Esc listeners) are live for the whole app session.
-- **Opening**: (1) command-palette `> Open terminal` action dispatches a window event
-  (`terminalOverlayOpenEvent` in `design-system/state/terminal/terminal-events.ts`) instead of
-  `router.push('/terminal')` — no URL change, origin = current page. (2) `/terminal` is now a **shareable
-  boot link**: `src/app/terminal/page.tsx` renders an inert fallback string; the overlay's own store detects
-  `window.location.pathname === slugs.terminal` on mount, `replaceState`s the URL to `/`, and opens itself
-  over the homepage.
+- **Opening**: the command-palette `> Open terminal` action dispatches a window event
+  (`terminalOverlayOpenEvent` in `apps/website/src/lib/terminal/terminal-events.ts`) instead of
+  `router.push('/terminal')` — no URL change, origin = current page. This is the ONLY way in: the `/terminal`
+  boot link described in Parts 1-2 was removed in Part 3 (below); `apps/website/src/app/terminal/` no longer exists.
 - **open vs cat vs cd**: ONLY `open` mutates history (`router.push` + a `TerminalRenderContentIntent` with
   `historyInert: false`). `cat` renders the SAME in-shell content but `historyInert: true` (no URL change —
   a peek). `cd`/`ls`/`tree`/`pwd`/`search`/`help`/`clear` stay URL-inert as before.
 - **In-shell rendering**: engine's `TerminalExecutionResult.renderContent?: TerminalRenderContentIntent`
   (`{route, title, historyInert}`) signals the store to fetch `/markdown/<route>` DIRECTLY (see
-  `src/lib/terminal/terminal-markdown-route.ts::toMarkdownFetchUrl` — `/` maps to bare `/markdown`). This is
+  `apps/website/src/lib/terminal/terminal-markdown-route.ts::toMarkdownFetchUrl` — `/` maps to bare `/markdown`). This is
   a **direct fetch, not `Accept: text/markdown` negotiation** — deliberately bypasses the GA4
   Measurement-Protocol tracking that fires in `proxy.ts` for that header, so human terminal use doesn't
   register as an AI-agent markdown hit. Rendered via the existing `Markdown` atom
-  (`design-system/atoms/typography/markdown`), wrapped in a new `TerminalContentBlock` (private child of
+  (`packages/matrix-design-system/src/atoms/typography/markdown`), wrapped in a new `TerminalContentBlock` (private child of
   `terminal-scrollback/`) between `─── <route> ───` / `─── EOF ─ close for full page ───` separators, with a
   fetch-status state machine (`loading`/`success`/`unavailable`/`error`; 404 → "no terminal view available"
   stub, other failures/timeout (8s `AbortController`) → generic error line).
-- **popstate mirroring**: `src/lib/terminal/terminal-path.ts::resolveRouteForPopstate` (pure, tested) reverse
+- **popstate mirroring**: `apps/website/src/lib/terminal/terminal-path.ts::resolveRouteForPopstate` (pure, tested) reverse
   -looks-up the browser's current pathname against the manifest (`findNodeByRoute`, also new) to derive
   `{cwd, title, route}` for Back/Forward; homepage `/` is special-cased since it's never itself a manifest
   node. A route with no manifest match still renders (title = raw pathname), just leaves cwd unset.
@@ -45,9 +43,9 @@ router") per an approved grilling redesign. Branch `worktree-feat+terminal-navig
   exits since `open` is plain `useState`, never persisted).
 - **A11y (modal)**: `role="dialog"` + `aria-modal="true"` on the panel; focus captured
   (`document.activeElement`) on open and restored on close; **background inert** via a new
-  `AppRootBoundary` component (`features/terminal/app-root-boundary/`, wraps `{children}` in
-  `src/app/layout.tsx` as `display:contents` so it never affects layout) whose DOM node is registered into a
-  tiny module-scope singleton (`src/lib/terminal/terminal-overlay-dom.ts::registerAppRootElement`/
+  `AppRootBoundary` component (`apps/website/src/components/features/terminal/app-root-boundary/`, wraps `{children}` in
+  `apps/website/src/app/layout.tsx` as `display:contents` so it never affects layout) whose DOM node is registered into a
+  tiny module-scope singleton (`apps/website/src/lib/terminal/terminal-overlay-dom.ts::registerAppRootElement`/
   `getAppRootElement`) — the overlay's store toggles `inert`/`aria-hidden` on that node while open. No
   explicit Tab-focus-trap needed: Tab was already fully `preventDefault()`-ed on the terminal input for
   completion (#480 behavior), and `inert` blocks any path into the background regardless.
@@ -96,9 +94,9 @@ router") per an approved grilling redesign. Branch `worktree-feat+terminal-navig
 - Scrollback/cwd/command-history persist across repeated open→close→reopen within the same page session
   (the store is a single always-mounted instance) — deliberately did NOT reset on close, only `clear` or a
   hard refresh resets it.
-- Dropped the old `GenericHeader`/`Menu`/`ContentContainer` page chrome and the `TerminalIcon` atom it used
+- Dropped the old `GenericHeader`/`Menu`/`ContentContainer` page layout and the `TerminalIcon` atom it used
   (both removed) — an overlay floating over the real page (which already has its own Menu) doesn't need a
-  second page header; this was a necessary, in-scope deviation from keeping the visual chrome identical.
+  second page header; this was a necessary, in-scope deviation from keeping the page layout identical.
 - `terminalSlug` prop threading was removed entirely from `CommandPalette`/`use-command-palette-store.ts`
   once the palette action switched to the event-based open (the prop had no remaining consumer).
 - Local Playwright runs with full parallelism (no `--workers` flag) can flake the palette-open retry under
@@ -161,7 +159,7 @@ that the filter class and border-accent are present and the image keeps its acce
 is open.
 
 **Tailwind v4 gotcha confirmed**: an isolated `@tailwindcss/cli` throwaway test harness (import the site's
-real `globals.css` + a scratch `--content` html file) produced a false negative for these exact classes —
+real `apps/website/src/app/css/globals.css` + a scratch `--content` html file) produced a false negative for these exact classes —
 content auto-detection inside a project directory seems to override/ignore an explicit `--content` flag
 in a way that doesn't scan a newly added scratch file. Don't trust that pattern for verifying whether a
 class compiles; instead build the real project (`npm run build`) and grep the compiled
@@ -195,8 +193,8 @@ DID confirm all rules generated correctly in the real build.
 
 The Part 2 sticky `/terminal` URL design (above) was fully reverted the next day. Current final state:
 
-- `src/app/terminal/page.tsx` deleted; `/terminal` is a plain 404 again. `slugs.terminal` removed from
-  `src/types/configuration/slug.ts`.
+- `apps/website/src/app/terminal/page.tsx` deleted; `/terminal` is a plain 404 again. `slugs.terminal` removed from
+  `apps/website/src/types/configuration/slug.ts`.
 - `use-terminal-store.ts`: `open` and `announcement` are now plain `useState(false)`/`useState("")` — no
   `isBootLink` check, no lazy initializer computing it. `closeOverlay` is back to just closing + restoring
   focus, no `router.replace` branch at all (the whole "reveal homepage instead of the boot stub" case no

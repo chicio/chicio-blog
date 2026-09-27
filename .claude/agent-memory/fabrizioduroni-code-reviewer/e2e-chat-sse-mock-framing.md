@@ -5,7 +5,7 @@ metadata:
   type: feedback
 ---
 
-Two traps that travel together in `e2e/chat.spec.ts`.
+Two traps that travel together in `apps/website/e2e/chat.spec.ts`.
 
 **1. SSE mock framing.** The AI SDK's `JsonToSseTransformStream` (see `node_modules/ai/dist/index.mjs`) emits every
 part as `` `data: ${JSON.stringify(part)}\n\n` `` — blank-line separated events. A mock built with
@@ -23,7 +23,7 @@ never worked. Any `getByText` whose needle is a substring of the text the test j
 in `.claude/rules/testing.md` did not exist. It only surfaced when an unrelated UI change forced the selector to be
 retargeted to the actual reply text.
 
-**How to apply:** when reviewing any change to `e2e/chat.spec.ts` (or any streaming/SSE route mock), check that
+**How to apply:** when reviewing any change to `apps/website/e2e/chat.spec.ts` (or any streaming/SSE route mock), check that
 (a) events are blank-line separated, and (b) the asserted text comes from the *mocked response*, not from the input
 the test typed. If a retargeted assertion goes red, suspect the long-broken mock before suspecting the diff — and
 direct the fix at the framing, never back to the vacuous selector.

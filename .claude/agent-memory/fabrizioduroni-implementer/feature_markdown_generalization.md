@@ -6,12 +6,12 @@ type: project
 
 ## Overview
 
-2026-07-23, alongside the terminal shareable-URL work ([[feature_terminal_navigation]]): generalized the
-`/markdown/[[...path]]` content-negotiation generators (see [[feature_markdown_negotiation]]) behind two new
-`src/lib/mdx/` helpers, then used them to give `art`, `cookie-policy`, and `mcp` real markdown views (previously
-404/"unavailable" in both the AI-facing endpoint and the terminal overlay), plus a `contact` generator.
+2026-07-23, alongside the Terminal shareable-URL work ([[feature_terminal_navigation]]): generalized the
+`/markdown/[[...path]]` Markdown Representation generators (see [[feature_markdown_negotiation]]) behind two new
+`apps/website/src/lib/mdx/` helpers, then used them to give `art`, `cookie-policy`, and `mcp` real markdown views (previously
+404/"unavailable" in both the AI-facing endpoint and the Terminal), plus a `contact` generator.
 
-- **`markdownDocument({ title, description, slug, body })`** (`src/lib/mdx/markdown-document.ts`) — the shared
+- **`markdownDocument({ title, description, slug, body })`** (`apps/website/src/lib/mdx/markdown-document.ts`) — the shared
   header (`# title` / `> description` / `**URL:** ...` / `---` / body). Every existing generator (posts, DSA,
   videogames, blog-stats, easter-egg-hunt) was refactored to route through it — clean sweep, ~8 files. Where a
   generator previously had extra inline metadata line(s) (Author/Date/Tags, Difficulty/Technique/LeetCode,
@@ -19,18 +19,20 @@ type: project
   canonical header, before the actual content) rather than growing the shared header shape per page. Generators
   that previously had NO `---` separator or NO blockquote description gained both, to converge on one canonical
   shape — a deliberate, approved formatting change, not a bug.
-- **`mdxPageMarkdown(slug)`** (`src/lib/mdx/mdx-page-markdown.ts`) — generic for any page backed by a standard
-  `src/content/<slug>/content.mdx`. `about-me-markdown.ts` was DELETED entirely (about-me now collapses to
-  `mdxPageMarkdown(slugs.aboutMe)` called directly from route.ts's registry — no bespoke file needed).
-- **`contactMarkdown()`** (`src/lib/content/contact/contact-markdown.ts`) — the one deliberate NON-mdxPageMarkdown
+- **`mdxPageMarkdown(slug)`** (`apps/website/src/lib/mdx/mdx-page-markdown.ts`) — generic for any page backed by a standard
+  `apps/website/src/content/<slug>/content.mdx`. `about-me-markdown.ts` was DELETED entirely (about-me now collapses to
+  `mdxPageMarkdown(slugs.aboutMe)` — no bespoke file needed).
+- **`contactMarkdown()`** (`apps/website/src/lib/content/contact/contact-markdown.ts`) — the one deliberate NON-mdxPageMarkdown
   page: contact has no `content.mdx` (would duplicate `siteMetadata.contacts`, which already drives the form/
   footer/SEO). Builds email + all social links straight from that config through `markdownDocument`.
-- **route.ts registry**: `MDX_PAGE_SLUGS = new Set([aboutMe, mcp, cookiePolicy, art])` checked BEFORE the
-  existing switch (not as switch cases) — a `contact` case was added to the switch alongside the others.
+- **Dispatch (superseded)**: route.ts originally had an `MDX_PAGE_SLUGS` set checked before a switch. Both are gone:
+  the route now iterates the Content Registry (`apps/website/src/lib/content/registry.ts`), where each MDX Standalone
+  Page is one `mdxPage(slug)` entry and contact is `{ slug: slugs.contact, markdown: contactMarkdown }` (verified
+  2026-09-27; see [[feature_markdown_negotiation]]).
 
 ## Critical gotcha: leading-H1 duplication for pages whose MDX body already has its own `# Title`
 
-`TerminalContentBlock` (the terminal's in-shell content renderer) does NOT render its own heading from the
+`TerminalContentBlock` (the Terminal's in-shell content renderer) does NOT render its own heading from the
 manifest node's `title` — it renders ONLY the fetched markdown body via the `Markdown` atom. So the visible H1
 is whatever's the first `# ...` line in the fetched `/markdown/<route>` text.
 
@@ -54,20 +56,25 @@ gets this dedup for free — no per-page special-casing needed.
 
 ## Art migration: `src/content/art/art.ts` → `content.mdx`, gallery reworked around MDX component overrides
 
+**Current state (verified 2026-09-27):** the `ArtGalleryContext`/`ArtGalleryProvider`/`ArtGalleryImage`/
+`ArtGalleryFigure` overrides described below are gone; `apps/website/src/mdx-components.tsx` now maps `img` to a
+global `LightboxImage` (the design system's `Lightbox` is mounted in `LayoutAdditionalContent`), and `art.tsx` just
+renders `ArtContent` inside a `ContentPage`. The rehype-figure finding and the verify-the-mechanism lesson still hold.
+
 - Content: the 49 `artDescriptions` entries became one `![caption](/media/content/art/<name>)` markdown image
-  line each (order + captions preserved verbatim), in `src/content/art/content.mdx` with standard frontmatter.
-  **Found a pre-existing, out-of-scope content gap while doing this**: `src/content/art/media/` has 97 image
+  line each (order + captions preserved verbatim), in `apps/website/src/content/art/content.mdx` with standard frontmatter.
+  **Found a pre-existing, out-of-scope content gap while doing this**: `apps/website/src/content/art/media/` has 97 image
   files on disk but `art.ts` only had descriptions for 49 of them — 48 images (mostly 2020-2022 dates) have NO
   gallery entry at all and were silently invisible on the old page too. Not touched (editorial curation, not a
   code task) but worth flagging to the site owner.
-- **`@microflash/rehype-figure` (next.config.ts rehype pipeline) wraps EVERY standalone `![alt](src)` image in
+- **`@microflash/rehype-figure` (`apps/website/next.config.ts` rehype pipeline) wraps EVERY standalone `![alt](src)` image in
   `<figure><img/><figcaption>{alt}</figcaption></figure>` at build time, unwrapping any `<p>` that contained only
   the image** (confirmed by reading the plugin's actual source, `node_modules/@microflash/rehype-figure/index.js`:
   a `hasOnlyImages` visitor removes the wrapping paragraph BEFORE a second visitor wraps every alt+src image in a
   fresh `<figure>`). This means a design-doc/spec instruction to "override the MDX `p` component to unwrap a
   lone image" is **factually wrong for this codebase's real pipeline** — there is no surviving `<p>` to override;
   the real wrapper is `<figure>`, confirmed by the pre-existing `#reading-content-container figure figcaption` /
-  `figure img` rules already in `globals.css`. The correct override target is `figure` (drop the redundant
+  `figure img` rules already in the global CSS. The correct override target is `figure` (drop the redundant
   `<figcaption>`, keep only the image element, since the gallery card already shows its own caption from `alt`).
   **When a plan's stated internal mechanism (which HTML tag wraps X) conflicts with what you can verify by
   reading the actual dependency's source and the codebase's existing CSS, trust the verified mechanism and
@@ -88,14 +95,14 @@ gets this dedup for free — no per-page special-casing needed.
 - Dropped the per-index `delay: i * 0.08` motion stagger (an `img`-override component has no `index` prop from
   MDX) in favor of a flat `duration: 0.4` fade — explicitly sanctioned as cosmetic-only in the plan.
 - MDX component overrides passed as `components={{ img: ArtGalleryImage, figure: ArtGalleryFigure }}` to
-  `<ArtContent components={...} />` DO override the ambient global `img` mapping from `src/mdx-components.tsx`
+  `<ArtContent components={...} />` DO override the ambient global `img` mapping from `apps/website/src/mdx-components.tsx`
   (that file's exported `img` becomes `_provideComponents().img`, spread BEFORE `props.components` in the
   compiled `_createMdxContent`, so an explicit `components` prop always wins for that render).
 
 ## Cookie-policy migration: hardcoded JSX prose → `content.mdx`
 
 Straightforward faithful markdown conversion (headings, lists, one external link) of the JSX in the old
-`src/app/cookie-policy/page.tsx`, rendered through a new `CookiePolicy` component (`ReadingContentPage` pattern,
+`apps/website/src/app/cookie-policy/page.tsx`, rendered through a new `CookiePolicy` component (`ReadingContentPage` pattern,
 mirroring `McpPage`) instead of raw `ContentPage` + inline JSX. Cleaned up two literal soft-hyphen artifacts
 ("third­parties", "third­party" — stray `­` chars from the original copy-paste) into plain "third parties" /
 "third party" while converting; a legitimate copyedit, not a content change.
@@ -111,14 +118,16 @@ etc. — NOT a new pattern) to sidestep needing real Next.js routing/menu contex
 define the fake MDX component before the hoisted `vi.mock()` call references it (same gotcha as
 [[feature_testing_pyramid]]).
 
-## Prettier pitfall: raw CLI `prettier --write` reformats to 2-space, breaking this repo's 4-space convention
+## Prettier pitfall (RESOLVED, kept as history)
 
-`.prettierrc` has no `tabWidth`, so Prettier's own default (2) applies to a raw `npx prettier --write <file>` CLI
+**Current state (verified 2026-09-27):** `.prettierrc` now sets `tabWidth: 4` and `printWidth: 120` (2 for
+json/yml), root `package.json` has `npm run format` / `format:check`, and CI has a `format` job running
+`format:check` (see [[project_ci_pipeline]]). Running Prettier from the CLI is now correct and expected. The
+original problem, for context:
+
+`.prettierrc` had no `tabWidth`, so Prettier's own default (2) applies to a raw `npx prettier --write <file>` CLI
 invocation — but this repo's actual 4-space convention (confirmed via `git show HEAD:<file>` on an untouched file)
 is produced by the VS Code Prettier extension falling back to `editor.tabSize` (VS Code's own default is 4) when
 `.prettierrc` doesn't specify one — an editor-extension-only behavior the raw CLI does not replicate. There is
-also no `format`/`prettier` npm script and no ESLint-Prettier integration in this repo — Prettier is a
-devDependency used only for the `prettier-plugin-tailwindcss` class-sorting plugin via editor tooling, not a CLI
-gate. **Never run `npx prettier --write` on a file in this repo to fix formatting** — it silently reformats to
-2-space and must be manually reverted to 4-space. Fix indentation/reflow by hand (or accept ESLint's `--fix`,
-which does not touch indentation width) instead.
+then no `format`/`prettier` npm script and no CLI gate, so a raw `npx prettier --write` silently reformatted to
+2-space. That advice no longer applies.

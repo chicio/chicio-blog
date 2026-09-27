@@ -1,9 +1,12 @@
 ---
 name: Chrome Built-in AI Integration
-description: Blog section uses Chrome AI Summarizer API via use-chrome-summarize hook
+description: Post pages use the Chrome AI Summarizer API via the chrome-ai-features-toolbar store
 type: project
 ---
 
-The blog section has a `use-chrome-summarize` hook (`src/components/sections/blog/hooks/use-chrome-summarize.ts`) that integrates with Chrome's built-in AI Summarizer API.
+Post pages integrate Chrome's built-in AI Summarizer API through
+`apps/website/src/components/content/blog/blog-post-content/chrome-ai-features-toolbar/` (store
+`use-chrome-ai-features-toolbar-store.ts`, modal `chrome-summary-modal/`). History: this replaced a
+`use-chrome-summarize` hook under the old `src/components/sections/blog/hooks/` tree (verified 2026-09-27).
 
-This is a cutting-edge browser API — only works in Chrome with the feature enabled. The hook handles availability detection and graceful fallback.
+This is a cutting-edge browser API — only works in Chrome with the feature enabled. The store handles availability detection and graceful fallback.

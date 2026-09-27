@@ -14,9 +14,9 @@ This is the authoritative reference for how UI components are structured, typed,
 Every component lives in its own kebab-case folder where the folder name equals the `.tsx` basename:
 
 ```
-packages/matrix-design-system/src/atoms/buttons/pill-button/
-    pill-button.tsx          # component
-    use-pill-button-store.ts # store hook
+packages/matrix-design-system/src/molecules/accordion/accordion/
+    accordion.tsx            # component
+    use-accordion-store.ts   # store hook
     index.ts                 # barrel
 ```
 

@@ -1,19 +1,22 @@
 ---
 name: feature_console_startup_section
-description: Startup section on videogame console pages; Youtube molecule title fix; mdx-to-markdown already handles Youtube+ParagraphTitleWithIcon
+description: The Startup on Console pages; Youtube molecule title fix; mdx-to-markdown already handles Youtube+ParagraphTitleWithIcon
 metadata:
   type: project
 ---
 
-**mdx-to-markdown sanitizer already had first-class handlers for both components used by this section** (see
-`src/lib/mdx/mdx-to-markdown.ts`): `transformYoutube` turns `<Youtube videoId="..." />` into a
+The Startup (glossary term, apps/website/CONTEXT.md; not a Section) is the part of a Console page showing its boot
+sequence.
+
+**mdx-to-markdown sanitizer already had first-class handlers for both components used by the Startup** (see
+`apps/website/src/lib/mdx/mdx-to-markdown.ts`): `transformYoutube` turns `<Youtube videoId="..." />` into a
 `[Watch on YouTube](https://youtu.be/<id>)` link, and `transformParagraphTitleWithIcon` turns the heading
 JSX into a plain `## <heading text>`. No markdown-negotiation code changes are needed when adding a new
-`ParagraphTitleWithIcon` + `Youtube` section to a console page; verify by reading the generated
+`ParagraphTitleWithIcon` + `Youtube` Startup to a Console page; verify by reading the generated
 `.next/server/app/markdown/videogames/console/<slug>.body` files after a real prod build rather than assuming.
 
 **Search index is unaffected by body-content changes on principle, not just for this PR**: `createSearchIndex`
-(`src/lib/content/search-index-factory.ts`) only indexes `title`, `description`, `tags`, `authors` from
+(`apps/website/src/lib/content/search-index-factory.ts`) only indexes `title`, `description`, `tags`, `authors` from
 frontmatter, never the MDX body. Any future PR that only touches prose inside a `content.mdx` body needs no
 search-index verification at all.
 

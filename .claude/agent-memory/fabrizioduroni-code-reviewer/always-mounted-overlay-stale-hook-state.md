@@ -11,13 +11,13 @@ and every hook the store calls — keeps state for the whole page session. Any "
 behaviour built on a hook with internal progress state runs correctly the FIRST time and is
 instantly-complete on every subsequent open.
 
-The canonical trap here is `useTypewriter` (`src/components/design-system/hooks/use-typewriter.tsx`):
+The canonical trap here is `useTypewriter` (`packages/matrix-design-system/src/hooks/use-typewriter.tsx`):
 it owns `lineIndex`/`charIndex` internally and exposes no reset. Once `lineIndex >= lines.length`,
 `isComplete` stays true forever, so a boot/intro sequence never types again. Same shape applies to
 `useInView` latches, step counters, and `hasFired` refs.
 
-**Why:** found in the easter-egg overlay review — the shared `EasterEggOverlay` typed its four boot
-lines only for the first egg of a page session; every later trigger (and every hunt-page `replay`)
+**Why:** found in the Easter Egg overlay review — the shared `EasterEggOverlay` typed its four boot
+lines only for the first egg of a page session; every later Trigger (and every `replay` on the Hunt)
 rendered all lines at once. Unit tests all passed because each test re-rendered a fresh component,
 and e2e triggered exactly one egg per page load. Neither layer can see it.
 

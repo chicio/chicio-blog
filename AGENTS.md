@@ -9,6 +9,16 @@ convention) read this file directly.
 
 This is a Next.js 16 blog (App Router) with a Matrix-inspired UI theme, built by Fabrizio Duroni. The site features blog posts, DSA (Data Structures & Algorithms) content, an AI chat interface, and various interactive elements. The codebase follows atomic design principles and uses TypeScript with strict type safety.
 
+## Ubiquitous Language and Decisions
+
+The project's vocabulary is defined in a glossary: [`CONTEXT-MAP.md`](CONTEXT-MAP.md) lists the contexts (Website,
+Matrix Design System, Matrix Rain), each with its own `CONTEXT.md`. Use its terms, in code, prose and prompts alike, and
+avoid the synonyms it lists under _Avoid_. It is authoritative: when an agent memory or a doc contradicts it, the memory
+or doc is wrong.
+
+Hard-to-reverse decisions are recorded as ADRs: system-wide in [`docs/adr/`](docs/adr/), context-specific in each
+context's own `docs/adr/`. Read the relevant one before changing what it decided.
+
 ## Repository Layout
 
 An npm-workspaces monorepo orchestrated by Turborepo. **Every path in this file and in `.claude/rules/`
@@ -31,7 +41,8 @@ packages/eslint-plugin-chicio/    the component-store lint rules, shared by both
 
 The website depends on the packages by version (`"matrix-design-system": "^1.0.0"`), and npm
 resolves that to the workspace copy — so the site always builds against the local packages, while
-they stay publishable for outside consumers.
+they stay publishable for outside consumers. Why one monorepo, and why the built output rather than the source:
+[ADR-0001](docs/adr/0001-monorepo.md).
 
 It resolves them through their **built output** (`dist/`), not their source, so every task that runs
 or builds the site depends on `^build` in `turbo.json`. `npm run dev` also starts each package's
@@ -52,44 +63,11 @@ never appears in the source, and the `GOOGLE_ANALYTICS_*` keys are destructured 
 `env` object. Treat `apps/website/.env.production` and the Vercel project settings as the
 authoritative list.
 
-**TypeScript sits on two majors on purpose: root is 6, every workspace is 7.** `typescript@7.0.2`
-does export an API surface (`./unstable/sync`, `./unstable/async`, `./unstable/fs`,
-`./unstable/ast*`), but not the classic `lib/typescript.js` entry `typescript-eslint` imports:
-`exports["."]` is `./lib/version.cjs`, and `lib/` holds only `tsc.js`, `getExePath.js`/`.d.ts` and
-`version.cjs`/`.d.cts` — no `lib/typescript.js`. It also ships no `tsserver`, and 7.1 is expected
-to ship a new, different API. `typescript-eslint` throws at import once the compiler's major is
-`>= 7` (that is how PR #620 failed, so the lint job already enforces this pin on its own), and it
-resolves `typescript` from wherever it itself is installed. No Go binary ships inside the
-`typescript` package itself — it arrives via 20
-platform-specific `optionalDependencies` (`@typescript/typescript-<platform>-<arch>`), recorded at
-root in `package-lock.json` with `os`/`cpu` guards. That is a CI fact, not trivia: `npm ci` on
-`ubuntu-latest` pulls down `@typescript/typescript-linux-x64`, while a Mac gets
-`typescript-darwin-arm64`.
-
-Root `node_modules` also hoists `knip`, `dependency-cruiser`, `react-docgen-typescript`
-(Storybook's prop-table generator) and `rolldown-plugin-dts` (tsdown's `.d.ts` emit) alongside
-`typescript-eslint` — none of the five has its own nested `typescript`, so all resolve the one
-root copy. Consequence: `packages/matrix-design-system` and `packages/matrix-component-store`'s
-_published_ `.d.ts` files are emitted by TS 6 (`rolldown-plugin-dts`, inside each package's tsdown
-build), while their _sources_ are type-checked by TS 7 (`tsc --noEmit` in each workspace).
-
-Both eslint configs load the one `typescript-eslint` copy at root `node_modules`
-(`packages/matrix-design-system/eslint.config.mjs` directly, `apps/website` transitively through
-`eslint-config-next/typescript`), so root must keep a TS 6 `typescript`, declared in the root
-`package.json`, for all five root-hoisted consumers above to resolve, and for VS Code's "Use
-Workspace Version" to give the editor a working `tsserver`. (`typescript-eslint` itself is declared
-in `packages/matrix-design-system/package.json`, the only manifest that lists it.) `apps/website`,
-`apps/matrix-design-system-showcase`, `packages/matrix-design-system` and
-`packages/matrix-component-store` each pin their own `typescript` devDependency to `^7.0.2`
-(`packages/eslint-plugin-chicio` declares none; the `matrix-rain-*` packages keep the
-`tsover@6.0.2` pin noted below), resolving to a nested copy so `next build`/`tsc --noEmit` run the
-faster TS 7 type checker
-(measured 6x on this repo) while root tooling keeps working. Do not "align" the two, and do not
-remove or bump the root `typescript` past 6 — that is the same kind of deliberate mismatch as
-`matrix-rain-webgpu` and `matrix-rain-showcase` pinning `typescript: "npm:tsover@6.0.2"` for
-operator-overloading support (unrelated reason, same lesson: check why a `typescript` version looks
-wrong before "fixing" it). `.github/dependabot.yml` ignores major bumps of `typescript` for exactly
-this reason; revisit when TS 7.1 ships its compiler API and `typescript-eslint` follows.
+**TypeScript sits on two majors on purpose: root is 6, every workspace is 7.** Do not "align" them, and do not remove
+or bump the root `typescript` past 6: `typescript-eslint` and the other root-hoisted tools import a compiler API that
+TS 7 does not ship. The `matrix-rain-*` packages pin `typescript: "npm:tsover@6.0.2"` for an unrelated reason
+(operator overloading). Check why a `typescript` version looks wrong before "fixing" it. Why, and when to revisit:
+[ADR-0003](docs/adr/0003-typescript-6-7-split.md).
 
 ## Claude Design Sync
 
@@ -167,35 +145,30 @@ Five workflows:
 - **`release-website.yml`** — manual `workflow_dispatch` to cut the site's version bump, changelog, tag and GitHub release. It publishes nothing (the site deploys continuously from `main`) and refuses to run unless `E2E (Playwright)` is green on the exact commit and `main` has not moved since dispatch.
 - **`scheduled-rebuild.yml`** — Monday 06:00 UTC, pings a Vercel deploy hook so time-dependent pages such as `/blog/stats` refresh even in a week with no site commits. Load-bearing now that unaffected commits skip their deploy: see **Vercel Deploys**.
 
-There is deliberately **no Dependabot auto-merge and no ruleset on `main`**. Auto-merge needs a required status check to wait on, a required status check gates direct pushes as well as merges, and `release-website.yml` pushes its bump commit and tag as `github-actions[bot]` — which cannot be added as a ruleset bypass actor on a repository owned by a personal account ("Actor GitHub Actions integration must be part of the ruleset source or owner organization"). Evaluate mode, which would have made this observable before enforcing, is Enterprise-only. The remaining routes are a long-lived PAT or a GitHub App, and neither is worth it for a queue that daily scheduling and the `others` group already keep to one to three PRs. Merging them is a click.
+There is deliberately **no Dependabot auto-merge and no ruleset on `main`**: a required check would block `release-website.yml` from pushing as `github-actions[bot]`. See [ADR-0005](docs/adr/0005-no-dependabot-auto-merge.md).
 
 ## Vercel Deploys
 
 The site deploys continuously from `main`. Two things about that project are not visible from the repository:
 
 - **The Root Directory is `apps/website`, not the repository root.** Vercel reads `vercel.json` from the Root Directory, so the file lives at `apps/website/vercel.json`; a repository-root `vercel.json` is silently ignored. (Tell: the build log's `npm install --prefix=../..`.) "Include files outside the Root Directory" is on, so the whole monorepo is cloned and the root `package-lock.json` resolves normally.
-- **The `ignoreCommand` skips deploys for commits that cannot affect the site.** What it replaced was Vercel's default ignore step, `git diff HEAD^ HEAD --quiet` — no path scope at all, so it only asked "did this commit change anything", to which the answer is always yes. One Dependabot batch produced 20 deployments in ten minutes that way.
+- **The `ignoreCommand` skips deploys for commits that cannot affect the site**, by asking `turbo query affected`. Why this and not the default ignore step or `turbo-ignore`: [ADR-0004](docs/adr/0004-vercel-deploy-skipping.md).
 
-`turbo query affected` decides by turbo's dependency graph rather than by paths, so a `matrix-design-system` change correctly counts as a website change while a `matrix-rain-showcase` or `.github` change correctly does not. Those reach GitHub Pages through `pages.yml` instead. Nothing is lost on Vercel: the next website commit builds the full tree, and `scheduled-rebuild.yml` redeploys every Monday regardless.
+Four things in that command are easy to get wrong (the ADR explains each):
 
-Turbo prunes the root lockfile per package, so a bump that only moves a `matrix-rain-showcase` dependency does **not** mark the website affected even though `package-lock.json` changed. That is the whole reason this works for Dependabot, and it is measured, not assumed — `101c5f67` (rain-showcase dependency + lockfile) skips, `5a8ccff6` (design-system dependency + lockfile) builds.
+- **`--base` must tolerate an empty value**: keep `${VERCEL_GIT_PREVIOUS_SHA:-HEAD^1}`; the variable is empty on every Dependabot PR, and an empty `--base` exits 2.
+- **Do not pass `--head`**: it makes a rain-showcase-only commit report the website affected.
+- **An unreachable base exits 1, so it builds rather than skips.** That is the desired direction; do not "fix" it.
+- **`turbo` is pinned to a major (`turbo@^2`)**: the step runs before `npm install`, so `npx` fetches turbo fresh.
 
-`--exit-code` maps onto Vercel's contract directly: it returns 0 when nothing is affected, which is how Vercel is told to ignore the build, and 1 when something is, which lets it proceed.
-
-Four things here are easy to get wrong:
-
-- **`--base` must tolerate an empty value, which is why `${VERCEL_GIT_PREVIOUS_SHA:-HEAD^1}` is not decoration.** That variable holds the SHA of the last _successful_ deployment and is only exposed when an ignore step is configured, but it is **empty on any branch with no previous deployment** — which is every Dependabot PR. With an empty `--base`, `turbo query affected` exits **2**. `HEAD^1` is the right fallback for those branches because they are always a single commit off `main`.
-- **Do not pass `--head`.** Supplying `--base=<sha>^ --head=<sha>` reports the website affected for a rain-showcase-only commit, where `--base=<sha>^` alone correctly reports it unaffected. Let `HEAD` stay implicit.
-- **An unreachable base exits 1, so it builds rather than skips.** This is the desirable direction and a reason to prefer this over `turbo-ignore`, which would silently fall back to its `--fallback` ref and could wrongly skip. It matters more than it sounds: every skip leaves `VERCEL_GIT_PREVIOUS_SHA` pointing further back, so it drifts out of Vercel's clone depth precisely as this feature succeeds.
-- **`turbo` is pinned to a major (`turbo@^2`).** The ignore step runs _before_ `npm install`, so there is no `node_modules` and `npx` fetches turbo from the registry; unpinned, a future turbo 3 would silently change change-detection semantics mid-deploy.
-
-The predecessor here was `npx turbo-ignore website --fallback=HEAD^1`. It produces identical verdicts on both test commits above, but it is deprecated in favour of `turbo query affected`, prints a deprecation warning into every build log, and costs a second registry fetch because it shells out to `npx -y turbo@... --dry=json` itself. It is not npm-deprecated and still ships with every turbo release, so it remains a working fallback if the above ever misbehaves.
-
-The **Build Command** override and the **Skip deployments when there are no changes** toggle both still live only in the Vercel dashboard. Turn that toggle off: `ignoreCommand` overrides the default ignore step, and leaving both on means two mechanisms with different semantics deciding the same thing.
+The **Build Command** override and the **Skip deployments when there are no changes** toggle both still live only in the Vercel dashboard. Keep that toggle off.
 
 ## Release
 
 `release-it` with conventional changelog (`.release-it.json`). Generates CHANGELOG.md and GitHub releases. Run: `npm run release`
+
+Each published package has its own `.release-it.json` and is released through `release-package.yml`, not Changesets:
+[ADR-0002](docs/adr/0002-per-package-release-it-with-oidc.md).
 
 ## Code Navigation
 
@@ -211,11 +184,10 @@ AI agents and tools that send `Accept: text/markdown` receive a Markdown represe
 
 **Architecture**:
 
-- `apps/website/src/middleware.ts` — re-exports `proxy` from `apps/website/src/proxy.ts` as `middleware`, providing Next.js middleware wiring
-- `apps/website/src/proxy.ts` — generic proxy: if `Accept: text/markdown`, prepends `/markdown` to the path and rewrites; never needs updating for new pages
-- `apps/website/src/app/markdown/[[...path]]/route.ts` — single catch-all route handler; dispatches by path segments to per-section markdown generators; statically pre-rendered via `generateStaticParams`
+- `apps/website/src/proxy.ts` — Next 16's proxy file convention (the successor of `middleware.ts`, which no longer exists here); a generic proxy: if `Accept: text/markdown`, prepends `/markdown` to the path and rewrites; never needs updating for new pages
+- `apps/website/src/app/markdown/[[...path]]/route.ts` — single catch-all route handler; derives both its static params and its dispatch from the Content Registry, so it never needs editing either
 
-**Adding markdown for a new page**: Add a new path-matching `if` block in the `GET` handler in `apps/website/src/app/markdown/[[...path]]/route.ts`, add the path to `generateStaticParams`, and write a generator function that uses existing `apps/website/src/lib/content/` functions.
+**Adding markdown for a new page**: register it in the Content Registry (`apps/website/src/lib/content/registry.ts`). A Standalone Page backed by a standard `content.mdx` is one `mdxPage(slug)` call; a Collection needs an entry with `params` and a markdown generator built on the existing `apps/website/src/lib/content/` functions.
 
 ## Agentic SDLC Pipeline (code work)
 

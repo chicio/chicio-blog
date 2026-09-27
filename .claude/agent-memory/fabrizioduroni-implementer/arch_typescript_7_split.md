@@ -5,8 +5,8 @@ type: project
 ---
 
 `chore/typescript-7` (2026-09-08) put root `typescript` at `^6.0.3` and every workspace's own
-`typescript` devDependency at `^7.0.2`. Full rationale lives in the `CLAUDE.md` TypeScript
-paragraph (Repository Layout section) — read that before touching any `typescript` version in
+`typescript` devDependency at `^7.0.2`. Full rationale lives in the `AGENTS.md` TypeScript
+paragraph (Repository Layout section; `CLAUDE.md` only imports it) — read that before touching any `typescript` version in
 this repo, do not re-derive it here.
 
 Two facts worth remembering because they are non-obvious and were wrong in the first draft of the

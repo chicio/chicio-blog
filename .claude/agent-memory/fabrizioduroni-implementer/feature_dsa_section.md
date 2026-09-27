@@ -6,7 +6,7 @@ type: project
 
 Technical architecture of the DSA section. Content authoring is managed by the DSA agent — this memory covers the engineering/development side.
 
-## Routes (src/app/data-structures-and-algorithms/)
+## Routes (apps/website/src/app/data-structures-and-algorithms/)
 
 | Route | Type |
 |-------|------|
@@ -17,30 +17,33 @@ Technical architecture of the DSA section. Content authoring is managed by the D
 
 All route pages are async Server Components with `generateStaticParams()` and `generateMetadata()`.
 
-## Content Loading (src/lib/content/data-structures-and-algorithms.ts)
-- `getAllDataStructuresAndAlgorithmsTopics()` — all topics sorted by date
-- `getDataStructuresAndAlgorithmsTopicWithNavigation(params)` — single topic with prev/next
-- `getDataStructuresAndAlgorithmsRoadmap()` — roadmap page
-- `getAllExercises()` / `getExercise(params)` — exercises with ExerciseMetadata (technique, leetcodeUrl)
-- `getAllExercisesForTopic(topic)` — filtered by topic slug
-- `getExercisesContent()` — exercises index page
+## Content Loading (apps/website/src/lib/content/data-structures-and-algorithms/data-structures-and-algorithms.ts)
+Verified 2026-09-27: the old `getAll…`/`get…` accessors are deleted (see [[arch_content_section_factory]]). Exports are
+`createSection` objects plus one helper:
+- `topics` — every Topic (`list()` / `single(params)`); prev/next now comes from `siblingsOf` in
+  `apps/website/src/lib/content/siblings.ts`
+- `dsaRoadmap` — the Roadmap Standalone Page
+- `exercises` — every Exercise, with ExerciseMetadata (technique, leetcodeUrl)
+- `dsaExercisesList` — the exercises index Standalone Page
+- `getAllExercisesForTopic(topic)` — Exercises filtered by Topic slug
+- Markdown Representation generators live beside it in `data-structures-and-algorithms-markdown.ts`
 
-## Types (src/types/content/data-structures-and-algorithms.ts)
+## Types (apps/website/src/types/content/data-structures-and-algorithms.ts)
 - `ExerciseMetadata`: `{ technique: string; leetcodeUrl: string }`
 
-## Container Components (src/components/sections/data-structures-and-algorithms/components/)
+## Container Components (apps/website/src/components/content/data-structures-and-algorithms/)
 All are async Server Components that dynamically import MDX via `@/content/${contentFileRelativePath}/content.mdx`.
 
-- **Topic** — wraps MDX in `ReadingContentPageTemplate`, adds breadcrumbs + `CourseNavigation` (blue pill/red pill prev/next) + JsonLd
-- **Exercise** — multi-level breadcrumbs (Roadmap > Topic > Exercise), `ReadingContentPageTemplate`
+- **Topic** — wraps MDX in `ReadingContentPage` (a Reading Page), adds breadcrumbs + `CourseNavigation` (blue pill/red pill prev/next) + JsonLd
+- **Exercise** — multi-level breadcrumbs (Roadmap > Topic > Exercise), `ReadingContentPage`
 - **Exercises** — index page with `<ExercisesList />` table grouped by topic
 - **Roadmap** — landing page with `<Topics />` table
 
 ## Navigation Components
 - **CourseNavigation** — blue pill (prev) / red pill (next) links with tracking
-- **Topics** — server-side table of all topics, used in roadmap MDX
+- **Topics** — server-side table of all Topics, used in the Roadmap MDX
 - **TopicExercises** — 3-column table (Exercise | Technique | Solution), used in topic MDX
-- **ExercisesList** — all exercises grouped by topic, used in exercises index MDX
+- **ExercisesList** — all Exercises grouped by Topic, used in the exercises index MDX
 
 ## Interactive Visualizers (all "use client", self-contained)
 29 components total, 19 stateful. Key ones:
@@ -56,10 +59,12 @@ All are async Server Components that dynamically import MDX via `@/content/${con
 - **BitwiseVisualizer** — bitwise operations with binary output
 - Various chart components (AmortizedAnalysis, SpaceComplexity, TimeSpaceTradeoff, etc.)
 
-All visualizers use design-system atoms: `BluePillButton`/`RedPillButton`, `glow-container` CSS, `InteractiveBlock` wrapper.
+All visualizers use design-system atoms: `BluePillButton`/`RedPillButton` (the Pill motif), `glow-container` CSS, and the
+`InteractiveBlock` container (itself in `components/content/data-structures-and-algorithms/interactive-block/`).
 
 ## Design System Dependencies
-- `ReadingContentPageTemplate` (with ContentProgressBar, Breadcrumb)
+- `ReadingContentPage` → `ReadingContentPageTemplate` (Website Templates in `features/content/`, with ContentProgressBar,
+  Breadcrumb via its Binding in `features/design-system-next/breadcrumb`)
 - `BluePillLink` / `RedPillLink` (prev/next navigation)
 - `BluePillButton` / `RedPillButton` (visualizer controls)
 - `JsonLd` (BlogPosting structured data)
@@ -70,9 +75,9 @@ All visualizers use design-system atoms: `BluePillButton`/`RedPillButton`, `glow
 - Actions: `open_dsa_roadmap`, `open_dsa_topic`, `blue_pill`, `red_pill`
 
 ## Styling
-- Syntax highlighting: `highlight.js/styles/tokyo-night-dark.css` (imported in route pages)
+- Syntax highlighting: `highlight.js/styles/tokyo-night-dark.css` (imported in route pages and `topic.tsx`)
 - Math: `katex/dist/katex.min.css` (imported in route pages)
 - Recharts for all chart visualizations
 
 ## Content Structure
-30+ topics in `src/content/data-structures-and-algorithms/topic/`, each with optional `exercise/` subdirectory. ~224 MDX files total. MDX files directly import visualizer components — they are NOT registered globally in `mdx-components.tsx`.
+45 Topics in `apps/website/src/content/data-structures-and-algorithms/topic/` (course complete), each with optional `exercise/` subdirectory. ~224 MDX files total. MDX files directly import visualizer components — they are NOT registered globally in `mdx-components.tsx`.

@@ -14,11 +14,11 @@ however long the intro ran, and the audio has been audible over the intro.
 Hiding with `opacity`/`z-index` (which is what you want, so the element is not remounted) does not
 pause media. Only `display:none`/unmount would, and those defeat the purpose.
 
-**Why:** measured on the easter-egg overlay — `currentTime` at the first visible frame was **2.58s**
+**Why:** measured on the Easter Egg overlay — `currentTime` at the first visible frame was **2.58s**
 (i-know-kung-fu) and **2.74s** (the-white-rabbit) against a ~2.8s boot animation, with
 `muted:false, volume:1, paused:false` throughout the hidden phase. Every clip lost its opening beat
 and played its audio over a fake terminal. Even the click-to-skip path revealed at 0.57s. The
-reduced-motion path was clean (no hidden phase at all), which is exactly why it never showed up in
+no-animation path (`useReducedMotions()` true: Motion Preference off or low-end device) was clean (no hidden phase at all), which is exactly why it never showed up in
 tests. Nothing catches this: unit tests assert the `<video>` renders with the right `src`, and e2e is
 told never to wait for playback (a 60s clip per spec).
 

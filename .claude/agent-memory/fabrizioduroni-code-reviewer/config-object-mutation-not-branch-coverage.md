@@ -7,7 +7,7 @@ metadata:
 
 When a diff changes a **configuration object** passed to a third-party call (`providerOptions`, `maxOutputTokens`,
 `temperature`, a model id, request headers, retry options), coverage numbers say nothing about whether a test would
-catch its removal. A config key is not a branch: `src/lib/chat/guardrails.ts` sat at **100% statements / branches /
+catch its removal. A config key is not a branch: `apps/website/src/lib/chat/guardrails.ts` sat at **100% statements / branches /
 functions / lines** while deleting its entire `providerOptions: { groq: { reasoningFormat, reasoningEffort } }` block
 left all 1557 tests green.
 
@@ -19,7 +19,7 @@ site, so the review has to check each changed key individually.
 
 ```
 S=<scratchpad>/redgreen
-cp src/lib/<mod>.ts src/lib/<mod>.test.ts $S/
+cp apps/website/src/lib/<mod>.ts apps/website/src/lib/<mod>.test.ts $S/
 ln -sfn <repo>/node_modules $S/node_modules      # so `vitest`/mocked ids resolve
 printf 'import {defineConfig} from "vitest/config";\nexport default defineConfig({test:{environment:"node",include:["*.test.ts"]}});\n' > $S/vitest.config.ts
 cd $S && npx vitest run --root $S                 # baseline green

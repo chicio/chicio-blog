@@ -1,6 +1,6 @@
 ---
-name: Article Catalog 2020
-description: Complete catalog of all blog posts published in 2020, with titles, tags, summaries, and editorial patterns
+name: Post Catalog 2020
+description: Complete catalog of all Posts published in 2020, with titles, tags, summaries, and editorial patterns
 type: reference
 ---
 
@@ -16,7 +16,7 @@ type: reference
 - **Tags**: [swift, swiftui, ios, apple, mobile application development]
 - **Authors**: fabrizio_duroni
 - **Summary**: Building a custom tab bar with modal and detail navigation in SwiftUI
-- **Notes**: YouTube video. First SwiftUI article. Personal project motivation.
+- **Notes**: YouTube video. First SwiftUI Post. Personal project motivation.
 
 ## 2020-04-19 | dependecy-injection-swift
 - **Title**: How to: create your SUPER simple dependency injector container in Swift
@@ -65,4 +65,4 @@ type: reference
 - **Tags**: [java, kotlin, spring, spring boot, backend, web development]
 - **Authors**: fabrizio_duroni
 - **Summary**: Consuming REST APIs from Spring Boot using RestTemplate and WebClient
-- **Notes**: First backend/Spring Boot article. Cheatsheet format. Work-motivated.
+- **Notes**: First backend/Spring Boot Post. Cheatsheet format. Work-motivated.

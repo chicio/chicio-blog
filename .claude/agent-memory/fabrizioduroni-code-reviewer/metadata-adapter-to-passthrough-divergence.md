@@ -11,8 +11,8 @@ Replacing a field-picking `metadataAdapter` (that explicitly picks named keys li
 Verify both before accepting such a refactor as inert:
 
 1. **No content file carries an extra frontmatter metadata key the adapter dropped.**
-   Enumerate distinct 2nd-level metadata keys per section with grep/awk across `src/content`.
-   Example caught in the section-factory PR: one console (`nintendo-wii`) had a stray
+   Enumerate distinct 2nd-level metadata keys per Collection with grep/awk across `apps/website/src/content`.
+   Example caught in the `createSection` factory PR: one Console (`nintendo-wii`) had a stray
    `formats: ["Physical"]` key the old `consoleMetadataAdapter` silently dropped; the
    new pass-through keeps it.
 

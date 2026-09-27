@@ -18,5 +18,5 @@ does reach the text spans.
 
 **How to apply:** If a diff themes legend text via `wrapperStyle`, the text will still render in the
 series color, not the theme color — flag it. `labelStyle` is the correct approach and is verified working.
-Related: chart-theme lives in `src/types/configuration/chart-theme.ts` and must never be value-imported by
-`src/components/design-system/**` (design-system may only type-import from types/).
+Related: chart-theme lives in `apps/website/src/types/configuration/chart-theme.ts`; the design system
+(`packages/matrix-design-system`) cannot import it at all, since the extracted package has no access to the Website.

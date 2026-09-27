@@ -4,10 +4,18 @@ description: Pure-logic + store-phase-machine pattern for global keydown easter 
 type: project
 ---
 
-Added 2026-07-22: "I Know Kung Fu" (Konami code) and "There Is No Spoon" (typed phrase) easter eggs,
-bringing the hunt page to 4 eggs. See [[feature_easter_eggs]] for where these mount.
+Added 2026-07-22: "I Know Kung Fu" (Konami code) and "There Is No Spoon" (typed phrase) Easter Eggs,
+bringing the Hunt to 4 eggs. See [[feature_easter_eggs]] for the current architecture.
 
-## Pure logic lives in src/lib/easter-eggs/ (new home, framework-free, node vitest project)
+**Superseded structure (verified 2026-09-27):** the per-egg `kung-fu-easter-egg/` and `spoon-easter-egg/`
+components/stores described below no longer exist. All six eggs now share one overlay
+(`features/easter-eggs/easter-egg-overlay/`) and fire through `triggerEasterEgg(slug)`; the Konami listener and
+the spoon drain latch live in `features/easter-eggs/easter-egg-triggers/use-easter-egg-triggers-store.ts`, and the
+kung-fu tap Trigger moved from the corner hotspot to a fighting game's genre pill (`fighting-game-trigger/`). The
+lib modules (`konami-sequence.ts`, `spoon-phrase.ts`, `spoon-activation.ts`) and every lint/test/worktree gotcha
+below are still current; the component-level rounds are history.
+
+## Pure logic lives in apps/website/src/lib/easter-eggs/ (framework-free, node vitest project)
 
 - `konami-sequence.ts` — `KONAMI_SEQUENCE` (ArrowUp x2, ArrowDown x2, ArrowLeft/Right x2, "b", "a" lowercase),
   `appendKonamiKey` (rolling buffer capped at sequence length), `matchesKonamiSequence` (exact match).
@@ -32,17 +40,17 @@ bringing the hunt page to 4 eggs. See [[feature_easter_eggs]] for where these mo
 - `spoon-easter-egg/`: `StateStore<{warping, reducedMotion}>` only — no effects, it is fully self-resetting
   via timers, no user-facing controls. Store is a 3-phase state machine (`"idle" | "glitching" | "warping"`),
   mirroring `dejavu`'s glitch-timeout + reset-timeout structure exactly (400ms body `glitch-active` shake, then
-  1600ms warp/rain, then back to idle). `useReducedMotions()` (OS + site toggle + low-end device) decides
-  whether to skip the glitch phase entirely (reduced motion jumps straight to "warping"). The component uses
+  1600ms warp/rain, then back to idle). `useReducedMotions()` (Motion Preference off, or a low-end device) decides
+  whether to skip the glitch phase entirely (it jumps straight to "warping"). The component uses
   `AnimatePresence` + `motion.div` directly from `framer-motion` (not the `MotionDiv` design-system atom,
-  which only checks the site motion toggle, not the stronger `useReducedMotions` signal) to render a
+  which only checks the Motion Preference, not the stronger `useReducedMotions` signal) to render a
   skew+scale ripple in full motion vs. a pure opacity crossfade when `reducedMotion` is true (transform
   values locked to identity). Payoff is the existing `MatrixRain` atom, not a bespoke effect.
 
 ## Content and tracking additions
 
-- `kungFuTerminalLines: EasterEggTerminalLines` lives in `src/lib/content/easter-eggs/easter-eggs-content.ts`
-  alongside the hints/intro-lines (co-located easter-egg copy), NOT inside the component file. 10 lines
+- `kungFuTerminalLines: EasterEggTerminalLines` lived in `src/lib/content/easter-eggs/easter-eggs-content.ts` (file
+  since deleted) alongside the Hints/intro-lines (co-located Easter Egg copy), NOT inside the component file. 10 lines
   ("loading construct..." through skill names to "I know kung fu." as the final `type: "quote"` line) with
   `delay`s hand-tuned (200ms first + 600ms each of 8 + 800ms last = 5800ms delay budget) plus the typewriter's
   fixed 50ms/char typing speed (184 total chars = 9200ms) to land at ~15000ms total, matching the extracted
@@ -51,9 +59,9 @@ bringing the hunt page to 4 eggs. See [[feature_easter_eggs]] for where these mo
   second, non-keyboard trigger was added — the action represents the egg, not one input method), and
   `easter_egg_spoon`. Labels use the hint ids (`i_know_kung_fu`, `there_is_no_spoon`) under the existing
   `tracking.category.easter_egg_hunt`.
-- The hunt page's existing tests (`easter-eggs.test.tsx`, `easter-egg-hunt-markdown.test.ts`,
+- The Hunt's existing tests (`easter-eggs.test.tsx`, `easter-egg-hunt-markdown.test.ts`,
   `indexable-content.test.ts`) are all fully data-driven (`.forEach` over `easterEggHints`/
-  `easterEggHuntIntroLines`) — adding 2 hints and changing the intro count text needed ZERO test edits, they
+  `easterEggHuntIntroLines`) — adding 2 Hints and changing the intro count text needed ZERO test edits, they
   passed unchanged. Don't assume a plan's "update the tests" instruction is always needed; check first.
 
 ## Test mocking gotchas hit while writing this
@@ -88,12 +96,12 @@ A from-scratch worktree has NO `.env*` files. `npm run build` fails collecting `
 "Missing API key. Pass it to the constructor `new Resend(...)`" without `RESEND_API_KEY` (and similarly
 Upstash/Groq keys) set. Inject dummy values as inline env vars for a local build-gate check
 (`RESEND_API_KEY=... UPSTASH_VECTOR_REST_URL=... UPSTASH_VECTOR_REST_TOKEN=... UPSTASH_REDIS_REST_URL=...
-UPSTASH_REDIS_REST_TOKEN=... GROQ_API_KEY=... npm run build`) — CI injects the real secrets per CLAUDE.md.
+UPSTASH_REDIS_REST_TOKEN=... GROQ_API_KEY=... npm run build`) — CI injects the real secrets on `build`/`e2e`.
 
 ## Round 2 (2026-07-23): unified mobile trigger, same egg/component/store
 
-Added a SECOND trigger to the SAME `kung-fu-easter-egg/` component + store (no new egg folder, per explicit
-instruction: one egg = one component/store even when it gains a trigger). Key decisions:
+Added a SECOND Trigger to the SAME `kung-fu-easter-egg/` component + store (no new egg folder, per explicit
+instruction: one egg = one component/store even when it gains a Trigger). Key decisions:
 
 - The component now ALWAYS renders an invisible `aria-hidden` `h-11 w-11` (44px, exact Tailwind spacing-scale
   match, no arbitrary value needed) `fixed bottom-0 right-0` hotspot `<div onClick={registerTap}>`, alongside
@@ -127,9 +135,9 @@ instruction: one egg = one component/store even when it gains a trigger). Key de
 
 ## Pre-existing unrelated drift noticed (not fixed)
 
-`npm run build` regenerates `public/search-index.json` and it came out with ONE unrelated diff: a blog post's
+`npm run build` regenerates `apps/website/public/search-index.json` and it came out with ONE unrelated diff: a blog post's
 title lost a trailing period in the index vs. what's currently committed there (frontmatter drift from an
-earlier, separate change, unrelated to easter eggs). Reverted it with `git checkout -- public/search-index.json`
+earlier, separate change, unrelated to easter eggs). Reverted it with `git checkout -- apps/website/public/search-index.json`
 before committing rather than smuggling an unrelated content fix into this diff — flag it to review/writer
 agents separately if it recurs. This keeps recurring across unrelated worktree sessions — always
 `git status`/`git diff` the search index after any local `build` and revert if the only change is unrelated
@@ -144,11 +152,11 @@ keeps native `controls` on as the fallback if a browser blocks unmuted autoplay.
 `onComplete`/`isCompleted` (replacing the terminal's `onComplete` callback), and the replay pill resets+replays
 the `<video>` via a ref instead of re-playing an `Audio()` object.
 
-- **`SelfHostedVideo` (`src/components/design-system/molecules/video/self-hosted-video/`) gained 4 optional
+- **`SelfHostedVideo` (`packages/matrix-design-system/src/molecules/video/self-hosted-video/`) gained 4 optional
   props**: `autoPlay?`, `onEnded?`, `videoRef?: (el: HTMLVideoElement | null) => void`, and `ariaLabel?`
   (needed for `aria-label` on the `<video>` — the plan only named 3 props but an accessible name is required
   and there's no other way to set it from outside the molecule; added as a small justified 4th prop, all still
-  optional/undefined-default so existing blog MDX `<SelfHostedVideo>` usages are unaffected).
+  optional/undefined-default so existing Post MDX `<SelfHostedVideo>` usages are unaffected).
 - **`react-hooks/immutability` (React Compiler ESLint rule) fires on mutating a property of a value read from
   `useState`**, even inside a `useCallback` and even when the "value" is a DOM node (mutating `.currentTime`
   on a `[videoEl, setVideoEl] = useState<HTMLVideoElement|null>(null)` triggers
@@ -170,17 +178,17 @@ the `<video>` via a ref instead of re-playing an `Audio()` object.
   `easter-eggs-content.ts` entirely once the terminal was gone — knip fails otherwise. The `EasterEggTerminalLines`
   type import in that file became unused too and was removed; the type itself is still alive via
   `neo-room-easter-egg` and `command-palette`, so only the LOCAL import in `easter-eggs-content.ts` went away,
-  not the type definition in `src/types/search/search.ts`.
+  not the type definition in `apps/website/src/types/search/search.ts` (the type itself has since been deleted too).
 
 ## Round 4 (2026-07-25): spoon trigger moved from global keydown buffer to the chat input
 
 Retired the global `keydown` buffer entirely for the spoon egg (kung-fu's Konami listener is unaffected, still
 keydown-based). `spoon-phrase-buffer.ts` was replaced by a pure `spoon-phrase.ts` (`matchesSpoonPhrase` only,
 no buffer/accumulation logic — matching is now against one already-complete chat message string, not a rolling
-keystroke buffer) and a new `src/lib/easter-eggs/spoon-activation.ts` owns the cross-module signal:
+keystroke buffer) and a new `apps/website/src/lib/easter-eggs/spoon-activation.ts` owns the cross-module signal:
 `spoonActivationEvent` (a `window` custom event name), `activateSpoonEasterEgg()` (dispatches it),
 `trySpoonPhrase(text)` (matches + activates, called from `useChatStore.handleSubmit` before `sendMessage` —
-if it matches, the message is swallowed and never sent to the LLM). `SpoonEasterEgg` still owns its own
+if it matches, the message is swallowed and never reaches the Chat). `SpoonEasterEgg` still owns its own
 `use-spoon-easter-egg-store.ts` state machine, listening for the same `spoonActivationEvent` via
 `window.addEventListener`, decoupling the trigger surface (now chat, was keydown-anywhere) from the payoff.
 
@@ -206,8 +214,8 @@ elsewhere:
 - Tests must reset the module-level pending flag between cases (`consumePendingSpoonActivation()` in
   `beforeEach`) since Vitest's default per-file (not per-test) module isolation means the flag persists across
   test cases within the same file otherwise.
-- e2e (`e2e/chat.spec.ts`) had been asserting the warp via `.bg-black-alpha-75`, a shared Tailwind utility also
-  used by `design-system/atoms/effects/overlay`, `organism/menu`, and the videogames `game-card` — only worked
+- e2e (`apps/website/e2e/chat.spec.ts`) had been asserting the warp via `.bg-black-alpha-75`, a shared Tailwind utility also
+  used by the design system's `atoms/effects/overlay`, `organism/menu`, and the videogames `game-card` — only worked
   because Playwright strict-mode would otherwise error on ambiguous matches. Retargeted to the spoon-specific
   `[style*="matrix-spoon-clip"]` (the `clipPath: url(#matrix-spoon-clip)` inline style on the warp's inner div,
   keyed off the existing `SPOON_CLIP_ID` constant in `spoon-easter-egg.tsx` — no production change needed). Also

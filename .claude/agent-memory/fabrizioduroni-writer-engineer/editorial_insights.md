@@ -1,12 +1,12 @@
 ---
 name: Editorial Insights and Patterns
-description: Key editorial patterns, co-author registry, article series, and style observations extracted from the full blog archive
+description: Key editorial patterns, co-author registry, Post series, and style observations extracted from the full blog archive
 type: reference
 ---
 
 ## Co-Author Registry
 
-These are all co-authors who have appeared on blog posts, useful for attribution and collaboration context:
+These are all co-authors (Authors, in the glossary) who have appeared on Posts, useful for attribution and collaboration context:
 
 - **marco_de_lucchi** — iOS/SwiftUI colleague. Co-authored: Hermes RN (2020), SwiftUI Path (2022), Widget iOS (2023), SwiftUI Text (2023), Locale iOS (2025)
 - **francesco_bonfadelli** — Clean code colleague. Co-authored: IDE comparison (2018), Hermes RN (2020). Sole author: Chain of Responsibility refactoring (2018)
@@ -21,10 +21,10 @@ These are all co-authors who have appeared on blog posts, useful for attribution
 - **stefano_varesi** — Backend colleague. Co-authored: Pact contract testing (2021)
 - **sam_campisi** — RN colleague. Co-authored: React Universe 2024 (2024)
 - **antonino_gitto** — iOS/RN colleague. Co-authored: Locale iOS (2025), Skia Gradients (2025)
-- **davide_botti** — Customer Value colleague at lastminute.com. Senior backend engineer (10+ yrs), focused on observability, system design, complex architectures. Registered in src/types/content/author.ts with an author page. Co-authored: Software engineer skills pyramid (2026)
-- **timothy_russo** — Customer Value colleague at lastminute.com. Experienced mobile engineer (10+ yrs), broad frontend (web + mobile) knowledge. Registered in src/types/content/author.ts with an author page. Co-authored: Software engineer skills pyramid (2026)
+- **davide_botti** — Customer Value colleague at lastminute.com. Senior backend engineer (10+ yrs), focused on observability, system design, complex architectures. Registered in apps/website/src/types/content/author.ts with an author page. Co-authored: Software engineer skills pyramid (2026)
+- **timothy_russo** — Customer Value colleague at lastminute.com. Experienced mobile engineer (10+ yrs), broad frontend (web + mobile) knowledge. Registered in apps/website/src/types/content/author.ts with an author page. Co-authored: Software engineer skills pyramid (2026)
 
-## Article Series
+## Post Series
 
 ### Blender Tutorial Series (15 parts, 2018-01 to 2019-03)
 Complete beginner-to-advanced Blender 3D tutorial. Posts #1-#15 covering UI, selection, modeling, advanced modeling, outliner, materials, textures, light, camera, animation, rigging, Cycles.
@@ -86,19 +86,20 @@ Lower frequency: kotlin, spring boot, backend, architectural pattern, domain dri
 
 Established by "Software engineer skills pyramid" (2026-07-10), co-authored with davide_botti and timothy_russo, cross-posted to technology.lastminute.com:
 
-1. **No internal cross-references**: when a post is also published on the company tech blog, do NOT add inline links to other fabrizioduroni.it articles. Keep it self-contained.
+1. **No internal cross-references**: when a post is also published on the company tech blog, do NOT add inline links to other fabrizioduroni.it Posts. Keep it self-contained.
 2. **Redaction pattern**: internal identifiers are genericized inside every skill/agent code snippet and prose — no internal GitLab hostnames, Jira project keys, team names, internal marketplace name, maintainer usernames, or internal service names. lastminute.com as the company name is fine, and public links to technology.lastminute.com (e.g. the AppFw framework post) are fine. When reviewing, NEVER suggest re-adding a redacted identifier.
 3. **Heavy Mermaid usage**: two diagrams — a `flowchart TD` of the SCRUM feature-to-production flow, and a layered-architecture `flowchart TD` using `subgraph` blocks with dedicated in-layer label nodes styled via `classDef layerLabel fill:none,stroke:none,color:#00FF41,font-weight:bold` (Matrix-green labels, no box). A clean pattern for labeling architecture layers inside subgraphs.
 4. **Recurring narrative devices** (worth reusing): a concept is planted in the intro and paid off later — "human gate" is introduced up front then mapped onto each pipeline checkpoint; the "TECH TODO section" is repeatedly shown to pay off across sections ("that section keeps paying off"). Also the "harness around a harness" through-line tying the title to the thesis.
 5. **Approved heading style**: playful headings like "sdlc-e2e: one skill to rule them all" are explicitly approved by Fabrizio — do not flag them as unprofessional.
 
-## Content Structure for Blog Posts
+## Content Structure for Posts
 
-Posts are stored at: `src/content/blog/post/[year]/[month]/[day]/[slug]/content.mdx`
-- This differs from the CLAUDE.md system prompt which mentions `src/content/posts/`
+Posts are stored at: `apps/website/src/content/blog/post/[year]/[month]/[day]/[slug]/content.mdx`
+- This differs from the system prompt which mentions `src/content/posts/`
 - The actual directory structure uses nested year/month/day/slug directories
-- Images referenced from `/images/posts/` (public directory)
-- YouTube import: `import { Youtube } from "@/components/design-system/molecules/video/youtube";`
+- Images live in the Post's `media/` folder and are referenced as `/media/content/blog/post/<y>/<m>/<d>/<slug>/<file>`
+- YouTube import: `import { Youtube } from "matrix-design-system";`
+- Full detail (verified 2026-09-27): [[codebase_content_structure]]
 
 ## Publication Frequency
 
@@ -110,6 +111,7 @@ Posts are stored at: `src/content/blog/post/[year]/[month]/[day]/[slug]/content.
 - 2022: 4 posts (lowest output year)
 - 2023: 4 posts (SwiftUI + Advent of TypeScript)
 - 2024: 6 posts (AoT completion + RN Skia + conference)
-- 2025: 5 posts (so far: TypeScript types, LLM, locale, Skia gradients, DSA)
-- 2026: 4 posts (Chrome Built-in AI, LLM chatbot guardrails, MCP server, software engineer skills pyramid)
-- **Total: 91 posts**
+- 2025: 5 posts (TypeScript types, LLM, locale, Skia gradients, DSA)
+- 2026: 7 posts so far (Chrome Built-in AI, LLM chatbot guardrails, MCP server, App.js Conf 2026, software engineer
+  skills pyramid, 18 years essay, monorepo)
+- **Total: 97 posts** (counted on disk 2026-09-27)

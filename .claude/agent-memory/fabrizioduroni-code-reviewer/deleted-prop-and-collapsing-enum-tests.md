@@ -17,7 +17,7 @@ mock that never forwards that prop — sometimes even destructures it into a dis
 exactly the regression the change exists to prevent. Reviewer move: for every component in the
 diff whose only change is a deleted prop, open its test's local mock and ask "does the mock even
 expose the prop?" If not, the behavior is untested regardless of how many other tests the diff
-added. `src/test-utils/next-module-mocks.tsx`'s shared `nextLinkMock` captures props onto
+added. `apps/website/src/test-utils/next-module-mocks.tsx`'s shared `nextLinkMock` captures props onto
 `data-*` attributes and is the fix.
 
 **2. Enum members that collapse to the same rendered value make "defaults to X" tests

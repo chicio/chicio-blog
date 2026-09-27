@@ -8,9 +8,9 @@ metadata:
 `npm run knip` passing does NOT prove a deleted symbol had no remaining production consumer, and does NOT
 prove a surviving export is still used by shipped code.
 
-**Why:** `.claude/rules/testing.md` states that knip ignores `**/*.test.*` and `**/*.spec.*`. That is stale.
-The actual `knip.json` has **no `ignore` key at all**. Its `project` globs are
-`src/**/*.{ts,tsx,mdx}` + `e2e/**/*.ts`, which *include* test files, and `e2e/**/*.ts` is even an `entry`.
+**Why:** `.claude/rules/testing.md` used to state that knip ignores `**/*.test.*` and `**/*.spec.*` (it now documents
+the real behaviour). The actual `apps/website/knip.json` has **no `ignore` key at all**. Its `project` globs are
+`apps/website/src/**/*.{ts,tsx,mdx}` + `apps/website/e2e/**/*.ts`, which *include* test files, and `apps/website/e2e/**/*.ts` is even an `entry`.
 Combined with `ignoreExportsUsedInFile: true`, this means an export whose only remaining consumer is its own
 co-located `.test.ts` is counted as used and is silently NOT reported.
 
@@ -19,7 +19,7 @@ knip green as sufficient. Run an explicit grep over production code for the dele
 deleted export name, e.g.:
 
 ```
-grep -rn "input-focus-guard\|shouldIgnoreKeystroke\|appendToSpoonPhraseBuffer" src/ e2e/
+grep -rn "input-focus-guard\|shouldIgnoreKeystroke\|appendToSpoonPhraseBuffer" apps/website/src/ apps/website/e2e/ packages/*/src/
 ```
 
 Hits confined to `docs/` (spec narrative) are fine. Also worth a non-blocking note when a surviving export's

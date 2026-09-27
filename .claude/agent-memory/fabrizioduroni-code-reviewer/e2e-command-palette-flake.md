@@ -6,12 +6,12 @@ metadata:
 ---
 
 Every e2e spec that reaches its subject through the command palette (`openPalette` /
-`openTerminalOverlay` in `e2e/terminal.spec.ts`, the listbox specs in `e2e/search.spec.ts`) is
+`openTerminalOverlay` in `apps/website/e2e/terminal.spec.ts`, the listbox specs in `apps/website/e2e/search.spec.ts`) is
 load-sensitive and flakes on a developer machine. Failures land on `expect(terminalOption).toBeVisible()`,
 `terminalOption.click()` timing out *after* Playwright logs "element is visible, enabled and stable", or the
 `getByRole("dialog", { name: "Terminal" })` assertion.
 
-**Why:** the palette and the terminal are both `dynamic(..., { ssr: false })` chunks mounted from
+**Why:** the palette and the Terminal are both `dynamic(..., { ssr: false })` chunks mounted from
 `LayoutAdditionalContent`, so opening them depends on post-hydration chunk load. `openPalette` already wraps
 its click in `expect(...).toPass({ timeout: 20000 })` precisely because of this window; the steps *after* it
 have no such retry.
@@ -24,7 +24,7 @@ regression in a helper used by 13 tests fails all 13 consistently.
 Cheapest confirmation, using the already-built app:
 
 ```
-npx playwright test e2e/terminal.spec.ts --workers=1 -g "<the failing titles>" --retries=2
+npx playwright test apps/website/e2e/terminal.spec.ts --workers=1 -g "<the failing titles>" --retries=2
 ```
 
 If they pass in ~3s each, it is load, not the diff. Do not pipe the run through `tail` — the pipe masks the

@@ -4,14 +4,16 @@ description: Architecture decisions and learned pitfalls from building the copy 
 type: project
 ---
 
-Automatic copy button on every MDX code block, wired via the `pre` mapping in `src/mdx-components.tsx`.
+Automatic copy button on every MDX code block, wired via the `pre` mapping in `apps/website/src/mdx-components.tsx`.
 
 **Files**:
-- `src/components/design-system/molecules/code/code-block.tsx` — wrapper around `<pre>`, owns the `useRef<HTMLPreElement>` and renders the button
-- `src/components/design-system/molecules/code/copy-code-button.tsx` — button with three states: default, copied (green), error (red); 2-second timeout to reset
-- `src/components/design-system/atoms/icons/copy-icon.tsx` — icon atom
+- `apps/website/src/components/features/mdx/code-block/` — wraps `<pre>`, owns the `useRef<HTMLPreElement>` and renders the button
+- `apps/website/src/components/features/mdx/code-block/copy-code-button/` — button with three states: default, copied (green), error (red); 2-second timeout to reset
+- `packages/matrix-design-system/src/atoms/icons/copy-icon/copy-icon.tsx` — icon atom
 
-**Why:** Convenience for readers copying code samples from blog and DSA content.
+(Both moved out of the design system into the Website's `features/mdx/`; verified 2026-09-27.)
+
+**Why:** Convenience for readers copying code samples from Posts and DSA content.
 
 **How to apply:** If copy-button behaviour needs changing, the three-state machine lives entirely in `CopyCodeButton`; layout changes live in `CodeBlock`.
 
@@ -29,7 +31,7 @@ An initial `if (typeof navigator === "undefined") return null` guard caused an S
 The absolutely positioned overlay button overlapped code on narrow viewports. Fix: `flex flex-col` on mobile so the button appears in a bottom bar below the code block; `sm:block` with `sm:absolute` restores the overlay on desktop.
 
 ### CSS border ownership
-Border and shadow styling must live on the `#code-block` wrapper `<div>`, not on the `<pre>` element, to avoid double borders when the two are composed together.
+Border and shadow styling must live on the `#code-block` container `<div>`, not on the `<pre>` element, to avoid double borders when the two are composed together.
 
 ### Clipboard unavailability — hide, don't silently fail
 When `navigator.clipboard` is unavailable (non-HTTPS or certain browsers) the button is hidden entirely rather than showing a disabled state. If `writeText` rejects at runtime (e.g., permission denied), the button shows the red error icon for 2 seconds then resets.

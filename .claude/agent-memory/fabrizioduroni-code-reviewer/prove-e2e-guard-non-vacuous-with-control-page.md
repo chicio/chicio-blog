@@ -22,8 +22,8 @@ Mechanics that work here without touching the repo (reviewer is read-only):
 is the standard this review stage exists to enforce. Ten minutes of control-running converts a judgement call
 into evidence.
 
-**How to apply:** good control pages in this repo are the deliberate exclusions — the NES console page has no
-Startup section, `/chat` has no static content in the terminal shell. Note what the assertion still does *not*
+**How to apply:** good control pages in this repo are the deliberate exclusions — the NES Console page has no
+Startup, `/chat` has no static content in the Terminal. Note what the assertion still does *not*
 pin down (an `iframe[src*='youtube.com/embed']` locator passes even with the wrong videoId) and report that as
 non-blocking.
 
