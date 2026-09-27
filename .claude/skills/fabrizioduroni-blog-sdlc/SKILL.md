@@ -45,7 +45,7 @@ request is already a reviewable, closable proposal, so gating it only bought a w
 
 1. **Parse** the description and flags. Decide mode: fix if `--fix` or a pasted trace/error is present, else feature.
 2. **Content firewall.** If the task is purely content — adding/editing MDX blog posts, DSA articles, or prose — STOP
-   and redirect: blog prose → `fabrizioduroni-writer-engineer`; DSA articles → `fabrizioduroni-writer-dsa-engineer`.
+   and redirect: Posts and DSA course edits → `fabrizioduroni-writer-engineer`.
    This pipeline is for code. (A change that is *both* code and content stays here for the code part.)
 3. **Isolation (default ON).** Unless `--in-place` was passed, `EnterWorktree` now — the whole pipeline runs in its
    own isolated worktree on its own `feat/<slug>` branch. This is the chicio default (diverging from mobile's in-place

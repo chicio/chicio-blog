@@ -15,5 +15,8 @@
 - [editorial_insights.md](editorial_insights.md) — Co-author (Author) registry, Post series, Tag frequency, voice observations
 - [codebase_content_structure.md](codebase_content_structure.md) — Actual Post file paths (apps/website/src/content/blog/post/...), media/ image conventions, YAML frontmatter format
 
+## DSA course
+- [dsa_editing_conventions.md](dsa_editing_conventions.md) — editing the finished DSA course: Topic layouts by kind, visualizer rules, Exercise code, image
+
 ## Capabilities Reference
 - [reference_mermaid_support.md](reference_mermaid_support.md) — Mermaid diagrams in MDX: fenced code blocks, no imports, Matrix Theme, all diagram types
