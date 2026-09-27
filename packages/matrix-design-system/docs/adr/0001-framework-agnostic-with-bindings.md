@@ -3,7 +3,8 @@
 The Matrix Design System imports nothing from `next` or any other framework. Whatever only the host can know (its link
 and image implementations, the current path, its assets such as the logo, per-item tracking callbacks) arrives as
 props, each with a framework-free default (`AnchorLink`, `PlainImage`). The website supplies these through its Bindings
-in `apps/website/src/components/features/design-system-next/`, and everything the site renders imports from there.
+in `apps/website/src/components/features/design-system-next/`; components that need no injection are imported from
+the package directly.
 
 This keeps the published package usable by any React host and forces application concerns (routes, tracking, consent,
 site metadata) to stay in the application. It is enforced at error by dependency-cruiser.
