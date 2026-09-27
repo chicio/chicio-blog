@@ -6,7 +6,7 @@ user_invocable: true
 
 # New Videogame Entry
 
-Bootstrap a new game entry under `src/content/videogames/console/<console>/game/<slug>/`.
+Bootstrap a new game entry under `apps/website/src/content/videogames/console/<console>/game/<slug>/`.
 
 ## Steps
 
@@ -43,8 +43,8 @@ Ask the user for all of these:
 
 ### 3. Validate
 
-- **Console exists**: verify `src/content/videogames/console/<console>/` directory exists. If not, abort with the list above.
-- **Game does not exist**: verify `src/content/videogames/console/<console>/game/<slug>/` does NOT exist. If it does, abort.
+- **Console exists**: verify `apps/website/src/content/videogames/console/<console>/` directory exists. If not, abort with the list above.
+- **Game does not exist**: verify `apps/website/src/content/videogames/console/<console>/game/<slug>/` does NOT exist. If it does, abort.
 - Derive the **slug** from the title: lowercase, hyphens for spaces, strip special characters (e.g., "Elden Ring" -> `elden-ring`).
 
 ### 4. Derive Fields
@@ -81,7 +81,7 @@ From the collected inputs, derive:
 ### 5. Create Directory Structure
 
 ```
-src/content/videogames/console/<console>/game/<slug>/
+apps/website/src/content/videogames/console/<console>/game/<slug>/
     media/
         media/
 ```
@@ -130,7 +130,7 @@ Run the `add-game-screenshots.py` script to download gameplay screenshots and ad
 
 ```bash
 uv run --script .claude/skills/fabrizioduroni-new-videogame/add-game-screenshots.py \
-    --game-folder src/content/videogames/console/<console>/game/<slug>
+    --game-folder apps/website/src/content/videogames/console/<console>/game/<slug>
 ```
 
 The script:
@@ -145,9 +145,9 @@ The script:
 Print what was created and what the user needs to do manually:
 
 **Created:**
-- `src/content/videogames/console/<console>/game/<slug>/content.mdx`
-- `src/content/videogames/console/<console>/game/<slug>/media/gameplay/` (with screenshots, if script succeeded)
-- `src/content/videogames/console/<console>/game/<slug>/media/media/` (empty)
+- `apps/website/src/content/videogames/console/<console>/game/<slug>/content.mdx`
+- `apps/website/src/content/videogames/console/<console>/game/<slug>/media/gameplay/` (with screenshots, if script succeeded)
+- `apps/website/src/content/videogames/console/<console>/game/<slug>/media/media/` (empty)
 
 **Manual TODOs:**
 - Add `cover.jpg` to `<slug>/media/` (game box art / cover image)

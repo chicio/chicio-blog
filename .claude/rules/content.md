@@ -15,9 +15,9 @@ Components follow the folder-per-component + store pattern; the full contract is
 ## New Page Checklist
 
 1. Create `apps/website/src/components/content/<name>/` (folder-per-component for each component)
-2. Add page type to `apps/website/src/types/slug.ts`
+2. Add the route to the `slugs` registry in `apps/website/src/types/configuration/slug.ts`
 3. Register in `packages/matrix-design-system/src/organism/menu/menu.tsx` (uses `MenuItemWithTracking`)
-4. Add tracking events in `apps/website/src/types/tracking.ts`
+4. Add tracking events in `apps/website/src/types/configuration/tracking.ts`
 5. Create route in `apps/website/src/app/<name>/page.tsx`
 6. If the page renders MDX, create the matching `apps/website/src/content/<name>/` folder
 
@@ -26,7 +26,7 @@ Components follow the folder-per-component + store pattern; the full contract is
 All navigation and UI interactions tracked via Google Analytics (gated by cookie consent):
 - Use `trackWith` helper from `apps/website/src/lib/tracking/`
 - Every new clickable UI element needs a tracking action
-- Category/action/label structure defined in `apps/website/src/types/tracking.ts`
+- Category/action/label structure defined in `apps/website/src/types/configuration/tracking.ts`
 
 ## Route Pages
 

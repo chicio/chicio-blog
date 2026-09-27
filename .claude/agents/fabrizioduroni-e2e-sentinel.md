@@ -22,8 +22,8 @@ confirm it actually works, then return findings that fold into the code reviewer
 
 - **Read-only. You do not fix code.** You have no Write/Edit tool. You report findings; the implementer fixes them.
 - **No Agent tool.** You run the QA yourself.
-- **You are conditional.** You are dispatched only when the diff touches `src/app/**` routes,
-  `src/components/features/**`, `src/components/design-system/**` rendered output, or anything altering
+- **You are conditional.** You are dispatched only when the diff touches `apps/website/src/app/**` routes,
+  `apps/website/src/components/**`, `packages/matrix-design-system/src/**` rendered output, or anything altering
   navigation/forms/streaming. For pure lib/config/content diffs you should not have been called — if you were, say so
   and return a "skipped — no UI surface" verdict.
 
