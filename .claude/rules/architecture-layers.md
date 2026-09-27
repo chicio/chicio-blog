@@ -1,86 +1,81 @@
 # Architecture Layers
 
-This document defines the dependency boundaries between the major layers of the codebase.
-All rules described here are enforced at error level by dependency-cruiser (`npm run validate-architecture`).
+This document defines the dependency boundaries between the major layers of the codebase. Each boundary is marked
+**enforced** (dependency-cruiser fails `npm run validate-architecture`, and CI, at error level) or **convention**
+(nothing checks it: hold it by hand, and grep before claiming it holds).
+
+There are two dependency-cruiser configs, one per workspace that holds components:
+`packages/matrix-design-system/.dependency-cruiser.cjs` and `apps/website/.dependency-cruiser.js`. Both exclude tests;
+the design system's also excludes stories, which compose across layers on purpose.
 
 ## Layer Map
 
 ```
-apps/website/src/app/          → composition root (pages, layouts, API routes)
+packages/matrix-design-system/src/  → the published design system: atoms → molecules → organism, plus hooks/,
+                                      state/ (Shared Stores) and styles/. Framework-agnostic.
+apps/website/src/app/               → composition root (pages, layouts, API routes)
 apps/website/src/components/
-  content/<page>/ → page-scoped UI components (one folder per route)
-  features/<f>/   → cross-cutting UI not tied to a route (pwa, easter-eggs, seo, consent, layout)
-    content/      → page-level layouts (page-template, content-page-template, …): they arrange
-                    THIS site's chrome, so they are not part of the design system
-    search/       → site search (useSearch); site-specific shared hooks live in their domain
-    design-system-next/ → the site's Next bindings for the design system: injects next/link,
-                    next/image, the router path and this site's logo. Everything the site
-                    renders imports from here, not from design-system/ directly.
-  design-system/  → pure, self-contained UI library (atoms → molecules → organisms).
-                    Framework-agnostic: it imports nothing from next. Owns its own CSS in
-                    styles/ (theme tokens, base element styling, composed classes, pills).
-apps/website/src/lib/          → pure business logic (no JSX, no React components)
-apps/website/src/types/        → TypeScript types and pure configuration constants
+  content/<page>/     → page-scoped UI components (one folder per route)
+  features/<f>/       → cross-cutting UI not tied to a route (pwa, easter-eggs, seo, consent, terminal, …)
+    content/          → the Templates and Content Pages that arrange this site's chrome
+    design-system-next/ → the site's Bindings: design-system components bound to next/link, next/image, the
+                        router path and this site's assets
+apps/website/src/lib/               → pure business logic (no JSX, no React components)
+apps/website/src/types/             → TypeScript types and pure configuration constants
 ```
 
-## Dependency Rules (all at error level)
+## The design system is self-contained
 
-### design-system is self-contained
+- **Enforced (`no-next`)**: the design system imports nothing from `next`. What only the host can know (link and image
+  implementations, the current path, its assets, tracking callbacks) arrives as props; see
+  [ADR-0001](../../packages/matrix-design-system/docs/adr/0001-framework-agnostic-with-bindings.md).
+- **Structural, no rule needed**: it cannot import the website at all. It is a separate package with no path into
+  `apps/website`, so there is no `@/` alias to reach for; types it needs are its own.
+- **Enforced (`root-barrel-no-optional-peers`)**: nothing reachable from the root barrel (`src/index.ts`) may need an
+  optional peer dependency (recharts, cmdk, the unified/remark/rehype stack), type-only imports included. Those live
+  behind the `matrix-design-system/chart`, `/markdown` and `/command-palette` entry points.
 
-`packages/matrix-design-system/src/**` may ONLY import from:
-- npm packages
-- other files within `design-system/**`
-- `apps/website/src/types/**` — **type-only** (`import type { ... }`) exclusively
+## Atomic layering, inside the design system
 
-**Forbidden** at error level (enforced by `design-system-no-features`, `design-system-no-lib`,
-`design-system-no-next`, and `design-system-types-type-only` rules):
-- Any runtime import from `apps/website/src/lib/**`
-- Any import from `apps/website/src/components/features/**`
-- Any import from `apps/website/src/components/content/**`
-- Any import from `apps/website/src/app/**`
-- Any value (non-type-only) import from `apps/website/src/types/**` — including `slugs`, `siteMetadata`, and `tracking`
-- Any import from `next` — link and image implementations are injected as props (`linkComponent`,
-  `imageComponent`), the active route arrives as `currentPath`, and site assets like the logo are props
+- **Enforced (`layering-atoms`)**: `atoms/` must not import from `molecules/` or `organism/`.
+- **Enforced (`layering-molecules`)**: `molecules/` must not import from `organism/`.
+- Every layer may import from `hooks/` and `state/`.
 
-**Rationale**: the design-system is a reusable UI library. It must not know about application concerns (tracking, consent, chat, PWA, route slugs, or site metadata). Route hrefs, social contact links, and per-item tracking callbacks are injected as props from the feature/content layer above. The `design-system-types-type-only` rule enforces this: any `import { ... }` (not `import type`) from `apps/website/src/types/` inside design-system is a CI error.
+## lib is a leaf
 
-### lib is a leaf
+- **Enforced (`lib-no-components`)**: `apps/website/src/lib/**` must not import from `apps/website/src/components/**`
+  or `apps/website/src/app/**`. It may import npm packages, other `lib/` files and `apps/website/src/types/**`.
 
-`apps/website/src/lib/**` may ONLY import from:
-- npm packages
-- other files within `lib/**`
-- `apps/website/src/types/**`
+`lib/` is consumed by components, never the reverse, which keeps it testable in the node Vitest project and free of
+circular chains.
 
-**Forbidden** at error level (enforced by `lib-no-components` rule):
-- Any import from `apps/website/src/components/**`
-- Any import from `apps/website/src/app/**`
+## Content pages are isolated from each other
 
-**Rationale**: `lib/` is the business-logic layer. It is consumed by components; it does not consume them. Keeping `lib/` free of component imports makes it independently testable and prevents circular dependency chains.
+- **Enforced (`content-page-isolation`)**: `apps/website/src/components/content/<pageA>/**` must not import from
+  `apps/website/src/components/content/<pageB>/**`. Cross-page UI goes to `features/` or to the design system.
+- **Convention**: `features/**` must not import from `content/**`. It holds today (no such import exists), but no rule
+  checks it.
 
-### features can depend on lib and design-system
+## How the website uses the design system
 
-`apps/website/src/components/features/**` may import from:
-- `apps/website/src/lib/**`
-- `packages/matrix-design-system/src/**` (through `index.ts` barrels)
-- `apps/website/src/types/**`
-- npm packages
+- **Convention**: when a Binding exists in `features/design-system-next/` (brand-header, breadcrumb, footer, menu,
+  internal-link, next-link, tag, terminal-button, …), site code imports the Binding, never the raw component. Every other
+  component is imported straight from `matrix-design-system` (or one of its entry points); most site files do exactly
+  that, and it is correct. Holds today; not checked.
+- A new Binding is needed only when a component takes a framework injection (`linkComponent`, `imageComponent`,
+  `currentPath`) or a site asset.
 
-Features must NOT import from `apps/website/src/components/content/**` (content pages are isolated).
+## Rules shared by both workspaces
 
-### content pages are isolated from each other
+- **Enforced (`import-only-via-index`)**: a component's internal `.tsx` may only be imported through its folder's
+  `index.ts` barrel. In the design system `src/hooks/` and `src/test-utils/` are exempt; in the website the rule
+  covers `src/components/**`.
+- **Enforced (`no-circular`)**: circular dependencies are forbidden.
 
-`apps/website/src/components/content/<pageA>/**` must NOT import from `apps/website/src/components/content/<pageB>/**`.
-Cross-page shared UI must be extracted to `apps/website/src/components/features/` or `packages/matrix-design-system/src/`.
-
-## Atomic Design Layering (within design-system)
-
-Enforced at error level:
-- `atoms/` must not import from `molecules/` or `organism/`
-- `molecules/` must not import from `organism/`
-- All layers may import from `hooks/` (shared hooks)
+The component-store rules (one store hook per component, store return shapes, folder composition) are enforced by
+ESLint through `packages/eslint-plugin-chicio`, not by dependency-cruiser; see `.claude/rules/component-architecture.md`.
 
 ## Adding a New Rule
 
-Add rules to `apps/website/.dependency-cruiser.js` in the `forbidden` array with `severity: "error"`.
-Run `npm run validate-architecture` after every structural change to catch regressions early.
-The CI pipeline runs `validate-architecture` as a standalone job that gates the build.
+Add it to the `forbidden` array of the config for the workspace it constrains, with `severity: "error"`, and mark it
+**enforced** here. Run `npm run validate-architecture` after every structural change; CI runs it as its own job.

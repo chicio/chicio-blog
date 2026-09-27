@@ -52,7 +52,8 @@ Where a component needs framework behaviour it takes it as a prop, with a framew
 - `currentPath` on `Menu`, instead of reading a router
 - site assets, such as `BrandHeader`'s `logo`
 
-The site's bindings live in `apps/website/src/components/features/design-system-next/`, which is what website code imports.
+The site's Bindings live in `apps/website/src/components/features/design-system-next/`. Website code imports the Binding
+when one exists and every other component straight from `matrix-design-system` (see `architecture-layers.md`).
 `PrefetchStrategy` ("viewport" | "hover" | "never") belongs to the design system — deciding *when* to
 prefetch is a design concern; the Binding decides *how*.
 
