@@ -199,8 +199,8 @@ detail is not repeated here.
 
 **When to use what**: full pipeline (`/fabrizioduroni-blog-sdlc`) for non-trivial code features/fixes; call
 `fabrizioduroni-implementer` **directly** as a quick-path escape hatch for trivial, well-specified code
-changes; use `fabrizioduroni-writer-engineer` for content (Posts, and edits to the finished DSA course) — the pipeline
-refuses content tasks.
+changes; use `/fabrizioduroni-write-post` for content (new Posts, translations, reviews, edits to the finished DSA course): it
+interviews in the main thread and dispatches `fabrizioduroni-writer-engineer` — the pipeline refuses content tasks.
 
 ## Commit Convention
 
