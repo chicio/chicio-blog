@@ -91,7 +91,8 @@ escape hatch) and find yourself on `main`, create the branch first: `git checkou
 - `code-style.md` — indentation, braces, imports, commits (always loaded)
 - `design-system.md` — atomic design, Matrix theme, glassmorphism/motion hooks
 - `mdx-content.md` — content file structure, frontmatter, writing style
-- `sections.md` — section isolation, new section checklist, tracking
+- `content.md` — page-content isolation, new-page checklist, tracking
+- `features.md` — cross-cutting UI (the features layer)
 - `api-routes.md` — chat and contact API conventions
 - `testing.md` — test stack (Vitest/RTL/Playwright/agent-browser), what to test at each layer, loop discipline, local commands
 

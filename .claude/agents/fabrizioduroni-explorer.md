@@ -113,7 +113,6 @@ isolation, atomic layering. Flag any boundary the obvious implementation might c
 <Derive this ONLY from `.claude/rules/testing.md`, which is authoritative. The project HAS a real automated suite:
 Vitest **node** project for `src/lib/**` pure logic, Vitest **jsdom** project + RTL for `src/components/**`
 (`use-*-store.ts` + components), Playwright **e2e** for full flows, plus coverage thresholds the CI `test` job gates on.
-IGNORE any summary line elsewhere (e.g. in CLAUDE.md) claiming there is "no automated test suite" — it is stale.
 List concretely: which `lib/**` functions need node-project unit tests, which stores/components need jsdom RTL tests,
 whether a Playwright e2e flow or agent-browser live-QA is implicated.>
 

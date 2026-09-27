@@ -43,8 +43,10 @@ Additional metadata fields per content type:
 
 ## Component Imports
 - Import components at the top of the MDX file, right after frontmatter
-- Use `@/` import alias: `import { Youtube } from "@/components/design-system/molecules/video/youtube"`
-- DSA topics import from `@/components/content/data-structures-and-algorithms/components/`
+- Design-system components import from the `matrix-design-system` package: `import { Youtube } from "matrix-design-system"`.
+  Use the `@/` alias for site-local modules (`@/components/...`, `@/lib/...`)
+- DSA topic and exercise components import from `@/components/content/data-structures-and-algorithms/<component>`:
+  each component is its own folder, there is no `components/` subfolder
 - Only `<table>` is globally mapped in `apps/website/src/mdx-components.tsx` — all other custom components must be explicitly imported
 
 ## DSA Content Style

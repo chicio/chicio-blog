@@ -19,7 +19,8 @@ Run `git diff --name-only HEAD` and `git status --short` to find new or modified
 For each changed `.mdx` file, read it and verify:
 - **Required fields present**: `title`, `description`, `date`, `image`, `tags`, `authors`
 - **Date format**: `YYYY-MM-DD`
-- **Image exists**: Check that the referenced image path exists in `public/`
+- **Image exists**: Check the source image exists in the post's co-located `<post-dir>/media/` folder, not in
+  `public/`: the `public/media/content/` mirror is gitignored and only generated at build time
 - **Tags is an array**: Not a string
 - **Authors includes** `fabrizio_duroni`
 
@@ -33,7 +34,8 @@ Report any missing or malformed fields.
 
 For each changed `.mdx` file that uses JSX components (lines containing `<ComponentName`):
 - Verify the component is imported at the top of the file (after frontmatter)
-- Verify the import path uses the `@/` alias
+- Verify the import resolves: design-system components from the `matrix-design-system` package, site-local
+  modules via the `@/` alias
 
 ### 4. Run Build Verification
 
