@@ -1,6 +1,6 @@
 ---
-name: Article Catalog 2022
-description: Complete catalog of all blog posts published in 2022, with titles, tags, summaries, and editorial patterns
+name: Post Catalog 2022
+description: Complete catalog of all Posts published in 2022, with titles, tags, summaries, and editorial patterns
 type: reference
 ---
 

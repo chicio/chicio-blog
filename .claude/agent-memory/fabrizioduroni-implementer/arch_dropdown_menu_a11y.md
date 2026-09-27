@@ -1,10 +1,10 @@
 ---
 name: arch_dropdown_menu_a11y
-description: DropdownMenu is a grouped nested-list disclosure (not an ARIA menu); globals.css re-adds bulleted ul/li styling AFTER Tailwind preflight, so ul/li conversions need explicit resets
+description: DropdownMenu is a grouped nested-list disclosure (not an ARIA menu); the design system's base.css re-adds bulleted ul/li styling AFTER Tailwind preflight, so ul/li conversions need explicit resets
 type: project
 ---
 
-`src/components/design-system/molecules/menu/dropdown-menu/` (PR shipped 2026-07-31, `feat/menu-sections-a11y`,
+`packages/matrix-design-system/src/molecules/menu/dropdown-menu/` (PR shipped 2026-07-31, `feat/menu-sections-a11y`,
 one review round CHANGES_REQUIRED before merge) was reworked from a flat/mixed `DropdownMenuEntry[]`
 (item-or-group union) to a groups-only `DropdownMenuGroup[]` prop. Key decisions, useful if extending
 Menu/DropdownMenu again:
@@ -26,7 +26,7 @@ Menu/DropdownMenu again:
   `effects.getGroupId(index)` curried-by-index function (`${id}-group-${index}`) — component just
   calls `getGroupId(idx)` in the render loop, not a raw template literal computed inline.
 - **CRITICAL — Tailwind v4 preflight is NOT the last word on list styling in this repo.**
-  `src/components/design-system/styles/base.css` has an `@layer base` block that runs AFTER preflight and
+  `packages/matrix-design-system/src/styles/base.css` has an `@layer base` block that runs AFTER preflight and
   unconditionally re-adds, on every bare `ul`/`ul li` in the app:
   `ul { list-style: none; ...; padding: 0; margin: 1rem; }`, `ul li { position: relative; padding-left: 1rem; margin-bottom: 0.5rem; }`,
   `ul li::before { content: "▸"; position: absolute; left: 0; color: var(--color-primary); font-weight: bold; }`.
@@ -38,9 +38,9 @@ Menu/DropdownMenu again:
   catches (RTL/Playwright only assert roles/text, not computed CSS). Verified by rendering a
   production build and diffing computed styles; confirmed against the precedent already in the repo:
   `form-error-summary.tsx` uses `<li className="before:content-none">`, and
-  `globals.css` has a `ul.recharts-default-legend li.recharts-legend-item::before { content: unset !important; }`
+  `apps/website/src/app/css/globals.css` has a `ul.recharts-default-legend li.recharts-legend-item::before { content: unset !important; }`
   escape for the same reason. **Do not trust `node_modules/tailwindcss/preflight.css` in isolation for
-  this repo** — always grep `src/components/design-system/styles/base.css` for a later unscoped `ul`/`ol`/`li` rule before
+  this repo** — always grep `packages/matrix-design-system/src/styles/base.css` for a later unscoped `ul`/`ol`/`li` rule before
   assuming a bare list element is unstyled.
 - **`list-style: none` also strips the `list`/`listitem` ARIA roles in WebKit** (Safari/VoiceOver),
   even though Chromium computes them anyway (which is why RTL/jsdom and Playwright/Chromium stay
@@ -67,11 +67,11 @@ Menu/DropdownMenu again:
   `min-w-max` as a safety floor so a future longer label grows past 240px instead of wrapping/clipping).
   240px was chosen to clear the 228px measured content by 12px and to match the `md:w-60` command-palette
   search button in the same menu bar. `xs` is a **custom 576px breakpoint** (`--breakpoint-xs` in
-  `globals.css`, not a Tailwind default) — at `xs`+ the panel is `absolute left-0 right-0`, so an explicit
+  `packages/matrix-design-system/src/styles/theme.css`, not a Tailwind default) — at `xs`+ the panel is `absolute left-0 right-0`, so an explicit
   width over-constrains it and `right-0` is dropped (LTR anchors left at 240px; intentional). Below `xs`
   the panel is in-flow inside the `w-80` (320px) mobile trigger column, unaffected by this change.
   `toHaveClass` in jsdom cannot prove this (no CSS engine) — added real Playwright bounding-box assertions
-  in `e2e/homepage.spec.ts` that open each of the three dropdowns and assert `boundingBox().width === 240`,
+  in `apps/website/e2e/homepage.spec.ts` that open each of the three dropdowns and assert `boundingBox().width === 240`,
   assert Explore's "DSA" and "Artificial Intelligence" group-header spans render the same height (proof
   of no line-wrap at 240px), and assert the mobile panel (opened via the hamburger, located as
   `svg.size-9` since `HamburgerMenu` has no role/aria-label — a pre-existing a11y gap, left alone as

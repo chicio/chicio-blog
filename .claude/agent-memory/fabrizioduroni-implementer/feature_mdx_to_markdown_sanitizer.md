@@ -1,21 +1,22 @@
 ---
 name: feature_mdx_to_markdown_sanitizer
-description: Pure mdxToMarkdown() lib sanitizer (src/lib/mdx/mdx-to-markdown.ts) that strips/transforms JSX from raw MDX before it's injected into /markdown routes and the terminal overlay; AST-shape gotchas discovered while building it
+description: Pure mdxToMarkdown() lib sanitizer (apps/website/src/lib/mdx/mdx-to-markdown.ts) that strips/transforms JSX from raw MDX before it's injected into the Markdown Representation and the Terminal; AST-shape gotchas discovered while building it
 type: project
 ---
 
 ## Overview
 
-`src/lib/mdx/mdx-to-markdown.ts` exports `mdxToMarkdown(mdx: string): string`, a pure lib/ leaf (no React/component
+`apps/website/src/lib/mdx/mdx-to-markdown.ts` exports `mdxToMarkdown(mdx: string): string`, a pure lib/ leaf (no React/component
 imports) that parses raw MDX body content (the `content` field from `Content<T>`, i.e. gray-matter output with
 frontmatter already stripped) into an mdast AST, strips/transforms MDX-only nodes, and stringifies back to plain
-markdown. Wired 2026-07-23 into the 7 `/markdown` generators that inject raw content (`blogPostMarkdown`,
+markdown. Wired 2026-07-23 into the 7 `/markdown` generators (today it is reached mostly through
+`contentBodyMarkdown` in `apps/website/src/lib/mdx/content-body-markdown.ts`, which also strips a leading title H1) that inject raw content (`blogPostMarkdown`,
 `aboutMeMarkdown`, `dsaRoadmapMarkdown`, `dsaTopicMarkdown`, `dsaExerciseMarkdown`, `consoleMarkdown`,
 `gameMarkdown`) — NOT the pure frontmatter-listing generators (`homepageMarkdown`, `blogListingMarkdown`,
 `dsaMarkdown`, `dsaExercisesListMarkdown`, `videogamesMarkdown`, `easterEggHuntMarkdown`), which never inject raw
-content. This single fix cleans BOTH the AI-facing `/markdown/<path>` content-negotiation endpoint (see
-[[feature_markdown_negotiation]]) and the terminal overlay's in-shell rendering (see
-[[feature_terminal_navigation]]), since the terminal fetches that same endpoint directly.
+content. This single fix cleans BOTH the AI-facing Markdown Representation at `/markdown/<path>` (see
+[[feature_markdown_negotiation]]) and the Terminal's in-shell rendering (see
+[[feature_terminal_navigation]]), since the Terminal fetches that same endpoint directly.
 
 ## Pipeline
 
@@ -26,7 +27,7 @@ one, or many sibling nodes, which `visit`'s in-place mutation API doesn't do cle
 therefore in the approved plan's "deps as needed" list but ended up unused — do not add it back without a real need
 (knip would flag it).
 
-**Critical ordering gotcha**: `remarkMath` MUST be registered before `remarkMdx`. Real blog content uses `$$...$$`
+**Critical ordering gotcha**: `remarkMath` MUST be registered before `remarkMdx`. Real Post content uses `$$...$$`
 LaTeX blocks containing literal curly braces (e.g. `{\hat {R}} \cdot {\hat {N}}`). Without remark-math's micromark
 extension registered first, remark-mdx's expression tokenizer tries to parse those braces as a JS expression and
 throws `Could not parse expression with acorn` — this is NOT a test-only issue, it broke `next build` itself (static
@@ -57,7 +58,7 @@ unchanged pre-existing behavior).
   `Text` node containing its flattened children (via `mdast-util-to-string`, which naturally ignores JSX attributes
   since they aren't part of `.children`) when `node.type === "mdxJsxTextElement"`, and synthesizes a depth-2 heading
   in the (currently unreachable via real content, kept for type-completeness/future-proofing) flow-element branch.
-- `InteractiveBlock` (the DSA visualizer wrapper) needed NO special-casing at all: it's simply an "unknown component
+- `InteractiveBlock` (the DSA visualizer container) needed NO special-casing at all: it's simply an "unknown component
   with children" to the generic fallback rule, and its sole child (a self-closing visualizer like
   `DynamicArrayVisualizer`) is itself on the explicit placeholder list — unwrap-then-recurse naturally produces the
   right output (drop `InteractiveBlock`, keep the placeholder for its child) with zero bespoke logic.
@@ -84,12 +85,12 @@ fallback (unknown component → transform children → if children non-empty, un
 fully redundant. Net rule is now just: 3 bespoke transforms (ImageCarousel, ParagraphTitleWithIcon,
 Youtube) → real markdown; anything else with non-empty transformed children → unwrap; anything else
 (self-closing/empty) → `_[interactive: <Name> — open the page]_`. New visualizer/interactive components
-added later need ZERO sanitizer code changes to degrade safely in `/markdown` and the terminal overlay.
+added later need ZERO sanitizer code changes to degrade safely in `/markdown` and the Terminal.
 
 **Zero-regression proof pattern**: built the project twice (before/after the deletion), captured
 `.next/server/app/markdown/**/*.body` for 5 representative pages spanning every transform path (Batman
 game page → ImageCarousel, DSA `array`/`graph` topics → visualizer placeholders + InteractiveBlock
-unwrap, `about-me` → structural components like `Timeline`/`TechnologiesSkillsGrid`, a blog post with
+unwrap, `about-me` → structural components like `Timeline`/`TechnologiesSkillsGrid`, a Post with
 `<Youtube videoId=...>`), and diffed them — byte-identical in all five. This is the authoritative way to
 prove a sanitizer refactor is regression-free; unit tests alone wouldn't have caught a subtle real-content
 divergence since the test suite's MDX fixtures are hand-written, not extracted from actual content files.
@@ -107,7 +108,7 @@ changes.
 
 Wrote small throwaway `.ts`/`.mjs` scripts run via `npx tsx` directly in the repo root (deleted immediately after)
 to inspect the actual mdast AST shape and smoke-test against REAL content fixtures (Batman game, DSA array/
-linked-list topics, MCP page, a blog post with `<Youtube>`) before committing to the transform design — this beat
+linked-list Topics, MCP page, a Post with `<Youtube>`) before committing to the transform design — this beat
 guessing at remark-mdx's flow/text classification rules or its estree attribute representation from documentation
 alone. The task's own acceptance check (`videogames/console/gameboy/game/batman` markdown must contain the Gameplay
 heading + image links, no leaked JSX) was verified directly against the `.next/server/app/markdown/...body` file

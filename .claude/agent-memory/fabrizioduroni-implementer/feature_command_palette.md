@@ -1,12 +1,16 @@
 ---
 name: Command Palette Feature
-description: ⌘K command palette with search, quick actions, easter eggs — architecture and hard-won patterns
+description: ⌘K command palette with search, quick actions, Easter Egg entry points — architecture and hard-won patterns
 type: project
 ---
 
 ## Overview
 
-Full-featured command palette at `src/components/design-system/organism/command-palette.tsx`.
+Originally built at `src/components/design-system/organism/command-palette.tsx`. Now (verified 2026-09-27) split in
+two: the generic organism `packages/matrix-design-system/src/organism/command-palette/command-palette/` (published via
+the `matrix-design-system/command-palette` entry, state in `src/state/command-palette/`), and the site's composition
+`apps/website/src/components/features/command-palette/site-command-palette/` (search results, Terminal item,
+Easter Egg Hunt item, customize-matrix-rain item). The patterns below still apply; file names are from the original PR.
 Triggered by ⌘K / Ctrl+K or clicking the search pill in the menu bar. PR #298 (`feat/ux-command-palette`).
 
 ## Component Architecture
@@ -15,7 +19,7 @@ Triggered by ⌘K / Ctrl+K or clicking the search pill in the menu bar. PR #298 
 - **Refs**: `panelShown` — tracks whether panel has been painted in current open session
 - **Effects**: Two separate effects — one stable (⌘K + open-event, `[]` deps), one ESC-only-when-open (`[open, close]` deps)
 - **No `AnimatePresence`**: Removed because it stalls when `MotionDiv` returns a plain `<div>` (motion OFF). Exit fade of backdrop is lost but close is reliable.
-- **Returns null when closed** (early return pattern, no `<>` fragment wrapper)
+- **Returns null when closed** (early return pattern, no `<>` fragment)
 
 ## Key Patterns Established
 
@@ -58,15 +62,15 @@ useLayoutEffect(() => { overlayShown.current = true; }, []);
     <kbd className="hidden xs:flex ...">⌘K</kbd>  {/* hidden on mobile */}
 </button>
 ```
-- `group` on `<button>`, `group-hover:` on children — no wrapper `<div>` needed
+- `group` on `<button>`, `group-hover:` on children — no extra container `<div>` needed
 - Fixed `w-44` on all screen sizes; ⌘K badge hidden on mobile (`hidden xs:flex`)
 - Footer keyboard legend also hidden on mobile (`hidden xs:flex`)
 
-## Files Changed
+## Files Changed (original PR #298; pre-extraction paths)
 - `src/components/design-system/organism/command-palette.tsx` — new file (feature)
-- `src/components/design-system/atoms/effects/overlay.tsx` — added `className` prop + blink-suppression ref
-- `src/components/design-system/organism/menu.tsx` — replaced old inline search with pill trigger
-- `src/components/design-system/utils/hooks/use-search.ts` — memoized `resetSearch`, removed `console.log`
+- `packages/matrix-design-system/src/atoms/effects/overlay/overlay.tsx` — added `className` prop + blink-suppression ref
+- `packages/matrix-design-system/src/organism/menu/menu.tsx` — replaced old inline search with pill trigger
+- `src/components/design-system/utils/hooks/use-search.ts` (now `apps/website/src/components/features/search/use-search.ts`) — memoized `resetSearch`, removed `console.log`
 
 ## Tracking Events Used
 - `tracking.action.command_palette_open`

@@ -1,6 +1,6 @@
 ---
 name: verify-mutation-claims-in-a-shadow-src-tree
-description: How to independently reproduce an implementer's "I verified red-green by temporarily breaking X" claim without violating read-only — a scratchpad shadow copy of src (minus src/content) with node_modules symlinked runs the real vitest suite in ~1s
+description: How to independently reproduce an implementer's "I verified red-green by temporarily breaking X" claim without violating read-only — a scratchpad shadow copy of apps/website/src (minus src/content) with node_modules symlinked runs the real vitest suite in ~1s
 metadata:
   type: feedback
 ---
@@ -10,13 +10,14 @@ faith, and never mutate the worktree to check it. Build a shadow tree in the scr
 that.
 
 Recipe (all paths absolute; the sandbox refuses shell loops and multi-line `sed`, so use one plain
-command per step):
+command per step). Run it from `<worktree>/apps/website` (the Website workspace); the design system has its own
+`packages/matrix-design-system/vitest.config.ts` and needs the same recipe rooted there:
 
 ```
 SH=<scratchpad>/shadow
 cp vitest.config.ts vitest.setup.ts package.json tsconfig.json "$SH/"
 cp -R src/components src/types src/test-utils src/lib src/app "$SH/src/"   # NOT src/content
-ln -s <worktree>/node_modules "$SH/node_modules"
+ln -s <worktree>/node_modules "$SH/node_modules"   # root node_modules (hoisted)
 cd "$SH" && npx vitest run --project jsdom <file-name-substrings>
 ```
 
@@ -25,7 +26,7 @@ copied to the shadow root the alias re-points at the shadow `src` automatically,
 `setupFiles: ["./vitest.setup.ts"]` resolves there too. Establish a green baseline first — it
 proves the harness is faithful before any mutant means anything.
 
-Sizing: `src/content` is ~409 MB (blog media) and no component test needs it; excluding it puts the
+Sizing: `apps/website/src/content` is ~409 MB (blog media) and no component test needs it; excluding it puts the
 shadow tree at ~4.4 MB and a five-file run at ~1 s, so one mutant per changed behavior is cheap.
 Mutate with a single-line `sed -i '' '<line>s|old|new|'` — BSD sed will not expand `\n` in the
 replacement, so prefer edits that stay on one line (`href={to}` → `href={to} prefetch={false}` is

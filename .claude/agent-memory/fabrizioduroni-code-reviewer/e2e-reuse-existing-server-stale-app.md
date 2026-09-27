@@ -5,7 +5,7 @@ metadata:
   type: feedback
 ---
 
-`playwright.config.ts` sets `webServer: { command: "npm run build && npm run start", url: "http://localhost:3000",
+`apps/website/playwright.config.ts` sets `webServer: { command: "npm run build && npm run start", url: "http://localhost:3000",
 reuseExistingServer: !process.env.CI }`. **Locally `reuseExistingServer` is `true`**, so if anything is already
 listening on :3000, Playwright skips the build entirely and runs all 80 specs against that other app. The run looks
 completely normal.

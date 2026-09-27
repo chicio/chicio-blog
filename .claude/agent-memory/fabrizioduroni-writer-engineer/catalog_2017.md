@@ -1,6 +1,6 @@
 ---
-name: Article Catalog 2017
-description: Complete catalog of all blog posts published in 2017, with titles, tags, summaries, and editorial patterns
+name: Post Catalog 2017
+description: Complete catalog of all Posts published in 2017, with titles, tags, summaries, and editorial patterns
 type: reference
 ---
 
@@ -9,7 +9,7 @@ type: reference
 - **Tags**: [web development, github pages, jekyll, node, gulp, bootstrap, threejs, javascript]
 - **Authors**: fabrizio_duroni
 - **Summary**: How the blog was created using GitHub Pages and Jekyll, covering the full development process
-- **Notes**: First ever blog post. Sets the conversational tone. Personal project origin story.
+- **Notes**: First ever Post. Sets the conversational tone. Personal project origin story.
 
 ## 2017-05-13 | first-threejs-scene
 - **Title**: A physically based scene with three.js

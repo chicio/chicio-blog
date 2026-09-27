@@ -5,12 +5,20 @@ metadata:
   type: project
 ---
 
-## Status: COMPLETE (2026-06-26, PR #392, branch feat/design-system-purity)
+## Status: COMPLETE (2026-06-26, PR #392, branch feat/design-system-purity) — then SUPERSEDED by the package extraction
 
-### The Invariant
-Every import in `src/components/design-system/**` from `@/types/**` must be **type-only** (`import type { ... }`).
-Zero runtime/value imports from `@/types` (and still zero `@/lib`) anywhere in design-system.
-Enforced by: `design-system-types-type-only` rule in `.dependency-cruiser.js` (severity: error, `dependencyTypesNot: ["type-only"]`).
+**Current state (verified 2026-09-27):** the design system is now its own package, `packages/matrix-design-system/src/`,
+with no `@/` alias at all, so it cannot import the Website's `types`/`lib` in the first place. Purity is structural;
+the package's own `packages/matrix-design-system/.dependency-cruiser.cjs` enforces `no-next`,
+`root-barrel-no-optional-peers`, `layering-atoms`, `layering-molecules`, `import-only-via-index`, `no-circular`. The
+`design-system-types-type-only` rule below no longer exists. What survives from this work is the prop-inversion
+architecture: everything the design system cannot know is injected by the Website (via its Bindings in
+`apps/website/src/components/features/design-system-next/`, and the Templates in `apps/website/src/components/features/content/`).
+The sections below are the history of how the inversion was done; paths in them are pre-extraction.
+
+### The Invariant (historical)
+Every import in `src/components/design-system/**` from `@/types/**` had to be **type-only** (`import type { ... }`).
+Enforced then by a `design-system-types-type-only` rule (severity: error, `dependencyTypesNot: ["type-only"]`).
 
 ### What Was Removed from Design-System
 - `slugs` from `menu.tsx`, `use-menu-store.ts`, `footer.tsx`, `social-contacts.tsx`, `use-command-palette-store.ts`
@@ -20,7 +28,7 @@ Enforced by: `design-system-types-type-only` rule in `.dependency-cruiser.js` (s
 - `import { SearchResult/EasterEggTerminalLines }` → `import type` in use-search.ts, command-palette.tsx, use-command-palette-store.ts
 
 ### Prop Inversion Architecture
-Nav hrefs and social links come from **`src/components/features/content/nav-config.ts`** (imports slugs + siteMetadata).
+Nav hrefs and social links come from **`apps/website/src/components/features/content/nav-config.ts`** (imports slugs + siteMetadata).
 
 **Menu** now receives:
 - `navHrefs: MenuNavHrefs` (blog, dsaRoadmap, dsaExercises, chat, mcp, aboutMe, art, videogames, contact)
@@ -38,9 +46,9 @@ Nav hrefs and social links come from **`src/components/features/content/nav-conf
 **CommandPalette** now receives: `chatSlug: string`
 
 ### Wiring Points
-- `PageTemplate` (design-system/templates) threads all new props to Menu + Footer
+- `PageTemplate` (now `apps/website/src/components/features/content/page-template/`, a Template) threads all new props to Menu + Footer
 - `ContentPageTemplate` + `ReadingContentPageTemplate` thread to PageTemplate
-- `ContentPage` (features/) wires nav-config + tracking from `useContentPageStore`
+- `ContentPage` (a Content Page, features/content/) wires nav-config + tracking from `useContentPageStore`
 - `ReadingContentPage` (features/) wires nav-config + tracking from `useReadingContentPageStore`
 - `Homepage` (content/home) passes `menuNavHrefs` directly to `<Menu>`
 - `Chat` (content/chat) passes `menuNavHrefs` directly to `<Menu>`
@@ -55,7 +63,7 @@ Nav hrefs and social links come from **`src/components/features/content/nav-conf
 4. Return `{ effects: { onPaletteTrigger, menuTracking, footerNavTracking, footerSocialTracking } }`
    Note: MUST use plain const objects (not `useMemo(() => ({ ... }))`) to avoid `chicio/store-return-shape` ESLint false positive
 
-### Dependency-Cruiser Rule
+### Dependency-Cruiser Rule (historical, pre-extraction)
 
 The rule lives in the SINGLE main config `.dependency-cruiser.js` (the earlier separate `.dependency-cruiser-purity.js` + `validate-design-system-purity` command were CONSOLIDATED away — do NOT recreate them).
 
@@ -75,17 +83,14 @@ The main config now has `tsConfig: { fileName: "tsconfig.json" }` in `options`, 
 `dependencyTypesNot: ["type-only"]` = flag the dependency if it is NOT type-only.
 So `import type { X }` → passes; `import { X }` → error.
 
-**npm script**: single `validate-architecture` → `depcruise src --config .dependency-cruiser.js` (runs ALL rules)
+**npm script**: `validate-architecture` runs per workspace (`apps/website`: `depcruise src --config .dependency-cruiser.js`;
+`packages/matrix-design-system`: `depcruise src --config .dependency-cruiser.cjs`)
 **CI**: the `validate-architecture` job
 **Pre-push**: `.husky/pre-push` runs `validate-architecture`
 
 ### Verification Commands
 ```bash
-# 1. Grep check (fast)
-grep -rn 'from "@/types' src/components/design-system | grep -v 'import type'
-# Must return empty
-
-# 2. Rule check (authoritative) — single command, all rules
+# Rule check (authoritative), from the repository root — runs every workspace's rules
 npm run validate-architecture
 # Must return 0 violations
 ```

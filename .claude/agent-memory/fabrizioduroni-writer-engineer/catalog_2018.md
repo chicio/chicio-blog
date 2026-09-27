@@ -1,6 +1,6 @@
 ---
-name: Article Catalog 2018
-description: Complete catalog of all blog posts published in 2018, with titles, tags, summaries, and editorial patterns
+name: Post Catalog 2018
+description: Complete catalog of all Posts published in 2018, with titles, tags, summaries, and editorial patterns
 type: reference
 ---
 
@@ -93,7 +93,7 @@ type: reference
 - **Tags**: [swift, ios, apple, mobile application development, test driven development]
 - **Authors**: fabrizio_duroni
 - **Summary**: How to test asynchronous code in Swift using expectations
-- **Notes**: Testing technique article.
+- **Notes**: Testing technique Post.
 
 ## 2018-06-02 | blender-tutorial-4-modeling-basics-part-2
 - **Title**: Blender tutorial: introduction to basics of modeling - part 2

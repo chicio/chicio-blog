@@ -11,10 +11,10 @@ is used by the `overlay` atom, the mobile `menu` overlay and the videogames `gam
 `page.locator(".bg-black-alpha-75")` can pass while the feature never rendered.
 
 **Why:** a selector that matches a shared utility makes the assertion vacuous — it turns a real regression
-into a green run, which is worse than a flaky red. Found on the spoon easter-egg chat trigger, where the
+into a green run, which is worse than a flaky red. Found on the spoon Easter Egg's Chat Trigger, where the
 warp overlay shares `bg-black-alpha-75` with two unrelated components on the same route.
 
-**How to apply:** for any new/changed e2e assertion, grep the selector across `src/` and confirm it resolves
+**How to apply:** for any new/changed e2e assertion, grep the selector across `apps/website/src/` and `packages/matrix-design-system/src/` and confirm it resolves
 to exactly one component. Prefer something structurally owned by the feature: an SVG `clipPath` id
 (`[style*="matrix-spoon-clip"]`), a `data-testid`, or an accessible role+name. Then ask the inverse
 question: would this locator fail if the feature did not render? If the element only exists inside the

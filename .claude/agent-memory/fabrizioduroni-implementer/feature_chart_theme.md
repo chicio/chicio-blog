@@ -4,10 +4,10 @@ description: Shared chart-theme module unifying blog-stats and DSA recharts/SVG 
 type: project
 ---
 
-`src/types/configuration/chart-theme.ts` (added 2026-07) is the single source of truth for chart styling shared
+`apps/website/src/types/configuration/chart-theme.ts` (added 2026-07) is the single source of truth for chart styling shared
 by `content/blog/blog-stats/**` and `content/data-structures-and-algorithms/**` — the only legal placement, since
-content-page-isolation forbids the two page folders importing each other, and design-system may only type-import
-from `types/`. Shape (flat, `as const`, constants only, no functions):
+content-page-isolation forbids the two page folders importing each other, and the design system (now the separate
+`packages/matrix-design-system` package) cannot import the Website at all. Shape (flat, `as const`, constants only, no functions):
 
 ```ts
 export const chartTheme = {
@@ -33,10 +33,11 @@ it's a plain object literal (not a function), so it's fully compatible with `rea
 not `wrapperStyle`, whenever DSA/blog-stats work needs to theme Legend text independent of series color.
 
 Every one of the 9 DSA recharts components and the 2 SVG visualizers (graph-properties-visualizer,
-tree-types-visualizer) got wrapped in `ChartPanel` (design-system molecule, no title) with axis/tooltip/legend
+tree-types-visualizer) got wrapped in `ChartPanel` (design-system molecule
+`packages/matrix-design-system/src/molecules/chart/chart-panel/`, from the `matrix-design-system/chart` entry, no title) with axis/tooltip/legend
 themed via `chartTheme`. Existing co-located tests only asserted `.recharts-responsive-container` presence and
 stayed green unchanged; added one extra assertion per file: `container.querySelector("section.glow-container")`
 to lock in the new wrap.
 
-See [[arch_design_system_purity]] for why `chart-theme.ts` had to live in `types/configuration/` rather than a
-design-system barrel constant.
+See [[arch_design_system_purity]] for the history of why `chart-theme.ts` lives in the Website's `types/configuration/`
+rather than in the design system.
