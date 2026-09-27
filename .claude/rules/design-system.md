@@ -54,7 +54,10 @@ Where a component needs framework behaviour it takes it as a prop, with a framew
 
 The site's bindings live in `apps/website/src/components/features/design-system-next/`, which is what website code imports.
 `PrefetchStrategy` ("viewport" | "hover" | "never") belongs to the design system — deciding *when* to
-prefetch is a design concern; the adapter decides *how*.
+prefetch is a design concern; the Binding decides *how*.
+
+Why the design system takes these as props instead of importing a framework:
+[ADR-0001](../../packages/matrix-design-system/docs/adr/0001-framework-agnostic-with-bindings.md).
 
 Always compose from existing lower-level components before creating new ones. New atoms should be justified — check if an existing atom can be extended first.
 
