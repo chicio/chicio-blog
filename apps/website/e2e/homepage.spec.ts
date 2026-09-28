@@ -23,6 +23,47 @@ test.describe("Homepage and primary navigation", () => {
         await expect(menu.getByRole("link", { name: "Archive" })).toHaveAttribute("href", "/blog/archive");
     });
 
+    test("the Author nav dropdown lists the hobbies Art, Manga and Videogames", async ({ page }) => {
+        await page.goto("/");
+        await page.getByRole("button", { name: "The Author" }).first().click();
+        const hobbies = page
+            .getByRole("list", { name: "The Author" })
+            .first()
+            .getByRole("list", { name: "Hobbies" })
+            .getByRole("link");
+        await expect(hobbies).toHaveText(["Art", "Manga", "Videogames"]);
+        await expect(hobbies.nth(1)).toHaveAttribute("href", "/manga");
+    });
+
+    test("the Manga menu link opens the manga collection", async ({ page }) => {
+        await page.goto("/");
+        await page.getByRole("button", { name: "The Author" }).first().click();
+        await page.getByRole("list", { name: "The Author" }).first().getByRole("link", { name: "Manga" }).click();
+        await expect(page).toHaveURL(/\/manga$/);
+    });
+
+    test("the Blog dropdown stays highlighted on an author page, but not on an unrelated page", async ({ page }) => {
+        await page.goto("/blog/author/fabrizio-duroni");
+        const blogButton = page.getByRole("button", { name: "Blog" }).first();
+        await expect(blogButton).toHaveClass(/bg-accent-alpha-15/);
+
+        await page.goto("/about-me");
+        await expect(page.getByRole("button", { name: "Blog" }).first()).not.toHaveClass(/bg-accent-alpha-15/);
+    });
+
+    test("the footer links to Home, Blog, Art, About Me, Archive and Tags", async ({ page }) => {
+        await page.goto("/about-me");
+        const footerLinks = page.getByRole("contentinfo").getByRole("link");
+        await expect(footerLinks.filter({ hasText: /^(Home|Blog|Art|About Me|Archive|Tags)$/ })).toHaveText([
+            "Home",
+            "Blog",
+            "Art",
+            "About Me",
+            "Archive",
+            "Tags",
+        ]);
+    });
+
     test("all three header dropdown panels share the same fixed 240px width", async ({ page }) => {
         await page.goto("/");
 
