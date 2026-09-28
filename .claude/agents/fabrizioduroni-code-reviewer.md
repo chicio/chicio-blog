@@ -5,7 +5,7 @@ description: "Use this agent as the REVIEW stage of the fabrizioduroni-blog-sdlc
 model: opus
 color: orange
 memory: project
-effort: high
+effort: xhigh
 mcpServers:
   - codegraph
 tools:
