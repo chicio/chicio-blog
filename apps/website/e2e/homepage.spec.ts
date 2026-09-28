@@ -50,7 +50,7 @@ test.describe("Homepage and primary navigation", () => {
     });
 
     test("the Blog dropdown stays highlighted on an author page, but not on an unrelated page", async ({ page }) => {
-        await page.goto("/blog/author/fabrizio-duroni");
+        await page.goto("/blog/author/antonino-gitto");
         const blogButton = page.getByRole("button", { name: "Blog" }).first();
         await expect(blogButton).toHaveClass(/bg-accent-alpha-15/);
 
