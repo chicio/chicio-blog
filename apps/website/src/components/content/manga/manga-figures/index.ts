@@ -1,1 +1,1 @@
-export { collectionFigures, serializationLabel, volumesOwnedLabel } from "./manga-figures";
+export { carouselImages, collectionFigures, serializationLabel, volumesOwnedLabel } from "./manga-figures";

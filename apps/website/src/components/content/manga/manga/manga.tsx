@@ -4,7 +4,7 @@ import { ReadingContentPage } from "@/components/features/content/reading-conten
 import { ImageCarousel } from "@/components/features/design-system-next/image-carousel";
 import { PreviousNextNavigation } from "@/components/features/design-system-next/previous-next-navigation";
 import { JsonLd } from "@/components/features/seo/jsond-ld";
-import { volumesOwnedLabel } from "@/components/content/manga/manga-figures";
+import { carouselImages, volumesOwnedLabel } from "@/components/content/manga/manga-figures";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { slugs } from "@/types/configuration/slug";
 import { tracking } from "@/types/configuration/tracking";
@@ -22,7 +22,6 @@ export const Manga: FC<PropsWithChildren<MangaProps>> = async ({ manga, previous
     const { contentFileRelativePath: contentPath, frontmatter } = manga;
     const { metadata } = frontmatter;
     const { default: MangaContent } = await import(`@/content/${contentPath}/content.mdx`);
-    const shelfPhotos = metadata?.gallery ?? [];
 
     return (
         <ReadingContentPage
@@ -43,11 +42,7 @@ export const Manga: FC<PropsWithChildren<MangaProps>> = async ({ manga, previous
                     </CoverCardBadge>
                 </div>
             )}
-            <ImageCarousel
-                images={shelfPhotos.length > 0 ? shelfPhotos : [frontmatter.image]}
-                alt={frontmatter.title}
-                className="mb-6"
-            />
+            <ImageCarousel images={carouselImages(frontmatter)} alt={frontmatter.title} className="mb-6" />
             {metadata && <MangaInformation metadata={metadata} className="mb-6" />}
             <MangaContent />
             <PreviousNextNavigation

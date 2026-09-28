@@ -1,4 +1,5 @@
 import { Content } from "@/types/content/content";
+import { Frontmatter } from "@/types/content/frontmatter";
 import { MangaMetadata } from "@/types/content/manga";
 
 export const isMangaComplete = ({ volumesOwned, volumes }: MangaMetadata): boolean => volumesOwned >= volumes;
@@ -26,4 +27,11 @@ export const collectionFigures = (mangas: Content<MangaMetadata>[]): MangaCollec
         complete: allMetadata.filter(isMangaComplete).length,
         authors: new Set(allMetadata.flatMap((metadata) => [...metadata.storyBy, ...metadata.artBy])).size,
     };
+};
+
+/** The detail carousel shows the shelf photos alone, and falls back to the cover while there are none. */
+export const carouselImages = ({ image, metadata }: Frontmatter<MangaMetadata>): string[] => {
+    const shelfPhotos = metadata?.gallery ?? [];
+
+    return shelfPhotos.length > 0 ? shelfPhotos : [image];
 };
