@@ -16,7 +16,7 @@ import { McpEndpoint } from "@/components/content/mcp/mcp-endpoint";
 
 [Model Context Protocol](https://modelcontextprotocol.io) (MCP) is an open standard that lets AI assistants connect to external data sources and tools. Instead of copy-pasting content into a chat, you give the AI a direct, structured connection to the source.
 
-This website exposes a public MCP server. Connect your AI assistant to browse blog posts, explore DSA exercises, search content, browse the videogame collection, and more. No authentication required.
+This website exposes a public MCP server. Connect your AI assistant to browse blog posts, explore DSA exercises, search content, browse the videogame and manga collections, and more. No authentication required.
 
 <McpEndpoint />
 
@@ -24,18 +24,19 @@ This website exposes a public MCP server. Connect your AI assistant to browse bl
 
 All tools are read-only and return JSON. Optional parameters are marked with `?`.
 
-| Tool | Parameters | Description |
-|------|-----------|-------------|
-| `search_content` | `query, limit?` | Full-text search across all blog posts and DSA content. |
-| `list_posts` | `tag?, limit?` | List blog posts, optionally filtered by tag slug. |
-| `get_post` | `year, month, day, slug` | Retrieve the full content of a single blog post by its date and slug. |
-| `get_tags` | — | Return all blog tags with their slugs. |
-| `get_dsa_topics` | — | List all Data Structures & Algorithms topics. |
-| `get_dsa_exercises` | `topic?, difficulty?` | List DSA exercises. Filterable by topic slug and difficulty ("Easy", "Medium", "Hard"). |
-| `get_videogame_consoles` | — | List all consoles in the collection, sorted by release year. |
-| `get_videogame_games` | `console?, genre?` | List games in the collection. Filter by console name (from `get_videogame_consoles`) and/or genre. |
-| `get_about_me` | — | Return the full About Me page content including professional background and skills. |
-| `get_site_stats` | — | Aggregate statistics: post count, tag count, DSA topics/exercises, videogame consoles/games, latest post. |
+| Tool                     | Parameters               | Description                                                                                                                                           |
+| ------------------------ | ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `search_content`         | `query, limit?`          | Full-text search across all blog posts and DSA content.                                                                                               |
+| `list_posts`             | `tag?, limit?`           | List blog posts, optionally filtered by tag slug.                                                                                                     |
+| `get_post`               | `year, month, day, slug` | Retrieve the full content of a single blog post by its date and slug.                                                                                 |
+| `get_tags`               | —                        | Return all blog tags with their slugs.                                                                                                                |
+| `get_dsa_topics`         | —                        | List all Data Structures & Algorithms topics.                                                                                                         |
+| `get_dsa_exercises`      | `topic?, difficulty?`    | List DSA exercises. Filterable by topic slug and difficulty ("Easy", "Medium", "Hard").                                                               |
+| `get_videogame_consoles` | —                        | List all consoles in the collection, sorted by release year.                                                                                          |
+| `get_videogame_games`    | `console?, genre?`       | List games in the collection. Filter by console name (from `get_videogame_consoles`) and/or genre.                                                    |
+| `get_manga`              | `author?, status?`       | List the manga in the collection with all their metadata and the Volumes owned. Filter by story or art author and/or status ("Completed", "Ongoing"). |
+| `get_about_me`           | —                        | Return the full About Me page content including professional background and skills.                                                                   |
+| `get_site_stats`         | —                        | Aggregate statistics: post count, tag count, DSA topics/exercises, videogame consoles/games, manga and Volumes owned, latest post.                    |
 
 ## <ParagraphTitleWithIcon icon={<BiChat className="text-accent text-2xl" />}>Usage Examples</ParagraphTitleWithIcon>
 
@@ -43,139 +44,156 @@ Natural language prompts that trigger each tool, with example responses (truncat
 
 ### `search_content`
 
-> *"Find blog posts about Metal shaders"*
+> _"Find blog posts about Metal shaders"_
 
 ```json
 [
-  {
-    "slug": "/blog/2018/01/26/the-secret-of-writing-shaders-for-both-apple-metal-and-opengl/",
-    "title": "The secret of writing shaders for both Apple Metal and OpenGL",
-    "date": "2018-01-26",
-    "score": 0.94
-  },
-  { "slug": "...", "title": "...", "score": 0.87 }
+    {
+        "slug": "/blog/2018/01/26/the-secret-of-writing-shaders-for-both-apple-metal-and-opengl/",
+        "title": "The secret of writing shaders for both Apple Metal and OpenGL",
+        "date": "2018-01-26",
+        "score": 0.94
+    },
+    { "slug": "...", "title": "...", "score": 0.87 }
 ]
 ```
 
 ### `list_posts`
 
-> *"List the latest blog posts tagged 'swift'"*
+> _"List the latest blog posts tagged 'swift'"_
 
 ```json
 [
-  { "title": "Swift Structured Concurrency", "date": "2023-06-12",
-    "slug": "/blog/2023/06/12/swift-structured-concurrency/", "tags": ["swift"] },
-  { "title": "Swift actors", "date": "2023-04-07", "slug": "...", "tags": ["swift"] }
+    {
+        "title": "Swift Structured Concurrency",
+        "date": "2023-06-12",
+        "slug": "/blog/2023/06/12/swift-structured-concurrency/",
+        "tags": ["swift"]
+    },
+    { "title": "Swift actors", "date": "2023-04-07", "slug": "...", "tags": ["swift"] }
 ]
 ```
 
 ### `get_post`
 
-> *"Show me the full Eulerian Circuit post"*
+> _"Show me the full Eulerian Circuit post"_
 
 ```json
 {
-  "title": "Eulerian Circuit",
-  "date": "2026-04-22",
-  "tags": ["dsa", "graph", "algorithm"],
-  "content": "An Eulerian circuit is a closed trail that visits every edge of a graph exactly once...[truncated]"
+    "title": "Eulerian Circuit",
+    "date": "2026-04-22",
+    "tags": ["dsa", "graph", "algorithm"],
+    "content": "An Eulerian circuit is a closed trail that visits every edge of a graph exactly once...[truncated]"
 }
 ```
 
 ### `get_tags`
 
-> *"What topics does this blog cover?"*
+> _"What topics does this blog cover?"_
 
 ```json
 [
-  { "name": "JavaScript", "slug": "javascript" },
-  { "name": "Swift",      "slug": "swift" },
-  { "name": "React",      "slug": "react" },
-  { "name": "Three.js",   "slug": "threejs" }
+    { "name": "JavaScript", "slug": "javascript" },
+    { "name": "Swift", "slug": "swift" },
+    { "name": "React", "slug": "react" },
+    { "name": "Three.js", "slug": "threejs" }
 ]
 ```
 
 ### `get_dsa_topics`
 
-> *"What data structure and algorithm topics are covered?"*
+> _"What data structure and algorithm topics are covered?"_
 
 ```json
 [
-  { "name": "Graph",         "slug": "graph",        "exerciseCount": 12 },
-  { "name": "Tree",          "slug": "tree",         "exerciseCount": 9  },
-  { "name": "Dynamic Prog",  "slug": "dynamic-prog", "exerciseCount": 8  }
+    { "name": "Graph", "slug": "graph", "exerciseCount": 12 },
+    { "name": "Tree", "slug": "tree", "exerciseCount": 9 },
+    { "name": "Dynamic Prog", "slug": "dynamic-prog", "exerciseCount": 8 }
 ]
 ```
 
 ### `get_dsa_exercises`
 
-> *"Show me hard graph exercises"*
+> _"Show me hard graph exercises"_
 
 ```json
 [
-  { "title": "Word Ladder",          "difficulty": "Hard", "topic": "graph" },
-  { "title": "Critical Connections", "difficulty": "Hard", "topic": "graph" },
-  { "title": "Alien Dictionary",     "difficulty": "Hard", "topic": "graph" }
+    { "title": "Word Ladder", "difficulty": "Hard", "topic": "graph" },
+    { "title": "Critical Connections", "difficulty": "Hard", "topic": "graph" },
+    { "title": "Alien Dictionary", "difficulty": "Hard", "topic": "graph" }
 ]
 ```
 
 ### `get_videogame_consoles`
 
-> *"What consoles are in your collection?"*
+> _"What consoles are in your collection?"_
 
 ```json
 [
-  { "name": "Nintendo Entertainment System", "manufacturer": "Nintendo", "releaseYear": 1983 },
-  { "name": "Game Boy",                      "manufacturer": "Nintendo", "releaseYear": 1989 },
-  { "name": "PlayStation",                   "manufacturer": "Sony",     "releaseYear": 1994 }
+    { "name": "Nintendo Entertainment System", "manufacturer": "Nintendo", "releaseYear": 1983 },
+    { "name": "Game Boy", "manufacturer": "Nintendo", "releaseYear": 1989 },
+    { "name": "PlayStation", "manufacturer": "Sony", "releaseYear": 1994 }
 ]
 ```
 
 ### `get_videogame_games`
 
-> *"What PlayStation 5 games do you have?"*
+> _"What PlayStation 5 games do you have?"_
 
 ```json
 [
-  { "title": "Astro Bot",                 "genre": "Platform",     "developer": "Team Asobi"    },
-  { "title": "Final Fantasy VII Rebirth", "genre": "Role-Playing", "developer": "Square Enix"   },
-  { "title": "God of War: Ragnarök",      "genre": "Action",       "developer": "Santa Monica"  }
+    { "title": "Astro Bot", "genre": "Platform", "developer": "Team Asobi" },
+    { "title": "Final Fantasy VII Rebirth", "genre": "Role-Playing", "developer": "Square Enix" },
+    { "title": "God of War: Ragnarök", "genre": "Action", "developer": "Santa Monica" }
+]
+```
+
+### `get_manga`
+
+> _"Which manga do you own?"_
+
+```json
+[
+    { "title": "Death Note Complete Edition", "storyBy": ["Tsugumi Ohba"], "volumesOwned": 1, "volumes": 1 },
+    { "title": "Demon Slayer: Kimetsu no Yaiba", "storyBy": ["Koyoharu Gotouge"], "volumesOwned": 23, "volumes": 23 }
 ]
 ```
 
 ### `get_about_me`
 
-> *"Tell me about Fabrizio's professional background"*
+> _"Tell me about Fabrizio's professional background"_
 
 ```json
 {
-  "content": "I'm Fabrizio Duroni, a senior software engineer based in Milan. I work at lastminute.com where I lead mobile and full-stack development...[truncated]"
+    "content": "I'm Fabrizio Duroni, a senior software engineer based in Milan. I work at lastminute.com where I lead mobile and full-stack development...[truncated]"
 }
 ```
 
 ### `get_site_stats`
 
-> *"How much content is on the site?"*
+> _"How much content is on the site?"_
 
 ```json
 {
-  "postsCount":             182,
-  "tagsCount":               47,
-  "dsaTopicsCount":          13,
-  "dsaExercisesCount":       91,
-  "videogameConsolesCount":  11,
-  "videogameGamesCount":    148,
-  "latestPost": {
-    "title": "Eulerian Circuit",
-    "date":  "2026-04-22",
-    "url":   "https://fabrizioduroni.it/blog/2026/04/22/eulerian-circuit/"
-  }
+    "postsCount": 182,
+    "tagsCount": 47,
+    "dsaTopicsCount": 13,
+    "dsaExercisesCount": 91,
+    "videogameConsolesCount": 11,
+    "videogameGamesCount": 148,
+    "mangaCount": 2,
+    "mangaVolumesOwnedCount": 24,
+    "latestPost": {
+        "title": "Eulerian Circuit",
+        "date": "2026-04-22",
+        "url": "https://fabrizioduroni.it/blog/2026/04/22/eulerian-circuit/"
+    }
 }
 ```
 
 ## <ParagraphTitleWithIcon icon={<BiPlug className="text-accent text-2xl" />}>Connect Your AI Assistant</ParagraphTitleWithIcon>
 
-Below you can find detailed instructions to connect various MCP-compatible AI assistants to this MCP. 
+Below you can find detailed instructions to connect various MCP-compatible AI assistants to this MCP.
 The process usually involves adding a new server/connector in the assistant's settings, specifying the endpoint URL and transport method (HTTP or stdio via mcp-remote).
 
 ### <ParagraphTitleWithIcon icon={<BiTerminal className="text-accent text-xl" />}>Claude Code</ParagraphTitleWithIcon>
@@ -197,11 +215,11 @@ Cursor supports HTTP transport natively — no mcp-remote needed. Open Settings 
 
 ```json
 {
-  "mcpServers": {
-    "fabrizioduroni.it": {
-      "url": "https://fabrizioduroni.it/api/mcp"
+    "mcpServers": {
+        "fabrizioduroni.it": {
+            "url": "https://fabrizioduroni.it/api/mcp"
+        }
     }
-  }
 }
 ```
 
@@ -214,12 +232,12 @@ Requires VS Code ≥ 1.99 with GitHub Copilot in agent mode. Create `.vscode/mcp
 
 ```json
 {
-  "servers": {
-    "fabrizioduroni.it": {
-      "type": "http",
-      "url": "https://fabrizioduroni.it/api/mcp"
+    "servers": {
+        "fabrizioduroni.it": {
+            "type": "http",
+            "url": "https://fabrizioduroni.it/api/mcp"
+        }
     }
-  }
 }
 ```
 
@@ -232,12 +250,12 @@ Both apps use the same JSON config format and require mcp-remote as a stdio↔HT
 
 ```json
 {
-  "mcpServers": {
-    "fabrizioduroni.it": {
-      "command": "npx",
-      "args": ["-y", "mcp-remote@latest", "https://fabrizioduroni.it/api/mcp"]
+    "mcpServers": {
+        "fabrizioduroni.it": {
+            "command": "npx",
+            "args": ["-y", "mcp-remote@latest", "https://fabrizioduroni.it/api/mcp"]
+        }
     }
-  }
 }
 ```
 

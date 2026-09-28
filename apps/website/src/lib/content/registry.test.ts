@@ -23,11 +23,13 @@ describe("contentRegistry", () => {
             [slugs.dataStructuresAndAlgorithms.roadmap, "dsa roadmap"],
             [slugs.dataStructuresAndAlgorithms.exercises, "dsa exercises list"],
             [slugs.videogames.home, "videogames home"],
+            [slugs.manga.home, "manga home"],
             [slugs.blog.blogPost, "blog post"],
             [slugs.dataStructuresAndAlgorithms.topic, "dsa topic"],
             [slugs.dataStructuresAndAlgorithms.exercise, "dsa exercise"],
             [slugs.videogames.console, "videogame console"],
             [slugs.videogames.game, "videogame game"],
+            [slugs.manga.manga, "manga"],
         ])("registers %s (%s)", (slug) => {
             expect(registeredSlugs).toContain(slug);
         });
@@ -44,6 +46,7 @@ describe("contentRegistry", () => {
             slugs.dataStructuresAndAlgorithms.exercise,
             slugs.videogames.console,
             slugs.videogames.game,
+            slugs.manga.manga,
         ];
 
         it.each(collectionSlugs)("%s expands to at least one concrete path", (slug) => {
@@ -100,6 +103,7 @@ describe("contentRegistry", () => {
                     slugs.aboutMe,
                     slugs.easterEggHunt,
                     slugs.videogames.home,
+                    slugs.manga.home,
                     slugs.dataStructuresAndAlgorithms.roadmap,
                     slugs.dataStructuresAndAlgorithms.exercises,
                     slugs.blog.blogPost,
@@ -107,6 +111,7 @@ describe("contentRegistry", () => {
                     slugs.dataStructuresAndAlgorithms.exercise,
                     slugs.videogames.console,
                     slugs.videogames.game,
+                    slugs.manga.manga,
                 ].sort(),
             );
         });
