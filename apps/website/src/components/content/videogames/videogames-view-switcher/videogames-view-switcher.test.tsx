@@ -1,4 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
+import userEvent from "@testing-library/user-event";
 import { render, screen, nextImageMock, nextLinkMock } from "@/test-utils";
 import { VideogamesViewSwitcher } from "./index";
 import type { Content } from "@/types/content/content";
@@ -86,6 +87,39 @@ describe("VideogamesViewSwitcher", () => {
                 />,
             );
             expect(screen.getByRole("textbox")).toBeInTheDocument();
+        });
+    });
+
+    describe("filtering", () => {
+        it("tells no console matches the query in the consoles view", async () => {
+            const user = userEvent.setup();
+            render(
+                <VideogamesViewSwitcher
+                    games={[makeGame("Zelda")]}
+                    consolesWithGameCount={[makeConsoleWithGameCount("NES", 1)]}
+                />,
+            );
+
+            await user.type(screen.getByRole("textbox"), "zzz");
+
+            expect(screen.getByText(/No consoles found for/)).toHaveTextContent(
+                "No consoles found for \u201Czzz\u201D.",
+            );
+        });
+
+        it("tells no game matches the query in the games view", async () => {
+            const user = userEvent.setup();
+            render(
+                <VideogamesViewSwitcher
+                    games={[makeGame("Zelda")]}
+                    consolesWithGameCount={[makeConsoleWithGameCount("NES", 1)]}
+                />,
+            );
+
+            await user.click(screen.getByText("All Games"));
+            await user.type(screen.getByRole("textbox"), "zzz");
+
+            expect(screen.getByText(/No games found for/)).toHaveTextContent("No games found for \u201Czzz\u201D.");
         });
     });
 });
