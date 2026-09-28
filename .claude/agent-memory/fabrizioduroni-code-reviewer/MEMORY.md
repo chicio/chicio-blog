@@ -30,3 +30,4 @@ No per-PR facts — those go stale.
 - [legacy-peer-deps-voids-peer-range-guarantees.md](legacy-peer-deps-voids-peer-range-guarantees.md) — root .npmrc sets legacy-peer-deps=true, so npm ci never fails on a peer-range violation; reject any "it will fail CI on arrival" claim
 - [narrowing-a-doc-claim-drops-a-manifest.md](narrowing-a-doc-claim-drops-a-manifest.md) — a quantifier rewritten into an explicit enumeration omits one manifest the same diff touched; diff the prose against the real grep
 - [verify-enforcement-claims-against-the-failing-ci-job.md](verify-enforcement-claims-against-the-failing-ci-job.md) — accept "already enforced by gate Y" only after reading the guard's condition, proving which copy it resolves, and citing the red job via gh
+- [generalized-component-drops-bespoke-item-logic.md](generalized-component-drops-bespoke-item-logic.md) — hardcoded list → injected data: diff old per-item logic (Authors prefix selection) against the new generic rule
