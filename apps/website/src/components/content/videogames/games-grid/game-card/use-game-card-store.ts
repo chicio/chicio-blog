@@ -1,22 +1,15 @@
 "use client";
 
 import { useCallback } from "react";
-import { ComponentStore } from "matrix-component-store";
+import { EffectsStore } from "matrix-component-store";
 import { VideogamesNavigationOrigin } from "@/types/content/videogames";
 import { writeVideogamesNavigationOrigin } from "@/lib/videogames/videogames-navigation-origin";
-import { useInViewList } from "matrix-design-system";
-interface GameCardState {
-    isInView: boolean;
-}
 
 interface GameCardEffects {
-    setEl: (el: HTMLDivElement | null) => void;
     handleClick: (navigationOrigin: VideogamesNavigationOrigin) => () => void;
 }
 
-export const useGameCardStore = (): ComponentStore<GameCardState, GameCardEffects> => {
-    const [setEl, isInView] = useInViewList<HTMLDivElement>({ rootMargin: "600px" });
-
+export const useGameCardStore = (): EffectsStore<GameCardEffects> => {
     const handleClick = useCallback(
         (navigationOrigin: VideogamesNavigationOrigin) => () => {
             writeVideogamesNavigationOrigin(navigationOrigin);
@@ -25,7 +18,6 @@ export const useGameCardStore = (): ComponentStore<GameCardState, GameCardEffect
     );
 
     return {
-        state: { isInView },
-        effects: { setEl, handleClick },
+        effects: { handleClick },
     };
 };
