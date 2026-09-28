@@ -163,6 +163,14 @@ test.describe("Terminal overlay content coverage", () => {
         await openAndAssertHeading(page, "open art", /\/art/, "Art");
     });
 
+    test("open manga renders the manga collection in-shell", async ({ page }) => {
+        await openAndAssertHeading(page, "open manga", /\/manga/, "My Manga Collection");
+    });
+
+    test("open manga/death-note renders a single manga in-shell", async ({ page }) => {
+        await openAndAssertHeading(page, "open manga/death-note", /\/manga\/death-note/, "Death Note Complete Edition");
+    });
+
     test("open contact renders the contact page in-shell", async ({ page }) => {
         // The in-shell heading comes from contactMarkdown()'s own title ("Contact"), not the real
         // page's "Contact Me" H1 (which lives on the real route mounted underneath the overlay).
