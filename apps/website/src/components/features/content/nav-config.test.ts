@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from "vitest";
 import type { MenuDropdown, MenuEntry, MenuLink } from "matrix-design-system";
 import { slugs } from "@/types/configuration/slug";
 import { tracking } from "@/types/configuration/tracking";
-import { buildFooterLinks, buildMenuEntries, contactHref, menuEntries } from "./nav-config";
+import { buildFooterLinks, buildMenuEntries, contactHref } from "./nav-config";
 
 const isDropdown = (entry: MenuEntry): entry is MenuDropdown => "groups" in entry;
 
@@ -54,7 +54,7 @@ describe("nav-config", () => {
         });
 
         it("gives links no click handler when nothing tracks them", () => {
-            expect(allLinks(menuEntries).every((link) => link.onClick === undefined)).toBe(true);
+            expect(allLinks(buildMenuEntries()).every((link) => link.onClick === undefined)).toBe(true);
         });
 
         it("reports the tracking action of each link it is built with", () => {

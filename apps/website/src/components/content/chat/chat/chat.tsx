@@ -9,13 +9,13 @@ import {
 } from "matrix-design-system";
 import { Markdown } from "matrix-design-system/markdown";
 import { BrandHeader } from "@/components/features/design-system-next/brand-header";
-import { Menu } from "@/components/features/design-system-next/menu";
+import { SiteMenu } from "@/components/features/site-menu";
 import { FC } from "react";
 import { ChatInput } from "./chat-input";
 import { ChatMessage } from "./chat-message";
 import { ChatWelcome } from "./chat-welcome";
 import { useChatStore } from "./use-chat-store";
-import { menuEntries } from "@/components/features/content/nav-config";
+import { tracking } from "@/types/configuration/tracking";
 
 export const Chat: FC = () => {
     const { state, effects } = useChatStore();
@@ -23,7 +23,7 @@ export const Chat: FC = () => {
 
     return (
         <>
-            <Menu entries={menuEntries} />
+            <SiteMenu trackingCategory={tracking.category.chat} />
             <ContentContainer>
                 {!state.hasMessages && (
                     <>

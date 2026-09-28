@@ -147,8 +147,6 @@ export const buildMenuEntries = (onTrack?: NavigationTracker): MenuEntry[] => [
     },
 ];
 
-export const menuEntries = buildMenuEntries();
-
 export const buildFooterLinks = (onTrack?: NavigationTracker): FooterLink[] => [
     { label: "Home", to: "/", onClick: clickTracker(onTrack, tracking.action.open_home) },
     { label: "Blog", to: slugs.blog.home, onClick: clickTracker(onTrack, tracking.action.open_blog) },

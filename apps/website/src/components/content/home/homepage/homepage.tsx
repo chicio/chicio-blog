@@ -1,15 +1,15 @@
 import { MatrixBackground } from "matrix-design-system";
-import { Menu } from "@/components/features/design-system-next/menu";
+import { SiteMenu } from "@/components/features/site-menu";
 import { JsonLd } from "@/components/features/seo/jsond-ld";
 import { ProfilePresentation } from "./profile-presentation";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { FC } from "react";
-import { menuEntries } from "@/components/features/content/nav-config";
+import { tracking } from "@/types/configuration/tracking";
 
 export const Homepage: FC = () => {
     return (
         <>
-            <Menu entries={menuEntries} />
+            <SiteMenu trackingCategory={tracking.category.home} />
             <div className="h-screen">
                 <MatrixBackground>
                     <ProfilePresentation author={siteMetadata.author} />
