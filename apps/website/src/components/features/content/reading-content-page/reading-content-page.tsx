@@ -5,35 +5,29 @@ import type { ReadingContentPageProps as ReadingContentPageTemplateProps } from 
 import { TheChoiceEasterEgg } from "@/components/features/easter-eggs/the-choice";
 import { FC } from "react";
 import { useReadingContentPageStore } from "./use-reading-content-page-store";
-import { menuNavHrefs, footerNavHrefs, socialContactLinks } from "../nav-config";
+import { contactHref, socialContactLinks } from "../nav-config";
 
 export type ReadingContentPageProps = Omit<
     ReadingContentPageTemplateProps,
-    | "navHrefs"
-    | "footerNavHrefs"
-    | "socialLinks"
-    | "onPaletteTrigger"
-    | "menuTracking"
-    | "footerNavTracking"
-    | "footerSocialTracking"
+    "menuEntries" | "footerLinks" | "contactHref" | "socialLinks" | "onPaletteTrigger" | "footerSocialTracking"
 > & {
     trackingCategory?: string;
 };
 
 export const ReadingContentPage: FC<ReadingContentPageProps> = ({ trackingCategory, ...rest }) => {
-    const { effects } = useReadingContentPageStore(trackingCategory);
-    const { onPaletteTrigger, menuTracking, footerNavTracking, footerSocialTracking } = effects;
+    const { state, effects } = useReadingContentPageStore(trackingCategory);
+    const { menuEntries, footerLinks } = state;
+    const { onPaletteTrigger, footerSocialTracking } = effects;
 
     return (
         <ReadingContentPageTemplate
             {...rest}
             headerWrapper={TheChoiceEasterEgg}
-            navHrefs={menuNavHrefs}
-            footerNavHrefs={footerNavHrefs}
+            menuEntries={menuEntries}
+            footerLinks={footerLinks}
+            contactHref={contactHref}
             socialLinks={socialContactLinks}
             onPaletteTrigger={onPaletteTrigger}
-            menuTracking={menuTracking}
-            footerNavTracking={footerNavTracking}
             footerSocialTracking={footerSocialTracking}
         />
     );
