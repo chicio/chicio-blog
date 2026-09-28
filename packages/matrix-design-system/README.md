@@ -77,12 +77,51 @@ import NextImage from "next/image";
 
 <InternalLink to="/blog" linkComponent={NextLink}>Blog</InternalLink>
 <ImageGlow src={photo} alt="" imageComponent={NextImage} />
-<Menu currentPath={usePathname()} navHrefs={...} linkComponent={NextLink} />
+<Menu currentPath={usePathname()} entries={entries} linkComponent={NextLink} />
 ```
 
 Without them you get a real `<a>` and a real `<img>` — `PlainImage` reproduces `next/image`'s
 `fill`, placeholder and lazy-loading behaviour — so the components work anywhere, just without
 client-side routing or image optimisation.
+
+## Navigation is injected
+
+`Menu` and `Footer` know nothing about your site: you hand them the navigation.
+
+```tsx
+const entries: MenuEntry[] = [
+    { label: "Home", to: "/" },
+    {
+        label: "Blog",
+        groups: [
+            { label: "Posts", items: [{ label: "Latest posts", to: "/blog", onClick: trackBlog }] },
+            { label: "Elsewhere", items: [{ label: "Docs", to: "https://example.com", external: true }] },
+        ],
+    },
+];
+
+<Menu currentPath={pathname} entries={entries} pinnedOnPaths={["/chat"]} linkComponent={NextLink} />
+<Footer author="Jane" links={[{ label: "Home", to: "/" }]} contactHref="/contact" socialLinks={social} />
+```
+
+An entry is either a link (`MenuLink`) or a dropdown of grouped links (`MenuDropdown`, told apart by its
+`groups`). A link is marked selected when its `to` equals `currentPath`, or when `currentPath` starts with one of
+its optional `activePathPrefixes` (for a detail route that lives outside the link's own path, e.g. an "Authors"
+link to `/blog/authors` with `activePathPrefixes: ["/blog/author/"]`); external links never are, and a dropdown
+holding a selected link is highlighted too. A link's
+`onClick` is where tracking goes, and the mobile panel closes on click by itself. The menu hides on scroll
+except on `pinnedOnPaths`.
+
+### Migrating from 1.x
+
+- `Menu`: `navHrefs` and `tracking` are gone. Build a `MenuEntry[]` (labels and hrefs included) and pass it as
+  `entries`; each former `onTrack*` callback becomes the `onClick` of its link. The chat path that used to be
+  hardcoded is now `pinnedOnPaths={[chatPath]}`. The Authors link that used to stay selected on author pages is
+  now `{ label: "Authors", to: "/blog/authors", activePathPrefixes: ["/blog/author/"] }`.
+- `Footer`: `navHrefs` and `navTracking` are gone. Pass `links` (`{ label, to, onClick? }`, Home included) and
+  `contactHref`. `socialTracking` is unchanged.
+- The exported types `MenuNavHrefs`, `MenuTrackingCallbacks`, `FooterNavHrefs` and `FooterNavTrackingCallbacks`
+  are removed; `MenuEntry`, `MenuLink`, `MenuGroup`, `MenuDropdown` and `FooterLink` replace them.
 
 ## No provider required
 

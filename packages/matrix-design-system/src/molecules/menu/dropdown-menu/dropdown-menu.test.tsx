@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { render, screen, within } from "@testing-library/react";
+import { act, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { DropdownMenu } from "./dropdown-menu";
 
@@ -112,6 +112,16 @@ describe("DropdownMenu", () => {
             await userEvent.keyboard("{Escape}");
             expect(screen.queryByRole("list", { name: "Nav" })).not.toBeInTheDocument();
             expect(button).toHaveFocus();
+        });
+
+        it("closes the dropdown when the page scrolls", async () => {
+            render(<DropdownMenu label="Nav" items={items} />);
+            await userEvent.click(screen.getByRole("button", { name: /Nav/ }));
+            expect(screen.getByRole("list", { name: "Nav" })).toBeInTheDocument();
+            act(() => {
+                window.dispatchEvent(new Event("scroll"));
+            });
+            expect(screen.queryByRole("list", { name: "Nav" })).not.toBeInTheDocument();
         });
 
         it("does not close or steal focus when Escape is pressed while already closed", async () => {

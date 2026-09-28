@@ -93,6 +93,10 @@ export default defineConfig({
                     environment: "jsdom",
                     globals: true,
                     setupFiles: ["./vitest.setup.ts"],
+                    // The website may resolve matrix-design-system from the registry rather than the workspace
+                    // symlink. Vitest externalizes installed packages, so the tests' vi.mock of its optional peers
+                    // (e.g. cmdk) would stop applying; inlining keeps the package's own imports mockable.
+                    server: { deps: { inline: ["matrix-design-system"] } },
                 },
             },
         ],

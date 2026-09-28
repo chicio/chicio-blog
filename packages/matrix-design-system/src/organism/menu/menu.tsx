@@ -12,7 +12,6 @@ import { useGlassmorphism } from "../../hooks/use-glassmorphism";
 import { MotionDiv } from "../../atoms/animation/motion-div";
 import { LuCommand } from "react-icons/lu";
 import { ImCtrl } from "react-icons/im";
-import type { MenuTrackingCallbacks } from "./use-menu-store";
 import { useMenuStore } from "./use-menu-store";
 
 const menuVariants: Variants = {
@@ -37,58 +36,53 @@ const panelVariants: Variants = {
     },
 };
 
-export interface MenuNavHrefs {
-    blog: string;
-    blogAuthors: string;
-    blogAuthor: string;
-    blogTags: string;
-    blogArchive: string;
-    blogStats: string;
-    dsaRoadmap: string;
-    dsaExercises: string;
-    chat: string;
-    mcp: string;
-    easterEggHunt: string;
-    aboutMe: string;
-    art: string;
-    videogames: string;
-    contact: string;
+export interface MenuLink {
+    label: string;
+    to: string;
+    external?: boolean;
+    onClick?: () => void;
+    /** Path prefixes that also mark this link selected (e.g. `/blog/author/`). */
+    activePathPrefixes?: string[];
 }
+
+export interface MenuGroup {
+    label: string;
+    items: MenuLink[];
+}
+
+export interface MenuDropdown {
+    label: string;
+    groups: MenuGroup[];
+}
+
+export type MenuEntry = MenuLink | MenuDropdown;
 
 export interface MenuProps {
     linkComponent?: LinkComponent;
     /** The path currently being viewed, used to mark the active entry. Injected by the consumer's router. */
     currentPath: string;
-    navHrefs: MenuNavHrefs;
+    /** The navigation tree, in display order: top-level links and dropdowns of grouped links. */
+    entries: MenuEntry[];
+    /** Paths on which the menu never hides on scroll. */
+    pinnedOnPaths?: string[];
     onPaletteTrigger?: () => void;
-    tracking?: MenuTrackingCallbacks;
 }
 
-export const Menu: FC<MenuProps> = ({ navHrefs, onPaletteTrigger, tracking, linkComponent, currentPath }) => {
+const noPinnedPaths: string[] = [];
+
+const isDropdown = (entry: MenuEntry): entry is MenuDropdown => "groups" in entry;
+
+export const Menu: FC<MenuProps> = ({
+    entries,
+    pinnedOnPaths = noPinnedPaths,
+    onPaletteTrigger,
+    linkComponent,
+    currentPath,
+}) => {
     const { glassmorphismClass } = useGlassmorphism({ noScale: true });
-    const { state, effects } = useMenuStore(currentPath, navHrefs.chat, onPaletteTrigger, tracking);
-    const { pathname, shouldHideMenu, shouldOpenMenu, modifierKey } = state;
-    const {
-        openMenu,
-        closeMenu,
-        handlePaletteTrigger,
-        onClickHome,
-        onClickBlog,
-        onClickBlogAuthors,
-        onClickBlogTags,
-        onClickBlogArchive,
-        onClickBlogStats,
-        onClickDsaRoadmap,
-        onClickDsaExercises,
-        onClickChat,
-        onClickMcp,
-        onClickMatrixRain,
-        onClickEasterEggHunt,
-        onClickAboutMe,
-        onClickArt,
-        onClickVideogames,
-        onClickContact,
-    } = effects;
+    const { state, effects } = useMenuStore(currentPath, pinnedOnPaths, onPaletteTrigger);
+    const { shouldHideMenu, shouldOpenMenu, modifierKey } = state;
+    const { openMenu, closeMenu, handlePaletteTrigger, handleLinkClick, isSelected } = effects;
 
     const baseClassName = (isMobile: boolean) => (isMobile ? "mb-2 w-80" : "hidden sm:flex xs:mb-0 xs:w-auto");
     const dropdownClassName = (isMobile: boolean) =>
@@ -96,174 +90,44 @@ export const Menu: FC<MenuProps> = ({ navHrefs, onPaletteTrigger, tracking, link
 
     const renderMenuItems = (isMobile: boolean) => (
         <>
-            <MenuItem
-                linkComponent={linkComponent}
-                className={baseClassName(isMobile)}
-                key={`home-${isMobile ? "mobile" : "desktop"}`}
-                to={"/"}
-                selected={pathname === "/"}
-                onClick={onClickHome}
-            >
-                Home
-            </MenuItem>
-            <DropdownMenu
-                linkComponent={linkComponent}
-                key={`blog-${isMobile ? "mobile" : "desktop"}`}
-                label="Blog"
-                className={dropdownClassName(isMobile)}
-                items={[
-                    {
-                        label: "Posts",
-                        items: [
-                            {
-                                label: "Latest posts",
-                                to: navHrefs.blog,
-                                selected: pathname === navHrefs.blog,
-                                onClick: onClickBlog,
-                            },
-                            {
-                                label: "Archive",
-                                to: navHrefs.blogArchive,
-                                selected: pathname === navHrefs.blogArchive,
-                                onClick: onClickBlogArchive,
-                            },
-                        ],
-                    },
-                    {
-                        label: "Discovery",
-                        items: [
-                            {
-                                label: "Authors",
-                                to: navHrefs.blogAuthors,
-                                selected:
-                                    pathname === navHrefs.blogAuthors || pathname.startsWith(`${navHrefs.blogAuthor}/`),
-                                onClick: onClickBlogAuthors,
-                            },
-                            {
-                                label: "Tags",
-                                to: navHrefs.blogTags,
-                                selected: pathname === navHrefs.blogTags,
-                                onClick: onClickBlogTags,
-                            },
-                        ],
-                    },
-                    {
-                        label: "Insights",
-                        items: [
-                            {
-                                label: "Stats",
-                                to: navHrefs.blogStats,
-                                selected: pathname === navHrefs.blogStats,
-                                onClick: onClickBlogStats,
-                            },
-                        ],
-                    },
-                ]}
-            />
-            <DropdownMenu
-                linkComponent={linkComponent}
-                label="Explore"
-                className={dropdownClassName(isMobile)}
-                items={[
-                    {
-                        label: "DSA",
-                        items: [
-                            {
-                                label: "Roadmap",
-                                to: navHrefs.dsaRoadmap,
-                                selected: pathname === navHrefs.dsaRoadmap,
-                                onClick: onClickDsaRoadmap,
-                            },
-                            {
-                                label: "Exercises",
-                                to: navHrefs.dsaExercises,
-                                selected: pathname === navHrefs.dsaExercises,
-                                onClick: onClickDsaExercises,
-                            },
-                        ],
-                    },
-                    {
-                        label: "Artificial Intelligence",
-                        items: [
-                            {
-                                label: "Chat",
-                                to: navHrefs.chat,
-                                selected: pathname === navHrefs.chat,
-                                onClick: onClickChat,
-                            },
-                            {
-                                label: "MCP",
-                                to: navHrefs.mcp,
-                                selected: pathname === navHrefs.mcp,
-                                onClick: onClickMcp,
-                            },
-                        ],
-                    },
-                    {
-                        label: "Computer Graphics",
-                        items: [
-                            {
-                                label: "Matrix Rain",
-                                to: "https://chicio.github.io/chicio-blog/matrix-rain/",
-                                external: true,
-                                onClick: onClickMatrixRain,
-                            },
-                        ],
-                    },
-                    {
-                        label: "Secrets",
-                        items: [
-                            {
-                                label: "Easter eggs",
-                                to: navHrefs.easterEggHunt,
-                                selected: pathname === navHrefs.easterEggHunt,
-                                onClick: onClickEasterEggHunt,
-                            },
-                        ],
-                    },
-                ]}
-            />
-            <DropdownMenu
-                linkComponent={linkComponent}
-                label="The Author"
-                className={dropdownClassName(isMobile)}
-                items={[
-                    {
-                        label: "Profile",
-                        items: [
-                            {
-                                label: "About me",
-                                to: navHrefs.aboutMe,
-                                selected: pathname === navHrefs.aboutMe,
-                                onClick: onClickAboutMe,
-                            },
-                            {
-                                label: "Contact me",
-                                to: navHrefs.contact,
-                                selected: pathname === navHrefs.contact,
-                                onClick: onClickContact,
-                            },
-                        ],
-                    },
-                    {
-                        label: "Hobbies",
-                        items: [
-                            {
-                                label: "Art",
-                                to: navHrefs.art,
-                                selected: pathname === navHrefs.art,
-                                onClick: onClickArt,
-                            },
-                            {
-                                label: "Videogames",
-                                to: navHrefs.videogames,
-                                selected: pathname === navHrefs.videogames,
-                                onClick: onClickVideogames,
-                            },
-                        ],
-                    },
-                ]}
-            />
+            {entries.map((entry) => {
+                const key = `${entry.label}-${isMobile ? "mobile" : "desktop"}`;
+
+                if (isDropdown(entry)) {
+                    return (
+                        <DropdownMenu
+                            linkComponent={linkComponent}
+                            key={key}
+                            label={entry.label}
+                            className={dropdownClassName(isMobile)}
+                            items={entry.groups.map((group) => ({
+                                label: group.label,
+                                items: group.items.map((link) => ({
+                                    label: link.label,
+                                    to: link.to,
+                                    external: link.external,
+                                    selected: isSelected(link),
+                                    onClick: handleLinkClick(link.onClick),
+                                })),
+                            }))}
+                        />
+                    );
+                }
+
+                return (
+                    <MenuItem
+                        linkComponent={linkComponent}
+                        className={baseClassName(isMobile)}
+                        key={key}
+                        to={entry.to}
+                        external={entry.external}
+                        selected={isSelected(entry)}
+                        onClick={handleLinkClick(entry.onClick)}
+                    >
+                        {entry.label}
+                    </MenuItem>
+                );
+            })}
         </>
     );
 

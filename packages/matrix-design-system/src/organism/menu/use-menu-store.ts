@@ -6,6 +6,12 @@ import { ScrollDirection, useScrollDirection } from "../../hooks/use-scroll-dire
 import { useOsModifierKey, OsModifierKey } from "../../hooks/use-os-modifier-key";
 import type { ComponentStore } from "matrix-component-store";
 
+interface SelectableLink {
+    to: string;
+    external?: boolean;
+    activePathPrefixes?: string[];
+}
+
 interface MenuState {
     pathname: string;
     shouldHideMenu: boolean;
@@ -17,53 +23,19 @@ interface MenuEffects {
     openMenu: () => void;
     closeMenu: () => void;
     handlePaletteTrigger: () => void;
-    onClickHome: () => void;
-    onClickBlog: () => void;
-    onClickBlogAuthors: () => void;
-    onClickBlogTags: () => void;
-    onClickBlogArchive: () => void;
-    onClickBlogStats: () => void;
-    onClickDsaRoadmap: () => void;
-    onClickDsaExercises: () => void;
-    onClickChat: () => void;
-    onClickMcp: () => void;
-    onClickMatrixRain: () => void;
-    onClickEasterEggHunt: () => void;
-    onClickAboutMe: () => void;
-    onClickArt: () => void;
-    onClickVideogames: () => void;
-    onClickContact: () => void;
-}
-
-export interface MenuTrackingCallbacks {
-    onTrackHome?: () => void;
-    onTrackBlog?: () => void;
-    onTrackBlogAuthors?: () => void;
-    onTrackBlogTags?: () => void;
-    onTrackBlogArchive?: () => void;
-    onTrackBlogStats?: () => void;
-    onTrackDsaRoadmap?: () => void;
-    onTrackDsaExercises?: () => void;
-    onTrackChat?: () => void;
-    onTrackMcp?: () => void;
-    onTrackMatrixRain?: () => void;
-    onTrackEasterEggHunt?: () => void;
-    onTrackAboutMe?: () => void;
-    onTrackArt?: () => void;
-    onTrackVideogames?: () => void;
-    onTrackContact?: () => void;
+    handleLinkClick: (onClick?: () => void) => () => void;
+    isSelected: (link: SelectableLink) => boolean;
 }
 
 export const useMenuStore = (
     pathname: string,
-    chatSlug: string,
+    pinnedOnPaths: string[],
     onPaletteTrigger?: () => void,
-    tracking?: MenuTrackingCallbacks,
 ): ComponentStore<MenuState, MenuEffects> => {
     const direction = useScrollDirection();
     const [shouldOpenMenu, setShouldOpenMenu] = useState(false);
     const modifierKey = useOsModifierKey();
-    const shouldHideMenu = pathname === chatSlug ? false : direction === ScrollDirection.down;
+    const shouldHideMenu = pinnedOnPaths.includes(pathname) ? false : direction === ScrollDirection.down;
 
     const openMenu = useCallback(() => setShouldOpenMenu(true), []);
     const closeMenu = useCallback(() => setShouldOpenMenu(false), []);
@@ -73,108 +45,23 @@ export const useMenuStore = (
         openCommandPalette();
     }, [onPaletteTrigger]);
 
-    const onClickHome = useCallback(() => {
-        tracking?.onTrackHome?.();
-        closeMenu();
-    }, [tracking, closeMenu]);
+    const handleLinkClick = useCallback(
+        (onClick?: () => void) => () => {
+            onClick?.();
+            closeMenu();
+        },
+        [closeMenu],
+    );
 
-    const onClickBlog = useCallback(() => {
-        tracking?.onTrackBlog?.();
-        closeMenu();
-    }, [tracking, closeMenu]);
-
-    const onClickBlogAuthors = useCallback(() => {
-        tracking?.onTrackBlogAuthors?.();
-        closeMenu();
-    }, [tracking, closeMenu]);
-
-    const onClickBlogTags = useCallback(() => {
-        tracking?.onTrackBlogTags?.();
-        closeMenu();
-    }, [tracking, closeMenu]);
-
-    const onClickBlogArchive = useCallback(() => {
-        tracking?.onTrackBlogArchive?.();
-        closeMenu();
-    }, [tracking, closeMenu]);
-
-    const onClickBlogStats = useCallback(() => {
-        tracking?.onTrackBlogStats?.();
-        closeMenu();
-    }, [tracking, closeMenu]);
-
-    const onClickDsaRoadmap = useCallback(() => {
-        tracking?.onTrackDsaRoadmap?.();
-        closeMenu();
-    }, [tracking, closeMenu]);
-
-    const onClickDsaExercises = useCallback(() => {
-        tracking?.onTrackDsaExercises?.();
-        closeMenu();
-    }, [tracking, closeMenu]);
-
-    const onClickChat = useCallback(() => {
-        tracking?.onTrackChat?.();
-        closeMenu();
-    }, [tracking, closeMenu]);
-
-    const onClickMcp = useCallback(() => {
-        tracking?.onTrackMcp?.();
-        closeMenu();
-    }, [tracking, closeMenu]);
-
-    const onClickMatrixRain = useCallback(() => {
-        tracking?.onTrackMatrixRain?.();
-        closeMenu();
-    }, [tracking, closeMenu]);
-
-    const onClickEasterEggHunt = useCallback(() => {
-        tracking?.onTrackEasterEggHunt?.();
-        closeMenu();
-    }, [tracking, closeMenu]);
-
-    const onClickAboutMe = useCallback(() => {
-        tracking?.onTrackAboutMe?.();
-        closeMenu();
-    }, [tracking, closeMenu]);
-
-    const onClickArt = useCallback(() => {
-        tracking?.onTrackArt?.();
-        closeMenu();
-    }, [tracking, closeMenu]);
-
-    const onClickVideogames = useCallback(() => {
-        tracking?.onTrackVideogames?.();
-        closeMenu();
-    }, [tracking, closeMenu]);
-
-    const onClickContact = useCallback(() => {
-        tracking?.onTrackContact?.();
-        closeMenu();
-    }, [tracking, closeMenu]);
+    const isSelected = useCallback(
+        (link: SelectableLink) =>
+            !link.external &&
+            (link.to === pathname || (link.activePathPrefixes?.some((prefix) => pathname.startsWith(prefix)) ?? false)),
+        [pathname],
+    );
 
     return {
         state: { pathname, shouldHideMenu, shouldOpenMenu, modifierKey },
-        effects: {
-            openMenu,
-            closeMenu,
-            handlePaletteTrigger,
-            onClickHome,
-            onClickBlog,
-            onClickBlogAuthors,
-            onClickBlogTags,
-            onClickBlogArchive,
-            onClickBlogStats,
-            onClickDsaRoadmap,
-            onClickDsaExercises,
-            onClickChat,
-            onClickMcp,
-            onClickMatrixRain,
-            onClickEasterEggHunt,
-            onClickAboutMe,
-            onClickArt,
-            onClickVideogames,
-            onClickContact,
-        },
+        effects: { openMenu, closeMenu, handlePaletteTrigger, handleLinkClick, isSelected },
     };
 };
