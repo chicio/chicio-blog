@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.0.0](https://github.com/chicio/chicio-blog/compare/matrix-rain-webgpu%402.0.3...matrix-design-system%401.1.0) (2026-09-28)
+
+### ⚠ BREAKING CHANGES
+
+* **capabilities:** Footer no longer takes navHrefs and navTracking. It receives links (label, to, onClick) and contactHref.
+* **capabilities:** Menu no longer takes navHrefs and tracking. It receives entries (links and dropdowns of grouped links), pinnedOnPaths and per-link onClick.
+
+### Features
+
+* **capabilities:** :boom: design system Menu and Footer take injected navigation (v2.0.0) ([#712](https://github.com/chicio/chicio-blog/issues/712)) ([317165c](https://github.com/chicio/chicio-blog/commit/317165ced546bf3fd34ad6e200bc71d4f84ea68a))
+
 ## [1.1.0](https://github.com/chicio/chicio-blog/compare/matrix-design-system%401.0.0...matrix-design-system%401.1.0) (2026-08-30)
 
 ### Features
