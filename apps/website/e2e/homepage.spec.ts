@@ -35,6 +35,13 @@ test.describe("Homepage and primary navigation", () => {
         await expect(hobbies.nth(1)).toHaveAttribute("href", "/manga");
     });
 
+    test("the chat page keeps the menu with the Manga hobby entry", async ({ page }) => {
+        await page.goto("/chat");
+        await page.getByRole("button", { name: "The Author" }).first().click();
+        const hobbies = page.getByRole("list", { name: "The Author" }).first().getByRole("list", { name: "Hobbies" });
+        await expect(hobbies.getByRole("link", { name: "Manga" })).toHaveAttribute("href", "/manga");
+    });
+
     test("the Manga menu link opens the manga collection", async ({ page }) => {
         await page.goto("/");
         await page.getByRole("button", { name: "The Author" }).first().click();
