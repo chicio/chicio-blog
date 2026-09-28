@@ -32,7 +32,7 @@ const entries: MenuEntry[] = [
             {
                 label: "Discovery",
                 items: [
-                    { label: "Authors", to: "/blog/authors" },
+                    { label: "Authors", to: "/blog/authors", activePathPrefixes: ["/blog/author/"] },
                     { label: "Tags", to: "/blog/tags" },
                 ],
             },

@@ -6,6 +6,12 @@ import { ScrollDirection, useScrollDirection } from "../../hooks/use-scroll-dire
 import { useOsModifierKey, OsModifierKey } from "../../hooks/use-os-modifier-key";
 import type { ComponentStore } from "matrix-component-store";
 
+interface SelectableLink {
+    to: string;
+    external?: boolean;
+    activePathPrefixes?: string[];
+}
+
 interface MenuState {
     pathname: string;
     shouldHideMenu: boolean;
@@ -18,6 +24,7 @@ interface MenuEffects {
     closeMenu: () => void;
     handlePaletteTrigger: () => void;
     handleLinkClick: (onClick?: () => void) => () => void;
+    isSelected: (link: SelectableLink) => boolean;
 }
 
 export const useMenuStore = (
@@ -46,8 +53,15 @@ export const useMenuStore = (
         [closeMenu],
     );
 
+    const isSelected = useCallback(
+        (link: SelectableLink) =>
+            !link.external &&
+            (link.to === pathname || (link.activePathPrefixes?.some((prefix) => pathname.startsWith(prefix)) ?? false)),
+        [pathname],
+    );
+
     return {
         state: { pathname, shouldHideMenu, shouldOpenMenu, modifierKey },
-        effects: { openMenu, closeMenu, handlePaletteTrigger, handleLinkClick },
+        effects: { openMenu, closeMenu, handlePaletteTrigger, handleLinkClick, isSelected },
     };
 };

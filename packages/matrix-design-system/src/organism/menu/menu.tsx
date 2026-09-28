@@ -41,6 +41,8 @@ export interface MenuLink {
     to: string;
     external?: boolean;
     onClick?: () => void;
+    /** Path prefixes that also mark this link selected (e.g. `/blog/author/`). */
+    activePathPrefixes?: string[];
 }
 
 export interface MenuGroup {
@@ -79,13 +81,12 @@ export const Menu: FC<MenuProps> = ({
 }) => {
     const { glassmorphismClass } = useGlassmorphism({ noScale: true });
     const { state, effects } = useMenuStore(currentPath, pinnedOnPaths, onPaletteTrigger);
-    const { pathname, shouldHideMenu, shouldOpenMenu, modifierKey } = state;
-    const { openMenu, closeMenu, handlePaletteTrigger, handleLinkClick } = effects;
+    const { shouldHideMenu, shouldOpenMenu, modifierKey } = state;
+    const { openMenu, closeMenu, handlePaletteTrigger, handleLinkClick, isSelected } = effects;
 
     const baseClassName = (isMobile: boolean) => (isMobile ? "mb-2 w-80" : "hidden sm:flex xs:mb-0 xs:w-auto");
     const dropdownClassName = (isMobile: boolean) =>
         isMobile ? "z-50 mb-2 w-80" : "hidden sm:flex xs:mb-0 xs:w-auto z-50";
-    const isSelected = (link: MenuLink) => !link.external && link.to === pathname;
 
     const renderMenuItems = (isMobile: boolean) => (
         <>

@@ -105,7 +105,10 @@ const entries: MenuEntry[] = [
 ```
 
 An entry is either a link (`MenuLink`) or a dropdown of grouped links (`MenuDropdown`, told apart by its
-`groups`). A link is marked selected when its `to` equals `currentPath`; external links never are. A link's
+`groups`). A link is marked selected when its `to` equals `currentPath`, or when `currentPath` starts with one of
+its optional `activePathPrefixes` (for a detail route that lives outside the link's own path, e.g. an "Authors"
+link to `/blog/authors` with `activePathPrefixes: ["/blog/author/"]`); external links never are, and a dropdown
+holding a selected link is highlighted too. A link's
 `onClick` is where tracking goes, and the mobile panel closes on click by itself. The menu hides on scroll
 except on `pinnedOnPaths`.
 
@@ -113,7 +116,8 @@ except on `pinnedOnPaths`.
 
 - `Menu`: `navHrefs` and `tracking` are gone. Build a `MenuEntry[]` (labels and hrefs included) and pass it as
   `entries`; each former `onTrack*` callback becomes the `onClick` of its link. The chat path that used to be
-  hardcoded is now `pinnedOnPaths={[chatPath]}`.
+  hardcoded is now `pinnedOnPaths={[chatPath]}`. The Authors link that used to stay selected on author pages is
+  now `{ label: "Authors", to: "/blog/authors", activePathPrefixes: ["/blog/author/"] }`.
 - `Footer`: `navHrefs` and `navTracking` are gone. Pass `links` (`{ label, to, onClick? }`, Home included) and
   `contactHref`. `socialTracking` is unchanged.
 - The exported types `MenuNavHrefs`, `MenuTrackingCallbacks`, `FooterNavHrefs` and `FooterNavTrackingCallbacks`

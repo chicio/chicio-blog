@@ -58,7 +58,12 @@ const buildEntries = (): MenuEntry[] => [
             {
                 label: "Discovery",
                 items: [
-                    { label: "Authors", to: "/blog/authors", onClick: onClickAuthors },
+                    {
+                        label: "Authors",
+                        to: "/blog/authors",
+                        activePathPrefixes: ["/blog/author/"],
+                        onClick: onClickAuthors,
+                    },
                     { label: "Tags", to: "/blog/tags" },
                 ],
             },
@@ -188,6 +193,50 @@ describe("Menu", () => {
                         },
                     ]}
                     currentPath="/x"
+                />,
+            );
+            await userEvent.click(screen.getAllByRole("button", { name: "Explore" })[0]);
+            const menu = screen.getAllByRole("list", { name: "Explore" })[0];
+            expect(within(menu).getByRole("link", { name: "Ext" })).not.toHaveClass("border-accent");
+        });
+
+        it("marks a link selected when the current path starts with one of its activePathPrefixes", async () => {
+            render(<Menu entries={entries} currentPath="/blog/author/fabrizio-duroni" />);
+            await userEvent.click(screen.getAllByRole("button", { name: "Blog" })[0]);
+            const menu = screen.getAllByRole("list", { name: "Blog" })[0];
+            expect(within(menu).getByRole("link", { name: "Authors" })).toHaveClass("border-accent");
+            expect(within(menu).getByRole("link", { name: "Tags" })).not.toHaveClass("border-accent");
+        });
+
+        it("highlights the containing dropdown when a prefix selects one of its links", () => {
+            render(<Menu entries={entries} currentPath="/blog/author/fabrizio-duroni" />);
+            expect(screen.getAllByRole("button", { name: "Blog" })[0]).toHaveClass("border-accent");
+            expect(screen.getAllByRole("button", { name: "Explore" })[0]).not.toHaveClass("border-accent");
+        });
+
+        it("does not select a link whose activePathPrefixes do not match the current path", async () => {
+            render(<Menu entries={entries} currentPath="/blog/tag/react" />);
+            await userEvent.click(screen.getAllByRole("button", { name: "Blog" })[0]);
+            const menu = screen.getAllByRole("list", { name: "Blog" })[0];
+            expect(within(menu).getByRole("link", { name: "Authors" })).not.toHaveClass("border-accent");
+            expect(screen.getAllByRole("button", { name: "Blog" })[0]).toHaveClass("border-accent");
+        });
+
+        it("never marks an external link selected through its activePathPrefixes", async () => {
+            render(
+                <Menu
+                    entries={[
+                        {
+                            label: "Explore",
+                            groups: [
+                                {
+                                    label: "Out",
+                                    items: [{ label: "Ext", to: "/x", external: true, activePathPrefixes: ["/x/"] }],
+                                },
+                            ],
+                        },
+                    ]}
+                    currentPath="/x/deep"
                 />,
             );
             await userEvent.click(screen.getAllByRole("button", { name: "Explore" })[0]);
