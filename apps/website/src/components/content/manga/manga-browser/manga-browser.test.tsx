@@ -5,6 +5,9 @@ import { MangaBrowser } from "./index";
 import type { Content } from "@/types/content/content";
 import { MangaStatus, type MangaMetadata } from "@/types/content/manga";
 
+const { trackWithMock } = vi.hoisted(() => ({ trackWithMock: vi.fn() }));
+
+vi.mock("@/lib/tracking/tracking", () => ({ trackWith: trackWithMock }));
 vi.mock("next/image", () => nextImageMock());
 vi.mock("next/link", () => nextLinkMock());
 
@@ -73,6 +76,23 @@ describe("MangaBrowser", () => {
             render(<MangaBrowser mangas={mangas} />);
             expect(screen.getByText("1/1 ✓")).toBeInTheDocument();
             expect(screen.getByText("5/23")).toBeInTheDocument();
+        });
+    });
+
+    describe("tracking", () => {
+        it("tracks the Manga open event when a card link is clicked", async () => {
+            const user = userEvent.setup();
+            trackWithMock.mockClear();
+            render(<MangaBrowser mangas={mangas} />);
+
+            await user.click(screen.getAllByRole("link")[0]);
+
+            expect(trackWithMock).toHaveBeenCalledTimes(1);
+            expect(trackWithMock).toHaveBeenCalledWith({
+                category: "manga",
+                label: "body",
+                action: "open_manga",
+            });
         });
     });
 
