@@ -1,13 +1,8 @@
 import { mangaHome, mangas } from "@/lib/content/manga/manga";
+import { serializationLabel } from "@/lib/content/manga/manga-figures";
 import { contentBodyMarkdown } from "@/lib/mdx/content-body-markdown";
 import { contentItemMarkdown } from "@/lib/mdx/content-item-markdown";
 import { siteMetadata } from "@/types/configuration/site-metadata";
-import { MangaMetadata } from "@/types/content/manga";
-
-const serialization = (metadata: MangaMetadata): string =>
-    metadata.serializationEndYear
-        ? `${metadata.serializationStartYear}–${metadata.serializationEndYear}`
-        : `${metadata.serializationStartYear}–present`;
 
 export const mangaListMarkdown = contentItemMarkdown(mangaHome, (home) => {
     const allManga = mangas.list();
@@ -27,7 +22,7 @@ export const mangaMarkdown = contentItemMarkdown(mangas, (manga) => {
 **Art by:** ${metadata.artBy.join(", ")}
 **Original publisher:** ${metadata.originalPublisher}
 **Magazine:** ${metadata.magazine}
-**Serialization:** ${serialization(metadata)}
+**Serialization:** ${serializationLabel(metadata)}
 **Demographic:** ${metadata.demographic}
 **Genres:** ${metadata.genres.join(", ")}
 **Status:** ${metadata.status}

@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { StatCard } from "matrix-design-system";
 import { mangas } from "@/lib/content/manga/manga";
-import { collectionFigures } from "@/components/content/manga/manga-figures";
+import { collectionFigures } from "@/lib/content/manga/manga-figures";
 
 /**
  * The collection's headline numbers. Counted from the content rather than written down, so they cannot

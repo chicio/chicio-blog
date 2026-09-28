@@ -14,7 +14,7 @@ import {
 } from "react-icons/fa";
 import { MdOutlineAutoStories } from "react-icons/md";
 import { InfoPill } from "matrix-design-system";
-import { serializationLabel, volumesOwnedLabel } from "@/components/content/manga/manga-figures";
+import { serializationLabel, volumesOwnedLabel } from "@/lib/content/manga/manga-figures";
 import { MangaMetadata } from "@/types/content/manga";
 
 interface MangaInformationProps {

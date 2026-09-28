@@ -4,7 +4,7 @@ import { ReadingContentPage } from "@/components/features/content/reading-conten
 import { ImageCarousel } from "@/components/features/design-system-next/image-carousel";
 import { PreviousNextNavigation } from "@/components/features/design-system-next/previous-next-navigation";
 import { JsonLd } from "@/components/features/seo/jsond-ld";
-import { carouselImages, volumesOwnedLabel } from "@/components/content/manga/manga-figures";
+import { carouselImages, volumesOwnedLabel } from "@/lib/content/manga/manga-figures";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { slugs } from "@/types/configuration/slug";
 import { tracking } from "@/types/configuration/tracking";

@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { CoverCardBadge } from "matrix-design-system";
 import { CoverCard } from "@/components/features/design-system-next/cover-card";
-import { volumesOwnedLabel } from "@/components/content/manga/manga-figures";
+import { volumesOwnedLabel } from "@/lib/content/manga/manga-figures";
 import { Content } from "@/types/content/content";
 import { MangaMetadata } from "@/types/content/manga";
 import { useMangaCardStore } from "./use-manga-card-store";

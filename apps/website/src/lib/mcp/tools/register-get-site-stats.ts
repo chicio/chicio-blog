@@ -2,6 +2,7 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { posts, getTags } from "@/lib/content/posts/posts";
 import { topics, exercises } from "@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms";
 import { mangas } from "@/lib/content/manga/manga";
+import { collectionFigures } from "@/lib/content/manga/manga-figures";
 import { consoles, games } from "@/lib/content/videogames/videogames";
 import { MCP_SITE_URL } from "@/lib/mcp/config";
 
@@ -39,10 +40,7 @@ export const registerGetSiteStats = (server: McpServer): void => {
                 videogameConsolesCount: allConsoles.length,
                 videogameGamesCount: allGames.length,
                 mangaCount: allManga.length,
-                mangaVolumesOwnedCount: allManga.reduce(
-                    (total, manga) => total + (manga.frontmatter.metadata?.volumesOwned ?? 0),
-                    0,
-                ),
+                mangaVolumesOwnedCount: collectionFigures(allManga).volumes,
                 latestPost,
             };
 

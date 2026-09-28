@@ -40,9 +40,9 @@ describe("manga-markdown", () => {
             expect(result).toContain("# Death Note Complete Edition");
             expect(result).toContain("**Story by:** Tsugumi Ohba");
             expect(result).toContain("**Art by:** Takeshi Obata");
-            expect(result).toContain("**Serialization:** 2003–2006");
+            expect(result).toContain("**Serialization:** 2003 – 2006");
             expect(result).toContain("**Status:** Completed");
-            expect(result).toContain("**Edition:** Complete Edition (Panini Comics, Italian)");
+            expect(result).toContain("**Edition:** Complete Edition (Panini Comics (Planet Manga), Italian)");
             expect(result).toContain("**Volumes owned:** 1/1");
             expect(result).toContain("Light Yagami");
         });

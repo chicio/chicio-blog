@@ -2,6 +2,7 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import z from "zod";
 import { mangas } from "@/lib/content/manga/manga";
 import { MCP_SITE_URL } from "@/lib/mcp/config";
+import { MangaStatus } from "@/types/content/manga";
 
 export const registerGetManga = (server: McpServer): void => {
     server.registerTool(
@@ -18,7 +19,7 @@ export const registerGetManga = (server: McpServer): void => {
                     .optional()
                     .describe("Story or art author to filter by, case insensitive (e.g. 'Takeshi Obata')"),
                 status: z
-                    .enum(["Completed", "Ongoing"])
+                    .enum([MangaStatus.Completed, MangaStatus.Ongoing])
                     .optional()
                     .describe("Publication status of the series to filter by"),
             },
