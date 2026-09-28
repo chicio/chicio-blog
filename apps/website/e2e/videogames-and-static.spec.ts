@@ -44,6 +44,7 @@ test.describe("Videogames section", () => {
 
         test("clicking a game cover opens the game page", async ({ page }) => {
             await page.goto("/videogames/console/nintendo-switch");
+            await page.getByRole("heading", { name: "Games", level: 2 }).scrollIntoViewIfNeeded();
             const cover = page.locator('a[href$="/game/super-mario-odyssey"]').first();
             await expect(cover).toBeVisible();
             await cover.click();
