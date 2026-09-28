@@ -123,6 +123,40 @@ except on `pinnedOnPaths`.
 - The exported types `MenuNavHrefs`, `MenuTrackingCallbacks`, `FooterNavHrefs` and `FooterNavTrackingCallbacks`
   are removed; `MenuEntry`, `MenuLink`, `MenuGroup`, `MenuDropdown` and `FooterLink` replace them.
 
+## Collection components
+
+Four molecules cover the pages of a collection (a list of cards, a detail page, a filtered list):
+
+```tsx
+<CoverCard
+    src="/covers/death-note.jpg"
+    title="Death Note"
+    action={{ kind: "link", href: "/manga/death-note", onClick: trackOpen }}
+    badges={<CoverCardBadge>1/1 ✓</CoverCardBadge>}
+    imageComponent={NextImage}
+    linkComponent={NextLink}
+/>
+<CoverCard src="/art/jellyfish.jpg" title="Jellyfish" action={{ kind: "lightbox" }} />
+
+<InfoPill icon={<IoCalendarOutline />} label="Acquired" value="2026" />
+<PreviousNextNavigation
+    previous={{ url: "/manga/death-note", title: "Death Note" }}
+    next={{ url: "/manga/one-piece", title: "One Piece" }}
+    linkComponent={NextLink}
+/>
+<EmptyState icon={<IoBookOutline />} subject="manga" query={query} />
+```
+
+- `CoverCard`: a fixed-height card showing the cover over a blurred copy of itself, with a glass caption
+  (`title`, also the image alt) and a top-right `badges` slot. `action` is either a link
+  (`{ kind: "link", href, onClick? }`, rendered through `linkComponent`) or `{ kind: "lightbox" }`, which
+  opens the cover in the lightbox (mount `Lightbox` once in the page). The cover mounts only when the card
+  comes within 600px of the viewport, so a grid of hundreds stays cheap. `CoverCardBadge` is the badge
+  styling.
+- `InfoPill`: `icon`, `label` and `value`; lay a wrapping row of them out yourself.
+- `PreviousNextNavigation`: a blue pill for `previous`, a red pill for `next`; either side is optional.
+- `EmptyState`: `icon` above "No `subject` found for “`query`”."
+
 ## No provider required
 
 There is no theme or context provider to wrap anything in. Components read their styling from CSS
