@@ -48,6 +48,14 @@ A videogame Fabrizio owns, always belonging to exactly one Console.
 **Format**:
 Whether a Game is owned as a physical copy or a digital one.
 
+**Manga**:
+A manga series Fabrizio collects, with its own page, whichever of its Volumes he owns.
+_Avoid_: title, book, using it for a single Volume
+
+**Volume**:
+One physical book of a Manga; a Manga is complete when every Volume of its edition is owned.
+_Avoid_: tankobon, issue
+
 **Startup**:
 The part of a Console page that describes and shows the Console's boot sequence.
 _Avoid_: calling it a Section
