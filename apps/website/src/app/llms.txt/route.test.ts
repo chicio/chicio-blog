@@ -5,7 +5,7 @@ const { mockListPosts, mockGetTags, mockListDsaTopics, mockPageContent, mockList
     mockGetTags: vi.fn(),
     mockListDsaTopics: vi.fn(),
     mockPageContent: vi.fn(),
-    mockListManga: vi.fn(() => []),
+    mockListManga: vi.fn<() => unknown[]>(() => []),
 }));
 
 vi.mock("@/lib/content/posts/posts", () => ({
