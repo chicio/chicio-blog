@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Menu } from ".";
+import type { MenuEntry } from ".";
 import { useEffect, useRef } from "react";
 
 // Typed as plain Meta/StoryObj rather than Meta<typeof Component>. These stories render
@@ -15,24 +16,79 @@ export default meta;
 
 type Story = StoryObj;
 
-// The real site nav (src/components/features/content/nav-config.ts).
-const navHrefs = {
-    blog: "/blog",
-    blogAuthors: "/blog/authors",
-    blogAuthor: "/blog/author",
-    blogTags: "/blog/tags",
-    blogArchive: "/blog/archive",
-    blogStats: "/blog/stats",
-    dsaRoadmap: "/data-structures-and-algorithms/roadmap",
-    dsaExercises: "/data-structures-and-algorithms/exercises",
-    chat: "/chat",
-    mcp: "/mcp",
-    easterEggHunt: "/easter-egg-hunt",
-    aboutMe: "/about-me",
-    art: "/art",
-    videogames: "/videogames",
-    contact: "/contact",
-};
+// The navigation tree of the real site, injected the way a consumer would.
+const entries: MenuEntry[] = [
+    { label: "Home", to: "/" },
+    {
+        label: "Blog",
+        groups: [
+            {
+                label: "Posts",
+                items: [
+                    { label: "Latest posts", to: "/blog" },
+                    { label: "Archive", to: "/blog/archive" },
+                ],
+            },
+            {
+                label: "Discovery",
+                items: [
+                    { label: "Authors", to: "/blog/authors" },
+                    { label: "Tags", to: "/blog/tags" },
+                ],
+            },
+            { label: "Insights", items: [{ label: "Stats", to: "/blog/stats" }] },
+        ],
+    },
+    {
+        label: "Explore",
+        groups: [
+            {
+                label: "DSA",
+                items: [
+                    { label: "Roadmap", to: "/data-structures-and-algorithms/roadmap" },
+                    { label: "Exercises", to: "/data-structures-and-algorithms/exercises" },
+                ],
+            },
+            {
+                label: "Artificial Intelligence",
+                items: [
+                    { label: "Chat", to: "/chat" },
+                    { label: "MCP", to: "/mcp" },
+                ],
+            },
+            {
+                label: "Computer Graphics",
+                items: [
+                    {
+                        label: "Matrix Rain",
+                        to: "https://chicio.github.io/chicio-blog/matrix-rain/",
+                        external: true,
+                    },
+                ],
+            },
+            { label: "Secrets", items: [{ label: "Easter eggs", to: "/easter-egg-hunt" }] },
+        ],
+    },
+    {
+        label: "The Author",
+        groups: [
+            {
+                label: "Profile",
+                items: [
+                    { label: "About me", to: "/about-me" },
+                    { label: "Contact me", to: "/contact" },
+                ],
+            },
+            {
+                label: "Hobbies",
+                items: [
+                    { label: "Art", to: "/art" },
+                    { label: "Videogames", to: "/videogames" },
+                ],
+            },
+        ],
+    },
+];
 
 // Menu owns its dropdowns' open state internally, so the cells that show a panel
 // click the matching trigger on mount. Matching on the trigger's own label keeps
@@ -50,14 +106,14 @@ const useDropdownOpenedOnMount = (label: string) => {
     return ref;
 };
 
-const DefaultStory = () => <Menu currentPath="/blog" navHrefs={navHrefs} />;
+const DefaultStory = () => <Menu currentPath="/blog" entries={entries} />;
 
 const BlogDropdownOpenStory = () => {
     const ref = useDropdownOpenedOnMount("Blog");
 
     return (
         <div ref={ref}>
-            <Menu currentPath="/blog" navHrefs={navHrefs} />
+            <Menu currentPath="/blog" entries={entries} />
         </div>
     );
 };
@@ -67,7 +123,7 @@ const ExploreDropdownOpenStory = () => {
 
     return (
         <div ref={ref}>
-            <Menu currentPath="/blog" navHrefs={navHrefs} />
+            <Menu currentPath="/blog" entries={entries} />
         </div>
     );
 };
@@ -77,7 +133,7 @@ const AuthorDropdownOpenStory = () => {
 
     return (
         <div ref={ref}>
-            <Menu currentPath="/blog" navHrefs={navHrefs} />
+            <Menu currentPath="/blog" entries={entries} />
         </div>
     );
 };

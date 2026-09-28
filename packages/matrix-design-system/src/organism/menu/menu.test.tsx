@@ -2,8 +2,7 @@ import { describe, it, expect, vi, afterEach } from "vitest";
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Menu } from "./menu";
-import type { MenuNavHrefs } from "./menu";
-import type { MenuTrackingCallbacks } from "./use-menu-store";
+import type { MenuEntry } from "./menu";
 import { ScrollDirection } from "../../hooks/use-scroll-direction";
 
 let currentPath = "/";
@@ -40,29 +39,61 @@ vi.mock("framer-motion", () => ({
     },
 }));
 
-const navHrefs: MenuNavHrefs = {
-    blog: "/blog",
-    blogAuthors: "/blog/authors",
-    blogAuthor: "/blog/author",
-    blogTags: "/blog/tags",
-    blogArchive: "/blog/archive",
-    blogStats: "/blog/stats",
-    dsaRoadmap: "/dsa/roadmap",
-    dsaExercises: "/dsa/exercises",
-    chat: "/chat",
-    mcp: "/mcp",
-    easterEggHunt: "/easter-egg-hunt",
-    aboutMe: "/about-me",
-    art: "/art",
-    videogames: "/videogames",
-    contact: "/contact",
-};
+const onClickHome = vi.fn();
+const onClickAuthors = vi.fn();
+const onClickMatrixRain = vi.fn();
+
+const buildEntries = (): MenuEntry[] => [
+    { label: "Home", to: "/", onClick: onClickHome },
+    {
+        label: "Blog",
+        groups: [
+            {
+                label: "Posts",
+                items: [
+                    { label: "Latest posts", to: "/blog" },
+                    { label: "Archive", to: "/blog/archive" },
+                ],
+            },
+            {
+                label: "Discovery",
+                items: [
+                    { label: "Authors", to: "/blog/authors", onClick: onClickAuthors },
+                    { label: "Tags", to: "/blog/tags" },
+                ],
+            },
+            { label: "Insights", items: [{ label: "Stats", to: "/blog/stats" }] },
+        ],
+    },
+    {
+        label: "Explore",
+        groups: [
+            { label: "Artificial Intelligence", items: [{ label: "Chat", to: "/chat" }] },
+            {
+                label: "Computer Graphics",
+                items: [
+                    {
+                        label: "Matrix Rain",
+                        to: "https://chicio.github.io/chicio-blog/matrix-rain/",
+                        external: true,
+                        onClick: onClickMatrixRain,
+                    },
+                ],
+            },
+        ],
+    },
+];
+
+const entries = buildEntries();
 
 afterEach(() => {
     currentPath = "/";
     mockScrollDirection = ScrollDirection.up;
     mockModifierKey = null;
     openCommandPaletteMock.mockClear();
+    onClickHome.mockClear();
+    onClickAuthors.mockClear();
+    onClickMatrixRain.mockClear();
 });
 
 const openMobileMenu = async (container: HTMLElement) => {
@@ -73,46 +104,23 @@ const openMobileMenu = async (container: HTMLElement) => {
 
 const getMobilePanel = (container: HTMLElement) => container.querySelector<HTMLElement>('[class*="touch-pan-y"]');
 
-interface NavCase {
-    label: string;
-    trackingKey: keyof MenuTrackingCallbacks;
-    dropdown?: "Blog" | "Explore" | "The Author";
-}
-
-const navCases: NavCase[] = [
-    { label: "Home", trackingKey: "onTrackHome" },
-    { label: "Latest posts", trackingKey: "onTrackBlog", dropdown: "Blog" },
-    { label: "Tags", trackingKey: "onTrackBlogTags", dropdown: "Blog" },
-    { label: "Archive", trackingKey: "onTrackBlogArchive", dropdown: "Blog" },
-    { label: "Easter eggs", trackingKey: "onTrackEasterEggHunt", dropdown: "Explore" },
-    { label: "Roadmap", trackingKey: "onTrackDsaRoadmap", dropdown: "Explore" },
-    { label: "Exercises", trackingKey: "onTrackDsaExercises", dropdown: "Explore" },
-    { label: "Chat", trackingKey: "onTrackChat", dropdown: "Explore" },
-    { label: "MCP", trackingKey: "onTrackMcp", dropdown: "Explore" },
-    { label: "Matrix Rain", trackingKey: "onTrackMatrixRain", dropdown: "Explore" },
-    { label: "About me", trackingKey: "onTrackAboutMe", dropdown: "The Author" },
-    { label: "Art", trackingKey: "onTrackArt", dropdown: "The Author" },
-    { label: "Videogames", trackingKey: "onTrackVideogames", dropdown: "The Author" },
-    { label: "Contact me", trackingKey: "onTrackContact", dropdown: "The Author" },
-];
-
 describe("Menu", () => {
     describe("render", () => {
         it("renders the Home nav link", () => {
-            render(<Menu navHrefs={navHrefs} currentPath={currentPath} />);
+            render(<Menu entries={entries} currentPath={currentPath} />);
             const homeLinks = screen.getAllByRole("link", { name: "Home" });
             expect(homeLinks.length).toBeGreaterThan(0);
             expect(homeLinks[0]).toHaveAttribute("href", "/");
         });
 
         it("renders a Blog dropdown trigger", () => {
-            render(<Menu navHrefs={navHrefs} currentPath={currentPath} />);
+            render(<Menu entries={entries} currentPath={currentPath} />);
             const blogButtons = screen.getAllByRole("button", { name: "Blog" });
             expect(blogButtons.length).toBeGreaterThan(0);
         });
 
-        it("lists Latest posts, Archive, Authors, Tags and Stats in the Blog dropdown, grouped in order", async () => {
-            render(<Menu navHrefs={navHrefs} currentPath={currentPath} />);
+        it("lists the injected Blog groups and links in order", async () => {
+            render(<Menu entries={entries} currentPath={currentPath} />);
             await userEvent.click(screen.getAllByRole("button", { name: "Blog" })[0]);
             const menu = screen.getAllByRole("list", { name: "Blog" })[0];
             expect(within(menu).getByText("Posts")).toBeInTheDocument();
@@ -127,86 +135,115 @@ describe("Menu", () => {
                 "Stats",
             ]);
             expect(within(menu).getByRole("link", { name: "Latest posts" })).toHaveAttribute("href", "/blog");
-            expect(within(menu).getByRole("link", { name: "Authors" })).toHaveAttribute("href", "/blog/authors");
-            expect(within(menu).getByRole("link", { name: "Tags" })).toHaveAttribute("href", "/blog/tags");
-            expect(within(menu).getByRole("link", { name: "Archive" })).toHaveAttribute("href", "/blog/archive");
             expect(within(menu).getByRole("link", { name: "Stats" })).toHaveAttribute("href", "/blog/stats");
         });
 
-        it("marks Authors as selected when on an author detail page", async () => {
-            currentPath = "/blog/author/francesco-bonfadelli";
-            render(<Menu navHrefs={navHrefs} currentPath={currentPath} />);
-            await userEvent.click(screen.getAllByRole("button", { name: "Blog" })[0]);
-            const menu = screen.getAllByRole("list", { name: "Blog" })[0];
-            expect(within(menu).getByRole("link", { name: "Authors" })).toHaveClass("border-accent");
+        it("renders nothing but the search button when no entries are injected", () => {
+            render(<Menu entries={[]} currentPath={currentPath} />);
+            expect(screen.queryByRole("link")).not.toBeInTheDocument();
+            expect(screen.getByRole("button", { name: "Open command palette" })).toBeInTheDocument();
         });
 
-        it("does not mark Authors as selected on an unrelated page", async () => {
-            currentPath = "/contact";
-            render(<Menu navHrefs={navHrefs} currentPath={currentPath} />);
-            await userEvent.click(screen.getAllByRole("button", { name: "Blog" })[0]);
-            const menu = screen.getAllByRole("list", { name: "Blog" })[0];
-            expect(within(menu).getByRole("link", { name: "Authors" })).not.toHaveClass("border-accent");
-        });
-
-        it("moves Easter eggs into the Explore dropdown under a Secrets section", async () => {
-            render(<Menu navHrefs={navHrefs} currentPath={currentPath} />);
+        it("renders an external link with its own target and rel", async () => {
+            render(<Menu entries={entries} currentPath={currentPath} />);
             await userEvent.click(screen.getAllByRole("button", { name: "Explore" })[0]);
             const menu = screen.getAllByRole("list", { name: "Explore" })[0];
-            expect(within(menu).getByText("Secrets")).toBeInTheDocument();
-            expect(within(menu).getByRole("link", { name: "Easter eggs" })).toHaveAttribute("href", "/easter-egg-hunt");
+            const link = within(menu).getByRole("link", { name: "Matrix Rain" });
+            expect(link).toHaveAttribute("href", "https://chicio.github.io/chicio-blog/matrix-rain/");
+            expect(link).toHaveAttribute("target", "_blank");
         });
 
         it("renders the search button", () => {
-            render(<Menu navHrefs={navHrefs} currentPath={currentPath} />);
+            render(<Menu entries={entries} currentPath={currentPath} />);
             expect(screen.getByRole("button", { name: "Open command palette" })).toBeInTheDocument();
+        });
+    });
+
+    describe("selected entry", () => {
+        it("marks the top-level link matching the current path as selected", () => {
+            render(<Menu entries={entries} currentPath="/" />);
+            expect(screen.getAllByRole("link", { name: "Home" })[0]).toHaveClass("border-accent");
+        });
+
+        it("does not mark the top-level link as selected on another path", () => {
+            render(<Menu entries={entries} currentPath="/blog" />);
+            expect(screen.getAllByRole("link", { name: "Home" })[0]).not.toHaveClass("border-accent");
+        });
+
+        it("marks the dropdown link matching the current path as selected", async () => {
+            render(<Menu entries={entries} currentPath="/blog/authors" />);
+            await userEvent.click(screen.getAllByRole("button", { name: "Blog" })[0]);
+            const menu = screen.getAllByRole("list", { name: "Blog" })[0];
+            expect(within(menu).getByRole("link", { name: "Authors" })).toHaveClass("border-accent");
+            expect(within(menu).getByRole("link", { name: "Tags" })).not.toHaveClass("border-accent");
+        });
+
+        it("never marks an external link as selected", async () => {
+            render(
+                <Menu
+                    entries={[
+                        {
+                            label: "Explore",
+                            groups: [{ label: "Out", items: [{ label: "Ext", to: "/x", external: true }] }],
+                        },
+                    ]}
+                    currentPath="/x"
+                />,
+            );
+            await userEvent.click(screen.getAllByRole("button", { name: "Explore" })[0]);
+            const menu = screen.getAllByRole("list", { name: "Explore" })[0];
+            expect(within(menu).getByRole("link", { name: "Ext" })).not.toHaveClass("border-accent");
         });
     });
 
     describe("interaction", () => {
         it("calls onPaletteTrigger and opens the command palette when search button is clicked", async () => {
             const onPaletteTrigger = vi.fn();
-            render(<Menu navHrefs={navHrefs} currentPath={currentPath} onPaletteTrigger={onPaletteTrigger} />);
+            render(<Menu entries={entries} currentPath={currentPath} onPaletteTrigger={onPaletteTrigger} />);
             await userEvent.click(screen.getByRole("button", { name: "Open command palette" }));
             expect(onPaletteTrigger).toHaveBeenCalledOnce();
             expect(openCommandPaletteMock).toHaveBeenCalledOnce();
         });
 
         it("opens the command palette even without an onPaletteTrigger prop", async () => {
-            render(<Menu navHrefs={navHrefs} currentPath={currentPath} />);
+            render(<Menu entries={entries} currentPath={currentPath} />);
             await userEvent.click(screen.getByRole("button", { name: "Open command palette" }));
             expect(openCommandPaletteMock).toHaveBeenCalledOnce();
         });
 
-        it("calls tracking callback when a Blog dropdown item is clicked", async () => {
-            const onTrackBlogAuthors = vi.fn();
-            render(<Menu navHrefs={navHrefs} currentPath={currentPath} tracking={{ onTrackBlogAuthors }} />);
+        it("calls the link onClick when a dropdown link is clicked", async () => {
+            render(<Menu entries={entries} currentPath={currentPath} />);
             await userEvent.click(screen.getAllByRole("button", { name: "Blog" })[0]);
             const menu = screen.getAllByRole("list", { name: "Blog" })[0];
             await userEvent.click(within(menu).getByRole("link", { name: "Authors" }));
-            expect(onTrackBlogAuthors).toHaveBeenCalledOnce();
+            expect(onClickAuthors).toHaveBeenCalledOnce();
         });
 
-        it("calls tracking callback when the Stats dropdown item is clicked", async () => {
-            const onTrackBlogStats = vi.fn();
-            render(<Menu navHrefs={navHrefs} currentPath={currentPath} tracking={{ onTrackBlogStats }} />);
+        it("calls the link onClick when a top-level link is clicked", async () => {
+            render(<Menu entries={entries} currentPath={currentPath} />);
+            await userEvent.click(screen.getAllByRole("link", { name: "Home" })[0]);
+            expect(onClickHome).toHaveBeenCalledOnce();
+        });
+
+        it("clicks a link that has no onClick without failing", async () => {
+            render(<Menu entries={entries} currentPath={currentPath} />);
             await userEvent.click(screen.getAllByRole("button", { name: "Blog" })[0]);
             const menu = screen.getAllByRole("list", { name: "Blog" })[0];
-            await userEvent.click(within(menu).getByRole("link", { name: "Stats" }));
-            expect(onTrackBlogStats).toHaveBeenCalledOnce();
+            await userEvent.click(within(menu).getByRole("link", { name: "Tags" }));
+            expect(onClickAuthors).not.toHaveBeenCalled();
         });
     });
 
     describe("mobile menu", () => {
         it("opens the mobile menu when the hamburger icon is clicked", async () => {
-            const { container } = render(<Menu navHrefs={navHrefs} currentPath={currentPath} />);
+            const { container } = render(<Menu entries={entries} currentPath={currentPath} />);
             expect(getMobilePanel(container)).toBeNull();
             await openMobileMenu(container);
             expect(getMobilePanel(container)).not.toBeNull();
         });
 
         it("closes the mobile menu when the close icon is clicked", async () => {
-            const { container } = render(<Menu navHrefs={navHrefs} currentPath={currentPath} />);
+            const { container } = render(<Menu entries={entries} currentPath={currentPath} />);
             await openMobileMenu(container);
             const mobilePanel = getMobilePanel(container)!;
             const closeIcon = mobilePanel.querySelector<SVGElement>('div[class="absolute top-2.5 left-2.5"] svg')!;
@@ -215,15 +252,15 @@ describe("Menu", () => {
         });
     });
 
-    describe("navigation tracking", () => {
-        it.each(navCases)(
-            "tracks $trackingKey and closes the mobile menu when $label is clicked",
-            async ({ label, trackingKey, dropdown }) => {
-                const trackingFn = vi.fn();
-                const tracking: MenuTrackingCallbacks = { [trackingKey]: trackingFn };
-                const { container } = render(
-                    <Menu navHrefs={navHrefs} currentPath={currentPath} tracking={tracking} />,
-                );
+    describe("mobile link click", () => {
+        it.each([
+            { label: "Home", dropdown: undefined, onClick: onClickHome },
+            { label: "Authors", dropdown: "Blog", onClick: onClickAuthors },
+            { label: "Matrix Rain", dropdown: "Explore", onClick: onClickMatrixRain },
+        ])(
+            "calls the onClick and closes the mobile menu when $label is clicked",
+            async ({ label, dropdown, onClick }) => {
+                const { container } = render(<Menu entries={entries} currentPath={currentPath} />);
                 await openMobileMenu(container);
                 const mobilePanel = getMobilePanel(container)!;
 
@@ -232,7 +269,7 @@ describe("Menu", () => {
                 }
                 await userEvent.click(within(mobilePanel).getByRole("link", { name: label }));
 
-                expect(trackingFn).toHaveBeenCalledOnce();
+                expect(onClick).toHaveBeenCalledOnce();
                 expect(getMobilePanel(container)).toBeNull();
             },
         );
@@ -242,23 +279,34 @@ describe("Menu", () => {
         it("hides the menu bar when scrolling down on a non-chat page", () => {
             currentPath = "/blog";
             mockScrollDirection = ScrollDirection.down;
-            const { container } = render(<Menu navHrefs={navHrefs} currentPath={currentPath} />);
+            const { container } = render(<Menu entries={entries} currentPath={currentPath} />);
             const menuBar = container.querySelector(".menu-container");
             expect(menuBar).toHaveAttribute("animate", "hidden");
+        });
+
+        it("hides the menu bar on a path that is not pinned", () => {
+            currentPath = "/blog";
+            mockScrollDirection = ScrollDirection.down;
+            const { container } = render(
+                <Menu entries={entries} currentPath={currentPath} pinnedOnPaths={["/chat"]} />,
+            );
+            expect(container.querySelector(".menu-container")).toHaveAttribute("animate", "hidden");
         });
 
         it("keeps the menu bar visible when scrolling up", () => {
             currentPath = "/blog";
             mockScrollDirection = ScrollDirection.up;
-            const { container } = render(<Menu navHrefs={navHrefs} currentPath={currentPath} />);
+            const { container } = render(<Menu entries={entries} currentPath={currentPath} />);
             const menuBar = container.querySelector(".menu-container");
             expect(menuBar).toHaveAttribute("animate", "visible");
         });
 
-        it("keeps the menu bar visible on the chat page even when scrolling down", () => {
-            currentPath = navHrefs.chat;
+        it("keeps the menu bar visible on a pinned path even when scrolling down", () => {
+            currentPath = "/chat";
             mockScrollDirection = ScrollDirection.down;
-            const { container } = render(<Menu navHrefs={navHrefs} currentPath={currentPath} />);
+            const { container } = render(
+                <Menu entries={entries} currentPath={currentPath} pinnedOnPaths={["/chat"]} />,
+            );
             const menuBar = container.querySelector(".menu-container");
             expect(menuBar).toHaveAttribute("animate", "visible");
         });
@@ -267,13 +315,13 @@ describe("Menu", () => {
     describe("os modifier key shortcut badge", () => {
         it("shows the K shortcut badge when a modifier key is detected", () => {
             mockModifierKey = "meta";
-            render(<Menu navHrefs={navHrefs} currentPath={currentPath} />);
+            render(<Menu entries={entries} currentPath={currentPath} />);
             expect(screen.getByText("K")).toBeInTheDocument();
         });
 
         it("hides the shortcut badge when no modifier key is detected", () => {
             mockModifierKey = null;
-            render(<Menu navHrefs={navHrefs} currentPath={currentPath} />);
+            render(<Menu entries={entries} currentPath={currentPath} />);
             expect(screen.queryByText("K")).not.toBeInTheDocument();
         });
     });
