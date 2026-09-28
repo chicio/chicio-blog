@@ -1,6 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { posts, getTags } from "@/lib/content/posts/posts";
 import { topics, exercises } from "@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms";
+import { mangas } from "@/lib/content/manga/manga";
 import { consoles, games } from "@/lib/content/videogames/videogames";
 import { MCP_SITE_URL } from "@/lib/mcp/config";
 
@@ -11,7 +12,7 @@ export const registerGetSiteStats = (server: McpServer): void => {
             title: "Get Site Stats",
             description:
                 "Returns aggregate statistics for the portfolio: total post count, tag count, DSA topic count, " +
-                "exercise count, videogame console count, game count, and the most recent post.",
+                "exercise count, videogame console count, game count, manga count, Volumes owned, and the most recent post.",
         },
         async () => {
             const allPosts = posts.list();
@@ -20,6 +21,7 @@ export const registerGetSiteStats = (server: McpServer): void => {
             const allExercises = exercises.list();
             const allConsoles = consoles.list();
             const allGames = games.list();
+            const allManga = mangas.list();
 
             const latestPost = allPosts[0]
                 ? {
@@ -36,6 +38,11 @@ export const registerGetSiteStats = (server: McpServer): void => {
                 dsaExercisesCount: allExercises.length,
                 videogameConsolesCount: allConsoles.length,
                 videogameGamesCount: allGames.length,
+                mangaCount: allManga.length,
+                mangaVolumesOwnedCount: allManga.reduce(
+                    (total, manga) => total + (manga.frontmatter.metadata?.volumesOwned ?? 0),
+                    0,
+                ),
                 latestPost,
             };
 

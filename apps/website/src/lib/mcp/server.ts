@@ -8,6 +8,7 @@ import { registerGetDsaExercises } from "@/lib/mcp/tools/register-get-dsa-exerci
 import { registerGetAboutMe } from "@/lib/mcp/tools/register-get-about-me";
 import { registerGetSiteStats } from "@/lib/mcp/tools/register-get-site-stats";
 import { registerGetVideogameConsoles } from "@/lib/mcp/tools/register-get-videogame-consoles";
+import { registerGetManga } from "@/lib/mcp/tools/register-get-manga";
 import { registerGetVideogameGames } from "@/lib/mcp/tools/register-get-videogame-games";
 
 export const createMcpServer = (): McpServer => {
@@ -25,6 +26,7 @@ export const createMcpServer = (): McpServer => {
     registerGetAboutMe(server);
     registerGetVideogameConsoles(server);
     registerGetVideogameGames(server);
+    registerGetManga(server);
     registerGetSiteStats(server);
 
     return server;
