@@ -15,6 +15,12 @@ test.describe("Videogames section", () => {
             await expect(page).toHaveURL(/\/videogames\/console\/nintendo-switch/);
             await expect(page.getByRole("heading", { name: "Nintendo Switch", level: 1 })).toBeVisible();
         });
+
+        test("filtering with a query nothing matches shows the empty state", async ({ page }) => {
+            await page.goto("/videogames");
+            await page.getByRole("textbox").fill("zzzzzz");
+            await expect(page.getByText("No consoles found for \u201Czzzzzz\u201D.")).toBeVisible();
+        });
     });
 
     test.describe("console page", () => {
@@ -36,6 +42,15 @@ test.describe("Videogames section", () => {
             await expect(page.getByRole("heading", { name: "Games", level: 2 })).toBeVisible();
         });
 
+        test("clicking a game cover opens the game page", async ({ page }) => {
+            await page.goto("/videogames/console/nintendo-switch");
+            const cover = page.locator('a[href$="/game/super-mario-odyssey"]').first();
+            await expect(cover).toBeVisible();
+            await cover.click();
+            await expect(page).toHaveURL(/\/videogames\/console\/nintendo-switch\/game\/super-mario-odyssey/);
+            await expect(page.getByRole("heading", { name: "Super Mario Odyssey", level: 1 })).toBeVisible();
+        });
+
         test("shows the Startup section with its video embed", async ({ page }) => {
             await page.goto("/videogames/console/nintendo-switch");
             await expect(page.getByRole("heading", { name: /startup/i })).toBeVisible();
@@ -55,6 +70,12 @@ test.describe("Videogames section", () => {
             const breadcrumb = page.getByRole("navigation", { name: "Breadcrumb" });
             await expect(breadcrumb.getByRole("link", { name: "Videogames" })).toBeVisible();
             await expect(breadcrumb.getByRole("link", { name: "Nintendo Switch" })).toBeVisible();
+        });
+
+        test("shows the game information pills", async ({ page }) => {
+            await page.goto("/videogames/console/nintendo-switch/game/super-mario-odyssey");
+            await expect(page.getByText("Publisher:")).toBeVisible();
+            await expect(page.getByText("Developer:")).toBeVisible();
         });
 
         test("returns HTTP 200", async ({ page }) => {
