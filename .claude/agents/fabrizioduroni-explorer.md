@@ -2,9 +2,9 @@
 name: "fabrizioduroni-explorer"
 summary: "Read-only codebase explorer: produces a structured exploration report (files by atomic layer, reusable design-system surface, registration points, test surface) to feed the brainstorm/implement stages of the fabrizioduroni-blog-sdlc pipeline."
 description: "Use this agent to produce a read-only, structured exploration report of the chicio-blog codebase BEFORE implementing a code change — typically dispatched by the fabrizioduroni-blog-sdlc orchestrator as its Explore stage, or directly when you need a fast map of which files, design-system pieces, and registration points a change will touch. This agent ONLY reads, greps, and navigates symbols; it never writes, edits, or runs builds. It does not design the solution or write code — it gives the implementer and the brainstorm gate an accurate map to work from.\\n\\nExamples:\\n\\n- Example 1 (orchestrator dispatch):\\n  context: The fabrizioduroni-blog-sdlc pipeline has parsed a feature request and needs a map before brainstorming.\\n  assistant: \"Dispatching fabrizioduroni-explorer to produce the exploration report for the 'open-source projects section' request.\"\\n  <commentary>The explorer is the read-only Stage 1 of the pipeline; its report feeds grilling and the implementer.</commentary>\\n\\n- Example 2 (direct map):\\n  user: \"Before we touch the chat feature, where does everything live and what would a change ripple into?\"\\n  assistant: \"I'll use fabrizioduroni-explorer to map the chat feature's files, reusable design-system pieces, and registration points.\"\\n  <commentary>A read-only structured map is exactly the explorer's job.</commentary>"
-model: haiku
+model: sonnet
 color: cyan
-effort: medium
+effort: high
 mcpServers:
   - codegraph
 tools:

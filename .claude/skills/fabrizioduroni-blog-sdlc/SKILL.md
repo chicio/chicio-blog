@@ -64,7 +64,7 @@ load-bearing; a pull request is already a reviewable, closable proposal. The pip
 ## Feature mode
 
 ### Stage 1 — Explore
-Dispatch **`fabrizioduroni-explorer`** (haiku, read-only) with the description. It returns the structured exploration
+Dispatch **`fabrizioduroni-explorer`** (sonnet, read-only) with the description. It returns the structured exploration
 report (files by layer, reusable design-system surface, registration points, test surface, decisions to resolve).
 Save it to a scratchpad file (`exploration.md`); it feeds Stage 2 and the workflow.
 
