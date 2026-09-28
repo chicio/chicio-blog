@@ -5,46 +5,32 @@ import { MenuItem } from "../../molecules/menu/menu-item";
 import { SocialContacts } from "../social-contacts";
 import type { LinkComponent } from "../../atoms/links/anchor-link";
 import { Cursor, TerminalLine } from "../../atoms/typography/terminal-blocks";
-import type { FooterNavTrackingCallbacks, FooterSocialTrackingCallbacks } from "./use-footer-store";
+import type { FooterSocialTrackingCallbacks } from "./use-footer-store";
 import { useFooterStore } from "./use-footer-store";
 import type { SocialContactLinks } from "../social-contacts";
 
 export type { SocialContactLinks };
 
-export interface FooterNavHrefs {
-    blog: string;
-    art: string;
-    aboutMe: string;
-    archive: string;
-    tags: string;
-    contact: string;
+export interface FooterLink {
+    label: string;
+    to: string;
+    onClick?: () => void;
 }
 
 export interface FooterProps {
     linkComponent?: LinkComponent;
     author: string;
-    navHrefs: FooterNavHrefs;
+    /** The navigation links, in display order. */
+    links: FooterLink[];
+    /** Where the contact call to action of the social contacts leads. */
+    contactHref: string;
     socialLinks: SocialContactLinks;
-    navTracking?: FooterNavTrackingCallbacks;
     socialTracking?: FooterSocialTrackingCallbacks;
 }
 
-export const Footer: FC<FooterProps> = ({
-    author,
-    navHrefs,
-    socialLinks,
-    navTracking,
-    socialTracking,
-    linkComponent,
-}) => {
-    const { effects } = useFooterStore(navTracking, socialTracking);
+export const Footer: FC<FooterProps> = ({ author, links, contactHref, socialLinks, socialTracking, linkComponent }) => {
+    const { effects } = useFooterStore(socialTracking);
     const {
-        onTrackHome,
-        onTrackBlog,
-        onTrackArt,
-        onTrackAboutMe,
-        onTrackArchive,
-        onTrackTags,
         onTrackGithub,
         onTrackLinkedin,
         onTrackContact,
@@ -58,42 +44,25 @@ export const Footer: FC<FooterProps> = ({
     return (
         <footer className="bg-primary-dark border-t-accent relative w-full shrink-0 snap-start border-t-2 border-solid shadow-lg">
             <div className="flex w-full flex-col items-center">
-                <div className="grid w-full grid-cols-2 gap-3 px-5 py-7 sm:mx-auto sm:max-w-4xl sm:grid-cols-[repeat(6,auto)] sm:justify-center">
-                    <MenuItem linkComponent={linkComponent} to="/" onClick={onTrackHome} selected={false}>
-                        Home
-                    </MenuItem>
-                    <MenuItem linkComponent={linkComponent} to={navHrefs.blog} onClick={onTrackBlog} selected={false}>
-                        Blog
-                    </MenuItem>
-                    <MenuItem linkComponent={linkComponent} to={navHrefs.art} onClick={onTrackArt} selected={false}>
-                        Art
-                    </MenuItem>
-                    <MenuItem
-                        linkComponent={linkComponent}
-                        to={navHrefs.aboutMe}
-                        onClick={onTrackAboutMe}
-                        selected={false}
-                    >
-                        About Me
-                    </MenuItem>
-                    <MenuItem
-                        linkComponent={linkComponent}
-                        to={navHrefs.archive}
-                        onClick={onTrackArchive}
-                        selected={false}
-                    >
-                        Archive
-                    </MenuItem>
-                    <MenuItem linkComponent={linkComponent} to={navHrefs.tags} onClick={onTrackTags} selected={false}>
-                        Tags
-                    </MenuItem>
+                <div className="grid w-full grid-cols-2 gap-3 px-5 py-7 sm:mx-auto sm:max-w-4xl sm:auto-cols-auto sm:grid-flow-col sm:grid-cols-none sm:justify-center">
+                    {links.map((link) => (
+                        <MenuItem
+                            key={link.label}
+                            linkComponent={linkComponent}
+                            to={link.to}
+                            onClick={link.onClick}
+                            selected={false}
+                        >
+                            {link.label}
+                        </MenuItem>
+                    ))}
                 </div>
                 <hr />
                 <div className="from-general-background-light to-primary-color-dark flex w-full flex-col items-center justify-center gap-3 bg-gradient-to-b px-4 py-6">
                     <SocialContacts
                         linkComponent={linkComponent}
                         links={socialLinks}
-                        contactHref={navHrefs.contact}
+                        contactHref={contactHref}
                         onTrackGithub={onTrackGithub}
                         onTrackLinkedin={onTrackLinkedin}
                         onTrackContact={onTrackContact}

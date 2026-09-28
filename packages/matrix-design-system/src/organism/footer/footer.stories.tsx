@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Footer } from ".";
+import type { FooterLink } from ".";
 
 // Typed as plain Meta/StoryObj rather than Meta<typeof Component>. These stories render
 // explicitly instead of being driven by args — several compose more than one component —
@@ -25,16 +26,15 @@ const stillCaret = `
 }
 `;
 
-// The real footer nav and social contacts (src/components/features/content/nav-config.ts
-// and src/types/configuration/site-metadata.ts).
-const navHrefs = {
-    blog: "/blog",
-    art: "/art",
-    aboutMe: "/about-me",
-    archive: "/blog/archive",
-    tags: "/blog/tags",
-    contact: "/contact",
-};
+// The real footer nav and social contacts, injected the way a consumer would.
+const links: FooterLink[] = [
+    { label: "Home", to: "/" },
+    { label: "Blog", to: "/blog" },
+    { label: "Art", to: "/art" },
+    { label: "About Me", to: "/about-me" },
+    { label: "Archive", to: "/blog/archive" },
+    { label: "Tags", to: "/blog/tags" },
+];
 
 const socialLinks = {
     github: "https://github.com/chicio",
@@ -49,7 +49,7 @@ const socialLinks = {
 const DefaultStory = () => (
     <div className="ds-caret-still">
         <style>{stillCaret}</style>
-        <Footer author="Fabrizio Duroni" navHrefs={navHrefs} socialLinks={socialLinks} />
+        <Footer author="Fabrizio Duroni" links={links} contactHref="/contact" socialLinks={socialLinks} />
     </div>
 );
 
@@ -65,7 +65,7 @@ const AtPageBottomStory = () => (
                 that ran alongside them.
             </p>
         </div>
-        <Footer author="Fabrizio Duroni" navHrefs={navHrefs} socialLinks={socialLinks} />
+        <Footer author="Fabrizio Duroni" links={links} contactHref="/contact" socialLinks={socialLinks} />
     </div>
 );
 
