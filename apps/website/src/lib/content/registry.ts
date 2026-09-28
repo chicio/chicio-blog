@@ -11,6 +11,10 @@ import { posts } from "./posts/posts";
 import { blogListingMarkdown, blogPostMarkdown, homepageMarkdown } from "./posts/posts-markdown";
 import { consoles, games, videogamesHome } from "./videogames/videogames";
 import { consoleMarkdown, gameMarkdown, videogamesMarkdown } from "./videogames/videogames-markdown";
+import { art } from "./art/art";
+import { artMarkdown } from "./art/art-markdown";
+import { mangaHome, mangas } from "./manga/manga";
+import { mangaListMarkdown, mangaMarkdown } from "./manga/manga-markdown";
 import { contactMarkdown } from "./contact/contact-markdown";
 import { blogStatsMarkdown } from "@/lib/blog-stats/blog-stats-markdown";
 import { mdxPageMarkdown } from "@/lib/mdx/mdx-page-markdown";
@@ -76,7 +80,7 @@ export const contentRegistry: ContentRegistryEntry[] = [
     { ...mdxPage(slugs.aboutMe), searchable: true },
     mdxPage(slugs.mcp),
     mdxPage(slugs.cookiePolicy),
-    mdxPage(slugs.art),
+    { slug: slugs.art, markdown: artMarkdown, content: singleItem(art) },
     { ...mdxPage(slugs.easterEggHunt), searchable: true },
     { slug: slugs.dataStructuresAndAlgorithms.home, markdown: dsaMarkdown },
     { ...mdxPage(slugs.dataStructuresAndAlgorithms.roadmap), searchable: true },
@@ -90,6 +94,12 @@ export const contentRegistry: ContentRegistryEntry[] = [
         slug: slugs.videogames.home,
         markdown: videogamesMarkdown,
         content: singleItem(videogamesHome),
+        searchable: true,
+    },
+    {
+        slug: slugs.manga.home,
+        markdown: mangaListMarkdown,
+        content: singleItem(mangaHome),
         searchable: true,
     },
     {
@@ -125,6 +135,13 @@ export const contentRegistry: ContentRegistryEntry[] = [
         params: paramsOf(games),
         markdown: gameMarkdown,
         content: games.list,
+        searchable: true,
+    },
+    {
+        slug: slugs.manga.manga,
+        params: paramsOf(mangas),
+        markdown: mangaMarkdown,
+        content: mangas.list,
         searchable: true,
     },
 ];

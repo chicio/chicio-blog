@@ -1,5 +1,6 @@
 const blog = "/blog";
 const videogames = "/videogames";
+const manga = "/manga";
 const dsa = `/data-structures-and-algorithms`;
 
 export const slugs = {
@@ -33,5 +34,9 @@ export const slugs = {
         console: `${videogames}/console/[console]`,
         game: `${videogames}/console/[console]/game/[game]`,
         games: `${videogames}/console/games`,
+    },
+    manga: {
+        home: manga,
+        manga: `${manga}/[manga]`,
     },
 };
