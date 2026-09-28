@@ -15,7 +15,7 @@ import { ChatInput } from "./chat-input";
 import { ChatMessage } from "./chat-message";
 import { ChatWelcome } from "./chat-welcome";
 import { useChatStore } from "./use-chat-store";
-import { menuNavHrefs } from "@/components/features/content/nav-config";
+import { menuEntries } from "@/components/features/content/nav-config";
 
 export const Chat: FC = () => {
     const { state, effects } = useChatStore();
@@ -23,7 +23,7 @@ export const Chat: FC = () => {
 
     return (
         <>
-            <Menu navHrefs={menuNavHrefs} />
+            <Menu entries={menuEntries} />
             <ContentContainer>
                 {!state.hasMessages && (
                     <>
