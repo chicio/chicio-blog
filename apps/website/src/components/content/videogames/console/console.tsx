@@ -11,7 +11,7 @@ import { IoGameControllerOutline } from "react-icons/io5";
 import { ImageCarousel } from "@/components/features/design-system-next/image-carousel";
 import { slugs } from "@/types/configuration/slug";
 import { GamesGrid } from "@/components/content/videogames/games-grid";
-import { VideogameNavigation } from "@/components/content/videogames/videogame-navigation";
+import { PreviousNextNavigation } from "@/components/features/design-system-next/previous-next-navigation";
 import { ConsoleHeader } from "./console-header";
 
 interface ConsoleProps {
@@ -63,7 +63,7 @@ export const Console: FC<PropsWithChildren<ConsoleProps>> = async ({ console, pr
                 Games
             </h2>
             <GamesGrid games={games} />
-            <VideogameNavigation
+            <PreviousNextNavigation
                 previous={
                     previous ? { url: previous.slug.formatted, title: previous.frontmatter.metadata!.name } : undefined
                 }

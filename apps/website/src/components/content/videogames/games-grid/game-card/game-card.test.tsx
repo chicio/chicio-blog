@@ -1,16 +1,27 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeAll, beforeEach } from "vitest";
+import userEvent from "@testing-library/user-event";
 import { render, screen, nextImageMock, nextLinkMock } from "@/test-utils";
 import { GameCard } from "./index";
+import { writeVideogamesNavigationOrigin } from "@/lib/videogames/videogames-navigation-origin";
 import type { Content } from "@/types/content/content";
 import { GameFormat, type GameMetadata } from "@/types/content/videogames";
 
 vi.mock("next/image", () => nextImageMock());
 vi.mock("next/link", () => nextLinkMock());
 
-vi.mock("matrix-design-system", async (importOriginal) => ({
-    ...(await importOriginal<typeof import("matrix-design-system")>()),
-    useInViewList: () => [vi.fn(), true],
+vi.mock("@/lib/videogames/videogames-navigation-origin", () => ({
+    writeVideogamesNavigationOrigin: vi.fn(),
 }));
+
+class IntersectingObserver {
+    constructor(private readonly callback: IntersectionObserverCallback) {}
+    observe(target: Element) {
+        this.callback([{ target, isIntersecting: true } as IntersectionObserverEntry], this as never);
+    }
+    unobserve() {}
+    disconnect() {}
+}
+
 const game: Content<GameMetadata> = {
     slug: { params: {}, formatted: "/videogames/nes/zelda" },
     frontmatter: {
@@ -39,6 +50,14 @@ const game: Content<GameMetadata> = {
 };
 
 describe("GameCard", () => {
+    beforeAll(() => {
+        vi.stubGlobal("IntersectionObserver", IntersectingObserver);
+    });
+
+    beforeEach(() => {
+        vi.mocked(writeVideogamesNavigationOrigin).mockClear();
+    });
+
     describe("render", () => {
         it("renders the card container", () => {
             const { container } = render(<GameCard game={game} />);
@@ -55,6 +74,40 @@ describe("GameCard", () => {
             const links = screen.getAllByRole("link");
             const slugLinks = links.filter((l) => l.getAttribute("href") === "/videogames/nes/zelda");
             expect(slugLinks.length).toBeGreaterThan(0);
+        });
+    });
+
+    describe("format badges", () => {
+        it("renders one badge for each format the game is owned in", () => {
+            const both: Content<GameMetadata> = {
+                ...game,
+                frontmatter: {
+                    ...game.frontmatter,
+                    metadata: { ...game.frontmatter.metadata!, formats: [GameFormat.Physical, GameFormat.Digital] },
+                },
+            };
+            const { container } = render(<GameCard game={both} />);
+            expect(container.querySelectorAll("span.glow-border")).toHaveLength(2);
+        });
+    });
+
+    describe("navigation origin", () => {
+        it("remembers the console origin by default when the card is opened", async () => {
+            const user = userEvent.setup();
+            render(<GameCard game={game} />);
+
+            await user.click(screen.getByRole("link"));
+
+            expect(writeVideogamesNavigationOrigin).toHaveBeenCalledWith("console");
+        });
+
+        it("remembers the origin it was given when the card is opened", async () => {
+            const user = userEvent.setup();
+            render(<GameCard game={game} navigationOrigin="all-games" />);
+
+            await user.click(screen.getByRole("link"));
+
+            expect(writeVideogamesNavigationOrigin).toHaveBeenCalledWith("all-games");
         });
     });
 });

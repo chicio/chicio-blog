@@ -3,7 +3,7 @@
 import { memo } from "react";
 import { Content } from "@/types/content/content";
 import { GameMetadata } from "@/types/content/videogames";
-import { FilterInput, SegmentOption, SegmentedControl } from "matrix-design-system";
+import { EmptyState, FilterInput, SegmentOption, SegmentedControl } from "matrix-design-system";
 import { GamesGrid } from "@/components/content/videogames/games-grid";
 import { IoGameControllerOutline } from "react-icons/io5";
 import { GiGameConsole } from "react-icons/gi";
@@ -16,10 +16,7 @@ const FilteredGameGrid = memo(
         games.length > 0 ? (
             <GamesGrid games={games} navigationOrigin="all-games" />
         ) : (
-            <div className="text-secondary flex flex-col items-center gap-3 py-16">
-                <IoGameControllerOutline className="text-accent size-12 text-shadow-lg" />
-                <p className="text-accent text-shadow-lg">No games found for &ldquo;{query}&rdquo;.</p>
-            </div>
+            <EmptyState icon={<IoGameControllerOutline />} subject="games" query={query} />
         ),
     (_, next) => next.isPending,
 );
@@ -41,10 +38,7 @@ const FilteredConsoleList = memo(
                 ))}
             </div>
         ) : (
-            <div className="text-secondary flex flex-col items-center gap-3 py-16">
-                <GiGameConsole className="text-accent size-12 text-shadow-lg" />
-                <p className="text-accent text-shadow-lg">No consoles found for &ldquo;{query}&rdquo;.</p>
-            </div>
+            <EmptyState icon={<GiGameConsole />} subject="consoles" query={query} />
         ),
     (_, next) => next.isPending,
 );
