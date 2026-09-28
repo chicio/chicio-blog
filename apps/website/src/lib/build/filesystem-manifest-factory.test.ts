@@ -1,12 +1,13 @@
 import { describe, it, expect } from "vitest";
 import { generateFilesystemManifest } from "./filesystem-manifest-factory";
 import { aboutMe } from "@/lib/content/about-me/about-me";
+import { mangas } from "@/lib/content/manga/manga";
 import { posts } from "@/lib/content/posts/posts";
 import { slugs } from "@/types/configuration/slug";
 import type { TerminalDirNode } from "@/types/terminal/terminal";
 
 describe("generateFilesystemManifest", () => {
-    it("groups the top level of the tree into blog, dsa, videogames and the standalone leaf pages", () => {
+    it("groups the top level of the tree into blog, dsa, videogames, manga and the standalone leaf pages", () => {
         const { root } = generateFilesystemManifest();
 
         expect(Object.keys(root.children).sort()).toEqual(
@@ -19,6 +20,7 @@ describe("generateFilesystemManifest", () => {
                 "cookie-policy",
                 "dsa",
                 "easter-egg-hunt",
+                "manga",
                 "mcp",
                 "videogames",
             ].sort(),
@@ -81,6 +83,22 @@ describe("generateFilesystemManifest", () => {
             });
 
             expect(consoleWithGames).toBeDefined();
+        });
+    });
+
+    describe("manga subtree", () => {
+        it("lists every manga as a leaf keyed by its slug, with the real route to open", () => {
+            const { root } = generateFilesystemManifest();
+            const manga = root.children.manga as TerminalDirNode;
+            const allManga = mangas.list();
+
+            expect(manga.route).toBe(slugs.manga.home);
+            expect(Object.keys(manga.children).sort()).toEqual(allManga.map((item) => item.slug.params.manga).sort());
+            expect(manga.children[allManga[0].slug.params.manga]).toMatchObject({
+                type: "file",
+                title: allManga[0].frontmatter.title,
+                route: allManga[0].slug.formatted,
+            });
         });
     });
 

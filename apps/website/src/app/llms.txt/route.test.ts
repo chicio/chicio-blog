@@ -1,10 +1,11 @@
 import { describe, it, expect, vi } from "vitest";
 
-const { mockListPosts, mockGetTags, mockListDsaTopics, mockPageContent } = vi.hoisted(() => ({
+const { mockListPosts, mockGetTags, mockListDsaTopics, mockPageContent, mockListManga } = vi.hoisted(() => ({
     mockListPosts: vi.fn(),
     mockGetTags: vi.fn(),
     mockListDsaTopics: vi.fn(),
     mockPageContent: vi.fn(),
+    mockListManga: vi.fn(() => []),
 }));
 
 vi.mock("@/lib/content/posts/posts", () => ({
@@ -14,6 +15,10 @@ vi.mock("@/lib/content/posts/posts", () => ({
 
 vi.mock("@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms", () => ({
     topics: { list: mockListDsaTopics },
+}));
+
+vi.mock("@/lib/content/manga/manga", () => ({
+    mangas: { list: mockListManga },
 }));
 
 /**
@@ -109,6 +114,24 @@ describe("GET /llms.txt", () => {
             const text = await response.text();
             expect(text).toContain("typescript");
             expect(text).toContain("7 posts");
+        });
+
+        it("lists every manga with its link and description", async () => {
+            mockListPosts.mockReturnValue([]);
+            mockGetTags.mockReturnValue([]);
+            mockListDsaTopics.mockReturnValue([]);
+            mockListManga.mockReturnValue([
+                {
+                    slug: { formatted: "/manga/death-note" },
+                    frontmatter: { title: "Death Note Complete Edition", description: "A psychological thriller" },
+                },
+            ]);
+
+            const text = await (await GET()).text();
+
+            expect(text).toContain("## Manga");
+            expect(text).toContain(`[Death Note Complete Edition](${siteMetadata.siteUrl}/manga/death-note)`);
+            expect(text).toContain("A psychological thriller");
         });
 
         it("links every single page the registry knows about, so a registered section is advertised", async () => {

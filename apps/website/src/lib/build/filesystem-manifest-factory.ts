@@ -1,11 +1,13 @@
 import { aboutMe } from "@/lib/content/about-me/about-me";
 import { easterEggHunt } from "@/lib/content/easter-eggs/easter-eggs";
 import { topics, exercises } from "@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms";
+import { mangas } from "@/lib/content/manga/manga";
 import { posts } from "@/lib/content/posts/posts";
 import { consoles, games } from "@/lib/content/videogames/videogames";
 import { slugs } from "@/types/configuration/slug";
 import { Content } from "@/types/content/content";
 import { ExerciseMetadata } from "@/types/content/data-structures-and-algorithms";
+import { MangaMetadata } from "@/types/content/manga";
 import { ConsoleMetadata, GameMetadata } from "@/types/content/videogames";
 import { TerminalDirNode, TerminalFileNode, TerminalFileSystemManifest } from "@/types/terminal/terminal";
 
@@ -131,6 +133,28 @@ const buildVideogamesTree = (consoles: Content<ConsoleMetadata>[], games: Conten
     return videogames;
 };
 
+const buildMangaTree = (mangas: Content<MangaMetadata>[]): TerminalDirNode => {
+    const manga = dir({
+        route: slugs.manga.home,
+        title: "manga",
+        description: "Fabrizio's manga collection",
+    });
+
+    mangas.forEach((item) => {
+        manga.children[item.slug.params.manga] = file(
+            item.frontmatter.title,
+            item.frontmatter.description,
+            item.slug.formatted,
+            {
+                volumesOwned: String(item.frontmatter.metadata?.volumesOwned ?? ""),
+                volumes: String(item.frontmatter.metadata?.volumes ?? ""),
+            },
+        );
+    });
+
+    return manga;
+};
+
 export const generateFilesystemManifest = (): TerminalFileSystemManifest => {
     const aboutMeContent = aboutMe.single()!;
     const easterEggHuntContent = easterEggHunt.single()!;
@@ -140,6 +164,7 @@ export const generateFilesystemManifest = (): TerminalFileSystemManifest => {
             blog: buildBlogTree(posts.list()),
             dsa: buildDsaTree(topics.list(), exercises.list()),
             videogames: buildVideogamesTree(consoles.list(), games.list()),
+            manga: buildMangaTree(mangas.list()),
             "about-me": file(aboutMeContent.frontmatter.title, aboutMeContent.frontmatter.description, slugs.aboutMe),
             art: file("Art", "3D and generative art gallery", slugs.art),
             chat: file("Chat", "Chat with Fabrizio's AI assistant", slugs.chat),
