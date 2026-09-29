@@ -21,6 +21,9 @@ export const Manga: FC<PropsWithChildren<MangaProps>> = async ({ manga, previous
     const { contentFileRelativePath: contentPath, frontmatter } = manga;
     const { metadata } = frontmatter;
     const { default: MangaContent } = await import(`@/content/${contentPath}/content.mdx`);
+    const mdxComponents = {
+        MangaInformation: () => (metadata ? <MangaInformation metadata={metadata} className="mb-6" /> : null),
+    };
 
     return (
         <ReadingContentPage
@@ -41,8 +44,7 @@ export const Manga: FC<PropsWithChildren<MangaProps>> = async ({ manga, previous
                     </CoverCardBadge>
                 </div>
             )}
-            {metadata && <MangaInformation metadata={metadata} className="mb-6" />}
-            <MangaContent />
+            <MangaContent components={mdxComponents} />
             <PreviousNextNavigation
                 previous={previous ? { url: previous.slug.formatted, title: previous.frontmatter.title } : undefined}
                 next={next ? { url: next.slug.formatted, title: next.frontmatter.title } : undefined}
