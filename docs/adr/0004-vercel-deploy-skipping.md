@@ -26,15 +26,19 @@ redeploys every Monday regardless.
 
 ## Consequences
 
-- `--base` is `VERCEL_GIT_PREVIOUS_SHA` when set, else the tip of `main`. The variable holds the last successful
-  deployment's SHA and is only exposed when an ignore step is configured, but it is empty on any branch with no previous
-  deployment (every Dependabot PR, and the first push of any feature branch); an empty `--base` makes `turbo query
-  affected` exit 2. The fallback was first `HEAD^1`, on the assumption that such branches are always one commit off
-  `main`. That holds for Dependabot but not for a feature branch pushed with many commits: a last commit touching only
-  `.claude/` looked unaffected against `HEAD^1`, and the preview of a 40-commit branch was skipped. The logic now lives in
-  `apps/website/scripts/vercel-ignore-build.sh`, which runs `git fetch --depth=1 origin main` and uses
-  `--base=FETCH_HEAD`, so the whole branch is compared with `main`. A failed fetch exits 1 (build). A branch that is
-  behind `main` can build when its own changes did not need it, never the reverse.
+- `--base` is `VERCEL_GIT_PREVIOUS_SHA` when set, else the branch's merge-base with `main`. The variable holds the last
+  successful deployment and is empty on any branch with no previous deployment (every Dependabot PR, and the first push
+  of any feature branch); an empty `--base` makes `turbo query affected` exit 2. The fallback was first `HEAD^1`, on the
+  assumption that such branches are always one commit off `main`. That holds for Dependabot but not for a feature
+  branch pushed with many commits: a last commit touching only `.claude/` looked unaffected against `HEAD^1`, and the
+  preview of a 40-commit branch was skipped. The logic now lives in `apps/website/scripts/vercel-ignore-build.sh`,
+  which runs `git fetch --depth=50 origin main` and uses `git merge-base HEAD FETCH_HEAD`, so exactly the branch's own
+  commits are compared. `main`'s tip was tried and rejected: it also counts `main`'s newer commits, so nearly every
+  Dependabot branch would build, and on a shallow clone turbo cannot relate a depth-1 `FETCH_HEAD` to `HEAD` at all
+  (`GitRefNotFound`, which builds every time). Measured on a depth-10 clone: a `.github`-only branch five commits behind
+  `main` skips, a branch with an earlier website commit and a `.claude/`-only last commit builds, and a branch whose
+  fork point is older than the clone has no merge-base and builds. A failed fetch or a missing merge-base exits 1
+  (build), never the reverse.
 - `--head` is never passed: `--base=<sha>^ --head=<sha>` reports the website affected for a rain-showcase-only commit,
   where `--base=<sha>^` alone correctly reports it unaffected.
 - `turbo` is pinned to a major (`turbo@^2`): the ignore step runs before `npm install`, so `npx` fetches turbo from the
