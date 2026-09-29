@@ -15,8 +15,17 @@ metadata:
     genre: "Racing"
     pegiRating: "3"
     region: "PAL"
-    gallery:
-        - /media/content/videogames/console/nintendo-switch/game/mario-kart-deluxe-8/media/1.jpeg
-        - /media/content/videogames/console/nintendo-switch/game/mario-kart-deluxe-8/media/2.jpeg
-        - /media/content/videogames/console/nintendo-switch/game/mario-kart-deluxe-8/media/3.jpeg
 ---
+import { ImageCarousel } from "@/components/features/design-system-next/image-carousel";
+
+<ImageCarousel
+    images={[
+        "/media/content/videogames/console/nintendo-switch/game/mario-kart-deluxe-8/media/1.jpeg",
+        "/media/content/videogames/console/nintendo-switch/game/mario-kart-deluxe-8/media/2.jpeg",
+        "/media/content/videogames/console/nintendo-switch/game/mario-kart-deluxe-8/media/3.jpeg",
+    ]}
+    alt="Mario Kart Deluxe 8"
+    className="mb-6"
+/>
+
+<GameInformation />

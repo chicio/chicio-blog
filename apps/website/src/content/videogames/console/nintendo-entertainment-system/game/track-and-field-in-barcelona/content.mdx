@@ -15,15 +15,23 @@ metadata:
     genre: "Sports"
     pegiRating: "8"
     region: "PAL"
-    gallery:
-        - /media/content/videogames/console/nintendo-entertainment-system/game/track-and-field-in-barcelona/media/1.jpg
-        - /media/content/videogames/console/nintendo-entertainment-system/game/track-and-field-in-barcelona/media/2.jpg
 ---
 
 import { FaGamepad } from "react-icons/fa";
 import { ImageCarousel } from "@/components/features/design-system-next/image-carousel";
 import { ParagraphTitleWithIcon } from "matrix-design-system";
 import { FaLightbulb } from "react-icons/fa";
+
+<ImageCarousel
+    images={[
+        "/media/content/videogames/console/nintendo-entertainment-system/game/track-and-field-in-barcelona/media/1.jpg",
+        "/media/content/videogames/console/nintendo-entertainment-system/game/track-and-field-in-barcelona/media/2.jpg",
+    ]}
+    alt="Track & Field in Barcelona"
+    className="mb-6"
+/>
+
+<GameInformation />
 
 ## <ParagraphTitleWithIcon icon={<FaLightbulb className="text-shadow-lg" />}>Trivia & Fun Facts</ParagraphTitleWithIcon>
 

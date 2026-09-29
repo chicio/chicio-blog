@@ -15,16 +15,25 @@ metadata:
     manufacturerLogo: "/media/content/videogames/manufacturer/nintendo.png"
     name: "Nintendo Wii"
     sku: "NTR-001"
-    gallery:
-        - "/media/content/videogames/console/nintendo-wii/gallery/1.jpeg"
-        - "/media/content/videogames/console/nintendo-wii/gallery/2.jpeg"
-        - "/media/content/videogames/console/nintendo-wii/gallery/3.jpeg"
-        - "/media/content/videogames/console/nintendo-wii/gallery/4.jpeg"
 ---
 
 import { FaLightbulb } from "react-icons/fa";
 import { ParagraphTitleWithIcon, Youtube } from "matrix-design-system";
 import { FiCpu, FiPower } from "react-icons/fi";
+import { ImageCarousel } from "@/components/features/design-system-next/image-carousel";
+
+<ImageCarousel
+    images={[
+        "/media/content/videogames/console/nintendo-wii/gallery/1.jpeg",
+        "/media/content/videogames/console/nintendo-wii/gallery/2.jpeg",
+        "/media/content/videogames/console/nintendo-wii/gallery/3.jpeg",
+        "/media/content/videogames/console/nintendo-wii/gallery/4.jpeg",
+    ]}
+    alt="Nintendo Wii"
+    className="mb-6"
+/>
+
+<ConsoleInformation />
 
 ## <ParagraphTitleWithIcon icon={<FiCpu className="text-shadow-lg" />}> Hardware specs</ParagraphTitleWithIcon>
 

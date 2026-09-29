@@ -15,12 +15,20 @@ metadata:
     genre: "Racing"
     pegiRating: "8"
     region: "PAL"
-    gallery:
-        - /media/content/videogames/console/gameboy/game/road-rash/media/1.jpeg
 ---
 import { FaGamepad } from "react-icons/fa";
 import { ParagraphTitleWithIcon } from "matrix-design-system";
 import { ImageCarousel } from "@/components/features/design-system-next/image-carousel";
+
+<ImageCarousel
+    images={[
+        "/media/content/videogames/console/gameboy/game/road-rash/media/1.jpeg",
+    ]}
+    alt="Road Rash"
+    className="mb-6"
+/>
+
+<GameInformation />
 
 ## <ParagraphTitleWithIcon icon={<FaGamepad className="text-shadow-lg" />}>Gameplay</ParagraphTitleWithIcon>
 

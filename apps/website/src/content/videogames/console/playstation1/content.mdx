@@ -2,7 +2,7 @@
 title: "Playstation 1"
 description: "The original PlayStation, also known as PS1, was a groundbreaking console that revolutionized the gaming industry with its 3D graphics and extensive game library."
 date: 2025-09-30
-image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+image: /media/content/videogames/console/playstation1/gallery/1.jpeg
 tags: [playstation 1, console, gaming]
 authors: [fabrizio_duroni]
 metadata:
@@ -15,23 +15,32 @@ metadata:
     manufacturerLogo: "/media/content/videogames/manufacturer/sony.png"
     name: "PlayStation 1"
     sku: "SCPH-5502"
-    gallery:
-        - "/media/content/videogames/console/playstation1/gallery/1.jpeg"
-        - "/media/content/videogames/console/playstation1/gallery/2.jpeg"
-        - "/media/content/videogames/console/playstation1/gallery/3.jpeg"
-        - "/media/content/videogames/console/playstation1/gallery/4.jpeg"
-        - "/media/content/videogames/console/playstation1/gallery/5.jpeg"
-        - "/media/content/videogames/console/playstation1/gallery/6.jpeg"
-        - "/media/content/videogames/console/playstation1/gallery/7.jpeg"    
-        - "/media/content/videogames/console/playstation1/gallery/8.jpeg"    
-        - "/media/content/videogames/console/playstation1/gallery/9.jpeg"    
-        - "/media/content/videogames/console/playstation1/gallery/10.jpeg"    
-        - "/media/content/videogames/console/playstation1/gallery/11.jpeg"    
 ---
 
 import { ParagraphTitleWithIcon, Youtube } from "matrix-design-system";
 import { FiCpu, FiPower } from "react-icons/fi";
 import { FaLightbulb } from "react-icons/fa";
+import { ImageCarousel } from "@/components/features/design-system-next/image-carousel";
+
+<ImageCarousel
+    images={[
+        "/media/content/videogames/console/playstation1/gallery/1.jpeg",
+        "/media/content/videogames/console/playstation1/gallery/2.jpeg",
+        "/media/content/videogames/console/playstation1/gallery/3.jpeg",
+        "/media/content/videogames/console/playstation1/gallery/4.jpeg",
+        "/media/content/videogames/console/playstation1/gallery/5.jpeg",
+        "/media/content/videogames/console/playstation1/gallery/6.jpeg",
+        "/media/content/videogames/console/playstation1/gallery/7.jpeg",
+        "/media/content/videogames/console/playstation1/gallery/8.jpeg",
+        "/media/content/videogames/console/playstation1/gallery/9.jpeg",
+        "/media/content/videogames/console/playstation1/gallery/10.jpeg",
+        "/media/content/videogames/console/playstation1/gallery/11.jpeg",
+    ]}
+    alt="Playstation 1"
+    className="mb-6"
+/>
+
+<ConsoleInformation />
 
 ## <ParagraphTitleWithIcon icon={<FiCpu className="text-shadow-lg" />}> Hardware specs</ParagraphTitleWithIcon>
 

@@ -15,14 +15,22 @@ metadata:
     genre: "RPG"
     pegiRating: "16"
     region: "PAL"
-    gallery:
-        - /media/content/videogames/console/playstation3/game/final-fantasy-13/media/1.jpeg
-        - /media/content/videogames/console/playstation3/game/final-fantasy-13/media/2.jpeg
-        - /media/content/videogames/console/playstation3/game/final-fantasy-13/media/3.jpeg
 ---
 import { FaGamepad } from "react-icons/fa";
 import { ParagraphTitleWithIcon } from "matrix-design-system";
 import { ImageCarousel } from "@/components/features/design-system-next/image-carousel";
+
+<ImageCarousel
+    images={[
+        "/media/content/videogames/console/playstation3/game/final-fantasy-13/media/1.jpeg",
+        "/media/content/videogames/console/playstation3/game/final-fantasy-13/media/2.jpeg",
+        "/media/content/videogames/console/playstation3/game/final-fantasy-13/media/3.jpeg",
+    ]}
+    alt="Final Fantasy XIII"
+    className="mb-6"
+/>
+
+<GameInformation />
 
 ## <ParagraphTitleWithIcon icon={<FaGamepad className="text-shadow-lg" />}>Gameplay</ParagraphTitleWithIcon>
 

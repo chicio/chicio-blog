@@ -15,10 +15,6 @@ metadata:
     genre: "Adventure"
     pegiRating: "8"
     region: "PAL"
-    gallery:
-        - /media/content/videogames/console/nintendo-entertainment-system/game/maniac-mansion/media/1.jpg
-        - /media/content/videogames/console/nintendo-entertainment-system/game/maniac-mansion/media/2.jpg
-        - /media/content/videogames/console/nintendo-entertainment-system/game/maniac-mansion/media/3.jpg
 ---
 
 import { FaGamepad } from "react-icons/fa";
@@ -26,6 +22,18 @@ import { ImageCarousel } from "@/components/features/design-system-next/image-ca
 import { ParagraphTitleWithIcon } from "matrix-design-system";
 import { FaLightbulb } from "react-icons/fa";
 import { FaStar } from "react-icons/fa";
+
+<ImageCarousel
+    images={[
+        "/media/content/videogames/console/nintendo-entertainment-system/game/maniac-mansion/media/1.jpg",
+        "/media/content/videogames/console/nintendo-entertainment-system/game/maniac-mansion/media/2.jpg",
+        "/media/content/videogames/console/nintendo-entertainment-system/game/maniac-mansion/media/3.jpg",
+    ]}
+    alt="Maniac Mansion"
+    className="mb-6"
+/>
+
+<GameInformation />
 
 ## <ParagraphTitleWithIcon icon={<FaLightbulb className="text-shadow-lg" />}>Trivia & Fun Facts</ParagraphTitleWithIcon>
 

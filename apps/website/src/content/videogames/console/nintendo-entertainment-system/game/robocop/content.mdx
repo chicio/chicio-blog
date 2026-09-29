@@ -15,17 +15,25 @@ metadata:
     genre: "Beat 'em up"
     pegiRating: "8"
     region: "PAL"
-    gallery:
-        - /media/content/videogames/console/nintendo-entertainment-system/game/robocop/media/1.jpg
-        - /media/content/videogames/console/nintendo-entertainment-system/game/robocop/media/2.jpg
-        - /media/content/videogames/console/nintendo-entertainment-system/game/robocop/media/3.jpg
-        - /media/content/videogames/console/nintendo-entertainment-system/game/robocop/media/4.jpg
 ---
 
 import { FaGamepad } from "react-icons/fa";
 import { ImageCarousel } from "@/components/features/design-system-next/image-carousel";
 import { ParagraphTitleWithIcon } from "matrix-design-system";
 import { FaLightbulb } from "react-icons/fa";
+
+<ImageCarousel
+    images={[
+        "/media/content/videogames/console/nintendo-entertainment-system/game/robocop/media/1.jpg",
+        "/media/content/videogames/console/nintendo-entertainment-system/game/robocop/media/2.jpg",
+        "/media/content/videogames/console/nintendo-entertainment-system/game/robocop/media/3.jpg",
+        "/media/content/videogames/console/nintendo-entertainment-system/game/robocop/media/4.jpg",
+    ]}
+    alt="RoboCop"
+    className="mb-6"
+/>
+
+<GameInformation />
 
 ## <ParagraphTitleWithIcon icon={<FaLightbulb className="text-shadow-lg" />}>Trivia & Fun Facts</ParagraphTitleWithIcon>
 

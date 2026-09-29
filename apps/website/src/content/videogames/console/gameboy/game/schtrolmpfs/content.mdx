@@ -15,8 +15,17 @@ metadata:
     genre: "Platformer"
     pegiRating: "8"
     region: "PAL"
-    gallery:
-        - /media/content/videogames/console/gameboy/game/schtrolmpfs/media/1.jpeg
-        - /media/content/videogames/console/gameboy/game/schtrolmpfs/media/2.jpeg
-        - /media/content/videogames/console/gameboy/game/schtrolmpfs/media/3.jpeg
 ---
+import { ImageCarousel } from "@/components/features/design-system-next/image-carousel";
+
+<ImageCarousel
+    images={[
+        "/media/content/videogames/console/gameboy/game/schtrolmpfs/media/1.jpeg",
+        "/media/content/videogames/console/gameboy/game/schtrolmpfs/media/2.jpeg",
+        "/media/content/videogames/console/gameboy/game/schtrolmpfs/media/3.jpeg",
+    ]}
+    alt="Schtrolmpfs"
+    className="mb-6"
+/>
+
+<GameInformation />

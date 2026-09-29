@@ -15,19 +15,28 @@ metadata:
     manufacturerLogo: "/media/content/videogames/manufacturer/nintendo.png"
     name: "Nintendo Entertainment System"
     sku: "NES-001"
-    gallery:
-        - "/media/content/videogames/console/nintendo-entertainment-system/gallery/1.jpg"
-        - "/media/content/videogames/console/nintendo-entertainment-system/gallery/2.jpg"
-        - "/media/content/videogames/console/nintendo-entertainment-system/gallery/3.jpg"
-        - "/media/content/videogames/console/nintendo-entertainment-system/gallery/4.jpg"
-        - "/media/content/videogames/console/nintendo-entertainment-system/gallery/5.jpg"
-        - "/media/content/videogames/console/nintendo-entertainment-system/gallery/6.jpg"
-        - "/media/content/videogames/console/nintendo-entertainment-system/gallery/7.jpg"
 ---
 
 import { FaLightbulb } from "react-icons/fa";
 import { ParagraphTitleWithIcon } from "matrix-design-system";
 import { FiCpu } from "react-icons/fi";
+import { ImageCarousel } from "@/components/features/design-system-next/image-carousel";
+
+<ImageCarousel
+    images={[
+        "/media/content/videogames/console/nintendo-entertainment-system/gallery/1.jpg",
+        "/media/content/videogames/console/nintendo-entertainment-system/gallery/2.jpg",
+        "/media/content/videogames/console/nintendo-entertainment-system/gallery/3.jpg",
+        "/media/content/videogames/console/nintendo-entertainment-system/gallery/4.jpg",
+        "/media/content/videogames/console/nintendo-entertainment-system/gallery/5.jpg",
+        "/media/content/videogames/console/nintendo-entertainment-system/gallery/6.jpg",
+        "/media/content/videogames/console/nintendo-entertainment-system/gallery/7.jpg",
+    ]}
+    alt="Nintendo Entertainment System"
+    className="mb-6"
+/>
+
+<ConsoleInformation />
 
 ## <ParagraphTitleWithIcon icon={<FiCpu className="text-shadow-lg" />}> Hardware specs</ParagraphTitleWithIcon>
 

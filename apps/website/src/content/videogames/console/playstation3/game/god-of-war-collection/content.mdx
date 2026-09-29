@@ -15,15 +15,23 @@ metadata:
     genre: "Action"
     pegiRating: "18"
     region: "PAL"
-    gallery:
-        - /media/content/videogames/console/playstation3/game/god-of-war-collection/media/1.jpeg
-        - /media/content/videogames/console/playstation3/game/god-of-war-collection/media/2.jpeg
-        - /media/content/videogames/console/playstation3/game/god-of-war-collection/media/3.jpeg
-        - /media/content/videogames/console/playstation3/game/god-of-war-collection/media/4.jpeg
 ---
 import { FaGamepad } from "react-icons/fa";
 import { ParagraphTitleWithIcon } from "matrix-design-system";
 import { ImageCarousel } from "@/components/features/design-system-next/image-carousel";
+
+<ImageCarousel
+    images={[
+        "/media/content/videogames/console/playstation3/game/god-of-war-collection/media/1.jpeg",
+        "/media/content/videogames/console/playstation3/game/god-of-war-collection/media/2.jpeg",
+        "/media/content/videogames/console/playstation3/game/god-of-war-collection/media/3.jpeg",
+        "/media/content/videogames/console/playstation3/game/god-of-war-collection/media/4.jpeg",
+    ]}
+    alt="God Of War Collection"
+    className="mb-6"
+/>
+
+<GameInformation />
 
 ## <ParagraphTitleWithIcon icon={<FaGamepad className="text-shadow-lg" />}>Gameplay</ParagraphTitleWithIcon>
 
