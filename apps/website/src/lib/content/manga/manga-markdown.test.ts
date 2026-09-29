@@ -46,5 +46,13 @@ describe("manga-markdown", () => {
             expect(result).toContain("**Volumes owned:** 1/1");
             expect(result).toContain("Light Yagami");
         });
+
+        it("gets the carousel from the body, once, and never a gallery from the metadata", () => {
+            const result = mangaMarkdown({ manga: "death-note" })!;
+
+            expect(result.match(/!\[[^\]]*\]\([^)]*death-note\/cover\.jpg\)/g)).toHaveLength(1);
+            expect(result).not.toContain("Gallery");
+            expect(result).not.toContain("ImageCarousel");
+        });
     });
 });

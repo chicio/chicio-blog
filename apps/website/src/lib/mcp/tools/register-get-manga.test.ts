@@ -42,6 +42,7 @@ describe("get_manga", () => {
             volumesOwned: 1,
             url: `${MCP_SITE_URL}/manga/death-note`,
         });
+        expect(deathNote).not.toHaveProperty("gallery");
     });
 
     it("filters by story or art author, ignoring case", async () => {
