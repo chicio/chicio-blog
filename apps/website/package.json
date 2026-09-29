@@ -23,8 +23,8 @@
     "chat-knowledge-upload": "tsx --env-file=.env.production src/lib/chat/chat-knowledge-upload.ts"
   },
   "dependencies": {
-    "@ai-sdk/groq": "^4.0.48",
-    "@ai-sdk/react": "^4.0.117",
+    "@ai-sdk/groq": "^4.0.50",
+    "@ai-sdk/react": "^4.0.119",
     "@giscus/react": "^3.1.0",
     "@google-analytics/data": "^7.1.0",
     "@mdx-js/loader": "^3.1.1",
