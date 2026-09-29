@@ -60,7 +60,7 @@ From the collected inputs, derive:
 | `tags` | `[{console-slug}, game, {genre-lowercase}]` |
 | `authors` | `[fabrizio_duroni]` |
 | `metadata.console` | Console display name from mapping (e.g., "PlayStation 5") |
-| `metadata.gallery` | 3 placeholder paths: `/media/content/videogames/console/{console}/game/{slug}/media/N.jpeg` for N=1,2,3 |
+| own-copy photos | 3 placeholder paths, listed in the MDX body carousel (step 6, never in the frontmatter): `/media/content/videogames/console/{console}/game/{slug}/media/N.jpeg` for N=1,2,3 |
 
 **Console slug to display name mapping:**
 
@@ -90,7 +90,7 @@ Create the directories (the co-located source folder MUST be named `media` — t
 
 ### 6. Create content.mdx
 
-Write `content.mdx` with **only the frontmatter** — no MDX body yet. The Gameplay section will be added by the screenshot script in step 7.
+Write `content.mdx` with the frontmatter, then a body holding the own-copy carousel and the `<GameInformation />` slot (the page binds it, its data comes from the frontmatter; see ADR-0002). The Gameplay section will be added by the screenshot script in step 7. There is no `gallery` in the frontmatter.
 
 ```mdx
 ---
@@ -110,18 +110,28 @@ metadata:
     genre: "<genre>"
     pegiRating: "<pegiRating>"
     region: "<region>"
-    gallery:
-        - /media/content/videogames/console/<console>/game/<slug>/media/1.jpeg
-        - /media/content/videogames/console/<console>/game/<slug>/media/2.jpeg
-        - /media/content/videogames/console/<console>/game/<slug>/media/3.jpeg
 ---
+import { ImageCarousel } from "@/components/features/design-system-next/image-carousel";
+
+<ImageCarousel
+    images={[
+        "/media/content/videogames/console/<console>/game/<slug>/media/1.jpeg",
+        "/media/content/videogames/console/<console>/game/<slug>/media/2.jpeg",
+        "/media/content/videogames/console/<console>/game/<slug>/media/3.jpeg",
+    ]}
+    alt="<title>"
+    className="mb-6"
+/>
+
+<GameInformation />
 ```
 
 **Formatting rules:**
 - 4-space indentation for metadata fields
 - String values in double quotes
 - `formats` is a YAML array: `["Physical"]`, `["Digital"]`, or `["Physical", "Digital"]`
-- `gallery` is a YAML block sequence (one path per line with `-` prefix)
+- The own-copy photos live only in the body `ImageCarousel`, one quoted path per line with a trailing comma
+- `<GameInformation />` takes no props: never inline the pills, the page binds the slot
 - No blank line between `---` and body content
 
 ### 7. Run Screenshot Script
@@ -136,7 +146,7 @@ uv run --script .claude/skills/fabrizioduroni-new-videogame/add-game-screenshots
 The script:
 - Downloads gameplay screenshots from Wikimedia Commons and/or IGDB
 - Saves them to `<game>/media/gameplay/` as numbered JPEGs
-- Adds the `## Gameplay` section with `ImageCarousel` component and imports to `content.mdx`
+- Adds the `## Gameplay` section with `ImageCarousel` component and imports to `content.mdx`, leaving the own-copy carousel and the `<GameInformation />` slot untouched
 
 **If the script fails** (no screenshots found, network error): the entry is still valid. Inform the user the Gameplay section was not added and they can re-run the script later.
 
@@ -152,5 +162,5 @@ Print what was created and what the user needs to do manually:
 **Manual TODOs:**
 - Add `cover.jpg` to `<slug>/media/` (game box art / cover image)
 - Add 3 photos to `<slug>/media/media/` named `1.jpeg`, `2.jpeg`, `3.jpeg` (photos of the physical game)
-- If more or fewer than 3 media photos: update the `metadata.gallery` array in `content.mdx`
+- If more or fewer than 3 media photos: edit the paths in the own-copy `ImageCarousel` at the top of the `content.mdx` body (there is no frontmatter gallery)
 - Run `npm run dev` to verify the page renders at `/videogames/console/<console>/game/<slug>`

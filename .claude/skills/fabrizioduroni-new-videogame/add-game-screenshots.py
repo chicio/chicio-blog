@@ -704,8 +704,8 @@ def build_platform_mapping(
 
 def ensure_imports(mdx_body: str) -> str:
     required_imports = [
-        'import { ImageCarousel } from "@/components/design-system/organism/image-carousel";',
-        'import { ParagraphTitleWithIcon } from "@/components/design-system/molecules/typography/paragraph-title-with-icon";',
+        'import { ImageCarousel } from "@/components/features/design-system-next/image-carousel";',
+        'import { ParagraphTitleWithIcon } from "matrix-design-system";',
         'import { FaGamepad } from "react-icons/fa";',
     ]
 
