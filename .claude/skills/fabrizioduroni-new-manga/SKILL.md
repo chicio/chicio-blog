@@ -92,6 +92,8 @@ import { ImageCarousel } from "@/components/features/design-system-next/image-ca
     className="mb-6"
 />
 
+<MangaInformation />
+
 ## <ParagraphTitleWithIcon icon={<FaBookOpen className="text-shadow-lg" />}>Plot</ParagraphTitleWithIcon>
 
 <original, spoiler-free plot summary>
@@ -107,7 +109,8 @@ Rules:
   imports, and one blank line between each block of the body.
 - Facts live in the frontmatter, everything a reader looks at lives in the body (ADR-0002): there is no `gallery` in the
   frontmatter. The photos are the `<ImageCarousel>` written literally in the body, before the Plot. While there are no
-  shelf photos it lists the cover alone, which is what the block above writes.
+  shelf photos it lists the cover alone, which is what the block above writes. `<MangaInformation />` (no props, no
+  import) comes right after the carousel: the page binds it to the frontmatter facts, so the pills follow the photos.
 - **Plot summary**: a short, ORIGINAL, spoiler-free paragraph written from the premise alone. Never copy or lightly
   reword AniList, the publisher or a shop blurb (their descriptions are only reference material). No dashes in prose
   (use commas, colons or parentheses).

@@ -25,3 +25,6 @@ added it.
 - The Markdown Representation gets carousels from the body (`mdx-to-markdown` already converts a literal
   `ImageCarousel`), so generators must not also render them from metadata.
 - An item with no photos yet shows a carousel holding only its cover, written by the skill that creates it.
+- A block derived from facts that the MDX needs to position is a slot the page binds (e.g. `<MangaInformation />`): the
+  MDX decides where it goes and its data still comes only from the frontmatter. Such slots are listed in
+  `componentsRenderedByTheirGenerator`, since the generator already renders their facts.
