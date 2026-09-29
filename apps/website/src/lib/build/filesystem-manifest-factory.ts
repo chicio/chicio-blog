@@ -1,4 +1,5 @@
 import { aboutMe } from "@/lib/content/about-me/about-me";
+import { art } from "@/lib/content/art/art";
 import { easterEggHunt } from "@/lib/content/easter-eggs/easter-eggs";
 import { topics, exercises } from "@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms";
 import { mangas } from "@/lib/content/manga/manga";
@@ -157,6 +158,7 @@ const buildMangaTree = (mangas: Content<MangaMetadata>[]): TerminalDirNode => {
 
 export const generateFilesystemManifest = (): TerminalFileSystemManifest => {
     const aboutMeContent = aboutMe.single()!;
+    const artContent = art.single()!;
     const easterEggHuntContent = easterEggHunt.single()!;
 
     const root = dir({
@@ -166,7 +168,7 @@ export const generateFilesystemManifest = (): TerminalFileSystemManifest => {
             videogames: buildVideogamesTree(consoles.list(), games.list()),
             manga: buildMangaTree(mangas.list()),
             "about-me": file(aboutMeContent.frontmatter.title, aboutMeContent.frontmatter.description, slugs.aboutMe),
-            art: file("Art", "3D and generative art gallery", slugs.art),
+            art: file(artContent.frontmatter.title, artContent.frontmatter.description, slugs.art),
             chat: file("Chat", "Chat with Fabrizio's AI assistant", slugs.chat),
             contact: file("Contact", "Send Fabrizio a message", slugs.contact),
             mcp: file("MCP", "MCP server for AI assistants", slugs.mcp),
