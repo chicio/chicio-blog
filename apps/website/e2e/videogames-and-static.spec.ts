@@ -129,14 +129,11 @@ test.describe("Videogames section", () => {
         });
 
         test("still shows the gameplay carousel after the information pills", async ({ page }) => {
-            await page.goto("/videogames/console/nintendo-switch/game/super-mario-odyssey");
+            await page.goto("/videogames/console/playstation5/game/astrobot");
             await expect(page.getByRole("heading", { name: "Gameplay", level: 2 })).toBeVisible();
             await expectAbove(
                 page.getByText("Publisher:"),
-                imageBySrc(
-                    page,
-                    "/media/content/videogames/console/nintendo-switch/game/super-mario-bros-wonder/gameplay/1.jpg",
-                ),
+                imageBySrc(page, "/media/content/videogames/console/playstation5/game/astrobot/gameplay/1.jpg"),
             );
         });
 
