@@ -42,3 +42,4 @@ No per-PR facts — those go stale.
 - [e2e-lazy-mounted-card-needs-scroll.md](e2e-lazy-mounted-card-needs-scroll.md) — CoverCard mounts only within 600px of the viewport; toBeVisible never scrolls; replay port-free via page.route over an existing .next
 - [new-collection-section-review-checks.md](new-collection-section-review-checks.md) — "mirror Videogames" copies dead open_<item> tracking (lost in #392) and an untested non-empty gallery branch; grep fire sites
 - [dedup-helper-falsy-vs-nullish.md](dedup-helper-falsy-vs-nullish.md) — swapping a private formatter for a shared one can turn `x ? a : b` into `x ?? b`; ask what the content producer emits for ""
+- [corrected-copy-has-hand-wired-siblings.md](corrected-copy-has-hand-wired-siblings.md) — a fixed hardcoded description survives in app/manifest.ts shortcuts/llms.txt/MCP; grep a keyword; dirty public/filesystem.json = prebuild output
