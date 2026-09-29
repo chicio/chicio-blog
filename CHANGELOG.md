@@ -1,5 +1,25 @@
 # Changelog
 
+## [5.1.0](https://github.com/chicio/chicio-blog/compare/v5.0.0...v5.1.0) (2026-09-29)
+
+### ⚠ BREAKING CHANGES
+
+* **capabilities:** Footer no longer takes navHrefs and navTracking. It receives links (label, to, onClick) and contactHref.
+* **capabilities:** Menu no longer takes navHrefs and tracking. It receives entries (links and dropdowns of grouped links), pinnedOnPaths and per-link onClick.
+
+### Features
+
+* **ai:** :sparkles: run Post writing through a main-thread skill ([#699](https://github.com/chicio/chicio-blog/issues/699)) ([83968cb](https://github.com/chicio/chicio-blog/commit/83968cbbf3c030bfa02aa70d21dc36c853fad79a))
+* **ai:** :sparkles: run the SDLC loop as a workflow with parallel Work Units ([#704](https://github.com/chicio/chicio-blog/issues/704)) ([cd276c9](https://github.com/chicio/chicio-blog/commit/cd276c922d40159bf6030adc25e0f0281c259c08))
+* **capabilities:** :boom: design system Menu and Footer take injected navigation (v2.0.0) ([#712](https://github.com/chicio/chicio-blog/issues/712)) ([317165c](https://github.com/chicio/chicio-blog/commit/317165ced546bf3fd34ad6e200bc71d4f84ea68a))
+* **capabilities:** :sparkles: add the Manga Collection and share the collection components ([#715](https://github.com/chicio/chicio-blog/issues/715)) ([37a216b](https://github.com/chicio/chicio-blog/commit/37a216bdf6ccfbf97601cef212ac9d9f05055603))
+
+### Bug Fixes
+
+* **capabilities:** :bug: read Art and About me metadata from their own frontmatter ([#725](https://github.com/chicio/chicio-blog/issues/725)) ([c18cf58](https://github.com/chicio/chicio-blog/commit/c18cf58c6a924b858c883c71c1bc032e004cef95))
+* **content:** :pencil2: describe the Art PWA shortcut as drawings, not 3D and generative art ([25bae97](https://github.com/chicio/chicio-blog/commit/25bae97f1c5ec4fc603c6c425999424a494712e5))
+* **performance:** :bug: build a branch's first Vercel preview when any of its commits affects the site ([#722](https://github.com/chicio/chicio-blog/issues/722)) ([1a9c0ff](https://github.com/chicio/chicio-blog/commit/1a9c0ff52075e3176d07264751cec698c434a19a))
+
 ## [5.0.0](https://github.com/chicio/chicio-blog/compare/v4.0.0...v5.0.0) (2026-09-11)
 
 ### Features
