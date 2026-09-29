@@ -86,3 +86,4 @@
 - [Worktree git stash hazard](feedback_worktree_git_stash_hazard.md) — never `git stash` inside a pipeline worktree, refs/stash is shared across all worktrees
 - [Prettier CLI 2-space regression](feature_markdown_generalization.md) — RESOLVED: .prettierrc now sets tabWidth 4/printWidth 120, `npm run format`/`format:check` exist and CI gates on them; the old "never run prettier" advice is obsolete
 - [Registry dep breaks cmdk mocks](feedback_registry_dep_vitest_mock_externalization.md) — website on registry matrix-design-system: 28 palette tests fail unless vitest inlines it
+- [Videogames content in MDX](feature_videogames_content_in_mdx.md) — ADR-0002 on Games/Consoles: body carousel + info slots, no gallery; conversion gotchas (2026-09-29)
