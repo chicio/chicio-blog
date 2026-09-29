@@ -15,20 +15,29 @@ metadata:
     manufacturerLogo: "/media/content/videogames/manufacturer/sony.png"
     name: "PlayStation 5"
     sku: "CFI-2016"
-    gallery:
-        - "/media/content/videogames/console/playstation5/gallery/1.jpeg"
-        - "/media/content/videogames/console/playstation5/gallery/2.jpeg"
-        - "/media/content/videogames/console/playstation5/gallery/3.jpeg"
-        - "/media/content/videogames/console/playstation5/gallery/4.jpeg"
-        - "/media/content/videogames/console/playstation5/gallery/5.jpeg"
-        - "/media/content/videogames/console/playstation5/gallery/6.jpeg"
-        - "/media/content/videogames/console/playstation5/gallery/7.jpeg"
-        - "/media/content/videogames/console/playstation5/gallery/8.jpeg"
 ---
 
 import { FaLightbulb } from "react-icons/fa";
 import { ParagraphTitleWithIcon, Youtube } from "matrix-design-system";
 import { FiCpu, FiPower } from "react-icons/fi";
+import { ImageCarousel } from "@/components/features/design-system-next/image-carousel";
+
+<ImageCarousel
+    images={[
+        "/media/content/videogames/console/playstation5/gallery/1.jpeg",
+        "/media/content/videogames/console/playstation5/gallery/2.jpeg",
+        "/media/content/videogames/console/playstation5/gallery/3.jpeg",
+        "/media/content/videogames/console/playstation5/gallery/4.jpeg",
+        "/media/content/videogames/console/playstation5/gallery/5.jpeg",
+        "/media/content/videogames/console/playstation5/gallery/6.jpeg",
+        "/media/content/videogames/console/playstation5/gallery/7.jpeg",
+        "/media/content/videogames/console/playstation5/gallery/8.jpeg",
+    ]}
+    alt="PlayStation 5"
+    className="mb-6"
+/>
+
+<ConsoleInformation />
 
 ## <ParagraphTitleWithIcon icon={<FiCpu className="text-shadow-lg" />}> Hardware specs</ParagraphTitleWithIcon>
 

@@ -8,7 +8,6 @@ import { getAllGamesForConsole } from "@/lib/content/videogames/videogames";
 import { ConsoleMetadata } from "@/types/content/videogames";
 import { ConsoleTimeInformation } from "@/components/content/videogames/console-time-information";
 import { IoGameControllerOutline } from "react-icons/io5";
-import { ImageCarousel } from "@/components/features/design-system-next/image-carousel";
 import { slugs } from "@/types/configuration/slug";
 import { GamesGrid } from "@/components/content/videogames/games-grid";
 import { PreviousNextNavigation } from "@/components/features/design-system-next/previous-next-navigation";
@@ -24,6 +23,18 @@ export const Console: FC<PropsWithChildren<ConsoleProps>> = async ({ console, pr
     const { contentFileRelativePath: contentPath } = console;
     const { default: ConsoleContent } = await import(`@/content/${contentPath}/content.mdx`);
     const games = getAllGamesForConsole(console.frontmatter.metadata!.name);
+    const { metadata } = console.frontmatter;
+    const mdxComponents = {
+        ConsoleInformation: () => (
+            <ConsoleTimeInformation
+                releaseYear={metadata?.releaseYear}
+                acquiredYear={metadata?.acquiredYear}
+                bits={metadata?.bits}
+                generation={metadata?.generation}
+                className="mb-6"
+            />
+        ),
+    };
 
     return (
         <ReadingContentPage
@@ -45,19 +56,7 @@ export const Console: FC<PropsWithChildren<ConsoleProps>> = async ({ console, pr
                 manufacturerLogo={console.frontmatter.metadata!.manufacturerLogo}
                 logo={console.frontmatter.metadata!.logo}
             />
-            <ImageCarousel
-                images={console.frontmatter.metadata?.gallery || [console.frontmatter.image]}
-                alt={console.frontmatter.title}
-                className="mb-6"
-            />
-            <ConsoleTimeInformation
-                releaseYear={console.frontmatter.metadata?.releaseYear}
-                acquiredYear={console.frontmatter.metadata?.acquiredYear}
-                bits={console.frontmatter.metadata?.bits}
-                generation={console.frontmatter.metadata?.generation}
-                className="mb-6"
-            />
-            <ConsoleContent />
+            <ConsoleContent components={mdxComponents} />
             <h2 className="mb-4 flex items-center">
                 <IoGameControllerOutline className="text-primary mr-2 inline" />
                 Games

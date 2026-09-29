@@ -15,18 +15,26 @@ metadata:
     genre: "Action"
     pegiRating: "18"
     region: "PAL"
-    gallery:
-        - /media/content/videogames/console/playstation3/game/god-of-war-3/media/1.jpeg
-        - /media/content/videogames/console/playstation3/game/god-of-war-3/media/2.jpeg
-        - /media/content/videogames/console/playstation3/game/god-of-war-3/media/3.jpeg
-        - /media/content/videogames/console/playstation3/game/god-of-war-3/media/4.jpeg
-        - /media/content/videogames/console/playstation3/game/god-of-war-3/media/5.jpeg
-        - /media/content/videogames/console/playstation3/game/god-of-war-3/media/6.jpeg
-        - /media/content/videogames/console/playstation3/game/god-of-war-3/media/7.jpeg
 ---
 import { FaGamepad } from "react-icons/fa";
 import { ParagraphTitleWithIcon } from "matrix-design-system";
 import { ImageCarousel } from "@/components/features/design-system-next/image-carousel";
+
+<ImageCarousel
+    images={[
+        "/media/content/videogames/console/playstation3/game/god-of-war-3/media/1.jpeg",
+        "/media/content/videogames/console/playstation3/game/god-of-war-3/media/2.jpeg",
+        "/media/content/videogames/console/playstation3/game/god-of-war-3/media/3.jpeg",
+        "/media/content/videogames/console/playstation3/game/god-of-war-3/media/4.jpeg",
+        "/media/content/videogames/console/playstation3/game/god-of-war-3/media/5.jpeg",
+        "/media/content/videogames/console/playstation3/game/god-of-war-3/media/6.jpeg",
+        "/media/content/videogames/console/playstation3/game/god-of-war-3/media/7.jpeg",
+    ]}
+    alt="God Of War 3"
+    className="mb-6"
+/>
+
+<GameInformation />
 
 ## <ParagraphTitleWithIcon icon={<FaGamepad className="text-shadow-lg" />}>Gameplay</ParagraphTitleWithIcon>
 

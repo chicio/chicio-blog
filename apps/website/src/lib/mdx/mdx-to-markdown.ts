@@ -178,6 +178,8 @@ const componentsRenderedByTheirGenerator = new Set([
     "MangaStats",
     "MangaCatalog",
     "MangaInformation",
+    "GameInformation",
+    "ConsoleInformation",
 ]);
 
 const transformJsxElement = (node: MdxJsxElement): AnyContent[] => {

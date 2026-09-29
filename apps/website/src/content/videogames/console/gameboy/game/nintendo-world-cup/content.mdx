@@ -15,8 +15,17 @@ metadata:
     genre: "Sports"
     pegiRating: "8"
     region: "PAL"
-    gallery:
-        - /media/content/videogames/console/gameboy/game/nintendo-world-cup/media/1.jpeg
-        - /media/content/videogames/console/gameboy/game/nintendo-world-cup/media/2.jpeg
-        - /media/content/videogames/console/gameboy/game/nintendo-world-cup/media/3.jpeg
 ---
+import { ImageCarousel } from "@/components/features/design-system-next/image-carousel";
+
+<ImageCarousel
+    images={[
+        "/media/content/videogames/console/gameboy/game/nintendo-world-cup/media/1.jpeg",
+        "/media/content/videogames/console/gameboy/game/nintendo-world-cup/media/2.jpeg",
+        "/media/content/videogames/console/gameboy/game/nintendo-world-cup/media/3.jpeg",
+    ]}
+    alt="Nintendo World Cup"
+    className="mb-6"
+/>
+
+<GameInformation />

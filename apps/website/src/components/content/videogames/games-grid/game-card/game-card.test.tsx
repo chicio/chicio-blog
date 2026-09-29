@@ -41,7 +41,6 @@ const game: Content<GameMetadata> = {
             genre: "Action-Adventure",
             pegiRating: "3",
             region: "EU",
-            gallery: [],
         },
     },
     readingTime: { text: "", minutes: 0, time: 0, words: 0 },

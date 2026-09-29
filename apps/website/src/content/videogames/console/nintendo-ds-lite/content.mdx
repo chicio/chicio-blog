@@ -15,15 +15,24 @@ metadata:
     manufacturerLogo: "/media/content/videogames/manufacturer/nintendo.png"
     name: "Nintendo DS Lite"
     sku: "NTR-001"
-    gallery:
-        - "/media/content/videogames/console/nintendo-ds-lite/gallery/1.jpeg"
-        - "/media/content/videogames/console/nintendo-ds-lite/gallery/2.jpeg"
-        - "/media/content/videogames/console/nintendo-ds-lite/gallery/3.jpeg"
 ---
 
 import { FaLightbulb } from "react-icons/fa";
 import { ParagraphTitleWithIcon, Youtube } from "matrix-design-system";
 import { FiCpu, FiPower } from "react-icons/fi";
+import { ImageCarousel } from "@/components/features/design-system-next/image-carousel";
+
+<ImageCarousel
+    images={[
+        "/media/content/videogames/console/nintendo-ds-lite/gallery/1.jpeg",
+        "/media/content/videogames/console/nintendo-ds-lite/gallery/2.jpeg",
+        "/media/content/videogames/console/nintendo-ds-lite/gallery/3.jpeg",
+    ]}
+    alt="Nintendo DS Lite"
+    className="mb-6"
+/>
+
+<ConsoleInformation />
 
 ## <ParagraphTitleWithIcon icon={<FiCpu className="text-shadow-lg" />}> Hardware specs</ParagraphTitleWithIcon>
 

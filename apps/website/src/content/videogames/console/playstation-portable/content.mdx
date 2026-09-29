@@ -2,7 +2,7 @@
 title: "PlayStation Portable"
 description: "The PlayStation Portable (PSP) is a handheld game console developed and marketed by Sony. It features a large screen, multimedia capabilities, and a wide range of games."
 date: 2026-09-30
-image: /media/content/blog/post/2025/11/01/data-structures-algorithms/data-structures-and-algorithms-featured.png
+image: /media/content/videogames/console/playstation-portable/gallery/1.jpeg
 tags: [playstation portable, console, gaming]
 authors: [fabrizio_duroni]
 metadata:
@@ -15,19 +15,28 @@ metadata:
     manufacturerLogo: "/media/content/videogames/manufacturer/sony.png"
     name: "PlayStation Portable"
     sku: "PSP-3004"
-    gallery:
-        - "/media/content/videogames/console/playstation-portable/gallery/1.jpeg"
-        - "/media/content/videogames/console/playstation-portable/gallery/2.jpeg"
-        - "/media/content/videogames/console/playstation-portable/gallery/3.jpeg"
-        - "/media/content/videogames/console/playstation-portable/gallery/4.jpeg"
-        - "/media/content/videogames/console/playstation-portable/gallery/5.jpeg"
-        - "/media/content/videogames/console/playstation-portable/gallery/6.jpeg"
-        - "/media/content/videogames/console/playstation-portable/gallery/7.jpeg"      
 ---
 
 import { ParagraphTitleWithIcon, Youtube } from "matrix-design-system";
 import { FiCpu, FiPower } from "react-icons/fi";
 import { FaLightbulb } from "react-icons/fa";
+import { ImageCarousel } from "@/components/features/design-system-next/image-carousel";
+
+<ImageCarousel
+    images={[
+        "/media/content/videogames/console/playstation-portable/gallery/1.jpeg",
+        "/media/content/videogames/console/playstation-portable/gallery/2.jpeg",
+        "/media/content/videogames/console/playstation-portable/gallery/3.jpeg",
+        "/media/content/videogames/console/playstation-portable/gallery/4.jpeg",
+        "/media/content/videogames/console/playstation-portable/gallery/5.jpeg",
+        "/media/content/videogames/console/playstation-portable/gallery/6.jpeg",
+        "/media/content/videogames/console/playstation-portable/gallery/7.jpeg",
+    ]}
+    alt="PlayStation Portable"
+    className="mb-6"
+/>
+
+<ConsoleInformation />
 
 ## <ParagraphTitleWithIcon icon={<FiCpu className="text-shadow-lg" />}> Hardware specs</ParagraphTitleWithIcon>
 

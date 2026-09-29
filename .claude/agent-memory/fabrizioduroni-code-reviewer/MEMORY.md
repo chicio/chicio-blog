@@ -33,7 +33,8 @@ No per-PR facts — those go stale.
 - [generalized-component-drops-bespoke-item-logic.md](generalized-component-drops-bespoke-item-logic.md) — hardcoded list → injected data: diff old per-item logic (Authors prefix selection) against the new generic rule
 - [paired-variant-swap-mutant.md](paired-variant-swap-mutant.md) — slot→variant components (previous→blue, next→red pill) tested by name/href only survive a swap mutant; demand a per-slot variant assertion
 - [overflow-hidden-card-clips-focus-ring.md](overflow-hidden-card-clips-focus-ring.md) — full-size link/button inside an overflow-hidden card loses its focus ring; DS has no focus-visible CSS; probe via headless Playwright on file://
-- [content-conversion-self-oracle-tests.md](content-conversion-self-oracle-tests.md) — MDX body→frontmatter conversions are tested against their own output; diff old vs new via gray-matter; also flag hand-forced prettier churn in src/content
+- [content-conversion-self-oracle-tests.md](content-conversion-self-oracle-tests.md) — body↔frontmatter conversions are self-oracle tested; diff old vs new via gray-matter, check order in .next/server/app/*.html
+- [test-fixture-on-a-flagged-content-bug.md](test-fixture-on-a-flagged-content-bug.md) — grep new tests for the slugs in the implementer's "content bug kept" uncertainties; an e2e pinning the bug breaks on the fix
 - [e2e-chrome-assertion-on-a-404-url.md](e2e-chrome-assertion-on-a-404-url.md) — not-found.tsx renders no Menu/Footer; /blog/author/fabrizio-duroni 404s by design; check every new goto() URL is generated
 - [run-knip-in-unit-review.md](run-knip-in-unit-review.md) — Unit Checks skip knip; run `npx knip` in apps/website (read-only), triage by owner: downstream-consumed = expected, own orphans = blocking
 - [prior-round-findings-in-workflow-journal.md](prior-round-findings-in-workflow-journal.md) — journal.jsonl has old blocking ids + every unit's parked "integration item" notes (they ship unapplied)

@@ -25,6 +25,8 @@ export const consoleMarkdown = contentItemMarkdown(consoles, (consoleItem) => {
 
     return `**Manufacturer:** ${frontmatter.metadata?.manufacturer ?? "unknown"}
 **Release Year:** ${frontmatter.metadata?.releaseYear ?? "unknown"}
+**Acquired:** ${frontmatter.metadata?.acquiredYear ?? "unknown"}
+**Architecture:** ${frontmatter.metadata?.bits ?? "unknown"}
 **Generation:** ${frontmatter.metadata?.generation ?? "unknown"}
 
 ${contentBodyMarkdown(consoleItem)}
@@ -46,6 +48,8 @@ export const gameMarkdown = contentItemMarkdown(
 **Publisher:** ${game.frontmatter.metadata?.publisher ?? "unknown"}
 **Genre:** ${game.frontmatter.metadata?.genre ?? "unknown"}
 **Release Year:** ${game.frontmatter.metadata?.releaseYear ?? "unknown"}
+**Acquired:** ${game.frontmatter.metadata?.acquiredYear ?? "unknown"}
+**PEGI Rating:** ${game.frontmatter.metadata?.pegiRating ?? "unknown"}
 **Region:** ${game.frontmatter.metadata?.region ?? "unknown"}
 
 ${contentBodyMarkdown(game)}

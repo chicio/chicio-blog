@@ -31,7 +31,14 @@ const consoleContent = {
     frontmatter: {
         title: "Game Boy",
         description: "Nintendo's handheld console",
-        metadata: { manufacturer: "Nintendo", releaseYear: "1989", generation: "4th", name: "gameboy" },
+        metadata: {
+            manufacturer: "Nintendo",
+            releaseYear: "1989",
+            acquiredYear: "1993",
+            bits: "8 bit",
+            generation: "4th",
+            name: "gameboy",
+        },
     },
     slug: { formatted: `${slugs.videogames.home}/console/gameboy` },
     content: "Console body.",
@@ -47,6 +54,8 @@ const gameContent = {
             publisher: "Nintendo",
             genre: "Puzzle",
             releaseYear: "1989",
+            acquiredYear: "1994",
+            pegiRating: "3",
             region: "PAL",
         },
     },
@@ -84,7 +93,7 @@ describe("videogames-markdown", () => {
             expect(consoleMarkdown({ console: "unknown" })).toBeNull();
         });
 
-        it("folds manufacturer/release year/generation into the body", () => {
+        it("folds manufacturer/release year/acquired/architecture/generation into the body", () => {
             mockSingleConsole.mockReturnValue(consoleContent);
             mockGetAllGamesForConsole.mockReturnValue([gameContent]);
 
@@ -93,6 +102,8 @@ describe("videogames-markdown", () => {
             expect(result).toContain("# Game Boy");
             expect(result).toContain("**Manufacturer:** Nintendo");
             expect(result).toContain("**Release Year:** 1989");
+            expect(result).toContain("**Acquired:** 1993");
+            expect(result).toContain("**Architecture:** 8 bit");
             expect(result).toContain("**Generation:** 4th");
             expect(result).toContain("Console body.");
             expect(result).toContain("## Games (1)");
@@ -107,7 +118,7 @@ describe("videogames-markdown", () => {
             expect(gameMarkdown({ console: "gameboy", game: "unknown" })).toBeNull();
         });
 
-        it("folds console/developer/publisher/genre/release year/region into the body", () => {
+        it("folds console/developer/publisher/genre/release year/acquired/PEGI rating/region into the body", () => {
             mockSingleGame.mockReturnValue(gameContent);
 
             const result = gameMarkdown({ console: "gameboy", game: "tetris" });
@@ -118,6 +129,8 @@ describe("videogames-markdown", () => {
             expect(result).toContain("**Publisher:** Nintendo");
             expect(result).toContain("**Genre:** Puzzle");
             expect(result).toContain("**Release Year:** 1989");
+            expect(result).toContain("**Acquired:** 1994");
+            expect(result).toContain("**PEGI Rating:** 3");
             expect(result).toContain("**Region:** PAL");
             expect(result).toContain("Game body.");
         });

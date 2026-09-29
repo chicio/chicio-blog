@@ -15,19 +15,28 @@ metadata:
     manufacturerLogo: "/media/content/videogames/manufacturer/nintendo.png"
     name: "Nintendo Switch"
     sku: "HEG-001"
-    gallery:
-        - "/media/content/videogames/console/nintendo-switch/gallery/1.jpeg"
-        - "/media/content/videogames/console/nintendo-switch/gallery/2.jpeg"
-        - "/media/content/videogames/console/nintendo-switch/gallery/3.jpeg"
-        - "/media/content/videogames/console/nintendo-switch/gallery/4.jpeg"
-        - "/media/content/videogames/console/nintendo-switch/gallery/5.jpeg"
-        - "/media/content/videogames/console/nintendo-switch/gallery/6.jpeg"
-        - "/media/content/videogames/console/nintendo-switch/gallery/7.jpeg"
 ---
 
 import { FaLightbulb } from "react-icons/fa";
 import { ParagraphTitleWithIcon, Youtube } from "matrix-design-system";
 import { FiCpu, FiPower } from "react-icons/fi";
+import { ImageCarousel } from "@/components/features/design-system-next/image-carousel";
+
+<ImageCarousel
+    images={[
+        "/media/content/videogames/console/nintendo-switch/gallery/1.jpeg",
+        "/media/content/videogames/console/nintendo-switch/gallery/2.jpeg",
+        "/media/content/videogames/console/nintendo-switch/gallery/3.jpeg",
+        "/media/content/videogames/console/nintendo-switch/gallery/4.jpeg",
+        "/media/content/videogames/console/nintendo-switch/gallery/5.jpeg",
+        "/media/content/videogames/console/nintendo-switch/gallery/6.jpeg",
+        "/media/content/videogames/console/nintendo-switch/gallery/7.jpeg",
+    ]}
+    alt="Nintendo Switch OLED"
+    className="mb-6"
+/>
+
+<ConsoleInformation />
 
 ## <ParagraphTitleWithIcon icon={<FiCpu className="text-shadow-lg" />}> Hardware specs</ParagraphTitleWithIcon>
 

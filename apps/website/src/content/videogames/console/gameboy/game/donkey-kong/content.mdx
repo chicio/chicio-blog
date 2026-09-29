@@ -15,14 +15,22 @@ metadata:
     genre: "Platformer"
     pegiRating: "8"
     region: "PAL"
-    gallery:
-        - /media/content/videogames/console/gameboy/game/donkey-kong/media/1.jpeg
-        - /media/content/videogames/console/gameboy/game/donkey-kong/media/2.jpeg
-        - /media/content/videogames/console/gameboy/game/donkey-kong/media/3.jpeg
 ---
 import { FaGamepad } from "react-icons/fa";
 import { ParagraphTitleWithIcon } from "matrix-design-system";
 import { ImageCarousel } from "@/components/features/design-system-next/image-carousel";
+
+<ImageCarousel
+    images={[
+        "/media/content/videogames/console/gameboy/game/donkey-kong/media/1.jpeg",
+        "/media/content/videogames/console/gameboy/game/donkey-kong/media/2.jpeg",
+        "/media/content/videogames/console/gameboy/game/donkey-kong/media/3.jpeg",
+    ]}
+    alt="Donkey Kong"
+    className="mb-6"
+/>
+
+<GameInformation />
 
 ## <ParagraphTitleWithIcon icon={<FaGamepad className="text-shadow-lg" />}>Gameplay</ParagraphTitleWithIcon>
 

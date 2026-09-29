@@ -15,15 +15,23 @@ metadata:
     genre: "Action"
     pegiRating: "8"
     region: "PAL"
-    gallery:
-        - /media/content/videogames/console/playstation1/game/metal-gear-solid/media/1.jpeg
-        - /media/content/videogames/console/playstation1/game/metal-gear-solid/media/2.jpeg
-        - /media/content/videogames/console/playstation1/game/metal-gear-solid/media/3.jpeg
-        - /media/content/videogames/console/playstation1/game/metal-gear-solid/media/4.jpeg
 ---
 import { FaGamepad } from "react-icons/fa";
 import { ParagraphTitleWithIcon } from "matrix-design-system";
 import { ImageCarousel } from "@/components/features/design-system-next/image-carousel";
+
+<ImageCarousel
+    images={[
+        "/media/content/videogames/console/playstation1/game/metal-gear-solid/media/1.jpeg",
+        "/media/content/videogames/console/playstation1/game/metal-gear-solid/media/2.jpeg",
+        "/media/content/videogames/console/playstation1/game/metal-gear-solid/media/3.jpeg",
+        "/media/content/videogames/console/playstation1/game/metal-gear-solid/media/4.jpeg",
+    ]}
+    alt="Metal Gear Solid"
+    className="mb-6"
+/>
+
+<GameInformation />
 
 ## <ParagraphTitleWithIcon icon={<FaGamepad className="text-shadow-lg" />}>Gameplay</ParagraphTitleWithIcon>
 

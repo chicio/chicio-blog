@@ -2,7 +2,7 @@
 title: "Game Boy"
 description: "The Game Boy is a handheld game console developed and marketed by Nintendo. It is one of the first successful handheld consoles, known for its portability and extensive game library."
 date: 2026-02-14
-image: /media/content/videogames/console/gameboy/1.jpg
+image: /media/content/videogames/console/gameboy/gallery/1.jpg
 tags: [gameboy, nintendo, console, gaming]
 authors: [fabrizio_duroni]
 metadata:
@@ -15,15 +15,24 @@ metadata:
     manufacturerLogo: "/media/content/videogames/manufacturer/nintendo.png"
     name: "Game Boy"
     sku: "DMG-01"
-    gallery:
-        - "/media/content/videogames/console/gameboy/gallery/1.jpg"
-        - "/media/content/videogames/console/gameboy/gallery/2.jpg"
-        - "/media/content/videogames/console/gameboy/gallery/3.jpg"
 ---
 
 import { ParagraphTitleWithIcon, Youtube } from "matrix-design-system";
 import { FiCpu, FiPower } from "react-icons/fi";
 import { FaLightbulb } from "react-icons/fa";
+import { ImageCarousel } from "@/components/features/design-system-next/image-carousel";
+
+<ImageCarousel
+    images={[
+        "/media/content/videogames/console/gameboy/gallery/1.jpg",
+        "/media/content/videogames/console/gameboy/gallery/2.jpg",
+        "/media/content/videogames/console/gameboy/gallery/3.jpg",
+    ]}
+    alt="Game Boy"
+    className="mb-6"
+/>
+
+<ConsoleInformation />
 
 ## <ParagraphTitleWithIcon icon={<FiCpu className="text-shadow-lg" />}> Hardware specs</ParagraphTitleWithIcon>
 

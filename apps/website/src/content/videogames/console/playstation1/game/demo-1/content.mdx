@@ -15,8 +15,17 @@ metadata:
     genre: "Demo"
     pegiRating: "8"
     region: "PAL"
-    gallery:
-        - /media/content/videogames/console/playstation1/game/demo-1/media/1.jpeg
-        - /media/content/videogames/console/playstation1/game/demo-1/media/2.jpeg
-        - /media/content/videogames/console/playstation1/game/demo-1/media/3.jpeg
 ---
+import { ImageCarousel } from "@/components/features/design-system-next/image-carousel";
+
+<ImageCarousel
+    images={[
+        "/media/content/videogames/console/playstation1/game/demo-1/media/1.jpeg",
+        "/media/content/videogames/console/playstation1/game/demo-1/media/2.jpeg",
+        "/media/content/videogames/console/playstation1/game/demo-1/media/3.jpeg",
+    ]}
+    alt="Demo 1"
+    className="mb-6"
+/>
+
+<GameInformation />

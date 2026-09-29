@@ -1,4 +1,15 @@
-import { test, expect, type Page } from "./fixtures";
+import { test, expect, type Locator, type Page } from "./fixtures";
+
+const imageBySrc = (page: Page, path: string) =>
+    page.locator(`img[src*='${encodeURIComponent(path)}'], img[src*='${path}']`).first();
+
+const expectAbove = async (upper: Locator, lower: Locator) => {
+    await expect(upper).toBeVisible();
+    await expect(lower).toBeVisible();
+    const upperBox = await upper.boundingBox();
+    const lowerBox = await lower.boundingBox();
+    expect(upperBox!.y).toBeLessThan(lowerBox!.y);
+};
 
 /** Vertical space between the badges row (right under the title) and the element that follows it. */
 const gapBelowBadges = (page: Page) =>
@@ -14,6 +25,13 @@ test.describe("Videogames section", () => {
             await expect(page).toHaveURL(/\/videogames/);
             await expect(page.getByRole("heading", { name: /my videogames collection/i, level: 1 })).toBeVisible();
             await expect(page.getByRole("heading", { name: "Nintendo Switch", level: 2 })).toBeVisible();
+        });
+
+        test("shows each console card with its own photo as the cover", async ({ page }) => {
+            await page.goto("/videogames");
+            await expect(
+                imageBySrc(page, "/media/content/videogames/console/nintendo-switch/gallery/1.jpeg"),
+            ).toBeAttached();
         });
 
         test("clicking the Nintendo Switch heading navigates to the console page", async ({ page }) => {
@@ -36,6 +54,14 @@ test.describe("Videogames section", () => {
             await expect(page).toHaveURL(/\/videogames\/console\/nintendo-switch/);
             await expect(page.getByRole("heading", { name: "Nintendo Switch", level: 1 })).toBeVisible();
             await expect(page.getByRole("heading", { name: /hardware specs/i })).toBeVisible();
+        });
+
+        test("shows the own-copy carousel written in the MDX before the information pills", async ({ page }) => {
+            await page.goto("/videogames/console/nintendo-switch");
+            await expectAbove(
+                imageBySrc(page, "/media/content/videogames/console/nintendo-switch/gallery/1.jpeg"),
+                page.getByText("Architecture:"),
+            );
         });
 
         test("shows breadcrumb navigation back to videogames", async ({ page }) => {
@@ -89,6 +115,26 @@ test.describe("Videogames section", () => {
             await page.goto("/videogames/console/nintendo-switch/game/super-mario-odyssey");
             await expect(page.getByText("Publisher:")).toBeVisible();
             await expect(page.getByText("Developer:")).toBeVisible();
+        });
+
+        test("shows the own-copy carousel written in the MDX before the information pills", async ({ page }) => {
+            await page.goto("/videogames/console/nintendo-switch/game/super-mario-odyssey");
+            await expectAbove(
+                imageBySrc(
+                    page,
+                    "/media/content/videogames/console/nintendo-switch/game/super-mario-odyssey/media/1.jpeg",
+                ),
+                page.getByText("Publisher:"),
+            );
+        });
+
+        test("still shows the gameplay carousel after the information pills", async ({ page }) => {
+            await page.goto("/videogames/console/playstation5/game/astrobot");
+            await expect(page.getByRole("heading", { name: "Gameplay", level: 2 })).toBeVisible();
+            await expectAbove(
+                page.getByText("Publisher:"),
+                imageBySrc(page, "/media/content/videogames/console/playstation5/game/astrobot/gameplay/1.jpg"),
+            );
         });
 
         test("returns HTTP 200", async ({ page }) => {

@@ -15,16 +15,24 @@ metadata:
     genre: "Action"
     pegiRating: "8"
     region: "PAL"
-    gallery:
-        - /media/content/videogames/console/playstation2/game/metal-gear-solid-2-sons-of-the-liberty/media/1.jpeg
-        - /media/content/videogames/console/playstation2/game/metal-gear-solid-2-sons-of-the-liberty/media/2.jpeg
-        - /media/content/videogames/console/playstation2/game/metal-gear-solid-2-sons-of-the-liberty/media/3.jpeg
-        - /media/content/videogames/console/playstation2/game/metal-gear-solid-2-sons-of-the-liberty/media/4.jpeg
-        - /media/content/videogames/console/playstation2/game/metal-gear-solid-2-sons-of-the-liberty/media/5.jpeg
 ---
 import { FaGamepad } from "react-icons/fa";
 import { ParagraphTitleWithIcon } from "matrix-design-system";
 import { ImageCarousel } from "@/components/features/design-system-next/image-carousel";
+
+<ImageCarousel
+    images={[
+        "/media/content/videogames/console/playstation2/game/metal-gear-solid-2-sons-of-the-liberty/media/1.jpeg",
+        "/media/content/videogames/console/playstation2/game/metal-gear-solid-2-sons-of-the-liberty/media/2.jpeg",
+        "/media/content/videogames/console/playstation2/game/metal-gear-solid-2-sons-of-the-liberty/media/3.jpeg",
+        "/media/content/videogames/console/playstation2/game/metal-gear-solid-2-sons-of-the-liberty/media/4.jpeg",
+        "/media/content/videogames/console/playstation2/game/metal-gear-solid-2-sons-of-the-liberty/media/5.jpeg",
+    ]}
+    alt="Metal Gear Solid 2 Sons Of The Liberty"
+    className="mb-6"
+/>
+
+<GameInformation />
 
 ## <ParagraphTitleWithIcon icon={<FaGamepad className="text-shadow-lg" />}>Gameplay</ParagraphTitleWithIcon>
 

@@ -15,17 +15,25 @@ metadata:
     genre: "Platformer"
     pegiRating: "8"
     region: "PAL"
-    gallery:
-        - /media/content/videogames/console/nintendo-wii/game/super-mario-all-stars/media/1.jpeg
-        - /media/content/videogames/console/nintendo-wii/game/super-mario-all-stars/media/2.jpeg
-        - /media/content/videogames/console/nintendo-wii/game/super-mario-all-stars/media/3.jpeg
-        - /media/content/videogames/console/nintendo-wii/game/super-mario-all-stars/media/4.jpeg
-        - /media/content/videogames/console/nintendo-wii/game/super-mario-all-stars/media/5.jpeg
-        - /media/content/videogames/console/nintendo-wii/game/super-mario-all-stars/media/6.jpeg
 ---
 import { FaGamepad } from "react-icons/fa";
 import { ParagraphTitleWithIcon } from "matrix-design-system";
 import { ImageCarousel } from "@/components/features/design-system-next/image-carousel";
+
+<ImageCarousel
+    images={[
+        "/media/content/videogames/console/nintendo-wii/game/super-mario-all-stars/media/1.jpeg",
+        "/media/content/videogames/console/nintendo-wii/game/super-mario-all-stars/media/2.jpeg",
+        "/media/content/videogames/console/nintendo-wii/game/super-mario-all-stars/media/3.jpeg",
+        "/media/content/videogames/console/nintendo-wii/game/super-mario-all-stars/media/4.jpeg",
+        "/media/content/videogames/console/nintendo-wii/game/super-mario-all-stars/media/5.jpeg",
+        "/media/content/videogames/console/nintendo-wii/game/super-mario-all-stars/media/6.jpeg",
+    ]}
+    alt="Super Mario All Stars"
+    className="mb-6"
+/>
+
+<GameInformation />
 
 ## <ParagraphTitleWithIcon icon={<FaGamepad className="text-shadow-lg" />}>Gameplay</ParagraphTitleWithIcon>
 
