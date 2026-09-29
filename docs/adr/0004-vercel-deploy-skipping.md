@@ -32,8 +32,10 @@ redeploys every Monday regardless.
   assumption that such branches are always one commit off `main`. That holds for Dependabot but not for a feature
   branch pushed with many commits: a last commit touching only `.claude/` looked unaffected against `HEAD^1`, and the
   preview of a 40-commit branch was skipped. The logic now lives in `apps/website/scripts/vercel-ignore-build.sh`,
-  which runs `git fetch --depth=50 origin main` and uses `git merge-base HEAD FETCH_HEAD`, so exactly the branch's own
-  commits are compared. `main`'s tip was tried and rejected: it also counts `main`'s newer commits, so nearly every
+  which fetches `main` with `git fetch --depth=50` and uses `git merge-base HEAD FETCH_HEAD`, so exactly the branch's
+  own commits are compared. It fetches by URL, built from `VERCEL_GIT_REPO_OWNER` and `VERCEL_GIT_REPO_SLUG`, because
+  Vercel's clone has no `origin` remote (the first version fetched `origin` and so built every time); the repository is
+  public, so no credentials are needed. `main`'s tip was tried and rejected: it also counts `main`'s newer commits, so nearly every
   Dependabot branch would build, and on a shallow clone turbo cannot relate a depth-1 `FETCH_HEAD` to `HEAD` at all
   (`GitRefNotFound`, which builds every time). Measured on a depth-10 clone: a `.github`-only branch five commits behind
   `main` skips, a branch with an earlier website commit and a `.claude/`-only last commit builds, and a branch whose

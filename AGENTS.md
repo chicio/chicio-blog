@@ -156,7 +156,7 @@ The site deploys continuously from `main`. Two things about that project are not
 
 Four things in that command are easy to get wrong (the ADR explains each):
 
-- **`--base` must tolerate an empty value**: `VERCEL_GIT_PREVIOUS_SHA` is empty on any branch with no previous deployment, and an empty `--base` exits 2. The script then compares against the branch's merge-base with `main` (`git fetch --depth=50 origin main`, `git merge-base HEAD FETCH_HEAD`), never `HEAD^1`, which sees only the last commit of a multi-commit branch, and never `main`'s tip, which Vercel's shallow clone cannot relate to the branch. A failed fetch or a missing merge-base builds.
+- **`--base` must tolerate an empty value**: `VERCEL_GIT_PREVIOUS_SHA` is empty on any branch with no previous deployment, and an empty `--base` exits 2. The script then compares against the branch's merge-base with `main` (`git fetch --depth=50` of `main` by URL, since Vercel's clone has no `origin` remote, then `git merge-base HEAD FETCH_HEAD`), never `HEAD^1`, which sees only the last commit of a multi-commit branch, and never `main`'s tip, which Vercel's shallow clone cannot relate to the branch. A failed fetch or a missing merge-base builds.
 - **Do not pass `--head`**: it makes a rain-showcase-only commit report the website affected.
 - **An unreachable base exits 1, so it builds rather than skips.** That is the desired direction; do not "fix" it.
 - **`turbo` is pinned to a major (`turbo@^2`)**: the step runs before `npm install`, so `npx` fetches turbo fresh.
