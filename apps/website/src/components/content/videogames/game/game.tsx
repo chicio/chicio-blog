@@ -36,7 +36,7 @@ export const Game: FC<PropsWithChildren<GameProps>> = async ({ game, console, pr
             }
         >
             <PageTitle>{game.frontmatter.title}</PageTitle>
-            <div className="flex flex-row gap-2">
+            <div className="mb-6 flex flex-row gap-2">
                 <ConsoleLogos
                     manufacturer={console.frontmatter.metadata!.manufacturer}
                     manufacturerLogo={console.frontmatter.metadata!.manufacturerLogo}
