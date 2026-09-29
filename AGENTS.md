@@ -152,11 +152,11 @@ There is deliberately **no Dependabot auto-merge and no ruleset on `main`**: a r
 The site deploys continuously from `main`. Two things about that project are not visible from the repository:
 
 - **The Root Directory is `apps/website`, not the repository root.** Vercel reads `vercel.json` from the Root Directory, so the file lives at `apps/website/vercel.json`; a repository-root `vercel.json` is silently ignored. (Tell: the build log's `npm install --prefix=../..`.) "Include files outside the Root Directory" is on, so the whole monorepo is cloned and the root `package-lock.json` resolves normally.
-- **The `ignoreCommand` skips deploys for commits that cannot affect the site**, by asking `turbo query affected`. Why this and not the default ignore step or `turbo-ignore`: [ADR-0004](docs/adr/0004-vercel-deploy-skipping.md).
+- **The `ignoreCommand` skips deploys for commits that cannot affect the site**, by asking `turbo query affected`; the logic lives in `apps/website/scripts/vercel-ignore-build.sh`. Why this and not the default ignore step or `turbo-ignore`: [ADR-0004](docs/adr/0004-vercel-deploy-skipping.md).
 
 Four things in that command are easy to get wrong (the ADR explains each):
 
-- **`--base` must tolerate an empty value**: keep `${VERCEL_GIT_PREVIOUS_SHA:-HEAD^1}`; the variable is empty on every Dependabot PR, and an empty `--base` exits 2.
+- **`--base` must tolerate an empty value**: `VERCEL_GIT_PREVIOUS_SHA` is empty on any branch with no previous deployment, and an empty `--base` exits 2. The script then compares against the branch's merge-base with `main` (`git fetch --depth=50` of `main` by URL, since Vercel's clone has no `origin` remote, then `git merge-base HEAD FETCH_HEAD`), never `HEAD^1`, which sees only the last commit of a multi-commit branch, and never `main`'s tip, which Vercel's shallow clone cannot relate to the branch. A failed fetch or a missing merge-base builds.
 - **Do not pass `--head`**: it makes a rain-showcase-only commit report the website affected.
 - **An unreachable base exits 1, so it builds rather than skips.** That is the desired direction; do not "fix" it.
 - **`turbo` is pinned to a major (`turbo@^2`)**: the step runs before `npm install`, so `npx` fetches turbo fresh.

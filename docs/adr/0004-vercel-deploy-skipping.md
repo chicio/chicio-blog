@@ -26,10 +26,21 @@ redeploys every Monday regardless.
 
 ## Consequences
 
-- `--base` falls back to `HEAD^1` (`${VERCEL_GIT_PREVIOUS_SHA:-HEAD^1}`). The variable holds the last successful
-  deployment's SHA and is only exposed when an ignore step is configured, but it is empty on any branch with no previous
-  deployment, which is every Dependabot PR; an empty `--base` makes `turbo query affected` exit 2. Those branches are
-  always one commit off `main`, so `HEAD^1` is right.
+- `--base` is `VERCEL_GIT_PREVIOUS_SHA` when set, else the branch's merge-base with `main`. The variable holds the last
+  successful deployment and is empty on any branch with no previous deployment (every Dependabot PR, and the first push
+  of any feature branch); an empty `--base` makes `turbo query affected` exit 2. The fallback was first `HEAD^1`, on the
+  assumption that such branches are always one commit off `main`. That holds for Dependabot but not for a feature
+  branch pushed with many commits: a last commit touching only `.claude/` looked unaffected against `HEAD^1`, and the
+  preview of a 40-commit branch was skipped. The logic now lives in `apps/website/scripts/vercel-ignore-build.sh`,
+  which fetches `main` with `git fetch --depth=50` and uses `git merge-base HEAD FETCH_HEAD`, so exactly the branch's
+  own commits are compared. It fetches by URL, built from `VERCEL_GIT_REPO_OWNER` and `VERCEL_GIT_REPO_SLUG`, because
+  Vercel's clone has no `origin` remote (the first version fetched `origin` and so built every time); the repository is
+  public, so no credentials are needed. `main`'s tip was tried and rejected: it also counts `main`'s newer commits, so nearly every
+  Dependabot branch would build, and on a shallow clone turbo cannot relate a depth-1 `FETCH_HEAD` to `HEAD` at all
+  (`GitRefNotFound`, which builds every time). Measured on a depth-10 clone: a `.github`-only branch five commits behind
+  `main` skips, a branch with an earlier website commit and a `.claude/`-only last commit builds, and a branch whose
+  fork point is older than the clone has no merge-base and builds. A failed fetch or a missing merge-base exits 1
+  (build), never the reverse.
 - `--head` is never passed: `--base=<sha>^ --head=<sha>` reports the website affected for a rain-showcase-only commit,
   where `--base=<sha>^` alone correctly reports it unaffected.
 - `turbo` is pinned to a major (`turbo@^2`): the ignore step runs before `npm install`, so `npx` fetches turbo from the
