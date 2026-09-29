@@ -167,11 +167,18 @@ const transformEggSolution = (node: MdxJsxElement): AnyContent[] => [
 ];
 
 /**
- * Components whose information the surrounding generator already renders as markdown. The videogames
- * page lists its consoles and games straight after placing the browser, so an "open the page"
- * placeholder there would be noise rather than a hint.
+ * Components whose information the surrounding generator already renders as markdown, including the
+ * per-item facts slots a page binds for its MDX. The videogames page lists its consoles and games
+ * straight after placing the browser, so an "open the page" placeholder there would be noise rather
+ * than a hint.
  */
-const componentsRenderedByTheirGenerator = new Set(["VideogamesStats", "VideogamesCatalog"]);
+const componentsRenderedByTheirGenerator = new Set([
+    "VideogamesStats",
+    "VideogamesCatalog",
+    "MangaStats",
+    "MangaCatalog",
+    "MangaInformation",
+]);
 
 const transformJsxElement = (node: MdxJsxElement): AnyContent[] => {
     const { name } = node;

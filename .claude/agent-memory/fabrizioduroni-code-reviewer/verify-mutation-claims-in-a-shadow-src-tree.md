@@ -21,6 +21,15 @@ ln -s <worktree>/node_modules "$SH/node_modules"   # root node_modules (hoisted)
 cd "$SH" && npx vitest run --project jsdom <file-name-substrings>
 ```
 
+Design-system variant: `packages/matrix-design-system` has its own `node_modules` too (jest-dom,
+typescript, @babel, …) that must shadow the root copies. A plain symlink to either one breaks resolution.
+Make `$SH/node_modules` a real directory, symlink every root entry into it, then replace the entries
+the package-local copy has. A scoped dir such as `@testing-library` has to be merged entry by entry,
+because the package-local copy holds only `jest-dom`. Copy `src`, `vitest.config.ts`, `vitest.setup.ts`,
+`package.json` and `tsconfig.json`, then run `./node_modules/.bin/vitest run --root . <paths>`. The
+sandbox accepts simple `for` loops of `ln -s`. It refuses a `sed` whose file argument is a shell
+variable, so spell the path out.
+
 Why it works: `vitest.config.ts` aliases `@` via `resolve(__dirname, "./src")`, so with the config
 copied to the shadow root the alias re-points at the shadow `src` automatically, and
 `setupFiles: ["./vitest.setup.ts"]` resolves there too. Establish a green baseline first — it

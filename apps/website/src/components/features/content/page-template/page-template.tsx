@@ -2,23 +2,21 @@ import { ContentContainer } from "matrix-design-system";
 import { Footer } from "@/components/features/design-system-next/footer";
 import { Menu } from "@/components/features/design-system-next/menu";
 import { FC, ReactNode } from "react";
-import type { MenuNavHrefs, MenuTrackingCallbacks } from "@/components/features/design-system-next/menu";
+import type { MenuEntry } from "@/components/features/design-system-next/menu";
 import type {
-    FooterNavHrefs,
+    FooterLink,
     SocialContactLinks,
-    FooterNavTrackingCallbacks,
     FooterSocialTrackingCallbacks,
 } from "@/components/features/design-system-next/footer";
 
 export interface BlogPageProps {
     header: React.ReactElement;
     author: string;
-    navHrefs: MenuNavHrefs;
-    footerNavHrefs: FooterNavHrefs;
+    menuEntries: MenuEntry[];
+    footerLinks: FooterLink[];
+    contactHref: string;
     socialLinks: SocialContactLinks;
     onPaletteTrigger?: () => void;
-    menuTracking?: MenuTrackingCallbacks;
-    footerNavTracking?: FooterNavTrackingCallbacks;
     footerSocialTracking?: FooterSocialTrackingCallbacks;
     children?: ReactNode;
 }
@@ -27,25 +25,24 @@ export const PageTemplate: FC<BlogPageProps> = ({
     header,
     children,
     author,
-    navHrefs,
-    footerNavHrefs,
+    menuEntries,
+    footerLinks,
+    contactHref,
     socialLinks,
     onPaletteTrigger,
-    menuTracking,
-    footerNavTracking,
     footerSocialTracking,
 }) => (
     <>
-        <Menu navHrefs={navHrefs} onPaletteTrigger={onPaletteTrigger} tracking={menuTracking} />
+        <Menu entries={menuEntries} onPaletteTrigger={onPaletteTrigger} />
         <ContentContainer>
             {header}
             <div className="mt-4">{children}</div>
         </ContentContainer>
         <Footer
             author={author}
-            navHrefs={footerNavHrefs}
+            links={footerLinks}
+            contactHref={contactHref}
             socialLinks={socialLinks}
-            navTracking={footerNavTracking}
             socialTracking={footerSocialTracking}
         />
     </>

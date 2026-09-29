@@ -1,4 +1,5 @@
 import { topics } from "@/lib/content/data-structures-and-algorithms/data-structures-and-algorithms";
+import { mangas } from "@/lib/content/manga/manga";
 import { posts, getTags } from "@/lib/content/posts/posts";
 import { contentRegistry } from "@/lib/content/registry";
 import { siteMetadata } from "@/types/configuration/site-metadata";
@@ -90,12 +91,25 @@ ${topics
     )
     .join("\n")}
 
+## Manga
+
+Manga in Fabrizio's collection, one entry per series:
+
+${mangas
+    .list()
+    .map(
+        (manga) =>
+            `- [${manga.frontmatter.title}](${siteMetadata.siteUrl}${manga.slug.formatted}): ${manga.frontmatter.description}`,
+    )
+    .join("\n")}
+
 ## Additional Information:
 
 - [Blog Pagination](${siteMetadata.siteUrl}${slugs.blog.blogPostsPage}/2): Browse posts page by page. Pay attention that the first page is just ${siteMetadata.siteUrl}${slugs.blog.home}.
 - Blog post URLs follow the pattern: ${siteMetadata.siteUrl}/blog/post/YYYY/MM/DD/slug
 - Tag URLs follow the pattern: ${siteMetadata.siteUrl}${slugs.blog.tag}/tag-name
 - Videogame URLs follow the pattern: ${siteMetadata.siteUrl}/videogames/console/console-name, then /game/game-name for a single game
+- Manga URLs follow the pattern: ${siteMetadata.siteUrl}/manga/manga-name
 - DSA exercise URLs follow the pattern: ${siteMetadata.siteUrl}/data-structures-and-algorithms/topic/topic-name/exercise/exercise-name
 `;
 

@@ -16,7 +16,7 @@ import { McpEndpoint } from "@/components/content/mcp/mcp-endpoint";
 
 [Model Context Protocol](https://modelcontextprotocol.io) (MCP) is an open standard that lets AI assistants connect to external data sources and tools. Instead of copy-pasting content into a chat, you give the AI a direct, structured connection to the source.
 
-This website exposes a public MCP server. Connect your AI assistant to browse blog posts, explore DSA exercises, search content, browse the videogame collection, and more. No authentication required.
+This website exposes a public MCP server. Connect your AI assistant to browse blog posts, explore DSA exercises, search content, browse the videogame and manga collections, and more. No authentication required.
 
 <McpEndpoint />
 
@@ -34,8 +34,9 @@ All tools are read-only and return JSON. Optional parameters are marked with `?`
 | `get_dsa_exercises` | `topic?, difficulty?` | List DSA exercises. Filterable by topic slug and difficulty ("Easy", "Medium", "Hard"). |
 | `get_videogame_consoles` | — | List all consoles in the collection, sorted by release year. |
 | `get_videogame_games` | `console?, genre?` | List games in the collection. Filter by console name (from `get_videogame_consoles`) and/or genre. |
+| `get_manga` | `author?, status?` | List the manga in the collection with all their metadata and the Volumes owned. Filter by story or art author and/or status ("Completed", "Ongoing"). |
 | `get_about_me` | — | Return the full About Me page content including professional background and skills. |
-| `get_site_stats` | — | Aggregate statistics: post count, tag count, DSA topics/exercises, videogame consoles/games, latest post. |
+| `get_site_stats` | — | Aggregate statistics: post count, tag count, DSA topics/exercises, videogame consoles/games, manga and Volumes owned, latest post. |
 
 ## <ParagraphTitleWithIcon icon={<BiChat className="text-accent text-2xl" />}>Usage Examples</ParagraphTitleWithIcon>
 
@@ -143,6 +144,17 @@ Natural language prompts that trigger each tool, with example responses (truncat
 ]
 ```
 
+### `get_manga`
+
+> *"Which manga do you own?"*
+
+```json
+[
+  { "title": "Death Note Complete Edition",     "storyBy": ["Tsugumi Ohba"],     "volumesOwned": 1,  "volumes": 1  },
+  { "title": "Demon Slayer: Kimetsu no Yaiba", "storyBy": ["Koyoharu Gotouge"], "volumesOwned": 23, "volumes": 23 }
+]
+```
+
 ### `get_about_me`
 
 > *"Tell me about Fabrizio's professional background"*
@@ -165,6 +177,8 @@ Natural language prompts that trigger each tool, with example responses (truncat
   "dsaExercisesCount":       91,
   "videogameConsolesCount":  11,
   "videogameGamesCount":    148,
+  "mangaCount":               2,
+  "mangaVolumesOwnedCount":  24,
   "latestPost": {
     "title": "Eulerian Circuit",
     "date":  "2026-04-22",

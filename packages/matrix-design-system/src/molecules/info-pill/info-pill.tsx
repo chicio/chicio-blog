@@ -1,6 +1,6 @@
 import { FC, ReactNode } from "react";
 
-interface InfoPillProps {
+export interface InfoPillProps {
     icon: ReactNode;
     label: string;
     value: string;

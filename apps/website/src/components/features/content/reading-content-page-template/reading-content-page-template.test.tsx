@@ -1,8 +1,8 @@
 import { describe, it, expect, vi, beforeAll } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { ReadingContentPageTemplate } from "./reading-content-page-template";
-import type { MenuNavHrefs } from "@/components/features/design-system-next/menu";
-import type { FooterNavHrefs, SocialContactLinks } from "@/components/features/design-system-next/footer";
+import type { MenuEntry } from "@/components/features/design-system-next/menu";
+import type { FooterLink, SocialContactLinks } from "@/components/features/design-system-next/footer";
 
 vi.mock("next/navigation", () => ({
     usePathname: () => "/",
@@ -87,32 +87,20 @@ beforeAll(() => {
     );
 });
 
-const navHrefs: MenuNavHrefs = {
-    blog: "/blog",
-    blogAuthors: "/blog/authors",
-    blogAuthor: "/blog/author",
-    blogTags: "/blog/tags",
-    blogArchive: "/blog/archive",
-    blogStats: "/blog/stats",
-    dsaRoadmap: "/dsa/roadmap",
-    dsaExercises: "/dsa/exercises",
-    chat: "/chat",
-    mcp: "/mcp",
-    easterEggHunt: "/easter-egg-hunt",
-    aboutMe: "/about-me",
-    art: "/art",
-    videogames: "/videogames",
-    contact: "/contact",
-};
+const menuEntries: MenuEntry[] = [
+    { label: "Home", to: "/" },
+    {
+        label: "The Author",
+        groups: [{ label: "Hobbies", items: [{ label: "Manga", to: "/manga" }] }],
+    },
+];
 
-const footerNavHrefs: FooterNavHrefs = {
-    blog: "/blog",
-    art: "/art",
-    aboutMe: "/about-me",
-    archive: "/archive",
-    tags: "/tags",
-    contact: "/contact",
-};
+const footerLinks: FooterLink[] = [
+    { label: "Home", to: "/" },
+    { label: "Blog", to: "/blog" },
+];
+
+const contactHref = "/contact";
 
 const socialLinks: SocialContactLinks = {
     github: "https://github.com/chicio",
@@ -130,8 +118,9 @@ describe("ReadingContentPageTemplate", () => {
             render(
                 <ReadingContentPageTemplate
                     author="Fabrizio"
-                    navHrefs={navHrefs}
-                    footerNavHrefs={footerNavHrefs}
+                    menuEntries={menuEntries}
+                    footerLinks={footerLinks}
+                    contactHref={contactHref}
                     socialLinks={socialLinks}
                 />,
             );
@@ -142,8 +131,9 @@ describe("ReadingContentPageTemplate", () => {
             render(
                 <ReadingContentPageTemplate
                     author="Fabrizio"
-                    navHrefs={navHrefs}
-                    footerNavHrefs={footerNavHrefs}
+                    menuEntries={menuEntries}
+                    footerLinks={footerLinks}
+                    contactHref={contactHref}
                     socialLinks={socialLinks}
                 >
                     <article>Article body</article>
@@ -156,8 +146,9 @@ describe("ReadingContentPageTemplate", () => {
             render(
                 <ReadingContentPageTemplate
                     author="Fabrizio"
-                    navHrefs={navHrefs}
-                    footerNavHrefs={footerNavHrefs}
+                    menuEntries={menuEntries}
+                    footerLinks={footerLinks}
+                    contactHref={contactHref}
                     socialLinks={socialLinks}
                     breadcrumbs={[
                         { label: "Blog", href: "/blog", isCurrent: false },
@@ -173,8 +164,9 @@ describe("ReadingContentPageTemplate", () => {
             render(
                 <ReadingContentPageTemplate
                     author="Fabrizio"
-                    navHrefs={navHrefs}
-                    footerNavHrefs={footerNavHrefs}
+                    menuEntries={menuEntries}
+                    footerLinks={footerLinks}
+                    contactHref={contactHref}
                     socialLinks={socialLinks}
                     beforeContent={<div>Before content</div>}
                     afterContent={<div>After content</div>}

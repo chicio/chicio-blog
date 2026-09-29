@@ -22,5 +22,8 @@ export type NextVideogamesConsoleParameters = NextParameters<VideogamesConsolePa
 type VideogamesGameParameters = { console: string; game: string };
 export type NextVideogamesGameParameters = NextParameters<VideogamesGameParameters>;
 
+type MangaParameters = { manga: string };
+export type NextMangaParameters = NextParameters<MangaParameters>;
+
 type AuthorParameters = { authorId: string };
 export type NextAuthorParameters = NextParameters<AuthorParameters>;

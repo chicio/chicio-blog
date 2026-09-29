@@ -21,12 +21,11 @@ export const ReadingContentPageTemplate: FC<ReadingContentPageProps> = ({
     breadcrumbs,
     big = false,
     headerWrapper,
-    navHrefs,
-    footerNavHrefs,
+    menuEntries,
+    footerLinks,
+    contactHref,
     socialLinks,
     onPaletteTrigger,
-    menuTracking,
-    footerNavTracking,
     footerSocialTracking,
 }) => (
     <>
@@ -35,12 +34,11 @@ export const ReadingContentPageTemplate: FC<ReadingContentPageProps> = ({
             author={author}
             big={big}
             headerWrapper={headerWrapper}
-            navHrefs={navHrefs}
-            footerNavHrefs={footerNavHrefs}
+            menuEntries={menuEntries}
+            footerLinks={footerLinks}
+            contactHref={contactHref}
             socialLinks={socialLinks}
             onPaletteTrigger={onPaletteTrigger}
-            menuTracking={menuTracking}
-            footerNavTracking={footerNavTracking}
             footerSocialTracking={footerSocialTracking}
         >
             {breadcrumbs && <Breadcrumb items={breadcrumbs} />}

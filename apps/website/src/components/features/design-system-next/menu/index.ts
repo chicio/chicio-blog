@@ -1,2 +1,2 @@
 export { Menu } from "./menu";
-export type { MenuNavHrefs, MenuTrackingCallbacks } from "matrix-design-system";
+export type { MenuEntry } from "matrix-design-system";

@@ -1,11 +1,10 @@
 import { PageTemplate } from "@/components/features/content/page-template";
 import { BrandHeader } from "@/components/features/design-system-next/brand-header";
 import { FC, PropsWithChildren, ReactNode } from "react";
-import type { MenuNavHrefs, MenuTrackingCallbacks } from "@/components/features/design-system-next/menu";
+import type { MenuEntry } from "@/components/features/design-system-next/menu";
 import type {
-    FooterNavHrefs,
+    FooterLink,
     SocialContactLinks,
-    FooterNavTrackingCallbacks,
     FooterSocialTrackingCallbacks,
 } from "@/components/features/design-system-next/footer";
 
@@ -13,12 +12,11 @@ export interface ContentPageProps {
     author: string;
     big?: boolean;
     headerWrapper?: FC<PropsWithChildren>;
-    navHrefs: MenuNavHrefs;
-    footerNavHrefs: FooterNavHrefs;
+    menuEntries: MenuEntry[];
+    footerLinks: FooterLink[];
+    contactHref: string;
     socialLinks: SocialContactLinks;
     onPaletteTrigger?: () => void;
-    menuTracking?: MenuTrackingCallbacks;
-    footerNavTracking?: FooterNavTrackingCallbacks;
     footerSocialTracking?: FooterSocialTrackingCallbacks;
     children?: ReactNode;
 }
@@ -28,22 +26,20 @@ export const ContentPageTemplate: FC<ContentPageProps> = ({
     author,
     big = false,
     headerWrapper,
-    navHrefs,
-    footerNavHrefs,
+    menuEntries,
+    footerLinks,
+    contactHref,
     socialLinks,
     onPaletteTrigger,
-    menuTracking,
-    footerNavTracking,
     footerSocialTracking,
 }) => (
     <PageTemplate
         author={author}
-        navHrefs={navHrefs}
-        footerNavHrefs={footerNavHrefs}
+        menuEntries={menuEntries}
+        footerLinks={footerLinks}
+        contactHref={contactHref}
         socialLinks={socialLinks}
         onPaletteTrigger={onPaletteTrigger}
-        menuTracking={menuTracking}
-        footerNavTracking={footerNavTracking}
         footerSocialTracking={footerSocialTracking}
         header={<BrandHeader big={big} wrapper={headerWrapper} />}
     >

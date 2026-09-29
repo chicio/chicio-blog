@@ -5,35 +5,29 @@ import type { ContentPageProps as ContentPageTemplateProps } from "@/components/
 import { TheChoiceEasterEgg } from "@/components/features/easter-eggs/the-choice";
 import { FC } from "react";
 import { useContentPageStore } from "./use-content-page-store";
-import { menuNavHrefs, footerNavHrefs, socialContactLinks } from "../nav-config";
+import { contactHref, socialContactLinks } from "../nav-config";
 
 export type ContentPageProps = Omit<
     ContentPageTemplateProps,
-    | "navHrefs"
-    | "footerNavHrefs"
-    | "socialLinks"
-    | "onPaletteTrigger"
-    | "menuTracking"
-    | "footerNavTracking"
-    | "footerSocialTracking"
+    "menuEntries" | "footerLinks" | "contactHref" | "socialLinks" | "onPaletteTrigger" | "footerSocialTracking"
 > & {
     trackingCategory: string;
 };
 
 export const ContentPage: FC<ContentPageProps> = ({ trackingCategory, ...rest }) => {
-    const { effects } = useContentPageStore(trackingCategory);
-    const { onPaletteTrigger, menuTracking, footerNavTracking, footerSocialTracking } = effects;
+    const { state, effects } = useContentPageStore(trackingCategory);
+    const { menuEntries, footerLinks } = state;
+    const { onPaletteTrigger, footerSocialTracking } = effects;
 
     return (
         <ContentPageTemplate
             {...rest}
             headerWrapper={TheChoiceEasterEgg}
-            navHrefs={menuNavHrefs}
-            footerNavHrefs={footerNavHrefs}
+            menuEntries={menuEntries}
+            footerLinks={footerLinks}
+            contactHref={contactHref}
             socialLinks={socialContactLinks}
             onPaletteTrigger={onPaletteTrigger}
-            menuTracking={menuTracking}
-            footerNavTracking={footerNavTracking}
             footerSocialTracking={footerSocialTracking}
         />
     );

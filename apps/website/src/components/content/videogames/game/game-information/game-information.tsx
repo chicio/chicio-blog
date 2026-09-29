@@ -1,7 +1,7 @@
 import { IoGameControllerOutline } from "react-icons/io5";
 import { FC } from "react";
+import { InfoPill } from "matrix-design-system";
 import { ReleaseYear } from "@/components/content/videogames/release-year";
-import { InfoPill } from "@/components/content/videogames/info-pill";
 import { FightingGameTrigger } from "@/components/features/easter-eggs/fighting-game-trigger";
 import { MdOutlineDeveloperBoard } from "react-icons/md";
 import { IoNewspaperOutline } from "react-icons/io5";

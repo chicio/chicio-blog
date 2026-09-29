@@ -4,11 +4,11 @@ import { FC, PropsWithChildren } from "react";
 import { JsonLd } from "@/components/features/seo/jsond-ld";
 import { Content } from "@/types/content/content";
 import { ConsoleMetadata, GameMetadata } from "@/types/content/videogames";
+import { PreviousNextNavigation } from "@/components/features/design-system-next/previous-next-navigation";
 import { ImageCarousel } from "@/components/features/design-system-next/image-carousel";
 import { PageTitle } from "matrix-design-system";
 import { ConsoleLogos } from "@/components/content/videogames/console-logos";
 import { GameFormatIcon } from "@/components/content/videogames/game-format-icon";
-import { VideogameNavigation } from "@/components/content/videogames/videogame-navigation";
 import { GameBreadcrumb } from "./game-breadcrumb";
 import { GameInformation } from "./game-information";
 
@@ -70,7 +70,7 @@ export const Game: FC<PropsWithChildren<GameProps>> = async ({ game, console, pr
                 className="mb-6"
             />
             <GameContent />
-            <VideogameNavigation
+            <PreviousNextNavigation
                 previous={previous ? { url: previous.slug.formatted, title: previous.frontmatter.title } : undefined}
                 next={next ? { url: next.slug.formatted, title: next.frontmatter.title } : undefined}
             />

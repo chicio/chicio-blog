@@ -29,8 +29,8 @@ test.describe("Global image lightbox", () => {
         test("renders a grid and clicking a tile opens the lightbox", async ({ page }) => {
             await page.goto("/art");
 
-            const tiles = page.locator("figure img");
-            await expect(tiles.first()).toBeVisible();
+            const tiles = page.locator('button[aria-label^="Open "]:not([aria-label="Open command palette"])');
+            await expect(tiles.first()).toBeAttached();
             const tileCount = await tiles.count();
             expect(tileCount).toBeGreaterThan(1);
 

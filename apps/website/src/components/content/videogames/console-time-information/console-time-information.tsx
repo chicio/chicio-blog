@@ -3,7 +3,7 @@ import { IoGameControllerOutline } from "react-icons/io5";
 import { FC } from "react";
 import { TbDeviceGamepad2 } from "react-icons/tb";
 import { ReleaseYear } from "@/components/content/videogames/release-year";
-import { InfoPill } from "@/components/content/videogames/info-pill";
+import { InfoPill } from "matrix-design-system";
 
 interface ConsoleTimeInformationProps {
     releaseYear?: string;
