@@ -61,7 +61,9 @@ test.describe("Manga section", () => {
             await expect(page.getByRole("heading", { name: "Plot", level: 2 })).toBeVisible();
         });
 
-        test("shows the carousel written in the MDX, holding the cover while there are no shelf photos", async ({ page }) => {
+        test("shows the carousel written in the MDX, holding the cover while there are no shelf photos", async ({
+            page,
+        }) => {
             await page.goto("/manga/death-note");
             await expect(
                 page.locator("img[src*='death-note%2Fcover.jpg'], img[src*='death-note/cover.jpg']").first(),

@@ -1,12 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { Content } from "@/types/content/content";
 import { MangaMetadata, MangaStatus } from "@/types/content/manga";
-import {
-    collectionFigures,
-    isMangaComplete,
-    serializationLabel,
-    volumesOwnedLabel,
-} from "./manga-figures";
+import { collectionFigures, isMangaComplete, serializationLabel, volumesOwnedLabel } from "./manga-figures";
 
 const metadataOf = (overrides: Partial<MangaMetadata> = {}): MangaMetadata => ({
     storyBy: ["Koyoharu Gotouge"],
