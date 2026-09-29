@@ -28,14 +28,14 @@ export const ConsoleCard: FC<ConsoleCardProps> = ({ console, gamesCount }) => (
         <InternalLink to={console.slug.formatted}>
             <div className="border-accent-alpha-40 relative flex h-96 items-center justify-center overflow-hidden border-b bg-black">
                 <Image
-                    src={console.frontmatter.metadata!.gallery[0]}
+                    src={console.frontmatter.image}
                     alt={console.frontmatter.title}
                     width={800}
                     height={400}
                     className="absolute h-96 w-full object-cover blur-lg"
                 />
                 <Image
-                    src={console.frontmatter.metadata!.gallery[0]}
+                    src={console.frontmatter.image}
                     alt={console.frontmatter.title}
                     width={800}
                     height={400}

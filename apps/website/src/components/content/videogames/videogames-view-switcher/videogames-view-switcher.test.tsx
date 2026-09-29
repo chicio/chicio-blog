@@ -28,7 +28,6 @@ const makeGame = (title: string): Content<GameMetadata> => ({
             genre: "Action",
             pegiRating: "3",
             region: "EU",
-            gallery: [],
         },
     },
     readingTime: { text: "", minutes: 0, time: 0, words: 0 },
@@ -57,7 +56,6 @@ const makeConsoleWithGameCount = (name: string, count: number): ConsoleWithGameC
                 manufacturer: "Nintendo",
                 manufacturerLogo: "",
                 sku: "NES-001",
-                gallery: ["/media/console.jpg"],
             },
         },
         readingTime: { text: "", minutes: 0, time: 0, words: 0 },
@@ -77,6 +75,22 @@ describe("VideogamesViewSwitcher", () => {
             );
             expect(screen.getByText("By Console")).toBeInTheDocument();
             expect(screen.getByText("All Games")).toBeInTheDocument();
+        });
+
+        it("shows each console card with its cover taken from the frontmatter image", () => {
+            render(
+                <VideogamesViewSwitcher
+                    games={[makeGame("Zelda")]}
+                    consolesWithGameCount={[makeConsoleWithGameCount("NES", 1)]}
+                />,
+            );
+
+            const covers = screen.getAllByRole("img", { name: "NES" });
+
+            expect(covers.length).toBeGreaterThan(0);
+            covers.forEach((cover) => {
+                expect(cover).toHaveAttribute("src", "/media/console.jpg");
+            });
         });
 
         it("renders the filter input", () => {

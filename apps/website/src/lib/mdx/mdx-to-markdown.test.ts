@@ -191,6 +191,12 @@ Some prose after the heading.
 
             expect(result).toBe("intro\n\noutro");
         });
+
+        it("emits nothing for the Game and Console facts slots", () => {
+            const result = mdxToMarkdown(`intro\n\n<GameInformation />\n\n<ConsoleInformation />\n\noutro`);
+
+            expect(result).toBe("intro\n\noutro");
+        });
     });
 
     describe("interactive component placeholder (generic fallback, no hardcoded name list)", () => {

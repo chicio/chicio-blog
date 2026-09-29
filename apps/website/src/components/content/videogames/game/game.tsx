@@ -5,7 +5,6 @@ import { JsonLd } from "@/components/features/seo/jsond-ld";
 import { Content } from "@/types/content/content";
 import { ConsoleMetadata, GameMetadata } from "@/types/content/videogames";
 import { PreviousNextNavigation } from "@/components/features/design-system-next/previous-next-navigation";
-import { ImageCarousel } from "@/components/features/design-system-next/image-carousel";
 import { PageTitle } from "matrix-design-system";
 import { ConsoleLogos } from "@/components/content/videogames/console-logos";
 import { GameFormatIcon } from "@/components/content/videogames/game-format-icon";
@@ -22,6 +21,22 @@ interface GameProps {
 export const Game: FC<PropsWithChildren<GameProps>> = async ({ game, console, previous, next }) => {
     const { contentFileRelativePath: contentPath } = game;
     const { default: GameContent } = await import(`@/content/${contentPath}/content.mdx`);
+    const { metadata } = game.frontmatter;
+    const mdxComponents = {
+        GameInformation: () => (
+            <GameInformation
+                releaseYear={metadata?.releaseYear}
+                acquiredYear={metadata?.acquiredYear}
+                developer={metadata?.developer}
+                publisher={metadata?.publisher}
+                genre={metadata?.genre}
+                pegiRating={metadata?.pegiRating}
+                region={metadata?.region}
+                console={metadata?.console}
+                className="mb-6"
+            />
+        ),
+    };
 
     return (
         <ReadingContentPage
@@ -53,23 +68,7 @@ export const Game: FC<PropsWithChildren<GameProps>> = async ({ game, console, pr
                     </span>
                 ))}
             </div>
-            <ImageCarousel
-                images={game.frontmatter.metadata?.gallery || [game.frontmatter.image]}
-                alt={game.frontmatter.title}
-                className="mb-6"
-            />
-            <GameInformation
-                releaseYear={game.frontmatter.metadata?.releaseYear}
-                acquiredYear={game.frontmatter.metadata?.acquiredYear}
-                developer={game.frontmatter.metadata?.developer}
-                publisher={game.frontmatter.metadata?.publisher}
-                genre={game.frontmatter.metadata?.genre}
-                pegiRating={game.frontmatter.metadata?.pegiRating}
-                region={game.frontmatter.metadata?.region}
-                console={game.frontmatter.metadata?.console}
-                className="mb-6"
-            />
-            <GameContent />
+            <GameContent components={mdxComponents} />
             <PreviousNextNavigation
                 previous={previous ? { url: previous.slug.formatted, title: previous.frontmatter.title } : undefined}
                 next={next ? { url: next.slug.formatted, title: next.frontmatter.title } : undefined}
