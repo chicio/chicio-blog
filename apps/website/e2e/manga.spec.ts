@@ -70,6 +70,19 @@ test.describe("Manga section", () => {
             ).toBeVisible();
         });
 
+        test("shows the carousel before the information pills", async ({ page }) => {
+            await page.goto("/manga/death-note");
+            const carousel = page
+                .locator("img[src*='death-note%2Fcover.jpg'], img[src*='death-note/cover.jpg']")
+                .first();
+            const firstPill = page.getByText("Story by:");
+            await expect(carousel).toBeVisible();
+            await expect(firstPill).toBeVisible();
+            const carouselBox = await carousel.boundingBox();
+            const pillBox = await firstPill.boundingBox();
+            expect(carouselBox!.y).toBeLessThan(pillBox!.y);
+        });
+
         test("links to the sibling Manga with the previous and next pills", async ({ page }) => {
             await page.goto("/manga/death-note");
             await expect(page.getByRole("link", { name: "Demon Slayer: Kimetsu no Yaiba" }).last()).toBeVisible();

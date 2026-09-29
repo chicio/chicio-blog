@@ -185,6 +185,12 @@ Some prose after the heading.
             expect(result).toContain("intro");
             expect(result).not.toContain("[interactive:");
         });
+
+        it("emits nothing for a per-item facts slot such as MangaInformation", () => {
+            const result = mdxToMarkdown(`intro\n\n<MangaInformation />\n\noutro`);
+
+            expect(result).toBe("intro\n\noutro");
+        });
     });
 
     describe("interactive component placeholder (generic fallback, no hardcoded name list)", () => {

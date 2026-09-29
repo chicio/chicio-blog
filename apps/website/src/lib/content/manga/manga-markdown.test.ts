@@ -54,5 +54,14 @@ describe("manga-markdown", () => {
             expect(result).not.toContain("Gallery");
             expect(result).not.toContain("ImageCarousel");
         });
+
+        it("lists the facts once, with no MangaInformation placeholder for the slot in the body", () => {
+            const result = mangaMarkdown({ manga: "death-note" })!;
+
+            expect(result).not.toContain("MangaInformation");
+            expect(result).not.toContain("[interactive");
+            expect(result.match(/\*\*Story by:\*\*/g)).toHaveLength(1);
+            expect(result.match(/\*\*Volumes owned:\*\*/g)).toHaveLength(1);
+        });
     });
 });
