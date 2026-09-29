@@ -26,10 +26,15 @@ redeploys every Monday regardless.
 
 ## Consequences
 
-- `--base` falls back to `HEAD^1` (`${VERCEL_GIT_PREVIOUS_SHA:-HEAD^1}`). The variable holds the last successful
+- `--base` is `VERCEL_GIT_PREVIOUS_SHA` when set, else the tip of `main`. The variable holds the last successful
   deployment's SHA and is only exposed when an ignore step is configured, but it is empty on any branch with no previous
-  deployment, which is every Dependabot PR; an empty `--base` makes `turbo query affected` exit 2. Those branches are
-  always one commit off `main`, so `HEAD^1` is right.
+  deployment (every Dependabot PR, and the first push of any feature branch); an empty `--base` makes `turbo query
+  affected` exit 2. The fallback was first `HEAD^1`, on the assumption that such branches are always one commit off
+  `main`. That holds for Dependabot but not for a feature branch pushed with many commits: a last commit touching only
+  `.claude/` looked unaffected against `HEAD^1`, and the preview of a 40-commit branch was skipped. The logic now lives in
+  `apps/website/scripts/vercel-ignore-build.sh`, which runs `git fetch --depth=1 origin main` and uses
+  `--base=FETCH_HEAD`, so the whole branch is compared with `main`. A failed fetch exits 1 (build). A branch that is
+  behind `main` can build when its own changes did not need it, never the reverse.
 - `--head` is never passed: `--base=<sha>^ --head=<sha>` reports the website affected for a rain-showcase-only commit,
   where `--base=<sha>^` alone correctly reports it unaffected.
 - `turbo` is pinned to a major (`turbo@^2`): the ignore step runs before `npm install`, so `npx` fetches turbo from the
