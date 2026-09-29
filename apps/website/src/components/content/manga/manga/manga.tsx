@@ -36,7 +36,7 @@ export const Manga: FC<PropsWithChildren<MangaProps>> = async ({ manga, previous
         >
             <PageTitle>{frontmatter.title}</PageTitle>
             {metadata && (
-                <div className="flex flex-row flex-wrap gap-2">
+                <div className="mb-6 flex flex-row flex-wrap gap-2">
                     <CoverCardBadge>{metadata.edition}</CoverCardBadge>
                     <CoverCardBadge>
                         <span className="sr-only">Volumes owned </span>

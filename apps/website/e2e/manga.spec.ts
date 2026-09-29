@@ -1,4 +1,11 @@
-import { test, expect } from "./fixtures";
+import { test, expect, type Page } from "./fixtures";
+
+/** Vertical space between the badges row (right under the title) and the element that follows it. */
+const gapBelowBadges = (page: Page) =>
+    page.locator("h1").evaluate((title) => {
+        const badges = title.nextElementSibling!;
+        return badges.nextElementSibling!.getBoundingClientRect().top - badges.getBoundingClientRect().bottom;
+    });
 
 test.describe("Manga section", () => {
     test.describe("collection page", () => {
@@ -68,6 +75,11 @@ test.describe("Manga section", () => {
             await expect(
                 page.locator("img[src*='death-note%2Fcover.jpg'], img[src*='death-note/cover.jpg']").first(),
             ).toBeVisible();
+        });
+
+        test("leaves space between the badges and the carousel", async ({ page }) => {
+            await page.goto("/manga/death-note");
+            expect(await gapBelowBadges(page)).toBeGreaterThanOrEqual(16);
         });
 
         test("shows the carousel before the information pills", async ({ page }) => {

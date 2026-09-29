@@ -1,4 +1,11 @@
-import { test, expect } from "./fixtures";
+import { test, expect, type Page } from "./fixtures";
+
+/** Vertical space between the badges row (right under the title) and the element that follows it. */
+const gapBelowBadges = (page: Page) =>
+    page.locator("h1").evaluate((title) => {
+        const badges = title.nextElementSibling!;
+        return badges.nextElementSibling!.getBoundingClientRect().top - badges.getBoundingClientRect().bottom;
+    });
 
 test.describe("Videogames section", () => {
     test.describe("console listing page", () => {
@@ -71,6 +78,11 @@ test.describe("Videogames section", () => {
             const breadcrumb = page.getByRole("navigation", { name: "Breadcrumb" });
             await expect(breadcrumb.getByRole("link", { name: "Videogames" })).toBeVisible();
             await expect(breadcrumb.getByRole("link", { name: "Nintendo Switch" })).toBeVisible();
+        });
+
+        test("leaves space between the console logos and the carousel", async ({ page }) => {
+            await page.goto("/videogames/console/nintendo-switch/game/super-mario-odyssey");
+            expect(await gapBelowBadges(page)).toBeGreaterThanOrEqual(16);
         });
 
         test("shows the game information pills", async ({ page }) => {
