@@ -63,7 +63,7 @@ export default function manifest(): MetadataRoute.Manifest {
             {
                 name: "Art",
                 short_name: "Art",
-                description: "Browse 3D art and generative works",
+                description: "Browse the drawings from my journey learning to draw",
                 url: "/art",
                 icons: [{ src: "/icon1.png", sizes: "192x192" }],
             },
