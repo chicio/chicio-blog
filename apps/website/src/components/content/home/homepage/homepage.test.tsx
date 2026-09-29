@@ -35,21 +35,14 @@ describe("Homepage", () => {
         vi.mocked(trackWith).mockClear();
     });
 
-    describe("render", () => {
-        it("renders the menu with the Manga hobby entry", () => {
-            render(<Homepage />);
-            expect(screen.getByRole("button", { name: "Manga" })).toBeInTheDocument();
-        });
-    });
-
     describe("tracking", () => {
         it("tracks a menu click under the home category and the header label", async () => {
             render(<Homepage />);
-            await userEvent.click(screen.getByRole("button", { name: "Manga" }));
+            await userEvent.click(screen.getByRole("button", { name: "About me" }));
             expect(trackWith).toHaveBeenCalledWith({
                 category: tracking.category.home,
                 label: tracking.label.header,
-                action: tracking.action.open_manga_collection,
+                action: tracking.action.open_about_me,
             });
         });
     });
