@@ -19,7 +19,6 @@ const metadata: MangaMetadata = {
     volumes: 1,
     volumesOwned: 1,
     acquiredYear: "2026",
-    gallery: [],
 };
 
 describe("MangaInformation", () => {

@@ -44,7 +44,6 @@ const mangaOf = (title: string, slug: string, volumes: number, volumesOwned: num
             volumes,
             volumesOwned,
             acquiredYear: "2026",
-            gallery: [],
         },
     },
     readingTime: { text: "", minutes: 0, time: 0, words: 0 },

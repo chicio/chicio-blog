@@ -1,9 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { Content } from "@/types/content/content";
-import { Frontmatter } from "@/types/content/frontmatter";
 import { MangaMetadata, MangaStatus } from "@/types/content/manga";
 import {
-    carouselImages,
     collectionFigures,
     isMangaComplete,
     serializationLabel,
@@ -26,7 +24,6 @@ const metadataOf = (overrides: Partial<MangaMetadata> = {}): MangaMetadata => ({
     volumes: 23,
     volumesOwned: 23,
     acquiredYear: "2026",
-    gallery: [],
     ...overrides,
 });
 
@@ -61,27 +58,6 @@ describe("manga figures", () => {
 
         it("ends in present while the serialization is ongoing", () => {
             expect(serializationLabel(metadataOf({ serializationEndYear: undefined }))).toBe("2016 – present");
-        });
-    });
-
-    describe("carouselImages", () => {
-        it("shows exactly the shelf photos, without the cover, once there are some", () => {
-            const frontmatter = {
-                image: "/cover.jpg",
-                metadata: metadataOf({ gallery: ["/shelf-1.jpg", "/shelf-2.jpg"] }),
-            };
-
-            expect(carouselImages(frontmatter as Frontmatter<MangaMetadata>)).toEqual(["/shelf-1.jpg", "/shelf-2.jpg"]);
-        });
-
-        it("falls back to the cover while the gallery is empty", () => {
-            const frontmatter = { image: "/cover.jpg", metadata: metadataOf({ gallery: [] }) };
-
-            expect(carouselImages(frontmatter as Frontmatter<MangaMetadata>)).toEqual(["/cover.jpg"]);
-        });
-
-        it("falls back to the cover when the Manga has no metadata", () => {
-            expect(carouselImages({ image: "/cover.jpg" } as Frontmatter<MangaMetadata>)).toEqual(["/cover.jpg"]);
         });
     });
 

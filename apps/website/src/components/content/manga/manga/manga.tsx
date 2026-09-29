@@ -1,10 +1,9 @@
 import { FC, PropsWithChildren } from "react";
 import { CoverCardBadge, PageTitle } from "matrix-design-system";
 import { ReadingContentPage } from "@/components/features/content/reading-content-page";
-import { ImageCarousel } from "@/components/features/design-system-next/image-carousel";
 import { PreviousNextNavigation } from "@/components/features/design-system-next/previous-next-navigation";
 import { JsonLd } from "@/components/features/seo/jsond-ld";
-import { carouselImages, volumesOwnedLabel } from "@/lib/content/manga/manga-figures";
+import { volumesOwnedLabel } from "@/lib/content/manga/manga-figures";
 import { siteMetadata } from "@/types/configuration/site-metadata";
 import { slugs } from "@/types/configuration/slug";
 import { tracking } from "@/types/configuration/tracking";
@@ -42,7 +41,6 @@ export const Manga: FC<PropsWithChildren<MangaProps>> = async ({ manga, previous
                     </CoverCardBadge>
                 </div>
             )}
-            <ImageCarousel images={carouselImages(frontmatter)} alt={frontmatter.title} className="mb-6" />
             {metadata && <MangaInformation metadata={metadata} className="mb-6" />}
             <MangaContent />
             <PreviousNextNavigation

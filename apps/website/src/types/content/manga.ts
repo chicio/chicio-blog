@@ -19,5 +19,4 @@ export type MangaMetadata = {
     volumes: number;
     volumesOwned: number;
     acquiredYear: string;
-    gallery: string[];
 };

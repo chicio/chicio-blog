@@ -21,11 +21,19 @@ metadata:
     volumes: 23
     volumesOwned: 23
     acquiredYear: "2026"
-    gallery: []
 ---
 
 import { FaBookOpen } from "react-icons/fa";
 import { ParagraphTitleWithIcon } from "matrix-design-system";
+import { ImageCarousel } from "@/components/features/design-system-next/image-carousel";
+
+<ImageCarousel
+    images={[
+        "/media/content/manga/demon-slayer/cover.jpg",
+    ]}
+    alt="Demon Slayer: Kimetsu no Yaiba on the shelf"
+    className="mb-6"
+/>
 
 ## <ParagraphTitleWithIcon icon={<FaBookOpen className="text-shadow-lg" />}>Plot</ParagraphTitleWithIcon>
 
