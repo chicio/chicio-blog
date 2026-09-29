@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { generateFilesystemManifest } from "./filesystem-manifest-factory";
 import { aboutMe } from "@/lib/content/about-me/about-me";
+import { art } from "@/lib/content/art/art";
 import { mangas } from "@/lib/content/manga/manga";
 import { posts } from "@/lib/content/posts/posts";
 import { slugs } from "@/types/configuration/slug";
@@ -112,6 +113,18 @@ describe("generateFilesystemManifest", () => {
                 title: aboutMeContent.frontmatter.title,
                 description: aboutMeContent.frontmatter.description,
                 route: slugs.aboutMe,
+            });
+        });
+
+        it("describes Art from its own frontmatter, not as a 3D or generative gallery", () => {
+            const { root } = generateFilesystemManifest();
+            const artContent = art.single()!;
+
+            expect(root.children.art).toMatchObject({
+                type: "file",
+                title: artContent.frontmatter.title,
+                description: artContent.frontmatter.description,
+                route: slugs.art,
             });
         });
 
