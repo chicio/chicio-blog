@@ -78,11 +78,19 @@ metadata:
     volumes: <number>
     volumesOwned: <number>
     acquiredYear: "<year>"
-    gallery: []
 ---
 
 import { FaBookOpen } from "react-icons/fa";
 import { ParagraphTitleWithIcon } from "matrix-design-system";
+import { ImageCarousel } from "@/components/features/design-system-next/image-carousel";
+
+<ImageCarousel
+    images={[
+        "/media/content/manga/<slug>/cover.jpg",
+    ]}
+    alt="<title> on the shelf"
+    className="mb-6"
+/>
 
 ## <ParagraphTitleWithIcon icon={<FaBookOpen className="text-shadow-lg" />}>Plot</ParagraphTitleWithIcon>
 
@@ -95,8 +103,11 @@ Rules:
 - `serializationEndYear` is left out for an ongoing series, and `status` is then `"Ongoing"`.
 - `storyBy` and `artBy` are lists: a series with two authors (one writing, one drawing) has one name in each. A
   single author who does both is in both lists.
-- 4-space indentation in the frontmatter, double-quoted strings, no blank line between `---` and the body imports.
-- `gallery: []` is correct until shelf photos exist: the detail page falls back to the cover.
+- 4-space indentation in the frontmatter, double-quoted strings, one blank line between the closing `---` and the body
+  imports, and one blank line between each block of the body.
+- Facts live in the frontmatter, everything a reader looks at lives in the body (ADR-0002): there is no `gallery` in the
+  frontmatter. The photos are the `<ImageCarousel>` written literally in the body, before the Plot. While there are no
+  shelf photos it lists the cover alone, which is what the block above writes.
 - **Plot summary**: a short, ORIGINAL, spoiler-free paragraph written from the premise alone. Never copy or lightly
   reword AniList, the publisher or a shop blurb (their descriptions are only reference material). No dashes in prose
   (use commas, colons or parentheses).
@@ -112,7 +123,10 @@ uv run --script .claude/skills/fabrizioduroni-new-manga/process-manga-photos.py 
 ```
 
 It rotates by EXIF, re-encodes WITHOUT metadata (so EXIF and GPS never reach the repository), resizes to 1600px,
-renames them `1.jpeg`, `2.jpeg`, ... deletes the originals and rewrites `metadata.gallery` in `content.mdx`. The EXIF
+renames them `1.jpeg`, `2.jpeg`, ... in natural order (2 before 10), deletes the originals and rewrites the `images`
+list of the `<ImageCarousel>` in the body of `content.mdx`: from the first photo on the carousel lists the shelf photos
+alone, the cover is no longer in it (it stays the `image` of the card and the page). Files already named `N.jpeg` are
+earlier output: they are kept as they are, never re-encoded, and new photos are numbered after them. The EXIF
 orientation sometimes lies: look at the results, and when one is sideways, drop the original again and pass
 `--rotate <original file name>=<degrees>` (or rotate that one by hand). The photos are Fabrizio's: do not invent or
 generate any.
