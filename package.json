@@ -52,7 +52,7 @@
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "release-it": "^21.1.0",
-    "turbo": "^2.11.4",
+    "turbo": "^2.11.5",
     "typescript": "^6.0.3"
   },
   "overrides": {
