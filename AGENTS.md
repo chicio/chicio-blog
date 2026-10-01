@@ -16,6 +16,10 @@ Matrix Design System, Matrix Rain), each with its own `CONTEXT.md`. Use its term
 avoid the synonyms it lists under _Avoid_. It is authoritative: when an agent memory or a doc contradicts it, the memory
 or doc is wrong.
 
+In Claude Code, the Glossary Browser mod (`.claude/skills/glossary-browser/`) browses the glossary and its ADRs
+(`/glossary [term]`, or the band above the prompt), and its Term Check flags _Avoid_ words in prompts and in edits to
+Markdown files. It reads the glossary and never writes it.
+
 Hard-to-reverse decisions are recorded as ADRs: system-wide in [`docs/adr/`](docs/adr/), context-specific in each
 context's own `docs/adr/`. Read the relevant one before changing what it decided.
 

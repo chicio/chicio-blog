@@ -1,0 +1,9 @@
+{
+    "name": "glossary-browser",
+    "version": "0.1.0",
+    "description": "Browse the project's ubiquitous language (CONTEXT-MAP, CONTEXT files, ADRs) and flag Avoid words as you work",
+    "types": "./types/index.d.ts",
+    "author": {
+        "name": "Fabrizio Duroni"
+    }
+}
