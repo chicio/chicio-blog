@@ -1,0 +1,66 @@
+name: Release plugin
+
+run-name: Release ${{ inputs.plugin }} (${{ inputs.increment }}${{ inputs.dry_run && ', dry run' || '' }})
+
+# Manual on purpose, like release-package.yml: a Public Plugin is installed by other people, and a release should be a
+# decision rather than a side effect of merging. Nothing is published anywhere: users of the chicio-labs marketplace
+# receive a release when the bumped `version` in its plugin.json reaches main, so the release is that bump, the
+# changelog, the `<plugin>--v<version>` tag (the Claude Code convention) and the GitHub release. Project Plugins carry
+# no version and are never released.
+on:
+  workflow_dispatch:
+    inputs:
+      plugin:
+        description: "Which Public Plugin to release"
+        type: choice
+        options:
+          - glossary-browser
+        required: true
+      increment:
+        description: 'Which release to cut ("initial" releases the version already in plugin.json)'
+        type: choice
+        options: [initial, patch, minor, major]
+        default: patch
+      dry_run:
+        description: "Dry run (no commit, tag or push)"
+        type: boolean
+        default: true
+
+permissions:
+  contents: write # push the bump/changelog commit + tag, create the GH release
+
+jobs:
+  release:
+    name: Release ${{ inputs.plugin }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0 # full history so conventional-changelog can diff tags
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version-file: "package.json"
+          cache: "npm"
+      - name: Install dependencies
+        run: npm ci
+      # The release-it config validates and tests the plugin before bumping it; neither needs Claude credentials.
+      - name: Install the Claude Code CLI
+        run: npm install -g @anthropic-ai/claude-code
+      - name: Configure git identity
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+      - name: Map increment to release-it args
+        id: args
+        run: |
+          case "${{ inputs.increment }}" in
+            initial) echo "args=--no-increment" >> "$GITHUB_OUTPUT" ;;
+            *)       echo "args=${{ inputs.increment }}" >> "$GITHUB_OUTPUT" ;;
+          esac
+      - name: Release
+        working-directory: claude-plugins/${{ inputs.plugin }}
+        run: npx release-it ${{ steps.args.outputs.args }} ${{ inputs.dry_run && '--dry-run' || '' }} --ci
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

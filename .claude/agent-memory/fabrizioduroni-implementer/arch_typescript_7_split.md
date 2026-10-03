@@ -23,7 +23,7 @@ docs:
   are type-checked by TS 7 in each workspace's own `tsc --noEmit`.
 
 **The `tsc <file> --noEmit` + adjacent `tsconfig.json` gotcha** (caught by
-`fabrizioduroni-code-reviewer` on round 1 of this branch's review loop): from TypeScript 6 onward,
+`chicio-labs-sdlc:code-reviewer` on round 1 of this branch's review loop): from TypeScript 6 onward,
 running `tsc --noEmit somefile.ts` in a directory that also contains a `tsconfig.json` aborts
 immediately with `TS5112` ("tsconfig.json is present but will not be loaded if files are specified
 on commandline") — nothing is compiled, so a resolution failure the check exists to catch can

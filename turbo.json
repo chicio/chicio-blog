@@ -1,6 +1,7 @@
 {
   "$schema": "https://turborepo.com/schema.json",
   "ui": "stream",
+  "agentGuidance": false,
   "globalDependencies": [".prettierrc"],
   "globalEnv": ["CI", "NODE_ENV"],
   "tasks": {

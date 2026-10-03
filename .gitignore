@@ -102,4 +102,4 @@ dist/
 # skills-lock: `npx skills update` pulls whatever the upstream skill folder contains, and
 # vercel-labs/agent-skills ships a stray macOS Archive.zip (__MACOSX forks, a duplicate of the
 # skill's own files) inside deploy-to-vercel. Ignore it so the tree stays clean across updates.
-.agents/skills/deploy-to-vercel/Archive.zip
+.claude/skills/deploy-to-vercel/Archive.zip

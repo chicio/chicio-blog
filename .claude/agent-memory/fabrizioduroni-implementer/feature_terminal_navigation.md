@@ -127,7 +127,7 @@ router") per an approved grilling redesign. Branch `worktree-feat+terminal-navig
 ## Green phosphor image treatment (2026-07-23 polish, PR #480; corrected same day after live QA)
 
 **v1 (superseded, do not reintroduce)**: a `grayscale sepia hue-rotate-90 saturate-[4] brightness-90` CSS
-filter chain. Live QA (`fabrizioduroni-e2e-sentinel`) caught that this reads **olive/khaki, not green**, on
+filter chain. Live QA (`chicio-labs-sdlc:e2e-sentinel`) caught that this reads **olive/khaki, not green**, on
 warm-toned source images (e.g. Game Boy screenshots) — grayscale→sepia→hue-rotate tints *relative to each
 pixel's original hue*, so a warm source hue doesn't land on the same rotated hue as a neutral one. A
 plain filter chain is fundamentally hue-relative, not hue-independent; no amount of retuning the rotation

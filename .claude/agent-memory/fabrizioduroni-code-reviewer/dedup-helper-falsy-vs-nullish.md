@@ -12,7 +12,7 @@ string is falsy but not nullish, so `serializationEndYear: ""` goes from "2003â€
 
 **Why:** the seed data never has the edge case (both Manga are Completed), so every test and the e2e stay green.
 Whether it matters depends on what the content producer writes. For the Manga this was safe: the
-fabrizioduroni-new-manga skill leaves `serializationEndYear` out for an ongoing series (SKILL.md) rather than writing
+chicio-blog-content:write-new-manga skill leaves `serializationEndYear` out for an ongoing series (SKILL.md) rather than writing
 `""`. Seen at the Manga Integration Review round 2 (2026-09-29).
 
 **How to apply:** on any "use the shared helper" fix, read the deleted helper's conditions next to the survivor's and

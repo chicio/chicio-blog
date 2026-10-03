@@ -1,4 +1,4 @@
-# Memory Index — fabrizioduroni-code-reviewer
+# Memory Index — chicio-labs-sdlc:code-reviewer
 
 Compounding review heuristics (recurring violation patterns worth catching faster). One line per memory file.
 No per-PR facts — those go stale.

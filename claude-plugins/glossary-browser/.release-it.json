@@ -1,0 +1,36 @@
+{
+  "$schema": "https://unpkg.com/release-it/schema/release-it.json",
+  "git": {
+    "tagName": "glossary-browser--v${version}",
+    "tagMatch": "glossary-browser--v*",
+    "tagAnnotation": "glossary-browser ${version}",
+    "commitMessage": "chore(release): :bookmark: glossary-browser ${version}",
+    "commitsPath": ".",
+    "requireCommits": true
+  },
+  "github": {
+    "release": true,
+    "releaseName": "glossary-browser ${version}"
+  },
+  "npm": false,
+  "hooks": {
+    "before:init": "claude plugin validate . && claude plugin test ."
+  },
+  "plugins": {
+    "@release-it/bumper": {
+      "in": ".claude-plugin/plugin.json",
+      "out": ".claude-plugin/plugin.json"
+    },
+    "@release-it/conventional-changelog": {
+      "preset": "conventionalcommits",
+      "infile": "CHANGELOG.md",
+      "tagPrefix": "glossary-browser--v",
+      "commitsOpts": {
+        "path": "."
+      },
+      "gitRawCommitsOpts": {
+        "path": "."
+      }
+    }
+  }
+}

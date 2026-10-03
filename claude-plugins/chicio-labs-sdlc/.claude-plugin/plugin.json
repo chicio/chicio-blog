@@ -1,0 +1,5 @@
+{
+  "name": "chicio-labs-sdlc",
+  "description": "Project Plugin, chicio-blog only. The agentic SDLC pipeline (explore, Human Gate, parallel Work Units, reviews, PR) and the release checklist",
+  "author": { "name": "Fabrizio Duroni", "url": "https://github.com/chicio" }
+}
