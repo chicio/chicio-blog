@@ -6,7 +6,8 @@ Checks, Unit Review, Integration Review) is the Agentic Delivery context, in [`.
 pipeline is shaped this way is [ADR-0001](../docs/adr/0001-parallel-work-units-in-a-workflow.md).
 
 It loads in place in this repository: `.claude/settings.json` enables it from the `chicio-labs` marketplace at the
-repository root, so an edit takes effect after `/reload-plugins`.
+repository root, so an edit, or a `git pull`, takes effect after `/reload-plugins`. On a fresh clone the project's
+`SessionStart` hook installs it during the first session; run `/reload-plugins` when it says so.
 
 ## Skills
 

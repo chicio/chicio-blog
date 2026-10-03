@@ -16,5 +16,19 @@
         "path": "./"
       }
     }
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/install-project-plugins.mjs\"",
+            "timeout": 120
+          }
+        ]
+      }
+    ]
   }
 }
