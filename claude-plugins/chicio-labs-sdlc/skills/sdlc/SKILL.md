@@ -52,7 +52,7 @@ load-bearing; a pull request is already a reviewable, closable proposal. The pip
 
 1. **Parse** the description and flags. Decide mode: fix if `--fix` or a pasted trace/error is present, else feature.
 2. **Content firewall.** If the task is purely content — adding/editing MDX blog posts, DSA articles, or prose — STOP
-   and redirect: Posts and DSA course edits → `/chicio-blog-content:write-post`.
+   and redirect: Posts and DSA course edits → `/website-content:write-post`.
    This pipeline is for code. (A change that is *both* code and content stays here for the code part.)
 3. **Isolation (default ON).** Unless `--in-place` was passed, `EnterWorktree` now — the whole pipeline runs in its
    own isolated worktree on its own `feat/<slug>` branch (the **pipeline worktree**). If the session is already inside

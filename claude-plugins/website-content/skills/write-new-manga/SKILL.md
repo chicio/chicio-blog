@@ -37,7 +37,7 @@ Ask the user for:
 ### 3. Fetch the facts and the cover
 
 ```bash
-uv run --script claude-plugins/chicio-blog-content/skills/write-new-manga/fetch-manga.py \
+uv run --script claude-plugins/website-content/skills/write-new-manga/fetch-manga.py \
     --title "<series title>" \
     --folder apps/website/src/content/manga/<slug> \
     [--cover-url <edition cover url>]
@@ -121,7 +121,7 @@ When the user drops photos in `apps/website/src/content/manga/<slug>/media/galle
 first), process them:
 
 ```bash
-uv run --script claude-plugins/chicio-blog-content/skills/write-new-manga/process-manga-photos.py \
+uv run --script claude-plugins/website-content/skills/write-new-manga/process-manga-photos.py \
     --manga-folder apps/website/src/content/manga/<slug>
 ```
 

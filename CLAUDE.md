@@ -163,7 +163,7 @@ There is deliberately **no Dependabot auto-merge and no ruleset on `main`**: a r
 
 ## Vercel Deploys
 
-The site deploys continuously from `main`, through the Vercel project `fabrizioduroni-it` (named after the Lab Project it
+The site deploys continuously from `main`, through the Vercel project `fabrizioduroni.it` (named after the Lab Project it
 deploys, not after the repository). Two things about that project are not visible from the repository:
 
 - **The Root Directory is `apps/website`, not the repository root.** Vercel reads `vercel.json` from the Root Directory, so the file lives at `apps/website/vercel.json`; a repository-root `vercel.json` is silently ignored. (Tell: the build log's `npm install --prefix=../..`.) "Include files outside the Root Directory" is on, so the whole monorepo is cloned and the root `package-lock.json` resolves normally.
@@ -209,7 +209,7 @@ AI agents and tools that send `Accept: text/markdown` receive a Markdown represe
 The repository root is a Claude Code plugin marketplace, **`chicio-labs`** (`.claude-plugin/marketplace.json`), listing
 the plugins in `claude-plugins/<name>/`. A **Public Plugin** (`glossary-browser`) works in any repository, carries a
 semver `version` and is released by `release-plugin.yml`; a **Project Plugin** (`chicio-labs-sdlc`,
-`chicio-blog-content`) only works here and carries no version. Each description says which kind it is. Why plugins, and
+`website-content`) only works here and carries no version. Each description says which kind it is. Why plugins, and
 what cannot move into one: [ADR-0002](claude-plugins/docs/adr/0002-claude-tooling-ships-as-plugins.md).
 
 - **This repo loads them in place.** `.claude/settings.json` declares the marketplace with a `directory` source and
@@ -244,8 +244,8 @@ Its vocabulary is the Agentic Delivery context (`claude-plugins/GLOSSARY.md`), a
 
 **When to use what**: full pipeline (`/chicio-labs-sdlc:sdlc`) for non-trivial code features/fixes; call
 `chicio-labs-sdlc:implementer` **directly** as a quick-path escape hatch for trivial, well-specified code
-changes; use `/chicio-blog-content:write-post` for content (new Posts, translations, reviews, edits to the finished DSA course): it
-interviews in the main thread and dispatches `chicio-blog-content:writer` — the pipeline refuses content tasks.
+changes; use `/website-content:write-post` for content (new Posts, translations, reviews, edits to the finished DSA course): it
+interviews in the main thread and dispatches `website-content:writer` — the pipeline refuses content tasks.
 
 ## Commit Convention
 

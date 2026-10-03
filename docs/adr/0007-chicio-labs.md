@@ -19,7 +19,7 @@ Website.
 
 ## Consequences
 
-- The Vercel project is named `fabrizioduroni-it`, after the Lab Project it deploys, not after the repository.
+- The Vercel project is named `fabrizioduroni.it`, after the Lab Project it deploys, not after the repository.
 - Three bindings outside the repository follow the repository's name and do not follow GitHub's redirect: npm trusted
   publishing (one entry per package, naming the repository and `release-package.yml`), npm provenance (each package's
   `repository.url` must match the repository in the OIDC token), and giscus (it looks the repository up by

@@ -26,7 +26,7 @@ so their GPS never lingers in the working tree: when a processed photo comes out
 or drop the original again and pass `--rotate <original file name>=<degrees>`.
 
 Usage:
-    uv run --script claude-plugins/chicio-blog-content/skills/write-new-manga/process-manga-photos.py \\
+    uv run --script claude-plugins/website-content/skills/write-new-manga/process-manga-photos.py \\
         --manga-folder apps/website/src/content/manga/demon-slayer
 
 Options:

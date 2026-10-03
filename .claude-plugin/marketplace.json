@@ -21,8 +21,8 @@
       "description": "Project Plugin, Chicio Labs only. The agentic SDLC pipeline (explore, Human Gate, parallel Work Units, reviews, PR) and the release checklist"
     },
     {
-      "name": "chicio-blog-content",
-      "source": "./claude-plugins/chicio-blog-content",
+      "name": "website-content",
+      "source": "./claude-plugins/website-content",
       "description": "Project Plugin, Chicio Labs only. Write Posts in Fabrizio Duroni's voice and add Manga and Games to the collections"
     }
   ]

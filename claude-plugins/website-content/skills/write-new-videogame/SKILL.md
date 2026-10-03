@@ -139,7 +139,7 @@ import { ImageCarousel } from "@/components/features/design-system-next/image-ca
 Run the `add-game-screenshots.py` script to download gameplay screenshots and add the Gameplay section to the MDX:
 
 ```bash
-uv run --script claude-plugins/chicio-blog-content/skills/write-new-videogame/add-game-screenshots.py \
+uv run --script claude-plugins/website-content/skills/write-new-videogame/add-game-screenshots.py \
     --game-folder apps/website/src/content/videogames/console/<console>/game/<slug>
 ```
 
