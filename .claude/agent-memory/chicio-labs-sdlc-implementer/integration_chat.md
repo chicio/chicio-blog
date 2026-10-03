@@ -23,7 +23,7 @@ type: project
 - See [[feature_chat_guardrails]] for the topic-relevance gate's parallel migration to `openai/gpt-oss-20b`.
 
 ## Knowledge Base retrieval
-The Knowledge Base (see apps/website/CONTEXT.md) holds only the Posts explicitly uploaded; nothing from the DSA course,
+The Knowledge Base (see apps/website/GLOSSARY.md) holds only the Posts explicitly uploaded; nothing from the DSA course,
 Videogames or other Sections.
 - Tool: `getFabrizioDuroniBlogKnowledge` registered in API route
 - Upstash Vector for semantic search of Post chunks

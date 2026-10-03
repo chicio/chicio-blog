@@ -1,15 +1,15 @@
-# Context Map
+# Glossary Map
 
 ## Contexts
 
-- [Website](./apps/website/CONTEXT.md): Fabrizio Duroni's personal site, its content (posts, the DSA course, the videogame
+- [Website](./apps/website/GLOSSARY.md): Fabrizio Duroni's personal site, its content (posts, the DSA course, the videogame
   collection, art) and the interactive layer around it (chat, terminal, easter eggs)
-- [Matrix Design System](./packages/matrix-design-system/CONTEXT.md): the published, framework-agnostic Matrix-themed UI
+- [Matrix Design System](./packages/matrix-design-system/GLOSSARY.md): the published, framework-agnostic Matrix-themed UI
   library, together with the component-store contract (`packages/matrix-component-store`) and the rules that enforce it
   (`packages/eslint-plugin-chicio`); its showcase is `apps/matrix-design-system-showcase`
-- [Matrix Rain](./packages/matrix-rain-webgpu/CONTEXT.md): the published WebGPU digital-rain background effect; its
+- [Matrix Rain](./packages/matrix-rain-webgpu/GLOSSARY.md): the published WebGPU digital-rain background effect; its
   showcase is `apps/matrix-rain-showcase`
-- [Agentic Delivery](./claude-plugins/CONTEXT.md): how agents plan, build and review code changes to this repository (the
+- [Agentic Delivery](./claude-plugins/GLOSSARY.md): how agents plan, build and review code changes to this repository (the
   SDLC pipeline, its Human Gate and its Work Units, and the plugins that ship its tooling)
 
 ## Relationships

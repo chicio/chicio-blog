@@ -43,6 +43,19 @@ const splitTopLevel = (text: string): string[] => {
 
 export type MapEntry = { name: string; dir: string; summary: string };
 
+export const glossaryFile = (dir: string): string => (dir === "" ? "GLOSSARY.md" : `${dir}/GLOSSARY.md`);
+
+export const singleContextEntry = (text: string): MapEntry => {
+    const title = /^# (.+)$/m.exec(text)?.[1]?.trim() ?? "Glossary";
+    const summary =
+        text
+            .split("\n")
+            .find((line) => line.trim() !== "" && !line.startsWith("#") && !line.startsWith("**"))
+            ?.trim() ?? "";
+
+    return { name: title, dir: "", summary };
+};
+
 export const parseContextMap = (text: string): { entries: MapEntry[]; relationships: string } => {
     const contexts = sectionOf(text, "Contexts");
     const entries: MapEntry[] = [];
@@ -50,7 +63,7 @@ export const parseContextMap = (text: string): { entries: MapEntry[]; relationsh
         const match = /^- \[([^\]]+)\]\(([^)]+)\):\s*([\s\S]*)$/.exec(bullet.trim());
         const [, name, link, summary] = match ?? [];
         if (name !== undefined && link !== undefined && summary !== undefined) {
-            const dir = link.replace(/^\.\//, "").replace(/\/?CONTEXT\.md$/, "");
+            const dir = link.replace(/^\.\//, "").replace(/\/?GLOSSARY\.md$/, "");
             entries.push({ name, dir, summary: summary.replace(/\s+/g, " ").trim() });
         }
     }
@@ -142,7 +155,7 @@ const canonicalNames = (contexts: GlossaryContext[]): string[] => {
 
 const withoutCanonical = (prose: string, names: string[]): string =>
     names.reduce(
-        (text, name) => text.replace(new RegExp(`\\b${escape(name).replace(/\s+/g, "\\s+")}s?\\b`, "gi"), " "),
+        (text, name) => text.replace(new RegExp(`\\b${escape(name).replace(/\s+/g, "[\\s-]+")}s?\\b`, "gi"), " "),
         prose,
     );
 
@@ -166,28 +179,31 @@ export const check = (text: string, contexts: GlossaryContext[], where: string, 
     return flags;
 };
 
-const EXEMPT = /(^|\/)(CONTEXT|CONTEXT-MAP)\.md$/;
+const EXEMPT = /(^|\/)(GLOSSARY|GLOSSARY-MAP)\.md$/;
+
+const owns = (dir: string, relative: string): boolean =>
+    dir === "" || relative === dir || relative.startsWith(`${dir}/`);
 
 export const contextsForPath = (relative: string, glossary: Glossary): GlossaryContext[] | null => {
     if (!/\.(md|mdx)$/.test(relative) || EXEMPT.test(relative)) {
         return null;
     }
     const owners = glossary.contexts
-        .filter((context) => relative === context.dir || relative.startsWith(`${context.dir}/`))
+        .filter((context) => owns(context.dir, relative))
         .sort((a, b) => b.dir.length - a.dir.length);
 
     return owners.length > 0 ? owners.slice(0, 1) : glossary.contexts;
 };
 
 export const isOwnedPath = (relative: string, glossary: Glossary): boolean =>
-    glossary.contexts.some((context) => relative === context.dir || relative.startsWith(`${context.dir}/`));
+    glossary.contexts.some((context) => owns(context.dir, relative));
 
 const flagLine = (flag: Flag): string =>
     `- '${flag.word}' is an Avoid word in ${flag.context}: when it means ${flag.term}, say ${flag.term}.`;
 
 export const promptNote = (flags: Flag[]): string =>
     [
-        "Glossary Term Check: the prompt uses Avoid words from this repository's glossary (CONTEXT-MAP.md).",
+        "Glossary Term Check: the prompt uses Avoid words from this repository's glossary (GLOSSARY.md).",
         ...flags.map(flagLine),
         "Use the canonical terms in your reply and your work. If a word is meant in another sense, ignore its line.",
     ].join("\n");
@@ -298,7 +314,7 @@ export const contextMarkdown = (context: GlossaryContext): string => {
     if (context.intro.trim() !== "" && context.intro.trim() !== context.summary) {
         parts.push(context.intro.trim());
     }
-    parts.push(`\`${context.dir}/CONTEXT.md\` · ${context.terms.length} terms · ${context.adrs.length} ADRs`);
+    parts.push(`\`${glossaryFile(context.dir)}\` · ${context.terms.length} terms · ${context.adrs.length} ADRs`);
     if (sections.length > 0) {
         parts.push(`**Sections**: ${sections.join(", ")}`);
     }

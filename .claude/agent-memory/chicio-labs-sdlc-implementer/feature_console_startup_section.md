@@ -5,7 +5,7 @@ metadata:
   type: project
 ---
 
-The Startup (glossary term, apps/website/CONTEXT.md; not a Section) is the part of a Console page showing its boot
+The Startup (glossary term, apps/website/GLOSSARY.md; not a Section) is the part of a Console page showing its boot
 sequence.
 
 **mdx-to-markdown sanitizer already had first-class handlers for both components used by the Startup** (see

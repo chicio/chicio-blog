@@ -8,7 +8,7 @@ Originally shipped on the feat/capabilities-markdown-content-negotiation branch;
 (verified 2026-09-27).
 
 **Why:** isitagentready.com level 3 (Agent-Readable) requires responding to `Accept: text/markdown` with a Markdown
-Representation (see apps/website/CONTEXT.md) and `Content-Type: text/markdown`. Part of the ongoing AI discoverability
+Representation (see apps/website/GLOSSARY.md) and `Content-Type: text/markdown`. Part of the ongoing AI discoverability
 initiative.
 
 **Architecture:**

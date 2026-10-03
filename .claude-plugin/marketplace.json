@@ -11,7 +11,7 @@
     {
       "name": "glossary-browser",
       "source": "./claude-plugins/glossary-browser",
-      "description": "Public Plugin. Browse a repository's ubiquitous language (CONTEXT-MAP.md, each context's CONTEXT.md, the ADRs) and flag Avoid words in prompts and Markdown edits",
+      "description": "Public Plugin. Browse a repository's ubiquitous language (GLOSSARY-MAP.md, each context's GLOSSARY.md, the ADRs) in a band above the prompt and a pane, and steer you and the model away from its Avoid words: a note to the model on prompts, a refusal on Markdown edits",
       "category": "productivity",
       "tags": ["ddd", "glossary", "ubiquitous-language", "adr", "mod"]
     },

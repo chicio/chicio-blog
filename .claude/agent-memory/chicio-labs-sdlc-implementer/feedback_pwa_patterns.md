@@ -4,7 +4,7 @@ description: Confirmed patterns from the PWA feature session — store hooks, co
 type: feedback
 ---
 
-Use the useSyncExternalStore pattern for any Shared Store (see packages/matrix-design-system/CONTEXT.md) backed by
+Use the useSyncExternalStore pattern for any Shared Store (see packages/matrix-design-system/GLOSSARY.md) backed by
 localStorage + custom events. Confirmed instances: useMotionStore, useMatrixSettingsStore (design system) and
 useConsentStore (Website).
 

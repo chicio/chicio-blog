@@ -4,7 +4,7 @@ description: Route map and page-scoped component organization for the website (v
 type: project
 ---
 
-Section, Collection and Standalone Page are glossary terms (apps/website/CONTEXT.md); the table's right column names
+Section, Collection and Standalone Page are glossary terms (apps/website/GLOSSARY.md); the table's right column names
 what a reader sees at each route.
 
 ## Routes (apps/website/src/app/)

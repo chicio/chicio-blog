@@ -7,7 +7,7 @@ type: project
 `apps/website/src/lib/content/section.ts` exports `createSection<TMeta>({ slug, sort? })` returning
 `{ list(), single(params?) }`, wrapping `getAllContentFor`/`getSingleContentBy` from `content.ts` beside it. One call
 ingests one Collection or Standalone Page (the code's "section" is not the glossary's Section; see
-apps/website/CONTEXT.md). Landed as Tier 1 of a
+apps/website/GLOSSARY.md). Landed as Tier 1 of a
 multi-PR content-ingestion refactor (2026-07-24, branch `feat/content-section-factory`).
 
 `posts/posts.ts` exports `posts = createSection({ slug: slugs.blog.blogPost, sort: byDateDesc })`.

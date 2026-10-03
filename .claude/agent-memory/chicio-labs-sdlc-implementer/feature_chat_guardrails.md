@@ -4,7 +4,7 @@ description: Three-layer Guardrail pipeline for the Chat API — injection, safe
 type: project
 ---
 
-Guardrails (see apps/website/CONTEXT.md) implemented in `apps/website/src/lib/chat/guardrails.ts`. Pipeline runs before every `streamText` call in `apps/website/src/app/api/chat/route.ts`.
+Guardrails (see apps/website/GLOSSARY.md) implemented in `apps/website/src/lib/chat/guardrails.ts`. Pipeline runs before every `streamText` call in `apps/website/src/app/api/chat/route.ts`.
 
 **Three layers (in order):**
 1. `checkPromptInjection(message)` — sync regex, ~0ms, no API call. Catches jailbreak phrases like "ignore previous instructions", "you are now", "pretend to be", etc.

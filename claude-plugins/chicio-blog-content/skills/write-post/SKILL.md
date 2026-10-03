@@ -10,7 +10,7 @@ You (the main thread) own every conversation with Fabrizio; **`chicio-blog-conte
 subagent cannot hold a real back-and-forth, so the interview, the outline gate and the review rounds happen here, and
 the agent receives an approved brief and never asks the user anything.
 
-Vocabulary: "Post" is the canonical term (see `apps/website/CONTEXT.md`), never "article".
+Vocabulary: "Post" is the canonical term (see `apps/website/GLOSSARY.md`), never "article".
 
 ## Invocation
 
@@ -47,7 +47,7 @@ Load **`grilling`** and **`domain-modeling`** with the Skill tool and run the in
   images or videos, Tags); the draft is the source of truth for content and structure.
 - Finding facts is your job: read the code in this repository or in a linked repository yourself instead of asking,
   and check existing Posts for cross-references and Tags already in use.
-- **Glossary scope**: `domain-modeling` here is for **site** vocabulary only. Write to `apps/website/CONTEXT.md` when a
+- **Glossary scope**: `domain-modeling` here is for **site** vocabulary only. Write to `apps/website/GLOSSARY.md` when a
   Post introduces or changes a concept of the site itself (a new Section, a new kind of content, a new Easter Egg).
   The technical subject of the Post (a framework, a pattern) is never a glossary term. Most Posts write nothing.
 
@@ -76,7 +76,7 @@ flagged spot must be settled here.
 ## Stage 5 — Publish
 
 Once Fabrizio says the Post is ready, tell the agent to publish: commit `feat(content): :sparkles: <title>`, push, open
-the PR, and update its memory with the new Post. If `domain-modeling` wrote to `CONTEXT.md` in Stage 1, commit that
+the PR, and update its memory with the new Post. If `domain-modeling` wrote to `GLOSSARY.md` in Stage 1, commit that
 first as a separate `docs(content): :memo:` commit. Relay the PR link.
 
 **Never merge.** Merging is Fabrizio's call.

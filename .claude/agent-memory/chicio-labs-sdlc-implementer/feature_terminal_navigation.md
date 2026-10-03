@@ -6,7 +6,7 @@ type: project
 
 ## Overview
 
-The Terminal (see apps/website/CONTEXT.md; not the design system's Terminal Chrome) is a Unix-shell-style REPL over the site's content tree: `ls`, `cd`, `pwd`, `tree`, `cat`, `open`, `help`/`man`,
+The Terminal (see apps/website/GLOSSARY.md; not the design system's Terminal Chrome) is a Unix-shell-style REPL over the site's content tree: `ls`, `cd`, `pwd`, `tree`, `cat`, `open`, `help`/`man`,
 `clear`, `search <query>`, `close`/`exit`. Shipped 2026-07-23 as a windowed `/terminal` route (draft PR #480),
 then EVOLVED the same day into a **global full-screen modal overlay** (Model A: "overlay drives the real
 router") per an approved grilling redesign. Branch `worktree-feat+terminal-navigation`.

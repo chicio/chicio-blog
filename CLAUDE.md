@@ -10,8 +10,8 @@ This is a Next.js 16 blog (App Router) with a Matrix-inspired UI theme, built by
 
 ## Ubiquitous Language and Decisions
 
-The project's vocabulary is defined in a glossary: [`CONTEXT-MAP.md`](CONTEXT-MAP.md) lists the contexts (Website,
-Matrix Design System, Matrix Rain, Agentic Delivery), each with its own `CONTEXT.md`. Use its terms, in code, prose and prompts alike, and
+The project's vocabulary is defined in a glossary: [`GLOSSARY-MAP.md`](GLOSSARY-MAP.md) lists the contexts (Website,
+Matrix Design System, Matrix Rain, Agentic Delivery), each with its own `GLOSSARY.md`. Use its terms, in code, prose and prompts alike, and
 avoid the synonyms it lists under _Avoid_. It is authoritative: when an agent memory or a doc contradicts it, the memory
 or doc is wrong.
 
@@ -227,7 +227,7 @@ approved together with its Work Unit Graph. Then the saved workflow `claude-plug
 builds it Wave by Wave, parallel Work Units each in their own worktree, with bounded implement⇄review loops, the
 Full Checks and an Integration Review. The main thread then opens the PR. The skill documents every stage, both modes
 (feature and `--fix`), the agent roster and the checks; it loads on invocation, so that detail is not repeated here.
-Its vocabulary is the Agentic Delivery context (`claude-plugins/CONTEXT.md`), and why it is shaped this way is
+Its vocabulary is the Agentic Delivery context (`claude-plugins/GLOSSARY.md`), and why it is shaped this way is
 `claude-plugins/docs/adr/0001-parallel-work-units-in-a-workflow.md`.
 
 **When to use what**: full pipeline (`/chicio-labs-sdlc:sdlc`) for non-trivial code features/fixes; call

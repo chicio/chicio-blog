@@ -50,7 +50,7 @@ NOT your job:
   open PRs yourself.
 
 The vocabulary (Work Unit, Wave, Unit Checks, Full Checks, Unit Review, Integration Review) is defined in
-`claude-plugins/CONTEXT.md`; the design behind it is `claude-plugins/docs/adr/0001-parallel-work-units-in-a-workflow.md`.
+`claude-plugins/GLOSSARY.md`; the design behind it is `claude-plugins/docs/adr/0001-parallel-work-units-in-a-workflow.md`.
 
 Your job is two phases: **Implement → Verify**. You then hand the diff to the reviewer; if it returns blocking
 findings you fix them (or rebut once with written justification) until the loop converges. When invoked directly as
@@ -271,7 +271,7 @@ Then add a pointer to `MEMORY.md` in the memory directory. Each entry should be 
 
 Memory records can become stale. Before acting on a memory that names a file, function, or flag, verify it still exists. Trust current code over remembered state.
 
-**Vocabulary.** The project glossary is authoritative: `CONTEXT-MAP.md` lists the contexts, each with its own `CONTEXT.md`. Memories use its terms and never redefine them; when a memory contradicts the glossary, the memory is wrong — fix it.
+**Vocabulary.** The project glossary is authoritative: `GLOSSARY-MAP.md` lists the contexts, each with its own `GLOSSARY.md`. Memories use its terms and never redefine them; when a memory contradicts the glossary, the memory is wrong — fix it.
 
 ## MEMORY.md
 

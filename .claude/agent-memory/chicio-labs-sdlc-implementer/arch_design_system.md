@@ -5,7 +5,7 @@ type: project
 ---
 
 The design system is the published package `packages/matrix-design-system` (vocabulary:
-packages/matrix-design-system/CONTEXT.md). Paths below verified 2026-09-27.
+packages/matrix-design-system/GLOSSARY.md). Paths below verified 2026-09-27.
 
 ## Matrix Theme (packages/matrix-design-system/src/styles/theme.css)
 - Primary: `#00FF41`, Secondary: `#00CC33`, Primary-light: `#39FF14`
@@ -47,6 +47,6 @@ Site-specific hooks moved out of the design system into the Website: `useConsent
 - SSR-safe: defaults to enabled to prevent hydration mismatches
 
 ## Matrix Rain (atoms/effects/matrix-rain/matrix-rain/matrix-rain.tsx)
-- Renders `MatrixRainWebGPU` from the `matrix-rain-webgpu` package (vocabulary: packages/matrix-rain-webgpu/CONTEXT.md)
+- Renders `MatrixRainWebGPU` from the `matrix-rain-webgpu` package (vocabulary: packages/matrix-rain-webgpu/GLOSSARY.md)
   when WebGPU is supported, else the `Matrix2DCanvas` fallback (fontSize, density)
 - Store: `use-matrix-rain-store.ts`; pause/activity via `use-matrix-rain-activity.ts`

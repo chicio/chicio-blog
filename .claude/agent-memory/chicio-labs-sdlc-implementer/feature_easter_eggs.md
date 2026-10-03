@@ -4,7 +4,7 @@ description: Six Easter Eggs sharing one video overlay, each fired by its own Tr
 type: project
 ---
 
-Vocabulary (Easter Egg, Trigger, Found, Reveal, Hunt, Hint) is defined in apps/website/CONTEXT.md; use it as is.
+Vocabulary (Easter Egg, Trigger, Found, Reveal, Hunt, Hint) is defined in apps/website/GLOSSARY.md; use it as is.
 
 ## Current architecture (verified 2026-09-27)
 

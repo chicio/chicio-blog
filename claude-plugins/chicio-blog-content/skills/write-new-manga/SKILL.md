@@ -8,7 +8,7 @@ user_invocable: true
 
 Bootstrap a new Manga under `apps/website/src/content/manga/<slug>/`. A **Manga** is one series, never one Volume: a
 series is a single entry however many **Volumes** are on the shelf (see the Website glossary,
-`apps/website/CONTEXT.md`). Facts are verified, never invented, and the plot summary is original.
+`apps/website/GLOSSARY.md`). Facts are verified, never invented, and the plot summary is original.
 
 ## Steps
 

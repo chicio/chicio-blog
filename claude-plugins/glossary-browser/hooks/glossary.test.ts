@@ -11,15 +11,16 @@ import {
     parseContextMap,
     promptNote,
     search,
+    singleContextEntry,
 } from "./glossary";
 
-const MAP = `# Context Map
+const MAP = `# Glossary Map
 
 ## Contexts
 
-- [Website](./apps/website/CONTEXT.md): the site
+- [Website](./apps/website/GLOSSARY.md): the site
   and its content
-- [Agentic Delivery](./.claude/CONTEXT.md): how agents build it
+- [Agentic Delivery](./.claude/GLOSSARY.md): how agents build it
 
 ## Relationships
 
@@ -142,6 +143,18 @@ describe("glossary", () => {
 
             expect(flags).toEqual([]);
         });
+
+        test("ignores a canonical name written with hyphens", async () => {
+            const designSystem = parseContext(
+                "# Design System\n\n## Language\n\n**Design System**:\nThe component library.\n",
+                { name: "Design System", dir: "packages/design-system", summary: "the library" },
+                [],
+            );
+            const contexts = [...glossaryOf().contexts, designSystem];
+
+            expect(check("the design-system pieces", contexts, "prompt")).toEqual([]);
+            expect(check("the design of the pieces", contexts, "prompt").map((flag) => flag.word)).toEqual(["design"]);
+        });
     });
 
     describe("contextsForPath", () => {
@@ -153,7 +166,8 @@ describe("glossary", () => {
             ]);
             expect(contextsForPath("AGENTS.md", glossary)?.length).toBe(2);
             expect(contextsForPath("apps/website/src/page.tsx", glossary)).toBe(null);
-            expect(contextsForPath(".claude/CONTEXT.md", glossary)).toBe(null);
+            expect(contextsForPath(".claude/GLOSSARY.md", glossary)).toBe(null);
+            expect(contextsForPath("GLOSSARY-MAP.md", glossary)).toBe(null);
         });
     });
 
@@ -207,6 +221,21 @@ describe("glossary", () => {
             expect(reason).toContain("this edit to apps/website/x.mdx uses Avoid words from the Website glossary");
             expect(reason).toContain("- 'Article' is an Avoid word in Website: when it means Post, say Post.");
             expect(reason).toContain("send the same edit again unchanged and it will pass");
+        });
+    });
+
+    describe("singleContextEntry", () => {
+        test("names a repository's only context after its GLOSSARY.md title, owning every path", async () => {
+            const text =
+                "# Ordering\n\nReceives and tracks customer orders.\n\n## Language\n\n**Order**:\nA purchase.\n_Avoid_: purchase\n";
+            const entry = singleContextEntry(text);
+            const context = parseContext(text, entry, []);
+            const glossary = { contexts: [context], systemAdrs: [], relationships: "" };
+
+            expect(entry).toEqual({ name: "Ordering", dir: "", summary: "Receives and tracks customer orders." });
+            expect(isOwnedPath("docs/notes.md", glossary)).toBe(true);
+            expect(contextsForPath("docs/notes.md", glossary)?.map((c) => c.name)).toEqual(["Ordering"]);
+            expect(contextsForPath("GLOSSARY.md", glossary)).toBe(null);
         });
     });
 
