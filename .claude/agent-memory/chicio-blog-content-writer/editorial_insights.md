@@ -69,7 +69,7 @@ Creating cross-platform Swift libraries and bundling resources with SPM.
 
 High frequency: swift, ios, apple, mobile application development, javascript, web development, react native, typescript, computer graphics, blender
 Medium frequency: clean code, test driven development, pwa, android, java, swiftui
-Lower frequency: kotlin, spring boot, backend, architectural pattern, domain driven design, react, conference, machine learning, llm, expo, skia, dsa, ai, chrome
+Lower frequency: kotlin, spring boot, backend, architectural pattern, domain driven design, react, conference, machine learning, llm, expo, skia, dsa, ai, chrome, claude code (new 2026-10-03)
 
 ## Editorial Voice Observations
 
