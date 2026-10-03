@@ -4,7 +4,7 @@ The repository root is a Claude Code plugin marketplace, `chicio-labs` (`.claude
 tooling built for agents (skills, subagents, the SDLC workflow, mods) lives in its plugins under `claude-plugins/`,
 instead of loose in `.claude/`. A plugin is the unit Claude Code installs, versions, namespaces and hot-reloads, and some
 of this tooling is meant for other repositories: a Public Plugin such as `glossary-browser` is installed elsewhere with
-`/plugin marketplace add chicio/chicio-labs`, while a Project Plugin (`chicio-labs-sdlc`, `chicio-blog-content`) only
+`/plugin marketplace add chicio/chicio-labs`, while a Project Plugin (`chicio-labs-sdlc`, `website-content`) only
 works here. One catalogue lists both, and each plugin's description says which it is.
 
 ## Considered Options
@@ -21,7 +21,7 @@ works here. One catalogue lists both, and each plugin's description says which i
 - Not everything can move. Rules (`.claude/rules/`), `CLAUDE.md`, permissions and agent memory
   (`.claude/agent-memory/`) are read from the project only, so `.claude/` stays as configuration.
 - Every component is namespaced `<plugin>:<name>`; renaming a plugin renames all of them, which is why the plugins are
-  named for what they serve (`chicio-labs-sdlc` serves the whole repository, `chicio-blog-content` the site).
+  named for what they serve (`chicio-labs-sdlc` serves the whole repository, `website-content` the site).
 - A plugin agent's memory folder is `.claude/agent-memory/<plugin>-<agent>/`, so a rename moves the agent's memory
   too.
 - Plugin subagents ignore `permissionMode`, `mcpServers` and `hooks`. MCP tools come from the project's `.mcp.json`.

@@ -17,8 +17,8 @@ original publisher are not exposed by the API either, so they must come from the
 reliable source and never be guessed.
 
 Usage:
-    uv run --script claude-plugins/chicio-blog-content/skills/write-new-manga/fetch-manga.py --title "Demon Slayer"
-    uv run --script claude-plugins/chicio-blog-content/skills/write-new-manga/fetch-manga.py --title "Death Note" \\
+    uv run --script claude-plugins/website-content/skills/write-new-manga/fetch-manga.py --title "Demon Slayer"
+    uv run --script claude-plugins/website-content/skills/write-new-manga/fetch-manga.py --title "Death Note" \\
         --folder apps/website/src/content/manga/death-note \\
         --cover-url https://example.com/edition-cover.jpg
 
@@ -39,7 +39,7 @@ from pathlib import Path
 from PIL import Image
 
 ANILIST_URL = "https://graphql.anilist.co"
-USER_AGENT = "Mozilla/5.0 (chicio-blog new-manga skill)"
+USER_AGENT = "Mozilla/5.0 (chicio-labs new-manga skill)"
 
 QUERY = """
 query ($search: String) {

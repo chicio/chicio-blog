@@ -53,8 +53,8 @@ Interactive platform mapping:
     If IGDB credentials are not configured, the mapping phase is skipped.
 
 Usage:
-    uv run --script claude-plugins/chicio-blog-content/skills/write-new-videogame/add-game-screenshots.py --game-folder <path>
-    uv run --script claude-plugins/chicio-blog-content/skills/write-new-videogame/add-game-screenshots.py --all-games
+    uv run --script claude-plugins/website-content/skills/write-new-videogame/add-game-screenshots.py --game-folder <path>
+    uv run --script claude-plugins/website-content/skills/write-new-videogame/add-game-screenshots.py --all-games
 
     Required (choose one):
         --game-folder     Path to one game folder, e.g.:
@@ -74,19 +74,19 @@ Usage:
                                             (default: 120)
 
 Examples:
-  uv run --script claude-plugins/chicio-blog-content/skills/write-new-videogame/add-game-screenshots.py \\
+  uv run --script claude-plugins/website-content/skills/write-new-videogame/add-game-screenshots.py \\
       --game-folder src/content/videogames/console/nintendo-entertainment-system/game/super-mario-bros-3
 
-  uv run --script claude-plugins/chicio-blog-content/skills/write-new-videogame/add-game-screenshots.py \\
+  uv run --script claude-plugins/website-content/skills/write-new-videogame/add-game-screenshots.py \\
       --game-folder src/content/videogames/console/playstation5/game/astrobot \\
       --max-images 3 \\
       --dry-run
 
-  uv run --script claude-plugins/chicio-blog-content/skills/write-new-videogame/add-game-screenshots.py \\
+  uv run --script claude-plugins/website-content/skills/write-new-videogame/add-game-screenshots.py \\
       --all-games \\
       --dry-run
 
-  uv run --script claude-plugins/chicio-blog-content/skills/write-new-videogame/add-game-screenshots.py \\
+  uv run --script claude-plugins/website-content/skills/write-new-videogame/add-game-screenshots.py \\
       --all-games \\
       --force \\
       --min-delay 45 \\
@@ -116,7 +116,7 @@ import frontmatter
 # Scripts are run from the repo root; no config files needed.
 
 IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp"}
-USER_AGENT = "chicio-blog game screenshot pipeline"
+USER_AGENT = "chicio-labs game screenshot pipeline"
 
 
 def load_env_file(env_path: str = ".env.others") -> dict[str, str]:

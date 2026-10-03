@@ -26,7 +26,7 @@ repository root, so an edit, or a `git pull`, takes effect after `/reload-plugin
   same workflow, starting from a failing regression test.
 - **Isolation**: the pipeline runs in its own worktree on a `feat/<slug>` branch unless `--in-place` is passed.
 
-The pipeline is for code. Posts and DSA course edits go to `/chicio-blog-content:write-post`.
+The pipeline is for code. Posts and DSA course edits go to `/website-content:write-post`.
 
 ## The workflow
 

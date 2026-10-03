@@ -1,12 +1,12 @@
 ---
 name: write-post
-description: Write a new Post, or turn an Italian draft into one, for chicio-blog — interview and outline approval in the main thread, drafting by chicio-blog-content:writer, review rounds, then the PR. Also routes Post reviews, DSA course edits and writer memory updates to the agent.
+description: Write a new Post, or turn an Italian draft into one, for the Website — interview and outline approval in the main thread, drafting by website-content:writer, review rounds, then the PR. Also routes Post reviews, DSA course edits and writer memory updates to the agent.
 disable-model-invocation: false
 ---
 
-# chicio-blog-content:write-post — orchestrator
+# website-content:write-post — orchestrator
 
-You (the main thread) own every conversation with Fabrizio; **`chicio-blog-content:writer`** owns the writing. A
+You (the main thread) own every conversation with Fabrizio; **`website-content:writer`** owns the writing. A
 subagent cannot hold a real back-and-forth, so the interview, the outline gate and the review rounds happen here, and
 the agent receives an approved brief and never asks the user anything.
 
@@ -15,7 +15,7 @@ Vocabulary: "Post" is the canonical term (see `apps/website/GLOSSARY.md`), never
 ## Invocation
 
 ```
-/chicio-blog-content:write-post [topic or draft path] [--translate] [--review <post>] [--dsa <topic or exercise>] [--memory]
+/website-content:write-post [topic or draft path] [--translate] [--review <post>] [--dsa <topic or exercise>] [--memory]
 ```
 
 Pick the mode from the arguments or the request:
@@ -59,12 +59,12 @@ before the outline is approved.** The approved outline plus every Stage 1 answer
 
 ## Stage 3 — Draft
 
-Dispatch **`chicio-blog-content:writer`** with the brief (or, for Translate, the draft path plus the gap answers),
+Dispatch **`website-content:writer`** with the brief (or, for Translate, the draft path plus the gap answers),
 the branch name, and the instruction to stop after the draft: write the MDX and media, generate the featured-image
 prompt if one is needed, run `npm run lint` and `npm run build`, and return. Do not let it commit yet.
 
 Relay what it returns **in full** in your reply: the draft path, the featured-image prompt (with the reminder to attach
-`claude-plugins/chicio-blog-content/references/featured-image-reference.png`), and for Translate every flagged idiom with its alternatives. Tool
+`claude-plugins/website-content/references/featured-image-reference.png`), and for Translate every flagged idiom with its alternatives. Tool
 results are invisible to Fabrizio.
 
 ## Stage 4 — Review rounds 🚪 [INTERACTIVE]
