@@ -1,0 +1,13 @@
+{
+  "name": "glossary-browser",
+  "version": "0.1.0",
+  "description": "Browse a repository's ubiquitous language (CONTEXT-MAP.md, each context's CONTEXT.md, the ADRs) in a pane and a band above the prompt, and flag Avoid words in prompts and Markdown edits",
+  "author": {
+    "name": "Fabrizio Duroni",
+    "url": "https://github.com/chicio"
+  },
+  "homepage": "https://github.com/chicio/chicio-blog/tree/main/claude-plugins/glossary-browser",
+  "repository": "https://github.com/chicio/chicio-blog",
+  "keywords": ["ddd", "glossary", "ubiquitous-language", "adr", "mod"],
+  "types": "./types/index.d.ts"
+}

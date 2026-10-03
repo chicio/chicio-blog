@@ -173,10 +173,38 @@ jobs:
       - name: Verify published packages
         run: npm run verify-packages
 
+  plugins:
+    name: Claude Code plugins
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version-file: "package.json"
+      # validate and test are local: they read the manifests and run the mods' tests in the engine's own sandbox,
+      # with no model call, so the CLI needs no API key or subscription here.
+      - name: Install the Claude Code CLI
+        run: npm install -g @anthropic-ai/claude-code
+      - name: Validate the marketplace
+        run: claude plugin validate .
+      - name: Validate and test every plugin
+        run: |
+          for plugin in claude-plugins/*/.claude-plugin/plugin.json; do
+            dir="$(dirname "$(dirname "$plugin")")"
+            echo "::group::$dir"
+            claude plugin validate "$dir"
+            if compgen -G "$dir/hooks/*.test.ts" > /dev/null || compgen -G "$dir/tests/*.test.ts" > /dev/null; then
+              claude plugin test "$dir"
+            fi
+            echo "::endgroup::"
+          done
+
   build:
     name: Build
     runs-on: ubuntu-latest
-    needs: [lint, format, knip, validate-architecture, typecheck, test, verify-packages]
+    needs: [lint, format, knip, validate-architecture, typecheck, test, verify-packages, plugins]
     steps:
       - name: Checkout
         uses: actions/checkout@v5

@@ -19,10 +19,12 @@ public/
 package-lock.json
 CHANGELOG.md
 
-# Agent tooling: vendored plugin skills and this repo's own agent memory, rules and prompts.
-# Not shipped code, and reflowing instruction markdown is churn with no reader.
-.agents/
+# Agent tooling: vendored skills, this repo's agent memory and rules, and the prompts of the plugins' agents, skills
+# and workflows. Not shipped code, and reflowing instruction markdown is churn with no reader.
 .claude/
+claude-plugins/*/agents/
+claude-plugins/*/skills/
+claude-plugins/*/workflows/
 
 # Formatted by oxfmt, not prettier: its `lint` script runs `oxfmt --check`, so letting
 # prettier rewrite these files makes `npm run lint` fail in that workspace.

@@ -3,5 +3,18 @@
     "allow": [
       "mcp__codegraph__*"
     ]
+  },
+  "enabledPlugins": {
+    "glossary-browser@chicio-labs": true,
+    "chicio-labs-sdlc@chicio-labs": true,
+    "chicio-blog-content@chicio-labs": true
+  },
+  "extraKnownMarketplaces": {
+    "chicio-labs": {
+      "source": {
+        "source": "directory",
+        "path": "./"
+      }
+    }
   }
 }

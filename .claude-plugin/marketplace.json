@@ -1,0 +1,29 @@
+{
+  "name": "chicio-labs",
+  "owner": {
+    "name": "Fabrizio Duroni",
+    "url": "https://github.com/chicio"
+  },
+  "metadata": {
+    "description": "Fabrizio Duroni's Claude Code plugins: Public Plugins for any repository, and the Project Plugins that build chicio-blog"
+  },
+  "plugins": [
+    {
+      "name": "glossary-browser",
+      "source": "./claude-plugins/glossary-browser",
+      "description": "Public Plugin. Browse a repository's ubiquitous language (CONTEXT-MAP.md, each context's CONTEXT.md, the ADRs) and flag Avoid words in prompts and Markdown edits",
+      "category": "productivity",
+      "tags": ["ddd", "glossary", "ubiquitous-language", "adr", "mod"]
+    },
+    {
+      "name": "chicio-labs-sdlc",
+      "source": "./claude-plugins/chicio-labs-sdlc",
+      "description": "Project Plugin, chicio-blog only. The agentic SDLC pipeline (explore, Human Gate, parallel Work Units, reviews, PR) and the release checklist"
+    },
+    {
+      "name": "chicio-blog-content",
+      "source": "./claude-plugins/chicio-blog-content",
+      "description": "Project Plugin, chicio-blog only. Write Posts in Fabrizio Duroni's voice and add Manga and Games to the collections"
+    }
+  ]
+}

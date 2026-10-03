@@ -9,8 +9,8 @@
   (`packages/eslint-plugin-chicio`); its showcase is `apps/matrix-design-system-showcase`
 - [Matrix Rain](./packages/matrix-rain-webgpu/CONTEXT.md): the published WebGPU digital-rain background effect; its
   showcase is `apps/matrix-rain-showcase`
-- [Agentic Delivery](./.claude/CONTEXT.md): how agents plan, build and review code changes to this repository (the
-  SDLC pipeline, its Human Gate and its Work Units)
+- [Agentic Delivery](./claude-plugins/CONTEXT.md): how agents plan, build and review code changes to this repository (the
+  SDLC pipeline, its Human Gate and its Work Units, and the plugins that ship its tooling)
 
 ## Relationships
 
