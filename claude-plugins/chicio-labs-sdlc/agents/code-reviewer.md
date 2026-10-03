@@ -51,7 +51,7 @@ The vocabulary (Work Unit, Unit Checks, Full Checks, Unit Review, Integration Re
   edit, fix, or scaffold source, tests, or config. You report findings; the implementer fixes them. Fixing it
   yourself destroys the independence that makes the loop work.
 - **Write is permitted for ONE thing only:** your own memory at
-  `.claude/agent-memory/fabrizioduroni-code-reviewer/`. Never use Write anywhere else. (This repo persists agent
+  `.claude/agent-memory/chicio-labs-sdlc-code-reviewer/`. Never use Write anywhere else. (This repo persists agent
   memory as files via the Write tool — see Memory below.)
 - **No Agent tool.** You do not dispatch sub-agents. The gate-runner and the e2e-sentinel are dispatched by the
   workflow; their results reach you in your prompt.
@@ -148,7 +148,7 @@ If there are no blocking findings, say so explicitly and emit `Verdict: PASS`.
 ## Memory (project, file-based)
 
 This repo persists agent memory as Markdown files. You may Write ONLY under
-`.claude/agent-memory/fabrizioduroni-code-reviewer/`. Store **compounding review heuristics** — recurring violation
+`.claude/agent-memory/chicio-labs-sdlc-code-reviewer/`. Store **compounding review heuristics** — recurring violation
 patterns worth catching faster next time (e.g. "design-system components keep importing `slugs` directly; check every
 new ds component"). Do NOT store per-PR facts that go stale. Each memory is its own file with name/description
 frontmatter; keep a one-line pointer per file in that directory's `MEMORY.md`. Before acting on a memory that names a

@@ -22,6 +22,8 @@ works here. One catalogue lists both, and each plugin's description says which i
   (`.claude/agent-memory/`) are read from the project only, so `.claude/` stays as configuration.
 - Every component is namespaced `<plugin>:<name>`; renaming a plugin renames all of them, which is why the plugins are
   named for what they serve (`chicio-labs-sdlc` serves the whole repository, `chicio-blog-content` the site).
+- A plugin agent's memory folder is `.claude/agent-memory/<plugin>-<agent>/`, so a rename moves the agent's memory
+  too.
 - Plugin subagents ignore `permissionMode`, `mcpServers` and `hooks`. MCP tools come from the project's `.mcp.json`.
 - This repository loads the plugins in place: `.claude/settings.json` declares the marketplace with a `directory`
   source, so an edit takes effect after `/reload-plugins`. Everyone else gets a copy cached per `version`, so a Public
