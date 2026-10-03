@@ -71,7 +71,7 @@ export const projects: Record<string, Project> = {
         trackingCategory: tracking.category.home,
         trackingAction: tracking.action.open_matrix_rain_webgpu_demo,
         trackingLabel: tracking.label.body,
-        link: "https://chicio.github.io/chicio-blog/matrix-rain/",
+        link: "https://labs.fabrizioduroni.it/matrix-rain/",
       },
       {
         label: "Github",

@@ -61,7 +61,7 @@ const entries: MenuEntry[] = [
                 items: [
                     {
                         label: "Matrix Rain",
-                        to: "https://chicio.github.io/chicio-blog/matrix-rain/",
+                        to: "https://labs.fabrizioduroni.it/matrix-rain/",
                         external: true,
                     },
                 ],

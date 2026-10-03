@@ -706,9 +706,9 @@ anyone had saved. Assembling the hub is six lines:
 ```
 
 Storybook emits relative asset paths, so nothing needs to know which subpath it's served from, which is what makes
-this arrangement free. The hub is live as [fabrizioduroni.it labs](https://chicio.github.io/chicio-blog/), with the
-[design system Storybook](https://chicio.github.io/chicio-blog/design-system/) under `/design-system/` and, once the
-next act lands, the [matrix rain showcase](https://chicio.github.io/chicio-blog/matrix-rain/) under `/matrix-rain/`.
+this arrangement free. The hub is live as [fabrizioduroni.it labs](https://labs.fabrizioduroni.it/), with the
+[design system Storybook](https://labs.fabrizioduroni.it/design-system/) under `/design-system/` and, once the
+next act lands, the [matrix rain showcase](https://labs.fabrizioduroni.it/matrix-rain/) under `/matrix-rain/`.
 It deploys independently of the site itself (the blog goes to Vercel, and the workflow only runs when the packages,
 the showcases, or the hub change).
 
@@ -775,7 +775,7 @@ Three more things this act taught me, all of them cheap to avoid and expensive t
 
 The Astro showcase was promoted to `apps/matrix-rain-showcase` and its private lockfile deleted, so the root lockfile
 governs it like everything else. It now sits on the hub as the
-[matrix rain showcase](https://chicio.github.io/chicio-blog/matrix-rain/), next to the design system's Storybook. Its release line stays scoped to both directories at once, since the package and its
+[matrix rain showcase](https://labs.fabrizioduroni.it/matrix-rain/), next to the design system's Storybook. Its release line stays scoped to both directories at once, since the package and its
 docs move together:
 
 ```json
@@ -974,9 +974,9 @@ Everything here is public, so you can check every claim in this post yourself:
 - [matrix-design-system](https://www.npmjs.com/package/matrix-design-system) on npm (1.1.0)
 - [matrix-component-store](https://www.npmjs.com/package/matrix-component-store) on npm (1.0.0)
 - [matrix-rain-webgpu](https://www.npmjs.com/package/matrix-rain-webgpu) on npm (2.0.2)
-- the [fabrizioduroni.it labs](https://chicio.github.io/chicio-blog/) hub, which collects both showcases
-- the [design system Storybook](https://chicio.github.io/chicio-blog/design-system/), every component with its stories
-- the [matrix rain showcase](https://chicio.github.io/chicio-blog/matrix-rain/), the WebGPU effect and its docs
+- the [fabrizioduroni.it labs](https://labs.fabrizioduroni.it/) hub, which collects both showcases
+- the [design system Storybook](https://labs.fabrizioduroni.it/design-system/), every component with its stories
+- the [matrix rain showcase](https://labs.fabrizioduroni.it/matrix-rain/), the WebGPU effect and its docs
 - the [repository itself](https://github.com/chicio/chicio-blog), configs, workflows, verification script, and all
 
 Pretty cool, isn't it? :rocket:

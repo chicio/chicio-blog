@@ -71,7 +71,7 @@ const exploreItems = [
     },
     {
         label: "Computer Graphics",
-        items: [{ label: "Matrix Rain", to: "https://chicio.github.io/chicio-blog/matrix-rain/", external: true }],
+        items: [{ label: "Matrix Rain", to: "https://labs.fabrizioduroni.it/matrix-rain/", external: true }],
     },
 ];
 

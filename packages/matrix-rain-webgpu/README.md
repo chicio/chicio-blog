@@ -6,7 +6,7 @@
 
 > A Matrix-style "digital rain" background effect for React, rendered on the GPU with WebGPU via [TypeGPU](https://docs.swmansion.com/TypeGPU/). GPU-driven simulation, signed-distance-field glyphs, depth parallax, bloom, and a CRT post-process.
 
-**▶ Live demo & full documentation: https://chicio.github.io/chicio-blog/matrix-rain/**
+**▶ Live demo & full documentation: https://labs.fabrizioduroni.it/matrix-rain/**
 
 It powers the animated background on [fabrizioduroni.it](https://www.fabrizioduroni.it). Requires a WebGPU-capable browser (recent Chrome / Edge / Safari / Firefox).
 
@@ -64,10 +64,10 @@ return isWebGPUSupported() ? <MatrixRainWebGPU /> : <My2DFallback />;
 
 Full docs live on the site — including the interactive playground:
 
-- **[Getting started](https://chicio.github.io/chicio-blog/matrix-rain/overview/getting-started/)** & **[Public API](https://chicio.github.io/chicio-blog/matrix-rain/usage/public-api/)** — install, props, recipes.
-- **[Architecture](https://chicio.github.io/chicio-blog/matrix-rain/architecture/pipeline-overview/)** — how the pieces connect.
-- **[How it works](https://chicio.github.io/chicio-blog/matrix-rain/how-it-works/glyph-rendering/)** — per-component deep dives, with the computer-graphics concepts and the math.
-- **[Playground](https://chicio.github.io/chicio-blog/matrix-rain/playground/)** — the live demo with every knob exposed.
+- **[Getting started](https://labs.fabrizioduroni.it/matrix-rain/overview/getting-started/)** & **[Public API](https://labs.fabrizioduroni.it/matrix-rain/usage/public-api/)** — install, props, recipes.
+- **[Architecture](https://labs.fabrizioduroni.it/matrix-rain/architecture/pipeline-overview/)** — how the pieces connect.
+- **[How it works](https://labs.fabrizioduroni.it/matrix-rain/how-it-works/glyph-rendering/)** — per-component deep dives, with the computer-graphics concepts and the math.
+- **[Playground](https://labs.fabrizioduroni.it/matrix-rain/playground/)** — the live demo with every knob exposed.
 
 ## Local development
 

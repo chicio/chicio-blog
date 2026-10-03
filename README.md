@@ -11,9 +11,9 @@
 My personal website, and the Matrix-inspired libraries it is built from.
 
 **[fabrizioduroni.it](https://www.fabrizioduroni.it)** — the site ·
-**[fabrizioduroni.it labs](https://chicio.github.io/chicio-blog/)** — playable references for the
-libraries: the [design system](https://chicio.github.io/chicio-blog/design-system/) in Storybook and
-the [matrix rain effect](https://chicio.github.io/chicio-blog/matrix-rain/) with its docs and playground.
+**[fabrizioduroni.it labs](https://labs.fabrizioduroni.it/)** — playable references for the
+libraries: the [design system](https://labs.fabrizioduroni.it/design-system/) in Storybook and
+the [matrix rain effect](https://labs.fabrizioduroni.it/matrix-rain/) with its docs and playground.
 
 ![Fabrizio duroni blog](https://github.com/chicio/chicio-blog/blob/main/brand/readme-hero.jpg?raw=true)
 
@@ -23,15 +23,15 @@ the [matrix rain effect](https://chicio.github.io/chicio-blog/matrix-rain/) with
 
 An npm-workspaces monorepo orchestrated by [Turborepo](https://turborepo.com).
 
-| Workspace                                                                  | What it is                                                                                                            |
-| -------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| [`apps/website`](apps/website)                                             | The site: Next.js 16 App Router, MDX content, an AI chat, an in-page terminal and a few easter eggs                   |
-| [`packages/matrix-design-system`](packages/matrix-design-system)           | The design system, published to npm. Framework-agnostic React components plus their stylesheet                        |
-| [`packages/matrix-component-store`](packages/matrix-component-store)       | The `ComponentStore` / `StateStore` / `EffectsStore` contract every component's store hook returns                    |
-| [`packages/eslint-plugin-chicio`](packages/eslint-plugin-chicio)           | The lint rules enforcing that contract, shared across the workspaces                                                  |
-| [`packages/matrix-rain-webgpu`](packages/matrix-rain-webgpu)               | The WebGPU/TypeGPU digital-rain effect, published to npm. Keeps its own toolchain (oxlint, Vite)                      |
-| [`apps/matrix-design-system-showcase`](apps/matrix-design-system-showcase) | Storybook over the design system's stories → [`/design-system/`](https://chicio.github.io/chicio-blog/design-system/) |
-| [`apps/matrix-rain-showcase`](apps/matrix-rain-showcase)                   | Astro docs and playground for the rain effect → [`/matrix-rain/`](https://chicio.github.io/chicio-blog/matrix-rain/)  |
+| Workspace                                                                  | What it is                                                                                                      |
+| -------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| [`apps/website`](apps/website)                                             | The site: Next.js 16 App Router, MDX content, an AI chat, an in-page terminal and a few easter eggs             |
+| [`packages/matrix-design-system`](packages/matrix-design-system)           | The design system, published to npm. Framework-agnostic React components plus their stylesheet                  |
+| [`packages/matrix-component-store`](packages/matrix-component-store)       | The `ComponentStore` / `StateStore` / `EffectsStore` contract every component's store hook returns              |
+| [`packages/eslint-plugin-chicio`](packages/eslint-plugin-chicio)           | The lint rules enforcing that contract, shared across the workspaces                                            |
+| [`packages/matrix-rain-webgpu`](packages/matrix-rain-webgpu)               | The WebGPU/TypeGPU digital-rain effect, published to npm. Keeps its own toolchain (oxlint, Vite)                |
+| [`apps/matrix-design-system-showcase`](apps/matrix-design-system-showcase) | Storybook over the design system's stories → [`/design-system/`](https://labs.fabrizioduroni.it/design-system/) |
+| [`apps/matrix-rain-showcase`](apps/matrix-rain-showcase)                   | Astro docs and playground for the rain effect → [`/matrix-rain/`](https://labs.fabrizioduroni.it/matrix-rain/)  |
 
 The website depends on the packages by version, and npm resolves that to the workspace copy — so the
 site always builds against local source, while the packages stay publishable for anyone else.

@@ -34,7 +34,7 @@ const SelectedStory = () => (
 
 const ExternalStory = () => (
     <div className="flex">
-        <MenuItem to="https://chicio.github.io/chicio-blog/matrix-rain/" selected={false} external>
+        <MenuItem to="https://labs.fabrizioduroni.it/matrix-rain/" selected={false} external>
             Matrix Rain
         </MenuItem>
     </div>

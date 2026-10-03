@@ -6,7 +6,7 @@ import type { FooterLink, SocialContactLinks } from "@/components/features/desig
 
 export type NavigationTracker = (action: string) => void;
 
-const matrixRainHref = "https://chicio.github.io/chicio-blog/matrix-rain/";
+const matrixRainHref = "https://labs.fabrizioduroni.it/matrix-rain/";
 
 const authorPagesPrefix = `${slugs.blog.author.replace("/[authorId]", "")}/`;
 
