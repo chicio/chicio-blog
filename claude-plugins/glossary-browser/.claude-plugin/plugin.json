@@ -9,5 +9,13 @@
   "homepage": "https://github.com/chicio/chicio-blog/tree/main/claude-plugins/glossary-browser",
   "repository": "https://github.com/chicio/chicio-blog",
   "keywords": ["ddd", "glossary", "ubiquitous-language", "adr", "mod"],
-  "types": "./types/index.d.ts"
+  "types": "./types/index.d.ts",
+  "userConfig": {
+    "denyEdits": {
+      "type": "boolean",
+      "title": "Refuse Avoid words in edits",
+      "description": "Refuse a Write or Edit to a Markdown file that uses an Avoid word of the context owning that file, so the model rewrites it with the canonical term. Sending the same edit again unchanged lets it through. Off, the Term Check only flags the word in the band.",
+      "default": true
+    }
+  }
 }

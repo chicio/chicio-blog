@@ -179,6 +179,27 @@ export const contextsForPath = (relative: string, glossary: Glossary): GlossaryC
     return owners.length > 0 ? owners.slice(0, 1) : glossary.contexts;
 };
 
+export const isOwnedPath = (relative: string, glossary: Glossary): boolean =>
+    glossary.contexts.some((context) => relative === context.dir || relative.startsWith(`${context.dir}/`));
+
+const flagLine = (flag: Flag): string =>
+    `- '${flag.word}' is an Avoid word in ${flag.context}: when it means ${flag.term}, say ${flag.term}.`;
+
+export const promptNote = (flags: Flag[]): string =>
+    [
+        "Glossary Term Check: the prompt uses Avoid words from this repository's glossary (CONTEXT-MAP.md).",
+        ...flags.map(flagLine),
+        "Use the canonical terms in your reply and your work. If a word is meant in another sense, ignore its line.",
+    ].join("\n");
+
+export const denyReason = (flags: Flag[], relative: string): string =>
+    [
+        `Glossary Term Check: this edit to ${relative} uses Avoid words from the ${flags[0]?.context ?? ""} glossary.`,
+        ...flags.map(flagLine),
+        "Rewrite the text with the canonical terms. If a word is meant (a quote, code, another sense), " +
+            "send the same edit again unchanged and it will pass.",
+    ].join("\n");
+
 export const elsewhere = (glossary: Glossary, contextName: string, term: Term): string[] => {
     const name = term.name.toLowerCase();
     const found: string[] = [];

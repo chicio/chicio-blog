@@ -12,9 +12,12 @@ import {
     contextId,
     contextMarkdown,
     contextsForPath,
+    denyReason,
     findTermId,
+    isOwnedPath,
     parseContext,
     parseContextMap,
+    promptNote,
     search,
     termId,
     termMarkdown,
@@ -182,9 +185,22 @@ const rowsOf = (glossary: Glossary, expanded: string | null, filter: string): Ro
 
 const isGroup = (id: string): boolean => id.startsWith("ctx:") || id === SYSTEM_ID;
 
+const GLOSSARY_SOURCE = /(^|\/)(CONTEXT|CONTEXT-MAP)\.md$|(^|\/)docs\/adr\//;
+
+const addFlags = async ($: Engine, found: Flag[]) => {
+    await update($, flagsAtom, (flags) => {
+        const known = new Set(flags.map((flag) => `${flag.context}|${flag.word}|${flag.where}`));
+
+        return [...flags, ...found.filter((flag) => !known.has(`${flag.context}|${flag.word}|${flag.where}`))];
+    });
+};
+
 const describeFlags = (flags: Flag[]): string => flags.map((flag) => `'${flag.word}' → ${flag.term}`).join(" · ");
 
-export const register: Register = (on) => {
+export const register: Register = (on, options) => {
+    const denyEdits = options.denyEdits !== false;
+    const retried = new Set<string>();
+
     on("session.start", async ($, e, next) => {
         await $.command.register({
             name: "glossary",
@@ -221,41 +237,47 @@ export const register: Register = (on) => {
 
     on("prompt.submit", async ($, e, next) => {
         const glossary = await read($, glossaryAtom);
-        if (glossary !== null && !e.text.trimStart().startsWith("/")) {
-            await update($, flagsAtom, () => check(e.text, glossary.contexts, "prompt"));
+        if (glossary === null || e.text.trimStart().startsWith("/")) {
+            return next(e);
         }
+        const found = check(e.text, glossary.contexts, "prompt");
+        await update($, flagsAtom, () => found);
 
-        return next(e);
+        return found.length === 0 ? next(e) : next({ ...e, context: [...(e.context ?? []), promptNote(found)] });
     });
 
     on("tool.call", async ($, e, next) => {
-        const ran = await next(e);
-        const isEdit = e.tool === "Edit" || e.tool === "Write";
-        if (!isEdit || ran.deny !== undefined || ran.isError === true) {
-            return ran;
+        if (e.tool !== "Edit" && e.tool !== "Write") {
+            return next(e);
         }
         const input = e as unknown as { file_path: string; new_string?: string; content?: string };
         const root = await $.session.root();
         if (!input.file_path.startsWith(`${root}/`)) {
-            return ran;
+            return next(e);
         }
         const relative = input.file_path.slice(root.length + 1);
-        if (/(^|\/)(CONTEXT|CONTEXT-MAP)\.md$|(^|\/)docs\/adr\//.test(relative)) {
-            await refresh($);
-        }
         const glossary = await read($, glossaryAtom);
         const contexts = glossary === null ? null : contextsForPath(relative, glossary);
-        if (glossary === null || contexts === null) {
-            return ran;
-        }
         const text = (e.tool === "Edit" ? input.new_string : input.content) ?? "";
-        const found = check(text, contexts, relative, glossary.contexts);
+        const found = glossary === null || contexts === null ? [] : check(text, contexts, relative, glossary.contexts);
         if (found.length > 0) {
-            await update($, flagsAtom, (flags) => {
-                const known = new Set(flags.map((flag) => `${flag.context}|${flag.word}|${flag.where}`));
+            await addFlags($, found);
+        }
+        const retry = `${relative}\n${text}`;
+        const isRefused =
+            found.length > 0 &&
+            denyEdits &&
+            glossary !== null &&
+            isOwnedPath(relative, glossary) &&
+            !retried.has(retry);
+        if (isRefused) {
+            retried.add(retry);
 
-                return [...flags, ...found.filter((flag) => !known.has(`${flag.context}|${flag.word}|${flag.where}`))];
-            });
+            return { deny: denyReason(found, relative) };
+        }
+        const ran = await next(e);
+        if (ran.deny === undefined && ran.isError !== true && GLOSSARY_SOURCE.test(relative)) {
+            await refresh($);
         }
 
         return ran;
