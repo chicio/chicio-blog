@@ -1,7 +1,7 @@
 import type { GiscusProps } from "@giscus/react";
 
 export const giscusConfig: Omit<GiscusProps, "id" | "host"> = {
-    repo: "chicio/chicio-blog",
+    repo: "chicio/chicio-labs",
     repoId: "R_kgDONo7oFQ",
     category: "Blog comments",
     categoryId: "DIC_kwDONo7oFc4DBaAT",

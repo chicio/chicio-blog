@@ -11,12 +11,12 @@
     "webgpu"
   ],
   "homepage": "https://labs.fabrizioduroni.it/matrix-rain/",
-  "bugs": "https://github.com/chicio/chicio-blog/issues",
+  "bugs": "https://github.com/chicio/chicio-labs/issues",
   "license": "MIT",
   "author": "Fabrizio Duroni",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/chicio/chicio-blog.git",
+    "url": "git+https://github.com/chicio/chicio-labs.git",
     "directory": "packages/matrix-rain-webgpu"
   },
   "files": [

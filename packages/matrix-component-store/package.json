@@ -13,10 +13,10 @@
   "author": "Fabrizio Duroni",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/chicio/chicio-blog.git",
+    "url": "git+https://github.com/chicio/chicio-labs.git",
     "directory": "packages/matrix-component-store"
   },
-  "homepage": "https://github.com/chicio/chicio-blog/tree/main/packages/matrix-component-store#readme",
+  "homepage": "https://github.com/chicio/chicio-labs/tree/main/packages/matrix-component-store#readme",
   "type": "module",
   "main": "./dist/index.mjs",
   "types": "./dist/index.d.mts",

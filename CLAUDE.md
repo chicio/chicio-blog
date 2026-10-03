@@ -6,7 +6,12 @@ agent here: the instructions, the skills and the plugins target it alone
 
 ## Project Overview
 
-This is a Next.js 16 blog (App Router) with a Matrix-inspired UI theme, built by Fabrizio Duroni. The site features blog posts, DSA (Data Structures & Algorithms) content, an AI chat interface, and various interactive elements. The codebase follows atomic design principles and uses TypeScript with strict type safety.
+This repository is **Chicio Labs** (`chicio/chicio-labs`): Fabrizio Duroni's lab, from which every Lab Project is
+published ([ADR-0007](docs/adr/0007-chicio-labs.md)). The Lab Projects are the Website (fabrizioduroni.it), the npm
+packages, their Showcases and the Claude Code plugins; the Labs Hub at `labs.fabrizioduroni.it` presents them. The
+repository was called `chicio-blog` until October 2026, and older Posts still say so.
+
+The Website is a Next.js 16 blog (App Router) with a Matrix-inspired UI theme. It features blog posts, DSA (Data Structures & Algorithms) content, an AI chat interface, and various interactive elements. The codebase follows atomic design principles and uses TypeScript with strict type safety.
 
 ## Ubiquitous Language and Decisions
 
@@ -158,7 +163,8 @@ There is deliberately **no Dependabot auto-merge and no ruleset on `main`**: a r
 
 ## Vercel Deploys
 
-The site deploys continuously from `main`. Two things about that project are not visible from the repository:
+The site deploys continuously from `main`, through the Vercel project `fabrizioduroni-it` (named after the Lab Project it
+deploys, not after the repository). Two things about that project are not visible from the repository:
 
 - **The Root Directory is `apps/website`, not the repository root.** Vercel reads `vercel.json` from the Root Directory, so the file lives at `apps/website/vercel.json`; a repository-root `vercel.json` is silently ignored. (Tell: the build log's `npm install --prefix=../..`.) "Include files outside the Root Directory" is on, so the whole monorepo is cloned and the root `package-lock.json` resolves normally.
 - **The `ignoreCommand` skips deploys for commits that cannot affect the site**, by asking `turbo query affected`; the logic lives in `apps/website/scripts/vercel-ignore-build.sh`. Why this and not the default ignore step or `turbo-ignore`: [ADR-0004](docs/adr/0004-vercel-deploy-skipping.md).
@@ -209,7 +215,7 @@ what cannot move into one: [ADR-0002](claude-plugins/docs/adr/0002-claude-toolin
 - **This repo loads them in place.** `.claude/settings.json` declares the marketplace with a `directory` source and
   enables all three at project scope, so an edit (or a `git pull`) takes effect after `/reload-plugins`, with no
   `claude plugin update`; the copies under `~/.claude/plugins/cache/` are install-time snapshots, never what runs.
-  Anyone else adds `chicio/chicio-blog` from GitHub and gets a cached copy.
+  Anyone else adds `chicio/chicio-labs` from GitHub and gets a cached copy.
 - **A fresh clone installs them on its first session.** Project settings only enable plugins, and Claude Code never
   installs them on a new machine, so a `SessionStart` hook (`.claude/hooks/install-project-plugins.mjs`) installs any
   enabled plugin missing for this checkout and asks for `/reload-plugins`; it is silent otherwise. One marketplace

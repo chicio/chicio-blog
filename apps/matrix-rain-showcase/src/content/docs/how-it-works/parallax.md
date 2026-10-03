@@ -4,7 +4,7 @@ sidebar:
     order: 4
 ---
 
-**Source:** [`src/gpu/render-graph.ts`](https://github.com/chicio/chicio-blog/blob/main/packages/matrix-rain-webgpu/src/gpu/render-graph.ts) (`initialColumns`), [`src/gpu/pipelines/render-glyphs.ts`](https://github.com/chicio/chicio-blog/blob/main/packages/matrix-rain-webgpu/src/gpu/pipelines/render-glyphs.ts)
+**Source:** [`src/gpu/render-graph.ts`](https://github.com/chicio/chicio-labs/blob/main/packages/matrix-rain-webgpu/src/gpu/render-graph.ts) (`initialColumns`), [`src/gpu/pipelines/render-glyphs.ts`](https://github.com/chicio/chicio-labs/blob/main/packages/matrix-rain-webgpu/src/gpu/pipelines/render-glyphs.ts)
 
 Parallax is the depth illusion: some columns read as _near_ (fast, bright, crisp) and others as _far_ (slow, dim, soft). It's driven entirely by one per-column value — `depth` — derived from the column's fall speed.
 

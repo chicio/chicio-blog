@@ -14,10 +14,10 @@
   "author": "Fabrizio Duroni",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/chicio/chicio-blog.git",
+    "url": "git+https://github.com/chicio/chicio-labs.git",
     "directory": "packages/matrix-design-system"
   },
-  "homepage": "https://github.com/chicio/chicio-blog/tree/main/packages/matrix-design-system#readme",
+  "homepage": "https://github.com/chicio/chicio-labs/tree/main/packages/matrix-design-system#readme",
   "type": "module",
   "main": "./dist/index.mjs",
   "types": "./dist/index.d.mts",

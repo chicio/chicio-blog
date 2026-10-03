@@ -78,7 +78,7 @@ export const projects: Record<string, Project> = {
         trackingCategory: tracking.category.home,
         trackingAction: tracking.action.open_matrix_rain_webgpu_github,
         trackingLabel: tracking.label.body,
-        link: "https://github.com/chicio/chicio-blog",
+        link: "https://github.com/chicio/chicio-labs",
       },
     ],
     image: '/media/content/about-me/projects/matrix-rain-webgpu.png',

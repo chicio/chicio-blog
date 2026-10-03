@@ -28,7 +28,7 @@ describe("BlogComments", () => {
         it("passes the site's giscus configuration to the widget", () => {
             render(<BlogComments />);
             const props = JSON.parse(screen.getByTestId("giscus").getAttribute("data-props")!);
-            expect(props.repo).toBe("chicio/chicio-blog");
+            expect(props.repo).toBe("chicio/chicio-labs");
             expect(props.mapping).toBe("pathname");
             expect(props.theme).toBe("https://www.fabrizioduroni.it/giscus-matrix.css");
         });

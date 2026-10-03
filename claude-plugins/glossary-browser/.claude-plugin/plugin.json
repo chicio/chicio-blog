@@ -6,8 +6,8 @@
     "name": "Fabrizio Duroni",
     "url": "https://github.com/chicio"
   },
-  "homepage": "https://github.com/chicio/chicio-blog/tree/main/claude-plugins/glossary-browser",
-  "repository": "https://github.com/chicio/chicio-blog",
+  "homepage": "https://github.com/chicio/chicio-labs/tree/main/claude-plugins/glossary-browser",
+  "repository": "https://github.com/chicio/chicio-labs",
   "keywords": ["ddd", "glossary", "ubiquitous-language", "adr", "mod"],
   "types": "./types/index.d.ts",
   "userConfig": {

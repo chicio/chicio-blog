@@ -1,6 +1,6 @@
 ---
 name: sdlc
-description: Orchestrate the full code SDLC for chicio-blog — explore → brainstorm → workflow (parallel Work Units ⇄ Unit Reviews, then Full Checks + Integration Review) → PR (feature mode), or investigate → confirm → workflow → PR (fix mode). One human gate (plan approval); the PR opens automatically. Code work only.
+description: Orchestrate the full code SDLC for Chicio Labs — explore → brainstorm → workflow (parallel Work Units ⇄ Unit Reviews, then Full Checks + Integration Review) → PR (feature mode), or investigate → confirm → workflow → PR (fix mode). One human gate (plan approval); the PR opens automatically. Code work only.
 disable-model-invocation: false
 ---
 
@@ -258,7 +258,7 @@ Automated (lint, validate-architecture, knip, typecheck, Vitest, build; Playwrig
 ## Checklist:
 - [X] My code follows the code style of this project :beers:.
 - [X] My change requires a change to the documentation :bulb: and I have updated the documentation accordingly.
-- [X] I have read the [CONTRIBUTING](https://github.com/chicio/chicio.github.io/blob/master/CONTRIBUTING.md) document :busts_in_silhouette:.
+- [X] I have read the [CONTRIBUTING](https://github.com/chicio/chicio-labs/blob/main/CONTRIBUTING.md) document :busts_in_silhouette:.
 - [X] I have added tests to cover my changes :tada:.
 - [X] All new and existing tests passed :white_check_mark:.
 EOF

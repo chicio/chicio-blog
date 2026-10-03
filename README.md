@@ -1,27 +1,32 @@
-# [fabrizioduroni.it](https://www.fabrizioduroni.it)
+# Chicio Labs
 
-[![CI](https://github.com/chicio/chicio-blog/actions/workflows/ci.yml/badge.svg)](https://github.com/chicio/chicio-blog/actions/workflows/ci.yml)
-[![GitHub license](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/chicio/chicio-blog/blob/main/LICENSE.md)
+[![CI](https://github.com/chicio/chicio-labs/actions/workflows/ci.yml/badge.svg)](https://github.com/chicio/chicio-labs/actions/workflows/ci.yml)
+[![GitHub license](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/chicio/chicio-labs/blob/main/LICENSE.md)
 [![Status](https://img.shields.io/badge/Status-Ok-green.svg)](https://stats.uptimerobot.com/H8Am1Ay0Vd)
 
-[![Typecheck](https://img.shields.io/badge/Typecheck-tsc%20--noEmit-3178C6?logo=typescript&logoColor=white)](https://github.com/chicio/chicio-blog/actions/workflows/ci.yml)
-[![Unit & Component](https://img.shields.io/badge/Unit%20%26%20Component-Vitest%20%2B%20RTL-6E9F18?logo=vitest&logoColor=white)](https://github.com/chicio/chicio-blog/actions/workflows/ci.yml)
-[![E2E](https://img.shields.io/badge/E2E-Playwright-2EAD33?logo=playwright&logoColor=white)](https://github.com/chicio/chicio-blog/actions/workflows/ci.yml)
+[![Typecheck](https://img.shields.io/badge/Typecheck-tsc%20--noEmit-3178C6?logo=typescript&logoColor=white)](https://github.com/chicio/chicio-labs/actions/workflows/ci.yml)
+[![Unit & Component](https://img.shields.io/badge/Unit%20%26%20Component-Vitest%20%2B%20RTL-6E9F18?logo=vitest&logoColor=white)](https://github.com/chicio/chicio-labs/actions/workflows/ci.yml)
+[![E2E](https://img.shields.io/badge/E2E-Playwright-2EAD33?logo=playwright&logoColor=white)](https://github.com/chicio/chicio-labs/actions/workflows/ci.yml)
 
-My personal website, and the Matrix-inspired libraries it is built from.
+Fabrizio Duroni's lab: the one repository where he experiments with code, AI and computer graphics, and from which
+every Lab Project is published. Each one is presented on the **[Labs Hub](https://labs.fabrizioduroni.it/)**.
 
-**[fabrizioduroni.it](https://www.fabrizioduroni.it)** — the site ·
-**[fabrizioduroni.it labs](https://labs.fabrizioduroni.it/)** — playable references for the
-libraries: the [design system](https://labs.fabrizioduroni.it/design-system/) in Storybook and
-the [matrix rain effect](https://labs.fabrizioduroni.it/matrix-rain/) with its docs and playground.
+## Lab Projects
 
-![Fabrizio duroni blog](https://github.com/chicio/chicio-blog/blob/main/brand/readme-hero.jpg?raw=true)
+| Lab Project                                            | What it is                                                                                             |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ |
+| [Website](apps/website)                                | [fabrizioduroni.it](https://www.fabrizioduroni.it): Posts, the DSA course, an AI chat, a terminal      |
+| [Matrix Design System](packages/matrix-design-system)  | The framework-agnostic React design system → [Showcase](https://labs.fabrizioduroni.it/design-system/) |
+| [Matrix Rain](packages/matrix-rain-webgpu)             | The WebGPU digital-rain effect → [Showcase](https://labs.fabrizioduroni.it/matrix-rain/)               |
+| [Claude Code plugins](.claude-plugin/marketplace.json) | The `chicio-labs` marketplace: `/plugin marketplace add chicio/chicio-labs`                            |
+
+![Chicio Labs](brand/readme-hero.jpg)
 
 ---
 
 ## Repository structure
 
-An npm-workspaces monorepo orchestrated by [Turborepo](https://turborepo.com).
+npm workspaces, orchestrated by [Turborepo](https://turborepo.com).
 
 | Workspace                                                                  | What it is                                                                                                      |
 | -------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
@@ -46,14 +51,6 @@ site always builds against local source, while the packages stay publishable for
 
 Each is released by hand from the [Release package](../../actions/workflows/release-package.yml)
 workflow, authenticated by npm trusted publishing, so every version carries a provenance attestation.
-
-### Why the design system is a package
-
-It imports nothing from Next, or from any framework. Where a component needs framework behaviour it
-takes it as a prop with a working default: `linkComponent` falls back to a real `<a>`,
-`imageComponent` to a real `<img>` that reproduces `next/image`'s `fill`, placeholder and lazy
-loading. The site injects the Next versions through `apps/website/src/components/features/design-system-next/`.
-A dependency-cruiser rule fails the build on any `next` import inside the package.
 
 ## Development
 

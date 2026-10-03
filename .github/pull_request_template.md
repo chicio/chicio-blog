@@ -22,6 +22,6 @@ _Please describe in detail how you tested your changes._
 
 - [ ] My code follows the code style of this project :beers:.
 - [ ] My change requires a change to the documentation :bulb: and I have updated the documentation accordingly.
-- [ ] I have read the [CONTRIBUTING](https://github.com/chicio/chicio-blog/blob/main/CONTRIBUTING.md) document :busts_in_silhouette:.
+- [ ] I have read the [CONTRIBUTING](https://github.com/chicio/chicio-labs/blob/main/CONTRIBUTING.md) document :busts_in_silhouette:.
 - [ ] I have added tests to cover my changes :tada:.
 - [ ] All new and existing tests passed :white_check_mark:.

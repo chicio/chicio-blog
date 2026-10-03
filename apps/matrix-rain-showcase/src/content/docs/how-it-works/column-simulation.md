@@ -4,7 +4,7 @@ sidebar:
     order: 1
 ---
 
-**Source:** [`src/gpu/pipelines/compute-step.ts`](https://github.com/chicio/chicio-blog/blob/main/packages/matrix-rain-webgpu/src/gpu/pipelines/compute-step.ts)
+**Source:** [`src/gpu/pipelines/compute-step.ts`](https://github.com/chicio/chicio-labs/blob/main/packages/matrix-rain-webgpu/src/gpu/pipelines/compute-step.ts)
 
 The simulation is a compute pass: one GPU thread per column, advancing the `Column[]` storage buffer. It's the only pass that _writes_ simulation state.
 

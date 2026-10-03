@@ -10,7 +10,7 @@ It is a mod: a plugin of function hooks that runs inside Claude Code (terminal o
 ## Install
 
 ```
-/plugin marketplace add chicio/chicio-blog
+/plugin marketplace add chicio/chicio-labs
 /plugin install glossary-browser@chicio-labs
 /reload-plugins
 ```

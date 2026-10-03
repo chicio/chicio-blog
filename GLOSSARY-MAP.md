@@ -1,5 +1,25 @@
 # Glossary Map
 
+## Language
+
+**Chicio Labs**:
+Fabrizio Duroni's lab: the one repository where he experiments with code, AI and computer graphics, and from which every
+Lab Project is published.
+_Avoid_: monorepo, fabrizioduroni.it labs
+
+**Lab Project**:
+One thing built in Chicio Labs, such as the Website, a package or a plugin, whether it is published or only used inside
+the lab.
+_Avoid_: project, experiment
+
+**Labs Hub**:
+The Chicio Labs site that presents every Lab Project and links out to each one's Showcase.
+_Avoid_: labs website, landing page, GitHub Pages site
+
+**Workbench**:
+The Lab Projects that only work inside Chicio Labs, the tools the published ones are built with.
+_Avoid_: internal, private projects, tooling
+
 ## Contexts
 
 - [Website](./apps/website/GLOSSARY.md): Fabrizio Duroni's personal site, its content (posts, the DSA course, the videogame
