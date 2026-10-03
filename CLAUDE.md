@@ -207,8 +207,14 @@ semver `version` and is released by `release-plugin.yml`; a **Project Plugin** (
 what cannot move into one: [ADR-0002](claude-plugins/docs/adr/0002-claude-tooling-ships-as-plugins.md).
 
 - **This repo loads them in place.** `.claude/settings.json` declares the marketplace with a `directory` source and
-  enables all three at project scope, so an edit takes effect after `/reload-plugins`. Anyone else adds
-  `chicio/chicio-blog` from GitHub and gets a cached copy.
+  enables all three at project scope, so an edit (or a `git pull`) takes effect after `/reload-plugins`, with no
+  `claude plugin update`; the copies under `~/.claude/plugins/cache/` are install-time snapshots, never what runs.
+  Anyone else adds `chicio/chicio-blog` from GitHub and gets a cached copy.
+- **A fresh clone installs them on its first session.** Project settings only enable plugins, and Claude Code never
+  installs them on a new machine, so a `SessionStart` hook (`.claude/hooks/install-project-plugins.mjs`) installs any
+  enabled plugin missing for this checkout and asks for `/reload-plugins`; it is silent otherwise. One marketplace
+  name is registered once per machine (`~/.claude/plugins/known_marketplaces.json`), so every checkout of this
+  repository on a machine loads the plugins from the first one registered.
 - **Everything is namespaced** `<plugin>:<name>`: `/chicio-labs-sdlc:sdlc`, `chicio-labs-sdlc:implementer`, the
   workflow `chicio-labs-sdlc:workflow`. Use the full name in `subagent_type`, `agentType` and `Workflow({ name })`.
 - **A plugin agent's memory lives in `.claude/agent-memory/<plugin>-<agent>/`** (the colon becomes a dash), e.g.

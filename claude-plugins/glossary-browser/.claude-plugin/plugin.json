@@ -8,13 +8,7 @@
   },
   "homepage": "https://github.com/chicio/chicio-blog/tree/main/claude-plugins/glossary-browser",
   "repository": "https://github.com/chicio/chicio-blog",
-  "keywords": [
-    "ddd",
-    "glossary",
-    "ubiquitous-language",
-    "adr",
-    "mod"
-  ],
+  "keywords": ["ddd", "glossary", "ubiquitous-language", "adr", "mod"],
   "types": "./types/index.d.ts",
   "userConfig": {
     "denyEdits": {

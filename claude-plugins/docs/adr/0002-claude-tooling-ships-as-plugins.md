@@ -29,5 +29,7 @@ works here. One catalogue lists both, and each plugin's description says which i
   source, so an edit takes effect after `/reload-plugins`. Everyone else gets a copy cached per `version`, so a Public
   Plugin only reaches them when `release-plugin.yml` bumps its version and tags `<plugin>--v<version>`. A Project
   Plugin carries no version.
+- Project settings enable the plugins but never install them on a new machine, so a `SessionStart` hook installs the
+  missing ones for each checkout, and they load after `/reload-plugins`.
 - CI validates and tests every plugin without Claude credentials (`claude plugin validate`, `claude plugin test`); type
   declarations for mods are written by the engine when a session loads them, so `tsc` is a local check only.
