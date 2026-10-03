@@ -11,11 +11,11 @@ import rehypeExternalLinks from "rehype-external-links";
 import mermaid from "astro-mermaid";
 
 // Deployed to the monorepo's GitHub Pages site, beside the design-system showcase:
-// https://chicio.github.io/chicio-blog/matrix-rain/
+// https://labs.fabrizioduroni.it/matrix-rain/
 // https://astro.build/config
 export default defineConfig({
-    site: "https://chicio.github.io",
-    base: "/chicio-blog/matrix-rain/",
+    site: "https://labs.fabrizioduroni.it",
+    base: "/matrix-rain/",
     markdown: {
         // Sätteri is Astro's default processor but parses math without rendering it and has no
         // external-link handling, so the docs' KaTeX and new-tab links need the unified processor.

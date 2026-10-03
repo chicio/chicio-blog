@@ -79,7 +79,7 @@ const buildEntries = (): MenuEntry[] => [
                 items: [
                     {
                         label: "Matrix Rain",
-                        to: "https://chicio.github.io/chicio-blog/matrix-rain/",
+                        to: "https://labs.fabrizioduroni.it/matrix-rain/",
                         external: true,
                         onClick: onClickMatrixRain,
                     },
@@ -154,7 +154,7 @@ describe("Menu", () => {
             await userEvent.click(screen.getAllByRole("button", { name: "Explore" })[0]);
             const menu = screen.getAllByRole("list", { name: "Explore" })[0];
             const link = within(menu).getByRole("link", { name: "Matrix Rain" });
-            expect(link).toHaveAttribute("href", "https://chicio.github.io/chicio-blog/matrix-rain/");
+            expect(link).toHaveAttribute("href", "https://labs.fabrizioduroni.it/matrix-rain/");
             expect(link).toHaveAttribute("target", "_blank");
         });
 
