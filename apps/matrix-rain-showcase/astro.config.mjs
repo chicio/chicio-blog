@@ -39,7 +39,7 @@ export default defineConfig({
                 {
                     icon: "github",
                     label: "GitHub",
-                    href: "https://github.com/chicio/matrix-rain-webgpu",
+                    href: "https://github.com/chicio/chicio-labs/tree/main/packages/matrix-rain-webgpu",
                 },
                 {
                     icon: "open-book",

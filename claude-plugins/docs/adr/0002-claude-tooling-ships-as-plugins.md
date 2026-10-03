@@ -4,7 +4,7 @@ The repository root is a Claude Code plugin marketplace, `chicio-labs` (`.claude
 tooling built for agents (skills, subagents, the SDLC workflow, mods) lives in its plugins under `claude-plugins/`,
 instead of loose in `.claude/`. A plugin is the unit Claude Code installs, versions, namespaces and hot-reloads, and some
 of this tooling is meant for other repositories: a Public Plugin such as `glossary-browser` is installed elsewhere with
-`/plugin marketplace add chicio/chicio-blog`, while a Project Plugin (`chicio-labs-sdlc`, `chicio-blog-content`) only
+`/plugin marketplace add chicio/chicio-labs`, while a Project Plugin (`chicio-labs-sdlc`, `chicio-blog-content`) only
 works here. One catalogue lists both, and each plugin's description says which it is.
 
 ## Considered Options

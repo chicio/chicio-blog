@@ -57,8 +57,8 @@ const SocialButtonsStory = () => (
 const InlineInProseStory = () => (
     <p className="text-primary-text max-w-[500px]">
         The whole design system is open source: read the components in the{" "}
-        <ExternalLink href="https://github.com/chicio/chicio-blog" target="_blank" rel="noopener noreferrer">
-            chicio-blog repository
+        <ExternalLink href="https://github.com/chicio/chicio-labs" target="_blank" rel="noopener noreferrer">
+            chicio-labs repository
         </ExternalLink>{" "}
         and the write-up on{" "}
         <ExternalLink href="https://www.fabrizioduroni.it" target="_blank" rel="noopener noreferrer">

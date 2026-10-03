@@ -1,8 +1,8 @@
 <!--
-AI Agent Instructions for chicio-blog
+AI Agent Instructions for Chicio Labs
 -->
 
-# chicio-blog: AI Agent Coding Guide
+# Chicio Labs: AI Agent Coding Guide
 
 This project is a Next.js (App Router) blog with a Matrix-inspired UI, using React, TailwindCSS, and Framer Motion. The codebase is modular, atomic, and highly type-safe. Follow these conventions and workflows for maximum productivity:
 

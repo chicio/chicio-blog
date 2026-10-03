@@ -1,8 +1,8 @@
 # matrix-rain-webgpu
 
 [![npm](https://img.shields.io/npm/v/matrix-rain-webgpu)](https://www.npmjs.com/package/matrix-rain-webgpu)
-[![CI](https://github.com/chicio/chicio-blog/actions/workflows/ci.yml/badge.svg)](https://github.com/chicio/chicio-blog/actions/workflows/ci.yml)
-[![Deploy](https://github.com/chicio/chicio-blog/actions/workflows/pages.yml/badge.svg)](https://github.com/chicio/chicio-blog/actions/workflows/pages.yml)
+[![CI](https://github.com/chicio/chicio-labs/actions/workflows/ci.yml/badge.svg)](https://github.com/chicio/chicio-labs/actions/workflows/ci.yml)
+[![Deploy](https://github.com/chicio/chicio-labs/actions/workflows/pages.yml/badge.svg)](https://github.com/chicio/chicio-labs/actions/workflows/pages.yml)
 
 > A Matrix-style "digital rain" background effect for React, rendered on the GPU with WebGPU via [TypeGPU](https://docs.swmansion.com/TypeGPU/). GPU-driven simulation, signed-distance-field glyphs, depth parallax, bloom, and a CRT post-process.
 
@@ -71,7 +71,7 @@ Full docs live on the site — including the interactive playground:
 
 ## Local development
 
-This package lives in the [chicio-blog](https://github.com/chicio/chicio-blog) monorepo. The library
+This package lives in [Chicio Labs](https://github.com/chicio/chicio-labs), Fabrizio Duroni's lab repository. The library
 is here; its docs and demo site are the sibling [`apps/matrix-rain-showcase`](../../apps/matrix-rain-showcase)
 workspace, an Astro + Starlight app.
 
@@ -94,4 +94,4 @@ gates (`npm run lint` from the root fans out across every workspace).
 
 ## Author
 
-Built by [Fabrizio Duroni](https://www.fabrizioduroni.it). If you enjoy it, a visit to the site is the best way to support the work. Also don't forget :star: to star [the monorepo](https://github.com/chicio/chicio-blog) :star:.
+Built by [Fabrizio Duroni](https://www.fabrizioduroni.it). If you enjoy it, a visit to the site is the best way to support the work. Also don't forget :star: to star [the monorepo](https://github.com/chicio/chicio-labs) :star:.

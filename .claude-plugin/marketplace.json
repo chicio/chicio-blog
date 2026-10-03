@@ -5,7 +5,7 @@
     "url": "https://github.com/chicio"
   },
   "metadata": {
-    "description": "Fabrizio Duroni's Claude Code plugins: Public Plugins for any repository, and the Project Plugins that build chicio-blog"
+    "description": "Fabrizio Duroni's Claude Code plugins: Public Plugins for any repository, and the Project Plugins that build Chicio Labs itself"
   },
   "plugins": [
     {
@@ -18,12 +18,12 @@
     {
       "name": "chicio-labs-sdlc",
       "source": "./claude-plugins/chicio-labs-sdlc",
-      "description": "Project Plugin, chicio-blog only. The agentic SDLC pipeline (explore, Human Gate, parallel Work Units, reviews, PR) and the release checklist"
+      "description": "Project Plugin, Chicio Labs only. The agentic SDLC pipeline (explore, Human Gate, parallel Work Units, reviews, PR) and the release checklist"
     },
     {
       "name": "chicio-blog-content",
       "source": "./claude-plugins/chicio-blog-content",
-      "description": "Project Plugin, chicio-blog only. Write Posts in Fabrizio Duroni's voice and add Manga and Games to the collections"
+      "description": "Project Plugin, Chicio Labs only. Write Posts in Fabrizio Duroni's voice and add Manga and Games to the collections"
     }
   ]
 }
