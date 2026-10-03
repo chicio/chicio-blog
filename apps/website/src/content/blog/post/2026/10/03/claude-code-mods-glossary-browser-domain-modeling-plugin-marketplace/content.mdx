@@ -1,0 +1,525 @@
+---
+title: "Claude Code mods: a glossary browser for Matt Pocock's domain-modeling skill"
+description: "How I used Claude Code mods to keep my repository's ubiquitous language visible while I work: a Glossary Browser for Matt Pocock's domain-modeling skill, with a Term Check that steers both me and the model toward the canonical terms."
+date: 2026-10-03
+image: /media/content/blog/post/2026/10/03/claude-code-mods-glossary-browser-domain-modeling-plugin-marketplace/claude-code-mods-glossary-browser.jpg
+tags: [ai, llm, claude code, typescript]
+authors: [fabrizio_duroni]
+---
+
+*How I used Claude Code mods to keep my repository's ubiquitous language visible while I work: a Glossary Browser for
+Matt Pocock's domain-modeling skill, with a Term Check that steers both me and the model toward the canonical terms.*
+
+---
+
+Claude Code mods just came out, and the moment I read
+[the getting-started post](https://claude.dev/blog/getting-started-with-claude-code-mods/) I wanted to build one.
+The problem with a brand new extension point is always the same: you need a real use case, not a toy.
+So I started looking through the codebase of the website you're reading right now, searching for something that
+could benefit from living *inside* my Claude Code session.
+
+I found it in the glossary. Recently I wrote down the ubiquitous language of this repository: every term, what
+it means, and which words to avoid. The terms are there, carefully written, but nothing keeps them in view while I
+work. I have to remember to open the file, and the model has to remember to read it. Spoiler: most of the time,
+neither of us does.
+
+In this post I will show you the mod I built to fix this: a Glossary Browser that shows the glossary above the prompt
+and in a dedicated pane, plus a Term Check that steers both me and the model toward the canonical terms. Let's start.
+
+## Ubiquitous language with Matt Pocock's skills
+
+The glossary of this repository is not something I invented from scratch. It follows the format of
+[Matt Pocock's `domain-modeling` skill](https://github.com/mattpocock/skills/tree/main/skills/engineering/domain-modeling).
+The skill is usually driven by
+[`grill-with-docs`](https://github.com/mattpocock/skills/tree/main/skills/engineering/grill-with-docs), which runs a
+[`grilling`](https://github.com/mattpocock/skills/tree/main/skills/productivity/grilling) session on a plan and
+records the terms and the decisions as they settle. The result is a small set of Markdown files, described in the
+[GLOSSARY-FORMAT.md](https://github.com/mattpocock/skills/blob/main/skills/engineering/domain-modeling/GLOSSARY-FORMAT.md)
+doc of the skill:
+
+- a `GLOSSARY.md` per context (in the Domain-Driven Design sense of bounded context), placed in the folder that context owns
+- a `GLOSSARY-MAP.md` at the repository root, linking every context's glossary and describing the relationships
+  between them (or, for a small project, a single root `GLOSSARY.md`)
+- inside each `GLOSSARY.md`, a `## Language` section with one `**Term**:` entry per term, optionally grouped by `###`
+  headings, each with its definition and an `_Avoid_:` list of the words *not* to use for it
+- the Architecture Decision Records (ADRs) in `docs/adr/`, at the root for the system-wide ones and inside each
+  context's folder for the others
+
+This is, for example, the entry for a Post in the glossary of the website context (`apps/website/GLOSSARY.md`):
+
+```md
+**Post**:
+One dated entry in the Blog, technical or personal.
+_Avoid_: Article, blog post
+```
+
+My website has four contexts (Website, Matrix Design System, Matrix Rain, and Agentic Delivery), for a total of 67 terms
+and 12 ADRs. It's a pretty good investment: when I say "Post" or "Topic" or "Work Unit", I know exactly what I mean,
+and so does every agent that reads the glossary.
+
+There's a catch though. The glossary only works when someone remembers to read it. A file sitting at the root of the
+repository is documentation, and documentation is the first thing everyone (humans and models) forgets. This is
+exactly the kind of problem a mod can solve.
+
+## What a mod is
+
+So, what is a Claude Code mod? A mod is a small JavaScript or TypeScript module that runs *inside* your Claude Code
+session. Instead of being called from the outside, it lives in the session and sees every event: prompts, tool calls,
+turns, slash commands, and even the rendering of the UI. The getting-started post describes it as "a way to fit
+Claude Code to how you work", and I think that's the best summary you can get.
+
+These are the things that make mods really interesting:
+
+- **They draw their own UI.** A mod can render a band above the prompt, open a pane next to the conversation, write in
+  the status line, or show a toast, in both the terminal and the desktop app.
+- **They intercept and rewrite events.** Every event goes through a middleware chain. Your hook runs, `next(e)` hands
+  the event to the next plugin, and at the bottom Claude Code does what it would have done anyway. This means a hook
+  can observe an event (call `next` and look at the result), rewrite it (change it before calling `next`), or answer
+  it directly (return without calling `next` at all).
+- **They keep state.** Values stored in the host survive for the whole session, including reloads of the mod itself.
+- **They register slash commands.** A mod can add its own `/command`, and respond to it.
+- **They hot reload.** You save the file, and the change is live in the running session. No restart.
+- **They run sandboxed.** The module has no Node and no DOM: everything outside of it (the filesystem, the session, the
+  UI) is reached through a single object, `$`.
+
+If you have used [hooks in the Claude Code settings](https://code.claude.com/docs/en/hooks), the
+difference is substantial. A settings hook is a shell command executed for each event, exchanging JSON over stdin and
+stdout: it starts, does its job, and dies. A mod is loaded once, and it has UI, state, and middleware. It's the
+difference between a script that reacts to Claude Code and a piece of Claude Code that you write yourself.
+
+This is the real point of mods: they let you adapt Claude Code to your own needs. Not the needs of the average user,
+*yours*. And my need was to keep my glossary in view.
+
+## The Glossary Browser
+
+The first part of the mod is the Glossary Browser. When the session starts, it reads the glossary and draws a band
+above the prompt with the contexts, the number of terms, and the number of ADRs.
+
+![The Glossary Browser band above the prompt, listing the four contexts with 67 terms and 12 ADRs](/media/content/blog/post/2026/10/03/claude-code-mods-glossary-browser-domain-modeling-plugin-marketplace/glossary-browser-band.png)
+
+Pressing `g` on the band (or running `/glossary`) opens the pane. You can also jump straight to a term with
+`/glossary [term]`. On the left, the pane lists the contexts, each one expandable to its terms (grouped by section)
+and its ADRs, plus the system-wide ADRs and the Relationships described in the map. A filter at the top searches every
+term, definition, and ADR. On the right, the pane shows the selection. For a term, you get its definition, its Avoid
+entry, the words the Term Check flags for it (more on this in a moment), and where the same word means something in
+another context.
+
+![The Glossary Browser pane open on the Post term, with its definition, Avoid entry, and Term Check flags](/media/content/blog/post/2026/10/03/claude-code-mods-glossary-browser-domain-modeling-plugin-marketplace/glossary-browser-pane-post-term.png)
+
+For an ADR, the pane renders the whole decision as Markdown. This is, for example, the system-wide ADR about the
+monorepo I described in [my previous post](/blog/post/2026/09/11/monorepo-npm-workspaces-turborepo-nextjs-blog).
+
+![The Glossary Browser pane open on the system-wide ADR "One monorepo, with packages consumed through their built output", rendered as Markdown](/media/content/blog/post/2026/10/03/claude-code-mods-glossary-browser-domain-modeling-plugin-marketplace/glossary-browser-pane-adr.png)
+
+Let's see how the band is drawn. A mod draws UI by hooking `ui.render` for a specific component. For the band, the
+component is `AbovePrompt`. The hook reads the glossary from the mod state, resolves the UI elements for the current
+surface with `$.ui.resolve(e)`, and returns JSX:
+
+```tsx
+on("ui.render", { component: "AbovePrompt" }, async ($, e, next) => {
+    const glossary = await read($, glossaryAtom);
+    if (e.props.hasSurvey || glossary === null) {
+        return next(e);
+    }
+    const { Box, Button, Text } = $.ui.resolve(e);
+    const flags = await read($, flagsAtom);
+    const terms = glossary.contexts.reduce((sum, context) => sum + context.terms.length, 0);
+    const adrs = allAdrs(glossary).length;
+    // ...
+    return (
+        <Box flexDirection="column">
+            <Box gap={1}>
+                <Button key="open" label="Glossary" hotkey="g" onPress={() => openPane($)} />
+                <Text dimColor wrap="truncate">
+                    {glossary.contexts.map((context) => context.name).join(" · ")} — {terms} terms · {adrs} ADRs
+                </Text>
+            </Box>
+            {/* the Term Check flags */}
+        </Box>
+    );
+});
+```
+
+As you can see, when there's no glossary (or Claude Code is showing a survey in that spot) the hook simply calls
+`next(e)` and gets out of the way. The glossary itself is read with `$.fs`, the sandboxed filesystem API. The mod first
+looks for a `GLOSSARY-MAP.md`, and falls back to a single root `GLOSSARY.md`:
+
+```typescript
+const loadGlossary = async ($: Engine): Promise<Glossary | null> => {
+    const root = await $.session.root();
+    if (await $.fs.exists(`${root}/GLOSSARY-MAP.md`)) {
+        const map = parseContextMap(await $.fs.read(`${root}/GLOSSARY-MAP.md`));
+        const contexts = await Promise.all(
+            map.entries.map(async (entry) => {
+                const path = `${root}/${glossaryFile(entry.dir)}`;
+                const text = (await $.fs.exists(path)) ? await $.fs.read(path) : "";
+
+                return parseContext(text, entry, await listAdrs($, root, entry.dir));
+            }),
+        );
+
+        return { contexts, systemAdrs: await listAdrs($, root, ""), relationships: map.relationships };
+    }
+    if (await $.fs.exists(`${root}/GLOSSARY.md`)) {
+        const text = await $.fs.read(`${root}/GLOSSARY.md`);
+        const context = parseContext(text, singleContextEntry(text), await listAdrs($, root, ""));
+
+        return { contexts: [context], systemAdrs: [], relationships: "" };
+    }
+
+    return null;
+};
+```
+
+The glossary is read live, and read again whenever a `GLOSSARY.md`, the map, or an ADR is edited during the session.
+One important design choice: the mod only *reads* the glossary, it never writes it. Writing the glossary is the job of
+the domain-modeling skill. The mod just makes it visible.
+
+## The Term Check
+
+Seeing the glossary is nice, but the real value comes from the second part of the mod: the Term Check. It looks for
+Avoid words in two places: my prompts, and the model's edits to Markdown files.
+
+### Prompts: a note only the model reads
+
+The first version of the check that comes to mind is a rewrite: you type "article", the mod replaces it with "Post".
+I discarded it immediately. My prompt is *my* text, and a tool that silently changes what I wrote is a tool I can't
+trust anymore. Instead, the Term Check leaves the prompt exactly as typed, and attaches a note to it that only the
+model reads. The `prompt.submit` hook does this through the `context` of the prompt event:
+
+```typescript
+on("prompt.submit", async ($, e, next) => {
+    const glossary = await read($, glossaryAtom);
+    if (glossary === null || e.text.trimStart().startsWith("/")) {
+        return next(e);
+    }
+    const found = check(e.text, glossary.contexts, "prompt");
+    await update($, flagsAtom, () => found);
+
+    return found.length === 0 ? next(e) : next({ ...e, context: [...(e.context ?? []), promptNote(found)] });
+});
+```
+
+This is the middleware chain in action: the hook rewrites the event (adding context, not touching the text) and hands
+it to `next`. When I typed just "article" in the prompt, this is the note the model received:
+
+```text
+Glossary Term Check: the prompt uses Avoid words from this repository's glossary (GLOSSARY.md).
+- 'Article' is an Avoid word in Website: when it means Post, say Post.
+Use the canonical terms in your reply and your work. If a word is meant in another sense, ignore its line.
+```
+
+At the same time, the band shows the flag, so I see it too. Pressing `1` opens the flagged term in the pane, and `x`
+clears the flags.
+
+![After the prompt "article", the band above the prompt shows the Term Check flag 'Article' mapped to Post, with a clear button](/media/content/blog/post/2026/10/03/claude-code-mods-glossary-browser-domain-modeling-plugin-marketplace/glossary-browser-term-check-flag.png)
+
+As you can see in the screenshot, the model got it right away: it answered that it read "article" as wanting to work on
+a Post. Pretty cool, isn't it? 😎
+
+Notice the last line of the note: "If a word is meant in another sense, ignore its line". A word like "task" is an
+Avoid word in my Agentic Delivery context (the canonical term is Work Unit), but sometimes a task is just a task. The
+model is perfectly able to tell the difference, as long as you tell it that it's allowed to.
+
+### Markdown edits: refuse once, then let it through
+
+The second place where the Term Check works is the model's edits to Markdown files (`.md` and `.mdx`). Here the
+mod is stricter. When the model runs a `Write` or an `Edit` on a Markdown file inside a context's folder, and the new
+text uses that context's Avoid words, the edit is refused, with the canonical terms in the reason:
+
+```typescript
+on("tool.call", async ($, e, next) => {
+    if (e.tool !== "Edit" && e.tool !== "Write") {
+        return next(e);
+    }
+    // ... resolve the file, the contexts owning it, and the new text
+    const found = glossary === null || contexts === null ? [] : check(text, contexts, relative, glossary.contexts);
+    if (found.length > 0) {
+        await addFlags($, found);
+    }
+    const retry = `${relative}\n${text}`;
+    const isRefused =
+        found.length > 0 &&
+        denyEdits &&
+        glossary !== null &&
+        isOwnedPath(relative, glossary) &&
+        !retried.has(retry);
+    if (isRefused) {
+        retried.add(retry);
+
+        return { deny: denyReason(found, relative) };
+    }
+    // ...
+    return next(e);
+});
+```
+
+This is the third kind of hook from the getting-started post: the hook *answers* the event (a `deny`) without calling
+`next`, so the tool never runs. The model reads the reason and rewrites the passage with the canonical term.
+
+Look at the `retried` set though. If the model sends the same edit again, unchanged, it goes through. This is the way
+out, and it's essential. Sometimes the Avoid word is meant: it's in a quote, it's in an example, or it's used in a
+completely different sense. A check that can only say "no" would either block legitimate work or teach the model to
+contort its prose around a regex. The refusal reason tells the model exactly this: "If a word is meant (a quote, code,
+another sense), send the same edit again unchanged and it will pass". Refuse once, explain why, and trust the model
+with the second attempt.
+
+### What does not count as a hit
+
+A check like this lives or dies by its false positives. If it flags too much, you stop reading the flags. So the Term
+Check ignores several things, and all of this logic lives in `hooks/glossary.ts`, as pure functions:
+
+- **Code**: fenced code blocks and inline code are stripped before the check, together with HTML or JSX tags, link
+  targets, and bare URLs.
+- **Canonical names**: an Avoid word inside a canonical name is not a hit. My Agentic Delivery context avoids "design"
+  (it's an Approved Plan), but "Design System" is a perfectly good name. Before checking, `withoutCanonical` masks
+  every canonical term and context name from the text, with spaces or hyphens between the words.
+- **Guidance**: some Avoid entries are not words, they are advice, like "using it for a block inside a page". The
+  `avoidWordsOf` function splits the Avoid entry, drops parentheticals, cuts at clauses like "which" or "when", skips
+  entries that start with "using" or "calling", and keeps only short, word-like entries.
+
+This is the heart of `check`:
+
+```typescript
+export const check = (text: string, contexts: GlossaryContext[], where: string, all = contexts): Flag[] => {
+    const prose = withoutCanonical(proseOnly(text), canonicalNames(all));
+    const flags: Flag[] = [];
+    const seen = new Set<string>();
+    for (const context of contexts) {
+        for (const term of context.terms) {
+            for (const word of term.avoidWords) {
+                const pattern = new RegExp(`\\b${escape(word).replace(/\s+/g, "\\s+")}(s|es)?\\b`, "i");
+                const key = `${context.name}|${word.toLowerCase()}`;
+                if (!seen.has(key) && pattern.test(prose)) {
+                    seen.add(key);
+                    flags.push({ word, term: term.name, context: context.name, where });
+                }
+            }
+        }
+    }
+
+    return flags;
+};
+```
+
+### It caught itself
+
+My favorite moment of the whole project came while Claude was writing the README of the mod. The README lives in the
+repository, inside the Agentic Delivery context, so the Term Check checked it. And it refused three passages.
+
+The first two were "by design" and "CI". Both are Avoid words in that context ("design" for an Approved Plan, "CI" for
+the Full Checks of my SDLC pipeline), but in the README "by design" was just an idiom, and "CI" meant the GitHub
+workflow, not the Full Checks. In both cases the model sent the same edit again, and the retry let it through. Exactly
+what the way out is for.
+
+The third one was different: "design-system pieces". That was a real false positive. "Design System" is a canonical
+name, so it should have been masked, but at that time `withoutCanonical` matched canonical names only when written
+with a space, not with a hyphen. The mod found a bug in itself, and the bug became a fix with a test (you will see the
+test in the next section). I don't think I could have asked for a better first user.
+
+## Writing a mod
+
+Now, let's see how a mod is actually built. A mod is shipped as a Claude Code plugin, and this is the layout of the
+Glossary Browser:
+
+```text
+glossary-browser/
+├── .claude-plugin/
+│   └── plugin.json      the manifest, with the user configuration
+├── hooks/
+│   ├── hooks.json       { "modules": ["./register.tsx"] }
+│   ├── register.tsx     the mod: exports register(on, options)
+│   ├── glossary.ts      the pure logic: parsing, check, notes
+│   └── glossary.test.ts the tests
+└── types/
+    └── index.d.ts       the state contract
+```
+
+`hooks/hooks.json` is what turns a plugin into a mod: instead of listing shell commands, it lists modules.
+
+```json
+{ "modules": ["./register.tsx"] }
+```
+
+The module exports a `register` function, which receives `on` (to subscribe hooks to events) and the options of the
+user configuration. Every hook you saw in the previous sections is registered inside it:
+
+```typescript
+export const register: Register = (on, options) => {
+    const denyEdits = options.denyEdits !== false;
+    const retried = new Set<string>();
+
+    on("session.start", async ($, e, next) => {
+        await $.command.register({
+            name: "glossary",
+            description: "Open the Glossary Browser, optionally on a term: /glossary [term]",
+        });
+        await refresh($);
+
+        return next(e);
+    });
+
+    on("command.run", { command: "glossary" }, async ($, e) => {
+        // open the pane, on the term when one is given
+    });
+
+    // prompt.submit, tool.call, ui.render ...
+};
+```
+
+### State
+
+Remember the hot reload? A module variable dies every time you save the file. Anything that must survive goes in the
+host state, declared as an atom. This is the atom of the Term Check flags:
+
+```typescript
+const flagsAtom = atom({ plugin: "glossary-browser", key: "flags" } as const, []);
+```
+
+Each atom needs its entry in the `PluginState` interface, declared in `types/index.d.ts`, so that `read` and `update`
+are fully typed:
+
+```typescript
+declare module "claude-code" {
+    interface PluginState {
+        "glossary-browser": {
+            glossary: Glossary | null;
+            selected: string | null;
+            expanded: string | null;
+            filter: string;
+            page: number;
+            flags: Flag[];
+        };
+    }
+}
+```
+
+Then you use the `read`/`update` pair from `claude-code`:
+
+```typescript
+const flags = await read($, flagsAtom);
+await update($, flagsAtom, () => []);
+```
+
+There's a gotcha here: `plugin` and `key` must be literals (hence the `as const`). If they are not,
+`claude plugin validate` refuses the atom.
+
+### User configuration
+
+The refusal of Markdown edits can be turned off. The option is declared in the `userConfig` block of `plugin.json`:
+
+```json
+"userConfig": {
+    "denyEdits": {
+        "type": "boolean",
+        "title": "Refuse Avoid words in edits",
+        "description": "Refuse a Write or Edit to a Markdown file that uses an Avoid word of the context owning that file, so the model rewrites it with the canonical term. Sending the same edit again unchanged lets it through. Off, the Term Check only flags the word in the band.",
+        "default": true
+    }
+}
+```
+
+and it arrives in `register` as `options.denyEdits`. The mod reads it as `options.denyEdits !== false`, so that a
+missing value behaves like the default.
+
+### Testing
+
+Mods come with their own testing kit, `claude-code/testing`. This is the test that verifies the check flags Avoid words
+in prose, naming the context and the canonical term:
+
+```typescript
+test("flags Avoid words in prose, naming the context and the canonical term", async () => {
+    const flags = check("the implementer finished the task, now the articles", glossaryOf().contexts, "prompt");
+
+    expect(flags).toEqual([
+        { word: "Article", term: "Post", context: "Website", where: "prompt" },
+        { word: "task", term: "Work Unit", context: "Agentic Delivery", where: "prompt" },
+    ]);
+});
+```
+
+And this is the test born from the false positive of the README:
+
+```typescript
+test("ignores a canonical name written with hyphens", async () => {
+    const designSystem = parseContext(
+        "# Design System\n\n## Language\n\n**Design System**:\nThe component library.\n",
+        { name: "Design System", dir: "packages/design-system", summary: "the library" },
+        [],
+    );
+    const contexts = [...glossaryOf().contexts, designSystem];
+
+    expect(check("the design-system pieces", contexts, "prompt")).toEqual([]);
+    expect(check("the design of the pieces", contexts, "prompt").map((flag) => flag.word)).toEqual(["design"]);
+});
+```
+
+The testing kit has no filesystem. This is why all the parsing and checking logic lives in `glossary.ts` as pure
+functions that take strings and return values, while `register.tsx` is just the thin layer that talks to `$`. It's
+the same separation I use for the components of this website, and it pays off in the same way.
+
+### The development loop
+
+The loop is pleasantly short:
+
+- edit the mod, and the session hot reloads it, so you see the band and the pane change right away
+- run `claude plugin validate <dir>` to check the manifest, the hooks, and the atoms
+- run `claude plugin test <dir>` to run the tests
+- type-check with `tsc`, once a session has loaded the mod: the engine writes the type declarations for `claude-code`
+  at load time, and your `PluginState` entry extends them
+
+One last gotcha: not every surface has the same elements. The mobile surface has no `Input`, so the filter of the pane
+is optional, and the pane checks for it before using it:
+
+```typescript
+const elements = $.ui.resolve(e);
+const { Box, Button, Markdown, Text } = elements;
+const Input = "Input" in elements ? elements.Input : null;
+```
+
+The full source of the mod is on GitHub, in the
+[`claude-plugins/glossary-browser`](https://github.com/chicio/chicio-blog/tree/main/claude-plugins/glossary-browser)
+folder of the repository of this website.
+
+## Lessons learned
+
+Building this mod taught me a few things about mods in general:
+
+- **A mod is a convenience, not enforcement.** The Term Check can be bypassed by design (that's what the retry is for),
+  and it runs only in Claude Code. A contributor using another editor, or another agent, never sees it. If something
+  is a rule that everyone must follow, it belongs in lint or in CI, not in a mod.
+- **Add context instead of rewriting the user's words.** The middleware chain lets you rewrite everything, and that's
+  exactly why you should be careful. Attaching a note the model reads keeps the prompt mine, and still gets the result.
+- **Always give the model a way out.** A refusal with no exit turns a helpful check into an obstacle. Refuse once,
+  explain, and let the same edit through on the second attempt.
+- **Follow the upstream convention.** Matt Pocock's skill renamed `CONTEXT.md` and `CONTEXT-MAP.md` to `GLOSSARY.md`
+  and `GLOSSARY-MAP.md` on 2026-08-15. My repository still used the old names, and the mod almost shipped reading them.
+  A mod built on top of someone else's format must track that format, not your local snapshot of it.
+
+## Try it
+
+The Glossary Browser is published in my plugin marketplace. You can install it in Claude Code with:
+
+```shell
+/plugin marketplace add chicio/chicio-blog
+/plugin install glossary-browser@chicio-labs
+/reload-plugins
+```
+
+It works in any repository with a `GLOSSARY.md` or a `GLOSSARY-MAP.md` at the root, and without a glossary it stays
+quiet. It pairs naturally with `domain-modeling` and `grill-with-docs`: grill a plan, and the terms the session
+resolves show up in the band and the pane, and the Term Check starts steering toward them. All the details are in
+[the README](https://github.com/chicio/chicio-blog/blob/main/claude-plugins/glossary-browser/README.md). The
+current release is 0.2.0.
+
+## Conclusion
+
+In [a previous post](/blog/post/2026/07/10/software-engineer-skills-pyramid-harness-sdlc) I described how we encoded
+our own harness in a set of skills and subagents: the idea that the tools around the model are where your way of
+working lives. Mods push that idea one step further. Skills tell the model *what* to do. Mods change the environment
+where the model and I work together: what I see, what the model reads, and what it's allowed to write.
+
+The Glossary Browser is a small mod, but it changed how I use my glossary. It's no longer a file I'm supposed to
+remember. It's right there, above the prompt, and it gently corrects both of us when we drift away from the language
+we agreed on. And this is, I think, the real promise of mods: not a feature someone else decided you need, but Claude
+Code shaped around *your* way of working. 🚀
