@@ -1,6 +1,17 @@
 import { describe, expect, test } from "claude-code/testing";
 
-import { avoidWordsOf, check, contextsForPath, elsewhere, parseContext, parseContextMap, search } from "./glossary";
+import {
+    avoidWordsOf,
+    check,
+    contextsForPath,
+    denyReason,
+    elsewhere,
+    isOwnedPath,
+    parseContext,
+    parseContextMap,
+    promptNote,
+    search,
+} from "./glossary";
 
 const MAP = `# Context Map
 
@@ -155,6 +166,47 @@ describe("glossary", () => {
             expect(elsewhere(glossary, "Website", { ...post, name: "Slice" })).toEqual([
                 "Agentic Delivery avoids it for **Work Unit**",
             ]);
+        });
+    });
+
+    describe("isOwnedPath", () => {
+        test("is true only inside a context's directory", async () => {
+            const glossary = glossaryOf();
+
+            expect(isOwnedPath("apps/website/src/content/x/content.mdx", glossary)).toBe(true);
+            expect(isOwnedPath(".claude/rules/testing.md", glossary)).toBe(true);
+            expect(isOwnedPath("AGENTS.md", glossary)).toBe(false);
+            expect(isOwnedPath("apps/websites/README.md", glossary)).toBe(false);
+        });
+    });
+
+    describe("promptNote", () => {
+        test("names each Avoid word with its context and canonical term", async () => {
+            const flags = check("the task and the article", glossaryOf().contexts, "prompt");
+            const note = promptNote(flags);
+
+            expect(note).toContain("- 'Article' is an Avoid word in Website: when it means Post, say Post.");
+            expect(note).toContain(
+                "- 'task' is an Avoid word in Agentic Delivery: when it means Work Unit, say Work Unit.",
+            );
+            expect(note).toContain("If a word is meant in another sense, ignore its line.");
+        });
+    });
+
+    describe("denyReason", () => {
+        test("names the file, the context and the way through", async () => {
+            const glossary = glossaryOf();
+            const flags = check(
+                "A new article",
+                glossary.contexts.slice(0, 1),
+                "apps/website/x.mdx",
+                glossary.contexts,
+            );
+            const reason = denyReason(flags, "apps/website/x.mdx");
+
+            expect(reason).toContain("this edit to apps/website/x.mdx uses Avoid words from the Website glossary");
+            expect(reason).toContain("- 'Article' is an Avoid word in Website: when it means Post, say Post.");
+            expect(reason).toContain("send the same edit again unchanged and it will pass");
         });
     });
 
