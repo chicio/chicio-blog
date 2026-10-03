@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.0.1](https://github.com/chicio/chicio-labs/compare/matrix-design-system%402.0.0...matrix-design-system%402.0.1) (2026-10-03)
+
+### Features
+
+* **ai:** :sparkles: adopt the GLOSSARY convention and add a README to each plugin ([#740](https://github.com/chicio/chicio-labs/issues/740)) ([d28fed4](https://github.com/chicio/chicio-labs/commit/d28fed493b970e5469cf156b34ab54c180c63abc))
+* **capabilities:** :sparkles: add the Manga Collection and share the collection components ([#715](https://github.com/chicio/chicio-labs/issues/715)) ([37a216b](https://github.com/chicio/chicio-labs/commit/37a216bdf6ccfbf97601cef212ac9d9f05055603))
+* **capabilities:** :truck: rename the repository to Chicio Labs ([#744](https://github.com/chicio/chicio-labs/issues/744)) ([76bbab2](https://github.com/chicio/chicio-labs/commit/76bbab2faaa1681bc9c9a2f7cacfa4ef77001e0e))
+
+### Bug Fixes
+
+* **ux:** :bug: serve the labs hub from labs.fabrizioduroni.it ([#743](https://github.com/chicio/chicio-labs/issues/743)) ([fb8b0d7](https://github.com/chicio/chicio-labs/commit/fb8b0d77cc1719c57b792f952764001944218890))
+
 ## [2.0.0](https://github.com/chicio/chicio-blog/compare/matrix-rain-webgpu%402.0.3...matrix-design-system%401.1.0) (2026-09-28)
 
 ### ⚠ BREAKING CHANGES
