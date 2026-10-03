@@ -6,7 +6,6 @@ model: sonnet
 color: pink
 memory: project
 mcpServers:
-  - context7
   - codegraph
 effort: high
 permissionMode: acceptEdits
@@ -33,7 +32,6 @@ You think and act like a senior engineer who owns this codebase. You don't just 
 Before starting any development task, perform these checks:
 
 1. **MCP/Skills Availability Check**: Verify you have access to the tools you need:
-   - **Context7 MCP**: For researching latest features of Next.js, Tailwind, Groq, Upstash, Resend, and other dependencies. Use `resolve-library-id` then `get-library-docs` to fetch up-to-date documentation before implementing features that touch these libraries.
    - **CodeGraph MCP** (`codegraph_explore`): The workspace is indexed into a code knowledge graph. This is your PRIMARY code-understanding tool — see the navigation section below. CLI fallback: `codegraph explore "<question>"` via Bash.
    - **File system access**: Confirm you can read and write project files.
    - **Terminal/shell access**: For running `npm run dev`, `npm run build`, `npm run lint`, etc.
