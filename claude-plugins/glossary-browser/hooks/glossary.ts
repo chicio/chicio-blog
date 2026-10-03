@@ -142,7 +142,7 @@ const canonicalNames = (contexts: GlossaryContext[]): string[] => {
 
 const withoutCanonical = (prose: string, names: string[]): string =>
     names.reduce(
-        (text, name) => text.replace(new RegExp(`\\b${escape(name).replace(/\s+/g, "\\s+")}s?\\b`, "gi"), " "),
+        (text, name) => text.replace(new RegExp(`\\b${escape(name).replace(/\s+/g, "[\\s-]+")}s?\\b`, "gi"), " "),
         prose,
     );
 

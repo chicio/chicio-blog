@@ -142,6 +142,18 @@ describe("glossary", () => {
 
             expect(flags).toEqual([]);
         });
+
+        test("ignores a canonical name written with hyphens", async () => {
+            const designSystem = parseContext(
+                "# Design System\n\n## Language\n\n**Design System**:\nThe component library.\n",
+                { name: "Design System", dir: "packages/design-system", summary: "the library" },
+                [],
+            );
+            const contexts = [...glossaryOf().contexts, designSystem];
+
+            expect(check("the design-system pieces", contexts, "prompt")).toEqual([]);
+            expect(check("the design of the pieces", contexts, "prompt").map((flag) => flag.word)).toEqual(["design"]);
+        });
     });
 
     describe("contextsForPath", () => {
