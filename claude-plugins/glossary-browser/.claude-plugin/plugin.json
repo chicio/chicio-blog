@@ -1,6 +1,6 @@
 {
   "name": "glossary-browser",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Browse a repository's ubiquitous language (GLOSSARY-MAP.md, each context's GLOSSARY.md, the ADRs) in a band above the prompt and a pane, and steer you and the model away from its Avoid words: a note to the model on prompts, a refusal on Markdown edits",
   "author": {
     "name": "Fabrizio Duroni",
@@ -8,7 +8,13 @@
   },
   "homepage": "https://github.com/chicio/chicio-blog/tree/main/claude-plugins/glossary-browser",
   "repository": "https://github.com/chicio/chicio-blog",
-  "keywords": ["ddd", "glossary", "ubiquitous-language", "adr", "mod"],
+  "keywords": [
+    "ddd",
+    "glossary",
+    "ubiquitous-language",
+    "adr",
+    "mod"
+  ],
   "types": "./types/index.d.ts",
   "userConfig": {
     "denyEdits": {
