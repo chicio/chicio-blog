@@ -8,7 +8,7 @@ disable-model-invocation: false
 
 You (the main thread) run the interactive half of this pipeline yourself: Intake, Explore, the Human Gate, and the
 PR. The automatable half, implementing and reviewing, runs as the saved dynamic workflow
-**`chicio-labs-sdlc:build-plan`** (`claude-plugins/chicio-labs-sdlc/workflows/build-plan.js`), which builds the Approved Plan Wave
+**`chicio-labs-sdlc:workflow`** (`claude-plugins/chicio-labs-sdlc/workflows/workflow.js`), which builds the Approved Plan Wave
 by Wave with Work Units in parallel. This skill instructs you to call the Workflow tool: invoking it is the user's
 opt-in.
 
@@ -112,7 +112,7 @@ Call the Workflow tool with the saved workflow and the plan as `args` (an object
 
 ```
 Workflow({
-  name: "chicio-labs-sdlc:build-plan",
+  name: "chicio-labs-sdlc:workflow",
   args: {
     mode: "feature" | "fix",
     slug: "<slug>",

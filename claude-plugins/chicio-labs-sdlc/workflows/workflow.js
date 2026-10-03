@@ -1,5 +1,5 @@
 export const meta = {
-    name: 'build-plan',
+    name: 'workflow',
     description: 'Build an Approved Plan Wave by Wave: parallel Work Units with Unit Reviews, then Full Checks and an Integration Review',
     whenToUse: 'Dispatched by the /chicio-labs-sdlc:sdlc skill after the Human Gate; never started on its own.',
     phases: [

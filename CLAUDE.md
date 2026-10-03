@@ -210,7 +210,7 @@ what cannot move into one: [ADR-0002](claude-plugins/docs/adr/0002-claude-toolin
   enables all three at project scope, so an edit takes effect after `/reload-plugins`. Anyone else adds
   `chicio/chicio-blog` from GitHub and gets a cached copy.
 - **Everything is namespaced** `<plugin>:<name>`: `/chicio-labs-sdlc:sdlc`, `chicio-labs-sdlc:implementer`, the
-  workflow `chicio-labs-sdlc:build-plan`. Use the full name in `subagent_type`, `agentType` and `Workflow({ name })`.
+  workflow `chicio-labs-sdlc:workflow`. Use the full name in `subagent_type`, `agentType` and `Workflow({ name })`.
 - **A plugin agent's memory lives in `.claude/agent-memory/<plugin>-<agent>/`** (the colon becomes a dash), e.g.
   `chicio-labs-sdlc-implementer`; renaming a plugin or an agent means moving that folder.
 - **Plugin agents ignore `permissionMode`, `mcpServers` and `hooks`.** MCP tools come from the project's `.mcp.json`
@@ -223,7 +223,7 @@ what cannot move into one: [ADR-0002](claude-plugins/docs/adr/0002-claude-toolin
 
 Non-trivial **code** changes can be run through an orchestrated, multi-agent SDLC via the
 `/chicio-labs-sdlc:sdlc` skill. The main thread explores and hosts the one Human Gate, where the plan is
-approved together with its Work Unit Graph. Then the saved workflow `claude-plugins/chicio-labs-sdlc/workflows/build-plan.js`
+approved together with its Work Unit Graph. Then the saved workflow `claude-plugins/chicio-labs-sdlc/workflows/workflow.js`
 builds it Wave by Wave, parallel Work Units each in their own worktree, with bounded implement⇄review loops, the
 Full Checks and an Integration Review. The main thread then opens the PR. The skill documents every stage, both modes
 (feature and `--fix`), the agent roster and the checks; it loads on invocation, so that detail is not repeated here.
