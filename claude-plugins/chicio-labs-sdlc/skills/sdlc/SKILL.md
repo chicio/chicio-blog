@@ -13,7 +13,7 @@ by Wave with Work Units in parallel. This skill instructs you to call the Workfl
 opt-in.
 
 The vocabulary (Human Gate, Approved Plan, Work Unit, Work Unit Graph, Wave, Unit Checks, Full Checks, Unit Review,
-Integration Review) is defined in `claude-plugins/CONTEXT.md`; why the loop runs this way is
+Integration Review) is defined in `claude-plugins/GLOSSARY.md`; why the loop runs this way is
 `claude-plugins/docs/adr/0001-parallel-work-units-in-a-workflow.md`. Use those terms in every prompt and report.
 
 **Scope: CODE work only.** Content (MDX blog prose, DSA articles) is out of scope — see the Content firewall in
@@ -72,14 +72,14 @@ Save it to a scratchpad file (`exploration.md`); it feeds Stage 2 and the workfl
 Run **grill-with-docs** in the main thread, fed the exploration report + the description (+ any §9 "decisions to
 resolve" the explorer surfaced). `grill-with-docs` is `disable-model-invocation`, so do what it does: invoke the
 Skill tool twice, for **`grilling`** and **`domain-modeling`**. Interview the user until the approach is nailed and an
-**Approved Plan** exists, while writing the glossary (`CONTEXT.md`) and any ADRs (`docs/adr/`) as terms and decisions
+**Approved Plan** exists, while writing the glossary (`GLOSSARY.md`) and any ADRs (`docs/adr/`) as terms and decisions
 settle.
-- The repo has several contexts: read `CONTEXT-MAP.md` first and write each term to the `CONTEXT.md` of the context it
-  belongs to, never to a root `CONTEXT.md`. ADRs go in that context's `docs/adr/`, or in the root `docs/adr/` when the
+- The repo has several contexts: read `GLOSSARY-MAP.md` first and write each term to the `GLOSSARY.md` of the context it
+  belongs to, never to a root `GLOSSARY.md`. ADRs go in that context's `docs/adr/`, or in the root `docs/adr/` when the
   decision spans contexts.
 - Load **both** skills. With only `grilling` loaded you get a good interview and no paper trail, which is the most
   reported failure of grill-with-docs, and it is known to drop the file writes when run as a step inside a pipeline
-  like this one. Write each resolved term to `CONTEXT.md` the moment it resolves, and check the working tree before
+  like this one. Write each resolved term to `GLOSSARY.md` the moment it resolves, and check the working tree before
   closing the gate. A session with no new vocabulary and no ADR is legitimate: say so, don't invent entries.
 - Everything decided that is neither a term nor an ADR lives only in the conversation, so it goes into the plan.
 
@@ -103,7 +103,7 @@ of the plan he approves:
 
 - **Plan handoff:** always write the Approved Plan, Work Unit Graph included, to a scratchpad plan file (`plan.md`).
   The workflow and every agent read it from there, and a resume must see the same file.
-- **Docs handoff:** if the session created or changed `CONTEXT.md` or an ADR, commit them on the feature branch as a
+- **Docs handoff:** if the session created or changed `GLOSSARY.md` or an ADR, commit them on the feature branch as a
   `docs:` commit before Stage 3, and pass their paths to the workflow (`docs`).
 - **Do not proceed to Stage 3 until the user has approved the plan and its Work Unit Graph.**
 
@@ -190,7 +190,7 @@ scratchpad file; it is the workflow's `explorationFile`.
 
 ### Stage 2' — Confirm root cause 🚪 **[INTERACTIVE] — THE HUMAN GATE**
 Present the root-cause report, with **`domain-modeling`** loaded (Skill tool) for the discussion. Bugs regularly
-expose a misunderstood concept, and some fixes encode a decision: write each term to the relevant `CONTEXT.md` as it
+expose a misunderstood concept, and some fixes encode a decision: write each term to the relevant `GLOSSARY.md` as it
 resolves, offer an ADR only when all three of its criteria hold, and handle the docs exactly as Stage 2's docs handoff
 does. A fix that surfaces no vocabulary writes nothing. The human decides:
 - **Proceed** → the report becomes the Approved Plan, saved to `plan.md`, with a **single Work Unit** owning

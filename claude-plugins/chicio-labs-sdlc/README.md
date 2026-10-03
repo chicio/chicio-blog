@@ -2,7 +2,7 @@
 
 A **Project Plugin**: it only works on this repository. It holds the agentic SDLC pipeline that builds code changes to
 chicio-blog, and the release checklist. Its vocabulary (Human Gate, Approved Plan, Work Unit, Wave, Unit Checks, Full
-Checks, Unit Review, Integration Review) is the Agentic Delivery context, in [`../CONTEXT.md`](../CONTEXT.md); why the
+Checks, Unit Review, Integration Review) is the Agentic Delivery context, in [`../GLOSSARY.md`](../GLOSSARY.md); why the
 pipeline is shaped this way is [ADR-0001](../docs/adr/0001-parallel-work-units-in-a-workflow.md).
 
 It loads in place in this repository: `.claude/settings.json` enables it from the `chicio-labs` marketplace at the

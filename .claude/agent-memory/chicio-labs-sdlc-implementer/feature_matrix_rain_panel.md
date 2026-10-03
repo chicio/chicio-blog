@@ -8,7 +8,7 @@ metadata:
 ## Feature: Matrix Rain Live Control Panel (PR #367, branch feat/matrix-rain-control-panel)
 
 A command-palette-triggered control panel that lets the user tweak the `matrix-rain-webgpu` renderer live, with settings persisted to localStorage and applied everywhere the rain renders (a Shared Store; vocabulary in
-packages/matrix-rain-webgpu/CONTEXT.md and packages/matrix-design-system/CONTEXT.md).
+packages/matrix-rain-webgpu/GLOSSARY.md and packages/matrix-design-system/GLOSSARY.md).
 
 ### Entry Point
 - Command palette entry: "> Customize Matrix Rain"

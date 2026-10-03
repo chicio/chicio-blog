@@ -4,7 +4,7 @@ description: Actual Post file structure in the codebase, correcting the system p
 type: reference
 ---
 
-A Post is one dated entry in the Blog (see apps/website/CONTEXT.md). The site is a monorepo: every content path
+A Post is one dated entry in the Blog (see apps/website/GLOSSARY.md). The site is a monorepo: every content path
 below is under `apps/website/`.
 
 ## Post File Location

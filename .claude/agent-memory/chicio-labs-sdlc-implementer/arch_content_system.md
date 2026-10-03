@@ -10,7 +10,7 @@ Content loading engine in `apps/website/src/lib/content/content.ts` uses dynamic
 extract route parameters from directory paths. Since 2026-07-24 (see [[arch_content_section_factory]]), every
 Collection and Standalone Page is ingested via `createSection<TMeta>({ slug, sort? })` from
 `apps/website/src/lib/content/section.ts` (the code name predates the glossary; a Section is the reader-facing area,
-see apps/website/CONTEXT.md), which returns
+see apps/website/GLOSSARY.md), which returns
 `{ list(), single(params?) }`. The old per-Collection metadata-adapter functions (`consoleMetadataAdapter`,
 `gamesMetadataAdapter`, `exerciseMetadataAdapter`) and their matching accessor functions (`getPosts`, `getAllConsoles`,
 etc.) are deleted — metadata typing now comes purely from the generic type argument to `createSection`, and

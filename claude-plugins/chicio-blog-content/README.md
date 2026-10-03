@@ -2,7 +2,7 @@
 
 A **Project Plugin**: it only works on this repository. It writes chicio-blog's content: Posts in Fabrizio Duroni's
 voice, and new entries in the Manga and Videogames collections. Its vocabulary (Post, Topic, Exercise, Manga, Volume,
-Console, Game, …) is the Website context, in [`apps/website/CONTEXT.md`](../../apps/website/CONTEXT.md).
+Console, Game, …) is the Website context, in [`apps/website/GLOSSARY.md`](../../apps/website/GLOSSARY.md).
 
 It loads in place in this repository: `.claude/settings.json` enables it from the `chicio-labs` marketplace at the
 repository root, so an edit takes effect after `/reload-plugins`.

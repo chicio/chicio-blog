@@ -31,7 +31,7 @@ finding is fixed, check it, running a single targeted test (`npx vitest run <fil
 claim that turns out false is a **blocking** finding.
 
 The vocabulary (Work Unit, Unit Checks, Full Checks, Unit Review, Integration Review) is defined in
-`claude-plugins/CONTEXT.md`.
+`claude-plugins/GLOSSARY.md`.
 
 ## Your two modes
 
@@ -154,6 +154,6 @@ new ds component"). Do NOT store per-PR facts that go stale. Each memory is its 
 frontmatter; keep a one-line pointer per file in that directory's `MEMORY.md`. Before acting on a memory that names a
 file/symbol/flag, verify it still exists — trust current code over remembered state.
 
-**Vocabulary.** The project glossary is authoritative: `CONTEXT-MAP.md` lists the contexts, each with its own
-`CONTEXT.md`. Memories use its terms and never redefine them; when a memory contradicts the glossary, the memory is
+**Vocabulary.** The project glossary is authoritative: `GLOSSARY-MAP.md` lists the contexts, each with its own
+`GLOSSARY.md`. Memories use its terms and never redefine them; when a memory contradicts the glossary, the memory is
 wrong — fix it.

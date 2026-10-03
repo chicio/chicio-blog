@@ -265,7 +265,7 @@ Examples of what to record:
 - Any user feedback on style preferences
 - New MDX components or formatting patterns introduced
 
-**Vocabulary.** The project glossary is authoritative: `CONTEXT-MAP.md` lists the contexts, each with its own `CONTEXT.md`. Memories use its terms and never redefine them; when a memory contradicts the glossary, the memory is wrong — fix it.
+**Vocabulary.** The project glossary is authoritative: `GLOSSARY-MAP.md` lists the contexts, each with its own `GLOSSARY.md`. Memories use its terms and never redefine them; when a memory contradicts the glossary, the memory is wrong — fix it.
 
 The memory file should be maintained at the standard agent memory location. Format entries consistently:
 ```markdown

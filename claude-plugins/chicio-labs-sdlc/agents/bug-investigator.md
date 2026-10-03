@@ -99,6 +99,6 @@ won't recur. This repo persists agent memory as Markdown files via the Write too
 plus a one-line pointer in that directory's `MEMORY.md`. Before trusting a memory that names a file/symbol/flag,
 verify it still exists — trust current code over remembered state.
 
-**Vocabulary.** The project glossary is authoritative: `CONTEXT-MAP.md` lists the contexts, each with its own
-`CONTEXT.md`. Memories use its terms and never redefine them; when a memory contradicts the glossary, the memory is
+**Vocabulary.** The project glossary is authoritative: `GLOSSARY-MAP.md` lists the contexts, each with its own
+`GLOSSARY.md`. Memories use its terms and never redefine them; when a memory contradicts the glossary, the memory is
 wrong — fix it.
