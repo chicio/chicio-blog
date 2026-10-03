@@ -19,12 +19,14 @@ So I started looking through the codebase of the website you're reading right no
 could benefit from living *inside* my Claude Code session.
 
 I found it in the glossary. Recently I wrote down the ubiquitous language of this repository: every term, what
-it means, and which words to avoid. The terms are there, carefully written, but nothing keeps them in view while I
-work. I have to remember to open the file, and the model has to remember to read it. Spoiler: most of the time,
-neither of us does.
+it means, and which words to avoid. The model is not the problem: the skills I use load the glossary, so the agents
+read it every time they need it. The problem is me. The terms are there, carefully written, but nothing keeps them in
+view while I work, and I have to remember to open the file. Spoiler: most of the time, I don't.
 
-In this post I will show you the mod I built to fix this: a Glossary Browser that shows the glossary above the prompt
-and in a dedicated pane, plus a Term Check that steers both me and the model toward the canonical terms. Let's start.
+In this post I will show you the mod I built to fix this. It has two parts, one for each of us. The Glossary Browser
+is for me: a band above the prompt and a dedicated pane that keep the terms in view and let me look them up in a
+second. The Term Check is for the model: a note attached to my prompts and a refusal on its Markdown edits, both
+steering it toward the canonical terms. Let's start.
 
 ## Ubiquitous language with Matt Pocock's skills
 
@@ -57,16 +59,17 @@ My website has four contexts (Website, Matrix Design System, Matrix Rain, and Ag
 and 12 ADRs. It's a pretty good investment: when I say "Post" or "Topic" or "Work Unit", I know exactly what I mean,
 and so does every agent that reads the glossary.
 
-There's a catch though. The glossary only works when someone remembers to read it. A file sitting at the root of the
-repository is documentation, and documentation is the first thing everyone (humans and models) forgets. This is
-exactly the kind of problem a mod can solve.
+There's a catch though. The agents get the glossary through the skills, but I don't have a skill loading it into my
+head. A file sitting at the root of the repository is documentation, and documentation is the first thing I forget
+when I'm focused on the code. This is exactly the kind of thing a mod can solve.
 
 ## What a mod is
 
 So, what is a Claude Code mod? A mod is a small JavaScript or TypeScript module that runs *inside* your Claude Code
 session. Instead of being called from the outside, it lives in the session and sees every event: prompts, tool calls,
-turns, slash commands, and even the rendering of the UI. The getting-started post describes it as "a way to fit
-Claude Code to how you work", and I think that's the best summary you can get.
+turns, slash commands, and even the rendering of the UI.
+[The getting-started post](https://claude.dev/blog/getting-started-with-claude-code-mods/) describes mods as "a way to
+fit Claude Code to how you work", and I think that's the best summary you can get.
 
 These are the things that make mods really interesting:
 
@@ -520,6 +523,6 @@ working lives. Mods push that idea one step further. Skills tell the model *what
 where the model and I work together: what I see, what the model reads, and what it's allowed to write.
 
 The Glossary Browser is a small mod, but it changed how I use my glossary. It's no longer a file I'm supposed to
-remember. It's right there, above the prompt, and it gently corrects both of us when we drift away from the language
-we agreed on. And this is, I think, the real promise of mods: not a feature someone else decided you need, but Claude
+remember. It's right there, above the prompt, whenever I need to look a term up, while the Term Check gently keeps
+the model on the language we agreed on. And this is, I think, the real promise of mods: not a feature someone else decided you need, but Claude
 Code shaped around *your* way of working. 🚀
