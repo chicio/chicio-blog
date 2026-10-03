@@ -14,11 +14,13 @@ import {
     contextsForPath,
     denyReason,
     findTermId,
+    glossaryFile,
     isOwnedPath,
     parseContext,
     parseContextMap,
     promptNote,
     search,
+    singleContextEntry,
     termId,
     termMarkdown,
 } from "./glossary";
@@ -57,20 +59,27 @@ const listAdrs = async ($: Engine, root: string, dir: string): Promise<Adr[]> =>
 
 const loadGlossary = async ($: Engine): Promise<Glossary | null> => {
     const root = await $.session.root();
-    if (!(await $.fs.exists(`${root}/CONTEXT-MAP.md`))) {
-        return null;
+    if (await $.fs.exists(`${root}/GLOSSARY-MAP.md`)) {
+        const map = parseContextMap(await $.fs.read(`${root}/GLOSSARY-MAP.md`));
+        const contexts = await Promise.all(
+            map.entries.map(async (entry) => {
+                const path = `${root}/${glossaryFile(entry.dir)}`;
+                const text = (await $.fs.exists(path)) ? await $.fs.read(path) : "";
+
+                return parseContext(text, entry, await listAdrs($, root, entry.dir));
+            }),
+        );
+
+        return { contexts, systemAdrs: await listAdrs($, root, ""), relationships: map.relationships };
     }
-    const map = parseContextMap(await $.fs.read(`${root}/CONTEXT-MAP.md`));
-    const contexts = await Promise.all(
-        map.entries.map(async (entry) => {
-            const path = `${root}/${entry.dir}/CONTEXT.md`;
-            const text = (await $.fs.exists(path)) ? await $.fs.read(path) : "";
+    if (await $.fs.exists(`${root}/GLOSSARY.md`)) {
+        const text = await $.fs.read(`${root}/GLOSSARY.md`);
+        const context = parseContext(text, singleContextEntry(text), await listAdrs($, root, ""));
 
-            return parseContext(text, entry, await listAdrs($, root, entry.dir));
-        }),
-    );
+        return { contexts: [context], systemAdrs: [], relationships: "" };
+    }
 
-    return { contexts, systemAdrs: await listAdrs($, root, ""), relationships: map.relationships };
+    return null;
 };
 
 const refresh = async ($: Engine): Promise<Glossary | null> => {
@@ -103,7 +112,7 @@ const detailOf = async ($: Engine, glossary: Glossary, id: string | null): Promi
     if (id === null) {
         return [
             `## ${TITLE}`,
-            "The project's ubiquitous language, read live from `CONTEXT-MAP.md` and each context's `CONTEXT.md`.",
+            "The project's ubiquitous language, read live from `GLOSSARY-MAP.md` and each context's `GLOSSARY.md` (or a single root `GLOSSARY.md`).",
             "Pick a context on the left, or type in the filter to search every term, definition and ADR.",
             "The **Term Check** flags _Avoid_ words in your prompts and in the model's edits to Markdown files; " +
                 "its flags show in the band above the prompt.",
@@ -168,24 +177,28 @@ const rowsOf = (glossary: Glossary, expanded: string | null, filter: string): Ro
         }
     });
     const isSystemOpen = expanded === SYSTEM_ID;
-    rows.push({
-        kind: "item",
-        id: SYSTEM_ID,
-        text: `${isSystemOpen ? "▾" : "▸"} System-wide ADRs (${glossary.systemAdrs.length})`,
-    });
+    if (glossary.systemAdrs.length > 0) {
+        rows.push({
+            kind: "item",
+            id: SYSTEM_ID,
+            text: `${isSystemOpen ? "▾" : "▸"} System-wide ADRs (${glossary.systemAdrs.length})`,
+        });
+    }
     if (isSystemOpen) {
         for (const adr of glossary.systemAdrs) {
             rows.push({ kind: "item", id: adrId(adr.path), text: `    ${adr.title}` });
         }
     }
-    rows.push({ kind: "item", id: RELATIONSHIPS_ID, text: "• Relationships" });
+    if (glossary.relationships !== "") {
+        rows.push({ kind: "item", id: RELATIONSHIPS_ID, text: "• Relationships" });
+    }
 
     return rows;
 };
 
 const isGroup = (id: string): boolean => id.startsWith("ctx:") || id === SYSTEM_ID;
 
-const GLOSSARY_SOURCE = /(^|\/)(CONTEXT|CONTEXT-MAP)\.md$|(^|\/)docs\/adr\//;
+const GLOSSARY_SOURCE = /(^|\/)(GLOSSARY|GLOSSARY-MAP)\.md$|(^|\/)docs\/adr\//;
 
 const addFlags = async ($: Engine, found: Flag[]) => {
     await update($, flagsAtom, (flags) => {
@@ -214,7 +227,7 @@ export const register: Register = (on, options) => {
     on("command.run", { command: "glossary" }, async ($, e) => {
         const glossary = await refresh($);
         if (glossary === null) {
-            return { text: "No CONTEXT-MAP.md in this project: nothing to browse." };
+            return { text: "No GLOSSARY-MAP.md or GLOSSARY.md in this project: nothing to browse." };
         }
         const query = e.args.trim();
         if (query !== "") {
@@ -341,7 +354,7 @@ export const register: Register = (on, options) => {
         const Input = "Input" in elements ? elements.Input : null;
         const glossary = await read($, glossaryAtom);
         if (glossary === null) {
-            return <Text dimColor>No CONTEXT-MAP.md in this project.</Text>;
+            return <Text dimColor>No GLOSSARY-MAP.md or GLOSSARY.md in this project.</Text>;
         }
         const selected = await read($, selectedAtom);
         const expanded = await read($, expandedAtom);
